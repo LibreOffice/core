@@ -1469,7 +1469,7 @@ struct XShapePosCompareHelper
         if(pObj1 && pObj2)
             return pObj1->GetOrdNum() < pObj2->GetOrdNum();
         else
-            return 0;
+            return false;
     }
 };
 //end of group position

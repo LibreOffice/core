@@ -412,7 +412,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             aLay = aMeasureLayer;
         }
 
-        SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aLay,sal_True);
+        SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aLay,true);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (!pCreatePV->GetLockedLayers().IsSet(nLayer) && pCreatePV->GetVisibleLayers().IsSet(nLayer))
         {
@@ -569,9 +569,9 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         if(bDidLimit && IsOrtho())
         {
             if(aDragStat.IsOrtho8Possible())
-                OrthoDistance8(aDragStat.GetPrev(), aPnt, sal_False);
+                OrthoDistance8(aDragStat.GetPrev(), aPnt, false);
             else if(aDragStat.IsOrtho4Possible())
-                OrthoDistance4(aDragStat.GetPrev(), aPnt, sal_False);
+                OrthoDistance4(aDragStat.GetPrev(), aPnt, false);
         }
 
         if (aPnt==aDragStat.GetNow()) return;
@@ -634,7 +634,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 }
                 else
                 {
-                    nLayer = rAd.GetLayerID(aAktLayer, sal_True);
+                    nLayer = rAd.GetLayerID(aAktLayer, true);
                 }
 
                 if(SDRLAYER_NOTFOUND == nLayer)
@@ -859,7 +859,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             }
         }
 
-        aDragStat.SetShown(sal_True);
+        aDragStat.SetShown(true);
     }
 }
 
@@ -872,7 +872,7 @@ void SdrCreateView::HideCreateObj()
         mpCreateViewExtraData->HideOverlay();
 
         //DrawCreateObj(pOut,bFull);
-        aDragStat.SetShown(sal_False);
+        aDragStat.SetShown(false);
     }
 }
 

@@ -525,7 +525,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                             // switch snapping off
                             if(!bWasNoSnap)
-                                ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
+                                ((SdrDragStat&)rDragStat).SetNoSnap(true);
                             if(bWasSnapEnabled)
                                 pView->SetSnapEnabled(sal_False);
 

@@ -126,23 +126,23 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 void SdrMarkView::ImpClearVars()
 {
     eDragMode=SDRDRAG_MOVE;
-    bRefHdlShownOnly=sal_False;
+    bRefHdlShownOnly=false;
     eEditMode=SDREDITMODE_EDIT;
     eEditMode0=SDREDITMODE_EDIT;
-    bDesignMode=sal_False;
+    bDesignMode=false;
     pMarkedObj=NULL;
     pMarkedPV=NULL;
-    bForceFrameHandles=sal_False;
-    bPlusHdlAlways=sal_False;
+    bForceFrameHandles=false;
+    bPlusHdlAlways=false;
     nFrameHandlesLimit=50;
-    bInsPolyPoint=sal_False;
+    bInsPolyPoint=false;
     mnInsPointNum = 0L;
-    bMarkedObjRectDirty=sal_False;
-    bMarkedPointsRectsDirty=sal_False;
+    bMarkedObjRectDirty=false;
+    bMarkedPointsRectsDirty=false;
     mbMarkHandlesHidden = false;
-    bMrkPntDirty=sal_False;
-    bMarkHdlWhenTextEdit=sal_False;
-    bMarkableObjCountDirty=sal_False; // not yet implemented
+    bMrkPntDirty=false;
+    bMarkHdlWhenTextEdit=false;
+    bMarkableObjCountDirty=false; // not yet implemented
     nMarkableObjCount=0;          // not yet implemented
 
     // Migrate selections
@@ -181,8 +181,8 @@ void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
         if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
         {
-            bMarkedObjRectDirty=sal_True;
-            bMarkedPointsRectsDirty=sal_True;
+            bMarkedObjRectDirty=true;
+            bMarkedPointsRectsDirty=true;
         }
     }
     SdrSnapView::Notify(rBC,rHint);
@@ -192,14 +192,14 @@ void SdrMarkView::ModelHasChanged()
 {
     SdrPaintView::ModelHasChanged();
     GetMarkedObjectListWriteAccess().SetNameDirty();
-    bMarkedObjRectDirty=sal_True;
-    bMarkedPointsRectsDirty=sal_True;
+    bMarkedObjRectDirty=true;
+    bMarkedPointsRectsDirty=true;
     // Example: Obj is selected and maMarkedObjectList is sorted.
     // In another View 2, the ObjOrder is changed (e. g. MovToTop())
     // Then we need to re-sort MarkList.
     GetMarkedObjectListWriteAccess().SetUnsorted();
     SortMarkedObjects();
-    bMrkPntDirty=sal_True;
+    bMrkPntDirty=true;
     UndirtyMrkPnt();
     SdrView* pV=(SdrView*)this;
     if (pV!=NULL && !pV->IsDragObj() && !pV->IsInsObjPoint()) {
@@ -1232,7 +1232,7 @@ void SdrMarkView::CheckMarked()
 
     // at least reset the remembered BoundRect to prevent handle
     // generation if bForceFrameHandles is TRUE.
-    bMarkedObjRectDirty = sal_True;
+    bMarkedObjRectDirty = true;
 }
 
 void SdrMarkView::SetMarkRects()
@@ -1972,7 +1972,7 @@ Point SdrMarkView::GetGridOffset() const
 const Rectangle& SdrMarkView::GetMarkedObjRect() const
 {
     if (bMarkedObjRectDirty) {
-        ((SdrMarkView*)this)->bMarkedObjRectDirty=sal_False;
+        ((SdrMarkView*)this)->bMarkedObjRectDirty=false;
         Rectangle aRect;
         Rectangle aRect2;
         for (sal_uIntPtr nm=0; nm<GetMarkedObjectCount(); nm++) {
@@ -2058,8 +2058,8 @@ void SdrMarkView::MarkListHasChanged()
     GetMarkedObjectListWriteAccess().SetNameDirty();
     SetEdgesOfMarkedNodesDirty();
 
-    bMarkedObjRectDirty=sal_True;
-    bMarkedPointsRectsDirty=sal_True;
+    bMarkedObjRectDirty=true;
+    bMarkedPointsRectsDirty=true;
 #ifdef DBG_UTIL
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif

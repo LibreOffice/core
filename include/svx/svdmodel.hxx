@@ -299,7 +299,7 @@ public:
     void ClearModel(sal_Bool bCalledFromDestructor);
 
     // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
-    bool IsLoading() const                  { return sal_False /*BFS01 bLoading */; }
+    bool IsLoading() const                  { return false /*BFS01 bLoading */; }
     // Muss z.B. ueberladen werden, um das Swappen/LoadOnDemand von Grafiken
     // zu ermoeglichen. Wird rbDeleteAfterUse auf sal_True gesetzt, so wird
     // die SvStream-Instanz vom Aufrufer nach Gebrauch destruiert.

@@ -170,23 +170,23 @@ void SdrPaintView::ImpClearVars()
 #ifdef DBG_UTIL
     pItemBrowser=NULL;
 #endif
-    bPageVisible=sal_True;
-    bPageBorderVisible=sal_True;
-    bBordVisible=sal_True;
-    bGridVisible=sal_True;
-    bGridFront  =sal_False;
-    bHlplVisible=sal_True;
-    bHlplFront  =sal_True;
-    bGlueVisible=sal_False;
-    bGlueVisible2=sal_False;
-    bGlueVisible3=sal_False;
-    bGlueVisible4=sal_False;
-    bSwapAsynchron=sal_False;
-    bPrintPreview=sal_False;
-    mbPreviewRenderer=sal_False;
+    bPageVisible=true;
+    bPageBorderVisible=true;
+    bBordVisible=true;
+    bGridVisible=true;
+    bGridFront  =false;
+    bHlplVisible=true;
+    bHlplFront  =true;
+    bGlueVisible=false;
+    bGlueVisible2=false;
+    bGlueVisible3=false;
+    bGlueVisible4=false;
+    bSwapAsynchron=false;
+    bPrintPreview=false;
+    mbPreviewRenderer=false;
 
     eAnimationMode = SDR_ANIMATION_ANIMATE;
-    bAnimationPause = sal_False;
+    bAnimationPause = false;
 
     nHitTolPix=2;
     nMinMovPix=3;
@@ -194,9 +194,9 @@ void SdrPaintView::ImpClearVars()
     nMinMovLog=0;
     pActualOutDev=NULL;
     pDragWin=NULL;
-    bRestoreColors=sal_True;
+    bRestoreColors=true;
     pDefaultStyleSheet=NULL;
-    bSomeObjChgdFlag=sal_False;
+    bSomeObjChgdFlag=false;
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
     aComeBackTimer.SetTimeout(1);
     aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
@@ -228,7 +228,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     }
 
     // flag to visualize groups
-    bVisualizeEnteredGroup = sal_True;
+    bVisualizeEnteredGroup = true;
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();
@@ -277,7 +277,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             SdrHintKind eKind=pSdrHint->GetKind();
             if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
                 if (bObjChg) {
-                    bSomeObjChgdFlag=sal_True;
+                    bSomeObjChgdFlag=true;
                     aComeBackTimer.Start();
                 }
             }
@@ -307,7 +307,7 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
 IMPL_LINK_NOARG_INLINE_START(SdrPaintView, ImpComeBackHdl)
 {
     if (bSomeObjChgdFlag) {
-        bSomeObjChgdFlag=sal_False;
+        bSomeObjChgdFlag=false;
         ModelHasChanged();
     }
     return 0;
@@ -869,7 +869,7 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
         {
             const SdrModel& rModel = *(GetModel());
             const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
+            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
 
             // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
             // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
@@ -1028,7 +1028,7 @@ void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnl
     bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
     const OUString& aNam = bMeasure ? aMeasureLayer : aAktLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
-    SdrLayerID nLayer=pMod->GetLayerAdmin().GetLayerID(aNam,sal_True);
+    SdrLayerID nLayer=pMod->GetLayerAdmin().GetLayerID(aNam,true);
     if (nLayer!=SDRLAYER_NOTFOUND) {
         rAttr.Put(SdrLayerIdItem(nLayer));
     }
@@ -1057,7 +1057,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
     }
 #endif
     if (bReplaceAll) aDefaultAttr.Set(rAttr);
-    else aDefaultAttr.Put(rAttr,sal_False); // if FALSE, regard InvalidItems as "holes," not as Default
+    else aDefaultAttr.Put(rAttr,false); // if FALSE, regard InvalidItems as "holes," not as Default
     SetNotPersistDefaultAttr(rAttr,bReplaceAll);
 #ifdef DBG_UTIL
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
@@ -1091,13 +1091,13 @@ sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardA
 {
     if(bOnlyHardAttr || !pDefaultStyleSheet)
     {
-        rTargetSet.Put(aDefaultAttr, sal_False);
+        rTargetSet.Put(aDefaultAttr, false);
     }
     else
     {
         // else merge with DefStyleSheet
-        rTargetSet.Put(pDefaultStyleSheet->GetItemSet(), sal_False);
-        rTargetSet.Put(aDefaultAttr, sal_False);
+        rTargetSet.Put(pDefaultStyleSheet->GetItemSet(), false);
+        rTargetSet.Put(aDefaultAttr, false);
     }
     MergeNotPersistDefaultAttr(rTargetSet, bOnlyHardAttr);
     return sal_True;
@@ -1128,7 +1128,7 @@ void SdrPaintView::ShowItemBrowser(sal_Bool bShow)
     if (bShow) {
         if (pItemBrowser==NULL) {
             pItemBrowser=new SdrItemBrowser(*(SdrView*)this);
-            pItemBrowser->SetFloatingMode(sal_True);
+            pItemBrowser->SetFloatingMode(true);
         }
         pItemBrowser->Show();
         pItemBrowser->GrabFocus();

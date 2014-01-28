@@ -137,11 +137,11 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         }
 
         maMove = maOrig;
-        bValid = sal_True;
+        bValid = true;
     }
     else
     {
-        bValid=sal_False;
+        bValid=false;
         bClosed=rPO.IsClosed();          // closed object?
         nPoly=(sal_uInt16)rHdl.GetPolyNum();            // number of the polygon in the PolyPolygon
         nPnt=(sal_uInt16)rHdl.GetPointNum();            // number of points in the above polygon
@@ -166,10 +166,10 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         if (!bPrevIsBegPnt) nPrevPrevPnt=GetPrevPnt(nPrevPnt,nPntMax,bClosed);
         if (!bNextIsEndPnt) nNextNextPnt=GetNextPnt(nNextPnt,nPntMax,bClosed);
         bControl=rHdl.IsPlusHdl();          // point is a control point
-        bIsPrevControl=sal_False;               // point is a control point before a support point
-        bIsNextControl=sal_False;               // point is a control point after a support point
-        bPrevIsControl=sal_False;               // if nPnt is a support point: a control point comes before
-        bNextIsControl=sal_False;               // if nPnt is a support point: a control point comes after
+        bIsPrevControl=false;               // point is a control point before a support point
+        bIsNextControl=false;               // point is a control point after a support point
+        bPrevIsControl=false;               // if nPnt is a support point: a control point comes before
+        bNextIsControl=false;               // if nPnt is a support point: a control point comes after
         if (bControl) {
             bIsPrevControl=aTmpXP.IsControl(nPrevPnt);
             bIsNextControl=!bIsPrevControl;
@@ -187,9 +187,9 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         nPnt=2;
         nNextPnt=3;
         nNextNextPnt=4;
-        bEliminate=sal_False;
+        bEliminate=false;
         ResetPoly(rPO);
-        bValid=sal_True;
+        bValid=true;
     }
 }
 
@@ -238,10 +238,10 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
 
 public:
     ImpPathCreateUser(): nCircRadius(0),nCircStWink(0),nCircRelWink(0),
-        bBezier(sal_False),bBezHasCtrl0(sal_False),bCurve(sal_False),bCircle(sal_False),bAngleSnap(sal_False),bLine(sal_False),bLine90(sal_False),bRect(sal_False),
-        bMixedCreate(sal_False),nBezierStartPoint(0),eStartKind(OBJ_NONE),eAktKind(OBJ_NONE) { }
+        bBezier(false),bBezHasCtrl0(false),bCurve(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
+        bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eAktKind(OBJ_NONE) { }
 
-    void ResetFormFlags() { bBezier=sal_False; bCurve=sal_False; bCircle=sal_False; bLine=sal_False; bRect=sal_False; }
+    void ResetFormFlags() { bBezier=false; bCurve=false; bCircle=false; bLine=false; bRect=false; }
     bool IsFormFlag() const { return bBezier || bCurve || bCircle || bLine || bRect; }
     XPolygon GetFormPoly() const;
     bool CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
@@ -334,7 +334,7 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
         }
     }
     nCircRadius=nRad;
-    if (nRad==0 || std::abs(nCircRelWink)<5) bRet=sal_False;
+    if (nRad==0 || std::abs(nCircRelWink)<5) bRet=false;
     bCircle=bRet;
     return bRet;
 }
@@ -390,8 +390,8 @@ bool ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
 {
     aLineStart=rP1;
     aLineEnd=rP2;
-    bLine90=sal_False;
-    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bLine=sal_False; return sal_False; }
+    bLine90=false;
+    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bLine=false; return false; }
     Point aTmpPt(rP2-rP1);
     long nDirX=rDir.X();
     long nDirY=rDir.Y();
@@ -404,8 +404,8 @@ bool ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
     } else {          // rectangular transition
         aLineEnd+=aP2;
     }
-    bLine=sal_True;
-    return sal_True;
+    bLine=true;
+    return true;
 }
 
 XPolygon ImpPathCreateUser::GetLinePoly() const
@@ -421,7 +421,7 @@ bool ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
     aRectP1=rP1;
     aRectP2=rP1;
     aRectP3=rP2;
-    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bRect=sal_False; return sal_False; }
+    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bRect=false; return false; }
     Point aTmpPt(rP2-rP1);
     long nDirX=rDir.X();
     long nDirY=rDir.Y();
@@ -465,8 +465,8 @@ bool ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
             aRectP3.Y()+=ytemp;
         }
     }
-    bRect=sal_True;
-    return sal_True;
+    bRect=true;
+    return true;
 }
 
 XPolygon ImpPathCreateUser::GetRectPoly() const
@@ -540,7 +540,7 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
 {
     const SdrHdl* pHdl=rDrag.GetHdl();
     if(!pHdl)
-        return sal_False;
+        return false;
 
     bool bMultiPointDrag(true);
 
@@ -681,7 +681,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 if (!bHLin || !bVLin) {
                     long ndx=aPos.X()-aPnt1.X();
                     long ndy=aPos.Y()-aPnt1.Y();
-                    bPnt1=sal_True;
+                    bPnt1=true;
                     double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
                     double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
@@ -702,7 +702,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 if (!bHLin || !bVLin) {
                     long ndx=aPos.X()-aPnt2.X();
                     long ndy=aPos.Y()-aPnt2.Y();
-                    bPnt2=sal_True;
+                    bPnt2=true;
                     double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
                     double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
@@ -722,7 +722,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 nX1+=nY1; // correction distance to square
                 nX2+=nY2; // correction distance to square
                 // let the alternative that allows fewer correction win
-                if (nX1<nX2) bPnt2=sal_False; else bPnt1=sal_False;
+                if (nX1<nX2) bPnt2=false; else bPnt1=false;
             }
             if (bPnt1) rDrag.Now()=aNeuPos1;
             if (bPnt2) rDrag.Now()=aNeuPos2;
@@ -939,23 +939,23 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             mrSdrPathObject.GetModel()->TakeWinkStr(std::abs(pU->nCircRelWink), aMetr);
             aStr += aMetr;
             aStr += " r=";
-            mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, sal_True);
+            mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, true);
             aStr += aMetr;
         }
 
         aStr += "dx=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, sal_True);
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, true);
         aStr += aMetr;
 
         aStr += " dy=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, sal_True);
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, true);
         aStr += aMetr;
 
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
             aStr += "  l=";
-            mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
+            mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
             aStr += aMetr;
 
             sal_Int32 nWink(GetAngle(aNow));
@@ -1017,11 +1017,11 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         aStr = "";
         aStr += "dx=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, sal_True);
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, true);
         aStr += aMetr;
 
         aStr += " dy=";
-        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, sal_True);
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, true);
         aStr += aMetr;
 
         if(!pDragData->IsMultiPointDrag())
@@ -1048,7 +1048,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                 sal_Int32 nLen(GetLen(aNow));
                 aStr += "  l=";
-                mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
+                mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                 aStr += aMetr;
 
                 sal_Int32 nWink(GetAngle(aNow));
@@ -1094,7 +1094,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nLen(GetLen(aPt));
                     aStr += "  l=";
-                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
+                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                     aStr += aMetr;
 
                     sal_Int32 nWink(GetAngle(aPt));
@@ -1115,7 +1115,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nLen(GetLen(aPt));
                     aStr += "l=";
-                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
+                    mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                     aStr += aMetr;
 
                     sal_Int32 nWink(GetAngle(aPt));
@@ -1252,7 +1252,7 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
     rStat.SetNoSnap(bFreeHand);
     rStat.SetOrtho8Possible();
     aPathPolygon.Clear();
-    mbCreating=sal_True;
+    mbCreating=true;
     bool bMakeStartPoint = true;
     SdrView* pView=rStat.GetView();
     if (pView!=NULL && pView->IsUseIncompatiblePathCreateInterface() &&
@@ -1291,7 +1291,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
                 case OBJ_FREELINE: case OBJ_FREEFILL:
                 case OBJ_SPLNLINE: case OBJ_SPLNFILL: {
                     pU->eAktKind=eNewKind;
-                    pU->bMixedCreate=sal_True;
+                    pU->bMixedCreate=true;
                     pU->nBezierStartPoint=rXPoly.GetPointCount();
                     if (pU->nBezierStartPoint>0) pU->nBezierStartPoint--;
                 } break;
@@ -1334,7 +1334,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
             Point aPt1(rStat.Now());
             long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
             long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
-            if (dx<nMinDist && dy<nMinDist) return sal_False;
+            if (dx<nMinDist && dy<nMinDist) return false;
 
             // TODO: the following is copied from EndCreate (with a few smaller modifications)
             // and should be combined into a method with the code there.
@@ -1390,7 +1390,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
         bRet = eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
-            mbCreating = sal_False;
+            mbCreating = false;
             delete pU;
             rStat.SetUser(NULL);
         }
@@ -1401,7 +1401,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
         bRet=eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
-            mbCreating=sal_False;
+            mbCreating=false;
             delete pU;
             rStat.SetUser(NULL);
         }
@@ -1425,7 +1425,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             } else {
                 if (nActPoint==1 && IsBezier(pU->eAktKind) && !pU->bBezHasCtrl0) {
                     pU->aBezControl0=rStat.GetNow();
-                    pU->bBezHasCtrl0=sal_True;
+                    pU->bBezHasCtrl0=true;
                     nActPoint--;
                 }
                 if (pU->IsFormFlag()) {
@@ -1444,7 +1444,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         }
         if (eCmd==SDRCREATE_NEXTOBJECT) {
             if (rXPoly.GetPointCount()>=2) {
-                pU->bBezHasCtrl0=sal_False;
+                pU->bBezHasCtrl0=false;
                 // only a singular polygon may be opened, so close this
                 rXPoly[nActPoint]=rXPoly[0];
                 XPolygon aXP;
@@ -1485,7 +1485,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     pU->ResetFormFlags();
     bRet=eCmd==SDRCREATE_FORCEEND;
     if (bRet) {
-        mbCreating=sal_False;
+        mbCreating=false;
         delete pU;
         rStat.SetUser(NULL);
     }
@@ -1536,7 +1536,7 @@ void ImpPathForDragAndCreate::BrkCreate(SdrDragStat& rStat)
 {
     ImpPathCreateUser* pU=(ImpPathCreateUser*)rStat.GetUser();
     aPathPolygon.Clear();
-    mbCreating=sal_False;
+    mbCreating=false;
     delete pU;
     rStat.SetUser(NULL);
 }
@@ -1812,7 +1812,7 @@ void SdrPathObj::ImpSetClosed(sal_Bool bClose)
             default: break;
         }
 
-        bClosedObj = sal_True;
+        bClosedObj = true;
     }
     else
     {
@@ -1825,7 +1825,7 @@ void SdrPathObj::ImpSetClosed(sal_Bool bClose)
             default: break;
         }
 
-        bClosedObj = sal_False;
+        bClosedObj = false;
     }
 
     ImpForceKind();
@@ -1833,12 +1833,12 @@ void SdrPathObj::ImpSetClosed(sal_Bool bClose)
 
 void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bNoContortion=sal_False;
+    rInfo.bNoContortion=false;
 
     bool bCanConv = !HasText() || ImpCanConvTextToCurve();
     bool bIsPath = IsBezier() || IsSpline();
 
-    rInfo.bEdgeRadiusAllowed    = sal_False;
+    rInfo.bEdgeRadiusAllowed    = false;
     rInfo.bCanConvToPath = bCanConv && !bIsPath;
     rInfo.bCanConvToPoly = bCanConv && bIsPath;
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
@@ -2455,7 +2455,7 @@ Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
     sal_uInt32 nPoly,nPnt;
     if(!PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nSnapPnt, nPoly, nPnt))
     {
-        DBG_ASSERT(sal_False,"SdrPathObj::GetSnapPoint: Point nSnapPnt does not exist.");
+        DBG_ASSERT(false,"SdrPathObj::GetSnapPoint: Point nSnapPnt does not exist.");
     }
 
     const basegfx::B2DPoint aB2DPoint(GetPathPoly().getB2DPolygon(nPoly).getB2DPoint(nPnt));

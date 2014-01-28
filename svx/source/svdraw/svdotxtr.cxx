@@ -198,7 +198,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
 void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     long dx=aRect.Right()-aRect.Left();
     long dy=aRect.Bottom()-aRect.Top();
     Point aP(aRect.TopLeft());
@@ -217,12 +217,12 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     }
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nWink,sn,cs);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
 
     // when this is a SdrPathObj, aRect may be uninitialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
@@ -239,12 +239,12 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     ImpCheckShear();
     SetRectsDirty();
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     bool bNoShearMerk=aGeo.nShearWink==0;
     bool bRota90Merk = false;
     if (bNoShearMerk &&
@@ -292,7 +292,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     ImpCheckShear();
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////

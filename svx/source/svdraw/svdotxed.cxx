@@ -93,7 +93,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         Rectangle aAnchorRect;
         Rectangle aTextRect;
-        TakeTextRect(rOutl, aTextRect, sal_False,
+        TakeTextRect(rOutl, aTextRect, false,
             &aAnchorRect);
         Fraction aFitXKorreg(1,1);
         ImpSetCharStretching(rOutl,aTextRect.GetSize(),aAnchorRect.GetSize(),aFitXKorreg);

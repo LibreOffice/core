@@ -653,7 +653,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             // #91254# put text to object and set EmptyPresObj to FALSE
             if( mpText && bOwnParaObj && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
-                mpObject->SetEmptyPresObj( sal_False );
+                mpObject->SetEmptyPresObj( false );
                 static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
 
                 // #i103982# Here, due to mpObject->NbcSetOutlinerParaObjectForText, we LOSE ownership of the
@@ -893,7 +893,7 @@ void SvxTextEditSourceImpl::UpdateData()
                 }
 
                 if( mpObject->IsEmptyPresObj() )
-                    mpObject->SetEmptyPresObj(sal_False);
+                    mpObject->SetEmptyPresObj(false);
             }
         }
     }

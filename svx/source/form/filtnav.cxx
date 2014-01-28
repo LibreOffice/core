@@ -1157,7 +1157,7 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     m_pModel = new FmFilterModel();
     StartListening( *m_pModel );
 
-    EnableInplaceEditing( sal_True );
+    EnableInplaceEditing( true );
     SetSelectionMode(MULTIPLE_SELECTION);
 
     SetDragDropMode(0xFFFF);
@@ -1556,7 +1556,7 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 
     if (pEntry == m_pEditingCurrently)
         // cancel editing
-        EndEditing(sal_True);
+        EndEditing(true);
 
     if (pEntry)
         GetModel()->Remove( pEntry );

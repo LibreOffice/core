@@ -183,7 +183,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
                     OSL_FAIL("was fuer ein Layout ist das?");
-                    return sal_False;
+                    return false;
             }
             rVal <<= eRet;
         }
@@ -216,7 +216,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
-                    return sal_False;
+                    return false;
                 eLayout = (style::PageStyleLayout)nValue;
             }
             eUse &= 0xfff0;

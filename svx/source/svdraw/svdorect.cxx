@@ -67,14 +67,14 @@ TYPEINIT1(SdrRectObj,SdrTextObj);
 SdrRectObj::SdrRectObj()
 :   mpXPoly(0L)
 {
-    bClosedObj=sal_True;
+    bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(const Rectangle& rRect)
 :   SdrTextObj(rRect),
     mpXPoly(NULL)
 {
-    bClosedObj=sal_True;
+    bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
@@ -84,7 +84,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
-    bClosedObj=sal_True;
+    bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
@@ -94,7 +94,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
-    bClosedObj=sal_True;
+    bClosedObj=true;
 }
 
 SdrRectObj::~SdrRectObj()
@@ -169,22 +169,22 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
     rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
-    rInfo.bResizePropAllowed=sal_True;
-    rInfo.bRotateFreeAllowed=sal_True;
-    rInfo.bRotate90Allowed  =sal_True;
+    rInfo.bResizePropAllowed=true;
+    rInfo.bRotateFreeAllowed=true;
+    rInfo.bRotate90Allowed  =true;
     rInfo.bMirrorFreeAllowed=bNoTextFrame;
     rInfo.bMirror45Allowed  =bNoTextFrame;
     rInfo.bMirror90Allowed  =bNoTextFrame;
 
     // allow transparency
-    rInfo.bTransparenceAllowed = sal_True;
+    rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
     XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;
-    rInfo.bEdgeRadiusAllowed=sal_True;
+    rInfo.bEdgeRadiusAllowed=true;
 
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();
     if (bCanConv && !bNoTextFrame && !HasText()) {
@@ -549,7 +549,7 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
     if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(sal_False);
+    aGP.SetPercent(false);
     return aGP;
 }
 
@@ -575,7 +575,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(sal_False);
+    aGP.SetPercent(false);
     return aGP;
 }
 

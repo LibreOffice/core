@@ -145,8 +145,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
             if (nHgt<1) nHgt=1; // nVDist may be negative
             long nWdtGrow=nWdt-(rR.Right()-rR.Left());
             long nHgtGrow=nHgt-(rR.Bottom()-rR.Top());
-            if (nWdtGrow==0) bWdtGrow=sal_False;
-            if (nHgtGrow==0) bHgtGrow=sal_False;
+            if (nWdtGrow==0) bWdtGrow=false;
+            if (nHgtGrow==0) bHgtGrow=false;
             if (bWdtGrow || bHgtGrow) {
                 if (bWdtGrow) {
                     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -176,11 +176,11 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                     aD2-=aD1;
                     rR.Move(aD2.X(),aD2.Y());
                 }
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)

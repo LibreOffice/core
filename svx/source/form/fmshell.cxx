@@ -218,8 +218,8 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             ,m_pFormModel( NULL )
             ,m_pParentShell(_pParent)
             ,m_nLastSlot( 0 )
-            ,m_bDesignMode( sal_True )
-            ,m_bHasForms(sal_False)
+            ,m_bDesignMode( true )
+            ,m_bHasForms(false)
 {
     m_pImpl->acquire();
     SetPool( &SFX_APP()->GetPool() );
@@ -312,7 +312,7 @@ void FmFormShell::impl_setDesignMode(sal_Bool bDesign)
     }
     else
     {
-        m_bHasForms = sal_False;
+        m_bHasForms = false;
         m_bDesignMode = bDesign;
         UIFeatureChanged();
     }
@@ -498,7 +498,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, sal_False );
+            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, false );
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -528,7 +528,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 // do this asynchron, so that the creation can be finished first
                 // reusing the SID_FM_TOGGLECONTROLFOCUS is somewhat hacky ... which it wouldn't if it would have another
                 // name, so I do not really have a big problem with this ....
-                SfxBoolItem aGrabFocusIndicatorItem( SID_FM_TOGGLECONTROLFOCUS, sal_True );
+                SfxBoolItem aGrabFocusIndicatorItem( SID_FM_TOGGLECONTROLFOCUS, true );
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_ASYNCHRON,
                                           &aGrabFocusIndicatorItem, NULL );
             }
@@ -608,7 +608,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
-            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, sal_False );
+            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, false );
             sal_Bool bShow = sal_True;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
@@ -620,7 +620,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_PROPERTIES:
         {
             // PropertyBrowser anzeigen
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             InterfaceBag aOnlyTheForm;
@@ -634,7 +634,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_CTL_PROPERTIES:
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
@@ -671,7 +671,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_DESIGN_MODE:
         {
-            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, false);
             bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
             SetDesignMode( bDesignMode );
             if ( m_bDesignMode == bDesignMode )
@@ -823,7 +823,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             rReq.Done();
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
-            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, sal_True );
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, true );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
                 &aIdentifierItem, NULL );
         }   break;
@@ -1076,7 +1076,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                    rSet.Put( SfxBoolItem( nWhich, false ) );
                     // just to have a defined state (available and not checked)
                 }
             }

@@ -280,14 +280,14 @@ private:
     SVX_DLLPRIVATE void Undirty();
     SVX_DLLPRIVATE void ForceUndirty() const { if (bDirty) ((SdrFormatter*)this)->Undirty(); }
 public:
-    SdrFormatter(MapUnit eSrc, MapUnit eDst)     { eSrcMU=eSrc; bSrcFU=sal_False; eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
-    SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=sal_False; eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
-    SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=sal_True;  eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
-    SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=sal_True;  eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
-    void SetSourceUnit(MapUnit eSrc)        { eSrcMU=eSrc; bSrcFU=sal_False; bDirty=sal_True; }
-    void SetSourceUnit(FieldUnit eSrc)      { eSrcFU=eSrc; bSrcFU=sal_True;  bDirty=sal_True; }
-    void SetDestinationUnit(MapUnit eDst)   { eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
-    void SetDestinationUnit(FieldUnit eDst) { eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
+    SdrFormatter(MapUnit eSrc, MapUnit eDst)     { eSrcMU=eSrc; bSrcFU=false; eDstMU=eDst; bDstFU=false; bDirty=true; }
+    SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=false; eDstFU=eDst; bDstFU=true;  bDirty=true; }
+    SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=true;  eDstMU=eDst; bDstFU=false; bDirty=true; }
+    SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=true;  eDstFU=eDst; bDstFU=true;  bDirty=true; }
+    void SetSourceUnit(MapUnit eSrc)        { eSrcMU=eSrc; bSrcFU=false; bDirty=true; }
+    void SetSourceUnit(FieldUnit eSrc)      { eSrcFU=eSrc; bSrcFU=true;  bDirty=true; }
+    void SetDestinationUnit(MapUnit eDst)   { eDstMU=eDst; bDstFU=false; bDirty=true; }
+    void SetDestinationUnit(FieldUnit eDst) { eDstFU=eDst; bDstFU=true;  bDirty=true; }
     void TakeStr(long nVal, OUString& rStr) const;
     static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
     static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);

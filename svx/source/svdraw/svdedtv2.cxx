@@ -627,7 +627,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, s
     }
     else
     {
-        SdrObject* pConvObj = pObj->ConvertToPolyObj(bCombine, sal_False);
+        SdrObject* pConvObj = pObj->ConvertToPolyObj(bCombine, false);
 
         if(pConvObj)
         {
@@ -1479,7 +1479,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
                 rOL.InsertObject(pPath, rPos, &aReason);
                 if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, sal_True));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
                 MarkObj(pPath, pPV, sal_False, sal_True);
                 rPos++;
             }
@@ -1514,7 +1514,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
                     rOL.InsertObject(pPath, rPos, &aReason);
                     if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, sal_True));
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
                     MarkObj(pPath, pPV, sal_False, sal_True);
                     rPos++;
                 }
@@ -1643,7 +1643,7 @@ void SdrEditView::DismantleMarkedObjects(sal_Bool bMakeLines)
                 ImpDismantleOneObject(pObj,*pOL,nPos,pPV,bMakeLines);
             }
             if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj,sal_True));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj,true));
             pOL->RemoveObject(nPos0);
 
             if( !bUndo )

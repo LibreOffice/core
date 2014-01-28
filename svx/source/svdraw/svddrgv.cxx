@@ -50,33 +50,33 @@ using namespace sdr;
 
 void SdrDragView::ImpClearVars()
 {
-    bFramDrag=sal_False;
+    bFramDrag=false;
     eDragMode=SDRDRAG_MOVE;
-    bDragLimit=sal_False;
-    bMarkedHitMovesAlways=sal_False;
+    bDragLimit=false;
+    bMarkedHitMovesAlways=false;
     eDragHdl=HDL_MOVE;
     pDragHdl=NULL;
-    bDragHdl=sal_False;
-    bDragSpecial=sal_False;
+    bDragHdl=false;
+    bDragSpecial=false;
     mpCurrentSdrDragMethod=NULL;
-    bDragStripes=sal_False;
-    bMirrRefDragObj=sal_True;
-    bDragWithCopy=sal_False;
+    bDragStripes=false;
+    bMirrRefDragObj=true;
+    bDragWithCopy=false;
     pInsPointUndo=NULL;
-    bInsGluePoint=sal_False;
-    bInsObjPointMode=sal_False;
-    bInsGluePointMode=sal_False;
+    bInsGluePoint=false;
+    bInsObjPointMode=false;
+    bInsGluePointMode=false;
     nDragXorPolyLimit=100;
     nDragXorPointLimit=500;
-    bNoDragXorPolys=sal_False;
-    bAutoVertexCon=sal_True;
-    bAutoCornerCon=sal_False;
-    bRubberEdgeDragging=sal_True;
-    bDetailedEdgeDragging=sal_True;
+    bNoDragXorPolys=false;
+    bAutoVertexCon=true;
+    bAutoCornerCon=false;
+    bRubberEdgeDragging=true;
+    bDetailedEdgeDragging=true;
     nDetailedEdgeDraggingLimit=10;
-    bResizeAtCenter=sal_False;
-    bCrookAtCenter=sal_False;
-    bMouseHideWhileDraggingPoints=sal_False;
+    bResizeAtCenter=false;
+    bCrookAtCenter=false;
+    bMouseHideWhileDraggingPoints=false;
 
     // init using default
     mbSolidDragging = getOptionsDrawinglayer().IsSolidDragCreate();
@@ -207,8 +207,8 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
         SetDragWithCopy(sal_False);
         //TODO: aAni.Reset();
         mpCurrentSdrDragMethod=NULL;
-        bDragSpecial=sal_False;
-        bDragLimit=sal_False;
+        bDragSpecial=false;
+        bDragLimit=false;
         SdrDragMode eTmpMode=eDragMode;
         if (eTmpMode==SDRDRAG_MOVE && pHdl!=NULL && pHdl->GetKind()!=HDL_MOVE) {
             eTmpMode=SDRDRAG_RESIZE;
@@ -218,7 +218,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
         if (!bFramDrag &&
             (pMarkedObj==NULL || !pMarkedObj->hasSpecialDrag()) &&
             (pHdl==NULL || pHdl->GetObj()==NULL)) {
-            bFramDrag=sal_True;
+            bFramDrag=true;
         }
 
         Point aPnt(rPnt);
@@ -354,7 +354,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                         if(!IsTransparenceAllowed())
                             return sal_False;
 
-                        mpCurrentSdrDragMethod = new SdrDragGradient(*this, sal_False);
+                        mpCurrentSdrDragMethod = new SdrDragGradient(*this, false);
                     }
                     break;
                 }
@@ -463,7 +463,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                             if(!mpCurrentSdrDragMethod)
                             {
                                 // fallback to DragSpecial if no interaction defined
-                                bDragSpecial = sal_True;
+                                bDragSpecial = true;
                                 mpCurrentSdrDragMethod = new SdrDragObjOwn(*this);
                             }
                         }
@@ -487,12 +487,12 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                     // Obj may not Move SpecialDrag, so try with MoveFrameDrag
                     delete mpCurrentSdrDragMethod;
                     mpCurrentSdrDragMethod = 0;
-                    bDragSpecial=sal_False;
+                    bDragSpecial=false;
 
                     if (!IsMoveAllowed())
                         return sal_False;
 
-                    bFramDrag=sal_True;
+                    bFramDrag=true;
                     mpCurrentSdrDragMethod = new SdrDragMove(*this);
                     aDragStat.SetDragMethod(mpCurrentSdrDragMethod);
                     bRet = mpCurrentSdrDragMethod->BeginSdrDrag();
@@ -560,7 +560,7 @@ sal_Bool SdrDragView::EndDragObj(sal_Bool bCopy)
         if (bInsPolyPoint)
         {
             SetMarkHandles();
-            bInsPolyPoint=sal_False;
+            bInsPolyPoint=false;
             if( bUndo )
             {
                 BegUndo(aInsPointUndoStr);
@@ -586,7 +586,7 @@ sal_Bool SdrDragView::EndDragObj(sal_Bool bCopy)
         BrkDragObj();
     }
 
-    bInsPolyPoint=sal_False;
+    bInsPolyPoint=false;
     SetInsertGluePoint(sal_False);
 
     return bRet;
@@ -607,7 +607,7 @@ void SdrDragView::BrkDragObj()
             delete pInsPointUndo;
             pInsPointUndo=NULL;
             SetMarkHandles();
-            bInsPolyPoint=sal_False;
+            bInsPolyPoint=false;
         }
 
         if (IsInsertGluePoint())
@@ -669,7 +669,7 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
 
         if(0xffffffff != mnInsPointNum)
         {
-            bInsPolyPoint = sal_True;
+            bInsPolyPoint = true;
             UnmarkAllPoints();
             AdjustMarkHdl();
 
@@ -810,7 +810,7 @@ void SdrDragView::ShowDragObj()
             }
         }
 
-        aDragStat.SetShown(sal_True);
+        aDragStat.SetShown(true);
     }
 }
 
@@ -819,7 +819,7 @@ void SdrDragView::HideDragObj()
     if(mpCurrentSdrDragMethod && aDragStat.IsShown())
     {
         mpCurrentSdrDragMethod->destroyOverlayGeometry();
-        aDragStat.SetShown(sal_False);
+        aDragStat.SetShown(false);
     }
 }
 

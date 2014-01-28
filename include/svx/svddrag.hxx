@@ -94,7 +94,7 @@ protected:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
     SdrDragStat(): aPnts()                           { pUser=NULL; Reset(); }
-    ~SdrDragStat()                                   { Clear(sal_False); }
+    ~SdrDragStat()                                   { Clear(false); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
@@ -124,8 +124,8 @@ public:
     void         SetShown(bool bOn)                  { bShown=bOn; }
 
     bool         IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=sal_True; }
-    void         ResetMinMoved()                     { bMinMoved=sal_False; }
+    void         SetMinMoved()                       { bMinMoved=true; }
+    void         ResetMinMoved()                     { bMinMoved=false; }
     void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
     sal_uInt16       GetMinMove() const                  { return nMinMov; }
 
@@ -160,7 +160,7 @@ public:
     Point KorregPos(const Point& rNow, const Point& rPrev) const;
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
-    void  NextPoint(bool bSaveReal=sal_False);
+    void  NextPoint(bool bSaveReal=false);
     void  PrevPoint();
     bool CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }

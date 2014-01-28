@@ -159,8 +159,8 @@ std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
                 SdrObject* pPartObj = aIter.Next();
                 if ( pPartObj->ISA( SdrEdgeObj ) )
                 {
-                    if ( ( pPartObj->GetConnectedNode( sal_False ) == &rO ) ||
-                         ( pPartObj->GetConnectedNode( sal_True  ) == &rO ) )
+                    if ( ( pPartObj->GetConnectedNode( false ) == &rO ) ||
+                         ( pPartObj->GetConnectedNode( true  ) == &rO ) )
                     {
                         vUndoActions.push_back( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pPartObj ) );
                     }
@@ -768,11 +768,11 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long nAngle=((const SdrHorzShearAllItem*)pPoolItem)->GetValue();
-        ShearMarkedObj(aAllSnapRect.Center(),nAngle,sal_False);
+        ShearMarkedObj(aAllSnapRect.Center(),nAngle,false);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long nAngle=((const SdrVertShearAllItem*)pPoolItem)->GetValue();
-        ShearMarkedObj(aAllSnapRect.Center(),nAngle,sal_True);
+        ShearMarkedObj(aAllSnapRect.Center(),nAngle,true);
     }
 
     const bool bUndo = IsUndoEnabled();
@@ -1038,7 +1038,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         // uses its second parameter (bInvalidAsDefault) to
         // remove all such items to set them to default.
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr, sal_True);
+        aAttr.Put(rAttr, true);
 
         // #i38135#
         bool bResetAnimationTimer(false);
@@ -1088,7 +1088,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                 const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != 0;
 
                 // add attribute undo
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,sal_False,bHasEEItems || bPossibleGeomChange || bRescueText));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,false,bHasEEItems || bPossibleGeomChange || bRescueText));
             }
 
             // set up a scene updater if object is a 3d object
@@ -1237,7 +1237,7 @@ sal_Bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAt
 {
     if(GetMarkedObjectCount())
     {
-        rTargetSet.Put(GetAttrFromMarked(bOnlyHardAttr), sal_False);
+        rTargetSet.Put(GetAttrFromMarked(bOnlyHardAttr), false);
         return sal_True;
     }
     else

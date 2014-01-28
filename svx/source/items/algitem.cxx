@@ -112,7 +112,7 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     {
         sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
-            return sal_False;
+            return false;
         eOrient = (table::CellOrientation)nValue;
     }
     SvxCellOrientation eSvx = SVX_ORIENTATION_STANDARD;
@@ -368,7 +368,7 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     long nMaxVal = bConvert ? TWIP_TO_MM100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
     sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))
-        return sal_False;
+        return false;
 
     switch ( nMemberId & ~CONVERT_TWIPS )
     {

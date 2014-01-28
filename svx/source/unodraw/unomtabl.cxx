@@ -326,7 +326,7 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
 
             throw container::NoSuchElementException();
         }
-        while(0);
+        while(false);
     }
 
     return aAny;

@@ -45,7 +45,7 @@ E3dDragMethod::E3dDragMethod (
 :   SdrDragMethod(_rView),
     meConstraint(eConstr),
     mbMoveFull(bFull),
-    mbMovedAtAll(sal_False)
+    mbMovedAtAll(false)
 {
     // Create a unit for all the 3D objects present in the selection
     const long nCnt(rMark.GetMarkCount());
@@ -150,7 +150,7 @@ bool E3dDragMethod::BeginSdrDrag()
         Show();
     }
 
-    return sal_True;
+    return true;
 }
 
 bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
@@ -187,7 +187,7 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
             getSdrDragView().EndUndo();
     }
 
-    return sal_True;
+    return true;
 }
 
 void E3dDragMethod::CancelSdrDrag()

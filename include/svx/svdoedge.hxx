@@ -232,7 +232,7 @@ public:
 
     // bTail1=TRUE: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect
-    void SetEdgeTrackDirty() { bEdgeTrackDirty=sal_True; }
+    void SetEdgeTrackDirty() { bEdgeTrackDirty=true; }
     void ConnectToNode(bool bTail1, SdrObject* pObj);
     void DisconnectFromNode(bool bTail1);
     SdrObject* GetConnectedNode(bool bTail1) const;

@@ -114,7 +114,7 @@ sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerI
     if (pObjList!=NULL) {
         const SdrPage* pPg=pObjList->GetPage();
         if (pPg!=NULL) {
-            rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,sal_True);
+            rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,true);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
             SdrPageView* pPV = GetSdrPageView();
             if (pPV!=NULL) {
@@ -304,9 +304,9 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
             {
                 if(bResize)
                 {
-                    pNeuObj->GetModel()->SetPasteResize(sal_True);
+                    pNeuObj->GetModel()->SetPasteResize(true);
                     pNeuObj->NbcResize(aPt0,xResize,yResize);
-                    pNeuObj->GetModel()->SetPasteResize(sal_False);
+                    pNeuObj->GetModel()->SetPasteResize(false);
                 }
 
                 // #i39861#
@@ -330,7 +330,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
                     }
                     else
                     {
-                        nLayer = rAd.GetLayerID(aAktLayer, sal_True);
+                        nLayer = rAd.GetLayerID(aAktLayer, true);
                     }
 
                     if(SDRLAYER_NOTFOUND == nLayer)
@@ -681,7 +681,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
-    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
+    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
     sal_uInt32                                  n, nCount;
 
     for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
@@ -733,7 +733,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     // use a copy.
     SortMarkedObjects();
     SdrModel* pNeuMod=pMod->AllocModel();
-    SdrPage* pNeuPag=pNeuMod->AllocPage(sal_False);
+    SdrPage* pNeuPag=pNeuMod->AllocPage(false);
     pNeuMod->InsertPage(pNeuPag);
 
     if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )

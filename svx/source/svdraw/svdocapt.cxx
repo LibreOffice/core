@@ -78,15 +78,15 @@ public:
     ImpCaptParams()
     {
         eType      =SDRCAPT_TYPE3;
-        bFixedAngle=sal_False;
+        bFixedAngle=false;
         nAngle     =4500;
         nGap       =0;
         eEscDir    =SDRCAPT_ESCHORIZONTAL;
-        bEscRel    =sal_True;
+        bEscRel    =true;
         nEscRel    =5000;
         nEscAbs    =0;
         nLineLen   =0;
-        bFitLineLen=sal_True;
+        bFitLineLen=true;
     }
     void CalcEscPos(const Point& rTail, const Rectangle& rRect, Point& rPt, EscDir& rDir) const;
 };
@@ -214,19 +214,19 @@ SdrCaptionObj::~SdrCaptionObj()
 
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bCanConvToPath    =sal_True;
-    rInfo.bCanConvToPoly    =sal_True;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bRotateFreeAllowed=false;
+    rInfo.bRotate90Allowed  =false;
+    rInfo.bMirrorFreeAllowed=false;
+    rInfo.bMirror45Allowed  =false;
+    rInfo.bMirror90Allowed  =false;
+    rInfo.bTransparenceAllowed = false;
+    rInfo.bGradientAllowed = false;
+    rInfo.bShearAllowed     =false;
+    rInfo.bEdgeRadiusAllowed=false;
+    rInfo.bCanConvToPath    =true;
+    rInfo.bCanConvToPoly    =true;
+    rInfo.bCanConvToPathLineToArea=false;
+    rInfo.bCanConvToPolyLineToArea=false;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
@@ -327,7 +327,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
         if(!pHdl)
         {
             if (bMovProt)
-                return 0;
+                return false;
 
             rDrag.SetNoSnap(true);
             rDrag.SetActionRect(aRect);
@@ -544,7 +544,7 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
 
 bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (aRect.IsEmpty()) return sal_False; // Create currently only works with the given Rect
+    if (aRect.IsEmpty()) return false; // Create currently only works with the given Rect
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -552,7 +552,7 @@ bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
     aTailPoly[0]=rStat.GetStart();
     ImpCalcTail(aPara,aTailPoly,aRect);
     rStat.SetActionRect(aRect);
-    return sal_True;
+    return true;
 }
 
 bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
@@ -563,8 +563,8 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     ImpCalcTail(aPara,aTailPoly,aRect);
     rStat.SetActionRect(aRect);
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
-    return sal_True;
+    bSnapRectDirty=true;
+    return true;
 }
 
 bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -579,7 +579,7 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 bool SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_False;
+    return false;
 }
 
 void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)

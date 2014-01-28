@@ -96,7 +96,7 @@ bool SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
 {
     const SvxClipboardFmtItem& rCmp = (SvxClipboardFmtItem&)rComp;
     if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())
-        return 0;
+        return false;
 
     int nRet = 1;
     for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.size(); n < nEnd; ++n )

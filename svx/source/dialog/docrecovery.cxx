@@ -989,7 +989,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     m_aFileListLB.SetBackground( rStyleSettings.GetDialogColor() );
 
-    m_aNextBtn.Enable(sal_True);
+    m_aNextBtn.Enable(true);
     m_aNextBtn.SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
     m_aCancelBtn.SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
 
@@ -1032,8 +1032,8 @@ short RecoveryDialog::execute()
                 // Dialog was started first time ...
                 // wait for user decision ("start" or "cancel" recovery)
                 // This decision will be made inside the NextBtn handler.
-                m_aNextBtn.Enable(sal_True);
-                m_aCancelBtn.Enable(sal_True);
+                m_aNextBtn.Enable(true);
+                m_aCancelBtn.Enable(true);
                 m_bWaitForUser = true;
                 while(m_bWaitForUser)
                     Application::Yield();
@@ -1051,8 +1051,8 @@ short RecoveryDialog::execute()
                 // do it asynchronous (to allow repaints)
                 // and wait for this asynchronous operation.
                 m_aDescrFT.SetText( m_aTitleRecoveryInProgress );
-                m_aNextBtn.Enable(sal_False);
-                m_aCancelBtn.Enable(sal_False);
+                m_aNextBtn.Enable(false);
+                m_aCancelBtn.Enable(false);
                 m_pCore->setProgressHandler(m_xProgress);
                 m_pCore->setUpdateListener(this);
                 m_pCore->doRecovery();
@@ -1074,15 +1074,15 @@ short RecoveryDialog::execute()
                  {
                      m_aDescrFT.SetText(m_aRecoveryOnlyFinishDescr);
                      m_aNextBtn.SetText(m_aRecoveryOnlyFinish);
-                     m_aNextBtn.Enable(sal_True);
-                     m_aCancelBtn.Enable(sal_False);
+                     m_aNextBtn.Enable(true);
+                     m_aCancelBtn.Enable(false);
                  }
                  else
                  {
                     m_aDescrFT.SetText(m_aTitleRecoveryReport);
                     m_aNextBtn.SetText(m_aNextStr);
-                    m_aNextBtn.Enable(sal_True);
-                    m_aCancelBtn.Enable(sal_True);
+                    m_aNextBtn.Enable(true);
+                    m_aCancelBtn.Enable(true);
                  }
 
                  m_bWaitForUser = true;
@@ -1524,10 +1524,10 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             maPrevBtn.Enable( _bAllowBack );
 
             maNextBtn.SetClickHdl( LINK( this, ErrorRepWelcomeDialog, NextBtnHdl ) );
-            maNextBtn.Enable( sal_True );
+            maNextBtn.Enable( true );
 
             maCancelBtn.SetClickHdl( LINK( this, ErrorRepWelcomeDialog, CancelBtnHdl ) );
-            maCancelBtn.Enable( sal_True );
+            maCancelBtn.Enable( true );
         }
 
         ErrorRepWelcomeDialog::~ErrorRepWelcomeDialog()

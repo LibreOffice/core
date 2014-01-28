@@ -639,7 +639,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotate the glue points (who still
                                             // have coordinates relative to the
                                             // original page)
-    SetGlueReallyAbsolute(sal_False);  // from now they are again relative to BoundRect (that is defined as aOutRect)
+    SetGlueReallyAbsolute(false);  // from now they are again relative to BoundRect (that is defined as aOutRect)
     SetRectsDirty();
 }
 
@@ -701,7 +701,7 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=true;
     return true;
 }
 

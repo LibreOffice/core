@@ -888,12 +888,12 @@ namespace sdr
                                 {
                                     SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
 
-                                    if(pEdge->GetConnectedNode(sal_True) == pCandidate)
+                                    if(pEdge->GetConnectedNode(true) == pCandidate)
                                     {
                                         aM.SetCon1(sal_True);
                                     }
 
-                                    if(pEdge->GetConnectedNode(sal_False) == pCandidate)
+                                    if(pEdge->GetConnectedNode(false) == pCandidate)
                                     {
                                         aM.SetCon2(sal_True);
                                     }

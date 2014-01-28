@@ -107,7 +107,7 @@ public:
     // !!! Diese Methode nur fuer Leute, die ganz genau wissen was sie tun !!!
 
     // #110094# This should not be needed (!)
-    void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=sal_True; }
+    void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=true; }
     // pModel, pPage, pUpList und pOwnerObj werden Zuweisungeoperator nicht veraendert!
     void operator=(const SdrObjList& rSrcList);
     void CopyObjects(const SdrObjList& rSrcList);

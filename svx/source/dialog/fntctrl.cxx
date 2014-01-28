@@ -584,7 +584,7 @@ void SvxFontPrevWindow::SetPreviewText( const OUString& rString )
 
 void SvxFontPrevWindow::SetFontNameAsPreviewText()
 {
-    pImpl->bUseFontNameAsText = sal_True;
+    pImpl->bUseFontNameAsText = true;
 }
 
 // -----------------------------------------------------------------------

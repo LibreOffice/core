@@ -199,7 +199,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // for ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=true;
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
     }

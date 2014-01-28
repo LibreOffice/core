@@ -158,14 +158,14 @@ void SvxXConnectionPreview::Construct()
                 SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_True );
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_False );
+                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( true );
+                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( false );
 
-                rConn1 = pTmpEdgeObj->GetConnection( sal_True );
-                rConn2 = pTmpEdgeObj->GetConnection( sal_False );
+                rConn1 = pTmpEdgeObj->GetConnection( true );
+                rConn2 = pTmpEdgeObj->GetConnection( false );
 
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( true );
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( false );
 
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
@@ -178,13 +178,13 @@ void SvxXConnectionPreview::Construct()
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
                     pObjList->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( sal_True, pObj1 );
+                    pEdgeObj->ConnectToNode( true, pObj1 );
                 }
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
                     pObjList->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( sal_False, pObj2 );
+                    pEdgeObj->ConnectToNode( false, pObj2 );
                 }
                 pObjList->InsertObject( pEdgeObj );
             }

@@ -78,8 +78,8 @@ void CloneList::CopyConnections() const
 
         if(pOriginalEdge && pCloneEdge)
         {
-            SdrObject* pOriginalNode1 = pOriginalEdge->GetConnectedNode(sal_True);
-            SdrObject* pOriginalNode2 = pOriginalEdge->GetConnectedNode(sal_False);
+            SdrObject* pOriginalNode1 = pOriginalEdge->GetConnectedNode(true);
+            SdrObject* pOriginalNode2 = pOriginalEdge->GetConnectedNode(false);
 
             if(pOriginalNode1)
             {
@@ -96,8 +96,8 @@ void CloneList::CopyConnections() const
                     if (nPos < cloneCount)
                         cObj = GetClone(nPos);
 
-                    if(pOriginalEdge->GetConnectedNode(sal_True) != cObj)
-                        pCloneEdge->ConnectToNode(sal_True, cObj);
+                    if(pOriginalEdge->GetConnectedNode(true) != cObj)
+                        pCloneEdge->ConnectToNode(true, cObj);
                 }
             }
 
@@ -116,8 +116,8 @@ void CloneList::CopyConnections() const
                     if (nPos < cloneCount)
                         cObj = GetClone(nPos);
 
-                    if(pOriginalEdge->GetConnectedNode(sal_False) != cObj)
-                        pCloneEdge->ConnectToNode(sal_False, cObj);
+                    if(pOriginalEdge->GetConnectedNode(false) != cObj)
+                        pCloneEdge->ConnectToNode(false, cObj);
                 }
             }
         }

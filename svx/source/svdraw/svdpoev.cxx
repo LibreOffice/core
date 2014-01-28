@@ -662,7 +662,7 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
 
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
 {
-    bCopy=sal_False; // TODO: not yet implemented
+    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -683,7 +683,7 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
-    bCopy=sal_False; // TODO: not yet implemented
+    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -704,7 +704,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy)
 {
-    bCopy=sal_False; // TODO: not yet implemented
+    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);

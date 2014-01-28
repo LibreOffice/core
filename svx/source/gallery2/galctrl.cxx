@@ -289,7 +289,7 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 {
     DBG_CTOR(GalleryIconView,NULL);
 
-    EnableFullItemMode( sal_False );
+    EnableFullItemMode( false );
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
@@ -517,7 +517,7 @@ sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
-    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, sal_True );
+    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, true );
     Region              aRegion;
 
     // call this to initiate dragging for ValueSet

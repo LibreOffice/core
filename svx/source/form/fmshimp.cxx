@@ -1362,7 +1362,7 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
         if (nConvertSlots[i] == nConversionSlot)
             return nObjectTypes[i] != nObjectType;
 
-    return sal_True;    // all other slots: assume "yes"
+    return true;    // all other slots: assume "yes"
 }
 
 //------------------------------------------------------------------------------

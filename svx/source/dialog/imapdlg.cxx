@@ -228,7 +228,7 @@ sal_Bool SvxIMapDlg::Close()
 
         if( nRet == RET_YES )
         {
-            SfxBoolItem aBoolItem( SID_IMAP_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
             GetBindings().GetDispatcher()->Execute(
                 SID_IMAP_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
@@ -330,7 +330,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         case( TBI_APPLY ):
         {
             URLLoseFocusHdl( NULL );
-            SfxBoolItem aBoolItem( SID_IMAP_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
             GetBindings().GetDispatcher()->Execute(
                 SID_IMAP_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }

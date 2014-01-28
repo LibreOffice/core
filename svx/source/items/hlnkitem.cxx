@@ -242,7 +242,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
                   sIntName == rItem.sIntName &&
                   nMacroEvents == rItem.nMacroEvents);
     if (!bRet)
-        return sal_False;
+        return false;
 
     const SvxMacroTableDtor* pOther = ((SvxHyperlinkItem&)rAttr).pMacroTable;
     if( !pMacroTable )
@@ -324,27 +324,27 @@ bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     {
         case MID_HLINK_NAME   :
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             sIntName = aStr;
         break;
         case MID_HLINK_TEXT   :
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             sName = aStr;
         break;
         case MID_HLINK_URL:
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             sURL = aStr.getStr();
         break;
         case MID_HLINK_TARGET:
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             sTarget = aStr;
         break;
         case MID_HLINK_TYPE:
             if(!(rVal >>= nVal))
-                return sal_False;
+                return false;
             eType = (SvxLinkInsertMode) (sal_uInt16) nVal;
         break;
         default:

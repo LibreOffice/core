@@ -416,7 +416,7 @@ void SvxStyleBox_Impl::Select()
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
         SfxStyleSheetBase* pStyle = NULL;
 
-        bool bCreateNew = 0;
+        bool bCreateNew = false;
 
         if ( pPool )
         {
@@ -431,7 +431,7 @@ void SvxStyleBox_Impl::Select()
         {
             // cannot find the style for whatever reason
             // therefore create a new style
-            bCreateNew = 1;
+            bCreateNew = true;
         }
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.

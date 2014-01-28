@@ -437,11 +437,11 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
     if(bSuccess)
     {
         SdrView* pView = new SdrView(mpDoc, pVDev);
-        pView->SetPageVisible( sal_False );
-        pView->SetBordVisible( sal_False );
-        pView->SetGridVisible( sal_False );
-        pView->SetHlplVisible( sal_False );
-        pView->SetGlueVisible( sal_False );
+        pView->SetPageVisible( false );
+        pView->SetBordVisible( false );
+        pView->SetGridVisible( false );
+        pView->SetHlplVisible( false );
+        pView->SetGlueVisible( false );
         pView->ShowSdrPage(pPage);
         Region aRegion (Rectangle( aPoint, aPageSize ) );
 
@@ -743,8 +743,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     pView.reset(new SdrView( mpDoc, &aVDev ));
                 }
 
-                pView->SetBordVisible( sal_False );
-                pView->SetPageVisible( sal_False );
+                pView->SetBordVisible( false );
+                pView->SetPageVisible( false );
                 pView->ShowSdrPage( pPage );
 
                 const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
@@ -1185,7 +1185,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         // no errors so far
         return;
     }
-    while( 0 );
+    while( false );
     }
     catch( Exception& )
     {

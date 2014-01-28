@@ -1077,7 +1077,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 
         if ( !xWizard.is() )
         {
-            ShowServiceNotAvailableError( NULL, OUString::createFromAscii(pWizardAsciiName), sal_True );
+            ShowServiceNotAvailableError( NULL, OUString::createFromAscii(pWizardAsciiName), true );
         }
         else
         {
@@ -1881,7 +1881,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
 {
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside( sal_True, FmFormView::ImplAccess() );
+        m_pView->SetMoveOutside( true, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1891,7 +1891,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
     // so we can not remove us as focus listener
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside( sal_False, FmFormView::ImplAccess() );
+        m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1902,7 +1902,7 @@ void FmXFormView::removeGridWindowListening()
         m_xWindow->removeFocusListener(this);
         if ( m_pView )
         {
-            m_pView->SetMoveOutside( sal_False, FmFormView::ImplAccess() );
+            m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
         }
         m_xWindow = NULL;
     }

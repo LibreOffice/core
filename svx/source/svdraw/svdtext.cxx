@@ -63,7 +63,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 
 void SdrText::ReformatText()
 {
-    mbPortionInfoChecked=sal_False;
+    mbPortionInfoChecked=false;
     mpOutlinerParaObject->ClearPortionInfo();
 }
 
@@ -163,7 +163,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject());
         mpOutlinerParaObject->ClearPortionInfo();
-        mbPortionInfoChecked=sal_False;
+        mbPortionInfoChecked=false;
         rOutliner.Clear();
     }
 }

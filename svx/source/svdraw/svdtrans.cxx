@@ -825,7 +825,7 @@ void SdrFormatter::Undirty()
     nMul_=nMul1;
     nDiv_=nDiv1;
     nKomma_=nKomma1;
-    bDirty=sal_False;
+    bDirty=false;
 }
 
 

@@ -113,10 +113,10 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     eUIUnit=FUNIT_MM;
     aUIScale=Fraction(1,1);
     nUIUnitKomma=0;
-    bUIOnlyKomma=sal_False;
+    bUIOnlyKomma=false;
     pLayerAdmin=NULL;
     pItemPool=pPool;
-    bMyPool=sal_False;
+    bMyPool=false;
     m_pEmbeddedHelper=_pEmbeddedHelper;
     pDrawOutliner=NULL;
     pHitTestOutliner=NULL;
@@ -135,33 +135,33 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbUndoEnabled=true;
     nProgressPercent=0;
     nLoadVersion=0;
-    bExtColorTable=sal_False;
-    mbChanged = sal_False;
-    bInfoChanged=sal_False;
-    bPagNumsDirty=sal_False;
-    bMPgNumsDirty=sal_False;
-    bPageNotValid=sal_False;
-    bSavePortable=sal_False;
-    bSaveCompressed=sal_False;
-    bSaveNative=sal_False;
-    bSwapGraphics=sal_False;
+    bExtColorTable=false;
+    mbChanged = false;
+    bInfoChanged=false;
+    bPagNumsDirty=false;
+    bMPgNumsDirty=false;
+    bPageNotValid=false;
+    bSavePortable=false;
+    bSaveCompressed=false;
+    bSaveNative=false;
+    bSwapGraphics=false;
     nSwapGraphicsMode=SDR_SWAPGRAPHICSMODE_DEFAULT;
-    bSaveOLEPreview=sal_False;
-    bPasteResize=sal_False;
-    bNoBitmapCaching=sal_False;
-    bReadOnly=sal_False;
+    bSaveOLEPreview=false;
+    bPasteResize=false;
+    bNoBitmapCaching=false;
+    bReadOnly=false;
     nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
     nDefaultTabulator=0;
     mpNumberFormatter = NULL;
-    bTransparentTextFrames=sal_False;
-    bStarDrawPreviewMode = sal_False;
+    bTransparentTextFrames=false;
+    bStarDrawPreviewMode = false;
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = false;
     mpOutlinerCache = NULL;
-    mbKernAsianPunctuation = sal_False;
-    mbAddExtLeading = sal_False;
+    mbKernAsianPunctuation = false;
+    mbAddExtLeading = false;
     mnHandoutPageCount = 0;
 
     mbDisableTextEditUsesCommonUndoManager = false;
@@ -183,7 +183,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
         // OutlinerPool as SecondaryPool of SdrPool
         pItemPool->SetSecondaryPool(pOutlPool);
         // remember that I created both pools myself
-        bMyPool=sal_True;
+        bMyPool=true;
     }
     pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
 
@@ -340,7 +340,7 @@ void SdrModel::operator=(const SdrModel&)
 bool SdrModel::operator==(const SdrModel&) const
 {
     OSL_FAIL("SdrModel::operator==() is not yet implemented");
-    return sal_False;
+    return false;
 }
 
 void SdrModel::SetSwapGraphics( bool bSwap )
@@ -1402,7 +1402,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
             SdrPage* pPg=maMaPag[i];
             pPg->SetPageNum(i);
         }
-        bMPgNumsDirty=sal_False;
+        bMPgNumsDirty=false;
     }
     else
     {
@@ -1412,7 +1412,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
             SdrPage* pPg=maPages[i];
             pPg->SetPageNum(i);
         }
-        bPagNumsDirty=sal_False;
+        bPagNumsDirty=false;
     }
 }
 
@@ -1422,10 +1422,10 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (nPos>nAnz) nPos=nAnz;
     maPages.insert(maPages.begin()+nPos,pPage);
     PageListChanged();
-    pPage->SetInserted(sal_True);
+    pPage->SetInserted(true);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
-    if (nPos<nAnz) bPagNumsDirty=sal_True;
+    if (nPos<nAnz) bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
     aHint.SetPage(pPage);
@@ -1444,9 +1444,9 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
     maPages.erase(maPages.begin()+nPgNum);
     PageListChanged();
     if (pPg!=NULL) {
-        pPg->SetInserted(sal_False);
+        pPg->SetInserted(false);
     }
-    bPagNumsDirty=sal_True;
+    bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
     aHint.SetPage(pPg);
@@ -1460,7 +1460,7 @@ void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     if (pPg!=NULL) {
         maPages.erase(maPages.begin()+nPgNum); // shortcut to avoid two broadcasts
         PageListChanged();
-        pPg->SetInserted(sal_False);
+        pPg->SetInserted(false);
         InsertPage(pPg,nNewPos);
     }
     else
@@ -1473,11 +1473,11 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     if (nPos>nAnz) nPos=nAnz;
     maMaPag.insert(maMaPag.begin()+nPos,pPage);
     MasterPageListChanged();
-    pPage->SetInserted(sal_True);
+    pPage->SetInserted(true);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
     if (nPos<nAnz) {
-        bMPgNumsDirty=sal_True;
+        bMPgNumsDirty=true;
     }
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
@@ -1507,10 +1507,10 @@ SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
             GetPage(np)->TRG_ImpMasterPageRemoved(*pRetPg);
         }
 
-        pRetPg->SetInserted(sal_False);
+        pRetPg->SetInserted(false);
     }
 
-    bMPgNumsDirty=sal_True;
+    bMPgNumsDirty=true;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
     aHint.SetPage(pRetPg);
@@ -1524,11 +1524,11 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     maMaPag.erase(maMaPag.begin()+nPgNum);
     MasterPageListChanged();
     if (pPg!=NULL) {
-        pPg->SetInserted(sal_False);
+        pPg->SetInserted(false);
         maMaPag.insert(maMaPag.begin()+nNewPos,pPg);
         MasterPageListChanged();
     }
-    bMPgNumsDirty=sal_True;
+    bMPgNumsDirty=true;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
     aHint.SetPage(pPg);
@@ -1698,9 +1698,9 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     // inconsistent until all are in.
                     maMaPag.insert(maMaPag.begin()+nDstMasterPageAnz, pPg);
                     MasterPageListChanged();
-                    pPg->SetInserted(sal_True);
+                    pPg->SetInserted(true);
                     pPg->SetModel(this);
-                    bMPgNumsDirty=sal_True;
+                    bMPgNumsDirty=true;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
                     OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
@@ -1771,8 +1771,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     delete [] pMasterMap;
     delete [] pMasterNeed;
 
-    bMPgNumsDirty=sal_True;
-    bPagNumsDirty=sal_True;
+    bMPgNumsDirty=true;
+    bPagNumsDirty=true;
 
     SetChanged();
     // TODO: Missing: merging and mapping of layers
@@ -1785,7 +1785,7 @@ void SdrModel::SetStarDrawPreviewMode(sal_Bool bPreview)
     if (!bPreview && bStarDrawPreviewMode && GetPageCount())
     {
         // Resetting is not allowed, because the Model might not be loaded completely
-        DBG_ASSERT(sal_False,"SdrModel::SetStarDrawPreviewMode(): Resetting not allowed, because Model might not be complete.");
+        DBG_ASSERT(false,"SdrModel::SetStarDrawPreviewMode(): Resetting not allowed, because Model might not be complete.");
     }
     else
     {

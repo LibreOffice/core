@@ -411,7 +411,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 
             bRet = true;
         }
-        while(0);
+        while(false);
 
         GetDocHandler()->endDocument();
     }

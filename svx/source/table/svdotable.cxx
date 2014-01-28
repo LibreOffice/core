@@ -745,7 +745,7 @@ SdrTableObj::SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int
 
 void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
 {
-    bClosedObj = sal_True;
+    bClosedObj = true;
 
     mpImpl = new SdrTableObjImpl;
     mpImpl->acquire();
@@ -1332,27 +1332,27 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed=sal_True;
-    rInfo.bResizePropAllowed=sal_True;
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
+    rInfo.bResizeFreeAllowed=true;
+    rInfo.bResizePropAllowed=true;
+    rInfo.bRotateFreeAllowed=false;
+    rInfo.bRotate90Allowed  =false;
+    rInfo.bMirrorFreeAllowed=false;
+    rInfo.bMirror45Allowed  =false;
+    rInfo.bMirror90Allowed  =false;
 
     // allow transparence
-    rInfo.bTransparenceAllowed = sal_True;
+    rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
     XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_False;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
-    rInfo.bCanConvToContour = sal_False;
+    rInfo.bShearAllowed     =false;
+    rInfo.bEdgeRadiusAllowed=false;
+    rInfo.bCanConvToPath    =false;
+    rInfo.bCanConvToPoly    =false;
+    rInfo.bCanConvToPathLineToArea=false;
+    rInfo.bCanConvToPolyLineToArea=false;
+    rInfo.bCanConvToContour = false;
 }
 
 // --------------------------------------------------------------------
@@ -2012,7 +2012,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, bool bWidth) const
 {
     if((pModel == NULL) || rR.IsEmpty() || !mpImpl || !mpImpl->mxTable.is() )
-        return sal_False;
+        return false;
 
     Rectangle aRectangle( rR );
     mpImpl->LayoutTable( aRectangle, !bWidth, !bHeight );
@@ -2020,11 +2020,11 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, boo
     if( aRectangle != rR )
     {
         rR = aRectangle;
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -2413,7 +2413,7 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=true;
     return true;
 }
 

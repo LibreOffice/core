@@ -835,7 +835,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             m_pFormatBtn->Hide();
             m_pNoFormatBtn->Hide();
             m_pAttributeBtn->Hide();
-            bDraw = sal_True;
+            bDraw = true;
         }
         else
         {
@@ -858,7 +858,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         }
     }
 
-    if ( 0 && !bDraw ) //!!!!!
+    if ( false && !bDraw ) //!!!!!
     {
         m_pRegExpBtn->Show();
         m_pLayoutBtn->Show();
@@ -867,7 +867,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     // similarity search?
     if ( ( nModifyFlag & MODIFY_SIMILARITY ) == 0 )
         m_pSimilarityBox->Check( pSearchItem->IsLevenshtein() );
-    bSet = sal_True;
+    bSet = true;
 
     FlagHdl_Impl(m_pSimilarityBox);
     FlagHdl_Impl(m_pJapOptionsCB);
@@ -987,7 +987,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_pSearchAllBtn->Disable();
         m_pReplaceBtn->Disable();
         m_pReplaceAllBtn->Disable();
-        m_pComponentFrame->Enable(sal_False);
+        m_pComponentFrame->Enable(false);
     }
     else
     {
@@ -1098,7 +1098,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
     if ( pCtrl && !bSet )
         SetModifyFlag_Impl( pCtrl );
     else
-        bSet = sal_False;
+        bSet = false;
 
     if (pCtrl == m_pSimilarityBox)
     {
@@ -1187,14 +1187,14 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
             }
 
             // Search-string in place? then enable Buttons
-            bSet = sal_True;
+            bSet = true;
             ModifyHdl_Impl(m_pSearchLB);
         }
     }
 
     if (m_pAllSheetsCB == pCtrl)
     {
-        bSet = sal_True;
+        bSet = true;
         ModifyHdl_Impl(m_pSearchLB);
     }
 
@@ -1243,12 +1243,12 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             }
         }
 
-        pSearchItem->SetRegExp( sal_False );
-        pSearchItem->SetLevenshtein( sal_False );
+        pSearchItem->SetRegExp( false );
+        pSearchItem->SetLevenshtein( false );
         if (GetCheckBoxValue(m_pRegExpBtn))
-            pSearchItem->SetRegExp( sal_True );
+            pSearchItem->SetRegExp( true );
         else if (GetCheckBoxValue(m_pSimilarityBox))
-            pSearchItem->SetLevenshtein( sal_True );
+            pSearchItem->SetLevenshtein( true );
 
         pSearchItem->SetWordOnly(GetCheckBoxValue(m_pWordBtn));
         pSearchItem->SetBackward(GetCheckBoxValue(m_pBackwardsBtn));
@@ -1383,7 +1383,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
     if ( !bSet )
         SetModifyFlag_Impl( pEd );
     else
-        bSet = sal_False;
+        bSet = false;
 
     // Calc allows searching for empty cells.
     bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC);
@@ -1413,7 +1413,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         }
         else
         {
-            m_pComponentFrame->Enable(sal_False);
+            m_pComponentFrame->Enable(false);
             m_pSearchBtn->Disable();
             m_pSearchAllBtn->Disable();
             m_pReplaceBtn->Disable();
@@ -1520,7 +1520,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 
         FocusHdl_Impl( bSearch ? m_pSearchLB : m_pReplaceLB );
     }
-    bSet = sal_True;
+    bSet = true;
     pImpl->bSaveToModule = sal_False;
     FlagHdl_Impl(m_pLayoutBtn);
     pImpl->bSaveToModule = sal_True;
@@ -1851,7 +1851,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
             m_pNoFormatBtn->Disable();
         m_pAttributeBtn->Disable();
     }
-    bSet = sal_True;
+    bSet = true;
 
     ( (ComboBox*)pCtrl )->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
@@ -2228,12 +2228,12 @@ void SvxSearchDialog::SaveToModule_Impl()
         Remember_Impl( m_pSearchLB->GetText(), sal_True );
     }
 
-    pSearchItem->SetRegExp( sal_False );
-    pSearchItem->SetLevenshtein( sal_False );
+    pSearchItem->SetRegExp( false );
+    pSearchItem->SetLevenshtein( false );
     if (GetCheckBoxValue(m_pRegExpBtn))
-        pSearchItem->SetRegExp( sal_True );
+        pSearchItem->SetRegExp( true );
     else if (GetCheckBoxValue(m_pSimilarityBox))
-        pSearchItem->SetLevenshtein( sal_True );
+        pSearchItem->SetLevenshtein( true );
 
     pSearchItem->SetWordOnly(GetCheckBoxValue(m_pWordBtn));
     pSearchItem->SetBackward(GetCheckBoxValue(m_pBackwardsBtn));
@@ -2303,7 +2303,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId
     pBindings->Update( SID_SEARCH_SEARCHSET );
     pBindings->Update( SID_SEARCH_REPLACESET );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    dialog->bConstruct = sal_False;
+    dialog->bConstruct = false;
 }
 
 SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()

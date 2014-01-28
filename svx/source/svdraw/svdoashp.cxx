@@ -1358,17 +1358,17 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bResizeFreeAllowed=fObjectRotation == 0.0;
-    rInfo.bResizePropAllowed=sal_True;
-    rInfo.bRotateFreeAllowed=sal_True;
-    rInfo.bRotate90Allowed  =sal_True;
-    rInfo.bMirrorFreeAllowed=sal_True;
-    rInfo.bMirror45Allowed  =sal_True;
-    rInfo.bMirror90Allowed  =sal_True;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_True;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoContortion     =sal_True;
+    rInfo.bResizePropAllowed=true;
+    rInfo.bRotateFreeAllowed=true;
+    rInfo.bRotate90Allowed  =true;
+    rInfo.bMirrorFreeAllowed=true;
+    rInfo.bMirror45Allowed  =true;
+    rInfo.bMirror90Allowed  =true;
+    rInfo.bTransparenceAllowed = false;
+    rInfo.bGradientAllowed = false;
+    rInfo.bShearAllowed     =true;
+    rInfo.bEdgeRadiusAllowed=false;
+    rInfo.bNoContortion     =true;
 
     // #i37011#
     if ( mXRenderedCustomShape.is() )
@@ -1741,7 +1741,7 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
     if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(sal_False);
+    aGP.SetPercent(false);
     return aGP;
 }
 
@@ -1773,7 +1773,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 for(a = 0; a < pSource->GetCount(); a++)
                 {
                     SdrGluePoint aCopy((*pSource)[a]);
-                    aCopy.SetUserDefined(sal_False);
+                    aCopy.SetUserDefined(false);
                     aNewList.Insert(aCopy);
                 }
 
@@ -1790,7 +1790,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     {
                         sal_uInt16 nPointCount=aPoly.GetSize();
                         for (sal_uInt16 i=0; i<nPointCount; i++)
-                            ShearPoint(aPoly[i],aRect.Center(), fTan, sal_False );
+                            ShearPoint(aPoly[i],aRect.Center(), fTan, false );
                     }
                     if ( aGeo.nDrehWink )
                         aPoly.Rotate( aRect.Center(), aGeo.nDrehWink / 10 );
@@ -2173,7 +2173,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     }
 
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=true;
 }
 
 bool SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
@@ -2190,7 +2190,7 @@ bool SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
     }
     DragCreateObject( rStat );
     SetRectsDirty();
-    return sal_True;
+    return true;
 }
 
 bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
@@ -2402,9 +2402,9 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
             long nWdtGrow = nWdt-(rR.Right()-rR.Left());
             long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
             if ( nWdtGrow == 0 )
-                bWdtGrow = sal_False;
+                bWdtGrow = false;
             if ( nHgtGrow == 0 )
-                bHgtGrow=sal_False;
+                bHgtGrow=false;
             if ( bWdtGrow || bHgtGrow )
             {
                 if ( bWdtGrow )
@@ -2444,11 +2444,11 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                     aD2-=aD1;
                     rR.Move(aD2.X(),aD2.Y());
                 }
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool bWdt )
@@ -3034,7 +3034,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // back the mirroring of the shear angle
         aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, sal_False);
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, false);
     }
 
     // rotation?

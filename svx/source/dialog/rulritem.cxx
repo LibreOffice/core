@@ -60,7 +60,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
             aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( mlLeft ) : mlLeft;
             aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( mlRight ) : mlRight;
             rVal <<= aLeftRightMargin;
-            return sal_True;
+            return true;
         }
 
         case MID_LEFT:
@@ -369,10 +369,10 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
             aPos.Y() = aPagePosSize.Y;
             lWidth   = aPagePosSize.Width;
             lHeight  = aPagePosSize.Height;
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
     else if ( rVal >>= nVal )
     {
@@ -383,7 +383,7 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
 
-            default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
 
         return true;
@@ -443,15 +443,15 @@ bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
        nRight != ((const SvxColumnItem&)rCmp).nRight ||
        bTable != ((const SvxColumnItem&)rCmp).bTable ||
        Count() != ((const SvxColumnItem&)rCmp).Count())
-        return sal_False;
+        return false;
 
     const sal_uInt16 nCount = ((const SvxColumnItem&)rCmp).Count();
     for(sal_uInt16 i = 0; i < nCount;++i)
     {
         if( (*this)[i] != ((const SvxColumnItem&)rCmp)[i] )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
@@ -561,7 +561,7 @@ bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             break;
         default:
             OSL_FAIL("Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
     return true;
@@ -597,7 +597,7 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             break;
         default:
             OSL_FAIL("Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
     return true;

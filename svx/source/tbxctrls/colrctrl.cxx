@@ -398,7 +398,7 @@ void SvxColorDockingWindow::SetSize()
 
 sal_Bool SvxColorDockingWindow::Close()
 {
-    SfxBoolItem aItem( SID_COLOR_CONTROL, sal_False );
+    SfxBoolItem aItem( SID_COLOR_CONTROL, false );
     GetBindings().GetDispatcher()->Execute(
         SID_COLOR_CONTROL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
     SfxDockingWindow::Close();

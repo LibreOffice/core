@@ -55,13 +55,13 @@ GalleryControl::GalleryControl (
     FreeResource();
 
     mpBrowser1->SelectTheme(0);
-    mpBrowser1->Show(sal_True);
+    mpBrowser1->Show(true);
 
-    mpBrowser2->Show(sal_True);
+    mpBrowser2->Show(true);
 
     mpSplitter->SetHorizontal(false);
     mpSplitter->SetSplitHdl( LINK( this, GalleryControl, SplitHdl ) );
-    mpSplitter->Show( sal_True );
+    mpSplitter->Show( true );
 
     InitSettings();
 }

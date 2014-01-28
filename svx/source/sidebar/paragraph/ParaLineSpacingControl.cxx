@@ -42,16 +42,16 @@
 #define LLINESPACE_DURCH      5
 #define LLINESPACE_FIX        6
 
-#define DO_NOT_CUSTOM          0
-#define USE_CUSTOM             1
+#define DO_NOT_CUSTOM          false
+#define USE_CUSTOM             true
 
 namespace svx { namespace sidebar {
 
 
 ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING))
-    , mbUseLineSPCustom             (0)
-    , mbLineSPDisable               (0)
+    , mbUseLineSPCustom             (false)
+    , mbLineSPDisable               (false)
     , mrParaPropertyPanel(rPanel)
     , mpBindings(NULL)
     , nMinFixDist(BEGIN_VALUE)
@@ -240,9 +240,9 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
             break;
     }
     if( !aWinOpt.Exists() && !aWinOpt2.Exists() )
-        mbLineSPDisable = sal_True;
+        mbLineSPDisable = true;
     else
-        mbLineSPDisable = sal_False;
+        mbLineSPDisable = false;
 
     if( mbLineSPDisable )
         maLineSpacing.ReplaceItemImages(5, maImgCusGrey,0);
@@ -451,7 +451,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     else if( eState == SFX_ITEM_DISABLED )
     {
         aLineDist.Disable();
-        pActLineDistFld->Enable(sal_False);
+        pActLineDistFld->Enable(false);
         pActLineDistFld->SetText( "" );
         maLineSpacing.SetNoSelection();
               maLineSpacing.SelectItem(0);
@@ -460,7 +460,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     }
     else
     {
-        pActLineDistFld->Enable(sal_False);
+        pActLineDistFld->Enable(false);
         pActLineDistFld->SetText( "" );
         aLineDist.SetNoSelection();
         maLineSpacing.SetNoSelection();
@@ -522,7 +522,7 @@ IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
         case LLINESPACE_1:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            pActLineDistFld->Enable(sal_False);
+            pActLineDistFld->Enable(false);
             pActLineDistFld->SetText( "" );
             break;
 
@@ -694,16 +694,16 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
         switch ( iPos )
         {
             case 1:
-                ExecuteLineSpacing( 0, 0 );
+                ExecuteLineSpacing( false, 0 );
                 break;
             case 2:
-                ExecuteLineSpacing( 0, 3 );
+                ExecuteLineSpacing( false, 3 );
                 break;
             case 3:
-                ExecuteLineSpacing( 0, 1 );
+                ExecuteLineSpacing( false, 1 );
                 break;
             case 4:
-                ExecuteLineSpacing( 0, 2 );
+                ExecuteLineSpacing( false, 2 );
                 break;
             case 5:
                 {
@@ -741,7 +741,7 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
                         ExecuteLineSpacing( USE_CUSTOM, 0 );
                     }
                     else
-                        bClosePop = sal_False;
+                        bClosePop = false;
                 }
                 break;
         }
@@ -751,7 +751,7 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
     return 0;
 }
 
-void ParaLineSpacingControl::ExecuteLineSpacing( sal_uInt16 aIsCustom, sal_uInt16 aEntry )
+void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEntry )
 {
     if( !aIsCustom )
     {

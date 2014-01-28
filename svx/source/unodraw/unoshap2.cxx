@@ -287,7 +287,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     }
     else
     {
-        DBG_ASSERT( 0, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
+        DBG_ASSERT( false, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
     }
 
     if( mpModel )
@@ -484,7 +484,7 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
     SvxShape* pShape = SvxShape::getImplementation( xRef );
 
     if( pShape )
-        mpObj->ConnectToNode( sal_True, pShape->mpObj.get() );
+        mpObj->ConnectToNode( true, pShape->mpObj.get() );
 
     if( mpModel )
         mpModel->SetChanged();
@@ -500,7 +500,7 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
     SvxShape* pShape = SvxShape::getImplementation( xRef );
 
     if( mpObj.is() && pShape )
-        mpObj->ConnectToNode( sal_False, pShape->mpObj.get() );
+        mpObj->ConnectToNode( false, pShape->mpObj.get() );
 
     if( mpModel )
         mpModel->SetChanged();
@@ -513,7 +513,7 @@ void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing:
     ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
-        mpObj->DisconnectFromNode( sal_True );
+        mpObj->DisconnectFromNode( true );
 
     if( mpModel )
         mpModel->SetChanged();
@@ -526,7 +526,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
     ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
-        mpObj->DisconnectFromNode( sal_False );
+        mpObj->DisconnectFromNode( false );
 
     if( mpModel )
         mpModel->SetChanged();
@@ -1493,7 +1493,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 SvMemoryStream  aMemStm;
                 Graphic         aGraphic;
 
-                aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), sal_False, pSeq->getLength() );
+                aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), false, pSeq->getLength() );
 
                 if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
                 {

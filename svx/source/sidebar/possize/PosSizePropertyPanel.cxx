@@ -495,12 +495,12 @@ IMPL_LINK( PosSizePropertyPanel, ClickAutoHdl, void *, EMPTYARG )
 IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
     OUString sTmp = mpMtrAngle->GetText();
-    bool    bNegative = 0;
+    bool    bNegative = false;
     sal_Unicode nChar = sTmp[0];
 
     if( nChar == '-' )
     {
-        bNegative = 1;
+        bNegative = true;
         nChar = sTmp[1];
     }
 

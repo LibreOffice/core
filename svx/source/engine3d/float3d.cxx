@@ -342,7 +342,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != NULL)
     {
-        SfxBoolItem aItem( SID_3D_INIT, sal_True );
+        SfxBoolItem aItem( SID_3D_INIT, true );
         pDispatcher->Execute(
             SID_3D_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
     }
@@ -566,37 +566,37 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         else
         {
             // Geometry
-            aFtHorizontal.Enable( sal_False );
-            aNumHorizontal.Enable( sal_False );
+            aFtHorizontal.Enable( false );
+            aNumHorizontal.Enable( false );
             aNumHorizontal.SetEmptyFieldValue();
-            aFtVertical.Enable( sal_False );
-            aNumVertical.Enable( sal_False );
+            aFtVertical.Enable( false );
+            aNumVertical.Enable( false );
             aNumVertical.SetEmptyFieldValue();
-            aFLSegments.Enable( sal_False );
-            aFtEndAngle.Enable( sal_False );
-            aMtrEndAngle.Enable( sal_False );
+            aFLSegments.Enable( false );
+            aFtEndAngle.Enable( false );
+            aMtrEndAngle.Enable( false );
             aMtrEndAngle.SetEmptyFieldValue();
-            aFtDepth.Enable( sal_False );
-            aMtrDepth.Enable( sal_False );
+            aFtDepth.Enable( false );
+            aMtrDepth.Enable( false );
             aMtrDepth.SetEmptyFieldValue();
 
             // Representation
-            aBtnShadow3d.Enable( sal_False );
-            aFtSlant.Enable( sal_False );
-            aMtrSlant.Enable( sal_False );
-            aFLShadow.Enable( sal_False );
+            aBtnShadow3d.Enable( false );
+            aFtSlant.Enable( false );
+            aMtrSlant.Enable( false );
+            aFLShadow.Enable( false );
 
-            aFtDistance.Enable( sal_False );
-            aMtrDistance.Enable( sal_False );
+            aFtDistance.Enable( false );
+            aMtrDistance.Enable( false );
             aMtrDistance.SetEmptyFieldValue();
-            aFtFocalLeng.Enable( sal_False );
-            aMtrFocalLength.Enable( sal_False );
+            aFtFocalLeng.Enable( false );
+            aMtrFocalLength.Enable( false );
             aMtrFocalLength.SetEmptyFieldValue();
-            aFLCamera.Enable( sal_False );
+            aFLCamera.Enable( false );
 
             //Lower Range
-            aBtnConvertTo3D.Enable( sal_False );
-            aBtnLatheObject.Enable( sal_False );
+            aBtnConvertTo3D.Enable( false );
+            aBtnLatheObject.Enable( false );
         }
     }
     // Bitmap fill ? -> Status
@@ -2322,7 +2322,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
         SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
         if (pDispatcher != NULL)
         {
-            SfxBoolItem aItem( SID_3D_STATE, sal_True );
+            SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
                 SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
@@ -2341,7 +2341,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != NULL)
     {
-        SfxBoolItem aItem( SID_3D_ASSIGN, sal_True );
+        SfxBoolItem aItem( SID_3D_ASSIGN, true );
         pDispatcher->Execute(
             SID_3D_ASSIGN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
     }
@@ -2760,7 +2760,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
             if (pDispatcher != NULL)
             {
-                SfxBoolItem aItem( nSId, sal_True );
+                SfxBoolItem aItem( nSId, true );
                 pDispatcher->Execute(
                     nSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
@@ -2998,44 +2998,44 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
         if( aBtnLight1.IsChecked() )
         {
             aBtnLight1.Check( sal_False );
-            aLbLight1.Enable( sal_False );
+            aLbLight1.Enable( false );
         }
         else if( aBtnLight2.IsChecked() )
         {
             aBtnLight2.Check( sal_False );
-            aLbLight2.Enable( sal_False );
+            aLbLight2.Enable( false );
         }
         else if( aBtnLight3.IsChecked() )
         {
             aBtnLight3.Check( sal_False );
-            aLbLight3.Enable( sal_False );
+            aLbLight3.Enable( false );
         }
         else if( aBtnLight4.IsChecked() )
         {
             aBtnLight4.Check( sal_False );
-            aLbLight4.Enable( sal_False );
+            aLbLight4.Enable( false );
         }
         else if( aBtnLight5.IsChecked() )
         {
             aBtnLight5.Check( sal_False );
-            aLbLight5.Enable( sal_False );
+            aLbLight5.Enable( false );
         }
         else if( aBtnLight6.IsChecked() )
         {
             aBtnLight6.Check( sal_False );
-            aLbLight6.Enable( sal_False );
+            aLbLight6.Enable( false );
         }
         else if( aBtnLight7.IsChecked() )
         {
             aBtnLight7.Check( sal_False );
-            aLbLight7.Enable( sal_False );
+            aLbLight7.Enable( false );
         }
         else if( aBtnLight8.IsChecked() )
         {
             aBtnLight8.Check( sal_False );
-            aLbLight8.Enable( sal_False );
+            aLbLight8.Enable( false );
         }
-        aBtnLightColor.Enable( sal_False );
+        aBtnLightColor.Enable( false );
     }
 
     return( 0L );
@@ -3082,7 +3082,7 @@ void Svx3DWin::UpdatePreview()
         SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
         if (pDispatcher != NULL)
         {
-            SfxBoolItem aItem( SID_3D_STATE, sal_True );
+            SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
                 SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
@@ -3277,7 +3277,7 @@ void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, 
         SfxDispatcher* pDispatcher = LocalGetDispatcher(&GetBindings());
         if (pDispatcher != NULL)
         {
-            SfxBoolItem aItem( SID_3D_STATE, sal_True );
+            SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
                 SID_3D_STATE, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, &aItem, 0L);
         }

@@ -309,7 +309,7 @@ void SdrMarkView::ImpSetPointsRects() const
     }
     ((SdrMarkView*)this)->aMarkedPointsRect=aPnts;
     ((SdrMarkView*)this)->aMarkedGluePointsRect=aGlue;
-    ((SdrMarkView*)this)->bMarkedPointsRectsDirty=sal_False;
+    ((SdrMarkView*)this)->bMarkedPointsRectsDirty=false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,8 +375,8 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
         }
     }
-    if (bChg) ((SdrMarkView*)this)->bMarkedPointsRectsDirty=sal_True;
-    ((SdrMarkView*)this)->bMrkPntDirty=sal_False;
+    if (bChg) ((SdrMarkView*)this)->bMarkedPointsRectsDirty=true;
+    ((SdrMarkView*)this)->bMrkPntDirty=false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

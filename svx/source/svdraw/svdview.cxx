@@ -67,20 +67,20 @@ SdrViewEvent::SdrViewEvent()
       nMouseCode(0),
       nHlplIdx(0),
       nGlueId(0),
-      bMouseDown(sal_False),
-      bMouseUp(sal_False),
-      bDoubleHdlSize(sal_False),
-      bIsAction(sal_False),
-      bIsTextEdit(sal_False),
-      bTextEditHit(sal_False),
-      bAddMark(sal_False),
-      bUnmark(sal_False),
-      bPrevNextMark(sal_False),
-      bMarkPrev(sal_False),
-      bInsPointNewObj(sal_False),
-      bDragWithCopy(sal_False),
-      bCaptureMouse(sal_False),
-      bReleaseMouse(sal_False)
+      bMouseDown(false),
+      bMouseUp(false),
+      bDoubleHdlSize(false),
+      bIsAction(false),
+      bIsTextEdit(false),
+      bTextEditHit(false),
+      bAddMark(false),
+      bUnmark(false),
+      bPrevNextMark(false),
+      bMarkPrev(false),
+      bInsPointNewObj(false),
+      bDragWithCopy(false),
+      bCaptureMouse(false),
+      bReleaseMouse(false)
 {
 }
 
@@ -158,12 +158,12 @@ TYPEINIT1(SdrView,SdrCreateView);
 
 SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
 :   SdrCreateView(pModel1,pOut),
-    bNoExtendedMouseDispatcher(sal_False),
-    bNoExtendedKeyDispatcher(sal_False),
-    bNoExtendedCommandDispatcher(sal_False),
-    mbMasterPagePaintCaching(sal_False)
+    bNoExtendedMouseDispatcher(false),
+    bNoExtendedKeyDispatcher(false),
+    bNoExtendedCommandDispatcher(false),
+    mbMasterPagePaintCaching(false)
 {
-    bTextEditOnObjectsWithoutTextIfTextTool=sal_False;
+    bTextEditOnObjectsWithoutTextIfTextTool=false;
 
     maAccessibilityOptions.AddListener(this);
 
@@ -221,7 +221,7 @@ sal_Bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 sal_Bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
 {
     SetActualWin(pWin);
-    if (rMEvt.IsLeft()) aDragStat.SetMouseDown(sal_True);
+    if (rMEvt.IsLeft()) aDragStat.SetMouseDown(true);
     sal_Bool bRet=SdrCreateView::MouseButtonDown(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
         SdrViewEvent aVEvt;
@@ -234,7 +234,7 @@ sal_Bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
 sal_Bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
 {
     SetActualWin(pWin);
-    if (rMEvt.IsLeft()) aDragStat.SetMouseDown(sal_False);
+    if (rMEvt.IsLeft()) aDragStat.SetMouseDown(false);
     sal_Bool bAction=IsAction();
     sal_Bool bRet=!bAction && SdrCreateView::MouseButtonUp(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
@@ -470,7 +470,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 if( pTextObj->GetModel() )
                     pOutliner = &pTextObj->GetModel()->GetHitTestOutliner();
 
-                pTextObj->TakeTextRect( *pOutliner, aTextRect, sal_False, &aAnchor, sal_False );
+                pTextObj->TakeTextRect( *pOutliner, aTextRect, false, &aAnchor, false );
 
                 // #i73628# Use a text-relative position for hit test in hit test outliner
                 Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
@@ -541,7 +541,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             // TextEdit attached to an object in a locked layer
             if (pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))
             {
-                bTEHit=sal_False;
+                bTEHit=false;
             }
 
             if (bTEHit)
@@ -639,13 +639,13 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 eEvent=bGlue ? SDREVENT_MARKGLUEPOINT : SDREVENT_MARKPOINT;
                 if (MODKEY_DeepMark)
                 {
-                    rVEvt.bAddMark=sal_True;
-                    rVEvt.bPrevNextMark=sal_True;
+                    rVEvt.bAddMark=true;
+                    rVEvt.bPrevNextMark=true;
                     rVEvt.bMarkPrev=MODKEY_DeepBackw;
                 }
                 else if (MODKEY_MultiMark)
                 {
-                    rVEvt.bAddMark=sal_True;
+                    rVEvt.bAddMark=true;
                     rVEvt.bUnmark=bMarked; // Toggle
                     if (bGlue)
                     {
@@ -764,9 +764,9 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     sal_Bool bMouseDown=rVEvt.bMouseDown;
     sal_Bool bMouseUp=rVEvt.bMouseUp;
     if (bMouseDown) {
-        if (bMouseLeft) aDragStat.SetMouseDown(sal_True);
+        if (bMouseLeft) aDragStat.SetMouseDown(true);
     } else if (bMouseUp) {
-        if (bMouseLeft) aDragStat.SetMouseDown(sal_False);
+        if (bMouseLeft) aDragStat.SetMouseDown(false);
     } else { // else, MouseMove
         aDragStat.SetMouseDown(bMouseLeft);
     }

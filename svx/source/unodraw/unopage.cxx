@@ -483,7 +483,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 double fH = (double)aSize.Height;
 
                 Camera3D aCam(pScene->GetCamera());
-                aCam.SetAutoAdjustProjection(sal_False);
+                aCam.SetAutoAdjustProjection(false);
                 aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
                 basegfx::B3DPoint aLookAt;
                 basegfx::B3DPoint aCamPos(0.0, 0.0, 10000.0);

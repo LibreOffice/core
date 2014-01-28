@@ -254,7 +254,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         {
             pScene = ((E3dObject*)pObj)->GetScene();
             if(pScene)
-                pScene->SetSelected(sal_False);
+                pScene->SetSelected(false);
         }
     }
 
@@ -271,7 +271,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
                 // relatated scene
                 pScene = ((E3dCompoundObject*)pObj)->GetScene();
                 if(pScene)
-                    pScene->SetSelected(sal_False);
+                    pScene->SetSelected(false);
             }
         }
 
@@ -282,7 +282,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             {
                 // Select object
                 E3dObject* p3DObj = (E3dObject*)pObj;
-                p3DObj->SetSelected(sal_True);
+                p3DObj->SetSelected(true);
                 pScene = p3DObj->GetScene();
             }
         }
@@ -306,7 +306,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
                 // releated scene
                 pScene = ((E3dCompoundObject*)pObj)->GetScene();
                 if(pScene)
-                    pScene->SetSelected(sal_False);
+                    pScene->SetSelected(false);
             }
         }
     }
@@ -785,7 +785,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
             ImpChangeSomeAttributesFor3DConversion(pObj);
 
         // convert completely to path objects
-        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(sal_False, sal_False);
+        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false);
 
         if(pNewObj1)
         {
@@ -803,7 +803,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
                 ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
 
             // convert completely to path objects
-            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, sal_True);
+            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, true);
 
             if(pNewObj2)
             {
@@ -1322,7 +1322,7 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 {
     Camera3D aCam(pScene->GetCamera());
 
-    aCam.SetAutoAdjustProjection(sal_False);
+    aCam.SetAutoAdjustProjection(false);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
 
@@ -1637,13 +1637,13 @@ void E3dView::CheckPossibilities()
         // So far: there are two or more of any objects selected. See if
         // compound objects are involved. If yes, ban grouping.
         if(bGroupPossible && bCoumpound)
-            bGroupPossible = sal_False;
+            bGroupPossible = false;
 
         if(bUnGroupPossible && b3DObject)
-            bUnGroupPossible = sal_False;
+            bUnGroupPossible = false;
 
         if(bGrpEnterPossible && bCoumpound)
-            bGrpEnterPossible = sal_False;
+            bGrpEnterPossible = false;
     }
 }
 

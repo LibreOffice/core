@@ -301,7 +301,7 @@ void SdrTableRTFParser::NewCellRow()
 {
     if( mbNewDef )
     {
-        mbNewDef = sal_False;
+        mbNewDef = false;
 
         maRows.push_back( RTFColumnVectorPtr( new RTFColumnVector() ) );
     }
@@ -358,7 +358,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CELLX:         // closes cell default
         {
-            mbNewDef = sal_True;
+            mbNewDef = true;
             mpInsDefault->mnCol = mnColCnt;
             maDefaultList.push_back( boost::shared_ptr< RTFCellDefault >( mpInsDefault ) );
 

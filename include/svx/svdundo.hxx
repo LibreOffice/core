@@ -515,7 +515,7 @@ class SdrUndoDelLayer : public SdrUndoLayer
 {
 public:
     SdrUndoDelLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
-    : SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel) { bItsMine=sal_True; }
+    : SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel) { bItsMine=true; }
 
     virtual void Undo();
     virtual void Redo();

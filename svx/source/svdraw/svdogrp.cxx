@@ -74,8 +74,8 @@ SdrObjGroup::SdrObjGroup()
     pSub=new SdrObjList(NULL,NULL);
     pSub->SetOwnerObj(this);
     pSub->SetListKind(SDROBJLIST_GROUPOBJ);
-    bRefPoint=sal_False;
-    bClosedObj=sal_False;
+    bRefPoint=false;
+    bClosedObj=false;
 }
 
 
@@ -86,51 +86,51 @@ SdrObjGroup::~SdrObjGroup()
 
 void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bNoContortion=sal_False;
+    rInfo.bNoContortion=false;
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     for (sal_uIntPtr i=0; i<nObjAnz; i++) {
         SdrObject* pObj=pOL->GetObj(i);
         SdrObjTransformInfoRec aInfo;
         pObj->TakeObjInfo(aInfo);
-        if (!aInfo.bMoveAllowed            ) rInfo.bMoveAllowed            =sal_False;
-        if (!aInfo.bResizeFreeAllowed      ) rInfo.bResizeFreeAllowed      =sal_False;
-        if (!aInfo.bResizePropAllowed      ) rInfo.bResizePropAllowed      =sal_False;
-        if (!aInfo.bRotateFreeAllowed      ) rInfo.bRotateFreeAllowed      =sal_False;
-        if (!aInfo.bRotate90Allowed        ) rInfo.bRotate90Allowed        =sal_False;
-        if (!aInfo.bMirrorFreeAllowed      ) rInfo.bMirrorFreeAllowed      =sal_False;
-        if (!aInfo.bMirror45Allowed        ) rInfo.bMirror45Allowed        =sal_False;
-        if (!aInfo.bMirror90Allowed        ) rInfo.bMirror90Allowed        =sal_False;
-        if (!aInfo.bShearAllowed           ) rInfo.bShearAllowed           =sal_False;
-        if (!aInfo.bEdgeRadiusAllowed      ) rInfo.bEdgeRadiusAllowed      =sal_False;
-        if (!aInfo.bNoOrthoDesired         ) rInfo.bNoOrthoDesired         =sal_False;
-        if (aInfo.bNoContortion            ) rInfo.bNoContortion           =sal_True;
-        if (!aInfo.bCanConvToPath          ) rInfo.bCanConvToPath          =sal_False;
+        if (!aInfo.bMoveAllowed            ) rInfo.bMoveAllowed            =false;
+        if (!aInfo.bResizeFreeAllowed      ) rInfo.bResizeFreeAllowed      =false;
+        if (!aInfo.bResizePropAllowed      ) rInfo.bResizePropAllowed      =false;
+        if (!aInfo.bRotateFreeAllowed      ) rInfo.bRotateFreeAllowed      =false;
+        if (!aInfo.bRotate90Allowed        ) rInfo.bRotate90Allowed        =false;
+        if (!aInfo.bMirrorFreeAllowed      ) rInfo.bMirrorFreeAllowed      =false;
+        if (!aInfo.bMirror45Allowed        ) rInfo.bMirror45Allowed        =false;
+        if (!aInfo.bMirror90Allowed        ) rInfo.bMirror90Allowed        =false;
+        if (!aInfo.bShearAllowed           ) rInfo.bShearAllowed           =false;
+        if (!aInfo.bEdgeRadiusAllowed      ) rInfo.bEdgeRadiusAllowed      =false;
+        if (!aInfo.bNoOrthoDesired         ) rInfo.bNoOrthoDesired         =false;
+        if (aInfo.bNoContortion            ) rInfo.bNoContortion           =true;
+        if (!aInfo.bCanConvToPath          ) rInfo.bCanConvToPath          =false;
 
         if(!aInfo.bCanConvToContour)
-            rInfo.bCanConvToContour = sal_False;
+            rInfo.bCanConvToContour = false;
 
-        if (!aInfo.bCanConvToPoly          ) rInfo.bCanConvToPoly          =sal_False;
-        if (!aInfo.bCanConvToPathLineToArea) rInfo.bCanConvToPathLineToArea=sal_False;
-        if (!aInfo.bCanConvToPolyLineToArea) rInfo.bCanConvToPolyLineToArea=sal_False;
+        if (!aInfo.bCanConvToPoly          ) rInfo.bCanConvToPoly          =false;
+        if (!aInfo.bCanConvToPathLineToArea) rInfo.bCanConvToPathLineToArea=false;
+        if (!aInfo.bCanConvToPolyLineToArea) rInfo.bCanConvToPolyLineToArea=false;
     }
     if (nObjAnz==0) {
-        rInfo.bRotateFreeAllowed=sal_False;
-        rInfo.bRotate90Allowed  =sal_False;
-        rInfo.bMirrorFreeAllowed=sal_False;
-        rInfo.bMirror45Allowed  =sal_False;
-        rInfo.bMirror90Allowed  =sal_False;
-        rInfo.bTransparenceAllowed = sal_False;
-        rInfo.bGradientAllowed = sal_False;
-        rInfo.bShearAllowed     =sal_False;
-        rInfo.bEdgeRadiusAllowed=sal_False;
-        rInfo.bNoContortion     =sal_True;
+        rInfo.bRotateFreeAllowed=false;
+        rInfo.bRotate90Allowed  =false;
+        rInfo.bMirrorFreeAllowed=false;
+        rInfo.bMirror45Allowed  =false;
+        rInfo.bMirror90Allowed  =false;
+        rInfo.bTransparenceAllowed = false;
+        rInfo.bGradientAllowed = false;
+        rInfo.bShearAllowed     =false;
+        rInfo.bEdgeRadiusAllowed=false;
+        rInfo.bNoContortion     =true;
     }
     if(nObjAnz != 1)
     {
         // only allowed if single object selected
-        rInfo.bTransparenceAllowed = sal_False;
-        rInfo.bGradientAllowed = sal_False;
+        rInfo.bTransparenceAllowed = false;
+        rInfo.bGradientAllowed = false;
     }
 }
 
@@ -231,7 +231,7 @@ Point SdrObjGroup::GetRefPoint() const
 
 void SdrObjGroup::SetRefPoint(const Point& rPnt)
 {
-    bRefPoint=sal_True;
+    bRefPoint=true;
     aRefPoint=rPnt;
 }
 
@@ -359,7 +359,7 @@ bool SdrObjGroup::beginSpecialDrag(SdrDragStat& /*rDrag*/) const
 
 bool SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -472,7 +472,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 
 void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     RotatePoint(aRefPoint,rRef,sn,cs);
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -481,13 +481,13 @@ void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
         pObj->NbcRotate(rRef,nWink,sn,cs);
     }
     NbcRotateGluePoints(rRef,nWink,sn,cs);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 
 void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -496,13 +496,13 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
         pObj->NbcMirror(rRef1,rRef2);
     }
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 
 void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     ShearPoint(aRefPoint,rRef,tn);
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -511,7 +511,7 @@ void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, bool bVShea
         pObj->NbcShear(rRef,nWink,tn,bVShear);
     }
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
 }
 
 
@@ -638,7 +638,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
 {
     if (nWink!=0) {
-        SetGlueReallyAbsolute(sal_True);
+        SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         RotatePoint(aRefPoint,rRef,sn,cs);
         // move the connectors first, everything else afterwards
@@ -654,7 +654,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
             if (!pObj->IsEdgeObj()) pObj->Rotate(rRef,nWink,sn,cs);
         }
         NbcRotateGluePoints(rRef,nWink,sn,cs);
-        SetGlueReallyAbsolute(sal_False);
+        SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -664,7 +664,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
 
 void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(true);
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
     // move the connectors first, everything else afterwards
@@ -680,7 +680,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
         if (!pObj->IsEdgeObj()) pObj->Mirror(rRef1,rRef2);
     }
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(sal_False);
+    SetGlueReallyAbsolute(false);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -690,7 +690,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if (nWink!=0) {
-        SetGlueReallyAbsolute(sal_True);
+        SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         ShearPoint(aRefPoint,rRef,tn);
         // move the connectors first, everything else afterwards
@@ -706,7 +706,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
             if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nWink,tn,bVShear);
         }
         NbcShearGluePoints(rRef,nWink,tn,bVShear);
-        SetGlueReallyAbsolute(sal_False);
+        SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);

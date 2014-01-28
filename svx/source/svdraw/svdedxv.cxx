@@ -64,22 +64,22 @@
 
 void SdrObjEditView::ImpClearVars()
 {
-    bQuickTextEditMode=sal_True;
-    bMacroMode=sal_True;
+    bQuickTextEditMode=true;
+    bMacroMode=true;
     pTextEditOutliner=NULL;
     pTextEditOutlinerView=NULL;
     pTextEditPV=NULL;
     pTextEditWin=NULL;
     pTextEditCursorMerker=NULL;
     pEditPara=NULL;
-    bTextEditNewObj=sal_False;
-    bMacroDown=sal_False;
+    bTextEditNewObj=false;
+    bMacroDown=false;
     pMacroObj=NULL;
     pMacroPV=NULL;
     pMacroWin=NULL;
     nMacroTol=0;
-    bTextEditDontDelete=sal_False;
-    bTextEditOnlyOneView=sal_False;
+    bTextEditDontDelete=false;
+    bTextEditOnlyOneView=false;
 }
 
 SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
@@ -480,7 +480,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
     if (pTextObj!=NULL) {
         Color* pTxtCol=NULL;
         Color* pFldCol=NULL;
-        bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),sal_True,pTxtCol,pFldCol,rStr);
+        bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),true,pTxtCol,pFldCol,rStr);
         if (bOk) {
             if (pTxtCol!=NULL) {
                 pFI->SetTxtColor(*pTxtCol);
@@ -647,7 +647,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             Rectangle aTextRect;
             Rectangle aAnchorRect;
-            pTextObj->TakeTextRect(*pTextEditOutliner, aTextRect, sal_True,
+            pTextObj->TakeTextRect(*pTextEditOutliner, aTextRect, true,
                 &aAnchorRect /* Give sal_True here, not sal_False */);
 
             if ( !pTextObj->IsContourTextFrame() )
@@ -1459,7 +1459,7 @@ sal_Bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHar
         if(pTextEditOutlinerView)
         {
             // FALSE= regard InvalidItems as "holes," not as Default
-            rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
+            rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), false);
             rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
         }
 
@@ -1715,7 +1715,7 @@ sal_Bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* p
         pMacroObj=pObj;
         pMacroPV=pPV;
         pMacroWin=pWin;
-        bMacroDown=sal_False;
+        bMacroDown=false;
         nMacroTol=sal_uInt16(nTol);
         aMacroDownPos=rPnt;
         MovMacroObj(rPnt);
@@ -1735,7 +1735,7 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.pPageView=pMacroPV;
         aHitRec.pOut=pMacroWin;
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
-        bMacroDown=sal_False;
+        bMacroDown=false;
     }
 }
 
@@ -1749,10 +1749,10 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.bDown=sal_True;
+        aHitRec.bDown=true;
         aHitRec.pOut=pMacroWin;
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
-        bMacroDown=sal_True;
+        bMacroDown=true;
     }
 }
 
@@ -1793,7 +1793,7 @@ sal_Bool SdrObjEditView::EndMacroObj()
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.bDown=sal_True;
+        aHitRec.bDown=true;
         aHitRec.pOut=pMacroWin;
         bool bRet=pMacroObj->DoMacro(aHitRec);
         pMacroObj=NULL;

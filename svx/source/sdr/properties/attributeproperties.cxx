@@ -370,7 +370,7 @@ namespace sdr
                             for (iter = aStyleList.begin(); iter != aStyleList.end(); ++iter)
                             {
                                 pNewSheet = &pNewPool->Make((*iter)->GetName(), (*iter)->GetFamily(), (*iter)->GetMask());
-                                pNewSheet->GetItemSet().Put((*iter)->GetItemSet(), sal_False);
+                                pNewSheet->GetItemSet().Put((*iter)->GetItemSet(), false);
 
                                 if(bScaleUnitChanged)
                                 {

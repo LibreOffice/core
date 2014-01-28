@@ -193,7 +193,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
         }
         else
         {
-            DBG_ASSERT( 0, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
+            DBG_ASSERT( false, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
         }
     }
 }
@@ -376,7 +376,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             double fCamFocal =
                 (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
-            aCam.SetAutoAdjustProjection(sal_False);
+            aCam.SetAutoAdjustProjection(false);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt;
             basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);

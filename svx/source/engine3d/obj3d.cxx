@@ -255,19 +255,19 @@ sal_uInt16 E3dObject::GetObjIdentifier() const
 
 void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed    = sal_True;
-    rInfo.bResizePropAllowed    = sal_True;
-    rInfo.bRotateFreeAllowed    = sal_True;
-    rInfo.bRotate90Allowed      = sal_True;
-    rInfo.bMirrorFreeAllowed    = sal_False;
-    rInfo.bMirror45Allowed      = sal_False;
-    rInfo.bMirror90Allowed      = sal_False;
-    rInfo.bShearAllowed         = sal_False;
-    rInfo.bEdgeRadiusAllowed    = sal_False;
-    rInfo.bCanConvToPath        = sal_False;
+    rInfo.bResizeFreeAllowed    = true;
+    rInfo.bResizePropAllowed    = true;
+    rInfo.bRotateFreeAllowed    = true;
+    rInfo.bRotate90Allowed      = true;
+    rInfo.bMirrorFreeAllowed    = false;
+    rInfo.bMirror45Allowed      = false;
+    rInfo.bMirror90Allowed      = false;
+    rInfo.bShearAllowed         = false;
+    rInfo.bEdgeRadiusAllowed    = false;
+    rInfo.bCanConvToPath        = false;
 
     // no transparence for 3d objects
-    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bTransparenceAllowed = false;
 
     // gradient depends on fillstyle
     // BM *** check if SetItem is NULL ***
@@ -279,10 +279,10 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // 2D polygons would be required which need to be sorted by depth,
     // ie at intersections be cut relative to each other. Also the texture
     // coorinates were an unsolved problem.
-    rInfo.bCanConvToPoly = sal_False;
-    rInfo.bCanConvToContour = sal_False;
-    rInfo.bCanConvToPathLineToArea = sal_False;
-    rInfo.bCanConvToPolyLineToArea = sal_False;
+    rInfo.bCanConvToPoly = false;
+    rInfo.bCanConvToContour = false;
+    rInfo.bCanConvToPathLineToArea = false;
+    rInfo.bCanConvToPolyLineToArea = false;
 }
 
 void E3dObject::NbcSetLayer(SdrLayerID nLayer)
@@ -759,7 +759,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotate the glue points (who still
                                             // have coordinates relative to the
                                             // original page)
-    SetGlueReallyAbsolute(sal_False);       // from now they are again relative to BoundRect (that is defined as aOutRect)
+    SetGlueReallyAbsolute(false);       // from now they are again relative to BoundRect (that is defined as aOutRect)
 }
 
 /*************************************************************************/

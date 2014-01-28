@@ -81,7 +81,7 @@ OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara
     OUString aRet;
 
     if(mpTextObj.is())
-        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, sal_False, rpTxtColor, rpFldColor, aRet);
+        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, false, rpTxtColor, rpFldColor, aRet);
 
     if (!bOk)
         aRet = Outliner::CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor);

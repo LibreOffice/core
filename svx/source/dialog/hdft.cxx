@@ -498,7 +498,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         {
             m_pDistFT->Disable();
             m_pDistEdit->Disable();
-            m_pDynSpacingCB->Enable(sal_False);
+            m_pDynSpacingCB->Enable(false);
             m_pHeightFT->Disable();
             m_pHeightEdit->Disable();
             m_pHeightDynBtn->Disable();

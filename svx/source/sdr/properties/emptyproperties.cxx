@@ -34,7 +34,7 @@ namespace sdr
         SfxItemSet& EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
-            DBG_ASSERT(sal_False, "EmptyProperties::CreateObjectSpecificItemSet() should never be called");
+            DBG_ASSERT(false, "EmptyProperties::CreateObjectSpecificItemSet() should never be called");
             return *(new SfxItemSet(rPool));
         }
 
@@ -75,65 +75,65 @@ namespace sdr
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
-            DBG_ASSERT(sal_False, "EmptyProperties::GetObjectItemSet() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::GetObjectItemSet() should never be called (!)");
 
             return *mpEmptyItemSet;
         }
 
         void EmptyProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItem() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::SetObjectItem() should never be called (!)");
         }
 
         void EmptyProperties::SetObjectItemDirect(const SfxPoolItem& /*rItem*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItemDirect() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::SetObjectItemDirect() should never be called (!)");
         }
 
         void EmptyProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::ClearObjectItem() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::ClearObjectItem() should never be called (!)");
         }
 
         void EmptyProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::ClearObjectItemDirect() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::ClearObjectItemDirect() should never be called (!)");
         }
 
         void EmptyProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::SetObjectItemSet() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::SetObjectItemSet() should never be called (!)");
         }
 
         void EmptyProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::ItemSetChanged() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::ItemSetChanged() should never be called (!)");
         }
 
         sal_Bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::AllowItemChange() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::AllowItemChange() should never be called (!)");
             return sal_True;
         }
 
         void EmptyProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::ItemChange() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::ItemChange() should never be called (!)");
         }
 
         void EmptyProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::PostItemChange() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::PostItemChange() should never be called (!)");
         }
 
         void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::SetStyleSheet() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::SetStyleSheet() should never be called (!)");
         }
 
         SfxStyleSheet* EmptyProperties::GetStyleSheet() const
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::GetStyleSheet() should never be called (!)");
+            DBG_ASSERT(false, "EmptyProperties::GetStyleSheet() should never be called (!)");
             return 0L;
         }
     } // end of namespace properties

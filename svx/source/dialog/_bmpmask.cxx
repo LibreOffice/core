@@ -325,7 +325,7 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 
 IMPL_LINK_NOARG(MaskData, ExecHdl)
 {
-    SfxBoolItem aBItem( SID_BMPMASK_EXEC, sal_True );
+    SfxBoolItem aBItem( SID_BMPMASK_EXEC, true );
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );
 
     return 0L;
@@ -568,7 +568,7 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 
 sal_Bool SvxBmpMask::Close()
 {
-    SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, sal_False );
+    SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, false );
     GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );
 
     return SfxDockingWindow::Close();

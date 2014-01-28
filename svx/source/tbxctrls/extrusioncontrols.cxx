@@ -92,7 +92,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
-    mpDirectionSet->EnableFullItemMode( sal_False );
+    mpDirectionSet->EnableFullItemMode( false );
 
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
     {
@@ -583,7 +583,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
 
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
     mpLightingSet->SetColCount( 3 );
-    mpLightingSet->EnableFullItemMode( sal_False );
+    mpLightingSet->EnableFullItemMode( false );
 
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
     {

@@ -482,7 +482,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
         }
         catch(const Exception&)
         {
-            OSL_ASSERT(!"Can not get style");
+            OSL_FAIL("Can not get style");
         }
     }
 

@@ -1738,7 +1738,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                     if(bIsNotPersist)
                     {
                         // Not-Persistent Attribute, hole diese extra
-                        mpObj->TakeNotPersistAttr(*pSet, sal_False);
+                        mpObj->TakeNotPersistAttr(*pSet, false);
                     }
                 }
 
@@ -1834,7 +1834,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
                 {
                     // Not-Persistent Attribute, hole diese extra
-                    mpObj->TakeNotPersistAttr(aSet, sal_False);
+                    mpObj->TakeNotPersistAttr(aSet, false);
                 }
             }
 
@@ -1878,7 +1878,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     // reseted even when an execption is thrown
     const ::comphelper::ScopeGuard aGuard( boost::bind( &SvxShape::endSetPropertyValues, this ) );
 
-    mbIsMultiPropertyCall = sal_True;
+    mbIsMultiPropertyCall = true;
 
     if( mpImpl->mpMaster )
     {
@@ -1928,7 +1928,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
 void SvxShape::endSetPropertyValues()
 {
-    mbIsMultiPropertyCall = sal_False;
+    mbIsMultiPropertyCall = false;
     if( mpImpl->mpItemSet )
     {
         delete mpImpl->mpItemSet;
@@ -2421,7 +2421,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         OUString aLayerName;
         if( rValue >>= aLayerName )
         {
-            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, sal_True);
+            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, true);
             if( pLayer != NULL )
             {
                 mpObj->SetLayer( pLayer->GetID() );
@@ -2459,7 +2459,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             {
                 Point aRef1(mpObj->GetSnapRect().Center());
                 double nTan=tan(nShear*nPi180);
-                mpObj->Shear(aRef1,nShear,nTan,sal_False);
+                mpObj->Shear(aRef1,nShear,nTan,false);
                 return true;
             }
         }

@@ -81,7 +81,7 @@ bool XBitmapList::Create()
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
     Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
 
-    return sal_True;
+    return true;
 }
 
 Bitmap XBitmapList::CreateBitmapForUI( long /*nIndex*/ )

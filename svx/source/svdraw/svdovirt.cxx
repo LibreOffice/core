@@ -50,7 +50,7 @@ TYPEINIT1(SdrVirtObj,SdrObject);
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=sal_True; // this is only a virtual object
+    bVirtObj=true; // this is only a virtual object
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }

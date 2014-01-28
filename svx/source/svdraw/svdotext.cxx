@@ -104,7 +104,7 @@ SdrTextObj::SdrTextObj()
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_True;
+    mbSupportTextIndentingOnLineWidthChange = true;
     mbInDownScale = sal_False;
 }
 
@@ -131,7 +131,7 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_True;
+    mbSupportTextIndentingOnLineWidthChange = true;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
@@ -155,7 +155,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_True;
+    mbSupportTextIndentingOnLineWidthChange = true;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
@@ -181,7 +181,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_True;
+    mbSupportTextIndentingOnLineWidthChange = true;
 }
 
 SdrTextObj::~SdrTextObj()
@@ -296,7 +296,7 @@ const Size& SdrTextObj::GetTextSize() const
 bool SdrTextObj::IsAutoGrowHeight() const
 {
     if(!bTextFrame)
-        return sal_False; // AutoGrow only together with TextFrames
+        return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
@@ -321,7 +321,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
 bool SdrTextObj::IsAutoGrowWidth() const
 {
     if(!bTextFrame)
-        return sal_False; // AutoGrow only together with TextFrames
+        return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
@@ -431,21 +431,21 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
     rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
-    rInfo.bResizePropAllowed=sal_True;
-    rInfo.bRotateFreeAllowed=sal_True;
-    rInfo.bRotate90Allowed  =sal_True;
+    rInfo.bResizePropAllowed=true;
+    rInfo.bRotateFreeAllowed=true;
+    rInfo.bRotate90Allowed  =true;
     rInfo.bMirrorFreeAllowed=bNoTextFrame;
     rInfo.bMirror45Allowed  =bNoTextFrame;
     rInfo.bMirror90Allowed  =bNoTextFrame;
 
     // allow transparency
-    rInfo.bTransparenceAllowed = sal_True;
+    rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
     XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
     rInfo.bShearAllowed     =bNoTextFrame;
-    rInfo.bEdgeRadiusAllowed=sal_True;
+    rInfo.bEdgeRadiusAllowed=true;
     bool bCanConv=ImpCanConvTextToCurve();
     rInfo.bCanConvToPath    =bCanConv;
     rInfo.bCanConvToPoly    =bCanConv;
@@ -917,7 +917,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
     bool bChkX = true;
     if (bNoStretching) { // might only be be possible proportionally
-        if (nX>nY) { nX=nY; bChkX=sal_False; }
+        if (nX>nY) { nX=nY; bChkX=false; }
         else { nY=nX; }
     }
 
@@ -1123,7 +1123,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
         Rectangle aAnchor2;
         Rectangle aR;
-        TakeTextRect(rOutliner,aR,sal_False,&aAnchor2);
+        TakeTextRect(rOutliner,aR,false,&aAnchor2);
         rOutliner.Clear();
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
@@ -1170,7 +1170,7 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 
 void SdrTextObj::ImpCheckMasterCachable()
 {
-    bNotMasterCachable=sal_False;
+    bNotMasterCachable=false;
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
 
@@ -1243,7 +1243,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
         }
     }
     rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
-    TakeTextRect(rOutliner, rTextRect, sal_False, &rAnchorRect);
+    TakeTextRect(rOutliner, rTextRect, false, &rAnchorRect);
     rPaintRect = rTextRect;
 
     if (!bContourFrame)
@@ -1708,7 +1708,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         GeoStat aGeoStat;
         aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, sal_False);
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, false);
     }
 
     // rotation?

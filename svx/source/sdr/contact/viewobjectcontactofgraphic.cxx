@@ -167,7 +167,7 @@ namespace sdr
                 if(rGrafObj.IsLinkedGraphic())
                 {
                     // update graphic link
-                    rGrafObj.ImpUpdateGraphicLink( sal_False );
+                    rGrafObj.ImpUpdateGraphicLink( false );
                 }
                 else
                 {

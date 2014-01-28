@@ -177,29 +177,29 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 void SdrSnapView::ClearVars()
 {
     nMagnSizPix=4;
-    bSnapEnab=sal_True;
-    bGridSnap=sal_True;
-    bSnapTo1Pix=sal_True;
-    bBordSnap=sal_True;
-    bHlplSnap=sal_True;
-    bOFrmSnap=sal_True;
-    bOPntSnap=sal_False;
-    bOConSnap=sal_True;
-    bMoveMFrmSnap=sal_True;
-    bMoveOFrmSnap=sal_True;
-    bMoveOPntSnap=sal_True;
-    bMoveOConSnap=sal_True;
-    bMoveSnapOnlyTopLeft=sal_False;
-    bOrtho=sal_False;
-    bBigOrtho=sal_True;
+    bSnapEnab=true;
+    bGridSnap=true;
+    bSnapTo1Pix=true;
+    bBordSnap=true;
+    bHlplSnap=true;
+    bOFrmSnap=true;
+    bOPntSnap=false;
+    bOConSnap=true;
+    bMoveMFrmSnap=true;
+    bMoveOFrmSnap=true;
+    bMoveOPntSnap=true;
+    bMoveOConSnap=true;
+    bMoveSnapOnlyTopLeft=false;
+    bOrtho=false;
+    bBigOrtho=true;
     nSnapAngle=1500;
-    bAngleSnapEnab=sal_False;
-    bMoveOnlyDragging=sal_False;
-    bSlantButShear=sal_False;
-    bCrookNoContortion=sal_False;
+    bAngleSnapEnab=false;
+    bMoveOnlyDragging=false;
+    bSlantButShear=false;
+    bCrookNoContortion=false;
     eCrookMode=SDRCROOK_ROTATE;
-    bHlplFixed=sal_False;
-    bEliminatePolyPoints=sal_False;
+    bHlplFixed=false;
+    bEliminatePolyPoints=false;
     nEliminatePolyPointLimitAngle=0;
 
     BrkSetPageOrg();
@@ -348,7 +348,7 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         sal_uIntPtr nMaxFrameSnapCount=200;
 
         // go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
-        SdrObjListIter aIter(*pPV->GetPage(),IM_DEEPNOGROUPS,sal_True);
+        SdrObjListIter aIter(*pPV->GetPage(),IM_DEEPNOGROUPS,true);
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
@@ -444,7 +444,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
             }
         } else {
             nBestXSnap=aPt.X();
-            bXSnapped=sal_True;
+            bXSnapped=true;
         }
     }
     if ((nRet & SDRSNAP_YSNAPPED) !=0) {
@@ -454,7 +454,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
             }
         } else {
             nBestYSnap=aPt.Y();
-            bYSnapped=sal_True;
+            bYSnapped=true;
         }
     }
 }

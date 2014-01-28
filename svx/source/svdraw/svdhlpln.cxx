@@ -52,7 +52,7 @@ bool SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevic
             }
         } break;
     } // switch
-    return sal_False;
+    return false;
 }
 
 Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const

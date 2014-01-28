@@ -1363,7 +1363,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                 if(pNewOverlayObject)
                                 {
                                     // line part is not hittable
-                                    pNewOverlayObject->setHittable(sal_False);
+                                    pNewOverlayObject->setHittable(false);
 
                                     // color(?)
                                     pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));

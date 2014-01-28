@@ -92,10 +92,10 @@ GalleryTheme::~GalleryTheme()
 
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
-    aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+    aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
     // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
     if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-        aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 }
 
 sal_Bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
@@ -665,7 +665,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         sal_uIntPtr nStorErr = 0;
 
         {
-            SvStorageRef aTempStorageRef( new SvStorage( sal_False, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
+            SvStorageRef aTempStorageRef( new SvStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef );
             nStorErr = aSvDrawStorageRef->GetError();
         }

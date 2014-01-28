@@ -298,7 +298,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case( OBJ_CIRC ):
         {
             SdrCircObj* pCircObj = (SdrCircObj*) &rObj;
-            SdrPathObj* pPathObj = (SdrPathObj*) pCircObj->ConvertToPolyObj( sal_False, sal_False );
+            SdrPathObj* pPathObj = (SdrPathObj*) pCircObj->ConvertToPolyObj( false, false );
             Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
@@ -364,7 +364,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             case( OBJ_CIRC ):
             {
                 const SdrCircObj& rCircObj = (const SdrCircObj&) rObj;
-                SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( sal_False, sal_False );
+                SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( false, false );
                 Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
 
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, sal_False );

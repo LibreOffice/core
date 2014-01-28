@@ -469,7 +469,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             }
             else
             {
-                SdrObject* pNewObj = pNext->ConvertToPolyObj( sal_False, sal_False );
+                SdrObject* pNewObj = pNext->ConvertToPolyObj( false, false );
                 SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
@@ -590,7 +590,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             double fW = rVolume.getWidth();
             double fH = rVolume.getHeight();
 
-            rCamera.SetAutoAdjustProjection( sal_False );
+            rCamera.SetAutoAdjustProjection( false );
             rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt( 0.0, 0.0, 0.0 );
             basegfx::B3DPoint aCamPos( 0.0, 0.0, 100.0 );

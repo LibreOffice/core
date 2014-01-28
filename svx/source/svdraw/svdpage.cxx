@@ -83,8 +83,8 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     pModel=pNewModel;
     pPage=pNewPage;
     pUpList=pNewUpList;
-    bObjOrdNumsDirty=sal_False;
-    bRectsDirty=sal_False;
+    bObjOrdNumsDirty=false;
+    bRectsDirty=false;
     pOwnerObj=NULL;
     eListKind=SDROBJLIST_UNKNOWN;
 }
@@ -99,8 +99,8 @@ SdrObjList::SdrObjList(const SdrObjList& rSrcList):
     pModel=NULL;
     pPage=NULL;
     pUpList=NULL;
-    bObjOrdNumsDirty=sal_False;
-    bRectsDirty=sal_False;
+    bObjOrdNumsDirty=false;
+    bRectsDirty=false;
     pOwnerObj=NULL;
     eListKind=SDROBJLIST_UNKNOWN;
     *this=rSrcList;
@@ -128,8 +128,8 @@ void SdrObjList::operator=(const SdrObjList& rSrcList)
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 {
     Clear();
-    bObjOrdNumsDirty=sal_False;
-    bRectsDirty     =sal_False;
+    bObjOrdNumsDirty=false;
+    bRectsDirty     =false;
     sal_uIntPtr nCloneErrCnt=0;
     sal_uIntPtr nAnz=rSrcList.GetObjCount();
     SdrInsertReason aReason(SDRREASON_COPY);
@@ -161,8 +161,8 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
             SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
             if (pSrcEdge!=NULL) {
-                SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(sal_True);
-                SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(sal_False);
+                SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
+                SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
                 if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // can't do this
                 if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // across all lists (yet)
                 if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
@@ -173,7 +173,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                             sal_uIntPtr nDstNode1=pSrcNode1->GetOrdNum();
                             SdrObject* pDstNode1=GetObj(nDstNode1);
                             if (pDstNode1!=NULL) { // else we get an error!
-                                pDstEdge->ConnectToNode(sal_True,pDstNode1);
+                                pDstEdge->ConnectToNode(true,pDstNode1);
                             } else {
                                 OSL_FAIL("SdrObjList::operator=(): pDstNode1==NULL!");
                             }
@@ -182,7 +182,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                             sal_uIntPtr nDstNode2=pSrcNode2->GetOrdNum();
                             SdrObject* pDstNode2=GetObj(nDstNode2);
                             if (pDstNode2!=NULL) { // else the node was probably not selected
-                                pDstEdge->ConnectToNode(sal_False,pDstNode2);
+                                pDstEdge->ConnectToNode(false,pDstNode2);
                             } else {
                                 OSL_FAIL("SdrObjList::operator=(): pDstNode2==NULL!");
                             }
@@ -290,7 +290,7 @@ void SdrObjList::RecalcObjOrdNums()
         SdrObject* pObj=GetObj(no);
         pObj->SetOrdNum(no);
     }
-    bObjOrdNumsDirty=sal_False;
+    bObjOrdNumsDirty=false;
 }
 
 void SdrObjList::RecalcRects()
@@ -313,7 +313,7 @@ void SdrObjList::RecalcRects()
 
 void SdrObjList::SetRectsDirty()
 {
-    bRectsDirty=sal_True;
+    bRectsDirty=true;
     if (pUpList!=NULL) pUpList->SetRectsDirty();
 }
 
@@ -336,7 +336,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrIns
         if (nPos>nAnz) nPos=nAnz;
         InsertObjectIntoContainer(*pObj,nPos);
 
-        if (nPos<nAnz) bObjOrdNumsDirty=sal_True;
+        if (nPos<nAnz) bObjOrdNumsDirty=true;
         pObj->SetOrdNum(nPos);
         pObj->SetObjList(this);
         pObj->SetPage(pPage);
@@ -349,7 +349,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrIns
             aOutRect.Union(pObj->GetCurrentBoundRect());
             aSnapRect.Union(pObj->GetSnapRect());
         }
-        pObj->SetInserted(sal_True); // calls the UserCall (among others)
+        pObj->SetInserted(true); // calls the UserCall (among others)
     }
 }
 
@@ -413,12 +413,12 @@ SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
         pObj->GetViewContact().flushViewObjectContacts(true);
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
-        pObj->SetInserted(sal_False); // Ruft u.a. den UserCall
+        pObj->SetInserted(false); // Ruft u.a. den UserCall
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimizing for the case that the last object has to be removed
             if (nObjNum!=sal_uIntPtr(nAnz-1)) {
-                bObjOrdNumsDirty=sal_True;
+                bObjOrdNumsDirty=true;
             }
         }
         SetRectsDirty();
@@ -454,12 +454,12 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
             }
             pModel->SetChanged();
         }
-        pObj->SetInserted(sal_False); // calls, among other things, the UserCall
+        pObj->SetInserted(false); // calls, among other things, the UserCall
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimization for the case that the last object is removed
             if (nObjNum!=sal_uIntPtr(nAnz-1)) {
-                bObjOrdNumsDirty=sal_True;
+                bObjOrdNumsDirty=true;
             }
         }
         SetRectsDirty();
@@ -487,7 +487,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Could not find object to remove.");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt does not have status Inserted.");
-        pObj->SetInserted(sal_False);
+        pObj->SetInserted(false);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
@@ -503,7 +503,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
         // evtl. existing parent visualisations
         impChildInserted(*pNewObj);
 
-        pNewObj->SetInserted(sal_True);
+        pNewObj->SetInserted(true);
         SetRectsDirty();
     }
     return pObj;
@@ -534,7 +534,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
                 pModel->Broadcast(aHint);
             }
         }
-        pObj->SetInserted(sal_False);
+        pObj->SetInserted(false);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
@@ -550,7 +550,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
         // evtl. existing parent visualisations
         impChildInserted(*pNewObj);
 
-        pNewObj->SetInserted(sal_True);
+        pNewObj->SetInserted(true);
         if (pModel!=NULL) {
             // TODO: We need a different broadcast here.
             if (pNewObj->GetPage()!=NULL) {
@@ -588,7 +588,7 @@ SdrObject* SdrObjList::NbcSetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nN
         pObj->ActionChanged();
 
         pObj->SetOrdNum(nNewObjNum);
-        bObjOrdNumsDirty=sal_True;
+        bObjOrdNumsDirty=true;
     }
     return pObj;
 }
@@ -615,7 +615,7 @@ SdrObject* SdrObjList::SetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewO
         pObj->ActionChanged();
 
         pObj->SetOrdNum(nNewObjNum);
-        bObjOrdNumsDirty=sal_True;
+        bObjOrdNumsDirty=true;
         if (pModel!=NULL)
         {
             // TODO: We need a different broadcast here.
@@ -630,7 +630,7 @@ const Rectangle& SdrObjList::GetAllObjSnapRect() const
 {
     if (bRectsDirty) {
         ((SdrObjList*)this)->RecalcRects();
-        ((SdrObjList*)this)->bRectsDirty=sal_False;
+        ((SdrObjList*)this)->bRectsDirty=false;
     }
     return aSnapRect;
 }
@@ -645,7 +645,7 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
     if (bRectsDirty || aOutRect.IsEmpty())
     {
         ((SdrObjList*)this)->RecalcRects();
-        ((SdrObjList*)this)->bRectsDirty=sal_False;
+        ((SdrObjList*)this)->bRectsDirty=false;
     }
     return aOutRect;
 }
@@ -998,7 +998,7 @@ void SdrObjList::InsertObjectIntoContainer (
         maList.push_back(&rObject);
     else
         maList.insert(maList.begin()+nInsertPosition, &rObject);
-    bObjOrdNumsDirty=sal_True;
+    bObjOrdNumsDirty=true;
 }
 
 
@@ -1035,7 +1035,7 @@ void SdrObjList::ReplaceObjectInContainer (
     }
 
     maList[nObjectPosition] = &rNewObject;
-    bObjOrdNumsDirty=sal_True;
+    bObjOrdNumsDirty=true;
 }
 
 
@@ -1064,7 +1064,7 @@ void SdrObjList::RemoveObjectFromContainer (
     }
 
     maList.erase(maList.begin()+nObjectPosition);
-    bObjOrdNumsDirty=sal_True;
+    bObjOrdNumsDirty=true;
 }
 
 
@@ -1665,10 +1665,10 @@ sal_uInt16 SdrPage::GetPageNum() const
 
     if (mbMaster) {
         if (pModel && pModel->IsMPgNumsDirty())
-            ((SdrModel*)pModel)->RecalcPageNums(sal_True);
+            ((SdrModel*)pModel)->RecalcPageNums(true);
     } else {
         if (pModel && pModel->IsPagNumsDirty())
-            ((SdrModel*)pModel)->RecalcPageNums(sal_False);
+            ((SdrModel*)pModel)->RecalcPageNums(false);
     }
     return nPageNum;
 }

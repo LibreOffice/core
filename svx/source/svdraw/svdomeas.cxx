@@ -216,19 +216,19 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
 SdrMeasureObj::SdrMeasureObj():
-    bTextDirty(sal_False)
+    bTextDirty(false)
 {
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_False;
+    mbSupportTextIndentingOnLineWidthChange = false;
 }
 
 SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
     aPt1(rPt1),
     aPt2(rPt2),
-    bTextDirty(sal_False)
+    bTextDirty(false)
 {
     // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_False;
+    mbSupportTextIndentingOnLineWidthChange = false;
 }
 
 SdrMeasureObj::~SdrMeasureObj()
@@ -237,25 +237,25 @@ SdrMeasureObj::~SdrMeasureObj()
 
 void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bSelectAllowed    =sal_True;
-    rInfo.bMoveAllowed      =sal_True;
-    rInfo.bResizeFreeAllowed=sal_True;
-    rInfo.bResizePropAllowed=sal_True;
-    rInfo.bRotateFreeAllowed=sal_True;
-    rInfo.bRotate90Allowed  =sal_True;
-    rInfo.bMirrorFreeAllowed=sal_True;
-    rInfo.bMirror45Allowed  =sal_True;
-    rInfo.bMirror90Allowed  =sal_True;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_True;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoOrthoDesired   =sal_True;
-    rInfo.bNoContortion     =sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_True;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bSelectAllowed    =true;
+    rInfo.bMoveAllowed      =true;
+    rInfo.bResizeFreeAllowed=true;
+    rInfo.bResizePropAllowed=true;
+    rInfo.bRotateFreeAllowed=true;
+    rInfo.bRotate90Allowed  =true;
+    rInfo.bMirrorFreeAllowed=true;
+    rInfo.bMirror45Allowed  =true;
+    rInfo.bMirror90Allowed  =true;
+    rInfo.bTransparenceAllowed = false;
+    rInfo.bGradientAllowed = false;
+    rInfo.bShearAllowed     =true;
+    rInfo.bEdgeRadiusAllowed=false;
+    rInfo.bNoOrthoDesired   =true;
+    rInfo.bNoContortion     =false;
+    rInfo.bCanConvToPath    =false;
+    rInfo.bCanConvToPoly    =true;
+    rInfo.bCanConvToPathLineToArea=false;
+    rInfo.bCanConvToPolyLineToArea=false;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
@@ -426,7 +426,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
         {
-            bBrkLine=sal_True; // dashed line if there's only on paragraph.
+            bBrkLine=true; // dashed line if there's only on paragraph.
         }
     }
     rPol.bBreakedLine=bBrkLine;
@@ -462,12 +462,12 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nTextWink=rPol.nLineWink;
     if (rRec.bTextRota90) rPol.nTextWink+=9000;
 
-    rPol.bAutoUpsideDown=sal_False;
+    rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
         long nTmpWink=NormAngle360(rPol.nTextWink-rRec.nTextAutoAngleView);
         if (nTmpWink>=18000) {
             rPol.nTextWink+=18000;
-            rPol.bAutoUpsideDown=sal_True;
+            rPol.bAutoUpsideDown=true;
         }
     }
 
@@ -597,7 +597,7 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
                 rpFldColor=NULL;
             }
         }
-        return sal_True;
+        return true;
     } else {
         return SdrTextObj::CalcFieldValue(rField,nPara,nPos,bEdit,rpTxtColor,rpFldColor,rRet);
     }
@@ -637,7 +637,7 @@ void SdrMeasureObj::UndirtyText() const
         // cast to nonconst three times
         ((SdrMeasureObj*)this)->aTextSize=aSiz;
         ((SdrMeasureObj*)this)->bTextSizeDirty=sal_False;
-        ((SdrMeasureObj*)this)->bTextDirty=sal_False;
+        ((SdrMeasureObj*)this)->bTextDirty=false;
     }
 }
 
@@ -978,7 +978,7 @@ bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)
     aPt1=rStat.GetStart();
     aPt2=rStat.GetNow();
     SetTextDirty();
-    return sal_True;
+    return true;
 }
 
 bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
@@ -992,8 +992,8 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     }
     SetTextDirty();
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
-    return sal_True;
+    bSnapRectDirty=true;
+    return true;
 }
 
 bool SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)

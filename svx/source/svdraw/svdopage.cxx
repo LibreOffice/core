@@ -136,20 +136,20 @@ sal_uInt16 SdrPageObj::GetObjIdentifier() const
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoOrthoDesired   =sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_False;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bRotateFreeAllowed=false;
+    rInfo.bRotate90Allowed  =false;
+    rInfo.bMirrorFreeAllowed=false;
+    rInfo.bMirror45Allowed  =false;
+    rInfo.bMirror90Allowed  =false;
+    rInfo.bTransparenceAllowed = false;
+    rInfo.bGradientAllowed = false;
+    rInfo.bShearAllowed     =false;
+    rInfo.bEdgeRadiusAllowed=false;
+    rInfo.bNoOrthoDesired   =false;
+    rInfo.bCanConvToPath    =false;
+    rInfo.bCanConvToPoly    =false;
+    rInfo.bCanConvToPathLineToArea=false;
+    rInfo.bCanConvToPolyLineToArea=false;
 }
 
 SdrPageObj* SdrPageObj::Clone() const

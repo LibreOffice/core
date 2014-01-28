@@ -52,7 +52,7 @@ public:
     void SetLineSpace( SvxLineSpacingItem& rLineSpace,
                         int eSpace, long lValue = 0 );
 
-    void ExecuteLineSpacing( sal_uInt16 aIsCustom, sal_uInt16 aEntry );
+    void ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEntry );
     void SetAllNoSel();
     void PopupModeEndCallback();
 

@@ -326,7 +326,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                     nShearWink = -nShearWink;
                     nTan = -nTan;
                 }
-                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, sal_False);
+                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, false);
             }
             if( !bPostRotateAngle && nRotateAngle )
             {
@@ -415,7 +415,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                     nShearWink = -nShearWink;
                     nTan = -nTan;
                 }
-                pObj->Shear( aRect.Center(), nShearWink, nTan, sal_False);
+                pObj->Shear( aRect.Center(), nShearWink, nTan, false);
             }
             sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )
@@ -451,7 +451,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 }
                 else
                 {
-                    pNewObj = pNext->ConvertToPolyObj( sal_False, sal_False );
+                    pNewObj = pNext->ConvertToPolyObj( false, false );
                     SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                     if ( pPath )
                         aPP = pPath->GetPathPoly();

@@ -198,7 +198,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
     }
 
     bool bResetPar, bResetAttr;
-    bResetPar = bResetAttr = sal_False;
+    bResetPar = bResetAttr = false;
 
     SdrTextHorzAdjust eHAdj = xCell->GetTextHorizontalAdjust();
 

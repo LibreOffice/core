@@ -767,7 +767,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUStrin
     bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(sal_True);
+        SetResizeProtect(true);
 
     // For math objects, set closed state to transparent
     SetClosedObj(!ImplIsMathObj( xObjRef.GetObject() ));
@@ -783,7 +783,7 @@ void SdrOle2Obj::Init()
     mpImpl->pGraphicObject=NULL;
     mpImpl->pLightClient = 0;
 
-    xObjRef.Lock( sal_True );
+    xObjRef.Lock( true );
 }
 
 // -----------------------------------------------------------------------------
@@ -1086,7 +1086,7 @@ void SdrOle2Obj::Connect_Impl()
                 {
                     xObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
                     mpImpl->mbConnected = true;
-                    xObjRef.Lock( sal_True );
+                    xObjRef.Lock( true );
                 }
             }
 
@@ -1499,7 +1499,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
     // the caller of the method is responsible to control the old object, it will not be closed here
     // Otherwise WW8 import crashes because it transfers control to OLENode by this method
     if ( xObjRef.GetObject().is() )
-        xObjRef.Lock( sal_False );
+        xObjRef.Lock( false );
 
     // avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
     // This call will try to close the objects; so if anybody else wants to keep it, it must be locked by a CloseListener
@@ -1516,7 +1516,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         DELETEZ( pGraphic );
 
         if ( (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-            SetResizeProtect(sal_True);
+            SetResizeProtect(true);
 
         // For math objects, set closed state to transparent
         SetClosedObj(!ImplIsMathObj( rNewObjRef ));

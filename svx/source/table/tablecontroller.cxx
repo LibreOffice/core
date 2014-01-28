@@ -418,7 +418,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                         if( !pSet )
                         {
                             pSet = new SfxItemSet( mxTableObj->GetModel()->GetItemPool() );
-                            MergeAttrFromSelectedCells(*pSet, sal_False);
+                            MergeAttrFromSelectedCells(*pSet, false);
                         }
 
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
@@ -735,7 +735,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
 
-        MergeAttrFromSelectedCells(aNewAttr, sal_False);
+        MergeAttrFromSelectedCells(aNewAttr, false);
         FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
         aNewAttr.Put( aBoxItem );
         aNewAttr.Put( aBoxInfoItem );
@@ -762,7 +762,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
             if( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) != aBoxItem.GetDistance( BOX_LINE_BOTTOM ) )
                 aNewSet.Put(SdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
 
-            SetAttrToSelectedCells(aNewSet, sal_False);
+            SetAttrToSelectedCells(aNewSet, false);
         }
     }
 }
@@ -2300,7 +2300,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
         getSelectedCells( aStart, aEnd );
 
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr, sal_True);
+        aAttr.Put(rAttr, true);
 
         const bool bFrame = (rAttr.GetItemState( SDRATTR_TABLE_BORDER ) == SFX_ITEM_SET) || (rAttr.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SFX_ITEM_SET);
 
@@ -2354,7 +2354,7 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
             if(pTextEditOutlinerView)
             {
                 // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
-                rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
+                rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), false);
                 rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
             }
         }
@@ -2507,7 +2507,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
         getSelectedCells( aStart, aEnd );
 
         SfxItemSet aAttr(*rFormatSet.GetPool(), rFormatSet.GetRanges());
-        aAttr.Put(rFormatSet, sal_True);
+        aAttr.Put(rFormatSet, true);
 
         const bool bFrame = (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER ) == SFX_ITEM_SET) || (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SFX_ITEM_SET);
 

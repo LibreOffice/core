@@ -1979,7 +1979,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 
         // und dann ein Format generieren, dass die gewuenschten Nachkommastellen usw. hat
         LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, sal_False, nScale);
+        OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
 
         static_cast< DoubleNumericField* >( m_pWindow )->SetFormat( sFormatString, aAppLanguage );
         static_cast< DoubleNumericField* >( m_pPainter )->SetFormat( sFormatString, aAppLanguage );

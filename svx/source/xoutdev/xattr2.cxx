@@ -243,14 +243,14 @@ bool AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
 {
     if(!SfxPoolItem::operator==(rRef))
     {
-        return 0;
+        return false;
     }
 
     const AffineMatrixItem* pRef = dynamic_cast< const AffineMatrixItem* >(&rRef);
 
     if(!pRef)
     {
-        return 0;
+        return false;
     }
 
     return (maMatrix.m00 == pRef->maMatrix.m00

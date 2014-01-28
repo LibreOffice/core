@@ -303,7 +303,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             {
                 SvLockBytes* pLockBytes = mpOStm->GetLockBytes();
                 if ( pLockBytes  )
-                    pLockBytes->SetSynchronMode( sal_True );
+                    pLockBytes->SetSynchronMode( true );
 
                 mpOStm->Seek( STREAM_SEEK_TO_END );
                 nStreamLen = mpOStm->Tell();

@@ -190,7 +190,7 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
 {
     if (pParent!=rCmpLayerAdmin.pParent ||
         aLayer.size()!=rCmpLayerAdmin.aLayer.size())
-        return sal_False;
+        return false;
     bool bOk = true;
     sal_uInt16 nAnz=GetLayerCount();
     sal_uInt16 i=0;
@@ -291,7 +291,7 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited
 
     if(!pLay && pParent)
     {
-        pLay = pParent->GetLayer(rName, sal_True);
+        pLay = pParent->GetLayer(rName, true);
     }
 
     return pLay;

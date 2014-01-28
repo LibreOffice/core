@@ -2376,7 +2376,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
             SdrGluePoint aGluePoint;
 
             aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], true, true ) );
-            aGluePoint.SetPercent( sal_False );
+            aGluePoint.SetPercent( false );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();

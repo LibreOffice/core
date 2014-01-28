@@ -111,7 +111,7 @@ void Svx3DPreviewControl::Construct()
     double fH = rVolume.getHeight();
     double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-    rCamera.SetAutoAdjustProjection(sal_False);
+    rCamera.SetAutoAdjustProjection(false);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
@@ -354,7 +354,7 @@ void Svx3DLightControl::Construct2()
         double fH = rVolume.getHeight();
         double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-        rCamera.SetAutoAdjustProjection(sal_False);
+        rCamera.SetAutoAdjustProjection(false);
         rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
         basegfx::B3DPoint aLookAt;
         double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();

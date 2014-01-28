@@ -551,7 +551,7 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
     sal_Int32 i;
     for ( i = 0; i < 6; i++ )
     {
-        checkEntry( i, sal_False );
+        checkEntry( i, false );
         enableEntry( i, bEnabled );
     }
     if ( nCharacterSpacing != -1 )

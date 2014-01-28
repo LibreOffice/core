@@ -143,7 +143,7 @@ SdrCircObj::~SdrCircObj()
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();
-    rInfo.bEdgeRadiusAllowed    = sal_False;
+    rInfo.bEdgeRadiusAllowed    = false;
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
@@ -373,7 +373,7 @@ public:
         nStart(0),
         nEnd(0),
         nWink(0),
-        bRight(sal_False)
+        bRight(false)
     {}
     void SetCreateParams(SdrDragStat& rStat);
 };
@@ -689,7 +689,7 @@ bool SdrCircObj::BegCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
     ImpSetCreateParams(rStat);
-    return sal_True;
+    return true;
 }
 
 bool SdrCircObj::MovCreate(SdrDragStat& rStat)
@@ -702,7 +702,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     nStartWink=pU->nStart;
     nEndWink=pU->nEnd;
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=true;
     SetXPolyDirty();
 
     // #i103058# push current angle settings to ItemSet to
@@ -712,7 +712,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
         ImpSetCircInfoToAttr();
     }
 
-    return sal_True;
+    return true;
 }
 
 bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)

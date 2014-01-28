@@ -309,7 +309,7 @@ sal_Bool SvxSuperContourDlg::Close()
 
         if ( nRet == RET_YES )
         {
-            SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
             GetBindings().GetDispatcher()->Execute(
                 SID_CONTOUR_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
@@ -429,7 +429,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     {
         case( TBI_APPLY ):
         {
-            SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
             GetBindings().GetDispatcher()->Execute(
                 SID_CONTOUR_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }

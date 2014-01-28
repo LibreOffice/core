@@ -272,7 +272,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             }
             else
             {
-                DBG_ASSERT( sal_False, "invalid arguments was found in URL!" );
+                DBG_ASSERT( false, "invalid arguments was found in URL!" );
             }
         }
     }

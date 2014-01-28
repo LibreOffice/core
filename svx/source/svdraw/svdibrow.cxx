@@ -230,13 +230,13 @@ void _SdrItemBrowserControl::ImpCtor()
     nLastWhich = 0;
     nLastWhichOben = 0;  // not implemented yet
     nLastWhichUnten = 0; // not implemented yet
-    bWhichesButNames = sal_False;
-    bDontHideIneffectiveItems = sal_False;
-    bDontSortItems = sal_False;
-    bShowWhichIds = sal_False;
-    bShowRealValues = sal_False;
-    bShowWhichIds = sal_True;   // not implemented yet
-    bShowRealValues = sal_True; // not implemented yet
+    bWhichesButNames = false;
+    bDontHideIneffectiveItems = false;
+    bDontSortItems = false;
+    bShowWhichIds = false;
+    bShowRealValues = false;
+    bShowWhichIds = true;   // not implemented yet
+    bShowRealValues = true; // not implemented yet
 
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
@@ -595,7 +595,7 @@ bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& r
 bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
 {
     rIndent=0;
-    if (pSet==NULL) return sal_False;
+    if (pSet==NULL) return false;
     const SfxPoolItem* pItem=NULL;
     bool bRet = false;
     switch (nWhich) {
@@ -612,21 +612,21 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_LINESTYLE,pItem)) {
                 XLineStyle eLineStyle=((const XLineStyleItem*)pItem)->GetValue();
-                if (eLineStyle==XLINE_NONE) return sal_True;
-                if (eLineStyle!=XLINE_DASH && nWhich==XATTR_LINEDASH) return sal_True;
+                if (eLineStyle==XLINE_NONE) return true;
+                if (eLineStyle!=XLINE_DASH && nWhich==XATTR_LINEDASH) return true;
             }
             if (nWhich==XATTR_LINESTART || nWhich==XATTR_LINESTARTCENTER) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_LINESTARTWIDTH,pItem)) {
                     sal_Int32 nWdt=((const XLineStartWidthItem*)pItem)->GetValue();
-                    if (nWdt==0) return sal_True;
+                    if (nWdt==0) return true;
                 }
             }
             if (nWhich==XATTR_LINEEND || nWhich==XATTR_LINEENDCENTER) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_LINEENDWIDTH,pItem)) {
                     sal_Int32 nWdt=((const XLineEndWidthItem*)pItem)->GetValue();
-                    if (nWdt==0) return sal_True;
+                    if (nWdt==0) return true;
                 }
             }
         } break;
@@ -640,11 +640,11 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle==XFILL_NONE) return sal_True;
+                if (eFillStyle==XFILL_NONE) return true;
                 // transparency currently only for SolidFill
-                if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return sal_True;
-                if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return sal_True;
-                if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return sal_True;
+                if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return true;
+                if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return true;
+                if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return true;
             }
         } break;
         case XATTR_FILLBITMAP          :
@@ -661,10 +661,10 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle!=XFILL_BITMAP) return sal_True;
+                if (eFillStyle!=XFILL_BITMAP) return true;
             }
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
-                return sal_False; // always selectable
+                return false; // always selectable
             }
             bool bTileTRUE = false;
             bool bTileFALSE = false;
@@ -692,7 +692,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             }
             // another 2 items specially for Tile -- however, these exclude each other
             if (nWhich==XATTR_FILLBMP_TILEOFFSETX || nWhich==XATTR_FILLBMP_TILEOFFSETY) {
-                if (bTileFALSE) return sal_True;
+                if (bTileFALSE) return true;
                 sal_uInt16 nX=0,nY=0;
                 bool bX = false,bY = false;
                 if (ImpGetItem(*pSet,XATTR_FILLBMP_TILEOFFSETX,pItem)) {
@@ -704,11 +704,11 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                     bY = true;
                 }
                 if (nWhich==XATTR_FILLBMP_TILEOFFSETX) {
-                    if (nX!=0 || !bX) return sal_False;
-                    if (nY!=0) return sal_True;
+                    if (nX!=0 || !bX) return false;
+                    if (nY!=0) return true;
                 } else {
-                    if (nY!=0 || !bY) return sal_False;
-                    if (nX!=0) return sal_True;
+                    if (nY!=0 || !bY) return false;
+                    if (nX!=0) return true;
                 }
             }
             // SizeLog not selectable if Stretch=TRUE and/or
@@ -716,7 +716,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             // -> apparently still in use
             // (sal_True is the static PoolDefault)
             if (nWhich==XATTR_FILLBMP_SIZELOG) {
-                if (bTileFALSE && bStretchTRUE) return sal_True;
+                if (bTileFALSE && bStretchTRUE) return true;
             }
         } break;
 
@@ -734,13 +734,13 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FORMTXTSTYLE,pItem)) {
                 XFormTextStyle eStyle=((const XFormTextStyleItem*)pItem)->GetValue();
-                if (eStyle==XFT_NONE) return sal_True;
+                if (eStyle==XFT_NONE) return true;
             }
             if ((nWhich>=XATTR_FORMTXTSHDWCOLOR && nWhich<=XATTR_FORMTXTSHDWYVAL) || nWhich>=XATTR_FORMTXTSHDWTRANSP) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_FORMTXTSHADOW,pItem)) {
                     XFormTextShadow eShadow=((const XFormTextShadowItem*)pItem)->GetValue();
-                    if (eShadow==XFTSHADOW_NONE) return sal_True;
+                    if (eShadow==XFTSHADOW_NONE) return true;
                 }
             }
         } break;
@@ -754,7 +754,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_SHADOW,pItem)) {
                 bool bShadow=((const SdrShadowItem*)pItem)->GetValue();
-                if (!bShadow) return sal_True;
+                if (!bShadow) return true;
             }
         } break;
 
@@ -762,7 +762,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFIXEDANGLE,pItem)) {
                 bool bFixed=((const SdrCaptionFixedAngleItem*)pItem)->GetValue();
-                if (!bFixed) return sal_True;
+                if (!bFixed) return true;
             }
         } break;
         case SDRATTR_CAPTIONESCREL:
@@ -770,15 +770,15 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONESCISREL,pItem)) {
                 bool bRel=((const SdrCaptionEscIsRelItem*)pItem)->GetValue();
-                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return sal_True;
-                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return sal_True;
+                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return true;
+                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return true;
             }
         } break;
         case SDRATTR_CAPTIONLINELEN: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFITLINELEN,pItem)) {
                 bool bFit=((const SdrCaptionFitLineLenItem*)pItem)->GetValue();
-                if (bFit) return sal_True;
+                if (bFit) return true;
             }
         } break;
 
@@ -787,7 +787,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWHEIGHT,pItem)) {
                 bool bAutoGrow=((const SdrTextAutoGrowHeightItem*)pItem)->GetValue();
-                if (!bAutoGrow) return sal_True;
+                if (!bAutoGrow) return true;
             }
         } break;
         case SDRATTR_TEXT_MINFRAMEWIDTH:
@@ -795,14 +795,14 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWWIDTH,pItem)) {
                 bool bAutoGrow=((const SdrTextAutoGrowWidthItem*)pItem)->GetValue();
-                if (!bAutoGrow) return sal_True;
+                if (!bAutoGrow) return true;
             }
         } break;
         case SDRATTR_TEXT_VERTADJUST:
         case SDRATTR_TEXT_HORZADJUST: {
             if (ImpGetItem(*pSet,SDRATTR_TEXT_FITTOSIZE,pItem)) {
                 SdrFitToSizeType eFit=((const SdrTextFitToSizeTypeItem*)pItem)->GetValue();
-                if (eFit!=SDRTEXTFIT_NONE) return sal_True;
+                if (eFit!=SDRTEXTFIT_NONE) return true;
             }
         } break;
 
@@ -815,30 +815,30 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_ANIKIND,pItem)) {
                 SdrTextAniKind eAniKind=((const SdrTextAniKindItem*)pItem)->GetValue();
-                if (eAniKind==SDRTEXTANI_NONE) return sal_True;
-                if (eAniKind==SDRTEXTANI_BLINK && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return sal_True;
-                if (eAniKind==SDRTEXTANI_SLIDE && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return sal_True;
+                if (eAniKind==SDRTEXTANI_NONE) return true;
+                if (eAniKind==SDRTEXTANI_BLINK && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return true;
+                if (eAniKind==SDRTEXTANI_SLIDE && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return true;
             }
         } break;
 
-        case SDRATTR_EDGELINEDELTAANZ: return sal_True;
+        case SDRATTR_EDGELINEDELTAANZ: return true;
         case SDRATTR_EDGELINE1DELTA:
         case SDRATTR_EDGELINE2DELTA:
         case SDRATTR_EDGELINE3DELTA: {
             if (ImpGetItem(*pSet,SDRATTR_EDGEKIND,pItem)) {
                 SdrEdgeKind eKind=((const SdrEdgeKindItem*)pItem)->GetValue();
                 if (eKind==SDREDGE_THREELINES) {
-                    if (nWhich>SDRATTR_EDGELINE2DELTA) return sal_True;
-                    else return sal_False;
+                    if (nWhich>SDRATTR_EDGELINE2DELTA) return true;
+                    else return false;
                 }
-                if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return sal_True;
+                if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return true;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
                 sal_uInt16 nAnz=((const SdrEdgeLineDeltaAnzItem*)pItem)->GetValue();
-                if (nAnz==0) return sal_True;
-                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return sal_True;
-                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return sal_True;
-                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return sal_True;
+                if (nAnz==0) return true;
+                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
+                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;
+                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return true;
             }
         } break;
 
@@ -847,7 +847,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CIRCKIND,pItem)) {
                 SdrCircKind eKind=((const SdrCircKindItem*)pItem)->GetValue();
-                if (eKind==SDRCIRC_FULL) return sal_True;
+                if (eKind==SDRCIRC_FULL) return true;
             }
         } break;
     } // switch
@@ -1070,7 +1070,7 @@ void _SdrItemBrowserWindow::GetFocus()
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     _SdrItemBrowserWindow(ImpGetViewWin(rView)),
     pView(&rView),
-    bDirty(sal_False)
+    bDirty(false)
 {
     aIdleTimer.SetTimeoutHdl(LINK(this,SdrItemBrowser,IdleHdl));
     GetBrowserControl().SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
@@ -1113,7 +1113,7 @@ void SdrItemBrowser::SetDirty()
 void SdrItemBrowser::Undirty()
 {
     aIdleTimer.Stop();
-    bDirty = sal_False;
+    bDirty = false;
 
     SfxItemSet aSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aSet);

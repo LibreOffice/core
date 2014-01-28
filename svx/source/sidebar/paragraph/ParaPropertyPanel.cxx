@@ -479,7 +479,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
     {
         nSID = FN_NUM_NUMBERING_ON;
     }
-    SfxBoolItem aBoolItem(nSID, sal_True);
+    SfxBoolItem aBoolItem(nSID, true);
     GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
 
     return 0;
@@ -521,7 +521,7 @@ IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_CHECK);
     }
-    SfxBoolItem aBoolItem(nSID, sal_True);
+    SfxBoolItem aBoolItem(nSID, true);
     GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
 
     return 0;
@@ -619,12 +619,12 @@ void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eS
     {
         const SvxColorItem* pItem =  (const SvxColorItem*)pState;
         maColor = pItem->GetValue();
-        mbColorAvailable = sal_True;
+        mbColorAvailable = true;
         mpColorUpdater->Update(maColor);
     }
     else
     {
-        mbColorAvailable = sal_False;
+        mbColorAvailable = false;
         maColor.SetColor(COL_AUTO);
         mpColorUpdater->Update(maColor);
     }
@@ -655,7 +655,7 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
             pBox->SetItemState(nIdCenter, STATE_NOCHECK);
             pBox->SetItemState(nIdRight, STATE_NOCHECK);
             pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_LEFT,  sal_True );
+            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_LEFT,  true );
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_LEFT, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
         }
         else if( aCommand == UNO_CENTERPARA )
@@ -664,7 +664,7 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
             pBox->SetItemState(nIdLeft, STATE_NOCHECK);
             pBox->SetItemState(nIdRight, STATE_NOCHECK);
             pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True );
+            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true );
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
         }
         else if( aCommand == UNO_RIGHTPARA )
@@ -673,7 +673,7 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
             pBox->SetItemState(nIdLeft, STATE_NOCHECK);
             pBox->SetItemState(nIdCenter, STATE_NOCHECK);
             pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True );
+            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true );
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_RIGHT, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
         }
         else if( aCommand == UNO_JUSTIFYPARA )
@@ -682,7 +682,7 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
             pBox->SetItemState(nIdLeft, STATE_NOCHECK);
             pBox->SetItemState(nIdRight, STATE_NOCHECK);
             pBox->SetItemState(nIdCenter, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True );
+            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true );
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_BLOCK, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
         }
     return 0;
@@ -713,7 +713,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             case CombinedEnumContext(Application_WriterVariants, Context_Text):
             case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
-                    SfxBoolItem aMargin( SID_INC_INDENT, sal_True );
+                    SfxBoolItem aMargin( SID_INC_INDENT, true );
                     GetBindings()->GetDispatcher()->Execute(
                         SID_INC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
                 }
@@ -742,7 +742,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             case CombinedEnumContext(Application_WriterVariants, Context_Text):
             case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
-                    SfxBoolItem aMargin( SID_DEC_INDENT, sal_True );
+                    SfxBoolItem aMargin( SID_DEC_INDENT, true );
                     GetBindings()->GetDispatcher()->Execute(
                         SID_DEC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
                 }
@@ -1262,16 +1262,16 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
     if (nSID==SID_OUTLINE_LEFT)
     {
         if( pState && eState == SFX_ITEM_UNKNOWN )
-            mbOutLineLeft = 1;
+            mbOutLineLeft = true;
         else
-            mbOutLineLeft = 0;
+            mbOutLineLeft = false;
     }
     if (nSID==SID_OUTLINE_RIGHT)
     {
         if( pState && eState == SFX_ITEM_UNKNOWN )
-            mbOutLineRight = 1;
+            mbOutLineRight = true;
         else
-            mbOutLineRight = 0;
+            mbOutLineRight = false;
     }
 
     const sal_uInt16 nIdDemote = mpTbxProDemote->GetItemId(UNO_DEMOTE);

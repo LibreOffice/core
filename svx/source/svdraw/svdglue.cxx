@@ -345,7 +345,7 @@ sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut
         if (!bBack) nNum--;
         const SdrGluePoint* pGP=GetObject(nNum);
         if (bNext) {
-            if (pGP->GetId()==nId0) bNext=sal_False;
+            if (pGP->GetId()==nId0) bNext=false;
         } else {
             if (pGP->IsHit(rPnt,rOut,pObj)) nRet=nNum;
         }

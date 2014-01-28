@@ -959,7 +959,7 @@ SfxPoolItem* SdrMetricItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool SdrMetricItem::HasMetrics() const
 {
-    return sal_True;
+    return true;
 }
 
 bool SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
@@ -971,7 +971,7 @@ bool SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
         aVal/=nDiv;
         SetValue(long(aVal));
     }
-    return sal_True;
+    return true;
 }
 
 SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
@@ -1079,7 +1079,7 @@ SfxItemPresentation SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentatio
     return ePres;
 }
 
-bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return sal_True; }
+bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
 
 sal_Bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
 
@@ -1347,8 +1347,8 @@ bool SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
         aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
         SetValue(short(aVal));
-        return sal_True;
-    } else return sal_False;
+        return true;
+    } else return false;
 }
 
 SfxItemPresentation SdrTextAniAmountItem::GetPresentation(
@@ -1391,7 +1391,7 @@ SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( sal_Bool bUseFixedCellHe
 {
 }
 SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion )
-    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, sal_False )
+    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, false )
 {
     if ( nVersion )
     {
