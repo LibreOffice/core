@@ -42,9 +42,9 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 // To be shorten source code by realking
 #define hconv(x)        OUString(hstr2ucsstr(x).c_str())
 #define ascii(x)        OUString::createFromAscii(x)
-#define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(0)
-#define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
-#define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(0)
+#define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
+#define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
+#define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
 #define Double2Str(x)   OUString::number((double)(x))
 #define WTI(x)          ((double)(x) / 1800.)     // unit => inch
@@ -134,7 +134,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     HStream stream;
     Sequence < sal_Int8 > aBuffer;
     sal_Int32 nRead, nBlock = 32768, nTotal = 0;
-    while( 1 )
+    while( true )
     {
         nRead = xInputStream->readBytes(aBuffer, nBlock);
         if( nRead == 0 )
