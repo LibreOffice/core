@@ -182,7 +182,7 @@ public:
     }
 
     /// checks if the loader works on a loaded and initialized library.
-    sal_Bool SAL_CALL isLoaded() const SAL_THROW(())
+    bool SAL_CALL isLoaded() const SAL_THROW(())
     {
         return (m_pLoader != NULL);
     }

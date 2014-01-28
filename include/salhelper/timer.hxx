@@ -89,33 +89,33 @@ struct TTimeValue : public TimeValue
         normalize();
     }
 
-    sal_Bool SAL_CALL isEmpty() const
+    bool SAL_CALL isEmpty() const
     {
         return ( ( Seconds == 0 ) && ( Nanosec == 0 ) );
     }
 };
 
-inline sal_Bool operator<( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
+inline bool operator<( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
 {
     if ( rTimeA.Seconds < rTimeB.Seconds )
-        return sal_True;
+        return true;
     else if ( rTimeA.Seconds > rTimeB.Seconds )
-        return sal_False;
+        return false;
     else
         return ( rTimeA.Nanosec < rTimeB.Nanosec );
 }
 
-inline sal_Bool operator>( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
+inline bool operator>( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
 {
     if ( rTimeA.Seconds > rTimeB.Seconds )
-        return sal_True;
+        return true;
     else if ( rTimeA.Seconds < rTimeB.Seconds )
-        return sal_False;
+        return false;
     else
         return ( rTimeA.Nanosec > rTimeB.Nanosec );
 }
 
-inline sal_Bool operator==( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
+inline bool operator==( const TTimeValue& rTimeA, const TTimeValue& rTimeB )
 {
     return ( ( rTimeA.Seconds == rTimeB.Seconds ) &&
              ( rTimeA.Nanosec == rTimeB.Nanosec ) );
