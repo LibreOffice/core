@@ -305,7 +305,7 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     if( IsEof() )
     {
         Error( SbERR_BAD_BLOCK, eEnd );
-        bAbort = sal_True;
+        bAbort = true;
     }
 }
 
@@ -594,7 +594,7 @@ void SbiParser::Set()
         Next();
         OUString aStr;
         SbiSymDef* pTypeDef = new SbiSymDef( aStr );
-        TypeDecl( *pTypeDef, sal_True );
+        TypeDecl( *pTypeDef, true );
 
         aLvalue.Gen();
         aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
@@ -749,7 +749,7 @@ void SbiParser::EnableCompatibility()
 {
     if( !bCompatible )
         AddConstants();
-    bCompatible = sal_True;
+    bCompatible = true;
 }
 
 // OPTION

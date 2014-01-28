@@ -2818,7 +2818,7 @@ bool isRootDir( OUString aDirURLStr )
     // or Windows  "file:///c:/"  -> root
     else if( nCount == 1 )
     {
-        OUString aSeg1 = aDirURLObj.getName( 0, sal_True,
+        OUString aSeg1 = aDirURLObj.getName( 0, true,
                                              INetURLObject::DECODE_WITH_CHARSET );
         if( aSeg1[1] == (sal_Unicode)':' )
         {
@@ -2985,7 +2985,7 @@ RTLFUNC(Dir)
                             }
 
                             INetURLObject aURL( aFile );
-                            aPath = aURL.getName( INetURLObject::LAST_SEGMENT, sal_True,
+                            aPath = aURL.getName( INetURLObject::LAST_SEGMENT, true,
                                                   INetURLObject::DECODE_WITH_CHARSET );
                         }
 

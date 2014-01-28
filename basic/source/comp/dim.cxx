@@ -510,10 +510,10 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 pDef->SetDims( pDim->GetDims() );
                 if( bPersistantGlobal )
-                    pDef->SetGlobal( sal_True );
+                    pDef->SetGlobal( true );
                 SbiExpression aExpr( this, *pDef, pDim );
                 aExpr.Gen();
-                pDef->SetGlobal( sal_False );
+                pDef->SetGlobal( false );
                 aGen.Gen( (eOp == _STATIC) ? _DIM : eOp );
             }
         }
@@ -1100,7 +1100,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                             if( pParDef->IsByVal() )
                             {
                                 // Reset to avoid additional byval in call to wrapper function
-                                pParDef->SetByVal( sal_False );
+                                pParDef->SetByVal( false );
                                 nTyp |= 0x8000;
                             }
                             aGen.Gen( _ARGTYP, nTyp );
@@ -1260,7 +1260,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     {
         if ( bVBASupportOn )
         {
-            pProc->SetStatic( sal_True );
+            pProc->SetStatic( true );
         }
         else
         {
@@ -1269,7 +1269,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     }
     else
     {
-        pProc->SetStatic( sal_False );
+        pProc->SetStatic( false );
     }
     // Normal case: Local variable->parameter->global variable
     pProc->GetLocals().SetParent( &pProc->GetParams() );

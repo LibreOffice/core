@@ -70,7 +70,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
             pGen->Gen( _CONST,  (short) nVal );
             break;
         case SbxSTRING:
-            nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, sal_True );
+            nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, true );
             pGen->Gen( _SCONST, nStringId );
             break;
         default:

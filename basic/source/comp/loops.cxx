@@ -48,7 +48,7 @@ void SbiParser::If()
             eTok = Peek();
             if( IsEof() )
             {
-                Error( SbERR_BAD_BLOCK, IF ); bAbort = sal_True; return;
+                Error( SbERR_BAD_BLOCK, IF ); bAbort = true; return;
             }
         }
         while( eTok == ELSEIF )
@@ -56,7 +56,7 @@ void SbiParser::If()
             // jump to ENDIF in case of a successful IF/ELSEIF
             if( iJmp >= JMP_TABLE_SIZE )
             {
-                Error( SbERR_PROG_TOO_LARGE );  bAbort = sal_True;  return;
+                Error( SbERR_PROG_TOO_LARGE );  bAbort = true;  return;
             }
             pnJmpToEndLbl[iJmp++] = aGen.Gen( _JUMP, 0 );
 
@@ -76,7 +76,7 @@ void SbiParser::If()
                 eTok = Peek();
                 if( IsEof() )
                 {
-                    Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = sal_True; return;
+                    Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = true; return;
                 }
             }
         }

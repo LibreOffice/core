@@ -369,7 +369,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
     if( !pPar )
     {
-        pPar = new SbiParameters( pParser,sal_False,sal_False );
+        pPar = new SbiParameters( pParser,false,false );
     }
     pNd->aVar.pPar = pPar;
     pNd->aVar.pvMorePar = pvMoreParLcl;
@@ -622,7 +622,7 @@ SbiExprNode* SbiExpression::Unary()
             pParser->TestToken( IS );
             OUString aDummy;
             SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
-            pParser->TypeDecl( *pTypeDef, sal_True );
+            pParser->TypeDecl( *pTypeDef, true );
             pNd = new SbiExprNode( pParser, pObjNode, pTypeDef->GetTypeId() );
             break;
         }
@@ -631,7 +631,7 @@ SbiExprNode* SbiExpression::Unary()
             pParser->Next();
             OUString aStr;
             SbiSymDef* pTypeDef = new SbiSymDef( aStr );
-            pParser->TypeDecl( *pTypeDef, sal_True );
+            pParser->TypeDecl( *pTypeDef, true );
             pNd = new SbiExprNode( pParser, pTypeDef->GetTypeId() );
             break;
         }
@@ -1051,7 +1051,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
             if( bAssumeExprLParenMode )
             {
                 pExpr = new SbiExpression( pParser, SbSTDEXPR, EXPRMODE_LPAREN_PENDING );
-                bAssumeExprLParenMode = sal_False;
+                bAssumeExprLParenMode = false;
 
                 SbiExprMode eModeAfter = pExpr->m_eMode;
                 if( eModeAfter == EXPRMODE_LPAREN_NOT_NEEDED )

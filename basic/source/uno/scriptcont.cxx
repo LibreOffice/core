@@ -362,7 +362,7 @@ SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl( void )
 void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 {
     // TODO: move loading from old storage to binary filters?
-    SotStorageRef xStorage = new SotStorage( sal_False, aFile );
+    SotStorageRef xStorage = new SotStorage( false, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
         BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );
@@ -540,8 +540,8 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                 OUString aElementName = pNames[ i ];
 
                 INetURLObject aElementInetObj( aLibDirPath );
-                aElementInetObj.insertName( aElementName, sal_False,
-                                            INetURLObject::LAST_SEGMENT, sal_True,
+                aElementInetObj.insertName( aElementName, false,
+                                            INetURLObject::LAST_SEGMENT, true,
                                             INetURLObject::ENCODE_ALL );
                 if( bKillUncryptedFiles )
                 {
@@ -738,7 +738,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             if( bExport )
             {
                 INetURLObject aInetObj( aTargetURL );
-                aInetObj.insertName( aName, sal_True, INetURLObject::LAST_SEGMENT, sal_True,
+                aInetObj.insertName( aName, true, INetURLObject::LAST_SEGMENT, true,
                                      INetURLObject::ENCODE_ALL );
                 aLibDirPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -757,8 +757,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 OUString aElementName = pNames[ i ];
 
                 INetURLObject aElementInetObj( aLibDirPath );
-                aElementInetObj.insertName( aElementName, sal_False,
-                                            INetURLObject::LAST_SEGMENT, sal_True,
+                aElementInetObj.insertName( aElementName, false,
+                                            INetURLObject::LAST_SEGMENT, true,
                                             INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( OUString( "pba" ) );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1058,8 +1058,8 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 OUString aElementName = pNames[ i ];
 
                 INetURLObject aElementInetObj( aLibDirPath );
-                aElementInetObj.insertName( aElementName, sal_False,
-                    INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+                aElementInetObj.insertName( aElementName, false,
+                    INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( OUString( "pba" ) );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 

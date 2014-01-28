@@ -144,7 +144,7 @@ bool writeOasis2OOoLibraryElement(
 
     xParser->parseStream( source );
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
@@ -208,7 +208,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(sal_False);
+            OSL_ASSERT(false);
         }
     }
 
