@@ -605,6 +605,16 @@ Reference< XShape > Shape::createAndInsert(
                     aEffectProperties.assignUsed( *pEffectProps );
                 // TODO: use ph color when applying effect properties
                 // nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
+
+                // Store style-related properties to InteropGrabBag to be able to export them back
+                Sequence< PropertyValue > aProperties( 3 );
+                PUT_PROP( aProperties, 0, "SchemeClr",      pEffectRef->maPhClr.getSchemeName() );
+                PUT_PROP( aProperties, 1, "Idx",            pEffectRef->mnThemedIdx );
+                PUT_PROP( aProperties, 2, "Transformations", pEffectRef->maPhClr.getTransformations() );
+                PropertyValue pStyleFillRef;
+                pStyleFillRef.Name = "StyleEffectRef";
+                pStyleFillRef.Value = Any( aProperties );
+                putPropertyToGrabBag( pStyleFillRef );
             }
         }
 

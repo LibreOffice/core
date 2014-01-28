@@ -1794,20 +1794,20 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
 
     // extract the relevant properties from the grab bag
     Sequence< PropertyValue > aGrabBag;
-    Sequence< PropertyValue > aFillRefProperties;
-    Sequence< PropertyValue > aLnRefProperties;
+    Sequence< PropertyValue > aFillRefProperties, aLnRefProperties, aEffectRefProperties;
     mAny >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
         if( aGrabBag[i].Name == "StyleFillRef" )
             aGrabBag[i].Value >>= aFillRefProperties;
         else if( aGrabBag[i].Name == "StyleLnRef" )
             aGrabBag[i].Value >>= aLnRefProperties;
+        else if( aGrabBag[i].Name == "StyleEffectRef" )
+            aGrabBag[i].Value >>= aEffectRefProperties;
 
     WriteStyleProperties( XML_lnRef, aLnRefProperties );
     WriteStyleProperties( XML_fillRef, aFillRefProperties );
+    WriteStyleProperties( XML_effectRef, aEffectRefProperties );
 
-    // write mock <a:effectRef>
-    mpFS->singleElementNS( XML_a, XML_effectRef, XML_idx, I32S( 0 ), FSEND );
     // write mock <a:fontRef>
     mpFS->singleElementNS( XML_a, XML_fontRef, XML_idx, "minor", FSEND );
 }
