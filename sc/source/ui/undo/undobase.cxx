@@ -29,6 +29,7 @@
 #include "attrib.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
+#include "bcaslot.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
@@ -146,6 +147,8 @@ void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->CellContentModified();
+
+    ScBulkBroadcast aBulkBroadcast( pDoc->GetBASM());
 
     ScHint aHint(SC_HINT_DATACHANGED, ScAddress());
     ScAddress& rPos = aHint.GetAddress();
