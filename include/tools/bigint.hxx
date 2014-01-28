@@ -235,7 +235,7 @@ inline bool BigInt::IsNeg() const
 inline bool BigInt::IsZero() const
 {
     if ( bIsBig )
-        return sal_False;
+        return false;
     else
         return (nVal == 0);
 }
@@ -243,7 +243,7 @@ inline bool BigInt::IsZero() const
 inline bool BigInt::IsOne() const
 {
     if ( bIsBig )
-        return sal_False;
+        return false;
     else
         return (nVal == 1);
 }

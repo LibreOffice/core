@@ -417,7 +417,7 @@ public:
 do                                          \
 {                                           \
     DbgTestSolarMutex();                    \
-} while(0)
+} while(false)
 
 // en-/disable debug defines
 
@@ -425,19 +425,19 @@ do                                          \
 do                                          \
 {                                           \
     DbgGetData()->nTraceOut = nOut;         \
-} while(0)
+} while(false)
 
 #define DBG_INSTOUTWARNING( nOut )          \
 do                                          \
 {                                           \
     DbgGetData()->nWarningOut = nOut;       \
-} while(0)
+} while(false)
 
 #define DBG_INSTOUTERROR( nOut )            \
 do                                          \
 {                                           \
     DbgGetData()->nErrorOut = nOut;         \
-} while(0)
+} while(false)
 
 #else
 // NO DBG_UITL

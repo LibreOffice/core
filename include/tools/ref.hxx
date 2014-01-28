@@ -89,8 +89,8 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),\
                           ReleaseReference(), pObj )
 
 #define SV_IMPL_LOCK( ClassName )                                   \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( sal_True ),       \
-                          OwnerLock( sal_True ), OwnerLock( sal_False ),    \
+PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( true ),       \
+                          OwnerLock( true ), OwnerLock( false ),    \
                           pObj )
 
 #define SV_DECL_IMPL_REF(ClassName)             \

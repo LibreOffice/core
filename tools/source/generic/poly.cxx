@@ -1522,7 +1522,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     {
         // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( 1 )
+        if ( true )
 #else
 #ifdef OSL_BIGENDIAN
         if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
@@ -1560,7 +1560,7 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
     {
         // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( 1 )
+        if ( true )
 #else
 #ifdef OSL_BIGENDIAN
         if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
