@@ -34,6 +34,24 @@
       "revId": "e2ca7f797cc556b4d9d2c31bf60ef5f25cc001d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_801460f6",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-28T05:50:42Z",
+      "side": 1,
+      "message": "actually, if we get rid of nIndex, we would have to change a lot of code, because in this one, the Insert method returns the index of the inserted/already existing element.",
+      "parentUuid": "da9df570_a5e6d614",
+      "revId": "e2ca7f797cc556b4d9d2c31bf60ef5f25cc001d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
