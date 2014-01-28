@@ -2587,7 +2587,7 @@ namespace osl_FileStatus
                 ::osl::FileBase::RC nError1 = testDirectory.open();
             ::rtl::OUString aFileName ("link.file");
             sal_Bool bOk = sal_False;
-            while (1) {
+            while (true) {
                 nError1 = testDirectory.getNextItem( rItem_link, 4 );
                 if (::osl::FileBase::E_None == nError1) {
                     sal_uInt32 mask_link = osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_LinkTargetURL;
@@ -5639,7 +5639,7 @@ namespace osl_Directory
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             ::rtl::OUString aFileName ("link.file");
 
-            while (1) {
+            while (true) {
                 nError1 = testDirectory.getNextItem( rItem, 4 );
                 if (::osl::FileBase::E_None == nError1) {
                     ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type );

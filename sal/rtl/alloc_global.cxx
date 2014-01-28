@@ -291,7 +291,7 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
-    while (1)
+    while (true)
     {
         if (alloc_mode == AMode_CUSTOM)
         {
@@ -314,7 +314,7 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
-    while (1)
+    while (true)
     {
         if (alloc_mode == AMode_CUSTOM)
         {
@@ -334,7 +334,7 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 {
 #if !defined(FORCE_SYSALLOC)
-    while (1)
+    while (true)
     {
         if (alloc_mode == AMode_CUSTOM)
         {

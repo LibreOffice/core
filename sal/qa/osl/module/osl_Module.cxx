@@ -189,7 +189,7 @@ namespace osl_Module
 
             if ( !( bRes ) )
             {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
+                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
 
             ::osl::Module aMod( aFileURL );
@@ -221,7 +221,7 @@ namespace osl_Module
             bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL ) ;
             if ( !( bRes ) )
             {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
+                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test get Module URL from address.",
@@ -239,7 +239,7 @@ namespace osl_Module
             bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
             if ( !( bRes  ) )
             {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
+                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
             aMod.unload( );
 
@@ -325,7 +325,7 @@ namespace osl_Module
             bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
             if ( !( bRes  ) )
             {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead",  sal_False  );
+                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead", false );
             }
 
             ::osl::Module aMod;
