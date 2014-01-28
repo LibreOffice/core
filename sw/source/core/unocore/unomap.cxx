@@ -372,6 +372,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_PRINT), RES_PRINT,              cppu::UnoType<bool>::get(),         PROPERTY_NONE, 0},                                        \
     { OUString(UNO_NAME_RELATIVE_HEIGHT), RES_FRM_SIZE,         cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },            \
     { OUString(UNO_NAME_RELATIVE_WIDTH), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },         \
+    { OUString(UNO_NAME_RELATIVE_WIDTH_RELATION), RES_FRM_SIZE, cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH_RELATION  },         \
     { OUString(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},             \
     { OUString(UNO_NAME_SHADOW_TRANSPARENCE), RES_SHADOW,       cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_SHADOW_TRANSPARENCE},             \
     { OUString(UNO_NAME_IMAGE_MAP), RES_URL,                    cppu::UnoType<css::container::XIndexContainer>::get(), PROPERTY_NONE, MID_URL_CLIENTMAP}, \
@@ -828,6 +829,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_HEIGHT), RES_FRM_SIZE,          cppu::UnoType<sal_Int32>::get()  ,         PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
                     { OUString(UNO_NAME_RELATIVE_HEIGHT), RES_FRM_SIZE,         cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
                     { OUString(UNO_NAME_RELATIVE_WIDTH), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
+                    { OUString(UNO_NAME_RELATIVE_WIDTH_RELATION), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH_RELATION  },
                     { OUString(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { OUString(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { OUString(UNO_NAME_SIZE), RES_FRM_SIZE,            cppu::UnoType<css::awt::Size>::get(),             PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},

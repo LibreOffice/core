@@ -209,6 +209,7 @@
 #define UNO_NAME_PRINT_PAPER_FROM_SETUP "PrintPaperFromSetup"
 #define UNO_NAME_REGISTER_MODE_ACTIVE "RegisterModeActive"
 #define UNO_NAME_RELATIVE_WIDTH "RelativeWidth"
+#define UNO_NAME_RELATIVE_WIDTH_RELATION "RelativeWidthRelation"
 #define UNO_NAME_RELATIVE_HEIGHT "RelativeHeight"
 #define UNO_NAME_REPEAT_HEADLINE "RepeatHeadline"
 #define UNO_NAME_SEARCH_STYLES "SearchStyles"
