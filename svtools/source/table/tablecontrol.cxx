@@ -283,7 +283,7 @@ namespace svt { namespace table
     Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
     {
         (void)_nIndex;
-        DBG_ASSERT( sal_False, "TableControl::CreateAccessibleControl: to be overwritten!" );
+        DBG_ASSERT( false, "TableControl::CreateAccessibleControl: to be overwritten!" );
         return NULL;
     }
 

@@ -835,7 +835,7 @@ void ToolbarMenu::appendSeparator()
 ValueSet* ToolbarMenu::createEmptyValueSetControl()
 {
     ValueSet* pSet = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
-    pSet->EnableFullItemMode( sal_False );
+    pSet->EnableFullItemMode( false );
     pSet->SetColor( GetControlBackground() );
     pSet->SetHighlightHdl( LINK( this, ToolbarMenu, HighlightHdl ) );
     return pSet;
@@ -1009,7 +1009,7 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool /*bMBDown*/ 
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= 0 ) && ( nMouseY < aOutSz.Height() ) )
     {
-        bool bHighlighted = sal_False;
+        bool bHighlighted = false;
 
         const int nEntryCount = mpImpl->maEntryVector.size();
         int nEntry;

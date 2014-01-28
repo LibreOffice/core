@@ -200,7 +200,7 @@ public:
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             return IsEntryPosSelected( nPos );
         else
-            return sal_False;
+            return false;
     }
 
 private:
@@ -351,7 +351,7 @@ public:
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             return IsEntryPosSelected( nPos );
         else
-            return sal_False;
+            return false;
     }
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }

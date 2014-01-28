@@ -161,7 +161,7 @@ sal_Int32 BrowseBox::GetAccessibleControlCount() const
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
-    DBG_ASSERT( sal_False, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
+    DBG_ASSERT( false, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return NULL;
 }
 // -----------------------------------------------------------------------------
@@ -400,7 +400,7 @@ void BrowseBox::GrabTableFocus()
 // -----------------------------------------------------------------------------
 OUString BrowseBox::GetCellText(long, sal_uInt16 ) const
 {
-    DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
+    DBG_ASSERT(false,"This method has to be implemented by the derived classes! BUG!!");
     return OUString();
 }
 

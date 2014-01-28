@@ -522,7 +522,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             aObj.setFinalSlash();
 
             // take base URL and append current input
-            bool bWasAbsolute = sal_False;
+            bool bWasAbsolute = false;
 #ifdef UNX
             // don't support FSYS_MAC under Unix, because here ':' is a valid character for a filename
             INetURLObject::FSysStyle eStyle = static_cast< INetURLObject::FSysStyle >( INetURLObject::FSYS_VOS | INetURLObject::FSYS_UNX | INetURLObject::FSYS_DOS );

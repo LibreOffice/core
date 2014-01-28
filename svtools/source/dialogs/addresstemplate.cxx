@@ -789,7 +789,7 @@ void AssignmentPersistentData::Commit()
             if (!m_xDatabaseContext.is())
             {
                 const OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
-                ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
+                ShowServiceNotAvailableError( this, sContextServiceName, false);
                 return;
             }
         }
@@ -841,7 +841,7 @@ void AssignmentPersistentData::Commit()
         if (!xHandler.is())
         {
             const OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
-            ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
+            ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, true);
             return;
         }
 
@@ -1216,7 +1216,7 @@ void AssignmentPersistentData::Commit()
         catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(this, OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), sal_True);
+            ShowServiceNotAvailableError(this, OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), true);
             return 1L;
         }
 

@@ -417,8 +417,8 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbInSelect      = sal_False;
     mbSelColor      = sal_False;
     mbSelTextColor  = sal_False;
-    mbMirrored      = sal_False;
-    mbMirrored      = sal_False;
+    mbMirrored      = false;
+    mbMirrored      = false;
     mbScrollAlwaysEnabled = false;
 
     if ( nWinStyle & WB_3DTAB )

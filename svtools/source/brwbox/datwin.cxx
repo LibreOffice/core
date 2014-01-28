@@ -192,18 +192,18 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,pEventWin( pParent )
     ,pCornerWin( 0 )
     ,pDtorNotify( 0 )
-    ,bInPaint( sal_False )
-    ,bInCommand( sal_False )
-    ,bNoScrollBack( sal_False )
-    ,bNoHScroll( sal_False )
-    ,bNoVScroll( sal_False )
-    ,bUpdateMode( sal_True )
-    ,bResizeOnPaint( sal_False )
-    ,bUpdateOnUnlock( sal_False )
-    ,bInUpdateScrollbars( sal_False )
-    ,bHadRecursion( sal_False )
-    ,bOwnDataChangedHdl( sal_False )
-    ,bCallingDropCallback( sal_False )
+    ,bInPaint( false )
+    ,bInCommand( false )
+    ,bNoScrollBack( false )
+    ,bNoHScroll( false )
+    ,bNoVScroll( false )
+    ,bUpdateMode( true )
+    ,bResizeOnPaint( false )
+    ,bUpdateOnUnlock( false )
+    ,bInUpdateScrollbars( false )
+    ,bHadRecursion( false )
+    ,bOwnDataChangedHdl( false )
+    ,bCallingDropCallback( false )
     ,nUpdateLock( 0 )
     ,nCursorHidden( 0 )
     ,m_nDragRowDividerLimit( 0 )
@@ -233,7 +233,7 @@ void BrowserDataWin::LeaveUpdateLock()
         if (bUpdateOnUnlock )
         {
             Control::Update();
-            bUpdateOnUnlock = sal_False;
+            bUpdateOnUnlock = false;
         }
     }
 }
@@ -276,7 +276,7 @@ void BrowserDataWin::Update()
     if ( !nUpdateLock )
         Control::Update();
     else
-        bUpdateOnUnlock = sal_True;
+        bUpdateOnUnlock = true;
 }
 
 //-------------------------------------------------------------------
@@ -308,9 +308,9 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
             aInvalidRegion.push_back( new Rectangle( rRect ) );
             return;
         }
-        bInPaint = sal_True;
+        bInPaint = true;
         ( (BrowseBox*) GetParent() )->PaintData( *this, rRect );
-        bInPaint = sal_False;
+        bInPaint = false;
         DoOutstandingInvalidations();
     }
     else
@@ -364,18 +364,18 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 //-------------------------------------------------------------------
 sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
-    bCallingDropCallback = sal_True;
+    bCallingDropCallback = true;
     sal_Int8 nReturn = GetParent()->AcceptDrop( BrowserAcceptDropEvent( this, _rEvt ) );
-    bCallingDropCallback = sal_False;
+    bCallingDropCallback = false;
     return nReturn;
 }
 
 //-------------------------------------------------------------------
 sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
-    bCallingDropCallback = sal_True;
+    bCallingDropCallback = true;
     sal_Int8 nReturn = GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
-    bCallingDropCallback = sal_False;
+    bCallingDropCallback = false;
     return nReturn;
 }
 
@@ -409,7 +409,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     {
         sal_Bool bDeleted = sal_False;
         pDtorNotify = &bDeleted;
-        bInCommand = sal_True;
+        bInCommand = true;
         MouseButtonDown( aMouseEvt );
         if( bDeleted )
             return;
@@ -417,20 +417,20 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
         if( bDeleted )
             return;
         pDtorNotify = 0;
-        bInCommand = sal_False;
+        bInCommand = false;
     }
 
     aEventPos.Y() += GetParent()->GetTitleHeight();
     CommandEvent aEvt( aEventPos, rEvt.GetCommand(),
                         rEvt.IsMouseEvent(), rEvt.GetData() );
-    bInCommand = sal_True;
+    bInCommand = true;
     sal_Bool bDeleted = sal_False;
     pDtorNotify = &bDeleted;
     GetParent()->Command( aEvt );
     if( bDeleted )
         return;
     pDtorNotify = 0;
-    bInCommand = sal_False;
+    bInCommand = false;
 
     if ( COMMAND_STARTDRAG == rEvt.GetCommand() )
         MouseButtonUp( aMouseEvt );

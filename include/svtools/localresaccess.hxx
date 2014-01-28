@@ -41,13 +41,13 @@ namespace svt
 
     public:
         OLocalResourceAccess( const ResId& _rId )
-            :Resource( _rId.SetAutoRelease( sal_False ) )
+            :Resource( _rId.SetAutoRelease( false ) )
             ,m_pManager( _rId.GetResMgr() )
         {
         }
 
         OLocalResourceAccess(const ResId& _rId, RESOURCE_TYPE _rType)
-            :Resource(_rId.SetRT(_rType).SetAutoRelease(sal_False))
+            :Resource(_rId.SetRT(_rType).SetAutoRelease(false))
             ,m_pManager(_rId.GetResMgr())
         {
             OSL_ENSURE( m_pManager != NULL, "OLocalResourceAccess::OLocalResourceAccess: invalid resource manager!" );

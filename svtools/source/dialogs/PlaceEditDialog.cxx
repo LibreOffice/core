@@ -28,7 +28,7 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent ) :
     get( m_pBTDelete, "delete" );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
-    m_pBTOk->Enable( sal_False );
+    m_pBTOk->Enable( false );
 
     m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 

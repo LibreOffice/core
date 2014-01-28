@@ -917,7 +917,7 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     if( rTree.IsEditingActive() )
     {
-        rTree.EndEditing(sal_False);
+        rTree.EndEditing(false);
         return sal_True;
     }
     else
@@ -933,7 +933,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
     SolarMutexGuard aGuard;
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    rTree.EndEditing(sal_False);
+    rTree.EndEditing(false);
 }
 
 // -------------------------------------------------------------------

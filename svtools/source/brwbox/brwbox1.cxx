@@ -87,7 +87,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     nCurRow = BROWSER_ENDOFSELECTION;
     nCurColId = 0;
     bResizing = sal_False;
-    bSelect = sal_False;
+    bSelect = false;
     bSelecting = sal_False;
     bScrolling = sal_False;
     bSelectionIsVisible = sal_False;
@@ -317,7 +317,7 @@ sal_uInt16 BrowseBox::ToggleSelectedColumn()
         DoHideCursor( "ToggleSelectedColumn" );
         ToggleSelection();
         nSelectedColId = (*pCols)[ pColSel->FirstSelected() ]->GetId();
-        pColSel->SelectAll(sal_False);
+        pColSel->SelectAll(false);
     }
     return nSelectedColId;
 }
@@ -798,7 +798,7 @@ void BrowseBox::RemoveColumns()
     // correct column selection
     if ( pColSel )
     {
-        pColSel->SelectAll(sal_False);
+        pColSel->SelectAll(false);
         pColSel->SetTotalRange( Range( 0, 0 ) );
     }
 
@@ -1573,7 +1573,7 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
         if ( !bSelecting )
             Select();
         else
-            bSelect = sal_True;
+            bSelect = true;
     }
     return sal_True;
 }
@@ -1680,15 +1680,15 @@ void BrowseBox::SetNoSelection()
 
     // unselect all
     if ( bMultiSelection )
-        uRow.pSel->SelectAll(sal_False);
+        uRow.pSel->SelectAll(false);
     else
         uRow.nSel = BROWSER_ENDOFSELECTION;
     if ( pColSel )
-        pColSel->SelectAll(sal_False);
+        pColSel->SelectAll(false);
     if ( !bSelecting )
         Select();
     else
-        bSelect = sal_True;
+        bSelect = true;
 
     // restore screen
     OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
@@ -1717,8 +1717,8 @@ void BrowseBox::SelectAll()
 
     // select all rows
     if ( pColSel )
-        pColSel->SelectAll(sal_False);
-    uRow.pSel->SelectAll(sal_True);
+        pColSel->SelectAll(false);
+    uRow.pSel->SelectAll(true);
 
     // don't highlight handle column
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
@@ -1742,7 +1742,7 @@ void BrowseBox::SelectAll()
     if ( !bSelecting )
         Select();
     else
-        bSelect = sal_True;
+        bSelect = true;
 
     // restore screen
     OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
@@ -1791,11 +1791,11 @@ void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
     {
         ToggleSelection();
         if ( bMultiSelection )
-            uRow.pSel->SelectAll(sal_False);
+            uRow.pSel->SelectAll(false);
         else
             uRow.nSel = BROWSER_ENDOFSELECTION;
         if ( pColSel )
-            pColSel->SelectAll(sal_False);
+            pColSel->SelectAll(false);
     }
 
     // set new selection
@@ -1823,7 +1823,7 @@ void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
     if ( !bSelecting )
         Select();
     else
-        bSelect = sal_True;
+        bSelect = true;
 
     // restore screen
     OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
@@ -1878,10 +1878,10 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_B
     OSL_TRACE( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();
     if ( bMultiSelection )
-        uRow.pSel->SelectAll(sal_False);
+        uRow.pSel->SelectAll(false);
     else
         uRow.nSel = BROWSER_ENDOFSELECTION;
-    pColSel->SelectAll(sal_False);
+    pColSel->SelectAll(false);
 
     if ( pColSel->Select( nNewColPos, _bSelect ) )
     {
@@ -1898,7 +1898,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_B
         if ( !bSelecting )
             Select();
         else
-            bSelect = sal_True;
+            bSelect = true;
 
         if ( isAccessibleAlive() )
         {
@@ -2266,9 +2266,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
     DBG_ASSERT( !( getDataWindow()->bAutoVScroll && getDataWindow()->bNoVScroll ),
         "BrowseBox::SetMode: AutoVScroll *and* NoVScroll?" );
     if ( getDataWindow()->bAutoHScroll )
-        getDataWindow()->bNoHScroll = sal_False;
+        getDataWindow()->bNoHScroll = false;
     if ( getDataWindow()->bAutoVScroll )
-        getDataWindow()->bNoVScroll = sal_False;
+        getDataWindow()->bNoVScroll = false;
 
     if ( getDataWindow()->bNoHScroll )
         aHScroll.Hide();

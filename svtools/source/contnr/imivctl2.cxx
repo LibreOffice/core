@@ -301,9 +301,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     // neighbor in same row?
     if( bRight )
         pResult = SearchRow(
-            nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, sal_True, sal_True );
+            nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, true, true );
     else
-        pResult = SearchRow( nY, nX ,0, nX, sal_False, sal_True );
+        pResult = SearchRow( nY, nX ,0, nX, false, true );
     if( pResult )
         return pResult;
 
@@ -325,7 +325,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     sal_uInt16 nRowMax = nY;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchCol((sal_uInt16)nCurCol,nRowMin,nRowMax,nY,sal_True, sal_False);
+        SvxIconChoiceCtrlEntry* pEntry = SearchCol((sal_uInt16)nCurCol,nRowMin,nRowMax,nY,true, false);
         if( pEntry )
             return pEntry;
         if( nRowMin )
@@ -420,9 +420,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     // neighbor in same column?
     if( bDown )
         pResult = SearchCol(
-            nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, sal_True, sal_True );
+            nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, true, true );
     else
-        pResult = SearchCol( nX, nY ,0, nY, sal_False, sal_True );
+        pResult = SearchCol( nX, nY ,0, nY, false, true );
     if( pResult )
         return pResult;
 
@@ -444,7 +444,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     sal_uInt16 nColMax = nX;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchRow((sal_uInt16)nCurRow,nColMin,nColMax,nX,sal_True, sal_False);
+        SvxIconChoiceCtrlEntry* pEntry = SearchRow((sal_uInt16)nCurRow,nColMin,nColMax,nX,true, false);
         if( pEntry )
             return pEntry;
         if( nColMin )
@@ -684,7 +684,7 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
     sal_uLong nStart = 0;
     sal_Bool bExpanded = sal_False;
 
-    while( 1 )
+    while( true )
     {
         const sal_uLong nCount = (sal_uInt16)(_nGridCols * _nGridRows);
         for( sal_uLong nCur = nStart; nCur < nCount; nCur++ )

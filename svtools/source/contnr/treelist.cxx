@@ -1007,7 +1007,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         // Under certain circumstances (which?), the explorer deletes entries
         // from the view that it hasn't inserted into the view. We don't want
         // to crash, so we catch this case here.
-        return sal_False;
+        return false;
     }
 
     Broadcast(LISTACTION_REMOVING, const_cast<SvTreeListEntry*>(pEntry));

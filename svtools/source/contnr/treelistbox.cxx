@@ -1680,14 +1680,14 @@ void SvTreeListBox::Resize()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsEditingActive() )
-        EndEditing( sal_True );
+        EndEditing( true );
 
     Control::Resize();
 
     pImp->Resize();
     nFocusWidth = -1;
-    pImp->ShowCursor( sal_False );
-    pImp->ShowCursor( sal_True );
+    pImp->ShowCursor( false );
+    pImp->ShowCursor( true );
 }
 
 /* Cases:
@@ -1727,7 +1727,7 @@ void SvTreeListBox::SetTabs()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsEditingActive() )
-        EndEditing( sal_True );
+        EndEditing( true );
     nTreeFlags &= (~TREEFLAG_RECALCTABS);
     nFocusWidth = -1;
     const WinBits nStyle( GetStyle() );
@@ -2615,8 +2615,8 @@ void SvTreeListBox::SelectAll( sal_Bool bSelect, sal_Bool )
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SelAllDestrAnch(
         bSelect,
-        sal_True,       // delete anchor,
-        sal_True );     // even when using SINGLE_SELECTION, deselect the cursor
+        true,       // delete anchor,
+        true );     // even when using SINGLE_SELECTION, deselect the cursor
 }
 
 void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
@@ -2838,11 +2838,11 @@ void SvTreeListBox::EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
     DBG_ASSERT(pEntry&&pItem,"EditItemText: Bad params");
     if( IsSelected( pEntry ))
     {
-        pImp->ShowCursor( sal_False );
+        pImp->ShowCursor( false );
         SvListView::Select( pEntry, sal_False );
         PaintEntry( pEntry );
         SvListView::Select( pEntry, sal_True );
-        pImp->ShowCursor( sal_True );
+        pImp->ShowCursor( true );
     }
     pEdEntry = pEntry;
     pEdItem = pItem;
@@ -3479,7 +3479,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     long nRealWidth = pImp->GetOutputSize().Width();
     nRealWidth -= GetMapMode().GetOrigin().X();
 
-    while( 1 )
+    while( true )
     {
         SvLBoxTab* pNextTab=nNextItem<nTabCount ? aTabs[nNextItem] : 0;
         long nStart = GetTabPos( pEntry, pTab );
@@ -4013,7 +4013,7 @@ void SvTreeListBox::EnableContextMenuHandling( void )
 {
     DBG_ASSERT( pImp, "-SvTreeListBox::EnableContextMenuHandling(): No implementation!" );
 
-    pImp->bContextMenuHandling = sal_True;
+    pImp->bContextMenuHandling = true;
 }
 
 void SvTreeListBox::EnableContextMenuHandling( sal_Bool b )

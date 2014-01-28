@@ -712,7 +712,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                     }
 
                     aOutAlpha.ReleaseAccess( pWriteAccess );
-                    bRet = sal_True;
+                    bRet = true;
                 }
 
                 aAlpha.ReleaseAccess( pReadAccess );
@@ -785,7 +785,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                     if( pMAcc )
                         aMsk.ReleaseAccess( pMAcc );
 
-                    bRet = sal_True;
+                    bRet = true;
                 }
 
                 aOutMsk.ReleaseAccess( pWriteAccess );

@@ -861,7 +861,7 @@ void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno:
     Window * pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->Enable( bEnable, sal_True );
+        pWindow->Enable( bEnable, true );
         pWindow->EnableInput( bEnable );
         pWindow->Invalidate();
     }

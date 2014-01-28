@@ -231,14 +231,14 @@ class ResString: public OUString
 //-------------------------------------------------------------------------
 
 ResString::ResString(ResId & rId):
-    OUString(rId.SetAutoRelease(sal_False).toString()),
+    OUString(rId.SetAutoRelease(false).toString()),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
      // String ctor temporarily sets global ResManager
     if (pResMgr->GetRemainSize())
         nFlags = sal_uInt16(pResMgr->ReadShort());
-    rId.SetAutoRelease(sal_True);
+    rId.SetAutoRelease(true);
     pResMgr->PopContext();
 }
 

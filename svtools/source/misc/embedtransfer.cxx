@@ -100,7 +100,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         // TODO/LATER: Propbably the graphic should be copied here as well
                         // currently it is handled by the applications
                         utl::TempFile aTmp;
-                        aTmp.EnableKillingFile( sal_True );
+                        aTmp.EnableKillingFile( true );
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                         {

@@ -317,7 +317,7 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
 
     // only highlight painted areas!
     bNotToggleSel = sal_True;
-    if ( sal_False && !getDataWindow()->bInPaint )
+    if ( false && !getDataWindow()->bInPaint )
         pDataWin->Update();
 
     // accumulate areas of rows to highlight
@@ -535,7 +535,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
                     SelectRow( aSelRange.Max(), bSelectThis, sal_True );
-                    bSelect = sal_True;
+                    bSelect = true;
                 }
             }
             while ( rEvt.GetRow() > aSelRange.Max() )
@@ -544,7 +544,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
                     SelectRow( aSelRange.Max(), bSelectThis, sal_True );
-                    bSelect = sal_True;
+                    bSelect = true;
                 }
             }
             bSelecting = bOldSelecting;
@@ -569,10 +569,10 @@ void BrowseBox::Resize()
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
     if ( pCols->empty() )
     {
-        getDataWindow()->bResizeOnPaint = sal_True;
+        getDataWindow()->bResizeOnPaint = true;
         return;
     }
-    getDataWindow()->bResizeOnPaint = sal_False;
+    getDataWindow()->bResizeOnPaint = false;
 
     // calc the size of the scrollbars
     // (we can't ask the scrollbars for their widths cause if we're zoomed they still have to be
@@ -1161,10 +1161,10 @@ void BrowseBox::UpdateScrollbars()
     BrowserDataWin *pBDW = (BrowserDataWin*) pDataWin;
     if ( pBDW->bInUpdateScrollbars )
     {
-        pBDW->bHadRecursion = sal_True;
+        pBDW->bHadRecursion = true;
         return;
     }
-    pBDW->bInUpdateScrollbars = sal_True;
+    pBDW->bInUpdateScrollbars = true;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
     sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1315,10 +1315,10 @@ void BrowseBox::UpdateScrollbars()
         getDataWindow()->pHeaderBar->SetOffset( nWidth );
     }
 
-    pBDW->bInUpdateScrollbars = sal_False;
+    pBDW->bInUpdateScrollbars = false;
     if ( pBDW->bHadRecursion )
     {
-        pBDW->bHadRecursion = sal_False;
+        pBDW->bHadRecursion = false;
         UpdateScrollbars();
     }
 }
@@ -1499,7 +1499,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
     // event occurred out of data area
     if ( rEvt.IsRight() )
         pDataWin->Command(
-            CommandEvent( Point( 1, LONG_MAX ), COMMAND_CONTEXTMENU, sal_True ) );
+            CommandEvent( Point( 1, LONG_MAX ), COMMAND_CONTEXTMENU, true ) );
     else
         SetNoSelection();
 }
@@ -1661,19 +1661,19 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                         {
                             ToggleSelection();
                             if ( bMultiSelection )
-                                uRow.pSel->SelectAll(sal_False);
+                                uRow.pSel->SelectAll(false);
                             else
                                 uRow.nSel = BROWSER_ENDOFSELECTION;
                             if ( pColSel )
-                                pColSel->SelectAll(sal_False);
-                            bSelect = sal_True;
+                                pColSel->SelectAll(false);
+                            bSelect = true;
                         }
 
                         // expanding mode?
                         if ( rEvt.GetMode() & MOUSE_RANGESELECT )
                         {
                             // select the further touched rows too
-                            bSelect = sal_True;
+                            bSelect = true;
                             ExpandRowSelection( rEvt );
                             return;
                         }
@@ -1696,7 +1696,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                             aSelRange = Range( rEvt.GetRow(), rEvt.GetRow() );
                             SelectRow( rEvt.GetRow(),
                                     !uRow.pSel->IsSelected( rEvt.GetRow() ) );
-                            bSelect = sal_True;
+                            bSelect = true;
                             return;
                         }
                     }
@@ -1706,7 +1706,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                     GoToRow( rEvt.GetRow() );
                     SelectRow( rEvt.GetRow(), sal_True );
                     aSelRange = Range( rEvt.GetRow(), rEvt.GetRow() );
-                    bSelect = sal_True;
+                    bSelect = true;
                 }
                 else // Column/Field-Selection
                 {
@@ -1721,7 +1721,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
                     SetNoSelection();
                     GoToRowColumnId( rEvt.GetRow(), rEvt.GetColumnId() );
-                    bSelect = sal_True;
+                    bSelect = true;
                 }
             }
             else
@@ -1777,7 +1777,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
                 SelectRow( rEvt.GetRow(), sal_True );
             }
         }
-        bSelect = sal_True;
+        bSelect = true;
         bExtendedMode = sal_False;
         bFieldMode = sal_False;
         bHit = sal_False;

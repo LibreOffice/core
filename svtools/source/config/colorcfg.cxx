@@ -519,12 +519,12 @@ EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(sal_False)
 {
-    m_pImpl->BlockBroadcasts(sal_True);
+    m_pImpl->BlockBroadcasts(true);
 }
 
 EditableColorConfig::~EditableColorConfig()
 {
-    m_pImpl->BlockBroadcasts(sal_False);
+    m_pImpl->BlockBroadcasts(false);
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
@@ -602,12 +602,12 @@ void EditableColorConfig::Commit()
 // -----------------------------------------------------------------------------
 void EditableColorConfig::DisableBroadcast()
 {
-    m_pImpl->BlockBroadcasts(sal_True);
+    m_pImpl->BlockBroadcasts(true);
 }
 // -----------------------------------------------------------------------------
 void EditableColorConfig::EnableBroadcast()
 {
-    m_pImpl->BlockBroadcasts(sal_False);
+    m_pImpl->BlockBroadcasts(false);
 }
 // -----------------------------------------------------------------------------
 

@@ -318,7 +318,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                     {
 
                         OStringBuffer aByteString;
-                        while (1)
+                        while (true)
                         {
                             char c = (char)GetHexValue();
                             /*

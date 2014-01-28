@@ -715,7 +715,7 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
                     // disabling must be done here, does not work in ctor because
                     // execute of the dialog will overwrite it
                     // ( own execute method would help )
-                    pTextWin->EnableInput( sal_False, sal_True );
+                    pTextWin->EnableInput( false, sal_True );
                     if ( pTextWin->IsReallyVisible() )
                     {
                         sal_Bool    b = sal_True;
