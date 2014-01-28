@@ -958,7 +958,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;
         }
-        else if ( pHint && ( cChar == CH_TXTATR_BREAKWORD || CH_TXTATR_INWORD ) )
+        else if ( pHint && ( cChar == CH_TXTATR_BREAKWORD || cChar == CH_TXTATR_INWORD ) )
         {
             switch( pHint->Which() )
             {
