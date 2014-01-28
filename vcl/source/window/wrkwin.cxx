@@ -166,7 +166,7 @@ void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDispla
                 xCanvasComponent->dispose();
         }
 
-        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = sal_True;
+        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = true;
         ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
     }
 }
@@ -241,7 +241,7 @@ sal_Bool WorkWindow::SetPluginParent( SystemParentData* pParent )
     bool bWasDnd = Window::ImplStopDnd();
 
     sal_Bool bShown = IsVisible();
-    Show( sal_False );
+    Show( false );
     sal_Bool bRet = mpWindowImpl->mpFrame->SetPluginParent( pParent );
     Show( bShown );
 

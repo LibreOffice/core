@@ -445,9 +445,9 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     if ((keyword = token(fp,tokenlen)) != NULL)
                     {
                         if (MATCH(keyword, False))
-                            gfi->isFixedPitch = 0;
+                            gfi->isFixedPitch = false;
                         else
-                            gfi->isFixedPitch = 1;
+                            gfi->isFixedPitch = true;
                     }
                     break;
                 case UNDERLINEPOSITION:

@@ -544,10 +544,10 @@ void SplnType::Draw(OutputDevice& rOut)
     sal_uInt16 i;
     for(i=0;i<nPoints;i++) aSpln.SetPoint(Point(EckP[i].x,EckP[i].y),i);
     if ((Flags & PolyClosBit) !=0) {
-        Spline2Poly(aSpln,sal_True,aPoly);
+        Spline2Poly(aSpln,true,aPoly);
         if (aPoly.GetSize()>0) rOut.DrawPolygon(aPoly);
     } else {
-        Spline2Poly(aSpln,sal_False,aPoly);
+        Spline2Poly(aSpln,false,aPoly);
         if (aPoly.GetSize()>0) rOut.DrawPolyLine(aPoly);
     }
 }

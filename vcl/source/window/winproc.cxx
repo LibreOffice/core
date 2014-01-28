@@ -239,7 +239,7 @@ static sal_Bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = 
         return sal_False;
     if ( !bPreNotify )
     {
-        pChild->ImplGetWindowImpl()->mbCommand = sal_False;
+        pChild->ImplGetWindowImpl()->mbCommand = false;
         pChild->Command( aCEvt );
 
         if( aDelData.IsDead() )
@@ -718,7 +718,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                     // if the MouseMove handler changes the help window's visibility
                     // the HelpRequest handler should not be called anymore
                     Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
-                    pChild->ImplGetWindowImpl()->mbMouseMove = sal_False;
+                    pChild->ImplGetWindowImpl()->mbMouseMove = false;
                     pChild->MouseMove( aMEvt );
                     if ( pOldHelpTextWin != pSVData->maHelpData.mpHelpWin )
                         bCallHelpRequest = sal_False;
@@ -732,7 +732,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                 nRet = true;
             else
             {
-                pChild->ImplGetWindowImpl()->mbMouseButtonDown = sal_False;
+                pChild->ImplGetWindowImpl()->mbMouseButtonDown = false;
                 pChild->MouseButtonDown( aMEvt );
             }
         }
@@ -745,7 +745,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             }
             else
             {
-                pChild->ImplGetWindowImpl()->mbMouseButtonUp = sal_False;
+                pChild->ImplGetWindowImpl()->mbMouseButtonUp = false;
                 pChild->MouseButtonUp( aMEvt );
             }
         }
@@ -1041,12 +1041,12 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     {
         if ( nSVEvent == EVENT_KEYINPUT )
         {
-            pChild->ImplGetWindowImpl()->mbKeyInput = sal_False;
+            pChild->ImplGetWindowImpl()->mbKeyInput = false;
             pChild->KeyInput( aKeyEvt );
         }
         else
         {
-            pChild->ImplGetWindowImpl()->mbKeyUp = sal_False;
+            pChild->ImplGetWindowImpl()->mbKeyUp = false;
             pChild->KeyUp( aKeyEvt );
         }
         // #82968#
@@ -1155,12 +1155,12 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         {
             if ( nSVEvent == EVENT_KEYINPUT )
             {
-                pChild->ImplGetWindowImpl()->mbKeyInput = sal_False;
+                pChild->ImplGetWindowImpl()->mbKeyInput = false;
                 pChild->KeyInput( aKEvt );
             }
             else
             {
-                pChild->ImplGetWindowImpl()->mbKeyUp = sal_False;
+                pChild->ImplGetWindowImpl()->mbKeyUp = false;
                 pChild->KeyUp( aKEvt );
             }
             // #82968#
@@ -1207,7 +1207,7 @@ static bool ImplHandleExtTextInput( Window* pWindow,
     ImplWinData* pWinData = pChild->ImplGetWinData();
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
     {
-        pChild->ImplGetWindowImpl()->mbExtTextInput = sal_True;
+        pChild->ImplGetWindowImpl()->mbExtTextInput = true;
         pWinData->mpExtOldText = new OUString;
         if ( pWinData->mpExtOldAttrAry )
         {
@@ -1282,7 +1282,7 @@ static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
 
     if ( pChild )
     {
-        pChild->ImplGetWindowImpl()->mbExtTextInput = sal_False;
+        pChild->ImplGetWindowImpl()->mbExtTextInput = false;
         pSVData->maWinData.mpExtTextInputWin = NULL;
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpExtOldText )
@@ -1363,7 +1363,7 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
 {
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
-    CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, sal_True, pWheelData );
+    CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, true, pWheelData );
     NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
     ImplDelData         aDelData( pWindow );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
@@ -1371,7 +1371,7 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
         return sal_False;
     if ( !bPreNotify )
     {
-        pWindow->ImplGetWindowImpl()->mbCommand = sal_False;
+        pWindow->ImplGetWindowImpl()->mbCommand = false;
         pWindow->Command( aCEvt );
         if ( aDelData.IsDead() )
             return sal_False;
@@ -1555,7 +1555,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
         {
             pWindow->mnOutWidth  = nNewWidth;
             pWindow->mnOutHeight = nNewHeight;
-            pWindow->ImplGetWindowImpl()->mbWaitSystemResize = sal_False;
+            pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize ||
@@ -1592,7 +1592,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                     pWindow->ImplCallResize(); // otherwise menus cannot be positioned
             }
             else
-                pWindow->ImplGetWindowImpl()->mbCallResize = sal_True;
+                pWindow->ImplGetWindowImpl()->mbCallResize = true;
         }
     }
 
@@ -1624,7 +1624,7 @@ static void ImplHandleMove( Window* pWindow )
     if ( pWindow->IsVisible() )
         pWindow->ImplCallMove();
     else
-        pWindow->ImplGetWindowImpl()->mbCallMove = sal_True; // make sure the framepos will be updated on the next Show()
+        pWindow->ImplGetWindowImpl()->mbCallMove = true; // make sure the framepos will be updated on the next Show()
 
     if ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow )
         pWindow->ImplGetWindowImpl()->mpClientWindow->ImplCallMove();   // notify client to update geometry
@@ -1734,11 +1734,11 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
                     Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
                     Window* pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
 
-                    pOldOverlapWindow->ImplGetWindowImpl()->mbActive = sal_False;
+                    pOldOverlapWindow->ImplGetWindowImpl()->mbActive = false;
                     pOldOverlapWindow->Deactivate();
                     if ( pOldRealWindow != pOldOverlapWindow )
                     {
-                        pOldRealWindow->ImplGetWindowImpl()->mbActive = sal_False;
+                        pOldRealWindow->ImplGetWindowImpl()->mbActive = false;
                         pOldRealWindow->Deactivate();
                     }
                 }
@@ -2153,7 +2153,7 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
                 nType = DATACHANGED_DISPLAY;
                 break;
             case SALEVENT_FONTCHANGED:
-                OutputDevice::ImplUpdateAllFontData( sal_True );
+                OutputDevice::ImplUpdateAllFontData( true );
                 nType = DATACHANGED_FONTS;
                 break;
             case SALEVENT_DATETIMECHANGED:

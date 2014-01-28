@@ -213,79 +213,79 @@ WindowImpl::WindowImpl( WindowType nType )
     mnMarginRight       = 0;
     mnMarginTop         = 0;
     mnMarginBottom      = 0;
-    mbFrame             = sal_False;        // sal_True: Window is a frame window
-    mbBorderWin         = sal_False;        // sal_True: Window is a border window
-    mbOverlapWin        = sal_False;        // sal_True: Window is a overlap window
-    mbSysWin            = sal_False;        // sal_True: SystemWindow is the base class
-    mbDialog            = sal_False;        // sal_True: Dialog is the base class
-    mbDockWin           = sal_False;        // sal_True: DockingWindow is the base class
-    mbFloatWin          = sal_False;        // sal_True: FloatingWindow is the base class
-    mbPushButton        = sal_False;        // sal_True: PushButton is the base class
-    mbToolBox           = sal_False;      // sal_True: ToolBox is the base class
-    mbMenuFloatingWindow= sal_False;      // sal_True: MenuFloatingWindow is the base class
-    mbToolbarFloatingWindow= sal_False;       // sal_True: ImplPopupFloatWin is the base class, used for subtoolbars
-    mbSplitter          = sal_False;      // sal_True: Splitter is the base class
-    mbVisible           = sal_False;        // sal_True: Show( sal_True ) called
-    mbOverlapVisible    = sal_False;        // sal_True: Hide called for visible window from ImplHideAllOverlapWindow()
-    mbDisabled          = sal_False;        // sal_True: Enable( sal_False ) called
-    mbInputDisabled     = sal_False;        // sal_True: EnableInput( sal_False ) called
-    mbDropDisabled      = sal_False;        // sal_True: Drop is enabled
-    mbNoUpdate          = sal_False;        // sal_True: SetUpdateMode( sal_False ) called
-    mbNoParentUpdate    = sal_False;        // sal_True: SetParentUpdateMode( sal_False ) called
-    mbActive            = sal_False;        // sal_True: Window Active
-    mbParentActive      = sal_False;        // sal_True: OverlapActive from Parent
-    mbReallyVisible     = sal_False;        // sal_True: this and all parents to an overlaped window are visible
-    mbReallyShown       = sal_False;        // sal_True: this and all parents to an overlaped window are shown
-    mbInInitShow        = sal_False;        // sal_True: we are in InitShow
-    mbChildNotify       = sal_False;        // sal_True: ChildNotify
-    mbChildPtrOverwrite = sal_False;        // sal_True: PointerStyle overwrites Child-Pointer
-    mbNoPtrVisible      = sal_False;        // sal_True: ShowPointer( sal_False ) called
-    mbMouseMove         = sal_False;        // sal_True: BaseMouseMove called
-    mbPaintFrame        = sal_False;        // sal_True: Paint is visible, but not painted
-    mbInPaint           = sal_False;        // sal_True: Inside PaintHdl
-    mbMouseButtonDown   = sal_False;        // sal_True: BaseMouseButtonDown called
-    mbMouseButtonUp     = sal_False;        // sal_True: BaseMouseButtonUp called
-    mbKeyInput          = sal_False;        // sal_True: BaseKeyInput called
-    mbKeyUp             = sal_False;        // sal_True: BaseKeyUp called
-    mbCommand           = sal_False;        // sal_True: BaseCommand called
-    mbDefPos            = sal_True;         // sal_True: Position is not Set
-    mbDefSize           = sal_True;         // sal_True: Size is not Set
-    mbCallMove          = sal_True;         // sal_True: Move must be called by Show
-    mbCallResize        = sal_True;         // sal_True: Resize must be called by Show
-    mbWaitSystemResize  = sal_True;         // sal_True: Wait for System-Resize
-    mbInitWinClipRegion = sal_True;         // sal_True: Calc Window Clip Region
-    mbInitChildRegion   = sal_False;        // sal_True: InitChildClipRegion
-    mbWinRegion         = sal_False;        // sal_True: Window Region
-    mbClipChildren      = sal_False;        // sal_True: Child-window should be clipped
-    mbClipSiblings      = sal_False;        // sal_True: Adjacent Child-window should be clipped
-    mbChildTransparent  = sal_False;        // sal_True: Child-windows are allowed to switch to transparent (incl. Parent-CLIPCHILDREN)
-    mbPaintTransparent  = sal_False;        // sal_True: Paints should be executed on the Parent
-    mbMouseTransparent  = sal_False;        // sal_True: Window is transparent for Mouse
-    mbDlgCtrlStart      = sal_False;        // sal_True: From here on own Dialog-Control
-    mbFocusVisible      = sal_False;        // sal_True: Focus Visible
-    mbUseNativeFocus    = sal_False;
-    mbNativeFocusVisible= sal_False;        // sal_True: native Focus Visible
-    mbInShowFocus       = sal_False;        // prevent recursion
-    mbInHideFocus       = sal_False;        // prevent recursion
-    mbTrackVisible      = sal_False;        // sal_True: Tracking Visible
-    mbControlForeground = sal_False;        // sal_True: Foreground-Property set
-    mbControlBackground = sal_False;        // sal_True: Background-Property set
-    mbAlwaysOnTop       = sal_False;        // sal_True: always visible for all others windows
-    mbCompoundControl   = sal_False;        // sal_True: Composite Control => Listener...
-    mbCompoundControlHasFocus = sal_False;  // sal_True: Composite Control has focus somewhere
-    mbPaintDisabled     = sal_False;        // sal_True: Paint should not be executed
-    mbAllResize         = sal_False;        // sal_True: Also sent ResizeEvents with 0,0
-    mbInDtor            = sal_False;        // sal_True: We're still in Window-Dtor
-    mbExtTextInput      = sal_False;        // sal_True: ExtTextInput-Mode is active
-    mbInFocusHdl        = sal_False;        // sal_True: Within GetFocus-Handler
-    mbCreatedWithToolkit = sal_False;
-    mbSuppressAccessibilityEvents = sal_False; // sal_True: do not send any accessibility events
-    mbDrawSelectionBackground = sal_False;    // sal_True: draws transparent window background to indicate (toolbox) selection
-    mbIsInTaskPaneList = sal_False;           // sal_True: window was added to the taskpanelist in the topmost system window
+    mbFrame             = false;        // sal_True: Window is a frame window
+    mbBorderWin         = false;        // sal_True: Window is a border window
+    mbOverlapWin        = false;        // sal_True: Window is a overlap window
+    mbSysWin            = false;        // sal_True: SystemWindow is the base class
+    mbDialog            = false;        // sal_True: Dialog is the base class
+    mbDockWin           = false;        // sal_True: DockingWindow is the base class
+    mbFloatWin          = false;        // sal_True: FloatingWindow is the base class
+    mbPushButton        = false;        // sal_True: PushButton is the base class
+    mbToolBox           = false;      // sal_True: ToolBox is the base class
+    mbMenuFloatingWindow= false;      // sal_True: MenuFloatingWindow is the base class
+    mbToolbarFloatingWindow= false;       // sal_True: ImplPopupFloatWin is the base class, used for subtoolbars
+    mbSplitter          = false;      // sal_True: Splitter is the base class
+    mbVisible           = false;        // sal_True: Show( sal_True ) called
+    mbOverlapVisible    = false;        // sal_True: Hide called for visible window from ImplHideAllOverlapWindow()
+    mbDisabled          = false;        // sal_True: Enable( sal_False ) called
+    mbInputDisabled     = false;        // sal_True: EnableInput( sal_False ) called
+    mbDropDisabled      = false;        // sal_True: Drop is enabled
+    mbNoUpdate          = false;        // sal_True: SetUpdateMode( sal_False ) called
+    mbNoParentUpdate    = false;        // sal_True: SetParentUpdateMode( sal_False ) called
+    mbActive            = false;        // sal_True: Window Active
+    mbParentActive      = false;        // sal_True: OverlapActive from Parent
+    mbReallyVisible     = false;        // sal_True: this and all parents to an overlaped window are visible
+    mbReallyShown       = false;        // sal_True: this and all parents to an overlaped window are shown
+    mbInInitShow        = false;        // sal_True: we are in InitShow
+    mbChildNotify       = false;        // sal_True: ChildNotify
+    mbChildPtrOverwrite = false;        // sal_True: PointerStyle overwrites Child-Pointer
+    mbNoPtrVisible      = false;        // sal_True: ShowPointer( sal_False ) called
+    mbMouseMove         = false;        // sal_True: BaseMouseMove called
+    mbPaintFrame        = false;        // sal_True: Paint is visible, but not painted
+    mbInPaint           = false;        // sal_True: Inside PaintHdl
+    mbMouseButtonDown   = false;        // sal_True: BaseMouseButtonDown called
+    mbMouseButtonUp     = false;        // sal_True: BaseMouseButtonUp called
+    mbKeyInput          = false;        // sal_True: BaseKeyInput called
+    mbKeyUp             = false;        // sal_True: BaseKeyUp called
+    mbCommand           = false;        // sal_True: BaseCommand called
+    mbDefPos            = true;         // sal_True: Position is not Set
+    mbDefSize           = true;         // sal_True: Size is not Set
+    mbCallMove          = true;         // sal_True: Move must be called by Show
+    mbCallResize        = true;         // sal_True: Resize must be called by Show
+    mbWaitSystemResize  = true;         // sal_True: Wait for System-Resize
+    mbInitWinClipRegion = true;         // sal_True: Calc Window Clip Region
+    mbInitChildRegion   = false;        // sal_True: InitChildClipRegion
+    mbWinRegion         = false;        // sal_True: Window Region
+    mbClipChildren      = false;        // sal_True: Child-window should be clipped
+    mbClipSiblings      = false;        // sal_True: Adjacent Child-window should be clipped
+    mbChildTransparent  = false;        // sal_True: Child-windows are allowed to switch to transparent (incl. Parent-CLIPCHILDREN)
+    mbPaintTransparent  = false;        // sal_True: Paints should be executed on the Parent
+    mbMouseTransparent  = false;        // sal_True: Window is transparent for Mouse
+    mbDlgCtrlStart      = false;        // sal_True: From here on own Dialog-Control
+    mbFocusVisible      = false;        // sal_True: Focus Visible
+    mbUseNativeFocus    = false;
+    mbNativeFocusVisible= false;        // sal_True: native Focus Visible
+    mbInShowFocus       = false;        // prevent recursion
+    mbInHideFocus       = false;        // prevent recursion
+    mbTrackVisible      = false;        // sal_True: Tracking Visible
+    mbControlForeground = false;        // sal_True: Foreground-Property set
+    mbControlBackground = false;        // sal_True: Background-Property set
+    mbAlwaysOnTop       = false;        // sal_True: always visible for all others windows
+    mbCompoundControl   = false;        // sal_True: Composite Control => Listener...
+    mbCompoundControlHasFocus = false;  // sal_True: Composite Control has focus somewhere
+    mbPaintDisabled     = false;        // sal_True: Paint should not be executed
+    mbAllResize         = false;        // sal_True: Also sent ResizeEvents with 0,0
+    mbInDtor            = false;        // sal_True: We're still in Window-Dtor
+    mbExtTextInput      = false;        // sal_True: ExtTextInput-Mode is active
+    mbInFocusHdl        = false;        // sal_True: Within GetFocus-Handler
+    mbCreatedWithToolkit = false;
+    mbSuppressAccessibilityEvents = false; // sal_True: do not send any accessibility events
+    mbDrawSelectionBackground = false;    // sal_True: draws transparent window background to indicate (toolbox) selection
+    mbIsInTaskPaneList = false;           // sal_True: window was added to the taskpanelist in the topmost system window
     mnNativeBackground  = 0;              // initialize later, depends on type
-    mbCallHandlersDuringInputDisabled = sal_False; // sal_True: call event handlers even if input is disabled
-    mbHelpTextDynamic = sal_False;          // sal_True: append help id in HELP_DEBUG case
-    mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
+    mbCallHandlersDuringInputDisabled = false; // sal_True: call event handlers even if input is disabled
+    mbHelpTextDynamic = false;          // sal_True: append help id in HELP_DEBUG case
+    mbFakeFocusSet = false; // sal_True: pretend as if the window has focus.
     mbHexpand = false;
     mbVexpand = false;
     mbExpand = false;
@@ -760,8 +760,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     }
     else if( !mpWindowImpl->mbFrame && ! pParent )
     {
-        mpWindowImpl->mbOverlapWin  = sal_True;
-        mpWindowImpl->mbFrame = sal_True;
+        mpWindowImpl->mbOverlapWin  = true;
+        mpWindowImpl->mbFrame = true;
     }
 
     // insert window in list
@@ -1042,7 +1042,7 @@ void Window::ImplInsertWindow( Window* pParent )
         mpWindowImpl->mpFrameData     = pFrameParent->mpWindowImpl->mpFrameData;
         mpWindowImpl->mpFrame         = pFrameParent->mpWindowImpl->mpFrame;
         mpWindowImpl->mpFrameWindow   = pFrameParent;
-        mpWindowImpl->mbFrame         = sal_False;
+        mpWindowImpl->mbFrame         = false;
 
         // search overlap window and insert window in list
         if ( ImplIsOverlapWindow() )
@@ -1166,7 +1166,7 @@ void Window::reorderWithinParent(sal_uInt16 nNewPosition)
 
 void Window::ImplCallResize()
 {
-    mpWindowImpl->mbCallResize = sal_False;
+    mpWindowImpl->mbCallResize = false;
 
     if( GetBackground().IsGradient() )
         Invalidate();
@@ -1182,7 +1182,7 @@ void Window::ImplCallResize()
 
 void Window::ImplCallMove()
 {
-    mpWindowImpl->mbCallMove = sal_False;
+    mpWindowImpl->mbCallMove = false;
 
     if( mpWindowImpl->mbFrame )
     {
@@ -1333,14 +1333,14 @@ void Window::ImplLoadRes( const ResId& rResId )
         SetSizePixel( aSize );
 
     if ( nRSStyle & RSWND_DISABLED )
-        Enable( sal_False );
+        Enable( false );
 
     if ( nObjMask & WINDOW_TEXT )
         SetText( ReadStringRes() );
     if ( nObjMask & WINDOW_HELPTEXT )
     {
         SetHelpText( ReadStringRes() );
-        mpWindowImpl->mbHelpTextDynamic = sal_True;
+        mpWindowImpl->mbHelpTextDynamic = true;
     }
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
@@ -1390,7 +1390,7 @@ ImplWinData* Window::ImplGetWinData() const
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
     if ( mpWindowImpl->mpFrameWindow->mpGraphics )
-        mpWindowImpl->mpFrameWindow->mbInitClipRegion = sal_True;
+        mpWindowImpl->mpFrameWindow->mbInitClipRegion = true;
     else
         mpWindowImpl->mpFrameWindow->ImplGetGraphics();
     mpWindowImpl->mpFrameWindow->mpGraphics->ResetClipRegion();
@@ -1577,9 +1577,9 @@ void Window::ImplResetReallyVisible()
 {
     sal_Bool bBecameReallyInvisible = mpWindowImpl->mbReallyVisible;
 
-    mbDevOutput     = sal_False;
-    mpWindowImpl->mbReallyVisible = sal_False;
-    mpWindowImpl->mbReallyShown   = sal_False;
+    mbDevOutput     = false;
+    mpWindowImpl->mbReallyVisible = false;
+    mpWindowImpl->mbReallyShown   = false;
 
     // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
     // For this, the data member of the event must not be NULL.
@@ -1618,9 +1618,9 @@ void Window::ImplSetReallyVisible()
 
     sal_Bool bBecameReallyVisible = !mpWindowImpl->mbReallyVisible;
 
-    mbDevOutput     = sal_True;
-    mpWindowImpl->mbReallyVisible = sal_True;
-    mpWindowImpl->mbReallyShown   = sal_True;
+    mbDevOutput     = true;
+    mpWindowImpl->mbReallyVisible = true;
+    mpWindowImpl->mbReallyShown   = true;
 
     // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
     // For this, the data member of the event must not be NULL.
@@ -1652,10 +1652,10 @@ void Window::ImplSetReallyVisible()
 
 void Window::ImplCallInitShow()
 {
-    mpWindowImpl->mbReallyShown   = sal_True;
-    mpWindowImpl->mbInInitShow    = sal_True;
+    mpWindowImpl->mbReallyShown   = true;
+    mpWindowImpl->mbInInitShow    = true;
     StateChanged( STATE_CHANGE_INITSHOW );
-    mpWindowImpl->mbInInitShow    = sal_False;
+    mpWindowImpl->mbInInitShow    = false;
 
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
@@ -1870,7 +1870,7 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
                 }
             }
             else
-                bVisibleState = sal_False;
+                bVisibleState = false;
         }
 
         // Visible-Status updaten
@@ -1943,8 +1943,8 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
         if ( bSysObjOnlySmaller && !mpWindowImpl->mbInitWinClipRegion )
             pOldRegion = new Region( mpWindowImpl->maWinClipRegion );
 
-        mbInitClipRegion = sal_True;
-        mpWindowImpl->mbInitWinClipRegion = sal_True;
+        mbInitClipRegion = true;
+        mpWindowImpl->mbInitWinClipRegion = true;
 
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
@@ -1956,8 +1956,8 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
 
         if ( !ImplSysObjClip( pOldRegion ) )
         {
-            mbInitClipRegion = sal_True;
-            mpWindowImpl->mbInitWinClipRegion = sal_True;
+            mbInitClipRegion = true;
+            mpWindowImpl->mbInitWinClipRegion = true;
             bUpdate = sal_False;
         }
 
@@ -1965,8 +1965,8 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
     }
     else
     {
-    mbInitClipRegion = sal_True;
-    mpWindowImpl->mbInitWinClipRegion = sal_True;
+    mbInitClipRegion = true;
+    mpWindowImpl->mbInitWinClipRegion = true;
 
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -2008,8 +2008,8 @@ sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
         if ( pParent &&
              ((pParent->GetStyle() & WB_CLIPCHILDREN) || (mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP)) )
         {
-            pParent->mbInitClipRegion = sal_True;
-            pParent->mpWindowImpl->mbInitChildRegion = sal_True;
+            pParent->mbInitClipRegion = true;
+            pParent->mpWindowImpl->mbInitChildRegion = true;
         }
 
         // siblings should recalculate their clip region
@@ -2206,9 +2206,9 @@ void Window::ImplInitWinClipRegion()
 
     // Clip Children
     if ( (GetStyle() & WB_CLIPCHILDREN) || mpWindowImpl->mbClipChildren )
-        mpWindowImpl->mbInitChildRegion = sal_True;
+        mpWindowImpl->mbInitChildRegion = true;
 
-    mpWindowImpl->mbInitWinClipRegion = sal_False;
+    mpWindowImpl->mbInitWinClipRegion = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2233,7 +2233,7 @@ void Window::ImplInitWinChildClipRegion()
         ImplClipChildren( *mpWindowImpl->mpChildClipRegion );
     }
 
-    mpWindowImpl->mbInitChildRegion = sal_False;
+    mpWindowImpl->mbInitChildRegion = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2394,7 +2394,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
     // other parameters used below.
     PrePaint();
 
-    mpWindowImpl->mbPaintFrame = sal_False;
+    mpWindowImpl->mbPaintFrame = false;
 
     if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALLCHILDREN | (nPaintFlags & IMPL_PAINT_PAINTALL);
@@ -2449,8 +2449,8 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             if ( mpWindowImpl->mpCursor )
                 bRestoreCursor = mpWindowImpl->mpCursor->ImplSuspend();
 
-            mbInitClipRegion = sal_True;
-            mpWindowImpl->mbInPaint = sal_True;
+            mbInitClipRegion = true;
+            mpWindowImpl->mbInPaint = true;
 
             // restore Paint-Region
             Region      aPaintRegion( mpWindowImpl->maInvalidateRegion );
@@ -2502,8 +2502,8 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
                 if ( mpWindowImpl->mbFocusVisible )
                     ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
             }
-            mpWindowImpl->mbInPaint = sal_False;
-            mbInitClipRegion = sal_True;
+            mpWindowImpl->mbInPaint = false;
+            mbInitClipRegion = true;
             mpWindowImpl->mpPaintRegion = NULL;
             if ( mpWindowImpl->mpCursor )
                 mpWindowImpl->mpCursor->ImplResume( bRestoreCursor );
@@ -3415,7 +3415,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
                 else
                 {
-                    mpWindowImpl->mpClientWindow->mpWindowImpl->mbCallMove = sal_True;
+                    mpWindowImpl->mpClientWindow->mpWindowImpl->mbCallMove = true;
                 }
             }
         }
@@ -3436,9 +3436,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         else
         {
             if ( bNewPos )
-                mpWindowImpl->mbCallMove = sal_True;
+                mpWindowImpl->mbCallMove = true;
             if ( bNewSize )
-                mpWindowImpl->mbCallResize = sal_True;
+                mpWindowImpl->mbCallResize = true;
         }
 
         sal_Bool bUpdateSysObjClip = sal_False;
@@ -3788,7 +3788,7 @@ void Window::ImplShowAllOverlaps()
         if ( pOverlapWindow->mpWindowImpl->mbOverlapVisible )
         {
             pOverlapWindow->Show( true, SHOW_NOACTIVATE );
-            pOverlapWindow->mpWindowImpl->mbOverlapVisible = sal_False;
+            pOverlapWindow->mpWindowImpl->mbOverlapVisible = false;
         }
 
         pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
@@ -3804,7 +3804,7 @@ void Window::ImplHideAllOverlaps()
     {
         if ( pOverlapWindow->IsVisible() )
         {
-            pOverlapWindow->mpWindowImpl->mbOverlapVisible = sal_True;
+            pOverlapWindow->mpWindowImpl->mbOverlapVisible = true;
             pOverlapWindow->Show( false );
         }
 
@@ -3902,11 +3902,11 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
             else
             {
                 Window* pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
-                pSVData->maWinData.mpLastDeacWin->mpWindowImpl->mbActive = sal_False;
+                pSVData->maWinData.mpLastDeacWin->mpWindowImpl->mbActive = false;
                 pSVData->maWinData.mpLastDeacWin->Deactivate();
                 if ( pLastRealWindow != pSVData->maWinData.mpLastDeacWin )
                 {
-                    pLastRealWindow->mpWindowImpl->mbActive = sal_True;
+                    pLastRealWindow->mpWindowImpl->mbActive = true;
                     pLastRealWindow->Activate();
                 }
             }
@@ -3918,14 +3918,14 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
     {
         if( pOldOverlapWindow->mpWindowImpl->mbActive )
         {
-            pOldOverlapWindow->mpWindowImpl->mbActive = sal_False;
+            pOldOverlapWindow->mpWindowImpl->mbActive = false;
             pOldOverlapWindow->Deactivate();
         }
         if ( pOldRealWindow != pOldOverlapWindow )
         {
             if( pOldRealWindow->mpWindowImpl->mbActive )
             {
-                pOldRealWindow->mpWindowImpl->mbActive = sal_False;
+                pOldRealWindow->mpWindowImpl->mbActive = false;
                 pOldRealWindow->Deactivate();
             }
         }
@@ -3934,14 +3934,14 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
     {
         if( ! pNewOverlapWindow->mpWindowImpl->mbActive )
         {
-            pNewOverlapWindow->mpWindowImpl->mbActive = sal_True;
+            pNewOverlapWindow->mpWindowImpl->mbActive = true;
             pNewOverlapWindow->Activate();
         }
         if ( pNewRealWindow != pNewOverlapWindow )
         {
             if( ! pNewRealWindow->mpWindowImpl->mbActive )
             {
-                pNewRealWindow->mpWindowImpl->mbActive = sal_True;
+                pNewRealWindow->mpWindowImpl->mbActive = true;
                 pNewRealWindow->Activate();
             }
         }
@@ -4106,11 +4106,11 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         {
             Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
             Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
-            pNewOverlapWindow->mpWindowImpl->mbActive = sal_True;
+            pNewOverlapWindow->mpWindowImpl->mbActive = true;
             pNewOverlapWindow->Activate();
             if ( pNewRealWindow != pNewOverlapWindow )
             {
-                pNewRealWindow->mpWindowImpl->mbActive = sal_True;
+                pNewRealWindow->mpWindowImpl->mbActive = true;
                 pNewRealWindow->Activate();
             }
         }
@@ -4140,7 +4140,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
             {
                 if ( mpWindowImpl->mpCursor )
                     mpWindowImpl->mpCursor->ImplShow();
-                mpWindowImpl->mbInFocusHdl = sal_True;
+                mpWindowImpl->mbInFocusHdl = true;
                 mpWindowImpl->mnGetFocusFlags = nFlags;
                 // if we're changing focus due to closing a popup floating window
                 // notify the new focus window so it can restore the inner focus
@@ -4157,7 +4157,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 if( !aDogTag.IsDead() )
                 {
                     mpWindowImpl->mnGetFocusFlags = 0;
-                    mpWindowImpl->mbInFocusHdl = sal_False;
+                    mpWindowImpl->mbInFocusHdl = false;
                 }
             }
         }
@@ -4290,7 +4290,7 @@ Window::~Window()
             xCanvasComponent->dispose();
     }
 
-    mpWindowImpl->mbInDtor = sal_True;
+    mpWindowImpl->mbInDtor = true;
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
@@ -4388,7 +4388,7 @@ Window::~Window()
         pSVData->maWinData.mpDefDialogParent = NULL;
 
 #if OSL_DEBUG_LEVEL > 0
-    if ( sal_True ) // always perform these tests in non-pro versions
+    if ( true ) // always perform these tests in non-pro versions
     {
         OStringBuffer aErrorStr;
         sal_Bool        bError = sal_False;
@@ -4737,7 +4737,7 @@ void Window::MouseMove( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( EVENT_MOUSEMOVE, this, &rMEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbMouseMove = sal_True;
+        mpWindowImpl->mbMouseMove = true;
 }
 
 // -----------------------------------------------------------------------
@@ -4746,7 +4746,7 @@ void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( EVENT_MOUSEBUTTONDOWN, this, &rMEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbMouseButtonDown = sal_True;
+        mpWindowImpl->mbMouseButtonDown = true;
 }
 
 // -----------------------------------------------------------------------
@@ -4755,7 +4755,7 @@ void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( EVENT_MOUSEBUTTONUP, this, &rMEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbMouseButtonUp = sal_True;
+        mpWindowImpl->mbMouseButtonUp = true;
 }
 
 // -----------------------------------------------------------------------
@@ -4764,7 +4764,7 @@ void Window::KeyInput( const KeyEvent& rKEvt )
 {
     NotifyEvent aNEvt( EVENT_KEYINPUT, this, &rKEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbKeyInput = sal_True;
+        mpWindowImpl->mbKeyInput = true;
 }
 
 // -----------------------------------------------------------------------
@@ -4773,7 +4773,7 @@ void Window::KeyUp( const KeyEvent& rKEvt )
 {
     NotifyEvent aNEvt( EVENT_KEYUP, this, &rKEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbKeyUp = sal_True;
+        mpWindowImpl->mbKeyUp = true;
 }
 
 // -----------------------------------------------------------------------
@@ -4891,7 +4891,7 @@ void Window::Command( const CommandEvent& rCEvt )
 
     NotifyEvent aNEvt( EVENT_COMMAND, this, &rCEvt );
     if ( !Notify( aNEvt ) )
-        mpWindowImpl->mbCommand = sal_True;
+        mpWindowImpl->mbCommand = true;
 }
 
 // -----------------------------------------------------------------------
@@ -5057,7 +5057,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
             sal_Bool bCompoundFocusChanged = sal_False;
             if ( mpWindowImpl->mbCompoundControl && !mpWindowImpl->mbCompoundControlHasFocus && HasChildPathFocus() )
             {
-                mpWindowImpl->mbCompoundControlHasFocus = sal_True;
+                mpWindowImpl->mbCompoundControlHasFocus = true;
                 bCompoundFocusChanged = sal_True;
             }
 
@@ -5069,7 +5069,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
             sal_Bool bCompoundFocusChanged = sal_False;
             if ( mpWindowImpl->mbCompoundControl && mpWindowImpl->mbCompoundControlHasFocus && !HasChildPathFocus() )
             {
-                mpWindowImpl->mbCompoundControlHasFocus = sal_False ;
+                mpWindowImpl->mbCompoundControlHasFocus = false ;
                 bCompoundFocusChanged = sal_True;
             }
 
@@ -5771,7 +5771,7 @@ void Window::SetParentClipMode( sal_uInt16 nMode )
         {
             mpWindowImpl->mnParentClipMode = nMode;
             if ( nMode & PARENTCLIPMODE_CLIP )
-                mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = sal_True;
+                mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = true;
         }
     }
 }
@@ -5797,7 +5797,7 @@ void Window::SetWindowRegionPixel()
     else if( mpWindowImpl->mbFrame )
     {
         mpWindowImpl->maWinRegion = Region(true);
-        mpWindowImpl->mbWinRegion = sal_False;
+        mpWindowImpl->mbWinRegion = false;
         mpWindowImpl->mpFrame->ResetClipRegion();
     }
     else
@@ -5805,7 +5805,7 @@ void Window::SetWindowRegionPixel()
         if ( mpWindowImpl->mbWinRegion )
         {
             mpWindowImpl->maWinRegion = Region(true);
-            mpWindowImpl->mbWinRegion = sal_False;
+            mpWindowImpl->mbWinRegion = false;
             ImplSetClipFlag();
 
             if ( IsReallyVisible() )
@@ -5886,14 +5886,14 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
             if ( mpWindowImpl->mbWinRegion )
             {
                 mpWindowImpl->maWinRegion = Region(true);
-                mpWindowImpl->mbWinRegion = sal_False;
+                mpWindowImpl->mbWinRegion = false;
                 ImplSetClipFlag();
             }
         }
         else
         {
             mpWindowImpl->maWinRegion = rRegion;
-            mpWindowImpl->mbWinRegion = sal_True;
+            mpWindowImpl->mbWinRegion = true;
             ImplSetClipFlag();
         }
 
@@ -6004,7 +6004,7 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
         if( ! aDevPixRegion.IsEmpty() )
         {
             mpWindowImpl->mpPaintRegion->Union( aDevPixRegion );
-            mbInitClipRegion = sal_True;
+            mbInitClipRegion = true;
         }
     }
 }
@@ -6115,7 +6115,7 @@ void Window::SetParent( Window* pNewParent )
     ImplRemoveWindow( bNewFrame );
     ImplInsertWindow( pNewParent );
     if ( mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP )
-        pNewParent->mpWindowImpl->mbClipChildren = sal_True;
+        pNewParent->mpWindowImpl->mbClipChildren = true;
     ImplUpdateWindowPtr();
     if ( ImplUpdatePos() )
         ImplUpdateSysObjPos();
@@ -6216,13 +6216,13 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         {
             bool bOldUpdate = mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate;
             if ( mpWindowImpl->mbNoParentUpdate )
-                mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = sal_True;
+                mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = true;
             mpWindowImpl->mpBorderWindow->Show( false, nFlags );
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = bOldUpdate;
         }
         else if ( mpWindowImpl->mbFrame )
         {
-            mpWindowImpl->mbSuppressAccessibilityEvents = sal_True;
+            mpWindowImpl->mbSuppressAccessibilityEvents = true;
             mpWindowImpl->mpFrame->Show( sal_False, sal_False );
         }
 
@@ -6372,9 +6372,9 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             }
 
             //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
-            mpWindowImpl->mbSuppressAccessibilityEvents = sal_False;
+            mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
-            mpWindowImpl->mbPaintFrame = sal_True;
+            mpWindowImpl->mbPaintFrame = true;
             sal_Bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
             mpWindowImpl->mpFrame->Show( sal_True, bNoActivate );
             if( aDogTag.IsDead() )
@@ -6502,10 +6502,10 @@ void Window::Enable( bool bEnable, bool bChild )
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->Enable( bEnable, sal_False );
+        mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, sal_True );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, true );
     }
 
     // #i56102# restore app focus win in case the
@@ -6706,7 +6706,7 @@ void Window::AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild )
         mpWindowImpl->meAlwaysInputMode = AlwaysInputEnabled;
 
         if ( bAlways )
-            EnableInput( sal_True, sal_False );
+            EnableInput( true, sal_False );
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled )
     {
@@ -6737,7 +6737,7 @@ void Window::AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild )
         mpWindowImpl->meAlwaysInputMode = AlwaysInputDisabled;
 
         if ( bAlways )
-            EnableInput( sal_False, sal_False );
+            EnableInput( false, sal_False );
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled )
     {
@@ -6773,7 +6773,7 @@ void Window::SetActivateMode( sal_uInt16 nMode )
             if ( (mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW)) &&
                  !HasChildPathFocus( sal_True ) )
             {
-                mpWindowImpl->mbActive = sal_False;
+                mpWindowImpl->mbActive = false;
                 Deactivate();
             }
         }
@@ -6781,7 +6781,7 @@ void Window::SetActivateMode( sal_uInt16 nMode )
         {
             if ( !mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW) )
             {
-                mpWindowImpl->mbActive = sal_True;
+                mpWindowImpl->mbActive = true;
                 Activate();
             }
         }
@@ -6997,9 +6997,9 @@ void Window::setPosSizePixel( long nX, long nY,
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
     if ( nFlags & WINDOW_POSSIZE_POS )
-        mpWindowImpl->mbDefPos = sal_False;
+        mpWindowImpl->mbDefPos = false;
     if ( nFlags & WINDOW_POSSIZE_SIZE )
-        mpWindowImpl->mbDefSize = sal_False;
+        mpWindowImpl->mbDefSize = false;
 
     // The top BorderWindow is the window which is to be positioned
     Window* pWindow = this;
@@ -7856,7 +7856,7 @@ const OUString& Window::GetHelpText() const
             if ( pHelp )
             {
                 ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
-                mpWindowImpl->mbHelpTextDynamic = sal_False;
+                mpWindowImpl->mbHelpTextDynamic = false;
             }
         }
     }
@@ -7871,7 +7871,7 @@ const OUString& Window::GetHelpText() const
             aTxt.append( OUString( aStrHelpId ) );
             mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
         }
-        mpWindowImpl->mbHelpTextDynamic = sal_False;
+        mpWindowImpl->mbHelpTextDynamic = false;
     }
 
     return mpWindowImpl->maHelpText;
@@ -9460,7 +9460,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     sal_Bool bRVisible = mpWindowImpl->mbReallyVisible;
     mpWindowImpl->mbReallyVisible = mpWindowImpl->mbVisible;
     sal_Bool bDevOutput = mbDevOutput;
-    mbDevOutput = sal_True;
+    mbDevOutput = true;
 
     long nOldDPIX = ImplGetDPIX();
     long nOldDPIY = ImplGetDPIY();
@@ -9597,7 +9597,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     }
 
     sal_Bool bVisible = mpWindowImpl->mbVisible;
-    mpWindowImpl->mbVisible = sal_True;
+    mpWindowImpl->mbVisible = true;
 
     if( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->ImplPaintToDevice( pDev, rPos );

@@ -2977,7 +2977,7 @@ void X11SalFrame::beginUnicodeSequence()
         aEv.mpTextAttr      = &nTextAttr;
         aEv.mnCursorPos     = 0;
         aEv.mnCursorFlags   = 0;
-        aEv.mbOnlyCursor    = sal_False;
+        aEv.mbOnlyCursor    = false;
 
         CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
     }
@@ -3006,7 +3006,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             aEv.mpTextAttr      = &attribs[0];
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
-            aEv.mbOnlyCursor    = sal_False;
+            aEv.mbOnlyCursor    = false;
 
             CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
             bRet = true;
@@ -3038,7 +3038,7 @@ bool X11SalFrame::endUnicodeSequence()
             aEv.mpTextAttr      = &nTextAttr;
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
-            aEv.mbOnlyCursor    = sal_False;
+            aEv.mbOnlyCursor    = false;
             CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
         }
     }

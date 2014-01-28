@@ -1310,7 +1310,7 @@ Window* Application::GetDefDialogParent()
     // #103442# find some useful dialog parent if there
     // was no default set
     // NOTE: currently even the default is not used
-    if( sal_False && pSVData->maWinData.mpDefDialogParent != NULL )
+    if( false && pSVData->maWinData.mpDefDialogParent != NULL )
         return pSVData->maWinData.mpDefDialogParent;
     else
     {

@@ -129,7 +129,7 @@ void SvgData::ensureSequenceAndRange()
             }
             catch(const uno::Exception&)
             {
-                OSL_ENSURE(sal_False, "Got no graphic::XSvgParser (!)" );
+                OSL_ENSURE(false, "Got no graphic::XSvgParser (!)" );
             }
         }
 

@@ -390,11 +390,11 @@ void ToolBox::ImplInvalidate( sal_Bool bNewCalc, sal_Bool bFullPaint )
     ImplUpdateInputEnable();
 
     if ( bNewCalc )
-        mbCalc = sal_True;
+        mbCalc = true;
 
     if ( bFullPaint )
     {
-        mbFormat = sal_True;
+        mbFormat = true;
 
         // Muss ueberhaupt eine neue Ausgabe erfolgen
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -408,7 +408,7 @@ void ToolBox::ImplInvalidate( sal_Bool bNewCalc, sal_Bool bFullPaint )
     {
         if ( !mbFormat )
         {
-            mbFormat = sal_True;
+            mbFormat = true;
 
             // Muss ueberhaupt eine neue Ausgabe erfolgen
             if ( IsReallyVisible() && IsUpdateMode() )
@@ -995,8 +995,8 @@ void ToolBox::SetToolboxButtonSize( ToolBoxButtonSize eSize )
     if( mpData->meButtonSize != eSize )
     {
         mpData->meButtonSize = eSize;
-        mbCalc = sal_True;
-        mbFormat = sal_True;
+        mbCalc = true;
+        mbFormat = true;
     }
 }
 
@@ -1059,16 +1059,16 @@ void ToolBox::SetAlign( WindowAlign eNewAlign )
         {
             // Setzen, ob Items horizontal oder vertikal angeordnet werden sollen
             if ( (eNewAlign == WINDOWALIGN_LEFT) || (eNewAlign == WINDOWALIGN_RIGHT) )
-                mbHorz = sal_False;
+                mbHorz = false;
             else
-                mbHorz = sal_True;
+                mbHorz = true;
 
             // Update the background according to Persona if necessary
             ImplInitSettings( sal_False, sal_False, sal_True );
 
             // Hier alles neu ausgeben, da sich Border auch aendert
-            mbCalc = sal_True;
-            mbFormat = sal_True;
+            mbCalc = true;
+            mbFormat = true;
             if ( IsReallyVisible() && IsUpdateMode() )
                 Invalidate();
         }
@@ -1597,7 +1597,7 @@ void ToolBox::StartSelection()
 
     if ( !mbSelection )
     {
-        mbSelection  = sal_True;
+        mbSelection  = true;
         mnCurPos     = TOOLBOX_ITEM_NOTFOUND;
         mnCurItemId  = 0;
         Activate();
@@ -1608,13 +1608,13 @@ void ToolBox::StartSelection()
 
 void ToolBox::EndSelection()
 {
-    mbCommandDrag = sal_False;
+    mbCommandDrag = false;
 
     if ( mbDrag || mbSelection )
     {
         // Daten zuruecksetzen
-        mbDrag = sal_False;
-        mbSelection = sal_False;
+        mbDrag = false;
+        mbSelection = false;
         if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             ImplDrawItem( mnCurPos );
         EndTracking();
@@ -1660,8 +1660,8 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, sal_Bool bDown, sal_Bool bRelease
         {
             if ( mbDrag || mbSelection )
             {
-                mbDrag = sal_False;
-                mbSelection = sal_False;
+                mbDrag = false;
+                mbSelection = false;
                 EndTracking();
                 ReleaseMouse();
                 Deactivate();
@@ -2073,7 +2073,7 @@ void ToolBox::SetMenuType( sal_uInt16 aType )
             if( pWrapper )
                 pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) ? sal_True : sal_False );
 
-            mbFormat = sal_True;
+            mbFormat = true;
             ImplFormat();
             ImplSetMinMaxFloatSize( this );
         }
@@ -2307,8 +2307,8 @@ void ToolBox::Lock( sal_Bool bLock )
         mpData->mbIsLocked = bLock;
         if( !ImplIsFloatingMode() )
         {
-            mbCalc = sal_True;
-            mbFormat = sal_True;
+            mbCalc = true;
+            mbFormat = true;
             SetSizePixel( CalcWindowSizePixel(1) );
             Invalidate();
         }

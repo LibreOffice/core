@@ -440,7 +440,7 @@ sal_Bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, 
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                         {
                             SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
-                            if ( sal_True /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
+                            if ( true /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
                                 pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
                             else if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
                             {
@@ -1868,26 +1868,26 @@ void ImplBorderWindow::ImplInit( Window* pParent,
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
 
-    mpWindowImpl->mbBorderWin       = sal_True;
+    mpWindowImpl->mbBorderWin       = true;
     mbSmallOutBorder    = sal_False;
     if ( nTypeStyle & BORDERWINDOW_STYLE_FRAME )
     {
         if( (nStyle & WB_SYSTEMCHILDWINDOW) )
         {
-            mpWindowImpl->mbOverlapWin  = sal_True;
-            mpWindowImpl->mbFrame       = sal_True;
+            mpWindowImpl->mbOverlapWin  = true;
+            mpWindowImpl->mbFrame       = true;
             mbFrameBorder               = sal_False;
         }
         else if( (nStyle & (WB_OWNERDRAWDECORATION | WB_POPUP)) )
         {
-            mpWindowImpl->mbOverlapWin  = sal_True;
-            mpWindowImpl->mbFrame       = sal_True;
+            mpWindowImpl->mbOverlapWin  = true;
+            mpWindowImpl->mbFrame       = true;
             mbFrameBorder   = (nOrgStyle & WB_NOBORDER) ? sal_False : sal_True;
         }
         else
         {
-            mpWindowImpl->mbOverlapWin  = sal_True;
-            mpWindowImpl->mbFrame       = sal_True;
+            mpWindowImpl->mbOverlapWin  = true;
+            mpWindowImpl->mbFrame       = true;
             mbFrameBorder   = sal_False;
             // closeable windows may have a border as well, eg. system floating windows without caption
             if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
@@ -1896,7 +1896,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     }
     else if ( nTypeStyle & BORDERWINDOW_STYLE_OVERLAP )
     {
-        mpWindowImpl->mbOverlapWin  = sal_True;
+        mpWindowImpl->mbOverlapWin  = true;
         mbFrameBorder   = sal_True;
     }
     else

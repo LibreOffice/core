@@ -52,7 +52,7 @@ namespace
 
 void Splitter::ImplInitSplitterData()
 {
-    ImplGetWindowImpl()->mbSplitter        = sal_True;
+    ImplGetWindowImpl()->mbSplitter        = true;
     mpRefWin          = NULL;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;

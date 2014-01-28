@@ -211,7 +211,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     if ( mpFloatWin )
         mpFloatWin->SetImplListBox( mpImplLB );
     else
-        mpImplLB->GetMainWindow()->AllowGrabFocus( sal_True );
+        mpImplLB->GetMainWindow()->AllowGrabFocus( true );
 
     ImplCalcEditHeight();
 

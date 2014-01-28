@@ -177,7 +177,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpImplLB->SetSelectionChangedHdl( LINK( this, ListBox, ImplSelectionChangedHdl ) );
     }
     else
-        mpImplLB->GetMainWindow()->AllowGrabFocus( sal_True );
+        mpImplLB->GetMainWindow()->AllowGrabFocus( true );
 
     SetCompoundControl( sal_True );
 }
@@ -905,7 +905,7 @@ void ListBox::StateChanged( StateChangedType nType )
 
 bool ListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = 0;
+    bool nDone = false;
     if ( mpImplLB )
     {
         if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( rNEvt.GetWindow() == mpImplWin ) )

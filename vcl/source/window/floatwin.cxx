@@ -65,7 +65,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
-    mpWindowImpl->mbFloatWin = sal_True;
+    mpWindowImpl->mbFloatWin = true;
     mbInCleanUp = sal_False;
     mbGrabFocus = sal_False;
 
@@ -79,7 +79,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     // no Border, then we dont need a border window
     if ( !nStyle )
     {
-        mpWindowImpl->mbOverlapWin = sal_True;
+        mpWindowImpl->mbOverlapWin = true;
         nStyle |= WB_DIALOGCONTROL;
         SystemWindow::ImplInit( pParent, nStyle, NULL );
     }
@@ -94,8 +94,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             WinBits nFloatWinStyle = nStyle;
             // #99154# floaters are not closeable by default anymore, eg fullscreen floater
             // nFloatWinStyle |= WB_CLOSEABLE;
-            mpWindowImpl->mbFrame = sal_True;
-            mpWindowImpl->mbOverlapWin = sal_True;
+            mpWindowImpl->mbFrame = true;
+            mpWindowImpl->mbOverlapWin = true;
             SystemWindow::ImplInit( pParent, nFloatWinStyle & ~WB_BORDER, NULL );
         }
         else
@@ -649,7 +649,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 {
     // avoid flickering
     if ( IsVisible() )
-        Show( sal_False, SHOW_NOFOCUSCHANGE );
+        Show( false, SHOW_NOFOCUSCHANGE );
 
     if ( IsRollUp() )
         RollDown();
@@ -722,7 +722,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
         // force key input even without focus (useful for menus)
         mbGrabFocus = sal_True;
     }
-    Show( sal_True, SHOW_NOACTIVATE );
+    Show( true, SHOW_NOACTIVATE );
 }
 
 // -----------------------------------------------------------------------
@@ -798,7 +798,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     if ( !(nFlags & FLOATWIN_POPUPMODEEND_TEAROFF) ||
          !(nPopupModeFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) )
     {
-        Show( sal_False, SHOW_NOFOCUSCHANGE );
+        Show( false, SHOW_NOFOCUSCHANGE );
 
         // Focus evt. auf ein entsprechendes FloatingWindow weiterschalten
         if ( nFocusId )

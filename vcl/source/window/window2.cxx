@@ -295,7 +295,7 @@ void Window::ShowFocus( const Rectangle& rRect )
 {
     if( mpWindowImpl->mbInShowFocus )
         return;
-    mpWindowImpl->mbInShowFocus = sal_True;
+    mpWindowImpl->mbInShowFocus = true;
 
     ImplWinData* pWinData = ImplGetWinData();
 
@@ -309,7 +309,7 @@ void Window::ShowFocus( const Rectangle& rRect )
             {
                 if ( *(pWinData->mpFocusRect) == rRect )
                 {
-                    mpWindowImpl->mbInShowFocus = sal_False;
+                    mpWindowImpl->mbInShowFocus = false;
                     return;
                 }
 
@@ -322,18 +322,18 @@ void Window::ShowFocus( const Rectangle& rRect )
             pWinData->mpFocusRect = new Rectangle( rRect );
         else
             *(pWinData->mpFocusRect) = rRect;
-        mpWindowImpl->mbFocusVisible = sal_True;
+        mpWindowImpl->mbFocusVisible = true;
     }
     else
     {
         if( ! mpWindowImpl->mbNativeFocusVisible )
         {
-            mpWindowImpl->mbNativeFocusVisible = sal_True;
+            mpWindowImpl->mbNativeFocusVisible = true;
             if ( !mpWindowImpl->mbInPaint )
                 Invalidate();
         }
     }
-    mpWindowImpl->mbInShowFocus = sal_False;
+    mpWindowImpl->mbInShowFocus = false;
 }
 
 // -----------------------------------------------------------------------
@@ -343,7 +343,7 @@ void Window::HideFocus()
 
     if( mpWindowImpl->mbInHideFocus )
         return;
-    mpWindowImpl->mbInHideFocus = sal_True;
+    mpWindowImpl->mbInHideFocus = true;
 
     // native themeing can suggest not to use focus rects
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
@@ -351,24 +351,24 @@ void Window::HideFocus()
     {
         if ( !mpWindowImpl->mbFocusVisible )
         {
-            mpWindowImpl->mbInHideFocus = sal_False;
+            mpWindowImpl->mbInHideFocus = false;
             return;
         }
 
         if ( !mpWindowImpl->mbInPaint )
             ImplInvertFocus( *(ImplGetWinData()->mpFocusRect) );
-        mpWindowImpl->mbFocusVisible = sal_False;
+        mpWindowImpl->mbFocusVisible = false;
     }
     else
     {
         if( mpWindowImpl->mbNativeFocusVisible )
         {
-            mpWindowImpl->mbNativeFocusVisible = sal_False;
+            mpWindowImpl->mbNativeFocusVisible = false;
             if ( !mpWindowImpl->mbInPaint )
                 Invalidate();
         }
     }
-    mpWindowImpl->mbInHideFocus = sal_False;
+    mpWindowImpl->mbInHideFocus = false;
 }
 
 // -----------------------------------------------------------------------
@@ -466,7 +466,7 @@ void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     else
         *(pWinData->mpTrackRect) = rRect;
     pWinData->mnTrackFlags      = nFlags;
-    mpWindowImpl->mbTrackVisible              = sal_True;
+    mpWindowImpl->mbTrackVisible              = true;
 }
 
 // -----------------------------------------------------------------------
@@ -478,7 +478,7 @@ void Window::HideTracking()
         ImplWinData* pWinData = ImplGetWinData();
         if ( !mpWindowImpl->mbInPaint || !(pWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
             InvertTracking( *(pWinData->mpTrackRect), pWinData->mnTrackFlags );
-        mpWindowImpl->mbTrackVisible = sal_False;
+        mpWindowImpl->mbTrackVisible = false;
     }
 }
 
@@ -934,7 +934,7 @@ void Window::SetControlForeground()
     if ( mpWindowImpl->mbControlForeground )
     {
         mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );
-        mpWindowImpl->mbControlForeground = sal_False;
+        mpWindowImpl->mbControlForeground = false;
         StateChanged( STATE_CHANGE_CONTROLFOREGROUND );
     }
 }
@@ -948,7 +948,7 @@ void Window::SetControlForeground( const Color& rColor )
         if ( mpWindowImpl->mbControlForeground )
         {
             mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );
-            mpWindowImpl->mbControlForeground = sal_False;
+            mpWindowImpl->mbControlForeground = false;
             StateChanged( STATE_CHANGE_CONTROLFOREGROUND );
         }
     }
@@ -957,7 +957,7 @@ void Window::SetControlForeground( const Color& rColor )
         if ( mpWindowImpl->maControlForeground != rColor )
         {
             mpWindowImpl->maControlForeground = rColor;
-            mpWindowImpl->mbControlForeground = sal_True;
+            mpWindowImpl->mbControlForeground = true;
             StateChanged( STATE_CHANGE_CONTROLFOREGROUND );
         }
     }
@@ -970,7 +970,7 @@ void Window::SetControlBackground()
     if ( mpWindowImpl->mbControlBackground )
     {
         mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );
-        mpWindowImpl->mbControlBackground = sal_False;
+        mpWindowImpl->mbControlBackground = false;
         StateChanged( STATE_CHANGE_CONTROLBACKGROUND );
     }
 }
@@ -984,7 +984,7 @@ void Window::SetControlBackground( const Color& rColor )
         if ( mpWindowImpl->mbControlBackground )
         {
             mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );
-            mpWindowImpl->mbControlBackground = sal_False;
+            mpWindowImpl->mbControlBackground = false;
             StateChanged( STATE_CHANGE_CONTROLBACKGROUND );
         }
     }
@@ -993,7 +993,7 @@ void Window::SetControlBackground( const Color& rColor )
         if ( mpWindowImpl->maControlBackground != rColor )
         {
             mpWindowImpl->maControlBackground = rColor;
-            mpWindowImpl->mbControlBackground = sal_True;
+            mpWindowImpl->mbControlBackground = true;
             StateChanged( STATE_CHANGE_CONTROLBACKGROUND );
         }
     }
@@ -1645,7 +1645,7 @@ sal_Bool Window::IsZoom() const
 void Window::SetHelpText( const OUString& rHelpText )
 {
     mpWindowImpl->maHelpText = rHelpText;
-    mpWindowImpl->mbHelpTextDynamic = sal_True;
+    mpWindowImpl->mbHelpTextDynamic = true;
 }
 
 void Window::SetQuickHelpText( const OUString& rHelpText )

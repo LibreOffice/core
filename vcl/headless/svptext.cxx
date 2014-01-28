@@ -410,9 +410,9 @@ bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, B2DPolyPolygon& rPol
 
     aGlyphId &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( aGlyphId, rPolyPoly ) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 

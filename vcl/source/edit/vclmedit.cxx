@@ -241,9 +241,9 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
     SetAlign( nWinStyle );
 
     if ( nWinStyle & WB_NOHIDESELECTION )
-        mpTextWindow->SetAutoFocusHide( sal_False );
+        mpTextWindow->SetAutoFocusHide( false );
     else
-        mpTextWindow->SetAutoFocusHide( sal_True );
+        mpTextWindow->SetAutoFocusHide( true );
 
     if ( nWinStyle & WB_READONLY )
         mpTextWindow->GetTextView()->SetReadOnly( sal_True );

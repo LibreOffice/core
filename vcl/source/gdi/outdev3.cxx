@@ -2857,7 +2857,7 @@ void OutputDevice::ImplInitTextColor()
     if ( mbInitTextColor )
     {
         mpGraphics->SetTextColor( ImplColorToSal( GetTextColor() ) );
-        mbInitTextColor = sal_False;
+        mbInitTextColor = false;
     }
 }
 
@@ -2913,9 +2913,9 @@ bool OutputDevice::ImplNewFont() const
         return false;
 
     // mark when lower layers need to get involved
-    mbNewFont = sal_False;
+    mbNewFont = false;
     if( pFontEntry != pOldEntry )
-        mbInitFont = sal_True;
+        mbInitFont = true;
 
     // select font when it has not been initialized yet
     if ( !pFontEntry->mbInit )
@@ -3013,10 +3013,10 @@ bool OutputDevice::ImplNewFont() const
         {
             Size aOrigSize = maFont.GetSize();
             const_cast<Font&>(maFont).SetSize( Size( nNewWidth, aSize.Height() ) );
-            mbMap = sal_False;
-            mbNewFont = sal_True;
+            mbMap = false;
+            mbNewFont = true;
             ImplNewFont();  // recurse once using stretched width
-            mbMap = sal_True;
+            mbMap = true;
             const_cast<Font&>(maFont).SetSize( aOrigSize );
         }
     }
@@ -3092,10 +3092,10 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     if ( mbLineColor || mbInitLineColor )
     {
         mpGraphics->SetLineColor();
-        mbInitLineColor = sal_True;
+        mbInitLineColor = true;
     }
     mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
-    mbInitFillColor = sal_True;
+    mbInitFillColor = true;
 
     ImplDrawTextRect( nX, nY, 0, -(mpFontEntry->maMetric.mnAscent + mnEmphasisAscent),
                       nWidth,
@@ -3410,7 +3410,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     if ( (nLineWidth == 1) && (nHeight == 1) )
     {
         mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
-        mbInitLineColor = sal_True;
+        mbInitLineColor = true;
 
         long nEndX = nStartX+nWidth;
         long nEndY = nStartY;
@@ -3440,10 +3440,10 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
-                mbInitLineColor = sal_True;
+                mbInitLineColor = true;
             }
             mpGraphics->SetFillColor( ImplColorToSal( rColor ) );
-            mbInitFillColor = sal_True;
+            mbInitFillColor = true;
             bDrawPixAsRect  = true;
             nPixWidth       = nLineWidth;
             nPixHeight      = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
@@ -3451,7 +3451,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         else
         {
             mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
-            mbInitLineColor = sal_True;
+            mbInitLineColor = true;
             nPixWidth       = 1;
             nPixHeight      = 1;
             bDrawPixAsRect  = false;
@@ -3653,10 +3653,10 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         if ( mbLineColor || mbInitLineColor )
         {
             mpGraphics->SetLineColor();
-            mbInitLineColor = sal_True;
+            mbInitLineColor = true;
         }
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
-        mbInitFillColor = sal_True;
+        mbInitFillColor = true;
 
         long nLeft = nDistX;
 
@@ -3844,10 +3844,10 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
         if ( mbLineColor || mbInitLineColor )
         {
             mpGraphics->SetLineColor();
-            mbInitLineColor = sal_True;
+            mbInitLineColor = true;
         }
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
-        mbInitFillColor = sal_True;
+        mbInitFillColor = true;
 
         const long& nLeft = nDistX;
 
@@ -4843,7 +4843,7 @@ void OutputDevice::SetAntialiasing( sal_uInt16 nMode )
     if ( mnAntialiasing != nMode )
     {
         mnAntialiasing = nMode;
-        mbInitFont = sal_True;
+        mbInitFont = true;
 
         if(mpGraphics)
         {
@@ -4938,12 +4938,12 @@ void OutputDevice::SetFont( const Font& rNewFont )
         && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor ) )
         {
             maTextColor = aFont.GetColor();
-            mbInitTextColor = sal_True;
+            mbInitTextColor = true;
             if( mpMetaFile )
                 mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
         }
         maFont      = aFont;
-        mbNewFont   = sal_True;
+        mbNewFont   = true;
 
         if( mpAlphaVDev )
         {
@@ -5019,7 +5019,7 @@ void OutputDevice::SetTextColor( const Color& rColor )
     if ( maTextColor != aColor )
     {
         maTextColor = aColor;
-        mbInitTextColor = sal_True;
+        mbInitTextColor = true;
     }
 
     if( mpAlphaVDev )
@@ -5210,7 +5210,7 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
     if ( maFont.GetAlign() != eAlign )
     {
         maFont.SetAlign( eAlign );
-        mbNewFont = sal_True;
+        mbNewFont = true;
     }
 
     if( mpAlphaVDev )
@@ -7415,8 +7415,8 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     sal_Bool bOldMap = mbMap;
     if( bOldMap )
     {
-        const_cast<OutputDevice&>(*this).mbMap = sal_False;
-        const_cast<OutputDevice&>(*this).mbNewFont = sal_True;
+        const_cast<OutputDevice&>(*this).mbMap = false;
+        const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
     SalLayout* pSalLayout = NULL;
@@ -7476,7 +7476,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     {
         // restore original font size and map mode
         const_cast<OutputDevice&>(*this).mbMap = bOldMap;
-        const_cast<OutputDevice&>(*this).mbNewFont = sal_True;
+        const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
     if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )

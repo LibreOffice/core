@@ -387,7 +387,7 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
             if ( nIteration >= 2 )
             {
                 // this is an unexpected scenario
-                DBG_ASSERT( sal_False, "It seems to be an endless loop!" );
+                DBG_ASSERT( false, "It seems to be an endless loop!" );
                 rFormStart = 0;
                 break;
             }

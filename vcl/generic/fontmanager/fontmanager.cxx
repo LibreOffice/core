@@ -264,7 +264,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                     rChar.width = m_aGlobalMetricY.width;
                     rChar.height = pMetrics[ i ].adv;
                     if( table_vert[i] != table[i] )
-                        m_pMetrics->m_bVerticalSubstitutions[ nPage*256 + i ] = 1;
+                        m_pMetrics->m_bVerticalSubstitutions[ nPage*256 + i ] = true;
                 }
             }
             free( pMetrics );

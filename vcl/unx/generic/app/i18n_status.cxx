@@ -154,7 +154,7 @@ void XIMStatusWindow::layout()
 
     m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText.SetFont( aFont );
-    m_aStatusText.Show( sal_True );
+    m_aStatusText.Show( true );
 
     if (m_bAnchoredAtRight && IsVisible())
     {
@@ -246,7 +246,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             setText( OUString() );
             m_pLastParent = pParent;
-            Show( sal_False, SHOW_NOACTIVATE );
+            Show( false, SHOW_NOACTIVATE );
         }
         if( IsVisible() )
         {
@@ -348,7 +348,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
     m_aStatusBtn.SetPopupMenu( &m_aMenu );
-    m_aStatusBtn.Show( sal_True );
+    m_aStatusBtn.Show( true );
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;

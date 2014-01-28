@@ -107,7 +107,7 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
     if ( pDockingWin )
     {
         SetSettings( pDockingWin->GetSettings() );
-        Enable( pDockingWin->IsEnabled(), sal_False );
+        Enable( pDockingWin->IsEnabled(), false );
         EnableInput( pDockingWin->IsInputEnabled(), sal_False );
         AlwaysEnableInput( pDockingWin->IsAlwaysEnableInput(), sal_False );
         EnableAlwaysOnTop( pDockingWin->IsAlwaysOnTopEnabled() );
@@ -335,7 +335,7 @@ sal_Bool DockingWindow::ImplStartDocking( const Point& rPos )
 void DockingWindow::ImplInitDockingWindowData()
 {
     mpImplData              = new ImplData;
-    mpWindowImpl->mbDockWin               = sal_True;
+    mpWindowImpl->mbDockWin               = true;
 
     mpFloatWin              = NULL;
     mbDockCanceled          = sal_False;
@@ -466,7 +466,7 @@ DockingWindow::~DockingWindow()
 {
     if ( IsFloatingMode() )
     {
-        Show( sal_False, SHOW_NOFOCUSCHANGE );
+        Show( false, SHOW_NOFOCUSCHANGE );
         SetFloatingMode( sal_False );
     }
     delete mpImplData;
@@ -671,7 +671,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
         bool bShow = false;
         if ( bFloatMode != IsFloatingMode() )
         {
-            Show( sal_False, SHOW_NOFOCUSCHANGE );
+            Show( false, SHOW_NOFOCUSCHANGE );
             SetFloatingMode( bFloatMode );
             bShow = true;
             if ( bFloatMode && mpFloatWin )
@@ -711,7 +711,7 @@ sal_Bool DockingWindow::Close()
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return sal_False;
 
-    Show( sal_False, SHOW_NOFOCUSCHANGE );
+    Show( false, SHOW_NOFOCUSCHANGE );
     return sal_True;
 }
 
@@ -805,7 +805,7 @@ void DockingWindow::SetFloatingMode( sal_Bool bFloatMode )
 
             if ( bFloatMode )
             {
-                Show( sal_False, SHOW_NOFOCUSCHANGE );
+                Show( false, SHOW_NOFOCUSCHANGE );
 
                 maDockPos = Window::GetPosPixel();
 
@@ -859,7 +859,7 @@ void DockingWindow::SetFloatingMode( sal_Bool bFloatMode )
             }
             else
             {
-                Show( sal_False, SHOW_NOFOCUSCHANGE );
+                Show( false, SHOW_NOFOCUSCHANGE );
 
                 // FloatingDaten wird im FloatingWindow speichern
                 maFloatPos      = mpFloatWin->GetPosPixel();

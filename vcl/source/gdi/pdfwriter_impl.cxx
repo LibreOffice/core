@@ -1801,7 +1801,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
             // do not encrypt after all
             m_aContext.Encryption.OValue.clear();
             m_aContext.Encryption.UValue.clear();
-            OSL_ENSURE( 0, "encryption data failed sanity check, encryption disabled" );
+            OSL_ENSURE( false, "encryption data failed sanity check, encryption disabled" );
         }
         else // setup key lengths
             m_nAccessPermissions = computeAccessPermissions( m_aContext.Encryption, m_nKeyLength, m_nRC4KeyLength );
@@ -2202,7 +2202,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         pVDev->SetMapMode( MAP_MM );
 
         m_pReferenceDevice->mpPDFWriter = this;
-        m_pReferenceDevice->ImplUpdateFontData( sal_True );
+        m_pReferenceDevice->ImplUpdateFontData( true );
     }
     return m_pReferenceDevice;
 }
@@ -2797,7 +2797,7 @@ bool PDFWriterImpl::emitGradients()
     for( std::list<GradientEmit>::iterator it = m_aGradients.begin();
          it != m_aGradients.end(); ++it )
     {
-        CHECK_RETURN( writeGradientFunction( *it ) );
+        if ( !writeGradientFunction( *it ) ) return false;
     }
     return true;
 }
@@ -2882,8 +2882,8 @@ bool PDFWriterImpl::emitTilings()
         aTilingObj.append( "/Length " );
         aTilingObj.append( (sal_Int32)nTilingStreamSize );
         aTilingObj.append( ">>\nstream\n" );
-        CHECK_RETURN( updateObject( it->m_nObject ) );
-        CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
+        if ( !updateObject( it->m_nObject ) ) return false;
+        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
         checkAndEnableStreamEncryption( it->m_nObject );
         bool written = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
         delete it->m_pTilingStream;
@@ -2893,7 +2893,7 @@ bool PDFWriterImpl::emitTilings()
         disableStreamEncryption();
         aTilingObj.setLength( 0 );
         aTilingObj.append( "\nendstream\nendobj\n\n" );
-        CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
+        if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
     }
     return true;
 }
@@ -3894,19 +3894,19 @@ bool PDFWriterImpl::emitFonts()
             {
                 // create font stream
                 oslFileHandle aFontFile;
-                CHECK_RETURN( (osl_File_E_None == osl_openFile( aTmpName.pData, &aFontFile, osl_File_OpenFlag_Read ) ) );
+                if ( osl_File_E_None != osl_openFile( aTmpName.pData, &aFontFile, osl_File_OpenFlag_Read ) ) return false;
                 // get file size
                 sal_uInt64 nLength1;
-                CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_End, 0 ) ) );
-                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( aFontFile, &nLength1 ) ) );
-                CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
+                if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_End, 0 ) ) return false;
+                if ( osl_File_E_None != osl_getFilePos( aFontFile, &nLength1 ) ) return false;
+                if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) return false;
 
                 #if OSL_DEBUG_LEVEL > 1
                 emitComment( "PDFWriterImpl::emitFonts" );
                 #endif
                 sal_Int32 nFontStream = createObject();
                 sal_Int32 nStreamLengthObject = createObject();
-                CHECK_RETURN( updateObject( nFontStream ) );
+                if ( !updateObject( nFontStream ) ) return false;
                 aLine.setLength( 0 );
                 aLine.append( nFontStream );
                 aLine.append( " 0 obj\n"
@@ -3925,8 +3925,8 @@ bool PDFWriterImpl::emitFonts()
 
                     aLine.append( ">>\n"
                                  "stream\n" );
-                    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
+                    if ( osl_File_E_None != osl_getFilePos( m_aFile, &nStartPos ) ) return false;
 
                     // copy font file
                     beginCompression();
@@ -3936,9 +3936,9 @@ bool PDFWriterImpl::emitFonts()
                     {
                         char buf[8192];
                         sal_uInt64 nRead;
-                        CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) );
-                        CHECK_RETURN( writeBuffer( buf, nRead ) );
-                        CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
+                        if ( osl_File_E_None != osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) return false;
+                        if ( !writeBuffer( buf, nRead ) ) return false;
+                        if ( osl_File_E_None != osl_isEndOfFile( aFontFile, &bEOF ) ) return false;
                     } while( ! bEOF );
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
@@ -3951,9 +3951,9 @@ bool PDFWriterImpl::emitFonts()
                     boost::shared_array<unsigned char> pBuffer( new unsigned char[ nLength1 ] );
 
                     sal_uInt64 nBytesRead = 0;
-                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer.get(), nLength1, &nBytesRead ) ) );
+                    if ( osl_File_E_None != osl_readFile( aFontFile, pBuffer.get(), nLength1, &nBytesRead ) ) return false;
                     DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
-                    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
+                    if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
                     getPfbSegmentLengths( pBuffer.get(), (int)nBytesRead, aSegmentLengths );
@@ -3967,15 +3967,15 @@ bool PDFWriterImpl::emitFonts()
 
                     aLine.append( ">>\n"
                                  "stream\n" );
-                    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+                    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
+                    if ( osl_File_E_None != osl_getFilePos( m_aFile, &nStartPos ) ) return false;
 
                     // emit PFB-sections without section headers
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    CHECK_RETURN( writeBuffer( &pBuffer[6], aSegmentLengths[0] ) );
-                    CHECK_RETURN( writeBuffer( &pBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) );
-                    CHECK_RETURN( writeBuffer( &pBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
+                    if ( !writeBuffer( &pBuffer[6], aSegmentLengths[0] ) ) return false;
+                    if ( !writeBuffer( &pBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
+                    if ( !writeBuffer( &pBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
                 }
                 else
                 {
@@ -3989,20 +3989,20 @@ bool PDFWriterImpl::emitFonts()
                 osl_closeFile( aFontFile );
 
                 sal_uInt64 nEndPos = 0;
-                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos ) ) );
+                if ( osl_File_E_None != osl_getFilePos( m_aFile, &nEndPos ) ) return false;
                 // end the stream
                 aLine.setLength( 0 );
                 aLine.append( "\nendstream\nendobj\n\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
                 // emit stream length object
-                CHECK_RETURN( updateObject( nStreamLengthObject ) );
+                if ( !updateObject( nStreamLengthObject ) ) return false;
                 aLine.setLength( 0 );
                 aLine.append( nStreamLengthObject );
                 aLine.append( " 0 obj\n" );
                 aLine.append( (sal_Int64)(nEndPos-nStartPos) );
                 aLine.append( "\nendobj\n\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
                 // write font descriptor
                 sal_Int32 nFontDescriptor = emitFontDescriptor( it->first, aSubsetInfo, lit->m_nFontID, nFontStream );
@@ -4011,7 +4011,7 @@ bool PDFWriterImpl::emitFonts()
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
-                CHECK_RETURN( updateObject( nFontObject ) );
+                if ( !updateObject( nFontObject ) ) return false;
                 aLine.setLength( 0 );
                 aLine.append( nFontObject );
 
@@ -4043,7 +4043,7 @@ bool PDFWriterImpl::emitFonts()
                 }
                 aLine.append( ">>\n"
                              "endobj\n\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
             }
@@ -4072,7 +4072,7 @@ bool PDFWriterImpl::emitFonts()
         std::map< sal_Int32, sal_Int32 > aObjects = emitEmbeddedFont( eit->first, eit->second );
         for( std::map< sal_Int32, sal_Int32 >::iterator fit = aObjects.begin(); fit != aObjects.end(); ++fit )
         {
-            CHECK_RETURN( fit->second );
+            if ( !fit->second ) return false;
             aFontIDToObject[ fit->first ] = fit->second;
         }
     }
@@ -4083,7 +4083,7 @@ bool PDFWriterImpl::emitFonts()
         std::map< sal_Int32, sal_Int32 > aObjects = emitSystemFont( sit->first, sit->second );
         for( std::map< sal_Int32, sal_Int32 >::iterator fit = aObjects.begin(); fit != aObjects.end(); ++fit )
         {
-            CHECK_RETURN( fit->second );
+            if ( !fit->second ) return false;
             aFontIDToObject[ fit->first ] = fit->second;
         }
     }
@@ -4113,8 +4113,8 @@ bool PDFWriterImpl::emitFonts()
     appendBuiltinFontsToDict( aFontDict );
     aFontDict.append( "\n>>\nendobj\n\n" );
 
-    CHECK_RETURN( updateObject( getFontDictObject() ) );
-    CHECK_RETURN( writeBuffer( aFontDict.getStr(), aFontDict.getLength() ) );
+    if ( !updateObject( getFontDictObject() ) ) return false;
+    if ( !writeBuffer( aFontDict.getStr(), aFontDict.getLength() ) ) return false;
     return true;
 }
 
@@ -6808,7 +6808,7 @@ void PDFWriterImpl::sortWidgets()
         }
         else
         {
-            DBG_ASSERT( 0, "wrong number of sorted annotations" );
+            DBG_ASSERT( false, "wrong number of sorted annotations" );
             #if OSL_DEBUG_LEVEL > 0
             fprintf( stderr, "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions on page nr %ld\n"
                      "    %ld sorted and %ld unsorted\n", (long int)it->first, (long int)it->second.aSortedAnnots.size(), (long int)nAnnots );
@@ -11087,7 +11087,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
             if( childType == PDFWriter::Document )
             {
                 m_nCurrentStructElement = nNewCurElement;
-                DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
+                DBG_ASSERT( false, "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
                 OSL_FAIL( "document structure in disorder !" );

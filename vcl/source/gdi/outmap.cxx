@@ -702,12 +702,12 @@ void OutputDevice::SetMapMode()
 
     if ( mbMap || !maMapMode.IsDefault() )
     {
-        mbMap       = sal_False;
+        mbMap       = false;
         maMapMode   = MapMode();
 
         // create new objects (clip region werden nicht neu skaliert)
-        mbNewFont   = sal_True;
-        mbInitFont  = sal_True;
+        mbNewFont   = true;
+        mbInitFont  = true;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
             if ( ((Window*)this)->mpWindowImpl->mpCursor )
@@ -806,8 +806,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         maMapMode = rNewMapMode;
 
     // create new objects (clip region werden nicht neu skaliert)
-    mbNewFont   = sal_True;
-    mbInitFont  = sal_True;
+    mbNewFont   = true;
+    mbInitFont  = true;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         if ( ((Window*)this)->mpWindowImpl->mpCursor )

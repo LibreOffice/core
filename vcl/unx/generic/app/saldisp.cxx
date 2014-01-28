@@ -1820,7 +1820,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
         if( ret != GrabSuccess )
         {
-            DBG_ASSERT( 1, "SalDisplay::CaptureMouse could not grab pointer\n");
+            DBG_ASSERT( true, "SalDisplay::CaptureMouse could not grab pointer\n");
             return -1;
         }
     }
@@ -2736,7 +2736,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
 
     if( m_hColormap )
     {
-        DBG_ASSERT( 1, "SalColormap::GetColor() !hColormap_\n" );
+        DBG_ASSERT( true, "SalColormap::GetColor() !hColormap_\n" );
         return nPixel;
     }
 

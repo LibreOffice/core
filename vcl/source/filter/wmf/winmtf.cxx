@@ -271,7 +271,7 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
 {
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
-        pLB->SetSynchronMode( sal_True );
+        pLB->SetSynchronMode( true );
 
     nStartPos = pWMF->Tell();
 

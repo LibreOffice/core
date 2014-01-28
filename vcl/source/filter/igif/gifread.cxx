@@ -144,7 +144,7 @@ bool GIFReader::ReadGlobalHeader()
             {
                 SvMemoryStream aMemStm;
 
-                aMemStm.SetBuffer( pBuf, 7, sal_False, 7 );
+                aMemStm.SetBuffer( pBuf, 7, false, 7 );
                 aMemStm >> nGlobalWidth;
                 aMemStm >> nGlobalHeight;
                 aMemStm >> nRF;
@@ -347,7 +347,7 @@ bool GIFReader::ReadLocalHeader()
         BitmapPalette*  pPal;
         sal_uInt8           nFlags;
 
-        aMemStm.SetBuffer( (char*) pBuf, 9, sal_False, 9 );
+        aMemStm.SetBuffer( (char*) pBuf, 9, false, 9 );
         aMemStm >> nImagePosX;
         aMemStm >> nImagePosY;
         aMemStm >> nImageWidth;

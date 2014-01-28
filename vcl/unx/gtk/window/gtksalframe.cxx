@@ -1560,11 +1560,11 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
     g_return_val_if_fail( pSalBitmap != NULL, NULL );
     g_return_val_if_fail( pSalAlpha != NULL, NULL );
 
-    BitmapBuffer *pBitmap = pSalBitmap->AcquireBuffer( sal_True );
+    BitmapBuffer *pBitmap = pSalBitmap->AcquireBuffer( true );
     g_return_val_if_fail( pBitmap != NULL, NULL );
     g_return_val_if_fail( pBitmap->mnBitCount == 24, NULL );
 
-    BitmapBuffer *pAlpha = pSalAlpha->AcquireBuffer( sal_True );
+    BitmapBuffer *pAlpha = pSalAlpha->AcquireBuffer( true );
     g_return_val_if_fail( pAlpha != NULL, NULL );
     g_return_val_if_fail( pAlpha->mnBitCount == 8, NULL );
 
@@ -1599,8 +1599,8 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
         }
     }
 
-    pSalBitmap->ReleaseBuffer( pBitmap, sal_True );
-    pSalAlpha->ReleaseBuffer( pAlpha, sal_True );
+    pSalBitmap->ReleaseBuffer( pBitmap, true );
+    pSalAlpha->ReleaseBuffer( pAlpha, true );
 
     return gdk_pixbuf_new_from_data( pPixbufData,
                                      GDK_COLORSPACE_RGB, sal_True, 8,

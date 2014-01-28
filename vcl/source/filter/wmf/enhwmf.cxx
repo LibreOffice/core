@@ -1025,7 +1025,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         {
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( sal_True );
+                            aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( (sal_uInt8)'B' )
                                 .WriteUChar( (sal_uInt8)'M' )
                                 .WriteUInt32( (sal_uInt32)cbBitsSrc )
@@ -1088,7 +1088,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         {
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( sal_True );
+                            aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( (sal_uInt8)'B' )
                                 .WriteUChar( (sal_uInt8)'M' )
                                 .WriteUInt32( (sal_uInt32)cbBitsSrc )
@@ -1158,7 +1158,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         {
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( sal_True );
+                            aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( (sal_uInt8)'B' )
                                .WriteUChar( (sal_uInt8)'M' )
                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
@@ -1395,7 +1395,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 char*   pBuf = new char[ nSize ];
 
                                 SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                                aTmp.ObjectOwnsMemory( sal_True );
+                                aTmp.ObjectOwnsMemory( true );
                                 aTmp.WriteUChar( (sal_uInt8)'B' )
                                     .WriteUChar( (sal_uInt8)'M' )
                                     .WriteUInt32( (sal_uInt32)cbBits )

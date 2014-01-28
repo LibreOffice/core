@@ -170,7 +170,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mpTextAttr        = NULL;
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
-    maClientData.aInputEv.mbOnlyCursor      = sal_False;
+    maClientData.aInputEv.mbOnlyCursor      = false;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetGenericData()->GetSalDisplay()->GetInputMethod();

@@ -495,11 +495,11 @@ void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     DBG_ASSERT( !bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
     // decide if alpha masking or transparency masking is needed
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( sal_True );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( true );
     if( pAlphaBuffer != NULL )
     {
         int nMaskFormat = pAlphaBuffer->mnFormat;
-        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, sal_True );
+        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, true );
         if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
             drawAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap );
     }
@@ -578,7 +578,7 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect& rPosAry,
 
         // #105055# Disable XOR temporarily
         sal_Bool bOldXORMode( bXORMode_ );
-        bXORMode_ = sal_False;
+        bXORMode_ = false;
 
         // copy pixmap #2 (result) to background
         XCopyArea( pXDisp, aBG, aDrawable, GetCopyGC(),
@@ -662,7 +662,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
     // problem is that they don't provide an 8bit Pixmap on a non-8bit display
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( sal_True );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( true );
 
     // an XImage needs its data top_down
     // TODO: avoid wrongly oriented images in upper layers!
@@ -707,7 +707,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
         delete[] pAlphaBits;
 
-    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, sal_True );
+    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, true );
 
     XRenderPictureAttributes aAttr;
     aAttr.repeat = int(true);

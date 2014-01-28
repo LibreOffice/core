@@ -359,33 +359,33 @@ OutputDevice::OutputDevice() :
         mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
     meOutDevType        = OUTDEV_DONTKNOW;
     meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
-    mbMap               = sal_False;
-    mbMapIsDefault      = sal_True;
-    mbClipRegion        = sal_False;
-    mbBackground        = sal_False;
-    mbOutput            = sal_True;
-    mbDevOutput         = sal_False;
-    mbOutputClipped     = sal_False;
+    mbMap               = false;
+    mbMapIsDefault      = true;
+    mbClipRegion        = false;
+    mbBackground        = false;
+    mbOutput            = true;
+    mbDevOutput         = false;
+    mbOutputClipped     = false;
     maTextColor         = Color( COL_BLACK );
     maOverlineColor     = Color( COL_TRANSPARENT );
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
     meTextLanguage      = 0;  // TODO: get default from configuration?
-    mbLineColor         = sal_True;
-    mbFillColor         = sal_True;
-    mbInitLineColor     = sal_True;
-    mbInitFillColor     = sal_True;
-    mbInitFont          = sal_True;
-    mbInitTextColor     = sal_True;
-    mbInitClipRegion    = sal_True;
-    mbClipRegionSet     = sal_False;
-    mbKerning           = sal_False;
-    mbNewFont           = sal_True;
-    mbTextLines         = sal_False;
-    mbTextSpecial       = sal_False;
-    mbRefPoint          = sal_False;
-    mbEnableRTL         = sal_False;    // mirroring must be explicitly allowed (typically for windows only)
+    mbLineColor         = true;
+    mbFillColor         = true;
+    mbInitLineColor     = true;
+    mbInitFillColor     = true;
+    mbInitFont          = true;
+    mbInitTextColor     = true;
+    mbInitClipRegion    = true;
+    mbClipRegionSet     = false;
+    mbKerning           = false;
+    mbNewFont           = true;
+    mbTextLines         = false;
+    mbTextSpecial       = false;
+    mbRefPoint          = false;
+    mbEnableRTL         = false;    // mirroring must be explicitly allowed (typically for windows only)
 
     // struct ImplMapRes
     maMapRes.mnMapOfsX          = 0;
@@ -562,11 +562,11 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     if ( mpGraphics )
         return mpGraphics;
 
-    mbInitLineColor     = sal_True;
-    mbInitFillColor     = sal_True;
-    mbInitFont          = sal_True;
-    mbInitTextColor     = sal_True;
-    mbInitClipRegion    = sal_True;
+    mbInitLineColor     = true;
+    mbInitFillColor     = true;
+    mbInitFont          = true;
+    mbInitTextColor     = true;
+    mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( meOutDevType == OUTDEV_WINDOW )
@@ -892,7 +892,7 @@ void OutputDevice::ImplInitLineColor()
     else
         mpGraphics->SetLineColor();
 
-    mbInitLineColor = sal_False;
+    mbInitLineColor = false;
 }
 
 void OutputDevice::ImplInitFillColor()
@@ -913,7 +913,7 @@ void OutputDevice::ImplInitFillColor()
     else
         mpGraphics->SetFillColor();
 
-    mbInitFillColor = sal_False;
+    mbInitFillColor = false;
 }
 
 void OutputDevice::ImplInitClipRegion()
@@ -941,23 +941,23 @@ void OutputDevice::ImplInitClipRegion()
         if ( mbClipRegion )
             aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
         if ( aRegion.IsEmpty() )
-            mbOutputClipped = sal_True;
+            mbOutputClipped = true;
         else
         {
-            mbOutputClipped = sal_False;
+            mbOutputClipped = false;
             ImplSelectClipRegion( aRegion );
         }
-        mbClipRegionSet = sal_True;
+        mbClipRegionSet = true;
     }
     else
     {
         if ( mbClipRegion )
         {
             if ( maRegion.IsEmpty() )
-                mbOutputClipped = sal_True;
+                mbOutputClipped = true;
             else
             {
-                mbOutputClipped = sal_False;
+                mbOutputClipped = false;
 
                 // #102532# Respect output offset also for clip region
                 Region aRegion( ImplPixelToDevicePixel( maRegion ) );
@@ -976,30 +976,30 @@ void OutputDevice::ImplInitClipRegion()
 
                 if ( aRegion.IsEmpty() )
                 {
-                    mbOutputClipped = sal_True;
+                    mbOutputClipped = true;
                 }
                 else
                 {
-                    mbOutputClipped = sal_False;
+                    mbOutputClipped = false;
                     ImplSelectClipRegion( aRegion );
                 }
             }
 
-            mbClipRegionSet = sal_True;
+            mbClipRegionSet = true;
         }
         else
         {
             if ( mbClipRegionSet )
             {
                 mpGraphics->ResetClipRegion();
-                mbClipRegionSet = sal_False;
+                mbClipRegionSet = false;
             }
 
-            mbOutputClipped = sal_False;
+            mbOutputClipped = false;
         }
     }
 
-    mbInitClipRegion = sal_False;
+    mbInitClipRegion = false;
 }
 
 void OutputDevice::ImplSetClipRegion( const Region* pRegion )
@@ -1011,15 +1011,15 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
         if ( mbClipRegion )
         {
             maRegion            = Region(true);
-            mbClipRegion        = sal_False;
-            mbInitClipRegion    = sal_True;
+            mbClipRegion        = false;
+            mbInitClipRegion    = true;
         }
     }
     else
     {
         maRegion            = *pRegion;
-        mbClipRegion        = sal_True;
-        mbInitClipRegion    = sal_True;
+        mbClipRegion        = true;
+        mbInitClipRegion    = true;
     }
 }
 
@@ -1091,7 +1091,7 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 
         maRegion.Move( ImplLogicWidthToDevicePixel( nHorzMove ),
                        ImplLogicHeightToDevicePixel( nVertMove ) );
-        mbInitClipRegion = sal_True;
+        mbInitClipRegion = true;
     }
 
     if( mpAlphaVDev )
@@ -1106,8 +1106,8 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 
     Rectangle aRect = LogicToPixel( rRect );
     maRegion.Intersect( aRect );
-    mbClipRegion        = sal_True;
-    mbInitClipRegion    = sal_True;
+    mbClipRegion        = true;
+    mbInitClipRegion    = true;
 
     if( mpAlphaVDev )
         mpAlphaVDev->IntersectClipRegion( rRect );
@@ -1123,8 +1123,8 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
         Region aRegion = LogicToPixel( rRegion );
         maRegion.Intersect( aRegion );
-        mbClipRegion        = sal_True;
-        mbInitClipRegion    = sal_True;
+        mbClipRegion        = true;
+        mbInitClipRegion    = true;
     }
 
     if( mpAlphaVDev )
@@ -1149,7 +1149,7 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
     if ( meRasterOp != eRasterOp )
     {
         meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = sal_True;
+        mbInitLineColor = mbInitFillColor = true;
 
         if( mpGraphics || ImplGetGraphics() )
             mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
@@ -1167,8 +1167,8 @@ void OutputDevice::SetLineColor()
 
     if ( mbLineColor )
     {
-        mbInitLineColor = sal_True;
-        mbLineColor = sal_False;
+        mbInitLineColor = true;
+        mbLineColor = false;
         maLineColor = Color( COL_TRANSPARENT );
     }
 
@@ -1229,8 +1229,8 @@ void OutputDevice::SetLineColor( const Color& rColor )
     {
         if ( mbLineColor )
         {
-            mbInitLineColor = sal_True;
-            mbLineColor = sal_False;
+            mbInitLineColor = true;
+            mbLineColor = false;
             maLineColor = Color( COL_TRANSPARENT );
         }
     }
@@ -1238,8 +1238,8 @@ void OutputDevice::SetLineColor( const Color& rColor )
     {
         if( maLineColor != aColor )
         {
-            mbInitLineColor = sal_True;
-            mbLineColor = sal_True;
+            mbInitLineColor = true;
+            mbLineColor = true;
             maLineColor = aColor;
         }
     }
@@ -1256,8 +1256,8 @@ void OutputDevice::SetFillColor()
 
     if ( mbFillColor )
     {
-        mbInitFillColor = sal_True;
-        mbFillColor = sal_False;
+        mbInitFillColor = true;
+        mbFillColor = false;
         maFillColor = Color( COL_TRANSPARENT );
     }
 
@@ -1314,8 +1314,8 @@ void OutputDevice::SetFillColor( const Color& rColor )
     {
         if ( mbFillColor )
         {
-            mbInitFillColor = sal_True;
-            mbFillColor = sal_False;
+            mbInitFillColor = true;
+            mbFillColor = false;
             maFillColor = Color( COL_TRANSPARENT );
         }
     }
@@ -1323,8 +1323,8 @@ void OutputDevice::SetFillColor( const Color& rColor )
     {
         if ( maFillColor != aColor )
         {
-            mbInitFillColor = sal_True;
-            mbFillColor = sal_True;
+            mbInitFillColor = true;
+            mbFillColor = true;
             maFillColor = aColor;
         }
     }
@@ -1337,7 +1337,7 @@ void OutputDevice::SetBackground()
 {
 
     maBackground = Wallpaper();
-    mbBackground = sal_False;
+    mbBackground = false;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetBackground();
@@ -1349,9 +1349,9 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
     maBackground = rBackground;
 
     if( rBackground.GetStyle() == WALLPAPER_NULL )
-        mbBackground = sal_False;
+        mbBackground = false;
     else
-        mbBackground = sal_True;
+        mbBackground = true;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetBackground( rBackground );
@@ -1363,7 +1363,7 @@ void OutputDevice::SetRefPoint()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( Point(), sal_False ) );
 
-    mbRefPoint = sal_False;
+    mbRefPoint = false;
     maRefPoint.X() = maRefPoint.Y() = 0L;
 
     if( mpAlphaVDev )
@@ -1376,7 +1376,7 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, sal_True ) );
 
-    mbRefPoint = sal_True;
+    mbRefPoint = true;
     maRefPoint = rRefPoint;
 
     if( mpAlphaVDev )

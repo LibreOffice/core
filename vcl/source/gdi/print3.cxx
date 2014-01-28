@@ -524,14 +524,14 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
     mnError = PRINTER_OK;
 
     if ( IsDisplayPrinter() )
-        return sal_False;
+        return false;
 
     if ( IsJobActive() || IsPrinting() )
-        return sal_False;
+        return false;
 
     sal_uLong   nCopies = mnCopyCount;
     bool    bCollateCopy = mbCollateCopy;
-    bool    bUserCopy = sal_False;
+    bool    bUserCopy = false;
 
     if ( nCopies > 1 )
     {
@@ -545,20 +545,20 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
         // need to do copies by hand ?
         if ( nCopies > nDevCopy )
         {
-            bUserCopy = sal_True;
+            bUserCopy = true;
             nCopies = 1;
-            bCollateCopy = sal_False;
+            bCollateCopy = false;
         }
     }
     else
-        bCollateCopy = sal_False;
+        bCollateCopy = false;
 
 
     ImplSVData* pSVData = ImplGetSVData();
     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
 
     if ( !mpPrinter )
-        return sal_False;
+        return false;
 
     sal_Bool bSinglePrintJobs = sal_False;
     beans::PropertyValue* pSingleValue = i_pController->getValue( OUString( "PrintCollateAsSingleJobs" ) );

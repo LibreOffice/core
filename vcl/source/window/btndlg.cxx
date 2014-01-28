@@ -273,7 +273,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
-    pItem->mbOwnButton      = sal_True;
+    pItem->mbOwnButton      = true;
     pItem->mnSepSize        = nSepPixel;
     pItem->mpPushButton     = ImplCreatePushButton( nBtnFlags );
 
@@ -294,7 +294,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
-    pItem->mbOwnButton      = sal_True;
+    pItem->mbOwnButton      = true;
     pItem->mnSepSize        = nSepPixel;
 
     if ( eType == BUTTON_OK )

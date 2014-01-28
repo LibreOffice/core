@@ -351,7 +351,7 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
-    mpWindowImpl->mbDialog  = sal_True;
+    mpWindowImpl->mbDialog  = true;
     mpDialogParent          = NULL;
     mpPrevExecuteDlg        = NULL;
     mbInExecute             = sal_False;
@@ -432,8 +432,8 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         }
         else
         {
-            mpWindowImpl->mbFrame         = sal_True;
-            mpWindowImpl->mbOverlapWin    = sal_True;
+            mpWindowImpl->mbFrame         = true;
+            mpWindowImpl->mbOverlapWin    = true;
             SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)) | WB_CLOSEABLE, NULL );
             // Now set all style bits
             mpWindowImpl->mnStyle = nStyle;
@@ -857,7 +857,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-    EnableInput( sal_True, sal_True );
+    EnableInput( true, sal_True );
 
     if ( GetParent() )
     {
@@ -1100,7 +1100,7 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
-            mpPrevExecuteDlg->EnableInput( sal_False, sal_True, sal_True, this );
+            mpPrevExecuteDlg->EnableInput( false, sal_True, sal_True, this );
 
         // determine next overlap dialog parent
         Window* pParent = GetParent();
@@ -1129,7 +1129,7 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
         // Enable the prev Modal Dialog
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
         {
-            mpPrevExecuteDlg->EnableInput( sal_True, sal_True, sal_True, this );
+            mpPrevExecuteDlg->EnableInput( true, sal_True, sal_True, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
 

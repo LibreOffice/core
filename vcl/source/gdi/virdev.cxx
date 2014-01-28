@@ -92,7 +92,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         mbScreenComp = ((VirtualDevice*)pOutDev)->mbScreenComp;
 
     meOutDevType    = OUTDEV_VIRDEV;
-    mbDevOutput     = sal_True;
+    mbDevOutput     = true;
     mpFontList      = pSVData->maGDIData.mpScreenFontList;
     mpFontCache     = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX          = pOutDev->mnDPIX;
@@ -383,7 +383,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     {
     case REFDEV_NONE:
     default:
-        DBG_ASSERT( sal_False, "VDev::SetRefDev illegal argument!" );
+        DBG_ASSERT( false, "VDev::SetRefDev illegal argument!" );
         break;
     case REFDEV_MODE06:
         nDPIX = nDPIY = 600;
@@ -413,8 +413,8 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mbScreenComp = sal_False;
 
     // invalidate currently selected fonts
-    mbInitFont = sal_True;
-    mbNewFont = sal_True;
+    mbInitFont = true;
+    mbNewFont = true;
 
     // avoid adjusting font lists when already in refdev mode
     sal_uInt8 nOldRefDevMode = meRefDevMode;

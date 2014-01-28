@@ -93,7 +93,7 @@ void ImplWheelWindow::ImplStop()
 {
     ReleaseMouse();
     mpTimer->Stop();
-    Show(sal_False);
+    Show(false);
 }
 
 void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
         const Point         aMousePos( pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() ) );
         Point               aCmdMousePos( pWindow->ImplFrameToOutput( aMousePos ) );
         CommandScrollData   aScrollData( mnActDeltaX, mnActDeltaY );
-        CommandEvent        aCEvt( aCmdMousePos, COMMAND_AUTOSCROLL, sal_True, &aScrollData );
+        CommandEvent        aCEvt( aCmdMousePos, COMMAND_AUTOSCROLL, true, &aScrollData );
         NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )

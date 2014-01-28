@@ -343,7 +343,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             std::vector< lang_and_element > lang_and_elements;
             lang_and_elements.push_back(lang_and_element(elementlang, *element));
             int k = 1;
-            while (1)
+            while (true)
             {
                 if (FcPatternGetString( pPattern, elementlangtype, k, &elementlang ) != FcResultMatch)
                     break;

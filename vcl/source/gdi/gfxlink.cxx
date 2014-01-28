@@ -198,7 +198,7 @@ sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
             SvMemoryStream  aMemStm;
             sal_uLong           nCvtType;
 
-            aMemStm.SetBuffer( (char*) pData, mnBufSize, sal_False, mnBufSize );
+            aMemStm.SetBuffer( (char*) pData, mnBufSize, false, mnBufSize );
 
             switch( meType )
             {

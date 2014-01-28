@@ -400,7 +400,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 void HelpTextWindow::ImplShow()
 {
     ImplDelData aDogTag( this );
-    Show( sal_True, SHOW_NOACTIVATE );
+    Show( true, SHOW_NOACTIVATE );
     if( !aDogTag.IsDead() )
     Update();
 }

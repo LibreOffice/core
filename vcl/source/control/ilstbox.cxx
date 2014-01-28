@@ -3274,7 +3274,7 @@ void ImplListBoxFloatingWindow::StartFloat( sal_Bool bStartTracking )
             mpImplLB->ShowProminentEntry( nPos );
 
         if( bStartTracking )
-            mpImplLB->GetMainWindow()->EnableMouseMoveSelect( sal_True );
+            mpImplLB->GetMainWindow()->EnableMouseMoveSelect( true );
 
         if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
             mpImplLB->GetMainWindow()->GrabFocus();

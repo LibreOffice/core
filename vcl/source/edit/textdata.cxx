@@ -290,9 +290,9 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartP
 {
     aPos = rPos;
     nLen = 0;
-    bCursor = sal_True;
+    bCursor = true;
     pAttribs = NULL;
-    bWasCursorOverwrite = sal_False;
+    bWasCursorOverwrite = false;
 }
 
 TEIMEInfos::~TEIMEInfos()

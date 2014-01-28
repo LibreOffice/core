@@ -505,7 +505,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
     OString sID, sProperty;
 
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
@@ -1679,7 +1679,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 
     int nLevel = 1;
     stringmap aProperties;
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -1831,7 +1831,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     int nLevel = 1;
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
@@ -2011,7 +2011,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
 
     ListStore::row aRow;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2074,7 +2074,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     int nLevel = 1;
     sal_Int32 nRowIndex = 0;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2111,7 +2111,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
 
     stringmap aProperties;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2157,7 +2157,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
     std::vector<OString> aItems;
     sal_Int32 nItemIndex = 0;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2222,7 +2222,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 
     stringmap aProperties;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2265,7 +2265,7 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
     int nsId;
 
     int nLevel = 1;
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
@@ -2327,7 +2327,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
@@ -2363,7 +2363,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
 
     int nLevel = 1;
 
-    while(1)
+    while(true)
     {
         xmlreader::Span name;
         int nsId;
@@ -2562,7 +2562,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         aProperties[OString("customproperty")] = sCustomProperty;
 
     Window *pCurrentChild = NULL;
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
@@ -2633,7 +2633,7 @@ void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
 
     int nLevel = 1;
 
-    while(1)
+    while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);

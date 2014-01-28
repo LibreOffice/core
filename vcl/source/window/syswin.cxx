@@ -67,7 +67,7 @@ SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )
 {
     mpImplData          = new ImplData;
-    mpWindowImpl->mbSysWin            = sal_True;
+    mpWindowImpl->mbSysWin            = true;
     mpWindowImpl->mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
 
     mpMenuBar           = NULL;

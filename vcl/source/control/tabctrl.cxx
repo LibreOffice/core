@@ -58,7 +58,7 @@ struct ImplTabItem
 
     ImplTabItem()
     : mnId( 0 ), mpTabPage( NULL ),
-      mnLine( 0 ), mbFullVisible( sal_False ), mbEnabled( true )
+      mnLine( 0 ), mbFullVisible( false ), mbEnabled( true )
     {}
 };
 
@@ -406,7 +406,7 @@ namespace MinimumRaggednessWrap
 
         // optimal solution
         size_t j = nWidthsCount - 1;
-        while (1)
+        while (true)
         {
             aSolution.push_front(j);
             if (!aWrapPoints[j])
@@ -526,7 +526,7 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
                 mbSmallInvalidate = sal_False;
             it->maRect = aNewRect;
             it->mnLine = nLines;
-            it->mbFullVisible = sal_True;
+            it->mbFullVisible = true;
 
             nLineWidthAry[nLines] += aSize.Width();
             nX += aSize.Width();
@@ -1287,7 +1287,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
                 if( !rRect.IsEmpty() )
                     aClipRgn.Intersect( rRect );
                 if( bLayout || !aClipRgn.IsEmpty() )
-                    ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), sal_False );
+                    ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), false );
             }
 
             if ( bDrawTabsRTL )
@@ -1303,7 +1303,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             if( !rRect.IsEmpty() )
                 aClipRgn.Intersect( rRect );
             if( bLayout || !aClipRgn.IsEmpty() )
-                ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), sal_True );
+                ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), true );
         }
     }
 
@@ -1796,7 +1796,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     pItem->mnId             = nPageId;
     pItem->mpTabPage        = NULL;
     pItem->maText           = rText;
-    pItem->mbFullVisible    = sal_False;
+    pItem->mbFullVisible    = false;
 
     mbFormat = sal_True;
     if ( IsUpdateMode() )

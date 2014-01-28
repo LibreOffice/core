@@ -142,7 +142,7 @@ X11SalGraphics::X11SalGraphics()
     bInvert50GC_        = sal_False;
     bStippleGC_         = sal_False;
     bTrackingGC_        = sal_False;
-    bXORMode_           = sal_False;
+    bXORMode_           = false;
     bDitherBrush_       = sal_False;
 }
 
@@ -1027,22 +1027,22 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     // nothing to do for empty polypolygons
     const int nOrigPolyCount = rOrigPolyPoly.count();
     if( nOrigPolyCount <= 0 )
-        return sal_True;
+        return true;
 
     // nothing to do if everything is transparent
     if( (nBrushColor_ == SALCOLOR_NONE)
     &&  (nPenColor_ == SALCOLOR_NONE) )
-        return sal_True;
+        return true;
 
     // cannot handle pencolor!=brushcolor yet
     if( (nPenColor_ != SALCOLOR_NONE)
     &&  (nPenColor_ != nBrushColor_) )
-        return sal_False;
+        return false;
 
     // TODO: remove the env-variable when no longer needed
     static const char* pRenderEnv = getenv( "SAL_DISABLE_RENDER_POLY" );
     if( pRenderEnv )
-        return sal_False;
+        return false;
 
     // snap to raster if requested
     basegfx::B2DPolyPolygon aPolyPoly = rOrigPolyPoly;

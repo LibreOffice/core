@@ -713,7 +713,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         {
             pThis->mpData->mbAssumeDocked = sal_True;   // force non-floating mode during calculation
             ImplCalcBorder( WINDOWALIGN_TOP, nLeft, nTop, nRight, nBottom, pThis );
-            ((ToolBox*)pThis)->mbHorz = sal_True;
+            ((ToolBox*)pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
                 ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
         }
@@ -721,7 +721,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         {
             pThis->mpData->mbAssumeDocked = sal_True;   // force non-floating mode during calculation
             ImplCalcBorder( WINDOWALIGN_LEFT, nLeft, nTop, nRight, nBottom, pThis );
-            ((ToolBox*)pThis)->mbHorz = sal_False;
+            ((ToolBox*)pThis)->mbHorz = false;
             if ( pThis->mbHorz != bOldHorz )
                 ((ToolBox*)pThis)->meAlign = WINDOWALIGN_LEFT;
         }
@@ -729,14 +729,14 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         {
             pThis->mpData->mbAssumeFloating = sal_True;   // force non-floating mode during calculation
             nLeft = nTop = nRight = nBottom = 0;
-            ((ToolBox*)pThis)->mbHorz = sal_True;
+            ((ToolBox*)pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
                 ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
         }
 
         if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) ||
              (pThis->ImplIsFloatingMode() != bOldFloatingMode ) )
-            ((ToolBox*)pThis)->mbCalc = sal_True;
+            ((ToolBox*)pThis)->mbCalc = true;
     }
     else
         ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom, pThis );
@@ -798,7 +798,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         {
             ((ToolBox*)pThis)->meAlign  = eOldAlign;
             ((ToolBox*)pThis)->mbHorz   = bOldHorz;
-            ((ToolBox*)pThis)->mbCalc   = sal_True;
+            ((ToolBox*)pThis)->mbCalc   = true;
         }
     }
 
@@ -1233,7 +1233,7 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
 {
     mpDragBox = pToolBox;
     pToolBox->CaptureMouse();
-    pToolBox->mbDragging = sal_True;
+    pToolBox->mbDragging = true;
     Application::InsertAccel( &maAccel );
 
     if ( nDragLineMode )
@@ -1309,7 +1309,7 @@ void ImplTBDragMgr::EndDragging( sal_Bool bOK )
 {
     mpDragBox->HideTracking();
     mpDragBox->ReleaseMouse();
-    mpDragBox->mbDragging = sal_False;
+    mpDragBox->mbDragging = false;
     mbShowDragRect = sal_False;
     Application::RemoveAccel( &maAccel );
 
@@ -1420,7 +1420,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
 
     // initialize variables
-    ImplGetWindowImpl()->mbToolBox         = sal_True;
+    ImplGetWindowImpl()->mbToolBox         = true;
     mpData                = new ImplToolBoxPrivateData;
     mpFloatWin        = NULL;
     mnDX              = 0;
@@ -1447,24 +1447,24 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnConfigItem      = 0;
     mnMouseClicks     = 0;
     mnMouseModifier   = 0;
-    mbDrag            = sal_False;
-    mbSelection       = sal_False;
-    mbCommandDrag     = sal_False;
-    mbUpper           = sal_False;
-    mbLower           = sal_False;
-    mbIn              = sal_False;
-    mbCalc            = sal_True;
-    mbFormat          = sal_False;
-    mbFullPaint       = sal_False;
-    mbHorz            = sal_True;
+    mbDrag            = false;
+    mbSelection       = false;
+    mbCommandDrag     = false;
+    mbUpper           = false;
+    mbLower           = false;
+    mbIn              = false;
+    mbCalc            = true;
+    mbFormat          = false;
+    mbFullPaint       = false;
+    mbHorz            = true;
     mbScroll          = (nStyle & WB_SCROLL) != 0;
-    mbCustomize       = sal_False;
-    mbCustomizeMode   = sal_False;
-    mbDragging        = sal_False;
-    mbMenuStrings     = sal_False;
-    mbIsShift          = sal_False;
-    mbIsKeyEvent = sal_False;
-    mbChangingHighlight = sal_False;
+    mbCustomize       = false;
+    mbCustomizeMode   = false;
+    mbDragging        = false;
+    mbMenuStrings     = false;
+    mbIsShift          = false;
+    mbIsKeyEvent = false;
+    mbChangingHighlight = false;
     meButtonType      = BUTTON_SYMBOL;
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
@@ -1642,7 +1642,7 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
     // calculate size of floating windows and switch if the
     // toolbox is initially in floating mode
     if ( ImplIsFloatingMode() )
-        mbHorz = sal_True;
+        mbHorz = true;
     else
         Resize();
 
@@ -1989,8 +1989,8 @@ sal_Bool ToolBox::ImplCalcItem()
             nMaxWidth = nFixedWidth;
     }
 
-    mbCalc = sal_False;
-    mbFormat = sal_True;
+    mbCalc = false;
+    mbFormat = true;
 
     // do we have to recalc the sizes ?
     if ( (nMaxWidth != mnMaxItemWidth) || (nMaxHeight != mnMaxItemHeight) )
@@ -2705,7 +2705,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     }
 
     // indicate formatting is done
-    mbFormat = sal_False;
+    mbFormat = false;
 }
 
 // -----------------------------------------------------------------------
@@ -3403,7 +3403,7 @@ void ToolBox::ImplFloatControl( sal_Bool bStart, FloatingWindow* pFloatWindow )
         // redraw item, to trigger drawing of a special border
         ImplDrawItem( mnCurPos, 1 );
 
-        mbDrag = sal_False;
+        mbDrag = false;
         EndTracking();
         ReleaseMouse();
     }
@@ -3436,7 +3436,7 @@ void ToolBox::ImplFloatControl( sal_Bool bStart, FloatingWindow* pFloatWindow )
 void ToolBox::ShowLine( sal_Bool bNext )
 {
 
-    mbFormat = sal_True;
+    mbFormat = true;
 
     if ( mpData->mbPageScroll )
     {
@@ -3554,10 +3554,10 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
         Deactivate();
 
         if ( mbDrag )
-            mbDrag = sal_False;
+            mbDrag = false;
         else
         {
-            mbSelection = sal_False;
+            mbSelection = false;
             if ( mnCurPos == TOOLBOX_ITEM_NOTFOUND )
                 return sal_True;
         }
@@ -3636,9 +3636,9 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
     {
         if ( mbIn )
             ShowLine( !mbUpper );
-        mbUpper = sal_False;
-        mbLower = sal_False;
-        mbIn    = sal_False;
+        mbUpper = false;
+        mbLower = false;
+        mbIn    = false;
         ImplDrawSpin( sal_False, sal_False );
         return sal_True;
     }
@@ -3960,7 +3960,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             else
             {
                 // update bDrag here, as it is evaluated in the EndSelection
-                mbDrag = sal_True;
+                mbDrag = true;
 
                 // on double-click: only call the handler, but do so before the button
                 // is hit, as in the handler dragging
@@ -4041,8 +4041,8 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             if ( mnCurLine > 1 )
             {
                 StartTracking();
-                mbUpper = sal_True;
-                mbIn    = sal_True;
+                mbUpper = true;
+                mbIn    = true;
                 ImplDrawSpin( sal_True, sal_False );
             }
             return;
@@ -4052,8 +4052,8 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             if ( mnCurLine+mnVisLines-1 < mnCurLines )
             {
                 StartTracking();
-                mbLower = sal_True;
-                mbIn    = sal_True;
+                mbLower = true;
+                mbIn    = true;
                 ImplDrawSpin( sal_False, sal_True );
             }
             return;
@@ -4106,7 +4106,7 @@ void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
         pMgr->EndDragging();
         return;
     }
-    mbCommandDrag = sal_False;
+    mbCommandDrag = false;
 
     DockingWindow::MouseButtonUp( rMEvt );
 }
@@ -4137,9 +4137,9 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
     if( mpData->mbIsPaintLocked )
         return;
     if ( rPaintRect == Rectangle( 0, 0, mnDX-1, mnDY-1 ) )
-        mbFullPaint = sal_True;
+        mbFullPaint = true;
     ImplFormat();
-    mbFullPaint = sal_False;
+    mbFullPaint = false;
 
 
     ImplDrawBackground( this, rPaintRect );
@@ -4217,7 +4217,7 @@ void ToolBox::Resize()
     {
         if ( !mbFormat )
         {
-            mbFormat = sal_True;
+            mbFormat = true;
             if( IsReallyVisible() )
                 ImplFormat( sal_True );
         }
@@ -4464,7 +4464,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
                     // the item has been disabled
                     if ( (it->meType == TOOLBOXITEM_BUTTON) &&
                          !it->mbShowWindow )
-                        mbCommandDrag = sal_True;
+                        mbCommandDrag = true;
                     break;
                 }
 
@@ -4518,8 +4518,8 @@ void ToolBox::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        mbCalc = sal_True;
-        mbFormat = sal_True;
+        mbCalc = true;
+        mbFormat = true;
         ImplInitSettings( sal_True, sal_False, sal_False );
         Invalidate();
     }
@@ -4550,8 +4550,8 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        mbCalc = sal_True;
-        mbFormat = sal_True;
+        mbCalc = true;
+        mbFormat = true;
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
@@ -4577,12 +4577,12 @@ void ToolBox::ToggleFloatingMode()
 
     if ( ImplIsFloatingMode() )
     {
-        mbHorz   = sal_True;
+        mbHorz   = true;
         meAlign  = WINDOWALIGN_TOP;
-        mbScroll = sal_True;
+        mbScroll = true;
 
         if( mbOldHorz != mbHorz )
-            mbCalc = sal_True;  // orientation was changed !
+            mbCalc = true;  // orientation was changed !
 
         ImplSetMinMaxFloatSize( this );
         SetOutputSizePixel( ImplCalcFloatSize( this, mnFloatLines ) );
@@ -4591,9 +4591,9 @@ void ToolBox::ToggleFloatingMode()
     {
         mbScroll = (mnWinStyle & WB_SCROLL) ? sal_True : sal_False;
         if ( (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM) )
-            mbHorz = sal_True;
+            mbHorz = true;
         else
-            mbHorz = sal_False;
+            mbHorz = false;
 
         // set focus back to document
         ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
@@ -4603,11 +4603,11 @@ void ToolBox::ToggleFloatingMode()
     {
         // if orientation changes, the toolbox has to be initialized again
         // to update the direction of the gradient
-        mbCalc = sal_True;
+        mbCalc = true;
         ImplInitSettings( sal_True, sal_True, sal_True );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     ImplFormat();
 }
 
@@ -4873,7 +4873,7 @@ Size ToolBox::CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines ) const
 
     Size aSize = ImplCalcFloatSize( (ToolBox*) this, nCalcLines );
 
-    pThis->mbFormat = sal_True;
+    pThis->mbFormat = true;
     pThis->mpData->mbAssumeFloating = bFloat;
     pThis->mpData->mbAssumeDocked = bDocking;
 
@@ -4988,9 +4988,9 @@ sal_Bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
         if( pToolItem && pToolItem->mpWindow && HasFocus() )
         {
             ImplHideFocus();
-            mbChangingHighlight = sal_True;  // avoid focus change due to loose focus
+            mbChangingHighlight = true;  // avoid focus change due to loose focus
             pToolItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
-            mbChangingHighlight = sal_False;
+            mbChangingHighlight = false;
         }
         else
         {
@@ -5012,7 +5012,7 @@ sal_Bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
                 }
             }
             mnMouseModifier = aKeyCode.GetModifier();
-            mbIsKeyEvent = sal_True;
+            mbIsKeyEvent = true;
             Activate();
             Click();
 
@@ -5025,7 +5025,7 @@ sal_Bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
             ImplRemoveDel( &aDelData );
 
             Deactivate();
-            mbIsKeyEvent = sal_False;
+            mbIsKeyEvent = false;
             mnMouseModifier = 0;
         }
     }
@@ -5084,15 +5084,15 @@ sal_Bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
         mnCurPos = GetItemPos( mnCurItemId );
         mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
         mnMouseModifier = aKeyCode.GetModifier();
-        mbIsShift = sal_True;
-        mbIsKeyEvent = sal_True;
+        mbIsShift = true;
+        mbIsKeyEvent = true;
         Activate();
 
         mpData->mbDropDownByKeyboard = sal_True;
         GetDropdownClickHdl().Call( this );
 
-        mbIsKeyEvent = sal_False;
-        mbIsShift = sal_False;
+        mbIsKeyEvent = false;
+        mbIsShift = false;
         mnMouseModifier = 0;
     }
     else
@@ -5170,7 +5170,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = mnCurLine - mnVisLines;
                 else
                     mnCurLine = 1;
-                mbFormat = sal_True;
+                mbFormat = true;
                 ImplFormat();
                 ImplDrawSpin( sal_False, sal_False );
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
@@ -5183,7 +5183,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = mnCurLine + mnVisLines;
                 else
                     mnCurLine = mnCurLines;
-                mbFormat = sal_True;
+                mbFormat = true;
                 ImplFormat();
                 ImplDrawSpin( sal_False, sal_False );
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
@@ -5248,9 +5248,9 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             {
                 Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
-                mbChangingHighlight = sal_True;  // avoid focus change due to loose focus
+                mbChangingHighlight = true;  // avoid focus change due to loose focus
                 pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
-                mbChangingHighlight = sal_False;
+                mbChangingHighlight = false;
                 if( pFocusWindow != Application::GetFocusWindow() )
                     Application::GetFocusWindow()->KeyInput( rKEvt );
             }
@@ -5369,7 +5369,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
     if( mbChangingHighlight )
         return;
 
-    mbChangingHighlight = sal_True;
+    mbChangingHighlight = true;
 
     ImplToolItem* pOldItem = NULL;
 
@@ -5403,12 +5403,12 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
             if( nLine >= mnCurLine + mnVisLines )
             {
                 mnCurLine = nLine - mnVisLines + 1;
-                mbFormat = sal_True;
+                mbFormat = true;
             }
             else if ( nLine < mnCurLine )
             {
                 mnCurLine = nLine;
-                mbFormat = sal_True;
+                mbFormat = true;
             }
 
             if( mbFormat )
@@ -5436,7 +5436,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
         mnCurPos = TOOLBOX_ITEM_NOTFOUND;
     }
 
-    mbChangingHighlight = sal_False;
+    mbChangingHighlight = false;
 }
 
 // -----------------------------------------------------------------------
@@ -5623,7 +5623,7 @@ void ToolBox::ImplShowFocus()
         if( pItem->mpWindow )
         {
             Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
-            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = sal_True;
+            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;
             pWin->Invalidate( 0 );
         }
     }
@@ -5639,7 +5639,7 @@ void ToolBox::ImplHideFocus()
         if( pItem->mpWindow )
         {
             Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
-            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = sal_False;
+            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = false;
             pWin->Invalidate( 0 );
         }
     }

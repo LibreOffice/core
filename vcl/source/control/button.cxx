@@ -622,7 +622,7 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
 
 void PushButton::ImplInitPushButtonData()
 {
-    mpWindowImpl->mbPushButton    = sal_True;
+    mpWindowImpl->mbPushButton    = true;
 
     meSymbol        = SYMBOL_NOSYMBOL;
     meState         = STATE_NOCHECK;
@@ -3235,7 +3235,7 @@ void CheckBox::ImplInvalidateOrDrawCheckBoxState()
 
 void CheckBox::ImplDrawCheckBoxState()
 {
-    bool    bNativeOK = sal_True;
+    bool    bNativeOK = true;
 
     if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) )
     {

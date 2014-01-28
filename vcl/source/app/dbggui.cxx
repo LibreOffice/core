@@ -1124,7 +1124,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
 
 void DbgDialogTest( Window* pWindow )
 {
-    bool        aAccelBuf[65536] = {0};
+    bool        aAccelBuf[65536] = {false};
     sal_uInt16      nChildCount = pWindow->GetChildCount();
     Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     Window*     pChild;

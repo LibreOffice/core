@@ -692,7 +692,7 @@ sal_Bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
         Rectangle aForward;
         Rectangle aBackward;
 
-        rIsInside = sal_False;
+        rIsInside = false;
 
         ControlPart nCounterPart = 0;
         if ( nPart == PART_BUTTON_UP )

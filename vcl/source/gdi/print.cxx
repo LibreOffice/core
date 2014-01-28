@@ -413,7 +413,7 @@ OUString Printer::GetDefaultPrinterName()
 
 void Printer::ImplInitData()
 {
-    mbDevOutput         = sal_False;
+    mbDevOutput         = false;
     meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = sal_False;
     mnError             = 0;
@@ -579,7 +579,7 @@ void Printer::ImplUpdatePageData()
 
 void Printer::ImplUpdateFontList()
 {
-    ImplUpdateFontData( sal_True );
+    ImplUpdateFontData( true );
 }
 
 
@@ -831,8 +831,8 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpFontCache = NULL;
             mpFontList = NULL;
 
-            mbInitFont = sal_True;
-            mbNewFont = sal_True;
+            mbInitFont = true;
+            mbNewFont = true;
             mpInfoPrinter = NULL;
         }
 
@@ -873,8 +873,8 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
             delete mpFontList;
             mpFontCache = NULL;
             mpFontList = NULL;
-            mbInitFont = sal_True;
-            mbNewFont = sal_True;
+            mbInitFont = true;
+            mbNewFont = true;
             mpInfoPrinter = NULL;
         }
 
@@ -1352,7 +1352,7 @@ sal_Bool Printer::EndJob()
         mnCurPrintPage  = 0;
         maJobName = OUString();
 
-        mbDevOutput = sal_False;
+        mbDevOutput = false;
         bRet = mpPrinter->EndJob();
         // FIXME: Do not destroy the printer asynchronously as Win95
         // can't handle destroying a printer object and printing
@@ -1378,7 +1378,7 @@ void Printer::ImplStartPage()
             ImplReleaseGraphics();
             mpJobGraphics = pGraphics;
         }
-        mbDevOutput = sal_True;
+        mbDevOutput = true;
 
         // PrintJob not aborted ???
         if ( IsJobActive() )
@@ -1402,7 +1402,7 @@ void Printer::ImplEndPage()
     {
         mpPrinter->EndPage();
         ImplReleaseGraphics();
-        mbDevOutput = sal_False;
+        mbDevOutput = false;
 
         mpJobGraphics = NULL;
         mbNewJobSetup = sal_False;

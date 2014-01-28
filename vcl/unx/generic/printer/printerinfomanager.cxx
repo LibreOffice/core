@@ -313,7 +313,7 @@ void PrinterInfoManager::initialize()
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
                         aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
-                        sal_True );
+                        true );
                     }
                 }
             }
@@ -500,7 +500,7 @@ void PrinterInfoManager::initialize()
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
                             aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
-                            sal_True );
+                            true );
                         }
                     }
                 }

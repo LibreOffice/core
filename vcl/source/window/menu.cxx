@@ -1876,7 +1876,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
         Window* pWin = ImplGetWindow();
         if ( pWin && pWin->IsVisible() )
         {
-            DBG_ASSERT( 0, "Menu::ShowItem - ignored for visible popups!" );
+            DBG_ASSERT( false, "Menu::ShowItem - ignored for visible popups!" );
             return;
         }
         pData->bVisible = bVisible;
@@ -3969,7 +3969,7 @@ static void ImplInitMenuWindow( Window* pWin, bool bFont, bool bMenuBar )
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle )
 {
-    mpWindowImpl->mbMenuFloatingWindow= sal_True;
+    mpWindowImpl->mbMenuFloatingWindow= true;
     pMenu               = pMen;
     pActivePopup        = 0;
     nSaveFocusId        = 0;
@@ -6162,7 +6162,7 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
         aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
         return it->second.m_aSelectLink.Call( &aArg );
     }
-    return sal_False;
+    return false;
 }
 
 ImplMenuDelData::ImplMenuDelData( const Menu* pMenu )

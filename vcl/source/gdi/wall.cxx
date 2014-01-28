@@ -143,7 +143,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         // version 3 (new color format)
         if( aCompat.GetVersion() >= 3 )
         {
-            rImplWallpaper.maColor.Read( rIStm, sal_True );
+            rImplWallpaper.maColor.Read( rIStm, true );
         }
     }
 
@@ -177,7 +177,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
     // version 3 (new color format)
-    ( (Color&) rImplWallpaper.maColor ).Write( rOStm, sal_True );
+    ( (Color&) rImplWallpaper.maColor ).Write( rOStm, true );
 
     return rOStm;
 }

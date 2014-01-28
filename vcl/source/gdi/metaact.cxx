@@ -290,7 +290,7 @@ void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     WritePair( rOStm, maPt );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
 }
 
 // ------------------------------------------------------------------------
@@ -299,7 +299,7 @@ void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     rIStm >> maPt;
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
 }
 
 // ========================================================================
@@ -2429,7 +2429,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     {
         WRITE_BASE_COMPAT( rOStm, 1, pData );
         WriteDIB(maBmp, rOStm, false, true);
-        maColor.Write( rOStm, sal_True );
+        maColor.Write( rOStm, true );
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
         WritePair( rOStm, maSrcPt );
@@ -2443,7 +2443,7 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     ReadDIB(maBmp, rIStm, true);
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> maDstPt >> maDstSz >> maSrcPt >> maSrcSz;
 }
 
@@ -3056,7 +3056,7 @@ sal_Bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
@@ -3065,7 +3065,7 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> mbSet;
 }
 
@@ -3114,7 +3114,7 @@ sal_Bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
@@ -3123,7 +3123,7 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> mbSet;
 }
 
@@ -3167,7 +3167,7 @@ sal_Bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
 }
 
 // ------------------------------------------------------------------------
@@ -3175,7 +3175,7 @@ void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
 }
 
 // ========================================================================
@@ -3223,7 +3223,7 @@ sal_Bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
@@ -3232,7 +3232,7 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> mbSet;
 }
 
@@ -3281,7 +3281,7 @@ sal_Bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
@@ -3290,7 +3290,7 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> mbSet;
 }
 
@@ -3339,7 +3339,7 @@ sal_Bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, sal_True );
+    maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
@@ -3348,7 +3348,7 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, sal_True );
+    maColor.Read( rIStm, true );
     rIStm >> mbSet;
 }
 

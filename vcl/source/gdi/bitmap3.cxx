@@ -958,7 +958,7 @@ sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
                       nScaleFlag );
     }
     else
-        bRet = sal_True;
+        bRet = true;
 
     return bRet;
 }

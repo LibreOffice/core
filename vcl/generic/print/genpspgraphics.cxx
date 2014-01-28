@@ -391,12 +391,12 @@ void GenPspGraphics::SetFillColor( SalColor nSalColor )
 
 void GenPspGraphics::SetROPLineColor( SalROPColor )
 {
-    DBG_ASSERT( 0, "Error: PrinterGfx::SetROPLineColor() not implemented" );
+    DBG_ASSERT( false, "Error: PrinterGfx::SetROPLineColor() not implemented" );
 }
 
 void GenPspGraphics::SetROPFillColor( SalROPColor )
 {
-    DBG_ASSERT( 0, "Error: PrinterGfx::SetROPFillColor() not implemented" );
+    DBG_ASSERT( false, "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
 void GenPspGraphics::SetXORMode( bool bSet, bool )
@@ -489,7 +489,7 @@ void GenPspGraphics::invert( sal_uInt32,
                           const SalPoint*,
                           SalInvert )
 {
-    DBG_ASSERT( 0, "Error: PrinterGfx::Invert() not implemented" );
+    DBG_ASSERT( false, "Error: PrinterGfx::Invert() not implemented" );
 }
 
 sal_Bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
@@ -515,12 +515,12 @@ void GenPspGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSa
     Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
                     Size(rPosAry.mnDestWidth, rPosAry.mnDestHeight));
 
-    BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(sal_True);
+    BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(true);
 
     SalPrinterBmp aBmp (pBuffer);
     m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
 
-    const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
+    const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, true);
 }
 
 void GenPspGraphics::drawBitmap( const SalTwoRect&,

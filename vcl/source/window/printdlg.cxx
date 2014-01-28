@@ -436,7 +436,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 {
     mpNupOrderWin->Show();
     mpPagesBtn->Check( sal_True );
-    mpBrochureBtn->Show( sal_False );
+    mpBrochureBtn->Show( false );
 
     // setup field units for metric fields
     const LocaleDataWrapper& rLocWrap( mpPageMarginEdt->GetLocaleDataWrapper() );
@@ -509,7 +509,7 @@ void PrintDialog::JobTabPage::readFromSettings()
     {
         mnCollateUIMode = 1;
         mpCollateBox->Check( sal_False );
-        mpCollateBox->Enable( sal_False );
+        mpCollateBox->Enable( false );
     }
     else
     {
@@ -1039,7 +1039,7 @@ void PrintDialog::setupOptionalUI()
                 pBtn->Check( m == nSelectVal );
                 pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                 if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
-                    pBtn->Enable( sal_False );
+                    pBtn->Enable( false );
                 pBtn->Show();
                 maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
                 maControlToPropertyMap[pBtn] = aPropertyName;
@@ -1145,8 +1145,8 @@ void PrintDialog::setupOptionalUI()
     if (!maNUpPage.mpBrochureBtn->IsVisible() && maNUpPage.mpPagesBtn->IsVisible())
     {
         maNUpPage.mpPagesBoxTitleTxt->SetText( maNUpPage.mpPagesBtn->GetText() );
-        maNUpPage.mpPagesBoxTitleTxt->Show( sal_True );
-        maNUpPage.mpPagesBtn->Show( sal_False );
+        maNUpPage.mpPagesBoxTitleTxt->Show( true );
+        maNUpPage.mpPagesBtn->Show( false );
     }
 
     // update enable states
@@ -1157,8 +1157,8 @@ void PrintDialog::setupOptionalUI()
     // print range not shown (currently math only) -> hide spacer line and reverse order
     if (!pPageRange || !pPageRange->IsVisible())
     {
-        maJobPage.mpCopySpacer->Show( sal_False );
-        maJobPage.mpReverseOrderBox->Show( sal_False );
+        maJobPage.mpCopySpacer->Show( false );
+        maJobPage.mpReverseOrderBox->Show( false );
     }
 
     if (!mpCustomOptionsUIBuilder)
@@ -1178,7 +1178,7 @@ void PrintDialog::checkControlDependencies()
     if( maJobPage.mpCopyCountField->GetValue() > 1 )
         maJobPage.mpCollateBox->Enable( maJobPage.mnCollateUIMode == 0 );
     else
-        maJobPage.mpCollateBox->Enable( sal_False );
+        maJobPage.mpCollateBox->Enable( false );
 
     Image aImg( maJobPage.mpCollateBox->IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
 
@@ -1679,7 +1679,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
                 }
                 else
                 {
-                    DBG_ASSERT( 0, "missing a checkbox" );
+                    DBG_ASSERT( false, "missing a checkbox" );
                 }
             }
             else if( pValue->Value >>= nVal )

@@ -660,10 +660,10 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
-                mbInitLineColor = sal_True;
+                mbInitLineColor = true;
             }
 
-            mbInitFillColor = sal_True;
+            mbInitFillColor = true;
 
             // calculate step count if necessary
             if ( !aGradient.GetSteps() )
@@ -820,10 +820,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                         if( mbLineColor || mbInitLineColor )
                         {
                             mpGraphics->SetLineColor();
-                            mbInitLineColor = sal_True;
+                            mbInitLineColor = true;
                         }
 
-                        mbInitFillColor = sal_True;
+                        mbInitFillColor = true;
 
                         // calculate step count if necessary
                         if ( !aGradient.GetSteps() )
