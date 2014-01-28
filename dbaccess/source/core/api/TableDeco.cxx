@@ -171,6 +171,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
     {
         case PROPERTY_ID_PRIVILEGES:
             SAL_WARN("dbaccess", "Property is readonly!");
+            /* Fall through */
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
