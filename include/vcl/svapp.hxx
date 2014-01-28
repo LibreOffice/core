@@ -93,21 +93,59 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 enum Service { SERVICE_OLE, SERVICE_APPEVENT, SERVICE_IPC };
 #endif
 
+/** An application can be notified of a number of different events:
+    - TYPE_ACCEPT       - listen for connection to the application (a connection
+                          string is passed via the event)
+    - TYPE_UNACCEPT     - stops listening for a connection to the app (determined by
+                          a connection string passed via the event)
+    - TYPE_APPEAR       - brings the app to the front (i.e. makes it "appear")
+    - TYPE_VERSION      - display the app version
+    - TYPE_HELP         - opens a help topic (help topic passed as string)
+    - TYPE_OPENHELP_URL - opens a help URL (URL passed as a string)
+    - TYPE_SHOWDIALOG   - shows a dialog (dialog passed as a string)
+    - TYPE_OPEN         - opens a document or group of documents (documents passed
+                          as an array of strings)
+    - TYPE_PRINT        - print a document or group of documents (documents passed
+                          as an array of strings
+    - TYPE_PRIVATE_DOSHUTDOWN - shutdown the app
+*/
 class VCL_DLLPUBLIC ApplicationEvent
 {
 public:
     enum Type {
-        TYPE_ACCEPT, TYPE_APPEAR, TYPE_HELP, TYPE_VERSION, TYPE_OPEN,
-        TYPE_OPENHELPURL, TYPE_PRINT, TYPE_PRIVATE_DOSHUTDOWN, TYPE_QUICKSTART,
-        TYPE_SHOWDIALOG, TYPE_UNACCEPT
+        TYPE_ACCEPT,                ///< Listen for connections
+        TYPE_APPEAR,                ///< Make application appear
+        TYPE_HELP,                  ///< Bring up help options (command-line help)
+        TYPE_VERSION,               ///< Display product version
+        TYPE_OPEN,                  ///< Open a document
+        TYPE_OPENHELPURL,           ///< Open a help URL
+        TYPE_PRINT,                 ///< Print document
+        TYPE_PRIVATE_DOSHUTDOWN,    ///< Shutdown application
+        TYPE_QUICKSTART,            ///< Start QuickStart
+        TYPE_SHOWDIALOG,            ///< Show a dialog
+        TYPE_UNACCEPT               ///< Stop listening for connections
     };
 
+    /** Explicit constructor for ApplicationEvent.
+
+     @attention TYPE_APPEAR, TYPE_VERSION, TYPE_PRIVATE_DOSHUTDOWN and
+        TYPE_QUICKSTART are the \em only events that don't need to include
+        a data string with the event. No other events should use this
+        constructor!
+    */
     explicit ApplicationEvent(Type type): aEvent(type) {
         assert(
             type == TYPE_APPEAR || type == TYPE_VERSION
             || type == TYPE_PRIVATE_DOSHUTDOWN || type == TYPE_QUICKSTART);
     }
 
+    /** Constructor for ApplicationEvent, accepts a string for the data
+     associated with the event.
+
+     @attention TYPE_ACCEPT, TYPE_HELP, TYPE_OPENHELPURL, TYPE_SHOWDIALOG
+        and TYPE_UNACCEPT are the \em only events that accept a single
+        string as event data. No other events should use this constructor!
+    */
     ApplicationEvent(Type type, OUString const & data): aEvent(type) {
         assert(
             type == TYPE_ACCEPT || type == TYPE_HELP || type == TYPE_OPENHELPURL
@@ -115,12 +153,30 @@ public:
         aData.push_back(data);
     }
 
+    /** Constructor for ApplicationEvnet, accepts an array of strings for
+     the data associated with the event.
+
+     @attention TYPE_OPEN and TYPE_PRINT can apply to multiple documents,
+        and are the \em only events that accept an array of strings. No other
+        events should use this constructor.
+    */
     ApplicationEvent(Type type, std::vector<OUString> const & data):
         aEvent(type), aData(data)
     { assert(type == TYPE_OPEN || type == TYPE_PRINT); }
 
+    /** Get the type of event.
+
+     @returns The type of event.
+    */
     Type GetEvent() const { return aEvent; }
 
+    /** Gets the application event's data string.
+
+     @attention The \em only events that need a single string TYPE_ACCEPT,
+        TYPE_HELP, TYPE_OPENHELPURL, TYPE_SHOWDIALOG and TYPE_UNACCEPT
+
+     @returns The event's data string.
+    */
     OUString GetStringData() const {
         assert(
             aEvent == TYPE_ACCEPT || aEvent == TYPE_HELP
@@ -130,6 +186,11 @@ public:
         return aData[0];
     }
 
+    /** Gets the event's array of strings.
+
+     @attention The \em only events that need an array of strings
+        are TYPE_OPEN and TYPE_PRINT.
+    */
     std::vector<OUString> const & GetStringsData() const {
         assert(aEvent == TYPE_OPEN || aEvent == TYPE_PRINT);
         return aData;
@@ -401,9 +462,7 @@ public:
 
     ///@}
 
-    /** @name Event Loop
-
-        Event loop functions
+    /** @name Event Loop Functions
 
         Functions that handle the LibreOffice main event loop are here,
         including a global lock called the Solar Mutex.
@@ -693,12 +752,25 @@ public:
 
     ///@}
 
-    /** @name Event Listeners
+    /** @name Event Listeners/Handlers
 
         A set of event listeners and callers. Note that in this code there is
         platform specific functions - namely for zoom and scroll events.
     */
     ///@{
+
+
+    /** Call on all event hooks
+
+     @param rEvt                Reference to the notification event to send
+                                to the event hook.
+
+     @return If any of the event hooks called upon fail with a non-zero
+         status, then it stops processing any more event hooks and returns
+         the error code as a long.
+
+    */
+    static long                 CallEventHooks( NotifyEvent& rEvt );
 
     /** Add a VCL event listener to the application. If no event listener exists,
      then initialize the application's event listener with a new one, then add
@@ -854,6 +926,15 @@ public:
     */
     static void                 RemoveIdleHdl( const Link& rLink );
 
+    /*** Get the DisplayConnection.
+
+     It is a reference to XDisplayConnection, which allows toolkits to send display
+     events to the application.
+
+     @returns UNO reference to an object that implements the css:awt:XDisplayConnection
+        interface.
+    */
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();
 
     /** @deprecated AppEvent is used only in the Desktop class now. However, it is
      intended to notify the application that an event has occured. It was in oldsv.cxx,
@@ -987,11 +1068,11 @@ public:
     */
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
-    ///*}
+    ///@}
 
     /** @name Display and Screen
     */
-    ///*{
+    ///@{
 
     /** Set the default name of the application for message dialogs and printing.
 
@@ -1070,133 +1151,406 @@ public:
     */
     static unsigned int         GetDisplayExternalScreen();
 
-    //@}
+    ///@}
+
+    /** @name Accelerators and Mnemonics
+
+     Accelerators allow a user to hold down Ctrl+key (or CMD+key on OS X)
+     combination to gain quick access to functionality.
+
+     Mnemonics are underline letters in things like menus and dialog boxes
+     that allow a user to type in the letter to activate the menu or option.
+    */
+    ///@{
 
     /** Insert accelerator
 
      @param     pAccel          Pointer to an Accelerator object to insert
 
      @returns true if successful, false if otherwise
+
+     @see RemoveAccel
     */
     static sal_Bool             InsertAccel( Accelerator* pAccel );
 
     /** Remove accelerator
 
      @param     pAccel          Pointer to Accelerator object to remove
+
+     @see InsertAccel
     */
     static void                 RemoveAccel( Accelerator* pAccel );
 
-    static long                 CallEventHooks( NotifyEvent& rEvt );
+    /** Enable auto-mnemonics
 
-    static void                 SetHelp( Help* pHelp = NULL );
-    static Help*                GetHelp();
+     @param     bEnabled        True enables auto-mnemonics, and false disables it
 
-    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
-    static sal_Bool             IsAutoHelpIdEnabled();
-
+     @see IsAutoMnemonicEnabled
+    */
     static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
+
+    /** Determines if auto-mnemonics are enabled.
+
+     @returns True if auto-mnemonics is enabled, false if not.
+
+     @see EnableAutoMnemonic
+    */
     static sal_Bool             IsAutoMnemonicEnabled();
 
+    /** Get the number of reserved key codes used by the application.
+
+     @returns number of reserved key codes
+
+     @see GetReservedKeyCode
+    */
     static sal_uLong            GetReservedKeyCodeCount();
+
+    /** Get the reserved key code.
+
+     @param     i               The keycode number to retrieve
+
+     @returns Const pointer to a KeyCode object
+
+     @see GetReservedKeyCodeCount
+    */
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
 
+    ///@}
+
+    /** @name Application Help
+
+     Deals with the help system, and "auto-help", where a user hovers a mouse above
+     a UI element and a tooltip with an explanation pops up.
+    */
+    ///@{
+
+    /** Sets up help
+
+     @param     pHelp           Pointer to a Help object (optional, can by NULL)
+
+     @see GetHelp
+    */
+    static void                 SetHelp( Help* pHelp = NULL );
+
+    /** Gets the application's help
+
+     @returns Pointer to application's help object. Note that the application may
+        not have a help object, so it might return NULL.
+
+     @see SetHelp
+    */
+    static Help*                GetHelp();
+
+    /** Turns on "auto-help" (hover mouse above UI element and a tooltip with an
+     explanation pops up.
+
+     @param     bEnabled        Enables/disables auto-help.
+
+     @see EnableAutoHelpId
+    */
+    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
+
+    /** Determines if auto-help is enabled or disabled.
+
+     @return true if auto-help is enabled, false if it is disabled.
+
+     @see EnableAutoHelpId
+    */
+    static sal_Bool             IsAutoHelpIdEnabled();
+
+    ///@}
+
+    /** @name Dialogs
+
+        @remark "Dialog cancel mode" tells a headless install whether to
+                cancel dialogs when they appear. See the DialogCancelMode
+                enumerator.
+    */
+    ///@{
+
+    /** Set the default parent window for dialog boxes.
+
+     @param     pWindow         Pointer to window that should be the default parent.
+
+     @remark You can set pWindow to NULL, which means there \em is no default parent.
+
+     @see GetDefDialogParent
+    */
     static void                 SetDefDialogParent( Window* pWindow );
+
+    /** Get the default parent window for dialog boxes.
+
+     @remark GetDefDialogParent does all sorts of things find a useful parent
+             window for dialogs. If it can't find one (it wasn't set!) then it
+             first uses the topmost parent of the active window to avoid using
+             floating windows or other dialog boxes. If there are no active
+             windows, then it will take a random stab and choose the first visible
+             top window. Otherwise, it defaults to the desktop.
+
+     @returns Pointer to the default window.
+    */
     static Window*              GetDefDialogParent();
 
+
+    /** Gets the dialog cancel mode for headless environments.
+
+     @return DialogCancelMode value
+
+     @see SetDialogCancelMode, IsDialogCancelEnabled
+    */
     static DialogCancelMode     GetDialogCancelMode();
+
+    /** Sets the dialog cancel mode for headless environments.
+
+     @param     mode            DialogCancel mode value
+
+     @see GetDialogCancelMode, IsDialogCancelEnabled
+    */
     static void                 SetDialogCancelMode( DialogCancelMode mode );
+
+    /** Determines if dialog cancel mode is enabled.
+
+     @returns True if dialog cancel mode is enabled, false if disabled.
+
+     @see GetDialogCancelMode, SetDialogCancelMode
+    */
     static sal_Bool             IsDialogCancelEnabled();
 
+
+    /** Make a dialog box a system window or not.
+
+     @param     nMode           Can be either: SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or
+                                SYSTEMWINDOW_MODE_DIALOG (0x0002)
+
+     @see GetSystemWindowMode
+    */
     static void                 SetSystemWindowMode( sal_uInt16 nMode );
+
+    /** Get the system window mode of dialogs.
+
+     @returns SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or SYSTEMWINDOW_MODE_DIALOG (0x0002)
+
+     @see SetSystemWindowMode
+    */
     static sal_uInt16           GetSystemWindowMode();
 
+
+    /** Set a dialog scaling factor. Used for localization.
+
+     @param     nScale          Scaling factor
+    */
     static void                 SetDialogScaleX( short nScale );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();
+    ///@}
 
-    // The global service manager has to be created before!
+    /** @name VCL Toolkit and UNO Wrapper
+
+      The VCL Toolkit implements the UNO XToolkit interface, which specifies a
+      factory interface for the window toolkit. It is similar to the abstract window
+      toolkit (AWT) in Java.
+
+    */
+    ///@{
+
+    /** Gets the VCL toolkit.
+
+     @attention The global service manager has to be created before getting the toolkit!
+
+     @returns UNO reference to VCL toolkit
+    */
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > GetVCLToolkit();
+
+    /** Get the application's UNO wrapper object.
+
+     Note that this static function will only ever try to create UNO wrapper object once, and
+     if it fails then it will not ever try again, even if the function is called multiple times.
+
+     @param     bCreateIfNotExists  Create the UNO wrapper object if it doesn't exist when true.
+
+     @return UNO wrapper object.
+    */
     static UnoWrapperBase*      GetUnoWrapper( sal_Bool bCreateIfNotExists = sal_True );
+
+    /** Sets the application's UNO Wrapper object.
+
+     @param     pWrapper        Pointer to UNO wrapper object.
+    */
     static void                 SetUnoWrapper( UnoWrapperBase* pWrapper );
 
+    ///@}
+
+
+    /*** @name Graphic Filters
+    */
+    ///@{
+
+    /** Setup a new graphics filter
+
+     @param     rLink           Const reference to a Link object, which the filter calls upon.
+
+     @see GetFilterHdl
+    */
     static void                 SetFilterHdl( const Link& rLink );
+
+    /*** Get a new graphics filter
+
+     @return Const reference to the Link object (the filter)
+    */
     static const Link&          GetFilterHdl();
 
+    ///@}
+
+    /** @name Headless Mode
+    */
+
+    /** Enables headless mode.
+
+     @param dialogsAreFatal     Set to true if a dialog ends the session, false if not.
+
+     @see IsHeadlessModeEnabled, IsHeadlessModeRequested
+    */
     static void                 EnableHeadlessMode( bool dialogsAreFatal );
+
+    /** Determines if headless mode is enabled
+
+     @return True if headless mode is enabled, false if not.
+
+     @see EnableHeadlessMode, IsHeadlessModeRequested
+    */
     static sal_Bool             IsHeadlessModeEnabled();
-    /// check command line arguments for --headless
+
+    /** Check command line arguments for \code --headless \endcode
+
+     @return True if headless mode was requested, false if not
+
+     @see EnableHeadlessMode, IsHeadlessModeEnabled
+    */
     static bool                 IsHeadlessModeRequested();
-    /// used to disable Mac specific app init that requires an app bundle
+
+    /** Enable Console Only mode
+
+     Used to disable Mac specific app init that requires an app bundle.
+    */
     static void                 EnableConsoleOnly();
-    /// used to see if Mac specific app init has been disabled
+
+    /** Determines if console only mode is enabled.
+
+     Used to see if Mac specific app init has been disabled.
+
+     @returns True if console only mode is on, false if not.
+
+     @see EnableConsoleOnly
+    */
     static bool                 IsConsoleOnly();
 
-    static void                 ShowNativeErrorBox(const OUString& sTitle  ,
-                                                   const OUString& sMessage);
+    ///@}
 
-    // IME Status Window Control:
+    /** @name IME Status Window Control
+    */
+    ///@{
 
-    /** Return true if any IME status window can be toggled on and off
-        externally.
+    /** Determine application can toggle the IME status window on and off.
 
-        Must only be called with the Solar mutex locked.
+      @attention Must only be called with the Solar mutex locked.
+
+      @return true if any IME status window can be toggled on and off
+            externally.
+
+      @see ShowImeStatusWindow, GetShowImeStatusWindowDefault,
+           GetShowImeStatusWindowDefault
      */
     static bool                 CanToggleImeStatusWindow();
 
     /** Toggle any IME status window on and off.
 
-        This only works if CanToggleImeStatusWinodw returns true (otherwise,
-        any calls of this method are ignored).
+     This only works if CanToggleImeStatusWindow returns true (otherwise,
+     any calls of this method are ignored).
 
-        Must only be called with the Solar mutex locked.
-     */
+     @remark Can be called without the Solar mutex locked.
+
+     @param      bShow       If true, then show the IME status window
+
+     @see GetShowImeStatusWindowDefault, CanToggleImeStatusWindow,
+          GetShowImeStatusWindow
+    */
     static void                 ShowImeStatusWindow(bool bShow);
 
-    /** Return true if any IME status window should be turned on by default
-        (this decision can be locale dependent, for example).
+    /** Determines if the IME status window should be turned of by default.
 
-        Can be called without the Solar mutex locked.
+      @return true if any IME status window should be turned on by default
+      (this decision can be locale dependent, for example).
+
+      @see ShowImeStatusWindow, GetShowImeStatusWindowDefault,
+           CanToggleImeStatusWindow
      */
     static bool                 GetShowImeStatusWindowDefault();
 
-    /** Returns a string representing the desktop environment
-        the process is currently running in.
-     */
+    ///@}
+
+    /** Get the desktop environment the process is currently running in
+
+     @returns String representing the desktop environment
+    */
     static const OUString&      GetDesktopEnvironment();
 
+    /*** @name Platform Functionality
+    */
+    ///@{
+
     /** Add a file to the system shells recent document list if there is any.
-          This function may have no effect under Unix because there is no
-          standard API among the different desktop managers.
+     This function may have no effect under Unix because there is no standard
+     API among the different desktop managers.
 
-          @param rFileUrl
-                    The file url of the document.
+     @param     rFileUrl        The file url of the document.
 
-          @param rMimeType
-          The mime content type of the document specified by aFileUrl.
-          If an empty string will be provided "application/octet-stream"
-          will be used.
+     @param     rMimeType       The mime content type of the document specified by aFileUrl.
+                                If an empty string will be provided "application/octet-stream"
+                                will be used.
     */
     static void                 AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 
-    /** Do we have a native / system file selector available ?
+    /*** Show a native error messagebox
+
+     @param     sTitle          Title of error messagebox
+
+     @param     sMessage        Message displayed in messagebox
+    */
+    static void                 ShowNativeErrorBox(const OUString& sTitle  ,
+                                                   const OUString& sMessage);
+
+    /** Do we have a native / system file selector available?
+
+     @returns True if native file selector is available, false otherwise.
      */
     static bool                 hasNativeFileSelection();
 
-    /** Create a platform specific file picker, if one is available,
-        otherwise return an empty reference
-    */
-    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-        createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& rServiceManager );
+    /** Create a platform specific file picker, if one is available, otherwise return an
+     empty reference.
 
-    /** Create a platform specific folder picker, if one is available,
-        otherwise return an empty reference
-    */
-    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
-        createFolderPicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& rServiceManager );
+     @param    rServiceManager Const reference to a UNO component context (service manager).
 
-    static bool                 IsEnableAccessInterface() {return true;}
+     @returns File picker if available, otherwise an empty reference.
+    */
+    static css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+
+    /** Create a platform specific folder picker, if one is available, otherwise return an
+     empty reference
+
+     @param    rServiceManager Const reference to a UNO component context (service manager).
+
+     @returns Folder picker if available, otherwise an empty reference.
+    */
+    static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+        createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+
+    /** Is the access interface enabled?
+
+     @returns true
+    */
+    static bool                 IsEnableAccessInterface() { return true; }
+
+    ///@}
 
 private:
 
