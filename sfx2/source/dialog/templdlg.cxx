@@ -2083,7 +2083,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         sal_uInt16 nMask;
-        if( pItem && nActFilter != SFXSTYLEBIT_ALL )
+        if( nActFilter != SFXSTYLEBIT_ALL )
         {
             nMask = pItem->GetFilterList()[ nActFilter ]->nFlags;
             if(!nMask)    // automatic
