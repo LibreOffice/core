@@ -3062,7 +3062,7 @@ void ChartExport::exportView3D()
         mAny >>= nRotationX;
         // X rotation (map Chart2 [-179,180] to OOXML [0..359])
         if( nRotationX < 0 )
-            nRotationX += 360;
+            nRotationX += 90;
         pFS->singleElement( FSNS( XML_c, XML_rotX ),
             XML_val, I32S( nRotationX ),
             FSEND );
@@ -3070,6 +3070,22 @@ void ChartExport::exportView3D()
     // rotY
     if( GetProperty( xPropSet, "RotationVertical" ) )
     {
+        sal_Int32 eChartType = getChartType( );
+        // Y rotation (map Chart2 [-179,180] to OOXML [0..359])
+        if( eChartType == chart::TYPEID_PIE && GetProperty( xPropSet, "StartingAngle" ) )
+        { // Y rotation used as 'first pie slice angle' in 3D pie charts
+                sal_Int32 nStartingAngle=0;
+                mAny >>= nStartingAngle;
+
+               // convert to ooxml angle
+               nStartingAngle = (450 - nStartingAngle ) % 360;
+               pFS->singleElement( FSNS( XML_c, XML_rotY ),
+                           XML_val, I32S( nStartingAngle ),
+                           FSEND );
+        }
+        else
+        {
+
         sal_Int32 nRotationY = 0;
         mAny >>= nRotationY;
         // Y rotation (map Chart2 [-179,180] to OOXML [0..359])
@@ -3078,6 +3094,7 @@ void ChartExport::exportView3D()
         pFS->singleElement( FSNS( XML_c, XML_rotY ),
             XML_val, I32S( nRotationY ),
             FSEND );
+        }
     }
     // rAngAx
     if( GetProperty( xPropSet, "RightAngledAxes" ) )
