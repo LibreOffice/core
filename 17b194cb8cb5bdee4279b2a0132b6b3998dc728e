@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_c0e3c803",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-28T09:31:55Z",
+      "side": 1,
+      "message": "\"The primary sub-class is the Desktop class\" ?",
+      "range": {
+        "startLine": 147,
+        "startChar": 19,
+        "endLine": 147,
+        "endChar": 69
+      },
+      "revId": "17b194cb8cb5bdee4279b2a0132b6b3998dc728e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_e0f0cccb",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-28T09:31:55Z",
+      "side": 1,
+      "message": "I would mention that user events are a way of deferring work to later in the main-loop - at idle :-)",
+      "revId": "17b194cb8cb5bdee4279b2a0132b6b3998dc728e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_00eeb0ec",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-28T09:31:55Z",
+      "side": 1,
+      "message": "Hmm - is that truly what it does ? is there really one app window ? - AFAIK there is a window that we have an event queue on for Windows that this might be ? I\u0027d want to check that myself \u003d) perhaps it\u0027s right but what is the App Window ?",
+      "revId": "17b194cb8cb5bdee4279b2a0132b6b3998dc728e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_20bad4e1",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-28T09:31:55Z",
+      "side": 1,
+      "message": "Used in default window titles ? for Accessibility ? or ... wonder what that is for \u003d)",
+      "revId": "17b194cb8cb5bdee4279b2a0132b6b3998dc728e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_40bfd8d0",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-28T09:31:55Z",
+      "side": 1,
+      "message": "How odd - what are these guys doing here ? :-) at least, I don\u0027t get that, is that for global app keybindings or something ? or is Accelerator * bound to a window ?",
+      "revId": "17b194cb8cb5bdee4279b2a0132b6b3998dc728e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
