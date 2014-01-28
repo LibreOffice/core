@@ -56,7 +56,7 @@ SvxHatchTabPage::SvxHatchTabPage
     pnHatchingListState ( 0 ),
     pnColorListState    ( 0 ),
     pPageType           ( 0 ),
-    pDlgType            ( 0 ),
+    nDlgType            ( 0 ),
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
@@ -149,7 +149,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         *pbAreaTP = sal_False;
 
@@ -279,7 +279,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( *pDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
+    if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
     {
         if( *pPageType == PT_HATCH )
         {

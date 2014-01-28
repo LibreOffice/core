@@ -70,7 +70,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnGradientListState ( CT_NONE ),
     mnHatchingListState ( CT_NONE ),
     mnPageType( PT_AREA ),
-    mnDlgType( 0 ),
     mbAreaTP( sal_False )
 {
     m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, 0 );
@@ -236,7 +235,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );
             ( (SvxAreaTabPage&) rPage ).SetPageType( mnPageType );
-            ( (SvxAreaTabPage&) rPage ).SetDlgType( mnDlgType );
+            ( (SvxAreaTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxAreaTabPage&) rPage ).SetPos( mnPos );
             ( (SvxAreaTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &mnGradientListState );
@@ -251,7 +250,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
             ( (SvxShadowTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxShadowTabPage&) rPage ).SetPageType( mnPageType );
-            ( (SvxShadowTabPage&) rPage ).SetDlgType( mnDlgType );
+            ( (SvxShadowTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxShadowTabPage&) rPage ).Construct();
@@ -261,7 +260,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxGradientTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxGradientTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxGradientTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxGradientTabPage&) rPage ).SetDlgType( &mnDlgType );
+            ( (SvxGradientTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxGradientTabPage&) rPage ).SetPos( &mnPos );
             ( (SvxGradientTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxGradientTabPage&) rPage ).SetGrdChgd( &mnGradientListState );
@@ -273,7 +272,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxHatchTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxHatchTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxHatchTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxHatchTabPage&) rPage ).SetDlgType( &mnDlgType );
+            ( (SvxHatchTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxHatchTabPage&) rPage ).SetPos( &mnPos );
             ( (SvxHatchTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxHatchTabPage&) rPage ).SetHtchChgd( &mnHatchingListState );
@@ -285,7 +284,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxBitmapTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxBitmapTabPage&) rPage ).SetBitmapList( mpBitmapList );
             ( (SvxBitmapTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxBitmapTabPage&) rPage ).SetDlgType( &mnDlgType );
+            ( (SvxBitmapTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxBitmapTabPage&) rPage ).SetPos( &mnPos );
             ( (SvxBitmapTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxBitmapTabPage&) rPage ).SetBmpChgd( &mnBitmapListState );
@@ -296,7 +295,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
             ( (SvxColorTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxColorTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxColorTabPage&) rPage ).SetDlgType( &mnDlgType );
+            ( (SvxColorTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxColorTabPage&) rPage ).SetPos( &mnPos );
             ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorListState );
@@ -305,7 +304,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nTransparenceTabPage)
     {
             ( (SvxTransparenceTabPage&) rPage ).SetPageType( mnPageType );
-            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( mnDlgType );
+            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( 0 );
             ( (SvxTransparenceTabPage&) rPage ).Construct();
     }
 }

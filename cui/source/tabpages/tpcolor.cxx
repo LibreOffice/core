@@ -303,7 +303,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     // All the horrific pointers we store and should not
     , pnColorListState( 0 )
     , pPageType( NULL )
-    , pDlgType( NULL )
+    , nDlgType( 0 )
     , pPos( NULL )
     , pbAreaTP( NULL )
     , aXFStyleItem( XFILL_SOLID )
@@ -420,7 +420,7 @@ void SvxColorTabPage::Construct()
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         *pbAreaTP = sal_False;
 
@@ -543,7 +543,7 @@ long SvxColorTabPage::CheckChanges_Impl()
             delete aMessDlg;
         }
     }
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         nPos = m_pLbColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -558,7 +558,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( ( *pDlgType != 0 ) ||
+    if( ( nDlgType != 0 ) ||
         ( *pPageType == PT_COLOR && *pbAreaTP == sal_False ) )
     {
         OUString aString;
@@ -1170,7 +1170,7 @@ void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
     pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
 
     SetPageType( &pShadow->nUnknownType );
-    SetDlgType( &pShadow->nUnknownType );
+    SetDlgType( COLORPAGE_UNKNOWN );
     SetPos( &pShadow->nUnknownPos );
     SetAreaTP( &pShadow->bIsAreaTP );
     SetColorChgd( (ChangeType*)&pShadow->nChangeType );

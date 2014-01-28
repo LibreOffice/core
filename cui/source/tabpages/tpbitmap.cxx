@@ -58,7 +58,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     pnBitmapListState   ( 0 ),
     pnColorListState    ( 0 ),
     pPageType           ( 0 ),
-    pDlgType            ( 0 ),
+    nDlgType            ( 0 ),
     pbAreaTP            ( 0 ),
 
     bBmpChanged         ( false ),
@@ -138,7 +138,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         *pbAreaTP = sal_False;
 
@@ -226,7 +226,7 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 
 sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
-    if( *pDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
+    if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
     {
         if(PT_BITMAP == *pPageType)
         {

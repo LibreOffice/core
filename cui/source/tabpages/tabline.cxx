@@ -65,7 +65,6 @@ SvxLineTabDialog::SvxLineTabDialog
     nDashListState( CT_NONE ),
     mnColorListState( CT_NONE ),
     nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
-    nDlgType( 0 ),
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
     mbAreaTP( sal_False )
@@ -203,7 +202,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ( (SvxLineTabPage&) rPage ).SetColorList( pColorList );
         ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
         ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-        ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
+        ( (SvxLineTabPage&) rPage ).SetDlgType( 0 );
         ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
         ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
         ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
@@ -218,7 +217,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if(nId == m_nStyleTabPage)
     {
         ( (SvxLineDefTabPage&) rPage ).SetDashList( pDashList );
-        ( (SvxLineDefTabPage&) rPage ).SetDlgType( &nDlgType );
+        ( (SvxLineDefTabPage&) rPage ).SetDlgType( 0 );
         ( (SvxLineDefTabPage&) rPage ).SetPageType( &nPageType );
         ( (SvxLineDefTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
         ( (SvxLineDefTabPage&) rPage ).SetDashChgd( &nDashListState );
@@ -229,7 +228,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         ( (SvxLineEndDefTabPage&) rPage ).SetLineEndList( pLineEndList );
         ( (SvxLineEndDefTabPage&) rPage ).SetPolyObj( pObj );
-        ( (SvxLineEndDefTabPage&) rPage ).SetDlgType( &nDlgType );
+        ( (SvxLineEndDefTabPage&) rPage ).SetDlgType( 0 );
         ( (SvxLineEndDefTabPage&) rPage ).SetPageType( &nPageType );
         ( (SvxLineEndDefTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
         ( (SvxLineEndDefTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
@@ -240,7 +239,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         ( (SvxShadowTabPage&) rPage ).SetColorList( pColorList );
         ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
-        ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
+        ( (SvxShadowTabPage&) rPage ).SetDlgType( 0 );
         ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
         ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
         ( (SvxShadowTabPage&) rPage ).Construct();

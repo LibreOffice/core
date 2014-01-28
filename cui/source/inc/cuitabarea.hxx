@@ -63,10 +63,9 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    sal_uInt16              mnPageType;
-    sal_uInt16              mnDlgType;
-    sal_uInt16              mnPos;
-    sal_Bool                mbAreaTP;
+    sal_uInt16          mnPageType;
+    sal_uInt16          mnPos;
+    sal_Bool            mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
@@ -396,10 +395,10 @@ private:
 
     ChangeType*         pnGradientListState;
     ChangeType*         pnColorListState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    sal_uInt16*         pPageType;
+    sal_uInt16          nDlgType;
+    sal_uInt16*         pPos;
+    sal_Bool*           pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -435,7 +434,7 @@ public:
                 { pGradientList = pGrdLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
 
@@ -471,10 +470,10 @@ private:
 
     ChangeType*         pnHatchingListState;
     ChangeType*         pnColorListState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    sal_uInt16*         pPageType;
+    sal_uInt16          nDlgType;
+    sal_uInt16*         pPos;
+    sal_Bool*           pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -513,7 +512,7 @@ public:
                 { pHatchingList = pHtchLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
 
@@ -554,10 +553,10 @@ private:
 
     ChangeType*         pnBitmapListState;
     ChangeType*         pnColorListState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    sal_uInt16*         pPageType;
+    sal_uInt16          nDlgType;
+    sal_uInt16*         pPos;
+    sal_Bool*           pbAreaTP;
 
     sal_Bool                bBmpChanged;
 
@@ -598,7 +597,7 @@ public:
     void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
 
@@ -677,10 +676,10 @@ private:
     XColorListRef         pColorList;
 
     ChangeType*         pnColorListState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    sal_uInt16*         pPageType;
+    sal_uInt16          nDlgType;
+    sal_uInt16*         pPos;
+    sal_Bool*           pbAreaTP;
 
     XFillStyleItem      aXFStyleItem;
     XFillColorItem      aXFillColorItem;
@@ -736,7 +735,7 @@ public:
     void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
 

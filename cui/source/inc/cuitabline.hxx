@@ -49,7 +49,6 @@ private:
     ChangeType          mnColorListState;
 
     sal_uInt16          nPageType;
-    sal_uInt16          nDlgType;
     sal_uInt16          nPosDashLb;
     sal_uInt16          nPosLineEndLb;
     sal_Bool            mbAreaTP;
@@ -276,7 +275,7 @@ private:
 
     ChangeType*         pnDashListState;
     sal_uInt16*         pPageType;
-    sal_uInt16*         pDlgType;
+    sal_uInt16          nDlgType;
     sal_uInt16*         pPosDashLb;
 
     SfxMapUnit          ePoolUnit;
@@ -315,7 +314,7 @@ public:
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPosDashLb( sal_uInt16* pInPos ) { pPosDashLb = pInPos; }
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
@@ -355,8 +354,8 @@ private:
 
     ChangeType*         pnLineEndListState;
     sal_uInt16*         pPageType;
-    sal_uInt16*         pDlgType;
-    sal_uInt16*             pPosLineEndLb;
+    sal_uInt16          nDlgType;
+    sal_uInt16*         pPosLineEndLb;
 
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
@@ -386,7 +385,7 @@ public:
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPosLineEndLb( sal_uInt16* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }

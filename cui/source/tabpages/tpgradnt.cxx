@@ -54,7 +54,7 @@ SvxGradientTabPage::SvxGradientTabPage
     pnGradientListState ( 0 ),
     pnColorListState    ( 0 ),
     pPageType           ( 0 ),
-    pDlgType            ( 0 ),
+    nDlgType            ( 0 ),
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
@@ -154,7 +154,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     sal_uInt16 nPos;
     sal_uInt16 nCount;
 
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         *pbAreaTP = sal_False;
 
@@ -308,7 +308,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( *pDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
+    if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 

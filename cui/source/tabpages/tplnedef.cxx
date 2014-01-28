@@ -158,7 +158,7 @@ void SvxLineDefTabPage::Construct()
 
 void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( *pDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) // area dialog
     {
         // ActivatePage() is called before the dialog receives PageCreated() !!!
         if( pDashList.is() )
@@ -258,7 +258,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
 
 sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    if( *pDlgType == 0 ) // line dialog
+    if( nDlgType == 0 ) // line dialog
     {
         if( *pPageType == 2 )
         {
