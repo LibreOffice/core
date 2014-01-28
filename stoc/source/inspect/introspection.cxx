@@ -1471,12 +1471,12 @@ struct hashIntrospectionAccessCache_Impl
     {
         if( rObj1.xPropInfo != rObj2.xPropInfo
           || rObj1.xImplClass != rObj2.xImplClass )
-            return sal_False;
+            return false;
 
         sal_Int32 nCount1 = rObj1.aIdlClasses.getLength();
         sal_Int32 nCount2 = rObj2.aIdlClasses.getLength();
         if( nCount1 != nCount2 )
-            return sal_False;
+            return false;
 
         const Reference<XIdlClass>* pRefs1 = rObj1.aIdlClasses.getConstArray();
         const Reference<XIdlClass>* pRefs2 = rObj2.aIdlClasses.getConstArray();
@@ -1525,7 +1525,7 @@ struct TypeProviderAccessCache_Impl
                      const hashTypeProviderKey_Impl & rObj2 ) const
     {
         if( rObj1.xPropInfo != rObj2.xPropInfo )
-            return sal_False;
+            return false;
 
         bool bEqual = false;
         sal_Int32 nLen1 = rObj1.maImpIdSeq.getLength();

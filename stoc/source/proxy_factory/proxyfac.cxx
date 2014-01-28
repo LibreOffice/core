@@ -160,7 +160,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
             m_uno2cpp.get() );
         uno_any_destruct( exc, 0 );
         ::cppu::throwException( cpp_exc );
-        OSL_ASSERT( 0 ); // way of no return
+        OSL_ASSERT( false ); // way of no return
         return UnoInterfaceReference(); // for dummy
     }
 }

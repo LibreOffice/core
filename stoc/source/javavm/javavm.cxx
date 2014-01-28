@@ -855,7 +855,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         case JFW_E_RUNNING_JVM:
         {
             //This service should make sure that we do not start java twice.
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             break;
         }
         case JFW_E_NEED_RESTART:
