@@ -170,6 +170,7 @@ namespace NS_sprm {
     const sal_uInt16 LN_CIdslRMarkDel = 0x4867;
     const sal_uInt16 LN_CFUsePgsuSettings = 0x0868;
     const sal_uInt16 LN_CCpg = 0x486b;
+    const sal_uInt16 LN_CPbiGrf = 0x4888;
     const sal_uInt16 LN_CRgLid0_80 = 0x486d;
     const sal_uInt16 LN_CRgLid1_80 = 0x486e;
     const sal_uInt16 LN_CIdctHint = 0x286f;

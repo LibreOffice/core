@@ -72,6 +72,7 @@
 #include <expfld.hxx>
 #include <fmtfld.hxx>
 #include <flddropdown.hxx>
+#include <filter/msfilter/sprmids.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
@@ -666,7 +667,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
         //For i120928,parse the graphic info of bullets
         sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(0x6887,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(0x4888,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(NS_sprm::LN_CPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
         if (pSprmWhichPis)
         {
             nWitchPicIsBullet = *pSprmWhichPis;
