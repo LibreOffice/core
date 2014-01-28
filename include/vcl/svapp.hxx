@@ -700,6 +700,19 @@ public:
     */
     ///@{
 
+
+    /** Call on all event hooks
+
+     @param rEvt                Reference to the notification event to send
+                                to the event hook.
+
+     @return If any of the event hooks called upon fail with a non-zero
+         status, then it stops processing any more event hooks and returns
+         the error code as a long.
+
+    */
+    static long                 CallEventHooks( NotifyEvent& rEvt );
+
     /** Add a VCL event listener to the application. If no event listener exists,
      then initialize the application's event listener with a new one, then add
      the event listener.
@@ -1070,47 +1083,197 @@ public:
     */
     static unsigned int         GetDisplayExternalScreen();
 
-    //@}
+    ///@}
+
+    /** @name Accelerators and Mnemonics
+
+     Accelerators allow a user to hold down the Alt + key combination to
+     gain quick access to functionality.
+
+     Mnemonics are underline letters in things like menus and dialog boxes
+     that allow a user to type in the letter to activate the menu or option.
+    */
+    ///@{
 
     /** Insert accelerator
 
      @param     pAccel          Pointer to an Accelerator object to insert
 
      @returns true if successful, false if otherwise
+
+     @see RemoveAccel
     */
     static sal_Bool             InsertAccel( Accelerator* pAccel );
 
     /** Remove accelerator
 
      @param     pAccel          Pointer to Accelerator object to remove
+
+     @see InsertAccel
     */
     static void                 RemoveAccel( Accelerator* pAccel );
 
-    static long                 CallEventHooks( NotifyEvent& rEvt );
+    /** Enable auto-mnemonics
 
-    static void                 SetHelp( Help* pHelp = NULL );
-    static Help*                GetHelp();
+     @param     bEnabled        True enables auto-mnemonics, and false disables it
 
-    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
-    static sal_Bool             IsAutoHelpIdEnabled();
-
+     @see IsAutoMnemonicEnabled
+    */
     static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
+
+    /** Determines if auto-mnemonics are enabled.
+
+     @returns True if auto-mnemonics is enabled, false if not.
+
+     @see EnableAutoMnemonic
+    */
     static sal_Bool             IsAutoMnemonicEnabled();
 
+    /** Get the number of reserved key codes used by the application.
+
+     @returns number of reserved key codes
+
+     @see GetReservedKeyCode
+    */
     static sal_uLong            GetReservedKeyCodeCount();
+
+    /** Get the reserved key code.
+
+     @param     i               The keycode number to retrieve
+
+     @returns Const pointer to a KeyCode object
+
+     @see GetReservedKeyCodeCount
+    */
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
 
+    ///@}
+
+    /** @name Application Help
+
+     Deals with the help system, and "auto-help", where a user hovers a mouse above
+     a UI element and a tooltip with an explanation pops up.
+    */
+    ///@{
+
+    /** Sets up help
+
+     @param     pHelp           Pointer to a Help object (optional, can by NULL)
+
+     @see GetHelp
+    */
+    static void                 SetHelp( Help* pHelp = NULL );
+
+    /** Gets the application's help
+
+     @returns Pointer to application's help object. Note that the application may
+        not have a help object, so it might return NULL.
+
+     @see SetHelp
+    */
+    static Help*                GetHelp();
+
+    /** Turns on "auto-help" (hover mouse above UI element and a tooltip with an
+     explanation pops up.
+
+     @param     bEnabled        Enables/disables auto-help.
+
+     @see EnableAutoHelpId
+    */
+    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
+
+    /** Determines if auto-help is enabled or disabled.
+
+     @return true if auto-help is enabled, false if it is disabled.
+
+     @see EnableAutoHelpId
+    */
+    static sal_Bool             IsAutoHelpIdEnabled();
+
+    ///@}
+
+    /** @name Dialogs
+
+        @remark "Dialog cancel mode" tells a headless install whether to
+                cancel dialogs when they appear. See the DialogCancelMode
+                enumerator.
+    */
+    ///@{
+
+    /** Set the default parent window for dialog boxes.
+
+     @param     pWindow         Pointer to window that should be the default parent.
+
+     @remark You can set pWindow to NULL, which means there \em is no default parent.
+
+     @see GetDefDialogParent
+    */
     static void                 SetDefDialogParent( Window* pWindow );
+
+    /** Get the default parent window for dialog boxes.
+
+     @remark GetDefDialogParent does all sorts of things find a useful parent
+             window for dialogs. If it can't find one (it wasn't set!) then it
+             first uses the topmost parent of the active window to avoid using
+             floating windows or other dialog boxes. If there are no active
+             windows, then it will take a random stab and choose the first visible
+             top window. Otherwise, it defaults to the desktop.
+
+     @returns Pointer to the default window.
+    */
     static Window*              GetDefDialogParent();
 
+
+    /** Gets the dialog cancel mode for headless environments.
+
+     @return DialogCancelMode value
+
+     @see SetDialogCancelMode, IsDialogCancelEnabled
+    */
     static DialogCancelMode     GetDialogCancelMode();
+
+    /** Sets the dialog cancel mode for headless environments.
+
+     @param     mode            DialogCancel mode value
+
+     @see GetDialogCancelMode, IsDialogCancelEnabled
+    */
     static void                 SetDialogCancelMode( DialogCancelMode mode );
+
+    /** Determines if dialog cancel mode is enabled.
+
+     @returns True if dialog cancel mode is enabled, false if disabled.
+
+     @see GetDialogCancelMode, SetDialogCancelMode
+    */
     static sal_Bool             IsDialogCancelEnabled();
 
+
+    /** Make a dialog box a system window or not.
+
+     @param     nMode           Can be either: SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or
+                                SYSTEMWINDOW_MODE_DIALOG (0x0002)
+
+     @see GetSystemWindowMode
+    */
     static void                 SetSystemWindowMode( sal_uInt16 nMode );
+
+    /** Get the system window mode of dialogs.
+
+     @returns SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or SYSTEMWINDOW_MODE_DIALOG (0x0002)
+
+     @see SetSystemWindowMode
+    */
     static sal_uInt16           GetSystemWindowMode();
 
+
+    /** Set a dialog scaling factor. Used for localization.
+
+     @param     nScale          Scaling factor
+    */
     static void                 SetDialogScaleX( short nScale );
+
+    ///@}
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();
 
