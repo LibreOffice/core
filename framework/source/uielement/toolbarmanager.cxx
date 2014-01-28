@@ -33,7 +33,7 @@
 
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -795,7 +795,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
 
             if ( !m_aModuleIdentifier.isEmpty() )
             {
-                Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( m_xContext );
+                Reference< XNameAccess > xNameAccess = frame::theUICommandDescription::get( m_xContext );
                 xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
             }
         }

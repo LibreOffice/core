@@ -26,7 +26,7 @@
 
 #include "properties.h"
 
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -173,7 +173,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
     {
         const OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
         Sequence< OUString > aCmdImageSeq;
-        uno::Reference< XNameAccess > xCmdDesc = frame::UICommandDescription::create( m_xContext );
+        uno::Reference< XNameAccess > xCmdDesc = frame::theUICommandDescription::get( m_xContext );
 
         if ( !m_aModuleIdentifier.isEmpty() )
         {

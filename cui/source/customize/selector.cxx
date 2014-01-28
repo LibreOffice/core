@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
@@ -425,7 +425,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
             { aModuleId = OUString(); }
 
         Reference< container::XNameAccess > const xNameAccess(
-                frame::UICommandDescription::create(xContext) );
+                frame::theUICommandDescription::get(xContext) );
         xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
 
         Reference< container::XNameAccess > xAllCategories =

@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 
 #include "ViewShellBase.hxx"
 #include <algorithm>
@@ -1111,7 +1111,7 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
         if( !aModuleIdentifier.isEmpty() )
         {
             Reference< XNameAccess > const xNameAccess(
-                    frame::UICommandDescription::create(xContext) );
+                    frame::theUICommandDescription::get(xContext) );
             Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
             Sequence< PropertyValue > aPropSeq;
             if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )

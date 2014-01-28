@@ -71,7 +71,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
@@ -869,7 +869,7 @@ SaveInData::SaveInData(
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        css::frame::UICommandDescription::create(xContext) );
+        css::frame::theUICommandDescription::get(xContext) );
 
     xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 

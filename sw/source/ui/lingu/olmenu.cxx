@@ -91,7 +91,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 
 
 using namespace ::com::sun::star;
@@ -236,7 +236,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
         try
         {
             uno::Reference< container::XNameAccess > const xNameAccess(
-                    frame::UICommandDescription::create(
+                    frame::theUICommandDescription::get(
                         ::comphelper::getProcessComponentContext() ),
                     uno::UNO_QUERY_THROW );
             uno::Reference< container::XNameAccess > xUICommandLabels;

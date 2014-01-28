@@ -54,7 +54,7 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
@@ -83,7 +83,7 @@ OUString retrieveLabelFromCommand(const OUString& sCommand, const OUString& sMod
 
     uno::Reference< container::XNameAccess > xUICommands;
     uno::Reference< container::XNameAccess > const xNameAccess(
-            frame::UICommandDescription::create(
+            frame::theUICommandDescription::get(
                 ::comphelper::getProcessComponentContext()) );
     xNameAccess->getByName( sModuleIdentifier ) >>= xUICommands;
     if (xUICommands.is())

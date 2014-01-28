@@ -26,26 +26,12 @@
 module com { module sun { module star { module frame {
 
 
-/** a service which provides information about user interface commands of modules.
+/**
+    A legacy (single-instance) service-variant of theUICommandDescription singleton.
 
-    <p>
-    OpenOffice.org has an amount of commands that can be used by user interface
-    elements. This service provides access to the user interface commands that
-    are part of OpenOffice.org modules, like Writer or Calc.
-    </p>
+    @deprecated Use theUICommandDescription singleton instead.
 
     @since OOo 2.0
-
-    Provides access to user interface commands of the installed modules.
-
-    <p>
-    To access the user interface command description of a module, a unique module specifier
-    must be provided to com::sun::star::container::XNameAccess::getByName() function.
-    The module specifier can be retrieved from the com::sun::star::frame::ModuleManager
-    service. The interface provides references to com::sun:star::ui::ModuleUICommandDescription.
-    </p>
-
-    @see com::sun::star::frame::ModuleManager
 */
 service UICommandDescription : com::sun::star::container::XNameAccess;
 

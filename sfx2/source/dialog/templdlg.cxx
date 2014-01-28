@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/app.hxx>
@@ -2781,7 +2781,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         //create a popup menu in Writer
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
-                frame::UICommandDescription::create(
+                frame::theUICommandDescription::get(
                     ::comphelper::getProcessComponentContext()) );
         uno::Reference< container::XNameAccess > xUICommands;
         OUString sTextDoc("com.sun.star.text.TextDocument");

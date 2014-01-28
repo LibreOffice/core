@@ -25,7 +25,7 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
@@ -305,7 +305,7 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const 
         const OUString sModuleIdentifier (GetModuleIdentifier());
         if (sModuleIdentifier.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::UICommandDescription::create(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;

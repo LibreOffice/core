@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -428,7 +428,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
             }
 
             uno::Reference< container::XNameAccess > xNameAccess(
-                frame::UICommandDescription::create(
+                frame::theUICommandDescription::get(
                         ::comphelper::getProcessComponentContext()),
                     uno::UNO_QUERY_THROW );
             try

@@ -126,7 +126,7 @@
 #include <com/sun/star/frame/StatusbarControllerFactory.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/ToolbarControllerFactory.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/frame/XController.hpp>

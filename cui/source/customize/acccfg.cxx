@@ -52,7 +52,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
@@ -830,7 +830,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         // no - initialize this instance
         m_xContext = ::comphelper::getProcessComponentContext();
 
-        m_xUICmdDescription = css::frame::UICommandDescription::create(m_xContext);
+        m_xUICmdDescription = css::frame::theUICommandDescription::get(m_xContext);
 
         // get the current active frame, which should be our "parent"
         // for this session

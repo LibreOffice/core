@@ -202,6 +202,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/frame,\
 	UICommandDescription \
 	theAutoRecovery \
 	theGlobalEventBroadcaster \
+	theUICommandDescription \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/graphic,\
 	GraphicObject \

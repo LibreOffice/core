@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
@@ -56,7 +56,7 @@ namespace dbaui
         using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XUIConfigurationManager;
         using ::com::sun::star::ui::XImageManager;
-        using ::com::sun::star::frame::UICommandDescription;
+        using ::com::sun::star::frame::theUICommandDescription;
         using ::com::sun::star::graphic::XGraphic;
 
         OUString GetCommandText( const sal_Char* _pCommandURL, const OUString& _rModuleName )
@@ -77,7 +77,7 @@ namespace dbaui
                     if ( !xContext.is() )
                         break;
 
-                    Reference< XNameAccess> xNameAccess( UICommandDescription::create(xContext) );
+                    Reference< XNameAccess> xNameAccess( theUICommandDescription::get(xContext) );
 
                     xNameAccess->getByName( _rModuleName ) >>= xUICommandLabels;
                     if ( !xUICommandLabels.is() )

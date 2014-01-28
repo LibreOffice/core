@@ -132,6 +132,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICommandDescription">
     <service name="com.sun.star.frame.UICommandDescription"/>
+    <singleton name="com.sun.star.frame.theUICommandDescription"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UIConfigurationManager"
       constructor="com_sun_star_comp_framework_UIConfigurationManager_get_implementation">

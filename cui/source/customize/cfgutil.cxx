@@ -25,7 +25,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
@@ -597,7 +597,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 
         m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
         m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
-        m_xUICmdDescription   = css::frame::UICommandDescription::create( m_xContext );
+        m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
         InitModule();
         InitBasic();

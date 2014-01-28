@@ -68,7 +68,7 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
@@ -2092,7 +2092,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 void Desktop::PreloadConfigurationData()
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XNameAccess > xNameAccess = css::frame::UICommandDescription::create(xContext);
+    Reference< XNameAccess > xNameAccess = css::frame::theUICommandDescription::get(xContext);
 
     OUString aWriterDoc( "com.sun.star.text.TextDocument" );
     OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );

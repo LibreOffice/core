@@ -39,7 +39,7 @@
 #include <unotools/confignode.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -701,7 +701,7 @@ static OUString getCommandLabel(const OUString& rCommand, const uno::Reference<u
     try
     {
         uno::Reference<container::XNameAccess> xUICommandLabels;
-        uno::Reference<container::XNameAccess> xUICommandDescription(frame::UICommandDescription::create(rContext));
+        uno::Reference<container::XNameAccess> xUICommandDescription(frame::theUICommandDescription::get(rContext));
 
         if ((xUICommandDescription->getByName(rModuleId) >>= xUICommandLabels) && xUICommandLabels.is())
         {
