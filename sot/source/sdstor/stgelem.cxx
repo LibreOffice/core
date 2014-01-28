@@ -279,7 +279,7 @@ bool StgEntry::Init()
     SetLeaf( STG_RIGHT, STG_FREE );
     SetLeaf( STG_CHILD, STG_FREE );
     SetLeaf( STG_DATA,  STG_EOF );
-    return sal_True;
+    return true;
 }
 
 static OUString ToUpperUnicode( const OUString & rStr )

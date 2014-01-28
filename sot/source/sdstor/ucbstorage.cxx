@@ -1244,7 +1244,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
 
     if ( nMode & STREAM_TRUNC )
     {
-        m_bSourceRead = 0; // usually it should be 0 already but just in case...
+        m_bSourceRead = false; // usually it should be 0 already but just in case...
 
         if ( !m_aTempURL.isEmpty() )
         {

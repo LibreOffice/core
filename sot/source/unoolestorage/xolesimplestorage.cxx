@@ -649,7 +649,7 @@ void SAL_CALL OLESimpleStorage::dispose()
     m_xStream = uno::Reference< io::XStream >();
     m_xTempStream = uno::Reference< io::XStream >();
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // --------------------------------------------------------------------------------
