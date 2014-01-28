@@ -33,11 +33,11 @@ extern std::list<Node*> nodelist;
 #include "hcode.h"
 
 #define ascii(x)  OUString::createFromAscii(x)
-#define rstartEl(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(0)
-#define rendEl(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
-#define rchars(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(ascii(x)); } while(0)
-#define runistr(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x)); } while(0)
-#define reucstr(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR)); } while(0)
+#define rstartEl(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
+#define rendEl(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
+#define rchars(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(ascii(x)); } while(false)
+#define runistr(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x)); } while(false)
+#define reucstr(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR)); } while(false)
 #define padd(x,y,z)  pList->addAttribute(x,y,z)
 #else
 static int indent = 0;

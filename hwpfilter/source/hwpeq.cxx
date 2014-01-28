@@ -593,7 +593,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
   else {
     /* 정상적인 token */
     int script_status = SCRIPT_NONE;
-    while( 1 ) {
+    while( true ) {
       state << white << token;
       make_keyword(keyword, token);
       if( token[0] == '^' )

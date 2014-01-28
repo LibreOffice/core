@@ -277,7 +277,7 @@ bool HWPFile::TagsRead(void)
     ulong tag;
     long size;
 
-    while (1)
+    while (true)
     {
         tag = Read4b();
         size = Read4b();
