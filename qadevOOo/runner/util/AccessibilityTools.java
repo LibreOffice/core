@@ -110,7 +110,9 @@ public class AccessibilityTools {
     public static XAccessibleContext getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-
+        if (ac == null) {
+            return null;
+        }
         if (ac.getAccessibleRole() == role) {
             SearchedAccessible = xacc;
             return ac;
