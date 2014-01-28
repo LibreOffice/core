@@ -73,12 +73,12 @@ throw (RuntimeException)
     }
     if ( sFilterName.isEmpty() )
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         return sal_False;
     }
     if ( !xInputStream.is() )
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         return sal_False;
     }
 

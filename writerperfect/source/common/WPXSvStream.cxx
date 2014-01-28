@@ -162,7 +162,7 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
     if (!pStream)
         return;
 
-    mxRootStorage.ref = new SotStorage( pStream, sal_True );
+    mxRootStorage.ref = new SotStorage( pStream, true );
 
     traverse(mxRootStorage.ref, "");
 
@@ -218,7 +218,7 @@ void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString
         }
         else
         {
-            assert(0);
+            assert(false);
         }
     }
 }
@@ -597,7 +597,7 @@ const char *WPXSvInputStreamImpl::subStreamName(const unsigned id)
 bool WPXSvInputStreamImpl::existsSubStream(const char *const name)
 {
     if (!name)
-        return 0;
+        return false;
 
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return false;

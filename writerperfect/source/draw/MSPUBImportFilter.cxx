@@ -64,7 +64,7 @@ throw (RuntimeException)
     }
     if ( !xInputStream.is() )
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         return sal_False;
     }
 
