@@ -35,12 +35,27 @@ using namespace com::sun::star;
 
 #define DEFAULT_STYLE "Default Style"
 
+#define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
+    class TestName : public BaseClass { \
+        public:\
+    CPPUNIT_TEST_SUITE(TestName); \
+    CPPUNIT_TEST(Import); \
+    CPPUNIT_TEST_SUITE_END(); \
+    \
+    void Import() { \
+        executeImportTest(filename);\
+    }\
+    void verify();\
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
-    SwModelTestBase()
-        : mpXmlBuffer(0)
+    SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
+        : mpXmlBuffer(0), mpTestDocumentPath(pTestDocumentPath), mpFilter(pFilter)
     {
     }
 
@@ -62,6 +77,53 @@ public:
 
         test::BootstrapFixture::tearDown();
     }
+
+protected:
+    /**
+     * Helper func used by each unit test to test the 'import' code.
+     * (Loads the requested file and then calls 'verify' method)
+     */
+    void executeImportTest(const char* filename)
+    {
+        // If the testcase is stored in some other format, it's pointless to test.
+        if (mustTestImportOf(filename))
+        {
+            header();
+            load(mpTestDocumentPath, filename);
+            verify();
+            finish();
+        }
+    }
+
+    /**
+     * Helper func used by each unit test to test the 'export' code.
+     * (Loads the requested file, save it to temp file, load the
+     * temp file and then calls 'verify' method)
+     */
+    void executeImportExportImportTest(const char* filename)
+    {
+        header();
+        load(mpTestDocumentPath, filename);
+        reload(mpFilter);
+        verify();
+        finish();
+    }
+
+    /**
+     * Function overloaded by unit test. See DECLARE_SW_*_TEST macros
+     */
+    virtual void verify()
+    {
+        CPPUNIT_FAIL( "verify method must be overriden" );
+    }
+
+    /**
+     * Override this function if interested in skipping import test for this file
+     */
+     virtual bool mustTestImportOf(const char* /* filename */) const
+     {
+        return true;
+     }
 
 private:
     void dumpLayout()
@@ -289,12 +351,12 @@ protected:
             calcLayout();
     }
 
-    void reload(OUString aFilter)
+    void reload(const char* pFilter)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aArgs(1);
         aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= aFilter;
+        aArgs[0].Value <<= OUString::createFromAscii(pFilter);
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
         xStorable->storeToURL(aTempFile.GetURL(), aArgs);
@@ -343,6 +405,8 @@ protected:
 
     uno::Reference<lang::XComponent> mxComponent;
     xmlBufferPtr mpXmlBuffer;
+    const char* mpTestDocumentPath;
+    const char* mpFilter;
 
     template< typename T >
     struct MethodEntry

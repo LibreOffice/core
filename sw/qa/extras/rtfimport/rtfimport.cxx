@@ -1537,11 +1537,25 @@ void Test::testFdo65090()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
+#if !defined(MACOSX) && !defined(WNT)
+
+class BackportedTest : public SwModelTestBase
+{
+public:
+    BackportedTest() : SwModelTestBase("/sw/qa/extras/rtfimport/data/", "Rich Text Format")
+    {
+    }
+};
+
+#define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, BackportedTest)
+
 DECLARE_RTFIMPORT_TEST(testCharColor, "char-color.rtf")
 {
     // This was -1: character color wasn't set.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x365F91), getProperty<sal_Int32>(getParagraph(1), "CharColor"));
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
