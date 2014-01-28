@@ -425,8 +425,8 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 //
 ORegistry::ORegistry()
     : m_refCount(1)
-    , m_readOnly(sal_False)
-    , m_isOpen(sal_False)
+    , m_readOnly(false)
+    , m_isOpen(false)
     , ROOT( "/" )
 {
 }
@@ -462,7 +462,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     else if (accessMode & REG_READONLY)
     {
         sAccessMode = REG_MODE_OPENREAD;
-        m_readOnly = sal_True;
+        m_readOnly = true;
     }
 
     if (regName.isEmpty() &&
@@ -499,7 +499,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         {
             m_file = rRegFile;
             m_name = regName;
-            m_isOpen = sal_True;
+            m_isOpen = true;
 
             m_openKeyTable[ROOT] = new ORegKey(ROOT, this);
             eRet = REG_NO_ERROR;
@@ -523,7 +523,7 @@ RegError ORegistry::closeRegistry()
     {
         (void) releaseKey(m_openKeyTable[ROOT]);
         m_file.close();
-        m_isOpen = sal_False;
+        m_isOpen = false;
         return REG_NO_ERROR;
     } else
     {
@@ -571,7 +571,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
         {
             releaseKey(m_openKeyTable[ROOT]);
             m_file.close();
-            m_isOpen = sal_False;
+            m_isOpen = false;
 
             if (!m_name.isEmpty())
             {

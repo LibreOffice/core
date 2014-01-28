@@ -202,7 +202,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
-                m_bForceOutput = sal_True;
+                m_bForceOutput = true;
                 break;
             }
         case 'c':
@@ -212,7 +212,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
-                m_bFullCheck = sal_True;
+                m_bFullCheck = true;
                 break;
             }
         case 't':
@@ -222,7 +222,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
-                m_bUnoTypeCheck = sal_True;
+                m_bUnoTypeCheck = true;
                 break;
             }
         case 'u':

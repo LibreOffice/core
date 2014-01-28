@@ -235,7 +235,7 @@ public:
     StringCache* m_pStringCache;
 
     ConstantPool(const sal_uInt8* buffer, sal_uInt16 numEntries)
-        : BlopObject(buffer, 0, sal_False)
+        : BlopObject(buffer, 0, false)
         , m_numOfEntries(numEntries)
         , m_pIndex(NULL)
         , m_pStringCache(NULL)
@@ -582,7 +582,7 @@ public:
     ConstantPool*   m_pCP;
 
     FieldList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, sal_False)
+        : BlopObject(buffer, 0, false)
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
@@ -751,7 +751,7 @@ public:
     ConstantPool*   m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, sal_False)
+        : BlopObject(buffer, 0, false)
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
@@ -845,7 +845,7 @@ public:
     ConstantPool*   m_pCP;
 
     MethodList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, sal_False)
+        : BlopObject(buffer, 0, false)
         , m_numOfEntries(numEntries)
         , m_pIndex(NULL)
         , m_pCP(pCP)
