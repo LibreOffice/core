@@ -479,6 +479,7 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
 End
 
 #if defined UNX
+#ifndef MACOSX
 
 File gid_Brand_File_Gdb_Trace
     TXT_FILE_BODY;
@@ -487,6 +488,7 @@ File gid_Brand_File_Gdb_Trace
     Styles = (PACKED);
 End
 
+#endif
 #endif
 
 File gid_Brand_File_Bin_Soffice
