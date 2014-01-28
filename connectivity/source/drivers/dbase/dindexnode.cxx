@@ -52,7 +52,7 @@ ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
     if (!aStr.isEmpty())
     {
         xValue = aStr;
-        xValue.setBound(sal_True);
+        xValue.setBound(true);
     }
 }
 // -----------------------------------------------------------------------------

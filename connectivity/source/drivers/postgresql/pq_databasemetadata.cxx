@@ -2167,9 +2167,9 @@ struct TypeInfoByDataTypeSorter
             a[0 /*TYPE_NAME*/] >>= nameA;
             b[0 /*TYPE_NAME*/] >>= nameB;
             if( nameA.startsWith( "int4" ) )
-                return 1;
+                return true;
             if( nameB.startsWith( "int4" ) )
-                return 0;
+                return false;
             return nameA.compareTo( nameB ) < 0;
         }
 

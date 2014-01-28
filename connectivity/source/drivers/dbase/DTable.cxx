@@ -645,7 +645,7 @@ OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName 
     }
     catch(const Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
     return sURL;
 }
@@ -2514,15 +2514,15 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     if(_nPos)
     {
         aInsertRow = new OValueRefVector(_pNewTable->m_pColumns->getCount());
-        ::std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(sal_True));
+        ::std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(true));
     }
     else
         aInsertRow = aRow;
 
     // we only have to bind the values which we need to copy into the new table
-    ::std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(sal_True));
+    ::std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(true));
     if(_nPos && (_nPos < (sal_Int32)aRow->get().size()))
-        (aRow->get())[nPos]->setBound(sal_False);
+        (aRow->get())[nPos]->setBound(false);
 
 
     sal_Bool bOk = sal_True;
@@ -2558,7 +2558,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         }
         else
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
     } // for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
 }

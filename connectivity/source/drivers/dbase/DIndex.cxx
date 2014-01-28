@@ -195,7 +195,7 @@ sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSet
     }
     catch (Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
         return sal_False;
     }
     return sal_True;

@@ -43,7 +43,7 @@ namespace {
     static bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
     {
         SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::isStorageCompatible" );
-        bool bIsCompatible = sal_True;
+        bool bIsCompatible = true;
 
         if (_eType1 != _eType2)
         {
@@ -101,7 +101,7 @@ namespace {
                     break;
 
                 default:
-                    bIsCompatible = sal_False;
+                    bIsCompatible = false;
             }
         }
         return bIsCompatible;
@@ -338,7 +338,7 @@ void ORowSetValue::free()
                 break;
 
         }
-        m_bNull = sal_True;
+        m_bNull = true;
     }
 }
 // -----------------------------------------------------------------------------
@@ -507,7 +507,7 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
         m_aValue.m_pValue = new Date(_rRH);
         TRACE_ALLOC( Date )
         m_eTypeKind = DataType::DATE;
-        m_bNull = sal_False;
+        m_bNull = false;
     }
     else
         *(Date*)m_aValue.m_pValue = _rRH;
@@ -525,7 +525,7 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
         m_aValue.m_pValue = new Time(_rRH);
         TRACE_ALLOC( Time )
         m_eTypeKind = DataType::TIME;
-        m_bNull = sal_False;
+        m_bNull = false;
     }
     else
         *(Time*)m_aValue.m_pValue = _rRH;
@@ -542,7 +542,7 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
         m_aValue.m_pValue = new DateTime(_rRH);
         TRACE_ALLOC( DateTime )
         m_eTypeKind = DataType::TIMESTAMP;
-        m_bNull = sal_False;
+        m_bNull = false;
     }
     else
         *(DateTime*)m_aValue.m_pValue = _rRH;
@@ -556,7 +556,7 @@ ORowSetValue& ORowSetValue::operator=(const OUString& _rRH)
     if(m_eTypeKind != DataType::VARCHAR || m_aValue.m_pString != _rRH.pData)
     {
         free();
-        m_bNull = sal_False;
+        m_bNull = false;
 
         m_aValue.m_pString = _rRH.pData;
         rtl_uString_acquire(m_aValue.m_pString);
@@ -574,7 +574,7 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 
     m_aValue.m_nDouble = _rRH;
     m_eTypeKind = DataType::DOUBLE;
-    m_bNull = sal_False;
+    m_bNull = false;
 
     return *this;
 }
@@ -586,7 +586,7 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
 
     m_aValue.m_nFloat = _rRH;
     m_eTypeKind = DataType::FLOAT;
-    m_bNull = sal_False;
+    m_bNull = false;
 
     return *this;
 }
@@ -599,8 +599,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 
     m_aValue.m_nInt8 = _rRH;
     m_eTypeKind = DataType::TINYINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_True;
+    m_bNull = false;
+    m_bSigned = true;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -612,8 +612,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt8& _rRH)
 
     m_aValue.m_uInt8 = _rRH;
     m_eTypeKind = DataType::TINYINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_False;
+    m_bNull = false;
+    m_bSigned = false;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -625,8 +625,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 
     m_aValue.m_nInt16 = _rRH;
     m_eTypeKind = DataType::SMALLINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_True;
+    m_bNull = false;
+    m_bSigned = true;
 
     return *this;
 }
@@ -639,8 +639,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt16& _rRH)
 
     m_aValue.m_uInt16 = _rRH;
     m_eTypeKind = DataType::SMALLINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_False;
+    m_bNull = false;
+    m_bSigned = false;
 
     return *this;
 }
@@ -654,8 +654,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
     m_aValue.m_nInt32 = _rRH;
 
     m_eTypeKind = DataType::INTEGER;
-    m_bNull = sal_False;
-    m_bSigned = sal_True;
+    m_bNull = false;
+    m_bSigned = true;
 
     return *this;
 }
@@ -669,8 +669,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt32& _rRH)
     m_aValue.m_uInt32 = _rRH;
 
     m_eTypeKind = DataType::INTEGER;
-    m_bNull = sal_False;
-    m_bSigned = sal_False;
+    m_bNull = false;
+    m_bSigned = false;
 
     return *this;
 }
@@ -683,7 +683,7 @@ ORowSetValue& ORowSetValue::operator=(const bool _rRH)
 
     m_aValue.m_bBool = _rRH;
     m_eTypeKind = DataType::BOOLEAN;
-    m_bNull = sal_False;
+    m_bNull = false;
 
     return *this;
 }
@@ -695,8 +695,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 
     m_aValue.m_nInt64 = _rRH;
     m_eTypeKind = DataType::BIGINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_True;
+    m_bNull = false;
+    m_bSigned = true;
 
     return *this;
 }
@@ -708,8 +708,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt64& _rRH)
 
     m_aValue.m_uInt64 = _rRH;
     m_eTypeKind = DataType::BIGINT;
-    m_bNull = sal_False;
-    m_bSigned = sal_False;
+    m_bNull = false;
+    m_bSigned = false;
 
     return *this;
 }
@@ -728,7 +728,7 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
         *static_cast< Sequence< sal_Int8 >* >(m_aValue.m_pValue) = _rRH;
 
     m_eTypeKind = DataType::LONGVARBINARY;
-    m_bNull = sal_False;
+    m_bNull = false;
 
     return *this;
 }
@@ -747,7 +747,7 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
         *static_cast<Any*>(m_aValue.m_pValue) = _rAny;
 
     m_eTypeKind = DataType::OBJECT;
-    m_bNull = sal_False;
+    m_bNull = false;
 
     return *this;
 }
@@ -1067,7 +1067,7 @@ OUString ORowSetValue::getString( ) const
 bool ORowSetValue::getBool()    const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getBool" );
-    bool bRet = sal_False;
+    bool bRet = false;
     if(!m_bNull)
     {
         switch(getTypeKind())
@@ -1109,7 +1109,7 @@ bool ORowSetValue::getBool()    const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                OSL_ASSERT(!"getBool() for this type is not allowed!");
+                OSL_FAIL("getBool() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1171,7 +1171,7 @@ sal_Int8 ORowSetValue::getInt8()    const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getInt8() for this type is not allowed!");
+                OSL_FAIL("getInt8() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1242,7 +1242,7 @@ sal_uInt8 ORowSetValue::getUInt8()    const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getuInt8() for this type is not allowed!");
+                OSL_FAIL("getuInt8() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1317,7 +1317,7 @@ sal_Int16 ORowSetValue::getInt16()  const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getInt16() for this type is not allowed!");
+                OSL_FAIL("getInt16() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1388,7 +1388,7 @@ sal_uInt16 ORowSetValue::getUInt16()  const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getuInt16() for this type is not allowed!");
+                OSL_FAIL("getuInt16() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1462,7 +1462,7 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getInt32() for this type is not allowed!");
+                OSL_FAIL("getInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1535,7 +1535,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getuInt32() for this type is not allowed!");
+                OSL_FAIL("getuInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1609,7 +1609,7 @@ sal_Int64 ORowSetValue::getLong()   const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getLong() for this type is not allowed!");
+                OSL_FAIL("getLong() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1682,7 +1682,7 @@ sal_uInt64 ORowSetValue::getULong()   const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getULong() for this type is not allowed!");
+                OSL_FAIL("getULong() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1760,7 +1760,7 @@ float ORowSetValue::getFloat()  const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getDouble() for this type is not allowed!");
+                OSL_FAIL("getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -1839,7 +1839,7 @@ double ORowSetValue::getDouble()    const
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
             case DataType::CLOB:
-                OSL_ASSERT(!"getDouble() for this type is not allowed!");
+                OSL_FAIL("getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -2262,7 +2262,7 @@ namespace detail
 void ORowSetValue::fill( const sal_Int32 _nType, const Reference< XColumn >& _rxColumn )
 {
     detail::ColumnValue aColumnValue( _rxColumn );
-    impl_fill( _nType, sal_True, aColumnValue );
+    impl_fill( _nType, true, aColumnValue );
 }
 
 // -----------------------------------------------------------------------------
@@ -2278,7 +2278,7 @@ void ORowSetValue::fill(sal_Int32 _nPos,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (1)" );
-    fill(_nPos,_nType,sal_True,_xRow);
+    fill(_nPos,_nType,true,_xRow);
 }
 
 // -----------------------------------------------------------------------------
@@ -2286,7 +2286,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
 
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (2)" );
-    bool bReadData = sal_True;
+    bool bReadData = true;
     switch(_nType)
     {
     case DataType::CHAR:
@@ -2380,7 +2380,7 @@ void ORowSetValue::fill(const Any& _rValue)
             setNull();            break;
         case TypeClass_BOOLEAN:
         {
-            bool bValue( sal_False );
+            bool bValue( false );
             _rValue >>= bValue;
             (*this) = bValue;
             break;
@@ -2446,7 +2446,7 @@ void ORowSetValue::fill(const Any& _rValue)
             sal_uInt32 nValue(0);
             _rValue >>= nValue;
             (*this) = static_cast<sal_Int64>(nValue);
-            setSigned(sal_False);
+            setSigned(false);
             break;
         }
         case TypeClass_HYPER:
@@ -2461,7 +2461,7 @@ void ORowSetValue::fill(const Any& _rValue)
             sal_uInt64 nValue(0);
             _rValue >>= nValue;
             (*this) = nValue;
-            setSigned(sal_False);
+            setSigned(false);
             break;
         }
         case TypeClass_ENUM:

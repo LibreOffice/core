@@ -345,7 +345,7 @@ OUString extractTableFromInsert( const OUString & sql )
                         {
                             // the second part of the table name does not use quotes
                             // parse on
-                            quote = 0;
+                            quote = false;
                         }
                     }
                     else

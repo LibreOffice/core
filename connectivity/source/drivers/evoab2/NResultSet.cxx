@@ -615,7 +615,7 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_pStatement(pStmt)
     ,m_pConnection(pConnection)
     ,m_xMetaData(NULL)
-    ,m_bWasNull(sal_True)
+    ,m_bWasNull(true)
     ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nFetchDirection(FetchDirection::FORWARD)

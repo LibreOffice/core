@@ -731,7 +731,7 @@ namespace
             if( _pColumnRef->count() > 1 )
             {
                 for ( sal_Int32 i=0; i<((sal_Int32)_pColumnRef->count())-2; ++i )
-                    _pColumnRef->getChild(i)->parseNodeToStr( _out_rTableRange, _rxConnection, NULL, sal_False, sal_False );
+                    _pColumnRef->getChild(i)->parseNodeToStr( _out_rTableRange, _rxConnection, NULL, false, false );
                 _out_rColumnName = _pColumnRef->getChild( _pColumnRef->count()-1 )->getChild(0)->getTokenValue();
             }
             else
@@ -849,24 +849,24 @@ bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode,
                 }
             }
             if (aTableRange.isEmpty())
-                return sal_False;
+                return false;
         }
 
 
         if (rTableRange.isEmpty())
             rTableRange = aTableRange;
         else if (rTableRange != aTableRange)
-            return sal_False;
+            return false;
     }
     else
     {
         for (sal_uInt32 i = 0, ncount = pNode->count(); i < ncount; i++)
         {
             if (!getColumnTableRange(pNode->getChild(i), rTableRange))
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -973,7 +973,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
             {
                 // All the table's columns
                 OUString aTableRange;
-                pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+                pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, false, false );
                 setSelectColumnName(m_aSelectColumns,OUString("*"), aEmptyString,aTableRange);
                 continue;
             }
@@ -1004,7 +1004,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                          SQL_ISRULE(pColumnRef,num_value_exp)   || SQL_ISRULE(pColumnRef,term))*/
                 {
                     // Function call present
-                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_True );
+                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, true );
                     // check if the column is also a parameter
                     traverseSearchCondition(pColumnRef); // num_value_exp
 
@@ -1111,7 +1111,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
         }
         else
         {   // here I found a predicate
-            pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+            pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
         }
         OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName must not be empty!");
         if ( _bOrder )
@@ -1174,7 +1174,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
             if ( SQL_ISRULE( pOther, column_ref ) )
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
         } // if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
         else if ( SQL_ISRULE(pParent,other_like_predicate_part_2) )
         {
@@ -1182,7 +1182,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
             if ( SQL_ISRULE( pOther, column_ref ) )
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
         }
         else if ( SQL_ISRULE(pParent,between_predicate_part_2) )
         {
@@ -1191,7 +1191,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
             {
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
                 lcl_generateParameterName( *pParent, *_pNode );
             }
         }
@@ -1315,7 +1315,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
     {
         OUString aValue;
-        pSearchCondition->getChild(2)->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        pSearchCondition->getChild(2)->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, false, false );
         traverseOnePredicate(pSearchCondition->getChild(0),aValue,pSearchCondition->getChild(2));
         impl_fillJoinConditions(pSearchCondition);
 //      if (! aIteratorStatus.IsSuccessful())
@@ -1349,7 +1349,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
             aValue = pNum_value_exp->getTokenValue();
         else
         {
-            pNum_value_exp->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+            pNum_value_exp->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, false, false );
             pParam = pNum_value_exp;
         }
 
@@ -1444,7 +1444,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     if ( _pParentNode && (SQL_ISRULE(_pParentNode,general_set_fct) || SQL_ISRULE(_pParentNode,set_fct_spec)) )
     {// found a function as column_ref
         OUString sFunctionName;
-        _pParentNode->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        _pParentNode->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
         const sal_uInt32 nCount = _pParentNode->count();
         sal_uInt32 i = 0;
         for(; i < nCount;++i)
@@ -2167,7 +2167,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
     OUString sFunctionName;
     if ( SQL_ISRULE(_pNode,length_exp) )
     {
-        _pNode->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        _pNode->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
         nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
     }
     else if ( SQL_ISRULE(_pNode,num_value_exp) || SQL_ISRULE(_pNode,term) || SQL_ISRULE(_pNode,factor) )
@@ -2176,7 +2176,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
     }
     else
     {
-        _pNode->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        _pNode->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
 
         // MIN and MAX have another return type, we have to check the expression itself.
         // @see http://qa.openoffice.org/issues/show_bug.cgi?id=99566

@@ -174,7 +174,7 @@ namespace connectivity
             OOperandResultBOOL(sal_Bool bResult) : OOperandResult(::com::sun::star::sdbc::DataType::BIT)
             {
                 m_aValue = bResult ? 1.0 : 0.0;
-                m_aValue.setBound(sal_True);
+                m_aValue.setBound(true);
             }
         };
 
@@ -184,7 +184,7 @@ namespace connectivity
             OOperandResultNUM(double fNum) : OOperandResult(::com::sun::star::sdbc::DataType::DOUBLE)
             {
                 m_aValue = fNum;
-                m_aValue.setBound(sal_True);
+                m_aValue.setBound(true);
             }
         };
 

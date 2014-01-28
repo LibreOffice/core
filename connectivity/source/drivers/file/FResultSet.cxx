@@ -672,7 +672,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
     m_bRowDeleted = m_pTable->DeleteRow(*m_xColumns);
     if(m_bRowDeleted && m_pFileSet.is())
     {
-        m_aRow->setDeleted(sal_True);
+        m_aRow->setDeleted(true);
         // don't touch the m_pFileSet member here
         m_aSkipDeletedSet.deletePosition(nPos);
     }
@@ -695,7 +695,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
         OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin()+1;
         for(;aIter != m_aInsertRow->get().end();++aIter)
         {
-            (*aIter)->setBound(sal_False);
+            (*aIter)->setBound(false);
             (*aIter)->setNull();
         }
     }
@@ -716,7 +716,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin()+1;
     for(;aIter != m_aInsertRow->get().end();++aIter)
     {
-        (*aIter)->setBound(sal_False);
+        (*aIter)->setBound(false);
         (*aIter)->setNull();
     }
 }
@@ -736,7 +736,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     checkIndex(columnIndex );
     columnIndex = mapColumn(columnIndex);
 
-    (m_aInsertRow->get())[columnIndex]->setBound(sal_True);
+    (m_aInsertRow->get())[columnIndex]->setBound(true);
     *(m_aInsertRow->get())[columnIndex] = x;
 }
 // -----------------------------------------------------------------------------
@@ -1184,7 +1184,7 @@ sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 
             {
                 *(m_aRow->get())[1] = m_nRowCountResult;
                 *(m_aRow->get())[0] = sal_Int32(1);
-                (m_aRow->get())[1]->setBound(sal_True);
+                (m_aRow->get())[1]->setBound(true);
                 (m_aSelectRow->get())[1] = (m_aRow->get())[1];
             }
         }
@@ -1300,7 +1300,7 @@ void OResultSet::sortRows()
                 SAL_WARN( "connectivity.drivers","OFILECursor::Execute: Datentyp nicht implementiert");
                 break;
         }
-        (m_aSelectRow->get())[*aOrderByIter]->setBound(sal_True);
+        (m_aSelectRow->get())[*aOrderByIter]->setBound(true);
     }
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
@@ -1651,7 +1651,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
             ++i, ++aRowIter
         )
     {
-        (*aRowIter)->setBound(sal_False);
+        (*aRowIter)->setBound(false);
         try
         {
             // get the table column and it's name
@@ -1687,7 +1687,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                         (_rSelectRow->get())[nSelectColumnPos] = *aRowIter;
                     }
 
-                    (*aRowIter)->setBound(sal_True);
+                    (*aRowIter)->setBound(true);
                     sal_Int32 nType = DataType::OTHER;
                     if (xTableColumn.is())
                         xTableColumn->getPropertyValue(sType) >>= nType;
@@ -1775,7 +1775,7 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 void OResultSet::clearInsertRow()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::clearInsertRow" );
-    m_aRow->setDeleted(sal_False); // set to false here because this is the new row
+    m_aRow->setDeleted(false); // set to false here because this is the new row
     OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin();
     const OValueRefVector::Vector::iterator aEnd = m_aInsertRow->get().end();
     for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
@@ -1786,7 +1786,7 @@ void OResultSet::clearInsertRow()
             (m_aRow->get())[nPos]->setValue( (*aIter)->getValue() );
         }
         rValue->setBound(nPos == 0);
-        rValue->setModified(sal_False);
+        rValue->setModified(false);
         rValue->setNull();
     }
 }
@@ -1797,8 +1797,8 @@ void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
     if(!_rRow.is())
     {
         _rRow   = new OValueRefVector(_nColumnCount);
-        (_rRow->get())[0]->setBound(sal_True);
-        ::std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetRefBound(sal_False));
+        (_rRow->get())[0]->setBound(true);
+        ::std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetRefBound(false));
     }
 }
 // -----------------------------------------------------------------------------

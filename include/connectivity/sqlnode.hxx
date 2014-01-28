@@ -316,8 +316,8 @@ namespace connectivity
         void parseNodeToStr(OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const IParseContext* pContext = NULL,
-                            bool _bIntl = sal_False,
-                            bool _bQuote= sal_True) const;
+                            bool _bIntl = false,
+                            bool _bQuote= true) const;
 
         // quoted and internationalised
         void parseNodeToPredicateStr(OUString& rString,

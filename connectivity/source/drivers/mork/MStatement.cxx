@@ -239,8 +239,8 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
             xNames = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
             // set the binding of the resultrow
             m_aRow          = new OValueVector(xNames->getCount());
-            (m_aRow->get())[0].setBound(sal_True);
-            ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(sal_False));
+            (m_aRow->get())[0].setBound(true);
+            ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(false));
             // create the column mapping
             createColumnMapping();
 
@@ -560,7 +560,7 @@ void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
     {
-        pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, sal_False, sal_False );
+        pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, false, false );
     }
     else
     {

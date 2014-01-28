@@ -80,7 +80,7 @@ void OMySQLCatalog::refreshViews()
     // as of this writing might not return the proper information in getTableTypes, so
     // don't rely on it.
     // during #73245# / 2007-10-26 / frank.schoenheit@sun.com
-    bool bSupportsViews = sal_True;
+    bool bSupportsViews = true;
 
     TStringVector aVector;
     if ( bSupportsViews )

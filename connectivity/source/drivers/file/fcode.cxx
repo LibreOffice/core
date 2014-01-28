@@ -86,7 +86,7 @@ void OOperandRow::bindValue(const OValueRefRow& _pRow)
     OSL_ENSURE(_pRow.is(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
-    (m_pRow->get())[m_nRowPos]->setBound(sal_True);
+    (m_pRow->get())[m_nRowPos]->setBound(true);
 }
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
@@ -160,13 +160,13 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
     case SQL_NODE_STRING:
         m_aValue = aStrValue;
         m_eDBType = DataType::VARCHAR;
-        m_aValue.setBound(sal_True);
+        m_aValue.setBound(true);
         return;
     case SQL_NODE_INTNUM:
     case SQL_NODE_APPROXNUM:
         m_aValue = aStrValue.toDouble();
         m_eDBType = DataType::DOUBLE;
-        m_aValue.setBound(sal_True);
+        m_aValue.setBound(true);
         return;
     default:
         break;
@@ -186,7 +186,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
     {
         SAL_WARN( "connectivity.drivers", "Parse Error");
     }
-    m_aValue.setBound(sal_True);
+    m_aValue.setBound(true);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

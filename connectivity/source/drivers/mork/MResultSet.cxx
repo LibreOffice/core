@@ -1405,7 +1405,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                         _rColMapping[nSelectColumnPos] = nTableColumnPos;
                     }
 
-                    aRowIter->setBound(sal_True);
+                    aRowIter->setBound(true);
                     aRowIter->setTypeKind(DataType::VARCHAR);
                 }
             }
@@ -1672,7 +1672,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     checkIndex(columnIndex );
     columnIndex = mapColumn(columnIndex);
 
-    (m_aRow->get())[columnIndex].setBound(sal_True);
+    (m_aRow->get())[columnIndex].setBound(true);
     (m_aRow->get())[columnIndex] = x;
     m_nUpdatedRow = getCurrentCardNumber();
 //    m_RowStates = m_RowStates | RowStates_Updated;
@@ -1690,7 +1690,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     checkIndex(columnIndex );
     columnIndex = mapColumn(columnIndex);
 
-    (m_aRow->get())[columnIndex].setBound(sal_True);
+    (m_aRow->get())[columnIndex].setBound(true);
     (m_aRow->get())[columnIndex].setNull();
     m_nUpdatedRow = getCurrentCardNumber();
 //    m_RowStates = m_RowStates | RowStates_Updated;

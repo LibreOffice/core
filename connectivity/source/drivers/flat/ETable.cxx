@@ -511,7 +511,7 @@ OUString OFlatTable::getEntry()
     }
     catch(const Exception&)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
     return sURL;
 }

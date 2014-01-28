@@ -292,7 +292,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, _rxConnection, xFormatter, NULL, OUString(), rIntl, pContext, sal_True, sal_True, _cDec, true, false);
+        parseNodeToStr(rString, _rxConnection, xFormatter, NULL, OUString(), rIntl, pContext, true, true, _cDec, true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -1215,7 +1215,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         }
         catch ( Exception& )
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
 
         if (m_nFormatKey && m_xFormatter.is())

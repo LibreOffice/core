@@ -365,7 +365,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
     {
-        pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, sal_False, sal_False );
+        pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, false, false );
     }
     else
     {
@@ -440,18 +440,18 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
         Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
         // set the binding of the resultrow
         m_aRow          = new OValueRefVector(xNames->getCount());
-        (m_aRow->get())[0]->setBound(sal_True);
-        ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(sal_False));
+        (m_aRow->get())[0]->setBound(true);
+        ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(false));
 
         // set the binding of the resultrow
         m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
 
-        (m_aEvaluateRow->get())[0]->setBound(sal_True);
-        ::std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(sal_False));
+        (m_aEvaluateRow->get())[0]->setBound(true);
+        ::std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(false));
 
         // set the select row
         m_aSelectRow = new OValueRefVector(m_aSQLIterator.getSelectColumns()->get().size());
-        ::std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(sal_True));
+        ::std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(true));
 
         // create the column mapping
         createColumnMapping();
@@ -521,7 +521,7 @@ void OStatement_Base::GetAssignValues()
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
-        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(sal_False));
+        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
@@ -609,7 +609,7 @@ void OStatement_Base::GetAssignValues()
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
-        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(sal_False));
+        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
