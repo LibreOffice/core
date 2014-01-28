@@ -320,8 +320,7 @@ oslFileError SAL_CALL osl_createTempFile(
         if (temp_file_url)
             rtl_uString_release(temp_file_url);
 
-        if (temp_file_name)
-            rtl_uString_release(temp_file_name);
+        rtl_uString_release(temp_file_name);
     }
 
     if (base_directory)
