@@ -1454,7 +1454,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 delete pNewNotesMaster;
                 delete pNewMaster;
-                OSL_ASSERT("SdDrawDocument::SetMasterPage() cloning of MasterPage/NoteAmsterPage failed!" );
+                OSL_FAIL("SdDrawDocument::SetMasterPage() cloning of MasterPage/NoteAmsterPage failed!" );
                 return;
             }
 
