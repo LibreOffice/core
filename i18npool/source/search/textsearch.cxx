@@ -428,7 +428,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
 bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 {
-    bool bRet = 1;
+    bool bRet = true;
     if( '\x7f' != rStr[nPos])
     {
         if ( !xCharClass.is() )
@@ -437,7 +437,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
                 aSrchPara.Locale );
         if( 0 != (( KCharacterType::DIGIT | KCharacterType::ALPHA |
                         KCharacterType::LETTER ) & nCType ) )
-            bRet = 0;
+            bRet = false;
     }
     return bRet;
 }

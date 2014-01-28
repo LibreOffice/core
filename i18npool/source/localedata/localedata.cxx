@@ -1327,7 +1327,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
                         rVal.Value <<= (sal_Int16) sVal.toInt32();
                         break;
                     default:
-                        OSL_ASSERT(0);
+                        OSL_ASSERT(false);
                 }
             }
         }
@@ -1440,7 +1440,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
-                                 OSL_ASSERT(0);
+                                 OSL_ASSERT(false);
                     }
                 }
             }
