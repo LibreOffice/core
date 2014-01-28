@@ -604,7 +604,9 @@ void SAL_CALL SwAccessibleDocument::disposing( const ::com::sun::star::lang::Eve
 }
 
 uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard g;
 
