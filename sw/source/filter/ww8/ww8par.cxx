@@ -1308,12 +1308,12 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SfxPoolItem *pItem = GetStackAttr(rPos, RES_FLTR_NUMRULE);
     if (pItem && rTxtNode.GetNumRule())
     {
-        OUString sName(((SfxStringItem*)pItem)->GetValue());
         if (rTxtNode.IsCountedInList())
         {
+            OUString sName(((SfxStringItem*)pItem)->GetValue());
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
-
-            pRet = GetNumFmtFromSwNumRuleLevel(*pRule, rTxtNode.GetActualListLevel());
+            if (pRule)
+                pRet = GetNumFmtFromSwNumRuleLevel(*pRule, rTxtNode.GetActualListLevel());
         }
     }
     return pRet;
