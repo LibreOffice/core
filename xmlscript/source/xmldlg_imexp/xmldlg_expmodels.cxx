@@ -81,7 +81,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
     readDefaults();
     readLongAttr( "MultiPageValue", XMLNS_DIALOGS_PREFIX ":value" );
     Any aDecorationAny( _xProps->getPropertyValue( "Decoration" ) );
-    bool bDecoration = sal_True;
+    bool bDecoration = true;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( XMLNS_DIALOGS_PREFIX ":withtabs", "false" );
 
@@ -1057,7 +1057,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
 
     readScrollableSettings();
     Any aDecorationAny( _xProps->getPropertyValue( "Decoration" ) );
-    bool bDecoration = sal_False;
+    bool bDecoration = false;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( XMLNS_DIALOGS_PREFIX ":withtitlebar", "false" );
     readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );

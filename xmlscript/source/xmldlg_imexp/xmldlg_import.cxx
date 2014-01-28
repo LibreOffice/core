@@ -281,7 +281,7 @@ bool StyleElement::importVisualEffectStyle(
             _visualEffect = awt::VisualEffect::FLAT;
         }
         else
-            OSL_ASSERT( 0 );
+            OSL_ASSERT( false );
 
         _hasValue |= 0x40;
         xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
