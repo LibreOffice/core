@@ -426,7 +426,10 @@ SwNumRule::SwNumRule( const OUString& rNm,
         {
             pFmt = new SwNumFmt;
             pFmt->SetIncludeUpperLevels( 1 );
-            pFmt->SetStart( 1 );
+            if(0 == n)
+                pFmt->SetStart( 0 );
+            else
+                pFmt->SetStart( 1 );
             pFmt->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
             pFmt->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             pFmt->SetListtabPos( cIndentAt[ n ] );

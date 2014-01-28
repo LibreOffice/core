@@ -2624,6 +2624,22 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumberedLists_StartingWithZero, "FDO74105.docx")
+{
+    /* Issue : Numbered lists Starting with value '0' is not preserved after RT.
+     * In numbering.xml, an XML tag <w:start> is optional. If not mentioned,
+     * the Numbered list should start from 0.
+     * Problem was LO was writing <w:start> for all levels 0-8 with default value "1".
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+      return;
+
+    // Check that we do _not_ export w:start for <w:lvl w:ilvl="0">.
+    assertXPath(pXmlDoc, "w:numbering/w:abstractNum[1]/w:lvl[1]/w:start", 0);
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
