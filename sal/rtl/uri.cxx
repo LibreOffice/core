@@ -142,7 +142,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                         || nWeight1 > 11
                         || (nWeight2 = getHexWeight(p[2])) < 0)
                     {
-                        bUTF8 = sal_False;
+                        bUTF8 = false;
                         break;
                     }
                     p += 3;

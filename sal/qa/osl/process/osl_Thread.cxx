@@ -626,7 +626,7 @@ namespace osl_Thread
     void suspendCountThread(OCountThread* _pCountThread)
     {
         sal_Int32 nValue = 0;
-        while (1)
+        while (true)
         {
             nValue = _pCountThread->getValue();
             if (nValue >= 3)

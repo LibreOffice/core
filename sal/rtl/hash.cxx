@@ -139,9 +139,9 @@ static int
 compareEqual (rtl_uString *pStringA, rtl_uString *pStringB)
 {
     if (pStringA == pStringB)
-        return 1;
+        return true;
     if (pStringA->length != pStringB->length)
-        return 0;
+        return false;
     return !rtl_ustr_compare_WithLength( pStringA->buffer, pStringA->length,
                                          pStringB->buffer, pStringB->length);
 }

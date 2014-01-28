@@ -732,7 +732,7 @@ namespace osl_ClearableGuard
             // wait 1 second to assure the child thread has begun
             ThreadHelper::thread_sleep(1);
 
-            while (1)
+            while (true)
             {
                 if (aMutex.tryToAcquire() == sal_True)
                 {
