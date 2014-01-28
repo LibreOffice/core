@@ -261,7 +261,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     readLoggingConfig( &(c->logLevel) , &(c->logFile) );
     log( c, LogLevel::CALL, "Instantiating pyuno bridge" );
 
-    c->valid = 1;
+    c->valid = true;
     c->xContext = ctx;
     c->xInvocation = Reference< XSingleServiceFactory > (
         ctx->getServiceManager()->createInstanceWithContext(

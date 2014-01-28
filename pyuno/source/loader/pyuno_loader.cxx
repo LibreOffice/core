@@ -146,7 +146,7 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
 {
     OUStringBuffer bufPYTHONPATH( 256 );
     sal_Int32 nIndex = 0;
-    while( 1 )
+    while( true )
     {
         sal_Int32 nNew = pythonPathBootstrap.indexOf( ' ', nIndex );
         OUString fileUrl;
