@@ -263,8 +263,7 @@ static oslFileError osl_create_temp_file_impl_(
     if (osl_File_E_None == osl_error)
         rtl_uString_assign(ppustr_temp_file_name, tmp_file_path);
 
-    if (tmp_file_path)
-        rtl_uString_release(tmp_file_path);
+    rtl_uString_release(tmp_file_path);
 
     return osl_error;
 }
