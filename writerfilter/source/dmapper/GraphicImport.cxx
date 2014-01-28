@@ -824,6 +824,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_wps_wsp:
         case NS_ooxml::LN_wpg_wgp:
         case NS_ooxml::LN_sizeRelH_sizeRelH:
+        case NS_ooxml::LN_sizeRelV_sizeRelV:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -886,6 +887,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         }
         break;
         case NS_ooxml::LN_CT_SizeRelH_pctWidth:
+        case NS_ooxml::LN_CT_SizeRelV_pctHeight:
             if (m_xShape.is() && !m_pImpl->m_rPositivePercentages.empty())
             {
                 sal_Int16 nPositivePercentage = m_pImpl->m_rPositivePercentages.front().toInt32() / 1000;
@@ -895,7 +897,8 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
                 if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(nPositivePercentage));
+                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                    xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
                 }
             }
             break;

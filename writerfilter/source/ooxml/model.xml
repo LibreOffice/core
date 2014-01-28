@@ -5234,6 +5234,7 @@
   </namespace>
   <namespace name="wp14">
     <start name="sizeRelH"/>
+    <start name="sizeRelV"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <define name="ST_SizeRelFromH">
         <choice>
@@ -5241,6 +5242,16 @@
           <value>page</value>
           <value>leftMargin</value>
           <value>rightMargin</value>
+          <value>insideMargin</value>
+          <value>outsideMargin</value>
+        </choice>
+      </define>
+      <define name="ST_SizeRelFromV">
+        <choice>
+          <value>margin</value>
+          <value>page</value>
+          <value>topMargin</value>
+          <value>bottomMargin</value>
           <value>insideMargin</value>
           <value>outsideMargin</value>
         </choice>
@@ -5253,9 +5264,22 @@
           <ref name="ST_SizeRelFromH"/>
         </attribute>
       </define>
+      <define name="CT_SizeRelV">
+        <element name="pctHeight">
+          <ref name="ST_PositivePercentage"/>
+        </element>
+        <attribute name="relativeFrom">
+          <ref name="ST_SizeRelFromV"/>
+        </attribute>
+      </define>
       <define name="sizeRelH">
         <element name="sizeRelH">
           <ref name="CT_SizeRelH"/>
+        </element>
+      </define>
+      <define name="sizeRelV">
+        <element name="sizeRelV">
+          <ref name="CT_SizeRelV"/>
         </element>
       </define>
     </grammar>
@@ -5267,12 +5291,27 @@
       <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromH_insideMargin">insideMargin</value>
       <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
     </resource>
+    <resource name="ST_SizeRelFromV" resource="List" generated="yes">
+      <value name="margin" tokenid="ooxml:ST_SizeRelFromV_margin">margin</value>
+      <value name="page" tokenid="ooxml:ST_SizeRelFromV_page">page</value>
+      <value name="topMargin" tokenid="ooxml:ST_SizeRelFromV_topMargin">topMargin</value>
+      <value name="bottomMargin" tokenid="ooxml:ST_SizeRelFromV_bottomMargin">bottomMargin</value>
+      <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromV_insideMargin">insideMargin</value>
+      <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromV_outsideMargin">outsideMargin</value>
+    </resource>
     <resource name="CT_SizeRelH" resource="Properties" tag="shape">
       <element name="pctWidth" tokenid="ooxml:CT_SizeRelH_pctWidth"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
     </resource>
+    <resource name="CT_SizeRelV" resource="Properties" tag="shape">
+      <element name="pctHeight" tokenid="ooxml:CT_SizeRelV_pctHeight"/>
+      <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelV_relativeFrom"/>
+    </resource>
     <resource name="sizeRelH" resource="Properties" tag="shape">
       <element name="sizeRelH" tokenid="ooxml:sizeRelH_sizeRelH"/>
+    </resource>
+    <resource name="sizeRelV" resource="Properties" tag="shape">
+      <element name="sizeRelV" tokenid="ooxml:sizeRelV_sizeRelV"/>
     </resource>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
@@ -6461,6 +6500,11 @@
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </optional>
+          <optional>
+            <element name="wp14:sizeRelV">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
         </group>
         <optional>
           <attribute name="distT">
@@ -6789,6 +6833,11 @@
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </optional>
+          <optional>
+            <element name="wp14:sizeRelV">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
         </group>
         <optional>
           <attribute name="distT">
@@ -6884,6 +6933,7 @@
       <element name="cNvGraphicFramePr" tokenid="ooxml:CT_Inline_cNvGraphicFramePr"/>
       <element name="a:graphic" tokenid="ooxml:CT_Inline_a_graphic"/>
       <element name="wp14:sizeRelH" tokenid="ooxml:CT_Inline_wp14_sizeRelH"/>
+      <element name="wp14:sizeRelV" tokenid="ooxml:CT_Inline_wp14_sizeRelV"/>
       <attribute name="distT" tokenid="ooxml:CT_Inline_distT"/>
       <attribute name="distB" tokenid="ooxml:CT_Inline_distB"/>
       <attribute name="distL" tokenid="ooxml:CT_Inline_distL"/>
@@ -6981,7 +7031,7 @@
       <element name="docPr" tokenid="ooxml:CT_Anchor_docPr"/>
       <element name="cNvGraphicFramePr" tokenid="ooxml:CT_Anchor_cNvGraphicFramePr"/>
       <element name="a:graphic" tokenid="ooxml:CT_Anchor_a_graphic"/>
-      <element name="wp14:sizeRelH" tokenid="ooxml:CT_Anchor_wp14_sizeRelH"/>
+      <element name="wp14:sizeRelV" tokenid="ooxml:CT_Anchor_wp14_sizeRelV"/>
       <attribute name="distT" tokenid="ooxml:CT_Anchor_distT"/>
       <attribute name="distB" tokenid="ooxml:CT_Anchor_distB"/>
       <attribute name="distL" tokenid="ooxml:CT_Anchor_distL"/>
