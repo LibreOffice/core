@@ -839,7 +839,7 @@ sal_Bool AstExpression::operator==(AstExpression *pExpr)
 
 sal_Bool AstExpression::compare(AstExpression *pExpr)
 {
-    bool bRet = sal_False;
+    bool bRet = false;
     if (m_combOperator != pExpr->getCombOperator())
         return bRet;
     evaluate(EK_const);
@@ -882,7 +882,7 @@ sal_Bool AstExpression::compare(AstExpression *pExpr)
             break;
         default:
             OSL_ASSERT(false);
-            bRet = sal_False;
+            bRet = false;
             break;
     }
     return bRet;
