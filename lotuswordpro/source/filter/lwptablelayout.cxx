@@ -218,13 +218,13 @@ double LwpSuperTableLayout::GetTableWidth()
         LwpTableLayout* pTableLayout = GetTableLayout();
         if(!pTableLayout)
         {
-            assert(sal_False);
+            assert(false);
             return 0;
         }
         LwpTable *pTable = pTableLayout->GetTable();
         if(!pTable)
         {
-            assert(sal_False);
+            assert(false);
             return 0;
         }
         double dDefaultWidth = pTable->GetWidth();
@@ -533,7 +533,7 @@ OUString LwpTableLayout::GetColumnWidth(sal_uInt16 nCol)
 {
     if (nCol >= m_nCols)
     {
-        assert(sal_False);
+        assert(false);
         return m_DefaultColumnStyleName;
     }
 
@@ -601,7 +601,7 @@ void LwpTableLayout::RegisterColumns()
         {
             // this can't happen
             dTableWidth = dDefaultColumn;
-            assert(sal_False);
+            assert(false);
         }
     }
 
@@ -645,7 +645,7 @@ void LwpTableLayout::RegisterRows()
     LwpTable * pTable = GetTable();
     if (pTable == NULL)
     {
-        assert(sal_False);
+        assert(false);
         return;
     }
 
@@ -684,7 +684,7 @@ void LwpTableLayout::RegisterStyle()
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();
     if(!pSuper)
     {
-        assert(sal_False);
+        assert(false);
         return;
     }
 
@@ -692,7 +692,7 @@ void LwpTableLayout::RegisterStyle()
     LwpTable * pTable = GetTable();
     if (pTable == NULL)
     {
-        assert(sal_False);
+        assert(false);
         return;
     }
 
@@ -767,7 +767,7 @@ void LwpTableLayout::ParseTable()
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();
     if(!pSuper)
     {
-        assert(sal_False);
+        assert(false);
         return;
     }
 
@@ -812,7 +812,7 @@ void LwpTableLayout::Read()
     // before layout hierarchy rework!
     if(LwpFileHeader::m_nFileRevision < 0x000b)
     {
-        assert(sal_False);
+        assert(false);
     }
     m_ColumnLayout.ReadIndexed(m_pObjStrm);
 
@@ -1241,7 +1241,7 @@ void LwpTableLayout::ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uIn
     LwpTable * pTable = GetTable();
     if (!pTable)
     {
-        assert(sal_False);
+        assert(false);
         return;
     }
 

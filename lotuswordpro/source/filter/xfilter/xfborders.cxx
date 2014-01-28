@@ -176,7 +176,7 @@ bool operator==(XFBorder& b1, XFBorder& b2)
             return false;
     }
     if( b1.m_aColor != b2.m_aColor )
-        return sal_False;
+        return false;
     return true;
 }
 

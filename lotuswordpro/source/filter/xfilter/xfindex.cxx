@@ -64,8 +64,8 @@ XFIndex::XFIndex()
 {
     m_pTitle = NULL;
     m_eType = enumXFIndexTOC;
-    m_bProtect = sal_True;
-    m_bSeparator = sal_False;
+    m_bProtect = true;
+    m_bSeparator = false;
     m_nMaxLevel = 0;
 
     for(sal_uInt16 i=1;i<MAX_TOC_LEVEL+1;i++)

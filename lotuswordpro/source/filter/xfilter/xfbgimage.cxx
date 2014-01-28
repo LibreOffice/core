@@ -137,7 +137,7 @@ bool operator==(XFBGImage& img1, XFBGImage& img2)
     else
     {
         //I'll not compare the content of the two buffer,it's time comsuming.
-        return sal_False;
+        return false;
     }
     if( img1.m_bPosition != img2.m_bPosition )
         return false;

@@ -153,7 +153,7 @@ Decompression::Decompression(SvStream * pInStream, SvStream * pOutStream)
 {
     if (!m_pInStream || !m_pOutStream )
     {
-        assert(sal_False);
+        assert(false);
     }
     ConstructTree1();
     ConstructTree2();

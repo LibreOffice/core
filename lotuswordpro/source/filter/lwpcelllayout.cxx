@@ -193,7 +193,7 @@ void LwpCellLayout::ApplyBorders(XFCellStyle *pCellStyle)
     case enumWholeBorder:
         break;
     default:
-        assert(sal_False);
+        assert(false);
     }
     pCellStyle->SetBorders(pBorders);
 }
@@ -314,7 +314,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
     if (!pTable)
     {
-        assert(sal_False);
+        assert(false);
         return NULL;
     }
     XFCell * pXFCell = new XFCell();
@@ -363,7 +363,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
     LwpTable *pTable = GetTable();
     if (!pTable)
     {
-        assert(sal_False);
+        assert(false);
         return NULL;
     }
     sal_uInt16 nRow = crowid;
@@ -403,7 +403,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
     LwpTableLayout * pTableLayout = GetTableLayout();
     if (!pTableLayout)
     {
-        assert(sal_False);
+        assert(false);
         return NULL;
     }
     return pTableLayout->SearchCellStoryMap(nRow, nCol);
@@ -420,7 +420,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
 {
     if (!pTableLayout)
     {
-        assert(sal_False);
+        assert(false);
         return enumWholeBorder;
     }
 
@@ -552,7 +552,7 @@ void LwpCellLayout::RegisterDefaultCell()
                 pBorders->SetWidth(enumXFBorderLeft, 0);
                 break;
             default:
-                assert(sal_False);
+                assert(false);
             }
             pCellStyle->SetBorders(pBorders);
         }
@@ -616,7 +616,7 @@ void LwpCellLayout::Read()
     // before the layout hierarchy rework
     if (LwpFileHeader::m_nFileRevision  < 0x000b)
     {
-        assert(sal_False);
+        assert(false);
     }
     else
     {
@@ -711,7 +711,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
 {
     if (!pTableLayout)
     {
-        assert(sal_False);
+        assert(false);
         return enumWholeBorder;
     }
 
@@ -895,7 +895,7 @@ XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, 
     }
     else
     {
-        assert(sal_False);
+        assert(false);
     }
     return pXFCell;
 }

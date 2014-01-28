@@ -1020,11 +1020,11 @@ sal_Int32 LwpMiddleLayout::DetermineWidth()
 {
     if (IsSizeRightToContent())
     {
-        assert(sal_False);
+        assert(false);
     }
     else if (IsSizeRightToContainer())
     {
-        assert(sal_False);
+        assert(false);
     }
     else
     {
