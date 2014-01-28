@@ -596,7 +596,10 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
                 // setup the font properties
-                Font aFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), aPixelSize );
+                SvxFont aFont;
+                aFont.SetName(pFontItem->GetFamilyName());
+                aFont.SetStyleName(pFontItem->GetStyleName());
+                aFont.SetSize(aPixelSize);
 
                 const SfxPoolItem *pItem = aItemSet.GetItem( SID_ATTR_CHAR_WEIGHT );
                 if ( pItem )
@@ -632,7 +635,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_CASEMAP );
                 if ( pItem )
-                    ((SvxFont &)aFont).SetCaseMap( static_cast< const SvxCaseMapItem* >( pItem )->GetCaseMap() );
+                    aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
 
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_EMPHASISMARK );
                 if ( pItem )
