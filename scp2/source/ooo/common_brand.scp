@@ -1397,7 +1397,7 @@ File gid_License_Txt
 End
 
 File gid_License_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
@@ -1408,7 +1408,7 @@ File gid_License_Odt
 End
 
 File gid_Eula_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
@@ -1419,7 +1419,7 @@ File gid_Eula_Odt
 End
 
 File gid_Credits_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
@@ -1430,7 +1430,7 @@ File gid_Credits_Odt
 End
 
 File gid_Apache_Notice
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
