@@ -2280,57 +2280,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         pTargetContext->Insert(PROP_WRITING_MODE, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
-    case NS_sprm::LN_TJc: // sprmTJc
-    case NS_sprm::LN_TDxaLeft:
     case NS_sprm::LN_TDxaGapHalf:
-    case NS_sprm::LN_TFCantSplit:
-    case NS_sprm::LN_TTableHeader:
-    case NS_sprm::LN_TTableBorders: // sprmTTableBorders
     {
         OSL_FAIL( "table propeties should be handled by the table manager");
     }
     break;
     case NS_sprm::LN_TDefTable10:
         break;  // sprmTDefTable10
-    case NS_sprm::LN_TDyaRowHeight:
-        break;  // sprmTDyaRowHeight
     case NS_sprm::LN_TDefTable:
         break;  // sprmTDefTable
     case NS_sprm::LN_TDefTableShd:
         break;  // sprmTDefTableShd
-    case NS_sprm::LN_TTlp:
-        break;  // sprmTTlp
-    case NS_sprm::LN_TFBiDi:
-        break;  // sprmTFBiDi
-    case NS_sprm::LN_THTMLProps:
-        break;  // sprmTHTMLProps
-    case NS_sprm::LN_TSetBrc:
-        break;  // sprmTSetBrc
-    case NS_sprm::LN_TInsert:
-        break;  // sprmTInsert
     case NS_sprm::LN_TDelete:
         break;  // sprmTDelete
     case NS_sprm::LN_TDxaCol:
         break;  // sprmTDxaCol
-    case NS_sprm::LN_TMerge:
-        break;  // sprmTMerge
-    case NS_sprm::LN_TSplit:
-        break;  // sprmTSplit
-    case NS_sprm::LN_TSetBrc10:
-        break;  // sprmTSetBrc10
     case 164: // sprmTSetShd
-    case NS_sprm::LN_TSetShd:
-        break;  // sprmTSetShd
-    case NS_sprm::LN_TSetShdOdd:
-        break;  // sprmTSetShdOdd
     case NS_sprm::LN_TTextFlow:
         break;  // sprmTTextFlow
     case NS_sprm::LN_TDiagLine:
         break;  // sprmTDiagLine
-    case NS_sprm::LN_TVertMerge:
-        break;  // sprmTVertMerge
-    case NS_sprm::LN_TVertAlign:
-        break;  // sprmTVertAlign
         // the following are not part of the official documentation
     case 0x6870: //TxtForeColor
         {
