@@ -4470,7 +4470,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             //sal_uInt32 nSize = pContext->size();
             //<--
 
-            if (pContext == NULL)
+            if( !bool(pContext))
                 pContext.reset(new PropertyMap());
 
             m_pImpl->appendTextPortion( sText, pContext );
@@ -4533,7 +4533,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->SetFieldResult( sText );
             else
             {
-                if (pContext == NULL)
+                if( !bool(pContext))
                     pContext.reset(new PropertyMap());
 
                 m_pImpl->appendTextPortion( sText, pContext );

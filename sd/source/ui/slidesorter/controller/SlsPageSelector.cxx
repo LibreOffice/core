@@ -183,7 +183,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         mpMostRecentlySelectedPage = rpDescriptor;
-        if (mpSelectionAnchor == NULL)
+        if( !bool(mpSelectionAnchor) )
             mpSelectionAnchor = rpDescriptor;
 
         if (mnBroadcastDisableLevel > 0)

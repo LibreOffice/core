@@ -1190,7 +1190,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
                 // At this moment the controller may not yet been set at
                 // model or ViewShellBase.  Take it from the view shell
                 // passed with the event.
-                if (mrBase.GetMainViewShell() != NULL)
+                if( bool(mrBase.GetMainViewShell()) )
                 {
                     mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
                     onSelectionChanged();

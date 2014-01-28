@@ -35,7 +35,7 @@ namespace XPath
         , m_rMutex(rMutex)
         , m_pNodeSet(0)
     {
-        if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
+        if( bool(rxpathObj) && rxpathObj->type == XPATH_NODESET)
         {
             m_pNodeSet = rxpathObj->nodesetval;
             m_pXPathObj = rxpathObj;

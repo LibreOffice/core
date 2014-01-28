@@ -630,7 +630,7 @@ namespace DOM
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
         ::boost::shared_ptr<xmlChar const> const pOld(
             xmlGetProp(m_aNodePtr, xName), xmlFree);
-        if (pOld == NULL) {
+        if( !bool(pOld)) {
             aChangeType = AttrChangeType_ADDITION;
             xmlNewProp(m_aNodePtr, xName, xValue);
         } else {
@@ -713,7 +713,7 @@ namespace DOM
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
         ::boost::shared_ptr<xmlChar const> const pOld(
                 xmlGetNsProp(m_aNodePtr, xLName, pNs->href), xmlFree);
-        if (pOld == NULL) {
+        if( !bool(pOld)) {
             aChangeType = AttrChangeType_ADDITION;
             xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
         } else {

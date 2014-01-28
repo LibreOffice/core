@@ -162,7 +162,7 @@ string WW8TableReference::getType() const
 
 void WW8PropertiesReference::resolve(Properties & rHandler)
 {
-    if (mpPropSet != NULL)
+    if( bool(mpPropSet))
     {
         //mpPropSet->dump(clog);
 

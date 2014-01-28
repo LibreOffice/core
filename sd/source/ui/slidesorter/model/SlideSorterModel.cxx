@@ -217,7 +217,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
     if (nPageIndex>=0 && nPageIndex<GetPageCount())
     {
         pDescriptor = maPageDescriptors[nPageIndex];
-        if (pDescriptor == NULL && bCreate && mxSlides.is())
+        if( !bool(pDescriptor) && bCreate && mxSlides.is())
         {
             SdPage* pPage = GetPage(nPageIndex);
             pDescriptor.reset(new PageDescriptor (

@@ -300,7 +300,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, lo
 {
     // die Daten zum Fenster
     TTableWindowData::value_type pData = pTabWin->GetData();
-    OSL_ENSURE(pData != NULL, "SaveTabWinPosSize : TabWin hat keine Daten !");
+    OSL_ENSURE( bool(pData), "SaveTabWinPosSize : TabWin hat keine Daten !");
 
     // Position & Size der Daten neu setzen (aus den aktuellen Fenster-Parametern)
     Point aPos = pTabWin->GetPosPixel();

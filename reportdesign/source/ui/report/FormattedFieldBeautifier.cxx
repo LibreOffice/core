@@ -184,7 +184,7 @@ namespace rptui
                 {
                     // Rectangle aRect = pUnoObj->GetCurrentBoundRect();
                     ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_rReportController.getSectionWindow(xSection);
-                    if (pSectionWindow != NULL)
+                    if( bool(pSectionWindow))
                     {
                         OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
                         OSectionView& aSdrView = aOutputDevice.getSectionView();            // SdrView

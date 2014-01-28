@@ -1011,7 +1011,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         if (pTabWin->Init())
         {
             TTableWindowData::value_type pData = pTabWin->GetData();
-            DBG_ASSERT(pData != NULL, "OQueryTableView::ShowTabWin : TabWin hat keine Daten !");
+            DBG_ASSERT( bool(pData), "OQueryTableView::ShowTabWin : TabWin hat keine Daten !");
             // Wenn die Daten schon PosSize haben, diese benutzen
             if (pData->HasPosition() && pData->HasSize())
             {

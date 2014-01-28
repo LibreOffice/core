@@ -378,7 +378,7 @@ namespace XPath
         /* Create xpath evaluation context */
         ::boost::shared_ptr<xmlXPathContext> const xpathCtx(
                 xmlXPathNewContext(pDoc), xmlXPathFreeContext);
-        if (xpathCtx == NULL) { throw XPathException(); }
+        if( !bool(xpathCtx)) { throw XPathException(); }
 
         // set context node
         xpathCtx->node = pNode;

@@ -665,7 +665,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     : ViewShell::OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
-                if (pActiveWindow != NULL)
+                if( bool(pActiveWindow) )
                     pActiveWindow->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
 

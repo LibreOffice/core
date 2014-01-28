@@ -464,10 +464,8 @@ void OViewsWindow::Paste()
                 if (nCurrentPosition > 0)
                 {
                     pRet = (*(--aIter));
-                    if (pRet == NULL)
-                    {
+                    if( !bool(pRet) )
                         pRet = (*m_aSections.begin());
-                    }
                 }
                 else
                 {
@@ -482,10 +480,8 @@ void OViewsWindow::Paste()
                 if ((nCurrentPosition + 1) < nSize)
                 {
                     pRet = *(++aIter);
-                    if (pRet == NULL)
-                    {
+                    if( !bool(pRet) )
                         pRet = (*(--aEnd));
-                    }
                 }
                 else
                 {

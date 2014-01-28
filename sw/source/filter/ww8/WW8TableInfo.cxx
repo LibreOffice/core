@@ -1341,7 +1341,7 @@ string WW8TableCellGrid::toString()
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
         WidthsPtr pWidths = pRow->getWidths();
-        if (pWidths != NULL)
+        if( bool(pWidths))
         {
             sResult += "<widths>";
 

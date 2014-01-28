@@ -335,9 +335,9 @@ void SidebarController::BroadcastPropertyChange (void)
 
 void SidebarController::NotifyResize (void)
 {
-    if (mpTabBar == NULL)
+    if( !bool(mpTabBar))
     {
-        OSL_ASSERT(mpTabBar!=NULL);
+        OSL_ASSERT( bool(mpTabBar));
         return;
     }
 
@@ -645,7 +645,7 @@ void SidebarController::SwitchToDeck (
                 rContext);
             bHasPanelSetChanged = true;
         }
-        if (aNewPanels[nWriteIndex] != NULL)
+        if( bool(aNewPanels[nWriteIndex]))
         {
             // Depending on the context we have to change the command
             // for the "more options" dialog.
