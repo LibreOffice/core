@@ -170,24 +170,4 @@ bool ScDocument::CopyOneCellFromClip(
     return true;
 }
 
-void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
-{
-    ScHint aHint(nHint, ScAddress());
-    ScAddress& rPos = aHint.GetAddress();
-
-    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
-    {
-        rPos.SetTab(nTab);
-        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-        {
-            rPos.SetCol(nCol);
-            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
-            {
-                rPos.SetRow(nRow);
-                Broadcast(aHint);
-            }
-        }
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
