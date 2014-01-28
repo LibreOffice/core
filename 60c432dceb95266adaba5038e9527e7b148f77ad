@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_a0a24498",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-01-28T17:12:04Z",
+      "side": 1,
+      "message": "Aren\u0027t accelerators key combinations with the \u0027ctrl\u0027 key (or CMD key in OSX), and Mnemonics (the underlined letters in menus) the underlined character + alt key? Just asking :)",
+      "revId": "60c432dceb95266adaba5038e9527e7b148f77ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
