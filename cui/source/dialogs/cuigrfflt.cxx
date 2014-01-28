@@ -498,6 +498,7 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
     switch( maCtlLight.GetActualRP() )
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
+                       /* Fall through */
         case( RP_LT ): nAzim = 4500,    nElev = 4500; break;
         case( RP_MT ): nAzim = 9000,    nElev = 4500; break;
         case( RP_RT ): nAzim = 13500,   nElev = 4500; break;
