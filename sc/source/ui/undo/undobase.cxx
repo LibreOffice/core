@@ -146,27 +146,7 @@ void ScSimpleUndo::EndRedo()
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CellContentModified();
-
-    ScBulkBroadcast aBulkBroadcast( pDoc->GetBASM());
-
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress());
-    ScAddress& rPos = aHint.GetAddress();
-    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
-    {
-        rPos.SetTab(nTab);
-        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-        {
-            rPos.SetCol(nCol);
-            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
-            {
-                rPos.SetRow(nRow);
-                pDoc->Broadcast(aHint);
-            }
-        }
-    }
-
-    pDoc->BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
+    pDoc->BroadcastCells(rRange, SC_HINT_DATACHANGED);
 }
 
 void ScSimpleUndo::ShowTable( SCTAB nTab )

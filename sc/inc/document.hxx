@@ -1808,6 +1808,8 @@ public:
                          */
     void                Broadcast( const ScHint& rHint );
 
+    void BroadcastCells( const ScRange& rRange, sal_uLong nHint );
+
                         /// only area, no cell broadcast
     void                AreaBroadcast( const ScHint& rHint );
                         /// only areas in range, no cell broadcasts

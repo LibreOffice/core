@@ -104,6 +104,31 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
+void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
+{
+    CellContentModified();
+
+    ScBulkBroadcast aBulkBroadcast(pBASM);
+
+    ScHint aHint(nHint, ScAddress());
+    ScAddress& rPos = aHint.GetAddress();
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        rPos.SetTab(nTab);
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        {
+            rPos.SetCol(nCol);
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                rPos.SetRow(nRow);
+                Broadcast(aHint);
+            }
+        }
+    }
+
+    BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
+}
+
 void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
