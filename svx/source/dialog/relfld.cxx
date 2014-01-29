@@ -22,12 +22,16 @@
 
 // -----------------------------------------------------------------------
 
-SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits) :
-    MetricField( pParent, nBits)
+SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits)
+    : MetricField( pParent, nBits)
+    , nRelMin(0)
+    , nRelMax(0)
+    , nRelStep(0)
+    , bRelativeMode(sal_False)
+    , bRelative(sal_False)
+    , bNegativeEnabled(sal_False)
+
 {
-    bNegativeEnabled = sal_False;
-    bRelativeMode = sal_False;
-    bRelative     = sal_False;
 
     SetDecimalDigits( 2 );
     SetMin( 0 );
