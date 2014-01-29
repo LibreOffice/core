@@ -1591,7 +1591,7 @@ class VCL_DLLPUBLIC SolarMutexClearableGuard
     bool m_bCleared;
 public:
     /** Acquires mutex
-        @param pMutex pointer to mutex which is to be acquired  */
+     */
     SolarMutexClearableGuard()
         : m_bCleared(false)
         , m_solarMutex( Application::GetSolarMutex() )
@@ -1628,7 +1628,7 @@ class VCL_DLLPUBLIC SolarMutexResettableGuard
     bool m_bCleared;
 public:
     /** Acquires mutex
-        @param pMutex pointer to mutex which is to be acquired  */
+     */
     SolarMutexResettableGuard()
         : m_bCleared(false)
         , m_solarMutex( Application::GetSolarMutex() )

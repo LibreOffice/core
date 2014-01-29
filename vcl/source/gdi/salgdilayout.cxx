@@ -466,7 +466,7 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
 {
     bool bRet = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
@@ -537,9 +537,9 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt3
 }
 
 bool SalGraphics::DrawPolyLine(
-    const ::basegfx::B2DPolygon& i_rPolygon,
+    const basegfx::B2DPolygon& i_rPolygon,
     double i_fTransparency,
-    const ::basegfx::B2DVector& i_rLineWidth,
+    const basegfx::B2DVector& i_rLineWidth,
     basegfx::B2DLineJoin i_eLineJoin,
     com::sun::star::drawing::LineCap i_eLineCap,
     const OutputDevice* i_pOutDev )

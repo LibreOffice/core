@@ -181,6 +181,9 @@ public:
         @param pInitColor
         Color to use for padded pixel
 
+        @param bExpandTransparent
+        Whether to expand the transparency color or not.
+
         @return sal_True, if padding was performed successfully. sal_False is
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
@@ -201,7 +204,7 @@ public:
         during this copy operation, i.e. only the minimum of source
         and destination rectangle's width and height are used.
 
-        @param pBmpSrc
+        @param pBmpExSrc
         The source bitmap to copy from. If this argument is NULL, or
         equal to the object this method is called on, copying takes
         place within the same bitmap.
@@ -260,6 +263,9 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
+        @param nScaleFlag
+        The algorithm to be used for scaling
+
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
@@ -298,16 +304,16 @@ public:
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
-        @param pSearchColor
+        @param pSearchColors
         Array of colors specifying which pixel should be replaced
 
-        @param pReplaceColor
+        @param pReplaceColors
         Array of colors to be placed in all changed pixel
 
         @param nColorCount
         Size of the aforementioned color arrays
 
-        @param nTol
+        @param pTols
         Tolerance value. Specifies the maximal difference between
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
@@ -454,21 +460,32 @@ public:
     The blend value defines how strong the frame will be blended with the
     existing content, 255 == full coverage, 0 == no frame will be drawn
 
-    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
-    The colors defining the frame. If the version without aColorTopRight and
-    aColorBottomLeft is used, these colors are linearly interpolated from
+    @param aColorTopLeft, aColorBottomRight
+    The colors defining the frame. These colors are linearly interpolated from
     aColorTopLeft and aColorBottomRight using the width and height of the area
 
     @param rSize
     The size of the frame in pixels
     */
-
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
     Color aColorBottomRight);
 
+
+/** Create a blend frame as BitmapEx
+
+    @param nAlpha
+    The blend value defines how strong the frame will be blended with the
+    existing content, 255 == full coverage, 0 == no frame will be drawn
+
+    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
+    The colors defining the frame.
+
+    @param rSize
+    The size of the frame in pixels
+    */
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
