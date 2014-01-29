@@ -4488,8 +4488,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     fYOfs = ((double)aPolyBoundRect.Top() - (double)aPolyPieRect.Top() ) * fYScale;
                             }
 
-                            fXScale = (double)aPolyBoundRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                            fYScale = (double)aPolyBoundRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                            if ( aPolyPieRect.GetWidth() )
+                                fXScale = (double)aPolyBoundRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                            if ( aPolyPieRect.GetHeight() )
+                                fYScale = (double)aPolyBoundRect.GetHeight() / (double)aPolyPieRect.GetHeight();
 
                             Rectangle aOldBoundRect( aObjData.aBoundRect );
                             aObjData.aBoundRect = Rectangle( Point( aLogicRect.Left() + (sal_Int32)fXOfs, aLogicRect.Top() + (sal_Int32)fYOfs ),
