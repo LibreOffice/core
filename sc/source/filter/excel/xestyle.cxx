@@ -1405,7 +1405,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // shrink to fit
-            mbShrink = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT, sal_Bool );
+            mbShrink = GETITEM( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT ).GetValue();
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_SHRINKTOFIT, bStyle );
 
             // CTL text direction
@@ -1421,7 +1421,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // stacked/rotation
-            bool bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, sal_Bool );
+            bool bStacked = GETITEM( rItemSet, SfxBoolItem, ATTR_STACKED ).GetValue();
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_STACKED, bStyle );
             if( bStacked )
             {

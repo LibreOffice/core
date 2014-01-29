@@ -89,7 +89,7 @@ namespace abp
                                                            // the parent window
                                                            xDialogParent,
                                                            _rxDataSource,
-                                                           (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName,
+                                                           _rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName,
                                                            // the table to use
                                                            _rSettings.sSelectedTable,
                                                            sTitle);

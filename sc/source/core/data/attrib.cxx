@@ -1078,7 +1078,7 @@ bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
-    return int(nValue == _rItem.nValue);
+    return nValue == _rItem.nValue;
 }
 
 //------------------------------------------------------------------------

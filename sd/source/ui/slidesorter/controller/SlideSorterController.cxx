@@ -727,14 +727,10 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
                     break;
             }
 
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
-                    (sal_Bool)(nQuality==0)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
-                    (sal_Bool)(nQuality==1)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
-                    (sal_Bool)(nQuality==2)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
-                    (sal_Bool)(nQuality==3)));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR, nQuality==0));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE, nQuality==1));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE, nQuality==2));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST, nQuality==3));
         }
     }
 

@@ -1252,7 +1252,7 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 {
     ::Outliner* pOutl = pOlView->GetOutliner();
 
-    pOutl->SetFlatMode( static_cast<bool>(pView->IsNoAttribs()) );
+    pOutl->SetFlatMode( pView->IsNoAttribs() );
 
     sal_uLong nCntrl = pOutl->GetControlWord();
 

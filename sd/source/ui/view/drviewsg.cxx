@@ -233,7 +233,7 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPntSnap() ) );
 
     rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
-    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (sal_Bool)
+    rSet.Put( SfxBoolItem( SID_PICK_THROUGH,
                 mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );
