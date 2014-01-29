@@ -24,7 +24,6 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
-#include <tools/solar.h>
 
 class SvStream;
 class SotDataObject;

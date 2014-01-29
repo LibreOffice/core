@@ -30,7 +30,6 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxdefs.hxx>
-#include <tools/solar.h>
 #include <tools/wldcrd.hxx>
 
 #define SFX_FILTER_STARTPRESENTATION 0x20000000L

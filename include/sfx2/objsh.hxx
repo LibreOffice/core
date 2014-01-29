@@ -20,10 +20,7 @@
 #define INCLUDED_SFX2_OBJSH_HXX
 
 #include <config_features.h>
-
 #include <sal/config.h>
-
-#include <tools/solar.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -39,10 +36,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/CmisVersion.hpp>
 #include <boost/shared_ptr.hpp>
-
-//________________________________________________________________________________________________________________
-//  include something else
-//________________________________________________________________________________________________________________
 
 #include <vcl/timer.hxx>
 #include <svl/poolitem.hxx>
@@ -132,8 +125,6 @@ typedef sal_uInt32 SfxObjectShellFlags;
 #define SFXOBJECTSHELL_STD_SPECIAL     ( SFXOBJECTSHELL_DONTLOADFILTERS )
 #define SFXOBJECTSHELL_UNDEFINED       0xf000000
 
-//--------------------------------------------------------------------
-
 #define SFX_TITLE_TITLE    0
 #define SFX_TITLE_FILENAME 1
 #define SFX_TITLE_FULLNAME 2
@@ -148,8 +139,6 @@ typedef sal_uInt32 SfxObjectShellFlags;
 #define SFX_LOADED_IMAGES       2
 #define SFX_LOADED_ALL          3
 
-//--------------------------------------------------------------------
-
 #define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
 #define HIDDENINFORMATION_NOTES                 0x0002
 #define HIDDENINFORMATION_DOCUMENTVERSIONS      0x0004
@@ -162,8 +151,6 @@ enum HiddenWarningFact
     WhenCreatingPDF
 };
 
-//--------------------------------------------------------------------
-
 enum SfxObjectCreateMode
 {
     SFX_CREATE_MODE_EMBEDDED,
@@ -174,13 +161,11 @@ enum SfxObjectCreateMode
     SFX_CREATE_MODE_INTERNAL
 };
 
-/*====================================================================
-
-The class SfxObjectShell is the base class for SFx-objects, ie documents
-and parts of documents that can be integrated as separate objects
-into foreign objects.
-
-----------------------------------------------------------------------*/
+/*
+    The class SfxObjectShell is the base class for SFx-objects, ie documents
+    and parts of documents that can be integrated as separate objects
+    into foreign objects.
+*/
 
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
@@ -550,7 +535,7 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xTarget );
 
-    // ==== The functions from SvPersist
+    // The functions from SvPersist
     void            EnableSetModified( sal_Bool bEnable = sal_True );
     sal_Bool        IsEnableSetModified() const;
     virtual void    SetModified( sal_Bool bModified = sal_True );
@@ -584,7 +569,7 @@ public:
     comphelper::EmbeddedObjectContainer&    GetEmbeddedObjectContainer() const;
     void    ClearEmbeddedObjects();
 
-    // ==== The functions from SvEmbeddedObject
+    // The functions from SvEmbeddedObject
     virtual Printer *       GetDocumentPrinter();
     virtual OutputDevice*    GetDocumentRefDev();
     virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
@@ -622,8 +607,6 @@ public:
     virtual void    SetChangeRecording( bool bActivate );
     virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
-
-    // =================================
 
     SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const;
 
@@ -746,16 +729,15 @@ public:
     };
 
 
-//--------------------------------------------------------------------
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
 SV_DECL_REF(SfxObjectShell)
 #endif
+
 SV_DECL_LOCK(SfxObjectShell)
 SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
 
-//--------------------------------------------------------------------
 class AutoReloadTimer_Impl : public Timer
 {
     OUString          aUrl;
@@ -766,8 +748,6 @@ public:
                           SfxObjectShell* pSh );
     virtual void Timeout();
 };
-
-//-------------------------------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
 {

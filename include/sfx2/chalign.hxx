@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_CHALIGN_HXX
 #define INCLUDED_SFX2_CHALIGN_HXX
 
-#include <tools/solar.h>
-
 // New order: first, navigation bar, then vertically docked child windows
 // (Explorer!), then horizontally docked child windows (Browser!),
 // then the format bar, status bar, and at the end of the toolbar.
