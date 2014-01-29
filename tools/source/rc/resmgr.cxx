@@ -421,6 +421,7 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
                                 const OUString& rResName,
                                 const LanguageTag& rLocale )
     : pContent( NULL )
+    , nOffCorrection( 0 )
     , pStringBlock( NULL )
     , pStm( NULL )
     , bEqual2Content( true )
