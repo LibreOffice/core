@@ -20,14 +20,9 @@
 #ifndef INCLUDED_VCL_VIRDEV_HXX
 #define INCLUDED_VCL_VIRDEV_HXX
 
-#include <tools/solar.h>
+#include <basebmp/bitmapdevice.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
-#include <basebmp/bitmapdevice.hxx>
-
-// -----------------
-// - VirtualDevice -
-// -----------------
 
 class SalVirtualDevice;
 struct SystemGraphicsData;

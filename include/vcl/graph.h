@@ -21,12 +21,7 @@
 #define INCLUDED_VCL_GRAPH_H
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-
-// ---------------
-// - GraphicType -
-// ---------------
 
 enum GraphicType
 {
@@ -35,10 +30,6 @@ enum GraphicType
     GRAPHIC_GDIMETAFILE,
     GRAPHIC_DEFAULT
 };
-
-// -----------------
-// - GraphicReader -
-// -----------------
 
 class ReaderData;
 

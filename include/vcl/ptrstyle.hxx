@@ -20,12 +20,6 @@
 #ifndef INCLUDED_VCL_PTRSTYLE_HXX
 #define INCLUDED_VCL_PTRSTYLE_HXX
 
-#include <tools/solar.h>
-
-// -----------------
-// - Pointer-Types -
-// -----------------
-
 typedef sal_uInt16 PointerStyle;
 
 #define POINTER_ARROW                   ((PointerStyle)0)

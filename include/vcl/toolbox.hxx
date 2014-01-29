@@ -20,15 +20,13 @@
 #ifndef INCLUDED_VCL_TOOLBOX_HXX
 #define INCLUDED_VCL_TOOLBOX_HXX
 
-#include <tools/solar.h>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
 #include <vector>
-
-#include <com/sun/star/frame/XFrame.hpp>
 
 class UserDrawEvent;
 
@@ -42,10 +40,6 @@ namespace vcl
 {
     class IImageListProvider;
 }
-
-// -------------------------
-// - ToolBoxCustomizeEvent -
-// -------------------------
 
 #define TOOLBOX_CUSTOMIZE_RESIZE        ((sal_uInt16)0xFFFE)
 
@@ -96,10 +90,6 @@ inline sal_Bool ToolBoxCustomizeEvent::IsResized() const
         return sal_False;
 }
 
-// -----------------
-// - ToolBox-Types -
-// -----------------
-
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
 
 #define TOOLBOX_APPEND              ((sal_uInt16)0xFFFF)
@@ -129,10 +119,6 @@ struct ImplToolSize
     long mnHeight;
     sal_uInt16 mnLines;
 };
-
-// -----------
-// - ToolBox -
-// -----------
 
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {

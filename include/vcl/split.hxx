@@ -20,15 +20,10 @@
 #ifndef INCLUDED_VCL_SPLIT_HXX
 #define INCLUDED_VCL_SPLIT_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
 #define SPLITTER_DEFAULTSTEPSIZE 0xFFFF
-
-// ------------
-// - Splitter -
-// ------------
 
 class VCL_DLLPUBLIC Splitter : public Window
 {

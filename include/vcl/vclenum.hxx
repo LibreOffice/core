@@ -20,26 +20,19 @@
 #ifndef INCLUDED_VCL_VCLENUM_HXX
 #define INCLUDED_VCL_VCLENUM_HXX
 
-#include <sal/types.h>
-#include <tools/solar.h>
-#include <tools/fontenum.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
-
-// ------------------------------------------------------------
+#include <sal/types.h>
+#include <tools/fontenum.hxx>
 
 enum ExtTimeFieldFormat { EXTTIMEF_24H_SHORT, EXTTIMEF_24H_LONG,
                           EXTTIMEF_12H_SHORT, EXTTIMEF_12H_LONG,
                           EXTTIMEF_DURATION_SHORT, EXTTIMEF_DURATION_LONG };
-
-// ------------------------------------------------------------
 
 enum ExtDateFieldFormat { XTDATEF_SYSTEM_SHORT, XTDATEF_SYSTEM_SHORT_YY, XTDATEF_SYSTEM_SHORT_YYYY,
                           XTDATEF_SYSTEM_LONG,
                           XTDATEF_SHORT_DDMMYY, XTDATEF_SHORT_MMDDYY, XTDATEF_SHORT_YYMMDD,
                           XTDATEF_SHORT_DDMMYYYY, XTDATEF_SHORT_MMDDYYYY, XTDATEF_SHORT_YYYYMMDD,
                           XTDATEF_SHORT_YYMMDD_DIN5008, XTDATEF_SHORT_YYYYMMDD_DIN5008, ExtDateFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
-// ------------------------------------------------------------
 
 enum GradientStyle
 {
@@ -51,8 +44,6 @@ enum GradientStyle
     GradientStyle_RECT = 5,
     GradientStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
-
-// ------------------------------------------------------------
 
 // to avoid conflicts with enum's declared otherwise
 #define HATCH_SINGLE            HatchStyle_SINGLE
@@ -68,8 +59,6 @@ enum HatchStyle
     HatchStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-// ------------------------------------------------------------
-
 // to avoid conflicts with enum's declared otherwise
 #define LINE_NONE               LineStyle_NONE
 #define LINE_SOLID              LineStyle_SOLID
@@ -84,19 +73,13 @@ enum LineStyle
     LineStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-// ------------------------------------------------------------
-
 enum RasterOp { ROP_OVERPAINT, ROP_XOR, ROP_0, ROP_1, ROP_INVERT };
-
-// ------------------------------------------------------------
 
 enum FontAutoHint { AUTOHINT_DONTKNOW, AUTOHINT_FALSE, AUTOHINT_TRUE };
 
 enum FontHinting { HINTING_DONTKNOW, HINTING_FALSE, HINTING_TRUE };
 
 enum FontHintStyle { HINT_NONE, HINT_SLIGHT, HINT_MEDIUM, HINT_FULL };
-
-// ------------------------------------------------------------
 
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 

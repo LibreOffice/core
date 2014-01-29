@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_DECOVIEW_HXX
 #define INCLUDED_VCL_DECOVIEW_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
 
@@ -28,10 +27,6 @@ class Rectangle;
 class Point;
 class Color;
 class OutputDevice;
-
-// ------------------------
-// - DecorationView-Types -
-// ------------------------
 
 // Flags for DrawSymbol()
 #define SYMBOL_DRAW_MONO                    ((sal_uInt16)0x0001)
@@ -71,10 +66,6 @@ class OutputDevice;
 #define BUTTON_DRAW_NOLEFTLIGHTBORDER       ((sal_uInt16)0x1000)
 #define BUTTON_DRAW_NOTEXT                  ((sal_uInt16)0x2000)
 #define BUTTON_DRAW_NOIMAGE                 ((sal_uInt16)0x4000)
-
-// ------------------
-// - DecorationView -
-// ------------------
 
 class VCL_DLLPUBLIC DecorationView
 {

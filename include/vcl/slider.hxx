@@ -20,15 +20,10 @@
 #ifndef INCLUDED_VCL_SLIDER_HXX
 #define INCLUDED_VCL_SLIDER_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 // for enum ScrollType
 #include <vcl/scrbar.hxx>
-
-// ----------
-// - Slider -
-// ----------
 
 class VCL_DLLPUBLIC Slider : public Control
 {

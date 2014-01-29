@@ -20,18 +20,13 @@
 #ifndef INCLUDED_VCL_WALL_HXX
 #define INCLUDED_VCL_WALL_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <vcl/dllapi.h>
 
 class Gradient;
 class BitmapEx;
 class ImplWallpaper;
-
-// -------------------
-// - Wallpaper-Types -
-// -------------------
 
 #define WALLPAPER_NULL                  WallpaperStyle_NULL
 #define WALLPAPER_TILE                  WallpaperStyle_TILE
@@ -71,10 +66,6 @@ enum WallpaperStyle
 };
 
 #endif
-
-// -------------
-// - Wallpaper -
-// -------------
 
 class VCL_DLLPUBLIC Wallpaper
 {

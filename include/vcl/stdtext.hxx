@@ -21,24 +21,15 @@
 #define INCLUDED_VCL_STDTEXT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 class Window;
-
-// ------------------
-// - Standard-Texte -
-// ------------------
 
 #define STANDARD_TEXT_FIRST                     STANDARD_TEXT_SERVICE_NOT_AVAILABLE
 #define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((sal_uInt16)0)
 #define STANDARD_TEXT_LAST                      STANDARD_TEXT_SERVICE_NOT_AVAILABLE
 
 OUString VCL_DLLPUBLIC GetStandardText(sal_uInt16 nStdText);
-
-// -------------------------------------
-// - Hilfsmethoden fuer Standard-Texte -
-// -------------------------------------
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(Window* pParent, const OUString& rServiceName, bool bError);
 

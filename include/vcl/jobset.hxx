@@ -20,17 +20,11 @@
 #ifndef INCLUDED_VCL_JOBSET_HXX
 #define INCLUDED_VCL_JOBSET_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 
-
 class SvStream;
 struct ImplJobSetup;
-
-// ------------
-// - JobSetup -
-// ------------
 
 class VCL_DLLPUBLIC JobSetup
 {

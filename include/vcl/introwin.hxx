@@ -20,14 +20,9 @@
 #ifndef INCLUDED_VCL_INTROWIN_HXX
 #define INCLUDED_VCL_INTROWIN_HXX
 
-#include <tools/solar.h>
+#include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
-#include <vcl/bitmapex.hxx>
-
-// --------------
-// - IntroWindow -
-// --------------
 
 class VCL_DLLPUBLIC IntroWindow : public WorkWindow
 {

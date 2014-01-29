@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_REGION_HXX
 
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -32,14 +31,10 @@ class RegionBand;
 class Polygon;
 class PolyPolygon;
 
-//////////////////////////////////////////////////////////////////////////////
-
 typedef boost::shared_ptr< RegionBand > RegionBandPtr;
 typedef boost::shared_ptr< PolyPolygon > PolyPolygonPtr;
 typedef boost::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
 typedef std::vector< Rectangle > RectangleVector;
-
-//////////////////////////////////////////////////////////////////////////////
 
 class VCL_DLLPUBLIC Region
 {

@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_APPTYPES_HXX
 #define INCLUDED_VCL_APPTYPES_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/rtti.hxx>
-
-// ---------------------
-// - Application-Types -
-// ---------------------
 
 #define EXC_RSCNOTLOADED            ((sal_uInt16)0x0100)
 #define EXC_SYSOBJNOTCREATED        ((sal_uInt16)0x0200)

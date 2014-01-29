@@ -20,24 +20,15 @@
 #ifndef INCLUDED_VCL_MENUBTN_HXX
 #define INCLUDED_VCL_MENUBTN_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <vcl/button.hxx>
+#include <vcl/dllapi.h>
 
 class Timer;
 class PopupMenu;
 class VclBuilder;
 class VclSimpleEvent;
 
-// --------------------
-// - MenuButton-Types -
-// --------------------
-
 #define MENUBUTTON_MENUMODE_TIMED       ((sal_uInt16)0x0001)
-
-// --------------
-// - MenuButton -
-// --------------
 
 class VCL_DLLPUBLIC MenuButton : public PushButton
 {

@@ -20,7 +20,6 @@
 #define INCLUDED_VCL_ABSTDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 class Window;
@@ -63,8 +62,6 @@ public:
     virtual OUString  GetPasswordToModify() const = 0;
     virtual bool      IsRecommendToOpenReadonly() const = 0;
 };
-
-//-------------------------------------------------------------
 
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {

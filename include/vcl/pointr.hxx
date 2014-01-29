@@ -20,15 +20,10 @@
 #ifndef INCLUDED_VCL_POINTR_HXX
 #define INCLUDED_VCL_POINTR_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ptrstyle.hxx>
 
 class Point;
-
-// -----------
-// - Pointer -
-// -----------
 
 class VCL_DLLPUBLIC Pointer
 {
