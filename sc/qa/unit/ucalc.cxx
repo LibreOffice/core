@@ -6,6 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include "ucalc.hxx"
+
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
@@ -50,6 +53,8 @@
 #include "queryparam.hxx"
 #include "edittextiterator.hxx"
 #include "editutil.hxx"
+#include <asciiopt.hxx>
+#include <impex.hxx>
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -71,8 +76,6 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-
-#include "ucalc.hxx"
 
 struct TestImpl
 {
@@ -5164,6 +5167,57 @@ void Test::testCondCopyPaste()
     CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
 
 
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testImportStream()
+{
+    sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
+    sc::UndoSwitch aUndo(*m_pDoc, true); // enable undo.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,1,0), "=SUM(A1:C1)");
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // CSV import options.
+    ScAsciiOptions aOpt;
+    aOpt.SetFieldSeps(",");
+
+    ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
+    aObj.SetExtOptions(aOpt);
+    aObj.ImportString("1,2,3", FORMAT_STRING);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    // Formula value should have been updated.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Undo, and check the result.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the undo manager.", pUndoMgr);
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
+
+    // Redo, and check the result.
+    pUndoMgr->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
+
+
+    pUndoMgr->Clear();
     m_pDoc->DeleteTab(0);
 }
 

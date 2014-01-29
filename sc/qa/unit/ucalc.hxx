@@ -307,6 +307,8 @@ public:
     void testCondFormatInsertCol();
     void testCondCopyPaste();
 
+    void testImportStream();
+
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
     CPPUNIT_TEST(testPerf);
@@ -425,6 +427,7 @@ public:
     CPPUNIT_TEST(testCondFormatInsertRow);
     CPPUNIT_TEST(testCondFormatInsertCol);
     CPPUNIT_TEST(testCondCopyPaste);
+    CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST_SUITE_END();
 
 private:

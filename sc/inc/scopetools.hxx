@@ -37,6 +37,15 @@ public:
     ~ExpandRefsSwitch();
 };
 
+class SC_DLLPUBLIC UndoSwitch
+{
+    ScDocument& mrDoc;
+    bool mbOldValue;
+public:
+    UndoSwitch(ScDocument& rDoc, bool bUndo);
+    ~UndoSwitch();
+};
+
 }
 
 #endif

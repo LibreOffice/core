@@ -34,6 +34,17 @@ ExpandRefsSwitch::~ExpandRefsSwitch()
     mrDoc.SetExpandRefs(mbOldValue);
 }
 
+UndoSwitch::UndoSwitch(ScDocument& rDoc, bool bUndo) :
+    mrDoc(rDoc), mbOldValue(rDoc.IsUndoEnabled())
+{
+    mrDoc.EnableUndo(bUndo);
+}
+
+UndoSwitch::~UndoSwitch()
+{
+    mrDoc.EnableUndo(mbOldValue);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
