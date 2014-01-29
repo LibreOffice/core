@@ -114,6 +114,14 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
                 << expr->getType() << expr->getSourceRange();
         }
+// At least Clang 3.2 would erroneously warn about Cache::add
+// (binaryurp/source/cache.hxx:53)
+//
+//   if( !size_) {
+//
+// as "implicit conversion (IntegralToBoolean) of null pointer constant of type
+// 'std::size_t' (aka 'unsigned long') to 'bool'":
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
     } else if (sub->isNullPointerConstant(
                    compiler.getASTContext(), Expr::NPC_ValueDependentIsNull)
                != Expr::NPCK_NotNull)
@@ -125,6 +133,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             expr->getLocStart())
             << expr->getCastKindName() << expr->getSubExpr()->getType()
             << expr->getType() << expr->getSourceRange();
+#endif
     } else if (sub->isIntegerConstantExpr(compiler.getASTContext())) {
         report(
             DiagnosticsEngine::Warning,
