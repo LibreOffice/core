@@ -1,0 +1,24 @@
+Use CC variable from environment, don't hardcode "cc".
+
+--- glew/config/Makefile.linux.orig	2014-01-29 15:39:43.364972925 +0100
++++ glew/config/Makefile.linux	2014-01-29 15:44:45.621000941 +0100
+@@ -1,6 +1,6 @@
+ NAME = $(GLEW_NAME)
+-CC = cc
+-LD = cc
++CC ?= cc
++LD ?= $(CC)
+ M_ARCH ?= $(shell uname -m)
+ ARCH64 = false
+ ifeq (x86_64,${M_ARCH})
+--- glew/config/Makefile.darwin.orig	2014-01-29 15:44:39.541000377 +0100
++++ glew/config/Makefile.darwin	2014-01-29 15:44:47.548001120 +0100
+@@ -1,6 +1,6 @@
+ NAME = $(GLEW_NAME)
+-CC = cc
+-LD = cc
++CC ?= cc
++LD ?= $(CC)
+ CFLAGS.EXTRA = -dynamic -fno-common
+ #CFLAGS.EXTRA += -no-cpp-precomp
+ LDFLAGS.EXTRA =

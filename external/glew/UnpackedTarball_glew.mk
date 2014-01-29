@@ -18,6 +18,11 @@ $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-fix-rc-error.patch.1 \
 ))
+else
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew_use_CC_variable.patch.1 \
+))
 endif
+
 
 # vim: set noet sw=4 ts=4:
