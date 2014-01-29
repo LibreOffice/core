@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,glew,$(GLEW_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glew,0))
 
 ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-fix-rc-error.patch.1 \
 ))
