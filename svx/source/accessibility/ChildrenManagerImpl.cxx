@@ -992,13 +992,14 @@ void ChildrenManagerImpl::UpdateSelection (void)
         }
     }
 
-    Window *pParentWidow = maShapeTreeInfo.GetWindow();
+    Window *pParentWindow = maShapeTreeInfo.GetWindow();
     bool bShapeActive= false;
     // For table cell, the table's parent must be checked to make sure it has focus.
-    Window *pPWindow = pParentWidow->GetParent();
-    if (pParentWidow && ( pParentWidow->HasFocus() || (pPWindow && pPWindow->HasFocus())))
+    if (pParentWindow)
     {
-        bShapeActive =true;
+        Window *pPWindow = pParentWindow->GetParent();
+        if (pParentWindow->HasFocus() || (pPWindow && pPWindow->HasFocus()))
+            bShapeActive =true;
     }
     // Move focus from current to newly focused shape.
     if (pCurrentlyFocusedShape != pNewFocusedShape)
