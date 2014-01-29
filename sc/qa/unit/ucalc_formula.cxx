@@ -101,7 +101,9 @@ void Test::testFormulaCreateStringFromTokens()
         ScDBData* pData = new ScDBData(
             OUString::createFromAscii(
                 aDBs[i].pName), aDBs[i].nTab, aDBs[i].nCol1, aDBs[i].nRow1, aDBs[i].nCol2,aDBs[i].nRow2);
-        pDBs->getNamedDBs().insert(pData);
+        bool bInserted = pDBs->getNamedDBs().insert(pData);
+        if (!bInserted)
+            delete pData;
     }
 
     const char* aTests[] = {
