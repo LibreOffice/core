@@ -288,9 +288,6 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     {
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
-        // open our own resource block, as the page titles are strings local to this block
-        LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-
         pPage->SetText(ModuleRes(nStringId));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
         enableButtons( WZB_FINISH, _nState == START_PAGE ? sal_False : sal_True);

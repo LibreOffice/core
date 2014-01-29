@@ -2890,8 +2890,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             case DatabaseObjectContainer::DATA_SOURCE:
             {
                 OUString sMessage(
-                    OUString(
-                        OUString(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
+                        OUString(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE)).
                     replaceFirst("$type$", OUString::number(pObject->Type)));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }

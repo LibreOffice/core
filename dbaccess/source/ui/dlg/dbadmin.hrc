@@ -57,13 +57,6 @@
 #define NF_PORTNUMBER           1
 #define NF_LDAPROWCOUNT         2
 
-//========================================================================
-// string ids (usually relative to other resources, that's why not necessarily unique)
-
-#define STR_PAGETITLE_GENERAL               1
-#define STR_PAGETITLE_CONNECTION            2
-#define STR_PAGETITLE_ADVANCED              3
-
 #endif // _DBAUI_DBADMIN_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -456,4 +456,19 @@ String RID_STR_UNSUPPORTED_OBJECT_TYPE
     Text [ en-US ] = "Unsupported object type found ($type$).";
 };
 
+String STR_PAGETITLE_GENERAL
+{
+    Text [ en-US ] = "Advanced Properties" ;
+};
+
+String STR_PAGETITLE_ADVANCED
+{
+    Text [ en-US ] = "Additional Settings" ;
+};
+
+String STR_PAGETITLE_CONNECTION
+{
+    Text [ en-US ] = "Connection settings" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

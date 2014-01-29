@@ -231,7 +231,7 @@
 #define STR_ERROR_DURING_CREATION           RID_STR_GEN_START + 1
 #define RID_STR_CONNECTION_LOST             RID_STR_GEN_START + 2
 #define STR_NAME_ALREADY_EXISTS             RID_STR_GEN_START + 3
-// free
+#define STR_PAGETITLE_GENERAL               RID_STR_GEN_START + 4
 #define STR_TITLE_CONFIRM_DELETION          RID_STR_GEN_START + 5
 #define STR_STAT_WARNING                    RID_STR_GEN_START + 6
 #define STR_TABLEDESIGN_DATASOURCE_DELETED  RID_STR_GEN_START + 7
@@ -266,8 +266,9 @@
 #define STR_FOLDER_LABEL                    RID_STR_GEN_START + 36
 #define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_GEN_START + 37
 #define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STR_GEN_START + 38
-    // FREE
+#define STR_PAGETITLE_ADVANCED              RID_STR_GEN_START + 39
 #define RID_STR_EXTENSION_NOT_PRESENT       RID_STR_GEN_START + 40
+#define STR_PAGETITLE_CONNECTION            RID_STR_GEN_START + 41
 
 //========================================================================
 // untyped resources

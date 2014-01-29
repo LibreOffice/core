@@ -92,24 +92,8 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         OutputSize = TRUE ;
     };
 
-    //.........................................................................
-    String STR_PAGETITLE_GENERAL
-    {
-        Text [ en-US ] = "Advanced Properties" ;
-    };
-    String STR_PAGETITLE_ADVANCED
-    {
-        Text [ en-US ] = "Additional Settings" ;
-    };
-    String STR_PAGETITLE_CONNECTION
-    {
-        Text [ en-US ] = "Connection settings" ;
-    };
-
     Text [ en-US ] = "Database properties" ;
 };
-
-// -----------------------------------------------------------------------------
 
 ModalDialog DLG_DATABASE_TYPE_CHANGE
 {

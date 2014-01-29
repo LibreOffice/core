@@ -100,9 +100,6 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 
 void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
 {
-    // open our own resource block, as the page titles are strings local to this block
-    LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-
     AddTabPage(_nPageId, OUString(ModuleRes(_nTextId)), _pCreateFunc, NULL);
     m_aCurrentDetailPages.push(_nPageId);
 }
@@ -162,7 +159,6 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
         case  ::dbaccess::DST_USERDEFINE9:
         case  ::dbaccess::DST_USERDEFINE10:
             {
-                LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
                 OUString aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, sal_False, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
@@ -210,7 +206,6 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
-        LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
         RemoveTabPage( PAGE_CONNECTION );
         m_nMainPageID = PAGE_MYSQL_NATIVE;
