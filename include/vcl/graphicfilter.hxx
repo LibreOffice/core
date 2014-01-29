@@ -30,6 +30,8 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+using namespace ::com::sun::star;
+
 class FilterConfigCache;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
@@ -278,10 +280,10 @@ public:
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+                                        const uno::Sequence< beans::PropertyValue >* pFilterData = NULL );
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                     SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+                                        const uno::Sequence< beans::PropertyValue >* pFilterData = NULL );
     long            GetExportGraphicHint() const { return nExpGraphHint; }
 
     sal_uInt16          CanImportGraphic( const INetURLObject& rPath,

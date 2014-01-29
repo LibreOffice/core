@@ -72,7 +72,7 @@ public:
     void            ShowFullScreenMode( sal_Bool bFullScreenMode,
                                         sal_Int32 nDisplayScreen );
     /**
-     @overload Calls ShowFullScreenMode( bFullScreenMode, GetScreenNumber()).
+     @overload ShowFullScreenMode(sal_Bool, bFullScreenMode, sal_Int32 nDisplayScreen)
     */
     void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True );
     void            EndFullScreenMode() { ShowFullScreenMode( sal_False ); }
