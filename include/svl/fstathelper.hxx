@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SVL_FSTATHELPER_HXX
 #define INCLUDED_SVL_FSTATHELPER_HXX
 
-#include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
+#include <svl/svldllapi.h>
 
 class Date;
 class Time;

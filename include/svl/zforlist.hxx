@@ -22,7 +22,6 @@
 #include <svl/svldllapi.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -928,13 +927,10 @@ public:
             return m_xContext;
         }
 
-
-
     //! The following method is not to be used from outside but must be
     //! public for the InputScanner.
     // return the current FormatScanner
     inline const ImpSvNumberformatScan* GetFormatScanner() const { return pFormatScanner; }
-
 
     //! The following methods are not to be used from outside but must be
     //! public for the InputScanner and FormatScanner.
@@ -980,9 +976,6 @@ public:
 
 };
 
-
-// --------------------------- inline --------------------------------------
-
 inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
 {
     if (pMergeTable)
@@ -1000,7 +993,6 @@ inline bool SvNumberFormatter::HasMergeFmtTbl() const
 {
     return pMergeTable && !pMergeTable->empty();
 }
-
 
 // static
 inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart )

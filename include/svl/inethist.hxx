@@ -19,17 +19,11 @@
 #ifndef INCLUDED_SVL_INETHIST_HXX
 #define INCLUDED_SVL_INETHIST_HXX
 
-#include <svl/svldllapi.h>
-#include <tools/solar.h>
-#include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/hint.hxx>
+#include <svl/svldllapi.h>
+#include <tools/urlobj.hxx>
 
-/*========================================================================
- *
- * INetURLHistory interface.
- *
- *=======================================================================*/
 class INetURLHistory_Impl;
 class INetURLHistory : public SfxBroadcaster
 {
@@ -112,11 +106,7 @@ public:
     }
 };
 
-/*========================================================================
- *
- * INetURLHistoryHint (broadcasted from PutUrl()).
- *
- *=======================================================================*/
+// broadcasted from PutUrl().
 DECL_PTRHINT (SVL_DLLPUBLIC, INetURLHistoryHint, const INetURLObject);
 
 #endif // INCLUDED_SVL_INETHIST_HXX

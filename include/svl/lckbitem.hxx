@@ -19,13 +19,10 @@
 #ifndef INCLUDED_SVL_LCKBITEM_HXX
 #define INCLUDED_SVL_LCKBITEM_HXX
 
+#include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
-#include <svl/poolitem.hxx>
-
-// -----------------------------------------------------------------------
 
 class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 {

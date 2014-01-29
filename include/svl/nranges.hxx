@@ -26,10 +26,6 @@
 #ifndef INCLUDED_SVL_NRANGES_HXX
 #define INCLUDED_SVL_NRANGES_HXX
 
-#include <tools/solar.h>
-
-//========================================================================
-
 class SfxUShortRanges
 {
     sal_uInt16*                 _pRanges; // 0-terminated array of sal_uInt16-pairs

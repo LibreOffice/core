@@ -20,10 +20,7 @@
 #define INCLUDED_SVL_POOLCACH_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/solar.h>
 #include <vector>
-
-//------------------------------------------------------------------------
 
 class SfxItemPool;
 class SfxItemSet;

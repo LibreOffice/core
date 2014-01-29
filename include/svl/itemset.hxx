@@ -24,7 +24,6 @@
 #include <cstdarg>
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
-#include <tools/solar.h>
 
 class SfxItemPool;
 class SfxPoolItem;
@@ -39,13 +38,9 @@ typedef SfxPoolItem const** SfxItemArray;
 #endif
 #define DBG(s)
 
-//========================================================================
-
 #define SFX_ITEMSET_GET( rSet, pItem, ItemType, nSlotId, bDeep ) \
     const ItemType *pItem = (const ItemType*) \
                             (rSet).GetItem( nSlotId, bDeep, TYPE(ItemType) )
-
-//========================================================================
 
 class SVL_DLLPUBLIC SfxItemSet
 {
@@ -57,7 +52,6 @@ class SVL_DLLPUBLIC SfxItemSet
     sal_uInt16*                     _pWhichRanges;  // Array von Which-Bereichen
     sal_uInt16                      _nCount;        // Anzahl Items
 
-    //---------------------------------------------------------------------
 #ifndef _SFXITEMS_HXX
 
 friend class SfxItemPoolCache;
@@ -73,7 +67,6 @@ public:
     SfxItemArray                GetItems_Impl() const { return _aItems; }
 
 #endif
-    //---------------------------------------------------------------------
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &);   // n.i.!!
@@ -153,16 +146,12 @@ public:
     virtual int                 operator==(const SfxItemSet &) const;
 };
 
-// --------------- Inline Implementierungen ------------------------
-
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
 {
     DBG( if (_pParent) --*_pChildCount(_pParent) );
     _pParent = pNew;
     DBG( if (_pParent) ++*_pChildCount(_pParent) );
 }
-
-//========================================================================
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 

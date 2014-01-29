@@ -19,13 +19,12 @@
 #ifndef INCLUDED_SVL_ITEMPROP_HXX
 #define INCLUDED_SVL_ITEMPROP_HXX
 
-#include <svl/svldllapi.h>
-#include <tools/solar.h>
-#include <svl/itemset.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <svl/itemset.hxx>
+#include <svl/svldllapi.h>
 #include <vector>
 
 struct SfxItemPropertyMapEntry
