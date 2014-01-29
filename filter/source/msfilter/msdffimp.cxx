@@ -4460,7 +4460,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 (sal_uInt16)nStartAngle / 10, (sal_uInt16)nEndAngle / 10, sal_True );
                             Rectangle aPolyPieRect( aXPoly.GetBoundRect() );
 
-                            double  fYScale, fXScale;
+                            double  fYScale = 0.0, fXScale = 0.0;
                             double  fYOfs, fXOfs;
 
                             Point aP( aObjData.aBoundRect.Center() );
