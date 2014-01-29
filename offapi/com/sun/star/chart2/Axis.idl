@@ -122,6 +122,18 @@ service Axis
     /** Determines where the interval marks are placed.
      */
     [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
+
+    /** Determines display units are avaiblable for axis
+
+        @since LibreOffice 4.3
+     */
+    [optional, property] boolean DisplayUnits;
+
+    /** Determintes built in display unit value for axis
+
+        @since LibreOffice 4.3
+     */
+    [optional, property] string BuiltInUnit;
 };
 
 } ; // chart2
