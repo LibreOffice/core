@@ -484,7 +484,7 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
 }
 
 
-void ScColumn::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
+void ScColumn::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     SCROW nTop;
     SCROW nBottom;
@@ -493,7 +493,7 @@ void ScColumn::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
     {
         ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
         while (aMarkIter.Next( nTop, nBottom ))
-            DeleteArea(nTop, nBottom, nDelFlag);
+            DeleteArea(nTop, nBottom, nDelFlag, bBroadcast);
     }
 }
 
