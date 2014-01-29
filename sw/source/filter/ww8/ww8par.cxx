@@ -6310,8 +6310,10 @@ namespace sw
     }
 }
 
-SwMacroInfo::SwMacroInfo() :
-    SdrObjUserData( SW_DRAWLAYER, SW_UD_IMAPDATA, 0 )
+SwMacroInfo::SwMacroInfo()
+    : SdrObjUserData( SW_DRAWLAYER, SW_UD_IMAPDATA, 0 )
+    , mnShapeId(-1)
+
 {
 }
 
