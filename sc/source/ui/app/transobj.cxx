@@ -231,6 +231,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
     AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     AddFormat( SOT_FORMAT_GDIMETAFILE );
+    AddFormat( SOT_FORMATSTR_ID_PNG );
     AddFormat( SOT_FORMAT_BITMAP );
 
     // ScImportExport formats
@@ -338,7 +339,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
                 OSL_FAIL("unknown DataType");
             }
         }
-        else if ( nFormat == SOT_FORMAT_BITMAP )
+        else if ( nFormat == SOT_FORMAT_BITMAP || nFormat == SOT_FORMATSTR_ID_PNG )
         {
             Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),

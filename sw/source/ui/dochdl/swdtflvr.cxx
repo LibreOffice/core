@@ -1330,6 +1330,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
             case SOT_FORMATSTR_ID_SVXB:
             case SOT_FORMAT_BITMAP:
+            case SOT_FORMATSTR_ID_PNG:
             case SOT_FORMAT_GDIMETAFILE:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_INSERT,pPt,
@@ -1462,6 +1463,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SOT_FORMATSTR_ID_SVXB:
             case SOT_FORMAT_GDIMETAFILE:
             case SOT_FORMAT_BITMAP:
+            case SOT_FORMATSTR_ID_PNG:
             case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
             case SOT_FORMAT_FILE:
             case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
@@ -2221,6 +2223,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     switch( nFmt )
     {
     case SOT_FORMAT_BITMAP:
+    case SOT_FORMATSTR_ID_PNG:
     case SOT_FORMAT_GDIMETAFILE:
         nRet = rData.GetGraphic( nFmt, aGraphic );
         break;

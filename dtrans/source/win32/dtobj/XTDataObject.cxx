@@ -298,6 +298,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
         nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
 
     // prepare data for transmision
+    // #i124085# DIBV5 should not happen for now, but keep as hint here
     if ( CF_DIBV5 == fetc.cfFormat || CF_DIB == fetc.cfFormat )
     {
 #ifdef DBG_UTIL

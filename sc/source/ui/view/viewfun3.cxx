@@ -715,7 +715,7 @@ sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTran
             if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
                 bRet = ApplyGraphicToObject( pHitObj, Graphic(aMtf) );
         }
-        else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
+        else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) || aDataHelper.HasFormat( SOT_FORMATSTR_ID_PNG ) )
         {
             BitmapEx aBmpEx;
             if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
