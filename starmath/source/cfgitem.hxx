@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
 #include <vcl/timer.hxx>
@@ -43,9 +42,6 @@ class SmSym;
 class SmFormat;
 class Font;
 struct SmCfgOther;
-
-/////////////////////////////////////////////////////////////////
-
 
 struct SmFontFormat
 {
@@ -62,7 +58,6 @@ struct SmFontFormat
     const Font      GetFont() const;
     bool            operator == ( const SmFontFormat &rFntFmt ) const;
 };
-
 
 struct SmFntFmtListEntry
 {
@@ -99,9 +94,6 @@ public:
     bool    IsModified() const          { return bModified; }
     void    SetModified( bool bVal )    { bModified = bVal; }
 };
-
-
-/////////////////////////////////////////////////////////////////
 
 class SmMathConfig : public utl::ConfigItem
 {
@@ -188,8 +180,6 @@ public:
     void            SetShowFormulaCursor( bool bVal );
     void            SetAutoRedraw( sal_Bool bVal );
 };
-
-/////////////////////////////////////////////////////////////////
 
 #endif
 
