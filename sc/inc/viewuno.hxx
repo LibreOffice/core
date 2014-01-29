@@ -86,7 +86,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getVisibleRange()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XCellRangeReferrer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL

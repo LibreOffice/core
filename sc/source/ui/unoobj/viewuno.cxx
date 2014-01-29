@@ -257,7 +257,8 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
     }
 }
 
-table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange() throw(uno::RuntimeException)
+table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellRangeAddress aAdr;
