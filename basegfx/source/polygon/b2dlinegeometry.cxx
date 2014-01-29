@@ -81,7 +81,7 @@ namespace basegfx
                     -aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY()));
 
                 // scale to target size
-                const double fArrowScale(fWidth / (aArrowSize.getRange().getX()));
+                const double fArrowScale(fWidth / (aArrowSize.getWidth()));
                 aArrowTransform.scale(fArrowScale, fArrowScale);
 
                 // get arrow size in Y
