@@ -2487,7 +2487,8 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
         // When size is a relative to page size, ignore size of SwBodyFrm.
         if (rSz.GetWidthPercentRelation() != text::RelOrientation::PAGE_FRAME)
             nRelWidth  = std::min( nRelWidth,  pRel->Prt().Width() );
-        nRelHeight = std::min( nRelHeight, pRel->Prt().Height() );
+        if (rSz.GetHeightPercentRelation() != text::RelOrientation::PAGE_FRAME)
+            nRelHeight = std::min( nRelHeight, pRel->Prt().Height() );
         if( !pRel->IsPageFrm() )
         {
             const SwPageFrm* pPage = FindPageFrm();
@@ -2498,7 +2499,11 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
                     nRelWidth  = std::min( nRelWidth,  pPage->Frm().Width() );
                 else
                     nRelWidth  = std::min( nRelWidth,  pPage->Prt().Width() );
-                nRelHeight = std::min( nRelHeight, pPage->Prt().Height() );
+                if (rSz.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                    // Ignore margins of pPage.
+                    nRelHeight = std::min( nRelHeight, pPage->Frm().Height() );
+                else
+                    nRelHeight = std::min( nRelHeight, pPage->Prt().Height() );
             }
         }
 
