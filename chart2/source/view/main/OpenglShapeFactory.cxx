@@ -411,11 +411,10 @@ uno::Reference< drawing::XShape >
         OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize, const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,
-                const uno::Reference< beans::XPropertySet > xPropSet,
+                const uno::Reference< beans::XPropertySet > &,
                 double, const OUString& rName)
 {
-    dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString,
-            xPropSet );
+    dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString );
     pText->setPosition(rPos);
     pText->setSize(rSize);
     pText->setName(rName);

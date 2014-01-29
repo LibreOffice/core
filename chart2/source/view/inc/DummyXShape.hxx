@@ -192,7 +192,7 @@ class DummyCube : public DummyXShape
 {
 public:
     DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-            const uno::Reference< beans::XPropertySet > xPropSet,
+            const uno::Reference< beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 };
 
@@ -206,7 +206,7 @@ class DummyPyramid : public DummyXShape
 {
 public:
     DummyPyramid(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            uno::Reference< beans::XPropertySet > xPropSet,
+            const uno::Reference< beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 };
 
@@ -247,7 +247,7 @@ private:
 class DummyStripe : public DummyXShape
 {
 public:
-    DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
+    DummyStripe(const Stripe& rStripe, const uno::Reference< beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 
 private:
@@ -357,8 +357,7 @@ class DummyFormattedText : public DummyXShape
 {
 public:
     DummyFormattedText(uno::Sequence< uno::Reference<
-        chart2::XFormattedString > >& rFormattedString,
-        uno::Reference< beans::XPropertySet > xPropSet);
+        chart2::XFormattedString > >& rFormattedString);
 
 private:
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference<

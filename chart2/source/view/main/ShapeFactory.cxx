@@ -2138,7 +2138,7 @@ uno::Reference< drawing::XShape >
                 const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
                 const uno::Reference<
-                beans::XPropertySet > xTextProperties,
+                beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName )
 {
     //create shape and add to page

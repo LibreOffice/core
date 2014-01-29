@@ -154,7 +154,7 @@ public:
                 const com::sun::star::awt::Point& rPosition,
                 com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::XFormattedString > >& xFormattedString,
                 const com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > xTextProperties,
+                com::sun::star::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >

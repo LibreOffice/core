@@ -279,7 +279,7 @@ void DummyXShape::render()
 
 namespace {
 
-void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPropertyNameMap& rPropertyNameMap,
+void setProperties( const uno::Reference< beans::XPropertySet > & xPropSet, const tPropertyNameMap& rPropertyNameMap,
         std::map<OUString, uno::Any>& rTargetMap)
 {
     tNameSequence aNames;
@@ -307,7 +307,7 @@ void setProperties( const tNameSequence& rNames, const tAnySequence& rValues,
 }
 
 DummyCube::DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-        const uno::Reference< beans::XPropertySet > xPropSet,
+        const uno::Reference< beans::XPropertySet > & xPropSet,
         const tPropertyNameMap& rPropertyNameMap )
 {
     setPosition(Position3DToAWTPoint(rPos));
@@ -322,7 +322,7 @@ DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Dir
 }
 
 DummyPyramid::DummyPyramid(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        uno::Reference< beans::XPropertySet > xPropSet,
+        const uno::Reference< beans::XPropertySet > & xPropSet,
         const tPropertyNameMap& rPropertyNameMap)
 {
     setPosition(Position3DToAWTPoint(rPos));
@@ -385,7 +385,7 @@ DummyPieSegment::DummyPieSegment(
 {
 }
 
-DummyStripe::DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
+DummyStripe::DummyStripe(const Stripe& rStripe, const uno::Reference< beans::XPropertySet > & xPropSet,
         const tPropertyNameMap& rPropertyNameMap ):
     maStripe(rStripe)
 {
@@ -788,8 +788,7 @@ void DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
 }
 
 DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
-        chart2::XFormattedString > >& rFormattedString,
-        uno::Reference< beans::XPropertySet >):
+        chart2::XFormattedString > >& rFormattedString):
     maFormattedString(rFormattedString)
 {
 }
