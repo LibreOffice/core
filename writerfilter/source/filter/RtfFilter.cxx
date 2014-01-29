@@ -20,7 +20,6 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <osl/module.hxx>
-#include <tools/solar.h>
 #include <RtfFilter.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>

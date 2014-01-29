@@ -213,7 +213,6 @@
 #include <tools/color.hxx>
 #include <tools/globname.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localfilehelper.hxx>
