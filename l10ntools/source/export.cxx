@@ -853,6 +853,9 @@ void Export::InsertListEntry(const OString &rLine)
 {
     ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
 
+    if (!pResData)
+        std::exit(EXIT_FAILURE);
+
     if( pResData->m_aList.empty() )
         nListIndex = 0;
 
