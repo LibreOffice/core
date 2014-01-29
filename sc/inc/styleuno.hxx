@@ -239,7 +239,8 @@ public:
     virtual OUString SAL_CALL getParentStyle() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setParentStyle( const OUString& aParentStyle )
                                 throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XNamed
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);

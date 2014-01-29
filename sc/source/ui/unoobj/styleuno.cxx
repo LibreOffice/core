@@ -1057,7 +1057,9 @@ OUString SAL_CALL ScStyleObj::getParentStyle() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
-                throw(container::NoSuchElementException, uno::RuntimeException)
+    throw(container::NoSuchElementException,
+          uno::RuntimeException,
+          std::exception)
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
