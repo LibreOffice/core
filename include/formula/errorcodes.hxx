@@ -21,7 +21,6 @@
 #define INCLUDED_FORMULA_ERRORCODES_HXX
 
 #include <rtl/math.hxx>
-#include <tools/solar.h>
 
 namespace ScErrorCodes
 {
@@ -93,7 +92,6 @@ inline double CreateDoubleError( sal_uInt16 nErr )
     smVal.nan_parts.fraction_lo = nErr;
     return fVal;
 }
-
 
 /** Recreate the error code of a coded double error, if any. */
 inline sal_uInt16 GetDoubleErrorValue( double fVal )

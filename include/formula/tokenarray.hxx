@@ -20,11 +20,10 @@
 #ifndef INCLUDED_FORMULA_TOKENARRAY_HXX
 #define INCLUDED_FORMULA_TOKENARRAY_HXX
 
-#include <limits.h>
+#include <com/sun/star/sheet/FormulaToken.hpp>
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
-#include <tools/solar.h>
-#include <com/sun/star/sheet/FormulaToken.hpp>
+#include <limits.h>
 
 namespace formula
 {
@@ -279,10 +278,7 @@ public:
 private:
     const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
-// =============================================================================
 } // formula
-// =============================================================================
-
 
 #endif // INCLUDED_FORMULA_TOKENARRAY_HXX
 

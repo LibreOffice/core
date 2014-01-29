@@ -23,7 +23,6 @@
 
 
 #ifndef __RSC
-#include <tools/solar.h>
 #include <tools/errcode.hxx>
 
 enum SbxClassType {         // SBX-class-IDs (order is important!)
