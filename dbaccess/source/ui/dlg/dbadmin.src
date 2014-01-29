@@ -78,23 +78,6 @@
     };
 //-------------------------------------------------------------------------
 
-TabDialog DLG_DATABASE_ADMINISTRATION
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_DIALOG;
-
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-    };
-
-    Text [ en-US ] = "Database properties" ;
-};
-
 ModalDialog DLG_DATABASE_TYPE_CHANGE
 {
     OutputSize = TRUE ;

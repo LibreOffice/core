@@ -50,23 +50,19 @@ using namespace com::sun::star::container;
 // ODbAdminDialog
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
-                               , const Reference< XComponentContext >& _rxContext
-                               )
-    :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADMINISTRATION), _pItems)
-    ,m_bApplied(sal_False)
-    ,m_bUIEnabled( sal_True )
-    ,m_nMainPageID( PAGE_CONNECTION )
+                               , const Reference< XComponentContext >& _rxContext)
+    : SfxTabDialog(_pParent, "AdminDialog",
+        "dbaccess/ui/admindialog.ui", _pItems)
+    , m_bApplied(false)
+    , m_bUIEnabled(true)
 {
-
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
     // add the initial tab page
-    AddTabPage( m_nMainPageID, OUString( ModuleRes( STR_PAGETITLE_GENERAL ) ), OConnectionTabPage::Create, NULL );
+    m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, NULL);
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
-    // no local resources needed anymore
-    FreeResource();
 }
 
 ODbAdminDialog::~ODbAdminDialog()
@@ -200,14 +196,14 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     delete pExampleSet;
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-    // special case: MySQL Native does not have the generic PAGE_CONNECTION page
+    // special case: MySQL Native does not have the generic "advanced" page
 
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
     ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
-        RemoveTabPage( PAGE_CONNECTION );
+        RemoveTabPage("advanced");
         m_nMainPageID = PAGE_MYSQL_NATIVE;
     }
 

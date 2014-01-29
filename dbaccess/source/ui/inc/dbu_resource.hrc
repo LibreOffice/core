@@ -76,7 +76,6 @@
 //========================================================================
 // dialog ids
 
-#define DLG_DATABASE_ADMINISTRATION     RID_DIALOG_START +  0
 #define DLG_DBASE_INDEXES               RID_DIALOG_START +  1
 #define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
 #define DLG_DATASOURCE_SELECTION        RID_DIALOG_START +  4

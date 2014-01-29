@@ -31,8 +31,6 @@
 #define UID_CTL_CONTENT                                   "DBACCESS_UID_CTL_CONTENT"
 #define HID_TLB_TABBROWSER                                "DBACCESS_HID_TLB_TABBROWSER"
 #define HID_TLB_TREELISTBOX                               "DBACCESS_HID_TLB_TREELISTBOX"
-#define HID_DSADMIN_DIALOG                                "DBACCESS_HID_DSADMIN_DIALOG"
-
 
 #define HID_DSADMIN_PAGE_GENERAL                          "DBACCESS_HID_DSADMIN_PAGE_GENERAL"
 #define HID_DSADMIN_PAGE_DBASE                            "DBACCESS_HID_DSADMIN_PAGE_DBASE"
