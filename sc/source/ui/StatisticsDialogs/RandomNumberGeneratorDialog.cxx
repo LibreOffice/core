@@ -36,21 +36,21 @@
 
 #include "RandomNumberGeneratorDialog.hxx"
 
-namespace
-{
+namespace {
 
-static const sal_Int64 DIST_UNIFORM             = 0;
-static const sal_Int64 DIST_NORMAL              = 1;
-static const sal_Int64 DIST_CAUCHY              = 2;
-static const sal_Int64 DIST_BERNOULLI           = 3;
-static const sal_Int64 DIST_BINOMIAL            = 4;
-static const sal_Int64 DIST_CHI_SQUARED         = 5;
-static const sal_Int64 DIST_GEOMETRIC           = 6;
-static const sal_Int64 DIST_NEGATIVE_BINOMIAL   = 7;
-static const sal_Int64 DIST_UNIFORM_INTEGER     = 8;
+const sal_Int64 DIST_UNIFORM             = 0;
+const sal_Int64 DIST_NORMAL              = 1;
+const sal_Int64 DIST_CAUCHY              = 2;
+const sal_Int64 DIST_BERNOULLI           = 3;
+const sal_Int64 DIST_BINOMIAL            = 4;
+const sal_Int64 DIST_CHI_SQUARED         = 5;
+const sal_Int64 DIST_GEOMETRIC           = 6;
+const sal_Int64 DIST_NEGATIVE_BINOMIAL   = 7;
+const sal_Int64 DIST_UNIFORM_INTEGER     = 8;
 
-static const sal_Int64 PERCISION   = 10000;
-static const sal_Int64 DIGITS      = 4;
+const sal_Int64 PERCISION   = 10000;
+const sal_Int64 DIGITS      = 4;
+
 }
 
 ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
