@@ -401,7 +401,8 @@ public:
 
     // XSelectedSheetsSupplier
     virtual ::com::sun::star::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException,
+              std::exception);
 };
 
 class ScPreviewObj : public SfxBaseController,

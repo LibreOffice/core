@@ -2330,7 +2330,7 @@ uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
 }
 
 uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
