@@ -54,7 +54,6 @@ private:
     ScDocument*         mpDoc;
 
     ScRange             maInputRange;
-    ScAddress::Details  maAddressDetails;
 
     bool                mbDialogLostFocus;
 

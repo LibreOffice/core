@@ -59,8 +59,7 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
                       "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
     mpViewData       ( pViewData ),
-    mpDoc       ( pViewData->GetDocument() ),
-    maAddressDetails ( mpDoc->GetAddressConvention(), 0, 0 ),
+    mpDoc( pViewData->GetDocument() ),
     mbDialogLostFocus( false )
 {
     get(mpInputRangeText,   "cell-range-label");
@@ -115,7 +114,7 @@ void ScRandomNumberGeneratorDialog::Init()
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
     mpViewData->GetSimpleArea(maInputRange);
-    OUString aCurrentString(maInputRange.Format(SCR_ABS_3D, mpDoc, maAddressDetails));
+    OUString aCurrentString(maInputRange.Format(SCR_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
     mpInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -142,7 +141,7 @@ sal_Bool ScRandomNumberGeneratorDialog::Close()
     return DoClose( ScRandomNumberGeneratorDialogWrapper::GetChildWindowId() );
 }
 
-void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
+void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDoc )
 {
     if ( mpInputRangeEdit->IsEnabled() )
     {
@@ -151,7 +150,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 
         maInputRange = rReferenceRange;
 
-        OUString aReferenceString(maInputRange.Format(SCR_ABS_3D, pDocument, maAddressDetails));
+        OUString aReferenceString(maInputRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         mpInputRangeEdit->SetRefString( aReferenceString );
     }
 }
