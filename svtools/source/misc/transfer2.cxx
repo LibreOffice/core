@@ -449,6 +449,7 @@ sal_Bool TransferDataContainer::GetData( const
             break;
 
         case SOT_FORMATSTR_ID_SVXB:
+        case SOT_FORMATSTR_ID_PNG:
         case SOT_FORMAT_BITMAP:
         case SOT_FORMAT_GDIMETAFILE:
             if( pImpl->pGrf )
@@ -537,10 +538,16 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
             *pImpl->pGrf = rGrf;
 
         AddFormat( SOT_FORMATSTR_ID_SVXB );
+
         if( GRAPHIC_BITMAP == nType )
+        {
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
+        }
         else if( GRAPHIC_GDIMETAFILE == nType )
+        {
             AddFormat( SOT_FORMAT_GDIMETAFILE );
+        }
     }
 }
 
