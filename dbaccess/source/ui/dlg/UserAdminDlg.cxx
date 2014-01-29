@@ -25,7 +25,6 @@
 #include "propertysetitem.hxx"
 #include "UITools.hxx"
 #include "UserAdmin.hxx"
-#include "UserAdminDlg.hrc"
 #include "UserAdminDlg.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -52,12 +51,11 @@ namespace dbaui
                                             ,const Reference< XComponentContext >& _rxORB
                                             ,const ::com::sun::star::uno::Any& _aDataSourceName
                                             ,const Reference< XConnection >& _xConnection)
-        :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_USERADMIN), _pItems)
-        ,m_pItemSet(_pItems)
-        ,m_xConnection(_xConnection)
-        ,m_bOwnConnection(!_xConnection.is())
+        : SfxTabDialog(_pParent, "UserAdminDialog", "dbaccess/ui/useradmindialog.ui", _pItems)
+        , m_pItemSet(_pItems)
+        , m_xConnection(_xConnection)
+        , m_bOwnConnection(!_xConnection.is())
     {
-
         m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -67,11 +65,10 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        AddTabPage(TAB_PAGE_USERADMIN, OUString(ModuleRes(STR_PAGETITLE_USERADMIN)), OUserAdmin::Create,0, sal_False, 1);
+        AddTabPage("settings", OUserAdmin::Create, 0);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();
-        FreeResource();
     }
 
     OUserAdminDlg::~OUserAdminDlg()

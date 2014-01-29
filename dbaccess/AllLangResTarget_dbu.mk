@@ -54,7 +54,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/dlg/RelationDlg.src \
     dbaccess/source/ui/dlg/sqlmessage.src \
     dbaccess/source/ui/dlg/textconnectionsettings.src \
-    dbaccess/source/ui/dlg/UserAdminDlg.src \
     dbaccess/source/ui/dlg/UserAdmin.src \
     dbaccess/source/ui/misc/dbumiscres.src \
     dbaccess/source/ui/misc/WizardPages.src \

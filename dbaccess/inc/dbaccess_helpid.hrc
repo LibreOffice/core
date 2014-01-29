@@ -295,7 +295,6 @@
 #define HID_APP_VIEW_PREVIEW_3                            "DBACCESS_HID_APP_VIEW_PREVIEW_3"
 
 #define HID_DSADMIN_TYPE_DIALOG                           "DBACCESS_HID_DSADMIN_TYPE_DIALOG"
-#define HID_DSADMIN_USERADMIN                             "DBACCESS_HID_DSADMIN_USERADMIN"
 
 #define HID_DBWIZ_PREVIOUS                                "DBACCESS_HID_DBWIZ_PREVIOUS"
 #define HID_DBWIZ_NEXT                                    "DBACCESS_HID_DBWIZ_NEXT"

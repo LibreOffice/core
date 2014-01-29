@@ -90,7 +90,7 @@
     // FREE
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
     // FREE
-#define DLG_DATABASE_USERADMIN          RID_DIALOG_START + 21
+    // FREE
     // FREE
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
