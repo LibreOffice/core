@@ -241,7 +241,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow() throw(uno::RuntimeExcept
 }
 
 void SAL_CALL ScViewPaneBase::setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pViewShell)

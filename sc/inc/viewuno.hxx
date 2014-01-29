@@ -83,7 +83,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getFirstVisibleRow() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getVisibleRange()
                                 throw(::com::sun::star::uno::RuntimeException);
 
