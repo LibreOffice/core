@@ -464,7 +464,8 @@ public:
                             createReplaceDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL replaceAll( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::util::XSearchDescriptor >& xDesc )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             // XModifyBroadcaster
     virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<

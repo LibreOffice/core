@@ -4031,7 +4031,8 @@ uno::Reference<util::XReplaceDescriptor> SAL_CALL ScCellRangesBase::createReplac
 }
 
 sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSearchDescriptor>& xDesc )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException,
+                                                      std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nReplaced = 0;
