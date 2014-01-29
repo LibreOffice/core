@@ -445,7 +445,7 @@
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/WindowContentFactoryManager.hpp>
+#include <com/sun/star/ui/theWindowContentFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>

@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
-#include <com/sun/star/ui/WindowContentFactoryManager.hpp>
+#include <com/sun/star/ui/theWindowContentFactoryManager.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
 #define MAX_TOGGLEAREA_HEIGHT       20
@@ -139,7 +139,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 
     // Use factory manager to retrieve XWindow factory. That can be used to instantiate
     // the real window factory.
-    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr = ui::WindowContentFactoryManager::create(xContext);
+    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr = ui::theWindowContentFactoryManager::get(xContext);
 
     SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
     uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
