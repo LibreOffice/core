@@ -47,7 +47,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
-#include <com/sun/star/ui/UIElementFactoryManager.hpp>
+#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -797,7 +797,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
         xUIElementFactory = xWeakUIElementFactory;
         if ( !xUIElementFactory.is() )
         {
-            xUIElementFactory = UIElementFactoryManager::create( m_xContext );
+            xUIElementFactory = theUIElementFactoryManager::get( m_xContext );
             xWeakUIElementFactory = xUIElementFactory;
         }
 

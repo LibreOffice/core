@@ -69,7 +69,7 @@
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/ui/UIElementFactoryManager.hpp>
+#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
@@ -2185,7 +2185,7 @@ void Desktop::PreloadConfigurationData()
 
     // preload user interface element factories
     Sequence< Sequence< css::beans::PropertyValue > > aSeqSeqPropValue;
-    Reference< XUIElementFactoryManager > xUIElementFactory = UIElementFactoryManager::create( xContext );
+    Reference< XUIElementFactoryManager > xUIElementFactory = theUIElementFactoryManager::get( xContext );
     try
     {
         aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();

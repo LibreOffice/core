@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_UIElementFactoryManager_idl__
-#define __com_sun_star_ui_UIElementFactoryManager_idl__
+#ifndef __com_sun_star_ui_theUIElementFactoryManager_idl__
+#define __com_sun_star_ui_theUIElementFactoryManager_idl__
 
 #include <com/sun/star/ui/XUIElementFactoryManager.idl>
 
@@ -26,15 +26,16 @@
 module com { module sun { module star { module ui {
 
 
-/**
-    A legacy (single-instance) service-variant of theUIElementFactoryManager singleton.
+/** specifies a user interface factory manager that controls all registered user
+    interface element factories.
 
-    @deprecated Use theUIElementFactoryManager singleton instead.
+    Prior to LibreOffice 4.3, this singleton was only available as a
+    (single-instance) UIElementFactoryManager service.
 
-    @since OOo 2.0
+    @since LibreOffice 4.3
 */
 
-service UIElementFactoryManager : XUIElementFactoryManager;
+singleton theUIElementFactoryManager : XUIElementFactoryManager;
 
 }; }; }; };
 

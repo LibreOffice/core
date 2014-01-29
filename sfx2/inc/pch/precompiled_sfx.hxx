@@ -443,7 +443,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
-#include <com/sun/star/ui/UIElementFactoryManager.hpp>
+#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowContentFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>

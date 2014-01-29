@@ -205,7 +205,7 @@
 #include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/UIElementFactoryManager.hpp>
+#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
