@@ -69,7 +69,10 @@ const OUString lcl_aLabelRole( RTL_CONSTASCII_USTRINGPARAM( "label" ));
 String lcl_GetRoleLBEntry(
     const OUString & rRole, const OUString & rRange )
 {
-    String aEntry(::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ));
+    String aEntry( rRole );
+    aEntry += '\t';
+    aEntry += String(
+        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ));
     aEntry += '\t';
     aEntry += String( rRange );
 
@@ -137,8 +140,8 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   2,        // Number of Tabs
-        0, 75
+    {   3,        // Number of Tabs
+        0, 0, 75
     };
 
 void lcl_ShowChooserButton(
