@@ -5216,7 +5216,6 @@ void Test::testImportStream()
 
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
 
-
     pUndoMgr->Clear();
     m_pDoc->DeleteTab(0);
 }
