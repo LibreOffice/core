@@ -121,7 +121,7 @@ public class CheckBookmarks {
         actualHashes.m_nDeleteRandomHash = BookmarkHashes.getBookmarksHash(m_xDoc);
         insertLinebreaks(007);
         actualHashes.m_nLinebreakHash = BookmarkHashes.getBookmarksHash(m_xDoc);
-        m_xOdfReloadedDoc = reloadFrom("StarOffice XML (Writer)", "odf");
+        m_xOdfReloadedDoc = reloadFrom("writer8", "odf");
         actualHashes.m_nOdfReloadHash = BookmarkHashes.getBookmarksHash(m_xOdfReloadedDoc);
         //m_xMsWordReloadedDoc = reloadFrom("MS Word 97", "doc");
         //actualHashes.m_nMsWordReloadHash = BookmarkHashes.getBookmarksHash(m_xMsWordReloadedDoc);
