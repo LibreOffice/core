@@ -23,7 +23,6 @@
 #include <memory>
 #include <list>
 #include <algorithm>
-#include <tools/solar.h>
 #include <tools/rtti.hxx>
 
 class SfxHint;

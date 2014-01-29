@@ -20,18 +20,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 
-#include <tools/solar.h>
-
-//........................................................................
 namespace svx
 {
-//........................................................................
-
     typedef sal_uInt16 SfxSlotId;
 
-    //====================================================================
-    //= ISlotInvalidator
-    //====================================================================
     class ISlotInvalidator
     {
     public:
@@ -40,10 +32,7 @@ namespace svx
     protected:
         ~ISlotInvalidator() {}
     };
-
-//........................................................................
 } // namespace svx
-//........................................................................
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 

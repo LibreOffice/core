@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
 
-#include <tools/solar.h>
-
 class SfxSlot;
 
 class SfxSlotServer
@@ -42,15 +40,11 @@ public:
     void                Invalidate() { _pSlot = 0; }
 };
 
-//--------------------------------------------------------------------
-
 inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell ):
     _pSlot( &rSlot),
     _nShellLevel( nShell )
 {
 }
-
-//--------------------------------------------------------------------
 
 inline SfxSlotServer::SfxSlotServer():
     _pSlot(0),
@@ -58,20 +52,15 @@ inline SfxSlotServer::SfxSlotServer():
 {
 }
 
-//--------------------------------------------------------------------
-
 inline sal_uInt16 SfxSlotServer::GetShellLevel() const
 {
     return _nShellLevel;
 }
 
-//--------------------------------------------------------------------
-
 inline const SfxSlot* SfxSlotServer::GetSlot() const
 {
     return _pSlot;
 }
-
 
 #endif
 

@@ -22,9 +22,6 @@
 
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
-
-#include <tools/solar.h>
-
 #include <cppuhelper/implbase1.hxx>
 
 
