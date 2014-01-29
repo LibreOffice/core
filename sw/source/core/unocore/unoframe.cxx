@@ -484,6 +484,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
     {
         const ::uno::Any* pRelH = 0;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT, pRelH);
+        const ::uno::Any* pRelHRelation = 0;
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT_RELATION, pRelHRelation);
         const ::uno::Any* pRelW = 0;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH, pRelW);
         const ::uno::Any* pRelWRelation = 0;
@@ -502,7 +504,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE, pSizeType);
         const ::uno::Any* pWidthType = 0;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE, pWidthType);
-        if( pWidth || pHeight ||pRelH || pRelW || pRelWRelation || pSize ||pSizeType ||
+        if( pWidth || pHeight ||pRelH || pRelHRelation || pRelW || pRelWRelation || pSize ||pSizeType ||
             pWidthType ||pSyncWidth || pSyncHeight )
         {
             rSizeFound = true;
@@ -513,6 +515,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pHeight, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS);
             if(pRelH )
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pRelH, MID_FRMSIZE_REL_HEIGHT);
+            if (pRelHRelation)
+                bRet &= const_cast<SwFmtFrmSize&>(aFrmSz).PutValue(*pRelHRelation, MID_FRMSIZE_REL_HEIGHT_RELATION);
             if(pRelW )
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
             if (pRelWRelation)
