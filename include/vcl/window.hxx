@@ -253,12 +253,14 @@ typedef sal_uInt16 StateChangedType;
 #define GETFOCUS_TAB                    ((sal_uInt16)0x0001)
 #define GETFOCUS_CURSOR                 ((sal_uInt16)0x0002)
 #define GETFOCUS_MNEMONIC               ((sal_uInt16)0x0004)
+#define GETFOCUS_F6                     ((sal_uInt16)0x0008)
 #define GETFOCUS_FORWARD                ((sal_uInt16)0x0010)
 #define GETFOCUS_BACKWARD               ((sal_uInt16)0x0020)
 #define GETFOCUS_AROUND                 ((sal_uInt16)0x0040)
 #define GETFOCUS_UNIQUEMNEMONIC         ((sal_uInt16)0x0100)
 #define GETFOCUS_INIT                   ((sal_uInt16)0x0200)
 #define GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0400)
+
 
 // Draw-Flags fuer Draw()
 #define WINDOW_DRAW_MONO                ((sal_uLong)0x00000001)
@@ -481,6 +483,7 @@ public:
     SAL_DLLPRIVATE void        ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged = sal_False );
     SAL_DLLPRIVATE void        ImplGenerateMouseMove();
     SAL_DLLPRIVATE void        ImplGrabFocus( sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void        ImplGrabFocusToDocument( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplInvertFocus( const Rectangle& rRect );
     SAL_DLLPRIVATE void        ImplControlFocus( sal_uInt16 nFlags = 0 );
     SAL_DLLPRIVATE Window*     ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );

@@ -77,13 +77,13 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
 
 // --------------------------------------------------
 
-static void ImplTaskPaneListGrabFocus( Window *pWindow )
+static void ImplTaskPaneListGrabFocus( Window *pWindow, bool bForward )
 {
     // put focus in child of floating windows which is typically a toolbar
     // that can deal with the focus
     if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( WINDOW_FIRSTCHILD ) )
         pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
-    pWindow->GrabFocus();
+    pWindow->ImplGrabFocus( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
 }
 
 // --------------------------------------------------
@@ -195,7 +195,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 // Ctrl-F6 goes directly to the document
                 if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
-                    pWin->GrabFocusToDocument();
+                    pWin->ImplGrabFocusToDocument( GETFOCUS_F6 );
                     return sal_True;
                 }
 
@@ -210,7 +210,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = sal_True;
-                    ImplTaskPaneListGrabFocus( pNextWin );
+                    ImplTaskPaneListGrabFocus( pNextWin, bForward );
                     ImplGetSVData()->maWinData.mbNoSaveFocus = sal_False;
                 }
                 else
@@ -221,7 +221,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
                     // we did not find another taskpane, so
                     // put focus back into document
-                    pWin->GrabFocusToDocument();
+                    pWin->ImplGrabFocusToDocument( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
                 }
 
                 return sal_True;
@@ -240,7 +240,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 pWin = FindNextFloat( NULL, bForward );
             if( pWin )
             {
-                ImplTaskPaneListGrabFocus( pWin );
+                ImplTaskPaneListGrabFocus( pWin, bForward );
                 return sal_True;
             }
         }
