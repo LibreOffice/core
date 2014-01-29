@@ -5354,10 +5354,10 @@ sal_Bool PPTPortionObj::HasTabulator()
     return bRetValue;
 }
 
-sal_Bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sal_uInt32 nDestinationInstance ) const
+sal_Bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt32 nDestinationInstance ) const
 {
     sal_uInt32  nMask = 1 << nAttr;
-    nRetValue = 0;
+    rRetValue = 0;
 
     sal_uInt32 bIsHardAttribute = ( ( pCharSet->mnAttrSet & nMask ) != 0 ) ? 1 : 0;
 
@@ -5371,22 +5371,22 @@ sal_Bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sal_
             case PPT_CharAttr_Shadow :
             case PPT_CharAttr_Strikeout :
             case PPT_CharAttr_Embossed :
-                nRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
+                rRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
             break;
             case PPT_CharAttr_Font :
-                nRetValue = pCharSet->mnFont;
+                rRetValue = pCharSet->mnFont;
             break;
             case PPT_CharAttr_AsianOrComplexFont :
-                nRetValue = pCharSet->mnAsianOrComplexFont;
+                rRetValue = pCharSet->mnAsianOrComplexFont;
             break;
             case PPT_CharAttr_FontHeight :
-                nRetValue = pCharSet->mnFontHeight;
+                rRetValue = pCharSet->mnFontHeight;
             break;
             case PPT_CharAttr_FontColor :
-                nRetValue = pCharSet->mnColor;
+                rRetValue = pCharSet->mnColor;
             break;
             case PPT_CharAttr_Escapement :
-                nRetValue = pCharSet->mnEscapement;
+                rRetValue = pCharSet->mnEscapement;
             break;
             default :
                 OSL_FAIL( "SJ:PPTPortionObj::GetAttrib ( hard attribute does not exist )" );
@@ -5410,47 +5410,47 @@ sal_Bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sal_
             case PPT_CharAttr_Strikeout :
             case PPT_CharAttr_Embossed :
             {
-                nRetValue = ( rCharLevel.mnFlags & nMask ) ? 1 : 0;
+                rRetValue = ( rCharLevel.mnFlags & nMask ) ? 1 : 0;
                 if ( pCharLevel )
                 {
                     sal_uInt32 nTmp = ( pCharLevel->mnFlags & nMask ) ? 1 : 0;
-                    if ( nRetValue != nTmp )
+                    if ( rRetValue != nTmp )
                         bIsHardAttribute = 1;
                 }
             }
             break;
             case PPT_CharAttr_Font :
             {
-                nRetValue = rCharLevel.mnFont;
-                if ( pCharLevel && ( nRetValue != pCharLevel->mnFont ) )
+                rRetValue = rCharLevel.mnFont;
+                if ( pCharLevel && ( rRetValue != pCharLevel->mnFont ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_CharAttr_AsianOrComplexFont :
             {
-                nRetValue = rCharLevel.mnAsianOrComplexFont;
-                if ( pCharLevel && ( nRetValue != pCharLevel->mnAsianOrComplexFont ) )
+                rRetValue = rCharLevel.mnAsianOrComplexFont;
+                if ( pCharLevel && ( rRetValue != pCharLevel->mnAsianOrComplexFont ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_CharAttr_FontHeight :
             {
-                nRetValue = rCharLevel.mnFontHeight;
-                if ( pCharLevel && ( nRetValue != pCharLevel->mnFontHeight ) )
+                rRetValue = rCharLevel.mnFontHeight;
+                if ( pCharLevel && ( rRetValue != pCharLevel->mnFontHeight ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_CharAttr_FontColor :
             {
-                nRetValue = rCharLevel.mnFontColor;
-                if ( pCharLevel && ( nRetValue != pCharLevel->mnFontColor ) )
+                rRetValue = rCharLevel.mnFontColor;
+                if ( pCharLevel && ( rRetValue != pCharLevel->mnFontColor ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_CharAttr_Escapement :
             {
-                nRetValue = rCharLevel.mnEscapement;
-                if ( pCharLevel && ( nRetValue != pCharLevel->mnEscapement ) )
+                rRetValue = rCharLevel.mnEscapement;
+                if ( pCharLevel && ( rRetValue != pCharLevel->mnEscapement ) )
                     bIsHardAttribute = 1;
             }
             break;
@@ -5775,10 +5775,10 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
     }
 }
 
-sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sal_uInt32 nDestinationInstance )
+sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt32 nDestinationInstance )
 {
     sal_uInt32  nMask = 1 << nAttr;
-    nRetValue = 0;
+    rRetValue = 0;
 
     if ( nAttr > 21 )
     {
@@ -5799,20 +5799,20 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                 bHardBulletColor = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
             if ( bHardBulletColor )
-                nRetValue = pParaSet->mnBulletColor;
+                rRetValue = pParaSet->mnBulletColor;
             else
             {
-                nRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
+                rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
                 if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontColor))
                     {
-                        nRetValue = rPortion.pCharSet->mnColor;
+                        rRetValue = rPortion.pCharSet->mnColor;
                     }
                     else
                     {
-                        nRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
                     }
                 }
             }
@@ -5826,27 +5826,27 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                 bHardBuFont = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardFont ) ) != 0;
             if ( bHardBuFont )
-                nRetValue = pParaSet->mpArry[ PPT_ParaAttr_BulletFont ];
+                rRetValue = pParaSet->mpArry[ PPT_ParaAttr_BulletFont ];
             else
             {
                 // it is the font used which assigned to the first character of the following text
-                nRetValue = 0;
+                rRetValue = 0;
                 if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
                     {
-                        nRetValue = rPortion.pCharSet->mnFont;
+                        rRetValue = rPortion.pCharSet->mnFont;
                     }
                     else
                     {
-                        nRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
+                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
                     }
                 }
             }
         }
         else
-            nRetValue = pParaSet->mpArry[ nAttr ];
+            rRetValue = pParaSet->mpArry[ nAttr ];
     }
     else
     {
@@ -5862,10 +5862,10 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
         {
             case PPT_ParaAttr_BulletOn :
             {
-                nRetValue = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn );
+                rRetValue = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn );
                 if ( pParaLevel )
                 {
-                    if ( nRetValue != ( (sal_uInt32)pParaLevel->mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) )
+                    if ( rRetValue != ( (sal_uInt32)pParaLevel->mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) )
                         bIsHardAttribute = 1;
                 }
             }
@@ -5877,8 +5877,8 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
             break;
             case PPT_ParaAttr_BulletChar :
             {
-                nRetValue = rParaLevel.mnBulletChar;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletChar ) )
+                rRetValue = rParaLevel.mnBulletChar;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnBulletChar ) )
                     bIsHardAttribute = 1;
             }
             break;
@@ -5891,8 +5891,8 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                     bHardBuFont = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardFont ) ) != 0;
                 if ( bHardBuFont )
                 {
-                    nRetValue = rParaLevel.mnBulletFont;
-                    if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletFont ) )
+                    rRetValue = rParaLevel.mnBulletFont;
+                    if ( pParaLevel && ( rRetValue != pParaLevel->mnBulletFont ) )
                         bIsHardAttribute = 1;
                 }
                 else
@@ -5901,11 +5901,11 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                     {
                         PPTPortionObj const& rPortion = m_PortionList.front();
                         bIsHardAttribute = rPortion.GetAttrib(
-                            PPT_CharAttr_Font, nRetValue, nDestinationInstance);
+                            PPT_CharAttr_Font, rRetValue, nDestinationInstance);
                     }
                     else
                     {
-                        nRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
+                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
                         bIsHardAttribute = 1;
                     }
                 }
@@ -5913,8 +5913,8 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
             break;
             case PPT_ParaAttr_BulletHeight :
             {
-                nRetValue = rParaLevel.mnBulletHeight;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletHeight ) )
+                rRetValue = rParaLevel.mnBulletHeight;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnBulletHeight ) )
                     bIsHardAttribute = 1;
             }
             break;
@@ -5927,8 +5927,8 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                     bHardBulletColor = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
                 if ( bHardBulletColor )
                 {
-                    nRetValue = rParaLevel.mnBulletColor;
-                    if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletColor ) )
+                    rRetValue = rParaLevel.mnBulletColor;
+                    if ( pParaLevel && ( rRetValue != pParaLevel->mnBulletColor ) )
                         bIsHardAttribute = 1;
                 }
                 else
@@ -5939,19 +5939,19 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                         if (rPortion.mbIsHyperlink )
                         {
                             if( rPortion.mbHardHylinkOrigColor )
-                                nRetValue = rPortion.mnHylinkOrigColor;
+                                rRetValue = rPortion.mnHylinkOrigColor;
                             else
-                                nRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                                rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
                             bIsHardAttribute = sal_True;
                         }
                         else
                         {
-                            bIsHardAttribute = rPortion.GetAttrib( PPT_CharAttr_FontColor, nRetValue, nDestinationInstance );
+                            bIsHardAttribute = rPortion.GetAttrib( PPT_CharAttr_FontColor, rRetValue, nDestinationInstance );
                         }
                     }
                     else
                     {
-                        nRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
                         bIsHardAttribute = 1;
                     }
                 }
@@ -5959,78 +5959,78 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
             break;
             case PPT_ParaAttr_Adjust :
             {
-                nRetValue = rParaLevel.mnAdjust;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnAdjust ) )
+                rRetValue = rParaLevel.mnAdjust;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnAdjust ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_LineFeed :
             {
-                nRetValue = rParaLevel.mnLineFeed;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnLineFeed ) )
+                rRetValue = rParaLevel.mnLineFeed;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnLineFeed ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_UpperDist :
             {
-                nRetValue = rParaLevel.mnUpperDist;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnUpperDist ) )
+                rRetValue = rParaLevel.mnUpperDist;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnUpperDist ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_LowerDist :
             {
-                nRetValue = rParaLevel.mnLowerDist;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnLowerDist ) )
+                rRetValue = rParaLevel.mnLowerDist;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnLowerDist ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_TextOfs :
             {
-                nRetValue = rParaLevel.mnTextOfs;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnTextOfs ) )
+                rRetValue = rParaLevel.mnTextOfs;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnTextOfs ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_BulletOfs :
             {
-                nRetValue = rParaLevel.mnBulletOfs;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletOfs ) )
+                rRetValue = rParaLevel.mnBulletOfs;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnBulletOfs ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_DefaultTab :
             {
-                nRetValue = rParaLevel.mnDefaultTab;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnDefaultTab ) )
+                rRetValue = rParaLevel.mnDefaultTab;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnDefaultTab ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_AsianLB_1 :
             {
-                nRetValue = rParaLevel.mnAsianLineBreak & 1;
-                if ( pParaLevel && ( nRetValue != ( (sal_uInt32)pParaLevel->mnAsianLineBreak & 1 ) ) )
+                rRetValue = rParaLevel.mnAsianLineBreak & 1;
+                if ( pParaLevel && ( rRetValue != ( (sal_uInt32)pParaLevel->mnAsianLineBreak & 1 ) ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_AsianLB_2 :
             {
-                nRetValue = ( rParaLevel.mnAsianLineBreak >> 1 ) & 1;
-                if ( pParaLevel && ( nRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 1 ) & 1 ) ) )
+                rRetValue = ( rParaLevel.mnAsianLineBreak >> 1 ) & 1;
+                if ( pParaLevel && ( rRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 1 ) & 1 ) ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_AsianLB_3 :
             {
-                nRetValue = ( rParaLevel.mnAsianLineBreak >> 2 ) & 1;
-                if ( pParaLevel && ( nRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 2 ) & 1 ) ) )
+                rRetValue = ( rParaLevel.mnAsianLineBreak >> 2 ) & 1;
+                if ( pParaLevel && ( rRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 2 ) & 1 ) ) )
                     bIsHardAttribute = 1;
             }
             break;
             case PPT_ParaAttr_BiDi :
             {
-                nRetValue = rParaLevel.mnBiDi;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBiDi ) )
+                rRetValue = rParaLevel.mnBiDi;
+                if ( pParaLevel && ( rRetValue != pParaLevel->mnBiDi ) )
                     bIsHardAttribute = 1;
             }
             break;
