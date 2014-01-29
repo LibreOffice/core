@@ -161,7 +161,7 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< awt::Gradient >() )
     {
         OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient >() );
-        return !aGradientName.isEmpty() && setProperty( nPropId, aGradientName );
+        return !aGradientName.isEmpty() && setProperty( PROP_FillGradientName, aGradientName );
     }
 
     return false;
