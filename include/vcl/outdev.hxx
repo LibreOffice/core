@@ -624,22 +624,26 @@ public:
     static OUString    GetNonMnemonicString( const OUString& rStr )
                             { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
-    sal_Bool                GetTextBoundRect( Rectangle& rRect,
+    sal_Bool           GetTextBoundRect( Rectangle& rRect,
                             const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
-    sal_Bool                GetTextOutline( PolyPolygon&,
+
+    sal_Bool           GetTextOutline( PolyPolygon&,
                             const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                             sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
-    sal_Bool                GetTextOutlines( PolyPolyVector&,
+
+    sal_Bool           GetTextOutlines( PolyPolyVector&,
                             const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                             sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
-    sal_Bool                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
+
+    sal_Bool           GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
                             const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                             sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
-    sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
+
+    sal_Bool           GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 
     void                DrawPixel( const Point& rPt );
@@ -805,7 +809,7 @@ public:
         Theoreticaly, handing over a matrix would be needed to handle
         painting rotated EPS files (e.g. contained in Metafiles). This
         would then need to be supported for Mac and PS printers, but
-        that's too much for now, wrote #i107046# for this */
+        that's too much for now, wrote \#i107046# for this */
     bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
 
