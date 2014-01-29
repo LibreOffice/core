@@ -311,7 +311,8 @@ public:
                             getActiveSheet() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setActiveSheet( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             //XEnhancedMouseClickBroadcaster
 

@@ -1105,7 +1105,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
 
 // support expand (but not replace) the active sheet
 void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet )
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
