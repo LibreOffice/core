@@ -3443,7 +3443,8 @@ void Test::testCopyPaste()
     pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
     ScRange aRangeLocal1;
-    pLocal1->IsValidReference(aRangeLocal1);
+    bool bIsValidRef = pLocal1->IsValidReference(aRangeLocal1);
+    CPPUNIT_ASSERT_MESSAGE("local range name 1 should be valid", bIsValidRef);
     CPPUNIT_ASSERT_MESSAGE("local range 1 should still point to Sheet1.A1",aRangeLocal1 == ScRange(0,0,0,0,0,0));
     pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == NULL);
