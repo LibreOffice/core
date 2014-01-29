@@ -5321,7 +5321,7 @@ PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyle
     PPTCharPropSet  ( rCharPropSet ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
-    mnDepth         ( nDepth )
+    mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth )
 {
 }
 
