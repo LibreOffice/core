@@ -500,7 +500,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode )
             {
                 const sal_Int32 n1 = aFormString.indexOf(sep, nTokPos);
-                const sal_Int32 n2 = aFormString.indexOf(')',nTokPos);
+                const sal_Int32 n2 = nTokPos < 0 ? -1 : aFormString.indexOf(')',nTokPos);
                 sal_Int32 nXXX = nTokPos;
                 if( n1 < n2 )
                 {
