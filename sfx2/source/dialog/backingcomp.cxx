@@ -307,7 +307,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
         // Control these pointer again ... it can be, that another instance will be faster then this one!
         if (!pID)
         {
-            static ::cppu::OImplementationId aID(sal_False);
+            static ::cppu::OImplementationId aID(false);
             pID = &aID;
         }
         /* } GLOBAL SAFE */

@@ -84,7 +84,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
         if( ! pId ) \
         { \
-            static ::cppu::OImplementationId id( sal_False ); \
+            static ::cppu::OImplementationId id( false ); \
             pId = &id; \
         } \
     } \

@@ -634,7 +634,7 @@ Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( Runtime
         if ( pID == NULL )
         {
             // Create a new static ID ...
-            static ::cppu::OImplementationId aID( sal_False ) ;
+            static ::cppu::OImplementationId aID( false ) ;
             // ... and set his address to static pointer!
             pID = &aID ;
         }

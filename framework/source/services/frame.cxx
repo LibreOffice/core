@@ -3113,7 +3113,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
         // Get iterator for access to listener.
         ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
         // Send message to all listener.
-        while( aIterator.hasMoreElements() == sal_True )
+        while( aIterator.hasMoreElements() )
         {
             try
             {

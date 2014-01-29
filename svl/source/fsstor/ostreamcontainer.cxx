@@ -193,7 +193,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OFSStreamContainer::getImplementationId()
 
         if ( pID == NULL )
         {
-            static ::cppu::OImplementationId aID( sal_False ) ;
+            static ::cppu::OImplementationId aID( false ) ;
             pID = &aID ;
         }
     }

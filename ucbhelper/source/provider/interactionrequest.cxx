@@ -153,7 +153,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -305,7 +305,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -407,7 +407,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -509,7 +509,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -611,7 +611,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -715,7 +715,7 @@ InteractionSupplyAuthentication::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -979,7 +979,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }
@@ -1096,7 +1096,7 @@ InteractionReplaceExistingData::getImplementationId()
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
           if ( !pId )
           {
-              static cppu::OImplementationId id( sal_False );
+              static cppu::OImplementationId id( false );
               pId = &id;
           }
       }

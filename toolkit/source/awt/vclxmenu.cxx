@@ -302,7 +302,7 @@ throw(css::uno::RuntimeException)
             ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
             if( !pIdPopupMenu )
             {
-                static ::cppu::OImplementationId idPopupMenu( sal_False );
+                static ::cppu::OImplementationId idPopupMenu( false );
                 pIdPopupMenu = &idPopupMenu;
             }
         }
@@ -316,7 +316,7 @@ throw(css::uno::RuntimeException)
             ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
             if( !pIdMenuBar )
             {
-                static ::cppu::OImplementationId idMenuBar( sal_False );
+                static ::cppu::OImplementationId idMenuBar( false );
                 pIdMenuBar = &idMenuBar;
             }
         }

@@ -286,7 +286,7 @@ Window* VCLXTopWindow::GetWindowImpl()
             ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
             if( !pIdWithHandle )
             {
-                static ::cppu::OImplementationId idWithHandle( sal_False );
+                static ::cppu::OImplementationId idWithHandle( false );
                 pIdWithHandle = &idWithHandle;
             }
         }
@@ -300,7 +300,7 @@ Window* VCLXTopWindow::GetWindowImpl()
             ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
             if( !pId )
             {
-                static ::cppu::OImplementationId id( sal_False );
+                static ::cppu::OImplementationId id( false );
                 pId = &id;
             }
         }

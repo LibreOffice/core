@@ -224,7 +224,7 @@ Sequence< sal_Int8> BaseResultSet::getImplementationId() throw( RuntimeException
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
         if( ! pId )
         {
-            static cppu::OImplementationId id(sal_False);
+            static cppu::OImplementationId id(false);
             pId = &id;
         }
     }

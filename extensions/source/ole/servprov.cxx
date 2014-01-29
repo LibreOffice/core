@@ -659,7 +659,7 @@ Sequence< sal_Int8 > SAL_CALL OleServer_Impl::getImplementationId() throw(Runtim
         MutexGuard guard( Mutex::getGlobalMutex() );
         if( ! pId )
         {
-            static OImplementationId id( sal_False );
+            static OImplementationId id( false );
             pId = &id;
         }
     }

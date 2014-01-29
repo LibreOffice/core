@@ -63,7 +63,7 @@ Adapter::~Adapter()
     mWrappedObject.scratch();
 }
 
-static cppu::OImplementationId g_id( sal_False );
+static cppu::OImplementationId g_id( false );
 
 Sequence<sal_Int8> Adapter::getUnoTunnelImplementationId()
 {

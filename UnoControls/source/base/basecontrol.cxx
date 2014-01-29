@@ -182,7 +182,7 @@ Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeE
         if ( pID == NULL )
         {
             // Create a new static ID ...
-            static OImplementationId aID( sal_False );
+            static OImplementationId aID( false );
             // ... and set his address to static pointer!
             pID = &aID ;
         }

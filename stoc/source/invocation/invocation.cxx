@@ -1056,7 +1056,7 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
         MutexGuard guard( Mutex::getGlobalMutex() );
         if( ! pId )
         {
-            static OImplementationId id( sal_False );
+            static OImplementationId id( false );
             pId = &id;
         }
     }

@@ -453,7 +453,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
         if ( !pID )
         {
-            static ::cppu::OImplementationId aID( sal_False ) ;
+            static ::cppu::OImplementationId aID( false ) ;
             pID = &aID ;
         }
     }
