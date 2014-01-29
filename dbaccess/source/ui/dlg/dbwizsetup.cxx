@@ -258,10 +258,7 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
             sRoadmapItem = m_sRM_AuthentificationText;
             break;
         case PAGE_DBSETUPWIZARD_USERDEFINED:
-            {
-                LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                sRoadmapItem = ModuleRes(STR_PAGETITLE_CONNECTION);
-            }
+            sRoadmapItem = ModuleRes(STR_PAGETITLE_CONNECTION);
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
             sRoadmapItem = m_sRM_FinalText;
