@@ -67,7 +67,8 @@ protected:
                                 sal_Int32 nHandle,
                                 const ::com::sun::star::uno::Any& rValue
                             )
-                            throw (::com::sun::star::uno::Exception);
+                            throw (::com::sun::star::uno::Exception,
+                                   std::exception);
 
     using OPropertyContainer_Base::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(

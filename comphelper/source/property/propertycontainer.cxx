@@ -77,7 +77,8 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
 }
 
 //--------------------------------------------------------------------------
-void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
+void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+    throw (Exception, std::exception)
 {
     OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
 }

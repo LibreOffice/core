@@ -560,7 +560,8 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     return *ScChartObj_PABase::getArrayHelper();
 }
 
-void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue ) throw (uno::Exception)
+void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
+    throw (uno::Exception, std::exception)
 {
     switch ( nHandle )
     {

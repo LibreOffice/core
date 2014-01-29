@@ -603,7 +603,8 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception) = 0;
+            throw (::com::sun::star::uno::Exception,
+                   std::exception) = 0;
     /**
        The same as getFastProperyValue, but return the value through rValue and nHandle
        is always valid.
