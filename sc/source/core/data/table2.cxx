@@ -453,12 +453,12 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
 }
 
 
-void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
+void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
         for (SCCOL i=0; i<=MAXCOL; i++)
-            aCol[i].DeleteSelection( nDelFlag, rMark );
+            aCol[i].DeleteSelection(nDelFlag, rMark, bBroadcast);
     }
 
     ScRangeList aRangeList;
