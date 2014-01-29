@@ -215,7 +215,8 @@ private:
                                                     const SfxItemPropertySimpleEntry* pEntry,
                                                     const ::com::sun::star::uno::Any* pValue )
                                             throw(::com::sun::star::lang::IllegalArgumentException,
-                                                    ::com::sun::star::uno::RuntimeException);
+                                                  ::com::sun::star::uno::RuntimeException,
+                                                  std::exception);
 
     ScStyleObj(); // disabled
 public:

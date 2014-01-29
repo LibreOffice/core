@@ -1533,7 +1533,9 @@ void SAL_CALL ScStyleObj::setPropertyValue(
 }
 
 void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException,
+                                      uno::RuntimeException,
+                                      std::exception)
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if ( pStyle && pEntry )
