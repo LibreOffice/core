@@ -1848,8 +1848,11 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
     }
     return sal_True;
 }
+
 sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard g;
 
