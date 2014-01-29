@@ -76,7 +76,7 @@ done
 # (bootstraprc and similar that the user might adjust and image files)
 # See also https://developer.apple.com/library/mac/technotes/tn2206/
 
-if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
+if test "$ENABLE_MACOSX_SANDBOX" = "YES"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
