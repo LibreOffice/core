@@ -20,12 +20,9 @@
 #define INCLUDED_SVL_GLOBALNAMEITEM_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/globname.hxx>
 #include <svl/poolitem.hxx>
-
-// -----------------------------------------------------------------------
 
 class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
 {

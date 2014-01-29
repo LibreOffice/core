@@ -20,12 +20,11 @@
 #ifndef INCLUDED_SVL_URIHELPER_HXX
 #define INCLUDED_SVL_URIHELPER_HXX
 
-#include <svl/svldllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/textenc.h>
+#include <svl/svldllapi.h>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <tools/urlobj.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -35,7 +34,6 @@ namespace com { namespace sun { namespace star {
 
 class CharClass;
 
-//============================================================================
 namespace URIHelper {
 
 /**
@@ -62,10 +60,8 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     bool bRelativeNonURIs = false,
                                     INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
-//============================================================================
 SVL_DLLPUBLIC void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
 
-//============================================================================
 SVL_DLLPUBLIC Link GetMaybeFileHdl();
 
 /**
@@ -119,7 +115,6 @@ normalizedMakeRelative(
 SVL_DLLPUBLIC OUString simpleNormalizedMakeRelative( OUString const & baseUriReference,
                                                      OUString const & uriReference);
 
-//============================================================================
 SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           sal_Int32 & rBegin,
                                           sal_Int32 & rEnd,
@@ -128,7 +123,6 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                                           INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
-//============================================================================
 /** Remove any password component from both absolute and relative URLs.
 
     @ATT  The current implementation will not remove a password from a

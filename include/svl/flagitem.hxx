@@ -19,14 +19,11 @@
 #ifndef INCLUDED_SVL_FLAGITEM_HXX
 #define INCLUDED_SVL_FLAGITEM_HXX
 
-#include <svl/svldllapi.h>
-#include <tools/solar.h>
-#include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/svldllapi.h>
+#include <tools/rtti.hxx>
 
 class SvStream;
-
-// -----------------------------------------------------------------------
 
 DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
 
