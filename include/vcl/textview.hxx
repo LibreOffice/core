@@ -46,6 +46,8 @@ namespace clipboard {
     class XClipboard;
 }}}}}
 
+using namespace ::com::sun::star;
+
 struct ImpTextView;
 
 class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
@@ -139,8 +141,8 @@ public:
     void                Copy();
     void                Paste();
 
-    void                Copy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
-    void                Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
+    void                Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard );
+    void                Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard );
 
     void                Undo();
     void                Redo();

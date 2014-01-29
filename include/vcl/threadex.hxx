@@ -204,11 +204,11 @@ inline detail::copy_back_wrapper<T> inout_by_ptr( T * p )
     (e.g. for out parameters) to foreign threads, use inout_by_ref()
     for this purpose.  For in parameters, this may not affect you, because
     the functor object is copy constructed into free store.  This way
-    you must not use boost::cref()/boost::ref() or similar for objects on
-    your thread's stack.
+    you must not use \verbatim boost::cref()/boost::ref() \endverbatim or similar
+    for objects on your thread's stack.
     Use inout_by_ref() or inout_by_ptr() for this purpose, e.g.
 
-    <pre>
+    \code{.cpp}
         using namespace vcl::solarthread;
 
         long n = 3;
@@ -222,7 +222,7 @@ inline detail::copy_back_wrapper<T> inout_by_ptr( T * p )
         syncExecute( boost::bind( &foo, inout_by_ptr(&pc) ) );
         // calling foo( char const*& rpc ):
         syncExecute( boost::bind( &foo, inout_by_ref(pc) ) );
-    </pre>
+    \endcode
 
     @tpl ResultT result type, defaults to FuncT::result_type to seamlessly
                  support mem_fn and bind
