@@ -36,7 +36,7 @@
 #include <helper/mischelper.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/StatusbarControllerFactory.hpp>
+#include <com/sun/star/frame/theStatusbarControllerFactory.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -145,7 +145,7 @@ StatusBarManager::StatusBarManager(
     m_xContext( rxContext )
 {
 
-    m_xStatusbarControllerFactory = frame::StatusbarControllerFactory::create(
+    m_xStatusbarControllerFactory = frame::theStatusbarControllerFactory::get(
         ::comphelper::getProcessComponentContext());
 
     m_pStatusBar->SetClickHdl( LINK( this, StatusBarManager, Click ) );

@@ -23,7 +23,7 @@
 
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
+#include <com/sun/star/frame/theToolbarControllerFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <framework/sfxhelperfunctions.hxx>
@@ -147,7 +147,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     try
     {
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-        Reference<frame::XUIControllerFactory> xFactory = frame::ToolbarControllerFactory::create( xContext );
+        Reference<frame::XUIControllerFactory> xFactory = frame::theToolbarControllerFactory::get( xContext );
         OUString sModuleName (Tools::GetModuleName(rxFrame));
 
         if (xFactory.is() && xFactory->hasController(rsCommandName,  sModuleName))

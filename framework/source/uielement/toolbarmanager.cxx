@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
+#include <com/sun/star/frame/theToolbarControllerFactory.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -211,7 +211,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
-    m_xToolbarControllerFactory = frame::ToolbarControllerFactory::create( m_xContext );
+    m_xToolbarControllerFactory = frame::theToolbarControllerFactory::get( m_xContext );
     m_xURLTransformer = URLTransformer::create( m_xContext );
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );

@@ -32,7 +32,7 @@
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
-#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
+#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
@@ -129,7 +129,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
     try
     {
         m_xPopupMenuFactory.set(
-            css::frame::PopupMenuControllerFactory::create( m_xContext ) );
+            css::frame::thePopupMenuControllerFactory::get( m_xContext ) );
         m_bHasController = m_xPopupMenuFactory->hasController(
             m_aPopupCommand, getModuleName() );
     }

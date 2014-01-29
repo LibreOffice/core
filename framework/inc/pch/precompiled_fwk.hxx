@@ -121,11 +121,11 @@
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/OfficeFrameLoader.hpp>
-#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
+#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
-#include <com/sun/star/frame/StatusbarControllerFactory.hpp>
+#include <com/sun/star/frame/theStatusbarControllerFactory.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
-#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
+#include <com/sun/star/frame/theToolbarControllerFactory.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>

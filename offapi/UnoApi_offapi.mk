@@ -951,6 +951,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/frame,\
 	ToolbarController \
 	ToolbarControllerFactory \
 	TransientDocumentsDocumentContentFactory \
+	thePopupMenuControllerFactory \
+	theStatusbarControllerFactory \
+	theToolbarControllerFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/gallery,\
 	GalleryItem \

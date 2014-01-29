@@ -43,7 +43,7 @@
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
+#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
@@ -179,7 +179,7 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
-    m_xPopupMenuControllerFactory = frame::PopupMenuControllerFactory::create(m_xContext);
+    m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(m_xContext);
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
 
@@ -1963,7 +1963,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
     m_bIsBookmarkMenu   = sal_True;
 
     OUString aModuleIdentifier;
-    m_xPopupMenuControllerFactory = frame::PopupMenuControllerFactory::create(
+    m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(
         ::comphelper::getProcessComponentContext());
 
     Reference< XStatusListener > xStatusListener;

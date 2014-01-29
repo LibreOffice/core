@@ -72,8 +72,7 @@
 #include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
-#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
-#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
+#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -2199,7 +2198,7 @@ void Desktop::PreloadConfigurationData()
     // configuration file they also get preloaded!
 
     Reference< css::frame::XUIControllerRegistration > xPopupMenuControllerFactory =
-    css::frame::PopupMenuControllerFactory::create( xContext );
+    css::frame::thePopupMenuControllerFactory::get( xContext );
     try
     {
         xPopupMenuControllerFactory->hasController(

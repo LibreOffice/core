@@ -22,11 +22,10 @@
 
 module com { module sun { module star { module frame {
 
-/** specifies a factory that creates instances of registered toolbar controller.
+/**
+    A legacy (single-instance) service-variant of theToolbarControllerFactory singleton.
 
-    <p>
-    A toolbar controller can be registered for a command URL and a model service name.
-    </p>
+    @deprecated Use theToolbarControllerFactory singleton instead.
 
     @since OOo 2.0
 */

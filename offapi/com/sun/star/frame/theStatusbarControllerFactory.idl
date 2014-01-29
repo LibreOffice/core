@@ -17,21 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_PopupMenuControllerFactory_idl__
-#define __com_sun_star_frame_PopupMenuControllerFactory_idl__
+#ifndef __com_sun_star_frame_theStatusbarControllerFactory_idl__
+#define __com_sun_star_frame_theStatusbarControllerFactory_idl__
 
 #include <com/sun/star/frame/XUIControllerFactory.idl>
 
 module com { module sun { module star { module frame {
 
-/**
-    A legacy (single-instance) service-variant of thePopupMenuControllerFactory singleton.
+/** specifies a factory that creates instances of registered status bar
+    controller.
 
-    @deprecated Use thePopupMenuControllerFactory singleton instead.
+    <p>
+    A status bar controller can be registered for a command URL and a model
+    service name. A status bar will automatically create a status bar controller
+    if it contains a registered command URL.
+    </p>
 
-    @since OOo 2.0
+    Prior to LibreOffice 4.3, this singleton was only available as a
+    (single-instance) StatusbarControllerFactory service.
+
+    @since LibreOffice 4.3
 */
-service PopupMenuControllerFactory : XUIControllerFactory;
+singleton theStatusbarControllerFactory : XUIControllerFactory;
 
 }; }; }; };
 

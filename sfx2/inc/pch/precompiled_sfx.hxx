@@ -253,7 +253,7 @@
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
+#include <com/sun/star/frame/theToolbarControllerFactory.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
