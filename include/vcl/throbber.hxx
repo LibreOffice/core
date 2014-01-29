@@ -28,6 +28,10 @@
 
 #include <vector>
 
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::graphic::XGraphic;
+
 class VCL_DLLPUBLIC Throbber : public ImageControl
 {
 public:
@@ -62,7 +66,7 @@ public:
     void stop();
     bool isRunning() const;
 
-    void setImageList( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& ImageList );
+    void setImageList( const Sequence< Reference< XGraphic > >& ImageList );
     void setImageList( ::std::vector< Image > const& i_images );
 
     // default images

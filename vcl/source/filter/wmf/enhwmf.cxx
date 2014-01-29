@@ -366,7 +366,7 @@ Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 
 /**
  * Reads a polyline from the WMF file and draws it
- * The <class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
+ * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
  * */
 template <class T>
 void EnhWMFReader::ReadAndDrawPolyLine()
