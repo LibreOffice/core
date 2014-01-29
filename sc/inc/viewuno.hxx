@@ -395,7 +395,9 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     // XTransferableSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable()
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans )
                                 throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
                                       ::com::sun::star::uno::RuntimeException,
