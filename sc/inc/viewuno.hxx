@@ -346,7 +346,8 @@ public:
                             // XViewFreezable
     virtual sal_Bool SAL_CALL hasFrozenPanes() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRows )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XRangeSelection
     virtual void SAL_CALL   startRangeSelection( const ::com::sun::star::uno::Sequence<
