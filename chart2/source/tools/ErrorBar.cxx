@@ -94,6 +94,7 @@ ErrorBar::ErrorBar(
     mfPositiveError(0),
     mfNegativeError(0),
     mfWeight(1),
+    meStyle(com::sun::star::chart::ErrorBarStyle::NONE),
     m_xContext( xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
@@ -107,6 +108,7 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     mfPositiveError(rOther.mfPositiveError),
     mfNegativeError(rOther.mfNegativeError),
     mfWeight(rOther.mfWeight),
+    meStyle(rOther.meStyle),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
