@@ -233,7 +233,7 @@ void DocumentLinkManager::disconnectDdeLinks()
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
-        if (!pDdeLink)
+        if (pDdeLink)
             pDdeLink->Disconnect();
     }
 }
