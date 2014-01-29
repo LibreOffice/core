@@ -42,7 +42,9 @@ public:
 
                             // XSheetCellCursor
     virtual void SAL_CALL   collapseToCurrentRegion() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   collapseToCurrentArray() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   collapseToCurrentArray()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   collapseToMergedArea() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   expandToEntireColumns() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   expandToEntireRows() throw(::com::sun::star::uno::RuntimeException);

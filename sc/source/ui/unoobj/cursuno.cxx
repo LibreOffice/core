@@ -127,7 +127,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
     }
 }
 
-void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeException)
+void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
