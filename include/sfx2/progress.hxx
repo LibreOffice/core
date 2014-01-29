@@ -19,12 +19,11 @@
 #ifndef INCLUDED_SFX2_PROGRESS_HXX
 #define INCLUDED_SFX2_PROGRESS_HXX
 
-#include <sal/config.h>
-#include <sfx2/dllapi.h>
-#include <sal/types.h>
-#include <tools/solar.h>
-#include <tools/link.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
+#include <tools/link.hxx>
 
 namespace rtl {
     class OUString;
@@ -33,8 +32,6 @@ class SfxObjectShell;
 struct SfxProgress_Impl;
 struct PlugInLoadStatus;
 struct SvProgressArg;
-
-//=======================================================================
 
 class SFX2_DLLPUBLIC SfxProgress
 {

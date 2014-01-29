@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <tools/rtti.hxx>
 
 // SFX_IMPL_MODULE_LIB
@@ -39,8 +38,6 @@ struct SfxObjectFactory_Impl;
 class SfxFilterContainer;
 class SfxBindings;
 
-//====================================================================
-
 typedef void (*SfxVoidFunc)();
 
 #define SDT_SDT_DOCFACTPRIO     10      // Explorer
@@ -55,8 +52,6 @@ typedef void (*SfxVoidFunc)();
 #define SDT_FRM_DOCFACTPRIO    100      // Frame Document
 #define SDT_MSG_DOCFACTPRIO    110      // Message Document
 #define SDT_SDB_DOCFACTPRIO    200      // Database Document
-
-//====================================================================
 
 class SFX2_DLLPUBLIC SfxObjectFactory
 {
@@ -106,8 +101,6 @@ private:
     SAL_DLLPRIVATE SfxObjectFactory(const SfxObjectFactory&);
     SAL_DLLPRIVATE const SfxObjectFactory& operator=(const SfxObjectFactory &);
 };
-
-//=========================================================================
 
 #define SFX_DECL_OBJECTFACTORY()                                            \
 public:                                                                     \

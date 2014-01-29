@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <tools/errcode.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
@@ -97,8 +96,6 @@ namespace sfx2
         class Theme;
     }
 }
-
-//====================================================================
 
 class SfxLinkItem : public SfxPoolItem
 {
@@ -265,8 +262,6 @@ public:
 };
 
 #define SFX_APP() SfxGetpApp()
-
-//--------------------------------------------------------------------
 
 inline SfxApplication* SfxGetpApp()
 {

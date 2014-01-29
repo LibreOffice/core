@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <tools/errcode.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
@@ -34,8 +33,6 @@
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfilt.hxx>
-
-//-----------------------------------------------------------------------------
 
 namespace com
 {
