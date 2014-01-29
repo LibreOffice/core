@@ -42,7 +42,11 @@ DBG_NAME(SfxFilter)
 
 SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
     maFilterName(rFilterName),
-    maProvider(rProvider)
+    maProvider(rProvider),
+    nFormatType(0),
+    nVersion(0),
+    lFormat(0),
+    nDocIcon(0)
 {
 }
 
