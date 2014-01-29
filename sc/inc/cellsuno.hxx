@@ -446,7 +446,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
                             findAll( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::util::XSearchDescriptor >& xDesc )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                             findFirst( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::util::XSearchDescriptor >& xDesc )

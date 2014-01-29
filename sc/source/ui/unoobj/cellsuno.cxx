@@ -3906,7 +3906,8 @@ uno::Reference<util::XSearchDescriptor> SAL_CALL ScCellRangesBase::createSearchD
 
 uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException,
+                                                          std::exception)
 {
     SolarMutexGuard aGuard;
     //  Wenn nichts gefunden wird, soll Null zurueckgegeben werden (?)
