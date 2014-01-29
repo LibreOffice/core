@@ -521,6 +521,22 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         } else {
             nested.top().push_back(expr);
         }
+    } else {
+        ExplicitCastExpr const * sub = dyn_cast<ExplicitCastExpr>(
+            expr->getSubExpr()->IgnoreParenImpCasts());
+        if (sub != nullptr
+            && (sub->getSubExpr()->IgnoreParenImpCasts()->getType().IgnoreParens()
+                == expr->getType().IgnoreParens())
+            && isBool(sub->getSubExpr()->IgnoreParenImpCasts()))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "explicit conversion (%0) from %1 to %2 implicitly cast back to %3",
+                expr->getLocStart())
+                << sub->getCastKindName()
+                << sub->getSubExpr()->IgnoreParenImpCasts()->getType()
+                << sub->getType() << expr->getType() << expr->getSourceRange();
+        }
     }
     return true;
 }
