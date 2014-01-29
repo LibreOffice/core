@@ -235,7 +235,9 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   refresh()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);

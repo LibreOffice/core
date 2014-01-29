@@ -695,7 +695,8 @@ void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
 
 // XRefreshable
 
-void SAL_CALL ScAreaLinkObj::refresh() throw(uno::RuntimeException)
+void SAL_CALL ScAreaLinkObj::refresh()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
