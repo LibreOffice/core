@@ -1878,14 +1878,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPicBrcBoConversionHelper::convertTwipToMM100ttom
     case NS_sprm::LN_PicBrcRight:
         break;  // sprmPicBrcRight
-    case NS_sprm::LN_ScnsPgn:
-        break;  // sprmScnsPgn
-    case NS_sprm::LN_SiHeadingPgn:
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetEvenlySpaced( nIntValue > 0 );
-
-        break;  // sprmSiHeadingPgn
     case NS_sprm::LN_SOlstAnm:
         break;  // sprmSOlstAnm
     case 136:
@@ -2073,18 +2065,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_SBCustomize:
         break;  // sprmSBCustomize
     case 165:
-    case NS_sprm::LN_SYaPage: // sprmSYaPage
     {
         //page height, rounded to default values, default: 0x3dc0 twip
         sal_Int32 nHeight = ConversionHelper::convertTwipToMM100( nIntValue );
         rContext->Insert( PROP_HEIGHT, uno::makeAny( PaperInfo::sloppyFitPageDimension( nHeight ) ) );
-    }
-    break;
-    case NS_sprm::LN_SXaPage:   // sprmSXaPage
-    {
-        //page width, rounded to default values, default 0x2fd0 twip
-        sal_Int32 nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
-        rContext->Insert( PROP_WIDTH, uno::makeAny( PaperInfo::sloppyFitPageDimension( nWidth ) ) );
     }
     break;
     case 166:
@@ -2280,26 +2264,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         pTargetContext->Insert(PROP_WRITING_MODE, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
-    case NS_sprm::LN_TDxaGapHalf:
-    {
-        OSL_FAIL( "table propeties should be handled by the table manager");
-    }
-    break;
-    case NS_sprm::LN_TDefTable10:
-        break;  // sprmTDefTable10
-    case NS_sprm::LN_TDefTable:
-        break;  // sprmTDefTable
-    case NS_sprm::LN_TDefTableShd:
-        break;  // sprmTDefTableShd
-    case NS_sprm::LN_TDelete:
-        break;  // sprmTDelete
-    case NS_sprm::LN_TDxaCol:
-        break;  // sprmTDxaCol
     case 164: // sprmTSetShd
     case NS_sprm::LN_TTextFlow:
         break;  // sprmTTextFlow
-    case NS_sprm::LN_TDiagLine:
-        break;  // sprmTDiagLine
         // the following are not part of the official documentation
     case 0x6870: //TxtForeColor
         {
