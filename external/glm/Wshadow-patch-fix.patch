@@ -1,0 +1,11 @@
+--- a/glm/core/type_vec4.hpp
++++ b/glm/core/type_vec4.hpp
+@@ -185,7 +185,7 @@
+ 		template <int E0, int E1>
+ 		GLM_FUNC_DECL tvec4(T const & x_, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & w_)
+ 		{
+-			*this = tvec4<T>(x_, v(), w);
++			*this = tvec4<T>(x_, v(), w_);
+ 		}
+ 
+ 		template <int E0, int E1>
