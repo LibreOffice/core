@@ -185,7 +185,6 @@ private:
     OUString maName;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
-    DummyXShape* mpParent;
 
 };
 
@@ -193,44 +192,28 @@ class DummyCube : public DummyXShape
 {
 public:
     DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-            sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > xPropSet,
-            const tPropertyNameMap& rPropertyNameMap, bool bRounded );
-
-private:
-    sal_Int32 mnRotateZAngleHundredthDegree;
-    bool mbRounded;
+            const uno::Reference< beans::XPropertySet > xPropSet,
+            const tPropertyNameMap& rPropertyNameMap );
 };
 
 class DummyCylinder : public DummyXShape
 {
 public:
-    DummyCylinder(const drawing::Position3D&, const drawing::Direction3D& rSize,
-            sal_Int32 nRotateZAngleHundredthDegree );
-private:
-    sal_Int32 mnRotateZAngleHundredthDegree;
+    DummyCylinder(const drawing::Position3D&, const drawing::Direction3D& rSize );
 };
 
 class DummyPyramid : public DummyXShape
 {
 public:
     DummyPyramid(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > xPropSet,
+            uno::Reference< beans::XPropertySet > xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
-
-private:
-    double mfTopHeight;
-    bool mbRotateZ;
 };
 
 class DummyCone : public DummyXShape
 {
 public:
-    DummyCone(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree);
-
-private:
-    sal_Int32 mnRotateZAngleHundredthDegree;
-    double mfTopHeight;
+    DummyCone(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize);
 };
 
 class DummyPieSegment2D : public DummyXShape
@@ -253,45 +236,30 @@ private:
 class DummyPieSegment : public DummyXShape
 {
 public:
-    DummyPieSegment(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
-            double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
-            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene,
-            double fDepth);
+    DummyPieSegment(
+            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene);
 
 private:
-    double mfUnitCircleStartAngleDegree;
-    double mfUnitCircleWidthAngleDegree;
-    double mfUnitCircleInnerRadius;
-    double mfUnitCircleOuterRadius;
-
     drawing::Direction3D maOffset;
     drawing::HomogenMatrix maUnitCircleToScene;
-
-    double mfDepth;
 };
 
 class DummyStripe : public DummyXShape
 {
 public:
     DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
-            const tPropertyNameMap& rPropertyNameMap, sal_Bool bDoubleSided,
-            short nRotatedTexture, bool bFlatNormals );
+            const tPropertyNameMap& rPropertyNameMap );
 
 private:
     Stripe maStripe;
-
-    bool mbDoubleSided;
-    short mnRotatedTexture;
-    bool mbFlatNormals;
 };
 
 class DummyArea3D : public DummyXShape
 {
 public:
-    DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDepth);
+    DummyArea3D(const drawing::PolyPolygonShape3D& rShape);
 
 private:
-    double mfDepth;
     drawing::PolyPolygonShape3D maShapes;
 };
 
@@ -310,13 +278,12 @@ class DummySymbol2D : public DummyXShape
 {
 public:
     DummySymbol2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            sal_Int32 nStandardSymbol, sal_Int32 nBorderColor, sal_Int32 nFillColor);
+            sal_Int32 nStandardSymbol, sal_Int32 nFillColor);
     void render();
 private:
     drawing::Position3D mrPosition;
     drawing::Direction3D mrSize;
     sal_Int32 mnStandardSymbol;
-    sal_Int32 mnBorderColor;
     sal_Int32 mnFillColor;
 };
 
@@ -391,13 +358,11 @@ class DummyFormattedText : public DummyXShape
 public:
     DummyFormattedText(uno::Sequence< uno::Reference<
         chart2::XFormattedString > >& rFormattedString,
-        uno::Reference< beans::XPropertySet > xPropSet, double fRotation);
+        uno::Reference< beans::XPropertySet > xPropSet);
 
 private:
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         chart2::XFormattedString > > maFormattedString;
-
-    double mfRotation;
 };
 
 

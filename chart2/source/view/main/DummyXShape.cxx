@@ -87,8 +87,7 @@ void debugProperties(std::map<OUString, uno::Any>& rProperties)
 
 }
 
-DummyXShape::DummyXShape():
-    mpParent(NULL)
+DummyXShape::DummyXShape()
 {
 }
 
@@ -308,39 +307,30 @@ void setProperties( const tNameSequence& rNames, const tAnySequence& rValues,
 }
 
 DummyCube::DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-        sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > xPropSet,
-        const tPropertyNameMap& rPropertyNameMap, bool bRounded ):
-    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree),
-    mbRounded(bRounded)
+        const uno::Reference< beans::XPropertySet > xPropSet,
+        const tPropertyNameMap& rPropertyNameMap )
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
     setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
-DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-            sal_Int32 nRotateZAngleHundredthDegree ):
-    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree)
+DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Direction3D& rSize )
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
 }
 
 DummyPyramid::DummyPyramid(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > xPropSet,
-        const tPropertyNameMap& rPropertyNameMap):
-    mfTopHeight(fTopHeight),
-    mbRotateZ(bRotateZ)
+        uno::Reference< beans::XPropertySet > xPropSet,
+        const tPropertyNameMap& rPropertyNameMap)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
     setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
-DummyCone::DummyCone(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree):
-    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree),
-    mfTopHeight(fTopHeight)
+DummyCone::DummyCone(const drawing::Position3D& rPos, const drawing::Direction3D& rSize)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
@@ -388,33 +378,21 @@ void DummyPieSegment2D::render()
 
 }
 
-DummyPieSegment::DummyPieSegment(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
-        double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
-        const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene,
-        double fDepth ):
-    mfUnitCircleStartAngleDegree(fUnitCircleStartAngleDegree),
-    mfUnitCircleWidthAngleDegree(fUnitCircleWidthAngleDegree),
-    mfUnitCircleInnerRadius(fUnitCircleInnerRadius),
-    mfUnitCircleOuterRadius(fUnitCircleOuterRadius),
+DummyPieSegment::DummyPieSegment(
+        const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene ):
     maOffset(rOffset),
-    maUnitCircleToScene(rUnitCircleToScene),
-    mfDepth(fDepth)
+    maUnitCircleToScene(rUnitCircleToScene)
 {
 }
 
 DummyStripe::DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
-        const tPropertyNameMap& rPropertyNameMap, sal_Bool bDoubleSided,
-        short nRotatedTexture, bool bFlatNormals ):
-    maStripe(rStripe),
-    mbDoubleSided(bDoubleSided),
-    mnRotatedTexture(nRotatedTexture),
-    mbFlatNormals(bFlatNormals)
+        const tPropertyNameMap& rPropertyNameMap ):
+    maStripe(rStripe)
 {
     setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
-DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDepth):
-    mfDepth(fDepth),
+DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape):
     maShapes(rShape)
 {
 }
@@ -452,11 +430,10 @@ void DummyArea2D::render()
 }
 
 DummySymbol2D::DummySymbol2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        sal_Int32 nStandardSymbol, sal_Int32 nBorderColor, sal_Int32 nFillColor):
+        sal_Int32 nStandardSymbol, sal_Int32 nFillColor):
     mrPosition(rPos),
     mrSize(rSize),
     mnStandardSymbol(nStandardSymbol),
-    mnBorderColor(nBorderColor),
     mnFillColor(nFillColor)
 {
     setPosition(Position3DToAWTPoint(rPos));
@@ -812,9 +789,8 @@ void DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
 
 DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
         chart2::XFormattedString > >& rFormattedString,
-        uno::Reference< beans::XPropertySet > , double fRotation):
-    maFormattedString(rFormattedString),
-    mfRotation(fRotation)
+        uno::Reference< beans::XPropertySet >):
+    maFormattedString(rFormattedString)
 {
 }
 
@@ -994,7 +970,7 @@ bool DummyChart::initWindow()
 
     GLWin.dpy = reinterpret_cast<Display*>(sysData->pDisplay);
 
-    if( glXQueryExtension( GLWin.dpy, NULL, NULL ) == false )
+    if( !glXQueryExtension( GLWin.dpy, NULL, NULL ) )
         return false;
 
     GLWin.win = sysData->aWindow;

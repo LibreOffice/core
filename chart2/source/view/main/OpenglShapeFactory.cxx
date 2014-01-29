@@ -143,14 +143,14 @@ uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCube(
             const uno::Reference<drawing::XShapes>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
-            , sal_Int32 nRotateZAngleHundredthDegree
+            , sal_Int32
             , const uno::Reference< beans::XPropertySet >& xSourceProp
             , const tPropertyNameMap& rPropertyNameMap
-            , bool bRounded )
+            , bool )
 {
     dummy::DummyCube* pCube = new dummy::DummyCube(rPosition, rSize,
-            nRotateZAngleHundredthDegree, xSourceProp,
-            rPropertyNameMap, bRounded);
+            xSourceProp,
+            rPropertyNameMap);
     xTarget->add(pCube);
     return pCube;
 }
@@ -159,10 +159,9 @@ uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCylinder(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
-          , sal_Int32 nRotateZAngleHundredthDegree )
+          , sal_Int32 )
 {
-    dummy::DummyCylinder* pCylinder = new dummy::DummyCylinder( rPosition, rSize,
-            nRotateZAngleHundredthDegree );
+    dummy::DummyCylinder* pCylinder = new dummy::DummyCylinder( rPosition, rSize );
     xTarget->add(pCylinder);
     return pCylinder;
 }
@@ -171,12 +170,11 @@ uno::Reference<drawing::XShape>
         OpenglShapeFactory::createPyramid(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
-          , double fTopHeight, bool bRotateZ
+          , double, bool
           , const uno::Reference< beans::XPropertySet >& xSourceProp
           , const tPropertyNameMap& rPropertyNameMap )
 {
     dummy::DummyPyramid* pPyramid = new dummy::DummyPyramid(rPosition, rSize,
-            fTopHeight, bRotateZ,
             xSourceProp, rPropertyNameMap );
     xTarget->add(pPyramid);
     return pPyramid;
@@ -186,10 +184,9 @@ uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCone(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
-          , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
+          , double, sal_Int32 )
 {
-    dummy::DummyCone* pCone = new dummy::DummyCone(rPosition, rSize, fTopHeight,
-            nRotateZAngleHundredthDegree);
+    dummy::DummyCone* pCone = new dummy::DummyCone(rPosition, rSize);
     xTarget->add(pCone);
     return pCone;
 }
@@ -212,15 +209,14 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createPieSegment(
                     const uno::Reference< drawing::XShapes >& xTarget
-                    , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
-                    , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                    , double, double
+                    , double, double
                     , const drawing::Direction3D& rOffset
                     , const drawing::HomogenMatrix& rUnitCircleToScene
-                    , double fDepth )
+                    , double )
 {
-    dummy::DummyPieSegment* pSegment = new dummy::DummyPieSegment(fUnitCircleStartAngleDegree,
-            fUnitCircleWidthAngleDegree, fUnitCircleInnerRadius, fUnitCircleOuterRadius,
-            rOffset, rUnitCircleToScene, fDepth);
+    dummy::DummyPieSegment* pSegment = new dummy::DummyPieSegment(
+            rOffset, rUnitCircleToScene);
 
     xTarget->add(pSegment);
     return pSegment;
@@ -231,14 +227,12 @@ uno::Reference< drawing::XShape >
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided
-                    , short nRotatedTexture
-                    , bool bFlatNormals )
+                    , sal_Bool
+                    , short
+                    , bool )
 {
     dummy::DummyStripe* pStripe = new dummy::DummyStripe(rStripe,
-            xSourceProp, rPropertyNameMap,
-            bDoubleSided, nRotatedTexture,
-            bFlatNormals);
+            xSourceProp, rPropertyNameMap);
     xTarget->add(pStripe);
     return pStripe;
 }
@@ -246,9 +240,9 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon
-                    , double fDepth )
+                    , double )
 {
-    dummy::DummyArea3D* pArea = new dummy::DummyArea3D(rPolyPolygon, fDepth);
+    dummy::DummyArea3D* pArea = new dummy::DummyArea3D(rPolyPolygon);
     xTarget->add(pArea);
     return pArea;
 }
@@ -268,11 +262,11 @@ uno::Reference< drawing::XShape >
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
-                    , sal_Int32 nBorderColor
+                    , sal_Int32
                     , sal_Int32 nFillColor )
 {
     dummy::DummySymbol2D* pSymbol = new dummy::DummySymbol2D(rPosition, rSize,
-            nStandardSymbol, nBorderColor, nFillColor);
+            nStandardSymbol, nFillColor);
     xTarget->add(pSymbol);
     return pSymbol;
 }
@@ -418,10 +412,10 @@ uno::Reference< drawing::XShape >
                 const awt::Size& rSize, const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,
                 const uno::Reference< beans::XPropertySet > xPropSet,
-                double fRotation, const OUString& rName)
+                double, const OUString& rName)
 {
     dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString,
-            xPropSet, fRotation );
+            xPropSet );
     pText->setPosition(rPos);
     pText->setSize(rSize);
     pText->setName(rName);

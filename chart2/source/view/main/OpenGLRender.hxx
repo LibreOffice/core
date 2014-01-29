@@ -220,19 +220,9 @@ private:
 
     GLint m_MatrixID;
 
-    GLint m_VertexID;
-
-    GLint m_ColorID;
-
     GLint m_RenderVertexID;
 
     GLint m_RenderTexCoordID;
-
-    GLint m_Line2DVertexID;
-
-    GLint m_Line2DWholeVertexID;
-
-    GLint m_Line2DColorID;
 
     GLint m_RenderTexID;
 
@@ -261,8 +251,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
     bool mbArbMultisampleSupported;
     int m_iArbMultisampleFormat;
-    GLint m_iSampleBufs;
-    GLint m_iSamples;
 
     glm::vec4 m_2DColor;
     GLuint m_frameBufferMS;
