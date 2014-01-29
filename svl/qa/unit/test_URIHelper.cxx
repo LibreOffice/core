@@ -54,7 +54,6 @@
 #include "sal/macros.h"
 #include "sal/types.h"
 #include "svl/urihelper.hxx"
-#include "tools/solar.h"
 #include "unotools/charclass.hxx"
 
 namespace com { namespace sun { namespace star { namespace ucb {

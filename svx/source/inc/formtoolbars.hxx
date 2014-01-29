@@ -22,19 +22,10 @@
 
 #include "fmdocumentclassification.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
-
-#include <tools/solar.h>
-
 #include <svx/svxdllapi.h>
 
-//........................................................................
 namespace svxform
 {
-//........................................................................
-
-    //====================================================================
-    //= FormToolboxes
-    //====================================================================
     class FormToolboxes
     {
     private:
@@ -74,9 +65,7 @@ namespace svxform
         }
     };
 
-//........................................................................
 } // namespace svxform
-//........................................................................
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMTOOLBARS_HXX
 
