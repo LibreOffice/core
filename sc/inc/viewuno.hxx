@@ -341,7 +341,8 @@ public:
     virtual sal_Int32 SAL_CALL getSplitRow()
         throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixelY )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XViewFreezable
     virtual sal_Bool SAL_CALL hasFrozenPanes() throw(::com::sun::star::uno::RuntimeException);
