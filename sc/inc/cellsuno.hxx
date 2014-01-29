@@ -367,7 +367,8 @@ public:
     virtual void SAL_CALL   addChartDataChangeEventListener(
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
                                 throw(::com::sun::star::uno::RuntimeException);
