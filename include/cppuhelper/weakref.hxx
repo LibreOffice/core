@@ -83,7 +83,7 @@ public:
         @param rObj another weak ref
         @return true, if both weak refs reference to the same object.
     */
-    inline sal_Bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const SAL_THROW(())
+    inline bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const SAL_THROW(())
         { return (get() == rObj.get()); }
 
     /**  Gets a hard reference to the object.

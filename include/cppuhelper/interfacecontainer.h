@@ -79,11 +79,11 @@ public:
      */
     ~OInterfaceIteratorHelper() SAL_THROW(());
 
-    /** Return sal_True, if there are more elements in the iterator. */
-    sal_Bool SAL_CALL hasMoreElements() const SAL_THROW(())
+    /** Return true, if there are more elements in the iterator. */
+    bool SAL_CALL hasMoreElements() const SAL_THROW(())
         { return nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
-        hasMoreElements() has returned sal_False, is an error. Cast the
+        hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
     ::com::sun::star::uno::XInterface * SAL_CALL next() SAL_THROW(());

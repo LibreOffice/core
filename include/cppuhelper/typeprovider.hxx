@@ -204,7 +204,7 @@ public:
 
         @param bUseEthernetAddress whether an ethernet mac address should be taken into account
     */
-    inline OImplementationId( sal_Bool bUseEthernetAddress = sal_True ) SAL_THROW(())
+    inline OImplementationId( bool bUseEthernetAddress = true ) SAL_THROW(())
         : _pSeq( 0 )
         , _bUseEthernetAddress( bUseEthernetAddress )
         {}
