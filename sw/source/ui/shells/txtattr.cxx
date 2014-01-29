@@ -239,20 +239,11 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     SvxFontHeightItem aSize( *(const SvxFontHeightItem*)pI );
                     SwTwips lSize = (SwTwips) aSize.GetHeight();
 
-                    if ( bGrow )
-                    {
-                        if( lSize == lFontMaxSz )
-                            break;      // That's all, further up is not possible
-                        if( ( lSize += lFontInc ) > lFontMaxSz )
-                            lSize = lFontMaxSz;
-                    }
-                    else
-                    {
-                        if( lSize == lFontInc )
-                            break;
-                        if( ( lSize -= lFontInc ) < lFontInc )
-                            lSize = lFontInc;
-                    }
+                    if ( bGrow && ( lSize += lFontInc ) > lFontMaxSz )
+                        lSize = lFontMaxSz;
+                    else if ( !bGrow && ( lSize -= lFontInc ) < lFontInc )
+                        lSize = lFontInc;
+
                     aSize.SetHeight( lSize );
                     aAttrSet.Put( aSize );
                 }
@@ -617,9 +608,20 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT,
                                             *rSet.GetPool() );
-                aSetItem.GetItemSet().Put( aCoreSet, sal_False );
-                if( !aSetItem.GetItemOfScript( rSh.GetScriptType() ))
+                aSetItem.GetItemSet().Put( aCoreSet, false );
+                const SvxFontHeightItem* aSize( dynamic_cast<const SvxFontHeightItem*>(
+                                            aSetItem.GetItemOfScript( rSh.GetScriptType() ) ) );
+
+                if( !aSize )
                     rSet.DisableItem( nSlot );
+                else
+                {
+                    sal_uInt32 nSize = aSize->GetHeight();
+                    if( nSize == lFontMaxSz )
+                        rSet.DisableItem( FN_GROW_FONT_SIZE );
+                    else if( nSize == lFontInc )
+                        rSet.DisableItem( FN_SHRINK_FONT_SIZE );
+                }
                 nSlot = 0;
             }
             break;
