@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_60e85c7d",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-29T22:30:47Z",
+      "side": 1,
+      "message": "these attributes don\u0027t exist in ODF 1.2,\nplease use MAP_ENTRY_ODF_EXT and also\nnot CHART namespace but LO_EXT one",
+      "revId": "adbf8657ed258f72e0529d6190af5dd0825c5c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
