@@ -88,10 +88,9 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     get(m_pCB_FirstRowAsLabel, "CB_FIRST_ROW_ASLABELS");
     get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
     get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
-    m_pCB_TimeBased = NULL;
-    m_pFt_TimeBased = NULL;
-    m_pEd_TimeStart = NULL;
-    m_pEd_TimeEnd = NULL;
+    get(m_pCB_TimeBased, "CB_TIME_BASED");
+    get(m_pEd_TimeStart, "ED_TIME_BASED_START");
+    get(m_pEd_TimeEnd, "ED_TIME_BASED_END");
 
     m_pFT_Caption->Show(!bHideDescription);
 
@@ -118,11 +117,9 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     m_pRB_Rows->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pCB_FirstRowAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pCB_FirstColumnAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
-#if 0
     m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pEd_TimeStart->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
-#endif
 }
 
 RangeChooserTabPage::~RangeChooserTabPage()
@@ -210,10 +207,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
         sal_Bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
-        sal_Bool bTimeBased = false;
-#if 0
         sal_Bool bTimeBased = m_pCB_TimeBased->IsChecked();
-#endif
 
         Sequence< beans::PropertyValue > aArguments(
             DataSourceHelper::createArguments(
