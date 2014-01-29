@@ -4844,6 +4844,7 @@ void Test::testAnchoredRotatedShape()
 
         ScDrawObjData aAnchor;
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+        CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
 
         aAnchor.maStart = pData->maStart;
         aAnchor.maEnd = pData->maEnd;
