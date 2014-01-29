@@ -33,6 +33,21 @@ namespace chart {
 
 // ============================================================================
 
+struct AxisDispUnitsModel;
+
+class AxisDispUnitsConverter : public ConverterBase< AxisDispUnitsModel >
+{
+public:
+    explicit            AxisDispUnitsConverter(
+                            const ConverterRoot& rParent,
+                            AxisDispUnitsModel& rModel );
+    virtual             ~AxisDispUnitsConverter();
+
+    /** Creates a chart2 axis and inserts it into the passed coordinate system. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& rxAxis);
+};
+
 struct AxisModel;
 class TypeGroupConverter;
 

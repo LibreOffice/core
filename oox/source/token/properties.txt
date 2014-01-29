@@ -37,6 +37,7 @@ BorderWidth
 BottomBorder
 BottomBorderDistance
 BottomMargin
+BuiltInUnit
 BulletChar
 BulletColor
 BulletFont
@@ -135,6 +136,7 @@ DialogLibraries
 DisableComplexChartTypes
 DisableDataTableDialog
 DisplayLabels
+DisplayUnits
 DrillDownOnDoubleClick
 Dropdown
 Duration
