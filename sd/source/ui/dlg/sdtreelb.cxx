@@ -1143,34 +1143,20 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
         {
             sal_Bool bMarked=sal_False;
             SvTreeListEntry* pNewEntry = GetCurEntry();
-            if( GetParent(pNewEntry) == NULL )
+            if (!pNewEntry)
                 return;
-            OUString  aStr=GetSelectEntry();
-            Window* pWindow=NULL;
-            SdNavigatorWin* pSdNavigatorWin=NULL;
-            sd::DrawDocShell* pSdDrawDocShell = NULL;
-            if(pNewEntry)
-                pWindow=(Window*)GetParent(pNewEntry);
-            if(pWindow)
-                pSdNavigatorWin = (SdNavigatorWin*)pWindow;
-            if( pSdNavigatorWin )
-                pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
-            if(pSdDrawDocShell)
+            SvTreeListEntry* pParentEntry = GetParent(pNewEntry);
+            if (!pParentEntry)
+                return;
+            OUString  aStr(GetSelectEntry());
+            SdNavigatorWin* pSdNavigatorWin = (SdNavigatorWin*)pParentEntry;
+            sd::DrawDocShell* pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+            if (pSdDrawDocShell)
             {
                 pSdDrawDocShell->GotoTreeBookmark(aStr);
                 bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
             }
-            if(pNewEntry)
-            {
-                if(bMarked)
-                {
-                    pNewEntry->SetMarked(sal_True);
-                }
-                else
-                {
-                    pNewEntry->SetMarked( sal_False );
-                }
-            }
+            pNewEntry->SetMarked(bMarked);
             Invalidate();
         }
     }
