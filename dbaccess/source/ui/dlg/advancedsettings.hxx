@@ -99,12 +99,12 @@ namespace dbaui
     {
     protected:
 
-        FixedLine   m_aAutoFixedLine;
-        CheckBox    m_aAutoRetrievingEnabled;
-        FixedText   m_aAutoIncrementLabel;
-        Edit        m_aAutoIncrement;
-        FixedText   m_aAutoRetrievingLabel;
-        Edit        m_aAutoRetrieving;
+        VclFrame*   m_pAutoFrame;
+        CheckBox*   m_pAutoRetrievingEnabled;
+        FixedText*  m_pAutoIncrementLabel;
+        Edit*       m_pAutoIncrement;
+        FixedText*  m_pAutoRetrievingLabel;
+        Edit*       m_pAutoRetrieving;
 
         ::svt::ControlDependencyManager
                     m_aControlDependencies;

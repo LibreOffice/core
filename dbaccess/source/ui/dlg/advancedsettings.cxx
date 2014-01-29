@@ -27,7 +27,6 @@
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
-#include "advancedsettings.hrc"
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -300,22 +299,22 @@ namespace dbaui
 
     // GeneratedValuesPage
     GeneratedValuesPage::GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage(pParent, ModuleRes( PAGE_GENERATED_VALUES ), _rCoreAttrs)
-        ,m_aAutoFixedLine        ( this, ModuleRes( FL_SEPARATORAUTO ) )
-        ,m_aAutoRetrievingEnabled( this, ModuleRes( CB_RETRIEVE_AUTO ) )
-        ,m_aAutoIncrementLabel   ( this, ModuleRes( FT_AUTOINCREMENTVALUE ) )
-        ,m_aAutoIncrement        ( this, ModuleRes( ET_AUTOINCREMENTVALUE ) )
-        ,m_aAutoRetrievingLabel  ( this, ModuleRes( FT_RETRIEVE_AUTO ) )
-        ,m_aAutoRetrieving       ( this, ModuleRes( ET_RETRIEVE_AUTO ) )
+        : OGenericAdministrationPage(pParent, "GeneratedValuesPage",
+            "dbaccess/ui/generatedvaluespage.ui", _rCoreAttrs)
     {
-        m_aAutoRetrievingEnabled.SetClickHdl( getControlModifiedLink() );
-        m_aAutoIncrement.SetModifyHdl( getControlModifiedLink() );
-        m_aAutoRetrieving.SetModifyHdl( getControlModifiedLink() );
+        get(m_pAutoFrame, "GeneratedValuesPage");
+        get(m_pAutoRetrievingEnabled, "autoretrieve");
+        get(m_pAutoIncrementLabel, "statementft");
+        get(m_pAutoIncrement, "statement");
+        get(m_pAutoRetrievingLabel, "queryft");
+        get(m_pAutoRetrieving, "query");
 
-        m_aControlDependencies.enableOnCheckMark( m_aAutoRetrievingEnabled,
-            m_aAutoIncrementLabel, m_aAutoIncrement, m_aAutoRetrievingLabel, m_aAutoRetrieving );
+        m_pAutoRetrievingEnabled->SetClickHdl( getControlModifiedLink() );
+        m_pAutoIncrement->SetModifyHdl( getControlModifiedLink() );
+        m_pAutoRetrieving->SetModifyHdl( getControlModifiedLink() );
 
-        FreeResource();
+        m_aControlDependencies.enableOnCheckMark( *m_pAutoRetrievingEnabled,
+            *m_pAutoIncrementLabel, *m_pAutoIncrement, *m_pAutoRetrievingLabel, *m_pAutoRetrieving );
     }
 
     GeneratedValuesPage::~GeneratedValuesPage()
@@ -325,16 +324,14 @@ namespace dbaui
 
     void GeneratedValuesPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        _rControlList.push_back( new ODisableWrapper< FixedLine >( &m_aAutoFixedLine ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aAutoIncrementLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aAutoRetrievingLabel ) );
+        _rControlList.push_back( new ODisableWrapper< VclFrame >( m_pAutoFrame ) );
     }
 
     void GeneratedValuesPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        _rControlList.push_back( new OSaveValueWrapper< CheckBox >( &m_aAutoRetrievingEnabled ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aAutoIncrement ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aAutoRetrieving ) );
+        _rControlList.push_back( new OSaveValueWrapper< CheckBox >( m_pAutoRetrievingEnabled ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoIncrement ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoRetrieving ) );
     }
 
     void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
@@ -352,12 +349,12 @@ namespace dbaui
         if (bValid)
         {
             sal_Bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
-            m_aAutoRetrievingEnabled.Check( bEnabled );
+            m_pAutoRetrievingEnabled->Check( bEnabled );
 
-            m_aAutoIncrement.SetText( pAutoIncrementItem->GetValue() );
-            m_aAutoIncrement.ClearModifyFlag();
-            m_aAutoRetrieving.SetText( pAutoRetrieveValueItem->GetValue() );
-            m_aAutoRetrieving.ClearModifyFlag();
+            m_pAutoIncrement->SetText( pAutoIncrementItem->GetValue() );
+            m_pAutoIncrement->ClearModifyFlag();
+            m_pAutoRetrieving->SetText( pAutoRetrieveValueItem->GetValue() );
+            m_pAutoRetrieving->ClearModifyFlag();
         }
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
@@ -366,9 +363,9 @@ namespace dbaui
     {
         sal_Bool bChangedSomething = sal_False;
 
-        fillString( _rSet, &m_aAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
-        fillBool( _rSet, &m_aAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
-        fillString( _rSet, &m_aAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
+        fillString( _rSet, m_pAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
+        fillBool( _rSet, m_pAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
+        fillString( _rSet, m_pAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
 
         return bChangedSomething;
     }

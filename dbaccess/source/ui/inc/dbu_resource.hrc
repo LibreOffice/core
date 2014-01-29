@@ -117,7 +117,7 @@
 #define PAGE_MYSQL_ODBC                 RID_PAGE_START + 17
 #define PAGE_USERDRIVER                 RID_PAGE_START + 19
 #define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
-#define PAGE_GENERATED_VALUES           RID_PAGE_START + 22
+    // FREE
     // FREE
 #define PAGE_MYSQL_NATIVE               RID_PAGE_START + 24
     // FREE
