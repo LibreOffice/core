@@ -176,7 +176,7 @@ SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     eFrmHeightType( eSize ),
     eFrmWidthType( ATT_FIX_SIZE )
 {
-    nWidthPercent = eWidthPercentRelation = nHeightPercent = 0;
+    nWidthPercent = eWidthPercentRelation = nHeightPercent = eHeightPercentRelation = 0;
 }
 
 SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
@@ -185,6 +185,7 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
     eFrmHeightType = rCpy.GetHeightSizeType();
     eFrmWidthType = rCpy.GetWidthSizeType();
     nHeightPercent = rCpy.GetHeightPercent();
+    eHeightPercentRelation  = rCpy.GetHeightPercentRelation();
     nWidthPercent  = rCpy.GetWidthPercent();
     eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
     return *this;
@@ -198,7 +199,8 @@ bool SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
             aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
             nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
             eWidthPercentRelation == ((SwFmtFrmSize&)rAttr).GetWidthPercentRelation() &&
-            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
+            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() &&
+            eHeightPercentRelation == ((SwFmtFrmSize&)rAttr).GetHeightPercentRelation() );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -222,6 +224,9 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_REL_HEIGHT:
             rVal <<= (sal_Int16)(GetHeightPercent() != 0xFF ? GetHeightPercent() : 0);
+        break;
+        case MID_FRMSIZE_REL_HEIGHT_RELATION:
+            rVal <<= GetHeightPercentRelation();
         break;
         case MID_FRMSIZE_REL_WIDTH:
             rVal <<= (sal_Int16)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
@@ -302,6 +307,13 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 SetHeightPercent((sal_uInt8)nSet);
             else
                 bRet = false;
+        }
+        break;
+        case MID_FRMSIZE_REL_HEIGHT_RELATION:
+        {
+            sal_Int16 eSet = 0;
+            rVal >>= eSet;
+            SetHeightPercentRelation(eSet);
         }
         break;
         case MID_FRMSIZE_REL_WIDTH:

@@ -46,6 +46,7 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     sal_uInt8     nWidthPercent;
     sal_Int16     eWidthPercentRelation;
     sal_uInt8     nHeightPercent;
+    sal_Int16     eHeightPercentRelation;
 
     // For tables: width can be given in percent.
 
@@ -91,9 +92,11 @@ public:
     void    SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
 
     sal_uInt8    GetHeightPercent() const{ return nHeightPercent; }
+    sal_Int16   GetHeightPercentRelation() const { return eHeightPercentRelation;  }
     sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
     sal_Int16   GetWidthPercentRelation() const { return eWidthPercentRelation;  }
     void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
+    void    SetHeightPercentRelation ( sal_Int16 n ) { eHeightPercentRelation  = n; }
     void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
     void    SetWidthPercentRelation ( sal_Int16 n ) { eWidthPercentRelation  = n; }
 };
