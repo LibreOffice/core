@@ -21,17 +21,11 @@
 #define INCLUDED_VCL_BTNDLG_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
 
 struct ImplBtnDlgItem;
 class PushButton;
-
-// ----------------------
-// - ButtonDialog-Types -
-// ----------------------
 
 #define BUTTONDIALOG_BUTTON_NOTFOUND            ((sal_uInt16)0xFFFF)
 
@@ -40,10 +34,6 @@ class PushButton;
 #define BUTTONDIALOG_CANCELBUTTON               ((sal_uInt16)0x0004)
 #define BUTTONDIALOG_HELPBUTTON                 ((sal_uInt16)0x0008)
 #define BUTTONDIALOG_FOCUSBUTTON                ((sal_uInt16)0x0010)
-
-// ----------------
-// - ButtonDialog -
-// ----------------
 
 class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {

@@ -20,16 +20,11 @@
 #ifndef INCLUDED_VCL_SYSCHILD_HXX
 #define INCLUDED_VCL_SYSCHILD_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
 struct SystemEnvData;
 struct SystemWindowData;
-
-// ---------------------
-// - SystemChildWindow -
-// ---------------------
 
 class VCL_DLLPUBLIC SystemChildWindow : public Window
 {

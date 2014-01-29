@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_TABCTRL_HXX
 #define INCLUDED_VCL_TABCTRL_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
@@ -30,18 +29,10 @@ class TabPage;
 class PushButton;
 class ListBox;
 
-// --------------------
-// - TabControl-Types -
-// --------------------
-
 #ifndef TAB_APPEND
 #define TAB_APPEND          ((sal_uInt16)0xFFFF)
 #define TAB_PAGE_NOTFOUND   ((sal_uInt16)0xFFFF)
 #endif /* !TAB_APPEND */
-
-// --------------
-// - TabControl -
-// --------------
 
 class VCL_DLLPUBLIC TabControl : public Control
 {

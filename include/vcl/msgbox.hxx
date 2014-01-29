@@ -20,18 +20,14 @@
 #ifndef INCLUDED_VCL_MSGBOX_HXX
 #define INCLUDED_VCL_MSGBOX_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/btndlg.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
+
 class VclMultiLineEdit;
 class FixedImage;
 class CheckBox;
-
-// -----------
-// - MessBox -
-// -----------
 
 class VCL_DLLPUBLIC MessBox : public ButtonDialog
 {
@@ -74,10 +70,6 @@ public:
     virtual Size        GetOptimalSize() const;
 };
 
-// -----------
-// - InfoBox -
-// -----------
-
 class VCL_DLLPUBLIC InfoBox : public MessBox
 {
 private:
@@ -91,10 +83,6 @@ public:
 
     static Image        GetStandardImage();
 };
-
-// --------------
-// - WarningBox -
-// --------------
 
 class VCL_DLLPUBLIC WarningBox : public MessBox
 {
@@ -111,10 +99,6 @@ public:
     static Image        GetStandardImage();
 };
 
-// ------------
-// - ErrorBox -
-// ------------
-
 class VCL_DLLPUBLIC ErrorBox : public MessBox
 {
 private:
@@ -127,10 +111,6 @@ public:
 
     static Image        GetStandardImage();
 };
-
-// ------------
-// - QueryBox -
-// ------------
 
 class VCL_DLLPUBLIC QueryBox : public MessBox
 {

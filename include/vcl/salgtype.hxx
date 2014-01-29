@@ -20,21 +20,12 @@
 #ifndef INCLUDED_VCL_SALGTYPE_HXX
 #define INCLUDED_VCL_SALGTYPE_HXX
 
-#include <tools/solar.h>
-
-// ------------
-// - SalColor -
-// ------------
-
 typedef sal_uInt32 SalColor;
 #define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
 #define SALCOLOR_RED( n )           ((sal_uInt8)((n)>>16))
 #define SALCOLOR_GREEN( n )         ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
 #define SALCOLOR_BLUE( n )          ((sal_uInt8)(n))
 #define SALCOLOR_NONE           (~(SalColor)0)
-// ------------
-// - SalPoint -
-// ------------
 
 // must equal to class Point
 struct SalPoint
@@ -44,10 +35,6 @@ struct SalPoint
 };
 
 typedef const SalPoint*   PCONSTSALPOINT;
-
-// --------------
-// - SalTwoRect -
-// --------------
 
 struct SalTwoRect
 {
@@ -61,18 +48,10 @@ struct SalTwoRect
     long        mnDestHeight;
 };
 
-// ---------------
-// - SalROPColor -
-// ---------------
-
 typedef sal_uInt16 SalROPColor;
 #define SAL_ROP_0                   ((SalROPColor)0)
 #define SAL_ROP_1                   ((SalROPColor)1)
 #define SAL_ROP_INVERT              ((SalROPColor)2)
-
-// -------------
-// - SalInvert -
-// -------------
 
 typedef sal_uInt16 SalInvert;
 #define SAL_INVERT_HIGHLIGHT        ((SalInvert)0x0001)

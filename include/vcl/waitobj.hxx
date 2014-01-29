@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_WAITOBJ_HXX
 #define INCLUDED_VCL_WAITOBJ_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-
-// --------------
-// - WaitObject -
-// --------------
 
 class VCL_DLLPUBLIC WaitObject
 {

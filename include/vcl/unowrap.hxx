@@ -20,9 +20,8 @@
 #ifndef INCLUDED_VCL_UNOWRAP_HXX
 #define INCLUDED_VCL_UNOWRAP_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <com/sun/star/uno/Reference.h>
+#include <vcl/dllapi.h>
 
 class XWindowPeer;
 class XToolkit;

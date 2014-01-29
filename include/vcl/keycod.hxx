@@ -21,18 +21,12 @@
 #define INCLUDED_VCL_KEYCOD_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <tools/resid.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
-
 #include <vcl/vclenum.hxx>
 
 class Window;
-
-// -----------
-// - KeyCode -
-// -----------
 
 class VCL_DLLPUBLIC KeyCode
 {

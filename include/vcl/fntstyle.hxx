@@ -20,12 +20,7 @@
 #ifndef INCLUDED_VCL_FNTSTYLE_HXX
 #define INCLUDED_VCL_FNTSTYLE_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
-
-// --------------
-// - Font enums -
-// --------------
 
 #ifndef ENUM_FONTRELIEF_DECLARED
 #define ENUM_FONTRELIEF_DECLARED
@@ -33,10 +28,6 @@
 enum FontRelief { RELIEF_NONE, RELIEF_EMBOSSED, RELIEF_ENGRAVED, FontRelief_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
 #endif
-
-// --------------
-// - Font types -
-// --------------
 
 typedef sal_uInt8 FontKerning;
 #define KERNING_FONTSPECIFIC        ((FontKerning)0x01)

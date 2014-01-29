@@ -20,14 +20,10 @@
 #ifndef INCLUDED_VCL_DOCKINGAREA_HXX
 #define INCLUDED_VCL_DOCKINGAREA_HXX
 
-#include <tools/solar.h>
 #include <vcl/window.hxx>
 
-// ------------------------------------------
 //  A simple container for docked toolbars
 //  - its main purpose is theming support
-// ------------------------------------------
-
 class VCL_DLLPUBLIC DockingAreaWindow : public Window
 {
     class ImplData;

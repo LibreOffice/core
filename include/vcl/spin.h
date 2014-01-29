@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_SPIN_H
 #define INCLUDED_VCL_SPIN_H
 
-#include <tools/solar.h>
-
 class Rectangle;
 class OutputDevice;
 

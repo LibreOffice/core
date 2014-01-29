@@ -20,22 +20,13 @@
 #ifndef INCLUDED_VCL_SPLITWIN_HXX
 #define INCLUDED_VCL_SPLITWIN_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 
 class Wallpaper;
 struct ImplSplitSet;
 
-// -----------------------
-// - SplitWindowItemBits -
-// -----------------------
-
 typedef sal_uInt16 SplitWindowItemBits;
-
-// -------------------------------
-// - Bits fuer SplitWindow-Items -
-// -------------------------------
 
 #define SWIB_FIXED                  ((SplitWindowItemBits)0x0001)
 #define SWIB_RELATIVESIZE           ((SplitWindowItemBits)0x0002)
@@ -43,16 +34,8 @@ typedef sal_uInt16 SplitWindowItemBits;
 #define SWIB_COLSET                 ((SplitWindowItemBits)0x0008)
 #define SWIB_INVISIBLE              ((SplitWindowItemBits)0x0010)
 
-// ---------------------
-// - SplitWindow-Types -
-// ---------------------
-
 #define SPLITWINDOW_APPEND          ((sal_uInt16)0xFFFF)
 #define SPLITWINDOW_ITEM_NOTFOUND   ((sal_uInt16)0xFFFF)
-
-// ---------------
-// - SplitWindow -
-// ---------------
 
 class VCL_DLLPUBLIC SplitWindow : public DockingWindow
 {

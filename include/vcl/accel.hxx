@@ -20,19 +20,14 @@
 #ifndef INCLUDED_VCL_ACCEL_HXX
 #define INCLUDED_VCL_ACCEL_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/dllapi.h>
 
 class ImplAccelData;
 class ImplAccelEntry;
-
-// ---------------
-// - Accelerator -
-// ---------------
 
 class VCL_DLLPUBLIC Accelerator : public Resource
 {

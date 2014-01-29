@@ -20,16 +20,11 @@
 #ifndef INCLUDED_VCL_TABDLG_HXX
 #define INCLUDED_VCL_TABDLG_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
 
 class FixedLine;
 class TabControl;
-
-// ----------------------
-// - TabDialog -
-// ----------------------
 
 class VCL_DLLPUBLIC TabDialog : public Dialog
 {

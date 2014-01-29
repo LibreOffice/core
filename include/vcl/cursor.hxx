@@ -22,7 +22,6 @@
 
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 struct ImplCursorData;
