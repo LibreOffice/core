@@ -997,7 +997,7 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
         for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
             AddId( GetFirstUnusedId(aIds), *pIt );
 
-        // Change the Sequence number of all the SetExp fields in the destination document
+        // Change the Sequence number of all SetExp fields in the source document
         SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
         if( pType )
         {
@@ -1051,16 +1051,24 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 {
     Init( rDoc, rDestDoc, bField);
 
-    // dann teste mal, ob die Nummer schon vergeben ist
-    // oder ob eine neue bestimmt werden muss.
     sal_uInt16 nSeqNo = rFld.GetSeqNo();
-    if( aIds.count( nSeqNo ) && aDstIds.count( nSeqNo ))
+
+    // Check if the number is used in both documents
+    // Note: For fields, aIds contains both the ids of SetExp from rDestDoc
+    // and the targets of the already remapped ones from rDoc.
+    // It is possible that aDstIds contains numbers that aIds does not contain!
+    // For example, copying a selection to clipboard that does not contain
+    // the first SwSetExpField will result in id 0 missing, then pasting that
+    // into empty document gives a mapping 1->0 ... N->N-1 (fdo#63553).
+    if (aIds.count(nSeqNo) || aDstIds.count(nSeqNo))
     {
         // Number already taken, so need a new one.
         if( sequencedIds.count(nSeqNo) )
             rFld.SetSeqNo( sequencedIds[nSeqNo] );
         else
         {
+            assert(!bField || !aDstIds.count(nSeqNo)); // postcond of Init
+
             sal_uInt16 n = GetFirstUnusedId( aIds );
 
             // die neue SeqNo eintragen, damit die "belegt" ist
@@ -1082,7 +1090,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
     }
     else
     {
-        AddId( nSeqNo, nSeqNo );
+        AddId( nSeqNo, nSeqNo ); // this requires that nSeqNo is unused in both!
     }
 }
 
