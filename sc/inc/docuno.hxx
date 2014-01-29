@@ -170,7 +170,8 @@ public:
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::beans::PropertyValue >& xOptions )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection,
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::beans::PropertyValue >& xOptions )

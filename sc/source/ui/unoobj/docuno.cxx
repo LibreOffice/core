@@ -985,7 +985,9 @@ static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const OUString& rPa
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
                                     const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
-                                throw (lang::IllegalArgumentException, uno::RuntimeException)
+                                throw (lang::IllegalArgumentException,
+                                       uno::RuntimeException,
+                                       std::exception)
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
