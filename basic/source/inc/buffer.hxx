@@ -19,8 +19,8 @@
 
 #ifndef INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
 #define INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
+
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 
 class SbiParser;
 

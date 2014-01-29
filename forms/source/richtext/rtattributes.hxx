@@ -20,16 +20,12 @@
 #ifndef INCLUDED_FORMS_SOURCE_RICHTEXT_RTATTRIBUTES_HXX
 #define INCLUDED_FORMS_SOURCE_RICHTEXT_RTATTRIBUTES_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
 
 namespace frm
 {
 
-    //====================================================================
-    //= misc
-    //====================================================================
     /// the id of an attribute
     typedef sal_Int32   AttributeId;
     /// the "which id" of an item in an SfxItemSet
@@ -39,9 +35,6 @@ namespace frm
     /// a script type
     typedef sal_uInt16      ScriptType;
 
-    //====================================================================
-    //= AttributeCheckState
-    //====================================================================
     enum AttributeCheckState
     {
         eChecked,
@@ -49,9 +42,6 @@ namespace frm
         eIndetermined
     };
 
-    //====================================================================
-    //= AttributeState
-    //====================================================================
     struct AttributeState
     {
     private:
@@ -73,9 +63,6 @@ namespace frm
         inline void setItem( const SfxPoolItem* _pItem );
     };
 
-    //====================================================================
-    //= AttributeState (inline implementation)
-    //====================================================================
     inline AttributeState::AttributeState( )
         :pItemHandle( NULL )
         ,eSimpleState( eIndetermined )
@@ -142,9 +129,6 @@ namespace frm
         return ( pItemHandle->GetItem() == _rRHS.pItemHandle->GetItem() );
     }
 
-    //====================================================================
-    //= IMultiAttributeDispatcher
-    //====================================================================
     class IMultiAttributeDispatcher
     {
     public:

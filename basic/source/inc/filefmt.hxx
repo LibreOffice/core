@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_FILEFMT_HXX
 #define INCLUDED_BASIC_SOURCE_INC_FILEFMT_HXX
 
-#include <tools/solar.h>
-
 class SvStream;
 
 // Version  2: data type of the return value for publics

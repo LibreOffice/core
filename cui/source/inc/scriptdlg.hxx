@@ -21,9 +21,6 @@
 #define INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
 
 #include <memory>
-
-#include "tools/solar.h"
-
 #include <svtools/treelistbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -39,8 +36,8 @@
 
 #define OBJTYPE_BASICMANAGER    1L
 #define OBJTYPE_METHOD          2L
-#define OBJTYPE_SCRIPTCONTAINER     3L
-#define OBJTYPE_SFROOT      4L
+#define OBJTYPE_SCRIPTCONTAINER 3L
+#define OBJTYPE_SFROOT          4L
 
 #define INPUTMODE_NEWLIB        1
 #define INPUTMODE_NEWMACRO      2
