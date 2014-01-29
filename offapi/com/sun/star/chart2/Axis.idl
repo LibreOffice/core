@@ -122,6 +122,14 @@ service Axis
     /** Determines where the interval marks are placed.
      */
     [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
+
+    /** Determines display units are avaiblable for axis
+     */
+    [optional, property] boolean DisplayUnits;
+
+    /** Determintes built in display unit valur for axis
+     */
+    [optional, property] string BuiltInUnit;
 };
 
 } ; // chart2
