@@ -25,6 +25,7 @@
 
 #include <cstdio>
 
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
@@ -1124,17 +1125,75 @@ void ChartExport::exportPlotArea( )
     exportDataTable();
 
     // shape properties
+    /*
+     * Export the Plot area Shape Properties
+     * eg: Fill and Outline
+     */
     Reference< ::com::sun::star::chart::X3DDisplay > xWallFloorSupplier( mxDiagram, uno::UNO_QUERY );
     if( xWallFloorSupplier.is() )
     {
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is() )
         {
-            exportShapeProps( xWallPropSet );
+            exportPlotAreaShapeProps( xWallPropSet );
         }
     }
+
     pFS->endElement( FSNS( XML_c, XML_plotArea ) );
 
+}
+
+void ChartExport::exportPlotAreaShapeProps( Reference< XPropertySet > xPropSet )
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement( FSNS( XML_c, XML_spPr ),
+            FSEND );
+
+    exportFill( xPropSet );
+    WriteOutline( xPropSet );
+
+    pFS->endElement( FSNS( XML_c, XML_spPr ) );
+}
+
+void ChartExport::exportFill( Reference< XPropertySet > xPropSet )
+{
+    if ( !GetProperty( xPropSet, "FillStyle" ) )
+        return;
+    FillStyle aFillStyle( FillStyle_NONE );
+    xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
+    switch( aFillStyle )
+    {
+    case FillStyle_GRADIENT :
+        exportGradientFill( xPropSet );
+    default:
+        WriteFill( xPropSet );
+    }
+}
+
+void ChartExport::exportGradientFill( Reference< XPropertySet > xPropSet )
+{
+    if( xPropSet.is() )
+     {
+        OUString sFillGradientName;
+        xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
+
+        awt::Gradient aGradient;
+        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+        try
+        {
+            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+            uno::Any rValue = xGradient->getByName( sFillGradientName );
+            if( (rValue >>= aGradient) )
+            {
+                WriteGradientFill( aGradient );
+            }
+        }
+        catch( const uno::Exception & rEx )
+        {
+            DBG_WARNING( "Gradient Property not Found; ChartExport::exportPlotAreaGradientFill" );
+        }
+
+    }
 }
 
 void ChartExport::exportDataTable( )

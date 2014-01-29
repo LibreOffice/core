@@ -130,6 +130,8 @@ public:
     void WriteSolidFill( OUString sSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
+    void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
+    void WriteGrabBagGradientFill( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aGradientStops, ::com::sun::star::awt::Gradient rGradient);
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName );
     void WriteSrcRect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, const OUString& );

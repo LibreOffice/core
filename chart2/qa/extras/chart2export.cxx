@@ -43,6 +43,7 @@ public:
     void testUpDownBars();
     void testDoughnutChart();
     void testDisplayUnits();
+    void testFdo74115WallGradientFill();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST(testDisplayUnits);
+    CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -162,6 +164,7 @@ xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& r
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     return pXmlXpathObj->nodesetval;
 }
@@ -540,7 +543,17 @@ void Chart2ExportTest::testDisplayUnits()
     load("/chart2/qa/extras/data/docx/", "DisplayUnits.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
+
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit", "val", "billions");
+}
+
+void Chart2ExportTest::testFdo74115WallGradientFill()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo74115_WallGradientFill.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
