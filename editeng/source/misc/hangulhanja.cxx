@@ -230,29 +230,34 @@ namespace editeng
     HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
 
     HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( Window* _pUIParent,
-        const Reference< XComponentContext >& rxContext,
-        const Locale& _rSourceLocale,
-        const Locale& _rTargetLocale,
-        const Font* _pTargetFont,
-        sal_Int32 _nOptions,
-        bool _bIsInteractive,
-        HangulHanjaConversion* _pAntiImpl )
-: m_pConversionDialog( NULL )
-, m_pUIParent( _pUIParent )
-, m_xContext( rxContext )
-, m_aSourceLocale( _rSourceLocale )
-, m_nSourceLang( LanguageTag::convertToLanguageType( _rSourceLocale ) )
-, m_nTargetLang( LanguageTag::convertToLanguageType( _rTargetLocale ) )
-, m_pTargetFont( _pTargetFont )
-, m_bIsInteractive( _bIsInteractive )
-, m_pAntiImpl( _pAntiImpl )
-, m_nCurrentPortionLang( LANGUAGE_NONE )
-, m_nCurrentStartIndex( 0 )
-, m_nCurrentEndIndex( 0 )
-, m_nReplacementBaseIndex( 0 )
-, m_nCurrentConversionOption( TextConversionOption::NONE )
-, m_nCurrentConversionType( -1 ) // not yet known
-, m_bTryBothDirections( true )
+                                                            const Reference< XComponentContext >& rxContext,
+                                                            const Locale& _rSourceLocale,
+                                                            const Locale& _rTargetLocale,
+                                                            const Font* _pTargetFont,
+                                                            sal_Int32 _nOptions,
+                                                            bool _bIsInteractive,
+                                                            HangulHanjaConversion* _pAntiImpl )
+        : m_pConversionDialog( NULL )
+        , m_pUIParent( _pUIParent )
+        , m_xContext( rxContext )
+        , m_aSourceLocale( _rSourceLocale )
+        , m_nSourceLang( LanguageTag::convertToLanguageType( _rSourceLocale ) )
+        , m_nTargetLang( LanguageTag::convertToLanguageType( _rTargetLocale ) )
+        , m_pTargetFont( _pTargetFont )
+        , m_nConvOptions(_nOptions)
+        , m_bIsInteractive( _bIsInteractive )
+        , m_pAntiImpl( _pAntiImpl )
+        , m_bByCharacter((_nOptions & CHARACTER_BY_CHARACTER) ? true : false)
+        , m_eConversionFormat( HHC::eSimpleConversion)
+        , m_ePrimaryConversionDirection( HHC::eHangulToHanja)    // used for eConvHangulHanja
+        , m_eCurrentConversionDirection( HHC::eHangulToHanja)    // used for eConvHangulHanja
+        , m_nCurrentPortionLang( LANGUAGE_NONE )
+        , m_nCurrentStartIndex( 0 )
+        , m_nCurrentEndIndex( 0 )
+        , m_nReplacementBaseIndex( 0 )
+        , m_nCurrentConversionOption( TextConversionOption::NONE )
+        , m_nCurrentConversionType( -1 ) // not yet known
+        , m_bTryBothDirections( true )
     {
         implReadOptionsFromConfiguration();
 
@@ -266,15 +271,9 @@ namespace editeng
             m_eConvType = HHC::eConvSimplifiedTraditional;
         else
         {
+            m_eConvType = HHC::eConvHangulHanja;
             OSL_FAIL( "failed to determine conversion type from languages" );
         }
-
-        // set remaining conversion parameters to their default values
-        m_nConvOptions      = _nOptions;
-        m_bByCharacter      = 0 != (_nOptions & CHARACTER_BY_CHARACTER);
-        m_eConversionFormat = HHC::eSimpleConversion;
-        m_ePrimaryConversionDirection = HHC::eHangulToHanja;    // used for eConvHangulHanja
-        m_eCurrentConversionDirection = HHC::eHangulToHanja;    // used for eConvHangulHanja
 
         m_xConverter = TextConversion::create( m_xContext );
     }
