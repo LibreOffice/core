@@ -16,6 +16,24 @@
       "revId": "60c432dceb95266adaba5038e9527e7b148f77ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_600cdc95",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-29T11:13:30Z",
+      "side": 1,
+      "message": "You are indeed correct :-)",
+      "parentUuid": "da9df570_a0a24498",
+      "revId": "60c432dceb95266adaba5038e9527e7b148f77ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
