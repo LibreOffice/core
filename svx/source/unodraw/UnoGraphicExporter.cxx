@@ -362,6 +362,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         break;
                     case SVX_ROMAN_UPPER:
                         bUpper = sal_True;
+                        /* Fall through */
                     case SVX_ROMAN_LOWER:
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
