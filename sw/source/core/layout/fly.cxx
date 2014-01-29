@@ -2499,7 +2499,7 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
                     nRelWidth  = std::min( nRelWidth,  pPage->Frm().Width() );
                 else
                     nRelWidth  = std::min( nRelWidth,  pPage->Prt().Width() );
-                if (rSz.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                if (rSz.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
                     // Ignore margins of pPage.
                     nRelHeight = std::min( nRelHeight, pPage->Frm().Height() );
                 else
