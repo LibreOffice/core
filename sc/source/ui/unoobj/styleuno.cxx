@@ -718,7 +718,9 @@ void SAL_CALL ScStyleFamilyObj::replaceByName( const OUString& aName, const uno:
 
 void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                                 throw(container::NoSuchElementException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                      lang::WrappedTargetException,
+                                      uno::RuntimeException,
+                                      std::exception)
 {
     SolarMutexGuard aGuard;
     bool bFound = false;

@@ -133,8 +133,9 @@ public:
                                         ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   removeByName( const OUString& Name )
                                 throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::lang::WrappedTargetException,
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XNameReplace
     virtual void SAL_CALL   replaceByName( const OUString& aName,
