@@ -97,12 +97,12 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
 {
     public:
         sal_Unicode cBulletChar;
-        //rtl::OUString sBulletFont;
         Font            aFont;
 
     public:
-        BulletsSettings_Impl(NBType eTy) :
-            BulletsSettings(eTy)
+        BulletsSettings_Impl(NBType eTy)
+            : BulletsSettings(eTy)
+            , cBulletChar(0)
             {}
         virtual ~BulletsSettings_Impl(){}
 };
