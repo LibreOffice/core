@@ -1182,10 +1182,10 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             nTmpPortion++;
             nPortionEnd = nTmpPortion;
             // one Non-Feature-Portion has to be wrapped
-            if ( pPortion->GetLen() > 1 )
+            if ( pPortion && pPortion->GetLen() > 1 )
             {
-                DBG_ASSERT( pPortion && (pPortion->GetKind() == PORTIONKIND_TEXT), "Len>1, but no TextPortion?" );
-                nTmpWidth -= pPortion ? pPortion->GetSize().Width() : 0;
+                DBG_ASSERT( pPortion->GetKind() == PORTIONKIND_TEXT, "Len>1, but no TextPortion?" );
+                nTmpWidth -= pPortion->GetSize().Width();
                 sal_uInt16 nP = SplitTextPortion( pParaPortion, nTmpPos, pLine );
                 const TextPortion* p = pParaPortion->GetTextPortions()[nP];
                 DBG_ASSERT( p, "Portion ?!" );
