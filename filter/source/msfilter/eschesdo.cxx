@@ -332,7 +332,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if ( nLength > rObj.GetRect().GetHeight() )
                     nLength = rObj.GetRect().GetHeight();
                 nLength >>= 1;
-                if ( nRadius >= nLength )
+                if ( nRadius >= nLength || nLength == 0 )
                     nRadius = 0x2a30;                           // 0x2a30 is PPTs maximum radius
                 else
                     nRadius = ( 0x2a30 * nRadius ) / nLength;
