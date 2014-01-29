@@ -25,6 +25,11 @@ public:
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
+
+private:
+    bool isFromCIncludeFile(SourceLocation spellingLocation) const;
+
+    bool isMacroBodyExpansion(SourceLocation location) const;
 };
 
 bool LiteralToBoolConversion::VisitImplicitCastExpr(
@@ -46,17 +51,15 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
+        if (isMacroBodyExpansion(loc)) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
                 loc = compiler.getSourceManager().getImmediateExpansionRange(
                     loc).first;
             }
-            SourceLocation spl { compiler.getSourceManager().getSpellingLoc(
-                loc) };
-            if (!compiler.getSourceManager().isInMainFile(spl)
-                && compiler.getSourceManager().getFilename(spl).endswith(".h"))
+            if (isFromCIncludeFile(
+                    compiler.getSourceManager().getSpellingLoc(loc)))
             {
                 return true;
             }
@@ -132,6 +135,33 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             << expr->getType() << expr->getSourceRange();
     }
     return true;
+}
+
+bool LiteralToBoolConversion::isFromCIncludeFile(
+    SourceLocation spellingLocation) const
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+    if (compiler.getSourceManager().isInMainFile(spellingLocation)) {
+        return false;
+    }
+#else
+    if (compiler.getSourceManager().isFromMainFile(spellingLocation)) {
+        return false;
+    }
+#endif
+    return compiler.getSourceManager().getFilename(spellingLocation).endswith(
+        ".h");
+}
+
+bool LiteralToBoolConversion::isMacroBodyExpansion(SourceLocation location)
+    const
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return compiler.getSourceManager().isMacroBodyExpansion(location);
+#else
+    return location.isMacroID()
+        && !compiler.getSourceManager().isMacroArgExpansion(location);
+#endif
 }
 
 loplugin::Plugin::Registration<LiteralToBoolConversion> X(
