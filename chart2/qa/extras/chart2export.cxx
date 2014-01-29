@@ -42,6 +42,7 @@ public:
     void testAreaChartLoad();
     void testUpDownBars();
     void testDoughnutChart();
+    void testDisplayUnits();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
+    CPPUNIT_TEST(testDisplayUnits);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -531,6 +533,14 @@ void Chart2ExportTest::testDoughnutChart()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
+}
+
+void Chart2ExportTest::testDisplayUnits()
+{
+    load("/chart2/qa/extras/data/docx/", "DisplayUnits.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit", "val", "billions");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

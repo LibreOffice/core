@@ -2389,6 +2389,31 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
+    sal_Bool bDisplayUnits = sal_False;
+    if(GetProperty( xAxisProp, "DisplayUnits" ) )
+    {
+        mAny >>= bDisplayUnits;
+        if(bDisplayUnits)
+        {
+            OUString aVal;
+            pFS->startElement( FSNS( XML_c, XML_dispUnits ),
+                FSEND );
+            if(GetProperty( xAxisProp, "BuiltInUnit" ))
+            {
+                mAny >>= aVal;
+                if(!aVal.isEmpty())
+                {
+                    OString aBuiltInUnit = OUStringToOString(aVal, RTL_TEXTENCODING_UTF8);
+                    pFS->singleElement( FSNS( XML_c, XML_builtInUnit ),
+                        XML_val, aBuiltInUnit.getStr(),
+                        FSEND );
+                }
+             }
+             pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ),FSEND);
+             pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
+
+        }
+    }
     // TODO: text properties
 
     pFS->endElement( FSNS( XML_c, nAxisType ) );
