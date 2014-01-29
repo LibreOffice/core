@@ -318,6 +318,7 @@ void ScDrawTransferObj::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
+        AddFormat( SOT_FORMATSTR_ID_PNG );
         AddFormat( SOT_FORMAT_BITMAP );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
     }
@@ -329,6 +330,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
+        AddFormat( SOT_FORMATSTR_ID_PNG );
         AddFormat( SOT_FORMAT_BITMAP );
     }
     else if ( pBookmark )       // url button
@@ -374,6 +376,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         // #103556# leave out bitmap and metafile if there are only controls
         if ( !lcl_HasOnlyControls( pModel ) )
         {
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
         }
@@ -426,7 +429,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             bOK = SetObject( pModel, SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
         }
-        else if ( nFormat == SOT_FORMAT_BITMAP || nFormat == SOT_FORMAT_GDIMETAFILE )
+        else if ( nFormat == SOT_FORMAT_BITMAP
+            || nFormat == SOT_FORMATSTR_ID_PNG
+            || nFormat == SOT_FORMAT_GDIMETAFILE )
         {
             // #i71538# use complete SdrViews
             // SdrExchangeView aView( pModel );

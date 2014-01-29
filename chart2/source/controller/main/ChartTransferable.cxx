@@ -79,6 +79,7 @@ void ChartTransferable::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_DRAWING );
     }
     AddFormat( SOT_FORMAT_GDIMETAFILE );
+    AddFormat( SOT_FORMATSTR_ID_PNG );
     AddFormat( SOT_FORMAT_BITMAP );
 }
 

@@ -377,6 +377,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_GDIMETAFILE );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_PNG );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_BITMAP );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE );
 
@@ -405,7 +406,8 @@ sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
         bPossible = sal_True;
     else
     {
-        if ( rData.HasFormat( SOT_FORMAT_BITMAP ) ||
+        if ( rData.HasFormat( SOT_FORMATSTR_ID_PNG ) ||
+             rData.HasFormat( SOT_FORMAT_BITMAP ) ||
              rData.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
              rData.HasFormat( FORMAT_PRIVATE ) ||

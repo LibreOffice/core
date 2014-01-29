@@ -209,6 +209,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
             AddFormat( SOT_FORMATSTR_ID_HTML );
             AddFormat( SOT_FORMATSTR_ID_SYLK );
@@ -225,6 +226,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
         case SC_SELTRANS_DRAW_BITMAP:
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_SVXB );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
             break;
@@ -233,6 +235,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_SVXB );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
              break;
 
@@ -256,6 +259,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( SOT_FORMAT_BITMAP );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
             break;
