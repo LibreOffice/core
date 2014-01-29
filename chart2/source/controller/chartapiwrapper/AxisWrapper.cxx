@@ -98,7 +98,9 @@ enum
     PROP_AXIS_CAN_OVERLAP,
     PROP_AXIS_STACKEDTEXT,
     PROP_AXIS_OVERLAP,
-    PROP_AXIS_GAP_WIDTH
+    PROP_AXIS_GAP_WIDTH,
+    PROP_AXIS_DISPLAY_UNITS,
+    PROP_AXIS_BUILTINUNIT
 };
 
 void lcl_AddPropertiesToVector(
@@ -336,6 +338,22 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //Properties for display units:
+    rOutProperties.push_back(
+        Property( "DisplayUnits",
+                  PROP_AXIS_DISPLAY_UNITS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //Properties for labels:
+    rOutProperties.push_back(
+        Property( "BuiltInUnit",
+                  PROP_AXIS_BUILTINUNIT,
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 struct StaticAxisWrapperPropertyArray_Initializer

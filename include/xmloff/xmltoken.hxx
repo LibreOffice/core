@@ -3227,6 +3227,9 @@ namespace xmloff { namespace token {
         XML_CHART_DTABLE_SHOWHORZBORDER,
         XML_CHART_DTABLE_SHOWVERTBORDER,
         XML_CHART_DTABLE_SHOWOUTLINE,
+        // Chart Display units properties
+        XML_CHART_DUNITS_DISPLAYUNITS,
+        XML_CHART_DUNITS_BUILTINUNIT,
         XML_EXTERNALDATA,
 
         XML_TOKEN_END
