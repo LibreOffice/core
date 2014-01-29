@@ -40,9 +40,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -56,7 +53,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -99,23 +95,10 @@
 #include <general.h>
 #include <stdtypes.h>
 
-using css::uno::Sequence;
-using css::uno::UNO_QUERY;
-using css::uno::UNO_QUERY_THROW;
-using css::uno::UNO_SET_THROW;
-using css::uno::Reference;
-using css::uno::Any;
-using css::beans::PropertyValue;
-using css::container::XEnumeration;
-using css::document::XDocumentRecovery;
-using css::frame::ModuleManager;
-using css::frame::XModel2;
-using css::frame::XModel;
-using css::frame::XFrame;
-using css::frame::XController2;
-using css::frame::XLoadable;
-using css::frame::XStorable;
-using css::lang::XComponent;
+using namespace css::uno;
+using namespace css::document;
+using namespace css::frame;
+using namespace css::lang;
 using namespace framework;
 
 namespace {
@@ -2165,7 +2148,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     const Reference< XModel2 > xModel( i_rInfo.Document, UNO_QUERY );
     if ( xModel.is() )
     {
-        const Reference< XEnumeration > xEnumControllers( xModel->getControllers() );
+        const Reference< css::container::XEnumeration > xEnumControllers( xModel->getControllers() );
         while ( xEnumControllers->hasMoreElements() )
         {
             const Reference< XController2 > xController( xEnumControllers->nextElement(), UNO_QUERY );
@@ -3625,7 +3608,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             Reference< XController2 > xController;
             if ( viewName->getLength() )
             {
-                xController.set( xModel->createViewController( *viewName, Sequence< PropertyValue >(), xTargetFrame ), UNO_SET_THROW );
+                xController.set( xModel->createViewController( *viewName, Sequence< css::beans::PropertyValue >(), xTargetFrame ), UNO_SET_THROW );
             }
             else
             {
