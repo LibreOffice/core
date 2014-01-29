@@ -2067,7 +2067,8 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
     if(pFmt)
     {
         // determine correct <SdrObject>
-        SdrObject* pObj = GetSvxShape()->GetSdrObject();
+        SvxShape* pSvxShape = GetSvxShape();
+        SdrObject* pObj = pSvxShape ? pSvxShape->GetSdrObject() : NULL;
         // safety assertion:
         // <pObj> must be the same as <pFmt->FindSdrObject()>, if <pObj> isn't
         // a 'virtual' drawing object.
