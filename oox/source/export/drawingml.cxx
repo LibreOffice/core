@@ -347,102 +347,110 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                     aGrabBag[i].Value >>= aOriginalGradient;
         }
 
-        mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
-
         // check if an ooxml gradient had been imported and if the user has modified it
         if( aGradientStops.hasElements() && EqualGradients( aOriginalGradient, aGradient ) )
         {
-            // write back the original gradient
-            mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-
-            // get original stops and write them
-            for( sal_Int32 i=0; i < aGradientStops.getLength(); ++i )
-            {
-                Sequence< PropertyValue > aGradientStop;
-                aGradientStops[i].Value >>= aGradientStop;
-
-                // get values
-                OUString sSchemeClr;
-                double nPos = 0;
-                sal_Int16 nTransparency = 0;
-                sal_Int32 nRgbClr = 0;
-                Sequence< PropertyValue > aTransformations;
-                for( sal_Int32 j=0; j < aGradientStop.getLength(); ++j )
-                    if( aGradientStop[j].Name == "SchemeClr" )
-                        aGradientStop[j].Value >>= sSchemeClr;
-                    else if( aGradientStop[j].Name == "RgbClr" )
-                        aGradientStop[j].Value >>= nRgbClr;
-                    else if( aGradientStop[j].Name == "Pos" )
-                        aGradientStop[j].Value >>= nPos;
-                    else if( aGradientStop[j].Name == "Transparency" )
-                        aGradientStop[j].Value >>= nTransparency;
-                    else if( aGradientStop[j].Name == "Transformations" )
-                        aGradientStop[j].Value >>= aTransformations;
-
-                // write stop
-                mpFS->startElementNS( XML_a, XML_gs,
-                                      XML_pos, OString::number( nPos * 100000.0 ).getStr(),
-                                      FSEND );
-                if( sSchemeClr.isEmpty() )
-                {
-                    // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
-                    sal_Int32 nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
-                    WriteColor( nRgbClr, nAlpha );
-                }
-                else
-                    WriteColor( sSchemeClr, aTransformations );
-                mpFS->endElementNS( XML_a, XML_gs );
-            }
-            mpFS->endElementNS( XML_a, XML_gsLst );
-
-            mpFS->singleElementNS( XML_a, XML_lin,
-                                   XML_ang, I32S( ( ( ( 3600 - aGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
-                                   FSEND );
+            WriteGrabBagGradientFill(aGradientStops, aGradient);
         }
         else
-            switch( aGradient.Style ) {
-            default:
-            case GradientStyle_LINEAR:
-                mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-                WriteGradientStop( 0, ColorWithIntensity( aGradient.StartColor, aGradient.StartIntensity ) );
-                WriteGradientStop( 100, ColorWithIntensity( aGradient.EndColor, aGradient.EndIntensity ) );
-                mpFS->endElementNS( XML_a, XML_gsLst );
-                mpFS->singleElementNS( XML_a, XML_lin,
-                                       XML_ang, I32S( ( ( ( 3600 - aGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
-                                       FSEND );
-                break;
-
-            case GradientStyle_AXIAL:
-                mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-                WriteGradientStop( 0, ColorWithIntensity( aGradient.EndColor, aGradient.EndIntensity ) );
-                WriteGradientStop( 50, ColorWithIntensity( aGradient.StartColor, aGradient.StartIntensity ) );
-                WriteGradientStop( 100, ColorWithIntensity( aGradient.EndColor, aGradient.EndIntensity ) );
-                mpFS->endElementNS( XML_a, XML_gsLst );
-                mpFS->singleElementNS( XML_a, XML_lin,
-                                       XML_ang, I32S( ( ( ( 3600 - aGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
-                                       FSEND );
-                break;
-
-                /* I don't see how to apply transformation to gradients, so
-                 * elliptical will end as radial and square as
-                 * rectangular. also position offsets are not applied */
-            case GradientStyle_RADIAL:
-            case GradientStyle_ELLIPTICAL:
-            case GradientStyle_RECT:
-            case GradientStyle_SQUARE:
-                mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-                WriteGradientStop( 0, ColorWithIntensity( aGradient.EndColor, aGradient.EndIntensity ) );
-                WriteGradientStop( 100, ColorWithIntensity( aGradient.StartColor, aGradient.StartIntensity ) );
-                mpFS->endElementNS( XML_a, XML_gsLst );
-                mpFS->singleElementNS( XML_a, XML_path,
-                                       XML_path, ( aGradient.Style == awt::GradientStyle_RADIAL || aGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect",
-                                       FSEND );
-                break;
-            }
-
-        mpFS->endElementNS( XML_a, XML_gradFill );
+            WriteGradientFill(aGradient);
     }
+}
+void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientStops, awt::Gradient rGradient )
+{
+    mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
+    // write back the original gradient
+    mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
 
+    // get original stops and write them
+    for( sal_Int32 i=0; i < aGradientStops.getLength(); ++i )
+    {
+        Sequence< PropertyValue > aGradientStop;
+        aGradientStops[i].Value >>= aGradientStop;
+
+        // get values
+        OUString sSchemeClr;
+        double nPos = 0;
+        sal_Int16 nTransparency = 0;
+        sal_Int32 nRgbClr = 0;
+        Sequence< PropertyValue > aTransformations;
+        for( sal_Int32 j=0; j < aGradientStop.getLength(); ++j )
+            if( aGradientStop[j].Name == "SchemeClr" )
+                aGradientStop[j].Value >>= sSchemeClr;
+            else if( aGradientStop[j].Name == "RgbClr" )
+                aGradientStop[j].Value >>= nRgbClr;
+            else if( aGradientStop[j].Name == "Pos" )
+                aGradientStop[j].Value >>= nPos;
+            else if( aGradientStop[j].Name == "Transparency" )
+                aGradientStop[j].Value >>= nTransparency;
+            else if( aGradientStop[j].Name == "Transformations" )
+                aGradientStop[j].Value >>= aTransformations;
+
+        // write stop
+        mpFS->startElementNS( XML_a, XML_gs,
+                              XML_pos, OString::number( nPos * 100000.0 ).getStr(),
+                              FSEND );
+        if( sSchemeClr.isEmpty() )
+        {
+            // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+            sal_Int32 nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+            WriteColor( nRgbClr, nAlpha );
+        }
+        else
+            WriteColor( sSchemeClr, aTransformations );
+        mpFS->endElementNS( XML_a, XML_gs );
+    }
+    mpFS->endElementNS( XML_a, XML_gsLst );
+
+    mpFS->singleElementNS( XML_a, XML_lin,
+                           XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                           FSEND );
+    mpFS->endElementNS( XML_a, XML_gradFill );
+}
+
+void DrawingML::WriteGradientFill( awt::Gradient rGradient )
+{
+    mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
+    switch( rGradient.Style ) {
+    default:
+    case GradientStyle_LINEAR:
+        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+        WriteGradientStop( 0, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+        WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+        mpFS->endElementNS( XML_a, XML_gsLst );
+        mpFS->singleElementNS( XML_a, XML_lin,
+                XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                FSEND );
+        break;
+
+    case GradientStyle_AXIAL:
+        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+        WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+        WriteGradientStop( 50, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+        WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+        mpFS->endElementNS( XML_a, XML_gsLst );
+        mpFS->singleElementNS( XML_a, XML_lin,
+                XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                FSEND );
+        break;
+
+        /* I don't see how to apply transformation to gradients, so
+         * elliptical will end as radial and square as
+         * rectangular. also position offsets are not applied */
+    case GradientStyle_RADIAL:
+    case GradientStyle_ELLIPTICAL:
+    case GradientStyle_RECT:
+    case GradientStyle_SQUARE:
+        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+        WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+        WriteGradientStop( 100, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+        mpFS->endElementNS( XML_a, XML_gsLst );
+        mpFS->singleElementNS( XML_a, XML_path,
+                XML_path, ( rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect",
+                        FSEND );
+        break;
+    }
+    mpFS->endElementNS( XML_a, XML_gradFill );
 }
 
 void DrawingML::WriteLineArrow( Reference< XPropertySet > rXPropSet, sal_Bool bLineStart )
