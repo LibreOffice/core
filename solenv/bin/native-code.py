@@ -55,8 +55,12 @@ core_constructor_list = [
     "com_sun_star_comp_framework_JobExecutor_get_implementation",
     "com_sun_star_comp_framework_LayoutManager_get_implementation",
     "com_sun_star_comp_framework_ModuleManager_get_implementation",
+    "com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation",
     "com_sun_star_comp_framework_PathSettings_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
+    "com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation",
+    "com_sun_star_comp_framework_UIConfigurationManager_get_implementation",
+    "com_sun_star_comp_framework_UIElementFactoryManager_get_implementation",
     "com_sun_star_comp_framework_URLTransformer_get_implementation",
 # i18npool/util/i18npool.component
     "com_sun_star_i18n_BreakIterator_get_implementation",
