@@ -3226,6 +3226,8 @@ namespace xmloff { namespace token {
         TOKEN( "data-table-show-horz-border",     XML_CHART_DTABLE_SHOWHORZBORDER ),
         TOKEN( "data-table-show-vert-border",     XML_CHART_DTABLE_SHOWVERTBORDER ),
         TOKEN( "data-table-show-outline",     XML_CHART_DTABLE_SHOWOUTLINE ),
+        TOKEN( "display-units",     XML_CHART_DUNITS_DISPLAYUNITS ),
+        TOKEN( "display-units-built-in-unit",     XML_CHART_DUNITS_BUILTINUNIT ),
         TOKEN( "external-data", XML_EXTERNALDATA),
 
 #if OSL_DEBUG_LEVEL > 0

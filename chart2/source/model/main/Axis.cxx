@@ -76,7 +76,10 @@ enum
 
     PROP_AXIS_MAJOR_TICKMARKS,
     PROP_AXIS_MINOR_TICKMARKS,
-    PROP_AXIS_MARK_POSITION
+    PROP_AXIS_MARK_POSITION,
+
+    PROP_AXIS_DISPLAY_UNITS,
+    PROP_AXIS_BUILTINUNIT
 };
 
 void lcl_AddPropertiesToVector(
@@ -180,6 +183,22 @@ void lcl_AddPropertiesToVector(
                   PROP_AXIS_MARK_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //Properties for display units:
+    rOutProperties.push_back(
+        Property( "DisplayUnits",
+                  PROP_AXIS_DISPLAY_UNITS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //Properties for labels:
+    rOutProperties.push_back(
+        Property( "BuiltInUnit",
+                  PROP_AXIS_BUILTINUNIT,
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 struct StaticAxisDefaults_Initializer
@@ -214,6 +233,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_UNITS, false );
     }
 };
 
