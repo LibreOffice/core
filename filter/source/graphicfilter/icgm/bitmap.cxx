@@ -144,9 +144,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                                 nxC = nxCount;
                                 for ( nx = 0; --nxC; nx++ )
                                 {
-                                    aBitmapColor.SetRed( (sal_Int8)*pTemp++ );
-                                    aBitmapColor.SetGreen( (sal_Int8)*pTemp++ );
-                                    aBitmapColor.SetBlue( (sal_Int8)*pTemp++ );
+                                    aBitmapColor.SetRed( *pTemp++ );
+                                    aBitmapColor.SetGreen( *pTemp++ );
+                                    aBitmapColor.SetBlue( *pTemp++ );
                                     rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
                                 }
                             }
