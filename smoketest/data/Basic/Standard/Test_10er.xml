@@ -30,7 +30,6 @@ const sLogFileName = &quot;smoketest.log&quot;
 const cTempFileName = &quot;smoketest_file&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
-const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
 const cMessageNewDoc = &quot;New Document&quot;
 const cMessageCloseDoc = &quot;Close Document&quot;
 const cMessageRunMacros = &quot;Run Macros&quot;
@@ -63,22 +62,6 @@ Sub DeleteAllSavedFiles()
         Kill (sFileName)
     End If
     sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmHyperText)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter or cFltXML)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc or cFltXML)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress or cFltXML)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFltXML)
     If FileExists (sFileName) then
         Kill (sFileName)
     End If
@@ -270,14 +253,8 @@ Sub WriteTestSequence
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, save 8.0&quot;
     end if
-    if bMakeSaveOpenXMLTest then
-        sWriteStr = sWriteStr + &quot;, save XML&quot;
-    end if
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, open 8.0&quot;
-    end if
-    if bMakeSaveOpenXMLTest then
-        sWriteStr = sWriteStr + &quot;, open XML&quot;
     end if
     if bMakeMacrosTest then
         sWriteStr = sWriteStr + &quot;, run macros&quot;
@@ -330,11 +307,6 @@ Sub MakeDocTest
             sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFlt8)
             SaveDoc (sFileName8, oDoc, GetDocFilter(gCurrentDocTest or cFlt8))
         end if
-        gCurrentTestCase = cDocSaveOpenXML
-        if bMakeSaveOpenXMLTest and IsFilterAvailable (gCurrentDocTest or cFltXML) then
-            sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFltXML)
-            SaveDoc (sFileNameXML, oDoc, GetDocFilter(gCurrentDocTest or cFltXML))
-        end if
         gCurrentTestCase = cDocClose
         bSuccess = CloseDoc( oDoc )
         LogTestResult( GetDocFilter(gCurrentDocTest)+&quot; &quot;+ cMessageCloseDoc, bSuccess )
@@ -344,19 +316,6 @@ Sub MakeDocTest
 
 &apos;          oDoc = Documents.open(sFileName)
             LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen8Doc, not IsNull (oDoc) )
-
-            if not IsNull (oDoc) then
-                gCurrentTestCase = cDocClose
-                oDoc.close (true)
-            end If
-        end if
-
-        gCurrentTestCase = cDocSaveOpenXML
-        if bMakeSaveOpenXMLTest and IsFilterAvailable (gCurrentDocTest or cFltXML) then
-            oDoc = LoadDoc (sFileNameXML)
-
-&apos;          oDoc = Documents.open(sFileName)
-            LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, not IsNull (oDoc) )
 
             if not IsNull (oDoc) then
                 gCurrentTestCase = cDocClose
@@ -600,8 +559,6 @@ Function GetErrorMessageOnAction (nAction as Integer) as String
             GetErrorMessageOnAction = cMessageNewDoc
         case cDocSaveOpen8
             GetErrorMessageOnAction = cMessageSaveOpen8Doc
-        case cDocSaveOpenXML
-            GetErrorMessageOnAction = cMessageSaveOpenXMLDoc
         case cDocMacros
             GetErrorMessageOnAction = cMessageRunMacros
         case cDocClose
