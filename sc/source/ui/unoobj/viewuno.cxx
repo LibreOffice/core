@@ -879,7 +879,8 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     return bRet;
 }
 
-uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
+uno::Any SAL_CALL ScTabViewObj::getSelection()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();

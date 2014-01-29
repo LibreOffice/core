@@ -236,7 +236,8 @@ public:
                                       ::com::sun::star::uno::RuntimeException,
                                       std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   addSelectionChangeListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::view::XSelectionChangeListener >& xListener )
                                     throw(::com::sun::star::uno::RuntimeException);
