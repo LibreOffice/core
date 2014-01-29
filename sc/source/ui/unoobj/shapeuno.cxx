@@ -666,8 +666,8 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
 }
 
 uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+          uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameString = aPropertyName;
