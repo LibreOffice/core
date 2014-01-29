@@ -1729,7 +1729,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
         SvxShape* pSvxShape = GetSvxShape();
         bool bGroupMember = false;
         bool bFormControl = false;
-        SdrObject* pObject = pSvxShape->GetSdrObject();
+        SdrObject* pObject = pSvxShape ? pSvxShape->GetSdrObject() : NULL;
         if(pObject)
         {
             bGroupMember = pObject->GetUpGroup() != 0;
