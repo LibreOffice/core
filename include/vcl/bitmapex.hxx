@@ -454,21 +454,32 @@ public:
     The blend value defines how strong the frame will be blended with the
     existing content, 255 == full coverage, 0 == no frame will be drawn
 
-    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
-    The colors defining the frame. If the version without aColorTopRight and
-    aColorBottomLeft is used, these colors are linearly interpolated from
+    @param aColorTopLeft, aColorBottomRight
+    The colors defining the frame. These colors are linearly interpolated from
     aColorTopLeft and aColorBottomRight using the width and height of the area
 
     @param rSize
     The size of the frame in pixels
     */
-
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
     Color aColorBottomRight);
 
+
+/** Create a blend frame as BitmapEx
+
+    @param nAlpha
+    The blend value defines how strong the frame will be blended with the
+    existing content, 255 == full coverage, 0 == no frame will be drawn
+
+    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
+    The colors defining the frame.
+
+    @param rSize
+    The size of the frame in pixels
+    */
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,

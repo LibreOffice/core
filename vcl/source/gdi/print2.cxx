@@ -66,7 +66,7 @@ struct ConnectedComponents
 
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
 
-/** #i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
+/** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
     if given action requires special handling (usually because of
     transparency)
 */

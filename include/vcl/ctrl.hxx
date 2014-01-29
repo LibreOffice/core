@@ -149,9 +149,8 @@ public:
     Pair GetLineStartEnd( long nLine ) const;
     /** ToRelativeLineIndex changes a layout data index to a count relative to its line.
 
-    <p>This is equivalent to getting the line start/end pairs with
-    <member>GetLineStartEnd</member> until the index lies within [start,end] of a line
-    </p>
+    This is equivalent to getting the line start/end pairs with
+    GetLineStartEnd() until the index lies within [start,end] of a line
 
     @param nIndex
     the absolute index inside the display text to be changed to a relative index
@@ -176,7 +175,7 @@ public:
     virtual Size    GetOptimalSize() const;
 
     /** sets a reference device used for rendering control text
-        @seealso DrawControlText
+        @see DrawControlText
     */
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;

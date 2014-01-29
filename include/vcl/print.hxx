@@ -50,6 +50,10 @@ namespace vcl {
     class PrintDialog;
 }
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+using namespace vcl;
+
 // -----------------
 // - Printer-Types -
 // -----------------
@@ -256,7 +260,7 @@ private:
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
 
-    SAL_DLLPRIVATE bool StartJob( const OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
+    SAL_DLLPRIVATE bool StartJob( const OUString& rJobName, boost::shared_ptr<PrinterController>& );
 
     static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
@@ -369,13 +373,13 @@ public:
         starts a print job asynchronously (that is will return
 
     */
-    static void PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+    static void PrintJob( const boost::shared_ptr<PrinterController>& i_pController,
                           const JobSetup& i_rInitSetup
                           );
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
-    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pController,
                                              const JobSetup& i_rInitSetup
                                              );
 };
@@ -438,13 +442,13 @@ public:
        For convenience a second sequence will be merged in to get a combined sequence.
        In case of duplicate property names, the value of i_MergeList wins.
     */
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        getJobProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rMergeList ) const;
+    Sequence< PropertyValue >
+        getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const;
 
     /* get the PropertyValue of a Property
     */
-    com::sun::star::beans::PropertyValue* getValue( const OUString& i_rPropertyName );
-    const com::sun::star::beans::PropertyValue* getValue( const OUString& i_rPropertyName ) const;
+    PropertyValue* getValue( const OUString& i_rPropertyName );
+    const PropertyValue* getValue( const OUString& i_rPropertyName ) const;
     /* get a bool property
        in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
@@ -456,16 +460,16 @@ public:
 
     /* set a property value - can also be used to add another UI property
     */
-    void setValue( const OUString& i_rPropertyName, const com::sun::star::uno::Any& i_rValue );
-    void setValue( const com::sun::star::beans::PropertyValue& i_rValue );
+    void setValue( const OUString& i_rPropertyName, const Any& i_rValue );
+    void setValue( const PropertyValue& i_rValue );
 
     /* return the currently active UI options. These are the same that were passed to setUIOptions.
     */
-    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& getUIOptions() const;
+    const Sequence< PropertyValue >& getUIOptions() const;
     /* set possible UI options. should only be done once before passing the PrinterListener
        to Printer::PrintJob
     */
-    void setUIOptions( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+    void setUIOptions( const Sequence< PropertyValue >& );
     /* enable/disable an option; this can be used to implement dialog logic.
     */
     bool isUIOptionEnabled( const OUString& rPropName ) const;
@@ -492,7 +496,7 @@ public:
        the paper size.
     */
     // must be overloaded by the app, return page size in 1/100th mm
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
+    virtual Sequence< PropertyValue > getPageParameters( int i_nPage ) const = 0;
     virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
     virtual void jobStarted(); // will be called after a possible dialog has been shown and the real printjob starts
     virtual void jobFinished( com::sun::star::view::PrintableState );
@@ -529,7 +533,7 @@ public:
     SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
 
     SAL_DLLPRIVATE int getPageCountProtected() const;
-    SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
+    SAL_DLLPRIVATE Sequence< PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
     SAL_DLLPRIVATE sal_uLong removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
     SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
@@ -538,12 +542,12 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
     protected:
-    boost::unordered_map< OUString, com::sun::star::uno::Any, OUStringHash >        m_aPropertyMap;
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >              m_aUIProperties;
+    boost::unordered_map< OUString, Any, OUStringHash >        m_aPropertyMap;
+    Sequence< PropertyValue >              m_aUIProperties;
 
     public:
     PrinterOptionsHelper() {} // create without ui properties
-    PrinterOptionsHelper( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rUIProperties )
+    PrinterOptionsHelper( const Sequence< PropertyValue >& i_rUIProperties )
     : m_aUIProperties( i_rUIProperties )
     {}
     ~PrinterOptionsHelper()
@@ -553,16 +557,16 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
      * merges changed properties and returns "true" if any occurred
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
-    bool processProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp,
+    bool processProperties( const Sequence< PropertyValue >& i_rNewProp,
                             std::set< OUString >* o_pChangeProp = NULL );
     /* append  to a sequence of property values the ui property sequence passed at creation
      * as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
      * will be appended.
     **/
-    void appendPrintUIOptions( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& io_rProps ) const;
+    void appendPrintUIOptions( Sequence< PropertyValue >& io_rProps ) const;
 
     // returns an empty Any for not existing properties
-    com::sun::star::uno::Any getValue( const OUString& i_rPropertyName ) const;
+    Any getValue( const OUString& i_rPropertyName ) const;
 
     sal_Bool getBoolValue( const OUString& i_rPropertyName, sal_Bool i_bDefault = sal_False ) const;
     // convenience for fixed strings
@@ -588,7 +592,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         OUString   maGroupHint;
         sal_Bool        mbInternalOnly;
         sal_Bool        mbEnabled;
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maAddProps;
+        Sequence< PropertyValue > maAddProps;
 
         UIControlOptions( const OUString& i_rDependsOnName = OUString(),
                           sal_Int32 i_nDependsOnEntry = -1,
@@ -612,27 +616,27 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // transported via UTF16 strings.
 
     // Show general control
-    static com::sun::star::uno::Any setUIControlOpt( const com::sun::star::uno::Sequence< OUString >& i_rIDs,
+    static Any setUIControlOpt( const Sequence< OUString >& i_rIDs,
                                                      const OUString& i_rTitle,
-                                                     const com::sun::star::uno::Sequence< OUString >& i_rHelpId,
+                                                     const Sequence< OUString >& i_rHelpId,
                                                      const OUString& i_rType,
-                                                     const com::sun::star::beans::PropertyValue* i_pValue = NULL,
+                                                     const PropertyValue* i_pValue = NULL,
                                                      const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
 
     // Show and set the title of a TagPage of id i_rID
-    static com::sun::star::uno::Any setGroupControlOpt(const OUString& i_rID,
+    static Any setGroupControlOpt(const OUString& i_rID,
                                                        const OUString& i_rTitle,
                                                        const OUString& i_rHelpId);
 
     // Show and set the label of a VclFrame of id i_rID
-    static com::sun::star::uno::Any setSubgroupControlOpt(const OUString& i_rID,
+    static Any setSubgroupControlOpt(const OUString& i_rID,
                                                           const OUString& i_rTitle,
                                                           const OUString& i_rHelpId,
                                                           const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show a bool option as a checkbox
-    static com::sun::star::uno::Any setBoolControlOpt(const OUString& i_rID,
+    static Any setBoolControlOpt(const OUString& i_rID,
                                                       const OUString& i_rTitle,
                                                       const OUString& i_rHelpId,
                                                       const OUString& i_rProperty,
@@ -640,29 +644,29 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                       const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show a set of choices in a list box
-    static com::sun::star::uno::Any setChoiceListControlOpt(const OUString& i_rID,
+    static Any setChoiceListControlOpt(const OUString& i_rID,
                                                             const OUString& i_rTitle,
-                                                            const com::sun::star::uno::Sequence< OUString >& i_rHelpId,
+                                                            const Sequence< OUString >& i_rHelpId,
                                                             const OUString& i_rProperty,
-                                                            const com::sun::star::uno::Sequence< OUString >& i_rChoices,
+                                                            const Sequence< OUString >& i_rChoices,
                                                             sal_Int32 i_nValue,
-                                                            const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
+                                                            const Sequence< sal_Bool >& i_rDisabledChoices = Sequence< sal_Bool >(),
                                                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // show a set of choices as radio buttons
-    static com::sun::star::uno::Any setChoiceRadiosControlOpt(const com::sun::star::uno::Sequence< OUString >& i_rIDs,
+    static Any setChoiceRadiosControlOpt(const Sequence< OUString >& i_rIDs,
                                                             const OUString& i_rTitle,
-                                                            const com::sun::star::uno::Sequence< OUString >& i_rHelpId,
+                                                            const Sequence< OUString >& i_rHelpId,
                                                             const OUString& i_rProperty,
-                                                            const com::sun::star::uno::Sequence< OUString >& i_rChoices,
+                                                            const Sequence< OUString >& i_rChoices,
                                                             sal_Int32 i_nValue,
-                                                            const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
+                                                            const Sequence< sal_Bool >& i_rDisabledChoices = Sequence< sal_Bool >(),
                                                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
 
     // show an integer range (e.g. a spin field)
     // note: max value < min value means do not apply min/max values
-    static com::sun::star::uno::Any setRangeControlOpt(const OUString& i_rID,
+    static Any setRangeControlOpt(const OUString& i_rID,
                                                        const OUString& i_rTitle,
                                                        const OUString& i_rHelpId,
                                                        const OUString& i_rProperty,
@@ -673,7 +677,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // show a string field
     // note: max value < min value means do not apply min/max values
-    static com::sun::star::uno::Any setEditControlOpt(const OUString& i_rID,
+    static Any setEditControlOpt(const OUString& i_rID,
                                                       const OUString& i_rTitle,
                                                       const OUString& i_rHelpId,
                                                       const OUString& i_rProperty,
