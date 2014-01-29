@@ -574,7 +574,8 @@ public:
 
 }
 
-void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
+void ScColumn::DeleteArea(
+    SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast )
 {
     sal_uInt16 nContMask = IDF_CONTENTS;
     // IDF_NOCAPTIONS needs to be passed too, if IDF_NOTE is set
@@ -626,9 +627,12 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     else if ((nDelFlag & IDF_HARDATTR) == IDF_HARDATTR)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 
-    // Broadcast on only cells that were deleted; no point broadcasting on
-    // cells that were already empty before the deletion.
-    BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
+    if (bBroadcast)
+    {
+        // Broadcast on only cells that were deleted; no point broadcasting on
+        // cells that were already empty before the deletion.
+        BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
+    }
 }
 
 bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )

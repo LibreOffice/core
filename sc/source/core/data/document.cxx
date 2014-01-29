@@ -5618,20 +5618,21 @@ void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData
 }
 
 
-void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
+void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
-            maTabs[*itr]->DeleteSelection( nDelFlag, rMark );
+            maTabs[*itr]->DeleteSelection(nDelFlag, rMark, bBroadcast);
 }
 
 
-void ScDocument::DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark )
+void ScDocument::DeleteSelectionTab(
+    SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->DeleteSelection( nDelFlag, rMark );
+        maTabs[nTab]->DeleteSelection(nDelFlag, rMark, bBroadcast);
     else
     {
         OSL_FAIL("wrong table");

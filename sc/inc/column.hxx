@@ -214,7 +214,8 @@ public:
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
-    void        DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag );
+    void DeleteArea(
+        SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast = true );
     void CopyToClip(
         sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
@@ -412,7 +413,7 @@ public:
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
     SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
-    void        DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
+    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );

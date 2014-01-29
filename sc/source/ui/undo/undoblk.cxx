@@ -950,7 +950,10 @@ void ScUndoPaste::DoChange(bool bUndo)
     pDocShell->UpdatePaintExt(nExtFlags, maBlockRanges.Combine());
 
     aMarkData.MarkToMulti();
-    pDoc->DeleteSelection( nUndoFlags, aMarkData );
+    pDoc->DeleteSelection(nUndoFlags, aMarkData, false); // no broadcasting here
+    for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
+        pDoc->BroadcastCells(*maBlockRanges[i], SC_HINT_DATACHANGED);
+
     aMarkData.MarkToSimple();
 
     SCTAB nFirstSelected = aMarkData.GetFirstSelected();

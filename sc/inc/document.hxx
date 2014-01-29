@@ -1441,8 +1441,8 @@ public:
 
     SC_DLLPUBLIC void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                            ScEditDataArray* pDataArray = NULL );
-    void            DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
-    void            DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark );
+    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    void DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     SC_DLLPUBLIC void           SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
     SC_DLLPUBLIC void           SetColWidthOnly( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );

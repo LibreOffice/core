@@ -629,7 +629,7 @@ public:
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
 
     void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
-    void        DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
+    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
