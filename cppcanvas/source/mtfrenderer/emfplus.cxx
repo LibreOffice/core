@@ -1345,29 +1345,27 @@ namespace cppcanvas
             if (!rLineCap.count())
                 return 0.0;
 
-            // it seems the line caps in EMF+ are 4*larger than what
-            // LibreOffice expects, and the mapping in
-            // createAreaGeometryForLineStartEnd scales that down, so
-            // correct it
-            // [unfortunately found no proof for this in the spec :-( - please
-            // feel free to correct this if it causes trouble]
-            double fWidth = rAttributes.StrokeWidth*4;
+            // createAreaGeometryForLineStartEnd normalises the arrows height
+            // before scaling (i.e. scales down by rPolygon.height), hence
+            // we pre-scale it (which means we can avoid changing the logic
+            // that would affect arrows rendered outside of EMF+).
+            const double fWidth = rAttributes.StrokeWidth*rLineCap.getB2DRange().getWidth();
 
+            // When drawing an outline (as opposed to a filled endCap), we also
+            // need to take account that the brush width also adds to the area
+            // of the polygon.
+            const double fShift = bIsFilled ? 0 : rAttributes.StrokeWidth;
+            double fConsumed = 0;
             basegfx::B2DPolyPolygon aArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
                         rPolygon, rLineCap, bStart,
-                        fWidth, fPolyLength, 0, NULL, rAttributes.StrokeWidth));
+                        fWidth, fPolyLength, 0, &fConsumed, fShift));
 
             // createAreaGeometryForLineStartEnd from some reason always sets
             // the path as closed, correct it
             aArrow.setClosed(rLineCap.isClosed());
 
-            ActionSharedPtr pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
-            if (pAction)
-            {
-                maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
-                rParms.mrCurrActionIndex += pAction->getActionCount()-1;
-            }
-
+            // If the endcap is filled, we draw ONLY the filling, if it isn't
+            // filled we draw ONLY the outline, but never both.
             if (bIsFilled)
             {
                 bool bWasFillColorSet = rState.isFillColorSet;
@@ -1381,8 +1379,23 @@ namespace cppcanvas
                 }
                 rState.isFillColorSet = bWasFillColorSet;
             }
+            else
+            {
+                ActionSharedPtr pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
+                if (pAction)
+                {
+                    maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
+                    rParms.mrCurrActionIndex += pAction->getActionCount()-1;
+                }
+            }
 
-            return rAttributes.StrokeWidth;
+            // This is slightly hacky, and doesn't work for arrows that are drawn
+            // using bIsFilled but that don't fill the entire arrow area.
+            // This would presumably be fixed if we correctly used baseInset.
+            if (bIsFilled)
+                return fConsumed;
+            else
+                return rAttributes.StrokeWidth;
         }
 
         void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
