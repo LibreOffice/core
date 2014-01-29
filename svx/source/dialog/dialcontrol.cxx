@@ -224,14 +224,15 @@ void DialControlBmp::DrawBackground()
 
 // ----------------------------------------------------------------------------
 
-DialControl::DialControl_Impl::DialControl_Impl (
-    Window& rParent ) :
+DialControl::DialControl_Impl::DialControl_Impl ( Window& rParent ) :
     mpBmpEnabled(new DialControlBmp(rParent)),
     mpBmpDisabled(new DialControlBmp(rParent)),
     mpBmpBuffered(new DialControlBmp(rParent)),
     mpLinkField( 0 ),
+    mnLinkedFieldValueMultiplyer( 0 ),
     mnAngle( 0 ),
     mnInitialAngle( 0 ),
+    mnOldAngle( 0 ),
     mnCenterX( 0 ),
     mnCenterY( 0 ),
     mbNoRot( false )
