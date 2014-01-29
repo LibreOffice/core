@@ -1266,7 +1266,8 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_TblWidth_typeSet( false ),
     mnListId( -1 ),
     mnListLevel( -1 ),
-    mnOutlineLevel( -1 )
+    mnOutlineLevel( -1 ),
+    mnNumId( -1 )
 {
 }
 
