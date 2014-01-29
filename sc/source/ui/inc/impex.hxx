@@ -65,6 +65,7 @@ class ScImportExport
     bool        bOverflowCol;           // too many columns
     bool        bOverflowCell;          // too much data for a cell
     bool        mbApi;
+    bool        mbImportBroadcast; // whether or not to broadcast after data import.
     ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // extended options
@@ -151,6 +152,7 @@ public:
 
     bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }
+    void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
     const ScExportTextOptions& GetExportTextOptions() { return mExportTextOptions; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };

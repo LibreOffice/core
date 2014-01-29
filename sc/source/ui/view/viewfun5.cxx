@@ -288,6 +288,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData()->GetTabNo() );
             ScImportExport aObj( GetViewData()->GetDocument(), aCellPos );
+            aObj.SetImportBroadcast(true);
 
             OUString aStr;
             SotStorageStreamRef xStream;
