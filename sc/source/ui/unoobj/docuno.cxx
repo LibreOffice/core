@@ -1093,7 +1093,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
 void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelection,
                                     const uno::Sequence<beans::PropertyValue>& rOptions )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException,
+                                      uno::RuntimeException,
+                                      std::exception)
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)

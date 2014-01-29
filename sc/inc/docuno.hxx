@@ -175,7 +175,8 @@ public:
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::beans::PropertyValue >& xOptions )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             /// XLinkTargetSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
