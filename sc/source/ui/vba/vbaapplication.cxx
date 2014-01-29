@@ -1268,7 +1268,8 @@ ScVbaApplication::getDisplayFormulaBar()
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( css::uno::RuntimeException )
+ScVbaApplication::setDisplayFormulaBar( ::sal_Bool _displayformulabar )
+    throw(css::uno::RuntimeException, std::exception)
 {
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell && ( _displayformulabar !=  getDisplayFormulaBar() ) )
