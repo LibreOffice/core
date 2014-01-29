@@ -53,6 +53,8 @@ namespace {
 
 typedef opengl::OpenglShapeFactory* (*__getOpenglShapeFactory)(void);
 
+#ifndef DISABLE_DYNLOADING
+
 static void SAL_CALL thisModule() {}
 
 osl::Module* getOpenGLModule()
@@ -70,7 +72,13 @@ osl::Module* getOpenGLModule()
     return bLoaded ? &aModule : NULL;
 }
 
+#endif
+
 }
+
+#ifdef DISABLE_DYNLOADING
+extern "C" opengl::OpenglShapeFactory* getOpenglShapeFactory();
+#endif
 
 AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
 {
@@ -81,6 +89,7 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
 
     if(getenv("CHART_DUMMY_FACTORY") && !Application::IsHeadlessModeEnabled())
     {
+#ifndef DISABLE_DYNLOADING
         osl::Module* pModule = getOpenGLModule();
         if(pModule)
         {
@@ -92,6 +101,10 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
                 pShapeFactory->setShapeFactory(xFactory);
             }
         }
+#else
+        pShapeFactory = getOpenglShapeFactory();
+        pShapeFactory->setShapeFactory(xFactory);
+#endif
     }
 
 
