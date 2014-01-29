@@ -41,7 +41,7 @@ struct AxisDispUnitsModel
     LayoutRef           mxLayout;           /// Layout/position of the axis units label.
     TextRef             mxText;             /// Text source of the axis units label.
     double              mfCustomUnit;       /// Custom unit size on value axis.
-    sal_Int32           mnBuiltInUnit;      /// Built-in unit on value axis.
+    OUString            mnBuiltInUnit;      /// Built-in unit on value axis.
 
     explicit            AxisDispUnitsModel();
                         ~AxisDispUnitsModel();
