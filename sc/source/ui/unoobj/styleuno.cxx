@@ -1422,7 +1422,8 @@ void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const uno::Sequence<OUStrin
 // XMultiPropertyStates
 // getPropertyStates already defined for XPropertyState
 
-void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeException)
+void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

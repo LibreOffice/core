@@ -326,7 +326,9 @@ public:
 
                             // XMultiPropertyStates
     // getPropertyStates already defined for XPropertyState
-    virtual void SAL_CALL   setAllPropertiesToDefault() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setAllPropertiesToDefault()
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   setPropertiesToDefault( const ::com::sun::star::uno::Sequence<
                                         OUString >& aPropertyNames )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
