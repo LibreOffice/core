@@ -1139,57 +1139,40 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     }
     else if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
     {
-       if(bisInSdNavigatorWin)
-       {
-           sal_Bool bMarked=sal_False;
-           SvTreeListEntry* pNewEntry = GetCurEntry();
-           if( GetParent(pNewEntry) == NULL )
-               return;
-           OUString  aStr=GetSelectEntry();
-           Window* pWindow=NULL;
-           SdNavigatorWin* pSdNavigatorWin=NULL;
-           sd::DrawDocShell* pSdDrawDocShell = NULL;
-           if(pNewEntry)
-               pWindow=(Window*)GetParent(pNewEntry);
-           if(pWindow)
-               pSdNavigatorWin = (SdNavigatorWin*)pWindow;
-           if( pSdNavigatorWin )
-               pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
-           if(pSdDrawDocShell)
-           {
-               pSdDrawDocShell->GotoTreeBookmark(aStr);
-               bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
-           }
-           //Removed by yanjun for sym2_6385
-           //The symphony2.0 can support morn than one level tree list, also support to select tow or more items in different level.
-           /*
-           SvTreeListEntry* pBeginEntry = First();
-           if( pBeginEntry )
-           {
-               if( GetParent(pBeginEntry) !=  GetParent(pNewEntry) )
-                   pBeginEntry->SetMarked( sal_False );
-               SvTreeListEntry* pNextEntry = Next( pBeginEntry );
-               while( pNextEntry )
-               {
-                   if( GetParent(pNextEntry) !=  GetParent(pNewEntry) )
-                       pNextEntry->SetMarked( sal_False );
-                   pNextEntry =  Next( pNextEntry );
-               }
-           }
-           End*/
-           if(pNewEntry)
-           {
-               if(bMarked)
-               {
-                   pNewEntry->SetMarked(sal_True);
-               }
-               else
-               {
-                   pNewEntry->SetMarked( sal_False );
-               }
-           }
-           Invalidate();
-       }
+        if(bisInSdNavigatorWin)
+        {
+            sal_Bool bMarked=sal_False;
+            SvTreeListEntry* pNewEntry = GetCurEntry();
+            if( GetParent(pNewEntry) == NULL )
+                return;
+            OUString  aStr=GetSelectEntry();
+            Window* pWindow=NULL;
+            SdNavigatorWin* pSdNavigatorWin=NULL;
+            sd::DrawDocShell* pSdDrawDocShell = NULL;
+            if(pNewEntry)
+                pWindow=(Window*)GetParent(pNewEntry);
+            if(pWindow)
+                pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+            if( pSdNavigatorWin )
+                pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+            if(pSdDrawDocShell)
+            {
+                pSdDrawDocShell->GotoTreeBookmark(aStr);
+                bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
+            }
+            if(pNewEntry)
+            {
+                if(bMarked)
+                {
+                    pNewEntry->SetMarked(sal_True);
+                }
+                else
+                {
+                    pNewEntry->SetMarked( sal_False );
+                }
+            }
+            Invalidate();
+        }
     }
     else
         SvTreeListBox::KeyInput( rKEvt );
