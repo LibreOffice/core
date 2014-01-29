@@ -74,26 +74,34 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 }
 
 SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
-    : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0),
-      bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
+    : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0)
+    , bFollow( sal_False ), bLeft( sal_False), bHide( sal_False)
+    , bCenter (sal_False), bHasFollow( sal_False )
+    , bAnimated( sal_False), bNoPaint( sal_False)
+    , bReplace( sal_False), bPlaceHolder( bPlaceHold )
     , m_bNoLength( false )
+    , m_nAttrFldType(0)
 {
     SetWhichPor( POR_FLD );
-    m_nAttrFldType = 0;
 }
 
 SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
-    : SwExpandPortion( rFld ),
-      aExpand( rFld.GetExp() ),
-      nNextOffset( rFld.GetNextOffset() ),
-      nNextScriptChg( rFld.GetNextScriptChg() ),
-      bFollow( rFld.IsFollow() ),
-      bLeft( rFld.IsLeft() ),
-      bHide( rFld.IsHide() ),
-      bCenter( rFld.IsCenter() ),
-      bHasFollow( rFld.HasFollow() ),
-      bPlaceHolder( rFld.bPlaceHolder )
+    : SwExpandPortion( rFld )
+    , aExpand( rFld.GetExp() )
+    , nNextOffset( rFld.GetNextOffset() )
+    , nNextScriptChg( rFld.GetNextScriptChg() )
+    , nViewWidth( rFld.nViewWidth )
+    , bFollow( rFld.IsFollow() )
+    , bLeft( rFld.IsLeft() )
+    , bHide( rFld.IsHide() )
+    , bCenter( rFld.IsCenter() )
+    , bHasFollow( rFld.HasFollow() )
+    , bAnimated ( rFld.bAnimated )
+    , bNoPaint( rFld.bNoPaint)
+    , bReplace( rFld.bReplace )
+    , bPlaceHolder( rFld.bPlaceHolder )
     , m_bNoLength( rFld.m_bNoLength )
+    , m_nAttrFldType( rFld.m_nAttrFldType)
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
