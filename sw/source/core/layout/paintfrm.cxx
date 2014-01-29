@@ -5921,12 +5921,12 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
 enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 
 /// Wrapper around pOut->DrawBitmapEx.
-static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& rBitmapEx, PaintArea eArea)
+static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
 {
     // The problem is that if we get called multiple times and the color is
     // partly transparent, then the result will get darker and darker. To avoid
     // this, always paint the background color before doing the real paint.
-    Rectangle aRect(aPoint, rBitmapEx.GetSizePixel());
+    Rectangle aRect(aPoint, aSize);
 
     switch (eArea)
     {
@@ -5940,7 +5940,9 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     pOut->SetLineColor();
     pOut->DrawRect(pOut->PixelToLogic(aRect));
 
-    pOut->DrawBitmapEx(pOut->PixelToLogic(aPoint), rBitmapEx);
+    pOut->DrawBitmapEx(pOut->PixelToLogic(aPoint), pOut->PixelToLogic(aSize),
+            Point(0, 0), aSize,
+            rBitmapEx);
 }
 
 /** paint page border and shadow
@@ -5957,7 +5959,8 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
                                                  bool bRightSidebar )
 {
     // No shadow in prefs
-    if( !SwViewOption::IsShadow() ) return;
+    if (!SwViewOption::IsShadow())
+        return;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
@@ -5976,20 +5979,19 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     static BitmapEx& aPageTopRightShadow = *aPageTopRightShadowObj.get();
     static BitmapEx& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
     static BitmapEx& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();
-    static BitmapEx& aPageBottomShadowBase = *aPageBottomShadowBaseObj.get();
-    static BitmapEx& aPageRightShadowBase = *aPageRightShadowBaseObj.get();
-    static BitmapEx& aPageTopShadowBase = *aPageTopShadowBaseObj.get();
+    static BitmapEx& aPageBottomShadow = *aPageBottomShadowBaseObj.get();
+    static BitmapEx& aPageRightShadow = *aPageRightShadowBaseObj.get();
+    static BitmapEx& aPageTopShadow = *aPageTopShadowBaseObj.get();
     static BitmapEx& aPageTopLeftShadow = *aPageTopLeftShadowObj.get();
-    static BitmapEx& aPageLeftShadowBase = *aPageLeftShadowBaseObj.get();
+    static BitmapEx& aPageLeftShadow = *aPageLeftShadowBaseObj.get();
     static Color aShadowColor( COL_AUTO );
 
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell );
-    SwRect aPagePxRect =
-        _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
+    SwRect aPagePxRect = _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
-
-    if(aShadowColor != SwViewOption::GetShadowColor() ) {
+    if (aShadowColor != SwViewOption::GetShadowColor())
+    {
         aShadowColor = SwViewOption::GetShadowColor();
 
         AlphaMask aMask( shadowMask.getBottomRight().GetBitmap() );
@@ -6005,12 +6007,12 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         aMask = AlphaMask( shadowMask.getBottom().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aPageBottomShadowBase = BitmapEx( aFilledSquare, aMask );
+        aPageBottomShadow = BitmapEx( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTop().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aPageTopShadowBase = BitmapEx( aFilledSquare, aMask );
+        aPageTopShadow = BitmapEx( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTopRight().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
@@ -6020,7 +6022,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         aMask = AlphaMask( shadowMask.getRight().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aPageRightShadowBase = BitmapEx( aFilledSquare, aMask );
+        aPageRightShadow = BitmapEx( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTopLeft().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
@@ -6030,7 +6032,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         aMask = AlphaMask( shadowMask.getLeft().GetBitmap() );
         aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aPageLeftShadowBase = BitmapEx( aFilledSquare, aMask );
+        aPageLeftShadow = BitmapEx( aFilledSquare, aMask );
     }
 
     SwRect aPaintRect;
@@ -6046,13 +6048,17 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Top() - mnShadowPxWidth ) ),
             aPageTopRightShadow );
 
-        if ( aPagePxRect.Height() > 2 * mnShadowPxWidth)
+        if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
         {
-            BitmapEx aPageRightShadow = aPageRightShadowBase;
-            aPageRightShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-            lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Right() + mnShadowPxWidth,
-                                                 aPagePxRect.Top() + mnShadowPxWidth - 1),
-                                     aPageRightShadow, RIGHT );
+            const long nWidth = aPageRightShadow.GetSizePixel().Width();
+            const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            if (aPageRightShadow.GetSizePixel().Height() < nHeight)
+                aPageRightShadow.Scale(Size(nWidth, nHeight), BMP_SCALE_FAST);
+
+            lcl_paintBitmapExToRect(pOut,
+                    Point(aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1),
+                    Size(nWidth, nHeight),
+                    aPageRightShadow, RIGHT);
         }
     }
 
@@ -6063,23 +6069,39 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft,
             aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
-        if ( aPagePxRect.Height() > 2 * mnShadowPxWidth)
+        if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
         {
-            BitmapEx aPageLeftShadow = aPageLeftShadowBase;
-            aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-            lcl_paintBitmapExToRect( pOut, Point( lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
-                                     aPageLeftShadow, LEFT );
+            const long nWidth = aPageLeftShadow.GetSizePixel().Width();
+            const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            if (aPageLeftShadow.GetSizePixel().Height() < nHeight)
+                aPageLeftShadow.Scale(Size(nWidth, nHeight), BMP_SCALE_FAST);
+
+            lcl_paintBitmapExToRect(pOut,
+                    Point(lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
+                    Size(nWidth, nHeight),
+                    aPageLeftShadow, LEFT);
         }
     }
 
-    BitmapEx aPageBottomShadow = aPageBottomShadowBase;
-    aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
-    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Bottom() + 2 ),
-                             aPageBottomShadow, BOTTOM );
-    BitmapEx aPageTopShadow = aPageTopShadowBase;
-    aPageTopShadow.Scale( aPaintRect.Width(), 1 );
-    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth ),
-                             aPageTopShadow, TOP );
+    // Bottom shadow
+    const long nBottomHeight = aPageBottomShadow.GetSizePixel().Height();
+    if (aPageBottomShadow.GetSizePixel().Width() < aPaintRect.Width())
+        aPageBottomShadow.Scale(Size(aPaintRect.Width(), nBottomHeight), BMP_SCALE_FAST);
+
+    lcl_paintBitmapExToRect(pOut,
+            Point(aPaintRect.Left(), aPagePxRect.Bottom() + 2),
+            Size(aPaintRect.Width(), nBottomHeight),
+            aPageBottomShadow, BOTTOM);
+
+    // Top shadow
+    const long nTopHeight = aPageTopShadow.GetSizePixel().Height();
+    if (aPageTopShadow.GetSizePixel().Width() < aPaintRect.Width())
+        aPageTopShadow.Scale(Size(aPaintRect.Width(), nTopHeight), BMP_SCALE_FAST);
+
+    lcl_paintBitmapExToRect(pOut,
+            Point(aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth),
+            Size(aPaintRect.Width(), nTopHeight),
+            aPageTopShadow, TOP);
 }
 
 //mod #i6193# paint sidebar for notes
