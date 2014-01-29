@@ -50,13 +50,13 @@ private:
     CloseButton*        mpButtonClose;
 
     // Data
-    ScViewData*         mViewData;
-    ScDocument*         mDocument;
+    ScViewData*         mpViewData;
+    ScDocument*         mpDoc;
 
-    ScRange             mInputRange;
-    ScAddress::Details  mAddressDetails;
+    ScRange             maInputRange;
+    ScAddress::Details  maAddressDetails;
 
-    bool                mDialogLostFocus;
+    bool                mbDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();

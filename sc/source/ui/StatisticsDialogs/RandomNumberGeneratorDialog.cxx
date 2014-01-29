@@ -58,10 +58,10 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                     Window* pParent, ScViewData* pViewData ) :
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
                       "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
-    mViewData       ( pViewData ),
-    mDocument       ( pViewData->GetDocument() ),
-    mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
-    mDialogLostFocus( false )
+    mpViewData       ( pViewData ),
+    mpDoc       ( pViewData->GetDocument() ),
+    maAddressDetails ( mpDoc->GetAddressConvention(), 0, 0 ),
+    mbDialogLostFocus( false )
 {
     get(mpInputRangeText,   "cell-range-label");
     get(mpInputRangeEdit,   "cell-range-edit");
@@ -114,8 +114,8 @@ void ScRandomNumberGeneratorDialog::Init()
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
-    mViewData->GetSimpleArea(mInputRange);
-    OUString aCurrentString(mInputRange.Format(SCR_ABS_3D, mDocument, mAddressDetails));
+    mpViewData->GetSimpleArea(maInputRange);
+    OUString aCurrentString(maInputRange.Format(SCR_ABS_3D, mpDoc, maAddressDetails));
     mpInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -124,9 +124,9 @@ ScRandomNumberGeneratorDialog::~ScRandomNumberGeneratorDialog()
 
 void ScRandomNumberGeneratorDialog::SetActive()
 {
-    if ( mDialogLostFocus )
+    if ( mbDialogLostFocus )
     {
-        mDialogLostFocus = false;
+        mbDialogLostFocus = false;
         if( mpInputRangeEdit )
             mpInputRangeEdit->GrabFocus();
     }
@@ -149,9 +149,9 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
         if ( rReferenceRange.aStart != rReferenceRange.aEnd )
             RefInputStart( mpInputRangeEdit );
 
-        mInputRange = rReferenceRange;
+        maInputRange = rReferenceRange;
 
-        OUString aReferenceString(mInputRange.Format(SCR_ABS_3D, pDocument, mAddressDetails));
+        OUString aReferenceString(maInputRange.Format(SCR_ABS_3D, pDocument, maAddressDetails));
         mpInputRangeEdit->SetRefString( aReferenceString );
     }
 }
@@ -256,16 +256,16 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
     OUString aUndo = SC_STRLOAD( RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
-    ScDocShell* pDocShell = mViewData->GetDocShell();
+    ScDocShell* pDocShell = mpViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    SCROW nRowStart = mInputRange.aStart.Row();
-    SCROW nRowEnd   = mInputRange.aEnd.Row();
-    SCCOL nColStart = mInputRange.aStart.Col();
-    SCCOL nColEnd   = mInputRange.aEnd.Col();
-    SCTAB nTabStart = mInputRange.aStart.Tab();
-    SCTAB nTabEnd   = mInputRange.aEnd.Tab();
+    SCROW nRowStart = maInputRange.aStart.Row();
+    SCROW nRowEnd   = maInputRange.aEnd.Row();
+    SCCOL nColStart = maInputRange.aStart.Col();
+    SCCOL nColEnd   = maInputRange.aEnd.Col();
+    SCTAB nTabStart = maInputRange.aStart.Tab();
+    SCTAB nTabEnd   = maInputRange.aEnd.Tab();
 
     for (SCROW nTab = nTabStart; nTab <= nTabEnd; nTab++)
     {
@@ -280,7 +280,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
 
     pUndoManager->LeaveListAction();
 
-    pDocShell->PostPaint( mInputRange, PAINT_GRID );
+    pDocShell->PostPaint( maInputRange, PAINT_GRID );
 }
 
 IMPL_LINK( ScRandomNumberGeneratorDialog, OkClicked, PushButton*, /*pButton*/ )
@@ -318,7 +318,7 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseFocusHandler)
 {
-    mDialogLostFocus = !IsActive();
+    mbDialogLostFocus = !IsActive();
     return 0;
 }
 
