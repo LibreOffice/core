@@ -87,7 +87,6 @@
       <text:user-field-decl text:value-type="string" text:string-value="y" text:name="HTML"/>
       <text:user-field-decl text:value-type="string" text:string-value="y" text:name="Math"/>
       <text:user-field-decl text:value-type="string" text:string-value="y" text:name="Chart"/>
-      <text:user-field-decl text:value-type="string" text:string-value="y" text:name="SaveOpenXML"/>
       <text:user-field-decl text:value-type="string" text:string-value="y" text:name="Macros"/>
       <text:user-field-decl text:value-type="string" text:string-value="n" text:name="Terminate"/>
       <text:user-field-decl text:value-type="string" text:string-value="y" text:name="Java"/>
