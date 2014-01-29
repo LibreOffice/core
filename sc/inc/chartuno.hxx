@@ -67,7 +67,8 @@ public:
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::table::CellRangeAddress >& aRanges,
                                     sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
-                                        throw(::com::sun::star::uno::RuntimeException);
+                                        throw(::com::sun::star::uno::RuntimeException,
+                                              std::exception);
     virtual void SAL_CALL   removeByName( const OUString& aName )
                                         throw(::com::sun::star::uno::RuntimeException);
 
