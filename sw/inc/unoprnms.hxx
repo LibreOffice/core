@@ -211,6 +211,7 @@
 #define UNO_NAME_RELATIVE_WIDTH "RelativeWidth"
 #define UNO_NAME_RELATIVE_WIDTH_RELATION "RelativeWidthRelation"
 #define UNO_NAME_RELATIVE_HEIGHT "RelativeHeight"
+#define UNO_NAME_RELATIVE_HEIGHT_RELATION "RelativeHeightRelation"
 #define UNO_NAME_REPEAT_HEADLINE "RepeatHeadline"
 #define UNO_NAME_SEARCH_STYLES "SearchStyles"
 #define UNO_NAME_SEARCH_BACKWARDS "SearchBackwards"
