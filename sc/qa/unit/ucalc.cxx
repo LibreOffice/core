@@ -3945,8 +3945,9 @@ void Test::testSearchCells()
     SCTAB nTab = 0;
     ScRangeList aMatchedRanges;
     OUString aUndoStr;
-    m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr);
+    bool bSuccess = m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr);
 
+    CPPUNIT_ASSERT_MESSAGE("Search And Replace should succeed", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("There should be exactly 3 matching cells.", aMatchedRanges.size() == 3);
     ScAddress aHit(0,0,0);
     CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.In(aHit));
