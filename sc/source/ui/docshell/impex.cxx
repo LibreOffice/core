@@ -88,7 +88,7 @@ ScImportExport::ScImportExport( ScDocument* p )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mExportTextOptions()
+      mbApi( true ), mbImportBroadcast(false), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -104,7 +104,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mExportTextOptions()
+      mbApi( true ), mbImportBroadcast(false), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -121,7 +121,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != NULL ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mExportTextOptions()
+      mbApi( true ), mbImportBroadcast(false), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -139,7 +139,7 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mExportTextOptions()
+      mbApi( true ), mbImportBroadcast(false), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -946,6 +946,12 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     }
 
     EndPaste();
+    if (bOk && mbImportBroadcast)
+    {
+        pDoc->BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        pDocSh->PostDataChanged();
+    }
+
     return bOk;
 }
 
@@ -1483,6 +1489,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     if (bRangeIsDetermined)
         EndPaste(false);
 
+    if (mbImportBroadcast)
+    {
+        pDoc->BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        pDocSh->PostDataChanged();
+    }
     return true;
 }
 
