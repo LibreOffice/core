@@ -69,6 +69,7 @@ public:
     VclBox(Window *pParent, bool bHomogeneous, int nSpacing)
         : VclContainer(pParent)
         , m_bHomogeneous(bHomogeneous)
+        , m_bVerticalContainer(false)
         , m_nSpacing(nSpacing)
     {
     }
