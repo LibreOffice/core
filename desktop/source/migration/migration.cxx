@@ -53,7 +53,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
@@ -1350,7 +1350,7 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     const OUString sMenubarResourceURL("private:resource/menubar/menubar");
     const OUString sToolbarResourcePre("private:resource/toolbar/");
 
-    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::ModuleUIConfigurationManagerSupplier::create( ::comphelper::getProcessComponentContext() );
+    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::theModuleUIConfigurationManagerSupplier::get( ::comphelper::getProcessComponentContext() );
 
     for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
     {

@@ -418,13 +418,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
 	ModuleAcceleratorConfiguration \
 	ModuleUIConfigurationManager \
-    ModuleUIConfigurationManagerSupplier \
 	UICategoryDescription \
 	UIConfigurationManager \
     UIElementFactoryManager \
 	WindowContentFactory \
     WindowContentFactoryManager \
 	WindowStateConfiguration \
+    theModuleUIConfigurationManagerSupplier \
 	theUICategoryDescription \
     theUIElementFactoryManager \
     theWindowContentFactoryManager \

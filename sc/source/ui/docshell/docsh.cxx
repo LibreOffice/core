@@ -48,7 +48,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -2970,7 +2970,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
         return;
 
     Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
-        ModuleUIConfigurationManagerSupplier::create(xContext) );
+        theModuleUIConfigurationManagerSupplier::get(xContext) );
 
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =

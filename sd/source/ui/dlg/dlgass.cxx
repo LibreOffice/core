@@ -47,7 +47,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
@@ -1789,7 +1789,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
                 break;
 
             Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier (
-                ui::ModuleUIConfigurationManagerSupplier::create(xContext));
+                ui::theModuleUIConfigurationManagerSupplier::get(xContext));
 
             Reference<com::sun::star::ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(

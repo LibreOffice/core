@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -52,7 +52,7 @@ namespace dbaui
         using ::com::sun::star::container::XNameAccess;
         using ::com::sun::star::lang::XMultiServiceFactory;
         using ::com::sun::star::beans::PropertyValue;
-        using ::com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
+        using ::com::sun::star::ui::theModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XUIConfigurationManager;
         using ::com::sun::star::ui::XImageManager;
@@ -126,7 +126,7 @@ namespace dbaui
                         break;
 
                     Reference< XModuleUIConfigurationManagerSupplier > xSupplier(
-                        ModuleUIConfigurationManagerSupplier::create(xContext) );
+                        theModuleUIConfigurationManagerSupplier::get(xContext) );
 
                     Reference< XUIConfigurationManager > xManager( xSupplier->getUIConfigurationManager( _rModuleName ) );
                     Reference< XImageManager > xImageManager;

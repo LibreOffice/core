@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -202,7 +202,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
             if ( !xModuleAccelCfg.is() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( m_xContext );
+                    theModuleUIConfigurationManagerSupplier::get( m_xContext );
                 Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
                 if ( xUICfgMgr.is() )
                 {

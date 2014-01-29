@@ -28,8 +28,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
 #include <vcl/menu.hxx>
@@ -150,7 +149,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
             if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( _rxContext );
+                    theModuleUIConfigurationManagerSupplier::get( _rxContext );
                 xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
                 bHasSettings = xCfgMgr->hasSettings( aResourceURL );
             }

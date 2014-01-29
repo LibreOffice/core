@@ -23,7 +23,7 @@
 #include "dbu_app.hrc"
 #include "AppView.hxx"
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -463,7 +463,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     try
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-            ModuleUIConfigurationManagerSupplier::create( getDetailView()->getBorderWin().getView()->getORB() );
+            theModuleUIConfigurationManagerSupplier::get( getDetailView()->getBorderWin().getView()->getORB() );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
             OUString( "com.sun.star.sdb.OfficeDatabaseDocument" )
         );

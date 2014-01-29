@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 
 using namespace css;
 using namespace cssu;
@@ -198,7 +198,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
     {
         try
         {
-            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::ModuleUIConfigurationManagerSupplier::create(mxContext);
+            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(mxContext);
             Reference<ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(GetModuleIdentifier()));
             if (xManager.is())

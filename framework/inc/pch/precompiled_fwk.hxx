@@ -204,7 +204,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManager.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>

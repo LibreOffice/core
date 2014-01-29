@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -417,7 +417,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
             aModuleId = xModuleManager->identify( xFrame );
 
             uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-                ui::ModuleUIConfigurationManagerSupplier::create(
+                ui::theModuleUIConfigurationManagerSupplier::get(
                     ::comphelper::getProcessComponentContext() ) );
             uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
                 xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));

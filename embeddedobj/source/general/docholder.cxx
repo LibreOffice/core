@@ -56,7 +56,7 @@
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -552,7 +552,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         if ( !aModuleIdent.isEmpty() )
         {
             uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier =
-                    ui::ModuleUIConfigurationManagerSupplier::create(m_xContext);
+                    ui::theModuleUIConfigurationManagerSupplier::get(m_xContext);
             uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );

@@ -23,7 +23,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/menu.hxx>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/svapp.hxx>
@@ -188,7 +188,7 @@ namespace dbaui
 
             try
             {
-                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier = ModuleUIConfigurationManagerSupplier::create( getContext() );
+                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier = theModuleUIConfigurationManagerSupplier::get( getContext() );
                 Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( OUString("com.sun.star.sdb.OfficeDatabaseDocument") );
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 

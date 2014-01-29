@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
@@ -267,7 +267,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier;
                 if ( xContext.is() )
-                    xModuleCfgSupplier = ModuleUIConfigurationManagerSupplier::create( xContext );
+                    xModuleCfgSupplier = theModuleUIConfigurationManagerSupplier::get( xContext );
 
                 if ( xModuleCfgMgr.is() )
                 {

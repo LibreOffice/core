@@ -76,7 +76,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ImageManager.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -1641,7 +1641,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
-            xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(xContext) );
+            xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
 
         // Set up data for module specific menus
         SaveInData* pModuleData = NULL;
