@@ -468,10 +468,8 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
             case 3:
                 aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM3 );
                 break;
-            case 4:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM4 );
-                break;
             default:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM4 );
                 break;
         }
         m_pDefaultVS->InsertItem( i + 1, aItemText, i );
