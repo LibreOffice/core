@@ -518,9 +518,9 @@ void ImpEditEngine::CheckAutoPageSize()
 {
     Size aPrevPaperSize( GetPaperSize() );
     if ( GetStatus().AutoPageWidth() )
-        aPaperSize.Width() = (long) !IsVertical() ? CalcTextWidth( sal_True ) : GetTextHeight();
+        aPaperSize.Width() = !IsVertical() ? CalcTextWidth( sal_True ) : GetTextHeight();
     if ( GetStatus().AutoPageHeight() )
-        aPaperSize.Height() = (long) !IsVertical() ? GetTextHeight() : CalcTextWidth( sal_True );
+        aPaperSize.Height() = !IsVertical() ? GetTextHeight() : CalcTextWidth( sal_True );
 
     SetValidPaperSize( aPaperSize );    // consider Min, Max
 
