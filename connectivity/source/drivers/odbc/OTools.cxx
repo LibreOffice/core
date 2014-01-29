@@ -654,7 +654,7 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
             nValue = DataType::LONGVARBINARY;
             break;
         default:
-            OSL_ASSERT(!"Invalid type");
+            OSL_FAIL("Invalid type");
     }
     return nValue;
 }

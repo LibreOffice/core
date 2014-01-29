@@ -84,14 +84,14 @@ namespace connectivity
                         for(i=0;i < nCount;++i,--pLHBack,--pRHBack)
                         {
                             if(!(*pLHBack) && *pRHBack)
-                                return sal_True;
+                                return true;
                             else if(*pLHBack && !(*pRHBack))
-                                return sal_False;
+                                return false;
                         }
                         for(i=0,++pLHBack,++pRHBack;i < nCount;++pLHBack,++pRHBack,++i)
                             if(*pLHBack < *pRHBack)
-                                return sal_True;
-                        return sal_False;
+                                return true;
+                        return false;
                     }
                     else
                         return *reinterpret_cast<const sal_Int32*>(_rLH.getConstArray()) < *reinterpret_cast<const sal_Int32*>(_rRH.getConstArray());
