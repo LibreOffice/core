@@ -51,39 +51,39 @@ namespace dbaui
     struct BooleanSettingDesc
     {
         CheckBox**  ppControl;          // the dialog's control which displays this setting
-        sal_uInt16      nControlResId;      // the resource ID to load the control from
-        sal_uInt16      nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
+        OString     sControlId;         // the widget name of the control in the .ui
+        sal_uInt16  nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
         bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
     };
 
     // SpecialSettingsPage
     SpecialSettingsPage::SpecialSettingsPage( Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
-        :OGenericAdministrationPage( pParent, ModuleRes( PAGE_ADVANCED_SETTINGS_SPECIAL ), _rCoreAttrs )
-        ,m_aTopLine( this, ModuleRes( FL_DATAHANDLING ) )
-        ,m_pIsSQL92Check( NULL )
-        ,m_pAppendTableAlias( NULL )
-        ,m_pAsBeforeCorrelationName( NULL )
-        ,m_pEnableOuterJoin( NULL )
-        ,m_pIgnoreDriverPrivileges( NULL )
-        ,m_pParameterSubstitution( NULL )
-        ,m_pSuppressVersionColumn( NULL )
-        ,m_pCatalog( NULL )
-        ,m_pSchema( NULL )
-        ,m_pIndexAppendix( NULL )
-        ,m_pDosLineEnds( NULL )
-        ,m_pCheckRequiredFields( NULL )
-        ,m_pIgnoreCurrency(NULL)
-        ,m_pEscapeDateTime(NULL)
-        ,m_pPrimaryKeySupport(NULL)
-        ,m_pRespectDriverResultSetType(NULL)
-        ,m_pBooleanComparisonModeLabel( NULL )
-        ,m_pBooleanComparisonMode( NULL )
-        ,m_pMaxRowScanLabel( NULL )
-        ,m_pMaxRowScan( NULL )
-        ,m_aControlDependencies()
-        ,m_aBooleanSettings()
-        ,m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
-        ,m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
+        : OGenericAdministrationPage(pParent, "SpecialSettingsPage",
+            "dbaccess/ui/specialsettingspage.ui", _rCoreAttrs)
+        , m_pIsSQL92Check( NULL )
+        , m_pAppendTableAlias( NULL )
+        , m_pAsBeforeCorrelationName( NULL )
+        , m_pEnableOuterJoin( NULL )
+        , m_pIgnoreDriverPrivileges( NULL )
+        , m_pParameterSubstitution( NULL )
+        , m_pSuppressVersionColumn( NULL )
+        , m_pCatalog( NULL )
+        , m_pSchema( NULL )
+        , m_pIndexAppendix( NULL )
+        , m_pDosLineEnds( NULL )
+        , m_pCheckRequiredFields( NULL )
+        , m_pIgnoreCurrency(NULL)
+        , m_pEscapeDateTime(NULL)
+        , m_pPrimaryKeySupport(NULL)
+        , m_pRespectDriverResultSetType(NULL)
+        , m_pBooleanComparisonModeLabel( NULL )
+        , m_pBooleanComparisonMode( NULL )
+        , m_pMaxRowScanLabel( NULL )
+        , m_pMaxRowScan( NULL )
+        , m_aControlDependencies()
+        , m_aBooleanSettings()
+        , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
+        , m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
     {
         impl_initBooleanSettings();
 
@@ -97,8 +97,7 @@ namespace dbaui
             sal_uInt16 nItemId = setting->nItemId;
             if ( rFeatures.has( nItemId ) )
             {
-                sal_uInt16 nResourceId = setting->nControlResId;
-                (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
+                get((*setting->ppControl), setting->sControlId);
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
 
                 // check whether this must be a tristate check box
@@ -112,85 +111,33 @@ namespace dbaui
             // make m_pAsBeforeCorrelationName depend on m_pAppendTableAlias
             m_aControlDependencies.enableOnCheckMark( *m_pAppendTableAlias, *m_pAsBeforeCorrelationName );
 
-        // move the controls to the appropriate positions
-        Point aPos( m_aTopLine.GetPosPixel() );
-        aPos.Move( 0, m_aTopLine.GetSizePixel().Height() );
-        Size aFirstDistance( LogicToPixel( Size( INDENTED_X, RELATED_CONTROLS ), MAP_APPFONT ) );
-        aPos.Move( aFirstDistance.Width(), aFirstDistance.Height() );
-
         Size aUnrelatedControls( LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT ) );
-
-        for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
-                setting != m_aBooleanSettings.end();
-                ++setting
-             )
-        {
-            if ( !*setting->ppControl )
-                continue;
-
-            (*setting->ppControl)->SetPosPixel( aPos );
-            aPos.Move( 0, (*setting->ppControl)->GetSizePixel().Height() );
-            aPos.Move( 0, aUnrelatedControls.Height() );
-        }
 
         // create the controls for the boolean comparison mode
         if ( m_bHasBooleanComparisonMode )
         {
-            m_pBooleanComparisonModeLabel = new FixedText( this, ModuleRes( FT_BOOLEANCOMPARISON ) );
-            m_pBooleanComparisonMode = new ListBox( this, ModuleRes( LB_BOOLEANCOMPARISON ) );
+            get(m_pBooleanComparisonModeLabel, "comparisonft");
+            get(m_pBooleanComparisonMode, "comparison");
             m_pBooleanComparisonMode->SetDropDownLineCount( 4 );
             m_pBooleanComparisonMode->SetSelectHdl( getControlModifiedLink() );
-
-            Point aLabelPos( m_pBooleanComparisonModeLabel->GetPosPixel() );
-            Point aControlPos( m_pBooleanComparisonMode->GetPosPixel() );
-            long nMoveUp = aControlPos.Y() - aPos.Y();
-
-            m_pBooleanComparisonModeLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
-            m_pBooleanComparisonMode->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
+            m_pBooleanComparisonModeLabel->Show();
+            m_pBooleanComparisonMode->Show();
         }
         // create the controls for the max row scan
         if ( m_bHasMaxRowScan )
         {
-            m_pMaxRowScanLabel = new FixedText( this, ModuleRes( FT_MAXROWSCAN ) );
-            m_pMaxRowScan = new NumericField( this, ModuleRes( NF_MAXROWSCAN ) );
+            get(m_pMaxRowScanLabel, "rowsft");
+            get(m_pMaxRowScan, "rows");
             m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
             m_pMaxRowScan->SetUseThousandSep(sal_False);
-
-            Point aLabelPos( m_pMaxRowScanLabel->GetPosPixel() );
-            Point aControlPos( m_pMaxRowScan->GetPosPixel() );
-            long nMoveUp = aControlPos.Y() - aPos.Y();
-
-            m_pMaxRowScanLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
-            m_pMaxRowScan->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
+            m_pMaxRowScanLabel->Show();
+            m_pMaxRowScan->Show();
         }
-
-        FreeResource();
     }
 
     SpecialSettingsPage::~SpecialSettingsPage()
     {
         m_aControlDependencies.clear();
-
-        DELETEZ( m_pIsSQL92Check );
-        DELETEZ( m_pAppendTableAlias );
-        DELETEZ( m_pAsBeforeCorrelationName );
-        DELETEZ( m_pParameterSubstitution );
-        DELETEZ( m_pIgnoreDriverPrivileges );
-        DELETEZ( m_pSuppressVersionColumn );
-        DELETEZ( m_pEnableOuterJoin );
-        DELETEZ( m_pCatalog );
-        DELETEZ( m_pSchema );
-        DELETEZ( m_pIndexAppendix );
-        DELETEZ( m_pDosLineEnds );
-        DELETEZ( m_pCheckRequiredFields );
-        DELETEZ( m_pIgnoreCurrency );
-        DELETEZ( m_pEscapeDateTime );
-        DELETEZ( m_pPrimaryKeySupport );
-        DELETEZ( m_pRespectDriverResultSetType );
-        DELETEZ( m_pBooleanComparisonModeLabel );
-        DELETEZ( m_pBooleanComparisonMode );
-        DELETEZ( m_pMaxRowScanLabel );
-        DELETEZ( m_pMaxRowScan );
     }
 
     void SpecialSettingsPage::impl_initBooleanSettings()
@@ -199,23 +146,23 @@ namespace dbaui
 
         // for easier maintainance, write the table in this form, then copy it to m_aBooleanSettings
         BooleanSettingDesc aSettings[] = {
-            { &m_pIsSQL92Check,                 CB_SQL92CHECK,          DSID_SQL92CHECK,            false },
-            { &m_pAppendTableAlias,             CB_APPENDTABLEALIAS,    DSID_APPEND_TABLE_ALIAS,    false },
-            { &m_pAsBeforeCorrelationName,      CB_AS_BEFORE_CORR_NAME, DSID_AS_BEFORE_CORRNAME,    false },
-            { &m_pEnableOuterJoin,              CB_ENABLEOUTERJOIN,     DSID_ENABLEOUTERJOIN,       false },
-            { &m_pIgnoreDriverPrivileges,       CB_IGNOREDRIVER_PRIV,   DSID_IGNOREDRIVER_PRIV,     false },
-            { &m_pParameterSubstitution,        CB_PARAMETERNAMESUBST,  DSID_PARAMETERNAMESUBST,    false },
-            { &m_pSuppressVersionColumn,        CB_SUPPRESVERSIONCL,    DSID_SUPPRESSVERSIONCL,     true },
-            { &m_pCatalog,                      CB_CATALOG,             DSID_CATALOG,               false },
-            { &m_pSchema,                       CB_SCHEMA,              DSID_SCHEMA,                false },
-            { &m_pIndexAppendix,                CB_IGNOREINDEXAPPENDIX, DSID_INDEXAPPENDIX,         false },
-            { &m_pDosLineEnds,                  CB_DOSLINEENDS,         DSID_DOSLINEENDS,           false },
-            { &m_pCheckRequiredFields,          CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
-            { &m_pIgnoreCurrency,               CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
-            { &m_pEscapeDateTime,               CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
-            { &m_pPrimaryKeySupport,            CB_PRIMARY_KEY_SUPPORT, DSID_PRIMARY_KEY_SUPPORT,   false },
-            { &m_pRespectDriverResultSetType,   CB_RESPECTRESULTSETTYPE,DSID_RESPECTRESULTSETTYPE,  false },
-            { NULL,                         0,                      0,                          false }
+            { &m_pIsSQL92Check,                 "usesql92",        DSID_SQL92CHECK,            false },
+            { &m_pAppendTableAlias,             "append",          DSID_APPEND_TABLE_ALIAS,    false },
+            { &m_pAsBeforeCorrelationName,      "useas",           DSID_AS_BEFORE_CORRNAME,    false },
+            { &m_pEnableOuterJoin,              "useoj",           DSID_ENABLEOUTERJOIN,       false },
+            { &m_pIgnoreDriverPrivileges,       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
+            { &m_pParameterSubstitution,        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
+            { &m_pSuppressVersionColumn,        "displayver",      DSID_SUPPRESSVERSIONCL,     true },
+            { &m_pCatalog,                      "usecatalogname",  DSID_CATALOG,               false },
+            { &m_pSchema,                       "useschemaname",   DSID_SCHEMA,                false },
+            { &m_pIndexAppendix,                "createindex",     DSID_INDEXAPPENDIX,         false },
+            { &m_pDosLineEnds,                  "eol",             DSID_DOSLINEENDS,           false },
+            { &m_pIgnoreCurrency,               "inputchecks",     DSID_IGNORECURRENCY,        false },
+            { &m_pCheckRequiredFields,          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
+            { &m_pEscapeDateTime,               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
+            { &m_pPrimaryKeySupport,            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
+            { &m_pRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false },
+            { NULL,                             "",                0,                          false }
         };
 
         for ( const BooleanSettingDesc* pCopy = aSettings; pCopy->nItemId != 0; ++pCopy )

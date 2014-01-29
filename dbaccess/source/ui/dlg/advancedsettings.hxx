@@ -42,7 +42,6 @@ namespace dbaui
     class SpecialSettingsPage : public OGenericAdministrationPage
     {
     protected:
-        FixedLine           m_aTopLine;
         CheckBox*           m_pIsSQL92Check;
         CheckBox*           m_pAppendTableAlias;
         CheckBox*           m_pAsBeforeCorrelationName;

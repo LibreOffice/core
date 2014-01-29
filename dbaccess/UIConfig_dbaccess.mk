@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/generalpagewizard \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/rowheightdialog \
+    dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
