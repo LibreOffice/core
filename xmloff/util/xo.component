@@ -149,7 +149,8 @@
   <implementation name="XMLMetaImportComponent">
     <service name="com.sun.star.document.XMLOasisMetaImporter"/>
   </implementation>
-  <implementation name="XMLVersionListPersistence">
+  <implementation name="XMLVersionListPersistence"
+      constructor="XMLVersionListPersistence_get_implementation">
     <service name="com.sun.star.document.DocumentRevisionListPersistence"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsExporter">

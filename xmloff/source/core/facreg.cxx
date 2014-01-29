@@ -114,9 +114,6 @@ SERVICE( SchXMLExport );
 SERVICE( SchXMLExport_Styles );
 SERVICE( SchXMLExport_Content );
 
-// version list import/export
-SERVICE( XMLVersionListPersistence );
-
 // meta export
 SERVICE( XMLMetaExportComponent );
 
@@ -240,8 +237,6 @@ XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImpl
         // meta import/export
         else SINGLEFACTORY( XMLMetaExportComponent )
         else SINGLEFACTORY( XMLMetaImportComponent )
-
-        else SINGLEFACTORY( XMLVersionListPersistence )
 
         // meta import/export OOo
         else SINGLEFACTORY( XMLMetaExportOOO )

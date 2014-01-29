@@ -427,27 +427,6 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     return aVersions;
 }
 
-uno::Sequence< OUString > SAL_CALL XMLVersionListPersistence_getSupportedServiceNames()
-    throw()
-{
-    const OUString aServiceName(
-        "com.sun.star.document.DocumentRevisionListPersistence"  );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL XMLVersionListPersistence_getImplementationName() throw()
-{
-    return OUString( "XMLVersionListPersistence"  );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL XMLVersionListPersistence_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > &)
-    throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new XMLVersionListPersistence;
-}
-
 uno::Sequence< OUString > SAL_CALL XMLVersionImExportOOO_getSupportedServiceNames()
     throw()
 {
@@ -467,6 +446,14 @@ uno::Reference< uno::XInterface > SAL_CALL XMLVersionImExportOOO_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new XMLVersionListPersistence;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+XMLVersionListPersistence_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLVersionListPersistence());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
