@@ -101,6 +101,8 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
                 pShapeFactory->setShapeFactory(xFactory);
             }
         }
+#elif defined(IOS) || defined(ANDROID) // Library_chartopengl is not portable enough yet
+        pShapeFactory = NULL;
 #else
         pShapeFactory = getOpenglShapeFactory();
         pShapeFactory->setShapeFactory(xFactory);
