@@ -608,7 +608,8 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
         nDstLinestep = -nDstLinestep;
     }
 
-    for( int y = rSrcBuffer.mnHeight; --y >= 0; )
+    assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight); // not sure about that?
+    for (int y = rDstBuffer.mnHeight; --y >= 0;)
     {
         ImplBlendLines<8>( aDstLine, rSrcLine, aMskLine, rDstBuffer.mnWidth );
         aDstLine.AddByteOffset( nDstLinestep );
