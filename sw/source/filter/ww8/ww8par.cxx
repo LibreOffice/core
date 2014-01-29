@@ -937,8 +937,12 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 pObj->SetMergedItemSet(aSet);
                 pObj->SetModel(pSdrModel);
 
-                if (bVerticalText && dynamic_cast< SdrTextObj* >( pObj ) )
-                    dynamic_cast< SdrTextObj* >( pObj )->SetVerticalWriting(sal_True);
+                if (bVerticalText)
+                {
+                    SdrTextObj *pTextObj = dynamic_cast< SdrTextObj* >(pObj);
+                    if (pTextObj)
+                        pTextObj->SetVerticalWriting(true);
+                }
 
                 if ( bIsSimpleDrawingTextBox )
                 {
