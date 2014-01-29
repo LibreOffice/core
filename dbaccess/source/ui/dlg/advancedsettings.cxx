@@ -494,7 +494,6 @@ namespace dbaui
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-        AdjustLayout();
         Window *pWin = GetViewWindow();
         if(pWin)
             pWin->Invalidate();

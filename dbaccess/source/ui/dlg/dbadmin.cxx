@@ -86,7 +86,6 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
     static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-    AdjustLayout();
     Window *pWin = GetViewWindow();
     if(pWin)
         pWin->Invalidate();
