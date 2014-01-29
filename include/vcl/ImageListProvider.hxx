@@ -39,7 +39,7 @@ namespace vcl
     /* abstract */ class IImageListProvider
     {
     public:
-        virtual ImageList getImageList(ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException )) = 0;
+        virtual ImageList getImageList(ImageListType) SAL_THROW (( css::lang::IllegalArgumentException )) = 0;
 
     protected:
         ~IImageListProvider() {}

@@ -286,7 +286,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
                         )
 {
     sal_Bool bSynchronous = sal_False;
-    beans::PropertyValue* pVal = i_pController->getValue( OUString( "Wait" ) );
+    PropertyValue* pVal = i_pController->getValue( OUString( "Wait" ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
 
@@ -345,12 +345,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
-    beans::PropertyValue* pContentVal = i_pController->getValue( OUString( "PrintRange" ) );
+    PropertyValue* pContentVal = i_pController->getValue( OUString( "PrintRange" ) );
     if( ! pContentVal )
         pContentVal = i_pController->getValue( OUString( "PrintContent" ) );
 
     // case 1: UNO API has set "Pages"
-    beans::PropertyValue* pPagesVal = i_pController->getValue( OUString( "Pages" ) );
+    PropertyValue* pPagesVal = i_pController->getValue( OUString( "Pages" ) );
     if( pPagesVal )
     {
         OUString aPagesVal;
@@ -376,7 +376,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( nContent == 0 )
             {
                 // do not overwrite PageRange if it is already set
-                beans::PropertyValue* pRangeVal = i_pController->getValue( OUString( "PageRange" ) );
+                PropertyValue* pRangeVal = i_pController->getValue( OUString( "PageRange" ) );
                 OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
@@ -399,7 +399,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         }
     }
 
-    beans::PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
+    PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
     if( pReverseVal )
     {
         sal_Bool bReverse = sal_False;
@@ -407,7 +407,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setReversePrint( bReverse );
     }
 
-    beans::PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
+    PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
     if( pPapersizeFromSetupVal )
     {
         sal_Bool bPapersizeFromSetup = sal_False;
@@ -444,7 +444,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         aMPS.bDrawBorder = i_pController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
         aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
         aMPS.aPaperSize = i_pController->getPrinter()->PixelToLogic( i_pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        beans::PropertyValue* pPgSizeVal = i_pController->getValue( OUString( "NUpPaperSize" ) );
+        PropertyValue* pPgSizeVal = i_pController->getValue( OUString( "NUpPaperSize" ) );
         awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
@@ -508,7 +508,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     pController->pushPropertiesToPrinter();
 
     OUString aJobName;
-    beans::PropertyValue* pJobNameVal = pController->getValue( OUString( "JobName" ) );
+    PropertyValue* pJobNameVal = pController->getValue( OUString( "JobName" ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
@@ -561,13 +561,13 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
         return false;
 
     sal_Bool bSinglePrintJobs = sal_False;
-    beans::PropertyValue* pSingleValue = i_pController->getValue( OUString( "PrintCollateAsSingleJobs" ) );
+    PropertyValue* pSingleValue = i_pController->getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;
     }
 
-    beans::PropertyValue* pFileValue = i_pController->getValue( OUString( "LocalFileName" ) );
+    PropertyValue* pFileValue = i_pController->getValue( OUString( "LocalFileName" ) );
     if( pFileValue )
     {
         OUString aFile;
@@ -936,13 +936,13 @@ int PrinterController::getPageCountProtected() const
     return nPages;
 }
 
-Sequence< beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
+Sequence< PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
 {
     const MapMode aMapMode( MAP_100TH_MM );
 
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( aMapMode );
-    Sequence< beans::PropertyValue > aResult( getPageParameters( i_nPage ) );
+    Sequence< PropertyValue > aResult( getPageParameters( i_nPage ) );
     mpImplData->mpPrinter->Pop();
     return aResult;
 }
@@ -1402,19 +1402,19 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     return aResult;
 }
 
-const Sequence< beans::PropertyValue >& PrinterController::getUIOptions() const
+const Sequence< PropertyValue >& PrinterController::getUIOptions() const
 {
     return mpImplData->maUIOptions;
 }
 
-beans::PropertyValue* PrinterController::getValue( const OUString& i_rProperty )
+PropertyValue* PrinterController::getValue( const OUString& i_rProperty )
 {
     boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
-const beans::PropertyValue* PrinterController::getValue( const OUString& i_rProperty ) const
+const PropertyValue* PrinterController::getValue( const OUString& i_rProperty ) const
 {
     boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
@@ -1423,14 +1423,14 @@ const beans::PropertyValue* PrinterController::getValue( const OUString& i_rProp
 
 void PrinterController::setValue( const OUString& i_rName, const Any& i_rValue )
 {
-    beans::PropertyValue aVal;
+    PropertyValue aVal;
     aVal.Name = i_rName;
     aVal.Value = i_rValue;
 
     setValue( aVal );
 }
 
-void PrinterController::setValue( const beans::PropertyValue& i_rValue )
+void PrinterController::setValue( const PropertyValue& i_rValue )
 {
     boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rValue.Name );
@@ -1445,7 +1445,7 @@ void PrinterController::setValue( const beans::PropertyValue& i_rValue )
     }
 }
 
-void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
+void PrinterController::setUIOptions( const Sequence< PropertyValue >& i_rOptions )
 {
     DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
 
@@ -1453,7 +1453,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
 
     for( int i = 0; i < i_rOptions.getLength(); i++ )
     {
-        Sequence< beans::PropertyValue > aOptProp;
+        Sequence< PropertyValue > aOptProp;
         i_rOptions[i].Value >>= aOptProp;
         bool bIsEnabled = true;
         bool bHaveProperty = false;
@@ -1462,7 +1462,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
         Sequence< sal_Bool > aChoicesDisabled;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
-            const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            const PropertyValue& rEntry( aOptProp[ n ] );
             if ( rEntry.Name == "Property" )
             {
                 PropertyValue aVal;
@@ -1532,7 +1532,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
                 if( bEnabled )
                 {
                     // does the dependency have the correct value ?
-                    const com::sun::star::beans::PropertyValue* pVal = getValue( it->second.maDependsOnName );
+                    const PropertyValue* pVal = getValue( it->second.maDependsOnName );
                     OSL_ENSURE( pVal, "unknown property in dependency" );
                     if( pVal )
                     {
@@ -1600,7 +1600,7 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
         if( isUIOptionEnabled( it->second.maDependsOnName ) )
         {
            aDependency = it->second.maDependsOnName;
-           const com::sun::star::beans::PropertyValue* pVal = getValue( aDependency );
+           const PropertyValue* pVal = getValue( aDependency );
            OSL_ENSURE( pVal, "unknown property in dependency" );
            if( pVal )
            {
@@ -1639,12 +1639,12 @@ void PrinterController::createProgressDialog()
     if( ! mpImplData->mpProgress )
     {
         sal_Bool bShow = sal_True;
-        beans::PropertyValue* pMonitor = getValue( OUString( "MonitorVisible" ) );
+        PropertyValue* pMonitor = getValue( OUString( "MonitorVisible" ) );
         if( pMonitor )
             pMonitor->Value >>= bShow;
         else
         {
-            const com::sun::star::beans::PropertyValue* pVal = getValue( OUString( "IsApi" ) );
+            const PropertyValue* pVal = getValue( OUString( "IsApi" ) );
             if( pVal )
             {
                 sal_Bool bApi = sal_False;
@@ -1687,7 +1687,7 @@ void PrinterController::pushPropertiesToPrinter()
 {
     sal_Int32 nCopyCount = 1;
     // set copycount and collate
-    const beans::PropertyValue* pVal = getValue( OUString( "CopyCount" ) );
+    const PropertyValue* pVal = getValue( OUString( "CopyCount" ) );
     if( pVal )
         pVal->Value >>= nCopyCount;
     sal_Bool bCollate = sal_False;
@@ -1726,7 +1726,7 @@ bool PrinterController::isDirectPrint() const
 sal_Bool PrinterController::getBoolProperty( const OUString& i_rProperty, sal_Bool i_bFallback ) const
 {
     sal_Bool bRet = i_bFallback;
-    const com::sun::star::beans::PropertyValue* pVal = getValue( i_rProperty );
+    const PropertyValue* pVal = getValue( i_rProperty );
     if( pVal )
         pVal->Value >>= bRet;
     return bRet;
@@ -1735,7 +1735,7 @@ sal_Bool PrinterController::getBoolProperty( const OUString& i_rProperty, sal_Bo
 sal_Int32 PrinterController::getIntProperty( const OUString& i_rProperty, sal_Int32 i_nFallback ) const
 {
     sal_Int32 nRet = i_nFallback;
-    const com::sun::star::beans::PropertyValue* pVal = getValue( i_rProperty );
+    const PropertyValue* pVal = getValue( i_rProperty );
     if( pVal )
         pVal->Value >>= nRet;
     return nRet;
@@ -1810,7 +1810,7 @@ bool PrinterOptionsHelper::processProperties( const Sequence< PropertyValue >& i
     return bChanged;
 }
 
-void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps ) const
+void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< PropertyValue >& io_rProps ) const
 {
     if( m_aUIProperties.getLength() > 0 )
     {
@@ -1823,7 +1823,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
     }
 }
 
-Any PrinterOptionsHelper::setUIControlOpt(const com::sun::star::uno::Sequence< OUString >& i_rIDs,
+Any PrinterOptionsHelper::setUIControlOpt(const Sequence< OUString >& i_rIDs,
                                           const OUString& i_rTitle,
                                           const Sequence< OUString >& i_rHelpIds,
                                           const OUString& i_rType,
@@ -1962,7 +1962,7 @@ Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Bool", &aVal, i_rControlOptions);
 }
 
-Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const com::sun::star::uno::Sequence< OUString >& i_rIDs,
+Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const Sequence< OUString >& i_rIDs,
                                               const OUString& i_rTitle,
                                               const Sequence< OUString >& i_rHelpId,
                                               const OUString& i_rProperty,

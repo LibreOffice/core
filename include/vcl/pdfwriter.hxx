@@ -666,8 +666,8 @@ The following structure describes the permissions used in PDF security
     ~PDFWriter();
 
     /** Returns an OutputDevice for formatting
-        <p>This Output device is guaranteed to use the same
-        font metrics as the resulting PDF file.</p>
+        This Output device is guaranteed to use the same
+        font metrics as the resulting PDF file.
 
         @returns
         the reference output device
@@ -675,13 +675,12 @@ The following structure describes the permissions used in PDF security
     OutputDevice* GetReferenceDevice();
 
     /** Creates a new page to fill
-        <p>If width and height are not set the page size
-        is inherited from the page tree</p>
-        <p>other effects:
+        If width and height are not set the page size
+        is inherited from the page tree
+        other effects:
         resets the graphics state: MapMode, Font
         Colors and other state information MUST
         be set again or are undefined.
-        </p>
 
         @returns
         returns the page id of the new page
@@ -707,7 +706,7 @@ The following structure describes the permissions used in PDF security
     void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = NULL );
 
     /* sets the document locale originally passed with the context to a new value
-     * only affects the output if used before calling <code>Emit/code>.
+     * only affects the output if used before calling Emit/code>.
      */
     void SetDocumentLocale( const com::sun::star::lang::Locale& rDocLocale );
 
@@ -821,10 +820,10 @@ The following structure describes the permissions used in PDF security
     /** Start a transparency group
 
     Drawing operations can be grouped together to acquire a common transparency
-    behaviour; after calling <code>BeginTransparencyGroup</code> all drawing
+    behaviour; after calling BeginTransparencyGroup all drawing
     operations will be grouped together into a transparent object.
 
-    The transparency behaviour is set with ond of the <code>EndTransparencyGroup</code>
+    The transparency behaviour is set with ond of the EndTransparencyGroup
     calls and can be either a constant transparency factor or a transparent
     soft mask in form of an 8 bit gray scale bitmap.
 
@@ -874,7 +873,7 @@ The following structure describes the permissions used in PDF security
 
     /** Create a new named destination to be used in a link from another PDF document
 
-    @parm sDestName
+    @param sDestName
     the name (label) of the bookmark, to be used to jump to
 
     @param rRect
@@ -931,6 +930,9 @@ The following structure describes the permissions used in PDF security
         point to this destination. In such cases, a public destination Id will be assigned to the form widget,
         and later on, the concrete destination data for this public Id will be registered using RegisterDestReference.
 
+        @param nDestId
+            destination ID
+
         @param rRect
             target rectangle on page to be displayed if dest is jumped to
 
@@ -948,7 +950,7 @@ The following structure describes the permissions used in PDF security
 
 
     /** Set the destination for a link
-        <p>will change a URL type link to a dest link if necessary</p>
+        will change a URL type link to a dest link if necessary
 
         @param nLinkId
         the link to be changed
@@ -962,13 +964,13 @@ The following structure describes the permissions used in PDF security
     */
     sal_Int32           SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     /** Set the URL for a link
-        <p>will change a dest type link to an URL type link if necessary</p>
+        will change a dest type link to an URL type link if necessary
         @param nLinkId
         the link to be changed
 
         @param rURL
         the URL the link shall point to.
-        The URL will be parsed (and corrected) by the <code>com.sun.star.util.URLTransformer</code>
+        The URL will be parsed (and corrected) by the com.sun.star.util.URLTransformer
         service; the result will then appear literally in the PDF file produced
 
         @returns
@@ -977,33 +979,30 @@ The following structure describes the permissions used in PDF security
     */
     sal_Int32           SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     /** Resolve link in logical structure
-        <p>
+
         If a link is created after the corresponding visual appearance was drawn
         it is not possible to set the link id as a property attribute to the
         link structure item that should be created in tagged PDF around the
         visual appearance of a link.
-        </p>
-        <p>
+
         For this reason an arbitrary id can be given to
-        <code>SetStructureAttributeNumerical</code> at the time the text for
+        SetStructureAttributeNumerical at the time the text for
         the link is drawn. To resolve this arbitrary id again when the actual
-        link annotation is created use SetLinkPropertyID. When <code>Emit</code>
-        finally gets called all <code>LinkAnnotation</code> type structure attributes
+        link annotation is created use SetLinkPropertyID. When Emit
+        finally gets called all LinkAnnotation type structure attributes
         will be replaced with the correct link id.
-        </p>
-        <p>
+
         CAUTION: this technique must be used either for all or none of the links
         in a document since the link id space and arbitrary property id space
-        could overlap and it would be impossible to resolve whether a <code>Link</code>
+        could overlap and it would be impossible to resolve whether a Link
         structure attribute value was arbitrary or already a real id.
-        </p>
 
         @param nLinkId
         the link to be mapped
 
         @param nPropertyID
-        the arbitrary id set in a <code>Link</code> structure element to address
-        the link with real id <code>nLinkId</code>
+        the arbitrary id set in a Link structure element to address
+        the link with real id nLinkId
      */
     void                SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyID );
     /** Create a new outline item
@@ -1015,7 +1014,7 @@ The following structure describes the permissions used in PDF security
         @param rText
         sets the title text of the item
 
-        @param nDestId
+        @param nDestID
         declares which Dest (created with CreateDest) the outline item
         will point to
 
@@ -1084,7 +1083,6 @@ The following structure describes the permissions used in PDF security
 
     /** begin a new logical structure element
 
-    <p>
     BeginStructureElement/EndStructureElement calls build the logical structure
     of the PDF - the basis for tagged PDF. Structural elements are implemented
     using marked content tags. Each structural element can contain sub elements
@@ -1094,34 +1092,26 @@ The following structure describes the permissions used in PDF security
     A structural element need not be contained on one page; e.g. paragraphs often
     run from one page to the next. In this case the corresponding EndStructureElement
     must be called while drawing the next page.
-    </p>
 
-    <p>
     BeginStructureElement and EndStructureElement must be called only after
-    <member scope="vcl">PDFWriter::NewPage</member> has been called and before
-    <member scope="vcl">PDFWriter::Emit</member>gets called. The current page
-    number is an implicit context parameter for Begin/EndStructureElement.
-    </p>
+    PDFWriter::NewPage has been called and before PDFWriter::Emitgets called. The
+    current page number is an implicit context parameter for Begin/EndStructureElement.
 
-    <p>
     For pagination artifacts that are not part of the logical structure
     of the document (like header, footer or page number) the special
-    StructElement <code>NonStructElement</code> exists. To place content
+    StructElement NonStructElement exists. To place content
     outside of the struture tree simply call
-    <code>BeginStructureElement( NonStructElement )</code> then draw your
-    content and then call <code>EndStructureElement()</code>. All children
-    of a <code>NonStructElement</code> will not be part of the structure.
+    BeginStructureElement( NonStructElement ) then draw your
+    content and then call EndStructureElement(). All children
+    of a NonStructElement will not be part of the structure.
     Nonetheless if you add a child structural element to a
-    <code>NonStructElement</code> you will still have to call
-    <code>EndStructureElement</code> for it. Best think of the structure
+    NonStructElement you will still have to call
+    EndStructureElement for it. Best think of the structure
     tree as a stack.
-    </p>
 
-    <p>
     Note: there is always one structural element in existance without having
-    called <code>BeginStructureElement</code>; this is the root of the structure
+    called BeginStructureElement; this is the root of the structure
     tree (called StructTreeRoot). The StructTreeRoot has always the id 0.
-    </p>
 
     @param eType
     denotes what kind of element to begin (e.g. a heading or paragraph)
@@ -1131,36 +1121,32 @@ The following structure describes the permissions used in PDF security
     role map will be created mapping alias to regular structure type.
 
     @returns
-    the new structure element's id for use in <code>SetCurrentStructureElement</code>
+    the new structure element's id for use in SetCurrentStructureElement
      */
      sal_Int32 BeginStructureElement( enum StructElement eType, const OUString& rAlias = OUString() );
     /** end the current logical structure element
 
-    <p>
     Close the current structure element. The current element's
     parent becomes the current structure element again.
-    </p>
 
     @see BeginStructureElement
      */
     void EndStructureElement();
     /** set the current structure element
 
-    <p>
     For different purposes it may be useful to paint a structure element's
     content discontinously. In that case an already existing structure element
-    can be appended to by using <code>SetCurrentStructureElement</code>. The
+    can be appended to by using SetCurrentStructureElement. The
     refenrenced structure element becomes the current structure element with
     all consequences: all following structure elements are appended as children
     of the current element.
-    </p>
 
     @param nElement
     the id of the new current structure element
 
     @returns
-    <true/> if the current structure element could be set successfully
-    <false/> if the current structure element could not be changed
+    True if the current structure element could be set successfully
+    False if the current structure element could not be changed
     (e.g. if the passed element id is invalid)
      */
     bool SetCurrentStructureElement( sal_Int32 nElement );
@@ -1169,7 +1155,7 @@ The following structure describes the permissions used in PDF security
 
     SetStructureAttribute sets an attribute of the current structural element to a
     new value. A consistency check is performed before actually setting the value;
-    if the check fails, the function returns <FALSE/> and the attribute remains
+    if the check fails, the function returns False and the attribute remains
     unchanged.
 
     @param eAttr
@@ -1179,15 +1165,15 @@ The following structure describes the permissions used in PDF security
     the value to set the attribute to
 
     @returns
-    <TRUE/> if the value was valid and the change has been performed,
-    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
+    True if the value was valid and the change has been performed,
+    False if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
 
     SetStructureAttributeNumerical sets an attribute of the current structural element
     to a new numerical value. A consistency check is performed before actually setting
-    the value; if the check fails, the function returns <FALSE/> and the attribute
+    the value; if the check fails, the function returns False and the attribute
     remains unchanged.
 
     @param eAttr
@@ -1197,15 +1183,15 @@ The following structure describes the permissions used in PDF security
     the value to set the attribute to
 
     @returns
-    <TRUE/> if the value was valid and the change has been performed,
-    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
+    True if the value was valid and the change has been performed,
+    False if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue );
     /** set the bounding box of a structural element
 
     SetStructureBoundingBox sets the BBox attribute to a new value. Since the BBox
-    attribute can only be applied to <code>Table</code>, <code>Figure</code>,
-    <code>Form</code> and <code>Formula</code> elements, a call of this function
+    attribute can only be applied to Table, Figure,
+    Form and Formula elements, a call of this function
     for other element types will be ignored and the BBox attribute not be set.
 
     @param rRect
@@ -1265,11 +1251,14 @@ The following structure describes the permissions used in PDF security
     /** create a new form control
 
     This function creates a new form control in the PDF and sets its various
-    properties. Do not pass an actual AnyWidget as <code>rControlType</code>
+    properties. Do not pass an actual AnyWidget as rControlType
     will be cast to the type described by the type member.
 
     @param rControlType
-    a descendant of <code>AnyWidget</code> determing the control's properties
+    a descendant of AnyWidget determing the control's properties
+
+    @param nPageNr
+    the page number to apply the effect to; -1 denotes the current page
 
     @returns
     the new control's id for reference purposes
@@ -1279,9 +1268,9 @@ The following structure describes the permissions used in PDF security
     /** Inserts an additional stream to the PDF file
 
     This function adds an arbitrary stream to the produced PDF file. May be called
-    any time before <code>Emit()</code>. The stream will be written during
-    <code>Emit</code> by calling the <code>PDFOutputStream</code> Object's <code>write</code>
-    method. After the call the <code>PDFOutputStream</code> will be deleted.
+    any time before Emit(). The stream will be written during
+    Emit by calling the PDFOutputStream Object's write
+    method. After the call the PDFOutputStream will be deleted.
 
     All additional streams and their mimetypes will be entered into an array
     in the trailer dictionary.
@@ -1289,7 +1278,7 @@ The following structure describes the permissions used in PDF security
     @param rMimeType
     the mimetype of the stream
 
-    @param rStream
+    @param pStream
     the interface to the additional stream
 
     @param bCompress
