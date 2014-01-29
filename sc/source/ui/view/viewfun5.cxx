@@ -453,7 +453,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             }
         }
     }
-    else if (nFormatId == SOT_FORMAT_BITMAP)
+    else if (nFormatId == SOT_FORMAT_BITMAP || nFormatId == SOT_FORMATSTR_ID_PNG)
     {
         BitmapEx aBmpEx;
         if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
