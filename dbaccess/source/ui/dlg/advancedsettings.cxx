@@ -110,8 +110,6 @@ namespace dbaui
             // make m_pAsBeforeCorrelationName depend on m_pAppendTableAlias
             m_aControlDependencies.enableOnCheckMark( *m_pAppendTableAlias, *m_pAsBeforeCorrelationName );
 
-        Size aUnrelatedControls( LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT ) );
-
         // create the controls for the boolean comparison mode
         if ( m_bHasBooleanComparisonMode )
         {
