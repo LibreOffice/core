@@ -342,6 +342,10 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
             aTitleConv.convertFromModel( xTitled, "Axis Title", OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
+
+        // axis data unit label -----------------------------------------------
+        AxisDispUnitsConverter axisDispUnitsConverter (*this, mrModel.mxDispUnits.getOrCreate());
+        axisDispUnitsConverter.convertFromModel(xAxis);
     }
     catch( Exception& )
     {
@@ -358,6 +362,26 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
     }
 }
 
+// ============================================================================
+
+AxisDispUnitsConverter::AxisDispUnitsConverter( const ConverterRoot& rParent, AxisDispUnitsModel& rModel ) :
+    ConverterBase< AxisDispUnitsModel >( rParent, rModel )
+{
+}
+
+AxisDispUnitsConverter::~AxisDispUnitsConverter()
+{
+}
+
+void AxisDispUnitsConverter::convertFromModel( const Reference< XAxis >& rxAxis )
+{
+    PropertySet aPropSet( rxAxis );
+    if (!(mrModel.mnBuiltInUnit).isEmpty() )
+    {
+        aPropSet.setProperty(PROP_DisplayUnits, true);
+        aPropSet.setProperty( PROP_BuiltInUnit, mrModel.mnBuiltInUnit );
+    }
+}
 // ============================================================================
 
 } // namespace chart

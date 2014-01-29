@@ -26,8 +26,7 @@ namespace chart {
 // ============================================================================
 
 AxisDispUnitsModel::AxisDispUnitsModel() :
-    mfCustomUnit( 0.0 ),
-    mnBuiltInUnit( XML_TOKEN_INVALID )
+    mfCustomUnit( 0.0 )
 {
 }
 
