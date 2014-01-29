@@ -2287,7 +2287,10 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
     return xTransferable;
 }
 
-void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans )
+    throw (::com::sun::star::datatransfer::UnsupportedFlavorException,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );

@@ -394,7 +394,10 @@ public:
 
     // XTransferableSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans )
+                                throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
     // XSelectedSheetsSupplier
     virtual ::com::sun::star::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets()
