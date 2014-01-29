@@ -1190,6 +1190,11 @@ throw (uno::RuntimeException)
 
         if ( eSearchNodeType == SwTableBoxStartNode )
         {
+            if (!pOwnStartNode || !pTmp)
+            {
+                throw uno::RuntimeException();
+            }
+
             if ( pOwnStartNode->FindTableNode() != pTmp->FindTableNode() )
             {
                 throw uno::RuntimeException();
