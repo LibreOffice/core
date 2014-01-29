@@ -70,6 +70,11 @@ class  SVX_DLLPUBLIC NumSettings_Impl
         NumSettings_Impl()
             : nNumberType(0)
             , nParentNumbering(0)
+            , eLabelFollowedBy(SvxNumberFormat::NOTHING)
+            , nTabValue (0)
+            , eNumAlign(SVX_ADJUST_LEFT)
+            , nNumAlignAt(0)
+            , nNumIndentAt(0)
             , pBrushItem(0)
             , aSize(0,0)
         {}
