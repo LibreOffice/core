@@ -116,7 +116,7 @@ public:
 
     OUString WriteImage( const Graphic &rGraphic );
 
-    void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = 0 );
+    void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
     void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, sal_Bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );

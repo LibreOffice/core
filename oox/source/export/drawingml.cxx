@@ -189,7 +189,7 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
 void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
-    if( nAlpha )
+    if( nAlpha < MAX_PERCENT )
     {
         mpFS->startElementNS( XML_a, XML_schemeClr, XML_val,
             OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
