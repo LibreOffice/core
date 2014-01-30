@@ -46,9 +46,10 @@ private:
     friend class CertificateViewerDetailsTP;
     friend class CertificateViewerCertPathTP;
 
-    TabControl          maTabCtrl;
-    OKButton            maOkBtn;
-    HelpButton          maHelpBtn;
+    TabControl*         mpTabCtrl;
+    sal_uInt16          mnGeneralId;
+    sal_uInt16          mnDetailsId;
+    sal_uInt16          mnPathId;
 
     bool                mbCheckForPrivateKey;
 

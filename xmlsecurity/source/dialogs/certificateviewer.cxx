@@ -46,29 +46,30 @@ CertificateViewer::CertificateViewer(
         Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
         const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
-    :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
-    ,maTabCtrl      ( this, XMLSEC_RES( 1 ) )
-    ,maOkBtn        ( this, XMLSEC_RES( BTN_OK ) )
-    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
+    : TabDialog(_pParent, "ViewCertDialog", "xmlsec/ui/viewcertdialog.ui" )
 {
-    FreeResource();
+    get(mpTabCtrl, "tabcontrol");
 
     mbCheckForPrivateKey = bCheckForPrivateKey;
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mxCert = _rXCert;
 
-    maTabCtrl.SetTabPage( RID_XMLSECTP_GENERAL, new CertificateViewerGeneralTP( &maTabCtrl, this ) );
-    maTabCtrl.SetTabPage( RID_XMLSECTP_DETAILS, new CertificateViewerDetailsTP( &maTabCtrl, this ) );
-    maTabCtrl.SetTabPage( RID_XMLSECTP_CERTPATH, new CertificateViewerCertPathTP( &maTabCtrl, this ) );
-    maTabCtrl.SetCurPageId( RID_XMLSECTP_GENERAL );
+    mnGeneralId = mpTabCtrl->GetPageId("general");
+    mnDetailsId = mpTabCtrl->GetPageId("details");
+    mnPathId = mpTabCtrl->GetPageId("path");
+
+    mpTabCtrl->SetTabPage(mnGeneralId, new CertificateViewerGeneralTP( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnDetailsId, new CertificateViewerDetailsTP( mpTabCtrl, this));
+    mpTabCtrl->SetTabPage(mnPathId, new CertificateViewerCertPathTP( mpTabCtrl, this));
+    mpTabCtrl->SetCurPageId(mnGeneralId);
 }
 
 CertificateViewer::~CertificateViewer()
 {
-    delete maTabCtrl.GetTabPage( RID_XMLSECTP_CERTPATH );
-    delete maTabCtrl.GetTabPage( RID_XMLSECTP_DETAILS );
-    delete maTabCtrl.GetTabPage( RID_XMLSECTP_GENERAL );
+    delete mpTabCtrl->GetTabPage(mnGeneralId);
+    delete mpTabCtrl->GetTabPage(mnDetailsId);
+    delete mpTabCtrl->GetTabPage(mnPathId);
 }
 
 CertificateViewerTP::CertificateViewerTP( Window* _pParent, const ResId& _rResId, CertificateViewer* _pDlg )

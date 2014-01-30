@@ -15,6 +15,7 @@ $(eval $(call gb_UIConfig_add_uifiles,xmlsec,\
 	xmlsecurity/uiconfig/ui/securitytrustpage \
 	xmlsecurity/uiconfig/ui/selectcertificatedialog \
 	xmlsecurity/uiconfig/ui/macrosecuritydialog \
+	xmlsecurity/uiconfig/ui/viewcertdialog \
 ))
 
 # vim: set noet sw=4 ts=4:
