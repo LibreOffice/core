@@ -3907,7 +3907,7 @@ AC_SUBST(LIBXML_LIBS)
 
 
 dnl ===================================================================
-dnl Checks for a MacOS platform SDK which supports a OSX 10.7 deployment target
+dnl Checks for a MacOS platform SDK compatible with an OSX 10.7 deployment target
 dnl ===================================================================
 if test  "$_os" = "Darwin"; then
    sdk_target=10.7
@@ -3918,13 +3918,13 @@ if test  "$_os" = "Darwin"; then
    if test "$sdk_minor" -lt "7"; then
       AC_MSG_ERROR([SDK version < 10.7 is not longer supported])
    else
-      AC_MSG_RESULT([yes])
       MACOSX_DEPLOYMENT_TARGET=$sdk_target
 
-      AC_MSG_CHECKING([for SDKs compatible with $MACOSX_DEPLOYMENT_TARGET])
       sdk_found=`xcodebuild -showsdks | grep "sdk macosx10.[[789]]" | sed -e "s/.*sdk //" | head -n1`
       if test -z "$sdk_found"; then
          AC_MSG_ERROR([No SDK with OSX $sdk_target compatibility found])
+      else
+         AC_MSG_RESULT([yes, by using SDK $sdk_found])
       fi
 
       sdk_path=`xcodebuild -version -sdk ${sdk_found} Path`
@@ -3932,7 +3932,7 @@ if test  "$_os" = "Darwin"; then
       if test -d "$sdk_path"; then
          AC_MSG_RESULT([yes])
       else
-         AC_MSG_ERROR([MacOS SDK $sdk_found is not available at $sdk_path])
+         AC_MSG_ERROR([not found!])
       fi
 
       MACOSX_SDK_PATH=$sdk_path
