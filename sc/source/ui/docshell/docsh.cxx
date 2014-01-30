@@ -1473,7 +1473,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             aMark.SetMarkArea( aColWidthRange );
             aMark.MarkToMulti();
 
-            // Order is important: First width, then height (cf. WHAT?! hund.rtf)
+            // Order is important: First width, then height
             if ( bSetColWidths )
             {
                 for ( SCCOL nCol=0; nCol <= nEndCol; nCol++ )
