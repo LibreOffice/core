@@ -9,41 +9,33 @@
 package org.libreoffice.impressremote.activity;
 
 import android.content.ContentResolver;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
-import android.webkit.WebView;
+import android.widget.TextView;
 
 import org.libreoffice.impressremote.R;
 
 public class LicensesActivity extends ActionBarActivity {
-    private static final String SCHEME = ContentResolver.SCHEME_FILE;
-    private static final String AUTHORITY = "android_asset";
-    private static final String PATH = "licenses.html";
 
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
         setContentView(R.layout.activity_licenses);
 
-        setUpHomeButton();
-        setUpContent();
-    }
-
-    private void setUpHomeButton() {
         getSupportActionBar().setHomeButtonEnabled(true);
-    }
 
-    private void setUpContent() {
-        getLicensesView().loadUrl(buildLicensesUri());
-    }
-
-    private WebView getLicensesView() {
-        return (WebView) findViewById(R.id.view_licenses);
-    }
-
-    private String buildLicensesUri() {
-        return String.format("%s:///%s/%s", SCHEME, AUTHORITY, PATH);
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    getPackageName(), 0);
+            ((TextView) findViewById(R.id.version)).setText(
+                    "Version: " + info.versionName +
+                    " (Build ID: "+info.versionCode +")");
+        } catch (NameNotFoundException e) {
+            // ignore
+        }
     }
 
     @Override

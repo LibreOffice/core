@@ -16,7 +16,45 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@+id/view_licenses"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_license"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="0dp"
+    android:gravity="center_horizontal|top"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="350dp"
+        android:padding="16dp"
+        android:src="@drawable/libreoffice_logo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/application_name"
+        android:textAppearance="@style/SectionHeader"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Version: %s (Build ID: %s)" />
+
+    <TextView
+        android:id="@+id/copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Copyright © 2012-2014 LibreOffice contributors\nThis App is provided under the\nMozilla Public License, v. 2.0" />
+
+</LinearLayout>
