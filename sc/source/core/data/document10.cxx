@@ -132,8 +132,11 @@ bool ScDocument::CopyOneCellFromClip(
                 {
                     svl::SharedString aStr = rSrcCell.mpFormula->GetString();
                     if (aStr.isEmpty())
+                    {
                         // do not clone empty string
                         rSrcCell.clear();
+                        break;
+                    }
 
                     // Turn this into a string or edit cell.
                     if (rSrcCell.mpFormula->IsMultilineResult())
