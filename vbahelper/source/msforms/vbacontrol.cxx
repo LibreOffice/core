@@ -737,9 +737,10 @@ sal_Int32 ScVbaControl::getBackColor() throw (uno::RuntimeException)
 
 void ScVbaControl::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
 {
-    if ( ( nBackColor >= (sal_Int32)0x80000000 ) && ( nBackColor <= (sal_Int32)0x80000018 ) )
+    if ( ( (sal_uInt32)nBackColor >= (sal_uInt32)0x80000000 ) &&
+         ( (sal_uInt32)nBackColor <= (sal_uInt32)0x80000000 + SAL_N_ELEMENTS(nSysCols) ) )
     {
-        nBackColor = nSysCols[ nBackColor - 0x80000000 ];
+        nBackColor = nSysCols[ nBackColor & 0x0FF];
     }
     m_xProps->setPropertyValue( "BackgroundColor" , uno::makeAny( XLRGBToOORGB( nBackColor ) ) );
 }
