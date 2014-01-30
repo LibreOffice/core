@@ -23,7 +23,11 @@
 
  *************************************************************************/
 
-#include <memory>
+#include <sal/config.h>
+
+#include <cstring>
+#include <vector>
+
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>
@@ -548,9 +552,10 @@ OUString FTPURL::net_title() const
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
             sal_Int32 index1 = aNetTitle.lastIndexOf("257");
-            index1 = 1+aNetTitle.indexOf('"',index1);
-            sal_Int32 index2 = aNetTitle.indexOf('"',index1);
-            aNetTitle = aNetTitle.copy(index1,index2-index1);
+            index1 = aNetTitle.indexOf('"', index1 + std::strlen("257")) + 1;
+            sal_Int32 index2 = aNetTitle.indexOf('"', index1);
+            aNetTitle = index2 > index1
+                ? aNetTitle.copy(index1, index2 - index1) : OUString();
             if( aNetTitle != "/" ) {
                 index1 = aNetTitle.lastIndexOf('/');
                 aNetTitle = aNetTitle.copy(1+index1);
