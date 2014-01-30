@@ -84,8 +84,8 @@ class SwHTMLWrtTable : public SwWriteTable
 
 public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    sal_Bool bRel, sal_uInt16 nNumOfRowsToRepeat,
-                    sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0 );
+                    sal_Bool bRel, sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0,
+                    sal_uInt16 nNumOfRowsToRepeat = 0 );
     SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
@@ -96,8 +96,9 @@ public:
 
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
-                                sal_uInt32 nBWidth, sal_Bool bRel, sal_uInt16 nNumOfRowsToRepeat,
-                                sal_uInt16 nLSub, sal_uInt16 nRSub )
+                                sal_uInt32 nBWidth, sal_Bool bRel,
+                                sal_uInt16 nLSub, sal_uInt16 nRSub,
+                                sal_uInt16 nNumOfRowsToRepeat )
     : SwWriteTable( rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat )
 {
     PixelizeBorders();
@@ -1136,7 +1137,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     else
     {
         SwHTMLWrtTable aTableWrt( rTbl.GetTabLines(), nWidth,
-                                  nBaseWidth, bRelWidths, rTbl.GetRowsToRepeat() );
+                                  nBaseWidth, bRelWidths, 0, 0, rTbl.GetRowsToRepeat() );
         aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.GetRowsToRepeat() > 0,
                          pFmt, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
