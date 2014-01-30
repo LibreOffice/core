@@ -120,8 +120,6 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
 IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
 {
-    fprintf(stderr, "dir is %s\n", OUStringToOString(getDirectory(), RTL_TEXTENCODING_UTF8).getStr());
-
     try
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
