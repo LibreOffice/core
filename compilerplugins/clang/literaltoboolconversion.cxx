@@ -121,7 +121,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
 //
 // as "implicit conversion (IntegralToBoolean) of null pointer constant of type
 // 'std::size_t' (aka 'unsigned long') to 'bool'":
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
     } else if (sub->isNullPointerConstant(
                    compiler.getASTContext(), Expr::NPC_ValueDependentIsNull)
                != Expr::NPCK_NotNull)
