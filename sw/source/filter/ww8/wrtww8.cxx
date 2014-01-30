@@ -1460,7 +1460,9 @@ void MSWordExportBase::BulletDefinitions()
             aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
         else
             aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
-        AttrOutput().BulletDefinition(i, rGraphic, aSize);
+
+        if (0 != aSize.Height() && 0 != aSize.Width())
+            AttrOutput().BulletDefinition(i, rGraphic, aSize);
     }
 }
 
