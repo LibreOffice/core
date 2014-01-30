@@ -608,20 +608,22 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
         {
             if (aWord1[ nIdx1 ] == cIgnBeg)
                 IgnState = true;
-            if (IgnState || aWord1[ nIdx1++ ] == cIgnChar)
+            if (IgnState || aWord1[ nIdx1 ] == cIgnChar)
                 nNumIgnChar1++;
             if (aWord1[ nIdx1] == cIgnEnd)
                 IgnState = false;
+            nIdx1++;
         }
         IgnState = false;
         while (nIdx2 < nLen2 )
         {
-            if (aWord1[ nIdx2 ] == cIgnBeg)
+            if (aWord2[ nIdx2 ] == cIgnBeg)
                 IgnState = true;
-            if (aWord2[ nIdx2++ ] == cIgnChar)
+            if (IgnState || aWord2[ nIdx2 ] == cIgnChar)
                 nNumIgnChar2++;
-            if (aWord1[ nIdx1] == cIgnEnd)
+            if (aWord2[ nIdx2 ] == cIgnEnd)
                 IgnState = false;
+            nIdx2++;
         }
 
         nRes = ((sal_Int32) nLen1 - nNumIgnChar1) - ((sal_Int32) nLen2 - nNumIgnChar2);
