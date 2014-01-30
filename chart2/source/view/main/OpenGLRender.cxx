@@ -497,7 +497,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderLine2FBO(int)
 {
-    m_fZStep += 0.001;
+    m_fZStep += 0.001f;
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
@@ -1116,7 +1116,6 @@ bool OpenGLRender::WGLisExtensionSupported(const char *extension)
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
             return 1; // Match
     }
-    return 1;
 }
 #endif
 
@@ -1277,7 +1276,7 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 
 int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
-    m_fZStep += 0.001;
+    m_fZStep += 0.001f;
     size_t listNum = m_RectangleShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
