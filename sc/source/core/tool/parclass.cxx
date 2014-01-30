@@ -150,7 +150,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocOr,              {{ Reference                                            }, 1 }},
     { ocPearson,         {{ ForceArray, ForceArray                               }, 0 }},
     { ocPercentile,      {{ Reference, Value                                     }, 0 }},
-    { ocPercentrank,     {{ Reference, Value                                     }, 0 }},
+    { ocPercentrank,     {{ Reference, Value, Value                              }, 0 }},
     { ocPow,             {{ Array, Array                                         }, 0 }},
     { ocPower,           {{ Array, Array                                         }, 0 }},
     { ocProb,            {{ ForceArray, ForceArray, Value, Value                 }, 0 }},
