@@ -87,7 +87,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bLocked  = bMinHeight =
     bHeightClipped = bWidthClipped = bFormatHeightOnly = sal_False;
 
-    //Grosseneinstellung, Fixe groesse ist immer die Breite
+    // Size setting: Fixed size is always the width
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
     sal_uInt16 nDir =
         ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
@@ -146,16 +146,16 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     // insert columns, if necessary
     InsertColumns();
 
-    //Erst das Init, dann den Inhalt, denn zum Inhalt koennen  widerum
-    //Objekte/Rahmen gehoeren die dann angemeldet werden.
+    // First the Init, then the Content:
+    // This is due to the fact that the Content may have Objects/Frames,
+    // which are then registered
     InitDrawObj( sal_False );
 
     Chain( pAnch );
 
     InsertCnt();
 
-    //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
-    //unnoetig viel formatiert wird.
+    // Put it somewhere outside so that out document is not formatted unnecessarily often
     Frm().Pos().setX(FAR_AWAY);
     Frm().Pos().setY(FAR_AWAY);
 }
@@ -198,7 +198,7 @@ void SwFlyFrm::InsertCnt()
         const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
         OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( no content prepared." );
         sal_uLong nIndex = rCntnt.GetCntntIdx()->GetIndex();
-        // Lower() bedeutet SwColumnFrm, eingefuegt werden muss der Inhalt dann in den (Column)BodyFrm
+        // Lower() means SwColumnFrm; the Content then needs to be instered into the (Column)BodyFrm
         ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
                       GetFmt()->GetDoc(), nIndex );
 
@@ -227,13 +227,11 @@ void SwFlyFrm::InsertCnt()
     const SwFmtCol &rCol = GetFmt()->GetCol();
     if ( rCol.GetNumCols() > 1 )
     {
-        //PrtArea ersteinmal so gross wie der Frm, damit die Spalten
-        //vernuenftig eingesetzt werden koennen; das schaukelt sich dann
-        //schon zurecht.
+        // Start off PrtArea to be as large as Frm, so that we can put in the columns
+        // properly. It'll adjust later on.
         Prt().Width( Frm().Width() );
         Prt().Height( Frm().Height() );
-        const SwFmtCol aOld; //ChgColumns() verlaesst sich darauf, dass auch ein
-                             //Old-Wert hereingereicht wird.
+        const SwFmtCol aOld; // ChgColumns() also needs an old value passed
         ChgColumns( aOld, rCol );
     }
  }
@@ -384,10 +382,10 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
     pDrawObj->SetModel( pContact->GetMaster()->GetModel() );
     pDrawObj->SetUserCall( pContact );
 
-    //Der Reader erzeugt die Master und setzt diese, um die Z-Order zu
-    //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
-    //die Master aus der Liste entfernt und fuehren von da an ein
-    //Schattendasein.
+    // The Reader creates the Masters and inserts them into the Page in
+    // order to transport the z-order.
+    // After creating the first Reference the Masters are removed from the
+    // List and are not important anymore.
     SdrPage* pPg( 0L );
     if ( 0 != ( pPg = pContact->GetMaster()->GetPage() ) )
     {
@@ -411,9 +409,8 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
 
 void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
 {
-    //ContactObject aus dem Format suchen. Wenn bereits eines existiert, so
-    //braucht nur eine neue Ref erzeugt werden, anderfalls ist es jetzt an
-    //der Zeit das Contact zu erzeugen.
+    // Find ContactObject from the Format. If there's already one, we just
+    // need to create a new Ref, else we create the Contact now.
 
     IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
     SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *GetFmt() );
@@ -450,7 +447,7 @@ void SwFlyFrm::FinitDrawObj()
     if ( !GetVirtDrawObj() )
         return;
 
-    //Bei den SdrPageViews abmelden falls das Objekt dort noch selektiert ist.
+    // Deregister from SdrPageViews if the Objects is still selected there.
     if ( !GetFmt()->GetDoc()->IsInDtor() )
     {
         SwViewShell *p1St = getRootFrm()->GetCurrShell();
@@ -458,8 +455,8 @@ void SwFlyFrm::FinitDrawObj()
         {
             SwViewShell *pSh = p1St;
             do
-            {   //z.Zt. kann das Drawing nur ein Unmark auf alles, weil das
-                //Objekt bereits Removed wurde.
+            {   // At the moment the Drawing can do just do an Unmark on everything,
+                // as the Object was already removed
                 if( pSh->HasDrawView() )
                     pSh->Imp()->GetDrawView()->UnmarkAll();
                 pSh = (SwViewShell*)pSh->GetNext();
@@ -468,9 +465,9 @@ void SwFlyFrm::FinitDrawObj()
         }
     }
 
-    //VirtObject mit in das Grab nehmen. Wenn das letzte VirObject
-    //zerstoert wird, mussen das DrawObject und DrawContact ebenfalls
-    //zerstoert werden.
+    // Take VirtObject to the grave.
+    // If the last VirtObject is destroyed, the DrawObject and the DrawContact
+    // also need to be destroyed.
     SwFlyDrawContact *pMyContact = 0;
     if ( GetFmt() )
     {
@@ -496,9 +493,9 @@ void SwFlyFrm::FinitDrawObj()
     {
         pMyContact->GetMaster()->SetUserCall( 0 );
     }
-    GetVirtDrawObj()->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
-    delete GetVirtDrawObj();            //Meldet sich selbst beim Master ab.
-    delete pMyContact;      //zerstoert den Master selbst.
+    GetVirtDrawObj()->SetUserCall( 0 ); // Else calls delete of the ContactObj
+    delete GetVirtDrawObj();            // Deregisters itself at the Master
+    delete pMyContact;                  // Destroys the Master itself
 }
 
 /*************************************************************************
@@ -518,7 +515,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
     if ( pMaster->ContainsCntnt() )
     {
-        //Damit ggf. ein Textfluss zustande kommt muss invalidiert werden.
+        // To get a text flow we need to invalidate
         SwFrm *pInva = pMaster->FindLastLower();
         SWRECTFN( pMaster )
         const long nBottom = (pMaster->*fnRect->fnGetPrtBottom)();
@@ -537,8 +534,8 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
     if ( pFollow->ContainsCntnt() )
     {
-        //Es gibt nur noch den Inhalt des Masters, der Inhalt vom Follow
-        //hat keine Frames mehr (sollte immer nur genau ein leerer TxtNode sein).
+        // There's only the content from the Masters left; the content from the Follow
+        // does not have any Frames left (should always be exactly one empty TxtNode).
         SwFrm *pFrm = pFollow->ContainsCntnt();
         OSL_ENSURE( !pFrm->IsTabFrm() && !pFrm->FindNext(), "follow in chain contains content" );
         pFrm->Cut();
@@ -562,12 +559,12 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
     if ( pFollow->ContainsCntnt() )
     {
-        //Der Master saugt den Inhalt vom Follow auf
+        // The Master sucks up the content of the Follow
         SwLayoutFrm *pUpper = pMaster;
         if ( pUpper->Lower()->IsColumnFrm() )
         {
             pUpper = static_cast<SwLayoutFrm*>(pUpper->GetLastLower());
-            pUpper = static_cast<SwLayoutFrm*>(pUpper->Lower()); // der (Column)BodyFrm
+            pUpper = static_cast<SwLayoutFrm*>(pUpper->Lower()); // The (Column)BodyFrm
             OSL_ENSURE( pUpper && pUpper->IsColBodyFrm(), "Missing ColumnBody" );
         }
         SwFlyFrm *pFoll = pFollow;
@@ -582,9 +579,10 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         }
     }
 
+    // The Follow needs his own content to be served
     //Der Follow muss mit seinem eigenen Inhalt versorgt werden.
     const SwFmtCntnt &rCntnt = pFollow->GetFmt()->GetCntnt();
-    OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( Kein Inhalt vorbereitet." );
+    OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( No content prepared." );
     sal_uLong nIndex = rCntnt.GetCntntIdx()->GetIndex();
     // Lower() bedeutet SwColumnFrm, dieser beinhaltet wieder einen SwBodyFrm
     ::_InsertCnt( pFollow->Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)pFollow->Lower())->Lower()
@@ -609,10 +607,10 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
 SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
 {
-    //Wir suchen denjenigen Fly, der in dem selben Bereich steht.
-    //Bereiche koennen zunaechst nur Kopf-/Fusszeilen oder Flys sein.
+    // We look for the Fly that's in the same Area.
+    // Areas can for now only be Head/Footer or Flys.
 
-    if ( !pAnch )           //Wenn ein Anchor uebergeben Wurde zaehlt dieser: Ctor!
+    if ( !pAnch ) // If an Anchor was passed along, that one couts (ctor!)
         pAnch = AnchorFrm();
 
     SwLayoutFrm *pLay;
@@ -620,8 +618,8 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
         pLay = pAnch->FindFlyFrm();
     else
     {
-        //FindFooterOrHeader taugt hier nicht, weil evtl. noch keine Verbindung
-        //zum Anker besteht.
+        // FindFooterOrHeader is not appropriate here, as we may not have a
+        // connection to the Anchor yet.
         pLay = pAnch->GetUpper();
         while ( pLay && !(pLay->GetType() & (FRM_HEADER|FRM_FOOTER)) )
             pLay = pLay->GetUpper();
@@ -700,9 +698,8 @@ sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
         }
         nDiffHeight -= rFrmSize.GetHeight();
     }
-    //Wenn der Fly Spalten enthaehlt muessen der Fly und
-    //die Spalten schon einmal auf die Wunschwerte gebracht
-    //werden, sonst haben wir ein kleines Problem.
+    // If the Fly contains columns, we already need to set the Fly
+    // and the Columns to the required value or else we run into problems.
     if ( Lower() )
     {
         if ( Lower()->IsColumnFrm() )
@@ -814,7 +811,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         // OD 22.09.2003 #i18732# - consider new option 'follow text flow'
         case RES_FOLLOW_TEXT_FLOW:
         {
-            //Achtung! _immer_ Aktion in ChgRePos() mitpflegen.
+            // ATTENTION: Always also change Action in ChgRePos()!
             rInvFlags |= 0x09;
         }
         break;
@@ -830,7 +827,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // wrapping style.
             //rInvFlags |= 0x40;
             rInvFlags |= 0x41;
-            //Der Hintergrund muss benachrichtigt und Invalidiert werden.
+            // The background needs to messaged and invalidated
             const SwRect aTmp( GetObjRectWithSpaces() );
             NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_ATTR_CHG );
 

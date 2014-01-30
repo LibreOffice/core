@@ -1071,8 +1071,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 |*
 |*  SwFrm::GetPrevLeaf()
 |*
-|*  Beschreibung        Returns the previous layout leaf where we can move
-|*      the frame.
+|*  Returns the previous layout leaf where we can move the frame.
 |*
 |*************************************************************************/
 
@@ -2540,7 +2539,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         PROTOCOL_ENTER( &m_rThis, PROT_MOVE_BWD, 0, 0 );
         if ( pNewUpper->IsFtnContFrm() )
         {
-            //Kann sein, dass ich einen Container bekam.
+            // I may have gotten a Container
             SwFtnFrm *pOld = m_rThis.FindFtnFrm();
             SwFtnFrm *pNew = new SwFtnFrm( pOld->GetFmt(), pOld,
                                            pOld->GetRef(), pOld->GetAttr() );
