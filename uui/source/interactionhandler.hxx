@@ -32,26 +32,13 @@ class UUIInteractionHandler:
                                   com::sun::star::lang::XInitialization,
                                   com::sun::star::task::XInteractionHandler2 >
 {
-public:
-    static char const m_aImplementationName[];
-
-    static com::sun::star::uno::Sequence< OUString >
-    getSupportedServiceNames_static();
-
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL
-    createInstance(
-        com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > const &
-            rServiceFactory)
-        SAL_THROW((com::sun::star::uno::Exception));
-
 private:
     UUIInteractionHelper * m_pImpl;
 
     UUIInteractionHandler(UUIInteractionHandler &); // not implemented
     void operator =(UUIInteractionHandler); // not implemented
 
+public:
     UUIInteractionHandler(com::sun::star::uno::Reference<
                   com::sun::star::uno::XComponentContext >
                   const & rxContext)

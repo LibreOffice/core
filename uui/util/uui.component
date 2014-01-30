@@ -23,7 +23,8 @@
       name="com.sun.star.comp.uui.PasswordContainerInteractionHandler">
     <service name="com.sun.star.task.PasswordContainerInteractionHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.uui.UUIInteractionHandler">
+  <implementation name="com.sun.star.comp.uui.UUIInteractionHandler"
+      constructor="com_sun_star_comp_uui_UUIInteractionHandler_get_implementation">
     <service name="com.sun.star.configuration.backend.InteractionHandler"/>
     <service name="com.sun.star.task.InteractionHandler"/>
     <service name="com.sun.star.uui.InteractionHandler"/>

@@ -20,7 +20,6 @@
 #include "iahndl.hxx"
 #include "interactionhandler.hxx"
 #include "comphelper/namedvaluecollection.hxx"
-#include "comphelper/processfactory.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/awt/XWindow.hpp"
 
@@ -42,7 +41,7 @@ UUIInteractionHandler::~UUIInteractionHandler()
 OUString SAL_CALL UUIInteractionHandler::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return OUString::createFromAscii(m_aImplementationName);
+    return OUString("com.sun.star.comp.uui.UUIInteractionHandler");
 }
 
 sal_Bool SAL_CALL
@@ -56,7 +55,13 @@ uno::Sequence< OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    return getSupportedServiceNames_static();
+    uno::Sequence< OUString > aNames(3);
+    aNames[0] = "com.sun.star.task.InteractionHandler";
+    // added to indicate support for configuration.backend.MergeRecoveryRequest
+    aNames[1] = "com.sun.star.configuration.backend.InteractionHandler";
+    aNames[2] = "com.sun.star.uui.InteractionHandler";
+    // for backwards compatibility
+    return aNames;
 }
 
 void SAL_CALL
@@ -119,35 +124,12 @@ UUIInteractionHandler::handle(
     }
 }
 
-char const UUIInteractionHandler::m_aImplementationName[]
-    = "com.sun.star.comp.uui.UUIInteractionHandler";
-
-uno::Sequence< OUString >
-UUIInteractionHandler::getSupportedServiceNames_static()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_uui_UUIInteractionHandler_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    uno::Sequence< OUString > aNames(3);
-    aNames[0] = "com.sun.star.task.InteractionHandler";
-    // added to indicate support for configuration.backend.MergeRecoveryRequest
-    aNames[1] = "com.sun.star.configuration.backend.InteractionHandler";
-    aNames[2] = "com.sun.star.uui.InteractionHandler";
-    // for backwards compatibility
-    return aNames;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-UUIInteractionHandler::createInstance(
-    uno::Reference< lang::XMultiServiceFactory > const &
-        rServiceFactory)
-    SAL_THROW((uno::Exception))
-{
-    try
-    {
-        return *new UUIInteractionHandler(comphelper::getComponentContext(rServiceFactory));
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory", 0);
-    }
+    return cppu::acquire(new UUIInteractionHandler(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
