@@ -1573,13 +1573,13 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                     aFilterName.equalsIgnoreAsciiCase( IMP_SVMETAFILE ) )
         {
             // SV internal filters for import bitmaps and MetaFiles
-            rIStream >> rGraphic;
+            ReadGraphic( rIStream, rGraphic );
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_MOV ) )
         {
-            rIStream >> rGraphic;
+            ReadGraphic( rIStream, rGraphic );
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
             else
@@ -1620,7 +1620,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                     else
                     {
                         aTempStream.Seek( 0L );
-                        aTempStream >> rGraphic;
+                        ReadGraphic( aTempStream, rGraphic );
 
                         if( aTempStream.GetError() )
                             nStatus = GRFILTER_FILTERERROR;

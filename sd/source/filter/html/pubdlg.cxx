@@ -270,11 +270,11 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rIn >> rDesign.m_bCreated;      // not used
     rIn >> rDesign.m_nButtonThema;
     rIn >> rDesign.m_bUserAttr;
-    rIn >> rDesign.m_aBackColor;
-    rIn >> rDesign.m_aTextColor;
-    rIn >> rDesign.m_aLinkColor;
-    rIn >> rDesign.m_aVLinkColor;
-    rIn >> rDesign.m_aALinkColor;
+    ReadColor( rIn, rDesign.m_aBackColor );
+    ReadColor( rIn, rDesign.m_aTextColor );
+    ReadColor( rIn, rDesign.m_aLinkColor );
+    ReadColor( rIn, rDesign.m_aVLinkColor );
+    ReadColor( rIn, rDesign.m_aALinkColor );
     rIn >> rDesign.m_bUseAttribs;
     rIn >> rDesign.m_bUseColor;
 

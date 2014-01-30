@@ -72,7 +72,7 @@ public:
                     { return !operator==( r ); }
 
     friend inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr );
-    friend inline SvStream& operator>> ( SvStream& rStream, ScBigAddress& rAdr );
+    friend inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr );
 };
 
 
@@ -138,7 +138,7 @@ inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr 
 }
 
 
-inline SvStream& operator>> ( SvStream& rStream, ScBigAddress& rAdr )
+inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr )
 {
     rStream >> rAdr.nCol >> rAdr.nRow >> rAdr.nTab;
     return rStream;
@@ -197,8 +197,8 @@ public:
     bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
 
-    friend inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange );
-    friend inline SvStream& operator>> ( SvStream& rStream, ScBigRange& rRange );
+    friend inline SvStream& WriteScBigRange( SvStream& rStream, const ScBigRange& rRange );
+    friend inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange );
 };
 
 
@@ -238,10 +238,10 @@ inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange )
 }
 
 
-inline SvStream& operator>> ( SvStream& rStream, ScBigRange& rRange )
+inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange )
 {
-    rStream >> rRange.aStart;
-    rStream >> rRange.aEnd;
+    ReadScBigAddress( rStream, rRange.aStart );
+    ReadScBigAddress( rStream, rRange.aEnd );
     return rStream;
 }
 

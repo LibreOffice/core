@@ -1177,7 +1177,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Point   aInsertPos( rPos );
             Graphic aGraphic;
 
-            *xStm >> aGraphic;
+            ReadGraphic( *xStm, aGraphic );
 
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
@@ -1293,7 +1293,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
-            *xStm >> aFillData;
+            ReadXFillExchangeData( *xStm, aFillData );
 
             if( IsUndoEnabled() )
             {

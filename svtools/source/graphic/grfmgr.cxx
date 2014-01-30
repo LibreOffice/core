@@ -214,7 +214,7 @@ void GraphicObject::ImplAutoSwapIn()
 
                                 if( pIStm )
                                 {
-                                    (*pIStm) >> maGraphic;
+                                    ReadGraphic( *pIStm, maGraphic );
                                     mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
                                     delete pIStm;
                                 }
@@ -347,7 +347,7 @@ sal_Bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
 
 void GraphicObject::Load( SvStream& rIStm )
 {
-    rIStm >> *this;
+    ReadGraphicObject( rIStm, *this );
 }
 
 void GraphicObject::Save( SvStream& rOStm )
@@ -1144,14 +1144,16 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
     return 0L;
 }
 
-SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
+SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
     sal_Bool            bLink;
 
-    rIStm >> aGraphic >> aAttr >> bLink;
+    ReadGraphic( rIStm, aGraphic );
+    ReadGraphicAttr( rIStm, aAttr );
+    rIStm >> bLink;
 
     rGraphicObj.SetGraphic( aGraphic );
     rGraphicObj.SetAttr( aAttr );

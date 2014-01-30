@@ -318,8 +318,8 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
                 Color aColorPix;
                 Color aColorBack;
 
-                rIn >> aColorPix;
-                rIn >> aColorBack;
+                ReadColor( rIn, aColorPix );
+                ReadColor( rIn, aColorBack );
 
                 const Bitmap aBitmap(createHistorical8x8FromArray(aArray, aColorPix, aColorBack));
 

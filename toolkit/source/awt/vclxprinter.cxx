@@ -256,7 +256,7 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
     if ( nMarker == BINARYSETUPMARKER )
     {
         JobSetup aSetup;
-        aMem >> aSetup;
+        ReadJobSetup( aMem, aSetup );
         GetPrinter()->SetJobSetup( aSetup );
     }
 }

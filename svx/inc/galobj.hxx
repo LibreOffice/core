@@ -87,7 +87,7 @@ public:
     void                    SetTitle( const OUString& rTitle );
 
     friend SvStream&        WriteSgaObject( SvStream& rOut, const SgaObject& rObj );
-    friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );
+    friend SvStream&        ReadSgaObject( SvStream& rIn, SgaObject& rObj );
 
     BitmapEx createPreviewBitmapEx(const Size& rSizePixel) const;
 };

@@ -42,7 +42,7 @@ struct ImplHatch
                         ImplHatch();
                         ImplHatch( const ImplHatch& rImplHatch );
 
-    friend SvStream&    operator>>( SvStream& rIStm, ImplHatch& rImplHatch );
+    friend SvStream&    ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch );
     friend SvStream&    WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch );
 };
 
@@ -80,7 +80,7 @@ public:
     void            SetAngle( sal_uInt16 nAngle10 );
     sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Hatch& rHatch );
+    friend VCL_DLLPUBLIC SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend VCL_DLLPUBLIC SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
 };
 

@@ -520,7 +520,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
         {
         case SOT_FORMATSTR_ID_SVXB:
             {
-                aMemStm >> rGrf;
+                ReadGraphic( aMemStm, rGrf );
                 bRet = sal_True;
             }
             break;

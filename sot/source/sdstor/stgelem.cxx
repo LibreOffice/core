@@ -35,7 +35,7 @@ static const sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A
 
 ////////////////////////////// struct ClsId  /////////////////////////////
 
-SvStream& operator >>( SvStream& r, ClsId& rId )
+SvStream& ReadClsId( SvStream& r, ClsId& rId )
 {
     r >> rId.n1
       >> rId.n2
@@ -131,8 +131,8 @@ bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0L );
     r.Read( cSignature, 8 );
-    r >> aClsId                     // 08 Class ID
-      >> nVersion                   // 1A version number
+    ReadClsId( r, aClsId );         // 08 Class ID
+    r >> nVersion                   // 1A version number
       >> nByteOrder                 // 1C Unicode byte order indicator
       >> nPageSize                  // 1E 1 << nPageSize = block size
       >> nDataPageSize;             // 20 1 << this size == data block size
@@ -380,9 +380,9 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
       >> cFlags                     // 43 0 or 1 (tree balance?)
       >> nLeft                      // 44 left node entry
       >> nRight                     // 48 right node entry
-      >> nChild                     // 4C 1st child entry if storage
-      >> aClsId                     // 50 class ID (optional)
-      >> nFlags                     // 60 state flags(?)
+      >> nChild;                    // 4C 1st child entry if storage
+    ReadClsId( r, aClsId );         // 50 class ID (optional)
+    r >> nFlags                     // 60 state flags(?)
       >> nMtime[ 0 ]                // 64 modification time
       >> nMtime[ 1 ]                // 64 modification time
       >> nAtime[ 0 ]                // 6C creation and access time

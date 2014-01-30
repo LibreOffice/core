@@ -1429,7 +1429,7 @@ static sal_uInt16 GetTransferableAction_Impl(
                                 SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
                                 FileList                aFileList;
 
-                                aMemStm >> aFileList;
+                                ReadFileList( aMemStm, aFileList );
 
                                 if( !aMemStm.GetError() && ( aFileList.Count() == 1 ) )
                                 {

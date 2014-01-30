@@ -880,7 +880,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                         {   // read SvtGraphicFill
                             SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
-                            aMemStm >> aFilling;
+                            ReadSvtGraphicFill( aMemStm, aFilling );
                         }
 
                         aFilling.getPath(aPath);
@@ -921,7 +921,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                         {   // read SvtGraphicFill
                             SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
-                            aMemStm >> aStroke;
+                            ReadSvtGraphicStroke( aMemStm, aStroke );
                         }
 
                         aStroke.getPath(aPath);

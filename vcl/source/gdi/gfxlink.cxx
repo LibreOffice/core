@@ -293,7 +293,7 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
     return rOStream;
 }
 
-SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
+SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 {
     Size            aSize;
     MapMode         aMapMode;
@@ -309,7 +309,8 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 
     if( pCompat->GetVersion() >= 2 )
     {
-        rIStream >> aSize >> aMapMode;
+        ReadPair( rIStream, aSize );
+        ReadMapMode( rIStream, aMapMode );
         bMapAndSizeValid = true;
     }
 

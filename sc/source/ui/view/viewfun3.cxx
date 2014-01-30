@@ -705,7 +705,7 @@ sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTran
             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
             {
                 Graphic aGraphic;
-                *xStm >> aGraphic;
+                ReadGraphic( *xStm, aGraphic );
                 bRet = ApplyGraphicToObject( pHitObj, aGraphic );
             }
         }

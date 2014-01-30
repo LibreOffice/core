@@ -179,7 +179,7 @@ struct SvxMSDffConnectorRule
     SvxMSDffConnectorRule() : nSpFlagsA( 0 ), nSpFlagsB( 0 ), pAObj( NULL ),
                               pBObj( NULL ), pCObj( NULL ) {};
 
-    friend SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
+    friend SvStream& ReadSvxMSDffConnectorRule( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
 
 typedef ::std::vector< SvxMSDffConnectorRule* > SvxMSDffConnectorRuleList;
@@ -191,7 +191,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
     SvxMSDffSolverContainer();
     ~SvxMSDffSolverContainer();
 
-    MSFILTER_DLLPUBLIC friend SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rAtom );
+    MSFILTER_DLLPUBLIC friend SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& rAtom );
 };
 
 struct FIDCL

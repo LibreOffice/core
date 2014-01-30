@@ -119,7 +119,7 @@ void Hatch::SetAngle( sal_uInt16 nAngle10 )
     mpImplHatch->mnAngle = nAngle10;
 }
 
-SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
+SvStream& ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
@@ -127,7 +127,7 @@ SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
 
     rIStm >> nTmp16; rImplHatch.meStyle = (HatchStyle) nTmp16;
     //#fdo39428 SvStream no longer supports operator>>(long&)
-    rIStm >> rImplHatch.maColor >> nTmp32 >> rImplHatch.mnAngle;
+    ReadColor( rIStm, rImplHatch.maColor ) >> nTmp32 >> rImplHatch.mnAngle;
     rImplHatch.mnDistance = nTmp32;
 
     return rIStm;
@@ -145,10 +145,10 @@ SvStream& WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch )
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, Hatch& rHatch )
+SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 {
     rHatch.ImplMakeUnique();
-    return( rIStm >> *rHatch.mpImplHatch );
+    return ReadImplHatch( rIStm, *rHatch.mpImplHatch );
 }
 
 SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )

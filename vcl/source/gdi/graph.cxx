@@ -306,7 +306,7 @@ sal_Bool Graphic::operator!() const
 
 void Graphic::Load( SvStream& rIStm )
 {
-    rIStm >> *this;
+    ReadGraphic( rIStm, *this );
 }
 
 void Graphic::Save( SvStream& rOStm )
@@ -571,10 +571,10 @@ sal_Bool Graphic::ExportNative( SvStream& rOStream ) const
     return mpImpGraphic->ImplExportNative( rOStream );
 }
 
-SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
+SvStream& ReadGraphic( SvStream& rIStream, Graphic& rGraphic )
 {
     rGraphic.ImplTestRefCount();
-    return rIStream >> *rGraphic.mpImpGraphic;
+    return ReadImpGraphic( rIStream, *rGraphic.mpImpGraphic );
 }
 
 SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )

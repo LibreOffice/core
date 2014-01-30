@@ -217,7 +217,7 @@ SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
     if ( bNewFormat )
         rIStm >> mnColor;
     else
-        rIStm >> *this;
+        ReadColor( rIStm, *this );
 
     return rIStm;
 }
@@ -234,7 +234,7 @@ SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
 
 #define COL_NAME_USER       ((sal_uInt16)0x8000)
 
-SvStream& operator>>( SvStream& rIStream, Color& rColor )
+SvStream& ReadColor( SvStream& rIStream, Color& rColor )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Color::>> - Solar-Version not set on rIStream" );
 

@@ -144,7 +144,7 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
 // SgfFilterSDrw ///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SvStream& operator>>(SvStream& rIStream, DtHdType& rDtHd)
+SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd)
 {
     rIStream.Read((char*)&rDtHd.Reserved[0],DtHdSize);
     return rIStream;
@@ -158,7 +158,7 @@ void DtHdOverSeek(SvStream& rInp)
 }
 
 
-SvStream& operator>>(SvStream& rIStream, PageType& rPage)
+SvStream& ReadPageType(SvStream& rIStream, PageType& rPage)
 {
     rIStream.Read((char*)&rPage.Next,PageSize);
 #if defined OSL_BIGENDIAN
@@ -174,7 +174,7 @@ void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
     rInp.Seek(rInp.Tell()+Siz);
 }
 
-SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
+SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
 {
     // fileposition in stream is not changed!
     sal_uLong nPos;
@@ -193,7 +193,7 @@ SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, StrkType& rStrk)
+SvStream& ReadStrkType(SvStream& rInp, StrkType& rStrk)
 {
     rInp.Read((char*)&rStrk.Last,StrkSize);
 #if defined OSL_BIGENDIAN
@@ -204,7 +204,7 @@ SvStream& operator>>(SvStream& rInp, StrkType& rStrk)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, RectType& rRect)
+SvStream& ReadRectType(SvStream& rInp, RectType& rRect)
 {
     rInp.Read((char*)&rRect.Last,RectSize);
 #if defined OSL_BIGENDIAN
@@ -219,7 +219,7 @@ SvStream& operator>>(SvStream& rInp, RectType& rRect)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, PolyType& rPoly)
+SvStream& ReadPolyType(SvStream& rInp, PolyType& rPoly)
 {
     rInp.Read((char*)&rPoly.Last,PolySize);
 #if defined OSL_BIGENDIAN
@@ -229,7 +229,7 @@ SvStream& operator>>(SvStream& rInp, PolyType& rPoly)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, SplnType& rSpln)
+SvStream& ReadSplnType(SvStream& rInp, SplnType& rSpln)
 {
     rInp.Read((char*)&rSpln.Last,SplnSize);
 #if defined OSL_BIGENDIAN
@@ -239,7 +239,7 @@ SvStream& operator>>(SvStream& rInp, SplnType& rSpln)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, CircType& rCirc)
+SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
 {
     rInp.Read((char*)&rCirc.Last,CircSize);
 #if defined OSL_BIGENDIAN
@@ -254,7 +254,7 @@ SvStream& operator>>(SvStream& rInp, CircType& rCirc)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, TextType& rText)
+SvStream& ReadTextType(SvStream& rInp, TextType& rText)
 {
     rInp.Read((char*)&rText.Last,TextSize);
 #if defined OSL_BIGENDIAN
@@ -272,7 +272,7 @@ SvStream& operator>>(SvStream& rInp, TextType& rText)
     rText.Buffer=NULL;
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, BmapType& rBmap)
+SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
 {
     rInp.Read((char*)&rBmap.Last,BmapSize);
 #if defined OSL_BIGENDIAN
@@ -286,7 +286,7 @@ SvStream& operator>>(SvStream& rInp, BmapType& rBmap)
 #endif
     return rInp;
 }
-SvStream& operator>>(SvStream& rInp, GrupType& rGrup)
+SvStream& ReadGrupType(SvStream& rInp, GrupType& rGrup)
 {
     rInp.Read((char*)&rGrup.Last,GrupSize);
 #if defined OSL_BIGENDIAN
@@ -768,15 +768,15 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
     sal_uInt16 nGrpCnt=0;
     bool bEnde=false;
     do {
-        rInp>>aObjk;
+        ReadObjkType( rInp, aObjk );
         if (!rInp.GetError()) {
             switch(aObjk.Art) {
-                case ObjStrk: { StrkType aStrk; rInp>>aStrk; if (!rInp.GetError()) aStrk.Draw(rOut); } break;
-                case ObjRect: { RectType aRect; rInp>>aRect; if (!rInp.GetError()) aRect.Draw(rOut); } break;
-                case ObjCirc: { CircType aCirc; rInp>>aCirc; if (!rInp.GetError()) aCirc.Draw(rOut); } break;
+                case ObjStrk: { StrkType aStrk; ReadStrkType( rInp, aStrk ); if (!rInp.GetError()) aStrk.Draw(rOut); } break;
+                case ObjRect: { RectType aRect; ReadRectType( rInp, aRect ); if (!rInp.GetError()) aRect.Draw(rOut); } break;
+                case ObjCirc: { CircType aCirc; ReadCircType( rInp, aCirc ); if (!rInp.GetError()) aCirc.Draw(rOut); } break;
                 case ObjText: {
                     TextType aText;
-                    rInp>>aText;
+                    ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
                         aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
                         rInp.Read((char* )aText.Buffer,aText.BufSize);
@@ -786,14 +786,14 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                 } break;
                 case ObjBmap: {
                     BmapType aBmap;
-                    rInp>>aBmap;
+                    ReadBmapType( rInp, aBmap );
                     if (!rInp.GetError()) {
                         aBmap.Draw(rOut);
                     }
                 } break;
                 case ObjPoly: {
                     PolyType aPoly;
-                    rInp>>aPoly;
+                    ReadPolyType( rInp, aPoly );
                     if (!rInp.GetError()) {
                         aPoly.EckP=new PointType[aPoly.nPoints];
                         rInp.Read((char*)aPoly.EckP,4*aPoly.nPoints);
@@ -806,7 +806,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                 } break;
                 case ObjSpln: {
                     SplnType aSpln;
-                    rInp>>aSpln;
+                    ReadSplnType( rInp, aSpln );
                     if (!rInp.GetError()) {
                         aSpln.EckP=new PointType[aSpln.nPoints];
                         rInp.Read((char*)aSpln.EckP,4*aSpln.nPoints);
@@ -819,7 +819,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                 } break;
                 case ObjGrup: {
                     GrupType aGrup;
-                    rInp>>aGrup;
+                    ReadGrupType( rInp, aGrup );
                     if (!rInp.GetError()) {
                         rInp.Seek(rInp.Tell()+aGrup.Last);   // object appendix
                         if(aGrup.GetSubPtr()!=0L) nGrpCnt++; // DrawObjkList(rInp,rOut );
@@ -852,10 +852,10 @@ void SkipObjkList(SvStream& rInp)
     ObjkType aObjk;
     do
     {
-        rInp>>aObjk;
+        ReadObjkType( rInp, aObjk );
         if(aObjk.Art==ObjGrup) {
             GrupType aGrup;
-            rInp>>aGrup;
+            ReadGrupType( rInp, aGrup );
             rInp.Seek(rInp.Tell()+aGrup.Last); // object appendix
             if(aGrup.GetSubPtr()!=0L) SkipObjkList(rInp);
         } else {
@@ -884,28 +884,28 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 
     nStdPos=rInp.Tell();
     do {                // read standard page
-        rInp>>aPage;
+        ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
     } while (aPage.Next!=0L && !rInp.GetError());
 
 //    ShowMsg("Drawingpage(n)\n");
     nZchPos=rInp.Tell();
-    rInp>>aPage;
+    ReadPageType( rInp, aPage );
 
     rMtf.Record(pOutDev);
     Num=aPage.StdPg;
     if (Num!=0) {
       rInp.Seek(nStdPos);
       while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { // search standard page
-        rInp>>aPage;
+        ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
         Num--;
       }
-      rInp>>aPage;
+      ReadPageType( rInp, aPage );
       if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev );
       rInp.Seek(nZchPos);
       nZchPos=rInp.Tell();
-      rInp>>aPage;
+      ReadPageType( rInp, aPage );
     }
     if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev );
 
@@ -943,12 +943,12 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 
     pSgfFonts->AssignFN( aIniPath.GetMainURL( INetURLObject::NO_DECODE ) );
     nFileStart=rInp.Tell();
-    rInp>>aHead;
+    ReadSgfHeader( rInp, aHead );
     if (aHead.ChkMagic() && aHead.Typ==SgfStarDraw && aHead.Version==SGV_VERSION) {
         nNext=aHead.GetOffset();
         while (nNext && !rInp.GetError()) {
             rInp.Seek(nFileStart+nNext);
-            rInp>>aEntr;
+            ReadSgfEntry( rInp, aEntr );
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
                 bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf );

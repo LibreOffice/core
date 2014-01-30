@@ -115,7 +115,7 @@ public:
     sal_Bool            IsSameInstance( const Wallpaper& rWallpaper ) const
                         { return (mpImplWallpaper == rWallpaper.mpImplWallpaper); }
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper );
+    friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
 

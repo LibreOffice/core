@@ -1558,7 +1558,7 @@ bool Region::operator==( const Region& rRegion ) const
     return false;
 }
 
-SvStream& operator>>(SvStream& rIStrm, Region& rRegion)
+SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
 {
     VersionCompat aCompat(rIStrm, STREAM_READ);
     sal_uInt16 nVersion(0);
@@ -1605,7 +1605,7 @@ SvStream& operator>>(SvStream& rIStrm, Region& rRegion)
                 if(bHasPolyPolygon)
                 {
                     PolyPolygon* pNewPoly = new PolyPolygon();
-                    rIStrm >> *pNewPoly;
+                    ReadPolyPolygon( rIStrm, *pNewPoly );
                     rRegion.mpPolyPolygon.reset(pNewPoly);
                 }
             }

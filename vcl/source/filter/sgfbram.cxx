@@ -27,7 +27,7 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 
-SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
+SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
 {
     rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);
 #if defined OSL_BIGENDIAN
@@ -52,7 +52,7 @@ bool SgfHeader::ChkMagic()
 sal_uInt32 SgfHeader::GetOffset()
 { return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
 
-SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
+SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
 {
     rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);
 #if defined OSL_BIGENDIAN
@@ -69,7 +69,7 @@ SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
 sal_uInt32 SgfEntry::GetOffset()
 { return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
 
-SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
+SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
 {
     rIStream.Read((char*)&rVect,sizeof(rVect));
 #if defined OSL_BIGENDIAN
@@ -337,13 +337,13 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
     bool      bRet=false;            // return value
 
     nFileStart=rInp.Tell();
-    rInp>>aHead;
+    ReadSgfHeader( rInp, aHead );
     if (aHead.ChkMagic() && (aHead.Typ==SgfBitImag0 || aHead.Typ==SgfBitImag1 ||
                              aHead.Typ==SgfBitImag2 || aHead.Typ==SgfBitImgMo)) {
         nNext=aHead.GetOffset();
         while (nNext && !bRdFlag && !rInp.GetError() && !rOut.GetError()) {
             rInp.Seek(nFileStart+nNext);
-            rInp>>aEntr;
+            ReadSgfEntry( rInp, aEntr );
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
                 bRdFlag=true;
@@ -415,7 +415,7 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     aOutDev.SetFillColor(Color(COL_BLACK));
 
     while (!bEoDt && !rInp.GetError()) {
-        rInp>>aVect; RecNr++;
+        ReadSgfVector( rInp, aVect ); RecNr++;
         nFarb=(sal_uInt8) (aVect.Flag & 0x000F);
         nLTyp=(sal_uInt8)((aVect.Flag & 0x00F0) >>4);
         nOTyp=(sal_uInt8)((aVect.Flag & 0x0F00) >>8);
@@ -472,12 +472,12 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
     bool      bRet=false;            // return value
 
     nFileStart=rInp.Tell();
-    rInp>>aHead;
+    ReadSgfHeader( rInp, aHead );
     if (aHead.ChkMagic() && aHead.Typ==SGF_SIMPVECT) {
         nNext=aHead.GetOffset();
         while (nNext && !rInp.GetError()) {
             rInp.Seek(nFileStart+nNext);
-            rInp>>aEntr;
+            ReadSgfEntry( rInp, aEntr );
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
                 bRet=SgfFilterVect(rInp,aHead,aEntr,rMtf);
@@ -509,7 +509,7 @@ sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
     SgfHeader aHead;
     nVersion=0;
     nPos=rInp.Tell();
-    rInp>>aHead;
+    ReadSgfHeader( rInp, aHead );
     rInp.Seek(nPos);
     if (aHead.ChkMagic()) {
         nVersion=aHead.Version;

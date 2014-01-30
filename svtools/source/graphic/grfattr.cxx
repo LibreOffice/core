@@ -73,7 +73,7 @@ sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 
 // ------------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
+SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt32      nTmp32;

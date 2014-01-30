@@ -91,7 +91,7 @@ public:
     void operator|=(const SetOfByte& r2ndSet);
 
     friend inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet);
-    friend inline SvStream& operator>>(SvStream& rIn, SetOfByte& rSet);
+    friend inline SvStream& ReadSetOfByte(SvStream& rIn, SetOfByte& rSet);
 
     // initialize this set with a uno sequence of sal_Int8
     void PutValue(const com::sun::star::uno::Any & rAny);
@@ -106,7 +106,7 @@ inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet)
     return rOut;
 }
 
-inline SvStream& operator>>(SvStream& rIn, SetOfByte& rSet)
+inline SvStream& ReadSetOfByte(SvStream& rIn, SetOfByte& rSet)
 {
     rIn.Read((char*)rSet.aData,32);
     return rIn;

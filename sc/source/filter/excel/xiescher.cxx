@@ -3368,7 +3368,7 @@ void XclImpDffConverter::ProcessDrawing( SvStream& rDffStrm )
     {
         rDffStrm.Seek( STREAM_SEEK_TO_BEGIN );
         DffRecordHeader aHeader;
-        rDffStrm >> aHeader;
+        ReadDffRecordHeader( rDffStrm, aHeader );
         OSL_ENSURE( aHeader.nRecType == DFF_msofbtDgContainer, "XclImpDffConverter::ProcessDrawing - unexpected record" );
         if( aHeader.nRecType == DFF_msofbtDgContainer )
             ProcessDgContainer( rDffStrm, aHeader );
@@ -3710,7 +3710,7 @@ void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecord
     while( rDffStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
-        rDffStrm >> aHeader;
+        ReadDffRecordHeader( rDffStrm, aHeader );
         switch( aHeader.nRecType )
         {
             case DFF_msofbtSolverContainer:
@@ -3739,7 +3739,7 @@ void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffReco
     while( rDffStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
-        rDffStrm >> aHeader;
+        ReadDffRecordHeader( rDffStrm, aHeader );
         switch( aHeader.nRecType )
         {
             case DFF_msofbtSpgrContainer:
@@ -3759,7 +3759,7 @@ void XclImpDffConverter::ProcessSolverContainer( SvStream& rDffStrm, const DffRe
     // solver container wants to read the solver container header again
     rSolverHeader.SeekToBegOfRecord( rDffStrm );
     // read the entire solver container
-    rDffStrm >> GetConvData().maSolverCont;
+    ReadSvxMSDffSolverContainer( rDffStrm, GetConvData().maSolverCont );
     // seek to end of solver container
     rSolverHeader.SeekToEndOfRecord( rDffStrm );
 }

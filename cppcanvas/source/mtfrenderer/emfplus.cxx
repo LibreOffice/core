@@ -479,7 +479,7 @@ namespace cppcanvas
 
                         if (additionalFlags & 0x02) {
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
-                            s >> transformation;
+                            ReadXForm( s, transformation );
                             hasTransformation = true;
                             SAL_INFO("cppcanvas.emf",
                                     "EMF+\tm11: "   << transformation.eM11 << " m12: " << transformation.eM12 <<
@@ -557,7 +557,7 @@ namespace cppcanvas
 
                         if (additionalFlags & 0x02) {
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
-                            s >> transformation;
+                            ReadXForm( s, transformation );
                             hasTransformation = true;
                             SAL_INFO("cppcanvas.emf",
                                     "EMF+\tm11: "   << transformation.eM11 << " m12: " << transformation.eM12 <<
@@ -846,7 +846,7 @@ namespace cppcanvas
                             " additional flags: 0x" << penFlags << " unknown: 0x" << unknown2 << " width: " << std::dec << width );
 
                 if (penFlags & 1)
-                    s >> transformation;
+                    ReadXForm( s, transformation );
 
                 if (penFlags & 2)
                 {
@@ -2089,7 +2089,7 @@ namespace cppcanvas
                     case EmfPlusRecordTypeSetWorldTransform: {
                         SAL_INFO("cppcanvas.emf", "EMF+ SetWorldTransform");
                         XForm transform;
-                        rMF >> transform;
+                        ReadXForm( rMF, transform );
                         aWorldTransform.Set (transform);
                         SAL_INFO("cppcanvas.emf",
                                 "EMF+\tm11: " << aWorldTransform.eM11 << "\tm12: " << aWorldTransform.eM12 <<
@@ -2104,7 +2104,7 @@ namespace cppcanvas
                     case EmfPlusRecordTypeMultiplyWorldTransform: {
                         SAL_INFO("cppcanvas.emf", "EMF+ MultiplyWorldTransform");
                         XForm transform;
-                        rMF >> transform;
+                        ReadXForm( rMF, transform );
 
                         SAL_INFO("cppcanvas.emf",
                                 "EMF+\tmatrix m11: " << transform.eM11 << "m12: " << transform.eM12 <<
@@ -2209,7 +2209,7 @@ namespace cppcanvas
 
                             XForm transform;
                             if( hasMatrix ) {
-                                rMF >> transform;
+                                ReadXForm( rMF, transform );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
                             }
 

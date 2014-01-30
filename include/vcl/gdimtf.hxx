@@ -210,7 +210,7 @@ public:
 
     // Stream-operators write (still) the old format
     // and read both the old and the new format
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
+    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.

@@ -174,7 +174,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
                 if( pSgaObj )
                 {
-                    *pIStm >> *pSgaObj;
+                    ReadSgaObject( *pIStm, *pSgaObj );
                     pSgaObj->ImplUpdateURL( pEntry->aURL );
                 }
             }
@@ -644,7 +644,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 if( pObj )
                 {
                     pIStm->Seek( pEntry->nOffset );
-                    *pIStm >> *pObj;
+                    ReadSgaObject( *pIStm, *pObj);
                     pEntry->nOffset = pTmpStm->Tell();
                     WriteSgaObject( *pTmpStm, *pObj );
                     delete pObj;
@@ -1517,7 +1517,7 @@ SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme )
     return rTheme.WriteData( rOut );
 }
 
-SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme )
+SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme )
 {
     return rTheme.ReadData( rIn );
 }

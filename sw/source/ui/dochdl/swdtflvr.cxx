@@ -2234,7 +2234,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         if(rData.GetSotStorageStream(SOT_FORMATSTR_ID_SVXB, xStm))
         {
-            *xStm >> aGraphic;
+            ReadGraphic( *xStm, aGraphic );
             nRet = (GRAPHIC_NONE != aGraphic.GetType() && GRAPHIC_DEFAULT != aGraphic.GetType());
         }
 

@@ -129,7 +129,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     SvStream* pCurrentUserStream = rStorage.OpenSotStream( OUString( "Current User" ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
-        *pCurrentUserStream >> aParam.aCurrentUserAtom;
+        ReadPptCurrentUserAtom( *pCurrentUserStream, aParam.aCurrentUserAtom );
         delete pCurrentUserStream;
     }
 
@@ -760,7 +760,7 @@ sal_Bool ImplSdPPTImport::Import()
                     while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
                         DffRecordHeader aHd;
-                         rStCtrl >> aHd;
+                        ReadDffRecordHeader( rStCtrl, aHd );
                         switch( aHd.nRecType )
                         {
                             case PPT_PST_PPDrawing :
@@ -781,7 +781,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
                                             {
                                                 DffRecordHeader aHd2;
-                                                rStCtrl >> aHd2;
+                                                ReadDffRecordHeader( rStCtrl, aHd2 );
                                                 if ( ( aHd2.nRecType == DFF_msofbtSpContainer ) || ( aHd2.nRecType == DFF_msofbtSpgrContainer ) )
                                                 {
                                                     if ( nObjCount++ )      // skipping the first object
@@ -812,7 +812,7 @@ sal_Bool ImplSdPPTImport::Import()
                                     while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
-                                        rStCtrl >> aProgTagContentHd;
+                                        ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
                                         switch( aProgTagContentHd.nRecType )
                                         {
                                             case DFF_msofbtAnimGroup :
@@ -918,7 +918,7 @@ sal_Bool ImplSdPPTImport::Import()
                     while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
                         DffRecordHeader aHd;
-                        rStCtrl >> aHd;
+                        ReadDffRecordHeader( rStCtrl, aHd );
                         switch ( aHd.nRecType )
                         {
                             case PPT_PST_ProgTags :
@@ -929,7 +929,7 @@ sal_Bool ImplSdPPTImport::Import()
                                     while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
-                                        rStCtrl >> aProgTagContentHd;
+                                        ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
                                         switch( aProgTagContentHd.nRecType )
                                         {
                                             case DFF_msofbtAnimGroup :
@@ -1517,7 +1517,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                 while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPageRecEnd ) )
                 {
                     DffRecordHeader aHd;
-                    rStCtrl >> aHd;
+                    ReadDffRecordHeader( rStCtrl, aHd );
                     switch ( aHd.nRecType )
                     {
                         case PPT_PST_SSSlideInfoAtom:
@@ -1980,7 +1980,7 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
         while ( ( rStCtrl.Tell() < pHd->GetRecEndFilePos() ) && aRetVal.isEmpty() )
         {
             DffRecordHeader aHdMovie;
-            rStCtrl >> aHdMovie;
+            ReadDffRecordHeader( rStCtrl, aHdMovie );
             switch( aHdMovie.nRecType )
             {
                 case PPT_PST_ExAviMovie :
@@ -2000,7 +2000,7 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                 while( rStCtrl.Tell() < aExVideoHd.GetRecEndFilePos() )
                                 {
                                     DffRecordHeader aHd;
-                                    rStCtrl >> aHd;
+                                    ReadDffRecordHeader( rStCtrl, aHd );
                                     switch( aHd.nRecType )
                                     {
                                         case PPT_PST_CString :
@@ -2575,7 +2575,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 DffRecordHeader aHd;
                 do
                 {
-                    rSt >> aHd;
+                    ReadDffRecordHeader( rSt, aHd );
                     sal_uInt32 nHdRecEnd = aHd.GetRecEndFilePos();
                     switch ( aHd.nRecType )
                     {
@@ -2638,7 +2638,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             if ( SeekToRec( rSt, PPT_PST_InteractiveInfoAtom, nHdRecEnd, &aHdInteractiveInfoAtom ) )
                             {
                                 PptInteractiveInfoAtom aInteractiveInfoAtom;
-                                rSt >> aInteractiveInfoAtom;
+                                ReadPptInteractiveInfoAtom( rSt, aInteractiveInfoAtom );
 
                                 // interactive object
                                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
@@ -2691,7 +2691,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 bInhabitanceChecked = sal_True;
                 if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, pData, GetPropertyValue( DFF_Prop_hspMaster ) ) ) )
                     break;
-                rSt >> aMasterShapeHd;
+                ReadDffRecordHeader( rSt, aMasterShapeHd );
                 if ( !SeekToRec( rSt, DFF_msofbtClientData, aMasterShapeHd.GetRecEndFilePos(), &aMasterShapeHd ) )
                     break;
                 aMasterShapeHd.SeekToContent( rSt );

@@ -56,7 +56,7 @@ public:
     sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (38 mod 4 =2) !
 
     sal_uInt32 GetOffset();
-    friend SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead);
+    friend SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead);
     bool   ChkMagic();
 };
 
@@ -71,7 +71,7 @@ public:
     sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (18 mod 4 =2) !
 
     sal_uInt32 GetOffset();
-    friend SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr);
+    friend SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr);
 };
 
 #define SgfVectorSize 10
@@ -83,7 +83,7 @@ public:
     sal_Int16 y;
     sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (6 mod 4 =2) !
 
-    friend SvStream& operator>>(SvStream& rIStream, SgfVector& rEntr);
+    friend SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rEntr);
 };
 
 extern long SgfVectXofs;

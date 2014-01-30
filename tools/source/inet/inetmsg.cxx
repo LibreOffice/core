@@ -135,7 +135,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     for (i = 0; i < n; i++)
     {
         INetMessageHeader *p = new INetMessageHeader();
-        rStrm >> *p;
+        ReadINetMessageHeader( rStrm, *p );
         m_aHeaderList.push_back( p );
     }
 

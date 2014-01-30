@@ -1661,7 +1661,7 @@ namespace cppcanvas
                                 SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), STREAM_READ );
 
                                 SvtGraphicFill aFill;
-                                aMemStm >> aFill;
+                                ReadSvtGraphicFill( aMemStm, aFill );
 
                                 // TODO(P2): Also handle gradients and
                                 // hatches like this
@@ -1792,7 +1792,7 @@ namespace cppcanvas
                             rMF >> nPixX >> nPixY >> nMmX >> nMmY;
                             SAL_INFO ("cppcanvas.emf", "EMF+ ref device pixel size: " << nPixX << "x" << nPixY << " mm size: " << nMmX << "x" << nMmY);
 
-                            rMF >> aBaseTransform;
+                            ReadXForm( rMF, aBaseTransform );
                             //aWorldTransform.Set (aBaseTransform);
                         }
                     }

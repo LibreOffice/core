@@ -65,7 +65,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 {
     Font aFont;
     Color aColor;
-    rStream >> aColor;    aFont.SetColor( aColor );
+    ReadColor( rStream, aColor );    aFont.SetColor( aColor );
     sal_uInt16 nTemp;
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
 

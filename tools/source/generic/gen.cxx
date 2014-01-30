@@ -21,7 +21,7 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
-SvStream& operator>>( SvStream& rIStream, Pair& rPair )
+SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
 
@@ -169,7 +169,7 @@ bool Rectangle::IsOver( const Rectangle& rRect ) const
     return !GetIntersection( rRect ).IsEmpty();
 }
 
-SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
+SvStream& ReadRectangle( SvStream& rIStream, Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Rectangle::>> - Solar-Version not set on rIStream" );
 

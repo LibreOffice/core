@@ -482,7 +482,7 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
     return nN > nD;
 }
 
-SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
+SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp(0);

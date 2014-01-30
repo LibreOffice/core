@@ -177,7 +177,7 @@ public:
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
     // method to take care of PolyFlags
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Polygon& rPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadPolygon( SvStream& rIStream, Polygon& rPoly );
     TOOLS_DLLPUBLIC friend SvStream&    WritePolygon( SvStream& rOStream, const Polygon& rPoly );
 
     void                Read( SvStream& rIStream );
@@ -262,7 +262,7 @@ public:
 
     bool                IsEqual( const PolyPolygon& rPolyPoly ) const;
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly );
     TOOLS_DLLPUBLIC friend SvStream&    WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly );
 
     void                Read( SvStream& rIStream );

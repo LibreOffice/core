@@ -208,7 +208,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     }
     else
     {
-        rIn >> aThumbMtf;
+        ReadGDIMetaFile( rIn, aThumbMtf );
     }
 
     OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
@@ -258,7 +258,7 @@ SvStream& WriteSgaObject( SvStream& rOut, const SgaObject& rObj )
     return rOut;
 }
 
-SvStream& operator>>( SvStream& rIn, SgaObject& rObj )
+SvStream& ReadSgaObject( SvStream& rIn, SgaObject& rObj )
 {
     sal_uInt16 nReadVersion;
 

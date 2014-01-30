@@ -102,7 +102,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     Point aStr;
-    rStream >> aStr;
+    ReadPair( rStream, aStr );
     return new SfxPointItem(Which(), aStr);
 }
 

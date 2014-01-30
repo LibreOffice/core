@@ -35,7 +35,7 @@ private:
     sal_uLong           mnRefCount;
     BitmapEx*       mpCache;
 
-    friend SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
+    friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
     friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
 
 public:

@@ -655,7 +655,7 @@ void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
     rAttrs.SetSymbolFlag( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL );
 }
 
-SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
+SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
@@ -664,7 +664,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 
     rImpl_Font.maFamilyName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
     rImpl_Font.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
-    rIStm >> rImpl_Font.maSize;
+    ReadPair( rIStm, rImpl_Font.maSize );
 
     rIStm >> nTmp16; rImpl_Font.meCharSet = (rtl_TextEncoding) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meFamily = (FontFamily) nTmp16;
@@ -736,10 +736,10 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, Font& rFont )
+SvStream& ReadFont( SvStream& rIStm, Font& rFont )
 {
     rFont.MakeUnique();
-    return( rIStm >> *rFont.mpImplFont );
+    return ReadImpl_Font( rIStm, *rFont.mpImplFont );
 }
 
 SvStream& WriteFont( SvStream& rOStm, const Font& rFont )

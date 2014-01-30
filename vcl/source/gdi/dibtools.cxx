@@ -1491,7 +1491,7 @@ bool ReadDIBBitmapEx(
                 {
                     Color aTransparentColor;
 
-                    rIStm >> aTransparentColor;
+                    ReadColor( rIStm, aTransparentColor );
                     bRetval = !rIStm.GetError();
 
                     if(bRetval)

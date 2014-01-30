@@ -194,7 +194,7 @@ void IMapRectangleObject::WriteIMapObject( SvStream& rOStm ) const
 
 void IMapRectangleObject::ReadIMapObject( SvStream& rIStm )
 {
-    rIStm >> aRect;
+    ReadRectangle( rIStm, aRect );
 }
 
 
@@ -307,7 +307,7 @@ void IMapCircleObject::ReadIMapObject( SvStream& rIStm )
 {
     sal_uInt32 nTmp;
 
-    rIStm >> aCenter;
+    ReadPair( rIStm, aCenter );
     rIStm >> nTmp;
 
     nRadius = nTmp;
@@ -445,13 +445,13 @@ void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 
 void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
 {
-    rIStm >> aPoly;
+    ReadPolygon( rIStm, aPoly );
 
     // Version >= 2 has additional ellipses information
     if ( nReadVersion >= 2 )
     {
         rIStm >> bEllipse;
-        rIStm >> aEllipse;
+        ReadRectangle( rIStm, aEllipse );
     }
 }
 

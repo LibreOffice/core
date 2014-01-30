@@ -97,7 +97,7 @@ void ImplWallpaper::ImplReleaseCachedBitmap()
 
 // -----------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
+SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
@@ -112,7 +112,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     rImplWallpaper.mpBitmap = NULL;
 
     // version 1
-    rIStm >> rImplWallpaper.maColor;
+    ReadColor( rIStm, rImplWallpaper.maColor );
     rIStm >> nTmp16; rImplWallpaper.meStyle = (WallpaperStyle) nTmp16;
 
     // version 2
@@ -125,13 +125,13 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         if( bRect )
         {
             rImplWallpaper.mpRect = new Rectangle;
-            rIStm >> *rImplWallpaper.mpRect;
+            ReadRectangle( rIStm, *rImplWallpaper.mpRect );
         }
 
         if( bGrad )
         {
             rImplWallpaper.mpGradient = new Gradient;
-            rIStm >> *rImplWallpaper.mpGradient;
+            ReadGradient( rIStm, *rImplWallpaper.mpGradient );
         }
 
         if( bBmp )
@@ -549,10 +549,10 @@ sal_Bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper )
+SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper )
 {
     rWallpaper.ImplMakeUnique();
-    return( rIStm >> *rWallpaper.mpImplWallpaper );
+    return ReadImplWallpaper( rIStm, *rWallpaper.mpImplWallpaper );
 }
 
 // -----------------------------------------------------------------------

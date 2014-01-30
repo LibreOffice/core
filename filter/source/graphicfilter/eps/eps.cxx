@@ -1252,7 +1252,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         {
                             sSeqEnd = "XPATHSTROKE_SEQ_END";
                             SvtGraphicStroke aStroke;
-                            aMemStm >> aStroke;
+                            ReadSvtGraphicStroke( aMemStm, aStroke );
 
                             Polygon aPath;
                             aStroke.getPath( aPath );
@@ -1288,7 +1288,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         {
                             sSeqEnd = "XPATHFILL_SEQ_END";
                             SvtGraphicFill aFill;
-                            aMemStm >> aFill;
+                            ReadSvtGraphicFill( aMemStm, aFill );
                             switch( aFill.getFillType() )
                             {
                                 case SvtGraphicFill::fillSolid :

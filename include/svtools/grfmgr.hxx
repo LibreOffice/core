@@ -151,7 +151,7 @@ public:
                     }
 
     friend SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr );
-    friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
+    friend SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr );
 };
 
 class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
@@ -485,7 +485,7 @@ public:
     void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
 
     friend SvStream&        WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj );
-    friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
+    friend SvStream&        ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj );
 
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'

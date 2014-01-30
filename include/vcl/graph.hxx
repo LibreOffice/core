@@ -189,7 +189,7 @@ public:
     sal_Bool                ExportNative( SvStream& rOStream ) const;
 
     friend VCL_DLLPUBLIC SvStream&    WriteGraphic( SvStream& rOStream, const Graphic& rGraphic );
-    friend VCL_DLLPUBLIC SvStream&    operator>>( SvStream& rIStream, Graphic& rGraphic );
+    friend VCL_DLLPUBLIC SvStream&    ReadGraphic( SvStream& rIStream, Graphic& rGraphic );
 
 public:
 

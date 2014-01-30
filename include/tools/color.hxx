@@ -160,7 +160,7 @@ public:
     SvStream&           Read( SvStream& rIStm, bool bNewFormat = true );
     SvStream&           Write( SvStream& rOStm, bool bNewFormat = true );
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Color& rColor );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadColor( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    WriteColor( SvStream& rOStream, const Color& rColor );
 
     // get ::basegfx::BColor from this color
