@@ -13,7 +13,9 @@ $(eval $(call gb_CustomTarget_register_target,odk/settings,dk.mk))
 
 $(call gb_CustomTarget_get_workdir,odk/settings)/dk.mk : $(SRCDIR)/odk/settings/dk.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,SED,1)
-	tr -d "\015" < $< | sed -e 's/@@PLATFORMID@@/$(PLATFORMID)/' \
+	tr -d "\015" < $< | sed \
+		-e 's/@@PLATFORM@@/$(firstword $(subst _, ,$(PLATFORMID)))/' \
+		-e 's/@@PROCTYPE@@/$(subst $(WHITESPACE),_,$(wordlist 2,$(words $(subst _, ,$(PLATFORMID))),$(subst _, ,$(PLATFORMID))))/' \
 		-e 's/@@RELEASE@@/$(PRODUCTVERSION)/' \
 		-e 's/@@BUILDID@@/$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)/' \
 		-e 's/@@ENABLE_DBGUTIL@@/$(ENABLE_DBGUTIL)/' > $@

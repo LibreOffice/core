@@ -21,10 +21,6 @@
 
 include $(OO_SDK_HOME)/settings/dk.mk
 
-# test for the platform
-PLATFORM := $(shell printf '%s' $(PLATFORMID) | cut -f 1 -d _)
-PROCTYPE := $(shell printf '%s' $(PLATFORMID) | cut -f 2- -d _)
-
 # debug option, default is no debug
 DEBUG=no
 ifeq "$(MAKECMDGOALS)" "debug"
