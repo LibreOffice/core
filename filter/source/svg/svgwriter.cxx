@@ -3000,7 +3000,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     SvMemoryStream  aMemStm( (void*) pA->GetData(), pA->GetDataSize(), STREAM_READ );
                     SvtGraphicFill  aFill;
 
-                    aMemStm >> aFill;
+                    ReadSvtGraphicFill( aMemStm, aFill );
 
                     sal_Bool bGradient = SvtGraphicFill::fillGradient == aFill.getFillType() &&
                                      ( SvtGraphicFill::gradientLinear == aFill.getGradientType() ||
@@ -3077,7 +3077,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     SvtGraphicStroke    aStroke;
                     PolyPolygon         aStartArrow, aEndArrow;
 
-                    aMemStm >> aStroke;
+                    ReadSvtGraphicStroke( aMemStm, aStroke );
                     aStroke.getStartArrow( aStartArrow );
                     aStroke.getEndArrow( aEndArrow );
 
@@ -3630,7 +3630,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
     GDIMetaFile     aMtf;
 
-    aMemStm >> aMtf;
+    ReadGDIMetaFile( aMemStm, aMtf );
 
     const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
     SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, maFilterData );

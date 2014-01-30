@@ -98,7 +98,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     Size aStr;
-    rStream >> aStr;
+    ReadPair( rStream, aStr );
     return new SfxSizeItem(Which(), aStr);
 }
 

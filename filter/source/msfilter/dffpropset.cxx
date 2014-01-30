@@ -1093,7 +1093,7 @@ DffPropSet::~DffPropSet()
 void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
 {
     DffRecordHeader aHd;
-    rIn >> aHd;
+    ReadDffRecordHeader( rIn, aHd );
 
     if ( !bSetUninitializedOnly )
     {
@@ -1213,7 +1213,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
     aHd.SeekToEndOfRecord( rIn );
 }
 
-SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
+SvStream& ReadDffPropSet( SvStream& rIn, DffPropSet& rRec )
 {
     rRec.ReadPropSet( rIn, false );
     return rIn;

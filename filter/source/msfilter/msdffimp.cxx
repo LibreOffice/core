@@ -212,13 +212,13 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
     sal_uInt32 nMerk = rStCtrl.Tell();
     rStCtrl.Seek( nOffsDgg );
     DffRecordHeader aRecHd;
-    rStCtrl >> aRecHd;
+    ReadDffRecordHeader( rStCtrl, aRecHd );
     if ( aRecHd.nRecType == DFF_msofbtDggContainer )
     {
         if ( rManager.SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
         {
             ( (DffPropertyReader*) this )->pDefaultPropSet = new DffPropSet;
-            rStCtrl >> *pDefaultPropSet;
+            ReadDffPropSet( rStCtrl, *pDefaultPropSet );
         }
     }
     rStCtrl.Seek( nMerk );
@@ -231,14 +231,14 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 #endif
 {
     sal_uLong nFilePos = rIn.Tell();
-    rIn >> (DffPropertyReader&)*this;
+    ReadDffPropSet( rIn, (DffPropertyReader&)*this );
 
     if ( IsProperty( DFF_Prop_hspMaster ) )
     {
         if ( rManager.SeekToShape( rIn, pClientData, GetPropertyValue( DFF_Prop_hspMaster ) ) )
         {
             DffRecordHeader aRecHd;
-            rIn >> aRecHd;
+            ReadDffRecordHeader( rIn, aRecHd );
             if ( rManager.SeekToRec( rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
             {
                 rIn |= (DffPropertyReader&)*this;
@@ -391,16 +391,16 @@ SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
     aCList.clear();
 }
 
-SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
+SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
 {
     DffRecordHeader aHd;
-    rIn >> aHd;
+    ReadDffRecordHeader( rIn, aHd );
     if ( aHd.nRecType == DFF_msofbtSolverContainer )
     {
         DffRecordHeader aCRule;
         while ( ( rIn.GetError() == 0 ) && ( rIn.Tell() < aHd.GetRecEndFilePos() ) )
         {
-            rIn >> aCRule;
+            ReadDffRecordHeader( rIn, aCRule );
             if ( aCRule.nRecType == DFF_msofbtConnectorRule )
             {
                 SvxMSDffConnectorRule* pRule = new SvxMSDffConnectorRule;
@@ -2881,7 +2881,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_Bool bAppend, sal_uInt32 nStO
     if ( !nStOfs )
     {
         DffRecordHeader aHd;
-        rIn >> aHd;
+        ReadDffRecordHeader( rIn, aHd );
         if ( aHd.nRecVer == DFF_PSFLAG_CONTAINER )
             nStOfs = aHd.GetRecEndFilePos();
     }
@@ -2894,7 +2894,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_Bool bAppend, sal_uInt32 nStO
         {
             if ( pCList->nCount == DFF_RECORD_MANAGER_BUF_SIZE )
                 pCList = new DffRecordList( pCList );
-            rIn >> pCList->mHd[ pCList->nCount ];
+            ReadDffRecordHeader( rIn, pCList->mHd[ pCList->nCount ] );
             bool bSeekSucceeded = pCList->mHd[ pCList->nCount++ ].SeekToEndOfRecord(rIn);
             if (!bSeekSucceeded)
                 break;
@@ -3154,12 +3154,12 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
                 sal_IntPtr nOfs = it->second;
                 rSt.Seek( nOfs );
                 DffRecordHeader aEscherF002Hd;
-                rSt >> aEscherF002Hd;
+                ReadDffRecordHeader( rSt, aEscherF002Hd );
                 sal_uLong nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
                 DffRecordHeader aEscherObjListHd;
                 while (rSt.good() && rSt.Tell() < nEscherF002End)
                 {
-                    rSt >> aEscherObjListHd;
+                    ReadDffRecordHeader( rSt, aEscherObjListHd );
                     if ( aEscherObjListHd.nRecVer != 0xf )
                         aEscherObjListHd.SeekToEndOfRecord( rSt );
                     else if ( aEscherObjListHd.nRecType == DFF_msofbtSpContainer )
@@ -3193,7 +3193,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     DffRecordHeader aHd;
     do
     {
-        rSt >> aHd;
+        ReadDffRecordHeader( rSt, aHd );
         if (!rSt.good())
             break;
         if (aHd.nRecLen > nMaxLegalDffRecordLength)
@@ -3231,7 +3231,7 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
     DffRecordHeader aHd;
     do
     {
-        rStCtrl >> aHd;
+        ReadDffRecordHeader( rStCtrl, aHd );
         if ( aHd.nRecType == nRecId1 || aHd.nRecType == nRecId2 )
         {
             if ( nSkipCount )
@@ -3515,13 +3515,13 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
 void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
 {
     DffRecordHeader aRecHd;
-    rStream >> aRecHd;
+    ReadDffRecordHeader( rStream, aRecHd );
     if( aRecHd.nRecType == DFF_msofbtClientTextbox || aRecHd.nRecType == 0x1022 )
     {
         while( rStream.GetError() == 0 && rStream.Tell() < aRecHd.GetRecEndFilePos() )
         {
             DffRecordHeader aHd;
-            rStream >> aHd;
+            ReadDffRecordHeader( rStream, aHd );
             switch( aHd.nRecType )
             {
                 case DFF_PST_TextBytesAtom:
@@ -3724,7 +3724,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 */
                 rObjData.rSpHd.SeekToEndOfRecord( rSt );
                 DffRecordHeader aHd;
-                rSt >> aHd;
+                ReadDffRecordHeader( rSt, aHd );
                 if( DFF_msofbtBSE == aHd.nRecType )
                 {
                     const sal_uLong nSkipBLIPLen = 20;
@@ -3947,7 +3947,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
 {
     SdrObject* pRet = NULL;
     DffRecordHeader aObjHd;
-    rSt >> aObjHd;
+    ReadDffRecordHeader( rSt, aObjHd );
     if ( aObjHd.nRecType == DFF_msofbtSpgrContainer )
     {
         pRet = ImportGroup( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
@@ -3973,7 +3973,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         return pRet;
 
     DffRecordHeader aRecHd;     // the first atom has to be the SpContainer for the GroupObject
-    rSt >> aRecHd;
+    ReadDffRecordHeader( rSt, aRecHd );
     if ( aRecHd.nRecType == DFF_msofbtSpContainer )
     {
         mnFix16Angle = 0;
@@ -4013,7 +4013,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
             {
                 DffRecordHeader aRecHd2;
-                rSt >> aRecHd2;
+                ReadDffRecordHeader( rSt, aRecHd2 );
                 if ( aRecHd2.nRecType == DFF_msofbtSpgrContainer )
                 {
                     Rectangle aGroupClientAnchor, aGroupChildAnchor;
@@ -4730,17 +4730,17 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aShapeHd;
-        rSt >> aShapeHd;
+        ReadDffRecordHeader( rSt, aShapeHd );
         if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) ||
                 ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
         {
             DffRecordHeader aShapeHd2( aShapeHd );
             if ( aShapeHd.nRecType == DFF_msofbtSpgrContainer )
-                rSt >> aShapeHd2;
+                ReadDffRecordHeader( rSt, aShapeHd2 );
             while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aShapeHd2.GetRecEndFilePos() ) )
             {
                 DffRecordHeader aShapeAtom;
-                rSt >> aShapeAtom;
+                ReadDffRecordHeader( rSt, aShapeAtom );
 
                 if ( aShapeAtom.nRecType == DFF_msofbtClientAnchor )
                 {
@@ -4807,17 +4807,17 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
     DffRecordHeader aShapeHd;
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
-        rSt >> aShapeHd;
+        ReadDffRecordHeader( rSt, aShapeHd );
         if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) ||
                 ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
         {
             DffRecordHeader aShapeHd2( aShapeHd );
             if ( aShapeHd.nRecType == DFF_msofbtSpgrContainer )
-                rSt >> aShapeHd2;
+                ReadDffRecordHeader( rSt, aShapeHd2 );
             while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aShapeHd2.GetRecEndFilePos() ) )
             {
                 DffRecordHeader aShapeAtom;
-                rSt >> aShapeAtom;
+                ReadDffRecordHeader( rSt, aShapeAtom );
                 if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
                 {
                     sal_Int32 l, o, r, u;
@@ -5556,12 +5556,12 @@ void SvxMSDffManager::SetDgContainer( SvStream& rSt )
 {
     sal_uInt32 nFilePos = rSt.Tell();
     DffRecordHeader aDgContHd;
-    rSt >> aDgContHd;
+    ReadDffRecordHeader( rSt, aDgContHd );
     // insert this container only if there is also a DgAtom
     if ( SeekToRec( rSt, DFF_msofbtDg, aDgContHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aRecHd;
-        rSt >> aRecHd;
+        ReadDffRecordHeader( rSt, aRecHd );
         sal_uInt32 nDrawingId = aRecHd.nRecInstance;
         maDgOffsetTable[ nDrawingId ] = nFilePos;
         rSt.Seek( nFilePos );
@@ -5578,7 +5578,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
     if (nOffsDggL == rStCtrl.Seek(nOffsDggL))
     {
         DffRecordHeader aRecHd;
-        rStCtrl >> aRecHd;
+        ReadDffRecordHeader( rStCtrl, aRecHd );
 
         DffRecordHeader aDggAtomHd;
         if ( SeekToRec( rStCtrl, DFF_msofbtDgg, aRecHd.GetRecEndFilePos(), &aDggAtomHd ) )

@@ -229,7 +229,7 @@ public:
                                 const Link* pProgress = NULL
                             );
 
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, Animation& rAnimation );
+    friend VCL_DLLPUBLIC SvStream&  ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream&  WriteAnimation( SvStream& rOStream, const Animation& rAnimation );
 };
 

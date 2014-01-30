@@ -292,7 +292,7 @@ void ChartController::executeDispatch_Paste()
                 // graphic exchange format (graphic manager bitmap format?)
                 SotStorageStreamRef xStm;
                 if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ))
-                    (*xStm) >> aGraphic;
+                    ReadGraphic( *xStm, aGraphic );
             }
             else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ))
             {

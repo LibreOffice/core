@@ -52,7 +52,7 @@ struct ImplLineInfo
 
     bool operator==( const ImplLineInfo& ) const;
 
-    friend SvStream&    operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
+    friend SvStream&    ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
     friend SvStream&    WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
 };
 
@@ -108,7 +108,7 @@ public:
 
     sal_Bool            IsDefault() const;
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
+    friend VCL_DLLPUBLIC SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );
 
     // helper to get decomposed polygon data with the LineInfo applied. The source

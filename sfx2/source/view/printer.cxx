@@ -76,7 +76,7 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 {
     // Load JobSetup
     JobSetup aFileJobSetup;
-    rStream >> aFileJobSetup;
+    ReadJobSetup( rStream, aFileJobSetup );
 
     // Get printers
     SfxPrinter *pPrinter = new SfxPrinter( pOptions, aFileJobSetup );

@@ -383,7 +383,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
                         GDIMetaFile     aMtf;
 
-                        *pSrcStm >> aMtf;
+                        ReadGDIMetaFile( *pSrcStm, aMtf );
                         delete pSrcStm;
 
                         Graphic         aGraphic( aMtf );
@@ -413,7 +413,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
                         GDIMetaFile     aMtf;
 
-                        *pSrcStm >> aMtf;
+                        ReadGDIMetaFile( *pSrcStm, aMtf );
                         delete pSrcStm;
 
                         SvMemoryStream  aDstStm( 65535, 65535 );
@@ -1793,7 +1793,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
 
     if( GetSotStorageStream( rFlavor, xStm ) )
     {
-        *xStm >> rMtf;
+        ReadGDIMetaFile( *xStm, rMtf );
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
@@ -1888,7 +1888,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
 
         if( GetSotStorageStream( rFlavor, xStm ) )
         {
-            *xStm >> rGraphic;
+            ReadGraphic( *xStm, rGraphic );
             bRet = ( xStm->GetError() == ERRCODE_NONE );
         }
     }
@@ -2143,7 +2143,7 @@ sal_Bool TransferableDataHelper::GetFileList(
                     bRet = sal_True;
                  }
                  else
-                    bRet = ( ( *xStm >> rFileList ).GetError() == ERRCODE_NONE );
+                    bRet = ( ( ReadFileList( *xStm, rFileList ) ).GetError() == ERRCODE_NONE );
             }
         }
     }

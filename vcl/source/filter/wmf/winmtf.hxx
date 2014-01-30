@@ -460,8 +460,6 @@ struct XForm
         eM11 =  eM22 = 1.0f;
         eDx = eDy = eM12 = eM21 = 0.0f;
     }
-
-    friend SvStream& operator>>( SvStream& rIn, XForm& rXForm );
 };
 
 // -----------------------------------------------------------------------------

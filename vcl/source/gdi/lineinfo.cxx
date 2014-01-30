@@ -229,7 +229,7 @@ sal_Bool LineInfo::IsDefault() const
 
 // -----------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
+SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16(0);
@@ -292,10 +292,10 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
 
 // -----------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo )
+SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
     rLineInfo.ImplMakeUnique();
-    return( rIStm >> *rLineInfo.mpImplLineInfo );
+    return ReadImplLineInfo( rIStm, *rLineInfo.mpImplLineInfo );
 }
 
 // -----------------------------------------------------------------------

@@ -150,7 +150,7 @@ class CGM
         sal_Bool                IsFinished() const { return mbIsFinished; };
         sal_Bool                Write( SvStream& rIStm );
 
-        friend SvStream& operator>>( SvStream& rOStm, CGM& rCGM );
+        friend SvStream& ReadCGM( SvStream& rOStm, CGM& rCGM );
 
 };
 #endif

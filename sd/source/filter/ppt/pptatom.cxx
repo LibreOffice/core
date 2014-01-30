@@ -46,7 +46,7 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
                 && ( mrStream.Tell() < nStreamSize )
                 && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
             {
-                mrStream >> aChildHeader;
+                ReadDffRecordHeader( mrStream, aChildHeader );
 
                 if( mrStream.GetError() == 0 )
                 {

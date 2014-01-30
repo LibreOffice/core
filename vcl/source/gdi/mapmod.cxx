@@ -43,14 +43,16 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     mbSimple        = sal_False;
 }
 
-SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
+SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImplMapMode.meUnit = (MapUnit) nTmp16;
-    rIStm >> rImplMapMode.maOrigin >> rImplMapMode.maScaleX >>
-             rImplMapMode.maScaleY >> rImplMapMode.mbSimple;
+    ReadPair( rIStm, rImplMapMode.maOrigin );
+    ReadFraction( rIStm, rImplMapMode.maScaleX );
+    ReadFraction( rIStm, rImplMapMode.maScaleY );
+    rIStm >> rImplMapMode.mbSimple;
 
     return rIStm;
 }
@@ -231,10 +233,10 @@ sal_Bool MapMode::IsDefault() const
         return sal_False;
 }
 
-SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode )
+SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
     rMapMode.ImplMakeUnique();
-    return (rIStm >> *rMapMode.mpImplMapMode);
+    return ReadImplMapMode( rIStm, *rMapMode.mpImplMapMode );
 }
 
 SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )

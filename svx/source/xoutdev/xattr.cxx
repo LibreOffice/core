@@ -294,7 +294,7 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        rIn >> aColor;
+        ReadColor( rIn, aColor );
     }
 }
 

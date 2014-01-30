@@ -109,7 +109,7 @@ bool StgCompObjStream::Load()
     *this >> nMarker;
     if( nMarker == -1L )
     {
-        *this >> aClsId;
+        ReadClsId( *this, aClsId );
         sal_Int32 nLen1 = 0;
         *this >> nLen1;
         if ( nLen1 > 0 )

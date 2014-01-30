@@ -87,7 +87,7 @@ SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rDat
 }
 
 /// binary export (currently w/o version control because it is not persistent)
-SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
+SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 

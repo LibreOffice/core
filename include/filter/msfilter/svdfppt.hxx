@@ -73,7 +73,7 @@ public:
                             nMajorVersion       ( 0 ),
                             nMinorVersion       ( 0 ) {}
 
-    MSFILTER_DLLPUBLIC friend SvStream& operator>>( SvStream& rIn, PptCurrentUserAtom& rAtom );
+    MSFILTER_DLLPUBLIC friend SvStream& ReadPptCurrentUserAtom( SvStream& rIn, PptCurrentUserAtom& rAtom );
 };
 
 struct MSFILTER_DLLPUBLIC PowerPointImportParam
@@ -121,7 +121,7 @@ struct MSFILTER_DLLPUBLIC PptInteractiveInfoAtom
 
 public:
 
-    MSFILTER_DLLPUBLIC friend SvStream& operator>>( SvStream& rIn, PptInteractiveInfoAtom& rAtom );
+    MSFILTER_DLLPUBLIC friend SvStream& ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom );
 };
 
 enum PptPageKind { PPT_MASTERPAGE, PPT_SLIDEPAGE, PPT_NOTEPAGE };
@@ -188,7 +188,7 @@ public:
     Size    GetSlidesPageSize() const { return GetPageSize( aSlidesPageSize ); }
     Size    GetNotesPageSize() const { return GetPageSize( aNotesPageSize ); }
 
-    friend SvStream& operator>>( SvStream& rIn, PptDocumentAtom& rAtom );
+    friend SvStream& ReadPptDocumentAtom( SvStream& rIn, PptDocumentAtom& rAtom );
 };
 
 struct PptSlideLayoutAtom
@@ -201,7 +201,7 @@ public:
     void                Clear();
 
     // SlideLayoutAtom is read without header!
-    friend SvStream& operator>>( SvStream& rIn, PptSlideLayoutAtom& rAtom );
+    friend SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom );
 };
 
 struct PptSlideAtom
@@ -215,7 +215,7 @@ public:
                         PptSlideAtom() { Clear(); }
     void                Clear();
 
-    friend SvStream& operator>>(SvStream& rIn, PptSlideAtom& rAtom);
+    friend SvStream& ReadPptSlideAtom(SvStream& rIn, PptSlideAtom& rAtom);
 };
 
 struct PptSlidePersistAtom
@@ -230,7 +230,7 @@ public:
                         PptSlidePersistAtom() { Clear(); }
     void                Clear();
 
-    friend SvStream& operator>>(SvStream& rIn, PptSlidePersistAtom& rAtom);
+    friend SvStream& ReadPptSlidePersistAtom(SvStream& rIn, PptSlidePersistAtom& rAtom);
 };
 
 struct PptNotesAtom
@@ -242,7 +242,7 @@ public:
                         PptNotesAtom() { Clear(); }
     void                Clear();
 
-    friend SvStream& operator>>(SvStream& rIn, PptNotesAtom& rAtom);
+    friend SvStream& ReadPptNotesAtom(SvStream& rIn, PptNotesAtom& rAtom);
 };
 
 struct PptColorSchemeAtom
@@ -254,7 +254,7 @@ public:
     void                Clear();
     Color               GetColor( sal_uInt16 nNum ) const;
 
-    friend SvStream& operator>>(SvStream& rIn, PptColorSchemeAtom& rAtom);
+    friend SvStream& ReadPptColorSchemeAtom(SvStream& rIn, PptColorSchemeAtom& rAtom);
 };
 
 struct PptFontEntityAtom
@@ -270,7 +270,7 @@ struct PptFontEntityAtom
     FontPitch           ePitch;
     sal_Bool            bAvailable;
 
-    friend SvStream& operator>>(SvStream& rIn, PptFontEntityAtom& rAtom);
+    friend SvStream& ReadPptFontEntityAtom(SvStream& rIn, PptFontEntityAtom& rAtom);
 };
 
 class PptFontCollection;
@@ -288,7 +288,7 @@ struct PptUserEditAtom
 public:
     PptUserEditAtom() : nOffsetPersistDirectory( 0 ) {}
 
-    friend SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom );
+    friend SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom );
 };
 
 struct PptOEPlaceholderAtom
@@ -301,7 +301,7 @@ public:
                         PptOEPlaceholderAtom() { Clear(); }
     void                Clear();
 
-    friend SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom );
+    friend SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom );
 };
 
 struct ProcessData;
@@ -382,7 +382,7 @@ struct PptExOleObjAtom
 
 public:
 
-    friend SvStream& operator>>( SvStream& rIn, PptExOleObjAtom& rAtom );
+    friend SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom );
 };
 
 typedef ::std::vector< PPTOleEntry* > PPTOleEntryList;
@@ -691,7 +691,7 @@ struct PPTExtParaLevel
     sal_Bool    mbSet;
 
     PPTExtParaLevel();
-    friend SvStream& operator>>( SvStream& rIn, PPTExtParaLevel& rL );
+    friend SvStream& ReadPPTExtParaLevel( SvStream& rIn, PPTExtParaLevel& rL );
 };
 
 struct PPTExtParaSheet

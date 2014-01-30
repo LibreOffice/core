@@ -231,7 +231,7 @@ public:
 };
 
 SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
-SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme );
+SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif
 

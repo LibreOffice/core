@@ -471,7 +471,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
         {
             Graphic aGraphic;
-            *xStm >> aGraphic;
+            ReadGraphic( *xStm, aGraphic );
             bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING, EMPTY_OUSTRING );
         }
     }

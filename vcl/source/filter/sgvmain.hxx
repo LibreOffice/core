@@ -37,7 +37,7 @@ struct PointType {
 class DtHdType {
 public:
     sal_uInt8  Reserved[256];
-    friend SvStream& operator>>(SvStream& rIStream, DtHdType& rDtHd);
+    friend SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd);
     friend void DtHdOverSeek(SvStream& rInp);
 };
 
@@ -66,7 +66,7 @@ public:
     sal_uInt8        LnAnzH;
     sal_uInt8        LnAnzV;
     UCHAR            PgName[32];  // page name
-    friend SvStream& operator>>(SvStream& rIStream, PageType& rPage);
+    friend SvStream& ReadPageType(SvStream& rIStream, PageType& rPage);
 };
 
 enum ObjArtType {ObjStrk,ObjRect,ObjPoly,ObjCirc,ObjSpln,
@@ -137,7 +137,7 @@ public:
     PointType      ObjMax;     // XY maximum of the object
     sal_uInt8      Art;
     sal_uInt8      Layer;
-    friend SvStream& operator>>(SvStream& rIStream, ObjkType& rObjk);
+    friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
     friend sal_Bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
 };
@@ -150,7 +150,7 @@ public:
     ObjLineType     L;
     PointType       Pos1;      // start point
     PointType       Pos2;      // end point
-    friend SvStream& operator>>(SvStream& rIStream, StrkType& rStrk);
+    friend SvStream& ReadStrkType(SvStream& rIStream, StrkType& rStrk);
     virtual void Draw(OutputDevice& rOut);
 };
 
@@ -166,7 +166,7 @@ public:
     sal_Int16       Radius;    // radius of corner
     sal_uInt16      DrehWink;  //  315...<45
     sal_uInt16      Slant;     // >270...<90
-    friend SvStream& operator>>(SvStream& rIStream, RectType& rRect);
+    friend SvStream& ReadRectType(SvStream& rIStream, RectType& rRect);
     virtual void Draw(OutputDevice& rOut);
 };
 
@@ -181,7 +181,7 @@ public:
     sal_uInt8        Reserve;
     sal_uInt32       SD_EckP; // pointer to corner point (StarDraw)
     PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
-    friend SvStream& operator>>(SvStream& rIStream, PolyType& rPoly);
+    friend SvStream& ReadPolyType(SvStream& rIStream, PolyType& rPoly);
     virtual void Draw(OutputDevice& rOut);
 };
 #define  PolyClosBit 0x01     // kinds of Poly:   0: polyLine  1: polygon
@@ -197,7 +197,7 @@ public:
     sal_uInt8        Reserve;
     sal_uInt32       SD_EckP; // pointer to corner points (StarDraw)
     PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
-    friend SvStream& operator>>(SvStream& rIStream, SplnType& rSpln);
+    friend SvStream& ReadSplnType(SvStream& rIStream, SplnType& rSpln);
     virtual void Draw(OutputDevice& rOut);
 };
 // kinds of Spline: see Poly
@@ -214,7 +214,7 @@ public:
     sal_uInt16      DrehWink;  // only ellipses
     sal_uInt16      StartWink; // and not for full circles
     sal_uInt16      RelWink;   // and full ellipses
-    friend SvStream& operator>>(SvStream& rIStream, CircType& rCirc);
+    friend SvStream& ReadCircType(SvStream& rIStream, CircType& rCirc);
     virtual void Draw(OutputDevice& rOut);
 };
 #define CircFull 0x00  /* kinds of circle: 0: full circle    */
@@ -239,7 +239,7 @@ public:
     PointType   FitSize;     // size of origin for Fit2Size
     sal_Int16   FitBreit;    // width to format for Fit2Size
     UCHAR*      Buffer;      // this variable is not set by reading from disk, but explicit!
-    friend SvStream& operator>>(SvStream& rIStream, TextType& rText);
+    friend SvStream& ReadTextType(SvStream& rIStream, TextType& rText);
     virtual void Draw(OutputDevice& rOut);
 };
 #define TextOutlBit 0x01     /*       1=Sourcecode for outliner (ignored byDrawObjekt()) */
@@ -269,7 +269,7 @@ public:
     sal_Bool    LightOut;     // brighten? (SD20)
     sal_uInt8   GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=HPGL 4=Raw $FF=Undef (to fix DrawBmp)
     INetURLObject aFltPath;   // for GraphicFilter
-    friend SvStream& operator>>(SvStream& rIStream, BmapType& rBmap);
+    friend SvStream& ReadBmapType(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut);
     void SetPaths( const INetURLObject rFltPath );
 };
@@ -284,7 +284,7 @@ public:
     sal_uInt16  ChartSize;     // required amount of memory for structure of diagram structure
     sal_uInt32  ChartPtr;      // diagram structure
     sal_uInt32  GetSubPtr();   // only to check if Sublist is empty
-    friend SvStream& operator>>(SvStream& rIStream, GrupType& rGrup);
+    friend SvStream& ReadGrupType(SvStream& rIStream, GrupType& rGrup);
 };
 
 void SetLine(ObjLineType& rLine, OutputDevice& rOut);

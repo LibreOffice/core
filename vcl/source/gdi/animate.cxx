@@ -738,7 +738,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
+SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
 {
     Bitmap  aBmp;
     sal_uLong   nStmPos = rIStm.Tell();
@@ -782,9 +782,9 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
         do
         {
             ReadDIBBitmapEx(aAnimBmp.aBmpEx, rIStm);
-            rIStm >> aAnimBmp.aPosPix;
-            rIStm >> aAnimBmp.aSizePix;
-            rIStm >> rAnimation.maGlobalSize;
+            ReadPair( rIStm, aAnimBmp.aPosPix );
+            ReadPair( rIStm, aAnimBmp.aSizePix );
+            ReadPair( rIStm, rAnimation.maGlobalSize );
             rIStm >> nTmp16; aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
             rIStm >> nTmp16; aAnimBmp.eDisposal = ( Disposal) nTmp16;
             rIStm >> cTmp; aAnimBmp.bUserInput = (sal_Bool) cTmp;

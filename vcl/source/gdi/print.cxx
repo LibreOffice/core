@@ -264,7 +264,7 @@ SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 }
 
 
-SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
+SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
 

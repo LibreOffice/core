@@ -19,7 +19,7 @@
 
 #include <filter/msfilter/dffrecordheader.hxx>
 
-SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
+SvStream& ReadDffRecordHeader( SvStream& rIn, DffRecordHeader& rRec )
 {
     rRec.nFilePos = rIn.Tell();
     sal_uInt16 nTmp(0);

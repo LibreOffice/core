@@ -214,12 +214,12 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     if ( hasBulletFont )
     {
         pBulletFont = new Font( );
-        rStream >> *pBulletFont;
+        ReadFont( rStream, *pBulletFont );
     }
     else pBulletFont = NULL;
-    rStream >> aGraphicSize;
+    ReadPair( rStream, aGraphicSize );
 
-    rStream >> nBulletColor;
+    ReadColor( rStream, nBulletColor );
     rStream >> nBulletRelSize;
     rStream >> nTmp16; SetShowSymbol( nTmp16 );
 

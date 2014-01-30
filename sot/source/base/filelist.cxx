@@ -63,7 +63,7 @@ FileList& FileList::operator=( const FileList& rFileList )
 
 void FileList::Load( SvStream& rIStm )
 {
-    rIStm >> *this;
+    ReadFileList( rIStm, *this );
 }
 
 void FileList::Save( SvStream& rOStm )
@@ -99,7 +99,7 @@ SvStream& WriteFileList( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
    instead of the original Windows Sv_DROPFILES structure. All strings
    in this list are UTF16 strings. Shell link files will be already
    resolved by the Windows clipboard bridge.*/
-SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
+SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
 

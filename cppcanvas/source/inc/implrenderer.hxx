@@ -147,7 +147,7 @@ static float GetSwapFloat( SvStream& rSt )
 }
 #endif
 
-            friend SvStream& operator>>( SvStream& rIn, XForm& rXForm )
+            friend SvStream& ReadXForm( SvStream& rIn, XForm& rXForm )
             {
                 if ( sizeof( float ) != 4 )
                 {

@@ -136,7 +136,7 @@ namespace dbaui
             _rStr.WriteInt32( (sal_Int32)0 );
         return _rStr;
     }
-    SvStream& operator>>( SvStream& _rStr, OTableRow& _rRow )
+    SvStream& ReadOTableRow( SvStream& _rStr, OTableRow& _rRow )
     {
         _rStr >> _rRow.m_nPos;
         sal_Int32 nValue = 0;

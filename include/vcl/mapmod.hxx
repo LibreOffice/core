@@ -48,7 +48,7 @@ private:
     Fraction        maScaleY;
     sal_Bool            mbSimple;
 
-    friend SvStream& operator>>( SvStream& rIStm, ImplMapMode& rMapMode );
+    friend SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rMapMode );
     friend SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rMapMode );
 
     static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit );
@@ -101,7 +101,7 @@ public:
     sal_Bool            IsSameInstance( const MapMode& rMapMode ) const
                         { return (mpImplMapMode == rMapMode.mpImplMapMode); }
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode );
+    friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
     friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
 };
 

@@ -49,7 +49,7 @@ public:
     sal_uInt16          mnIntensityEnd;
     sal_uInt16          mnStepCount;
 
-    friend SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImplGradient );
+    friend SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImplGradient );
     friend SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImplGradient );
 
                     Impl_Gradient();
@@ -109,7 +109,7 @@ public:
     sal_Bool            IsSameInstance( const Gradient& rGradient ) const
                         { return (mpImplGradient == rGradient.mpImplGradient); }
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Gradient& rGradient );
+    friend VCL_DLLPUBLIC SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient );
     friend VCL_DLLPUBLIC SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient );
 };
 

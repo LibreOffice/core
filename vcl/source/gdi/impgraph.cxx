@@ -1015,8 +1015,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
         rIStm >> nType;
         rIStm >> nLen;
-        rIStm >> aSize;
-        rIStm >> aMapMode;
+        ReadPair( rIStm, aSize );
+        ReadMapMode( rIStm, aMapMode );
 
         delete pCompat;
     }
@@ -1173,7 +1173,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
         }
         else if( meType == GRAPHIC_BITMAP || meType == GRAPHIC_GDIMETAFILE )
         {
-            rIStm >> *this;
+            ReadImpGraphic( rIStm, *this );
             bRet = ( rIStm.GetError() == 0UL );
         }
         else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
@@ -1587,7 +1587,7 @@ const SvgDataPtr& ImpGraphic::getSvgData() const
     return maSvgData;
 }
 
-SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
+SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
     if( !rIStm.GetError() )
     {
@@ -1616,7 +1616,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 pCompat = new VersionCompat( rIStm, STREAM_READ );
                 delete pCompat;
 
-                rIStm >> aLink;
+                ReadGfxLink( rIStm, aLink );
 
                 // set dummy link to avoid creation of additional link after filtering;
                 // we set a default link to avoid unnecessary swapping of native data
@@ -1668,7 +1668,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     {
                         delete rImpGraphic.mpAnimation;
                         rImpGraphic.mpAnimation = new Animation;
-                        rIStm >> *rImpGraphic.mpAnimation;
+                        ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
 
                         // #108077# manually set loaded BmpEx to Animation
                         // (which skips loading its BmpEx if already done)
@@ -1683,7 +1683,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                     rIStm.Seek( nStmPos1 );
                     rIStm.ResetError();
-                    rIStm >> aMtf;
+                    ReadGDIMetaFile( rIStm, aMtf );
 
                     if( !rIStm.GetError() )
                     {

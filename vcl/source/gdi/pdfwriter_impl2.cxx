@@ -563,7 +563,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             {
                                 sSeqEnd = OString("XPATHSTROKE_SEQ_END");
                                 SvtGraphicStroke aStroke;
-                                aMemStm >> aStroke;
+                                ReadSvtGraphicStroke( aMemStm, aStroke );
 
                                 Polygon aPath;
                                 aStroke.getPath( aPath );
@@ -648,7 +648,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             {
                                 sSeqEnd = OString("XPATHFILL_SEQ_END");
                                 SvtGraphicFill aFill;
-                                aMemStm >> aFill;
+                                ReadSvtGraphicFill( aMemStm, aFill );
 
                                 if ( ( aFill.getFillType() == SvtGraphicFill::fillSolid ) && ( aFill.getFillRule() == SvtGraphicFill::fillEvenOdd ) )
                                 {

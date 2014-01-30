@@ -1197,7 +1197,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 if ( bPathStroke )
                                 {
                                     SvtGraphicStroke aStroke;
-                                    aMemStm >> aStroke;
+                                    ReadSvtGraphicStroke( aMemStm, aStroke );
                                     Polygon aPath;
                                     aStroke.getPath( aPath );
                                     aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -1208,7 +1208,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 else
                                 {
                                     SvtGraphicFill aFill;
-                                    aMemStm >> aFill;
+                                    ReadSvtGraphicFill( aMemStm, aFill );
                                     PolyPolygon aPath;
                                     aFill.getPath( aPath );
                                     aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -2726,7 +2726,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
     return( nSizeBytes );
 }
 
-SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
+SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 {
     if( !rIStm.GetError() )
     {
@@ -2751,8 +2751,8 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             pCompat = new VersionCompat( rIStm, STREAM_READ );
 
             rIStm >> nStmCompressMode;
-            rIStm >> rGDIMetaFile.aPrefMapMode;
-            rIStm >> rGDIMetaFile.aPrefSize;
+            ReadMapMode( rIStm, rGDIMetaFile.aPrefMapMode );
+            ReadPair( rIStm, rGDIMetaFile.aPrefSize );
             rIStm >> nCount;
 
             delete pCompat;
@@ -2830,7 +2830,7 @@ Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior"
 SvStream& GDIMetaFile::Read( SvStream& rIStm )
 {
     Clear();
-    rIStm >> *this;
+    ReadGDIMetaFile( rIStm, *this );
 
     return rIStm;
 }

@@ -553,7 +553,7 @@ bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
     return bIsEqual;
 }
 
-SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
+SvStream& ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
@@ -575,7 +575,7 @@ SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
             pPoly = new Polygon;
-            rIStream >> *pPoly;
+            ReadPolygon( rIStream, *pPoly );
             rPolyPoly.mpImplPolyPolygon->mpPolyAry[i] = pPoly;
         }
     }

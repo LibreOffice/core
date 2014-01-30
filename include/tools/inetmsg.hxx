@@ -70,7 +70,7 @@ public:
         return rStrm;
     }
 
-    friend SvStream& operator>> (
+    friend SvStream& ReadINetMessageHeader (
         SvStream& rStrm, INetMessageHeader& rHdr)
     {
         rHdr.m_aName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
@@ -200,7 +200,7 @@ public:
         return rMsg.operator<< (rStrm);
     }
 
-    friend SvStream& operator>> (
+    friend SvStream& ReadINetMessage (
         SvStream& rStrm, INetMessage& rMsg)
     {
         return rMsg.operator>> (rStrm);

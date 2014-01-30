@@ -1065,8 +1065,8 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
                     MapMode aMapMode;
 
                     rStm.SeekRel( 0x06 );
-                    rStm >> aMapMode;
-                    rStm >> aLogSize;
+                    ReadMapMode( rStm, aMapMode );
+                    ReadPair( rStm, aLogSize );
                     aLogSize = OutputDevice::LogicToLogic( aLogSize, aMapMode, MapMode( MAP_100TH_MM ) );
                 }
             }

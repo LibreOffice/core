@@ -1501,7 +1501,7 @@ bool Polygon::IsEqual( const Polygon& rPoly ) const
     return bIsEqual;
 }
 
-SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
+SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
 
@@ -1590,8 +1590,8 @@ void Polygon::ImplRead( SvStream& rIStream )
 {
     sal_uInt8   bHasPolyFlags;
 
-    rIStream >> *this
-             >> bHasPolyFlags;
+    ReadPolygon( rIStream, *this );
+    rIStream >> bHasPolyFlags;
 
     if ( bHasPolyFlags )
     {

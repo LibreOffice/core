@@ -28,7 +28,7 @@
 class StgIo;
 class SvStream;
 
-SvStream& operator>>( SvStream&, ClsId& );
+SvStream& ReadClsId( SvStream&, ClsId& );
 SvStream& WriteClsId( SvStream&, const ClsId& );
 
 class StgHeader

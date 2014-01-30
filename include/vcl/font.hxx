@@ -131,7 +131,7 @@ public:
                             { return !(Font::operator==( rFont )); }
     sal_Bool                IsSameInstance( const Font& ) const;
 
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, Font& );
+    friend VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, Font& );
     friend VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const Font& );
 
     static Font identifyFont( const void* pBuffer, sal_uInt32 nLen );

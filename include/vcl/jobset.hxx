@@ -59,7 +59,7 @@ public:
     sal_Bool                operator!=( const JobSetup& rJobSetup ) const
                             { return !(JobSetup::operator==( rJobSetup )); }
 
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, JobSetup& rJobSetup );
+    friend VCL_DLLPUBLIC SvStream&  ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup );
     friend VCL_DLLPUBLIC SvStream&  WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup );
 };
 

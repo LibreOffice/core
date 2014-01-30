@@ -61,7 +61,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
         sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
         void        InitializePropSet( sal_uInt16 nPropSetType ) const;
 
-        friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
+        friend SvStream& ReadDffPropSet( SvStream& rIn, DffPropSet& rPropSet );
         friend SvStream& operator|=( SvStream& rIn, DffPropSet& rPropSet );
 };
 

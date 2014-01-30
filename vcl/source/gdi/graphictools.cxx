@@ -158,7 +158,7 @@ SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass )
+SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rIStm, STREAM_READ );
 
@@ -316,12 +316,12 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass )
+SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
 {
     VersionCompat aCompat( rIStm, STREAM_READ );
 
     rClass.maPath.Read( rIStm );
-    rIStm >> rClass.maFillColor;
+    ReadColor( rIStm, rClass.maFillColor );
     rIStm >> rClass.mfTransparency;
     sal_uInt16 nTmp;
     rIStm >> nTmp;
@@ -335,13 +335,13 @@ SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass )
     rClass.mbTiling = nTmp;
     rIStm >> nTmp;
     rClass.maHatchType = SvtGraphicFill::HatchType( nTmp );
-    rIStm >> rClass.maHatchColor;
+    ReadColor( rIStm, rClass.maHatchColor );
     rIStm >> nTmp;
     rClass.maGradientType = SvtGraphicFill::GradientType( nTmp );
-    rIStm >> rClass.maGradient1stColor;
-    rIStm >> rClass.maGradient2ndColor;
+    ReadColor( rIStm, rClass.maGradient1stColor );
+    ReadColor( rIStm, rClass.maGradient2ndColor );
     rIStm >> rClass.maGradientStepCount;
-    rIStm >> rClass.maFillGraphic;
+    ReadGraphic( rIStm, rClass.maFillGraphic );
 
     return rIStm;
 }

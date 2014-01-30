@@ -125,7 +125,7 @@ namespace
         sal_uInt16 nOutline, nInline, nDistance;
         sal_uInt16 nStyle = NONE;
         Color aColor;
-        stream >> aColor >> nOutline >> nInline >> nDistance;
+        ReadColor( stream, aColor ) >> nOutline >> nInline >> nDistance;
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
             stream >> nStyle;
@@ -1571,7 +1571,9 @@ SfxPoolItem* SvxShadowItem::Create( SvStream& rStrm, sal_uInt16 ) const
     Color aFillColor;
     sal_Int8 nStyle;
     rStrm >> cLoc >> _nWidth
-          >> bTrans >> aColor >> aFillColor >> nStyle;
+          >> bTrans;
+    ReadColor( rStrm, aColor );
+    ReadColor( rStrm, aFillColor ) >> nStyle;
     aColor.SetTransparency(bTrans ? 0xff : 0);
     return new SvxShadowItem( Which(), &aColor, _nWidth, (SvxShadowLocation)cLoc );
 }
@@ -2690,7 +2692,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
             break;
         short nOutline, nInline, nDistance;
         Color aColor;
-        rStrm >> aColor >> nOutline >> nInline >> nDistance;
+        ReadColor( rStrm, aColor ) >> nOutline >> nInline >> nDistance;
         SvxBorderLine aBorder( &aColor );
         aBorder.GuessLinesWidths(NONE, nOutline, nInline, nDistance);
 
@@ -3319,7 +3321,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     short        nOutline, nInline, nDistance;
     Color        aColor;
 
-    rStrm >> aColor >> nOutline >> nInline >> nDistance;
+    ReadColor( rStrm, aColor ) >> nOutline >> nInline >> nDistance;
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
@@ -3477,8 +3479,8 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
     sal_Int8 nStyle;
 
     rStream >> bTrans;
-    rStream >> aTempColor;
-    rStream >> aTempFillColor;
+    ReadColor( rStream, aTempColor );
+    ReadColor( rStream, aTempFillColor );
     rStream >> nStyle;
 
     switch ( nStyle )
@@ -3538,7 +3540,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         {
             Graphic aGraphic;
 
-            rStream >> aGraphic;
+            ReadGraphic( rStream, aGraphic );
             pImpl->pGraphicObject = new GraphicObject( aGraphic );
 
             if( SVSTREAM_FILEFORMAT_ERROR == rStream.GetError() )

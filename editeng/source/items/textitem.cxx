@@ -1936,7 +1936,7 @@ SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
     Color aColor;
-    rStrm >> aColor;
+    ReadColor( rStrm, aColor );
     mColor = aColor;
 }
 
@@ -2093,7 +2093,8 @@ SfxPoolItem* SvxCharSetColorItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 cSet;
     Color aColor;
-    rStrm >> cSet >> aColor;
+    rStrm >> cSet;
+    ReadColor( rStrm, aColor );
     return new SvxCharSetColorItem( aColor,  (rtl_TextEncoding)cSet, Which() );
 }
 

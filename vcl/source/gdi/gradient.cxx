@@ -286,16 +286,16 @@ sal_Bool Gradient::operator==( const Gradient& rGradient ) const
         return sal_False;
 }
 
-SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
+SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
 
-    rIStm >> rImpl_Gradient.maStartColor >>
-             rImpl_Gradient.maEndColor >>
-             rImpl_Gradient.mnAngle >>
+    ReadColor( rIStm, rImpl_Gradient.maStartColor );
+    ReadColor( rIStm, rImpl_Gradient.maEndColor );
+    rIStm >> rImpl_Gradient.mnAngle >>
              rImpl_Gradient.mnBorder >>
              rImpl_Gradient.mnOfsX >>
              rImpl_Gradient.mnOfsY >>
@@ -324,10 +324,10 @@ SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradie
     return rOStm;
 }
 
-SvStream& operator>>( SvStream& rIStm, Gradient& rGradient )
+SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
 {
     rGradient.MakeUnique();
-    return( rIStm >> *rGradient.mpImplGradient );
+    return ReadImpl_Gradient( rIStm, *rGradient.mpImplGradient );
 }
 
 SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )

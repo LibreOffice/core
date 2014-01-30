@@ -45,7 +45,7 @@ public:
     bool                operator == ( const Pair& rPair ) const;
     bool                operator != ( const Pair& rPair ) const;
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Pair& rPair );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
 
 protected:
@@ -417,7 +417,7 @@ public:
     friend inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt );
     friend inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt );
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Rectangle& rRect );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadRectangle( SvStream& rIStream, Rectangle& rRect );
     TOOLS_DLLPUBLIC friend SvStream&    WriteRectangle( SvStream& rOStream, const Rectangle& rRect );
 
     // ONE

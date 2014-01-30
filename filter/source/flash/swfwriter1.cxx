@@ -1662,7 +1662,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
 
                     // read the fill info
-                    aMemStm >> aFilling;
+                    ReadSvtGraphicFill( aMemStm, aFilling );
 
                     // if impl_writeFilling can handle this high level filling, it returns true and we
                     // skip all meta actions until "XPATHFILL_SEQ_END"
@@ -1692,7 +1692,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
 
                     // read the fill info
-                    aMemStm >> aStroke;
+                    ReadSvtGraphicStroke( aMemStm, aStroke );
 
                     // if impl_writeStroke can handle this high level stroke, it returns true and we
                     // skip all meta actions until "XPATHSTROKE_SEQ_END"
