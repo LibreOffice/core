@@ -43,6 +43,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include <ooxml/resourceids.hxx>
@@ -936,7 +937,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_SizeRelV_pctHeight:
             if (m_xShape.is() && !m_pImpl->m_rPositivePercentages.empty())
             {
-                sal_Int16 nPositivePercentage = m_pImpl->m_rPositivePercentages.front().toInt32() / 1000;
+                sal_Int16 nPositivePercentage = rtl::math::round(m_pImpl->m_rPositivePercentages.front().toDouble() / 1000);
                 m_pImpl->m_rPositivePercentages.pop();
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);

@@ -1748,6 +1748,12 @@ DECLARE_OOXMLIMPORT_TEST(testPageRelSize, "pagerelsize.docx")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testRelSizeRound, "rel-size-round.docx")
+{
+    // This was 9: 9.8 was imported as 9 instead of being rounded to 10.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
