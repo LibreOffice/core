@@ -119,8 +119,11 @@ bool ScDocument::CopyOneCellFromClip(
                 {
                     bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                     if (!bPaste)
+                    {
                         // Don't paste this.
                         rSrcCell.clear();
+                        break;
+                    }
 
                     // Turn this into a numeric cell.
                     rSrcCell.set(rSrcCell.mpFormula->GetValue());
