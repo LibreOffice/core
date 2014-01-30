@@ -17,13 +17,67 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "iahndl.hxx"
-#include "interactionhandler.hxx"
-#include "comphelper/namedvaluecollection.hxx"
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+
+#include <iahndl.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "com/sun/star/awt/XWindow.hpp"
 
 using namespace com::sun::star;
+
+namespace {
+
+class UUIInteractionHandler:
+    public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
+                                  com::sun::star::lang::XInitialization,
+                                  com::sun::star::task::XInteractionHandler2 >
+{
+private:
+    UUIInteractionHelper * m_pImpl;
+
+    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
+    void operator =(UUIInteractionHandler); // not implemented
+
+public:
+    UUIInteractionHandler(com::sun::star::uno::Reference<
+                  com::sun::star::uno::XComponentContext >
+                  const & rxContext)
+        SAL_THROW(());
+
+    virtual ~UUIInteractionHandler() SAL_THROW(());
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const &
+                          rServiceName)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    getSupportedServiceNames()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+    initialize(
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
+            rArguments)
+        throw (com::sun::star::uno::Exception);
+
+    virtual void SAL_CALL
+    handle(com::sun::star::uno::Reference<
+           com::sun::star::task::XInteractionRequest > const &
+       rRequest)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual ::sal_Bool SAL_CALL
+        handleInteractionRequest(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _Request
+        )   throw ( ::com::sun::star::uno::RuntimeException );
+};
 
 UUIInteractionHandler::UUIInteractionHandler(
     uno::Reference< uno::XComponentContext > const &
@@ -122,6 +176,8 @@ UUIInteractionHandler::handle(
     {
         throw uno::RuntimeException( ex.Message, *this );
     }
+}
+
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
