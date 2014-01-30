@@ -741,36 +741,31 @@ PyObject* PyUNO_new_UNCHECKED (
     const Any &targetInterface,
     const Reference<XSingleServiceFactory> &ssf )
 {
-    PyUNO* self;
-    Sequence<Any> arguments (1);
     Reference<XInterface> tmp_interface;
-
-    self = PyObject_New (PyUNO, &PyUNOType);
+    Reference<XInvocation2> tmp_invocation;
+    {
+        PyThreadDetach antiguard;
+        Sequence<Any> arguments(1);
+        arguments[0] <<= targetInterface;
+        tmp_interface = ssf->createInstanceWithArguments(arguments);
+        tmp_invocation.set(tmp_interface, UNO_QUERY);
+        if (!tmp_invocation.is() && tmp_interface.is()) {
+            throw RuntimeException(
+                "XInvocation2 not implemented, cannot interact with object",
+                Reference<XInterface>());
+        }
+    }
+    if (!tmp_interface.is())
+    {
+        Py_INCREF( Py_None );
+        return Py_None;
+    }
+    PyUNO* self = PyObject_New (PyUNO, &PyUNOType);
     if (self == NULL)
         return NULL; // == error
     self->members = new PyUNOInternals();
-
-    arguments[0] <<= targetInterface;
-    {
-        PyThreadDetach antiguard;
-        tmp_interface = ssf->createInstanceWithArguments (arguments);
-
-        if (!tmp_interface.is ())
-        {
-            Py_INCREF( Py_None );
-            return Py_None;
-        }
-
-        Reference<XInvocation2> tmp_invocation (tmp_interface, UNO_QUERY);
-        if (!tmp_invocation.is()) {
-            throw RuntimeException (OUString::createFromAscii (
-                "XInvocation2 not implemented, cannot interact with object"),
-                Reference< XInterface > ());
-        }
-
-        self->members->xInvocation = tmp_invocation;
-        self->members->wrappedObject = targetInterface;
-    }
+    self->members->xInvocation = tmp_invocation;
+    self->members->wrappedObject = targetInterface;
     return (PyObject*) self;
 }
 
