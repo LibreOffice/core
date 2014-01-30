@@ -158,7 +158,7 @@ void TextPropertyPanel::HandleContextChange (
 
     maContext = aContext;
 
-    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application::Application_Calc)
+    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_Calc)
         mpToolBoxIncDec->Hide();
     else
         mpToolBoxIncDec->Show();
