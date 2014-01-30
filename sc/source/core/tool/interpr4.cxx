@@ -4154,9 +4154,9 @@ StackVar ScInterpreter::Interpret()
                 case ocPercentile       :
                 case ocPercentile_Inc   : ScPercentile( true );         break;
                 case ocPercentile_Exc   : ScPercentile( false );        break;
-                case ocPercentrank      : ScPercentrank();              break;
-                case ocPercentrank_Inc  : ScPercentrank_MS( true );     break;
-                case ocPercentrank_Exc  : ScPercentrank_MS( false );    break;
+                case ocPercentrank      :
+                case ocPercentrank_Inc  : ScPercentrank( true );        break;
+                case ocPercentrank_Exc  : ScPercentrank( false );       break;
                 case ocLarge            : ScLarge();                    break;
                 case ocSmall            : ScSmall();                    break;
                 case ocFrequency        : ScFrequency();                break;

@@ -3509,30 +3509,7 @@ void ScInterpreter::ScSmall()
     CalculateSmallLarge(true);
 }
 
-void ScInterpreter::ScPercentrank()
-{
-    sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 2 ) )
-        return;
-
-    double fNum = GetDouble();
-    vector<double> aSortArray;
-    GetSortArray(1, aSortArray);
-    SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
-        PushNoValue();
-    else
-    {
-        if (fNum < aSortArray[0] || fNum > aSortArray[nSize-1])
-            PushNoValue();
-        else if ( nSize == 1 )
-            PushDouble(1.0);            // fNum == pSortArray[0], see test above
-        else
-            PushDouble( GetPercentrank( aSortArray, fNum, true ) );
-    }
-}
-
-void ScInterpreter::ScPercentrank_MS( bool bInclusive )
+void ScInterpreter::ScPercentrank( bool bInclusive )
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
