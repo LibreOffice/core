@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_cb92099f",
+        "filename": "sw/source/filter/ww1/w1class.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-01-30T13:34:15Z",
+      "side": 1,
+      "message": "old code calls SVBT8ToByte on the pointer (aFkp+511) new code dereferences the aFkp pointer and adds 511 to that value, i.e. should be return *(aFkp+511); to dereference aFkp+511",
+      "revId": "cf2ab03dd44c8be0d0f49642602923734cb3c1dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_eb8fcd73",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-01-30T13:34:15Z",
+      "side": 1,
+      "message": "typo here, should be pS ? *pS : nDefaultVal",
+      "revId": "cf2ab03dd44c8be0d0f49642602923734cb3c1dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
