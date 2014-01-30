@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SwPanelFactory.hxx"
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 
 #include <PagePropertyPanel.hxx>
 #include <WrapPropertyPanel.hxx>
@@ -29,44 +29,39 @@
 #include <vcl/window.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <boost/bind.hpp>
-
+#include <boost/noncopyable.hpp>
 
 using namespace css;
-using namespace cssu;
-using ::rtl::OUString;
+using namespace css::uno;
 
+namespace {
 
-namespace sw { namespace sidebar {
+typedef ::cppu::WeakComponentImplHelper1 <
+        css::ui::XUIElementFactory
+        > PanelFactoryInterfaceBase;
 
-#define IMPLEMENTATION_NAME "org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"
-#define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
-
-
-::rtl::OUString SAL_CALL SwPanelFactory::getImplementationName (void)
+class SwPanelFactory
+    : private ::boost::noncopyable,
+      private ::cppu::BaseMutex,
+      public PanelFactoryInterfaceBase
 {
-    return OUString(IMPLEMENTATION_NAME);
-}
+public:
+    SwPanelFactory(void);
+    virtual ~SwPanelFactory(void);
 
-
-cssu::Reference<cssu::XInterface> SAL_CALL SwPanelFactory::createInstance(
-    const uno::Reference<lang::XMultiServiceFactory>& )
-{
-    ::rtl::Reference<SwPanelFactory> pPanelFactory (new SwPanelFactory());
-    cssu::Reference<cssu::XInterface> xService (static_cast<XWeak*>(pPanelFactory.get()), cssu::UNO_QUERY);
-    return xService;
-}
-
-
-cssu::Sequence<OUString> SAL_CALL SwPanelFactory::getSupportedServiceNames (void)
-{
-    cssu::Sequence<OUString> aServiceNames (1);
-    aServiceNames[0] = SERVICE_NAME;
-    return aServiceNames;
-
-}
-
+    // XUIElementFactory
+    cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
+        const ::rtl::OUString& rsResourceURL,
+        const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+        throw(
+            css::container::NoSuchElementException,
+            css::lang::IllegalArgumentException,
+            cssu::RuntimeException );
+};
 
 SwPanelFactory::SwPanelFactory (void)
     : PanelFactoryInterfaceBase(m_aMutex)
@@ -112,7 +107,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 #define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
     if (DoesResourceEndWith("/PagePropertyPanel"))
     {
-        PagePropertyPanel* pPanel = PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
+        sw::sidebar::PagePropertyPanel* pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -121,7 +116,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (DoesResourceEndWith("/WrapPropertyPanel"))
     {
-        WrapPropertyPanel* pPanel = WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+        sw::sidebar::WrapPropertyPanel* pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -142,8 +137,14 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     return xElement;
 }
 
-} } // end of namespace sw::sidebar
+}
 
-// eof
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_sw_sidebar_SwPanelFactory_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwPanelFactory());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
