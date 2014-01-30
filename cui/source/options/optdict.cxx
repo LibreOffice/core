@@ -54,6 +54,23 @@ static long nStaticTabs[]=
 static OUString getNormDicEntry_Impl(const OUString &rText)
 {
     OUString aTmp(comphelper::string::stripEnd(rText, '.'));
+    // non-standard hyphenation
+    if (aTmp.indexOf('[') > -1)
+    {
+        OUStringBuffer aTmp2 ( aTmp.getLength() );
+        sal_Bool bSkip = sal_False;
+        for (sal_Int32 i = 0; i < aTmp.getLength(); i++)
+        {
+            sal_Unicode cTmp = aTmp[i];
+            if (cTmp == '[')
+                bSkip = sal_True;
+            else if (!bSkip)
+                aTmp2.append( cTmp );
+            else if (cTmp == ']')
+                bSkip = sal_False;
+        }
+        aTmp = aTmp2.makeStringAndClear();
+    }
     return comphelper::string::remove(aTmp, '=');
 }
 
@@ -68,7 +85,7 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
         eRes = CDE_EQUAL;
     else
     {   // similar = equal up to trailing '.' and hyphenation positions
-        // marked with '='
+        // marked with '=' and '[' + alternative spelling pattern + ']'
         if (getNormDicEntry_Impl( rText1 ) == getNormDicEntry_Impl( rText2 ))
             eRes = CDE_SIMILAR;
     }

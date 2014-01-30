@@ -262,9 +262,11 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
     sal_Bool bRes = sal_False;
     if (xEntry.is())
     {
-        // there has to be (at least one) '=' denoting a hyphenation position
+        // there has to be (at least one) '=' or '[' denoting a hyphenation position
         // and it must not be before any character of the word
         sal_Int32 nIdx = xEntry->getDictionaryWord().indexOf( '=' );
+        if (nIdx == -1)
+            nIdx = xEntry->getDictionaryWord().indexOf( '[' );
         bRes = nIdx != -1  &&  nIdx != 0;
     }
     return bRes;

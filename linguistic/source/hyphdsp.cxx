@@ -79,18 +79,23 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
         sal_Int32 nTextLen = aText.getLength();
 
         // trailing '=' means "hyphenation should not be possible"
-        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=')
+        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
         {
             sal_Int16 nHyphenationPos = -1;
+            sal_Int32 nHyphenPos = -1;
+            sal_Int16 nOrigHyphPos = -1;
 
             OUStringBuffer aTmp( nTextLen );
             sal_Bool  bSkip = sal_False;
+            sal_Bool  bSkip2 = sal_False;
             sal_Int32 nHyphIdx = -1;
             sal_Int32 nLeading = 0;
             for (sal_Int32 i = 0;  i < nTextLen;  i++)
             {
                 sal_Unicode cTmp = aText[i];
-                if (cTmp != '=')
+                if (cTmp == '[' || cTmp == ']')
+                    bSkip2 = !bSkip2;
+                if (cTmp != '=' && !bSkip2 && cTmp != ']')
                 {
                     aTmp.append( cTmp );
                     nLeading++;
@@ -101,8 +106,10 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
                     {
-                        if (nLeading <= nMaxLeading)
+                        if (nLeading <= nMaxLeading) {
                             nHyphenationPos = (sal_Int16) nHyphIdx;
+                            nOrigHyphPos = i;
+                        }
                     }
                     bSkip = sal_True;   //! multiple '=' should count as one only
                 }
@@ -110,24 +117,23 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
 
             if (nHyphenationPos > 0)
             {
-                aText = aTmp.makeStringAndClear();
 
 #if OSL_DEBUG_LEVEL > 1
                 {
-                    if (aText != rOrigWord)
+                    if (aTmp.toString() != rOrigWord)
                     {
                         // both words should only differ by a having a trailing '.'
                         // character or not...
                         OUString aShorter, aLonger;
-                        if (aText.getLength() <= rOrigWord.getLength())
+                        if (aTmp.getLength() <= rOrigWord.getLength())
                         {
-                            aShorter = aText;
+                            aShorter = aTmp.toString();
                             aLonger  = rOrigWord;
                         }
                         else
                         {
                             aShorter = rOrigWord;
-                            aLonger  = aText;
+                            aLonger  = aTmp.toString();
                         }
                         sal_Int32 nS = aShorter.getLength();
                         sal_Int32 nL = aLonger.getLength();
@@ -139,12 +145,33 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     }
                 }
 #endif
-                //! take care of #i22591#
-                aText = rOrigWord;
+                if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
+                {
+                    sal_Int16 split = 0;
+                    sal_Unicode c = aText [ nOrigHyphPos + 1 ];
+                    sal_Int32 endhyphpat = aText.indexOf( ']', nOrigHyphPos );
+                    if ('0' <= c && c <= '9')
+                    {
+                        split = c - '0';
+                        nOrigHyphPos++;
+                    }
+                    if (endhyphpat > -1)
+                    {
+                        OUStringBuffer aTmp2 ( aTmp.copy(0, std::max (nHyphenationPos + 1 - split, 0) ) );
+                        aTmp2.append( aText.copy( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
+                        nHyphenPos = aTmp2.getLength();
+                        aTmp2.append( aTmp.copy( nHyphenationPos + 1 ) );
+                        //! take care of #i22591#
+                        if (rOrigWord[ rOrigWord.getLength() - 1 ] == '.')
+                            aTmp2.append( '.' );
+                        aText = aTmp2.makeStringAndClear();
+                    }
+                }
+                if (nHyphenPos == -1)
+                    aText = rOrigWord;
 
-                DBG_ASSERT( aText == rOrigWord, "failed to " );
-                xRes = new HyphenatedWord( aText, nLang, nHyphenationPos,
-                                aText, nHyphenationPos );
+                xRes = new HyphenatedWord( rOrigWord, nLang, nHyphenationPos,
+                                aText, (nHyphenPos > -1) ? nHyphenPos - 1 : nHyphenationPos);
             }
         }
     }
@@ -167,7 +194,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
         sal_Int32 nTextLen = aText.getLength();
 
         // trailing '=' means "hyphenation should not be possible"
-        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=')
+        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
         {
             // sequence to hold hyphenation positions
             Sequence< sal_Int16 > aHyphPos( nTextLen );
@@ -176,11 +203,14 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
 
             OUStringBuffer aTmp( nTextLen );
             sal_Bool  bSkip = sal_False;
+            sal_Bool  bSkip2 = sal_False;
             sal_Int32 nHyphIdx = -1;
             for (sal_Int32 i = 0;  i < nTextLen;  i++)
             {
                 sal_Unicode cTmp = aText[i];
-                if (cTmp != '=')
+                if (cTmp == '[' || cTmp == ']')
+                    bSkip2 = !bSkip2;
+                if (cTmp != '=' && !bSkip2 && cTmp != ']')
                 {
                     aTmp.append( cTmp );
                     bSkip = sal_False;
@@ -426,7 +456,15 @@ Reference< XHyphenatedWord > SAL_CALL
 
         if (xEntry.is())
         {
-            //! alternative spellings not yet supported by dictionaries
+            // FIXME: multiple character change, eg. briddzsel -> bridzs-dzsel is not supported,
+            // because Writer has got a layout problem here.
+            // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
+            for (int extrachar = 1; extrachar < 2; extrachar++) // temporarily i < 2 instead of i <= 2
+            {
+                xRes = buildHyphWord(aChkWord, xEntry, nLanguage, nIndex + 1 + extrachar);
+                if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)
+                    return xRes;
+            }
         }
         else
         {

@@ -550,24 +550,37 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     }
 
     const sal_Unicode cIgnChar = '=';
+    const sal_Unicode cIgnBeg = '['; // for alternative hyphenation, eg. Schif[f]fahrt, Zuc[1k]ker
+    const sal_Unicode cIgnEnd = ']'; // planned: gee"[1-/e]rfde or ge[-/1e]e"rfde (gee"rfde -> ge=erfde)
     sal_Int32       nIdx1 = 0,
                   nIdx2 = 0,
                   nNumIgnChar1 = 0,
                   nNumIgnChar2 = 0;
 
+    bool IgnState;
     sal_Int32 nDiff = 0;
     sal_Unicode cChar1 = '\0';
     sal_Unicode cChar2 = '\0';
     do
     {
         // skip chars to be ignored
-        while (nIdx1 < nLen1  &&  (cChar1 = aWord1[ nIdx1 ]) == cIgnChar)
+        IgnState = false;
+        while (nIdx1 < nLen1  &&  ((cChar1 = aWord1[ nIdx1 ]) == cIgnChar || cChar1 == cIgnBeg || IgnState ))
         {
+            if ( cChar1 == cIgnBeg )
+                IgnState = true;
+            else if (cChar1 == cIgnEnd)
+                IgnState = false;
             nIdx1++;
             nNumIgnChar1++;
         }
-        while (nIdx2 < nLen2  &&  (cChar2 = aWord2[ nIdx2 ]) == cIgnChar)
+        IgnState = false;
+        while (nIdx2 < nLen2  &&  ((cChar2 = aWord2[ nIdx2 ]) == cIgnChar || cChar2 == cIgnBeg || IgnState ))
         {
+            if ( cChar2 == cIgnBeg )
+                IgnState = true;
+            else if (cChar2 == cIgnEnd)
+                IgnState = false;
             nIdx2++;
             nNumIgnChar2++;
         }
@@ -590,15 +603,25 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
         // shorter one
 
         // count remaining IgnChars
+        IgnState = false;
         while (nIdx1 < nLen1 )
         {
-            if (aWord1[ nIdx1++ ] == cIgnChar)
+            if (aWord1[ nIdx1 ] == cIgnBeg)
+                IgnState = true;
+            if (IgnState || aWord1[ nIdx1++ ] == cIgnChar)
                 nNumIgnChar1++;
+            if (aWord1[ nIdx1] == cIgnEnd)
+                IgnState = false;
         }
+        IgnState = false;
         while (nIdx2 < nLen2 )
         {
+            if (aWord1[ nIdx2 ] == cIgnBeg)
+                IgnState = true;
             if (aWord2[ nIdx2++ ] == cIgnChar)
                 nNumIgnChar2++;
+            if (aWord1[ nIdx1] == cIgnEnd)
+                IgnState = false;
         }
 
         nRes = ((sal_Int32) nLen1 - nNumIgnChar1) - ((sal_Int32) nLen2 - nNumIgnChar2);

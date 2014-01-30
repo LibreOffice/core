@@ -508,16 +508,22 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
 
 Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
-        const OUString& /*aWord*/,
-        const ::com::sun::star::lang::Locale& /*aLocale*/,
-        sal_Int16 /*nIndex*/,
-        const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
+        const OUString& aWord,
+        const ::com::sun::star::lang::Locale& aLocale,
+        sal_Int16 nIndex,
+        const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-  /* alternative spelling isn't supported by tex dictionaries */
-  /* XXX: OOo's extended libhjn algorithm can support alternative spellings with extended TeX dic. */
-  /* TASK: implement queryAlternativeSpelling() */
-  return NULL;
+    // FIXME: multiple character change, eg. briddzsel -> bridzs-dzsel is not supported,
+    // because Writer has got a layout problem here.
+    // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
+    for (int extrachar = 1; extrachar < 2; extrachar++) // temporarily i < 2 instead of i <= 2
+    {
+        Reference< XHyphenatedWord > xRes = hyphenate(aWord, aLocale, nIndex + 1 + extrachar, aProperties);
+        if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)
+            return xRes;
+    }
+    return NULL;
 }
 
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
@@ -658,7 +664,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         for ( i = 0; i < encWord.getLength(); i++)
         {
-            if (hyphens[i]&1 && (!rep || !rep[i]))
+            if (hyphens[i]&1)
                 nHyphCount++;
         }
 
@@ -670,8 +676,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         for (i = 0; i < nWord.getLength(); i++)
         {
             hyphenatedWordBuffer.append(aWord[i]);
-            // hyphenation position (not alternative)
-            if (hyphens[i]&1 && (!rep || !rep[i]))
+            // hyphenation position
+            if (hyphens[i]&1)
             {
                 pPos[nHyphCount] = i;
                 hyphenatedWordBuffer.append('=');
