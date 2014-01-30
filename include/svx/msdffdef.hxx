@@ -21,9 +21,8 @@
 #define INCLUDED_SVX_MSDFFDEF_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
-#include <tools/stream.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/stream.hxx>
 
 #define DFF_COMMON_RECORD_HEADER_SIZE           8
 
@@ -572,9 +571,7 @@ enum DFF_TextHeader {
 // properties of the second property set
 #define DFF_Prop_metroBlob					937 // XML ZipPackage*
 
-//---------------------------------------------------------------------------
 // linchpin: the shape type
-//---------------------------------------------------------------------------
 typedef enum
    {
    mso_sptMin = 0,

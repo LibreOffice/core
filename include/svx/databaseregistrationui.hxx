@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
 #include <svx/svxdllapi.h>
-#include <tools/solar.h>
 
 class Window;
 
@@ -29,18 +28,13 @@ class Window;
 #define SID_SB_DRIVER_TIMEOUTS          (RID_OFA_START + 248)
 #define SID_SB_DB_REGISTER              (RID_OFA_START + 249)
 
-//........................................................................
 namespace svx
 {
-//........................................................................
-
     /** opens a dialog which allows the user to administrate the database registrations
     */
     sal_uInt16  SVX_DLLPUBLIC  administrateDatabaseRegistration( Window* _parentWindow );
 
-//........................................................................
 }   // namespace svx
-//........................................................................
 
 #endif // INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 

@@ -20,10 +20,9 @@
 #define INCLUDED_SVX_LANGBOX_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vcl/lstbox.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/image.hxx>
-#include <tools/solar.h>
+#include <vcl/lstbox.hxx>
 
 class SvtLanguageTable;
 

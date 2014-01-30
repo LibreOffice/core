@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_SVDTYPES_HXX
 #define INCLUDED_SVX_SVDTYPES_HXX
 
-#include <tools/solar.h>
-
 /*
  * SdrObject
  */
@@ -62,14 +60,12 @@ enum SdrConvertType {SDRCONVERT_POLY,   // reines Polygon erzeugen
 /*
  * Layer
  */
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // Bei der Identifikation eines Layer kann es vorkommen, das dieser nicht
 // vorhanden ist. SdrLayerAdmin::GetLayerID(const String&) liefert
 // dann diesen Wert:
 #define SDRLAYER_NOTFOUND 0xFF
 // Man kann diesen Wert jodoch ohne Bedenken den Methoden des SdrLayerSet
 // zuwerfen, bekommt dann jedoch immer sal_False, bzw. tut die Methode nix.
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // Typdeklaration fuer Layer-IDs
 typedef sal_uInt8 SdrLayerID;
 
@@ -89,7 +85,6 @@ enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,    // Unbekannt
 };   // fuer die Surrogate reserviert
 
 inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
-
 
 /*
  * Repeat
@@ -126,8 +121,6 @@ enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
                     SDRREPFUNC_OBJ_IMPORTMTF,
                     SDRREPFUNC_PAGE_DELETE,
                     SDRREPFUNC_LAST};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SVX_SVDTYPES_HXX
 

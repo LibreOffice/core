@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVDATTR_HXX
 
 #include <svl/solar.hrc>
-#include <tools/solar.h>
 #include <svx/sdangitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDVITER_HXX
 #define INCLUDED_SVX_SVDVITER_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
@@ -53,8 +52,6 @@ Not considered are:
 
 */
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class OutputDevice;
 class Window;
 class SdrView;
@@ -63,8 +60,6 @@ class SdrModel;
 class SdrPage;
 class SdrObject;
 class SetOfByte;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrViewIter
 {

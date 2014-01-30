@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SVX_FMGLOB_HXX
 #define INCLUDED_SVX_FMGLOB_HXX
 
-#include <tools/solar.h>
-#include <svx/svdobj.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <svx/svdobj.hxx>
 
 const sal_uInt32 FmFormInventor = sal_uInt32('F')*0x00000001+
                               sal_uInt32('M')*0x00000100+
