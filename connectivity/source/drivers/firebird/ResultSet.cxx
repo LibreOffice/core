@@ -507,7 +507,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     {
         // First 2 bytes are a short containing the length of the string
         // No idea if sqllen is still valid here?
-        short aLength = *((short*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+        sal_uInt16 aLength = *((sal_uInt16*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
                         aLength,
                         RTL_TEXTENCODING_UTF8);
