@@ -670,12 +670,12 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                boost::scoped_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ ));
                 if( pSrcStm )
                 {
                     xStream->SetBufferSize( 0xff00 );
                     xStream->WriteStream( *pSrcStm );
-                    delete pSrcStm;
+                    pSrcStm.reset();
                 }
 
                 bRet = sal_True;

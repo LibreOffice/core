@@ -19,13 +19,14 @@
 
 #include <doc.hxx>
 #include <pamtyp.hxx>
+#include <boost/scoped_ptr.hpp>
 
 bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly  )
 {
     bool bFound = false;
     const bool bSrchForward = (fnMove == fnMoveForward);
-    SwPaM* pPam = MakeRegion( fnMove, pRegion );
+    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
@@ -34,7 +35,6 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     {
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
-            delete pPam;
             return false;
         }
         SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
@@ -65,7 +65,6 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
             break;
         }
     }
-    delete pPam;
     return bFound;
 }
 

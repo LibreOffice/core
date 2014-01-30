@@ -31,6 +31,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <swevent.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 
@@ -98,17 +99,17 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
         break;
     case EXTENDED_STYPE:
         {
-            Sequence<Any> *pUnoArgs = 0;
+            boost::scoped_ptr<Sequence<Any> > pUnoArgs;
             if( pArgs )
             {
                 // better to rename the local function to lcl_translateBasic2Uno and
                 // a much shorter routine can be found in sfx2/source/doc/objmisc.cxx
-                pUnoArgs = lcl_docbasic_convertArgs( *pArgs );
+                pUnoArgs.reset(lcl_docbasic_convertArgs( *pArgs ));
             }
 
             if (!pUnoArgs)
             {
-                pUnoArgs = new Sequence< Any > (0);
+                pUnoArgs.reset(new Sequence< Any > (0));
             }
 
             // TODO - return value is not handled
@@ -122,7 +123,6 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             eErr = mpDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
-            delete pUnoArgs;
             break;
         }
     }
@@ -210,16 +210,16 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
-                Sequence<Any> *pUnoArgs = 0;
+                boost::scoped_ptr<Sequence<Any> > pUnoArgs;
 
                 if( pArgs )
                 {
-                    pUnoArgs = lcl_docbasic_convertArgs( *pArgs );
+                    pUnoArgs.reset(lcl_docbasic_convertArgs( *pArgs ));
                 }
 
                 if (!pUnoArgs)
                 {
-                    pUnoArgs = new Sequence <Any> (0);
+                    pUnoArgs.reset(new Sequence <Any> (0));
                 }
 
                 Any aRet;
@@ -231,8 +231,6 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
 
                 nRet += 0 == mpDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
-
-                delete pUnoArgs;
             }
             // JavaScript calls are ignored
         }

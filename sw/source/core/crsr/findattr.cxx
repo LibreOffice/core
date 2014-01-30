@@ -41,6 +41,7 @@
 #include <swundo.hxx>
 #include <crsskip.hxx>
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -879,7 +880,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     const sal_uInt16 nWhich = rAttr.Which();
     bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
-    SwPaM* pPam = MakeRegion( fnMove, pRegion );
+    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     bool bFound = false;
     sal_Bool bFirst = sal_True;
@@ -895,7 +896,6 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     {
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
-            delete pPam;
             return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
@@ -950,7 +950,6 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     if( bFound && !bSrchForward )
         Exchange();
 
-    delete pPam;
     return bFound;
 }
 
@@ -959,7 +958,7 @@ typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )
 {
-    SwPaM* pPam = MakeRegion( fnMove, pRegion );
+    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     bool bFound = false;
     sal_Bool bFirst = sal_True;
@@ -985,7 +984,6 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
     {
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
-            delete pPam;
             return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
@@ -1043,7 +1041,6 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
     if( bFound && !bSrchForward )
         Exchange();
 
-    delete pPam;
     return bFound;
 }
 
