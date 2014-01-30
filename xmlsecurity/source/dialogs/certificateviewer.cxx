@@ -78,6 +78,12 @@ CertificateViewerTP::CertificateViewerTP( Window* _pParent, const ResId& _rResId
 {
 }
 
+CertificateViewerTP::CertificateViewerTP( Window* _pParent, const OString& rID,
+    const OUString& rUIXMLDescription, CertificateViewer* _pDlg )
+    : TabPage(_pParent, rID, rUIXMLDescription)
+    , mpDlg(_pDlg)
+{
+}
 
 CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_GENERAL ), _pDlg )
@@ -363,46 +369,29 @@ struct CertPath_UserData
 
 
 CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, CertificateViewer* _pDlg )
-    :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_CERTPATH ), _pDlg  )
-    ,maCertPathFT           ( this, XMLSEC_RES( FT_CERTPATH ) )
-    ,maCertPathLB           ( this, XMLSEC_RES( LB_SIGNATURES ) )
-    ,maViewCertPB           ( this, XMLSEC_RES( BTN_VIEWCERT ) )
-    ,maCertStatusFT         ( this, XMLSEC_RES( FT_CERTSTATUS ) )
-    ,maCertStatusML         ( this, XMLSEC_RES( ML_CERTSTATUS ) )
-    ,mpParent               ( _pDlg )
-    ,mbFirstActivateDone    ( false )
-    ,maCertImage            ( XMLSEC_RES( IMG_CERT_SMALL ) )
-    ,maCertNotValidatedImage( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL ) )
-    ,msCertOK               ( XMLSEC_RES( STR_PATH_CERT_OK ) )
-    ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
-
+    : CertificateViewerTP(_pParent, "CertPage", "xmlsec/ui/certpage.ui", _pDlg)
+    , mpParent(_pDlg)
+    , mbFirstActivateDone(false)
 {
-    FreeResource();
+    get(mpCertPathLB, "signatures");
+    get(mpViewCertPB, "viewcert");
+    get(mpCertStatusML, "status");
 
-    maCertPathLB.SetNodeDefaultImages();
-    maCertPathLB.SetSublistOpenWithLeftRight();
-    maCertPathLB.SetSelectHdl( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
-    maViewCertPB.SetClickHdl( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
+    msCertOK = get<FixedText>("certok")->GetText();
+    msCertNotValidated = get<FixedText>("certnotok")->GetText();
+    maCertImage = get<FixedImage>("imgok")->GetImage();
+    maCertNotValidatedImage = get<FixedImage>("imgnotok")->GetImage();
 
-    // check if buttontext is to wide
-    const long nOffset = 10;
-    OUString sText = maViewCertPB.GetText();
-    long nTxtW = maViewCertPB.GetTextWidth( sText );
-    if ( sText.indexOf( '~' ) == -1 )
-        nTxtW += nOffset;
-    long nBtnW = maViewCertPB.GetSizePixel().Width();
-    if ( nTxtW > nBtnW )
-    {
-        // broaden the button
-        long nDelta = nTxtW - nBtnW;
-        Size aNewSize = maViewCertPB.GetSizePixel();
-        aNewSize.Width() += nDelta;
-        maViewCertPB.SetSizePixel( aNewSize );
-        // and give it a new position
-        Point aNewPos = maViewCertPB.GetPosPixel();
-        aNewPos.X() -= nDelta;
-        maViewCertPB.SetPosPixel( aNewPos );
-    }
+    Size aControlSize(LogicToPixel(Size(251, 45), MAP_APPFONT));
+    mpCertPathLB->set_width_request(aControlSize.Width());
+    mpCertPathLB->set_height_request(aControlSize.Height());
+    mpCertStatusML->set_width_request(aControlSize.Width());
+    mpCertStatusML->set_height_request(aControlSize.Height());
+
+    mpCertPathLB->SetNodeDefaultImages();
+    mpCertPathLB->SetSublistOpenWithLeftRight();
+    mpCertPathLB->SetSelectHdl( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
+    mpViewCertPB->SetClickHdl( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
 }
 
 CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
@@ -432,13 +421,13 @@ void CertificateViewerCertPathTP::ActivatePage()
             pParent = InsertCert( pParent, sName, rCert, bCertValid);
         }
 
-        maCertPathLB.Select( pParent );
-        maViewCertPB.Disable(); // Own certificate selected
+        mpCertPathLB->Select( pParent );
+        mpViewCertPB->Disable(); // Own certificate selected
 
         while( pParent )
         {
-            maCertPathLB.Expand( pParent );
-            pParent = maCertPathLB.GetParent( pParent );
+            mpCertPathLB->Expand( pParent );
+            pParent = mpCertPathLB->GetParent( pParent );
         }
 
         CertSelectHdl( NULL );
@@ -447,7 +436,7 @@ void CertificateViewerCertPathTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 {
-    SvTreeListEntry* pEntry = maCertPathLB.FirstSelected();
+    SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
         CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, false );
@@ -460,7 +449,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 {
     OUString sStatus;
-    SvTreeListEntry* pEntry = maCertPathLB.FirstSelected();
+    SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
         CertPath_UserData* pData = (CertPath_UserData*) pEntry->GetUserData();
@@ -468,24 +457,24 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
             sStatus = pData->mbValid ? msCertOK : msCertNotValidated;
     }
 
-    maCertStatusML.SetText( sStatus );
-    maViewCertPB.Enable( pEntry && ( pEntry != maCertPathLB.Last() ) );
+    mpCertStatusML->SetText( sStatus );
+    mpViewCertPB->Enable( pEntry && ( pEntry != mpCertPathLB->Last() ) );
     return 0;
 }
 
 void CertificateViewerCertPathTP::Clear( void )
 {
-    maCertStatusML.SetText( OUString() );
+    mpCertStatusML->SetText( OUString() );
     sal_uLong           i = 0;
-    SvTreeListEntry*    pEntry = maCertPathLB.GetEntry( i );
+    SvTreeListEntry*    pEntry = mpCertPathLB->GetEntry( i );
     while( pEntry )
     {
         delete ( CertPath_UserData* ) pEntry->GetUserData();
         ++i;
-        pEntry = maCertPathLB.GetEntry( i );
+        pEntry = mpCertPathLB->GetEntry( i );
     }
 
-    maCertPathLB.Clear();
+    mpCertPathLB->Clear();
 }
 
 SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
@@ -493,7 +482,7 @@ SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
     bool bValid)
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;
-    SvTreeListEntry* pEntry = maCertPathLB.InsertEntry( _rName, aImage, aImage, _pParent );
+    SvTreeListEntry* pEntry = mpCertPathLB->InsertEntry( _rName, aImage, aImage, _pParent );
     pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert, bValid ) );
 
     return pEntry;

@@ -67,14 +67,13 @@ protected:
     CertificateViewer*  mpDlg;
 public:
     CertificateViewerTP( Window* _pParent, const ResId& _rResId, CertificateViewer* _pDlg );
-    inline void         SetTabDlg( CertificateViewer* pTabDlg );
+    CertificateViewerTP( Window* _pParent, const OString& rID,
+        const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
+    void SetTabDlg( CertificateViewer* _pTabDlg )
+    {
+        mpDlg = _pTabDlg;
+    }
 };
-
-inline void CertificateViewerTP::SetTabDlg( CertificateViewer* _pTabDlg )
-{
-    mpDlg = _pTabDlg;
-}
-
 
 class CertificateViewerGeneralTP : public CertificateViewerTP
 {
@@ -123,11 +122,9 @@ public:
 class CertificateViewerCertPathTP : public CertificateViewerTP
 {
 private:
-    FixedText           maCertPathFT;
-    SvTreeListBox       maCertPathLB;
-    PushButton          maViewCertPB;
-    FixedText           maCertStatusFT;
-    MultiLineEdit       maCertStatusML;
+    SvTreeListBox*      mpCertPathLB;
+    PushButton*         mpViewCertPB;
+    VclMultiLineEdit*   mpCertStatusML;
 
     CertificateViewer*  mpParent;
     bool                mbFirstActivateDone;
