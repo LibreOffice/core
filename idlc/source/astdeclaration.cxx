@@ -134,10 +134,8 @@ bool AstDeclaration::isType() const {
     switch (m_nodeType) {
     case NT_interface:
     case NT_instantiated_struct:
-    case NT_union:
     case NT_enum:
     case NT_sequence:
-    case NT_array:
     case NT_typedef:
     case NT_predefined:
     case NT_type_parameter:
@@ -181,7 +179,6 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey)
                     case NT_struct:
                     case NT_exception:
                     case NT_enum:
-                    case NT_union:
                     case NT_typedef:
                     case NT_service:
                     case NT_singleton:

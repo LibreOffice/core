@@ -43,8 +43,6 @@ enum NodeType
     NT_property,            // Denotes an property
     NT_operation,           // Denotes an operation
     NT_parameter,           // Denotes an op. parameter
-    NT_union,               // Denotes a union
-    NT_union_branch,        // Denotes a union branch
     NT_struct,              // Denotes either a plain struct type, or a
                             // polymorphic struct type template
     NT_type_parameter,      // Denotes a type parameter of a polymorphic struct
@@ -53,7 +51,6 @@ enum NodeType
     NT_member,              // Denotes a member in structure, exception
     NT_enum,                // Denotes an enumeration
     NT_enum_val,            // Denotes an enum. value
-    NT_array,               // Denotes an IDL array
     NT_sequence,            // Denotes an IDL sequence
     NT_typedef,             // Denotes a typedef
     NT_predefined,          // Denotes a predefined type

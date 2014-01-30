@@ -21,7 +21,6 @@
 
 #include <idlc/astdeclaration.hxx>
 #include <idlc/astexpression.hxx>
-#include <idlc/astunion.hxx>
 #include <idlc/astenum.hxx>
 
 enum ErrorCode
@@ -33,11 +32,8 @@ enum ErrorCode
     EIDL_REDEF,             // Redefinition
     EIDL_REDEF_SCOPE,       // Redefinition inside defining scope
     EIDL_DEF_USE,           // Definition after use
-    EIDL_MULTIPLE_BRANCH,   // More than one union branch with this label
     EIDL_COERCION_FAILURE,  // Coercion failure
     EIDL_SCOPE_CONFLICT,    // Between fwd declare and full declare
-    EIDL_DISC_TYPE,         // Illegal discriminator type in union
-    EIDL_LABEL_TYPE,        // Mismatch with discriminator type in union
     EIDL_ILLEGAL_ADD,       // Illegal add action
     EIDL_ILLEGAL_USE,       // Illegal type used in expression
     EIDL_ILLEGAL_RAISES,    // Error in "raises" clause
@@ -46,8 +42,6 @@ enum ErrorCode
     EIDL_INHERIT_FWD_ERROR, // Cannot inherit from fwd decl interface
     EIDL_CONSTANT_EXPECTED, // We got something else..
     EIDL_NAME_CASE_ERROR,   // Spelling differences found
-    EIDL_ENUM_VAL_EXPECTED, // Expected an enumerator
-    EIDL_ENUM_VAL_NOT_FOUND,    // Didnt find an enumerator with that name
     EIDL_EVAL_ERROR,        // Error in evaluating expression
     EIDL_AMBIGUOUS,         // Ambiguous name definition
     EIDL_DECL_NOT_DEFINED,  // Forward declared but never defined
@@ -129,15 +123,6 @@ public:
     void    constantExpected(AstDeclaration* pDecl, const OString& name);
 
     void    evalError(AstExpression* pExpr);
-
-    // Report a situation where an enumerator was expected but we got
-    // something else instead. This occurs when a union with an enum
-    // discriminator is being parsed and one of the branch labels is
-    // not an enumerator in that enum
-    void    enumValExpected(AstUnion* pUnion);
-
-    // Report a failed enumerator lookup in an enum
-    void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const OString& name);
 
     bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
 };

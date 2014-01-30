@@ -58,12 +58,6 @@ typedef ::std::list< OString >               StringList;
 typedef ::std::vector< OString >             StringVector;
 typedef ::std::set< OString, LessString >    StringSet;
 
-class AstExpression;
-typedef ::std::list< AstExpression* >   ExprList;
-
-class AstUnionLabel;
-typedef ::std::list< AstUnionLabel* >   LabelList;
-
 class AstDeclaration;
 
 typedef ::boost::unordered_map< OString, AstDeclaration*, HashString, EqualString > DeclMap;
@@ -171,25 +165,6 @@ enum ParseState
     PS_MemberDeclsSeen,     // Seen decls of struct or except members
     PS_MemberDeclsCompleted,// Completed one struct or except member to ';'
 
-    PS_UnionSeen,           // Seen a UNION keyword
-    PS_UnionIDSeen,         // Seen the union ID
-    PS_SwitchSeen,          // Seen the SWITCH keyword
-    PS_SwitchOpenParSeen,   // Seen the switch open par.
-    PS_SwitchTypeSeen,      // Seen the switch type spec
-    PS_SwitchCloseParSeen,  // Seen the switch close par.
-    PS_UnionSqSeen,         // '{' seen for union
-    PS_UnionQsSeen,         // '}' seen for union
-    PS_DefaultSeen,         // Seen DEFAULT keyword
-    PS_UnionLabelSeen,      // Seen label of union element
-    PS_LabelColonSeen,      // Seen ':' of union branch label
-    PS_LabelExprSeen,       // Seen expression of union branch label
-    PS_UnionElemSeen,       // Seen a union element
-    PS_UnionElemCompleted,  // Completed one union member up to ';'
-    PS_CaseSeen,            // Seen a CASE keyword
-    PS_UnionElemTypeSeen,   // Seen type spec for union element
-    PS_UnionElemDeclSeen,   // Seen declarator for union element
-    PS_UnionBodySeen,       // Seen completed union body
-
     PS_EnumSeen,            // Seen an ENUM keyword
     PS_EnumIDSeen,          // Seen the enum ID
     PS_EnumSqSeen,          // Seen '{' for enum
@@ -201,14 +176,6 @@ enum ParseState
     PS_SequenceSqSeen,      // Seen '<' for sequence
     PS_SequenceQsSeen,      // Seen '>' for sequence
     PS_SequenceTypeSeen,    // Seen type decl for sequence
-
-    PS_ArrayIDSeen,         // Seen array ID
-    PS_ArrayTypeSeen,       // Seen array type
-    PS_ArrayCompleted,      // Seen completed array declaration
-    PS_DimSqSeen,           // Seen '[' for array dimension
-    PS_DimQsSeen,           // Seen ']' for array dimension
-    PS_DimExprSeen,         // Seen size expression for array dimension
-
 
     PS_FlagHeaderSeen,      // Seen the attribute|property|interface member head
     PS_AttrSeen,            // Seen ATTRIBUTE keyword

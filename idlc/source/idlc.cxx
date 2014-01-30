@@ -24,7 +24,6 @@
 #include <idlc/astservice.hxx>
 #include <idlc/astconstants.hxx>
 #include <idlc/astexception.hxx>
-#include <idlc/astunion.hxx>
 #include <idlc/astenum.hxx>
 #include <idlc/astinterface.hxx>
 #include <idlc/astoperation.hxx>
@@ -61,8 +60,6 @@ AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
             return (AstOperation*)(pScope);
         case NT_exception:
             return (AstException*)(pScope);
-        case NT_union:
-            return (AstUnion*)(pScope);
         case NT_struct:
             return (AstStruct*)(pScope);
         case NT_enum:
@@ -90,8 +87,6 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
             return (AstConstants*)(pDecl);
         case NT_exception:
             return (AstException*)(pDecl);
-        case NT_union:
-            return (AstUnion*)(pDecl);
         case NT_struct:
             return (AstStruct*)(pDecl);
         case NT_enum:

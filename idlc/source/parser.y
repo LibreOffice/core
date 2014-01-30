@@ -30,7 +30,6 @@
 #include <idlc/astexpression.hxx>
 #include <idlc/astconstants.hxx>
 #include <idlc/astconstant.hxx>
-#include <idlc/astarray.hxx>
 #include <idlc/astbasetype.hxx>
 #include <idlc/asttypedef.hxx>
 #include <idlc/astexception.hxx>
@@ -44,7 +43,6 @@
 #include <idlc/astservicemember.hxx>
 #include <idlc/astobserves.hxx>
 #include <idlc/astneeds.hxx>
-#include <idlc/astunion.hxx>
 
 #include "idlc/aststructinstance.hxx"
 
@@ -224,7 +222,6 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
     AstDeclaration const * cdclval;
     DeclList * dclsval;
     AstExpression*      exval;      /* expression value */
-    ExprList*               exlval; /* expression list value */
     FeDeclarator*           fdval;      /* declarator value */
     FeDeclList*         dlval;      /* declarator list value */
     FeInheritanceHeader*    ihval;      /* inheritance header value */
@@ -238,9 +235,6 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
     double                  dval;       /* double value */
     float                   fval;       /* float value */
     StringList*         slval;      /* StringList value */
-    LabelList*          llval;      /* LabelList value  */
-    AstUnionLabel*      lbval;      /* union label value */
-    AstMember*          mval;       /* member value */
     AttributeExceptions::Part attexcpval;
     AttributeExceptions attexcval;
 }
@@ -252,11 +246,9 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token <sval>       IDL_IDENTIFIER
 %token          IDL_ATTRIBUTE
 %token              IDL_BOUND
-%token          IDL_CASE
 %token          IDL_CONST
 %token          IDL_CONSTANTS
 %token              IDL_CONSTRAINED
-%token          IDL_DEFAULT
 %token          IDL_ENUM
 %token          IDL_EXCEPTION
 %token          IDL_INTERFACE
@@ -275,10 +267,8 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token          IDL_SEQUENCE
 %token          IDL_SINGLETON
 %token          IDL_STRUCT
-%token          IDL_SWITCH
 %token          IDL_TYPEDEF
 %token              IDL_TRANSIENT
-%token          IDL_UNION
 
 %token          IDL_ANY
 %token          IDL_CHAR
@@ -320,11 +310,10 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
  * These are production names:
  */
 %type <dclval>  type_dcl
-%type <dclval>  array_declarator
 %type <dclval>  exception_name
-%type <cdclval> array_type constructed_type_spec enum_type op_type_spec
-%type <cdclval> sequence_type_spec simple_type_spec struct_type switch_type_spec
-%type <cdclval> template_type_spec type_spec union_type
+%type <cdclval> constructed_type_spec enum_type op_type_spec
+%type <cdclval> sequence_type_spec simple_type_spec struct_type
+%type <cdclval> type_spec
 %type <cdclval> fundamental_type type_arg type_or_parameter
 %type <dclsval> opt_raises raises exception_list
 %type <attexcpval> opt_attribute_get_raises attribute_get_raises
@@ -342,21 +331,15 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 
 %type <exval>   expression const_expr or_expr xor_expr and_expr
 %type <exval>   add_expr mult_expr unary_expr primary_expr shift_expr
-%type <exval>   literal positive_int_expr array_dim
+%type <exval>   literal positive_int_expr
 
-%type <exlval>  at_least_one_array_dim array_dims
-
-%type <fdval>   declarator simple_declarator complex_declarator
+%type <fdval>   declarator
 %type <dlval>   declarators at_least_one_declarator
 
 %type <ihval>   exception_header structure_header interfaceheader
 
 %type <ulval>   flag_header opt_attrflags opt_attrflag
 %type <ulval>   direction service_interface_header service_service_header
-
-%type <llval>   case_labels at_least_one_case_label
-%type <lbval>   case_label
-%type <mval>    element_spec
 
 %type <bval>    optional_inherited_interface opt_rest opt_service_body
 
@@ -741,7 +724,7 @@ attribute :
     {
         idlc()->setParseState(PS_AttrTypeSeen);
     }
-    simple_declarator
+    declarator
     {
         idlc()->setParseState(PS_AttrCompleted);
         if (($1 & ~(AF_BOUND | AF_READONLY)) != AF_ATTRIBUTE) {
@@ -2042,7 +2025,6 @@ type_dcl :
     }
     type_declarator {}
     | struct_type {}
-    | union_type {}
     | enum_type {}
     ;
 
@@ -2144,11 +2126,6 @@ declarators :
     ;
 
 declarator :
-    simple_declarator
-    | complex_declarator
-    ;
-
-simple_declarator :
     identifier
     {
         // For historic reasons, the struct com.sun.star.uno.Uik contains
@@ -2164,88 +2141,6 @@ simple_declarator :
 
         $$ = new FeDeclarator(*$1, FeDeclarator::FD_simple, NULL);
         delete $1;
-    }
-    ;
-
-complex_declarator :
-    array_declarator
-    {
-        $$ = new FeDeclarator($1->getLocalName(), FeDeclarator::FD_complex, $1);
-    }
-    ;
-
-array_declarator :
-    identifier
-    {
-        idlc()->setParseState(PS_ArrayIDSeen);
-        checkIdentifier($1);
-    }
-    at_least_one_array_dim
-    {
-        idlc()->setParseState(PS_ArrayCompleted);
-        $$ = new AstArray(*$1, NULL, *$3, idlc()->scopes()->bottom());
-        delete $1;
-    }
-    ;
-
-at_least_one_array_dim :
-    array_dim array_dims
-    {
-        if( $2 )
-        {
-            $2->push_front($1);
-            $$ = $2;
-        } else
-        {
-            ExprList* pList = new ExprList();
-            pList->push_back($1);
-            $$ = pList;
-        }
-    }
-    ;
-
-array_dims :
-    array_dims array_dim
-    {
-        if( $1 )
-        {
-            $1->push_back($2);
-            $$ = $1;
-        } else
-        {
-            ExprList* pList = new ExprList();
-            pList->push_back($2);
-            $$ = pList;
-        }
-    }
-    | /* EMPTY */
-    {
-        $$ = NULL;
-    }
-    ;
-
-array_dim :
-    '['
-    {
-        idlc()->setParseState(PS_DimSqSeen);
-    }
-    positive_int_expr
-    {
-        idlc()->setParseState(PS_DimExprSeen);
-    }
-    ']'
-    {
-        idlc()->setParseState(PS_DimQsSeen);
-        /*
-         * Array dimensions are expressions which must be coerced to
-         * positive integers
-         */
-        if ( !$3 || !$3->coerce(ET_uhyper) )
-        {
-            idlc()->error()->coercionError($3, ET_uhyper);
-            $$ = NULL;
-        } else
-            $$ = $3;
     }
     ;
 
@@ -2344,7 +2239,7 @@ fundamental_type:
     {
         $$ = idlc()->scopes()->bottom()->lookupPrimitiveType($1);
     }
-    | template_type_spec
+    | sequence_type_spec
     ;
 
 opt_type_args:
@@ -2474,46 +2369,9 @@ string_type :
     }
     ;
 
-template_type_spec :
-    sequence_type_spec
-    | array_type
-    ;
-
 constructed_type_spec :
     struct_type
-    | union_type
     | enum_type
-    ;
-
-array_type :
-    simple_type_spec
-    {
-        idlc()->setParseState(PS_ArrayTypeSeen);
-    }
-    at_least_one_array_dim
-    {
-        idlc()->setParseState(PS_ArrayCompleted);
-
-        AstScope* pScope = idlc()->scopes()->bottom();
-        AstDeclaration* pDecl = NULL;
-        AstDeclaration* pArray = NULL;
-
-        if ( $1 )
-        {
-            pArray = new AstArray((AstType*)$1, *$3, idlc()->scopes()->bottom());
-            if ( pScope )
-            {
-                pDecl = pScope->addDeclaration(pArray);
-                if ( pArray != pDecl )
-                {
-                    // if array type already defined then use it
-                    delete pArray;
-                    pArray = pDecl;
-                }
-            }
-        }
-        $$ = pArray;
-    }
     ;
 
 sequence_type_spec :
@@ -2897,303 +2755,6 @@ enumerator :
             }
         }
         delete $1;
-    }
-    ;
-
-union_type :
-    IDL_UNION
-    {
-        idlc()->setParseState(PS_UnionSeen);
-    }
-    identifier
-    {
-        idlc()->setParseState(PS_UnionIDSeen);
-        checkIdentifier($3);
-    }
-    IDL_SWITCH
-    {
-        idlc()->setParseState(PS_SwitchSeen);
-    }
-    '('
-    {
-        idlc()->setParseState(PS_SwitchOpenParSeen);
-    }
-    switch_type_spec
-    {
-        idlc()->setParseState(PS_SwitchTypeSeen);
-    }
-    ')'
-    {
-        idlc()->setParseState(PS_SwitchCloseParSeen);
-
-        AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstUnion*       pUnion = NULL;
-
-        /*
-         * Create a node representing a union. Add it to its enclosing
-         * scope
-         */
-        if ( $9 && pScope )
-        {
-            AstType* pType = (AstType*)$9;
-            if ( !pType)
-            {
-                idlc()->error()->noTypeError($9);
-            } else
-            {
-                pUnion = new AstUnion(*$3, pType, pScope);
-                pScope->addDeclaration(pUnion);
-            }
-        }
-        delete $3;
-        /*
-         * Push the scope of the union on the scopes stack
-         */
-        idlc()->scopes()->push(pUnion);
-    }
-    '{'
-    {
-        idlc()->setParseState(PS_UnionSqSeen);
-    }
-    at_least_one_case_branch
-    {
-        idlc()->setParseState(PS_UnionBodySeen);
-    }
-    '}'
-    {
-        idlc()->setParseState(PS_UnionQsSeen);
-        /* this union is finished, pop its scope from the stack */
-        idlc()->scopes()->pop();
-    }
-    ;
-
-switch_type_spec :
-    integer_type
-    {
-        $$ = idlc()->scopes()->bottom()->lookupPrimitiveType($1);
-    }
-    | char_type
-    {
-        $$ = idlc()->scopes()->bottom()->lookupPrimitiveType($1);
-    }
-    | boolean_type
-    {
-        $$ = idlc()->scopes()->bottom()->lookupPrimitiveType($1);
-    }
-    | enum_type
-    | scoped_name
-    {
-        AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstBaseType*    pBaseType = NULL;
-        AstDeclaration const * pDecl = NULL;
-        AstTypeDef*     pTypeDef = NULL;
-        sal_Bool        bFound = sal_False;
-        /*
-         * If the constant's type is a scoped name, it must resolve
-         * to a scalar constant type
-         */
-        if ( pScope && (pDecl = pScope->lookupByName(*$1)) )
-        {
-            /*
-             * Look through typedefs
-             */
-            while ( !bFound )
-            {
-                switch (pDecl->getNodeType())
-                {
-                    case NT_enum:
-                        $$ = pDecl;
-                        bFound = sal_True;
-                        break;
-                    case NT_predefined:
-                        pBaseType = (AstBaseType*)pDecl;
-                        if ( pBaseType )
-                        {
-                            switch (pBaseType->getExprType())
-                            {
-                                case ET_short:
-                                case ET_ushort:
-                                case ET_long:
-                                case ET_ulong:
-                                case ET_hyper:
-                                case ET_uhyper:
-                                case ET_char:
-                                case ET_byte:
-                                case ET_boolean:
-                                    $$ = pBaseType;
-                                    bFound = sal_True;
-                                    break;
-                                default:
-                                    $$ = NULL;
-                                    bFound = sal_True;
-                                    break;
-                            }
-                        }
-                        break;
-                    case NT_typedef:
-                        pTypeDef = (AstTypeDef*)pDecl;
-                        if ( pTypeDef )
-                            pDecl = pTypeDef->getBaseType();
-                        break;
-                    default:
-                        $$ = NULL;
-                        bFound = sal_True;
-                       break;
-                }
-            }
-        } else
-            $$ = NULL;
-
-        if ($$ == NULL)
-            idlc()->error()->lookupError(*$1);
-    }
-    ;
-
-at_least_one_case_branch : case_branch case_branches ;
-
-case_branches :
-    case_branches case_branch
-    | /* EMPTY */
-    ;
-
-case_branch :
-    at_least_one_case_label
-    {
-        idlc()->setParseState(PS_UnionLabelSeen);
-    }
-    element_spec
-    {
-        idlc()->setParseState(PS_UnionElemSeen);
-
-        AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstUnionLabel*  pLabel = NULL;
-        AstUnionBranch* pBranch = NULL;
-        AstMember*      pMember = $3;
-
-        /*
-         * Create several nodes representing branches of a union.
-         * Add them to the enclosing scope (the union scope)
-         */
-        if ( pScope && $1 && $3 )
-        {
-            LabelList::iterator iter = $1->begin();
-            LabelList::iterator end = $1->end();
-            for (;iter != end; iter++)
-            {
-                pLabel = *iter;
-                if ( !pLabel )
-                {
-                    iter++;
-                    continue;
-                }
-                pBranch = new AstUnionBranch(pLabel, pMember->getType(),
-                                             pMember->getLocalName(), pScope);
-                pScope->addDeclaration(pBranch);
-            }
-        }
-        if ( $1 ) delete($1);
-    }
-    ;
-
-at_least_one_case_label :
-    case_label case_labels
-    {
-        if ( $2 )
-        {
-            $2->push_front($1);
-            $$ = $2;
-        } else
-        {
-            LabelList* pLabels = new LabelList();
-            pLabels->push_back($1);
-            $$ = pLabels;
-        }
-    }
-    ;
-
-case_labels :
-    case_labels case_label
-    {
-        if ( $1 )
-        {
-            $1->push_back($2);
-            $$ = $1;
-        } else
-        {
-            LabelList* pLabels = new LabelList();
-            pLabels->push_back($2);
-            $$ = pLabels;
-        }
-    }
-    | /* EMPTY */
-    {
-        $$ = NULL;
-    }
-    ;
-
-case_label :
-    IDL_DEFAULT
-    {
-        idlc()->setParseState(PS_DefaultSeen);
-    }
-    ':'
-    {
-        idlc()->setParseState(PS_LabelColonSeen);
-        $$ = new AstUnionLabel(UL_default, NULL);
-    }
-    | IDL_CASE
-    {
-        idlc()->setParseState(PS_CaseSeen);
-    }
-    const_expr
-    {
-        idlc()->setParseState(PS_LabelExprSeen);
-    }
-    ':'
-    {
-        idlc()->setParseState(PS_LabelColonSeen);
-        $$ = new AstUnionLabel(UL_label, $3);
-    }
-    ;
-
-element_spec :
-    type_spec
-    {
-        idlc()->setParseState(PS_UnionElemTypeSeen);
-    }
-    declarator
-    {
-        idlc()->setParseState(PS_UnionElemDeclSeen);
-    }
-    ';'
-    {
-        idlc()->setParseState(PS_UnionElemCompleted);
-
-        AstScope* pScope = idlc()->scopes()->topNonNull();
-        /*
-         * Check for illegal recursive use of type
-         */
-//      if ( $1 && AST_illegal_recursive_type($1))
-//          idlc()->error()->error1(EIDL_RECURSIVE_TYPE, $1);
-        /*
-         * Create a field in a union branch
-         */
-        if ( $1 && $3 )
-        {
-            AstType const * pType = $3->compose($1);
-            if ( !pType )
-                $$ = NULL;
-            else
-                $$ = new AstMember(pType, $3->getName(), pScope);
-        } else
-            $$ = NULL;
-
-        if ( $3 ) delete $3;
-    }
-    | error
-    ';'
-    {
-        $$ = NULL;
     }
     ;
 

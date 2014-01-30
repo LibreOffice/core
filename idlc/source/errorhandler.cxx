@@ -36,16 +36,10 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "illegal redefinition in scope ";
     case EIDL_DEF_USE:
         return "redefinition after use, ";
-    case EIDL_MULTIPLE_BRANCH:
-        return "union with duplicate branch label ";
     case EIDL_COERCION_FAILURE:
         return "coercion failure ";
     case EIDL_SCOPE_CONFLICT:
         return "definition scope is different than fwd declare scope, ";
-    case EIDL_DISC_TYPE:
-        return "union with illegal discriminator type, ";
-    case EIDL_LABEL_TYPE:
-        return "label type incompatible with union discriminator type, ";
     case EIDL_ILLEGAL_ADD:
         return "illegal add operation, ";
     case EIDL_ILLEGAL_USE:
@@ -62,10 +56,6 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "constant expected: ";
     case EIDL_NAME_CASE_ERROR:
         return "identifier used with two differing spellings: ";
-    case EIDL_ENUM_VAL_EXPECTED:
-        return "enumerator expected: ";
-    case EIDL_ENUM_VAL_NOT_FOUND:
-        return "enumerator by this name not defined: ";
     case EIDL_EVAL_ERROR:
         return "expression evaluation error: ";
     case EIDL_AMBIGUOUS:
@@ -293,41 +283,6 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax following member declarator(s)";
     case PS_MemberDeclsCompleted:
         return "Missing ',' between member decls of same type(?)";
-    case PS_UnionSeen:
-        return "Missing identifier following UNION keyword";
-    case PS_UnionIDSeen:
-        return "Illegal syntax following union identifier";
-    case PS_SwitchSeen:
-        return "Illegal syntax following SWITCH keyword";
-    case PS_SwitchOpenParSeen:
-        return "Illegal syntax following '(' in switch in union";
-    case PS_SwitchTypeSeen:
-        return "Illegal syntax following type decl in switch in union";
-    case PS_SwitchCloseParSeen:
-        return "Missing union '{' opener";
-    case PS_UnionSqSeen:
-        return "Illegal syntax following union '{' opener";
-    case PS_UnionQsSeen:
-        return "Illegal syntax following union '}' closer";
-    case PS_DefaultSeen:
-        return "Illegal syntax or missing ':' following DEFAULT keyword";
-    case PS_UnionLabelSeen:
-        return "Illegal syntax following branch label in union";
-    case PS_LabelColonSeen:
-        return "Illegal syntax following ':' in branch label in union";
-    case PS_LabelExprSeen:
-        return "Illegal syntax following label expression in union";
-    case PS_UnionElemSeen:
-    case PS_UnionElemCompleted:
-        return "Illegal syntax following union element";
-    case PS_CaseSeen:
-        return "Illegal syntax following CASE keyword in union";
-    case PS_UnionElemTypeSeen:
-        return "Illegal syntax following type decl in union element";
-    case PS_UnionElemDeclSeen:
-        return "Illegal syntax following declarator in union element";
-    case PS_UnionBodySeen:
-        return "Illegal syntax following union body statement(s)";
     case PS_EnumSeen:
         return "Illegal syntax or missing identifier following ENUM keyword";
     case PS_EnumIDSeen:
@@ -348,16 +303,6 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax following '>' in sequence";
     case PS_SequenceTypeSeen:
         return "Illegal syntax following sequence type declaration";
-    case PS_ArrayIDSeen:
-        return "Illegal syntax or missing dimensions after array identifier";
-    case PS_ArrayCompleted:
-        return "Illegal syntax after array declaration";
-    case PS_DimSqSeen:
-        return "Illegal syntax or missing size expr after '[' in array declaration";
-    case PS_DimQsSeen:
-        return "Illegal syntax after ']' in array declaration";
-    case PS_DimExprSeen:
-        return "Illegal syntax or missing ']' after size expr in array declaration";
     case PS_FlagHeaderSeen:
         return "Illegal syntax after flags";
     case PS_AttrSeen:
@@ -655,22 +600,6 @@ void ErrorHandler::evalError(AstExpression* pExpr)
 {
     errorHeader(EIDL_EVAL_ERROR);
     fprintf(stderr, "'%s'\n", pExpr->toString().getStr());
-    idlc()->incErrorCount();
-}
-
-void ErrorHandler::enumValExpected(AstUnion* pUnion)
-{
-    errorHeader(EIDL_ENUM_VAL_EXPECTED);
-    fprintf(stderr, " union %s\n", pUnion->getLocalName().getStr());
-    idlc()->incErrorCount();
-}
-
-void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const OString& name)
-{
-    errorHeader(EIDL_ENUM_VAL_NOT_FOUND);
-    fprintf(stderr, " union %s, enum %s, enumerator %s\n",
-            pUnion->getLocalName().getStr(),
-            pEnum->getLocalName().getStr(), name.getStr());
     idlc()->incErrorCount();
 }
 

@@ -19,7 +19,6 @@
 
 #include <idlc/fehelper.hxx>
 #include <idlc/errorhandler.hxx>
-#include <idlc/astarray.hxx>
 #include "idlc/idlc.hxx"
 
 using namespace ::rtl;
@@ -64,26 +63,6 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
     pType = (AstType*)pDecl;
     if (m_declType == FD_simple || m_pComplexPart == NULL)
         return pType;
-
-    if (m_pComplexPart->getNodeType() == NT_array)
-    {
-        AstArray* pArray = (AstArray*)m_pComplexPart;
-        pArray->setType(pType);
-
-        // insert array type in global scope
-        AstScope* pScope = idlc()->scopes()->bottom();
-        if ( pScope )
-        {
-            AstDeclaration* pDecl2 = pScope->addDeclaration(pArray);
-            if ( (AstDeclaration*)pArray != pDecl2 )
-            {
-                delete m_pComplexPart;
-                m_pComplexPart = pDecl2;
-                return (AstType*)pDecl2;
-            }
-        }
-        return pArray;
-    }
 
     return NULL; // return through this statement should not happen
 }

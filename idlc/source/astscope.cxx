@@ -47,11 +47,6 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 
     if ((pDeclaration = lookupForAdd(pDecl)) != NULL)
     {
-        if (pDecl->getNodeType() == NT_union_branch )
-        {
-            m_declarations.push_back(pDecl);
-            return pDecl;
-        }
         if ( pDecl->hasAncestor(pDeclaration) )
         {
             idlc()->error()->error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
@@ -59,7 +54,6 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
              (pDecl->getNodeType() == NT_sequence
-              || pDecl->getNodeType() == NT_array
               || pDecl->getNodeType() == NT_instantiated_struct) )
         {
             return pDeclaration;

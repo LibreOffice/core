@@ -58,8 +58,6 @@ $(eval $(call gb_Executable_add_exception_objects,idlc,\
     idlc/source/astoperation \
     idlc/source/astconstant \
     idlc/source/astenum \
-    idlc/source/astarray \
-    idlc/source/astunion \
     idlc/source/astexpression \
     idlc/source/astservice \
 ))

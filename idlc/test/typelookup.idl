@@ -71,10 +71,6 @@ struct TestStruct : BaseStruct
     hyper           ms2;
     /// a sequence<long> member
     sequence< long >    ms3;
-    /// a long array member with dimesion 5,10
-    long            ms4[5][10];
-    /// a string array member with dimension 4,8
-    long[5][10]     ms5;
 };
 
 }; // test

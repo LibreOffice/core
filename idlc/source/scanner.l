@@ -37,7 +37,6 @@
 
 
 class AstExpression;
-class AstArray;
 class AstMember;
 
 #include <parser.hxx>
@@ -283,11 +282,9 @@ IDENTIFIER      ("_"?({ALPHA}|{DIGIT})+)*
 
 attribute       return IDL_ATTRIBUTE;
 bound           return IDL_BOUND;
-case            return IDL_CASE;
 const           return IDL_CONST;
 constants       return IDL_CONSTANTS;
 constrained     return IDL_CONSTRAINED;
-default         return IDL_DEFAULT;
 enum            return IDL_ENUM;
 exception       return IDL_EXCEPTION;
 interface       return IDL_INTERFACE;
@@ -306,10 +303,8 @@ service         return IDL_SERVICE;
 sequence        return IDL_SEQUENCE;
 singleton       return IDL_SINGLETON;
 struct          return IDL_STRUCT;
-switch          return IDL_SWITCH;
 transient       return IDL_TRANSIENT;
 typedef         return IDL_TYPEDEF;
-union           return IDL_UNION;
 
 any             return IDL_ANY;				
 boolean         return IDL_BOOLEAN;
