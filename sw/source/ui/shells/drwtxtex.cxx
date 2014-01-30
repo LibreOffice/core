@@ -101,6 +101,8 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
+const sal_uInt32 nFontInc = 40;      // 2pt
+const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
 
 using namespace ::com::sun::star;
 
@@ -548,6 +550,32 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             rSh.GetView().AttrChangedNotify( &rSh );
         }
         return;
+
+        case FN_GROW_FONT_SIZE:
+        case FN_SHRINK_FONT_SIZE:
+        {
+            SfxItemPool* pPool2 = aEditAttr.GetPool()->GetSecondaryPool();
+            if( !pPool2 )
+                pPool2 = aEditAttr.GetPool();
+
+            SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pPool2 );
+            aSetItem.GetItemSet().Put( aEditAttr, false );
+
+            sal_uInt16 nScriptTypes = pOLV->GetSelectedScriptType();
+            SvxFontHeightItem aSize( *static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
+            sal_uInt32 nSize = aSize.GetHeight();
+
+            if( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
+                nSize = nFontMaxSz;
+            else if( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
+                nSize = nFontInc;
+
+            aSize.SetHeight( nSize );
+            aSetItem.PutItemForScriptType( nScriptTypes, aSize );
+            aNewAttr.Put( aSetItem.GetItemSet() );
+        }
+        break;
+
         default:
             OSL_ENSURE(!this, "wrong dispatcher");
             return;
@@ -888,6 +916,28 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_SCALEWIDTH:   nEEWhich = EE_CHAR_FONTWIDTH;break;
             case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
             case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
+            case FN_GROW_FONT_SIZE:
+            case FN_SHRINK_FONT_SIZE:
+            {
+                SfxItemPool* pEditPool = aEditAttr.GetPool()->GetSecondaryPool();
+                if( !pEditPool )
+                    pEditPool = aEditAttr.GetPool();
+
+                SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pEditPool );
+                aSetItem.GetItemSet().Put( aEditAttr, false );
+                const SvxFontHeightItem* aSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptType ) ) );
+
+                if( !aSize )
+                    rSet.DisableItem( nSlotId );
+                else
+                {
+                    sal_uInt32 nSize = aSize->GetHeight();
+                    if( nSize == nFontMaxSz )
+                        rSet.DisableItem( FN_GROW_FONT_SIZE );
+                    else if( nSize == nFontInc )
+                        rSet.DisableItem( FN_SHRINK_FONT_SIZE );
+                }
+            }
         }
         if(nEEWhich)
             rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
