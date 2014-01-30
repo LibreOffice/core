@@ -1878,8 +1878,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPicBrcBoConversionHelper::convertTwipToMM100ttom
     case NS_sprm::LN_PicBrcRight:
         break;  // sprmPicBrcRight
-    case NS_sprm::LN_SOlstAnm:
-        break;  // sprmSOlstAnm
     case 136:
     case NS_sprm::LN_SDxaColWidth: // sprmSDxaColWidth
         // contains the twip width of the column as 3-byte-code
@@ -1893,15 +1891,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
             pSectionContext->AppendColumnSpacing( ConversionHelper::convertTwipToMM100( (nIntValue & 0xffff00) >> 8 ));
-        break;
-    case 138:
-    case NS_sprm::LN_SFEvenlySpaced:
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetEvenlySpaced( nIntValue > 0 );
-        break;  // sprmSFEvenlySpaced
-    case NS_sprm::LN_SFProtected: // sprmSFProtected
-        //todo: missing feature - unlocked sections in protected documents
         break;
     case NS_sprm::LN_SDmBinFirst: // sprmSDmBinFirst
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -1938,8 +1927,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 pSectionContext->SetBreakType( nIntValue );
         }
         break;
-    case 143:
-    case NS_sprm::LN_SFTitlePage: // sprmSFTitlePage
     case NS_ooxml::LN_EG_SectPrContents_titlePg:
     {
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -1961,98 +1948,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if(pSectionContext)
             pSectionContext->SetColumnDistance( ConversionHelper::convertTwipToMM100( nIntValue ) );
         break;
-    case NS_sprm::LN_SFAutoPgn:
-        break;  // sprmSFAutoPgn
-    case 147:
-    case NS_sprm::LN_SNfcPgn: // sprmSNfcPgn
-        //page numbering 0 - Arab, 1 - ROMAN, 2 - roman, 3 - ABC, 4 abc
-        sal_Int16 nNumbering;
-        switch( nIntValue )
-        {
-            case 1:  nNumbering = style::NumberingType::ROMAN_UPPER;break;
-            case 2:  nNumbering = style::NumberingType::ROMAN_LOWER;break;
-            case 3:  nNumbering = style::NumberingType::CHARS_UPPER_LETTER;break;
-            case 4:  nNumbering = style::NumberingType::CHARS_LOWER_LETTER;break;
-            case 0:
-            default:
-                    nNumbering = style::NumberingType::ARABIC;
-        }
-        rContext->Insert( PROP_NUMBERING_TYPE, uno::makeAny( nNumbering ) );
-    break;
-    case NS_sprm::LN_SDyaPgn:
-        break;  // sprmSDyaPgn
     case NS_sprm::LN_SDxaPgn:
         break;  // sprmSDxaPgn
-    case 150:
-    case NS_sprm::LN_SFPgnRestart: // sprmSFPgnRestart
-    {
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetPageNoRestart( nIntValue > 0 );
-    }
-    break;
-    case NS_sprm::LN_SFEndnote:
-        break;  // sprmSFEndnote
-    case 154:
-    case NS_sprm::LN_SNLnnMod:// sprmSNLnnMod
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if( pSectionContext )
-            pSectionContext->SetLnnMod( nIntValue );
-    break;
     case 155:
     case NS_sprm::LN_SDxaLnn: // sprmSDxaLnn
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if( pSectionContext )
             pSectionContext->SetdxaLnn( nIntValue );
-    break;
-    case 152:
-    case NS_sprm::LN_SLnc:// sprmSLnc
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if( pSectionContext )
-            pSectionContext->SetLnc( nIntValue );
-    break;
-    case 160:
-    case NS_sprm::LN_SLnnMin: // sprmSLnnMin
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if( pSectionContext )
-            pSectionContext->SetLnnMin( nIntValue + 1 ); // Sending '+1' because the value of 'sprmSLnnMin' is one less than the starting value for line numbers.
-    break;
-
-    case NS_sprm::LN_SGprfIhdt:
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        //flags about header/footer sharing and footnotes?
-        /* ww8scan.hxx:
-         * WW8_HEADER_EVEN = 0x01, WW8_HEADER_ODD = 0x02, WW8_FOOTER_EVEN = 0x04,
-         * WW8_FOOTER_ODD = 0x08, WW8_HEADER_FIRST = 0x10, WW8_FOOTER_FIRST = 0x20
-         */
-
-    break;  // sprmSGprfIhdt
-    case NS_sprm::LN_SDyaHdrTop: // sprmSDyaHdrTop
-        // default 720 twip
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetHeaderTop( ConversionHelper::convertTwipToMM100( nIntValue ));
-    break;
-    case NS_sprm::LN_SDyaHdrBottom: // sprmSDyaHdrBottom
-        // default 720 twip
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetHeaderBottom( ConversionHelper::convertTwipToMM100( nIntValue ) );
-    break;
-    case 158:
-    case NS_sprm::LN_SLBetween: // sprmSLBetween
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetSeparatorLine( nIntValue > 0 );
-    break;
-    case NS_sprm::LN_SVjc:
-        break;  // sprmSVjc
-    case 161:
-    case NS_sprm::LN_SPgnStart: // sprmSPgnStart
-        //page number
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetPageNumber( nIntValue );
     break;
     case 162:
     case NS_sprm::LN_SBOrientation:
@@ -2093,62 +1995,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( nConverted ));
     }
     break;
-    case 168:
-    case NS_sprm::LN_SDyaTop: // sprmSDyaTop
-    {
-        //top page margin default 1440 twip
-        //todo: check cast of SVBT16
-        sal_Int32 nConverted = ConversionHelper::convertTwipToMM100( static_cast< sal_Int16 >( nIntValue ) );
-        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( nConverted ) );
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetTopMargin( nConverted );
-    }
-    break;
-    case 169:
-    case NS_sprm::LN_SDyaBottom: // sprmSDyaBottom
-    {
-        //bottom page margin default 1440 twip
-        //todo: check cast of SVBT16
-        sal_Int32 nConverted = ConversionHelper::convertTwipToMM100( static_cast< sal_Int16 >( nIntValue ) );
-        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( nConverted) );
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetBottomMargin( nConverted );
-    }
-    break;
-    case 170:
-    case NS_sprm::LN_SDzaGutter:   // sprmSDzaGutter
-    {
-        // gutter is added to one of the margins of a section depending on RTL, can be placed on top either
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-        {
-            pSectionContext->SetDzaGutter( ConversionHelper::convertTwipToMM100( nIntValue  ) );
-        }
-    }
-    break;
     case NS_sprm::LN_SDmPaperReq:   // sprmSDmPaperReq
         //paper code - no handled in old filter
         break;
-    case NS_sprm::LN_SPropRMark:
-        break;  // sprmSPropRMark
-    case NS_sprm::LN_SFBiDi:// sprmSFBiDi
-    {
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetSFBiDi( nIntValue > 0 );
-    }
-    break;
-    case NS_sprm::LN_SFFacingCol:
-        break;  // sprmSFFacingCol
-    case NS_sprm::LN_SFRTLGutter: // sprmSFRTLGutter
-    {
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetGutterRTL( nIntValue > 0 );
-    }
-    break;
     case NS_sprm::LN_SBrcTop:   // sprmSBrcTop
     case NS_sprm::LN_SBrcLeft:   // sprmSBrcLeft
     case NS_sprm::LN_SBrcBottom:  // sprmSBrcBottom
@@ -2171,34 +2020,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         break;
 
-    case NS_sprm::LN_SPgbProp:  // sprmSPgbProp
-        {
-            OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-            if(pSectionContext)
-            {
-                pSectionContext->ApplyBorderToPageStyles( m_pImpl->GetPageStyles(), m_pImpl->GetTextFactory(), nIntValue );
-            }
-        }
-        break;
-    case NS_sprm::LN_SDxtCharSpace:
-    {
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-        {
-            pSectionContext->SetDxtCharSpace( nIntValue );
-        }
-    }
-    break;  // sprmSDxtCharSpace
-    case NS_sprm::LN_SDyaLinePitch:   // sprmSDyaLinePitch
-    {
-        //see SwWW8ImplReader::SetDocumentGrid
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-        {
-            pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
-        }
-    }
-    break;
     case 0x703a: //undocumented, grid related?
         OSL_FAIL( "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
         break;
