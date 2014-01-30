@@ -36,9 +36,10 @@ using namespace css::uno;
 using namespace css::beans;
 using namespace css::lang;
 
-GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& rxContext ) :
-    mxContext           ( rxContext ),
-    mbExportSelection   ( false )
+GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& rxContext )
+    : mxContext( rxContext )
+    , meFieldUnit(FUNIT_NONE)
+    , mbExportSelection( false )
 {
 }
 
