@@ -22360,7 +22360,7 @@
       <element name="snapToGrid" tokenid="ooxml:CT_PPrBase_snapToGrid"/>
       <element name="spacing" tokenid="ooxml:CT_PPrBase_spacing"/>
       <element name="ind" tokenid="ooxml:CT_PPrBase_ind"/>
-      <element name="contextualSpacing" tokenid="0x246d"/>
+      <element name="contextualSpacing" tokenid="sprm:PContextualSpacing"/>
       <element name="mirrorIndents" tokenid="0x2470"/>
       <element name="suppressOverlap" tokenid="0x2462"/>
       <element name="jc" tokenid="sprm:PJc"/>
