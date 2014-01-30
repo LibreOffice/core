@@ -3849,7 +3849,8 @@ void ScInterpreter::ScRank( bool bAverage )
             PushNoValue();
         else
         {
-            double fLastPos, fFirstPos = -1.0;
+            double fLastPos = 0;
+            double fFirstPos = -1.0;
             bool bFinished = false;
             SCSIZE i;
             for ( i = 0; i < nSize && !bFinished && !nGlobalError; i++ )
