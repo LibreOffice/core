@@ -598,7 +598,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                             if (bCanInsert)
                                 xUpdateCursor->moveToInsertRow();
                             else
-                                // move data entry to reset Stati
+                                // move data entry to reset state
                                 xCursor->first();
                         }
                         catch(const Exception&)
