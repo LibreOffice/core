@@ -72,6 +72,8 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4189: 'identifier' : local variable is initialized but not referenced
 
+# C4201: nonstandard extension used : nameless struct/union
+
 # C4242: 'identifier' : conversion from 'type1' to 'type2', possible
 #   loss of data
 
@@ -163,6 +165,7 @@ gb_CXXFLAGS := \
 	-W4 \
 	-wd4127 \
 	-wd4189 \
+	-wd4201 \
 	-wd4244 \
 	-wd4245 \
 	-wd4250 \

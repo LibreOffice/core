@@ -51,14 +51,7 @@
 #endif
 
 #if defined(_WIN32) && !defined(__SYMBIAN32__)
-#if defined _MSC_VER && _MSC_VER >= 1200
-#pragma warning(push)
-#pragma warning(disable:4201)
-#endif
 #include <windef.h>
-#if defined _MSC_VER && _MSC_VER >= 1200
-#pragma warning(pop)
-#endif
 #ifndef XP_WIN
 #define XP_WIN 1
 #endif
