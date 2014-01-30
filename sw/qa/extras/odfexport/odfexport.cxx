@@ -13,6 +13,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -308,6 +309,24 @@ DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-sh
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     // ODF stores opacity of 75%, that means 25% transparency.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPicture, "ShadowTransparence"));
+}
+
+DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
+{
+    uno::Reference<drawing::XShape> xTextFrame = getShape(1);
+    // This was text::RelOrientation::FRAME (the default), RelativeHeightRelation was not handled in xmloff.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+    // Make sure rel-height-rel doesn't affect width.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+}
+
+DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
+{
+    uno::Reference<drawing::XShape> xTextFrame = getShape(1);
+    // This was text::RelOrientation::FRAME (the default), RelativeWidthRelation was not handled in xmloff.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+    // Make sure rel-width-rel doesn't affect height.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
 }
 
 #endif

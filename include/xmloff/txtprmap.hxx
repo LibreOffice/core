@@ -194,6 +194,8 @@
 #define CTF_CHARRIGHTBORDER                 (XML_TEXT_CTF_START + 165)
 #define CTF_CHARTOPBORDER                   (XML_TEXT_CTF_START + 166)
 #define CTF_CHARBOTTOMBORDER                (XML_TEXT_CTF_START + 167)
+#define CTF_RELWIDTHREL                     (XML_TEXT_CTF_START + 168)
+#define CTF_RELHEIGHTREL                    (XML_TEXT_CTF_START + 169)
 
 
 #define TEXT_PROP_MAP_TEXT 0

@@ -626,6 +626,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pVertOrientRelPageState = NULL;
     XMLPropertyState* pVertOrientRelFrameState = NULL;
     XMLPropertyState* pVertOrientRelAsCharState = NULL;
+    XMLPropertyState* pRelWidthRel = NULL;
+    XMLPropertyState* pRelHeightRel = NULL;
 
     // Vertical position and relation for shapes (#i28749#)
     XMLPropertyState* pShapeVertOrientState = NULL;
@@ -738,12 +740,14 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_HORIZONTALREL:             pHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_RELWIDTHREL:               pRelWidthRel = propertie; break;
         case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALPOS_ATCHAR:    pVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_RELHEIGHTREL:          pRelHeightRel = propertie; break;
 
         // Handle new CTFs for shape positioning properties (#i28749#)
         case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
@@ -975,6 +979,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pHoriOrientRelState->mnIndex = -1;
         if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
             pHoriOrientRelFrameState->mnIndex = -1;
+        if (pRelWidthRel)
+        {
+            sal_Int16 nRelWidth = 0;
+            rPropSet->getPropertyValue("RelativeWidth") >>= nRelWidth;
+            if (!nRelWidth)
+                pRelWidthRel->mnIndex = -1;
+        }
 
         if( pVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
             pVertOrientState->mnIndex = -1;
@@ -989,6 +1000,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pVertOrientRelFrameState->mnIndex = -1;
         if( pVertOrientRelAsCharState && TextContentAnchorType_AS_CHARACTER != eAnchor )
             pVertOrientRelAsCharState->mnIndex = -1;
+        if (pRelHeightRel)
+        {
+            sal_Int16 nRelHeight = 0;
+            rPropSet->getPropertyValue("RelativeHeight") >>= nRelHeight;
+            if (!nRelHeight)
+                pRelHeightRel->mnIndex = -1;
+        }
     }
 
     // States for shape positioning properties (#i28749#)
