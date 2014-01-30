@@ -44,7 +44,7 @@
 #define SC_HDRPAINT_COUNT       7
 
 ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                    SCCOLROW nNewSize, bool bNewVertical ) :
+                                  SCCOLROW nNewSize, bool bNewVertical ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
             bVertical   ( bNewVertical ),
@@ -53,6 +53,10 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
             nMarkEnd    ( 0 ),
             bMarkRange  ( false ),
             bDragging   ( false ),
+            nDragNo     ( 0 ),
+            nDragStart  ( 0 ),
+            nDragPos    ( 0 ),
+            bDragMoved  ( false ),
             bIgnoreMove ( false )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
