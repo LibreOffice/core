@@ -23,6 +23,7 @@
 #include "undobase.hxx"
 #include "postit.hxx"
 #include "cellvalue.hxx"
+#include <cellvalues.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -35,6 +36,12 @@ class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
 class ScDocument;
+
+namespace sc {
+
+class CellValues;
+
+}
 
 class ScUndoCursorAttr: public ScSimpleUndo
 {
@@ -367,7 +374,31 @@ private:
     void            DoChange( sal_Bool bUndo );
 };
 
+namespace sc {
 
+class UndoSetCells : public ScSimpleUndo
+{
+    ScAddress maTopPos;
+    CellValues maOldValues;
+    CellValues maNewValues;
+
+    void DoChange( const CellValues& rValues );
+
+public:
+    UndoSetCells( ScDocShell* pDocSh, const ScAddress& rTopPos );
+    virtual ~UndoSetCells();
+
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual bool CanRepeat( SfxRepeatTarget& ) const;
+    virtual OUString GetComment() const;
+
+    CellValues& GetOldValues();
+    void SetNewValues( const std::vector<double>& rVals );
+};
+
+} // namespace sc
 
 #endif
 

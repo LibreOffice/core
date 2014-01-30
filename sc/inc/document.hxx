@@ -71,6 +71,7 @@ struct NoteEntry;
 struct FormulaGroupContext;
 class DocumentStreamAccess;
 class DocumentLinkManager;
+class CellValues;
 
 }
 
@@ -810,6 +811,9 @@ public:
 
     SC_DLLPUBLIC void SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
+
+    void SetValues( const ScAddress& rPos, const std::vector<double>& rVals );
+
     void SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
 
     SC_DLLPUBLIC void SetFormula(
@@ -1770,6 +1774,15 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
 
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaTokenRef* pResults, size_t nLen );
+
+    /**
+     * Transfer a series of contiguous cell values from specified position to
+     * the passed container. The specified segment will become empty after the
+     * transfer.
+     */
+    void TransferCellValuesTo( const ScAddress& rTopPos, size_t nLen, sc::CellValues& rDest );
+
+    void CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc );
 
 private:
     ScDocument(const ScDocument& r); // disabled with no definition

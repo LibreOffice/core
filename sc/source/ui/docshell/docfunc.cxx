@@ -843,6 +843,41 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     return true;
 }
 
+bool ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction )
+{
+    // Check for invalid range.
+    SCROW nLastRow = rPos.Row() + aVals.size() - 1;
+    if (nLastRow > MAXROW)
+        // out of bound.
+        return false;
+
+    ScRange aRange(rPos);
+    aRange.aEnd.SetRow(nLastRow);
+
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (pDoc->IsUndoEnabled())
+    {
+        sc::UndoSetCells* pUndoObj = new sc::UndoSetCells(&rDocShell, rPos);
+        pDoc->TransferCellValuesTo(rPos, aVals.size(), pUndoObj->GetOldValues());
+        pUndoObj->SetNewValues(aVals);
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        pUndoMgr->AddUndoAction(pUndoObj);
+    }
+
+    pDoc->SetValues(rPos, aVals);
+
+    rDocShell.PostPaint(aRange, PAINT_GRID);
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler(rPos);
+
+    return true;
+}
+
 bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
 {
     ScDocShellModificator aModificator( rDocShell );

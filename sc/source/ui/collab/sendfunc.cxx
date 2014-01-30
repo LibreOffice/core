@@ -350,6 +350,13 @@ bool ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInte
     return true; // needs some code auditing action
 }
 
+bool ScDocFuncSend::SetValueCells(
+    const ScAddress& /*rPos*/, const std::vector<double>& /*aVals*/, bool /*bInteraction*/ )
+{
+    // TODO : Implement this.
+    return true;
+}
+
 bool ScDocFuncSend::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
 {
     ScChangeOpWriter aOp("setStringCell");

@@ -170,4 +170,31 @@ bool ScDocument::CopyOneCellFromClip(
     return true;
 }
 
+void ScDocument::SetValues( const ScAddress& rPos, const std::vector<double>& rVals )
+{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->SetValues(rPos.Col(), rPos.Row(), rVals);
+}
+
+void ScDocument::TransferCellValuesTo( const ScAddress& rTopPos, size_t nLen, sc::CellValues& rDest )
+{
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->TransferCellValuesTo(rTopPos.Col(), rTopPos.Row(), nLen, rDest);
+}
+
+void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc )
+{
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->CopyCellValuesFrom(rTopPos.Col(), rTopPos.Row(), rSrc);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

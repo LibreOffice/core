@@ -68,6 +68,7 @@ struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 struct NoteEntry;
 class DocumentStreamAccess;
+class CellValues;
 
 }
 
@@ -345,6 +346,7 @@ public:
     svl::SharedString GetSharedString( SCCOL nCol, SCROW nRow ) const;
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
+    void SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
     SCSIZE      GetPatternCount( SCCOL nCol ) const;
     SCSIZE      GetPatternCount( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
@@ -896,6 +898,9 @@ public:
      * COLUMN() or ROW() which may change its value on move.
      */
     void BroadcastRecalcOnRefMove();
+
+    void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
+    void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups( SCCOL nCol ) const;

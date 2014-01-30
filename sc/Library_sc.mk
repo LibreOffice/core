@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/bcaslot \
     sc/source/core/data/bigrange \
     sc/source/core/data/cellvalue \
+    sc/source/core/data/cellvalues \
     sc/source/core/data/clipcontext \
     sc/source/core/data/clipparam \
     sc/source/core/data/column \
@@ -512,6 +513,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/undoblk2 \
     sc/source/ui/undo/undoblk3 \
     sc/source/ui/undo/undocell \
+    sc/source/ui/undo/undocell2 \
     sc/source/ui/undo/undodat \
     sc/source/ui/undo/undodraw \
     sc/source/ui/undo/undoolk \

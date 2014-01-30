@@ -266,14 +266,20 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
     SCTAB nTabStart = maInputRange.aStart.Tab();
     SCTAB nTabEnd   = maInputRange.aEnd.Tab();
 
-    for (SCROW nTab = nTabStart; nTab <= nTabEnd; nTab++)
+    std::vector<double> aVals;
+    aVals.reserve(nRowEnd-nRowStart+1);
+
+    for (SCROW nTab = nTabStart; nTab <= nTabEnd; ++nTab)
     {
-        for (SCROW nRow = nRowStart; nRow <= nRowEnd; nRow++)
+        for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         {
-            for (SCCOL nCol = nColStart; nCol <= nColEnd; nCol++)
-            {
-                pDocShell->GetDocFunc().SetValueCell(ScAddress(nCol, nRow, nTab), randomGenerator(), true);
-            }
+            aVals.clear();
+
+            ScAddress aPos(nCol, nRowStart, nTab);
+            for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
+                aVals.push_back(randomGenerator());
+
+            pDocShell->GetDocFunc().SetValueCells(aPos, aVals, true);
         }
     }
 

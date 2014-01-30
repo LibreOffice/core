@@ -24,4 +24,28 @@ void ScTable::CopyOneCellFromClip(
         aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2);
 }
 
+void ScTable::SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].SetValues(nRow, rVals);
+}
+
+void ScTable::TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].TransferCellValuesTo(nRow, nLen, rDest);
+}
+
+void ScTable::CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].CopyCellValuesFrom(nRow, rSrc);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,6 +56,7 @@ struct RefUpdateMoveTabContext;
 class EditTextIterator;
 struct NoteEntry;
 class DocumentStreamAccess;
+class CellValues;
 
 }
 
@@ -143,6 +144,7 @@ friend class sc::DocumentStreamAccess;
 friend class sc::SingleColumnSpanSet;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
+friend class sc::CellValues;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
@@ -294,6 +296,7 @@ public:
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast = true );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
+    void SetValues( SCROW nRow, const std::vector<double>& rVals );
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
@@ -538,6 +541,9 @@ public:
      * Regroup formula cells for the entire column.
      */
     void RegroupFormulaCells();
+
+    void TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest );
+    void CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups() const;

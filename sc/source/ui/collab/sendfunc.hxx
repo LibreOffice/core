@@ -35,6 +35,7 @@ public:
 
     virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi );
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
+    virtual bool SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
     virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );

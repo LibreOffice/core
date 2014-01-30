@@ -13,6 +13,7 @@
 #include <cellvalue.hxx>
 #include <attarray.hxx>
 #include <document.hxx>
+#include <cellvalues.hxx>
 
 #include <svl/sharedstring.hxx>
 
@@ -142,6 +143,89 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             maCellNotes.set(
                 pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
     }
+}
+
+void ScColumn::SetValues( SCROW nRow, const std::vector<double>& rVals )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    SCROW nLastRow = nRow + rVals.size() - 1;
+    if (nLastRow > MAXROW)
+        // Out of bound. Do nothing.
+        return;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    DetachFormulaCells(aPos, rVals.size());
+
+    maCells.set(nRow, rVals.begin(), rVals.end());
+    std::vector<sc::CellTextAttr> aDefaults(rVals.size());
+    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
+
+    CellStorageModified();
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(rVals.size());
+    for (SCROW i = nRow; i <= nLastRow; ++i)
+        aRows.push_back(i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+}
+
+void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    SCROW nLastRow = nRow + nLen - 1;
+    if (nLastRow > MAXROW)
+        // Out of bound. Do nothing.
+        return;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    DetachFormulaCells(aPos, nLen);
+
+    rDest.transferFrom(*this, nRow, nLen);
+
+    std::vector<sc::CellTextAttr> aDefaults(nLen);
+    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
+
+    CellStorageModified();
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(nLen);
+    for (SCROW i = nRow; i <= nLastRow; ++i)
+        aRows.push_back(i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+}
+
+void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    SCROW nLastRow = nRow + rSrc.size() - 1;
+    if (nLastRow > MAXROW)
+        // Out of bound. Do nothing
+        return;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    DetachFormulaCells(aPos, rSrc.size());
+
+    rSrc.copyTo(*this, nRow);
+
+    std::vector<sc::CellTextAttr> aDefaults(rSrc.size());
+    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
+
+    CellStorageModified();
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(rSrc.size());
+    for (SCROW i = nRow; i <= nLastRow; ++i)
+        aRows.push_back(i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
