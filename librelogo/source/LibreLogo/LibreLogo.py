@@ -1701,9 +1701,5 @@ def __gotoline__(n):
         _.doc.CurrentController.getViewCursor().gotoRange(_.cursor.getStart(), False)
 
 g_exportedScripts = left, right, goforward, gobackward, run, stop, home, clearscreen, commandline, __translate__
-g_ImplementationHelper = unohelper.ImplementationHelper()
-g_ImplementationHelper.addImplementation( \
-    None,"org.openoffice.script.LibreLogo", \
-    ("org.openoffice.script.ServiceLibreLogo",),)
 
 # vim: set noet sw=4 ts=4:
