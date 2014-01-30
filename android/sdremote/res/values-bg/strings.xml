@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Remote</string>
+  <string name="title_computers">Компютри</string>
+  <string name="title_generic">Общи</string>
+  <string name="title_licenses">Свободни лицензи</string>
+  <string name="title_settings">Настройки</string>
+  <string name="title_requirements">Изисквания</string>
+  <string name="title_connection">Връзка</string>
+  <string name="title_creation">Създаване</string>
+  <string name="title_slide_show">Прожекция</string>
+  <string name="title_timer">Таймер</string>
+  <string name="menu_licenses">Свободни лицензи</string>
+  <string name="menu_settings">Настройки</string>
+  <string name="menu_requirements">Изисквания</string>
+  <string name="menu_reconnect">Възстановяване на връзката</string>
+  <string name="menu_add_computer">Добавяне на компютър</string>
+  <string name="menu_remove_computer">Премахване</string>
+  <string name="menu_slides_grid">Кадри в решетка</string>
+  <string name="menu_slides_pager">Кадри по страници</string>
+  <string name="menu_timer">Таймер</string>
+  <string name="menu_stop_slide_show">Край на прожекция</string>
+  <string name="menu_pause_slide_show">Пауза на прожекция</string>
+  <string name="menu_resume_slide_show">Продължаване</string>
+  <string name="button_cancel">Отмяна</string>
+  <string name="button_save">Запазване</string>
+  <string name="button_start">Начало</string>
+  <string name="button_remove">Премахване</string>
+  <string name="message_impress_pin_validation">В LibreOffice Impress изберете „Прожекция → Impress Remote“ и въведете кода.</string>
+  <string name="message_connection_failed_title">Неуспешно свързване</string>
+  <string name="message_impress_remote_enabling">Уверете се, че дистанционното управление е разрешено в „Инструменти → Настройки → LibreOffice Impress → Общи“ в LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Освен това трябва да е разрешена експерименталната функционалност в „Инструменти → Настройки → LibreOffice → Разширени“.</string>
+  <string name="message_impress_pairing_check">Ако срещате проблеми с връзката чрез Bluetooth, вижте указанията за настолната ви операционна система.</string>
+  <string name="message_ip_address_validation">Въведете валиден IP адрес.</string>
+  <string name="message_time_is_up">Времето изтече!</string>
+  <string name="message_search_wifi">Уверете се, че LibreOffice се изпълнява в компютър от същата WiFi мрежа.</string>
+  <string name="message_search_bluetooth">Уверете се, че LibreOffice се изпълнява в компютър с включен Bluetooth.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Научете още</a>
+  </string>
+  <string name="message_paused">Пауза</string>
+  <string name="message_notes_empty">Празно.</string>
+  <string name="hint_ip_address">IP адрес</string>
+  <string name="hint_name">Име (незадължително)</string>
+  <string name="header_notes">Бележки</string>
+  <string name="mask_slide_show_progress">Кадър %1$d от %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Остава една минута</item>
+    <item quantity="other">Остават %d минути</item>
+  </plurals>
+  <string name="description_pager_slide">Преглед на кадрите</string>
+  <string name="description_grid_slide">Преглед на кадрите</string>
+  <string name="description_empty_slide">Празен кадър</string>
+  <string name="preferences_volume_keys_actions_title">Действие на клавишите за звука</string>
+  <string name="preferences_volume_keys_actions_summary">Смяна на кадрите и анимация чрез клавишите за звука</string>
+  <string name="preferences_keep_screen_on_title">Постоянно включен екран</string>
+  <string name="preferences_keep_screen_on_summary">Забранено заспиване на телефона при прожекция</string>
+  <string name="preferences_quiet_mode_title">Тих режим</string>
+  <string name="preferences_quiet_mode_summary">Режим „вибрация“ по време на прожекция</string>
+  <string name="requirements_libreoffice_version">В компютъра се изпълнява LibreOffice 4.0.3 или по-нов.</string>
+  <string name="requirements_libreoffice_general_enabled">В „Инструменти → Настройка → LibreOffice Impress → Общи“ в LibreOffice Impress е разрешено Impress Remote.</string>
+  <string name="requirements_libreoffice_experimental_enabled">В „Инструменти → Настройка → LibreOffice → Разширени“ е разрешена експерименталната функционалност.</string>
+  <string name="requirements_network_connection">Устройството с Android и компютърът са свързани в една мрежа.</string>
+  <string name="requirements_network_ports">Ако е включена защитна стена, портовете 1598 и 1599 трябва да са отворени.</string>
+  <string name="requirements_bluetooth_connection">Компютър с включен Bluetooth.</string>
+</resources>

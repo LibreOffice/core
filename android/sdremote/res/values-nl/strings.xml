@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Remote</string>
+  <string name="title_computers">Computers</string>
+  <string name="title_generic">Algemeen</string>
+  <string name="title_licenses">Open source licenties</string>
+  <string name="title_settings">Instellingen</string>
+  <string name="title_requirements">Vereisten</string>
+  <string name="title_connection">Verbinding</string>
+  <string name="title_creation">Aanmaak</string>
+  <string name="title_slide_show">Diashow</string>
+  <string name="title_timer">Timer</string>
+  <string name="menu_licenses">Open source licenties</string>
+  <string name="menu_settings">Instellingen</string>
+  <string name="menu_requirements">Vereisten</string>
+  <string name="menu_reconnect">Opnieuw verbinden</string>
+  <string name="menu_add_computer">Computer toevoegen</string>
+  <string name="menu_remove_computer">Verwijder</string>
+  <string name="menu_slides_grid">Diaraster</string>
+  <string name="menu_slides_pager">Diapager</string>
+  <string name="menu_timer">Timer</string>
+  <string name="menu_stop_slide_show">Stop diashow</string>
+  <string name="menu_pause_slide_show">Pauzeer diashow</string>
+  <string name="menu_resume_slide_show">Hervat diashow</string>
+  <string name="button_cancel">Annuleer</string>
+  <string name="button_save">Opslaan</string>
+  <string name="button_start">Begin</string>
+  <string name="button_remove">Verwijder</string>
+  <string name="message_impress_pin_validation">Ga naar \"Presentatie &gt; ​​Impress afstandsbediening\" in LibreOffice Impress en voer de code in.</string>
+  <string name="message_connection_failed_title">Verbinding mislukt</string>
+  <string name="message_impress_remote_enabling">Zorg ervoor dat de afstandsbediening is ingeschakeld. Ga naar \"Extra &gt; Opties &gt; LibreOffice Impress &gt; Algemeen\", in LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">U moet ook experimentele functies inschakelen in \"Extra &gt; Opties &gt; LibreOffice &gt; Geavanceerd\".</string>
+  <string name="message_impress_pairing_check">Als u Bluetooth-problemen heeft, bekijk de instructies met betrekking tot uw desktop OS.</string>
+  <string name="message_ip_address_validation">Type een geldig IP-adres in.</string>
+  <string name="message_time_is_up">Tijd is om!</string>
+  <string name="message_search_wifi">Zorg ervoor dat LibreOffice wordt uitgevoerd op een computer op hetzelfde WiFi-netwerk.</string>
+  <string name="message_search_bluetooth">Zorg ervoor dat LibreOffice wordt uitgevoerd op een computer met Bluetooth.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Leer meer</a>
+  </string>
+  <string name="message_paused">Gepauzeerd</string>
+  <string name="message_notes_empty">Niets hier.</string>
+  <string name="hint_ip_address">IP-adres</string>
+  <string name="hint_name">Naam optioneel)</string>
+  <string name="header_notes">Aantekeningen</string>
+  <string name="mask_slide_show_progress">Dia %1$d van %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Nog één minuutnog %d minuten</item>
+    <item quantity="other"/>
+  </plurals>
+  <string name="description_pager_slide">Dia voorvertoning</string>
+  <string name="description_grid_slide">Dia voorvertoning</string>
+  <string name="description_empty_slide">Lege dia</string>
+  <string name="preferences_volume_keys_actions_title">Volumetoetsen-acties</string>
+  <string name="preferences_volume_keys_actions_summary">Wissel dia\'s en activeer animaties met behulp van de volumetoetsen</string>
+  <string name="preferences_keep_screen_on_title">Houd het scherm aan</string>
+  <string name="preferences_keep_screen_on_summary">Voorkom dat de telefoon in slaapstand gaat gedurende de presentatie</string>
+  <string name="preferences_quiet_mode_title">Stille modus</string>
+  <string name="preferences_quiet_mode_summary">Zet de trilstand aan tijdens de presentatie</string>
+  <string name="requirements_libreoffice_version">LibreOffice versie 4.0.3 of hoger uitvoeren op een computer</string>
+  <string name="requirements_libreoffice_general_enabled">Impress afstandsbedienng ingeschakeld in \"Extra &gt; Opties &gt; LibreOffice Impress &gt; Algemeen\" in LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Experimentele functies ingeschakeld in \"Extra &gt; Opties &gt; LibreOffice &gt; Geavanceerd\" in LibreOffice Impress.</string>
+  <string name="requirements_network_connection">Het Android-toestel en een computer zijn aangesloten op hetzelfde netwerk.</string>
+  <string name="requirements_network_ports">Als u een firewall heeft, zorg er dan voor dat poorten 1598 en 1599 zijn geopend.</string>
+  <string name="requirements_bluetooth_connection">Een computer met ingeschakelde Bluetooth.</string>
+</resources>

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Remote</string>
+  <string name="title_computers">Datamaskiner</string>
+  <string name="title_generic">Generisk</string>
+  <string name="title_licenses">Åpen kildekode-lisenser</string>
+  <string name="title_settings">Innstillinger</string>
+  <string name="title_requirements">Krav</string>
+  <string name="title_connection">Tilkobling</string>
+  <string name="title_creation">Oppretting</string>
+  <string name="title_slide_show">Lysbildeframvisning</string>
+  <string name="title_timer">Tidtaker</string>
+  <string name="menu_licenses">Åpen kildekode-lisenser</string>
+  <string name="menu_settings">Innstillinger</string>
+  <string name="menu_requirements">Krav</string>
+  <string name="menu_reconnect">Koble til på nytt</string>
+  <string name="menu_add_computer">Legg til en datamaskin</string>
+  <string name="menu_remove_computer">Fjern</string>
+  <string name="menu_slides_grid">Lysbilderutenett</string>
+  <string name="menu_slides_pager">Lysbildebytter</string>
+  <string name="menu_timer">Tidtaker</string>
+  <string name="menu_stop_slide_show">Stopp lysbildeframvising</string>
+  <string name="menu_pause_slide_show">Sett lysbildeframvisning på pause</string>
+  <string name="menu_resume_slide_show">Gjenoppta lysbildeframvisning</string>
+  <string name="button_cancel">Avbryt</string>
+  <string name="button_save">Lagre</string>
+  <string name="button_start">Start</string>
+  <string name="button_remove">Fjern</string>
+  <string name="message_impress_pin_validation">Gå til «Lysbildeframvisning → Impress Remote» i LibreOffice Impress, og skriv inn koden.</string>
+  <string name="message_connection_failed_title">Tilkoblinga mislyktes</string>
+  <string name="message_impress_remote_enabling">"Sørg for at fjernkontrollen er påslått. Gå til «Verktøy → Innstillinger → LibreOffice Impress  → Generelt» i LibreOffice Impress."</string>
+  <string name="message_impress_wifi_enabling">Du bør også slå på de eksperimentelle funksjonene i «Verktøy → LibreOffice → Avansert».</string>
+  <string name="message_impress_pairing_check">Hvis du har problemer med å pare Bluetooth-enheter, må du lese instruksjonene for ditt operativsystem.</string>
+  <string name="message_ip_address_validation">Skriv inn en gyldig IP-adresse.</string>
+  <string name="message_time_is_up">Tiden er ute!</string>
+  <string name="message_search_wifi">Sørg for at LibreOffice kjører på en datamaskin tilkoblet det samme WiFi-nettverket.</string>
+  <string name="message_search_bluetooth">Sørg for at LibreOffice kjører på en datamaskin med Bluetooth er påslått.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Lær mer</a>
+  </string>
+  <string name="message_paused">På pause</string>
+  <string name="message_notes_empty">Her var det ingenting.</string>
+  <string name="hint_ip_address">IP-adresse</string>
+  <string name="hint_name">Navn (valgfritt)</string>
+  <string name="header_notes">Merknader</string>
+  <string name="mask_slide_show_progress">Lysbilde %1$d fra %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Et minutt gjenstår%d minutter gjenstår</item>
+    <item quantity="other"/>
+  </plurals>
+  <string name="description_pager_slide">Forhåndsvisning av lysbilde</string>
+  <string name="description_grid_slide">Forhåndsvisning av lysbilde</string>
+  <string name="description_empty_slide">Tomt lysbilde</string>
+  <string name="preferences_volume_keys_actions_title">Handlinger for volumknapper</string>
+  <string name="preferences_volume_keys_actions_summary">Bytt lysbilder og slå på animasjoner ved å bruke volumknappene.</string>
+  <string name="preferences_keep_screen_on_title">La skjermen være påslått</string>
+  <string name="preferences_keep_screen_on_summary">Hindre telefonen i å sove under presentasjonen</string>
+  <string name="preferences_quiet_mode_title">Stillemodus</string>
+  <string name="preferences_quiet_mode_summary">Sett på vibrasjonsmodus under presentasjonen</string>
+  <string name="requirements_libreoffice_version">En datamaskin med LibreOffice versjon 4,0,3 eller nyere.</string>
+  <string name="requirements_libreoffice_general_enabled">Impress Remote påslått i «Verktøy → Innstillinger → LibreOffice Impress → Generelt» i LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Eksperimentelle funksjoner påslått i «Verktøy → Innstillinger → LibreOffice → Avansert» i LibreOffice Impress.</string>
+  <string name="requirements_network_connection">En Android-enhet og datamaskin tilkoblet det samme nettverket.</string>
+  <string name="requirements_network_ports">Hvis du har en brannmur, må portene «1598» og «1599» være åpne.</string>
+  <string name="requirements_bluetooth_connection">En datamaskin med Blutetooth påslått.</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress-ті қашықтан басқару</string>
+  <string name="title_computers">Компьютерлер</string>
+  <string name="title_generic">Жалпы</string>
+  <string name="title_licenses">Лицензиялар</string>
+  <string name="title_settings">Баптаулар</string>
+  <string name="title_requirements">Талаптары</string>
+  <string name="title_connection">Байланыс</string>
+  <string name="title_creation">Жасау</string>
+  <string name="title_slide_show">Слайд-шоу</string>
+  <string name="title_timer">Таймер</string>
+  <string name="menu_licenses">Лицензиялар</string>
+  <string name="menu_settings">Баптаулар</string>
+  <string name="menu_requirements">Талаптары</string>
+  <string name="menu_reconnect">Қайта байланысу</string>
+  <string name="menu_add_computer">Компьютерді қосу</string>
+  <string name="menu_remove_computer">Өшіру</string>
+  <string name="menu_slides_grid">Слайдтар тормен</string>
+  <string name="menu_slides_pager">Слайдтар бет бойынша</string>
+  <string name="menu_timer">Таймер</string>
+  <string name="menu_stop_slide_show">Слайдшоуды тоқтату</string>
+  <string name="menu_pause_slide_show">Слайдшоуды аялдату</string>
+  <string name="menu_resume_slide_show">Слайдшоуды жалғастыру</string>
+  <string name="button_cancel">Бас тарту</string>
+  <string name="button_save">Сақтау</string>
+  <string name="button_start">Бастау</string>
+  <string name="button_remove">Өшіру</string>
+  <string name="message_connection_failed_title">Байланыс орнату сәтсіз</string>
+  <string name="message_time_is_up">Уақыт бітті!</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Көбірек біліңіз</a>
+  </string>
+  <string name="message_paused">Аялдатылған</string>
+  <string name="hint_ip_address">IP адресі</string>
+  <string name="hint_name">Аты (міндетті емес)</string>
+  <string name="header_notes">Жазбалар</string>
+  <string name="mask_slide_show_progress">Слайд %1$d, барлығы %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="other">%d минут қалды</item>
+  </plurals>
+  <string name="description_pager_slide">Слайдтарды қарау</string>
+  <string name="description_grid_slide">Слайдтарды қарау</string>
+  <string name="description_empty_slide">Бос слайд</string>
+  <string name="preferences_volume_keys_actions_title">Дыбыс пернелерінің әрекеттері</string>
+  <string name="preferences_keep_screen_on_title">Экранды сөндірмеу</string>
+  <string name="preferences_quiet_mode_title">Тыныш режимі</string>
+</resources>

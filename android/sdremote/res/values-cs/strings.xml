@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Dálkové ovládání prezentace</string>
+  <string name="title_computers">Počítače</string>
+  <string name="title_generic">Obecné</string>
+  <string name="title_licenses">Licence open source</string>
+  <string name="title_settings">Nastavení</string>
+  <string name="title_requirements">Požadavky</string>
+  <string name="title_connection">Spojení</string>
+  <string name="title_creation">Vytvoření</string>
+  <string name="title_slide_show">Prezentace</string>
+  <string name="title_timer">Časovač</string>
+  <string name="menu_licenses">Licence open source</string>
+  <string name="menu_settings">Nastavení</string>
+  <string name="menu_requirements">Požadavky</string>
+  <string name="menu_reconnect">Znovu připojit</string>
+  <string name="menu_add_computer">Přidat počítač</string>
+  <string name="menu_remove_computer">Odstranit</string>
+  <string name="menu_slides_grid">Mřížka snímků</string>
+  <string name="menu_slides_pager">Snímek na stránku</string>
+  <string name="menu_timer">Časovač</string>
+  <string name="menu_stop_slide_show">Zastavit prezentaci</string>
+  <string name="menu_pause_slide_show">Pozastavit prezentaci</string>
+  <string name="menu_resume_slide_show">Pokračovat v prezentaci</string>
+  <string name="button_cancel">Zrušit</string>
+  <string name="button_save">Uložit</string>
+  <string name="button_start">Spustit</string>
+  <string name="button_remove">Odstranit</string>
+  <string name="message_impress_pin_validation">V programu LibreOffice Impress přejděte na „Prezentace → Dálkové ovládání prezentace“ a zadejte kód.</string>
+  <string name="message_connection_failed_title">Připojení se nepodařilo navázat</string>
+  <string name="message_impress_remote_enabling">Ujistěte se, že je dálkové ovládání povoleno. V programu LibreOffice Impress přejděte na „Nástroje → Možnosti → LibreOffice Impress → Obecné“.</string>
+  <string name="message_impress_wifi_enabling">Měli byste také povolit experimentální vlastnosti v „Nástroje → Možnosti → LibreOffice → Pokročilé“.</string>
+  <string name="message_impress_pairing_check">Máte-li problémy s připojením pomocí Bluetooth, vyzkoušejte návody pro příslušný operační systém.</string>
+  <string name="message_ip_address_validation">Zadejte platnou IP adresu.</string>
+  <string name="message_time_is_up">Čas vypršel!</string>
+  <string name="message_search_wifi">Ujistěte se, že je LibreOffice spuštěn na počítači připojeném ke stejné síti WiFi.</string>
+  <string name="message_search_bluetooth">Ujistěte se, že je povolen Bluetooth na počítači, kde je LibreOffice spuštěn.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Zjistěte více</a>
+  </string>
+  <string name="message_paused">Pozastaveno</string>
+  <string name="message_notes_empty">Nic se zde nenachází.</string>
+  <string name="hint_ip_address">IP adresa</string>
+  <string name="hint_name">Název (nepovinný)</string>
+  <string name="header_notes">Poznámky</string>
+  <string name="mask_slide_show_progress">Snímek %1$d z %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Zbývá jedna minuta</item>
+    <item quantity="few">Zbývají %d minuty</item>
+    <item quantity="other">Zbývá %d minut</item>
+  </plurals>
+  <string name="description_pager_slide">Náhled snímku</string>
+  <string name="description_grid_slide">Náhled snímku</string>
+  <string name="description_empty_slide">Prázdný snímek</string>
+  <string name="preferences_volume_keys_actions_title">Akce pro klávesy hlasitosti</string>
+  <string name="preferences_volume_keys_actions_summary">Přepínat snímky a aktivovat animace pomocí kláves pro ovládání hlasitosti</string>
+  <string name="preferences_keep_screen_on_title">Ponechat zapnutou obrazovku</string>
+  <string name="preferences_keep_screen_on_summary">Zabránit telefonu přejít během prezentace do úsporného režimu</string>
+  <string name="preferences_quiet_mode_title">Tichý režim</string>
+  <string name="preferences_quiet_mode_summary">Nastavit během prezentace vibrační vyzvánění</string>
+  <string name="requirements_libreoffice_version">Na počítači spuštěný LibreOffice verze 4.0.3 nebo novější.</string>
+  <string name="requirements_libreoffice_general_enabled">V LibreOffice Impressu povolené Dálkové ovládání prezentace v „Nástroje → Možnosti → LibreOffice Impress → Obecné“.</string>
+  <string name="requirements_libreoffice_experimental_enabled">V LibreOffice Impressu povolené experimentální vlastnosti v „Nástroje → Možnosti → LibreOffice → Pokročilé“.</string>
+  <string name="requirements_network_connection">Ke stejné síti připojené zařízení s Androidem a počítač.</string>
+  <string name="requirements_network_ports">Pokud používáte firewall, ujistěte se, že jsou porty 1598 a 1599 otevřené.</string>
+  <string name="requirements_bluetooth_connection">Počítač s povoleným Bluetooth.</string>
+</resources>

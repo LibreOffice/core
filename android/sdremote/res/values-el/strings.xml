@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Απομακρυσμένο Impress</string>
+  <string name="title_computers">Υπολογιστές</string>
+  <string name="title_generic">Γενικά</string>
+  <string name="title_licenses">Άδειες ανοικτού λογισμικού</string>
+  <string name="title_settings">Ρυθμίσεις</string>
+  <string name="title_requirements">Απαιτήσεις</string>
+  <string name="title_connection">Σύνδεση</string>
+  <string name="title_creation">Δημιουργία</string>
+  <string name="title_slide_show">Παρουσίαση</string>
+  <string name="title_timer">Χρονόμετρο</string>
+  <string name="menu_licenses">Άδειες ανοικτού λογισμικού</string>
+  <string name="menu_settings">Ρυθμίσεις</string>
+  <string name="menu_requirements">Απαιτήσεις</string>
+  <string name="menu_reconnect">Επανασύνδεση</string>
+  <string name="menu_add_computer">Προσθήκη υπολογιστή</string>
+  <string name="menu_remove_computer">Αφαίρεση</string>
+  <string name="menu_slides_grid">Πλέγμα διαφανειών</string>
+  <string name="menu_slides_pager">Σελιδοποίηση διαφανειών</string>
+  <string name="menu_timer">Χρονόμετρο</string>
+  <string name="menu_stop_slide_show">Διακοπή παρουσίασης</string>
+  <string name="menu_pause_slide_show">Παύση παρουσίασης</string>
+  <string name="menu_resume_slide_show">Συνέχιση παρουσίασης</string>
+  <string name="button_cancel">Ακύρωση</string>
+  <string name="button_save">Αποθήκευση</string>
+  <string name="button_start">Έναρξη</string>
+  <string name="button_remove">Αφαίρεση</string>
+  <string name="message_impress_pin_validation">Πηγαίνετε στο “Παρουσίαση → Απομακρυσμένο Impress” στο LibreOffice Impress και εισαγωγή του κώδικα.</string>
+  <string name="message_connection_failed_title">Αποτυχία σύνδεσης</string>
+  <string name="message_impress_remote_enabling">Βεβαιωθείτε ότι ενεργοποιήσατε τον απομακρυσμένο έλεγχο. Πηγαίνετε στο “Εργαλεία → Επιλογές → LibreOffice Impress → Γενικά” στο LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Θα πρέπει να ενεργοποιήσετε πειραματικά γνωρίσματα στο “Εργαλεία → Επιλογές → LibreOffice → Προχωρημένα” επίσης.</string>
+  <string name="message_impress_pairing_check">Αν έχετε προβλήματα σύνδεσης μπλουτούθ κοιτάξτε τις οδηγίες τις σχετικές με το λειτουργικό της επιφάνειας εργασίας σας.</string>
+  <string name="message_ip_address_validation">Πληκτρολογήστε μια έγκυρη διεύθυνση IP.</string>
+  <string name="message_time_is_up">Λήξη χρόνου!</string>
+  <string name="message_search_wifi">"Βεβαιωθείτε ότι το LibreOffice εκτελείται σε έναν υπολογιστή στο ίδιο  ασύρματο δίκτυο."</string>
+  <string name="message_search_bluetooth">Βεβαιωθείτε ότι το LibreOffice εκτελείται σε έναν υπολογιστή με ενεργό το μπλουτούθ.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Μάθετε περισσότερα</a>
+  </string>
+  <string name="message_paused">Σε παύση</string>
+  <string name="message_notes_empty">Τίποτα εδώ.</string>
+  <string name="hint_ip_address">Διεύθυνση IP</string>
+  <string name="hint_name">Όνομα (προαιρετικό)</string>
+  <string name="header_notes">Σημειώσεις</string>
+  <string name="mask_slide_show_progress">Διαφάνεια %1$d από %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Ένα λεπτό απέμεινε</item>
+    <item quantity="other">%d λεπτά απέμειναν</item>
+  </plurals>
+  <string name="description_pager_slide">Προεπισκόπηση διαφάνειας</string>
+  <string name="description_grid_slide">Προεπισκόπηση διαφάνειας</string>
+  <string name="description_empty_slide">Κενή διαφάνεια</string>
+  <string name="preferences_volume_keys_actions_title">Ενέργειες πλήκτρων έντασης</string>
+  <string name="preferences_volume_keys_actions_summary">Αλλαγή διαφανειών και ενεργοποίηση κινήσεων χρησιμοποιώντας πλήκτρα έντασης</string>
+  <string name="preferences_keep_screen_on_title">Διατήρηση ενεργούς οθόνης</string>
+  <string name="preferences_keep_screen_on_summary">Αποτροπή τηλεφώνου από ύπνωση κατά την παρουσίαση</string>
+  <string name="preferences_quiet_mode_title">Αθόρυβη λειτουργία</string>
+  <string name="preferences_quiet_mode_summary">Ορισμός σε λειτουργία δόνησης κατά την παρουσίαση</string>
+  <string name="requirements_libreoffice_version">LibreOffice με έκδοση 4.0.3 ή μεγαλύτερη που εκτελείται σε έναν υπολογιστή.</string>
+  <string name="requirements_libreoffice_general_enabled">Απομακρυσμένο Impress ενεργοποιημένο στο “Εργαλεία → Επιλογές → LibreOffice Impress → Γενικά” στο LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Πειραματικά γνωρίσματα ενεργοποιημένα στο “Εργαλεία → Επιλογές → LibreOffice → Προχωρημένα” στο LibreOffice Impress.</string>
+  <string name="requirements_network_connection">Η συσκευή Android και ένας υπολογιστής συνδεμένος στο ίδιο δίκτυο.</string>
+  <string name="requirements_network_ports">Αν έχετε τείχος προστασίας βεβαιωθείτε ότι οι θύρες 1598 και 1599 είναι ανοικτές.</string>
+  <string name="requirements_bluetooth_connection">Ένας υπολογιστής με ενεργοποιημένο μπλουτούθ.</string>
+</resources>

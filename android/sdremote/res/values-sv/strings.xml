@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress-fjärrkontroll</string>
+  <string name="title_computers">Datorer</string>
+  <string name="title_generic">Allmänt</string>
+  <string name="title_licenses">Licenser (öppen källkod)</string>
+  <string name="title_settings">Inställningar</string>
+  <string name="title_requirements">Systemkrav</string>
+  <string name="title_connection">Anslutning</string>
+  <string name="title_creation">Upprättning</string>
+  <string name="title_slide_show">Presentation</string>
+  <string name="title_timer">Tidtagarur</string>
+  <string name="menu_licenses">Licenser (öppen källkod)</string>
+  <string name="menu_settings">Inställningar</string>
+  <string name="menu_requirements">Systemkrav</string>
+  <string name="menu_reconnect">Återanslut</string>
+  <string name="menu_add_computer">Lägg till dator</string>
+  <string name="menu_remove_computer">Ta bort</string>
+  <string name="menu_slides_grid">Bildrutnät</string>
+  <string name="menu_slides_pager">Bildbytare</string>
+  <string name="menu_timer">Tidtagarur</string>
+  <string name="menu_stop_slide_show">Stoppa presentation</string>
+  <string name="menu_pause_slide_show">Pausa presentation</string>
+  <string name="menu_resume_slide_show">Återuppta presentation</string>
+  <string name="button_cancel">Avbryt</string>
+  <string name="button_save">Spara</string>
+  <string name="button_start">Start</string>
+  <string name="button_remove">Ta bort</string>
+  <string name="message_impress_pin_validation">Gå till ”Presentation → Impress fjärrkontroll” i LibreOffice Impress och skriv in koden.</string>
+  <string name="message_connection_failed_title">Anslutningen misslyckades</string>
+  <string name="message_impress_remote_enabling">Försäkra dig om att du aktiverat fjärrkontrollen. Gå till ”Verktyg → Alternativ → LibreOffice Impress → Allmännt” i LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Du ska även aktivera experimentella funktioner under ”Verktyg → Alternativ → LibreOffice → Avancerat”.</string>
+  <string name="message_impress_pairing_check">Om du har problem att parkoppla via bluetooth så får du läsa de instruktioner som gäller för ditt operativsystem.</string>
+  <string name="message_ip_address_validation">Skriv in en giltig IP-adress.</string>
+  <string name="message_time_is_up">Tiden är ute!</string>
+  <string name="message_search_wifi">Försäkra dig om att LibreOffice körs på en dator i samma Wifi-nätverk.</string>
+  <string name="message_search_bluetooth">Försäkra dig om att LibreOffice körs på en dator där Bluetooth är aktiverat.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Lär dig mer</a>
+  </string>
+  <string name="message_paused">Pausad</string>
+  <string name="message_notes_empty">Ingenting här.</string>
+  <string name="hint_ip_address">IP-adress</string>
+  <string name="hint_name">Namn (valfritt)</string>
+  <string name="header_notes">Anteckningar</string>
+  <string name="mask_slide_show_progress">Bild %1$d av %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">En minut kvar</item>
+    <item quantity="other">%d minuter kvar</item>
+  </plurals>
+  <string name="description_pager_slide">Förhandsvisning av bild</string>
+  <string name="description_grid_slide">Förhandsvisning av bild</string>
+  <string name="description_empty_slide">Tom bild</string>
+  <string name="preferences_volume_keys_actions_title">Funktioner för volymknappar</string>
+  <string name="preferences_volume_keys_actions_summary">Byt bilder och aktivera animeringar genom att använda volymknapparna</string>
+  <string name="preferences_keep_screen_on_title">Behåll skärmen på</string>
+  <string name="preferences_keep_screen_on_summary">Förhindra att telefonen försätts i sovläge under presentationen</string>
+  <string name="preferences_quiet_mode_title">Tyst läge</string>
+  <string name="preferences_quiet_mode_summary">Aktivera telefonens vibrator under presentationen</string>
+  <string name="requirements_libreoffice_version">LibreOffice version 4.0.3 eller senare körs på en dator.</string>
+  <string name="requirements_libreoffice_general_enabled">Impress-fjärrkontroll aktiverad under ”Verktyg → Alternativ → LibreOffice Impress → Allmänt” i LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Experimentella funktioner aktiverade under ”Verktyg → Alternativ → LibreOffice → Avancerat” i LibreOffice Impress.</string>
+  <string name="requirements_network_connection">Android-enheten och en dator är anslutna till samma nätverk.</string>
+  <string name="requirements_network_ports">Om du har en brandvägg ska portarna 1598 och 1599 vara öppna.</string>
+  <string name="requirements_bluetooth_connection">En dator med Bluetooth aktiverat.</string>
+</resources>

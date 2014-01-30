@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Pilot Impressa</string>
+  <string name="title_computers">Komputery</string>
+  <string name="title_generic">Ogólne</string>
+  <string name="title_licenses">Licencje Open Source</string>
+  <string name="title_settings">Ustawienia</string>
+  <string name="title_requirements">Wymagania</string>
+  <string name="title_connection">Połączenie</string>
+  <string name="title_creation">Utworzono</string>
+  <string name="title_slide_show">Pokaz slajdów</string>
+  <string name="title_timer">Czasomierz</string>
+  <string name="menu_licenses">Licencje Open Source</string>
+  <string name="menu_settings">Ustawienia</string>
+  <string name="menu_requirements">Wymagania</string>
+  <string name="menu_reconnect">Połącz ponownie</string>
+  <string name="menu_add_computer">Dodaj komputer</string>
+  <string name="menu_remove_computer">Usuń</string>
+  <string name="menu_slides_grid">Siatka slajdów</string>
+  <string name="menu_slides_pager">Pager slajdów</string>
+  <string name="menu_timer">Czasomierz</string>
+  <string name="menu_stop_slide_show">Zatrzymaj pokaz slajdów</string>
+  <string name="menu_pause_slide_show">Wstrzymaj pokaz slajdów</string>
+  <string name="menu_resume_slide_show">Wznów pokaz slajdów</string>
+  <string name="button_cancel">Anuluj</string>
+  <string name="button_save">Zapisz</string>
+  <string name="button_start">Uruchom</string>
+  <string name="button_remove">Usuń</string>
+  <string name="message_impress_pin_validation">Przejdź do “Pokaz slajdów → Pilot Impressa” w LibreOffice Impress i wprowadź kod.</string>
+  <string name="message_connection_failed_title">Połączenie się nie powiodło</string>
+  <string name="message_impress_remote_enabling">Upewnij się, że włączyłeś zdalne sterowanie. Przejdź do “Narzędzia → Opcje → LibreOffice Impress → Ogólne” w LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Powinieneś również włączyć eksperymentalne funkcje w “Narzędzia → Opcje → LibreOffice → Zaawansowane”.</string>
+  <string name="message_impress_pairing_check">Jeśli wystąpiły problemy z parowaniem urządzeń przez Bluetooth, zapoznaj się z instrukcją odpowiednią dla Twojego systemu operacyjnego.</string>
+  <string name="message_ip_address_validation">Wprowadź poprawny adres IP</string>
+  <string name="message_time_is_up">Koniec czasu!</string>
+  <string name="message_search_wifi">Upewnij się, że LibreOffice jest uruchomiony na komputerze podłączonym do tej samej sieci WiFi.</string>
+  <string name="message_search_bluetooth">Upewnij się, że LibreOffice jest uruchomiony na komputerze z włączoną technologią Bluetooth.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Dowiedz się więcej</a>
+  </string>
+  <string name="message_paused">Wstrzymano</string>
+  <string name="message_notes_empty">Pusto.</string>
+  <string name="hint_ip_address">Adres IP</string>
+  <string name="hint_name">Nazwa (opcjonalnie)</string>
+  <string name="header_notes">Notatki</string>
+  <string name="mask_slide_show_progress">Slajd %1$d z %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Pozostała jedna minuta</item>
+    <item quantity="few">Pozostało %d minut</item>
+    <item quantity="other">Pozostały %d minuty</item>
+  </plurals>
+  <string name="description_pager_slide">Podgląd slajdu</string>
+  <string name="description_grid_slide">Podgląd slajdu</string>
+  <string name="description_empty_slide">Pusty slajd</string>
+  <string name="preferences_volume_keys_actions_title">Działanie klawiszy głośności</string>
+  <string name="preferences_volume_keys_actions_summary">Przełącza slajdy i aktywuje animacje używając przycisków głośności</string>
+  <string name="preferences_keep_screen_on_title">Utrzymuj włączony ekran</string>
+  <string name="preferences_keep_screen_on_summary">Zapobiega przejściu telefonu w tryb uśpienia podczas prezentacji</string>
+  <string name="preferences_quiet_mode_title">Tryb cichy</string>
+  <string name="preferences_quiet_mode_summary">Ustaw tryb wibracji dzwonka podczas prezentacji</string>
+  <string name="requirements_libreoffice_version">LibreOffice 4.0.3 lub nowszy działający na komputerze.</string>
+  <string name="requirements_libreoffice_general_enabled">Zdalne sterowanie włączone w “Narzędzia → Opcje → LibreOffice Impress → Ogólne” w LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Eksperymentalne funkcje włączone w “Narzędzia → Opcje → LibreOffice → Zaawansowane” w LibreOffice Impress.</string>
+  <string name="requirements_network_connection">Urządzenie Android oraz komputer znajdują się w tej samej sieci.</string>
+  <string name="requirements_network_ports">Jeśli posiadasz zaporę sieciową, upewnij się, że porty 1598 oraz 1599 zostały otwarte.</string>
+  <string name="requirements_bluetooth_connection">Komputer z włączoną technologią Bluetooth.</string>
+</resources>

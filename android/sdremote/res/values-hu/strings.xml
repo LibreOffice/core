@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Remote</string>
+  <string name="title_computers">Számítógépek</string>
+  <string name="title_generic">Általános</string>
+  <string name="title_licenses">Nyílt forrású licencek</string>
+  <string name="title_settings">Beállítások</string>
+  <string name="title_requirements">Követelmények</string>
+  <string name="title_connection">Kapcsolat</string>
+  <string name="title_creation">Létrehozás</string>
+  <string name="title_slide_show">Diavetítés</string>
+  <string name="title_timer">Időzítő</string>
+  <string name="menu_licenses">Nyílt forrású licencek</string>
+  <string name="menu_settings">Beállítások</string>
+  <string name="menu_requirements">Követelmények</string>
+  <string name="menu_reconnect">Újrakapcsolódás</string>
+  <string name="menu_add_computer">Számítógép hozzáadása</string>
+  <string name="menu_remove_computer">Eltávolítás</string>
+  <string name="menu_slides_grid">Diaáttekintő</string>
+  <string name="menu_slides_pager">Dialapozó</string>
+  <string name="menu_timer">Időzítő</string>
+  <string name="menu_stop_slide_show">Diavetítés leállítása</string>
+  <string name="menu_pause_slide_show">Diavetítés szüneteltetése</string>
+  <string name="menu_resume_slide_show">Diavetítés folytatása</string>
+  <string name="button_cancel">Mégse</string>
+  <string name="button_save">Mentés</string>
+  <string name="button_start">Kezdés</string>
+  <string name="button_remove">Eltávolítás</string>
+  <string name="message_impress_pin_validation">A LibreOffice Impressben válassza a „Diavetítés → Impress távirányító” menüparancsot, és írja be a kódot.</string>
+  <string name="message_connection_failed_title">Sikertelen kapcsolat</string>
+  <string name="message_impress_remote_enabling">Ellenőrizze, hogy engedélyezte-e a távirányítót a LibreOffice Impress „Eszközök → Beállítások → LibreOffice Impress → Általános” paneljén.</string>
+  <string name="message_impress_wifi_enabling">A kísérleti funkciókat is engedélyeznie kell az „Eszközök → Beállítások → LibreOffice → Speciális” panelen.</string>
+  <string name="message_impress_pairing_check">Ha a Bluetooth-párosítással vannak problémái, olvassa el az asztali operációs rendszerének használati utasítását.</string>
+  <string name="message_ip_address_validation">Írjon be egy érvényes IP-címet.</string>
+  <string name="message_time_is_up">Lejárt az idő!</string>
+  <string name="message_search_wifi">Ellenőrizze, hogy fut-e a LibreOffice egy azonos WiFi-hálózatra csatlakozó számítógépen.</string>
+  <string name="message_search_bluetooth">Ellenőrizze, hogy fut-e a LibreOffice egy Bluetooth-os számítógépen.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">További infó</a>
+  </string>
+  <string name="message_paused">Szünet</string>
+  <string name="message_notes_empty">Nincs itt semmi.</string>
+  <string name="hint_ip_address">IP-cím</string>
+  <string name="hint_name">Név (nem kötelező)</string>
+  <string name="header_notes">Megjegyzések</string>
+  <string name="mask_slide_show_progress">%1$d. / %2$d dia</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="other">Egy perc van hátra.</item>
+  </plurals>
+  <string name="description_pager_slide">Diaelőnézet</string>
+  <string name="description_grid_slide">Diaelőnézet</string>
+  <string name="description_empty_slide">Üres dia</string>
+  <string name="preferences_volume_keys_actions_title">Hangerőgombok használata</string>
+  <string name="preferences_volume_keys_actions_summary">Diaváltás és animációk aktiválása a hangerőgombokkal</string>
+  <string name="preferences_keep_screen_on_title">Képernyő bekapcsolva tartása</string>
+  <string name="preferences_keep_screen_on_summary">Megakadályozza a telefon elalvását előadás közben</string>
+  <string name="preferences_quiet_mode_title">Csendes mód</string>
+  <string name="preferences_quiet_mode_summary">Rezgőre állítja a csengetést előadás közben</string>
+  <string name="requirements_libreoffice_version">LibreOffice 4.0.3-at vagy újabbat futtató számítógép</string>
+  <string name="requirements_libreoffice_general_enabled">Engedélyezett Impress távirányító a LibreOffice Impress „Eszközök → Beállítások → LibreOffice Impress → Általános” paneljén.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Engedélyezett kísérleti funkciók a LibreOffice Impress „Eszközök → Beállítások → LibreOffice → Speciális” paneljén.</string>
+  <string name="requirements_network_connection">Az Android eszköz és a számítógép ugyanahhoz a hálózathoz csatlakozzon.</string>
+  <string name="requirements_network_ports">A tűzfalon legyen nyitva az 1598-as és 1599-es port.</string>
+  <string name="requirements_bluetooth_connection">Bluetooth-os számítógép</string>
+</resources>

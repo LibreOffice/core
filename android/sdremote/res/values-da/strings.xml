@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Fjernkontrol</string>
+  <string name="title_computers">Computere</string>
+  <string name="title_generic">Generisk</string>
+  <string name="title_licenses">Open source-licenser</string>
+  <string name="title_settings">Indstillinger</string>
+  <string name="title_requirements">Systemkrav</string>
+  <string name="title_connection">Forbindelse</string>
+  <string name="title_creation">Oprettelse</string>
+  <string name="title_slide_show">Præsentation</string>
+  <string name="title_timer">Timer</string>
+  <string name="menu_licenses">Open source-licenser</string>
+  <string name="menu_settings">Indstillinger</string>
+  <string name="menu_requirements">Systemkrav</string>
+  <string name="menu_reconnect">Genforbind</string>
+  <string name="menu_add_computer">Tilføj computer</string>
+  <string name="menu_remove_computer">Fjern</string>
+  <string name="menu_slides_grid">Diasgitter</string>
+  <string name="menu_slides_pager">Diassøger</string>
+  <string name="menu_timer">Timer</string>
+  <string name="menu_stop_slide_show">Stop præsentation</string>
+  <string name="menu_pause_slide_show">Præsentation på pause</string>
+  <string name="menu_resume_slide_show">Genoptag præsentation</string>
+  <string name="button_cancel">Afbryd</string>
+  <string name="button_save">Gem</string>
+  <string name="button_start">Start</string>
+  <string name="button_remove">Fjern</string>
+  <string name="message_impress_pin_validation">Gå til “Præsentation → Impress Fjernkontrol” i LibreOffice Impress og indtast koden.</string>
+  <string name="message_connection_failed_title">Forbindelsen fejlede</string>
+  <string name="message_impress_remote_enabling">Kontroller at du har aktiveret fjernkontrol. Gå til “Funktioner → Indstillinger → LibreOffice Impress → Generelt” i LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Du skal aktivere eksperimentelle funktioner i “Funktioner → Indstillinger → LibreOffice → Avanceret”.</string>
+  <string name="message_impress_pairing_check">Hvis du har problemer med Bluetooth parring bør du kigge i instruktionerne for dit skrivebordsmiljø.</string>
+  <string name="message_ip_address_validation">Indtast en gyldig IP-adresse</string>
+  <string name="message_time_is_up">Tiden er udløbet</string>
+  <string name="message_search_wifi">Du skal sikre dig, at LibreOffice kører på en computer, som benytter samme Wifi netværk.</string>
+  <string name="message_search_bluetooth">Du skal sikre dig at LibreOffice kører på en computer med Bluetooth aktiveret.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Læs mere</a>
+  </string>
+  <string name="message_paused">Sat på pause</string>
+  <string name="message_notes_empty">Intet her.</string>
+  <string name="hint_ip_address">IP-adresse</string>
+  <string name="hint_name">Navn (valgfrit)</string>
+  <string name="header_notes">Noter</string>
+  <string name="mask_slide_show_progress">Dias %1$d af %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Et minut tilbage</item>
+    <item quantity="other">%d minutter tilbage</item>
+  </plurals>
+  <string name="description_pager_slide">Forhåndsvisning af dias</string>
+  <string name="description_grid_slide">Forhåndsvisning af dias</string>
+  <string name="description_empty_slide">Tomt dias</string>
+  <string name="preferences_volume_keys_actions_title">Volumenknap funktioner</string>
+  <string name="preferences_volume_keys_actions_summary">Skift dias og aktiver bevægelser vha. volumenknapper</string>
+  <string name="preferences_keep_screen_on_title">Bevar skærmen tændt</string>
+  <string name="preferences_keep_screen_on_summary">Undgå at telefonen går i dvale under præsentationen</string>
+  <string name="preferences_quiet_mode_title">Lydløs tilstand</string>
+  <string name="preferences_quiet_mode_summary">Aktiver telefonens vibrator under præsentationen</string>
+  <string name="requirements_libreoffice_version">LibreOffice 4.0.3 eller højere på en computer.</string>
+  <string name="requirements_libreoffice_general_enabled">Impress Fjernkontrol aktiveret under \"Funktioner → Indstillinger → LibreOffice Impress → Generelt\" i LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Eksperimentelle funktioner er aktiveret under \"Funktioner → Indstillinger → LibreOffice → Avanceret\" i LibreOffice.</string>
+  <string name="requirements_network_connection">Android-enheden og en computer forbundet til det samme trådløse netværk.</string>
+  <string name="requirements_network_ports">Hvis netværket har en firewall skal portene 1598 og 1599 være åbne.</string>
+  <string name="requirements_bluetooth_connection">En computer med Bluetooth aktiveret.</string>
+</resources>

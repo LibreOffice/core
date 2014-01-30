@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">„Impress“ nuotolinis valdymas</string>
+  <string name="title_computers">Kompiuteriai</string>
+  <string name="title_generic">Bendrosios</string>
+  <string name="title_licenses">Atvirojo kodo licencijos</string>
+  <string name="title_settings">Nuostatos</string>
+  <string name="title_requirements">Reikalavimai</string>
+  <string name="title_connection">Ryšys</string>
+  <string name="title_creation">Sukūrimas</string>
+  <string name="title_slide_show">Pateikties demonstravimas</string>
+  <string name="title_timer">Laikmatis</string>
+  <string name="menu_licenses">Atvirojo kodo licencijos</string>
+  <string name="menu_settings">Nuostatos</string>
+  <string name="menu_requirements">Reikalavimai</string>
+  <string name="menu_reconnect">Jungtis ir naujo</string>
+  <string name="menu_add_computer">Pridėti kompiuterį</string>
+  <string name="menu_remove_computer">Pašalinti</string>
+  <string name="menu_slides_grid">Skaidrių tinklelis</string>
+  <string name="menu_slides_pager">Skaidrių albumas</string>
+  <string name="menu_timer">Laikmatis</string>
+  <string name="menu_stop_slide_show">Nutraukti demonstravimą</string>
+  <string name="menu_pause_slide_show">Pristabdyti demonstravimą</string>
+  <string name="menu_resume_slide_show">Tęsti demonstravimą</string>
+  <string name="button_cancel">Atsisakyti</string>
+  <string name="button_save">Įrašyti</string>
+  <string name="button_start">Pradėti</string>
+  <string name="button_remove">Pašalinti</string>
+  <string name="message_impress_pin_validation">„LibreOffice“ pateikčių rengyklėje atverkite meniu punktą „Demonstravimas → „Impress“ nuotolinis valdymas“ ir įveskite kodą.</string>
+  <string name="message_connection_failed_title">Nepavyko užmegzti ryšio</string>
+  <string name="message_impress_remote_enabling">Įsitikinkite, jog įgalintas nuotolinis valdymas. „LibreOffice“ pateikčių rengyklėje atverkite meniu punktą „Priemonės → Parinktys → „LibreOffice“ pateikčių rengyklė → Bendra“.</string>
+  <string name="message_impress_wifi_enabling">Taip pat derėtų įgalinti eksperimentines funkcijas. Tai daroma, atvėrus meniu „Priemonės → Parinktys → „LibreOffice“ → Kitkas“.</string>
+  <string name="message_impress_pairing_check">Jeigu turite problemų suporuojant įrenginius per „Bluetooth“, pasidomėkite susijusia dokumentacija Jūsų naudojamai operacinei sistemai.</string>
+  <string name="message_ip_address_validation">Įveskite galiojantį IP adresą.</string>
+  <string name="message_time_is_up">Laikas baigėsi!</string>
+  <string name="message_search_wifi">Įsitikinkite, jog „LibreOffice“ paleista kompiuteryje, prijungtame prie to paties tinklo.</string>
+  <string name="message_search_bluetooth">Įsitikinkite, jog „LibreOffice“ paleista kompiuteryje su įgalintu „Bluetooth“ ryšiu.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Sužinoti daugiau</a>
+  </string>
+  <string name="message_paused">Pristabdyta</string>
+  <string name="message_notes_empty">Čia nieko nėra.</string>
+  <string name="hint_ip_address">IP adresas</string>
+  <string name="hint_name">Vardas (nebūtinas)</string>
+  <string name="header_notes">Pastabos</string>
+  <string name="mask_slide_show_progress">%1$d-oji skaidrė iš %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Liko %d minutė</item>
+    <item quantity="few">Liko %d minutės</item>
+    <item quantity="other">Liko %d minučių</item>
+  </plurals>
+  <string name="description_pager_slide">Skaidrės peržiūra</string>
+  <string name="description_grid_slide">Skaidrės peržiūra</string>
+  <string name="description_empty_slide">Tuščia skaidrė</string>
+  <string name="preferences_volume_keys_actions_title">Garsio mygtukų veiksmai</string>
+  <string name="preferences_volume_keys_actions_summary">Keisti skaidres ir aktyvinti animaciją naudojant garsio mygtukus</string>
+  <string name="preferences_keep_screen_on_title">Neišjungti ekrano</string>
+  <string name="preferences_keep_screen_on_summary">Neleisti telefonui užmigti demonstravimo metu</string>
+  <string name="preferences_quiet_mode_title">Tylioji veiksena</string>
+  <string name="preferences_quiet_mode_summary">Išjungti skambučių garsą demonstravimo metu, įjungti vibravimą</string>
+  <string name="requirements_libreoffice_version">„LibreOffice“ 4.0.3 ar vėlesnė, veikianti kompiuteryje.</string>
+  <string name="requirements_libreoffice_general_enabled">„LibreOffice“ pateikčių rengyklės nuostatose (meniu „Priemonės → Parinktys → „LibreOffice“ parengčių rengyklė → Bendrosios“) įgalintas „LibreOffice“ nuotolinis valdymas.</string>
+  <string name="requirements_libreoffice_experimental_enabled">„LibreOffice“ pateikčių rengyklės nuostatose (meniu „Priemonės → Parinktys → Kitkas“) įgalintos eksperimentinės galimybės.</string>
+  <string name="requirements_network_connection">„Android“ įrenginys ir kompiuteris, esantys tame pačiame tinkle.</string>
+  <string name="requirements_network_ports">Jeigu naudojate ugniasienę, įsitikinkite, jog atverti 1598 ir 1599 prievadai.</string>
+  <string name="requirements_bluetooth_connection">Kompiuteris su įgalintu „Bluetooth“ ryšiu.</string>
+</resources>

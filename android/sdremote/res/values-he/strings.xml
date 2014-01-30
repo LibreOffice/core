@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="title_computers">מחשבים</string>
+  <string name="title_generic">כללי</string>
+  <string name="title_licenses">רישיונות קוד פתוח</string>
+  <string name="title_settings">הגדרות</string>
+  <string name="title_requirements">דרישות</string>
+  <string name="title_connection">חיבור</string>
+  <string name="title_creation">יצירה</string>
+  <string name="title_slide_show">מצגת</string>
+  <string name="title_timer">מתזמן</string>
+  <string name="menu_licenses">רישיונות קוד פתוח</string>
+  <string name="menu_settings">הגדרות</string>
+  <string name="menu_requirements">דרישות</string>
+  <string name="menu_reconnect">חיבור מחדש</string>
+  <string name="menu_add_computer">הוספת מחשב</string>
+  <string name="menu_remove_computer">הסרה</string>
+  <string name="menu_slides_grid">רשת שקופיות</string>
+  <string name="menu_slides_pager">נווט שקופיות</string>
+  <string name="menu_timer">מתזמן</string>
+  <string name="menu_stop_slide_show">עצירת המצגת</string>
+  <string name="menu_pause_slide_show">השהיית המצגת</string>
+  <string name="menu_resume_slide_show">המשך המצגת</string>
+  <string name="button_cancel">ביטול</string>
+  <string name="button_save">שמירה</string>
+  <string name="button_start">התחלה</string>
+  <string name="button_remove">הסרה</string>
+  <string name="message_connection_failed_title">החיבור נכשל</string>
+  <string name="message_impress_pairing_check">אם יש לך בעיות צימוד ל־Bluetooth נא לחפש את ההנחיות הקשורות למערכת ההפעלה של המחשב שלך.</string>
+  <string name="message_ip_address_validation">נא להזין כתובת IP חוקית.</string>
+  <string name="message_time_is_up">זמנך עבר!</string>
+  <string name="message_search_wifi">נא לוודא ש־LibreOffice פועל על מחשב שמחובר לאותה הרשת האלחוטית.</string>
+  <string name="message_search_bluetooth">נא לוודא ש־LibreOffice פועל על מחשב עם התקן Bluetooth פעיל.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">מידע נוסף</a>
+  </string>
+  <string name="message_paused">מושהה</string>
+  <string name="message_notes_empty">אין כאן כלום.</string>
+  <string name="hint_ip_address">כתובת IP</string>
+  <string name="hint_name">שם (רשות)</string>
+  <string name="header_notes">הערות</string>
+  <string name="mask_slide_show_progress">שקופית %1$d מתוך %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">דקה אחת נותרה</item>
+    <item quantity="other">%d דקות נותרו</item>
+  </plurals>
+  <string name="description_pager_slide">תצוגה מקדימה של השקופית</string>
+  <string name="description_grid_slide">תצוגה מקדימה של השקופית</string>
+  <string name="description_empty_slide">שקופית ריקה</string>
+  <string name="preferences_volume_keys_actions_title">פעולות כפתורי עצמת השמע</string>
+  <string name="preferences_volume_keys_actions_summary">ניתן להחליף בין שקופיות ולהפעיל הנפשות באמצעות כפתורי עצמת השמע</string>
+  <string name="preferences_keep_screen_on_title">להשאיר את הצג פעיל</string>
+  <string name="preferences_keep_screen_on_summary">למנוע מהטלפון להיכנס למצב שינה בעת ההצגה</string>
+  <string name="preferences_quiet_mode_title">מצב שקט</string>
+  <string name="preferences_quiet_mode_summary">הגדרת מצב צלצול ברטט בעת ההצגה</string>
+  <string name="requirements_libreoffice_version">גרסה 4.0.3 ומעלה של LibreOffice פועלת על מחשב.</string>
+  <string name="requirements_network_connection">התקן אנדרויד ומחשב המחוברים לאותה הרשת.</string>
+  <string name="requirements_network_ports">אם יש לך חומת אש עליך לוודא שפתחות 1598 ו־1599 פתוחות.</string>
+  <string name="requirements_bluetooth_connection">מחשב עם Bluetooth פעיל.</string>
+</resources>

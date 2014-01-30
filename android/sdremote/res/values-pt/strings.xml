@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress remoto</string>
+  <string name="title_computers">Computadores</string>
+  <string name="title_generic">Genérico</string>
+  <string name="title_licenses">Licenças Open Source</string>
+  <string name="title_settings">Definições</string>
+  <string name="title_requirements">Requisitos</string>
+  <string name="title_connection">Ligação</string>
+  <string name="title_creation">Criação</string>
+  <string name="title_slide_show">Apresentação</string>
+  <string name="title_timer">Temporizador</string>
+  <string name="menu_licenses">Licenças Open Source</string>
+  <string name="menu_settings">Definições</string>
+  <string name="menu_requirements">Requisitos</string>
+  <string name="menu_reconnect">Nova ligação</string>
+  <string name="menu_add_computer">Adicionar um computador</string>
+  <string name="menu_remove_computer">Remover</string>
+  <string name="menu_slides_grid">Grelha de diapositivos</string>
+  <string name="menu_slides_pager">Paginador de diapositivos</string>
+  <string name="menu_timer">Temporizador</string>
+  <string name="menu_stop_slide_show">Parar apresentação</string>
+  <string name="menu_pause_slide_show">Pausa na apresentação</string>
+  <string name="menu_resume_slide_show">Retomar apresentação</string>
+  <string name="button_cancel">Cancelar</string>
+  <string name="button_save">Guardar</string>
+  <string name="button_start">Iniciar</string>
+  <string name="button_remove">Remover</string>
+  <string name="message_impress_pin_validation">Aceda a “Apresentação → Impress remoto” no LibreOffice Impress e introduza o código.</string>
+  <string name="message_connection_failed_title">Falha de ligação</string>
+  <string name="message_impress_remote_enabling">Certifique-se que ativou o controlo remoto. Aceda a “Ferramentas → Opções → LibreOffice Impress → Geral” no LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Deve também ativar as funcionalidades de teste em “Ferramentas → Opções → LibreOffice → Avançado”.</string>
+  <string name="message_impress_pairing_check">Sem existirem problemas com o emparelhamento de dispositivos Buletooth, verifique a documentação do seu sistema operativo.</string>
+  <string name="message_ip_address_validation">Escreva um endereço IP válido.</string>
+  <string name="message_time_is_up">O tempo acabou!</string>
+  <string name="message_search_wifi">Certifique-se que o LibreOffice está a ser executado num computador com a mesma rede sem fios.</string>
+  <string name="message_search_bluetooth">Certifique-se que o LibreOffice está a ser executado num computador com Bluetooth ativo.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Saber mais</a>
+  </string>
+  <string name="message_paused">Pausa</string>
+  <string name="message_notes_empty">Nada aqui.</string>
+  <string name="hint_ip_address">Endereço IP</string>
+  <string name="hint_name">Nome (opcional)</string>
+  <string name="header_notes">Notas</string>
+  <string name="mask_slide_show_progress">Diapositivo %1$d de %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Falta 1 minuto</item>
+    <item quantity="other">Faltam %d minutos</item>
+  </plurals>
+  <string name="description_pager_slide">Pré-visualização</string>
+  <string name="description_grid_slide">Pré-visualização</string>
+  <string name="description_empty_slide">Diapositivo vazio</string>
+  <string name="preferences_volume_keys_actions_title">Ações das teclas de volume</string>
+  <string name="preferences_volume_keys_actions_summary">Trocar diapositivos e ativar animações com as teclas de volume</string>
+  <string name="preferences_keep_screen_on_title">Manter ecrã ligado</string>
+  <string name="preferences_keep_screen_on_summary">Impedir suspensão do telefone durante a apresentação</string>
+  <string name="preferences_quiet_mode_title">Modo silencioso</string>
+  <string name="preferences_quiet_mode_summary">Ativar modo de vibração durante a apresentação</string>
+  <string name="requirements_libreoffice_version">Deve possuir a versão 4.0.3 ou superior em execução no computador.</string>
+  <string name="requirements_libreoffice_general_enabled">Impress Remote ativo em “Ferramentas → Opções → LibreOffice Impress → Geral” no LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Funcionalidades de teste ativas em “Ferramentas → Opções → LibreOffice → Avançado” no LibreOffice Impress.</string>
+  <string name="requirements_network_connection">Um dispositivo Android e um computador ligados na mesma rede.</string>
+  <string name="requirements_network_ports">Se possui uma firewall, certifique-se que as portas 1598 e 1599 estão abertas.</string>
+  <string name="requirements_bluetooth_connection">Um computador com Bluetooth ativo.</string>
+</resources>

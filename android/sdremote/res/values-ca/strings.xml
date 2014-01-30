@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Control remot de l\'Impress</string>
+  <string name="title_computers">Ordinadors</string>
+  <string name="title_generic">Genèric</string>
+  <string name="title_licenses">Llicències de codi obert</string>
+  <string name="title_settings">Configuració</string>
+  <string name="title_requirements">Requeriments</string>
+  <string name="title_connection">Connexió</string>
+  <string name="title_creation">Creació</string>
+  <string name="title_slide_show">Presentació</string>
+  <string name="title_timer">Temporitzador</string>
+  <string name="menu_licenses">Llicències de codi obert</string>
+  <string name="menu_settings">Configuració</string>
+  <string name="menu_requirements">Requirements</string>
+  <string name="menu_reconnect">Torna a connectar</string>
+  <string name="menu_add_computer">Afegeix un ordinador</string>
+  <string name="menu_remove_computer">Suprimeix</string>
+  <string name="menu_slides_grid">Graella de diapositives</string>
+  <string name="menu_slides_pager">Paginador de diapositives</string>
+  <string name="menu_timer">Temporitzador</string>
+  <string name="menu_stop_slide_show">Atura la presentació de diapositives</string>
+  <string name="menu_pause_slide_show">Pausa la presentació de diapositives</string>
+  <string name="menu_resume_slide_show">Reprèn la presentació de diapositives</string>
+  <string name="button_cancel">Cancel·la</string>
+  <string name="button_save">Desa</string>
+  <string name="button_start">Inicia</string>
+  <string name="button_remove">Suprimeix</string>
+  <string name="message_impress_pin_validation">Aneu a «Presentació de diapositives → Control remot de l\'Impress» al LibreOffice Impress i introduïu el codi.</string>
+  <string name="message_connection_failed_title">La connexió ha fallat</string>
+  <string name="message_impress_remote_enabling">Assegureu-vos que heu habilitat el control remot. Aneu a «Eines → Opcions → LibreOffice Impress → General» al LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">"També heu d\'habilitar les funcionalitats experimentals  a «Eines s → Opcions → LibreOffice → Avançat»."</string>
+  <string name="message_impress_pairing_check">Si teniu problemes de connexió Bluetooth, comproveu les instruccions relatives al sistema operatiu d\'escriptori.</string>
+  <string name="message_ip_address_validation">Introduïu una adreça IP vàlida.</string>
+  <string name="message_time_is_up">S\'ha acabat el temps!</string>
+  <string name="message_search_wifi">Assegureu-vos que el LibreOffice s\'està executant en un equip de la mateixa xarxa WiFi.</string>
+  <string name="message_search_bluetooth">Assegureu-vos que el LibreOffice s\'està executant en un equip amb el Bluetooth habilitat.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Més informació</a>
+  </string>
+  <string name="message_paused">Pausa</string>
+  <string name="message_notes_empty">No hi ha res aquí.</string>
+  <string name="hint_ip_address">Adreça IP</string>
+  <string name="hint_name">Nom (opcional)</string>
+  <string name="header_notes">Notes</string>
+  <string name="mask_slide_show_progress">Diapositiva %1$d de %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Queda un minut</item>
+    <item quantity="other">Queden %d minuts</item>
+  </plurals>
+  <string name="description_pager_slide">Previsualització de la diapositiva</string>
+  <string name="description_grid_slide">Previsualització de la diapositiva</string>
+  <string name="description_empty_slide">Diapositiva buida</string>
+  <string name="preferences_volume_keys_actions_title">Accions de les tecles de volum</string>
+  <string name="preferences_volume_keys_actions_summary">Les tecles de volum permeten desplaçar-se per les diapositives i activar les animacions</string>
+  <string name="preferences_keep_screen_on_title">Mantén la pantalla activa</string>
+  <string name="preferences_keep_screen_on_summary">Evita que s\'apagui la pantalla del dispositiu durant la presentació</string>
+  <string name="preferences_quiet_mode_title">Mode silenciós</string>
+  <string name="preferences_quiet_mode_summary">Configura el mode de timbre de vibració durant la presentació</string>
+  <string name="requirements_libreoffice_version">LibreOffice versió 4.0.3 o superior executant-se en un ordinador.</string>
+  <string name="requirements_libreoffice_general_enabled">Control remot de l\'Impress habilitat a «Eines→ Opcions → LibreOffice Impress → General» al LibreOffice Impress.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Funcionalitats experimentals habilitades a «Eines → Opcions → LibreOffice → Avançat» al LibreOffice Impress.</string>
+  <string name="requirements_network_connection">El dispositiu Android i un ordinador connectats a la mateixa xarxa.</string>
+  <string name="requirements_network_ports">Si teniu un tallafocs, assegureu-vos de tenir oberts els ports 1598 i 1599.</string>
+  <string name="requirements_bluetooth_connection">Un ordinador amb el Bluetooth activat.</string>
+</resources>

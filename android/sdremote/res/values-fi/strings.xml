@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress-kauko-ohjain</string>
+  <string name="title_computers">Tietokoneet</string>
+  <string name="title_generic">Yleistä</string>
+  <string name="title_licenses">Avoimen lähdekoodin lisenssit</string>
+  <string name="title_settings">Asetukset</string>
+  <string name="title_requirements">Vaatimukset</string>
+  <string name="title_connection">Yhteys</string>
+  <string name="title_creation">Tietokoneen lisäys</string>
+  <string name="title_slide_show">Diaesitys</string>
+  <string name="title_timer">Ajoitus</string>
+  <string name="menu_licenses">Avoimen lähdekoodin lisenssit</string>
+  <string name="menu_settings">Asetukset</string>
+  <string name="menu_requirements">Vaatimukset</string>
+  <string name="menu_reconnect">Yhdistä uudelleen</string>
+  <string name="menu_add_computer">Lisää tietokone</string>
+  <string name="menu_remove_computer">Poista</string>
+  <string name="menu_slides_grid">Kaikki diat</string>
+  <string name="menu_slides_pager">Dia kerrallaan</string>
+  <string name="menu_timer">Ajoitus</string>
+  <string name="menu_stop_slide_show">Lopeta diaesitys</string>
+  <string name="menu_pause_slide_show">Keskeytä diaesitys</string>
+  <string name="menu_resume_slide_show">Jatka diaesitystä</string>
+  <string name="button_cancel">Peruuta</string>
+  <string name="button_save">Tallenna</string>
+  <string name="button_start">Aloita</string>
+  <string name="button_remove">Poista</string>
+  <string name="message_impress_pin_validation">Valitse LibreOffice Impressissä ”Diaesitys → Impress-kauko-ohjain” ja syötä koodi.</string>
+  <string name="message_connection_failed_title">Yhteyden muodostaminen epäonnistui</string>
+  <string name="message_impress_remote_enabling">Varmista, että kauko-ohjaus on käytössä. LibreOffice Impressissä asetus löytyy kohdasta ”Työkalut → Asetukset → LibreOffice Impress → Yleiset”.</string>
+  <string name="message_impress_wifi_enabling">Ota käyttöön kokeelliset ominaisuudet kohdasta ”Työkalut → Asetukset → LibreOffice → Lisäasetukset”.</string>
+  <string name="message_impress_pairing_check">Jos Bluetooth-pariyhteyden muodostamisessa on ongelmia, lue työpöytäkäyttöjärjestelmääsi koskevat ohjeet.</string>
+  <string name="message_ip_address_validation">Syötä kelvollinen IP-osoite.</string>
+  <string name="message_time_is_up">Aika lopussa!</string>
+  <string name="message_search_wifi">Varmista, että LibreOffice on käynnissä tietokoneella, joka on samassa WiFi-verkossa.</string>
+  <string name="message_search_bluetooth">Varmista, että LibreOffice on käynnissä tietokoneella, jossa Bluetooth on käytettävissä.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Lisätietoja</a>
+  </string>
+  <string name="message_paused">Keskeytetty</string>
+  <string name="message_notes_empty">Ei muistiinpanoja.</string>
+  <string name="hint_ip_address">IP-osoite</string>
+  <string name="hint_name">Nimi (valinnainen)</string>
+  <string name="header_notes">Muistiinpanot</string>
+  <string name="mask_slide_show_progress">Dia %1$d / %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Minuutti jäljellä</item>
+    <item quantity="other">%d minuuttia jäljellä</item>
+  </plurals>
+  <string name="description_pager_slide">Dian esikatselu</string>
+  <string name="description_grid_slide">Dian esikatselu</string>
+  <string name="description_empty_slide">Tyhjä dia</string>
+  <string name="preferences_volume_keys_actions_title">Äänenvoimakkuussäätimen toiminnot</string>
+  <string name="preferences_volume_keys_actions_summary">Vaihda diaa ja käynnistä animaatiot äänenvoimakkuussäätimellä</string>
+  <string name="preferences_keep_screen_on_title">Pidä näyttö päällä</string>
+  <string name="preferences_keep_screen_on_summary">Estä puhelinta menemästä lepotilaan esityksen aikana</string>
+  <string name="preferences_quiet_mode_title">Hiljainen tila</string>
+  <string name="preferences_quiet_mode_summary">Aseta puhelimen värinähälytys päälle esityksen ajaksi</string>
+  <string name="requirements_libreoffice_version">LibreOfficen versio 4.0.3 tai uudempi käynnissä tietokoneella.</string>
+  <string name="requirements_libreoffice_general_enabled">Kauko-ohjaus sallittu LibreOffice Impressissä kohdasta ”Työkalut → Asetukset → LibreOffice Impress → Yleiset”.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Kokeelliset ominaisuudet käytössä LibreOffice Impressissä kohdasta ”Työkalut → Asetukset → LibreOffice → Lisäasetukset”.</string>
+  <string name="requirements_network_connection">Android-mobiililaite ja tietokone yhdistettynä samaan verkkoon.</string>
+  <string name="requirements_network_ports">Jos käytössä on palomuuri, porttien 1598 ja 1599 on oltava auki.</string>
+  <string name="requirements_bluetooth_connection">Tietokone, jossa Bluetooth on käytettävissä.</string>
+</resources>

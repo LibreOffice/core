@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="title_computers">Komputer</string>
+  <string name="title_generic">Generik</string>
+  <string name="title_licenses">Lisensi open source</string>
+  <string name="title_settings">Pengaturan</string>
+  <string name="title_requirements">Kebutuhan</string>
+  <string name="title_connection">Koneksi</string>
+  <string name="title_creation">Pembuatan</string>
+  <string name="title_slide_show">Pertunjukan salindia</string>
+  <string name="title_timer">Pewaktu</string>
+  <string name="menu_licenses">Lisensi open source</string>
+  <string name="menu_settings">Pengaturan</string>
+</resources>

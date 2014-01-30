@@ -1,5 +1,0 @@
-# Ignore values-* folders as to avoid inadvertently adding any translations
-# (which end up in values-[langcode] directories).
-/values-*
-!/values-v10
-!/values-xlarge

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Uzaktan Kumanda</string>
+  <string name="title_computers">Bilgisayarlar</string>
+  <string name="title_generic">Genel</string>
+  <string name="title_licenses">Açık kaynak lisansları</string>
+  <string name="title_settings">Ayarlar</string>
+  <string name="title_requirements">Gereksinimler</string>
+  <string name="title_connection">Bağlantı</string>
+  <string name="title_creation">Oluşturma</string>
+  <string name="title_slide_show">Slayt gösterisi</string>
+  <string name="title_timer">Zamanlayıcı</string>
+  <string name="menu_licenses">Açık kaynak lisansları</string>
+  <string name="menu_settings">Ayarlar</string>
+  <string name="menu_requirements">Gereksinimler</string>
+  <string name="menu_reconnect">Yeniden bağlan</string>
+  <string name="menu_add_computer">Bilgisayar ekle</string>
+  <string name="menu_remove_computer">Kaldır</string>
+  <string name="menu_slides_grid">Slayt ızgarası</string>
+  <string name="menu_slides_pager">Slayt sayfalayıcı</string>
+  <string name="menu_timer">Zamanlayıcı</string>
+  <string name="menu_stop_slide_show">Slayt gösterisini durdur</string>
+  <string name="menu_pause_slide_show">Slayt gösterisini beklet</string>
+  <string name="menu_resume_slide_show">Slayt gösterisine dön</string>
+  <string name="button_cancel">İptal</string>
+  <string name="button_save">Kaydet</string>
+  <string name="button_start">Başlat</string>
+  <string name="button_remove">Kaldır</string>
+  <string name="message_impress_pin_validation">LibreOffice Impress\'de \"Slayt Gösterisi → Impress Uzaktan Kumanda\" yolunu takip edin ve aşağıdaki kodu girin.</string>
+  <string name="message_connection_failed_title">Bağlantı başarısız oldu</string>
+  <string name="message_impress_remote_enabling">Uzaktan erişimi etkinleştirdiğinizden emin olun. LibreOffice Impress\'te bunu yapmak için \"Araçlar → Seçenekler → LibreOffice Impress → Genel” yolunu izleyiniz.</string>
+  <string name="message_impress_wifi_enabling">"Bunun yanında  “Araçlar → Seçenekler → LibreOffice → Gelişmiş” yolunu izleyerek deneysel özellikleri de etkinleştirmelisiniz."</string>
+  <string name="message_impress_pairing_check">Eğer Bluetooth paylaşım sorununuz varsa masaüstü işletim sisteminizle ilgili talimatları kontrol edin.</string>
+  <string name="message_ip_address_validation">Geçerli bir IP adresi girin.</string>
+  <string name="message_time_is_up">Süre doldu!</string>
+  <string name="message_search_wifi">LibreOffice\'in aynı WiFi ağındaki bir bilgisayarda çalıştığından emin olun.</string>
+  <string name="message_search_bluetooth">LibreOffice\'in Bluetooth\'u etkinleştirilmiş bir bilgisayarda çalıştığından emin olun.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Daha fazlasını öğren</a>
+  </string>
+  <string name="message_paused">Beklet</string>
+  <string name="message_notes_empty">Burada bir şey yok.</string>
+  <string name="hint_ip_address">IP adresi</string>
+  <string name="hint_name">İsim (isteğe bağlı)</string>
+  <string name="header_notes">Notlar</string>
+  <string name="mask_slide_show_progress">%2$d slayttan %1$d slayt</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="other">Bir dakika kaldı%d dakika kaldı</item>
+  </plurals>
+  <string name="description_pager_slide">Slayt önizleme</string>
+  <string name="description_grid_slide">Slayt önizleme</string>
+  <string name="description_empty_slide">Boş slayt</string>
+  <string name="preferences_volume_keys_actions_title">Ses düğme eylemleri</string>
+  <string name="preferences_volume_keys_actions_summary">Ses düğmelerini kullanarak slayta geç ve canlandırmayı etkinleştir</string>
+  <string name="preferences_keep_screen_on_title">Ekranı açık tut</string>
+  <string name="preferences_keep_screen_on_summary">Sunum esnasında telefonu uyku kipine alma</string>
+  <string name="preferences_quiet_mode_title">Sessiz kip</string>
+  <string name="preferences_quiet_mode_summary">Sunum esnasında zil sesini titreşim olarak ayarla</string>
+  <string name="requirements_libreoffice_version">Bilgisayarda LibreOffice 4.0.3 veya daha üst sürüm çalışıyor.</string>
+  <string name="requirements_libreoffice_general_enabled">Impress Uzaktan Kumanda, LibreOffice Impress içerisinde \"Araçlar → Seçenekler → LibreOffice Impress → Genel\" yolu ile etkinleştirilir.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Deneysel Özellikler \"Araçlar → Seçenekler → LimreOffice → Gelişmiş\" yolu ile etkinleştirilir.</string>
+  <string name="requirements_network_connection">Aynı şebekeye bağlanmış Android cihaz ve bilgisayar.</string>
+  <string name="requirements_network_ports">Eğer güvenlik duvarı kullanıyorsanız, 1598 ve 1599 numaralı bağlantı noktalarının açık olduğundan emin olun.</string>
+  <string name="requirements_bluetooth_connection">Bluetooth\'u etkinleştirilmiş bir bilgisayar.</string>
+</resources>

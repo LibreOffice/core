@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impress Remote</string>
+  <string name="title_computers">Calculatoare</string>
+  <string name="title_generic">Generic</string>
+  <string name="title_licenses">Licențe libere</string>
+  <string name="title_settings">Setări</string>
+  <string name="title_requirements">Cerințe</string>
+  <string name="title_connection">Conexiune</string>
+  <string name="title_creation">Creare</string>
+  <string name="title_slide_show">Prezentare</string>
+  <string name="title_timer">Cronometru</string>
+  <string name="menu_licenses">Licențe libere</string>
+  <string name="menu_settings">Setări</string>
+  <string name="menu_requirements">Cerințe</string>
+  <string name="menu_reconnect">Reconectare</string>
+  <string name="menu_add_computer">Adăugare calculator</string>
+  <string name="menu_remove_computer">Eliminare</string>
+  <string name="menu_slides_grid">Afișor diapozitive</string>
+  <string name="menu_timer">Cronometru</string>
+  <string name="menu_stop_slide_show">Oprire prezentare</string>
+  <string name="menu_pause_slide_show">Pauză prezentare</string>
+  <string name="menu_resume_slide_show">Reluare prezentare</string>
+  <string name="button_cancel">Anulare</string>
+  <string name="button_save">Salvare</string>
+  <string name="button_start">Începe</string>
+  <string name="button_remove">Șterge</string>
+  <string name="message_impress_pin_validation">Mergeți la „Prezentare → Impress de la distanță” în LibreOffice Impress și introduceți codul.</string>
+  <string name="message_connection_failed_title">Conectare eșuată</string>
+  <string name="message_impress_remote_enabling">Asigurați-vă că ați activat controlul de la distanță. Se poate activa în „Unelte - Opțiuni - LibreOffice Impress - General” în LibreOffice Impress.</string>
+  <string name="message_impress_wifi_enabling">Trebuie să activați și opțiunile experimentale din “Unelte → Opțiuni → LibreOffice → Avansat”.</string>
+  <string name="message_impress_pairing_check">Dacă aveți probleme cu împerecherea pe Bluetooth citiți manualul sistemului de operare folosit.</string>
+  <string name="message_ip_address_validation">Introduceți o adresă IP corectă.</string>
+  <string name="message_time_is_up">Timpul a expirat!</string>
+  <string name="message_search_wifi">Asigurați-vă că LibreOffice rulează în aceeași rețea WiFi.</string>
+  <string name="message_search_bluetooth">Asigurați-vă că LibreOffice rulează pe un calculator cu Bluetooth pornit.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Mai multe informații</a>
+  </string>
+  <string name="message_paused">Pauză</string>
+  <string name="message_notes_empty">Aici nu este nimic.</string>
+  <string name="hint_ip_address">Adresă IP</string>
+  <string name="hint_name">Nume (opțional)</string>
+  <string name="header_notes">Notițe</string>
+  <string name="mask_slide_show_progress">Diapozitiv %1$d din %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Încă un minut.</item>
+    <item quantity="few">Încă %d minute.</item>
+    <item quantity="other"/>
+  </plurals>
+  <string name="description_pager_slide">Previzualizare</string>
+  <string name="description_grid_slide">Previzualizare</string>
+  <string name="description_empty_slide">Diapozitiv gol</string>
+  <string name="preferences_volume_keys_actions_title">Utilizarea butoanelor de volum</string>
+  <string name="preferences_volume_keys_actions_summary">Rulați diapozitivele și activați animațiile utilizând tastele de volum</string>
+  <string name="preferences_keep_screen_on_title">Păstrează ecranul porni</string>
+  <string name="preferences_keep_screen_on_summary">Blochează stingerea telefonului în timpul prezentării</string>
+  <string name="preferences_quiet_mode_title">Mod silențios</string>
+  <string name="preferences_quiet_mode_summary">Setează modul vibrare în timpul prezentării</string>
+  <string name="requirements_libreoffice_version">Versiunea LibreOffice 4.0.3 sau mai nou pe calculator.</string>
+  <string name="requirements_libreoffice_general_enabled">Activat telecomandă LibreOffice Impress în „Unelte → Opțiuni → LibreOffice Impress → General”.</string>
+  <string name="requirements_libreoffice_experimental_enabled">Activarea funcțiunilor experimentale în „Unelte → Opțiuni → LibreOffice → Avansat”.</string>
+  <string name="requirements_network_connection">Dispozitivul cu Android și calculatorul să fiu conectate în aceeași rețea.</string>
+  <string name="requirements_network_ports">În firewall trebuie deschise porturile 1598 și 1599.</string>
+  <string name="requirements_bluetooth_connection">Calculator cu Bluetooth</string>
+</resources>

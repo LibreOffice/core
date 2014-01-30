@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">Impressi pult</string>
+  <string name="title_computers">Arvutid</string>
+  <string name="title_generic">Üldine</string>
+  <string name="title_licenses">Avatud lähtekoodi litsentsid</string>
+  <string name="title_settings">Sätted</string>
+  <string name="title_requirements">Nõuded</string>
+  <string name="title_connection">Ühendus</string>
+  <string name="title_creation">Loomine</string>
+  <string name="title_slide_show">Slaidiseanss</string>
+  <string name="title_timer">Taimer</string>
+  <string name="menu_licenses">Avatud lähtekoodi litsentsid</string>
+  <string name="menu_settings">Sätted</string>
+  <string name="menu_requirements">Nõuded</string>
+  <string name="menu_reconnect">Ühenda uuesti</string>
+  <string name="menu_add_computer">Lisa arvuti</string>
+  <string name="menu_remove_computer">Eemalda</string>
+  <string name="menu_slides_grid">Mitu slaidi</string>
+  <string name="menu_slides_pager">Üks slaid</string>
+  <string name="menu_timer">Taimer</string>
+  <string name="menu_stop_slide_show">Lõpeta slaidiseanss</string>
+  <string name="menu_pause_slide_show">Peata slaidiseanss</string>
+  <string name="menu_resume_slide_show">Jätka slaidiseanssi</string>
+  <string name="button_cancel">Loobu</string>
+  <string name="button_save">Salvesta</string>
+  <string name="button_start">Alusta</string>
+  <string name="button_remove">Eemalda</string>
+  <string name="message_impress_pin_validation">Vali LibreOffice Impressi menüüst Slaidiseanss - Kaugjuhtimispult ning sisesta kood.</string>
+  <string name="message_connection_failed_title">Ühendumine nurjus</string>
+  <string name="message_impress_remote_enabling">Vaata, et kaugjuhtimispult oleks lubatud. Selleks vali LibreOffice Impressis menüüst Tööriistad - Sätted - LibreOffice Impress - Üldine.</string>
+  <string name="message_impress_wifi_enabling">Lubada tuleb ka katselised võimalused (Tööriistad - Sätted - LibreOffice - Edasijõudnuile).</string>
+  <string name="message_impress_pairing_check">Kui seadmeid ei õnnestu Bluetoothi kaudu siduda, siis otsi juhiseid vastavalt arvuti opsüsteemile.</string>
+  <string name="message_ip_address_validation">Sisesta korrektne IP-aadress.</string>
+  <string name="message_time_is_up">Aeg on täis!</string>
+  <string name="message_search_wifi">Vaata, et arvuti, kus LibreOffice töötab, oleks samas Wi-Fi-võrgus kui telefon.</string>
+  <string name="message_search_bluetooth">Vaata, et Bluetooth oleks sisse lülitatud arvutis, kus LibreOffice töötab.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">Lisateave</a>
+  </string>
+  <string name="message_paused">Peatatud</string>
+  <string name="message_notes_empty">Märkmeid pole.</string>
+  <string name="hint_ip_address">IP-aadress</string>
+  <string name="hint_name">Nimi (valikuline)</string>
+  <string name="header_notes">Märkmed</string>
+  <string name="mask_slide_show_progress">Slaid %1$d / %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="one">Üks minut jäänud</item>
+    <item quantity="other">%d minutit jäänud</item>
+  </plurals>
+  <string name="description_pager_slide">Slaidi eelvaade</string>
+  <string name="description_grid_slide">Slaidi eelvaade</string>
+  <string name="description_empty_slide">Tühi slaid</string>
+  <string name="preferences_volume_keys_actions_title">Toimingud helivaljuse nuppudega</string>
+  <string name="preferences_volume_keys_actions_summary">Laseb helinuppudega slaide vahetada ja animatsioone käivitada</string>
+  <string name="preferences_keep_screen_on_title">Ekraan püsivalt sees</string>
+  <string name="preferences_keep_screen_on_summary">Keelab telefonil esitluse ajal ekraani välja lülitada</string>
+  <string name="preferences_quiet_mode_title">Vaikne režiim</string>
+  <string name="preferences_quiet_mode_summary">Esitluse ajaks läheb telefon värinarežiimi</string>
+  <string name="requirements_libreoffice_version">Arvutis töötav LibreOffice\'i versioon 4.0.3 või uuem</string>
+  <string name="requirements_libreoffice_general_enabled">LibreOffice Impressi seadetes kaugjuhtimispult lubatud (Tööriistad - Sätted - LibreOffice Impress - Üldine).</string>
+  <string name="requirements_libreoffice_experimental_enabled">LibreOffice\'i seadetes katselised võimalused lubatud (Tööriistad - Sätted - LibreOffice - Edasijõudnuile).</string>
+  <string name="requirements_network_connection">Samasse võrku ühendatud Androidi-seade ja arvuti.</string>
+  <string name="requirements_network_ports">Kui tulemüür töötab, siis tuleb avada pordid 1598 ja 1599.</string>
+  <string name="requirements_bluetooth_connection">Sisselülitatud Bluetoothiga arvuti.</string>
+</resources>

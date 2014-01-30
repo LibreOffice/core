@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="application_name">إمبريس عن بُعد</string>
+  <string name="title_computers">الحواسيب</string>
+  <string name="title_settings">إعدادات</string>
+  <string name="title_requirements">المتطلبات</string>
+  <string name="title_connection">الاتصال</string>
+  <string name="title_timer">المؤقت</string>
+  <string name="menu_settings">إعدادات</string>
+  <string name="menu_requirements">المتطلبات</string>
+  <string name="menu_reconnect">أعد الاتصال</string>
+  <string name="menu_add_computer">أضف حاسوب</string>
+  <string name="menu_remove_computer">أزل</string>
+  <string name="menu_timer">المؤقت</string>
+  <string name="menu_stop_slide_show">أوقف عرض الشرائح</string>
+  <string name="menu_pause_slide_show">ألبث عرض الشرائح</string>
+  <string name="menu_resume_slide_show">استكمل عرض الشرائح</string>
+  <string name="button_cancel">ألغِ</string>
+  <string name="button_save">احفظ</string>
+  <string name="button_start">ابدأ</string>
+  <string name="button_remove">أزل</string>
+  <string name="message_impress_pin_validation">اذهب إلى \"عرض الشرائح ← إمبريس عن بُعد\" في ليبر أوفيس إمبريس وأدخِل الشِفرة.</string>
+  <string name="message_connection_failed_title">فشل الاتصال</string>
+  <string name="message_impress_remote_enabling">تأكد أن التحكّم عن بعد بإمبريس يعمل. اذهب إلى أدوات ← خيارات ← LibreOffice إمبريس ← عام\" في ليبر أوفيس إمبريس.</string>
+  <string name="message_impress_wifi_enabling">عليك تمكين ميزة المزايا التجريبية في \"أدوات ← خيارات ← LibreOffice ← متقدّم\" أيضًا.</string>
+  <string name="message_ip_address_validation">اطبع عنوان IP صالح.</string>
+  <string name="message_time_is_up">حان الوقت!</string>
+  <string name="message_search_wifi">تأكد أن ليبر أوفيس يعمل على حاسوب بنفس الشبكة اللاسلكية.</string>
+  <string name="message_search_bluetooth">تأكد أن ليبر أوفيس يعمل على حاسوب البلووتوث ممكّن فيه.</string>
+  <string name="message_learn_more">
+    <a href="org.libreoffice.impressremote://requirements/">تعلّم أكثر</a>
+  </string>
+  <string name="message_paused">أُلبث</string>
+  <string name="message_notes_empty">لا شيء هنا.</string>
+  <string name="hint_ip_address">عنوان IP</string>
+  <string name="hint_name">الاسم (اختياري)</string>
+  <string name="header_notes">الملاحظات</string>
+  <string name="mask_slide_show_progress">الشريحة %1$d من %2$d</string>
+  <plurals name="mask_timer_progress">
+    <item quantity="zero">لا دقائق متبقية</item>
+    <item quantity="one">تبقّت دقيقة واحدة</item>
+    <item quantity="two">تبقّت دقيقتان</item>
+    <item quantity="few">تبقّت %d دقائق</item>
+    <item quantity="many">تبقّت %d دقيقة</item>
+    <item quantity="other">تبقّت %d دقيقة</item>
+  </plurals>
+  <string name="description_pager_slide">معاينة الشريحة</string>
+  <string name="description_grid_slide">معاينة الشريحة</string>
+  <string name="description_empty_slide">شريحة فارغة</string>
+  <string name="preferences_volume_keys_actions_title">إجراءات مفاتيح الصوت</string>
+  <string name="preferences_volume_keys_actions_summary">بدّل الشرائح وفعّل الحركات باستخدام مفاتيح الصوت</string>
+  <string name="preferences_keep_screen_on_title">أبقِ الشاشة تعمل</string>
+  <string name="preferences_keep_screen_on_summary">امنع الهاتف من النوم أثناء التقديم</string>
+  <string name="preferences_quiet_mode_title">الوضع الهادئ</string>
+  <string name="preferences_quiet_mode_summary">اضبط على وضع الاهتزاز أثناء التقديم</string>
+  <string name="requirements_libreoffice_version">ليبر أوفيس 4.0.3 أو أكثر يعمل على حاسوبك.</string>
+  <string name="requirements_libreoffice_general_enabled">إمبريس عن بُعد ممكّن في \"أدوات ← خيارات ← LibreOffice إمبريس ← عام\" في ليبر أوفيس إمبريس.</string>
+  <string name="requirements_libreoffice_experimental_enabled">المزايا التجريبية ممكّنة في \"أدوات ← خيارات ← LibreOffice ← متقدّم\" في ليبر أوفيس إمبريس.</string>
+  <string name="requirements_network_connection">جهاز أندرويد والحاسوب متّصلان بنفس الشبكة.</string>
+  <string name="requirements_network_ports">إن كان لديك جدار ناري، تأكد أن المنفذين 1598 و 1599 مفتوحين.</string>
+  <string name="requirements_bluetooth_connection">حاسوب وبلووتوث ممكّن عليه.</string>
+</resources>
