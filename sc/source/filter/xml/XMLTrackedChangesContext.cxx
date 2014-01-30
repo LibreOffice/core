@@ -1103,25 +1103,26 @@ void ScXMLChangeTextPContext::EndElement()
         pChangeCellContext->SetText(sText.makeStringAndClear());
 }
 
-ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScCellValue& rOldCell, OUString& rAddress,
-                                            OUString& rFormula, OUString& rFormulaNmsp,
-                                            formula::FormulaGrammar::Grammar& rGrammar,
-                                            OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
-                                            sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    mrOldCell(rOldCell),
-    rInputString(rTempInputString),
-    pEditTextObj(NULL),
-    rDateTimeValue(fDateTimeValue),
-    rType(nType),
-    bEmpty(sal_True),
-    bFirstParagraph(sal_True),
-    bString(sal_True),
-    bFormula(false)
+ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
+                                                sal_uInt16 nPrfx,
+                                                const OUString& rLName,
+                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                                ScCellValue& rOldCell, OUString& rAddress,
+                                                OUString& rFormula, OUString& rFormulaNmsp,
+                                                formula::FormulaGrammar::Grammar& rGrammar,
+                                                OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
+                                                sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
+    , mrOldCell(rOldCell)
+    , rInputString(rTempInputString)
+    , pEditTextObj(NULL)
+    , rDateTimeValue(fDateTimeValue)
+    , fValue(0.0)
+    , rType(nType)
+    , bEmpty(sal_True)
+    , bFirstParagraph(sal_True)
+    , bString(sal_True)
+    , bFormula(false)
 {
     sal_Bool bIsMatrix(false);
     sal_Bool bIsCoveredMatrix(false);
@@ -1131,7 +1132,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
         const OUString& sAttrName(xAttrList->getNameByIndex( i ));
         OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
+                                   sAttrName, &aLocalName ));
         const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
