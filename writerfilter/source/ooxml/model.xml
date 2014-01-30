@@ -22361,7 +22361,7 @@
       <element name="spacing" tokenid="ooxml:CT_PPrBase_spacing"/>
       <element name="ind" tokenid="ooxml:CT_PPrBase_ind"/>
       <element name="contextualSpacing" tokenid="sprm:PContextualSpacing"/>
-      <element name="mirrorIndents" tokenid="0x2470"/>
+      <element name="mirrorIndents" tokenid="ooxml:CT_PPrBase_mirrorIndents"/>
       <element name="suppressOverlap" tokenid="0x2462"/>
       <element name="jc" tokenid="sprm:PJc"/>
       <element name="textDirection" tokenid="sprm:PFrameTextFlow"/>
