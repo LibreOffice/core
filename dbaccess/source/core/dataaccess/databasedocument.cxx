@@ -481,6 +481,18 @@ void ODatabaseDocument::impl_reset_nothrow()
     m_pImpl->m_bDocumentReadOnly = sal_False;
 }
 
+namespace
+{
+    /** property map for import/exmport info set */
+    comphelper::PropertyMapEntry const aExportInfoMap[] =
+     {
+        { OUString("BaseURI"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("UsePrettyPrinting"), 0, ::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
+     };
+}
+
 void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentContext >& _rContext, const Reference< XInterface >& _rxTargetComponent,
                                                  const ::comphelper::NamedValueCollection& _rResource )
 {
@@ -488,13 +500,6 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     Reference< XStatusIndicator > xStatusIndicator;
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
-    /** property map for import info set */
-    comphelper::PropertyMapEntry const aExportInfoMap[] =
-     {
-        { OUString("BaseURI"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
-     };
      uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
     xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rResource.getOrDefault("URL",OUString())));
     xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
@@ -1606,14 +1611,6 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     Sequence< Any > aDelegatorArguments;
     lcl_extractStatusIndicator( _rMediaDescriptor, aDelegatorArguments );
 
-    /** property map for export info set */
-    comphelper::PropertyMapEntry aExportInfoMap[] =
-    {
-        { OUString("BaseURI"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("UsePrettyPrinting"), 0, ::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
-    };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
