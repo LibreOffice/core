@@ -69,9 +69,10 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 }
 
 ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
-:   mrModel(rModel),
-    mpHandoutPage(0L),
-    mbPageListValid(sal_False)
+    : mrModel(rModel)
+    , mpHandoutPage(0L)
+    , mbPageListValid(sal_False)
+    , mnVisiblePageCount(0)
 {
 }
 
