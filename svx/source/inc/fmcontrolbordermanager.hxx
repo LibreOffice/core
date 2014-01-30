@@ -186,7 +186,7 @@ namespace svxform
         void    restoreAll();
 
     private:
-        /** called when a control got one of the two possible stati (focused, and hovered with the mouse)
+        /** called when a control got one of the two possible statuses (focused, and hovered with the mouse)
             @param _rxControl
                 the control which gained the status
             @param _rControlData
@@ -197,7 +197,7 @@ namespace svxform
                     ControlData& _rControlData
                 ) SAL_THROW(());
 
-        /** called when a control lost one of the two possible stati (focused, and hovered with the mouse)
+        /** called when a control lost one of the two possible statuses (focused, and hovered with the mouse)
             @param _rxControl
                 the control which lost the status
             @param _rControlData

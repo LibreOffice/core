@@ -763,7 +763,7 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     aTbxIMapDlg1.EnableItem( TBI_POLY, bDrawEnabled );
     aTbxIMapDlg1.EnableItem( TBI_FREEPOLY, bDrawEnabled );
 
-    // BezierEditor-Stati
+    // BezierEditor State
     aTbxIMapDlg1.EnableItem( TBI_POLYEDIT, bPolyEdit );
     aTbxIMapDlg1.EnableItem( TBI_POLYMOVE, !bDrawEnabled );
     aTbxIMapDlg1.EnableItem( TBI_POLYINSERT, !bDrawEnabled );

@@ -707,7 +707,7 @@ namespace frm
                         if ( bCanInsert )
                             m_xUpdateCursor->moveToInsertRow();
                         else
-                            // move record to update stati
+                            // move record to update status
                             m_xCursor->first();
                     }
                 }

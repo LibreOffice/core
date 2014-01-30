@@ -64,8 +64,8 @@ namespace
 {
     /** helper class for graphic context
 
-        This class allows to hold a complete status of classic
-        VCL OutputDevice stati. This data is needed for correct
+        This class allows to hold a complete representation of classic
+        VCL OutputDevice state. This data is needed for correct
         interpretation of the MetaFile action flow.
     */
     class PropertyHolder

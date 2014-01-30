@@ -76,7 +76,7 @@ public:
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer
     SystemFontList                               *mpFontList;
-    NSStatusItem*                                 mpStatusItem;     // one status item that draws all our stati
+    NSStatusItem*                                 mpStatusItem;     // one status item that draws all our statuses
                                                                     // at the moment this is only one add menu button
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;

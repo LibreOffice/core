@@ -577,7 +577,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 
-// Pass-through Update-Stati
+// Pass-through Update-Status
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
     if(!pUsrPref)

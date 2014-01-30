@@ -319,7 +319,7 @@ namespace svxform
     // XGridControlListener
         virtual void SAL_CALL columnChanged( const ::com::sun::star::lang::EventObject& _event ) throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::beans::XPropertyChangeListener -> aenderung der stati
+    // ::com::sun::star::beans::XPropertyChangeListener -> change of states
         virtual void SAL_CALL propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
     // XTextListener           -> modify setzen
