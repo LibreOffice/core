@@ -1451,16 +1451,22 @@ int MSWordExportBase::CollectGrfsOfBullets()
 
 void MSWordExportBase::BulletDefinitions()
 {
-    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
+    int nCount = CollectGrfsOfBullets();
+    if (nCount > 0)
     {
-        const MapMode aMapMode(MAP_TWIP);
-        const Graphic& rGraphic = *m_vecBulletPic[i];
-        Size aSize(rGraphic.GetPrefSize());
-        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
-            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
-        else
-            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
-        AttrOutput().BulletDefinition(i, rGraphic, aSize);
+        for(size_t i = 0; i < nCount; ++i)
+        {
+            const MapMode aMapMode(MAP_TWIP);
+            const Graphic& rGraphic = *m_vecBulletPic[i];
+            Size aSize(rGraphic.GetPrefSize());
+            if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
+            else
+                aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
+
+            if (0 != aSize.Height() && 0 != aSize.Width())
+                AttrOutput().BulletDefinition(i, rGraphic, aSize);
+        }
     }
 }
 

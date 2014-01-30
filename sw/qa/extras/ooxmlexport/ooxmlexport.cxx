@@ -2717,6 +2717,15 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
     xShape.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:6.4pt;height:6.4pt");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
