@@ -318,6 +318,9 @@ DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
     // Make sure rel-height-rel doesn't affect width.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+
+    // This was 2601, 20% height was relative from margin, not page.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3168), parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32());
 }
 
 DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
@@ -327,6 +330,9 @@ DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
     // Make sure rel-width-rel doesn't affect height.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+
+    // This was 3762, 40% width was relative from margin, not page.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4896), parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "width").toInt32());
 }
 
 #endif
