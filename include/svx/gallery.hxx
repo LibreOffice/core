@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SVX_GALLERY_HXX
 #define INCLUDED_SVX_GALLERY_HXX
 
-#include <tools/solar.h>
+#include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 #include <vector>
-#include <svx/svxdllapi.h>
 
 // Defines for preinstalled themes
 // Has to be in sync with svx/inc/galtheme.hrc

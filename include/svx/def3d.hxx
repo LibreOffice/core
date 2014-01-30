@@ -21,16 +21,13 @@
 #define INCLUDED_SVX_DEF3D_HXX
 
 #include <math.h>
-#include <tools/solar.h>
 
 const double fPiDiv180 = 0.01745329251994;
 const double EPSILON = 1e-06;
 
 #define DEG2RAD(fAngle) (fPiDiv180 * (fAngle))
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++ 3D helper functions ++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// 3D helper functions
 
 enum E3dDragConstraint { E3DDRAG_CONSTR_X   = 0x0001,
                          E3DDRAG_CONSTR_Y   = 0x0002,

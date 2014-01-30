@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_XPOLY_HXX
 #define INCLUDED_SVX_XPOLY_HXX
 
-#include <tools/solar.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svxdllapi.h>
 
@@ -30,14 +29,11 @@ class Polygon;
 class PolyPolygon;
 class OutputDevice;
 
-/************************************************************************/
-
 #define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
 
 #define XPOLY_MAXPOINTS      0xFFF0 /* Auch fuer die 32-Bitter etwas Luft lassen */
 
-/************************************************************************/
 // Punktstile im XPolygon:
 // NORMAL : Anfangs- oder Endpunkt einer Kurve oder Linie
 // SMOOTH : Glatter Uebergang zwischen Kurven
@@ -46,13 +42,8 @@ class OutputDevice;
 
 enum XPolyFlags { XPOLY_NORMAL, XPOLY_SMOOTH, XPOLY_CONTROL, XPOLY_SYMMTR };
 
-
-/*************************************************************************
-|*
-|* Klasse XPolygon; hat neben dem Point-Array noch ein Array mit Flags,
-|* die Informationen ueber den jeweiligen Punkt enthalten
-|*
-\************************************************************************/
+// Klasse XPolygon; hat neben dem Point-Array noch ein Array mit Flags,
+// die Informationen ueber den jeweiligen Punkt enthalten
 
 class ImpXPolygon;
 
@@ -125,12 +116,8 @@ public:
      explicit XPolygon(const basegfx::B2DPolygon& rPolygon);
 };
 
-/*************************************************************************
-|*
-|* Klasse XPolyPolygon; wie PolyPolygon, nur statt aus Polygonen aus
-|* XPolygonen bestehend
-|*
-\************************************************************************/
+// Klasse XPolyPolygon; wie PolyPolygon, nur statt aus Polygonen aus
+// XPolygonen bestehend
 
 class ImpXPolyPolygon;
 
