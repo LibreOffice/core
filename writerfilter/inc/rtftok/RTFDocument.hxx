@@ -16,38 +16,39 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-namespace writerfilter {
-    namespace rtftok {
-        /// The RTFDocument opens and resolves the RTF document.
-        class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocument
-            : public writerfilter::Reference<Stream>
-        {
-            public:
-                /// Pointer to this stream.
-                typedef ::boost::shared_ptr<RTFDocument> Pointer_t;
+namespace writerfilter
+{
+namespace rtftok
+{
+/// The RTFDocument opens and resolves the RTF document.
+class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocument
+    : public writerfilter::Reference<Stream>
+{
+public:
+    /// Pointer to this stream.
+    typedef boost::shared_ptr<RTFDocument> Pointer_t;
 
-                virtual ~RTFDocument() { }
+    virtual ~RTFDocument() { }
 
-                /// Resolves this document to a stream handler.
-                virtual void resolve(Stream & rHandler) = 0;
+    /// Resolves this document to a stream handler.
+    virtual void resolve(Stream& rHandler) = 0;
 
-                /// Returns string representation of the type of this reference. (Debugging purpose only.)
-                virtual ::std::string getType() const = 0;
-        };
+    /// Returns string representation of the type of this reference. (Debugging purpose only.)
+    virtual ::std::string getType() const = 0;
+};
 
-        /// Interface to create an RTFDocument instance.
-        class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocumentFactory
-        {
-            public:
-                static RTFDocument::Pointer_t
-                    createDocument(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const & xInputStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const & xDstDoc,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & xFrame,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > const & xStatusIndicator);
-        };
-    } // namespace rtftok
+/// Interface to create an RTFDocument instance.
+class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocumentFactory
+{
+public:
+    static RTFDocument::Pointer_t
+    createDocument(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                   css::uno::Reference<css::io::XInputStream> const& xInputStream,
+                   css::uno::Reference<css::lang::XComponent> const& xDstDoc,
+                   css::uno::Reference<css::frame::XFrame> const& xFrame,
+                   css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // _RTFDOCUMENT_HXX_
