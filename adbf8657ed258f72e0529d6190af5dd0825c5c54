@@ -16,6 +16,24 @@
       "revId": "adbf8657ed258f72e0529d6190af5dd0825c5c54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_c0aca838",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2014-01-30T08:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_60e85c7d",
+      "revId": "adbf8657ed258f72e0529d6190af5dd0825c5c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
