@@ -1003,13 +1003,19 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         }
 
         // create clip region from ClipRgnData
-        if ( mpClipRgnData->rdh.nCount == 1 )
+        if(0 == mpClipRgnData->rdh.nCount)
+        {
+            // #i123585# region is empty; this may happen when e.g. a PolyPolygon is given
+            // that contains no polygons or only empty ones (no width/height). This is
+            // perfectly fine and we are done, except setting it (see end of method)
+        }
+        else if(1 == mpClipRgnData->rdh.nCount)
         {
             RECT* pRect = &(mpClipRgnData->rdh.rcBound);
             mhRegion = CreateRectRgn( pRect->left, pRect->top,
                                                      pRect->right, pRect->bottom );
         }
-        else if( mpClipRgnData->rdh.nCount > 1 )
+        else if(mpClipRgnData->rdh.nCount > 1)
         {
             sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
             mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
@@ -1049,8 +1055,14 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         //
         //bool bBla = true;
     }
+    else
+    {
+        // #i123585# See above, this is a valid case, execute it
+        SelectClipRgn( getHDC(), 0 );
+    }
 
-    return mhRegion != 0;
+    // #i123585# retval no longer dependent of mhRegion, see TaskId comments above
+    return true;
 }
 
 // -----------------------------------------------------------------------
