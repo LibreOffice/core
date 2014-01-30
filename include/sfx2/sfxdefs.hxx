@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SFX2_SFXDEFS_HXX
 #define INCLUDED_SFX2_SFXDEFS_HXX
 
-#define SfxFilterFlags sal_uLong
+#include <sal/types.h>
+
+typedef sal_uInt32 SfxFilterFlags;
 
 #endif
 
