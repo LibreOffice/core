@@ -937,10 +937,6 @@ AC_ARG_WITH(rat-scan,
                           a separately installed library.
 ],with_rat_scan=$withval,)
 
-AC_ARG_WITH(macosx-sdk-version,
-[  --with-macosx-sdk-version=<version>   Specify the MacOSX platform SDK version, default is 10.7. Only 10.7 or higher is supported.
-],,)
-
 BUILD_TYPE="OOo"
 ADDITIONAL_REPOSITORIES="../ext_libraries"
 SCPDEFS=""
@@ -3911,32 +3907,32 @@ AC_SUBST(LIBXML_LIBS)
 
 
 dnl ===================================================================
-dnl Checks for MacOS platform SDK. Default is 10.7
+dnl Checks for a MacOS platform SDK which supports a OSX 10.7 deployment target
 dnl ===================================================================
 if test  "$_os" = "Darwin"; then
-   AC_MSG_CHECKING([checking MacOS platform SDK])
-   sdk_version=10.7
+   sdk_target=10.7
+   AC_MSG_CHECKING([checking SDK compatiblity with OSX $sdk_target])
 
-   if test -n "$with_macosx_sdk_version"; then
-      sdk_version=$with_macosx_sdk_version
-   fi
-
-   sdk_minor=`echo $sdk_version | cut -d"." -f2`
+   sdk_minor=`echo $sdk_target | cut -d"." -f2`
 
    if test "$sdk_minor" -lt "7"; then
       AC_MSG_ERROR([SDK version < 10.7 is not longer supported])
    else
       AC_MSG_RESULT([yes])
-      if test "$sdk_minor" -ge "7"; then
-          MACOSX_DEPLOYMENT_TARGET=$sdk_version
+      MACOSX_DEPLOYMENT_TARGET=$sdk_target
+
+      AC_MSG_CHECKING([for SDKs compatible with $MACOSX_DEPLOYMENT_TARGET])
+      sdk_found=`xcodebuild -showsdks | grep "sdk macosx10.[[789]]" | sed -e "s/.*sdk //" | head -n1`
+      if test -z "$sdk_found"; then
+         AC_MSG_ERROR([No SDK with OSX $sdk_target compatibility found])
       fi
 
-      sdk_path=`xcodebuild -version -sdk macosx$MACOSX_DEPLOYMENT_TARGET Path`
+      sdk_path=`xcodebuild -version -sdk ${sdk_found} Path`
       AC_MSG_CHECKING([for $sdk_path])
       if test -d "$sdk_path"; then
          AC_MSG_RESULT([yes])
       else
-         AC_MSG_ERROR([No proper MacOS platform SDK, not found])
+         AC_MSG_ERROR([MacOS SDK $sdk_found is not available at $sdk_path])
       fi
 
       MACOSX_SDK_PATH=$sdk_path
