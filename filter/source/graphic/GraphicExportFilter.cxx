@@ -23,8 +23,11 @@
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
-GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>& rxContext ) :
-    mxContext( rxContext )
+GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>& rxContext )
+    : mxContext( rxContext )
+    , mExportSelection(false)
+    , mTargetWidth(0)
+    , mTargetHeight(0)
 {}
 
 GraphicExportFilter::~GraphicExportFilter()
