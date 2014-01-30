@@ -492,6 +492,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     openBlobForWriting(aBlobHandle, aBlobId);
 
     // Max segment size is 2^16 == SAL_MAX_UINT16
+    // LEM TODO: SAL_MAX_UINT16 is 2^16-1; this mixup is probably innocuous; to be checked
     sal_uInt64 nDataWritten = 0;
     ISC_STATUS aErr = 0;
     while (xBlob->length() - nDataWritten > 0)
