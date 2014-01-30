@@ -166,7 +166,7 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
 
         sColor = sBuf.getStr();
     }
-    if( nAlpha )
+    if( nAlpha < MAX_PERCENT )
     {
         mpFS->startElementNS( XML_a, XML_srgbClr, XML_val, sColor.getStr(), FSEND );
         mpFS->singleElementNS( XML_a, XML_alpha, XML_val, OString::number(nAlpha), FSEND );
@@ -231,11 +231,11 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
                 aGrabBag[i].Value >>= aStyleProperties;
     }
 
-    sal_Int32 nAlpha = 0;
+    sal_Int32 nAlpha = MAX_PERCENT;
     if( GetProperty( rXPropSet, "FillTransparence" ) )
     {
-        sal_Int32 nTransparency;
-        rXPropSet->getPropertyValue( "FillTransparence" ) >>= nTransparency;
+        sal_Int32 nTransparency = 0;
+        mAny >>= nTransparency;
         // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
         nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
     }

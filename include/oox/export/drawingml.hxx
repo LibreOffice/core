@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include "oox/drawingml/drawingmltypes.hxx"
 #ifndef PPTX_EXPORT_ROTATE_CLOCKWISIFY
 // Our rotation is counter-clockwise and is in 100ths of a degree.
 // drawingML rotation is clockwise and is in 60000ths of a degree.
@@ -120,8 +121,8 @@ public:
     void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, sal_Bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
-    void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = 0 );
-    void WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha = 0 );
+    void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace );
