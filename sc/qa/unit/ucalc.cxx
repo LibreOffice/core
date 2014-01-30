@@ -5194,6 +5194,7 @@ void Test::testImportStream()
     aOpt.SetFieldSeps(",");
 
     ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
+    aObj.SetImportBroadcast(true);
     aObj.SetExtOptions(aOpt);
     aObj.ImportString("1,2,3", FORMAT_STRING);
 
