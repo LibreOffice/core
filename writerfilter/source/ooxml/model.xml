@@ -22911,7 +22911,7 @@
       <element name="em" tokenid="sprm:CKcd"/>
       <element name="lang" tokenid="ooxml:EG_RPrBase_lang"/>
       <element name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
-      <element name="specVanish" tokenid="0x818"/>
+      <element name="specVanish" tokenid="sprm:CFspecVanish"/>
       <element name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
     </resource>
     <resource name="EG_RPrContent" resource="Properties" tag="character">
