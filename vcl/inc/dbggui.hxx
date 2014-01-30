@@ -20,12 +20,6 @@
 #ifndef INCLUDED_VCL_INC_DBGGUI_HXX
 #define INCLUDED_VCL_INC_DBGGUI_HXX
 
-#include <tools/solar.h>
-
-// ------------
-// - DBG_UITL -
-// ------------
-
 #ifdef DBG_UTIL
 
 class Window;

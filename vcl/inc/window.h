@@ -20,20 +20,17 @@
 #ifndef INCLUDED_VCL_INC_WINDOW_H
 #define INCLUDED_VCL_INC_WINDOW_H
 
-#include <vector>
-#include <tools/solar.h>
-#include <vcl/outdev.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/inputctx.hxx>
-#include <vcl/pointr.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-
-#include <vcl/salnativewidgets.hxx>
-
 #include <list>
+#include <tools/wintypes.hxx>
+#include <vcl/inputctx.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/pointr.hxx>
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/vclevent.hxx>
+#include <vector>
 
 struct SalPaintEvent;
 struct ImplDelData;
@@ -92,20 +89,10 @@ namespace vcl {
     struct ControlLayoutData;
 }
 
-
-// --------------
-// - Prototypes -
-// --------------
-
 bool ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
-
-// -----------
-// - HitTest -
-// -----------
 
 #define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
 #define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
-
 
 struct ImplWinData
 {
@@ -126,7 +113,6 @@ struct ImplWinData
                         maTopWindowChildren;
 };
 
-
 struct ImplOverlapData
 {
     VirtualDevice*      mpSaveBackDev;      // saved background bitmap
@@ -136,7 +122,6 @@ struct ImplOverlapData
     sal_Bool            mbSaveBack;         // sal_True: save background
     sal_uInt8           mnTopLevel;         // Level for Overlap-Window
 };
-
 
 struct ImplFrameData
 {
@@ -193,7 +178,6 @@ struct ImplFrameData
     sal_Bool                mbInternalDragGestureRecognizer;
 };
 
-
 struct ImplAccessibleInfos
 {
     sal_uInt16 nAccessibleRole;
@@ -206,7 +190,6 @@ struct ImplAccessibleInfos
     ImplAccessibleInfos();
     ~ImplAccessibleInfos();
 };
-
 
 enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputDisabled =2 };
 

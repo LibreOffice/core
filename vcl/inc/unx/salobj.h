@@ -20,11 +20,9 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALOBJ_H
 #define INCLUDED_VCL_INC_UNX_SALOBJ_H
 
-#include <tools/solar.h>
-#include <vcl/sysdata.hxx>
-
-#include <vclpluginapi.h>
 #include <salobj.hxx>
+#include <vcl/sysdata.hxx>
+#include <vclpluginapi.h>
 
 class SalClipRegion
 {

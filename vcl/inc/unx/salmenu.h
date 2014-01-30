@@ -20,10 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALMENU_H
 #define INCLUDED_VCL_INC_UNX_SALMENU_H
 
-#include <tools/solar.h>
 #include <vcl/bitmap.hxx>
 #include <salmenu.hxx>
-
 
 class X11SalMenu : public SalMenu
 {

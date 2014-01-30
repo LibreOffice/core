@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_INC_OUTDATA_HXX
 #define INCLUDED_VCL_INC_OUTDATA_HXX
 
-#include <tools/solar.h>
 #include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
-
-// -----------------
-// - Hilfemethoden -
-// -----------------
 
 inline SalColor ImplColorToSal( Color aColor )
 {

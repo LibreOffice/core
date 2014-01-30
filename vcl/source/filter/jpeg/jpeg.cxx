@@ -20,7 +20,6 @@
 #include "JpegReader.hxx"
 #include "JpegWriter.hxx"
 
-#include <tools/solar.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>

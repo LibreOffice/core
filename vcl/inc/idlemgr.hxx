@@ -20,16 +20,11 @@
 #ifndef INCLUDED_VCL_INC_IDLEMGR_HXX
 #define INCLUDED_VCL_INC_IDLEMGR_HXX
 
-#include <tools/solar.h>
 #include <vcl/timer.hxx>
 #include <vector>
 
 struct ImplIdleData;
 typedef ::std::vector< ImplIdleData* > ImplIdleList;
-
-// ---------------
-// - ImplIdleMgr -
-// ---------------
 
 class ImplIdleMgr
 {
