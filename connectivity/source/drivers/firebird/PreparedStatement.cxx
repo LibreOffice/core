@@ -208,10 +208,11 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     switch (dtype) {
     case SQL_VARYING:
     {
+        const sal_Int32 max_varchar_len = 0xFFFF;
         // First 2 bytes indicate string size
-        if (str.getLength() > (2^16)-1)
+        if (str.getLength() > max_varchar_len)
         {
-            str = str.copy(0, (2^16)-1);
+            str = str.copy(0, max_varchar_len);
         }
         const short nLength = str.getLength();
         memcpy(pVar->sqldata, &nLength, 2);
