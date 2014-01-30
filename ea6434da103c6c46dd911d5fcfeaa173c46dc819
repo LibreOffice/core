@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_606dbc04",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2478,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-30T09:09:55Z",
+      "side": 1,
+      "message": "This \u0027was wrap\u003d\"none\"\u0027 is a copy\u0026paste error?",
+      "revId": "ea6434da103c6c46dd911d5fcfeaa173c46dc819",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
