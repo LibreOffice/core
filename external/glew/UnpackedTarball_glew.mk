@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 else
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew_use_CC_variable.patch.1 \
+	external/glew/0001-stop-linking-to-unneeded-Xmu-Xi-Xext-libraries.patch.1 \
 ))
 endif
 
