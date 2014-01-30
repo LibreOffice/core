@@ -25,11 +25,10 @@ extern "C"
     #include <jerror.h>
 }
 
-#include <tools/solar.h>
+#include "JpegWriter.hxx"
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include "JpegWriter.hxx"
 
 #define BUFFER_SIZE  4096
 

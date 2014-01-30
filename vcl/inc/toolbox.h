@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
@@ -43,10 +42,6 @@
 #define TB_LARGEIMAGESIZE_OXYGEN     22
 
 class Window;
-
-// ----------------
-// - ImplToolItem -
-// ----------------
 
 struct ImplToolItem
 {

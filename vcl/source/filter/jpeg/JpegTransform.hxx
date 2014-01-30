@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 
-#include <tools/solar.h>
 #include <vcl/graph.hxx>
 
 class JpegTransform

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_ACCEL_H
 #define INCLUDED_VCL_INC_ACCEL_H
 
-#include <tools/solar.h>
 #include <vcl/keycod.hxx>
 
 class Accelerator;

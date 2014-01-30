@@ -20,14 +20,9 @@
 #ifndef INCLUDED_VCL_INC_JOBSET_H
 #define INCLUDED_VCL_INC_JOBSET_H
 
-#include <tools/solar.h>
-#include <vcl/prntypes.hxx>
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
-
-// ------------------
-// - JobSetup-Types -
-// ------------------
+#include <vcl/prntypes.hxx>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
 #define JOBSETUP_SYSTEM_DONTKNOW    0
@@ -36,10 +31,6 @@
 #define JOBSETUP_SYSTEM_UNIX        3
 #define JOBSETUP_SYSTEM_MAC         4
 #define JOBSETUP_SYSTEM_JAVA        5
-
-// ----------------
-// - ImplJobSetup -
-// ----------------
 
 struct ImplJobSetup
 {

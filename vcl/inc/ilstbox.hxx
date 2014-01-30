@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_INC_ILSTBOX_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-
-#include <tools/solar.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>
@@ -35,10 +33,6 @@
 class ScrollBar;
 class ScrollBarBox;
 
-// -----------------
-// - ListBox-Types -
-// -----------------
-
 #define HORZ_SCROLL         4
 #define IMG_TXT_DISTANCE    6
 
@@ -50,10 +44,6 @@ enum LB_EVENT_TYPE
     LET_KEYMOVE,
     LET_KEYSPACE
 };
-
-// -----------------
-// - ImplEntryType -
-// -----------------
 
 struct ImplEntryType
 {
@@ -92,10 +82,6 @@ struct ImplEntryType
         mpUserData = NULL;
     }
 };
-
-// -----------------
-// - ImplEntryList -
-// -----------------
 
 class ImplEntryList
 {
@@ -188,10 +174,6 @@ public:
         */
     sal_uInt16          FindFirstSelectable( sal_uInt16 nPos, bool bForward = true );
 };
-
-// ---------------------
-// - ImplListBoxWindow -
-// ---------------------
 
 class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
 {
@@ -397,10 +379,6 @@ protected:
     virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
 };
 
-// ---------------
-// - ImplListBox -
-// ---------------
-
 class ImplListBox : public Control
 {
 private:
@@ -529,10 +507,6 @@ public:
     inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
 
-// -----------------------------
-// - ImplListBoxFloatingWindow -
-// -----------------------------
-
 class ImplListBoxFloatingWindow : public FloatingWindow
 {
 private:
@@ -571,10 +545,6 @@ public:
 
     virtual void    Resize();
 };
-
-// -----------
-// - ImplWin -
-// -----------
 
 class ImplWin : public Control
 {
@@ -637,10 +607,6 @@ public:
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 };
-
-// -----------
-// - ImplBtn -
-// -----------
 
 class ImplBtn : public PushButton
 {

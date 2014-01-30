@@ -20,10 +20,9 @@
 #ifndef INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 #define INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 
-#include <tools/solar.h>
+#include <generic/gensys.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
-#include <generic/gensys.h>
 #include <vclpluginapi.h>
 
 class VCLPLUG_GEN_PUBLIC X11SalSystem : public SalGenericSystem

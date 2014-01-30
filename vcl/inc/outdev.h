@@ -20,22 +20,16 @@
 #ifndef INCLUDED_VCL_INC_OUTDEV_H
 #define INCLUDED_VCL_INC_OUTDEV_H
 
-#include <tools/solar.h>
-#include <outfont.hxx>
-
-#include <vector>
 #include <list>
+#include <outfont.hxx>
 #include <set>
+#include <vector>
 
 class Size;
 class Font;
 class VirtualDevice;
 class ImplGetDevFontList;
 class GetDevSizeList;
-
-// -----------------------
-// - ImplDevFontListData -
-// -----------------------
 
 // flags for mnMatchType member
 #define IMPL_DEVFONT_SCALABLE       ((sal_uIntPtr)0x00000001)
@@ -86,11 +80,6 @@ friend class ImplDevFontList; // TODO: remove soon
     int                 mnMinQuality;       // quality of the worst font face
 };
 
-
-// ----------------------
-// - ImplGetDevFontList -
-// ----------------------
-
 // an ImplGetDevFontList is created by an ImplDevFontList
 // it becomes invalid when original ImplDevFontList is modified
 class ImplGetDevFontList
@@ -104,10 +93,6 @@ public:
     PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
     int                 Count() const               { return maDevFontVector.size(); }
 };
-
-// ----------------------
-// - ImplGetDevSizeList -
-// ----------------------
 
 class ImplGetDevSizeList
 {
@@ -124,9 +109,6 @@ public:
     const OUString&     GetFontName() const     { return maFontName; }
 };
 
-// ------------------------
-// - ImplFontSubstitution -
-// ------------------------
 // nowadays these substitutions are needed for backward compatibility and tight platform integration:
 // - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
 // - device specific substitutions (e.g. for PS printer builtin fonts)
@@ -192,9 +174,6 @@ public:
     virtual bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const = 0;
 };
 
-// -----------------
-// - ImplFontCache -
-// -----------------
 // TODO: closely couple with ImplDevFontList
 
 class ImplFontCache
@@ -221,10 +200,6 @@ public:
     void                Release( ImplFontEntry* );
     void                Invalidate();
 };
-
-// ------------------
-// - ImplOutDevData -
-// ------------------
 
 namespace vcl { struct ControlLayoutData; }
 // #i75163#

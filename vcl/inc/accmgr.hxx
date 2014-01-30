@@ -20,17 +20,12 @@
 #ifndef INCLUDED_VCL_INC_ACCMGR_HXX
 #define INCLUDED_VCL_INC_ACCMGR_HXX
 
-#include <tools/solar.h>
 #include <vector>
 
 class Accelerator;
 class KeyCode;
 
 typedef ::std::vector< Accelerator* > ImplAccelList;
-
-// --------------------
-// - ImplAccelManager -
-// --------------------
 
 class ImplAccelManager
 {

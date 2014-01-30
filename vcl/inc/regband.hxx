@@ -20,10 +20,9 @@
 #ifndef INCLUDED_VCL_INC_REGBAND_HXX
 #define INCLUDED_VCL_INC_REGBAND_HXX
 
-#include <tools/solar.h>
 #include <tools/poly.hxx>
 
-/* =======================================================================
+/*
 
 class ImplRegionBand
 
@@ -37,11 +36,7 @@ Intersection - the Class will process the clipping for the actual band.
 The actual separations may be checked by functions like IsInside or
 IsOver.
 
-======================================================================= */
-
-// ------------------------
-// - ImplRegionBand-Types -
-// ------------------------
+*/
 
 // element for the list with x-separations
 struct ImplRegionBandSep
@@ -63,10 +58,6 @@ struct ImplRegionBandPoint
     bool                        mbEndPoint;
     LineType                    meLineType;
 };
-
-// ------------------
-// - ImplRegionBand -
-// ------------------
 
 class ImplRegionBand
 {

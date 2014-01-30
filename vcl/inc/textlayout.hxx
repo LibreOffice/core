@@ -20,21 +20,14 @@
 #ifndef INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 #define INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 
-#include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <vcl/outdev.hxx>
 #include <memory>
+#include <rtl/ustring.hxx>
+#include <vcl/outdev.hxx>
 
 class Control;
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
-
-    //====================================================================
-    //= ITextLayout
-    //====================================================================
     class SAL_NO_VTABLE ITextLayout
     {
     public:
@@ -49,9 +42,6 @@ namespace vcl
         ~ITextLayout() {}
     };
 
-    //====================================================================
-    //= DefaultTextLayout
-    //====================================================================
     /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
         methods of an OutputDevice instance, without any inbetween magic.
     */
@@ -96,9 +86,6 @@ namespace vcl
         OutputDevice&   m_rTargetDevice;
     };
 
-    //====================================================================
-    //= ControlTextRenderer
-    //====================================================================
     class ReferenceDeviceTextLayout;
     /** a class which allows rendering text of a Control onto a device, by taking into account the metrics of
         a reference device.
@@ -122,9 +109,7 @@ namespace vcl
         ::std::auto_ptr< ReferenceDeviceTextLayout >   m_pImpl;
     };
 
-//........................................................................
 } // namespace vcl
-//........................................................................
 
 #endif // INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 

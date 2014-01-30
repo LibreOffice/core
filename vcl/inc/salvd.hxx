@@ -20,9 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALVD_HXX
 #define INCLUDED_VCL_INC_SALVD_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <basebmp/bitmapdevice.hxx>
+#include <vcl/dllapi.h>
 
 class SalGraphics;
 

@@ -20,11 +20,8 @@
 #ifndef INCLUDED_VCL_INC_PRINT_H
 #define INCLUDED_VCL_INC_PRINT_H
 
-#include "tools/solar.h"
-#include "vcl/dllapi.h"
-
 #include "rtl/ustring.hxx"
-
+#include "vcl/dllapi.h"
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -35,19 +32,11 @@ class JobSetup;
 namespace vcl
 { class PrinterListener; }
 
-// --------------------
-// - ImplPrnQueueData -
-// --------------------
-
 struct ImplPrnQueueData
 {
     QueueInfo*              mpQueueInfo;
     SalPrinterQueueInfo*    mpSalQueueInfo;
 };
-
-// --------------------
-// - ImplPrnQueueList -
-// --------------------
 
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
@@ -63,10 +52,6 @@ public:
     void                    Add( SalPrinterQueueInfo* pData );
     ImplPrnQueueData*       Get( const OUString& rPrinter );
 };
-
-// --------------
-// - Prototypes -
-// --------------
 
 void ImplDeletePrnQueueList();
 void SAL_DLLPRIVATE ImplUpdateJobSetupPaper( JobSetup& rJobSetup );

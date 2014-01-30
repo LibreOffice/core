@@ -20,14 +20,9 @@
 #ifndef INCLUDED_VCL_INC_BRDWIN_HXX
 #define INCLUDED_VCL_INC_BRDWIN_HXX
 
-#include <tools/solar.h>
 #include <vcl/window.hxx>
 
 class ImplBorderWindowView;
-
-// --------------------------
-// - ImplBorderWindow-Types -
-// --------------------------
 
 #define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
 #define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
@@ -78,10 +73,6 @@ class ImplBorderWindowView;
 #define BORDERWINDOW_TITLE_TEAROFF          ((sal_uInt16)0x0004)
 #define BORDERWINDOW_TITLE_POPUP            ((sal_uInt16)0x0008)
 #define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0010)
-
-// --------------------
-// - ImplBorderWindow -
-// --------------------
 
 class ImplBorderWindow : public Window
 {
@@ -181,12 +172,6 @@ public:
     virtual Size            GetOptimalSize() const;
 };
 
-// =======================================================================
-
-// -----------------------
-// - ImplBorderFrameData -
-// -----------------------
-
 struct ImplBorderFrameData
 {
     ImplBorderWindow*       mpBorderWindow;
@@ -228,12 +213,6 @@ struct ImplBorderFrameData
     sal_Bool                    mbTitleClipped;
 };
 
-// =======================================================================
-
-// ------------------------
-// - ImplBorderWindowView -
-// ------------------------
-
 class ImplBorderWindowView
 {
 public:
@@ -260,12 +239,6 @@ public:
     long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
 };
 
-// =======================================================================
-
-// --------------------------
-// - ImplNoBorderWindowView -
-// --------------------------
-
 class ImplNoBorderWindowView : public ImplBorderWindowView
 {
 public:
@@ -277,13 +250,6 @@ public:
     virtual long            CalcTitleWidth() const;
     virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
-
-
-// =======================================================================
-
-// -----------------------------
-// - ImplSmallBorderWindowView -
-// -----------------------------
 
 class ImplSmallBorderWindowView : public ImplBorderWindowView
 {
@@ -307,14 +273,6 @@ public:
     virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
 
-
-// =======================================================================
-
-// ---------------------------
-// - ImplStdBorderWindowView -
-// ---------------------------
-
-
 class ImplStdBorderWindowView : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;
@@ -337,7 +295,6 @@ public:
     virtual long            CalcTitleWidth() const;
     virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
-
 
 #endif // INCLUDED_VCL_INC_BRDWIN_HXX
 

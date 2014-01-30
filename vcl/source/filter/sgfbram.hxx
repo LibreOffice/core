@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_SGFBRAM_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_SGFBRAM_HXX
 
-#include <tools/solar.h>
-
 #define SgfBitImag0   1 /* Bitmap                  */
 #define SgfBitImag1   4 /* Bitmap                  */
 #define SgfBitImag2   5 /* Bitmap                  */
@@ -95,10 +93,6 @@ extern long SgfVectYmul;
 extern long SgfVectXdiv;
 extern long SgfVectYdiv;
 extern bool SgfVectScal;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Windows BMP /////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define BmpFileHeaderSize 14
 class BmpFileHeader
