@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_4bbff9d0",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-31T02:00:45Z",
+      "side": 1,
+      "message": "That is still not correct.\n\nOOXML supports -90 to 90 for rotX. See part 21.2.2.157 of the spec.\n\nFrom what I conclude this makes sense with the values of rotY going from 0 to 360. If your rotX value is outside of the -90 to +90 range you can change the rotY value to move it back into that range and still have the same transformation matrix.\n\nI would need to think a bit about how to express it mathematically but this patch does not look correct like that.",
+      "revId": "5bfd42b02563d4c706c8de1c7918695c24d7e3f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_6bb4bdf2",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3073,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-31T02:00:45Z",
+      "side": 1,
+      "message": "Can you please leave a few more comments what you are trying to do here and why you think it is correct. If you can\u0027t describe it please open a bug report and attach a few test documents that help understand the issue.",
+      "revId": "5bfd42b02563d4c706c8de1c7918695c24d7e3f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
