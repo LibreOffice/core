@@ -16,6 +16,24 @@
       "revId": "5186307d2fb8c582030829dea82ae8317118a5d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_cb3be936",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-31T14:46:43Z",
+      "side": 1,
+      "message": "oops! so i should make it ColorData or sal_uInt32?",
+      "parentUuid": "da9df570_8b3ac134",
+      "revId": "5186307d2fb8c582030829dea82ae8317118a5d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
