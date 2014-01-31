@@ -22,12 +22,12 @@
 #include <classes/actiontriggercontainer.hxx>
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
-#include <framework/actiontriggerhelper.hxx>
-#include <threadhelp/resetableguard.hxx>
-#include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-
+#include <framework/actiontriggerhelper.hxx>
+#include <osl/mutex.hxx>
+#include <threadhelp/resetableguard.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -45,7 +45,6 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((const sal_Int8*)pGUID,16) ;
     return seqID ;
 }
-
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
     PropertySetContainer()
@@ -123,7 +122,6 @@ throw ( RuntimeException )
     return aSeq;
 }
 
-
 // XIndexContainer
 void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
@@ -151,7 +149,6 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     PropertySetContainer::removeByIndex( Index );
 }
 
-
 // XIndexReplace
 void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
@@ -165,7 +162,6 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         m_bContainerChanged = sal_True;
     PropertySetContainer::replaceByIndex( Index, Element );
 }
-
 
 // XIndexAccess
 sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
@@ -200,7 +196,6 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     return PropertySetContainer::getByIndex( Index );
 }
 
-
 // XElementAccess
 Type SAL_CALL RootActionTriggerContainer::getElementType()
     throw (::com::sun::star::uno::RuntimeException)
@@ -220,7 +215,6 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_False;
 }
 
-
 // XServiceInfo
 OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
 throw ( RuntimeException )
@@ -231,10 +225,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
-    if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()

@@ -16,14 +16,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/menuconfiguration.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/processfactory.hxx>
+#include <framework/menuconfiguration.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/toolboxcontroller.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -154,9 +154,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
 }
 
-void SAL_CALL
-PopupMenuToolbarController::statusChanged(
-    const css::frame::FeatureStateEvent& rEvent )
+void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException )
 {
     // TODO move to base class
@@ -390,9 +388,7 @@ css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
     return aRet;
 }
 
-void SAL_CALL
-NewToolbarController::initialize(
-    const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw ( css::uno::Exception, css::uno::RuntimeException )
 {
     PopupMenuToolbarController::initialize( aArguments );
@@ -401,10 +397,8 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
     createPopupMenuController();
 }
 
-void SAL_CALL
-NewToolbarController::statusChanged(
-    const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
+void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+throw ( css::uno::RuntimeException )
 {
     if ( rEvent.IsEnabled )
     {
@@ -418,9 +412,8 @@ NewToolbarController::statusChanged(
     enable( rEvent.IsEnabled );
 }
 
-void SAL_CALL
-NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
-    throw ( css::uno::RuntimeException )
+void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
+throw ( css::uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if ( !m_aLastURL.getLength() )

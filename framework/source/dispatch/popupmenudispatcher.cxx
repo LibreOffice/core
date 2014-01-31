@@ -40,9 +40,10 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <ucbhelper/content.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -59,9 +60,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
 PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
         //  Init baseclasses first
@@ -74,9 +72,6 @@ PopupMenuDispatcher::PopupMenuDispatcher(
 {
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
 PopupMenuDispatcher::~PopupMenuDispatcher()
 {
     // Warn programmer if he forgot to dispose this instance.
@@ -92,7 +87,7 @@ OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::
 sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
   throw( css::uno::RuntimeException )
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
@@ -149,11 +144,7 @@ DEFINE_INIT_SERVICE(PopupMenuDispatcher,
 }
 )
 
-//*****************************************************************************************************************
-//  XInitialization
-//*****************************************************************************************************************
-void SAL_CALL PopupMenuDispatcher::initialize(
-    const css::uno::Sequence< css::uno::Any >& lArguments )
+void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
 throw( css::uno::Exception, css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -179,9 +170,6 @@ throw( css::uno::Exception, css::uno::RuntimeException)
     /* } SAFE */
 }
 
-//*****************************************************************************************************************
-//  XDispatchProvider
-//*****************************************************************************************************************
 css::uno::Reference< css::frame::XDispatch >
 SAL_CALL PopupMenuDispatcher::queryDispatch(
     const css::util::URL&  rURL    ,
@@ -263,24 +251,13 @@ throw( css::uno::RuntimeException )
     return lDispatcher;
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void
-SAL_CALL PopupMenuDispatcher::dispatch(
-    const URL&                        /*aURL*/            ,
-    const Sequence< PropertyValue >&  /*seqProperties*/ )
+void SAL_CALL PopupMenuDispatcher::dispatch( const URL& /*aURL*/, const Sequence< PropertyValue >& /*seqProperties*/ )
 throw( RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void
-SAL_CALL PopupMenuDispatcher::addStatusListener(
-    const uno::Reference< XStatusListener >& xControl,
-    const URL&                          aURL    )
+void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& xControl,
+                                                      const URL& aURL )
 throw( RuntimeException )
 {
     // Ready for multithreading
@@ -290,13 +267,8 @@ throw( RuntimeException )
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void
-SAL_CALL PopupMenuDispatcher::removeStatusListener(
-    const uno::Reference< XStatusListener >& xControl,
-    const URL&                          aURL    )
+void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& xControl,
+                                                         const URL& aURL )
 throw( RuntimeException )
 {
     // Ready for multithreading
@@ -306,13 +278,7 @@ throw( RuntimeException )
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
-//*****************************************************************************************************************
-//   XFrameActionListener
-//*****************************************************************************************************************
-
-void
-SAL_CALL PopupMenuDispatcher::frameAction(
-    const FrameActionEvent& aEvent )
+void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -325,11 +291,7 @@ throw ( RuntimeException )
     }
 }
 
-//*****************************************************************************************************************
-//   XEventListener
-//*****************************************************************************************************************
-void
-SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
+void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -401,6 +363,6 @@ void PopupMenuDispatcher::impl_CreateUriRefFactory()
     }
 }
 
-}       //  namespace framework
+} //  namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

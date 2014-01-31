@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "services/ContextChangeEventMultiplexer.hxx"
 #include "services.h"
+#include <cppuhelper/supportsservice.hxx>
 
 using ::rtl::OUString;
 
@@ -36,15 +38,9 @@ ContextChangeEventMultiplexer::ContextChangeEventMultiplexer (
     (void)rxContext;
 }
 
-
-
-
 ContextChangeEventMultiplexer::~ContextChangeEventMultiplexer (void)
 {
 }
-
-
-
 
 void SAL_CALL ContextChangeEventMultiplexer::disposing (void)
 {
@@ -75,11 +71,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing (void)
     }
 }
 
-
-
-
 // XContextChangeEventMultiplexer
-
 void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -117,9 +109,6 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     }
 }
 
-
-
-
 void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
     const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -146,9 +135,6 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
     }
 
 }
-
-
-
 
 void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListeners (
     const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener)
@@ -177,9 +163,6 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
     }
 }
 
-
-
-
 void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     const css::ui::ContextChangeEventObject& rEventObject,
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -201,9 +184,6 @@ void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
         BroadcastEventToSingleContainer(rEventObject, NULL);
 }
 
-
-
-
 void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
     const css::ui::ContextChangeEventObject& rEventObject,
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
@@ -224,9 +204,6 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
         }
     }
 }
-
-
-
 
 ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::GetFocusDescriptor (
     const cssu::Reference<cssu::XInterface>& rxEventFocus,
@@ -252,11 +229,7 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
         return NULL;
 }
 
-
-
-
 // XSingleComponentFactory
-
 cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::createInstanceWithContext (
     const cssu::Reference<cssu::XComponentContext>& rxContext)
     throw (cssu::Exception, cssu::RuntimeException)
@@ -264,9 +237,6 @@ cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::create
     (void)rxContext;
     return cssu::Reference<cssu::XInterface>();
 }
-
-
-
 
 cssu::Reference<cssu::XInterface > SAL_CALL ContextChangeEventMultiplexer::createInstanceWithArgumentsAndContext (
     const cssu::Sequence<cssu::Any>& rArguments,
@@ -278,30 +248,18 @@ cssu::Reference<cssu::XInterface > SAL_CALL ContextChangeEventMultiplexer::creat
     return cssu::Reference<cssu::XInterface>();
 }
 
-
-
-
 // XServiceInfo
-
 ::rtl::OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName (void)
     throw(cssu::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
 
-
-
-
-
-sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService (
-    const ::rtl::OUString& rsServiceName)
+sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const ::rtl::OUString& rsServiceName)
     throw (cssu::RuntimeException)
 {
-    return ::comphelper::findValue(static_GetSupportedServiceNames(), rsServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, rsServiceName);
 }
-
-
-
 
 cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames (void)
     throw (cssu::RuntimeException)
@@ -309,11 +267,7 @@ cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedSer
     return static_GetSupportedServiceNames();
 }
 
-
-
-
-void SAL_CALL ContextChangeEventMultiplexer::disposing (
-    const css::lang::EventObject& rEvent)
+void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventObject& rEvent)
     throw (cssu::RuntimeException)
 {
     ListenerMap::iterator iDescriptor (maListeners.find(rEvent.Source));
@@ -329,18 +283,11 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing (
     maListeners.erase(iDescriptor);
 }
 
-
-
-
 // Local and static methods.
-
 OUString SAL_CALL ContextChangeEventMultiplexer::impl_getStaticImplementationName (void)
 {
     return OUString(IMPLEMENTATION_NAME);
 }
-
-
-
 
 cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::static_GetSupportedServiceNames (void)
 {
@@ -357,9 +304,6 @@ cssu::Reference<cssu::XInterface> ContextChangeEventMultiplexer::impl_createFact
         ContextChangeEventMultiplexer::static_GetSupportedServiceNames()
         );
 }
-
-
-
 
 cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::static_CreateInstance (
     const cssu::Reference<cssu::XComponentContext>& rxComponentContext)

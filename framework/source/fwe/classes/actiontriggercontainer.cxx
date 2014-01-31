@@ -18,10 +18,10 @@
  */
 
 #include <classes/actiontriggercontainer.hxx>
-#include <cppuhelper/typeprovider.hxx>
-
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -69,7 +69,6 @@ void ActionTriggerContainer::release() throw()
     PropertySetContainer::release();
 }
 
-
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( ::com::sun::star::uno::Exception, RuntimeException)
@@ -84,13 +83,11 @@ throw ( ::com::sun::star::uno::Exception, RuntimeException)
         throw com::sun::star::uno::RuntimeException("Unknown service specifier!", (OWeakObject *)this );
 }
 
-
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 throw ( Exception, RuntimeException)
 {
     return createInstance( ServiceSpecifier );
 }
-
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
 throw ( RuntimeException )
@@ -114,10 +111,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
-    if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
