@@ -136,9 +136,10 @@ public class Bootstrap {
 
     /**
      * Bootstraps a servicemanager with the jurt base components registered.
-     * <p>
+     *
+     * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code>.
+     *
      * @return     a freshly boostrapped service manager
-     * @see        com.sun.star.lang.ServiceManager
      */
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
@@ -149,7 +150,8 @@ public class Bootstrap {
 
     /** Bootstraps the initial component context from a native UNO installation.
 
-        @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
+        See also
+        <code>cppuhelper/defaultBootstrap_InitialComponentContext()</code>.
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext()
         throws Exception
@@ -168,12 +170,13 @@ public class Bootstrap {
     }
     /** Bootstraps the initial component context from a native UNO installation.
 
+        See also
+        <code>cppuhelper/defaultBootstrap_InitialComponentContext()</code>.
+
         @param ini_file
                ini_file (may be null: uno.rc besides cppuhelper lib)
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
-
-        @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
         String ini_file, java.util.Map<String,String> bootstrap_parameters )

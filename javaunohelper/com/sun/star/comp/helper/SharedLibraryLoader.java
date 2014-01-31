@@ -29,10 +29,10 @@ import com.sun.star.registry.XRegistryKey;
  *
  * The <code>SharedLibraryLoader</code> class provides the functionality of the <code>com.sun.star.loader.SharedLibrary</code>
  * service.
- * <p>
+ *
+ * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code>.
+ *
  * @see         com.sun.star.loader.SharedLibrary
- * @see         "com.sun.star.comp.servicemanager.ServiceManager"
- * @see         com.sun.star.lang.ServiceManager
  */
 public class SharedLibraryLoader {
     /**
@@ -77,13 +77,14 @@ public class SharedLibraryLoader {
      * The defaults are "shlibloader.uno"
      * for the library and "com.sun.star.comp.stoc.DLLComponentLoader"
      * for the component name.
-     * <p>
+     *
+     * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
+     * <code>com.sun.star.registry.RegistryKey</code>.
+     *
      * @return  the factory for the "com.sun.star.comp.stoc.DLLComponentLoader" component.
      * @param   smgr    the ServiceManager
      * @param   regKey  the root registry key
      * @see     com.sun.star.loader.SharedLibrary
-     * @see     com.sun.star.lang.ServiceManager
-     * @see     com.sun.star.registry.RegistryKey
      */
     public static XSingleServiceFactory getServiceFactory(
                 XMultiServiceFactory smgr,
@@ -98,15 +99,16 @@ public class SharedLibraryLoader {
 
     /**
      * Loads and returns a specific factory for a given library and implementation name.
-     * <p>
+     *
+     * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
+     * <code>com.sun.star.registry.RegistryKey</code>.
+     *
      * @return  the factory of the component
      * @param   libName the name of the shared library
      * @param   impName the implementation name of the component
      * @param   smgr    the ServiceManager
      * @param   regKey  the root registry key
      * @see     com.sun.star.loader.SharedLibrary
-     * @see     com.sun.star.lang.ServiceManager
-     * @see     com.sun.star.registry.RegistryKey
      */
     public static XSingleServiceFactory getServiceFactory(
                 String libName,
@@ -123,13 +125,14 @@ public class SharedLibraryLoader {
 
     /**
      * Registers the SharedLibraryLoader under a RegistryKey.
-     * <p>
+     *
+     * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
+     * <code>com.sun.star.registry.RegistryKey</code>.
+     *
      * @return  true if the registration was successful - otherwise false
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
      * @see     com.sun.star.loader.SharedLibrary
-     * @see     com.sun.star.lang.ServiceManager
-     * @see     com.sun.star.registry.RegistryKey
      */
     public static boolean writeRegistryServiceInfo(
                 com.sun.star.lang.XMultiServiceFactory smgr,
@@ -142,14 +145,15 @@ public class SharedLibraryLoader {
 
     /**
      * Registers the SharedLibraryLoader under a RegistryKey.
-     * <p>
+     *
+     * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code> and
+     * <code>com.sun.star.registry.RegistryKey</code>.
+     *
      * @return  true if the registration was successful - otherwise false
      * @param   libName name of the shared library
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
      * @see     com.sun.star.loader.SharedLibrary
-     * @see     com.sun.star.lang.ServiceManager
-     * @see     com.sun.star.registry.RegistryKey
      */
     public static boolean writeRegistryServiceInfo(
                 String libName,

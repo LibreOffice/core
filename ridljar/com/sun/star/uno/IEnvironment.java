@@ -58,7 +58,7 @@ public interface IEnvironment {
      *     given bridge <var>B2</var>.</li>
      * <li>A proxy object, created as a remote object is mapped into this
      *     environment via a given bridge.</li>
-     * </ul></p>
+     * </ul>
      *
      * <p>The object actually registered may differ from the specified
      * <code>object</code> that is passed as an argument.  This enables an
