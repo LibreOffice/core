@@ -6106,7 +6106,7 @@ void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 
 void DocxAttributeOutput::ParaNumRule_Impl( const SwTxtNode* /*pTxtNd*/, sal_Int32 nLvl, sal_Int32 nNumId )
 {
-    if ( USHRT_MAX != nNumId && 0 != nNumId )
+    if ( USHRT_MAX != nNumId )
     {
         m_pSerializer->startElementNS( XML_w, XML_numPr, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_ilvl, FSNS( XML_w, XML_val ), OString::number( nLvl).getStr(), FSEND );
