@@ -9,6 +9,7 @@
  *
  */
 
+#include "compat.hxx"
 #include "pluginhandler.hxx"
 
 #include <clang/Frontend/CompilerInstance.h>
@@ -161,9 +162,9 @@ DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, const c
         }
     fullMessage += "]";
     if( loc.isValid())
-        return diag.Report( loc, diag.getCustomDiagID( level, fullMessage ));
+        return diag.Report( loc, compat::getCustomDiagID(diag, level, fullMessage) );
     else
-        return diag.Report( diag.getCustomDiagID( level, fullMessage ));
+        return diag.Report( compat::getCustomDiagID(diag, level, fullMessage) );
     }
 
 DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )

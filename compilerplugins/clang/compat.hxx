@@ -12,6 +12,9 @@
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/Type.h"
+#include "clang/Basic/Diagnostic.h"
+#include "clang/Basic/DiagnosticIDs.h"
+#include "llvm/ADT/StringRef.h"
 
 // Compatibility wrapper to abstract over (trivial) chanes in the Clang API:
 namespace compat {
@@ -39,6 +42,18 @@ inline clang::QualType getParamType(
     return type.getParamType(i);
 #else
     return type.getArgType(i);
+#endif
+}
+
+inline unsigned getCustomDiagID(
+    clang::DiagnosticsEngine const & engine, clang::DiagnosticsEngine::Level L,
+    llvm::StringRef FormatString)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+    return engine.getDiagnosticIDs()->getCustomDiagID(
+        static_cast<clang::DiagnosticIDs::Level>(L), FormatString);
+#else
+    return engine.getCustomDiagID(L, FormatString);
 #endif
 }
 
