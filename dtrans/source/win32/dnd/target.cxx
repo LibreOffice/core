@@ -19,14 +19,16 @@
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <stdio.h>
-#include "target.hxx"
-#include "idroptarget.hxx"
-#include "globals.hxx"
-#include "targetdropcontext.hxx"
-#include "targetdragcontext.hxx"
 #include <rtl/ustring.h>
+
+#include "globals.hxx"
+#include "idroptarget.hxx"
+#include "target.hxx"
+#include "targetdragcontext.hxx"
+#include "targetdropcontext.hxx"
+
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -238,9 +240,6 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
     return 0;
 }
 
-
-
-
 // XServiceInfo
 OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
 {
@@ -249,9 +248,7 @@ OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
 // XServiceInfo
 sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName == DNDTARGET_SERVICE_NAME )
-        return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -260,8 +257,7 @@ Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (Ru
     return Sequence<OUString>(names, 1);
 }
 
-
-// XDropTarget ----------------------------------------------------------------
+// XDropTarget
 void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
         throw(RuntimeException)
 {
@@ -286,7 +282,6 @@ void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
     m_bActive= _b;
 }
 
-
 sal_Int8 SAL_CALL DropTarget::getDefaultActions(  ) throw(RuntimeException)
 {
     return m_nDefaultActions;
@@ -297,7 +292,6 @@ void SAL_CALL DropTarget::setDefaultActions( sal_Int8 actions ) throw(RuntimeExc
     OSL_ENSURE( actions < 8, "No valid default actions");
     m_nDefaultActions= actions;
 }
-
 
 HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
                                     DWORD grfKeyState,
@@ -490,8 +484,6 @@ HRESULT DropTarget::Drop( IDataObject  * /*pDataObj*/,
     return S_OK;
 }
 
-
-
 void DropTarget::fire_drop( const DropTargetDropEvent& dte)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
@@ -563,7 +555,7 @@ void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
     }
 }
 
-// Non - interface functions ============================================================
+// Non - interface functions
 // DropTarget fires events to XDropTargetListeners. The event object contains an
 // XDropTargetDropContext implementaion. When the listener calls on that interface
 // then the calls are delegated from DropContext (XDropTargetDropContext) to these
@@ -597,7 +589,7 @@ void DropTarget::_dropComplete(sal_Bool success, const Reference<XDropTargetDrop
         m_bDropComplete= success;
     }
 }
-// --------------------------------------------------------------------------------------
+
 // DropTarget fires events to XDropTargetListeners. The event object can contains an
 // XDropTargetDragContext implementaion. When the listener calls on that interface
 // then the calls are delegated from DragContext (XDropTargetDragContext) to these
@@ -619,10 +611,6 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
         m_nLastDropAction= ACTION_NONE;
     }
 }
-
-
-//--------------------------------------------------------------------------------------
-
 
 // This function determines the action dependend on the pressed
 // key modifiers ( CTRL, SHIFT, ALT, Right Mouse Button). The result
