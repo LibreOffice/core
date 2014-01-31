@@ -3248,6 +3248,18 @@ DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:t", 3);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFooterContainHyperlink,"footer-contain-hyperlink.docx")
+{
+    // Problem is that footer1.xml.rels contains the empty
+    // Target due to which the file get corrupted
+    // in MS Office 2007.
+    // Check for footer1.xml.rels file.
+    xmlDocPtr pXmlRels = parseExport("word/_rels/footer1.xml.rels");
+    if (!pXmlRels)
+        return;
+    // Check the value of Target which is http://www.google.com/.
+    assertXPath(pXmlRels,"/rels:Relationships/rels:Relationship","Target","http://www.google.com/");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
