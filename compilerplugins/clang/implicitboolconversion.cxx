@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 template<> struct std::iterator_traits<ExprIterator> {
@@ -183,11 +184,11 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
             } else {
                 std::ptrdiff_t n = j - expr->arg_begin();
                 assert(n >= 0);
-                assert(n < t->getNumArgs() || t->isVariadic());
-                if (n < t->getNumArgs()
-                    && !(t->getArgType(n)->isSpecificBuiltinType(
+                assert(n < compat::getNumParams(*t) || t->isVariadic());
+                if (n < compat::getNumParams(*t)
+                    && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
                              BuiltinType::Int)
-                         || (t->getArgType(n)->isSpecificBuiltinType(
+                         || (compat::getParamType(*t, n)->isSpecificBuiltinType(
                                  BuiltinType::UInt))))
                 {
                     reportWarning(i);
@@ -494,8 +495,10 @@ bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
 bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
     bool ext = hasCLanguageLinkageType(decl)
         && decl->isThisDeclarationADefinition()
-        && (decl->getResultType()->isSpecificBuiltinType(BuiltinType::Int)
-            || decl->getResultType()->isSpecificBuiltinType(BuiltinType::UInt));
+        && (compat::getReturnType(*decl)->isSpecificBuiltinType(
+                BuiltinType::Int)
+            || compat::getReturnType(*decl)->isSpecificBuiltinType(
+                BuiltinType::UInt));
     if (ext) {
         assert(!externCIntFunctionDefinition);
         externCIntFunctionDefinition = true;
