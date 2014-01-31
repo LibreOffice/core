@@ -1317,7 +1317,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     rtl_TextEncoding eCharset):
     m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(INET_PROT_HTTP)
 {
-    setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
+    setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true,
                  FSysStyle(0));
 }
 
