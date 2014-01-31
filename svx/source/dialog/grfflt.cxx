@@ -77,7 +77,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSmooth( pWindow, rGraphic, 0.7, RID_SVX_GRFFILTER_DLG_SEPIA);
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSmooth(pWindow, rGraphic, 0.7);
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
                     if( aDlg->Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );

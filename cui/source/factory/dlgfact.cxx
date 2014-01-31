@@ -1536,8 +1536,8 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
     return 0;
 }
 
-AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth ( Window* pParent,
-                                            const Graphic& rGraphic, double nRadius, sal_uInt32)
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(Window* pParent,
+                                            const Graphic& rGraphic, double nRadius)
 {
     GraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
