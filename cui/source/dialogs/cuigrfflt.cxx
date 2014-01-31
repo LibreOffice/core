@@ -18,6 +18,7 @@
  */
 
 #include <tools/shl.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
@@ -143,7 +144,7 @@ IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplModifyHdl)
     return 0;
 }
 
-GraphicFilterDialog::PreviewWindow::PreviewWindow(Window* pParent,
+GraphicPreviewWindow::GraphicPreviewWindow(Window* pParent,
     const WinBits nStyle)
     : Control(pParent, nStyle)
     , mpOrigGraphic(NULL)
@@ -152,14 +153,25 @@ GraphicFilterDialog::PreviewWindow::PreviewWindow(Window* pParent,
 {
 }
 
-Size GraphicFilterDialog::PreviewWindow::GetOptimalSize() const
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGraphicPreviewWindow(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new GraphicPreviewWindow(pParent, nWinBits);
+}
+
+Size GraphicPreviewWindow::GetOptimalSize() const
 {
     return LogicToPixel(Size(81, 73), MAP_APPFONT);
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
+void GraphicPreviewWindow::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
 
@@ -183,20 +195,18 @@ void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------------
 
-void GraphicFilterDialog::PreviewWindow::SetPreview( const Graphic& rGraphic )
+void GraphicPreviewWindow::SetPreview( const Graphic& rGraphic )
 {
     maPreview = rGraphic;
-
-    if( maPreview.IsAnimated() || maPreview.IsTransparent() )
-        Invalidate();
-    else
-        Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+    Invalidate();
 }
 
-void GraphicFilterDialog::PreviewWindow::ScaleImageToFit()
+void GraphicPreviewWindow::ScaleImageToFit()
 {
     if (!mpOrigGraphic)
         return;
+
+    maScaledOrig = *mpOrigGraphic;
 
     const Size  aPreviewSize( GetOutputSizePixel() );
     Size aSizePixel(LogicToPixel(mpOrigGraphic->GetPrefSize(),
@@ -229,12 +239,14 @@ void GraphicFilterDialog::PreviewWindow::ScaleImageToFit()
             BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
 
             if( aBmpEx.Scale( aGrfSize, BMP_SCALE_DEFAULT ) )
-                maPreview = aBmpEx;
+                maScaledOrig = aBmpEx;
         }
     }
+
+    maModifyHdl.Call(this);
 }
 
-void GraphicFilterDialog::PreviewWindow::Resize()
+void GraphicPreviewWindow::Resize()
 {
     Control::Resize();
     ScaleImageToFit();
@@ -250,14 +262,12 @@ GraphicFilterDialog::GraphicFilterDialog(Window* pParent,
 {
     bIsBitmap = rGraphic.GetType() == GRAPHIC_BITMAP;
 
-    get(mpPreview, "preview");
-    mpPreview->init(&rGraphic);
-
     maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
-    maTimer.SetTimeout( 100 );
-    ImplModifyHdl( NULL );
-}
+    maTimer.SetTimeout( 5 );
 
+    get(mpPreview, "preview");
+    mpPreview->init(&rGraphic, maModifyHdl);
+}
 
 // -----------------------------------------------------------------------------
 
@@ -366,22 +376,15 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterSmooth -
 // ------------------
 
-GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius) :
-    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SMOOTH ), rGraphic ),
-    maFtRadius   ( this, CUI_RES( DLG_FILTERSMOOTH_FT_RADIUS ) ),
-    maMtrRadius  ( this, CUI_RES( DLG_FILTERSMOOTH_MTR_RADIUS ) )
+GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius)
+    : GraphicFilterDialog(pParent, "SmoothDialog",
+        "cui/ui/smoothdialog.ui", rGraphic)
 {
-    FreeResource();
+    get(mpMtrRadius, "radius");
 
-    maMtrRadius.SetValue( nRadius* 10  );
-    maMtrRadius.SetModifyHdl( GetModifyHdl() );
-    maMtrRadius.GrabFocus();
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterSmooth::~GraphicFilterSmooth()
-{
+    mpMtrRadius->SetValue( nRadius* 10  );
+    mpMtrRadius->SetModifyHdl( GetModifyHdl() );
+    mpMtrRadius->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------

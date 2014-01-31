@@ -235,6 +235,9 @@
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Graphic Preview" name="cuilo-GraphicPreviewWindow"
+                        generic-name="Graphic Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Writer Number Preview" name="swuilo-NumberingPreview"
                         generic-name="Writer Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

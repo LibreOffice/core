@@ -80,40 +80,40 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
-class GraphicFilterDialog : public ModalDialog
+class GraphicPreviewWindow : public Control
 {
 private:
+    const Graphic* mpOrigGraphic;
+    Link      maModifyHdl;
+    Graphic   maScaledOrig;
+    Graphic   maPreview;
+    double    mfScaleX;
+    double    mfScaleY;
 
-    class PreviewWindow : public Control
+    virtual void Paint(const Rectangle& rRect);
+    virtual void Resize();
+    virtual Size GetOptimalSize() const;
+
+    void ScaleImageToFit();
+
+public:
+
+    GraphicPreviewWindow(Window* pParent, WinBits nStyle);
+    void init(const Graphic* pOrigGraphic, const Link& rLink)
     {
-    private:
-        const Graphic* mpOrigGraphic;
-        Graphic   maScaledOrig;
-        Graphic   maPreview;
-        double    mfScaleX;
-        double    mfScaleY;
+        mpOrigGraphic = pOrigGraphic;
+        maModifyHdl = rLink;
+        ScaleImageToFit();
+    }
 
-        virtual void Paint(const Rectangle& rRect);
-        virtual void Resize();
-        virtual Size GetOptimalSize() const;
+    void            SetPreview(const Graphic& rGraphic);
+    const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
+    double          GetScaleX() const { return mfScaleX; }
+    double          GetScaleY() const { return mfScaleY; }
+};
 
-        void ScaleImageToFit();
-
-    public:
-
-        PreviewWindow(Window* pParent, WinBits nStyle);
-        void init(const Graphic *pOrigGraphic)
-        {
-            mpOrigGraphic = pOrigGraphic;
-            ScaleImageToFit();
-        }
-
-        void            SetPreview(const Graphic& rGraphic);
-        const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
-        double          GetScaleX() const { return mfScaleX; }
-        double          GetScaleY() const { return mfScaleY; }
-    };
-
+class GraphicFilterDialog : public ModalDialog
+{
 private:
 
     Timer           maTimer;
@@ -125,7 +125,7 @@ private:
     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:
-    PreviewWindow*  mpPreview;
+    GraphicPreviewWindow*  mpPreview;
 
     const Link&     GetModifyHdl() const { return maModifyHdl; }
     const Size&     GetGraphicSizePixel() const { return maSizePixel; }
@@ -142,20 +142,17 @@ public:
 // - GraphicFilterSmooth -
 // -------------------------
 
-class GraphicFilterSmooth : public oldGraphicFilterDialog
+class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
-
-    FixedText       maFtRadius;
-    NumericField    maMtrRadius;
+    NumericField*   mpMtrRadius;
 
 public:
 
     GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius);
-    ~GraphicFilterSmooth();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    double          GetRadius() const { return maMtrRadius.GetValue() / 10.0; }
+    double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
 };
 
 // -----------------------

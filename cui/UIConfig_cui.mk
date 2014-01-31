@@ -147,6 +147,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/showcoldialog \
 	cui/uiconfig/ui/similaritysearchdialog \
 	cui/uiconfig/ui/slantcornertabpage \
+	cui/uiconfig/ui/smoothdialog \
 	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/spellingdialog \
 	cui/uiconfig/ui/spelloptionsdialog \

@@ -140,6 +140,7 @@ IMPL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
+IMPL_ABSTDLG_BASE(oldAbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasteDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
@@ -877,6 +878,11 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
     return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
 }
 
+Graphic oldAbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY )
+{
+    return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
+}
+
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
@@ -1503,7 +1509,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmb
                                             sal_uInt32)
 {
     oldGraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
-    return new AbstractGraphicFilterDialog_Impl( pDlg );
+    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPosterSepia (Window* pParent,
@@ -1526,14 +1532,14 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
     }
 
     if ( pDlg )
-        return new AbstractGraphicFilterDialog_Impl( pDlg );
+        return new oldAbstractGraphicFilterDialog_Impl( pDlg );
     return 0;
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth ( Window* pParent,
                                             const Graphic& rGraphic, double nRadius, sal_uInt32)
 {
-    oldGraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
+    GraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1541,7 +1547,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSol
                                             const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
 {
     oldGraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
-    return new AbstractGraphicFilterDialog_Impl( pDlg );
+    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,
@@ -1559,7 +1565,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
     }
 
     if ( pDlg )
-        return new AbstractGraphicFilterDialog_Impl( pDlg );
+        return new oldAbstractGraphicFilterDialog_Impl( pDlg );
     return 0;
 }
 
