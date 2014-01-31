@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "comphelper_module.hxx"
 
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -25,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vector>
 
@@ -226,8 +226,7 @@ OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static( 
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
-    return aServiceName == ServiceName;
+    return cppu::supportsService(this, ServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
