@@ -915,9 +915,16 @@ public:
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
 
 private:
-    void FillSimple(
+    void FillSeriesSimple(
         ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
         SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
+
+    void FillAutoSimple(
+        SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
+        SCCOLROW& rInner, SCCOLROW& rCol, SCCOLROW& rRow,
+        sal_uLong nActFormCnt, sal_uLong nMaxFormCnt,
+        bool bHasFiltered, bool bVertical, bool bPositive,
+        ScProgress* pProgress, sal_uLong& rProgress );
 
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,

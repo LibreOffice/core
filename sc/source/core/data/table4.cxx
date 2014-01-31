@@ -484,16 +484,16 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     bool bVertical = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP);
     bool bPositive = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_RIGHT);
 
-    sal_uLong nCol = 0;
-    sal_uLong nRow = 0;
-    sal_uLong& rInner = bVertical ? nRow : nCol;        // loop variables
-    sal_uLong& rOuter = bVertical ? nCol : nRow;
-    sal_uLong nOStart;
-    sal_uLong nOEnd;
-    sal_uLong nIStart;
-    sal_uLong nIEnd;
-    sal_uLong nISrcStart;
-    sal_uLong nISrcEnd;
+    SCCOLROW nCol = 0;
+    SCCOLROW nRow = 0;
+    SCCOLROW& rInner = bVertical ? nRow : nCol;        // loop variables
+    SCCOLROW& rOuter = bVertical ? nCol : nRow;
+    SCCOLROW nOStart;
+    SCCOLROW nOEnd;
+    SCCOLROW nIStart;
+    SCCOLROW nIEnd;
+    SCCOLROW nISrcStart;
+    SCCOLROW nISrcEnd;
     ScRange aFillRange;
 
     if (bVertical)
@@ -568,7 +568,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         const ScPatternAttr* pSrcPattern = NULL;
         const ScStyleSheet* pStyleSheet = NULL;
-        sal_uLong nAtSrc = nISrcStart;
+        SCCOLROW nAtSrc = nISrcStart;
         ScPatternAttr* pNewPattern = NULL;
         bool bGetPattern = true;
         rInner = nIStart;
@@ -744,159 +744,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         }
         else if (eFillCmd == FILL_SIMPLE)           // fill with pattern/sample
         {
-            sal_uLong nSource = nISrcStart;
-            double nDelta;
-            if ( (nScFillModeMouseModifier & KEY_MOD1) )
-                nDelta = 0.0;
-            else if ( bPositive )
-                nDelta = 1.0;
-            else
-                nDelta = -1.0;
-            double nVal = 0.0;
-            sal_uLong nFormulaCounter = nActFormCnt;
-            bool bGetCell = true;
-            sal_uInt16 nCellDigits = 0;
-            short nHeadNoneTail = 0;
-            sal_Int32 nStringValue = 0;
-            OUString aValue;
-            ScCellValue aSrcCell;
-            CellType eCellType = CELLTYPE_NONE;
-            bool bIsOrdinalSuffix = false;
-
-            rInner = nIStart;
-            while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
-            {
-                if(!ColHidden(nCol) && !RowHidden(nRow))
-                {
-                    if ( bGetCell )
-                    {
-                        if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                            aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nSource));
-                        else                // rInner&:=nCol, rOuter&:=nRow
-                            aSrcCell = aCol[nSource].GetCellValue(static_cast<SCROW>(nRow));
-
-                        bGetCell = false;
-                        if (!aSrcCell.isEmpty())
-                        {
-                            eCellType = aSrcCell.meType;
-                            switch (eCellType)
-                            {
-                                case CELLTYPE_VALUE:
-                                    nVal = aSrcCell.mfValue;
-                                    break;
-                                case CELLTYPE_STRING:
-                                case CELLTYPE_EDIT:
-                                    if ( eCellType == CELLTYPE_STRING )
-                                        aValue = aSrcCell.mpString->getString();
-                                    else
-                                        aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, pDocument);
-                                    if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
-                                    {
-                                        nCellDigits = 0;    // look at each source cell individually
-                                        nHeadNoneTail = lcl_DecompValueString(
-                                                aValue, nStringValue, &nCellDigits );
-
-                                        bIsOrdinalSuffix = aValue.equals(
-                                                ScGlobal::GetOrdinalSuffix( nStringValue));
-                                    }
-                                    break;
-                                default:
-                                    {
-                                        // added to avoid warnings
-                                    }
-                            }
-                        }
-                        else
-                            eCellType = CELLTYPE_NONE;
-                    }
-
-                    switch (eCellType)
-                    {
-                        case CELLTYPE_VALUE:
-                            aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal + nDelta);
-                            break;
-                        case CELLTYPE_STRING:
-                        case CELLTYPE_EDIT:
-                            if ( nHeadNoneTail )
-                            {
-                                // #i48009# with the "nStringValue+(long)nDelta" expression within the
-                                // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
-                                // so nNextValue is now calculated ahead.
-                                sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
-
-                                OUString aStr;
-                                if ( nHeadNoneTail < 0 )
-                                {
-                                    setSuffixCell(
-                                        aCol[nCol], static_cast<SCROW>(nRow),
-                                        nNextValue, nCellDigits, aValue,
-                                        eCellType, bIsOrdinalSuffix);
-                                }
-                                else
-                                {
-                                    aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
-                                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), aStr);
-                                }
-                            }
-                            else
-                                aSrcCell.commit(aCol[nCol], nRow);
-
-                            break;
-                        case CELLTYPE_FORMULA :
-                            FillFormula(
-                                aSrcCell.mpFormula,
-                                    static_cast<SCCOL>(nCol),
-                                    static_cast<SCROW>(nRow), (rInner == nIEnd) );
-                            if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
-                                nMaxFormCnt = nFormulaCounter - nActFormCnt;
-                            break;
-                        default:
-                            {
-                                // added to avoid warnings
-                            }
-                    }
-
-                    if (nSource==nISrcEnd)
-                    {
-                        if ( nSource != nISrcStart )
-                        {   // More than one source cell
-                            nSource = nISrcStart;
-                            bGetCell = true;
-                        }
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
-                        {
-                            if ( bPositive )
-                                nDelta += 1.0;
-                            else
-                                nDelta -= 1.0;
-                        }
-                        nFormulaCounter = nActFormCnt;
-                    }
-                    else if (bPositive)
-                    {
-                        ++nSource;
-                        bGetCell = true;
-                    }
-                    else
-                    {
-                        --nSource;
-                        bGetCell = true;
-                    }
-                }
-
-                if (rInner == nIEnd) break;
-                if (bPositive) ++rInner; else --rInner;
-
-                //  Progress in inner loop only for expensive cells,
-                //  and even then not individually for each one
-
-                ++nProgress;
-                if ( pProgress && (eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT) )
-                    pProgress->SetStateOnPercent( nProgress );
-
-            }
-            if (pProgress)
-                pProgress->SetStateOnPercent( nProgress );
+            FillAutoSimple(
+                nISrcStart, nISrcEnd, nIStart, nIEnd, rInner, nCol, nRow,
+                nActFormCnt, nMaxFormCnt, bHasFiltered, bVertical, bPositive, pProgress, nProgress);
         }
         else
         {
@@ -1283,7 +1133,7 @@ bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOL
 
 }
 
-void ScTable::FillSimple(
+void ScTable::FillSeriesSimple(
     ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
     SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
 {
@@ -1394,6 +1244,163 @@ void ScTable::FillSimple(
             }
         }
     }
+}
+
+void ScTable::FillAutoSimple(
+    SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
+    SCCOLROW& rInner, SCCOLROW& rCol, SCCOLROW& rRow, sal_uLong nActFormCnt,
+    sal_uLong nMaxFormCnt, bool bHasFiltered, bool bVertical, bool bPositive,
+    ScProgress* pProgress, sal_uLong& rProgress )
+{
+    SCCOLROW nSource = nISrcStart;
+    double nDelta;
+    if ( (nScFillModeMouseModifier & KEY_MOD1) )
+        nDelta = 0.0;
+    else if ( bPositive )
+        nDelta = 1.0;
+    else
+        nDelta = -1.0;
+    sal_uLong nFormulaCounter = nActFormCnt;
+    bool bGetCell = true;
+    sal_uInt16 nCellDigits = 0;
+    short nHeadNoneTail = 0;
+    sal_Int32 nStringValue = 0;
+    OUString aValue;
+    ScCellValue aSrcCell;
+    CellType eCellType = CELLTYPE_NONE;
+    bool bIsOrdinalSuffix = false;
+
+    rInner = nIStart;
+    while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
+    {
+        if(!ColHidden(rCol) && !RowHidden(rRow))
+        {
+            if ( bGetCell )
+            {
+                if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
+                    aSrcCell = aCol[rCol].GetCellValue(static_cast<SCROW>(nSource));
+                else                // rInner&:=nCol, rOuter&:=nRow
+                    aSrcCell = aCol[nSource].GetCellValue(static_cast<SCROW>(rRow));
+
+                bGetCell = false;
+                if (!aSrcCell.isEmpty())
+                {
+                    eCellType = aSrcCell.meType;
+                    switch (eCellType)
+                    {
+                        case CELLTYPE_STRING:
+                        case CELLTYPE_EDIT:
+                            if ( eCellType == CELLTYPE_STRING )
+                                aValue = aSrcCell.mpString->getString();
+                            else
+                                aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, pDocument);
+                            if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
+                            {
+                                nCellDigits = 0;    // look at each source cell individually
+                                nHeadNoneTail = lcl_DecompValueString(
+                                        aValue, nStringValue, &nCellDigits );
+
+                                bIsOrdinalSuffix = aValue.equals(
+                                        ScGlobal::GetOrdinalSuffix( nStringValue));
+                            }
+                            break;
+                        default:
+                            {
+                                // added to avoid warnings
+                            }
+                    }
+                }
+                else
+                    eCellType = CELLTYPE_NONE;
+            }
+
+            switch (eCellType)
+            {
+                case CELLTYPE_VALUE:
+                    aCol[rCol].SetValue(static_cast<SCROW>(rRow), aSrcCell.mfValue + nDelta);
+                    break;
+                case CELLTYPE_STRING:
+                case CELLTYPE_EDIT:
+                    if ( nHeadNoneTail )
+                    {
+                        // #i48009# with the "nStringValue+(long)nDelta" expression within the
+                        // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
+                        // so nNextValue is now calculated ahead.
+                        sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
+
+                        OUString aStr;
+                        if ( nHeadNoneTail < 0 )
+                        {
+                            setSuffixCell(
+                                aCol[rCol], static_cast<SCROW>(rRow),
+                                nNextValue, nCellDigits, aValue,
+                                eCellType, bIsOrdinalSuffix);
+                        }
+                        else
+                        {
+                            aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
+                            aCol[rCol].SetRawString(static_cast<SCROW>(rRow), aStr);
+                        }
+                    }
+                    else
+                        aSrcCell.commit(aCol[rCol], rRow);
+
+                    break;
+                case CELLTYPE_FORMULA :
+                    FillFormula(
+                        aSrcCell.mpFormula,
+                            static_cast<SCCOL>(rCol),
+                            static_cast<SCROW>(rRow), (rInner == nIEnd) );
+                    if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
+                        nMaxFormCnt = nFormulaCounter - nActFormCnt;
+                    break;
+                default:
+                    {
+                        // added to avoid warnings
+                    }
+            }
+
+            if (nSource==nISrcEnd)
+            {
+                if ( nSource != nISrcStart )
+                {   // More than one source cell
+                    nSource = nISrcStart;
+                    bGetCell = true;
+                }
+                if ( !(nScFillModeMouseModifier & KEY_MOD1) )
+                {
+                    if ( bPositive )
+                        nDelta += 1.0;
+                    else
+                        nDelta -= 1.0;
+                }
+                nFormulaCounter = nActFormCnt;
+            }
+            else if (bPositive)
+            {
+                ++nSource;
+                bGetCell = true;
+            }
+            else
+            {
+                --nSource;
+                bGetCell = true;
+            }
+        }
+
+        if (rInner == nIEnd) break;
+        if (bPositive) ++rInner; else --rInner;
+
+        //  Progress in inner loop only for expensive cells,
+        //  and even then not individually for each one
+
+        ++rProgress;
+        if ( pProgress && (eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT) )
+            pProgress->SetStateOnPercent( rProgress );
+
+    }
+    if (pProgress)
+        pProgress->SetStateOnPercent( rProgress );
 }
 
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -1562,7 +1569,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {
-                FillSimple(aSrcCell, rInner, nIMin, nIMax, nCol, nRow, bVertical, pProgress, nProgress);
+                FillSeriesSimple(aSrcCell, rInner, nIMin, nIMax, nCol, nRow, bVertical, pProgress, nProgress);
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
