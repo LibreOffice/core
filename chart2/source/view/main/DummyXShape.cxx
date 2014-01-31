@@ -351,9 +351,8 @@ void DummyPieSegment2D::render()
 {
     DummyChart* pChart = getRootShape();
 
-    while(mfUnitCircleWidthAngleDegree>360)
-        mfUnitCircleWidthAngleDegree -= 360.0;
-    while(mfUnitCircleWidthAngleDegree<0)
+    mfUnitCircleWidthAngleDegree = std::fmod(mfUnitCircleWidthAngleDegree, 360.0);
+    if(mfUnitCircleWidthAngleDegree)
         mfUnitCircleWidthAngleDegree += 360.0;
 
     pChart->m_GLRender.GeneratePieSegment2D(mfUnitCircleInnerRadius, mfUnitCircleOuterRadius,
