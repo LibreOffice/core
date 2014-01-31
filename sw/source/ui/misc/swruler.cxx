@@ -134,7 +134,7 @@ void SwCommentRuler::DrawCommentControl()
     }
 
     // Draw label
-    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDeactiveTextColor() );
+    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDarkShadowColor() );
     maVirDev.SetTextColor( aTextColor );
     // FIXME Expected font size?
     maVirDev.DrawText( aLabelPos, aLabel );
@@ -278,7 +278,7 @@ Color SwCommentRuler::GetFadedColor(const Color &rHighColor, const Color &rLowCo
         return mbIsHighlighted ? rHighColor : rLowColor;
 
     Color aColor = rHighColor;
-    aColor.Merge( rLowColor, mnFadeRate * 255/100.f );
+    aColor.Merge( rLowColor, mnFadeRate * 255/100 );
     return aColor;
 }
 
