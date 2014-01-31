@@ -321,6 +321,9 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 
 void SdrGrafObj::onGraphicChanged()
 {
+    if (!pGraphic || pGraphic->IsSwappedOut()) // don't force swap-in for this
+        return;
+
     OUString aName;
     OUString aTitle;
     OUString aDesc;
