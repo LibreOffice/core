@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_0bc5f15a",
+        "filename": "offapi/com/sun/star/chart2/Axis.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-31T03:10:07Z",
+      "side": 1,
+      "message": "Please add a @since tag to the documentation.",
+      "revId": "fa9280a3ca0e93fcfc33550b5d063a790e7d82b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_2ba1d5a9",
+        "filename": "offapi/com/sun/star/chart2/Axis.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-31T03:10:07Z",
+      "side": 1,
+      "message": "Please add a @since tag to the documentation.",
+      "revId": "fa9280a3ca0e93fcfc33550b5d063a790e7d82b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
