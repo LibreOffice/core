@@ -55,7 +55,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::document;
@@ -212,12 +212,6 @@ OUString FilterDetect_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
-sal_Bool SAL_CALL FilterDetect_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME1;
-}
-
 Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
@@ -245,7 +239,7 @@ OUString SAL_CALL FilterDetect::getImplementationName(  )
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return FilterDetect_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )

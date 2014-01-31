@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
@@ -57,12 +58,6 @@ OUString MyJob_getImplementationName ()
 
 #define SERVICE_NAME "com.sun.star.task.Job"
 
-sal_Bool SAL_CALL MyJob_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
 Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
@@ -90,7 +85,7 @@ OUString SAL_CALL MyJob::getImplementationName(  )
 sal_Bool SAL_CALL MyJob::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return MyJob_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MyJob::getSupportedServiceNames(  )

@@ -23,15 +23,14 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 MyListener::MyListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : m_xSMGR(xSMGR)
 {}
 
-
 MyListener::~MyListener()
 {}
-
 
 css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
     throw (css::lang::IllegalArgumentException,
@@ -105,13 +104,11 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     return css::uno::Any();
 }
 
-
 ::rtl::OUString SAL_CALL MyListener::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return ::rtl::OUString( MYLISTENER_IMPLEMENTATIONNAME );
 }
-
 
 css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
@@ -121,14 +118,11 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNa
     return lNames;
 }
 
-
 sal_Bool SAL_CALL MyListener::supportsService(const ::rtl::OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
-    return sServiceName== MYLISTENER_SERVICENAME ||
-           sServiceName == "com.sun.star.task.Job";
+    return cppu::supportsService(this, sServiceName);
 }
-
 
 css::uno::Reference< css::uno::XInterface > MyListener::st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {

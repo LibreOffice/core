@@ -30,6 +30,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::awt;
 using namespace com::sun::star::frame;
@@ -167,13 +168,6 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
     return ::rtl::OUString( MYPROTOCOLHANDLER_IMPLEMENTATIONNAME );
 }
 
-sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == MYPROTOCOLHANDLER_SERVICENAME ||
-           ServiceName == "com.sun.star.frame.ProtocolHandler";
-}
-
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
@@ -200,7 +194,7 @@ Reference< XInterface > SAL_CALL MyProtocolHandler_createInstance( const Referen
 sal_Bool SAL_CALL MyProtocolHandler::supportsService( const ::rtl::OUString& rServiceName )
     throw (RuntimeException)
 {
-    return MyProtocolHandler_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler::getSupportedServiceNames(  )
@@ -499,7 +493,6 @@ BaseDispatch::BaseDispatch( const Reference< XComponentContext > &rxContext,
         , mbButtonEnabled( sal_True )
 {
 }
-
 
 BaseDispatch::~BaseDispatch()
 {
