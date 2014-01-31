@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/CommandInfoChange.hpp>
@@ -30,25 +24,20 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <ucbhelper/contenthelper.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/contentinfo.hxx>
+#include <ucbhelper/providerhelper.hxx>
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
-#include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/contenthelper.hxx>
-#include <ucbhelper/providerhelper.hxx>
-#include <ucbhelper/contentinfo.hxx>
 
 using namespace com::sun::star;
 
 namespace ucbhelper_impl
 {
-
-//=========================================================================
-//
-// class PropertyEventSequence.
-//
-//=========================================================================
 
 class PropertyEventSequence
 {
@@ -65,12 +54,6 @@ public:
     const uno::Sequence< beans::PropertyChangeEvent >& getEvents()
     { m_aSeq.realloc( m_nPos ); return m_aSeq; }
 };
-
-//=========================================================================
-//
-// PropertiesEventListenerMap.
-//
-//=========================================================================
 
 typedef void* XPropertiesChangeListenerPtr; // -> Compiler problems!
 
@@ -100,23 +83,11 @@ typedef boost::unordered_map
 >
 PropertiesEventListenerMap;
 
-//=========================================================================
-//
-// PropertyChangeListenerContainer.
-//
-//=========================================================================
-
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
 <
     OUString,
     OUStringHash
 > PropertyChangeListeners;
-
-//=========================================================================
-//
-// struct ContentImplHelper_Impl
-//
-//=========================================================================
 
 struct ContentImplHelper_Impl
 {
@@ -149,14 +120,6 @@ struct ContentImplHelper_Impl
 
 using namespace ucbhelper_impl;
 
-//=========================================================================
-//=========================================================================
-//
-// ContentImplHelper Implementation.
-//
-//=========================================================================
-//=========================================================================
-
 namespace ucbhelper {
 
 ContentImplHelper::ContentImplHelper(
@@ -172,18 +135,11 @@ ContentImplHelper::ContentImplHelper(
 {
 }
 
-//=========================================================================
 // virtual
 ContentImplHelper::~ContentImplHelper()
 {
     delete m_pImpl;
 }
-
-//=========================================================================
-//
-// XInterface methods.
-//
-//=========================================================================
 
 void SAL_CALL ContentImplHelper::acquire()
     throw()
@@ -222,12 +178,6 @@ uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : cppu::OWeakObject::queryInterface( rType );
 }
 
-//=========================================================================
-//
-// XTypeProvider methods.
-//
-//=========================================================================
-
 XTYPEPROVIDER_IMPL_10( ContentImplHelper,
                        lang::XTypeProvider,
                        lang::XServiceInfo,
@@ -240,33 +190,13 @@ XTYPEPROVIDER_IMPL_10( ContentImplHelper,
                        beans::XPropertySetInfoChangeNotifier,
                        container::XChild );
 
-//=========================================================================
-//
-// XServiceInfo methods.
-//
-//=========================================================================
-
 // virtual
 sal_Bool SAL_CALL ContentImplHelper::supportsService(
                                             const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getConstArray();
-    for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if ( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-//=========================================================================
-//
-// XComponent methods.
-//
-//=========================================================================
 
 // virtual
 void SAL_CALL ContentImplHelper::dispose()
@@ -316,7 +246,6 @@ void SAL_CALL ContentImplHelper::dispose()
     }
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
@@ -331,7 +260,6 @@ void SAL_CALL ContentImplHelper::addEventListener(
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
@@ -343,12 +271,6 @@ void SAL_CALL ContentImplHelper::removeEventListener(
         m_pImpl->m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//=========================================================================
-//
-// XContent methods.
-//
-//=========================================================================
-
 // virtual
 uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
 ContentImplHelper::getIdentifier()
@@ -357,7 +279,6 @@ ContentImplHelper::getIdentifier()
     return m_xIdentifier;
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::addContentEventListener(
         const uno::Reference< com::sun::star::ucb::XContentEventListener >& Listener )
@@ -372,7 +293,6 @@ void SAL_CALL ContentImplHelper::addContentEventListener(
     m_pImpl->m_pContentEventListeners->addInterface( Listener );
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removeContentEventListener(
         const uno::Reference< com::sun::star::ucb::XContentEventListener >& Listener )
@@ -384,12 +304,6 @@ void SAL_CALL ContentImplHelper::removeContentEventListener(
         m_pImpl->m_pContentEventListeners->removeInterface( Listener );
 }
 
-//=========================================================================
-//
-// XCommandProcessor methods.
-//
-//=========================================================================
-
 // virtual
 sal_Int32 SAL_CALL ContentImplHelper::createCommandIdentifier()
     throw( uno::RuntimeException )
@@ -399,12 +313,6 @@ sal_Int32 SAL_CALL ContentImplHelper::createCommandIdentifier()
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
 }
-
-//=========================================================================
-//
-// XPropertiesChangeNotifier methods.
-//
-//=========================================================================
 
 // virtual
 void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
@@ -439,7 +347,6 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
     }
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
         const uno::Sequence< OUString >& PropertyNames,
@@ -472,12 +379,6 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
     }
 }
 
-//=========================================================================
-//
-// XCommandInfoChangeNotifier methods.
-//
-//=========================================================================
-
 // virtual
 void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
         const uno::Reference< com::sun::star::ucb::XCommandInfoChangeListener >& Listener )
@@ -492,7 +393,6 @@ void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
     m_pImpl->m_pCommandChangeListeners->addInterface( Listener );
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
         const uno::Reference< com::sun::star::ucb::XCommandInfoChangeListener >& Listener )
@@ -503,12 +403,6 @@ void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
     if ( m_pImpl->m_pCommandChangeListeners )
         m_pImpl->m_pCommandChangeListeners->removeInterface( Listener );
 }
-
-//=========================================================================
-//
-// XPropertyContainer methods.
-//
-//=========================================================================
 
 // virtual
 void SAL_CALL ContentImplHelper::addProperty(
@@ -522,10 +416,8 @@ void SAL_CALL ContentImplHelper::addProperty(
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    //////////////////////////////////////////////////////////////////////
     // Make sure a property with the requested name does not already
     // exist in dynamic and static(!) properties.
-    //////////////////////////////////////////////////////////////////////
 
     // @@@ Need real command environment here, but where to get it from?
     //     XPropertyContainer interface should be replaced by
@@ -538,10 +430,7 @@ void SAL_CALL ContentImplHelper::addProperty(
         throw beans::PropertyExistException();
     }
 
-    //////////////////////////////////////////////////////////////////////
     // Add a new dynamic property.
-    //////////////////////////////////////////////////////////////////////
-
     // Open/create persistent property set.
     uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xSet(
                                     getAdditionalPropertySet( sal_True ) );
@@ -606,7 +495,6 @@ void SAL_CALL ContentImplHelper::addProperty(
     }
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
     throw( beans::UnknownPropertyException,
@@ -637,10 +525,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
         throw;
     }
 
-    //////////////////////////////////////////////////////////////////////
     // Try to remove property from dynamic property set.
-    //////////////////////////////////////////////////////////////////////
-
     // Open persistent property set, if exists.
     uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xSet(
         getAdditionalPropertySet( sal_False ) );
@@ -709,12 +594,6 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
     }
 }
 
-//=========================================================================
-//
-// XPropertySetInfoChangeNotifier methods.
-//
-//=========================================================================
-
 // virtual
 void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
         const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
@@ -729,7 +608,6 @@ void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removePropertySetInfoChangeListener(
         const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
@@ -740,12 +618,6 @@ void SAL_CALL ContentImplHelper::removePropertySetInfoChangeListener(
     if ( m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners->removeInterface( Listener );
 }
-
-//=========================================================================
-//
-// XChild methods.
-//
-//=========================================================================
 
 // virtual
 uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
@@ -770,7 +642,6 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
     return xParent;
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::setParent(
                                     const uno::Reference< uno::XInterface >& )
@@ -778,12 +649,6 @@ void SAL_CALL ContentImplHelper::setParent(
 {
     throw lang::NoSupportException();
 }
-
-//=========================================================================
-//
-// Non-interface methods
-//
-//=========================================================================
 
 uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
 ContentImplHelper::getAdditionalPropertySet( sal_Bool bCreate )
@@ -793,7 +658,6 @@ ContentImplHelper::getAdditionalPropertySet( sal_Bool bCreate )
                             m_xIdentifier->getContentIdentifier(), bCreate );
 }
 
-//=========================================================================
 sal_Bool ContentImplHelper::renameAdditionalPropertySet(
     const OUString& rOldKey,
     const OUString& rNewKey,
@@ -803,7 +667,6 @@ sal_Bool ContentImplHelper::renameAdditionalPropertySet(
                                             rOldKey, rNewKey, bRecursive );
 }
 
-//=========================================================================
 sal_Bool ContentImplHelper::copyAdditionalPropertySet(
     const OUString& rSourceKey,
     const OUString& rTargetKey,
@@ -813,14 +676,12 @@ sal_Bool ContentImplHelper::copyAdditionalPropertySet(
                                         rSourceKey, rTargetKey, bRecursive );
 }
 
-//=========================================================================
 sal_Bool ContentImplHelper::removeAdditionalPropertySet( sal_Bool bRecursive )
 {
     return m_xProvider->removeAdditionalPropertySet(
                     m_xIdentifier->getContentIdentifier(), bRecursive );
 }
 
-//=========================================================================
 void ContentImplHelper::notifyPropertiesChange(
     const uno::Sequence< beans::PropertyChangeEvent >& evt ) const
 {
@@ -906,7 +767,6 @@ void ContentImplHelper::notifyPropertiesChange(
     }
 }
 
-//=========================================================================
 void ContentImplHelper::notifyPropertySetInfoChange(
     const beans::PropertySetInfoChangeEvent& evt ) const
 {
@@ -925,7 +785,6 @@ void ContentImplHelper::notifyPropertySetInfoChange(
     }
 }
 
-//=========================================================================
 void ContentImplHelper::notifyContentEvent(
     const com::sun::star::ucb::ContentEvent& evt ) const
 {
@@ -945,7 +804,6 @@ void ContentImplHelper::notifyContentEvent(
     }
 }
 
-//=========================================================================
 void ContentImplHelper::inserted()
 {
     // Content is not yet registered at provider.
@@ -968,7 +826,6 @@ void ContentImplHelper::inserted()
     }
 }
 
-//=========================================================================
 void ContentImplHelper::deleted()
 {
     uno::Reference< com::sun::star::ucb::XContent > xThis = this;
@@ -998,7 +855,6 @@ void ContentImplHelper::deleted()
     m_xProvider->removeContent( this );
 }
 
-//=========================================================================
 sal_Bool ContentImplHelper::exchange(
     const uno::Reference< com::sun::star::ucb::XContentIdentifier >& rNewId )
 {
@@ -1036,7 +892,6 @@ sal_Bool ContentImplHelper::exchange(
     return sal_True;
 }
 
-//=========================================================================
 uno::Reference< com::sun::star::ucb::XCommandInfo >
 ContentImplHelper::getCommandInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
@@ -1054,7 +909,6 @@ ContentImplHelper::getCommandInfo(
         m_pImpl->m_xCommandsInfo.get() );
 }
 
-//=========================================================================
 uno::Reference< beans::XPropertySetInfo >
 ContentImplHelper::getPropertySetInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
