@@ -1270,10 +1270,19 @@ void ScTable::FillAutoSimple(
     CellType eCellType = CELLTYPE_NONE;
     bool bIsOrdinalSuffix = false;
 
+    bool bColHidden = false, bRowHidden = false;
+    SCCOL nColHiddenLast = -1;
+    SCROW nRowHiddenLast = -1;
+
     rInner = nIStart;
     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
     {
-        if(!ColHidden(rCol) && !RowHidden(rRow))
+        if (rCol > nColHiddenLast)
+            bColHidden = ColHidden(rCol, NULL, &nColHiddenLast);
+        if (rRow > nRowHiddenLast)
+            bRowHidden = RowHidden(rRow, NULL, &nRowHiddenLast);
+
+        if (!bColHidden && !bRowHidden)
         {
             if ( bGetCell )
             {
