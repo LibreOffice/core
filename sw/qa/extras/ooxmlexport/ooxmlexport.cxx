@@ -2472,15 +2472,6 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
-{
-    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
-    // This was wrap="none".
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -2695,27 +2686,19 @@ DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:align","1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
+DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
 {
-    /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
-     * an XMl tag <a:prstDash> with value "dash".
-     */
+    //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "dash");
-}
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:pStyle", "val", "NumberedList1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:ilvl","val", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:numId","val", "0");
 
-DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
-{
-    // Problem was that the transparency was not exported (a:alpha).
-    // RGB color (a:srgbClr)
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);;
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(70), getProperty<sal_Int16>(xShape, "FillTransparence"));
-
-    // Theme color (a:schemeClr)
-    xShape.set(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:pStyle","val", "NumberedList1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:ilvl","val", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:numId","val", "0");
 }
 #endif
 
