@@ -95,7 +95,7 @@ typedef struct _typelib_TypeDescription
     void *                              pReserved;
 
     /** flag to determine whether the description is complete:
-        compound and union types lack of member names, enums lack of member types and names,
+        compound types lack of member names, enums lack of member types and names,
         interfaces lack of members and table init.
         Call typelib_typedescription_complete() if false.
     */
@@ -165,42 +165,7 @@ typedef struct _typelib_StructTypeDescription
     sal_Bool * pParameterizedTypes;
 } typelib_StructTypeDescription;
 
-/** Type description of a union. The type class of this description is typelib_TypeClass_UNION.
-*/
-typedef struct _typelib_UnionTypeDescription
-{
-    /** inherits all members of typelib_TypeDescription
-    */
-    typelib_TypeDescription             aBase;
-
-    /** type of the discriminant
-    */
-    typelib_TypeDescriptionReference *  pDiscriminantTypeRef;
-
-    /** union default descriminant
-    */
-    sal_Int64                           nDefaultDiscriminant;
-    /** union default member type (may be 0)
-     */
-    typelib_TypeDescriptionReference *  pDefaultTypeRef;
-    /** number of union member types
-    */
-    sal_Int32                           nMembers;
-    /** union member discriminant values (same order as idl declaration)
-    */
-    sal_Int64 *                         pDiscriminants;
-    /** union member value types (same order as idl declaration)
-    */
-    typelib_TypeDescriptionReference ** ppTypeRefs;
-    /** union member value names (same order as idl declaration)
-    */
-    rtl_uString **                      ppMemberNames;
-    /** union value offset for data access
-    */
-    sal_Int32                           nValueOffset;
-} typelib_UnionTypeDescription;
-
-/** Type description of an array or sequence.
+/** Type description of a sequence.
 */
 typedef struct _typelib_IndirectTypeDescription
 {
@@ -208,29 +173,10 @@ typedef struct _typelib_IndirectTypeDescription
     */
     typelib_TypeDescription             aBase;
 
-    /** array, sequence: pointer to element type
+    /** pointer to element type
     */
     typelib_TypeDescriptionReference *  pType;
 } typelib_IndirectTypeDescription;
-
-/** Type description of an array.
-*/
-typedef struct _typelib_ArrayTypeDescription
-{
-    /** inherits all members of typelib_IndirectTypeDescription
-    */
-    typelib_IndirectTypeDescription     aBase;
-
-    /** number of dimensions
-    */
-    sal_Int32                           nDimensions;
-    /** number of total array elements
-    */
-    sal_Int32                           nTotalElements;
-    /** array of dimensions
-    */
-    sal_Int32 *                         pDimensions;
-} typelib_ArrayTypeDescription;
 
 /** Type description of an enum. The type class of this description is typelib_TypeClass_ENUM.
 */
@@ -531,46 +477,9 @@ typedef struct _typelib_Parameter_Init
     sal_Bool            bOut;
 } typelib_Parameter_Init;
 
-/** Init struct of union types for typelib_typedescription_newUnion().
-*/
-typedef struct _typelib_Union_Init
-{
-    /** union member discriminant
-    */
-    sal_Int64           nDiscriminant;
-    /** union member name
-    */
-    rtl_uString *       pMemberName;
-    /** union member type
-    */
-    typelib_TypeDescriptionReference* pTypeRef;
-} typelib_Union_Init;
-
 #if defined( SAL_W32)
 #pragma pack(pop)
 #endif
-
-
-/** Creates a union type description. All discriminants are handled as int64 values.
-    The pDiscriminantTypeRef must be of type byte, short, ..., up to hyper.
-
-    @param ppRet inout union type description
-    @param pTypeName name of union type
-    @param pDiscriminantTypeRef discriminant type
-    @param nDefaultDiscriminant default discriminant
-    @param pDefaultTypeRef default value type of union
-    @param nMembers number of union members
-    @param pMembers init members
-*/
-CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newUnion(
-    typelib_TypeDescription ** ppRet,
-    rtl_uString * pTypeName,
-    typelib_TypeDescriptionReference * pDiscriminantTypeRef,
-    sal_Int64 nDefaultDiscriminant,
-    typelib_TypeDescriptionReference * pDefaultTypeRef,
-    sal_Int32 nMembers,
-    typelib_Union_Init * pMembers )
-    SAL_THROW_EXTERN_C();
 
 /** Creates an enum type description.
 
@@ -590,20 +499,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newEnum(
     sal_Int32 * pEnumValues )
     SAL_THROW_EXTERN_C();
 
-/** Creates an array type description.
-
-    @param ppRet inout enum type description
-    @param pElementTypeRef element type
-    @param nDimensions number of dimensions
-    @param pDimensions dimensions
-*/
-CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
-    typelib_TypeDescription ** ppRet,
-    typelib_TypeDescriptionReference * pElementTypeRef,
-    sal_Int32 nDimensions,
-    sal_Int32 * pDimensions )
-    SAL_THROW_EXTERN_C ();
-
 /** Creates a new type description.
 
     Since this function can only be used to create type descriptions for plain
@@ -614,7 +509,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
     @param ppRet inout type description
     @param eTypeClass type class
     @param pTypeName name of type
-    @param pType sequence, array: element type;
+    @param pType sequence: element type;
                  struct, Exception: base type;
     @param nMembers number of members if struct, exception
     @param pMembers array of members if struct, exception
@@ -988,19 +883,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference * pElementType )
     SAL_THROW_EXTERN_C ();
 
-/** Inits static array type reference. Thread synchronizes on typelib init mutex.
-
-    @param ppRef pointer to type reference pointer
-    @param pElementType element type of sequence
-    @param nDimensions number of dimensions
-    @param ... additional sal_Int32 parameter for each dimension
-*/
-CPPU_DLLPUBLIC void SAL_CALL typelib_static_array_type_init(
-    typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeDescriptionReference * pElementType,
-    sal_Int32 nDimensions, ... )
-    SAL_THROW_EXTERN_C ();
-
 /** Inits incomplete static compound type reference. Thread synchronizes on typelib init mutex.
 
     Since this function can only be used to create type descriptions for plain
@@ -1084,7 +966,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     sal_Int32 nDefaultValue )
     SAL_THROW_EXTERN_C();
 
-/** Completes a typedescription to be used for, e.g., marshalling values. COMPOUND, UNION,
+/** Completes a typedescription to be used for, e.g., marshalling values. COMPOUND,
     INTERFACE and ENUM type descriptions may be partly initialized (see typelib_static_...(),
     typelib_TypeDescription::bComplete). For interface type descriptions, this will also
     init index tables.

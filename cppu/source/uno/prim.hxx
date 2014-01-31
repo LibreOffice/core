@@ -151,32 +151,6 @@ extern "C" void * binuno_queryInterface(
     void * pUnoI, typelib_TypeDescriptionReference * pDestType );
 
 //--------------------------------------------------------------------------------------------------
-inline typelib_TypeDescriptionReference * _unionGetSetType(
-    void * pUnion, typelib_TypeDescription * pTD )
-    SAL_THROW(())
-{
-    typelib_TypeDescriptionReference * pRet = 0;
-    sal_Int32 nPos;
-
-    sal_Int64 * pDiscr = ((typelib_UnionTypeDescription *)pTD)->pDiscriminants;
-    sal_Int64 nDiscr   = *(sal_Int64 *)pUnion;
-    for ( nPos = ((typelib_UnionTypeDescription *)pTD)->nMembers; nPos--; )
-    {
-        if (pDiscr[nPos] == nDiscr)
-        {
-            pRet = ((typelib_UnionTypeDescription *)pTD)->ppTypeRefs[nPos];
-            break;
-        }
-    }
-    if (nPos >= 0)
-    {
-        // default
-        pRet = ((typelib_UnionTypeDescription *)pTD)->pDefaultTypeRef;
-    }
-    typelib_typedescriptionreference_acquire( pRet );
-    return pRet;
-}
-//--------------------------------------------------------------------------------------------------
 inline sal_Bool _type_equals(
     typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
     SAL_THROW(())

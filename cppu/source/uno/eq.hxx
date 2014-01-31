@@ -226,32 +226,6 @@ inline sal_Bool _equalSequence(
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         return sal_True;
     }
-    case typelib_TypeClass_UNION:
-    {
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
-        for ( sal_Int32 nPos = nElements; nPos--; )
-        {
-            char * pDest2 = (char *)pDestElements + (nPos * nElementSize);
-            char * pSource2 = (char *)pSourceElements + (nPos * nElementSize);
-            typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                pDest2, pElementTypeDescr );
-            sal_Bool bRet = ::uno_type_equalData(
-                pDest2 + nValueOffset, pSetType,
-                pSource2 + nValueOffset, pSetType,
-                queryInterface, release );
-            ::typelib_typedescriptionreference_release( pSetType );
-            if (! bRet)
-            {
-                TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-                return sal_False;
-            }
-        }
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        return sal_True;
-    }
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
         typelib_TypeDescription * pElementTypeDescr = 0;
@@ -586,40 +560,6 @@ inline sal_Bool _equalData(
             TYPELIB_DANGER_RELEASE( pDestTypeDescr );
             return bRet;
         }
-    case typelib_TypeClass_UNION:
-        if (_type_equals( pDestType, pSourceType ) &&
-            *(sal_Int64 *)pDest == *(sal_Int64 *)pSource) // same discriminant
-        {
-            sal_Bool bRet;
-            if (pDestTypeDescr)
-            {
-                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                    pDest, pDestTypeDescr );
-                bRet = ::uno_type_equalData(
-                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
-                    pSetType,
-                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
-                    pSetType,
-                    queryInterface, release );
-                typelib_typedescriptionreference_release( pSetType );
-            }
-            else
-            {
-                TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
-                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                    pDest, pDestTypeDescr );
-                bRet = ::uno_type_equalData(
-                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
-                    pSetType,
-                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
-                    pSetType,
-                    queryInterface, release );
-                typelib_typedescriptionreference_release( pSetType );
-                TYPELIB_DANGER_RELEASE( pDestTypeDescr );
-            }
-            return bRet;
-        }
-        return sal_False;
     case typelib_TypeClass_SEQUENCE:
         if (_type_equals( pDestType, pSourceType ))
         {

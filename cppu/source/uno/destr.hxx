@@ -29,19 +29,6 @@ namespace cppu
 //#### destruction #################################################################################
 //##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
-inline void _destructUnion(
-    void * pValue,
-    typelib_TypeDescription * pTypeDescr,
-    uno_ReleaseFunc release )
-    SAL_THROW(())
-{
-    typelib_TypeDescriptionReference * pType = _unionGetSetType( pValue, pTypeDescr );
-    ::uno_type_destructData(
-        (char *)pValue + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-        pType, release );
-    ::typelib_typedescriptionreference_release( pType );
-}
 //==================================================================================================
 void destructStruct(
     void * pValue,
@@ -69,29 +56,6 @@ inline void _destructStruct(
             (char *)pValue + pMemberOffsets[nDescr],
             ppTypeRefs[nDescr], release );
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void _destructArray(
-    void * pValue,
-    typelib_ArrayTypeDescription * pTypeDescr,
-    uno_ReleaseFunc release )
-    throw ()
-{
-    typelib_TypeDescription * pElementType = NULL;
-    TYPELIB_DANGER_GET( &pElementType, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
-    sal_Int32 nElementSize = pElementType->nSize;
-    TYPELIB_DANGER_RELEASE( pElementType );
-
-    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
-    for(sal_Int32 i=0; i < nTotalElements; i++)
-    {
-        ::uno_type_destructData(
-            (sal_Char *)pValue + i * nElementSize,
-            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType, release );
-    }
-
-    typelib_typedescriptionreference_release(((typelib_IndirectTypeDescription *)pTypeDescr)->pType);
 }
 
 //==============================================================================
@@ -151,15 +115,6 @@ inline void _destructAny(
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
         _destructStruct( pAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr, release );
-        TYPELIB_DANGER_RELEASE( pTypeDescr );
-        ::rtl_freeMemory( pAny->pData );
-        break;
-    }
-    case typelib_TypeClass_UNION:
-    {
-        typelib_TypeDescription * pTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pTypeDescr, pType );
-        _destructUnion( pAny->pData, pTypeDescr, release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         ::rtl_freeMemory( pAny->pData );
         break;
@@ -251,22 +206,6 @@ inline sal_Int32 idestructElements(
             _destructStruct(
                 (char *)pElements + (nElementSize * nPos),
                 (typelib_CompoundTypeDescription *)pElementTypeDescr,
-                release );
-        }
-        sal_Int32 nSize = pElementTypeDescr->nSize;
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        return nSize;
-    }
-    case typelib_TypeClass_UNION:
-    {
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
-        {
-            _destructUnion(
-                (char *)pElements + (nElementSize * nPos),
-                pElementTypeDescr,
                 release );
         }
         sal_Int32 nSize = pElementTypeDescr->nSize;
@@ -384,30 +323,6 @@ inline void _destructData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             _destructStruct( pValue, (typelib_CompoundTypeDescription *)pTypeDescr, release );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_ARRAY:
-        if (pTypeDescr)
-        {
-            _destructArray( pValue, (typelib_ArrayTypeDescription *)pTypeDescr, release );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _destructArray( pValue, (typelib_ArrayTypeDescription *)pTypeDescr, release );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_UNION:
-        if (pTypeDescr)
-        {
-            _destructUnion( pValue, pTypeDescr, release );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _destructUnion( pValue, pTypeDescr, release );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;

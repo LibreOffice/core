@@ -265,65 +265,6 @@ static inline bool idefaultConstructElements(
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
-    case typelib_TypeClass_ARRAY:
-    {
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
-        if (pSeq != 0)
-        {
-            char * pElements = pSeq->elements;
-            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
-            {
-                _defaultConstructArray(
-                    pElements + (nElementSize * nPos),
-                    (typelib_ArrayTypeDescription *)pElementTypeDescr );
-            }
-        }
-
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        break;
-    }
-    case typelib_TypeClass_UNION:
-    {
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
-        if (pSeq != 0)
-        {
-            sal_Int32 nValueOffset =
-                ((typelib_UnionTypeDescription *)
-                 pElementTypeDescr)->nValueOffset;
-            sal_Int64 nDefaultDiscr =
-                ((typelib_UnionTypeDescription *)
-                 pElementTypeDescr)->nDefaultDiscriminant;
-
-            typelib_TypeDescription * pDefaultTypeDescr = 0;
-            TYPELIB_DANGER_GET(
-                &pDefaultTypeDescr,
-                ((typelib_UnionTypeDescription *)
-                 pElementTypeDescr)->pDefaultTypeRef );
-
-            char * pElements = pSeq->elements;
-            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
-            {
-                char * pMem = pElements + (nElementSize * nPos);
-                ::uno_constructData(
-                    (char *)pMem + nValueOffset, pDefaultTypeDescr );
-                *(sal_Int64 *)pMem = nDefaultDiscr;
-            }
-            TYPELIB_DANGER_RELEASE( pDefaultTypeDescr );
-        }
-
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        break;
-    }
     case typelib_TypeClass_SEQUENCE:
     {
         if (nAlloc >= 0)
@@ -582,42 +523,6 @@ static inline bool icopyConstructFromElements(
                         pSource + pMemberOffsets[nDescr],
                         ppTypeRefs[nDescr], acquire );
                 }
-            }
-        }
-
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        break;
-    }
-    case typelib_TypeClass_UNION:
-    {
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
-        if (pSeq != 0)
-        {
-            char * pDestElements = pSeq->elements;
-
-            sal_Int32 nValueOffset =
-                ((typelib_UnionTypeDescription *)
-                 pElementTypeDescr)->nValueOffset;
-            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
-            {
-                char * pDest =
-                    pDestElements + (nElementSize * nPos);
-                char * pSource =
-                    (char *)pSourceElements + (nElementSize * nPos);
-
-                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                    pSource, pElementTypeDescr );
-                ::uno_type_copyData(
-                    pDest + nValueOffset,
-                    pSource + nValueOffset,
-                    pSetType, acquire );
-                *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-                typelib_typedescriptionreference_release( pSetType );
             }
         }
 

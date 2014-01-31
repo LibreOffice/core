@@ -95,65 +95,6 @@ inline void _copyConstructStruct(
         }
     }
 }
-//--------------------------------------------------------------------------------------------------
-inline void _copyConstructArray(
-    void * pDest, void * pSource,
-    typelib_ArrayTypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire, uno_Mapping * mapping )
-{
-    typelib_TypeDescriptionReference * pElementTypeRef = ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
-    typelib_TypeDescription * pElementTypeDescr = NULL;
-    TYPELIB_DANGER_GET( &pElementTypeDescr, pElementTypeRef );
-    sal_Int32 nElementSize = ((typelib_TypeDescription*)pElementTypeDescr)->nSize;
-    TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
-
-    if (mapping)
-    {
-        for(sal_Int32 i = 0; i < nTotalElements; i++)
-        {
-            ::uno_type_copyAndConvertData(
-                (sal_Char *)pDest + i * nElementSize,
-                (sal_Char *)pSource + i * nElementSize,
-                pElementTypeRef, mapping );
-        }
-    }
-    else
-    {
-        for(sal_Int32 i = 0; i < nTotalElements; i++)
-        {
-            ::uno_type_copyData(
-                (sal_Char *)pDest + (i * nElementSize),
-                (sal_Char *)pSource + (i * nElementSize),
-                pElementTypeRef, acquire );
-        }
-    }
-}
-//--------------------------------------------------------------------------------------------------
-inline void _copyConstructUnion(
-    void * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire, uno_Mapping * mapping )
-    SAL_THROW (())
-{
-    typelib_TypeDescriptionReference * pSetType = _unionGetSetType( pSource, pTypeDescr );
-    if (mapping)
-    {
-        ::uno_type_copyAndConvertData(
-            (char *)pDest + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-            (char *)pSource + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-            pSetType, mapping );
-    }
-    else
-    {
-        ::uno_type_copyData(
-            (char *)pDest + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-            (char *)pSource + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-            pSetType, acquire );
-    }
-    *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-    typelib_typedescriptionreference_release( pSetType );
-}
 
 //------------------------------------------------------------------------------
 uno_Sequence * copyConstructSequence(
@@ -253,40 +194,6 @@ inline void _copyConstructAnyFromData(
                 pDestAny->pData, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_ARRAY:
-        if (pTypeDescr)
-        {
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            _copyConstructArray(
-                pDestAny->pData, pSource,
-                (typelib_ArrayTypeDescription *)pTypeDescr,
-                acquire, mapping );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            _copyConstructArray(
-                pDestAny->pData, pSource,
-                (typelib_ArrayTypeDescription *)pTypeDescr,
-                acquire, mapping );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_UNION:
-        if (pTypeDescr)
-        {
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            _copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            _copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
@@ -450,36 +357,6 @@ inline void _copyConstructAny(
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
-            case typelib_TypeClass_ARRAY:
-                if (pTypeDescr)
-                {
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    _defaultConstructArray(
-                        pDestAny->pData, (typelib_ArrayTypeDescription *)pTypeDescr );
-                }
-                else
-                {
-                    TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    _defaultConstructArray(
-                        pDestAny->pData, (typelib_ArrayTypeDescription *)pTypeDescr );
-                    TYPELIB_DANGER_RELEASE( pTypeDescr );
-                }
-                break;
-            case typelib_TypeClass_UNION:
-                if (pTypeDescr)
-                {
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    _defaultConstructUnion( pDestAny->pData, pTypeDescr );
-                }
-                else
-                {
-                    TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    _defaultConstructUnion( pDestAny->pData, pTypeDescr );
-                    TYPELIB_DANGER_RELEASE( pTypeDescr );
-                }
-                break;
             case typelib_TypeClass_SEQUENCE:
                 pDestAny->pData = &pDestAny->pReserved;
                 *(uno_Sequence **)pDestAny->pData = createEmptySequence();
@@ -563,60 +440,6 @@ inline uno_Sequence * icopyConstructSequence(
                             (typelib_CompoundTypeDescription *)
                             pElementTypeDescr,
                             acquire, mapping );
-                    }
-                }
-                TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-                break;
-            }
-            case typelib_TypeClass_ARRAY:
-            {
-                typelib_TypeDescription * pElementTypeDescr = 0;
-                TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-                sal_Int32 nElementSize = pElementTypeDescr->nSize;
-                char * pSourceElements = pSource->elements;
-                pDest = allocSeq( nElementSize, nElements );
-                if (pDest != 0)
-                {
-                    char * pElements = pDest->elements;
-                    for ( sal_Int32 nPos = nElements; nPos--; )
-                    {
-                        _copyConstructArray(
-                            pElements + (nPos * nElementSize),
-                            pSourceElements + (nPos * nElementSize),
-                            (typelib_ArrayTypeDescription *)pElementTypeDescr,
-                            acquire, mapping );
-                    }
-                }
-                TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-                break;
-            }
-            case typelib_TypeClass_UNION:
-            {
-                typelib_TypeDescription * pElementTypeDescr = 0;
-                TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-                sal_Int32 nElementSize = pElementTypeDescr->nSize;
-                sal_Int32 nValueOffset =
-                    ((typelib_UnionTypeDescription *)
-                     pElementTypeDescr)->nValueOffset;
-                pDest = allocSeq( nElementSize, nElements );
-                if (pDest != 0)
-                {
-                    char * pElements = pDest->elements;
-                    char * pSourceElements = pSource->elements;
-                    for ( sal_Int32 nPos = nElements; nPos--; )
-                    {
-                        char * pDest2 =
-                            pElements + (nPos * nElementSize);
-                        char * pSource2 =
-                            pSourceElements + (nPos * nElementSize);
-
-                        typelib_TypeDescriptionReference * pSetType =
-                            _unionGetSetType( pSource2, pElementTypeDescr );
-                        ::uno_type_copyAndConvertData(
-                            pDest2 + nValueOffset, pSource2 + nValueOffset,
-                            pSetType, mapping );
-                        *(sal_Int64 *)pDest2 = *(sal_Int64 *)pSource2;
-                        ::typelib_typedescriptionreference_release( pSetType );
                     }
                 }
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -762,36 +585,6 @@ inline void _copyConstructData(
                 pDest, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_ARRAY:
-        if (pTypeDescr)
-        {
-            _copyConstructArray(
-                pDest, pSource,
-                (typelib_ArrayTypeDescription *)pTypeDescr,
-                acquire, mapping );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _copyConstructArray(
-                pDest, pSource,
-                (typelib_ArrayTypeDescription *)pTypeDescr,
-                acquire, mapping );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_UNION:
-        if (pTypeDescr)
-        {
-            _copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;

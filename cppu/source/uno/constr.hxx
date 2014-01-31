@@ -29,17 +29,6 @@ namespace cppu
 //#### construction ################################################################################
 //##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
-inline void _defaultConstructUnion(
-    void * pMem,
-    typelib_TypeDescription * pTypeDescr )
-    SAL_THROW(())
-{
-    ::uno_type_constructData(
-        (char *)pMem + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-        ((typelib_UnionTypeDescription *)pTypeDescr)->pDefaultTypeRef );
-    *(sal_Int64 *)pMem = ((typelib_UnionTypeDescription *)pTypeDescr)->nDefaultDiscriminant;
-}
 //==================================================================================================
 void defaultConstructStruct(
     void * pMem,
@@ -64,87 +53,6 @@ inline void _defaultConstructStruct(
     {
         ::uno_type_constructData( (char *)pMem + pMemberOffsets[nDescr], ppTypeRefs[nDescr] );
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void _defaultConstructArray(
-    void * pMem,
-    typelib_ArrayTypeDescription * pTypeDescr )
-{
-    typelib_TypeDescription * pElementType = NULL;
-    TYPELIB_DANGER_GET( &pElementType, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
-    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
-    sal_Int32 nElementSize = pElementType->nSize;
-    sal_Int32 i;
-    switch ( pElementType->eTypeClass )
-    {
-    case typelib_TypeClass_CHAR:
-    case typelib_TypeClass_BOOLEAN:
-    case typelib_TypeClass_BYTE:
-    case typelib_TypeClass_SHORT:
-    case typelib_TypeClass_UNSIGNED_SHORT:
-    case typelib_TypeClass_LONG:
-    case typelib_TypeClass_UNSIGNED_LONG:
-    case typelib_TypeClass_HYPER:
-    case typelib_TypeClass_UNSIGNED_HYPER:
-    case typelib_TypeClass_FLOAT:
-    case typelib_TypeClass_DOUBLE:
-    case typelib_TypeClass_INTERFACE:
-        memset(pMem, 0, nElementSize * nTotalElements);
-        break;
-
-    case typelib_TypeClass_STRING:
-        for (i=0; i < nTotalElements; i++)
-        {
-            rtl_uString** ppElement = (rtl_uString **)pMem + i;
-            *ppElement = 0;
-            rtl_uString_new( ppElement);
-        }
-        break;
-    case typelib_TypeClass_TYPE:
-        for (i=0; i < nTotalElements; i++)
-        {
-            typelib_TypeDescriptionReference** ppElement = (typelib_TypeDescriptionReference **)pMem + i;
-            *ppElement = _getVoidType();
-        }
-        break;
-    case typelib_TypeClass_ANY:
-        for (i=0; i < nTotalElements; i++)
-        {
-            CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem + i );
-        }
-        break;
-    case typelib_TypeClass_ENUM:
-        for (i=0; i < nTotalElements; i++)
-        {
-            *((sal_Int32 *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
-        }
-        break;
-    case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_EXCEPTION:
-        for (i=0; i < nTotalElements; i++)
-        {
-            _defaultConstructStruct( (sal_Char*)pMem + i * nElementSize, (typelib_CompoundTypeDescription *)pElementType );
-        }
-        break;
-    case typelib_TypeClass_UNION:
-        for (i=0; i < nTotalElements; i++)
-        {
-            _defaultConstructUnion( (sal_Char*)pMem + i * nElementSize, pElementType );
-        }
-        break;
-    case typelib_TypeClass_SEQUENCE:
-        for (i=0; i < nTotalElements; i++)
-        {
-            uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
-            *ppElement = createEmptySequence();
-        }
-        break;
-    default:
-        OSL_ASSERT(false);
-        break;
-    }
-    TYPELIB_DANGER_RELEASE( pElementType );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -215,30 +123,6 @@ inline void _defaultConstructData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             _defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_ARRAY:
-        if (pTypeDescr)
-        {
-            _defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-        }
-        break;
-    case typelib_TypeClass_UNION:
-        if (pTypeDescr)
-        {
-            _defaultConstructUnion( pMem, pTypeDescr );
-        }
-        else
-        {
-            TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _defaultConstructUnion( pMem, pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
