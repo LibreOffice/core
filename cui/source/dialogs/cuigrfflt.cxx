@@ -40,12 +40,6 @@ GraphicFilterDialog::PreviewWindow::PreviewWindow( Window* pParent, const ResId&
 
 // -----------------------------------------------------------------------------
 
-GraphicFilterDialog::PreviewWindow::~PreviewWindow()
-{
-}
-
-// -----------------------------------------------------------------------------
-
 void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
@@ -132,12 +126,6 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
     maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
     maTimer.SetTimeout( 100 );
     ImplModifyHdl( NULL );
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterDialog::~GraphicFilterDialog()
-{
 }
 
 // -----------------------------------------------------------------------------

@@ -50,8 +50,7 @@ private:
 
     public:
 
-                        PreviewWindow( Window* pParent, const ResId& rResId );
-                        ~PreviewWindow();
+        PreviewWindow( Window* pParent, const ResId& rResId );
 
         void            SetGraphic( const Graphic& rGraphic );
     };
@@ -80,8 +79,7 @@ protected:
 
 public:
 
-                    GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
-                    ~GraphicFilterDialog();
+    GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
