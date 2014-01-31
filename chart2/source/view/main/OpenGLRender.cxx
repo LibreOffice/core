@@ -364,10 +364,14 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glGenBuffers(1, &m_VertexBuffer);
     glGenBuffers(1, &m_ColorBuffer);
 
+    CHECK_GL_ERROR();
+
     m_RenderProID = LoadShaders("renderVertexShader", "renderFragmentShader");
     m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
     m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
+
+    CHECK_GL_ERROR();
 
     m_CommonProID = LoadShaders("commonVertexShader", "commonFragmentShader");
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
@@ -378,18 +382,22 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 #if DEBUG_POSITIONING
     m_DebugProID = LoadShaders("debugVertexShader", "debugFragmentShader");
     m_DebugVertexID = glGetAttribLocation(m_DebugProID, "vPosition");
-#endif
     CHECK_GL_ERROR();
+#endif
 
     m_BackgroundProID = LoadShaders("backgroundVertexShader", "backgroundFragmentShader");
     m_BackgroundMatrixID = glGetUniformLocation(m_BackgroundProID, "MVP");
     m_BackgroundVertexID = glGetAttribLocation(m_BackgroundProID, "vPosition");
     m_BackgroundColorID = glGetAttribLocation(m_BackgroundProID, "vColor");
 
+    CHECK_GL_ERROR();
+
     m_SymbolProID = LoadShaders("symbolVertexShader", "symbolFragmentShader");
     m_SymbolVertexID = glGetAttribLocation(m_SymbolProID, "vPosition");
     m_SymbolMatrixID = glGetAttribLocation(m_SymbolProID, "MVP");
     m_SymbolColorID = glGetAttribLocation(m_SymbolProID, "vColor");
+
+    CHECK_GL_ERROR();
 
     m_TextProID = LoadShaders("textVertexShader", "textFragmentShader");
     m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
@@ -1734,6 +1742,7 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float heigh
     glDisable(GL_POINT_SMOOTH);
     glDisable(GL_MULTISAMPLE);
     glPointSize(10.f);
+    CHECK_GL_ERROR();
     PosVecf3 trans = {x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {width/OPENGL_SCALE_VALUE, height/OPENGL_SCALE_VALUE, 1.0f};
@@ -1744,12 +1753,11 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float heigh
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float), aPos, GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
 
     // Use our shader
     glUseProgram(m_SymbolProID);
-
     glUniform4fv(m_SymbolColorID, 1, &m_2DColor[0]);
-
     glUniformMatrix4fv(m_SymbolMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
 
     // 1rst attribute buffer : vertices
@@ -1769,9 +1777,9 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float heigh
     glUseProgram(0);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_POINT_SMOOTH);
-    CHECK_GL_ERROR();
     m_fZStep += Z_STEP;
 
+    CHECK_GL_ERROR();
     return 0;
 }
 
