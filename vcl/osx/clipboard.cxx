@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
-
+#include <cppuhelper/supportsservice.hxx>
 #include <boost/assert.hpp>
 
 using namespace com::sun::star::datatransfer;
@@ -68,7 +68,6 @@ using namespace comphelper;
 
 @end
 
-
 OUString clipboard_getImplementationName()
 {
   return OUString("com.sun.star.datatransfer.clipboard.AquaClipboard");
@@ -79,7 +78,6 @@ Sequence<OUString> clipboard_getSupportedServiceNames()
   return makeSequence(OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"));
 }
 
-
 AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard) :
   WeakComponentImplHelper3<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex),
   mIsSystemPasteboard(bUseSystemPasteboard)
@@ -88,81 +86,79 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
     mrXMimeCntFactory = MimeContentTypeFactory::create(xContext);
 
-  mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
+    mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 
-  if (pasteboard != NULL)
+    if (pasteboard != NULL)
     {
       mPasteboard = pasteboard;
       mIsSystemPasteboard = false;
     }
-  else
+    else
     {
       mPasteboard = bUseSystemPasteboard ? [NSPasteboard generalPasteboard] :
         [NSPasteboard pasteboardWithName: NSDragPboard];
 
       if (mPasteboard == nil)
         {
-          throw RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
+            throw RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
                 static_cast<XClipboardEx*>(this));
         }
     }
 
-  [mPasteboard retain];
+    [mPasteboard retain];
 
-  mEventListener = [[EventListener alloc] initWithAquaClipboard: this];
+    mEventListener = [[EventListener alloc] initWithAquaClipboard: this];
 
-  if (mEventListener == nil)
+    if (mEventListener == nil)
     {
-      [mPasteboard release];
+        [mPasteboard release];
 
-      throw RuntimeException(
+        throw RuntimeException(
             OUString("AquaClipboard: Cannot create pasteboard change listener"),
             static_cast<XClipboardEx*>(this));
     }
 
-  if (mIsSystemPasteboard)
+    if (mIsSystemPasteboard)
     {
-      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
 
-      [notificationCenter addObserver: mEventListener
-       selector: @selector(applicationDidBecomeActive:)
-       name: @"NSApplicationDidBecomeActiveNotification"
-       object: [NSApplication sharedApplication]];
+        [notificationCenter addObserver: mEventListener
+         selector: @selector(applicationDidBecomeActive:)
+         name: @"NSApplicationDidBecomeActiveNotification"
+         object: [NSApplication sharedApplication]];
     }
 
-  mPasteboardChangeCount = [mPasteboard changeCount];
+    mPasteboardChangeCount = [mPasteboard changeCount];
 }
 
 
 AquaClipboard::~AquaClipboard()
 {
-  if (mIsSystemPasteboard)
+    if (mIsSystemPasteboard)
     {
-      [[NSNotificationCenter defaultCenter] removeObserver: mEventListener];
+        [[NSNotificationCenter defaultCenter] removeObserver: mEventListener];
     }
 
-  [mEventListener disposing];
-  [mEventListener release];
-  [mPasteboard release];
+    [mEventListener disposing];
+    [mEventListener release];
+    [mPasteboard release];
 }
-
 
 Reference<XTransferable> SAL_CALL AquaClipboard::getContents() throw(RuntimeException)
 {
-  MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
 
-  // Shortcut: If we are clipboard owner already we don't need
-  // to drag the data through the system clipboard
-  if (mXClipboardContent.is())
+    // Shortcut: If we are clipboard owner already we don't need
+    // to drag the data through the system clipboard
+    if (mXClipboardContent.is())
     {
-      return mXClipboardContent;
+        return mXClipboardContent;
     }
 
-  return Reference<XTransferable>(new OSXTransferable(mrXMimeCntFactory,
-                                                      mpDataFlavorMapper,
-                                                      mPasteboard));
+    return Reference<XTransferable>(new OSXTransferable(mrXMimeCntFactory,
+                                                        mpDataFlavorMapper,
+                                                        mPasteboard));
 }
-
 
 void SAL_CALL AquaClipboard::setContents(const Reference<XTransferable>& xTransferable,
     const Reference<XClipboardOwner>& xClipboardOwner)
@@ -194,18 +190,15 @@ void SAL_CALL AquaClipboard::setContents(const Reference<XTransferable>& xTransf
     fireClipboardChangedEvent();
 }
 
-
 OUString SAL_CALL AquaClipboard::getName() throw( RuntimeException )
 {
-  return OUString();
+    return OUString();
 }
-
 
 sal_Int8 SAL_CALL AquaClipboard::getRenderingCapabilities() throw( RuntimeException )
 {
     return 0;
 }
-
 
 void SAL_CALL AquaClipboard::addClipboardListener(const Reference< XClipboardListener >& listener)
   throw( RuntimeException )
@@ -219,7 +212,6 @@ void SAL_CALL AquaClipboard::addClipboardListener(const Reference< XClipboardLis
   mClipboardListeners.push_back(listener);
 }
 
-
 void SAL_CALL AquaClipboard::removeClipboardListener(const Reference< XClipboardListener >& listener)
   throw( RuntimeException )
 {
@@ -231,7 +223,6 @@ void SAL_CALL AquaClipboard::removeClipboardListener(const Reference< XClipboard
 
   mClipboardListeners.remove(listener);
 }
-
 
 void AquaClipboard::applicationDidBecomeActive(NSNotification*)
 {
@@ -263,7 +254,6 @@ void AquaClipboard::applicationDidBecomeActive(NSNotification*)
     }
 }
 
-
 void AquaClipboard::fireClipboardChangedEvent()
 {
     ClearableMutexGuard aGuard(m_aMutex);
@@ -272,32 +262,30 @@ void AquaClipboard::fireClipboardChangedEvent()
     ClipboardEvent aEvent;
 
     if (listeners.begin() != listeners.end())
-      {
+    {
         aEvent = ClipboardEvent(static_cast<OWeakObject*>(this), getContents());
-      }
+    }
 
     aGuard.clear();
 
     while (listeners.begin() != listeners.end())
     {
         if (listeners.front().is())
-          {
+        {
             try { listeners.front()->changedContents(aEvent); }
             catch (RuntimeException&) { }
-          }
+        }
         listeners.pop_front();
     }
 }
 
-
 void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> oldOwner, Reference<XTransferable> oldContent)
 {
-  BOOST_ASSERT(oldOwner.is());
+    BOOST_ASSERT(oldOwner.is());
 
-  try { oldOwner->lostOwnership(static_cast<XClipboardEx*>(this), oldContent); }
-  catch(RuntimeException&) { }
+    try { oldOwner->lostOwnership(static_cast<XClipboardEx*>(this), oldContent); }
+    catch(RuntimeException&) { }
 }
-
 
 void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* type)
 {
@@ -314,17 +302,12 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* typ
     }
 }
 
-
-//------------------------------------------------
-// XFlushableClipboard
-//------------------------------------------------
-
 void SAL_CALL AquaClipboard::flushClipboard()
   throw(RuntimeException)
 {
     if (mXClipboardContent.is())
     {
-          Sequence<DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
+        Sequence<DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
         sal_uInt32 nFlavors = flavorList.getLength();
         bool bInternal(false);
 
@@ -341,32 +324,24 @@ void SAL_CALL AquaClipboard::flushClipboard()
     }
 }
 
-
 NSPasteboard* AquaClipboard::getPasteboard() const
 {
-  return mPasteboard;
+    return mPasteboard;
 }
-
-
-//-------------------------------------------------
-// XServiceInfo
-//-------------------------------------------------
 
 OUString SAL_CALL AquaClipboard::getImplementationName() throw( RuntimeException )
 {
-  return clipboard_getImplementationName();
+    return clipboard_getImplementationName();
 }
-
 
 sal_Bool SAL_CALL AquaClipboard::supportsService( const OUString& /*ServiceName*/ ) throw( RuntimeException )
 {
     return sal_False;
 }
 
-
 Sequence< OUString > SAL_CALL AquaClipboard::getSupportedServiceNames() throw( RuntimeException )
 {
-  return clipboard_getSupportedServiceNames();
+    return clipboard_getSupportedServiceNames();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
