@@ -1589,7 +1589,9 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
     if ( ( rProp.Value >>= aAdjustmentSeq )
          && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
          && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
+         && OString(pShape) != "rect" //some shape types are commented out in pCustomShapeTypeTranslationTable[] & are being defaulted to rect & rect does not have adjustment values/name.
         ) {
+
         DBG(printf("adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
