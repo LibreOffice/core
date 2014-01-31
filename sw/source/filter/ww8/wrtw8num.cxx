@@ -261,7 +261,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
             int nIndex = m_rWW8Export.GetGrfIndex(*pBrush);
             if ( nIndex != -1 )
             {
-                m_rWW8Export.InsUInt16(0x6887);
+                m_rWW8Export.InsUInt16(NS_sprm::LN_CPbiIBullet);
                 m_rWW8Export.InsUInt32(nIndex);
                 m_rWW8Export.InsUInt16(NS_sprm::LN_CPbiGrf);
                 m_rWW8Export.InsUInt16(1);
