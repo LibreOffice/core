@@ -18,36 +18,19 @@
  */
 
 
-//------------------------------------------------------------------------
-//
-// Global header
-//
-//------------------------------------------------------------------------
-#include <osl/mutex.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
-
-
-//------------------------------------------------------------------------
-//
-// Project-local header
-//
-//------------------------------------------------------------------------
-
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <editeng/unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
-//
-// SvxAccessibleTextPropertySet implementation
-//
-//------------------------------------------------------------------------
 
 SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource* pEditSrc, const SvxItemPropertySet* pPropSet )
     : SvxUnoTextRangeBase( pEditSrc, pPropSet )
@@ -136,14 +119,7 @@ OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName (
 
 sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName) throw (uno::RuntimeException)
 {
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    uno::Sequence< OUString> aSupportedServices (
-        getSupportedServiceNames ());
-    for (int i=0; i<aSupportedServices.getLength(); i++)
-        if (sServiceName == aSupportedServices[i])
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames (void) throw (uno::RuntimeException)

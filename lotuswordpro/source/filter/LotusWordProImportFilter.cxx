@@ -17,27 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
-#include <sal/macros.h>
-#include <rtl/tencinfo.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
+#include <rtl/tencinfo.h>
+#include <sal/macros.h>
+#include <tools/stream.hxx>
+#include <vector>
+#include <ucbhelper/content.hxx>
 #include <xmloff/attrlist.hxx>
 
-#include <ucbhelper/content.hxx>
-
-#include <tools/stream.hxx>
-
 #include "LotusWordProImportFilter.hxx"
-
-#include <vector>
-
 #include "lwpfilter.hxx"
 
 using namespace com::sun::star;
@@ -327,7 +324,6 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     return sTypeName;
 }
 
-
 // XInitialization
 void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
@@ -348,6 +344,7 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArgu
         }
     }
 }
+
 OUString LotusWordProImportFilter_getImplementationName ()
     throw (RuntimeException)
 {
@@ -356,11 +353,7 @@ OUString LotusWordProImportFilter_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2;
-}
+
 Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
@@ -370,6 +363,7 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
     pArray[1] =  OUString ( SERVICE_NAME2 );
     return aRet;
 }
+
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
@@ -388,7 +382,7 @@ OUString SAL_CALL LotusWordProImportFilter::getImplementationName(  )
 sal_Bool SAL_CALL LotusWordProImportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return LotusWordProImportFilter_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 Sequence< OUString > SAL_CALL LotusWordProImportFilter::getSupportedServiceNames(  )
     throw (RuntimeException)
