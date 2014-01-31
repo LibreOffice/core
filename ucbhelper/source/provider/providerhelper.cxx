@@ -17,38 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/ucb/Store.hpp>
-#include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
+#include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <ucbhelper/contenthelper.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/providerhelper.hxx>
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "cppuhelper/weakref.hxx"
-#include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/providerhelper.hxx>
-#include <ucbhelper/contenthelper.hxx>
 
 using namespace com::sun::star;
 
 namespace ucbhelper_impl
 {
-
-//=========================================================================
-//
-// Contents.
-//
-//=========================================================================
 
 struct equalString
 {
@@ -76,12 +64,6 @@ typedef boost::unordered_map
 >
 Contents;
 
-//=========================================================================
-//
-// struct ContentProviderImplHelper_Impl.
-//
-//=========================================================================
-
 struct ContentProviderImplHelper_Impl
 {
     uno::Reference< com::sun::star::ucb::XPropertySetRegistry >
@@ -92,14 +74,6 @@ struct ContentProviderImplHelper_Impl
 
 } // namespace ucbhelper_impl
 
-//=========================================================================
-//=========================================================================
-//
-// ContentProviderImplHelper Implementation.
-//
-//=========================================================================
-//=========================================================================
-
 namespace ucbhelper {
 
 ContentProviderImplHelper::ContentProviderImplHelper(
@@ -109,62 +83,29 @@ ContentProviderImplHelper::ContentProviderImplHelper(
 {
 }
 
-//=========================================================================
 // virtual
 ContentProviderImplHelper::~ContentProviderImplHelper()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-//
-// XInterface methods.
-//
-//=========================================================================
-
 XINTERFACE_IMPL_3( ContentProviderImplHelper,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    com::sun::star::ucb::XContentProvider );
-
-//=========================================================================
-//
-// XTypeProvider methods.
-//
-//=========================================================================
 
 XTYPEPROVIDER_IMPL_3( ContentProviderImplHelper,
                          lang::XTypeProvider,
                          lang::XServiceInfo,
                          com::sun::star::ucb::XContentProvider );
 
-//=========================================================================
-//
-// XServiceInfo methods.
-//
-//=========================================================================
-
 // virtual
 sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
                                             const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getConstArray();
-    for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if ( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
 // virtual
 sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
@@ -179,12 +120,6 @@ sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
 
     return aURL1.compareTo( aURL2 );
 }
-
-//=========================================================================
-//
-// Non-interface methods
-//
-//=========================================================================
 
 void ContentProviderImplHelper::cleanupRegisteredContents()
 {
@@ -208,8 +143,6 @@ void ContentProviderImplHelper::cleanupRegisteredContents()
     }
 }
 
-//=========================================================================
-
 void ContentProviderImplHelper::removeContent( ContentImplHelper* pContent )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -225,7 +158,6 @@ void ContentProviderImplHelper::removeContent( ContentImplHelper* pContent )
         m_pImpl->m_aContents.erase( it );
 }
 
-//=========================================================================
 rtl::Reference< ContentImplHelper >
 ContentProviderImplHelper::queryExistingContent(
     const uno::Reference< com::sun::star::ucb::XContentIdentifier >&
@@ -234,7 +166,6 @@ ContentProviderImplHelper::queryExistingContent(
     return queryExistingContent( Identifier->getContentIdentifier() );
 }
 
-//=========================================================================
 rtl::Reference< ContentImplHelper >
 ContentProviderImplHelper::queryExistingContent( const OUString& rURL )
 {
@@ -258,7 +189,6 @@ ContentProviderImplHelper::queryExistingContent( const OUString& rURL )
     return rtl::Reference< ContentImplHelper >();
 }
 
-//=========================================================================
 void ContentProviderImplHelper::queryExistingContents(
         ContentRefList& rContents )
 {
@@ -284,7 +214,6 @@ void ContentProviderImplHelper::queryExistingContents(
     }
 }
 
-//=========================================================================
 void ContentProviderImplHelper::registerNewContent(
     const uno::Reference< ucb::XContent > & xContent )
 {
@@ -303,7 +232,6 @@ void ContentProviderImplHelper::registerNewContent(
     }
 }
 
-//=========================================================================
 uno::Reference< com::sun::star::ucb::XPropertySetRegistry >
 ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 {
@@ -328,8 +256,6 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
     return m_pImpl->m_xPropertySetRegistry;
 }
 
-
-//=========================================================================
 uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
 ContentProviderImplHelper::getAdditionalPropertySet(
     const OUString& rKey, sal_Bool bCreate )
@@ -348,7 +274,6 @@ ContentProviderImplHelper::getAdditionalPropertySet(
     return uno::Reference< com::sun::star::ucb::XPersistentPropertySet >();
 }
 
-//=========================================================================
 sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
     const OUString& rOldKey,
     const OUString& rNewKey,
@@ -433,7 +358,6 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
     return sal_True;
 }
 
-//=========================================================================
 sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
     const OUString& rSourceKey,
     const OUString& rTargetKey,
@@ -575,7 +499,6 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
     return sal_True;
 }
 
-//=========================================================================
 sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
     const OUString& rKey, sal_Bool bRecursive )
 {
