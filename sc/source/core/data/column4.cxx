@@ -14,6 +14,8 @@
 #include <attarray.hxx>
 #include <document.hxx>
 #include <cellvalues.hxx>
+#include <columnspanset.hxx>
+#include <listenercontext.hxx>
 
 #include <svl/sharedstring.hxx>
 
@@ -49,6 +51,8 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & IDF_CONTENTS) != 0)
     {
+        std::vector<sc::CellTextAttr> aTextAttrs(nDestSize);
+
         switch (rSrcCell.meType)
         {
             case CELLTYPE_VALUE:
@@ -56,13 +60,18 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<double> aVals(nDestSize, rSrcCell.mfValue);
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aVals.begin(), aVals.end());
+                pBlockPos->miCellTextAttrPos =
+                    maCellTextAttrs.set(pBlockPos->miCellTextAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
                 CellStorageModified();
             }
             break;
             case CELLTYPE_STRING:
             {
                 std::vector<svl::SharedString> aStrs(nDestSize, *rSrcCell.mpString);
-                maCells.set(pBlockPos->miCellPos, nRow1, aStrs.begin(), aStrs.end());
+                pBlockPos->miCellPos =
+                    maCells.set(pBlockPos->miCellPos, nRow1, aStrs.begin(), aStrs.end());
+                pBlockPos->miCellTextAttrPos =
+                    maCellTextAttrs.set(pBlockPos->miCellTextAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
                 CellStorageModified();
             }
             break;
@@ -75,46 +84,17 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aStrs.begin(), aStrs.end());
+                pBlockPos->miCellTextAttrPos =
+                    maCellTextAttrs.set(pBlockPos->miCellTextAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
                 CellStorageModified();
             }
             break;
             case CELLTYPE_FORMULA:
             {
-                std::vector<ScFormulaCell*> aFormulas;
-                ScAddress aPos(nCol, nRow1, nTab);
-                aFormulas.reserve(nDestSize);
-                ScFormulaCellGroupRef xGroup(new ScFormulaCellGroup);
-                xGroup->setCode(*rSrcCell.mpFormula->GetCode());
-                xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
-                for (size_t i = 0; i < nDestSize; ++i)
-                {
-                    ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup);
-                    if (i == 0)
-                    {
-                        xGroup->mpTopCell = pCell;
-                        xGroup->mnLength = nDestSize;
-                    }
-                    aFormulas.push_back(pCell);
-                    aPos.IncRow();
-                }
-
-                pBlockPos->miCellPos =
-                    maCells.set(pBlockPos->miCellPos, nRow1, aFormulas.begin(), aFormulas.end());
-
-                // Join the top and bottom of the pasted formula cells as needed.
-                sc::CellStoreType::position_type aPosObj =
-                    maCells.position(pBlockPos->miCellPos, nRow1);
-
-                assert(aPosObj.first->type == sc::element_type_formula);
-                ScFormulaCell* pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
-                JoinNewFormulaCell(aPosObj, *pCell);
-
-                aPosObj = maCells.position(aPosObj.first, nRow2);
-                assert(aPosObj.first->type == sc::element_type_formula);
-                pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
-                JoinNewFormulaCell(aPosObj, *pCell);
-
-                CellStorageModified();
+                std::vector<sc::RowSpan> aRanges;
+                aRanges.reserve(1);
+                aRanges.push_back(sc::RowSpan(nRow1, nRow2));
+                CloneFormulaCell(*rSrcCell.mpFormula, aRanges);
             }
             break;
             default:
@@ -226,6 +206,66 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
         aRows.push_back(i);
 
     BroadcastCells(aRows, SC_HINT_DATACHANGED);
+}
+
+void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, sal_uInt16 nDelFlag, bool bBroadcast )
+{
+    std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
+    for (; itSpan != itSpanEnd; ++itSpan)
+        DeleteArea(itSpan->mnRow1, itSpan->mnRow2, nDelFlag, bBroadcast);
+}
+
+void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges )
+{
+    sc::CellStoreType::iterator itPos = maCells.begin();
+    sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
+    sc::StartListeningContext aCxt(*pDocument);
+
+    std::vector<ScFormulaCell*> aFormulas;
+    std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
+    for (; itSpan != itSpanEnd; ++itSpan)
+    {
+        SCROW nRow1 = itSpan->mnRow1, nRow2 = itSpan->mnRow2;
+        size_t nLen = nRow2 - nRow1 + 1;
+        aFormulas.clear();
+        aFormulas.reserve(nLen);
+
+        ScAddress aPos(nCol, nRow1, nTab);
+        ScFormulaCellGroupRef xGroup(new ScFormulaCellGroup);
+        xGroup->setCode(*rSrc.GetCode());
+        xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
+        for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
+        {
+            ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup);
+            if (i == 0)
+            {
+                xGroup->mpTopCell = pCell;
+                xGroup->mnLength = nLen;
+            }
+            pCell->StartListeningTo(aCxt);
+            pCell->SetDirty();
+            aFormulas.push_back(pCell);
+        }
+
+        itPos = maCells.set(itPos, nRow1, aFormulas.begin(), aFormulas.end());
+
+        // Join the top and bottom of the pasted formula cells as needed.
+        sc::CellStoreType::position_type aPosObj = maCells.position(itPos, nRow1);
+
+        assert(aPosObj.first->type == sc::element_type_formula);
+        ScFormulaCell* pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
+        JoinNewFormulaCell(aPosObj, *pCell);
+
+        aPosObj = maCells.position(aPosObj.first, nRow2);
+        assert(aPosObj.first->type == sc::element_type_formula);
+        pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
+        JoinNewFormulaCell(aPosObj, *pCell);
+
+        std::vector<sc::CellTextAttr> aTextAttrs(nLen);
+        itAttrPos = maCellTextAttrs.set(itAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
+    }
+
+    CellStorageModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

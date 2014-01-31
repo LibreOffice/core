@@ -60,6 +60,7 @@
 #include "segmenttree.hxx"
 #include "conditio.hxx"
 #include "editutil.hxx"
+#include <columnspanset.hxx>
 
 #include <math.h>
 #include <boost/scoped_ptr.hpp>
@@ -1287,42 +1288,110 @@ void ScTable::FillSimple(
     SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
 {
     bool bHidden = false;
-    SCCOLROW nHiddenValid = -1;
+    SCCOLROW nHiddenLast = -1;
 
-    switch (rSrcCell.meType)
+    if (bVertical)
     {
-        case CELLTYPE_FORMULA:
+        switch (rSrcCell.meType)
         {
-            for (rInner = nIMin; rInner <= nIMax; ++rInner)
+            case CELLTYPE_FORMULA:
             {
-                if (rInner > nHiddenValid)
-                    bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+                SCCOLROW nRowStart = -1, nRowEnd = -1;
+                std::vector<sc::RowSpan> aSpans;
+                for (rInner = nIMin; rInner <= nIMax; ++rInner)
+                {
+                    if (rInner > nHiddenLast)
+                        bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenLast);
 
-                if (bHidden)
-                    continue;
+                    if (bHidden)
+                    {
+                        if (nRowStart >= 0)
+                        {
+                            nRowEnd = rInner - 1;
+                            aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+                            nRowStart = -1;
+                        }
+                        rInner = nHiddenLast;
+                        continue;
+                    }
 
-                FillFormula(rSrcCell.mpFormula, rCol, rRow, (rInner == nIMax));
+                    if (nRowStart < 0)
+                        nRowStart = rInner;
+                }
+
+                if (nRowStart >= 0)
+                {
+                    nRowEnd = rInner - 1;
+                    aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+                }
+
+                aCol[rCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
+                aCol[rCol].CloneFormulaCell(*rSrcCell.mpFormula, aSpans);
+
+                rProgress += nIMax - nIMin + 1;
                 if (pProgress)
-                    pProgress->SetStateOnPercent(++rProgress);
+                    pProgress->SetStateOnPercent(rProgress);
+            }
+            break;
+            default:
+            {
+                for (rInner = nIMin; rInner <= nIMax; ++rInner)
+                {
+                    if (rInner > nHiddenLast)
+                        bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenLast);
+
+                    if (bHidden)
+                    {
+                        rInner = nHiddenLast;
+                        continue;
+                    }
+
+                    ScAddress aDestPos(rCol, rRow, nTab);
+                    rSrcCell.commit(aCol[rCol], aDestPos.Row());
+                }
+                rProgress += nIMax - nIMin + 1;
+                if (pProgress)
+                    pProgress->SetStateOnPercent(rProgress);
             }
         }
-        break;
-        default:
+    }
+    else
+    {
+        switch (rSrcCell.meType)
         {
-            for (rInner = nIMin; rInner <= nIMax; ++rInner)
+            case CELLTYPE_FORMULA:
             {
-                if (rInner > nHiddenValid)
-                    bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+                for (rInner = nIMin; rInner <= nIMax; ++rInner)
+                {
+                    if (rInner > nHiddenLast)
+                        bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenLast);
 
-                if (bHidden)
-                    continue;
+                    if (bHidden)
+                        continue;
 
-                ScAddress aDestPos(rCol, rRow, nTab);
-                rSrcCell.commit(aCol[rCol], aDestPos.Row());
+                    FillFormula(rSrcCell.mpFormula, rCol, rRow, (rInner == nIMax));
+                    if (pProgress)
+                        pProgress->SetStateOnPercent(++rProgress);
+                }
             }
-            rProgress += nIMax - nIMin + 1;
-            if (pProgress)
-                pProgress->SetStateOnPercent(rProgress);
+            break;
+            default:
+            {
+                for (rInner = nIMin; rInner <= nIMax; ++rInner)
+                {
+                    if (rInner > nHiddenLast)
+                        bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenLast);
+
+                    if (bHidden)
+                        continue;
+
+                    ScAddress aDestPos(rCol, rRow, nTab);
+                    rSrcCell.commit(aCol[rCol], aDestPos.Row());
+                }
+                rProgress += nIMax - nIMin + 1;
+                if (pProgress)
+                    pProgress->SetStateOnPercent(rProgress);
+            }
         }
     }
 }

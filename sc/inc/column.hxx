@@ -57,6 +57,7 @@ class EditTextIterator;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
+struct RowSpan;
 
 }
 
@@ -218,6 +219,8 @@ public:
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void DeleteArea(
         SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast = true );
+    void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, sal_uInt16 nDelFlag, bool bBroadcast );
+
     void CopyToClip(
         sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
@@ -288,6 +291,8 @@ public:
      */
     ScFormulaCell* SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
     ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
+
+    void CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 
