@@ -810,7 +810,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
     }
     else
     {
-        INetURLObject aURL( rUrl );
+        INetURLObject aURL( rUrl, INET_PROT_NOT_VALID );
         sURL = aURL.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS );
         sMark = aURL.GetMark( INetURLObject::DECODE_UNAMBIGUOUS );
     }

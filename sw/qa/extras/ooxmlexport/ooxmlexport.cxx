@@ -3629,6 +3629,18 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_TextOutline, "TextEffects_TextOutlin
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:bevel", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFooterContainHyperlink,"footer-contain-hyperlink.docx")
+{
+    // Problem is that footer1.xml.rels contains the empty
+    // Target due to which the file get corrupted
+    // in MS Office 2007.
+    // Check for footer1.xml.rels file.
+    xmlDocPtr pXmlRels = parseExport("word/_rels/footer1.xml.rels");
+    if (!pXmlRels)
+        return;
+    // Check the value of Target which is http://www.google.com/.
+    assertXPath(pXmlRels,"/rels:Relationships/rels:Relationship","Target","http://www.google.com/");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
