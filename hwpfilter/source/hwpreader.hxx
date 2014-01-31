@@ -31,16 +31,17 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -258,14 +259,7 @@ OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::R
 
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString *pArray = aSNL.getConstArray();
-
-    for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if ( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //XExtendedFilterDetection

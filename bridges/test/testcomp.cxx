@@ -20,22 +20,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <osl/time.h>
-
 #include <uno/threadpool.h>
-
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-
 #include <test/XTestFactory.hpp>
 #include <cppuhelper/servicefactory.hxx>
-
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
-
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
-
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
 #include <cppuhelper/weak.hxx>
 
 using namespace ::test;
@@ -249,34 +242,27 @@ public:
         { throw _aDummyRE; }
 };
 
-
 void ServiceImpl::async() throw(::com::sun::star::uno::RuntimeException)
 {}
 
 // XServiceInfo
-//__________________________________________________________________________________________________
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool ServiceImpl::supportsService( const OUString & /* rServiceName */)
     throw (RuntimeException)
 {
     return sal_False;
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return Sequence< OUString > ();
 }
-
-/******************
- * OCallMe
- *
- *****************/
 
 Any OCallMe::queryInterface( const  Type & aType )  throw ( RuntimeException )
 {
@@ -368,10 +354,6 @@ void OCallMe::callAgain( const Reference< ::test::XCallMe >& callAgainArg,
     }
 }
 
-/********************
- * OInterfaceTest
- *
- *******************/
 Any OInterfaceTest::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
@@ -382,7 +364,6 @@ Any OInterfaceTest::queryInterface( const Type & aType )  throw ( RuntimeExcepti
     }
     return OWeakObject::queryInterface( aType );
 }
-
 
 void OInterfaceTest::setIn(
     const Reference< ::test::XCallMe >& callback )
@@ -400,7 +381,6 @@ void OInterfaceTest::setInOut( Reference< ::test::XCallMe >& callback )
     callback = r;
     call();
 }
-
 
 void OInterfaceTest::getOut( Reference< ::test::XCallMe >& callback )
     throw(RuntimeException)
@@ -422,7 +402,6 @@ void OInterfaceTest::call()
         m_rCallMe->call( OUString("This is my String during a callback!") , 5);
     }
 }
-
 
 Any OTestFactory::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
@@ -449,9 +428,6 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
     return Reference < XInterfaceTest > ( (XInterfaceTest * ) new OInterfaceTest() );
 }
 
-
-
-
 //  class OInstanceProvider :
 //      public ::cppu::OWeakObject,
 //      public XInstanceProvider
@@ -471,13 +447,6 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 //                   throw( ::com::sun::star::container::NoSuchElementException,
 //                          ::com::sun::star::uno::RuntimeException);
 //  };
-
-
-
-
-
-
-
 
 double getCallsPerSec( const Reference < XCallMe > &rCall , int nLoops, int nToDo )
 {
@@ -742,11 +711,6 @@ void testRemote( const Reference< XInterface > &rRemote )
 
 }
 
-
-
-
-
-
 Reference <XInterface > createComponent( const OUString &sService ,
                                          const OUString &sDllName,
                                          const Reference < XMultiServiceFactory > &rSMgr )
@@ -781,6 +745,5 @@ Reference <XInterface > createComponent( const OUString &sService ,
     }
     return rInterface;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

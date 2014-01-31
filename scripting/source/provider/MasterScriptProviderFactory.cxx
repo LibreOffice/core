@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include "MasterScriptProviderFactory.hxx"
 
@@ -42,22 +43,12 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 {
 }
 
-
-//############################################################################
-// Implementation of XScriptProviderFactory
-//############################################################################
-
-
 Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( lang::IllegalArgumentException, RuntimeException)
 {
     Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_QUERY_THROW );
     return xMsp;
 }
-
-//############################################################################
-// Helper methods
-//############################################################################
 
 const rtl::Reference< ActiveMSPList > &
 MasterScriptProviderFactory::getActiveMSPList() const
@@ -71,12 +62,7 @@ MasterScriptProviderFactory::getActiveMSPList() const
     return m_MSPList;
 }
 
-//############################################################################
-// Namespace global methods for setting up MasterScriptProviderFactory service
-//############################################################################
-
-Sequence< OUString > SAL_CALL
-mspf_getSupportedServiceNames( )
+Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames( )
     SAL_THROW(())
 {
     OUString str_name(
@@ -85,8 +71,7 @@ mspf_getSupportedServiceNames( )
     return Sequence< OUString >( &str_name, 1 );
 }
 
-OUString SAL_CALL
-mspf_getImplementationName( )
+OUString SAL_CALL mspf_getImplementationName( )
     SAL_THROW(())
 {
     return OUString(
@@ -101,19 +86,13 @@ mspf_create( Reference< XComponentContext > const & xComponentContext )
         new MasterScriptProviderFactory( xComponentContext ) );
 }
 
-//############################################################################
-// Implementation of XServiceInfo
-//############################################################################
-
-OUString SAL_CALL
-MasterScriptProviderFactory::getImplementationName()
+OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
     throw (RuntimeException)
 {
     return mspf_getImplementationName();
 }
 
-Sequence< OUString > SAL_CALL
-MasterScriptProviderFactory::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return mspf_getSupportedServiceNames();
@@ -123,19 +102,7 @@ sal_Bool MasterScriptProviderFactory::supportsService(
     OUString const & serviceName )
     throw (RuntimeException)
 {
-//     check();
-
-    Sequence< OUString > supported_services(
-        getSupportedServiceNames() );
-
-    OUString const * ar = supported_services.getConstArray();
-
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; )
-    {
-        if (ar[ pos ].equals( serviceName ))
-            return true;
-    }
-    return false;
+    return cppu::supportsService(this, serviceName);
 }
 
 } // namespace browsenodefactory

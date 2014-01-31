@@ -19,7 +19,7 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
@@ -78,10 +78,6 @@ unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
     DBG_ASSERT( eAdjust <= 6, "Enum hat sich geaendert! [CL]" );
     return aSvxToUnoAdjust[eAdjust];
 }
-
-/******************************************************************
- * SvxUnoNumberingRules
- ******************************************************************/
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
@@ -163,7 +159,7 @@ OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeE
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return ServiceName == pSvxUnoNumberingRulesService;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException)
@@ -472,8 +468,6 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
     maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
 }
 
-///////////////////////////////////////////////////////////////////////
-
 const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( IllegalArgumentException )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
@@ -496,9 +490,6 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
-
-
-///////////////////////////////////////////////////////////////////////
 
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
