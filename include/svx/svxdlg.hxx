@@ -415,10 +415,12 @@ public:
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 RECT_POINT eLightSource, sal_uInt32 nResId )=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPosterSepia (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(Window* pParent,
                                                 const Graphic& rGraphic,
-                                                sal_uInt16 nCount,
-                                                sal_uInt32 nResId)=0;
+                                                sal_uInt16 nCount)=0;
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (Window* pParent,
+                                                const Graphic& rGraphic,
+                                                sal_uInt16 nCount)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 double nRadius)=0;

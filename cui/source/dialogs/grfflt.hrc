@@ -40,13 +40,6 @@
 #define DLG_FILTERMOSAIC_MTR_HEIGHT         4
 #define DLG_FILTERMOSAIC_CBX_EDGES          5
 
-// -------------------
-// - DLG_FILTERSEPIA -
-// -------------------
-
-#define DLG_FILTERSEPIA_FT_SEPIA            1
-#define DLG_FILTERSEPIA_MTR_SEPIA           2
-
 // --------------------
 // - DLG_FILTERPOSTER -
 // --------------------

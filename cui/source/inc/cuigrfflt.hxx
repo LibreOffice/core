@@ -205,22 +205,18 @@ public:
 // - GraphicFilterSepia -
 // ----------------------
 
-class GraphicFilterSepia : public oldGraphicFilterDialog
+class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
-
-    FixedText       maFtSepia;
-    MetricField     maMtrSepia;
-
+    MetricField*    mpMtrSepia;
 public:
-
-                    GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
-                                        sal_uInt16 nSepiaPercent );
-                    ~GraphicFilterSepia();
-
+    GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
+                        sal_uInt16 nSepiaPercent );
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    sal_uInt16          GetSepiaPercent() const
-    { return sal::static_int_cast< sal_uInt16 >(maMtrSepia.GetValue()); }
+    sal_uInt16 GetSepiaPercent() const
+    {
+        return sal::static_int_cast< sal_uInt16 >(mpMtrSepia->GetValue());
+    }
 };
 
 // -----------------------

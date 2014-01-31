@@ -1512,28 +1512,20 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmb
     return new oldAbstractGraphicFilterDialog_Impl( pDlg );
 }
 
-AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPosterSepia (Window* pParent,
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPoster(Window* pParent,
                                             const Graphic& rGraphic,
-                                            sal_uInt16 nCount,
-                                            sal_uInt32 nResId)
+                                            sal_uInt16 nCount)
 {
-    oldGraphicFilterDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SVX_GRFFILTER_DLG_POSTER :
-            pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
-            break;
-        case RID_SVX_GRFFILTER_DLG_SEPIA :
-            pDlg = new GraphicFilterSepia( pParent, rGraphic, nCount );
-            break;
+    oldGraphicFilterDialog* pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
+    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
+}
 
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new oldAbstractGraphicFilterDialog_Impl( pDlg );
-    return 0;
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSepia (Window* pParent,
+                                            const Graphic& rGraphic,
+                                            sal_uInt16 nCount)
+{
+    GraphicFilterDialog* pDlg = new GraphicFilterSepia( pParent, rGraphic, nCount );
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(Window* pParent,

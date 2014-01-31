@@ -476,21 +476,14 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 // ----------------------
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
-                                        sal_uInt16 nSepiaPercent ) :
-    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
-    maFtSepia       ( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
-    maMtrSepia      ( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
+                                        sal_uInt16 nSepiaPercent )
+    : GraphicFilterDialog(pParent, "AgingDialog",
+        "cui/ui/agingdialog.ui", rGraphic)
 {
-    FreeResource();
+    get(mpMtrSepia, "value");
 
-    maMtrSepia.SetValue( nSepiaPercent );
-    maMtrSepia.SetModifyHdl( GetModifyHdl() );
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterSepia::~GraphicFilterSepia()
-{
+    mpMtrSepia->SetValue( nSepiaPercent );
+    mpMtrSepia->SetModifyHdl( GetModifyHdl() );
 }
 
 // -----------------------------------------------------------------------------
