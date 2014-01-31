@@ -16,7 +16,7 @@
 #include "clang/Basic/DiagnosticIDs.h"
 #include "llvm/ADT/StringRef.h"
 
-// Compatibility wrapper to abstract over (trivial) chanes in the Clang API:
+// Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
 inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
