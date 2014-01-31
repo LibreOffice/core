@@ -20,12 +20,13 @@
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #define _CONNECTIVITY_OSUBCOMPONENT_HXX_
 
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
-#include <osl/mutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 
 namespace cppu {
     class IPropertyArrayHelper;
@@ -44,9 +45,9 @@ namespace com
         }
     }
 }
+
 namespace connectivity
 {
-
     namespace mysqlc
     {
         void release(oslInterlockedCount& _refCount,
@@ -55,9 +56,7 @@ namespace connectivity
                      ::com::sun::star::lang::XComponent* _pObject);
 
         void checkDisposed(sal_Bool _bThrow) throw (::com::sun::star::lang::DisposedException);
-        //************************************************************
-        // OSubComponent
-        //************************************************************
+
         template <class SELF, class WEAK> class OSubComponent
         {
         protected:
@@ -90,7 +89,6 @@ namespace connectivity
                 m_pDerivedImplementation->WEAK::release();
             }
         };
-
 
         template <class TYPE>
         class OPropertyArrayUsageHelper
@@ -141,7 +139,6 @@ namespace connectivity
         template<class TYPE>
         ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
 
-        //------------------------------------------------------------------
         template <class TYPE>
         OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
         {
@@ -149,7 +146,6 @@ namespace connectivity
             ++s_nRefCount;
         }
 
-        //------------------------------------------------------------------
         template <class TYPE>
         ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
         {
@@ -163,7 +159,6 @@ namespace connectivity
             }
             return s_pProps;
         }
-
 
         class OBase_Mutex
         {
@@ -180,7 +175,7 @@ namespace connectivity
                     *_pDest = *_pSource;
             }
         }
-        //-------------------------------------------------------------------------
+
         /// concat two sequences
         template <class T>
         ::com::sun::star::uno::Sequence<T> concatSequences(const ::com::sun::star::uno::Sequence<T>& _rLeft, const ::com::sun::star::uno::Sequence<T>& _rRight)
@@ -199,34 +194,26 @@ namespace connectivity
             return aReturn;
         }
 
-
-#define DECLARE_SERVICE_INFO()  \
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);   \
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);   \
+#define DECLARE_SERVICE_INFO()                                                                                                               \
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);                                       \
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);                   \
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
 
-#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
+#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)                               \
     OUString SAL_CALL classname::getImplementationName() throw (::com::sun::star::uno::RuntimeException) \
-    {   \
-        return OUString::createFromAscii(implasciiname); \
-    }   \
+    {                                                                                                    \
+        return OUString::createFromAscii(implasciiname);                                                 \
+    }                                                                                                    \
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)    \
-    {   \
-        ::com::sun::star::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname); \
-        return aSupported;  \
-    }   \
+    {                                                                                                                                            \
+        ::com::sun::star::uno::Sequence< OUString > aSupported(1);                                                                               \
+        aSupported[0] = OUString::createFromAscii(serviceasciiname);                                                                             \
+        return aSupported;                                                                                                                       \
+    }                                                                                                                                            \
     sal_Bool SAL_CALL classname::supportsService(const OUString& _rServiceName) throw(::com::sun::star::uno::RuntimeException)   \
-    {   \
-        Sequence< OUString > aSupported(getSupportedServiceNames());             \
-        const OUString* pSupported = aSupported.getConstArray();                 \
-        const OUString* pEnd = pSupported + aSupported.getLength();              \
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
-            ;                                                                           \
-        return pSupported != pEnd;                                                      \
-    }   \
-
-
+    {                                                                                                                            \
+        return cppu::supportsService(this, ServiceName);                                                                         \
+    }                                                                                                                            \
     }
 }
 #endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_

@@ -23,19 +23,16 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <svgio/svgreader/svgdocumenthandler.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <svgio/svgreader/svgdocumenthandler.hxx>
 
 #include "xsvgparser.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
-
 using namespace ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace svgio
 {
@@ -68,9 +65,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
 // uno functions
-
 namespace svgio
 {
     namespace svgreader
@@ -94,8 +89,6 @@ namespace svgio
         }
     } // end of namespace svgreader
 } // end of namespace svgio
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace svgio
 {
@@ -185,17 +178,7 @@ namespace svgio
 
         sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
         {
-            const uno::Sequence< OUString > aServices(XSvgParser_getSupportedServiceNames());
-
-            for(sal_Int32 nService(0); nService < aServices.getLength(); nService++)
-            {
-                if(rServiceName == aServices[nService])
-                {
-                    return sal_True;
-                }
-            }
-
-            return sal_False;
+            return cppu::supportsService(this, rServiceName);
         }
 
         uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -205,8 +188,5 @@ namespace svgio
 
     } // end of namespace svgreader
 } // end of namespace svgio
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

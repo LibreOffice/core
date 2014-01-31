@@ -22,14 +22,15 @@
 #include "mysqlc_resultset.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
 
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 using namespace connectivity::mysqlc;
 using namespace cppu;
@@ -48,7 +49,6 @@ using ::osl::MutexGuard;
 
 #include <stdio.h>
 
-
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 /* {{{ OResultSet::getImplementationName() -I- */
 OUString SAL_CALL OResultSet::getImplementationName()
@@ -58,7 +58,6 @@ OUString SAL_CALL OResultSet::getImplementationName()
     return OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getSupportedServiceNames() -I- */
 Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
@@ -72,21 +71,14 @@ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::supportsService() -I- */
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
     throw(RuntimeException)
 {
     OSL_TRACE("OResultSet::supportsService");
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported) {}
-
-    return (pSupported != pEnd);
+    return cppu::supportsService(this, _rServiceName);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::OResultSet() -I- */
 OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_TextEncoding _encoding )
@@ -108,14 +100,12 @@ OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_Te
 }
 /* }}} */
 
-
 /* {{{ OResultSet::~OResultSet() -I- */
 OResultSet::~OResultSet()
 {
     OSL_TRACE("OResultSet::~OResultSet");
 }
 /* }}} */
-
 
 /* {{{ OResultSet::disposing() -I- */
 void OResultSet::disposing()
@@ -130,7 +120,6 @@ void OResultSet::disposing()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::queryInterface() -I- */
 Any SAL_CALL OResultSet::queryInterface(const Type & rType)
     throw(RuntimeException)
@@ -144,7 +133,6 @@ Any SAL_CALL OResultSet::queryInterface(const Type & rType)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getTypes() -I- */
 Sequence< Type > SAL_CALL OResultSet::getTypes()
     throw(RuntimeException)
@@ -157,7 +145,6 @@ Sequence< Type > SAL_CALL OResultSet::getTypes()
     return concatSequences(aTypes.getTypes(), OResultSet_BASE::getTypes());
 }
 /* }}} */
-
 
 /* {{{ OResultSet::findColumn() -I- */
 sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
@@ -189,7 +176,6 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getBinaryStream() -U- */
 Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -204,7 +190,6 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getCharacterStream() -U- */
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -218,7 +203,6 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream(sal_Int32 colu
     return NULL;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getBoolean() -I- */
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
@@ -238,7 +222,6 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getByte() -I- */
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -257,7 +240,6 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getBytes() -I- */
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -267,7 +249,6 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 column)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
 
-
     sql::SQLString val = m_result->getString(column);
     if (!val.length()) {
         return Sequence< sal_Int8>();
@@ -276,7 +257,6 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 column)
     }
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getDate() -I- */
 Date SAL_CALL OResultSet::getDate(sal_Int32 column)
@@ -316,7 +296,6 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getDouble() -I- */
 double SAL_CALL OResultSet::getDouble(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -334,7 +313,6 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 column)
     return 0.0; // fool compiler
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getFloat() -I- */
 float SAL_CALL OResultSet::getFloat(sal_Int32 column)
@@ -354,7 +332,6 @@ float SAL_CALL OResultSet::getFloat(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getInt() -I- */
 sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -373,7 +350,6 @@ sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getRow() -I- */
 sal_Int32 SAL_CALL OResultSet::getRow()
     throw(SQLException, RuntimeException)
@@ -390,7 +366,6 @@ sal_Int32 SAL_CALL OResultSet::getRow()
     return 0; // fool compiler
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getLong() -I- */
 sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
@@ -409,7 +384,6 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
     return 0; // fool compiler
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getMetaData() -I- */
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData()
@@ -431,7 +405,6 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getArray() -U- */
 Reference< XArray > SAL_CALL OResultSet::getArray(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -445,7 +418,6 @@ Reference< XArray > SAL_CALL OResultSet::getArray(sal_Int32 column)
     return NULL;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getClob() -U- */
 Reference< XClob > SAL_CALL OResultSet::getClob(sal_Int32 column)
@@ -461,7 +433,6 @@ Reference< XClob > SAL_CALL OResultSet::getClob(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getBlob() -U- */
 Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -476,7 +447,6 @@ Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getRef() -U- */
 Reference< XRef > SAL_CALL OResultSet::getRef(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -490,7 +460,6 @@ Reference< XRef > SAL_CALL OResultSet::getRef(sal_Int32 column)
     return NULL;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getObject() -U- */
 Any SAL_CALL OResultSet::getObject(sal_Int32 column, const Reference< XNameAccess >& /* typeMap */)
@@ -508,7 +477,6 @@ Any SAL_CALL OResultSet::getObject(sal_Int32 column, const Reference< XNameAcces
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getShort() -I- */
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -525,7 +493,6 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     return 0; // fool compiler
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getString() -I- */
 OUString SAL_CALL OResultSet::getString(sal_Int32 column)
@@ -550,7 +517,6 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     return OUString(); // fool compiler
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getTime() -I- */
 Time SAL_CALL OResultSet::getTime(sal_Int32 column)
@@ -588,7 +554,6 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getTimestamp() -I- */
 DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     throw(SQLException, RuntimeException)
@@ -612,7 +577,6 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::isBeforeFirst() -I- */
 sal_Bool SAL_CALL OResultSet::isBeforeFirst()
     throw(SQLException, RuntimeException)
@@ -629,7 +593,6 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst()
     return sal_False; //fool
 }
 /* }}} */
-
 
 /* {{{ OResultSet::isAfterLast() -I- */
 sal_Bool SAL_CALL OResultSet::isAfterLast()
@@ -648,7 +611,6 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::isFirst() -I- */
 sal_Bool SAL_CALL OResultSet::isFirst()
     throw(SQLException, RuntimeException)
@@ -665,7 +627,6 @@ sal_Bool SAL_CALL OResultSet::isFirst()
     return sal_False; //fool
 }
 /* }}} */
-
 
 /* {{{ OResultSet::isLast() -I- */
 sal_Bool SAL_CALL OResultSet::isLast()
@@ -684,7 +645,6 @@ sal_Bool SAL_CALL OResultSet::isLast()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::beforeFirst() -I- */
 void SAL_CALL OResultSet::beforeFirst()
     throw(SQLException, RuntimeException)
@@ -701,7 +661,6 @@ void SAL_CALL OResultSet::beforeFirst()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::afterLast() -I- */
 void SAL_CALL OResultSet::afterLast()
     throw(SQLException, RuntimeException)
@@ -717,7 +676,6 @@ void SAL_CALL OResultSet::afterLast()
     }
 }
 /* }}} */
-
 
 /* {{{ OResultSet::close() -I- */
 void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
@@ -736,7 +694,6 @@ void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::first() -I- */
 sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
 {
@@ -752,7 +709,6 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
     return sal_False; //fool
 }
 /* }}} */
-
 
 /* {{{ OResultSet::last() -I- */
 sal_Bool SAL_CALL OResultSet::last()
@@ -771,7 +727,6 @@ sal_Bool SAL_CALL OResultSet::last()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::absolute() -I- */
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     throw(SQLException, RuntimeException)
@@ -788,7 +743,6 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     return sal_False; //fool
 }
 /* }}} */
-
 
 /* {{{ OResultSet::relative() -I- */
 sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
@@ -807,7 +761,6 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::previous() -I- */
 sal_Bool SAL_CALL OResultSet::previous()
     throw(SQLException, RuntimeException)
@@ -825,7 +778,6 @@ sal_Bool SAL_CALL OResultSet::previous()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getStatement() -I- */
 Reference< XInterface > SAL_CALL OResultSet::getStatement()
     throw(SQLException, RuntimeException)
@@ -837,7 +789,6 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement()
     return m_aStatement.get();
 }
 /* }}} */
-
 
 /* {{{ OResultSet::rowDeleted() -I- */
 sal_Bool SAL_CALL OResultSet::rowDeleted()
@@ -851,7 +802,6 @@ sal_Bool SAL_CALL OResultSet::rowDeleted()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::rowInserted() -I- */
 sal_Bool SAL_CALL OResultSet::rowInserted()
     throw(SQLException, RuntimeException)
@@ -864,7 +814,6 @@ sal_Bool SAL_CALL OResultSet::rowInserted()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::rowUpdated() -I- */
 sal_Bool SAL_CALL OResultSet::rowUpdated()
     throw(SQLException, RuntimeException)
@@ -876,7 +825,6 @@ sal_Bool SAL_CALL OResultSet::rowUpdated()
     return sal_False;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::next() -I- */
 sal_Bool SAL_CALL OResultSet::next()
@@ -895,7 +843,6 @@ sal_Bool SAL_CALL OResultSet::next()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::wasNull() -I- */
 sal_Bool SAL_CALL OResultSet::wasNull()
     throw(SQLException, RuntimeException)
@@ -913,7 +860,6 @@ sal_Bool SAL_CALL OResultSet::wasNull()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::cancel() -I- */
 void SAL_CALL OResultSet::cancel()
     throw(RuntimeException)
@@ -924,7 +870,6 @@ void SAL_CALL OResultSet::cancel()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::clearWarnings() -I- */
 void SAL_CALL OResultSet::clearWarnings()
     throw(SQLException, RuntimeException)
@@ -932,7 +877,6 @@ void SAL_CALL OResultSet::clearWarnings()
     OSL_TRACE("OResultSet::clearWarnings");
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getWarnings() -I- */
 Any SAL_CALL OResultSet::getWarnings()
@@ -943,7 +887,6 @@ Any SAL_CALL OResultSet::getWarnings()
     return aRet;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::insertRow() -I- */
 void SAL_CALL OResultSet::insertRow()
@@ -956,7 +899,6 @@ void SAL_CALL OResultSet::insertRow()
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::insertRow", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateRow() -I- */
 void SAL_CALL OResultSet::updateRow()
@@ -971,7 +913,6 @@ void SAL_CALL OResultSet::updateRow()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::deleteRow() -I- */
 void SAL_CALL OResultSet::deleteRow()
     throw(SQLException, RuntimeException)
@@ -983,7 +924,6 @@ void SAL_CALL OResultSet::deleteRow()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::cancelRowUpdates() -I- */
 void SAL_CALL OResultSet::cancelRowUpdates()
     throw(SQLException, RuntimeException)
@@ -994,7 +934,6 @@ void SAL_CALL OResultSet::cancelRowUpdates()
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::cancelRowUpdates", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::moveToInsertRow() -I- */
 void SAL_CALL OResultSet::moveToInsertRow()
@@ -1009,7 +948,6 @@ void SAL_CALL OResultSet::moveToInsertRow()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::moveToCurrentRow() -I- */
 void SAL_CALL OResultSet::moveToCurrentRow()
     throw(SQLException, RuntimeException)
@@ -1019,7 +957,6 @@ void SAL_CALL OResultSet::moveToCurrentRow()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateNull() -U- */
 void SAL_CALL OResultSet::updateNull(sal_Int32 column)
@@ -1033,7 +970,6 @@ void SAL_CALL OResultSet::updateNull(sal_Int32 column)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateBoolean() -U- */
 void SAL_CALL OResultSet::updateBoolean(sal_Int32 column, sal_Bool /* x */)
     throw(SQLException, RuntimeException)
@@ -1045,7 +981,6 @@ void SAL_CALL OResultSet::updateBoolean(sal_Int32 column, sal_Bool /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateBoolean", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateByte() -U- */
 void SAL_CALL OResultSet::updateByte(sal_Int32 column, sal_Int8 /* x */)
@@ -1059,7 +994,6 @@ void SAL_CALL OResultSet::updateByte(sal_Int32 column, sal_Int8 /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateShort() -U- */
 void SAL_CALL OResultSet::updateShort(sal_Int32 column, sal_Int16 /* x */)
     throw(SQLException, RuntimeException)
@@ -1071,7 +1005,6 @@ void SAL_CALL OResultSet::updateShort(sal_Int32 column, sal_Int16 /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateShort", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateInt() -U- */
 void SAL_CALL OResultSet::updateInt(sal_Int32 column, sal_Int32 /* x */)
@@ -1085,7 +1018,6 @@ void SAL_CALL OResultSet::updateInt(sal_Int32 column, sal_Int32 /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateLong() -U- */
 void SAL_CALL OResultSet::updateLong(sal_Int32 column, sal_Int64 /* x */)
     throw(SQLException, RuntimeException)
@@ -1097,7 +1029,6 @@ void SAL_CALL OResultSet::updateLong(sal_Int32 column, sal_Int64 /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateLong", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateFloat() -U- */
 void SAL_CALL OResultSet::updateFloat(sal_Int32 column, float /* x */)
@@ -1111,7 +1042,6 @@ void SAL_CALL OResultSet::updateFloat(sal_Int32 column, float /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateDouble() -U- */
 void SAL_CALL OResultSet::updateDouble(sal_Int32 column, double /* x */)
     throw(SQLException, RuntimeException)
@@ -1123,7 +1053,6 @@ void SAL_CALL OResultSet::updateDouble(sal_Int32 column, double /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateDouble", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateString() -U- */
 void SAL_CALL OResultSet::updateString(sal_Int32 column, const OUString& /* x */)
@@ -1137,7 +1066,6 @@ void SAL_CALL OResultSet::updateString(sal_Int32 column, const OUString& /* x */
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateBytes() -U- */
 void SAL_CALL OResultSet::updateBytes(sal_Int32 column, const Sequence< sal_Int8 >& /* x */)
     throw(SQLException, RuntimeException)
@@ -1149,7 +1077,6 @@ void SAL_CALL OResultSet::updateBytes(sal_Int32 column, const Sequence< sal_Int8
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateBytes", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateDate() -U- */
 void SAL_CALL OResultSet::updateDate(sal_Int32 column, const Date& /* x */)
@@ -1163,7 +1090,6 @@ void SAL_CALL OResultSet::updateDate(sal_Int32 column, const Date& /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateTime() -U- */
 void SAL_CALL OResultSet::updateTime(sal_Int32 column, const Time& /* x */)
     throw(SQLException, RuntimeException)
@@ -1176,7 +1102,6 @@ void SAL_CALL OResultSet::updateTime(sal_Int32 column, const Time& /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateTimestamp() -U- */
 void SAL_CALL OResultSet::updateTimestamp(sal_Int32 column, const DateTime& /* x */)
     throw(SQLException, RuntimeException)
@@ -1188,7 +1113,6 @@ void SAL_CALL OResultSet::updateTimestamp(sal_Int32 column, const DateTime& /* x
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateTimestamp", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateBinaryStream() -U- */
 void SAL_CALL OResultSet::updateBinaryStream(sal_Int32 column, const Reference< XInputStream >& /* x */,
@@ -1203,7 +1127,6 @@ void SAL_CALL OResultSet::updateBinaryStream(sal_Int32 column, const Reference< 
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateCharacterStream() -U- */
 void SAL_CALL OResultSet::updateCharacterStream(sal_Int32 column, const Reference< XInputStream >& /* x */,
                                                 sal_Int32 /* length */)
@@ -1217,7 +1140,6 @@ void SAL_CALL OResultSet::updateCharacterStream(sal_Int32 column, const Referenc
 }
 /* }}} */
 
-
 /* {{{ OResultSet::refreshRow() -U- */
 void SAL_CALL OResultSet::refreshRow()
     throw(SQLException, RuntimeException)
@@ -1228,7 +1150,6 @@ void SAL_CALL OResultSet::refreshRow()
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::refreshRow", *this);
 }
 /* }}} */
-
 
 /* {{{ OResultSet::updateObject() -U- */
 void SAL_CALL OResultSet::updateObject(sal_Int32 column, const Any& /* x */)
@@ -1242,7 +1163,6 @@ void SAL_CALL OResultSet::updateObject(sal_Int32 column, const Any& /* x */)
 }
 /* }}} */
 
-
 /* {{{ OResultSet::updateNumericObject() -U- */
 void SAL_CALL OResultSet::updateNumericObject(sal_Int32 column, const Any& /* x */, sal_Int32 /* scale */)
     throw(SQLException, RuntimeException)
@@ -1254,7 +1174,6 @@ void SAL_CALL OResultSet::updateNumericObject(sal_Int32 column, const Any& /* x 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateNumericObject", *this);
 }
 /* }}} */
-
 
 // XRowLocate
 /* {{{ OResultSet::getBookmark() -U- */
@@ -1273,7 +1192,6 @@ Any SAL_CALL OResultSet::getBookmark()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::moveToBookmark() -U- */
 sal_Bool SAL_CALL OResultSet::moveToBookmark(const Any& /* bookmark */)
     throw(SQLException, RuntimeException)
@@ -1285,7 +1203,6 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark(const Any& /* bookmark */)
     return sal_False;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::moveRelativeToBookmark() -U- */
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark(const Any& /* bookmark */, sal_Int32 /* rows */)
@@ -1299,7 +1216,6 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark(const Any& /* bookmark */, 
     return sal_False;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::compareBookmarks() -I- */
 sal_Int32 SAL_CALL OResultSet::compareBookmarks(const Any& /* n1 */, const Any& /* n2 */)
@@ -1315,7 +1231,6 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks(const Any& /* n1 */, const Any& 
 }
 /* }}} */
 
-
 /* {{{ OResultSet::hasOrderedBookmarks() -I- */
 sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks()
     throw(SQLException, RuntimeException)
@@ -1324,7 +1239,6 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks()
     return sal_False;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::hashBookmark() -U- */
 sal_Int32 SAL_CALL OResultSet::hashBookmark(const Any& /* bookmark */)
@@ -1335,7 +1249,6 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark(const Any& /* bookmark */)
     return 0;
 }
 /* }}} */
-
 
 // XDeleteRows
 /* {{{ OResultSet::deleteRows() -U- */
@@ -1351,7 +1264,6 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows(const Sequence< Any >& /* 
     return aRet;
 }
 /* }}} */
-
 
 /* {{{ OResultSet::createArrayHelper() -I- */
 IPropertyArrayHelper * OResultSet::createArrayHelper() const
@@ -1370,7 +1282,6 @@ IPropertyArrayHelper * OResultSet::createArrayHelper() const
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getInfoHelper() -I- */
 IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
@@ -1378,7 +1289,6 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
     return (*const_cast<OResultSet*>(this)->getArrayHelper());
 }
 /* }}} */
-
 
 /* {{{ OResultSet::convertFastPropertyValue() -I- */
 sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
@@ -1403,7 +1313,6 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
 }
 /* }}} */
 
-
 /* {{{ OResultSet::setFastPropertyValue_NoBroadcast() -I- */
 void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)
     throw (Exception)
@@ -1424,7 +1333,6 @@ void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& 
     }
 }
 /* }}} */
-
 
 /* {{{ OResultSet::getFastPropertyValue() -I- */
 void OResultSet::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
@@ -1455,7 +1363,6 @@ void OResultSet::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
 }
 /* }}} */
 
-
 /* {{{ OResultSet::acquire() -I- */
 void SAL_CALL OResultSet::acquire()
     throw()
@@ -1464,7 +1371,6 @@ void SAL_CALL OResultSet::acquire()
     OResultSet_BASE::acquire();
 }
 /* }}} */
-
 
 /* {{{ OResultSet::release() -I- */
 void SAL_CALL OResultSet::release()
@@ -1475,7 +1381,6 @@ void SAL_CALL OResultSet::release()
 }
 /* }}} */
 
-
 /* {{{ OResultSet::getPropertySetInfo() -I- */
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1483,7 +1388,6 @@ void SAL_CALL OResultSet::release()
     return (::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
 }
 /* }}} */
-
 
 /* {{{ OResultSet::checkColumnIndex() -I- */
 void OResultSet::checkColumnIndex(sal_Int32 index)
@@ -1497,7 +1401,6 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
     }
 }
 /* }}} */
-
 
 /*
  * Local variables:

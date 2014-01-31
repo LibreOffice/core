@@ -18,15 +18,15 @@
  */
 
 
-#include "unomodel.hxx"
+#include <basdoc.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <iderdll.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
-
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
-#include <iderdll.hxx>
-#include <basdoc.hxx>
+#include "unomodel.hxx"
 
 namespace basctl
 {
@@ -93,7 +93,7 @@ OUString SIDEModel::getImplementationName_Static()
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.script.BasicIDE";
+    return cppu::supportsService(this, rServiceName);
 }
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
