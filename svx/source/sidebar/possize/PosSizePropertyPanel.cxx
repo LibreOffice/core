@@ -514,9 +514,11 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     }
     sal_Int64 nTmp = dTmp*100;
 
+    // #i123993# Need to take UIScale into account when executing rotations
+    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X,(sal_uInt32) mlRotX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y,(sal_uInt32) mlRotY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
@@ -530,9 +532,11 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
 
+    // #i123993# Need to take UIScale into account when executing rotations
+    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X,(sal_uInt32) mlRotX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y,(sal_uInt32) mlRotY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
