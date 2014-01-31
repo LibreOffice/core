@@ -62,6 +62,8 @@ using namespace std;
 #define WGL_SAMPLES_ARB          0x2042
 #endif
 
+#define Z_STEP 0.001;
+
 // end shaders
 
 static GLfloat squareVertices[] = {
@@ -497,7 +499,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderLine2FBO(int)
 {
-    m_fZStep += 0.001f;
+    m_fZStep += Z_STEP;
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
@@ -1276,7 +1278,7 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 
 int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
-    m_fZStep += 0.001f;
+    m_fZStep += Z_STEP;
     size_t listNum = m_RectangleShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1477,7 +1479,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
 int OpenGLRender::RenderTextShape()
 {
     CHECK_GL_ERROR();
-    m_fZStep += 0.01f;
+    m_fZStep += Z_STEP;
     size_t listNum = m_TextInfoList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1591,7 +1593,7 @@ int OpenGLRender::RenderArea2DShape()
         m_Area2DShapePointList.pop_front();
     }
     glEnable(GL_MULTISAMPLE);
-    m_fZStep += 0.01f;
+    m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
 
@@ -1719,11 +1721,12 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
         CHECK_GL_ERROR();
 
     }
-    m_fZStep += 0.01f;
+    m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
     return 0;
 }
+
 int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float height, sal_Int32)
 {
     CHECK_GL_ERROR();
@@ -1766,9 +1769,8 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float heigh
     glUseProgram(0);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_POINT_SMOOTH);
-    m_fZStep += 0.01f;
-
     CHECK_GL_ERROR();
+    m_fZStep += Z_STEP;
 
     return 0;
 }
