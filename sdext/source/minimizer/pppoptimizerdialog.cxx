@@ -29,11 +29,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 #define SERVICE_NAME "com.sun.star.comp.PresentationMinimizer"
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
-
-// ----------------------
-// - PPPOptimizerDialog -
-// ----------------------
 
 PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xContext ) :
     mxContext( xContext ),
@@ -41,15 +38,9 @@ PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xC
 {
 }
 
-// -----------------------------------------------------------------------------
-
 PPPOptimizerDialog::~PPPOptimizerDialog()
 {
 }
-
-// -----------------------------------------------------------------------------
-// XInitialization
-// -----------------------------------------------------------------------------
 
 void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException )
@@ -62,10 +53,6 @@ void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments 
         mxController = mxFrame->getController();
 }
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
-
 OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
     throw (RuntimeException)
 {
@@ -75,7 +62,7 @@ OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
 sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
     throw ( RuntimeException )
 {
-    return ServiceName == SERVICE_NAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
@@ -83,10 +70,6 @@ Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
 {
     return PPPOptimizerDialog_getSupportedServiceNames();
 }
-
-// -----------------------------------------------------------------------------
-// XDispatchProvider
-// -----------------------------------------------------------------------------
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
@@ -97,8 +80,6 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::query
 
     return xRet;
 }
-
-//------------------------------------------------------------------------------
 
 Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::queryDispatches(
     const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException )
@@ -112,10 +93,6 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizerD
     }
     return aReturn;
 }
-
-// -----------------------------------------------------------------------------
-// XDispatch
-// -----------------------------------------------------------------------------
 
 void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                                             const Sequence< PropertyValue >& rArguments )
@@ -165,7 +142,6 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     }
 }
 
-//===============================================
 void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
@@ -173,15 +149,12 @@ void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusLis
     // OSL_FAIL( "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
 }
 
-//===============================================
 void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
     // TODO
     // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
 }
-
-// -----------------------------------------------------------------------------
 
 OUString PPPOptimizerDialog_getImplementationName()
 {
@@ -201,7 +174,5 @@ Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XCom
 {
     return (cppu::OWeakObject*) new PPPOptimizerDialog( rSMgr );
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

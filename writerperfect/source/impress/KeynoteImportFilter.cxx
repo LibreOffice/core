@@ -8,13 +8,6 @@
  */
 
 #include <boost/shared_ptr.hpp>
-
-#include <osl/diagnose.h>
-#include <rtl/tencinfo.h>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -26,20 +19,21 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
-
-#include <ucbhelper/content.hxx>
-
-#include <xmloff/attrlist.hxx>
-
+#include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <iostream>
 #include <libetonyek/libetonyek.h>
 #include <libodfgen/libodfgen.hxx>
+#include <osl/diagnose.h>
+#include <rtl/tencinfo.h>
+#include <ucbhelper/content.hxx>
+#include <xmloff/attrlist.hxx>
 
 #include "common/DirectoryStream.hxx"
 #include "common/DocumentHandler.hxx"
 #include "common/WPXSvStream.hxx"
 #include "KeynoteImportFilter.hxx"
-
-#include <iostream>
 
 using boost::shared_ptr;
 
@@ -100,7 +94,6 @@ sal_Bool lcl_isPackage( const Any &rComponentData )
 
     return false;
 }
-
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
@@ -329,7 +322,6 @@ throw( com::sun::star::uno::RuntimeException )
     return sTypeName;
 }
 
-
 // XInitialization
 void SAL_CALL KeynoteImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
@@ -351,6 +343,7 @@ throw (Exception, RuntimeException)
         }
     }
 }
+
 OUString KeynoteImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
@@ -360,12 +353,7 @@ throw (RuntimeException)
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL KeynoteImportFilter_supportsService( const OUString &ServiceName )
-throw (RuntimeException)
-{
-    SAL_INFO("writerperfect", "KeynoteImportFilter_supportsService");
-    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
-}
+
 Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
@@ -376,6 +364,7 @@ throw (RuntimeException)
     pArray[1] =  OUString ( SERVICE_NAME2 );
     return aRet;
 }
+
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
@@ -393,12 +382,14 @@ throw (RuntimeException)
     SAL_INFO("writerperfect", "KeynoteImportFilter::getImplementationName");
     return KeynoteImportFilter_getImplementationName();
 }
+
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
     SAL_INFO("writerperfect", "KeynoteImportFilter::supportsService");
-    return KeynoteImportFilter_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
+
 Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
