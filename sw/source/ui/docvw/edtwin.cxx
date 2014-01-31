@@ -282,7 +282,7 @@ struct QuickHelpData
 
     // Fills internal structures with hopefully helpful information.
     void FillStrArr( SwWrtShell& rSh, const OUString& rWord );
-    void SortAndFilter();
+    void SortAndFilter(const OUString &rOrigWord);
 };
 
 /**
@@ -5848,6 +5848,11 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
             if( rStr.getLength() > rWord.getLength() &&
                 rCC.lowercase( rStr, 0, rWord.getLength() ) == sWordLower )
             {
+                //fdo#61251 if it's an exact match, ensure unchanged replacement
+                //exists as a candidate
+                if (rStr.startsWith(rWord))
+                    m_aHelpStrings.push_back(rStr);
+
                 if ( aWordCase == CASE_LOWER )
                     m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
                 else if ( aWordCase == CASE_SENTENCE )
@@ -5876,6 +5881,10 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
         for (unsigned int i= 0; i<strings.size(); i++)
         {
             OUString aCompletedString = strings[i];
+            //fdo#61251 if it's an exact match, ensure unchanged replacement
+            //exists as a candidate
+            if (aCompletedString.startsWith(rWord))
+                m_aHelpStrings.push_back(aCompletedString);
             if ( aWordCase == CASE_LOWER )
                 m_aHelpStrings.push_back( rCC.lowercase( aCompletedString ) );
             else if ( aWordCase == CASE_SENTENCE )
@@ -5895,11 +5904,28 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
 
 namespace {
 
-struct CompareIgnoreCaseAscii
+class CompareIgnoreCaseAsciiFavorExact
+    : public std::binary_function<const OUString&, const OUString&, bool>
 {
+    const OUString &m_rOrigWord;
+public:
+    CompareIgnoreCaseAsciiFavorExact(const OUString& rOrigWord)
+        : m_rOrigWord(rOrigWord)
+    {
+    }
+
     bool operator()(const OUString& s1, const OUString& s2) const
     {
-        return s1.compareToIgnoreAsciiCase(s2) < 0;
+        int nRet = s1.compareToIgnoreAsciiCase(s2);
+        if (nRet == 0)
+        {
+            //fdo#61251 sort stuff that starts with the exact rOrigWord before
+            //another ignore-case candidate
+            int n1StartsWithOrig = s1.startsWith(m_rOrigWord) ? 0 : 1;
+            int n2StartsWithOrig = s2.startsWith(m_rOrigWord) ? 0 : 1;
+            return n1StartsWithOrig < n2StartsWithOrig;
+        }
+        return nRet < 0;
     }
 };
 
@@ -5914,11 +5940,11 @@ struct EqualIgnoreCaseAscii
 } // anonymous namespace
 
 // TODO Implement an i18n aware sort
-void QuickHelpData::SortAndFilter()
+void QuickHelpData::SortAndFilter(const OUString &rOrigWord)
 {
     std::sort( m_aHelpStrings.begin(),
                m_aHelpStrings.end(),
-               CompareIgnoreCaseAscii() );
+               CompareIgnoreCaseAsciiFavorExact(rOrigWord) );
 
     std::vector<OUString>::iterator it = std::unique( m_aHelpStrings.begin(),
                                                     m_aHelpStrings.end(),
@@ -5955,7 +5981,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
 
     if( !m_pQuickHlpData->m_aHelpStrings.empty() )
     {
-        m_pQuickHlpData->SortAndFilter();
+        m_pQuickHlpData->SortAndFilter(rWord);
         m_pQuickHlpData->Start( rSh, rWord.getLength() );
     }
 }
