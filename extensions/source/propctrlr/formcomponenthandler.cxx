@@ -2207,7 +2207,6 @@ namespace pcr
             return false;
 
         if  (   ( _rProperty.Type.getTypeClass() == TypeClass_INTERFACE )
-            ||  ( _rProperty.Type.getTypeClass() == TypeClass_ARRAY )
             ||  ( _rProperty.Type.getTypeClass() == TypeClass_UNKNOWN )
             )
             return true;

@@ -51,7 +51,6 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
         switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
         {
         case typelib_TypeClass_INTERFACE:
-        case typelib_TypeClass_UNION: // might relate to interface
         case typelib_TypeClass_ANY: // might relate to interface
             return true;
         case typelib_TypeClass_SEQUENCE:
@@ -80,7 +79,6 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             switch (pTypes[nPos]->eTypeClass)
             {
             case typelib_TypeClass_INTERFACE:
-            case typelib_TypeClass_UNION: // might relate to interface
             case typelib_TypeClass_ANY: // might relate to interface
                 return true;
 //              case typelib_TypeClass_TYPEDEF:
@@ -103,7 +101,6 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             return relatesToInterface( (typelib_TypeDescription *)pComp->pBaseTypeDescription );
         break;
     }
-    case typelib_TypeClass_UNION: // might relate to interface
     case typelib_TypeClass_ANY: // might relate to interface
     case typelib_TypeClass_INTERFACE:
         return true;

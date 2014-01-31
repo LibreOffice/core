@@ -2893,9 +2893,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
     case TypeClass_TYPE:
     case TypeClass_ANY:
     case TypeClass_TYPEDEF:
-    case TypeClass_UNION:
     case TypeClass_EXCEPTION:
-    case TypeClass_ARRAY:
     case TypeClass_INTERFACE:
     case TypeClass_SERVICE:
     case TypeClass_MODULE:
@@ -3047,10 +3045,8 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
         case TypeClass_ENUM:
         case TypeClass_TYPEDEF:
         case TypeClass_STRUCT:
-        case TypeClass_UNION:
         case TypeClass_EXCEPTION:
         case TypeClass_SEQUENCE:
-        case TypeClass_ARRAY:
         case TypeClass_INTERFACE:
             {
                 Reference< XAccessible > pXAcc;

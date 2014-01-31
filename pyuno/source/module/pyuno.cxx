@@ -118,10 +118,6 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 
         break;
     }
-    case typelib_TypeClass_UNION:
-    {
-        break;
-    }
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -283,7 +279,6 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
 
     case typelib_TypeClass_VOID:
-    case typelib_TypeClass_ARRAY:
     case typelib_TypeClass_UNKNOWN:
     case typelib_TypeClass_SERVICE:
     case typelib_TypeClass_MODULE:

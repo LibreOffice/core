@@ -171,9 +171,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
         case typelib_TypeClass_TYPE:
         case typelib_TypeClass_ANY:
         case typelib_TypeClass_TYPEDEF:
-        case typelib_TypeClass_UNION:
         case typelib_TypeClass_SEQUENCE:
-        case typelib_TypeClass_ARRAY:
         case typelib_TypeClass_INTERFACE:
             return 0;
         case typelib_TypeClass_STRUCT:

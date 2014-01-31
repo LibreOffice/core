@@ -81,10 +81,6 @@ const char *typeClassToString( TypeClass t )
         ret = "INTERFACE"; break;
     case com::sun::star::uno::TypeClass_TYPEDEF:
         ret = "TYPEDEF"; break;
-    case com::sun::star::uno::TypeClass_UNION:
-        ret = "UNION"; break;
-    case com::sun::star::uno::TypeClass_ARRAY:
-        ret = "ARRAY"; break;
     case com::sun::star::uno::TypeClass_SERVICE:
         ret = "SERVICE"; break;
     case com::sun::star::uno::TypeClass_MODULE:

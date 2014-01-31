@@ -585,7 +585,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==SEQ of ANY==
-    Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 ), aAnySeq3( 2 );
+    Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 );
     Any * pAnySeq    = aAnySeq.getArray();
     pAnySeq[0]       = makeAny( aINT32Seq );
     pAnySeq[1]       = makeAny( OUString("lala") );
@@ -597,12 +597,6 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pAnySeq[1]       <<= OUString("0815");
     aVal <<= aAnySeq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
-                                         // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    pAnySeq = aAnySeq3.getArray();
-    pAnySeq[0]       <<= OUString("TypeClass_UNION");
-    pAnySeq[1]       <<= OUString("TypeClass_ENUM");
-    aVal <<= aAnySeq3;
-    pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     return nElems;
 }

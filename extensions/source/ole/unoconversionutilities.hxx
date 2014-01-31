@@ -963,12 +963,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             //TypeClass_TYPEDEF
             //TypeClass_ANY:
             //TypeClass_UNKNOWN:
-            //TypeClass_UNSIGNED_OCTET:
-            // TypeClass_UNION:
-            // TypeClass_ARRAY:
-            // TypeClass_UNSIGNED_INT:
-            // TypeClass_UNSIGNED_BYTE:
-            // TypeClass_MODULE:
+            //TypeClass_MODULE:
             throw CannotConvertException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
                       "There is no conversion for this UNO type to a Automation type."

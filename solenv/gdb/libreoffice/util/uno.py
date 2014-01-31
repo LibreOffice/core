@@ -63,14 +63,12 @@ class TypeClass(object):
     TYPEDEF = 16
     # type class of struct
     STRUCT = 17
-    # type class of union (not implemented)
-    UNION = 18
+
     # type class of exception
     EXCEPTION = 19
     # type class of sequence
     SEQUENCE = 20
-    # type class of array (not implemented)
-    ARRAY = 21
+
     # type class of interface
     INTERFACE = 22
     # type class of service (not implemented)
@@ -236,14 +234,10 @@ def make_uno_type(val):
         pass
     elif type_class == TypeClass.STRUCT:
         uno_type = StructType(val, full_val)
-    elif type_class == TypeClass.UNION:
-        raise UnsupportedType('union')
     elif type_class == TypeClass.EXCEPTION:
         uno_type = CompoundType(val, full_val)
     elif type_class == TypeClass.SEQUENCE:
         uno_type = IndirectType(val, full_val)
-    elif type_class == TypeClass.ARRAY:
-        raise UnsupportedType('array')
     elif type_class == TypeClass.INTERFACE:
         uno_type = InterfaceType(val, full_val)
     elif type_class == TypeClass.SERVICE:

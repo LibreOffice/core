@@ -87,7 +87,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     TypeClass eTC = rArray.getValueTypeClass();
-    if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
+    if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
             OUString("no sequence given!"),
@@ -112,7 +112,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     TypeClass eTC = rArray.getValueTypeClass();
-    if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
+    if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
             OUString("no sequence given!"),
@@ -126,7 +126,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
     TypeClass eTC = rArray.getValueTypeClass();
-    if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
+    if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
             OUString("no sequence given!"),
@@ -157,7 +157,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
     TypeClass eTC = rArray.getValueTypeClass();
-    if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
+    if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
             OUString("no sequence given!"),

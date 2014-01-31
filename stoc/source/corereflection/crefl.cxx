@@ -208,11 +208,9 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
         return new EnumIdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 
     case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_UNION:
     case typelib_TypeClass_EXCEPTION:
         return new CompoundIdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 
-    case typelib_TypeClass_ARRAY:
     case typelib_TypeClass_SEQUENCE:
         return new ArrayIdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 

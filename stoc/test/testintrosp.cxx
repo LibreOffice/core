@@ -103,10 +103,8 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         case TypeClass_SERVICE:         aRetStr = "TYPE SERVICE";        break;
         case TypeClass_STRUCT:          aRetStr = "TYPE STRUCT";         break;
         case TypeClass_TYPEDEF:         aRetStr = "TYPE TYPEDEF";        break;
-        case TypeClass_UNION:           aRetStr = "TYPE UNION";          break;
         case TypeClass_ENUM:            aRetStr = "TYPE ENUM";           break;
         case TypeClass_EXCEPTION:       aRetStr = "TYPE EXCEPTION";      break;
-        case TypeClass_ARRAY:           aRetStr = "TYPE ARRAY";          break;
         case TypeClass_SEQUENCE:        aRetStr = "TYPE SEQUENCE";       break;
         case TypeClass_VOID:            aRetStr = "TYPE void";           break;
         case TypeClass_ANY:             aRetStr = "TYPE any";            break;

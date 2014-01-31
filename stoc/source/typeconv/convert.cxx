@@ -521,9 +521,8 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
     case TypeClass_ANY:
         return rVal;
 
-    // --- to STRUCT, UNION, EXCEPTION ----------------------------------------------------------
+    // --- to STRUCT, EXCEPTION ----------------------------------------------------------
     case TypeClass_STRUCT:
-//      case TypeClass_UNION: // xxx todo
     case TypeClass_EXCEPTION:
     {
         // same types or destination type is derived source type?
@@ -700,22 +699,26 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     switch (aDestinationClass)
     {
         // only simple Conversion of _simple_ types
-    case TypeClass_INTERFACE:
-    case TypeClass_SERVICE:
-    case TypeClass_STRUCT:
-    case TypeClass_TYPEDEF:
-    case TypeClass_UNION:
-    case TypeClass_EXCEPTION:
-    case TypeClass_ARRAY:
-    case TypeClass_SEQUENCE:
-    case TypeClass_ENUM:
-    case TypeClass_UNKNOWN:
-    case TypeClass_MODULE:
+    case TypeClass_VOID:
+    case TypeClass_BOOLEAN:
+    case TypeClass_BYTE:
+    case TypeClass_SHORT:
+    case TypeClass_UNSIGNED_SHORT:
+    case TypeClass_LONG:
+    case TypeClass_UNSIGNED_LONG:
+    case TypeClass_HYPER:
+    case TypeClass_UNSIGNED_HYPER:
+    case TypeClass_FLOAT:
+    case TypeClass_DOUBLE:
+    case TypeClass_CHAR:
+    case TypeClass_STRING:
+    case TypeClass_ANY:
+        break;
+
+    default:
         throw IllegalArgumentException(
             OUString("destination type is not simple!"),
             Reference< XInterface >(), (sal_Int16) 1 );
-    default:
-        break;
     }
 
     Type aSourceType = rVal.getValueType();

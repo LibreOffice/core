@@ -26,9 +26,7 @@
  module com {  module sun {  module star {  module reflection {
 
 
-/** Deprecated.  Arrays are not supported.
-    Reflects a fixed-size array type.
-    The type class of this description is TypeClass_ARRAY.
+/** Deprecated, UNOIDL does not have an array concept.
 
     @deprecated
 */

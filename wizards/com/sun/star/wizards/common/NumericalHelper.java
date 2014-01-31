@@ -43,8 +43,7 @@ public class NumericalHelper
     public static final int CHAR_TYPE = 6;
     public static final int STRING_TYPE = -1;
     public static final int BOOLEAN_TYPE = -2;
-    public static final int ARRAY_TYPE = -3;
-    public static final int SEQUENCE_TYPE = -4;
+    public static final int SEQUENCE_TYPE = -3;
     public static final int ASCII_VALUE_0 = 48;
     public static final int ASCII_VALUE_A = 65;
     public static final int COUNT_CHARS_IN_ALPHABET = 26;
@@ -659,7 +658,7 @@ public class NumericalHelper
             case BOOLEAN_TYPE:
                 retValue = aTypeObject.aValue.toString();
                 break;
-            case ARRAY_TYPE:
+            case SEQUENCE_TYPE:
                 retValue = new String(toByteArray((aValue)));
                 break;
             default:
@@ -738,11 +737,7 @@ public class NumericalHelper
         TypeObject aTypeObject = getTypeObject(anArrayValue);
         if (aTypeObject.iType == SEQUENCE_TYPE)
         {
-            aTypeObject = convertSequenceToObjectArray(aTypeObject);
-        }
-        if (aTypeObject.iType == ARRAY_TYPE)
-        {
-            Object[] obj = (Object[]) aTypeObject.aValue;
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
             retValue = new int[obj.length];
             for (int i = 0; i < obj.length; i++)
             {
@@ -772,11 +767,7 @@ public class NumericalHelper
         TypeObject aTypeObject = getTypeObject(anArrayValue);
         if (aTypeObject.iType == SEQUENCE_TYPE)
         {
-            aTypeObject = convertSequenceToObjectArray(aTypeObject);
-        }
-        if (aTypeObject.iType == ARRAY_TYPE)
-        {
-            Object[] obj = (Object[]) aTypeObject.aValue;
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
             retValue = new byte[obj.length];
             for (int i = 0; i < obj.length; i++)
             {
@@ -806,11 +797,7 @@ public class NumericalHelper
         TypeObject aTypeObject = getTypeObject(anArrayValue);
         if (aTypeObject.iType == SEQUENCE_TYPE)
         {
-            aTypeObject = convertSequenceToObjectArray(aTypeObject);
-        }
-        if (aTypeObject.iType == ARRAY_TYPE)
-        {
-            Object[] obj = (Object[]) aTypeObject.aValue;
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
             retValue = new short[obj.length];
             for (int i = 0; i < obj.length; i++)
             {
@@ -840,11 +827,7 @@ public class NumericalHelper
         TypeObject aTypeObject = getTypeObject(anArrayValue);
         if (aTypeObject.iType == SEQUENCE_TYPE)
         {
-            aTypeObject = convertSequenceToObjectArray(aTypeObject);
-        }
-        if (aTypeObject.iType == ARRAY_TYPE)
-        {
-            Object[] obj = (Object[]) aTypeObject.aValue;
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
             retValue = new String[obj.length];
             for (int i = 0; i < obj.length; i++)
             {
@@ -1120,13 +1103,6 @@ public class NumericalHelper
                 aTypeObject.iType = BOOLEAN_TYPE;
                 aTypeObject.aValue = Boolean.valueOf(AnyConverter.toBoolean(aValue));
                 break;
-            case TypeClass.ARRAY_value:
-                aTypeObject.iType = ARRAY_TYPE;
-                aTypeObject.aValue = new Object[]
-                        {
-                            AnyConverter.toArray(aValue)
-                        };
-                break;
             case TypeClass.SEQUENCE_value:
                 aTypeObject.iType = SEQUENCE_TYPE;
                 aTypeObject.aValue = aValue;
@@ -1302,13 +1278,11 @@ public class NumericalHelper
         }
     }
 
-    private static TypeObject convertSequenceToObjectArray(
+    private static Object[] convertSequenceToObjectArray(
             TypeObject sourceObject)
             throws com.sun.star.lang.IllegalArgumentException
     {
-        TypeObject destObject = new TypeObject();
         Object array = sourceObject.aValue;
-        destObject.iType = ARRAY_TYPE;
         Class<?> c = array.getClass();
         Object[] aShortVal = null;
         if (c.equals(byte[].class))
@@ -1388,8 +1362,7 @@ public class NumericalHelper
                         "Cannot convert unknown type: '" + e.getMessage() + "'");
             }
         }
-        destObject.aValue = aShortVal;
-        return destObject;
+        return aShortVal;
     }
 
     /**

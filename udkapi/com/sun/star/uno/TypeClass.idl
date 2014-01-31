@@ -89,7 +89,9 @@ published enum TypeClass
     /** reflecting compound types
     */
     STRUCT,
-    /** reflecting union types
+    /** Deprecated, UNOIDL does not have a union concept.
+
+        @deprecated
     */
     UNION,
     /** reflecting exception types
@@ -98,7 +100,9 @@ published enum TypeClass
     /** reflecting sequence types
     */
     SEQUENCE,
-    /** reflecting array types
+    /** Deprecated, UNOIDL does not have an array concept.
+
+        @deprecated
     */
     ARRAY,
     /** reflecting interface types

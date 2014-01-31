@@ -61,13 +61,19 @@ typedef enum _typelib_TypeClass
     typelib_TypeClass_TYPEDEF = 16,
     /** type class of struct */
     typelib_TypeClass_STRUCT = 17,
-    /** type class of union (not implemented) */
+    /** Deprecated, UNOIDL does not have a union concept.
+
+        @deprecated
+    */
     typelib_TypeClass_UNION = 18,
     /** type class of exception */
     typelib_TypeClass_EXCEPTION = 19,
     /** type class of sequence */
     typelib_TypeClass_SEQUENCE = 20,
-    /** type class of array (not implemented) */
+    /** Deprecated, UNOIDL does not have an array concept.
+
+        @deprecated
+    */
     typelib_TypeClass_ARRAY = 21,
     /** type class of interface */
     typelib_TypeClass_INTERFACE = 22,

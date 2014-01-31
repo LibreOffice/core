@@ -278,8 +278,7 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * )
 
 /** Gets the meta type of IDL sequence.
     This function has been introduced, because one cannot get the (templated)
-    cppu type out of C++ array types.  Array types have special
-    getCppuArrayTypeN() functions.
+    cppu type out of C++ array types.
 
     @attention
     the given element type must be the same as the template argument type!

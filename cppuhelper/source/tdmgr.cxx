@@ -47,7 +47,6 @@
 #include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XUnionTypeDescription.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "boost/scoped_array.hpp"
@@ -65,104 +64,6 @@ static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType );
 
-//==================================================================================================
-inline static sal_Int64 coerceToInt64( const Any & rVal )
-{
-    switch (rVal.getValueTypeClass())
-    {
-    case TypeClass_CHAR:
-        return *(sal_Unicode *)rVal.getValue();
-    case TypeClass_BOOLEAN:
-        return (*(sal_Bool *)rVal.getValue() ? 1 : 0);
-    case TypeClass_BYTE:
-        return *(sal_Int8 *)rVal.getValue();
-    case TypeClass_SHORT:
-        return *(sal_Int16 *)rVal.getValue();
-    case TypeClass_UNSIGNED_SHORT:
-        return *(sal_uInt16 *)rVal.getValue();
-    case TypeClass_LONG:
-        return *(sal_Int32 *)rVal.getValue();
-    case TypeClass_UNSIGNED_LONG:
-        return *(sal_uInt32 *)rVal.getValue();
-    case TypeClass_HYPER:
-        return *(sal_Int64 *)rVal.getValue();
-    case TypeClass_UNSIGNED_HYPER:
-        return *(sal_uInt64 *)rVal.getValue();
-    case TypeClass_ENUM:
-        return *(int *)rVal.getValue();
-    default:
-        OSL_ASSERT(false);
-        return 0;
-    }
-}
-//==================================================================================================
-inline static typelib_TypeDescription * createCTD(
-    const Reference< XUnionTypeDescription > & xType )
-{
-    typelib_TypeDescription * pRet = 0;
-    if (xType.is())
-    {
-        OUString aTypeName( xType->getName() );
-
-        // discriminant type
-        Reference< XTypeDescription > xDiscrTD( xType->getDiscriminantType() );
-        OUString aDiscrTypeName( xDiscrTD->getName() );
-        typelib_TypeDescriptionReference * pDiscrTypeRef = 0;
-        typelib_typedescriptionreference_new( &pDiscrTypeRef,
-                                              (typelib_TypeClass)xDiscrTD->getTypeClass(),
-                                              aDiscrTypeName.pData );
-        // default member type
-        Reference< XTypeDescription > xDefaultMemberTD( xType->getDefaultMemberType() );
-        OUString aDefMemberTypeName( xDefaultMemberTD->getName() );
-        typelib_TypeDescriptionReference * pDefMemberTypeRef = 0;
-        typelib_typedescriptionreference_new( &pDefMemberTypeRef,
-                                              (typelib_TypeClass)xDefaultMemberTD->getTypeClass(),
-                                              aDefMemberTypeName.pData );
-        // init array
-        Sequence< Any > aDiscriminants( xType->getDiscriminants() );
-        Sequence< Reference< XTypeDescription > > aMemberTypes( xType->getMemberTypes() );
-        Sequence< OUString > aMemberNames( xType->getMemberNames() );
-        sal_Int32 nMembers = aDiscriminants.getLength();
-        OSL_ASSERT( nMembers == aMemberNames.getLength() && nMembers == aMemberTypes.getLength() );
-
-        const Any * pDiscriminants                          = aDiscriminants.getConstArray();
-        const Reference< XTypeDescription > * pMemberTypes  = aMemberTypes.getConstArray();
-        const OUString * pMemberNames                       = aMemberNames.getConstArray();
-
-        typelib_Union_Init * pMembers = (typelib_Union_Init *)alloca( nMembers * sizeof(typelib_Union_Init) );
-
-        sal_Int32 nPos;
-        for ( nPos = nMembers; nPos--; )
-        {
-            typelib_Union_Init & rEntry = pMembers[nPos];
-            // member discriminant
-            rEntry.nDiscriminant = coerceToInt64( pDiscriminants[nPos] );
-            // member type
-            OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
-            rEntry.pTypeRef = 0;
-            typelib_typedescriptionreference_new( &rEntry.pTypeRef,
-                                                  (typelib_TypeClass)pMemberTypes[nPos]->getTypeClass(),
-                                                  aMemberTypeName.pData );
-            // member name
-            rEntry.pMemberName = pMemberNames[nPos].pData;
-        }
-
-        typelib_typedescription_newUnion( &pRet, aTypeName.pData,
-                                          pDiscrTypeRef,
-                                          coerceToInt64( xType->getDefaultDiscriminant() ),
-                                          pDefMemberTypeRef,
-                                          nMembers, pMembers );
-
-        for ( nPos = nMembers; nPos--; )
-        {
-            typelib_typedescriptionreference_release( pMembers[nPos].pTypeRef );
-        }
-
-        typelib_typedescriptionreference_release( pDiscrTypeRef );
-        typelib_typedescriptionreference_release( pDefMemberTypeRef );
-    }
-    return pRet;
-}
 //==================================================================================================
 inline static typelib_TypeDescription * createCTD(
     const Reference< XCompoundTypeDescription > & xType )
@@ -620,9 +521,6 @@ static typelib_TypeDescription * createCTD(
             break;
         }
 
-        case TypeClass_UNION:
-            pRet = createCTD( Reference< XUnionTypeDescription >::query( xType ) );
-            break;
         case TypeClass_EXCEPTION:
             pRet = createCTD( Reference< XCompoundTypeDescription >::query( xType ) );
             break;

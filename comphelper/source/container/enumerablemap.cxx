@@ -70,7 +70,6 @@ namespace comphelper
     using ::com::sun::star::uno::TypeClass_ANY;
     using ::com::sun::star::uno::TypeClass_EXCEPTION;
     using ::com::sun::star::uno::TypeClass_STRUCT;
-    using ::com::sun::star::uno::TypeClass_UNION;
     using ::com::sun::star::uno::TypeClass_FLOAT;
     using ::com::sun::star::uno::TypeClass_DOUBLE;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
@@ -462,7 +461,6 @@ namespace comphelper
         break;
         case TypeClass_EXCEPTION:
         case TypeClass_STRUCT:
-        case TypeClass_UNION:
         {
             // values are accepted if and only if their type equals, or is derived from, our value type
 

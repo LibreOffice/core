@@ -3389,13 +3389,11 @@ com.sun.star.reflection.XInterfaceMemberTypeDescription
 com.sun.star.reflection.XInterfaceTypeDescription
 com.sun.star.reflection.XInterfaceMethodTypeDescription
 com.sun.star.reflection.XIndirectTypeDescription
-com.sun.star.reflection.XUnionTypeDescription
 com.sun.star.reflection.TypeDescriptionProvider
 com.sun.star.reflection.XInterfaceAttributeTypeDescription
 com.sun.star.reflection.XTypeDescription
 com.sun.star.reflection.XCompoundTypeDescription
 com.sun.star.container.XHierarchicalNameAccess
-com.sun.star.reflection.XArrayTypeDescription
 TOPIC:
 
 LINK:Documentation/DevGuide/OfficeDev/Component/Controllers#XSelectionSupplier

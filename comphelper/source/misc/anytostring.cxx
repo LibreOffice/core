@@ -297,8 +297,6 @@ void appendValue( OUStringBuffer & buf,
     case typelib_TypeClass_UNSIGNED_HYPER:
         buf.append( *static_cast< sal_Int64 const * >(val) );
         break;
-//     case typelib_TypeClass_UNION:
-//     case typelib_TypeClass_ARRAY:
 //     case typelib_TypeClass_UNKNOWN:
 //     case typelib_TypeClass_SERVICE:
 //     case typelib_TypeClass_MODULE:

@@ -26,10 +26,7 @@
  module com {  module sun {  module star {  module reflection {
 
 
-/** Deprecated.  Unions are not supported.
-    Reflects a union type.
-    The discriminant of a union switches between the current value types.
-    In addition, there is also a default case, having no discriminant.
+/** Deprecated, UNOIDL does not have a union concept.
 
     @deprecated
 */
