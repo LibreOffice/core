@@ -21,6 +21,7 @@
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
@@ -48,7 +49,7 @@ namespace framework
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
         ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
-        ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))      )
+        ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))        )
         ,   OWeakObject             (                                                   )
         ,   m_nSeparatorType( 0 )
 {
@@ -100,10 +101,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
-    if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSupportedServiceNames()
@@ -174,10 +172,6 @@ Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementati
     return pID->getImplementationId() ;
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper implementation
-//---------------------------------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::convertFastPropertyValue(
     Any&        aConvertedValue,
     Any&        aOldValue,
@@ -202,7 +196,6 @@ throw( IllegalArgumentException )
     // Return state of operation.
     return bReturn;
 }
-
 
 void SAL_CALL ActionTriggerSeparatorPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
@@ -297,10 +290,6 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
     return seqActionTriggerPropertyDescriptor ;
 }
 
-
-//******************************************************************************************************************************
-//  private method
-//******************************************************************************************************************************
 sal_Bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
     sal_Int16           aCurrentValue   ,
     const   Any&        aNewValue       ,

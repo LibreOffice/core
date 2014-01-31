@@ -35,12 +35,12 @@
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
 
-/*_________________________________________________________________________________________________________________
-
+/*
     macros for declaration and definition of XServiceInfo
     Please use follow public macros only!
 
@@ -48,65 +48,43 @@ namespace framework{
     2)  DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )          => use it to define XServiceInfo for multi service mode
     3)  DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )    => use it to define XServiceInfo for one instance service mode
     4)  DEFINE_INIT_SERVICE( CLASS )                                                                        => use it to implement your own impl_initService() method, which is necessary for initializeing object by using his own reference!
+*/
 
-_________________________________________________________________________________________________________________*/
-
-//*****************************************************************************************************************
-//  private
-//  implementation of XServiceInfo and helper functions
-//*****************************************************************************************************************
 #define PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                  \
-    /*===========================================================================================================*/                                 \
-    /* XServiceInfo                                                                                              */                                 \
-    /*===========================================================================================================*/                                 \
-    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                     \
+                                                                                                                                                    \
+    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                            \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/                                 \
-    /* XServiceInfo                                                                                              */                                 \
-    /*===========================================================================================================*/                                 \
-    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                             \
+    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                                    \
     {                                                                                                                                               \
-        return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;                                        \
+        return cppu::supportsService(this, sServiceName);                                                                                           \
     }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/                                 \
-    /* XServiceInfo                                                                                              */                                 \
-    /*===========================================================================================================*/                                 \
-    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                            \
+    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                                   \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/                                 \
-    /* Helper for XServiceInfo                                                                                   */                                 \
-    /*===========================================================================================================*/                                 \
-    css::uno::Sequence< OUString > CLASS::impl_getStaticSupportedServiceNames()                                                              \
+    css::uno::Sequence< OUString > CLASS::impl_getStaticSupportedServiceNames()                                                                     \
     {                                                                                                                                               \
-        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                 \
+        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                        \
         seqServiceNames.getArray() [0] = SERVICENAME ;                                                                                              \
         return seqServiceNames;                                                                                                                     \
     }                                                                                                                                               \
                                                                                                                                                     \
-    /*===========================================================================================================*/                                 \
-    /* Helper for XServiceInfo                                                                                   */                                 \
-    /*===========================================================================================================*/                                 \
-    OUString CLASS::impl_getStaticImplementationName()                                                                                       \
+    OUString CLASS::impl_getStaticImplementationName()                                                                                              \
     {                                                                                                                                               \
         return IMPLEMENTATIONNAME ;                                                                                                                 \
     }
 
 #define PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
     PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
-    /*===========================================================================================================*/                                 \
-    /* Helper for registry                                                                                       */                                 \
     /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
     /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
-    /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )  \
     {                                                                                                                                                                                              \
         /* create new instance of service */                                                                                                                                                       \
@@ -121,13 +99,10 @@ ________________________________________________________________________________
 
 #define PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
     PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
-    /*===========================================================================================================*/                                 \
-    /* Helper for registry                                                                                       */                                 \
     /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
     /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
-    /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )\
         throw( css::uno::Exception )                                                                                                                                \
     {                                                                                                                                                               \
@@ -144,10 +119,6 @@ ________________________________________________________________________________
         return xService;                                                                                                                                            \
     }
 
-//*****************************************************************************************************************
-//  private
-//  definition of helper function createFactory() for multiple services
-//*****************************************************************************************************************
 #define PRIVATE_DEFINE_SINGLEFACTORY( CLASS )                                                                                                                           \
     css::uno::Reference< css::lang::XSingleServiceFactory > CLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )  \
     {                                                                                                                                                                   \
@@ -160,10 +131,6 @@ ________________________________________________________________________________
         return xReturn;                                                                                                                                                 \
     }
 
-//*****************************************************************************************************************
-//  private
-//  definition of helper function createFactory() for one instance services
-//*****************************************************************************************************************
 #define PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )                                                                                                                      \
     css::uno::Reference< css::lang::XSingleServiceFactory > CLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )  \
     {                                                                                                                                                                   \
@@ -175,11 +142,6 @@ ________________________________________________________________________________
                                                                         );                                                                                              \
         return xReturn;                                                                                                                                                 \
     }
-
-//*****************************************************************************************************************
-//  public
-//  declaration of XServiceInfo and helper functions
-//*****************************************************************************************************************
 
 #define DECLARE_XSERVICEINFO_NOFACTORY                                                                                                                                                                                                  \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
@@ -198,10 +160,6 @@ ________________________________________________________________________________
     static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );          \
     static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );                                       \
 
-//*****************************************************************************************************************
-//  public
-//  implementation of XServiceInfo
-//*****************************************************************************************************************
 #define DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
@@ -214,11 +172,10 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
 
-#define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )        \
+#define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )      \
     PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
 
-//*****************************************************************************************************************
 //  public
 //  implementation of service initialize!
 //  example of using:   DEFINE_INIT_SERVICE( MyClassName,
@@ -229,7 +186,6 @@ ________________________________________________________________________________
 //                              ...
 //                          }
 //                      )
-//*****************************************************************************************************************
 #define DEFINE_INIT_SERVICE( CLASS, FUNCTIONBODY )                                                              \
     void SAL_CALL CLASS::impl_initService()                                                                     \
     {                                                                                                           \

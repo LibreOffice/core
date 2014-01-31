@@ -21,6 +21,7 @@
 #include <classes/actiontriggerpropertyset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
@@ -97,7 +98,6 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
     OWeakObject::release();
 }
 
-
 // XServiceInfo
 OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
 throw ( RuntimeException )
@@ -108,10 +108,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
-    if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
@@ -182,10 +179,6 @@ Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() th
     return pID->getImplementationId() ;
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper implementation
-//---------------------------------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
     Any&        aConvertedValue,
     Any&        aOldValue,
@@ -226,7 +219,6 @@ throw( IllegalArgumentException )
     // Return state of operation.
     return bReturn;
 }
-
 
 void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
@@ -357,10 +349,6 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     return seqActionTriggerPropertyDescriptor ;
 }
 
-
-//******************************************************************************************************************************
-//  private method
-//******************************************************************************************************************************
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const   OUString&    sCurrentValue   ,
     const   Any&        aNewValue       ,
@@ -395,7 +383,6 @@ throw( IllegalArgumentException )
 
     return bReturn;
 }
-
 
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Reference< XBitmap >  aCurrentValue   ,
