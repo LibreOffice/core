@@ -3011,6 +3011,22 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
     assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:6.4pt;height:6.4pt");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo74110,"fdo74110.docx")
+{
+    /*
+    The File contains word art which is being exported as shape and the mapping is defaulted to
+    shape type rect since the actual shape type(s) is/are commented out for some reason.
+    The actual shape type(s) has/have adjustment value(s) where as rect does not have adjustment value.
+    Hence the following test case.
+    */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]",
+                "prst", "rect");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]",0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
