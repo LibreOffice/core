@@ -32,10 +32,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
 
-// -----------------------
-// - oldGraphicFilterDialog -
-// -----------------------
-
 class oldGraphicFilterDialog : public ModalDialog
 {
 private:
@@ -83,6 +79,64 @@ public:
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
+
+class GraphicFilterDialog : public ModalDialog
+{
+private:
+
+    class PreviewWindow : public Control
+    {
+    private:
+        const Graphic* mpOrigGraphic;
+        Graphic   maScaledOrig;
+        Graphic   maPreview;
+        double    mfScaleX;
+        double    mfScaleY;
+
+        virtual void Paint(const Rectangle& rRect);
+        virtual void Resize();
+        virtual Size GetOptimalSize() const;
+
+        void ScaleImageToFit();
+
+    public:
+
+        PreviewWindow(Window* pParent, WinBits nStyle);
+        void init(const Graphic *pOrigGraphic)
+        {
+            mpOrigGraphic = pOrigGraphic;
+            ScaleImageToFit();
+        }
+
+        void            SetPreview(const Graphic& rGraphic);
+        const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
+        double          GetScaleX() const { return mfScaleX; }
+        double          GetScaleY() const { return mfScaleY; }
+    };
+
+private:
+
+    Timer           maTimer;
+    Link            maModifyHdl;
+    Size            maSizePixel;
+    bool            bIsBitmap;
+
+    DECL_LINK(ImplPreviewTimeoutHdl, void *);
+    DECL_LINK( ImplModifyHdl, void* p );
+
+protected:
+    PreviewWindow*  mpPreview;
+
+    const Link&     GetModifyHdl() const { return maModifyHdl; }
+    const Size&     GetGraphicSizePixel() const { return maSizePixel; }
+
+public:
+
+    GraphicFilterDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
+
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
+};
+
 
 // -------------------------
 // - GraphicFilterSmooth -

@@ -29,10 +29,6 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
-// --------------------------------------
-// - oldGraphicFilterDialog::PreviewWindow -
-// --------------------------------------
-
 oldGraphicFilterDialog::PreviewWindow::PreviewWindow( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId )
 {
@@ -73,10 +69,6 @@ void oldGraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic 
     else
         Paint( Rectangle( Point(), GetOutputSizePixel() ) );
 }
-
-// -----------------------
-// - oldGraphicFilterDialog -
-// -----------------------
 
 oldGraphicFilterDialog::oldGraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
     ModalDialog     ( pParent, rResId ),
@@ -143,6 +135,146 @@ IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplPreviewTimeoutHdl)
 IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplModifyHdl)
 {
     if( maGraphic.GetType() == GRAPHIC_BITMAP )
+    {
+        maTimer.Stop();
+        maTimer.Start();
+    }
+
+    return 0;
+}
+
+GraphicFilterDialog::PreviewWindow::PreviewWindow(Window* pParent,
+    const WinBits nStyle)
+    : Control(pParent, nStyle)
+    , mpOrigGraphic(NULL)
+    , mfScaleX(0.0)
+    , mfScaleY(0.0)
+{
+}
+
+Size GraphicFilterDialog::PreviewWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(81, 73), MAP_APPFONT);
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
+{
+    Control::Paint( rRect );
+
+    const Size  aOutputSize( GetOutputSizePixel() );
+
+    if( maPreview.IsAnimated() )
+    {
+        const Size  aGraphicSize( LogicToPixel( maPreview.GetPrefSize(), maPreview.GetPrefMapMode() ) );
+        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
+        maPreview.StartAnimation( this, aGraphicPosition, aGraphicSize );
+    }
+    else
+    {
+        const Size  aGraphicSize( maPreview.GetSizePixel() );
+        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
+        maPreview.Draw( this, aGraphicPosition, aGraphicSize );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicFilterDialog::PreviewWindow::SetPreview( const Graphic& rGraphic )
+{
+    maPreview = rGraphic;
+
+    if( maPreview.IsAnimated() || maPreview.IsTransparent() )
+        Invalidate();
+    else
+        Paint( Rectangle( Point(), GetOutputSizePixel() ) );
+}
+
+void GraphicFilterDialog::PreviewWindow::ScaleImageToFit()
+{
+    if (!mpOrigGraphic)
+        return;
+
+    const Size  aPreviewSize( GetOutputSizePixel() );
+    Size aSizePixel(LogicToPixel(mpOrigGraphic->GetPrefSize(),
+        mpOrigGraphic->GetPrefMapMode()));
+    Size aGrfSize(aSizePixel);
+
+    if( mpOrigGraphic->GetType() == GRAPHIC_BITMAP &&
+        aPreviewSize.Width() && aPreviewSize.Height() &&
+        aGrfSize.Width() && aGrfSize.Height() )
+    {
+        const double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
+        const double fPreWH = (double) aPreviewSize.Width() / aPreviewSize.Height();
+
+        if( fGrfWH < fPreWH )
+        {
+            aGrfSize.Width()  = (long) ( aPreviewSize.Height() * fGrfWH );
+            aGrfSize.Height() = aPreviewSize.Height();
+        }
+        else
+        {
+            aGrfSize.Width()  = aPreviewSize.Width();
+            aGrfSize.Height() = (long) ( aPreviewSize.Width() / fGrfWH );
+        }
+
+        mfScaleX = (double) aGrfSize.Width() / aSizePixel.Width();
+        mfScaleY = (double) aGrfSize.Height() / aSizePixel.Height();
+
+        if( !mpOrigGraphic->IsAnimated() )
+        {
+            BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
+
+            if( aBmpEx.Scale( aGrfSize, BMP_SCALE_DEFAULT ) )
+                maPreview = aBmpEx;
+        }
+    }
+}
+
+void GraphicFilterDialog::PreviewWindow::Resize()
+{
+    Control::Resize();
+    ScaleImageToFit();
+}
+
+GraphicFilterDialog::GraphicFilterDialog(Window* pParent,
+    const OString& rID, const OUString& rUIXMLDescription,
+    const Graphic& rGraphic)
+    : ModalDialog(pParent, rID, rUIXMLDescription)
+    , maModifyHdl(LINK( this, GraphicFilterDialog, ImplModifyHdl))
+    , maSizePixel(LogicToPixel(rGraphic.GetPrefSize(),
+        rGraphic.GetPrefMapMode()))
+{
+    bIsBitmap = rGraphic.GetType() == GRAPHIC_BITMAP;
+
+    get(mpPreview, "preview");
+    mpPreview->init(&rGraphic);
+
+    maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
+    maTimer.SetTimeout( 100 );
+    ImplModifyHdl( NULL );
+}
+
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
+{
+    maTimer.Stop();
+    mpPreview->SetPreview(GetFilteredGraphic(mpPreview->GetScaledOriginal(),
+        mpPreview->GetScaleX(), mpPreview->GetScaleY()));
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
+{
+    if (bIsBitmap)
     {
         maTimer.Stop();
         maTimer.Start();
