@@ -134,7 +134,7 @@ void SwCommentRuler::DrawCommentControl()
     }
 
     // Draw label
-    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDeactiveTextColor() );
+    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDarkShadowColor() );
     maVirDev.SetTextColor( aTextColor );
     // FIXME Expected font size?
     maVirDev.DrawText( aLabelPos, aLabel );
