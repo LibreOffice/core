@@ -1,4 +1,4 @@
-#version 110
+#version 120
 
 attribute vec3 vPosition;
 uniform mat4 MVP;
