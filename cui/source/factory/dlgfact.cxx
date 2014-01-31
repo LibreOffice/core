@@ -1502,7 +1502,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmb
                                             RECT_POINT eLightSource,
                                             sal_uInt32)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
+    oldGraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1511,7 +1511,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
                                             sal_uInt16 nCount,
                                             sal_uInt32 nResId)
 {
-    GraphicFilterDialog* pDlg=NULL;
+    oldGraphicFilterDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_POSTER :
@@ -1533,14 +1533,14 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth ( Window* pParent,
                                             const Graphic& rGraphic, double nRadius, sal_uInt32)
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
+    oldGraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,
                                             const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
 {
-    GraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
+    oldGraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1548,7 +1548,7 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
                                             const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
                                             sal_Bool bEnhanceEdges, sal_uInt32 nResId)
 {
-    GraphicFilterDialog* pDlg=NULL;
+    oldGraphicFilterDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_MOSAIC :

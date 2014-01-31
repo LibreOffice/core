@@ -46,7 +46,7 @@ class SvxMultiFileDialog;
 class SvxHpLinkDlg;
 class FmSearchDialog;
 class Graphic;
-class GraphicFilterDialog;
+class oldGraphicFilterDialog;
 class SvxAreaTabDialog;
 class InsertObjectDialog_Impl;
 class SvPasteObjectDialog;
@@ -436,10 +436,9 @@ class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
     virtual void SetActiveField(const OUString& strField);
 };
 
-class GraphicFilterDialog;
 class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
 {
-    DECL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl,GraphicFilterDialog)
+    DECL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl,oldGraphicFilterDialog)
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
 };
 

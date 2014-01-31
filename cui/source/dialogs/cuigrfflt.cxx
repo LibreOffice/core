@@ -30,17 +30,17 @@
 #include <svx/dialogs.hrc>
 
 // --------------------------------------
-// - GraphicFilterDialog::PreviewWindow -
+// - oldGraphicFilterDialog::PreviewWindow -
 // --------------------------------------
 
-GraphicFilterDialog::PreviewWindow::PreviewWindow( Window* pParent, const ResId& rResId ) :
+oldGraphicFilterDialog::PreviewWindow::PreviewWindow( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
+void oldGraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
 
@@ -64,7 +64,7 @@ void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------------
 
-void GraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
+void oldGraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
 {
     maGraphic = rGraphic;
 
@@ -75,12 +75,12 @@ void GraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
 }
 
 // -----------------------
-// - GraphicFilterDialog -
+// - oldGraphicFilterDialog -
 // -----------------------
 
-GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
+oldGraphicFilterDialog::oldGraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
     ModalDialog     ( pParent, rResId ),
-    maModifyHdl     ( LINK( this, GraphicFilterDialog, ImplModifyHdl ) ),
+    maModifyHdl     ( LINK( this, oldGraphicFilterDialog, ImplModifyHdl ) ),
     mfScaleX        ( 0.0 ),
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
@@ -123,14 +123,14 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
         }
     }
 
-    maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
+    maTimer.SetTimeoutHdl( LINK( this, oldGraphicFilterDialog, ImplPreviewTimeoutHdl ) );
     maTimer.SetTimeout( 100 );
     ImplModifyHdl( NULL );
 }
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
+IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplPreviewTimeoutHdl)
 {
     maTimer.Stop();
     maPreview.SetGraphic( GetFilteredGraphic( maGraphic, mfScaleX, mfScaleY ) );
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
+IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplModifyHdl)
 {
     if( maGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges ) :
-    GraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
+    oldGraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
     maFtWidth   ( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
     maMtrWidth  ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
     maFtHeight  ( this, CUI_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
@@ -235,7 +235,7 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 // ------------------
 
 GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius) :
-    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SMOOTH ), rGraphic ),
+    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SMOOTH ), rGraphic ),
     maFtRadius   ( this, CUI_RES( DLG_FILTERSMOOTH_FT_RADIUS ) ),
     maMtrRadius  ( this, CUI_RES( DLG_FILTERSMOOTH_MTR_RADIUS ) )
 {
@@ -287,7 +287,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                               sal_uInt8 cGreyThreshold, sal_Bool bInvert ) :
-    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
+    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
     maFtThreshold   ( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
     maMtrThreshold  ( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
     maCbxInvert     ( this, CUI_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
@@ -349,7 +349,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
                                         sal_uInt16 nSepiaPercent ) :
-    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
+    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
     maFtSepia       ( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
     maMtrSepia      ( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
 {
@@ -397,7 +397,7 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount ) :
-    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
+    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
     maFtPoster      ( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
     maNumPoster     ( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
 {
@@ -459,7 +459,7 @@ void GraphicFilterEmboss::EmbossControl::MouseButtonDown( const MouseEvent& rEvt
 
 GraphicFilterEmboss::GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
                                           RECT_POINT eLightSource ) :
-    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
+    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
     maFtLight       ( this, CUI_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
     maCtlLight      ( this, CUI_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
 {

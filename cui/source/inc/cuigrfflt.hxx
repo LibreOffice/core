@@ -33,10 +33,10 @@
 #include <svx/rectenum.hxx>
 
 // -----------------------
-// - GraphicFilterDialog -
+// - oldGraphicFilterDialog -
 // -----------------------
 
-class GraphicFilterDialog : public ModalDialog
+class oldGraphicFilterDialog : public ModalDialog
 {
 private:
 
@@ -79,7 +79,7 @@ protected:
 
 public:
 
-    GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
+    oldGraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
@@ -88,7 +88,7 @@ public:
 // - GraphicFilterSmooth -
 // -------------------------
 
-class GraphicFilterSmooth : public GraphicFilterDialog
+class GraphicFilterSmooth : public oldGraphicFilterDialog
 {
 private:
 
@@ -108,7 +108,7 @@ public:
 // - GraphicFilterMosaic -
 // -----------------------
 
-class GraphicFilterMosaic : public GraphicFilterDialog
+class GraphicFilterMosaic : public oldGraphicFilterDialog
 {
 private:
 
@@ -134,7 +134,7 @@ public:
 // - GraphicFilterSolarize -
 // -------------------------
 
-class GraphicFilterSolarize : public GraphicFilterDialog
+class GraphicFilterSolarize : public oldGraphicFilterDialog
 {
 private:
 
@@ -157,7 +157,7 @@ public:
 // - GraphicFilterSepia -
 // ----------------------
 
-class GraphicFilterSepia : public GraphicFilterDialog
+class GraphicFilterSepia : public oldGraphicFilterDialog
 {
 private:
 
@@ -179,7 +179,7 @@ public:
 // - GraphicFilterPoster -
 // -----------------------
 
-class GraphicFilterPoster : public GraphicFilterDialog
+class GraphicFilterPoster : public oldGraphicFilterDialog
 {
 private:
 
@@ -200,7 +200,7 @@ public:
 // - GraphicFilterEmboss -
 // -----------------------
 
-class GraphicFilterEmboss : public GraphicFilterDialog
+class GraphicFilterEmboss : public oldGraphicFilterDialog
 {
 private:
 
