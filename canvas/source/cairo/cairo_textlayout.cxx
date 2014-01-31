@@ -527,7 +527,11 @@ namespace cairocanvas
             if (aSysLayoutData.orientation)
                 cairo_matrix_rotate(&m, (3600 - aSysLayoutData.orientation) * M_PI / 1800.0);
 
-            cairo_matrix_scale(&m, aFont.GetWidth(), aFont.GetHeight());
+            long nWidth = aFont.GetWidth();
+            long nHeight = aFont.GetHeight();
+            if (nWidth == 0)
+                nWidth = nHeight;
+            cairo_matrix_scale(&m, nWidth, nHeight);
 
             //faux italics
             if (rSysFontData.bFakeItalic)
