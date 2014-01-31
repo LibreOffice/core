@@ -24,6 +24,7 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -106,6 +107,8 @@ protected:
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
 
+    bool EqualGradients( ::com::sun::star::awt::Gradient aGradient1, ::com::sun::star::awt::Gradient aGradient2 );
+
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ) {}
@@ -117,6 +120,8 @@ public:
     OUString WriteImage( const Graphic &rGraphic );
 
     void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteColor( OUString sColorSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
+    void WriteColorTransformations( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
     void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, sal_Bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );

@@ -179,6 +179,34 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
     }
 }
 
+void DrawingML::WriteColor( OUString sColorSchemeName, Sequence< PropertyValue > aTransformations )
+{
+    if( aTransformations.hasElements() )
+    {
+        mpFS->startElementNS( XML_a, XML_schemeClr,
+                              XML_val, USS( sColorSchemeName ),
+                              FSEND );
+        WriteColorTransformations( aTransformations );
+        mpFS->endElementNS( XML_a, XML_schemeClr );
+    }
+    else
+        mpFS->singleElementNS( XML_a, XML_schemeClr,
+                              XML_val, USS( sColorSchemeName ),
+                              FSEND );
+}
+
+void DrawingML::WriteColorTransformations( Sequence< PropertyValue > aTransformations )
+{
+    for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
+    {
+        sal_Int32 nToken = Color::getColorTransformationToken( aTransformations[i].Name );
+        sal_Int32 nValue; aTransformations[i].Value >>= nValue;
+
+        if( nToken != XML_TOKEN_INVALID )
+            mpFS->singleElementNS( XML_a, nToken, XML_val, I32S( nValue ), FSEND );
+    }
+}
+
 void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
@@ -283,14 +311,93 @@ sal_uInt32 DrawingML::ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensi
         | ( ( ( ( ( nColor & 0xff0000 ) >> 8 ) * nIntensity ) / 100 ) << 8 );
 }
 
+bool DrawingML::EqualGradients( awt::Gradient aGradient1, awt::Gradient aGradient2 )
+{
+    return aGradient1.Style == aGradient2.Style &&
+            aGradient1.StartColor == aGradient2.StartColor &&
+            aGradient1.EndColor == aGradient2.EndColor &&
+            aGradient1.Angle == aGradient2.Angle &&
+            aGradient1.Border == aGradient2.Border &&
+            aGradient1.XOffset == aGradient2.XOffset &&
+            aGradient1.YOffset == aGradient2.YOffset &&
+            aGradient1.StartIntensity == aGradient2.StartIntensity &&
+            aGradient1.EndIntensity == aGradient2.EndIntensity &&
+            aGradient1.StepCount == aGradient2.StepCount;
+}
+
 void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
 {
     awt::Gradient aGradient;
     if( GETA( FillGradient ) ) {
         aGradient = *static_cast< const awt::Gradient* >( mAny.getValue() );
 
+        // get InteropGrabBag and search the relevant attributes
+        awt::Gradient aOriginalGradient;
+        Sequence< PropertyValue > aGradientStops;
+        if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+        {
+            Sequence< PropertyValue > aGrabBag;
+            mAny >>= aGrabBag;
+            for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+                if( aGrabBag[i].Name == "GradFillDefinition" )
+                    aGrabBag[i].Value >>= aGradientStops;
+                else if( aGrabBag[i].Name == "OriginalGradFill" )
+                    aGrabBag[i].Value >>= aOriginalGradient;
+        }
+
         mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
 
+        // check if an ooxml gradient had been imported and if the user has modified it
+        if( aGradientStops.hasElements() && EqualGradients( aOriginalGradient, aGradient ) )
+        {
+            // write back the original gradient
+            mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+
+            // get original stops and write them
+            for( sal_Int32 i=0; i < aGradientStops.getLength(); ++i )
+            {
+                Sequence< PropertyValue > aGradientStop;
+                aGradientStops[i].Value >>= aGradientStop;
+
+                // get values
+                OUString sSchemeClr;
+                double nPos = 0;
+                sal_Int16 nTransparency = 0;
+                sal_Int32 nRgbClr = 0;
+                Sequence< PropertyValue > aTransformations;
+                for( sal_Int32 j=0; j < aGradientStop.getLength(); ++j )
+                    if( aGradientStop[j].Name == "SchemeClr" )
+                        aGradientStop[j].Value >>= sSchemeClr;
+                    else if( aGradientStop[j].Name == "RgbClr" )
+                        aGradientStop[j].Value >>= nRgbClr;
+                    else if( aGradientStop[j].Name == "Pos" )
+                        aGradientStop[j].Value >>= nPos;
+                    else if( aGradientStop[j].Name == "Transparency" )
+                        aGradientStop[j].Value >>= nTransparency;
+                    else if( aGradientStop[j].Name == "Transformations" )
+                        aGradientStop[j].Value >>= aTransformations;
+
+                // write stop
+                mpFS->startElementNS( XML_a, XML_gs,
+                                      XML_pos, OString::number( nPos * 100000.0 ).getStr(),
+                                      FSEND );
+                if( sSchemeClr.isEmpty() )
+                {
+                    // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+                    sal_Int32 nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+                    WriteColor( nRgbClr, nAlpha );
+                }
+                else
+                    WriteColor( sSchemeClr, aTransformations );
+                mpFS->endElementNS( XML_a, XML_gs );
+            }
+            mpFS->endElementNS( XML_a, XML_gsLst );
+
+            mpFS->singleElementNS( XML_a, XML_lin,
+                                   XML_ang, I32S( ( ( ( 3600 - aGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                                   FSEND );
+        }
+        else
         switch( aGradient.Style ) {
             default:
             case GradientStyle_LINEAR:
@@ -1798,18 +1905,7 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, Sequence< PropertyValu
             else if( aProperties[i].Name == "Transformations" )
                 aProperties[i].Value >>= aTransformations;
         mpFS->startElementNS( XML_a, nTokenId, XML_idx, I32S( nIdx ), FSEND );
-        mpFS->startElementNS( XML_a, XML_schemeClr,
-                              XML_val, USS( sSchemeClr ),
-                              FSEND );
-        for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
-        {
-            sal_Int32 nValue;
-            aTransformations[i].Value >>= nValue;
-            mpFS->singleElementNS( XML_a, Color::getColorTransformationToken( aTransformations[i].Name ),
-                                   XML_val, I32S( nValue ),
-                                   FSEND );
-        }
-        mpFS->endElementNS( XML_a, XML_schemeClr );
+        WriteColor( sSchemeClr, aTransformations );
         mpFS->endElementNS( XML_a, nTokenId );
     }
     else

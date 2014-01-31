@@ -799,6 +799,47 @@ Reference< XShape > Shape::createAndInsert(
                 PUT_PROP( aProperties, nSize - 1, "SpPrLnSolidFillSchemeClr", sLnColorFillScheme );
             }
             putPropertiesToGrabBag( aProperties );
+
+            // Store original gradient fill of the shape to InteropGrabBag
+            // LibreOffice doesn't support all the kinds of gradient so we save its complete definition
+            if( aShapeProps.hasProperty( PROP_FillGradient ) )
+            {
+                Sequence< PropertyValue > aGradientStops( aFillProperties.maGradientProps.maGradientStops.size() );
+                ::std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
+                for( sal_uInt32 i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
+                { // for each stop in the gradient definition:
+
+                    // save position
+                    Sequence< PropertyValue > aGradientStop( 3 );
+                    PUT_PROP( aGradientStop, 0, "Pos", aIt->first );
+
+                    OUString sStopColorScheme = aIt->second.getSchemeName();
+                    if( sStopColorScheme.isEmpty() )
+                    {
+                        // save RGB color
+                        PUT_PROP( aGradientStop, 1, "RgbClr", aIt->second.getColor( rGraphicHelper, nFillPhClr ) );
+                        // in the case of a RGB color, transformations are already applied to
+                        // the color with the exception of alpha transformations. We only need
+                        // to keep the transparency value to calculate the alpha value later.
+                        if( aIt->second.hasTransparency() )
+                        {
+                            PUT_PROP( aGradientStop, 2, "Transparency", aIt->second.getTransparency() );
+                        }
+                    }
+                    else
+                    {
+                        // save color with scheme name
+                        PUT_PROP( aGradientStop, 1, "SchemeClr", sStopColorScheme );
+                        // save all color transformations
+                        PUT_PROP( aGradientStop, 2, "Transformations", aIt->second.getTransformations() );
+                    }
+
+                    PUT_PROP( aGradientStops, i, OUString::number( i ), aGradientStop );
+                    ++aIt;
+                }
+                putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
+                putPropertyToGrabBag( "OriginalGradFill", Any( aShapeProps[PROP_FillGradient] ) );
+            }
         }
 
         // These can have a custom geometry, so position should be set here,

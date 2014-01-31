@@ -358,6 +358,9 @@ OUString Color::getColorTransformationName( sal_Int32 nElement )
         case XML_blue:      return OUString( "blue" );
         case XML_blueMod:   return OUString( "blueMod" );
         case XML_blueOff:   return OUString( "blueOff" );
+        case XML_alpha:     return OUString( "alpha" );
+        case XML_alphaMod:  return OUString( "alphaMod" );
+        case XML_alphaOff:  return OUString( "alphaOff" );
         case XML_hue:       return OUString( "hue" );
         case XML_hueMod:    return OUString( "hueMod" );
         case XML_hueOff:    return OUString( "hueOff" );
@@ -399,6 +402,12 @@ sal_Int32 Color::getColorTransformationToken( OUString sName )
         return XML_blueMod;
     else if( sName == "blueOff" )
         return XML_blueOff;
+    else if( sName == "alpha" )
+        return XML_alpha;
+    else if( sName == "alphaMod" )
+        return XML_alphaMod;
+    else if( sName == "alphaOff" )
+        return XML_alphaOff;
     else if( sName == "hue" )
         return XML_hue;
     else if( sName == "hueMod" )
