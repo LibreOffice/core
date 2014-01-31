@@ -250,16 +250,6 @@ _SvxMacroTabPage::_SvxMacroTabPage(Window* pParent, const OString& rID,
 
 _SvxMacroTabPage::~_SvxMacroTabPage()
 {
-    // need to delete the user data
-    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry* pE = rListBox.GetEntry( 0 );
-    while( pE )
-    {
-        OUString* pEventName = (OUString*)pE->GetUserData();
-        delete pEventName;
-        pE->SetUserData((void*)0);
-        pE = rListBox.NextSibling( pE );
-    }
     DELETEZ( mpImpl );
 }
 // -----------------------------------------------------------------------------

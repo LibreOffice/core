@@ -39,6 +39,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <unotools/eventcfg.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
@@ -108,7 +109,18 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
+    // need to delete the user data
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
+    SvTreeListEntry* pE = rListBox.GetEntry( 0 );
+    while( pE )
+    {
+        OUString* pEventName = (OUString*)pE->GetUserData();
+        delete pEventName;
+        pE->SetUserData((void*)0);
+        pE = rListBox.NextSibling( pE );
+    }
     delete mpImpl->pEventLB;
+
     delete mpImpl->pAssignFT;
     delete mpImpl->pAssignPB;
     delete mpImpl->pDeletePB;
