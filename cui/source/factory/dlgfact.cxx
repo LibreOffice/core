@@ -1544,10 +1544,10 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmo
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,
-                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
+                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert)
 {
-    oldGraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
-    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
+    GraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,

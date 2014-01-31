@@ -421,25 +421,18 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 // ------------------
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
-                                              sal_uInt8 cGreyThreshold, sal_Bool bInvert ) :
-    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
-    maFtThreshold   ( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
-    maMtrThreshold  ( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
-    maCbxInvert     ( this, CUI_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
+                                              sal_uInt8 cGreyThreshold, sal_Bool bInvert )
+    : GraphicFilterDialog(pParent, "SolarizeDialog",
+        "cui/ui/solarizedialog.ui", rGraphic)
 {
-    FreeResource();
+    get(mpMtrThreshold, "value");
+    get(mpCbxInvert, "invert");
 
-    maMtrThreshold.SetValue( FRound( cGreyThreshold / 2.55 ) );
-    maMtrThreshold.SetModifyHdl( GetModifyHdl() );
+    mpMtrThreshold->SetValue( FRound( cGreyThreshold / 2.55 ) );
+    mpMtrThreshold->SetModifyHdl( GetModifyHdl() );
 
-    maCbxInvert.Check( bInvert );
-    maCbxInvert.SetToggleHdl( GetModifyHdl() );
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterSolarize::~GraphicFilterSolarize()
-{
+    mpCbxInvert->Check( bInvert );
+    mpCbxInvert->SetToggleHdl( GetModifyHdl() );
 }
 
 // -----------------------------------------------------------------------------

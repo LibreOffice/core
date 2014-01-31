@@ -40,14 +40,6 @@
 #define DLG_FILTERMOSAIC_MTR_HEIGHT         4
 #define DLG_FILTERMOSAIC_CBX_EDGES          5
 
-// ----------------------
-// - DLG_FILTERSOLARIZE -
-// ----------------------
-
-#define DLG_FILTERSOLARIZE_FT_THRESHOLD     1
-#define DLG_FILTERSOLARIZE_MTR_THRESHOLD    2
-#define DLG_FILTERSOLARIZE_CBX_INVERT       3
-
 // -------------------
 // - DLG_FILTERSEPIA -
 // -------------------

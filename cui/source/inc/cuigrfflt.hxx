@@ -185,23 +185,20 @@ public:
 // - GraphicFilterSolarize -
 // -------------------------
 
-class GraphicFilterSolarize : public oldGraphicFilterDialog
+class GraphicFilterSolarize : public GraphicFilterDialog
 {
 private:
-
-    FixedText       maFtThreshold;
-    MetricField     maMtrThreshold;
-    CheckBox        maCbxInvert;
+    MetricField*    mpMtrThreshold;
+    CheckBox*       mpCbxInvert;
 
 public:
 
-                    GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
+    GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                            sal_uInt8 nGreyThreshold, sal_Bool bInvert );
-                    ~GraphicFilterSolarize();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( maMtrThreshold.GetValue() * 2.55 ) ); }
-    sal_Bool            IsInvert() const { return maCbxInvert.IsChecked(); }
+    virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 ) ); }
+    sal_Bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
 
 // ----------------------
