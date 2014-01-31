@@ -28,6 +28,7 @@
 #include "tp_DataSourceControls.hxx"
 #include "ControllerLockGuard.hxx"
 #include "DataSourceHelper.hxx"
+#include "dlg_PropertyMapping.hxx"
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -217,8 +218,7 @@ DataSourceTabPage::DataSourceTabPage(
     get(m_pFT_DATALABELS  ,"FT_DATALABELS");
     get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
     get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
-
-    m_pBtn_AddMapping = NULL;
+    get(m_pBtn_AddMapping ,"BTN_ADD_MAPPING");
 
     m_pFT_CAPTION->Show(!bHideDescription);
 
@@ -249,9 +249,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
 
     // mapped properties
-#if 0
     m_pBtn_AddMapping->SetClickHdl( LINK( this, DataSourceTabPage, AddMappingHdl ));
-#endif
 
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
@@ -763,6 +761,8 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
 
 IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
 {
+    PropertyMappingDlg aDlg(this);
+    aDlg.Execute();
     OUString aNewMappingName = "FillColor";
     m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aNewMappingName, OUString()));
 

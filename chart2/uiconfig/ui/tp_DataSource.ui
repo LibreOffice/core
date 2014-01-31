@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Fri Jan 17 16:28:14 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
@@ -93,9 +92,11 @@
                 <child>
                   <object class="GtkButton" id="BTN_ADD">
                     <property name="label" translatable="yes">_Add</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -107,9 +108,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="BTN_UP">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="always_show_image">True</property>
                   </object>
                   <packing>
@@ -122,10 +125,12 @@
                 <child>
                   <object class="GtkButton" id="BTN_REMOVE">
                     <property name="label" translatable="yes">_Remove</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -137,9 +142,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="BTN_DOWN">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -237,9 +244,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="IMB_RANGE_MAIN">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="image">imageIMB_RANGE_MAIN</property>
                   </object>
                   <packing>
@@ -317,9 +326,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="IMB_RANGE_CAT">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="image">imageIMB_RANGE_CAT</property>
                   </object>
                   <packing>
@@ -333,6 +344,21 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="BTN_ADD_MAPPING">
+                <property name="label" translatable="yes">Add property mapping</property>
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>
