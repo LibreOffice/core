@@ -427,8 +427,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
 }
 
-void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, ScFormulaCell* pSrcCell,
-                          SCCOL nDestCol, SCROW nDestRow, bool bLast )
+void ScTable::FillFormula(
+    ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast )
 {
 
     pDocument->SetNoListening( true );  // still the wrong reference
@@ -753,7 +753,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 nDelta = -1.0;
             double nVal = 0.0;
             sal_uLong nFormulaCounter = nActFormCnt;
-            bool bFirst = true;
             bool bGetCell = true;
             sal_uInt16 nCellDigits = 0;
             short nHeadNoneTail = 0;
@@ -843,7 +842,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                             break;
                         case CELLTYPE_FORMULA :
-                            FillFormula( nFormulaCounter, bFirst, aSrcCell.mpFormula,
+                            FillFormula(
+                                aSrcCell.mpFormula,
                                     static_cast<SCCOL>(nCol),
                                     static_cast<SCROW>(nRow), (rInner == nIEnd) );
                             if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
@@ -870,7 +870,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 nDelta -= 1.0;
                         }
                         nFormulaCounter = nActFormCnt;
-                        bFirst = false;
                     }
                     else if (bPositive)
                     {
@@ -1283,6 +1282,51 @@ bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOL
 
 }
 
+void ScTable::FillSimple(
+    ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
+    SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
+{
+    bool bHidden = false;
+    SCCOLROW nHiddenValid = -1;
+
+    switch (rSrcCell.meType)
+    {
+        case CELLTYPE_FORMULA:
+        {
+            for (rInner = nIMin; rInner <= nIMax; ++rInner)
+            {
+                if (rInner > nHiddenValid)
+                    bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+
+                if (bHidden)
+                    continue;
+
+                FillFormula(rSrcCell.mpFormula, rCol, rRow, (rInner == nIMax));
+                if (pProgress)
+                    pProgress->SetStateOnPercent(++rProgress);
+            }
+        }
+        break;
+        default:
+        {
+            for (rInner = nIMin; rInner <= nIMax; ++rInner)
+            {
+                if (rInner > nHiddenValid)
+                    bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+
+                if (bHidden)
+                    continue;
+
+                ScAddress aDestPos(rCol, rRow, nTab);
+                rSrcCell.commit(aCol[rCol], aDestPos.Row());
+            }
+            rProgress += nIMax - nIMin + 1;
+            if (pProgress)
+                pProgress->SetStateOnPercent(rProgress);
+        }
+    }
+}
+
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
@@ -1449,43 +1493,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {
-                bool bHidden = false;
-                SCCOLROW nHiddenValid = -1;
-
-                if (eCellType == CELLTYPE_FORMULA)
-                {
-                    bool bFirst = true;
-                    for (rInner = nIMin; rInner <= nIMax; rInner++)
-                    {
-                        if (rInner > nHiddenValid)
-                            bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
-
-                        if (bHidden)
-                            continue;
-                        sal_uLong nInd = nActFormCnt;
-                        FillFormula(nInd, bFirst, aSrcCell.mpFormula,
-                            static_cast<SCCOL>(nCol), nRow, (rInner == nIEnd) );
-                        bFirst = false;
-                        if(pProgress)
-                            pProgress->SetStateOnPercent( ++nProgress );
-                    }
-                }
-                else
-                {
-                    for (rInner = nIMin; rInner <= nIMax; rInner++)
-                    {
-                        if (rInner > nHiddenValid)
-                            bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
-
-                        if (bHidden)
-                            continue;
-                        ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                        aSrcCell.commit(aCol[nCol], aDestPos.Row());
-                    }
-                    nProgress += nIMax - nIMin + 1;
-                    if(pProgress)
-                        pProgress->SetStateOnPercent( nProgress );
-                }
+                FillSimple(aSrcCell, rInner, nIMin, nIMax, nCol, nRow, bVertical, pProgress, nProgress);
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
