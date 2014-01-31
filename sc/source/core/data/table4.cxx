@@ -1261,19 +1261,24 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     rVal = aDate - aNullDate;
 }
 
-namespace
-{
+namespace {
 
-bool HiddenRowColumn(sal_uLong nRowColumn, bool bVertical, ScTable* pTable)
+bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOLROW& rLastPos)
 {
+    bool bHidden = false;
     if(bVertical)
     {
-        return pTable->RowHidden(static_cast<SCROW>(nRowColumn));
+        SCROW nLast;
+        bHidden = pTable->RowHidden(nRowColumn, NULL, &nLast);
+        rLastPos = nLast;
     }
     else
     {
-        return pTable->ColHidden(static_cast<SCCOL>(nRowColumn));
+        SCCOL nLast;
+        bHidden = pTable->ColHidden(static_cast<SCCOL>(nRowColumn), NULL, &nLast);
+        rLastPos = nLast;
     }
+    return bHidden;
 }
 
 }
@@ -1290,15 +1295,15 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     bool bVertical = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP);
     bool bPositive = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_RIGHT);
 
-    sal_uLong nCol = 0;
-    sal_uLong nRow = 0;
-    sal_uLong& rInner = bVertical ? nRow : nCol;        // loop variables
-    sal_uLong& rOuter = bVertical ? nCol : nRow;
-    sal_uLong nOStart;
-    sal_uLong nOEnd;
-    sal_uLong nIStart;
-    sal_uLong nIEnd;
-    sal_uLong nISource;
+    SCCOLROW nCol = 0;
+    SCCOLROW nRow = 0;
+    SCCOLROW& rInner = bVertical ? nRow : nCol;        // loop variables
+    SCCOLROW& rOuter = bVertical ? nCol : nRow;
+    SCCOLROW nOStart;
+    SCCOLROW nOEnd;
+    SCCOLROW nIStart;
+    SCCOLROW nIEnd;
+    SCCOLROW nISource;
     ScRange aFillRange;
 
     if (bVertical)
@@ -1346,8 +1351,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         }
     }
 
-    sal_uLong nIMin = nIStart;
-    sal_uLong nIMax = nIEnd;
+    SCCOLROW nIMin = nIStart;
+    SCCOLROW nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
     sal_uInt16 nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
 
@@ -1444,12 +1449,18 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {
+                bool bHidden = false;
+                SCCOLROW nHiddenValid = -1;
+
                 if (eCellType == CELLTYPE_FORMULA)
                 {
                     bool bFirst = true;
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
-                        if(HiddenRowColumn(rInner, bVertical, this))
+                        if (rInner > nHiddenValid)
+                            bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+
+                        if (bHidden)
                             continue;
                         sal_uLong nInd = nActFormCnt;
                         FillFormula(nInd, bFirst, aSrcCell.mpFormula,
@@ -1463,7 +1474,10 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
-                        if(HiddenRowColumn(rInner, bVertical, this))
+                        if (rInner > nHiddenValid)
+                            bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenValid);
+
+                        if (bHidden)
                             continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
                         aSrcCell.commit(aCol[nCol], aDestPos.Row());
