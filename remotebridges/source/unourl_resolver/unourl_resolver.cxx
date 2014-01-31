@@ -17,21 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/connection/XConnector.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/connection/XConnector.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include "cppuhelper/unourl.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 
 using namespace cppu;
 using namespace osl;
@@ -47,7 +48,7 @@ using namespace com::sun::star::registry;
 
 namespace unourl_resolver
 {
-//--------------------------------------------------------------------------------------------------
+
 Sequence< OUString > resolver_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
@@ -60,7 +61,6 @@ OUString resolver_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-//==================================================================================================
 class ResolverImpl : public WeakImplHelper2< XServiceInfo, XUnoUrlResolver >
 {
     Reference< XMultiComponentFactory > _xSMgr;
@@ -80,37 +80,26 @@ public:
         throw (NoConnectException, ConnectionSetupException, RuntimeException);
 };
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
     : _xSMgr( xCtx->getServiceManager() )
     , _xCtx( xCtx )
 {}
-//__________________________________________________________________________________________________
+
 ResolverImpl::~ResolverImpl() {}
 
 // XServiceInfo
-//__________________________________________________________________________________________________
 OUString ResolverImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return resolver_getImplementationName();
 }
-//__________________________________________________________________________________________________
+
 sal_Bool ResolverImpl::supportsService( const OUString & rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > ResolverImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -118,7 +107,6 @@ Sequence< OUString > ResolverImpl::getSupportedServiceNames()
 }
 
 // XUnoUrlResolver
-//__________________________________________________________________________________________________
 Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     throw (NoConnectException, ConnectionSetupException, RuntimeException)
 {
@@ -161,12 +149,10 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     return xRet;
 }
 
-//==================================================================================================
 static Reference< XInterface > SAL_CALL ResolverImpl_create( const Reference< XComponentContext > & xCtx )
 {
     return Reference< XInterface >( *new ResolverImpl( xCtx ) );
 }
-
 
 }
 

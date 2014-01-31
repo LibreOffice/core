@@ -21,7 +21,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <process.h>
 #include <memory>
 
@@ -68,7 +68,6 @@ DragSource::~DragSource()
 {
 }
 
-//----------------------------------------------------
 /** First start a new drag and drop thread if
      the last one has finished
 
@@ -135,10 +134,7 @@ void DragSource::StartDragImpl(
 }
 
 // XInitialization
-
-//----------------------------------------------------
-/** aArguments contains a machine id
-*/
+/** aArguments contains a machine id */
 void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
 {
@@ -147,28 +143,21 @@ void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
     OSL_ASSERT( IsWindow( m_hAppWindow) );
 }
 
-//----------------------------------------------------
-/** XDragSource
-*/
+/** XDragSource */
 sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
          throw(RuntimeException)
 {
     return 0;
 }
 
-//----------------------------------------------------
-/**
-*/
 sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
           throw( IllegalArgumentException, RuntimeException)
 {
     return 0;
 }
 
-//----------------------------------------------------
 /** Notifies the XDragSourceListener by
-     calling dragDropEnd
-*/
+     calling dragDropEnd */
 void SAL_CALL DragSource::startDrag(
     const DragGestureEvent& trigger,
     sal_Int8 sourceActions,
@@ -206,9 +195,7 @@ void SAL_CALL DragSource::startDrag(
     }
 }
 
-//----------------------------------------------------
-/**IDropTarget
-*/
+/** IDropTarget */
 HRESULT STDMETHODCALLTYPE DragSource::QueryInterface( REFIID riid, void  **ppvObject)
 {
     if( !ppvObject)
@@ -230,18 +217,12 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryInterface( REFIID riid, void  **ppvOb
 
 }
 
-//----------------------------------------------------
-/**
-*/
 ULONG STDMETHODCALLTYPE DragSource::AddRef( void)
 {
     acquire();
     return (ULONG) m_refCount;
 }
 
-//----------------------------------------------------
-/**
-*/
 ULONG STDMETHODCALLTYPE DragSource::Release( void)
 {
     ULONG ref= m_refCount;
@@ -249,9 +230,7 @@ ULONG STDMETHODCALLTYPE DragSource::Release( void)
     return --ref;
 }
 
-//----------------------------------------------------
-/** IDropSource
-*/
+/** IDropSource */
 HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
 /* [in] */ BOOL fEscapePressed,
 /* [in] */ DWORD grfKeyState)
@@ -292,9 +271,6 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
     return retVal;
 }
 
-//----------------------------------------------------
-/**
-*/
 HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
 /* [in] */ DWORD
 #if defined DBG_CONSOLE_OUT
@@ -317,9 +293,7 @@ OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
 // XServiceInfo
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName == DNDSOURCE_SERVICE_NAME )
-        return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -329,13 +303,11 @@ Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  ) throw (Ru
     return Sequence<OUString>(names, 1);
 }
 
-//----------------------------------------------------
-/**This function is called as extra thread from
+/** This function is called as extra thread from
     DragSource::executeDrag. The function
     carries out a drag and drop operation by calling
     DoDragDrop. The thread also notifies all
-    XSourceListener.
-*/
+    XSourceListener. */
 unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 {
     // The structure contains all arguments for DoDragDrop and other
@@ -399,8 +371,5 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 
     return 0;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
