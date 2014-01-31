@@ -8,19 +8,11 @@
 
 $(eval $(call gb_Module_Module,android))
 
-ifeq ($(ENABLE_SDREMOTE_ANDROID),TRUE)
-
-$(eval $(call gb_Module_add_targets,android,\
-    CustomTarget_sdremote \
-))
-
-endif
 
 ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,android,\
     CustomTarget_lo4android \
-    CustomTarget_android_desktop \
 ))
 
 endif
