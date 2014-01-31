@@ -132,10 +132,6 @@ const SCSIZE MAXSUBTOTAL        = 3;
                                     /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
 
-///     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
-
-#define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)    /* 256 Twips, 0.45 cm */
-
 namespace sc
 {
     inline long TwipsToHMM( long nTwips )     { return (nTwips * 127 + 36) / 72; }

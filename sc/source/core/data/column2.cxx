@@ -725,10 +725,11 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
 static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId )
 {
-    sal_uInt16 nHeight = (sal_uInt16) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
-    const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
-    nHeight += nHeight / 5;
-    //  for 10pt gives 240
+    const SvxFontHeightItem& rFontHeight =
+        static_cast<const SvxFontHeightItem&>(rPattern.GetItem(nFontHeightId));
+
+    sal_uInt16 nHeight = rFontHeight.GetHeight();
+    nHeight *= 1.18;
 
     if ( ((const SvxEmphasisMarkItem&)rPattern.
             GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != EMPHASISMARK_NONE )
@@ -738,19 +739,16 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
         nHeight += nHeight / 4;
     }
 
-    if ( nHeight + 240 > ScGlobal::nDefFontHeight )
-    {
-        nHeight = sal::static_int_cast<sal_uInt16>( nHeight + ScGlobal::nDefFontHeight );
-        nHeight -= 240;
-    }
+    const SvxMarginItem& rMargin =
+        static_cast<const SvxMarginItem&>(rPattern.GetItem(ATTR_MARGIN));
 
-    //  Standard height: TextHeight + margin - 23
-    //  -> 257 for Windows
+    nHeight += rMargin.GetTopMargin() + rMargin.GetBottomMargin();
 
     if (nHeight > STD_ROWHEIGHT_DIFF)
         nHeight -= STD_ROWHEIGHT_DIFF;
 
-    nHeight += pMargin->GetTopMargin() + pMargin->GetBottomMargin();
+    if (nHeight < ScGlobal::nStdRowHeight)
+        nHeight = ScGlobal::nStdRowHeight;
 
     return nHeight;
 }
