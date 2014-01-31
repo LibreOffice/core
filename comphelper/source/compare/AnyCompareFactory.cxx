@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "comphelper_module.hxx"
 
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -30,17 +29,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <map>
+#include <cppuhelper/supportsservice.hxx>
 
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
-
-
-//=============================================================================
 
 class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
 {
@@ -56,8 +51,6 @@ public:
 
     virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException);
 };
-
-//=============================================================================
 
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
@@ -87,8 +80,6 @@ public:
     static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 };
 
-//===========================================================================================
-
 sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 aResult = 0;
@@ -103,8 +94,6 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
 
     return aResult;
 }
-
-//===========================================================================================
 
 Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -127,7 +116,6 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
             return;
         }
     }
-
 }
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException )
@@ -142,8 +130,7 @@ OUString SAL_CALL AnyCompareFactory::getImplementationName_static(  )
 
 sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    OUString aServiceName( "com.sun.star.ucb.AnyCompareFactory" );
-    return aServiceName == ServiceName;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  ) throw(RuntimeException)

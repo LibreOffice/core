@@ -25,6 +25,7 @@
 #include "rtl/ustring.hxx"
 
 #include "comphelper/makesequence.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 #include "DragSource.hxx"
 #include "DragSourceContext.hxx"
@@ -69,7 +70,6 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
   return makeSequence(OUString("com.sun.star.datatransfer.dnd.OleDragSource"));
 }
 
-
 @implementation DragSourceHelper;
 
 -(DragSourceHelper*)initWithDragSource: (DragSource*) pds
@@ -84,24 +84,20 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
   return self;
 }
 
-
 -(void)mouseDown: (NSEvent*)theEvent
 {
   mDragSource->saveMouseEvent(theEvent);
 }
-
 
 -(void)mouseDragged: (NSEvent*)theEvent
 {
   mDragSource->saveMouseEvent(theEvent);
 }
 
-
 -(unsigned int)draggingSourceOperationMaskForLocal: (BOOL)isLocal
 {
   return mDragSource->getSupportedDragOperations(isLocal);
 }
-
 
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint
 {
@@ -115,7 +111,6 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
     mDragSource->mXDragSrcListener->dragEnter(dsde);
 }
-
 
 -(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
@@ -137,7 +132,6 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
     mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
 }
 
-
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint
 {
     (void)draggedImage;
@@ -153,7 +147,6 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 @end
 
-
 DragSource::DragSource():
   WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
   mView(NULL),
@@ -163,14 +156,12 @@ DragSource::DragSource():
 {
 }
 
-
 DragSource::~DragSource()
 {
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
     [mDragSourceHelper release];
 }
-
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   throw(Exception)
@@ -217,24 +208,17 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   [(id <MouseEventListener>)mView registerMouseEventListener: mDragSourceHelper];
 }
 
-
-//----------------------------------------------------
-// XDragSource
-//----------------------------------------------------
-
 sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
   throw(RuntimeException)
 {
   return true;
 }
 
-
 sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
   throw( IllegalArgumentException, RuntimeException)
 {
   return 0;
 }
-
 
 void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
@@ -303,7 +287,6 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   g_DropSuccess = false;
 }
 
-
 // In order to initiate a D&D operation we need to
 // provide the triggering mouse event which we get
 // from the SalFrameView that is associated with
@@ -317,7 +300,6 @@ void DragSource::saveMouseEvent(NSEvent* theEvent)
 
   mLastMouseEventBeforeStartDrag = theEvent;
 }
-
 
 /* isLocal indicates whether or not the DnD operation is OOo
    internal.
@@ -344,29 +326,19 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   return srcActions;
 }
 
-
-//################################
-// XServiceInfo
-//################################
-
 OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
 {
   return dragSource_getImplementationName();
 }
 
-
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-  return ServiceName == "com.sun.star.datatransfer.dnd.OleDragSource";
+  return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames() throw (RuntimeException)
 {
   return dragSource_getSupportedServiceNames();
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
