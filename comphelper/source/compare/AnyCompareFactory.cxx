@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <map>
 
 
