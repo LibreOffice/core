@@ -46,7 +46,7 @@ inline clang::QualType getParamType(
 }
 
 inline unsigned getCustomDiagID(
-    clang::DiagnosticsEngine const & engine, clang::DiagnosticsEngine::Level L,
+    clang::DiagnosticsEngine & engine, clang::DiagnosticsEngine::Level L,
     llvm::StringRef FormatString)
 {
 #if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
