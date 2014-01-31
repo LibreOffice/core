@@ -62,7 +62,7 @@ using namespace std;
 #define WGL_SAMPLES_ARB          0x2042
 #endif
 
-#define Z_STEP 0.001;
+#define Z_STEP 0.001
 
 // end shaders
 
@@ -507,7 +507,6 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderLine2FBO(int)
 {
-    m_fZStep += Z_STEP;
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
@@ -554,6 +553,7 @@ int OpenGLRender::RenderLine2FBO(int)
     GLenum status;
     CHECK_GL_ERROR();
     CHECK_GL_FRAME_BUFFER_STATUS();
+    m_fZStep += Z_STEP;
     return 0;
 }
 
@@ -1286,7 +1286,6 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 
 int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
-    m_fZStep += Z_STEP;
     size_t listNum = m_RectangleShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1377,6 +1376,8 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
         m_RectangleShapePointList.pop_front();
     }
     CHECK_GL_ERROR();
+
+    m_fZStep += Z_STEP;
     return 0;
 }
 
@@ -1487,7 +1488,6 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
 int OpenGLRender::RenderTextShape()
 {
     CHECK_GL_ERROR();
-    m_fZStep += Z_STEP;
     size_t listNum = m_TextInfoList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1537,6 +1537,7 @@ int OpenGLRender::RenderTextShape()
         m_TextInfoList.pop_front();
     }
     CHECK_GL_ERROR();
+    m_fZStep += Z_STEP;
     return 0;
 }
 
