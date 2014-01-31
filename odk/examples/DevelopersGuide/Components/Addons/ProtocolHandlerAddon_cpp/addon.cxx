@@ -34,8 +34,6 @@
  *************************************************************************/
 
 #include <addon.hxx>
-#include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -44,6 +42,9 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XMessageBox.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
 
 using rtl::OUString;
 using namespace com::sun::star::uno;
@@ -193,20 +194,11 @@ void SAL_CALL Addon::removeStatusListener( const Reference< XStatusListener >& x
 {
 }
 
-//##################################################################################################
-//#### Helper functions for the implementation of UNO component interfaces #########################
-//##################################################################################################
-
+// Helper functions for the implementation of UNO component interfaces.
 OUString Addon_getImplementationName()
 throw (RuntimeException)
 {
     return OUString ( IMPLEMENTATION_NAME );
-}
-
-sal_Bool SAL_CALL Addon_supportsService( const ::rtl::OUString& ServiceName )
-throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
 }
 
 Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames()
@@ -224,10 +216,7 @@ Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XCompone
     return (cppu::OWeakObject*) new Addon( rContext );
 }
 
-//##################################################################################################
-//#### Implementation of the recommended/mandatory interfaces of a UNO component ###################
-//##################################################################################################
-
+// Implementation of the recommended/mandatory interfaces of a UNO component.
 // XServiceInfo
 ::rtl::OUString SAL_CALL Addon::getImplementationName(  )
     throw (RuntimeException)
@@ -238,7 +227,7 @@ Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XCompone
 sal_Bool SAL_CALL Addon::supportsService( const ::rtl::OUString& rServiceName )
     throw (RuntimeException)
 {
-    return Addon_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< ::rtl::OUString > SAL_CALL Addon::getSupportedServiceNames(  )

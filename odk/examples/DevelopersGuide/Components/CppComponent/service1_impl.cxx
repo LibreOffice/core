@@ -38,6 +38,7 @@
 #include <rtl/uuid.h>
 #include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -226,8 +227,7 @@ OUString MyService1Impl::getImplementationName()
 sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    // this object only supports one service, so the test is simple
-    return serviceName == "my_module.MyService1";
+    return cppu::supportsService(this, serviceName);
 }
 Sequence< OUString > MyService1Impl::getSupportedServiceNames()
     throw (RuntimeException)

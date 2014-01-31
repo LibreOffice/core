@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -154,8 +155,7 @@ OUString MyService2Impl::getImplementationName()
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    // this object only supports one service, so the test is simple
-    return serviceName == "my_module.MyService2";
+    return cppu::supportsService(this, serviceName);
 }
 
 Sequence< OUString > MyService2Impl::getSupportedServiceNames()
