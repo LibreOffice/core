@@ -71,7 +71,7 @@ UnsafeBridge::~UnsafeBridge(void)
 {
     LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::~UnsafeBridge(void)", this));
 
-    OSL_ASSERT(m_count >= 0);
+    SAL_WARN_IF(m_count < 0, "cppu.unsafebridge", "m_count is less than 0");
 }
 
 void UnsafeBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
@@ -83,7 +83,7 @@ void UnsafeBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 
 void UnsafeBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    OSL_ASSERT(m_count > 0);
+    SAL_WARN_IF(m_count <= 0, "cppu.unsafebridge", "m_count is less than or equal to 0");
 
     -- m_count;
     pCallee(pParam);
@@ -97,7 +97,7 @@ void UnsafeBridge::v_enter(void)
 {
     m_mutex.acquire();
 
-    OSL_ASSERT(m_count >= 0);
+    SAL_WARN_IF(m_count < 0, "cppu.unsafebridge", "m_count is less than 0");
 
     if (m_count == 0)
         m_threadId = osl::Thread::getCurrentIdentifier();
@@ -107,7 +107,7 @@ void UnsafeBridge::v_enter(void)
 
 void UnsafeBridge::v_leave(void)
 {
-    OSL_ASSERT(m_count > 0);
+    SAL_WARN_IF(m_count <= 0, "cppu.unsafebridge", "m_count is less than or equal to 0");
 
     -- m_count;
     if (!m_count)
