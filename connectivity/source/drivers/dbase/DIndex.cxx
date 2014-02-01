@@ -56,13 +56,16 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
-    ,m_pFileStream(NULL)
-    ,m_nCurNode(NODE_NOTFOUND)
-    ,m_pTable(_pTable)
+ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
+    : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
+    , m_pFileStream(NULL)
+    , m_nCurNode(NODE_NOTFOUND)
+    , m_nPageCount(0)
+    , m_nRootPage(0)
+    , m_pTable(_pTable)
+    , m_bUseCollector(sal_False)
 {
-    m_aHeader.db_pagecount = m_aHeader.db_rootpage = m_aHeader.db_keytype = m_aHeader.db_maxkeys = m_aHeader.db_keylen = 0;
-    m_aHeader.db_name[0] = '\0';
+    m_aHeader = {};
     construct();
 }
 // -------------------------------------------------------------------------
