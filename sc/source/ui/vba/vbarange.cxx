@@ -4483,8 +4483,10 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
         sal_Bool bHasColHeader = false;
         ScDocument* pDoc = pShell ? pShell->GetDocument() : NULL;
-
-        bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) ) ? sal_True : false;
+        if (pDoc)
+        {
+            bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) ) ? sal_True : false;
+        }
         xFiltProps->setPropertyValue( "ContainsHeader", uno::Any( bHasColHeader ) );
     }
 
