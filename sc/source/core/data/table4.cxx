@@ -1298,7 +1298,14 @@ void ScTable::FillAutoSimple(
             if ( bGetCell )
             {
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
+                {
                     aSrcCell = aCol[rCol].GetCellValue(nSource);
+                    if (aSrcCell.meType == CELLTYPE_FORMULA)
+                    {
+                        FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
+                        return;
+                    }
+                }
                 else                // rInner&:=nCol, rOuter&:=nRow
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
 
