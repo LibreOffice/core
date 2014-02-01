@@ -321,8 +321,11 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
 
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
-        if( pEvt && mpAccExec->execute(rKeyCode) )
-            return true;
+        const OUString sFindBar("vnd.sun.star.findbar:FocusToFindbar");
+        // Checking the command is not for findbar
+        if(mpAccExec->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)) != sFindBar)
+            if( pEvt && mpAccExec->execute(rKeyCode) )
+                return true;
     }
 
     return Window::Notify( rNEvt );
