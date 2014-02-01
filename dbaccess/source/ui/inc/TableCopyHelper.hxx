@@ -82,7 +82,13 @@ namespace dbaui
             sal_Bool                        bHtml;
             sal_Bool                        bError;
 
-            DropDescriptor() : nType(E_TABLE),pDroppedAt(NULL),nAction(DND_ACTION_NONE) { }
+            DropDescriptor()
+                : nType(E_TABLE)
+                , pDroppedAt(NULL)
+                , nAction(DND_ACTION_NONE)
+                , bHtml(sal_False)
+                , bError(sal_False)
+                { }
         };
 
         OTableCopyHelper(OGenericUnoController* _pControler);
