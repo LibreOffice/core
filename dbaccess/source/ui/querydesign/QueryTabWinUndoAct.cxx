@@ -40,8 +40,9 @@ OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 }
 
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
-    :OQueryDesignUndoAction(pOwner, nCommentID)
-    ,m_pTabWin(NULL)
+    : OQueryDesignUndoAction(pOwner, nCommentID)
+    , m_pTabWin(NULL)
+    , m_bOwnerOfObjects(sal_False)
 {
 }
 

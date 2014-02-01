@@ -35,7 +35,7 @@ namespace dbaui
     protected:
         ::std::vector<OTableConnection*> m_vTableConnection;
         OQueryTableWindow*               m_pTabWin;
-        sal_Bool                             m_bOwnerOfObjects;
+        sal_Bool                         m_bOwnerOfObjects;
         // am I the only owner of the managed objects? (changes with every redo or undo)
 
     public:
