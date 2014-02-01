@@ -651,11 +651,10 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( aValue.getType() == CTRL_SPINBUTTONS )
         {
             const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
-            sal_Bool bOk = sal_False;
 
             RECT rect;
             ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
-            bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
+            sal_Bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
 
             if( bOk )
             {
@@ -676,11 +675,10 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             if( aValue.getType() == CTRL_SPINBUTTONS )
             {
                 const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue*>(&aValue);
-                sal_Bool bOk = sal_False;
 
                 RECT rect;
                 ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
-                bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
+                sal_Bool bOk = ImplDrawTheme( hTheme, hDC, iPart, iState, rect, aCaption);
 
                 if( bOk )
                 {
