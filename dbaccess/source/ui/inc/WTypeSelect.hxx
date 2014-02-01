@@ -65,12 +65,18 @@ namespace dbaui
         sal_Bool                IsPrimaryKeyAllowed() const;
         void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
                                                 sal_uInt16 _nPos,
-                                                sal_Bool _bSet=sal_False);
+                                                sal_Bool _bSet = sal_False);
     protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt );
     public:
-        OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER ) : MultiListBox(pParent,nStyle) {};
-        OWizTypeSelectList( Window* pParent, const ResId& rResId ) : MultiListBox(pParent,rResId) {};
+        OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
+            : MultiListBox(pParent,nStyle)
+            , m_bPKey(sal_False)
+            {}
+        OWizTypeSelectList( Window* pParent, const ResId& rResId )
+            : MultiListBox(pParent,rResId)
+            , m_bPKey(sal_False)
+            {}
         void                    SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
     };
 
