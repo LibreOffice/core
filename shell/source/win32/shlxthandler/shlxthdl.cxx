@@ -289,7 +289,7 @@ namespace /* private */
                 hkey,
                 ClsidToString(Clsid).c_str());
 
-            rc = RegCloseKey(hkey);
+            rc |= RegCloseKey(hkey);
         }
 
         return rc == ERROR_SUCCESS ? S_OK : E_FAIL;
