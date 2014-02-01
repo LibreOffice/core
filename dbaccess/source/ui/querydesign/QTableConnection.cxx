@@ -25,13 +25,14 @@ using namespace dbaui;
 // class OQueryTableConnection
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
-    :OTableConnection(pContainer, pTabConnData)
-    ,m_bVisited(sal_False)
+    : OTableConnection(pContainer, pTabConnData)
+    , m_bVisited(sal_False)
 {
 }
 
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
-    :OTableConnection( rConn )
+    : OTableConnection( rConn )
+    , m_bVisited(sal_False)
 {
     // no own members, so base class functionality is sufficient
 }
