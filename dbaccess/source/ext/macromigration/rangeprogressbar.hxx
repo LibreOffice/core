@@ -32,14 +32,14 @@ namespace dbmm
     {
     public:
         RangeProgressBar( Window* _pParent, WinBits nWinBits = WB_STDPROGRESSBAR )
-            :ProgressBar( _pParent, nWinBits )
-        {
-        }
+            : ProgressBar( _pParent, nWinBits )
+            , m_nRange(0)
+        { }
 
         RangeProgressBar( Window* _pParent, const ResId& rResId )
-            :ProgressBar( _pParent, rResId )
-        {
-        }
+            : ProgressBar( _pParent, rResId )
+            , m_nRange(0)
+        { }
 
         inline  void        SetRange( sal_uInt32 _nRange );
         inline  sal_uInt32  GetRange() const;
