@@ -179,7 +179,8 @@ namespace dbaui
         OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
-                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
+            : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
+            , m_nIndent(0)
         {}
 
         virtual sal_Bool Write();
