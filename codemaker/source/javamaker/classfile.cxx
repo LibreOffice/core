@@ -431,8 +431,11 @@ ClassFile::Code::Position ClassFile::Code::getPosition() const {
     return m_code.size();
 }
 
-ClassFile::Code::Code(ClassFile & classFile):
-    m_classFile(classFile), m_exceptionTableLength(0)
+ClassFile::Code::Code(ClassFile & classFile)
+    : m_classFile(classFile)
+    , m_maxStack(0)
+    , m_maxLocals(0)
+    , m_exceptionTableLength(0)
 {}
 
 void ClassFile::Code::ldc(sal_uInt16 index) {
