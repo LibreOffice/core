@@ -490,11 +490,19 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
  */
 
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-            SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
-            sal_uLong nNodeIndex, bool bCache )
-    : rpFrm( rpF ), rpPrv( rpP ), rpPage( rpPg ), rpLay( rpL ),
-      rpActualSection( rpA ), rbBreakAfter(rB), pDoc(pD), nMaxParaPerPage( 25 ),
-      nParagraphCnt( bCache ? 0 : USHRT_MAX ), bFirst( bCache )
+                          SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
+                          sal_uLong nNodeIndex, bool bCache )
+    : rpFrm( rpF )
+    , rpPrv( rpP )
+    , rpPage( rpPg )
+    , rpLay( rpL )
+    , rpActualSection( rpA )
+    , rbBreakAfter(rB)
+    , pDoc(pD)
+    , nMaxParaPerPage( 25 )
+    , nParagraphCnt( bCache ? 0 : USHRT_MAX )
+    , nFlyIdx( 0 )
+    , bFirst( bCache )
 {
     pImpl = pDoc->GetLayoutCache() ? pDoc->GetLayoutCache()->LockImpl() : NULL;
     if( pImpl )
@@ -504,9 +512,10 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
                           ->GetIndex();
         nNodeIndex -= nStartOfContent;
         nIndex = 0;
-        nFlyIdx = 0;
         while( nIndex < pImpl->size() && (*pImpl)[ nIndex ] < nNodeIndex )
+        {
             ++nIndex;
+        }
         if( nIndex >= pImpl->size() )
         {
             pDoc->GetLayoutCache()->UnlockImpl();
