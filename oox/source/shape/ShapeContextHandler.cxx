@@ -330,6 +330,7 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
         if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
             mxWpsContext.clear();
+        mxSavedShape.clear();
     }
 }
 
