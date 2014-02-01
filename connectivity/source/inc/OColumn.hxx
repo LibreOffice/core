@@ -52,7 +52,23 @@ namespace connectivity
         sal_Bool        m_DefinitelyWritable;
 
     public:
-        OColumn() {}
+        OColumn()
+            : m_Nullable(0)
+            , m_ColumnDisplaySize(0)
+            , m_Precision(0)
+            , m_Scale(0)
+            , m_ColumnType(0)
+
+            , m_AutoIncrement(sal_False)
+            , m_CaseSensitive(sal_False)
+            , m_Searchable(sal_True)
+            , m_Currency(sal_False)
+            , m_Signed(sal_False)
+            , m_ReadOnly(sal_True)
+            , m_Writable(sal_False)
+            , m_DefinitelyWritable(sal_False)
+            {}
+
         OColumn(const OUString &_aTableName,
                 const OUString &_aColumnName,
 
