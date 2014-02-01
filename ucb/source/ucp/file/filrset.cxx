@@ -41,27 +41,27 @@ using namespace com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-XResultSet_impl::XResultSet_impl(
-    shell* pMyShell,
-    const OUString& aUnqPath,
-    sal_Int32 OpenMode,
-    const uno::Sequence< beans::Property >& seq,
-    const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
-    : m_pMyShell( pMyShell ),
-      m_xProvider( pMyShell->m_pProvider ),
-      m_nRow( -1 ),
-      m_nOpenMode( OpenMode ),
-      m_bRowCountFinal( false ),
-      m_aBaseDirectory( aUnqPath ),
-      m_aFolder( aUnqPath ),
-      m_sProperty( seq ),
-      m_sSortingInfo( seqSort ),
-      m_pDisposeEventListeners( 0 ),
-      m_pRowCountListeners( 0 ),
-      m_pIsFinalListeners( 0 ),
-      m_bStatic( false ),
-      m_nErrorCode( TASKHANDLER_NO_ERROR ),
-      m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
+XResultSet_impl::XResultSet_impl( shell* pMyShell,
+                                  const OUString& aUnqPath,
+                                  sal_Int32 OpenMode,
+                                  const uno::Sequence< beans::Property >& seq,
+                                  const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
+    : m_pMyShell( pMyShell )
+    , m_xProvider( pMyShell->m_pProvider )
+    , m_nRow( -1 )
+    , m_nWasNull ( false )
+    , m_nOpenMode( OpenMode )
+    , m_bRowCountFinal( false )
+    , m_aBaseDirectory( aUnqPath )
+    , m_aFolder( aUnqPath )
+    , m_sProperty( seq )
+    , m_sSortingInfo( seqSort )
+    , m_pDisposeEventListeners( 0 )
+    , m_pRowCountListeners( 0 )
+    , m_pIsFinalListeners( 0 )
+    , m_bStatic( false )
+    , m_nErrorCode( TASKHANDLER_NO_ERROR )
+    , m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
     osl::FileBase::RC err = m_aFolder.open();
     if(  err != osl::FileBase::E_None )
