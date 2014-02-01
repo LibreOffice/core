@@ -43,13 +43,11 @@ namespace connectivity
         sal_Int16       nSearchType;    // Can we search for the type?
         sal_Int16       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
 
-        sal_Bool        bCurrency       : 1,    // Currency
-                        bAutoIncrement  : 1,    // Is it an autoincrementing field?
-                        bNullable       : 1,    // Can the field be NULL?
-                        bCaseSensitive  : 1,    // Is the type case sensitive?
-                        bUnsigned       : 1,    // Is the type unsigned?
-                        bEmpty_1        : 1,    // for later use
-                        bEmpty_2        : 1;
+        sal_Bool        bCurrency       : 1;    // Currency
+        sal_Bool        bAutoIncrement  : 1;    // Is it an autoincrementing field?
+        sal_Bool        bNullable       : 1;    // Can the field be NULL?
+        sal_Bool        bCaseSensitive  : 1;    // Is the type case sensitive?
+        sal_Bool        bUnsigned       : 1;    // Is the type unsigned?
 
         OTypeInfo()
                 :nPrecision(0)
