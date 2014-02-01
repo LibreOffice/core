@@ -516,24 +516,17 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterPoster -
 // -----------------------
 
-GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
-                                          sal_uInt16 nPosterCount ) :
-    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
-    maFtPoster      ( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
-    maNumPoster     ( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
+GraphicFilterPoster::GraphicFilterPoster(Window* pParent, const Graphic& rGraphic,
+                                          sal_uInt16 nPosterCount)
+    : GraphicFilterDialog(pParent, "PosterDialog",
+        "cui/ui/posterdialog.ui", rGraphic)
 {
-    FreeResource();
+    get(mpNumPoster, "value");
 
-    maNumPoster.SetFirst( 2 );
-    maNumPoster.SetLast( rGraphic.GetBitmapEx().GetBitCount() );
-    maNumPoster.SetValue( nPosterCount );
-    maNumPoster.SetModifyHdl( GetModifyHdl() );
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterPoster::~GraphicFilterPoster()
-{
+    mpNumPoster->SetFirst( 2 );
+    mpNumPoster->SetLast( rGraphic.GetBitmapEx().GetBitCount() );
+    mpNumPoster->SetValue( nPosterCount );
+    mpNumPoster->SetModifyHdl( GetModifyHdl() );
 }
 
 // -----------------------------------------------------------------------------

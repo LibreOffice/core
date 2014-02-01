@@ -98,7 +98,6 @@
 #define RID_SVXPAGE_GRID                    (RID_SVX_START + 152)
 
 // factory IDs of dialogs implemented in CUI
-#define RID_SVX_GRFFILTER_DLG_POSTER        (RID_SVX_START + 335)
 #define RID_SVX_GRFFILTER_DLG_MOSAIC        (RID_SVX_START + 332)
 #define RID_SVX_GRFFILTER_DLG_EMBOSS        (RID_SVX_START + 336)
 #define RID_SVXDLG_CHARMAP                  ( RID_SVX_START +  10 )

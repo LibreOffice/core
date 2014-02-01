@@ -41,13 +41,6 @@
 #define DLG_FILTERMOSAIC_CBX_EDGES          5
 
 // --------------------
-// - DLG_FILTERPOSTER -
-// --------------------
-
-#define DLG_FILTERPOSTER_FT_POSTER          1
-#define DLG_FILTERPOSTER_NUM_POSTER         2
-
-// --------------------
 // - DLG_FILTEREMBOSS -
 // --------------------
 

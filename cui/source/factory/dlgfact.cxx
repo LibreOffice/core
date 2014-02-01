@@ -1516,8 +1516,8 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
                                             const Graphic& rGraphic,
                                             sal_uInt16 nCount)
 {
-    oldGraphicFilterDialog* pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
-    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
+    GraphicFilterDialog* pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSepia (Window* pParent,

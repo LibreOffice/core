@@ -223,21 +223,16 @@ public:
 // - GraphicFilterPoster -
 // -----------------------
 
-class GraphicFilterPoster : public oldGraphicFilterDialog
+class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
-
-    FixedText       maFtPoster;
-    NumericField    maNumPoster;
-
+    NumericField*   mpNumPoster;
 public:
-
-                    GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
-                                         sal_uInt16 nPosterColorCount );
-                    ~GraphicFilterPoster();
+    GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
+                         sal_uInt16 nPosterColorCount );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    sal_uInt16          GetPosterColorCount() const { return( (sal_uInt16) maNumPoster.GetValue() ); }
+    sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
 };
 
 // -----------------------
