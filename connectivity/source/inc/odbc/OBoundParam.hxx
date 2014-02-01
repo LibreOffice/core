@@ -33,6 +33,7 @@ namespace connectivity
         public:
             OBoundParam()
                 : binaryData(NULL)
+                , paramLength(0)
                 , paramInputStreamLen(0)
                 , sqlType(::com::sun::star::sdbc::DataType::SQLNULL)
                 , outputParameter(false)
