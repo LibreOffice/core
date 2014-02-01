@@ -1955,7 +1955,6 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
     Reference< XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
-    sal_Bool                bRet = sal_False;
 
     GDIMetaFile             aMtf;
 
@@ -1976,9 +1975,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
 
     (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
 
-    bRet = sal_True;
-
-    return bRet;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
