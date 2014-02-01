@@ -1267,7 +1267,6 @@ void ScTable::FillAutoSimple(
     sal_Int32 nStringValue = 0;
     OUString aValue;
     ScCellValue aSrcCell;
-    CellType eCellType = CELLTYPE_NONE;
     bool bIsOrdinalSuffix = false;
 
     bool bColHidden = false, bRowHidden = false;
@@ -1287,19 +1286,18 @@ void ScTable::FillAutoSimple(
             if ( bGetCell )
             {
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                    aSrcCell = aCol[rCol].GetCellValue(static_cast<SCROW>(nSource));
+                    aSrcCell = aCol[rCol].GetCellValue(nSource);
                 else                // rInner&:=nCol, rOuter&:=nRow
-                    aSrcCell = aCol[nSource].GetCellValue(static_cast<SCROW>(rRow));
+                    aSrcCell = aCol[nSource].GetCellValue(rRow);
 
                 bGetCell = false;
                 if (!aSrcCell.isEmpty())
                 {
-                    eCellType = aSrcCell.meType;
-                    switch (eCellType)
+                    switch (aSrcCell.meType)
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            if ( eCellType == CELLTYPE_STRING )
+                            if (aSrcCell.meType == CELLTYPE_STRING)
                                 aValue = aSrcCell.mpString->getString();
                             else
                                 aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, pDocument);
@@ -1319,14 +1317,12 @@ void ScTable::FillAutoSimple(
                             }
                     }
                 }
-                else
-                    eCellType = CELLTYPE_NONE;
             }
 
-            switch (eCellType)
+            switch (aSrcCell.meType)
             {
                 case CELLTYPE_VALUE:
-                    aCol[rCol].SetValue(static_cast<SCROW>(rRow), aSrcCell.mfValue + nDelta);
+                    aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
                     break;
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
@@ -1341,14 +1337,14 @@ void ScTable::FillAutoSimple(
                         if ( nHeadNoneTail < 0 )
                         {
                             setSuffixCell(
-                                aCol[rCol], static_cast<SCROW>(rRow),
+                                aCol[rCol], rRow,
                                 nNextValue, nCellDigits, aValue,
-                                eCellType, bIsOrdinalSuffix);
+                                aSrcCell.meType, bIsOrdinalSuffix);
                         }
                         else
                         {
                             aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
-                            aCol[rCol].SetRawString(static_cast<SCROW>(rRow), aStr);
+                            aCol[rCol].SetRawString(rRow, aStr);
                         }
                     }
                     else
@@ -1357,9 +1353,7 @@ void ScTable::FillAutoSimple(
                     break;
                 case CELLTYPE_FORMULA :
                     FillFormula(
-                        aSrcCell.mpFormula,
-                            static_cast<SCCOL>(rCol),
-                            static_cast<SCROW>(rRow), (rInner == nIEnd) );
+                        aSrcCell.mpFormula, rCol, rRow, (rInner == nIEnd));
                     if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
                         nMaxFormCnt = nFormulaCounter - nActFormCnt;
                     break;
@@ -1369,7 +1363,7 @@ void ScTable::FillAutoSimple(
                     }
             }
 
-            if (nSource==nISrcEnd)
+            if (nSource == nISrcEnd)
             {
                 if ( nSource != nISrcStart )
                 {   // More than one source cell
@@ -1404,7 +1398,7 @@ void ScTable::FillAutoSimple(
         //  and even then not individually for each one
 
         ++rProgress;
-        if ( pProgress && (eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT) )
+        if ( pProgress && (aSrcCell.meType == CELLTYPE_FORMULA || aSrcCell.meType == CELLTYPE_EDIT) )
             pProgress->SetStateOnPercent( rProgress );
 
     }
