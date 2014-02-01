@@ -1133,6 +1133,51 @@ bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOL
 
 }
 
+void ScTable::FillFormulaVertical(
+    const ScFormulaCell& rSrcCell,
+    SCCOLROW& rInner, SCCOL nCol, SCROW nRow1, SCROW nRow2,
+    ScProgress* pProgress, sal_uLong& rProgress )
+{
+    bool bHidden = false;
+    SCCOLROW nHiddenLast = -1;
+
+    SCCOLROW nRowStart = -1, nRowEnd = -1;
+    std::vector<sc::RowSpan> aSpans;
+    for (rInner = nRow1; rInner <= nRow2; ++rInner)
+    {
+        if (rInner > nHiddenLast)
+            bHidden = HiddenRowColumn(this, rInner, true, nHiddenLast);
+
+        if (bHidden)
+        {
+            if (nRowStart >= 0)
+            {
+                nRowEnd = rInner - 1;
+                aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+                nRowStart = -1;
+            }
+            rInner = nHiddenLast;
+            continue;
+        }
+
+        if (nRowStart < 0)
+            nRowStart = rInner;
+    }
+
+    if (nRowStart >= 0)
+    {
+        nRowEnd = rInner - 1;
+        aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+    }
+
+    aCol[nCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
+    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans);
+
+    rProgress += nRow2 - nRow1 + 1;
+    if (pProgress)
+        pProgress->SetStateOnPercent(rProgress);
+}
+
 void ScTable::FillSeriesSimple(
     ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
     SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
@@ -1146,41 +1191,8 @@ void ScTable::FillSeriesSimple(
         {
             case CELLTYPE_FORMULA:
             {
-                SCCOLROW nRowStart = -1, nRowEnd = -1;
-                std::vector<sc::RowSpan> aSpans;
-                for (rInner = nIMin; rInner <= nIMax; ++rInner)
-                {
-                    if (rInner > nHiddenLast)
-                        bHidden = HiddenRowColumn(this, rInner, bVertical, nHiddenLast);
-
-                    if (bHidden)
-                    {
-                        if (nRowStart >= 0)
-                        {
-                            nRowEnd = rInner - 1;
-                            aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
-                            nRowStart = -1;
-                        }
-                        rInner = nHiddenLast;
-                        continue;
-                    }
-
-                    if (nRowStart < 0)
-                        nRowStart = rInner;
-                }
-
-                if (nRowStart >= 0)
-                {
-                    nRowEnd = rInner - 1;
-                    aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
-                }
-
-                aCol[rCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
-                aCol[rCol].CloneFormulaCell(*rSrcCell.mpFormula, aSpans);
-
-                rProgress += nIMax - nIMin + 1;
-                if (pProgress)
-                    pProgress->SetStateOnPercent(rProgress);
+                FillFormulaVertical(
+                    *rSrcCell.mpFormula, rInner, rCol, nIMin, nIMax, pProgress, rProgress);
             }
             break;
             default:
