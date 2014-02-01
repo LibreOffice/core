@@ -117,10 +117,9 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                                  void* pData )
 {
-    SANE_Status nStatus = SANE_STATUS_GOOD;
     SANE_Int    nInfo = 0;
 
-    nStatus = p_control_option( maHandle, (SANE_Int)nOption,
+    SANE_Status nStatus = p_control_option( maHandle, (SANE_Int)nOption,
                                 nAction, pData, &nInfo );
     DUMP_STATE( nStatus, "sane_control_option" );
 #if OSL_DEBUG_LEVEL > 1
