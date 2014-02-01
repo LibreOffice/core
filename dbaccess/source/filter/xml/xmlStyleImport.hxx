@@ -80,7 +80,7 @@ namespace dbaxml
         const OUString sColumnStyleServiceName;
         const OUString sCellStyleServiceName;
         sal_Int32 m_nNumberFormatIndex;
-        sal_Int32 nMasterPageNameIndex;
+        sal_Int32 m_nMasterPageNameIndex;
         sal_Bool bAutoStyles : 1;
 
         mutable UniReference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;

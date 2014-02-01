@@ -141,16 +141,17 @@ ODBFilter& OTableStyleContext::GetOwnImport()
 
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx ,
-        const OUString& rLName ,
-        const Reference< XAttributeList > & xAttrList,
-        const sal_Bool bTempAutoStyles ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
-    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
-    sCellStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
-    m_nNumberFormatIndex(-1),
-    bAutoStyles(bTempAutoStyles)
+                                          sal_uInt16 nPrfx ,
+                                          const OUString& rLName ,
+                                          const Reference< XAttributeList > & xAttrList,
+                                          const sal_Bool bTempAutoStyles )
+    : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+    , sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))
+    , sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))
+    , sCellStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))
+    , m_nNumberFormatIndex(-1)
+    , m_nMasterPageNameIndex(-1)
+    , bAutoStyles(bTempAutoStyles)
 {
 
 }
@@ -269,10 +270,10 @@ sal_Int32 OTableStylesContext::GetIndex(const sal_Int16 nContextID)
     }
     else if ( nContextID == CTF_DB_MASTERPAGENAME )
     {
-        if (nMasterPageNameIndex == -1)
-            nMasterPageNameIndex =
+        if (m_nMasterPageNameIndex == -1)
+            m_nMasterPageNameIndex =
                 GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
-        return nMasterPageNameIndex;
+        return m_nMasterPageNameIndex;
     }
     else
         return -1;
