@@ -282,9 +282,11 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     ,m_aSelectionListeners( getMutex() )
     ,m_pClipbordNotifier(NULL)
     ,m_pGroupsFloater(NULL)
+    ,m_sMode("normal")
     ,m_nSplitPos(-1)
     ,m_nPageNum(-1)
     ,m_nSelectionCount(0)
+    ,m_nAspect(0)
     ,m_nZoomValue(100)
     ,m_eZoomType(SVX_ZOOM_PERCENT)
     ,m_bShowRuler(sal_True)
@@ -300,9 +302,9 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     // new Observer
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
     m_pReportControllerObserver->acquire();
-
-    m_sMode = "normal";
-    registerProperty(OUString("ZoomValue"),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(static_cast< sal_Int16*>(0)));
+    registerProperty(OUString("ZoomValue"), PROPERTY_ID_ZOOMVALUE,
+                     beans::PropertyAttribute::BOUND | beans::PropertyAttribute::TRANSIENT,
+                     &m_nZoomValue, ::getCppuType(static_cast< sal_Int16*>(0)));
 
 }
 // -----------------------------------------------------------------------------
