@@ -146,6 +146,10 @@ sal_Bool SwGrfNode::ReRead(
     OSL_ENSURE( pGraphic || pGrfObj || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
+    if (rGrfName.startsWith("data")) {
+        GraphicObject::CreateGraphicObjectFromURL(rGrfName);
+        return sal_True;
+    }
     // with name
     if( refLink.Is() )
     {
