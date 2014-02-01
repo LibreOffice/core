@@ -35,7 +35,6 @@ private:
     sal_uIntPtr         mnDataUpdateId;
     sal_uInt16          mnLockCount;
     bool                mbPersistence;
-    bool                mbDummy1;
 
     TOOLS_DLLPRIVATE bool           ImplUpdateConfig() const;
     TOOLS_DLLPRIVATE ImplGroupData* ImplGetGroup() const;
