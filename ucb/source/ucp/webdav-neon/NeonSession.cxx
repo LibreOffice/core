@@ -585,17 +585,17 @@ bool NeonSession::m_bGlobalsInited = false;
 osl::Mutex aGlobalNeonMutex;
 NeonLockStore NeonSession::m_aNeonLockStore;
 
-NeonSession::NeonSession(
-        const rtl::Reference< DAVSessionFactory > & rSessionFactory,
-        const OUString& inUri,
-        const uno::Sequence< beans::NamedValue >& rFlags,
-        const ucbhelper::InternetProxyDecider & rProxyDecider )
+NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
+                          const OUString& inUri,
+                          const uno::Sequence< beans::NamedValue >& rFlags,
+                          const ucbhelper::InternetProxyDecider & rProxyDecider )
     throw ( DAVException )
-: DAVSession( rSessionFactory ),
-  m_aFlags( rFlags ),
-  m_pHttpSession( 0 ),
-  m_pRequestData( new RequestDataMap ),
-  m_rProxyDecider( rProxyDecider )
+    : DAVSession( rSessionFactory )
+    , m_nProxyPort( 0 )
+    , m_aFlags( rFlags )
+    , m_pHttpSession( 0 )
+    , m_pRequestData( new RequestDataMap )
+    , m_rProxyDecider( rProxyDecider )
 {
     NeonUri theUri( inUri );
     m_aScheme    = theUri.GetScheme();
@@ -617,7 +617,7 @@ NeonSession::~NeonSession( )
 }
 
 void NeonSession::Init( const DAVRequestEnvironment & rEnv )
-  throw ( DAVException )
+    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     m_aEnv = rEnv;
