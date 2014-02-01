@@ -2542,9 +2542,14 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 }
 
 SwDocUpdtFld::SwDocUpdtFld(SwDoc* pDoc)
-    : pFldSortLst(0), nFldLstGetMode(0), pDocument(pDoc)
+    : pFldSortLst(0)
+    , nNodes(0)
+    , nFldLstGetMode(0)
+    , pDocument(pDoc)
+    , bInUpdateFlds(false)
+    , bFldsDirty(false)
+
 {
-    bInUpdateFlds = bFldsDirty = false;
     memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );
 }
 
