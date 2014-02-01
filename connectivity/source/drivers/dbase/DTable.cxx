@@ -440,35 +440,34 @@ void ODbaseTable::fillColumns()
     OSL_ENSURE(i,"No columns in table!");
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection)
-        :ODbaseTable_BASE(_pTables,_pConnection)
-        ,m_pMemoStream(NULL)
-        ,m_bWriteableMemo(sal_False)
+ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection)
+    : ODbaseTable_BASE(_pTables,_pConnection)
+    , m_pMemoStream(NULL)
+    , m_bWriteableMemo(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     // initialize the header
-    m_aHeader.db_typ    = dBaseIII;
-    m_aHeader.db_anz    = 0;
-    m_aHeader.db_kopf   = 0;
-    m_aHeader.db_slng   = 0;
+    m_aHeader = {};
+    m_aHeader.db_typ = dBaseIII;
     m_eEncoding = getConnection()->getTextEncoding();
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description ,
-                    const OUString& _SchemaName,
-                    const OUString& _CatalogName
-                ) : ODbaseTable_BASE(_pTables,_pConnection,_Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
-                ,m_pMemoStream(NULL)
-                ,m_bWriteableMemo(sal_False)
+ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection,
+                         const OUString& _Name,
+                         const OUString& _Type,
+                         const OUString& _Description ,
+                         const OUString& _SchemaName,
+                         const OUString& _CatalogName )
+    : ODbaseTable_BASE(_pTables,_pConnection,_Name,
+                       _Type,
+                       _Description,
+                       _SchemaName,
+                       _CatalogName)
+    , m_pMemoStream(NULL)
+    , m_bWriteableMemo(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
+    m_aHeader = {};
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
