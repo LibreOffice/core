@@ -72,14 +72,20 @@ struct SvxBackgroundTable_Impl
     SvxBrushItem*   pCellBrush;
     SvxBrushItem*   pRowBrush;
     SvxBrushItem*   pTableBrush;
-    sal_uInt16          nCellWhich;
-    sal_uInt16          nRowWhich;
-    sal_uInt16          nTableWhich;
-    sal_uInt16          nActPos;
+    sal_uInt16      nCellWhich;
+    sal_uInt16      nRowWhich;
+    sal_uInt16      nTableWhich;
+    sal_uInt16      nActPos;
 
-    SvxBackgroundTable_Impl() :
-        pCellBrush(NULL), pRowBrush(NULL), pTableBrush(NULL),
-        nCellWhich(0), nRowWhich(0), nTableWhich(0) {}
+    SvxBackgroundTable_Impl()
+        : pCellBrush(NULL)
+        , pRowBrush(NULL)
+        , pTableBrush(NULL)
+        , nCellWhich(0)
+        , nRowWhich(0)
+        , nTableWhich(0)
+        , nActPos(0)
+    {}
 };
 
 struct SvxBackgroundPara_Impl
@@ -94,15 +100,18 @@ struct SvxBackgroundPara_Impl
         , pCharBrush(NULL)
         , nActPos(LISTBOX_ENTRY_NOTFOUND)
     {}
+
 };
 
 struct SvxBackgroundPage_Impl
 {
     Timer*          pLoadTimer;
-    sal_Bool            bIsImportDlgInExecute;
+    sal_Bool        bIsImportDlgInExecute;
 
-    SvxBackgroundPage_Impl() :
-        pLoadTimer(NULL), bIsImportDlgInExecute(sal_False) {}
+    SvxBackgroundPage_Impl()
+        : pLoadTimer(NULL)
+        , bIsImportDlgInExecute(sal_False)
+    {}
 };
 
 static inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
