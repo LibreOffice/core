@@ -1088,6 +1088,7 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),
+    nFlagRecEnd ( 0 ),
     nMajorVersion(SW_LAYCACHE_IO_VERSION_MAJOR),
     nMinorVersion(SW_LAYCACHE_IO_VERSION_MINOR),
     bWriteMode( bWrtMd ),
