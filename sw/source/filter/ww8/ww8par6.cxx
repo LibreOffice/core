@@ -5664,7 +5664,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pap.fAutoSpaceDE;0 or 1;byte;
         {0x2438, 0},                                 //"sprmPFAutoSpaceDN"
                                                      //pap.fAutoSpaceDN;0 or 1;byte;
-        {0x4439, &SwWW8ImplReader::Read_AlignFont},  //"sprmPWAlignFont"
+        {NS_sprm::LN_PWAlignFont, &SwWW8ImplReader::Read_AlignFont},  //"sprmPWAlignFont"
                                                      //pap.wAlignFont;iFa; word;
         {0x443A, 0},                                 //"sprmPFrameTextFlow"
                                                      //pap.fVertical pap.fBackward

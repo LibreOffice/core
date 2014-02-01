@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <i18nlangtag/mslangid.hxx>
+#include <filter/msfilter/sprmids.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 
@@ -511,7 +512,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x2436, 1, L_FIX}, // "sprmPFTopLinePunct" pap.fTopLinePunct;0 or 1
         {0x2437, 1, L_FIX}, // "sprmPFAutoSpaceDE" pap.fAutoSpaceDE;0 or 1
         {0x2438, 1, L_FIX}, // "sprmPFAutoSpaceDN" pap.fAutoSpaceDN;0 or 1
-        {0x4439, 2, L_FIX}, // "sprmPWAlignFont" pap.wAlignFont;iFa
+        {NS_sprm::LN_PWAlignFont, 2, L_FIX}, // "sprmPWAlignFont" pap.wAlignFont;iFa
         {0x443A, 2, L_FIX}, // "sprmPFrameTextFlow" pap.fVertical pap.fBackward
                             // pap.fRotateFont;complex
         {0x243B, 1, L_FIX}, // "sprmPISnapBaseLine" obsolete: not applicable in
