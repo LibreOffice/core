@@ -122,7 +122,7 @@ class ProgressCmdEnv
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XAbortChannel> m_xAbortChannel;
 
-    DialogHelper   *m_pDialogHelper;
+    DialogHelper*   m_pDialogHelper;
     OUString        m_sTitle;
     bool            m_bAborted;
     bool            m_bWarnUser;
@@ -143,14 +143,15 @@ public:
     */
 
     ProgressCmdEnv( const uno::Reference< uno::XComponentContext > rContext,
-                    DialogHelper *pDialogHelper,
-                    const OUString &rTitle )
-        :   m_xContext( rContext ),
-            m_pDialogHelper( pDialogHelper ),
-            m_sTitle( rTitle ),
-            m_bAborted( false ),
-            m_bWarnUser( false )
-    {}
+                    DialogHelper* pDialogHelper,
+                    const OUString& rTitle )
+        : m_xContext( rContext )
+        , m_pDialogHelper( pDialogHelper )
+        , m_sTitle( rTitle )
+        , m_bAborted( false )
+        , m_bWarnUser( false )
+        , m_nCurrentProgress(0)
+        {}
 
     Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : NULL; }
 
