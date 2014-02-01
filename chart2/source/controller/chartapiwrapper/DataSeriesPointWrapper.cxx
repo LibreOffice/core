@@ -484,16 +484,17 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
         m_eType = DATA_SERIES;
 }
 
-DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType
-            , sal_Int32 nSeriesIndexInNewAPI
-            , sal_Int32 nPointIndex //ignored for series
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : m_spChart2ModelContact( spChart2ModelContact )
-        , m_aEventListenerContainer( m_aMutex )
-        , m_eType( _eType )
-        , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
-        , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
-        , m_xDataSeries(0)
+DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType,
+                                                sal_Int32 nSeriesIndexInNewAPI ,
+                                                sal_Int32 nPointIndex, //ignored for series
+                                                ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+    : m_spChart2ModelContact( spChart2ModelContact )
+    , m_aEventListenerContainer( m_aMutex )
+    , m_eType( _eType )
+    , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
+    , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
+    , m_bLinesAllowed( sal_False )
+    , m_xDataSeries(0)
 {
 }
 
