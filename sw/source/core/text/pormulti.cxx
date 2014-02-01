@@ -219,15 +219,14 @@ long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo& rInf ) con
 
 bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
 {
-    bool bRet = false;
     if( !HasTabulator() && nSpaceAdd > 0 && !pCurr->IsSpaceAdd() )
     {
         pCurr->CreateSpaceAdd();
         pCurr->SetLLSpaceAdd( nSpaceAdd, 0 );
-        bRet = true;
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
