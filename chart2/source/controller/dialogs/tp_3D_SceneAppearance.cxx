@@ -36,10 +36,11 @@ struct lcl_ModelProperties
     sal_Int32                 m_nObjectLines;
     ::chart::ThreeDLookScheme m_eScheme;
 
-    lcl_ModelProperties() :
-            m_nRoundedEdges(-1),
-            m_nObjectLines(-1),
-            m_eScheme(::chart::ThreeDLookScheme_Unknown)
+    lcl_ModelProperties()
+        : m_aShadeMode(drawing::ShadeMode_FLAT)
+        , m_nRoundedEdges(-1)
+        , m_nObjectLines(-1)
+        , m_eScheme(::chart::ThreeDLookScheme_Unknown)
     {}
 };
 
