@@ -32,54 +32,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
 
-class oldGraphicFilterDialog : public ModalDialog
-{
-private:
-
-    class PreviewWindow : public Control
-    {
-    private:
-
-        Graphic   maGraphic;
-
-        virtual void    Paint( const Rectangle& rRect );
-
-    public:
-
-        PreviewWindow( Window* pParent, const ResId& rResId );
-
-        void            SetGraphic( const Graphic& rGraphic );
-    };
-
-private:
-
-    Timer           maTimer;
-    Link            maModifyHdl;
-    Graphic         maGraphic;
-    double          mfScaleX;
-    double          mfScaleY;
-    Size            maSizePixel;
-
-                    DECL_LINK(ImplPreviewTimeoutHdl, void *);
-                    DECL_LINK( ImplModifyHdl, void* p );
-
-protected:
-    PreviewWindow   maPreview;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
-    FixedLine       maFlParameter;
-
-    const Link&     GetModifyHdl() const { return maModifyHdl; }
-    const Size&     GetGraphicSizePixel() const { return maSizePixel; }
-
-public:
-
-    oldGraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
-
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
-};
-
 class GraphicPreviewWindow : public Control
 {
 private:
@@ -235,39 +187,29 @@ public:
 // - GraphicFilterEmboss -
 // -----------------------
 
-class GraphicFilterEmboss : public oldGraphicFilterDialog
+class EmbossControl : public SvxRectCtl
 {
 private:
-
-    class EmbossControl : public SvxRectCtl
-    {
-    private:
-
-        Link            maModifyHdl;
-
-        virtual void    MouseButtonDown( const MouseEvent& rEvt );
-
-    public:
-
-                        EmbossControl( Window* pParent, const ResId& rResId, RECT_POINT eRectPoint ) :
-                            SvxRectCtl( pParent, rResId ) { SetActualRP( eRectPoint ); }
-
-        void            SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
-    };
-
-private:
-
-    FixedText       maFtLight;
-    EmbossControl   maCtlLight;
-
+    Link            maModifyHdl;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt );
+    virtual Size    GetOptimalSize() const;
 public:
+    EmbossControl(Window* pParent)
+        : SvxRectCtl(pParent) {}
 
-                    GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
-                                         RECT_POINT eLightSource );
-                    ~GraphicFilterEmboss();
+    void            SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
+};
+
+class GraphicFilterEmboss : public GraphicFilterDialog
+{
+private:
+    EmbossControl*  mpCtlLight;
+public:
+    GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
+                         RECT_POINT eLightSource );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    RECT_POINT      GetLightSource() const { return maCtlLight.GetActualRP(); }
+    RECT_POINT      GetLightSource() const { return mpCtlLight->GetActualRP(); }
 };
 
 #endif

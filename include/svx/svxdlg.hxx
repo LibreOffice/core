@@ -412,9 +412,9 @@ public:
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier)=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(Window* pParent,
                                                 const Graphic& rGraphic,
-                                                RECT_POINT eLightSource, sal_uInt32 nResId )=0;
+                                                RECT_POINT eLightSource)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(Window* pParent,
                                                 const Graphic& rGraphic,
                                                 sal_uInt16 nCount)=0;

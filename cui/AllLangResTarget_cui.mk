@@ -32,7 +32,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/cuires.src \
     cui/source/dialogs/fmsearch.src \
     cui/source/dialogs/gallery.src \
-    cui/source/dialogs/grfflt.src \
     cui/source/dialogs/hangulhanjadlg.src \
     cui/source/dialogs/hlmarkwn.src \
     cui/source/dialogs/hyperdlg.src \

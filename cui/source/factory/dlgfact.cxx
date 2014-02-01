@@ -140,7 +140,6 @@ IMPL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
-IMPL_ABSTDLG_BASE(oldAbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasteDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
@@ -878,11 +877,6 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
     return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
 }
 
-Graphic oldAbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY )
-{
-    return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
-}
-
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
@@ -1505,11 +1499,10 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (Window* pParent,
                                             const Graphic& rGraphic,
-                                            RECT_POINT eLightSource,
-                                            sal_uInt32)
+                                            RECT_POINT eLightSource)
 {
-    oldGraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
-    return new oldAbstractGraphicFilterDialog_Impl( pDlg );
+    GraphicFilterDialog* pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPoster(Window* pParent,

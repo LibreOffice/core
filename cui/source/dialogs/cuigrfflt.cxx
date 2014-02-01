@@ -26,123 +26,8 @@
 #include <sfx2/request.hxx>
 #include <dialmgr.hxx>
 #include "cuigrfflt.hxx"
-#include "grfflt.hrc"
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
-
-oldGraphicFilterDialog::PreviewWindow::PreviewWindow( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId )
-{
-}
-
-// -----------------------------------------------------------------------------
-
-void oldGraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
-{
-    Control::Paint( rRect );
-
-    const Size  aOutputSize( GetOutputSizePixel() );
-
-    if( maGraphic.IsAnimated() )
-    {
-        const Size  aGraphicSize( LogicToPixel( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode() ) );
-        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
-                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
-        maGraphic.StartAnimation( this, aGraphicPosition, aGraphicSize );
-    }
-    else
-    {
-        const Size  aGraphicSize( maGraphic.GetSizePixel() );
-        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
-                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
-        maGraphic.Draw( this, aGraphicPosition, aGraphicSize );
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-void oldGraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
-{
-    maGraphic = rGraphic;
-
-    if( maGraphic.IsAnimated() || maGraphic.IsTransparent() )
-        Invalidate();
-    else
-        Paint( Rectangle( Point(), GetOutputSizePixel() ) );
-}
-
-oldGraphicFilterDialog::oldGraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
-    ModalDialog     ( pParent, rResId ),
-    maModifyHdl     ( LINK( this, oldGraphicFilterDialog, ImplModifyHdl ) ),
-    mfScaleX        ( 0.0 ),
-    mfScaleY        ( 0.0 ),
-    maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
-    maPreview       ( this, CUI_RES( CTL_PREVIEW ) ),
-    maBtnOK         ( this, CUI_RES( BTN_OK ) ),
-    maBtnCancel     ( this, CUI_RES( BTN_CANCEL ) ),
-    maBtnHelp       ( this, CUI_RES( BTN_HELP ) ),
-    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) )
-{
-    const Size  aPreviewSize( maPreview.GetOutputSizePixel() );
-    Size        aGrfSize( maSizePixel );
-
-    if( rGraphic.GetType() == GRAPHIC_BITMAP &&
-        aPreviewSize.Width() && aPreviewSize.Height() &&
-        aGrfSize.Width() && aGrfSize.Height() )
-    {
-        const double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
-        const double fPreWH = (double) aPreviewSize.Width() / aPreviewSize.Height();
-
-        if( fGrfWH < fPreWH )
-        {
-            aGrfSize.Width()  = (long) ( aPreviewSize.Height() * fGrfWH );
-            aGrfSize.Height() = aPreviewSize.Height();
-        }
-        else
-        {
-            aGrfSize.Width()  = aPreviewSize.Width();
-            aGrfSize.Height() = (long) ( aPreviewSize.Width() / fGrfWH );
-        }
-
-        mfScaleX = (double) aGrfSize.Width() / maSizePixel.Width();
-        mfScaleY = (double) aGrfSize.Height() / maSizePixel.Height();
-
-        if( !rGraphic.IsAnimated() )
-        {
-            BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-            if( aBmpEx.Scale( aGrfSize, BMP_SCALE_DEFAULT ) )
-                maGraphic = aBmpEx;
-        }
-    }
-
-    maTimer.SetTimeoutHdl( LINK( this, oldGraphicFilterDialog, ImplPreviewTimeoutHdl ) );
-    maTimer.SetTimeout( 100 );
-    ImplModifyHdl( NULL );
-}
-
-// -----------------------------------------------------------------------------
-
-IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplPreviewTimeoutHdl)
-{
-    maTimer.Stop();
-    maPreview.SetGraphic( GetFilteredGraphic( maGraphic, mfScaleX, mfScaleY ) );
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------------
-
-IMPL_LINK_NOARG(oldGraphicFilterDialog, ImplModifyHdl)
-{
-    if( maGraphic.GetType() == GRAPHIC_BITMAP )
-    {
-        maTimer.Stop();
-        maTimer.Start();
-    }
-
-    return 0;
-}
 
 GraphicPreviewWindow::GraphicPreviewWindow(Window* pParent,
     const WinBits nStyle)
@@ -545,7 +430,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterEmboss -
 // -----------------------
 
-void GraphicFilterEmboss::EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
+void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     const RECT_POINT eOldRP = GetActualRP();
 
@@ -555,24 +440,27 @@ void GraphicFilterEmboss::EmbossControl::MouseButtonDown( const MouseEvent& rEvt
         maModifyHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------------
-
-GraphicFilterEmboss::GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
-                                          RECT_POINT eLightSource ) :
-    oldGraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
-    maFtLight       ( this, CUI_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
-    maCtlLight      ( this, CUI_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
+Size EmbossControl::GetOptimalSize() const
 {
-    FreeResource();
+    return LogicToPixel(Size(77, 60), MAP_APPFONT);
+}
 
-    maCtlLight.SetModifyHdl( GetModifyHdl() );
-    maCtlLight.GrabFocus();
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeEmbossControl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new EmbossControl(pParent);
 }
 
 // -----------------------------------------------------------------------------
 
-GraphicFilterEmboss::~GraphicFilterEmboss()
+GraphicFilterEmboss::GraphicFilterEmboss(Window* pParent,
+    const Graphic& rGraphic, RECT_POINT eLightSource)
+    : GraphicFilterDialog (pParent, "EmbossDialog",
+        "cui/ui/embossdialog.ui", rGraphic)
 {
+    get(mpCtlLight, "lightsource");
+    mpCtlLight->SetActualRP(eLightSource);
+    mpCtlLight->SetModifyHdl( GetModifyHdl() );
+    mpCtlLight->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
@@ -583,7 +471,7 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
     Graphic aRet;
     sal_uInt16  nAzim, nElev;
 
-    switch( maCtlLight.GetActualRP() )
+    switch( mpCtlLight->GetActualRP() )
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
                        /* Fall through */

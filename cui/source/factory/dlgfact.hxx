@@ -46,7 +46,6 @@ class SvxMultiFileDialog;
 class SvxHpLinkDlg;
 class FmSearchDialog;
 class Graphic;
-class oldGraphicFilterDialog;
 class GraphicFilterDialog;
 class SvxAreaTabDialog;
 class InsertObjectDialog_Impl;
@@ -443,12 +442,6 @@ class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
 };
 
-class oldAbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
-{
-    DECL_ABSTDLG_BASE(oldAbstractGraphicFilterDialog_Impl,oldGraphicFilterDialog)
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-};
-
 class SvxAreaTabDialog;
 class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 {
@@ -660,9 +653,8 @@ public:
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier);
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,
-                                                const Graphic& rGraphic, RECT_POINT eLightSource,
-                                                sal_uInt32 nResId);
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(Window* pParent,
+                                                const Graphic& rGraphic, RECT_POINT eLightSource);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nCount);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (Window* pParent,
