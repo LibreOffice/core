@@ -159,26 +159,22 @@ public:
 // - GraphicFilterMosaic -
 // -----------------------
 
-class GraphicFilterMosaic : public oldGraphicFilterDialog
+class GraphicFilterMosaic : public GraphicFilterDialog
 {
 private:
-
-    FixedText       maFtWidth;
-    MetricField     maMtrWidth;
-    FixedText       maFtHeight;
-    MetricField     maMtrHeight;
-    CheckBox        maCbxEdges;
+    MetricField*    mpMtrWidth;
+    MetricField*    mpMtrHeight;
+    CheckBox*       mpCbxEdges;
 
 public:
 
-                    GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
-                                         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges );
-                    ~GraphicFilterMosaic();
+    GraphicFilterMosaic(Window* pParent, const Graphic& rGraphic,
+        sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    long            GetTileWidth() const { return static_cast<long>(maMtrWidth.GetValue()); }
-    long            GetTileHeight() const { return static_cast<long>(maMtrHeight.GetValue()); }
-    sal_Bool            IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
+    long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
+    long            GetTileHeight() const { return static_cast<long>(mpMtrHeight->GetValue()); }
+    sal_Bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
 // -------------------------

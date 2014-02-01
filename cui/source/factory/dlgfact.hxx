@@ -674,7 +674,7 @@ public:
                                                 sal_Bool bInvert);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
-                                                sal_Bool bEnhanceEdges, sal_uInt32 nResId);
+                                                sal_Bool bEnhanceEdges);
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,

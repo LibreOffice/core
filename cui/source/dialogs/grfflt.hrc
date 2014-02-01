@@ -31,16 +31,6 @@
 #define FL_PARAMETER                        106
 
 // --------------------
-// - DLG_FILTERMOSAIC -
-// --------------------
-
-#define DLG_FILTERMOSAIC_FT_WIDTH           1
-#define DLG_FILTERMOSAIC_MTR_WIDTH          2
-#define DLG_FILTERMOSAIC_FT_HEIGHT          3
-#define DLG_FILTERMOSAIC_MTR_HEIGHT         4
-#define DLG_FILTERMOSAIC_CBX_EDGES          5
-
-// --------------------
 // - DLG_FILTEREMBOSS -
 // --------------------
 

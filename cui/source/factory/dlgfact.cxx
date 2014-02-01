@@ -1544,21 +1544,10 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSol
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,
                                             const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
-                                            sal_Bool bEnhanceEdges, sal_uInt32 nResId)
+                                            sal_Bool bEnhanceEdges)
 {
-    oldGraphicFilterDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SVX_GRFFILTER_DLG_MOSAIC :
-            pDlg = new GraphicFilterMosaic( pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new oldAbstractGraphicFilterDialog_Impl( pDlg );
-    return 0;
+    GraphicFilterDialog* pDlg = new GraphicFilterMosaic(pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges);
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Window* pParent,

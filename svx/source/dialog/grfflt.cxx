@@ -166,7 +166,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic( pWindow, rGraphic, 4, 4, sal_False, RID_SVX_GRFFILTER_DLG_MOSAIC);
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic(pWindow, rGraphic, 4, 4, sal_False);
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
                     if( aDlg->Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );

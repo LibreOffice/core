@@ -298,40 +298,26 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 // ----------------
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
-                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges ) :
-    oldGraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
-    maFtWidth   ( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
-    maMtrWidth  ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
-    maFtHeight  ( this, CUI_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
-    maMtrHeight ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_HEIGHT ) ),
-    maCbxEdges  ( this, CUI_RES( DLG_FILTERMOSAIC_CBX_EDGES ) )
+                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges )
+    : GraphicFilterDialog(pParent, "MosaicDialog",
+        "cui/ui/mosaicdialog.ui", rGraphic)
 {
-    FreeResource();
+    get(mpMtrWidth, "width");
+    get(mpMtrHeight, "height");
+    get(mpCbxEdges, "edges");
 
-    maMtrWidth.SetValue( nTileWidth );
-    maMtrWidth.SetLast( GetGraphicSizePixel().Width() );
-    maMtrWidth.SetModifyHdl( GetModifyHdl() );
+    mpMtrWidth->SetValue( nTileWidth );
+    mpMtrWidth->SetLast( GetGraphicSizePixel().Width() );
+    mpMtrWidth->SetModifyHdl( GetModifyHdl() );
 
-    maMtrHeight.SetValue( nTileHeight );
-    maMtrHeight.SetLast( GetGraphicSizePixel().Height() );
-    maMtrHeight.SetModifyHdl( GetModifyHdl() );
+    mpMtrHeight->SetValue( nTileHeight );
+    mpMtrHeight->SetLast( GetGraphicSizePixel().Height() );
+    mpMtrHeight->SetModifyHdl( GetModifyHdl() );
 
-    maCbxEdges.Check( bEnhanceEdges );
-    maCbxEdges.SetToggleHdl( GetModifyHdl() );
+    mpCbxEdges->Check( bEnhanceEdges );
+    mpCbxEdges->SetToggleHdl( GetModifyHdl() );
 
-    maMtrWidth.GrabFocus();
-
-    maFtWidth.SetAccessibleRelationMemberOf(&maFlParameter);
-    maMtrWidth.SetAccessibleRelationMemberOf(&maFlParameter);
-    maFtHeight.SetAccessibleRelationMemberOf(&maFlParameter);
-    maMtrHeight.SetAccessibleRelationMemberOf(&maFlParameter);
-    maCbxEdges.SetAccessibleRelationMemberOf(&maFlParameter);
-}
-
-// -----------------------------------------------------------------------------
-
-GraphicFilterMosaic::~GraphicFilterMosaic()
-{
+    mpMtrWidth->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
