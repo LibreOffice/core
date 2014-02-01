@@ -56,13 +56,15 @@ using namespace ::ucbhelper;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
-                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-                         ,m_pDriver(_pDriver)
-                         ,m_bClosed(sal_False)
-                         ,m_bShowDeleted(sal_False)
-                         ,m_bCaseSensitiveExtension( sal_True )
-                         ,m_bCheckSQL92(sal_False)
-                         ,m_bDefaultTextEncoding(false)
+    : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    , m_pDriver(_pDriver)
+    , m_bClosed(sal_False)
+    , m_bAutoCommit(sal_False)
+    , m_bReadOnly(sal_False)
+    , m_bShowDeleted(sal_False)
+    , m_bCaseSensitiveExtension( sal_True )
+    , m_bCheckSQL92(sal_False)
+    , m_bDefaultTextEncoding(false)
 {
     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
 }
