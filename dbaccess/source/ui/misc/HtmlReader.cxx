@@ -72,12 +72,13 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
-    :HTMLParser(rIn)
-    ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
-    ,m_nTableCount(0)
-    ,m_nColumnWidth(87)
-    ,m_bMetaOptions(sal_False)
-    ,m_bSDNum(sal_False)
+    : HTMLParser(rIn)
+    , ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
+    , m_nTableCount(0)
+    , m_nWidth(0)
+    , m_nColumnWidth(87)
+    , m_bMetaOptions(sal_False)
+    , m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -93,12 +94,13 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          const TColumnVector* pList,
                          const OTypeInfoMap* _pInfoMap,
                          sal_Bool _bAutoIncrementEnabled)
-    :HTMLParser(rIn)
-    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
-    ,m_nTableCount(0)
-    ,m_nColumnWidth(87)
-    ,m_bMetaOptions(sal_False)
-    ,m_bSDNum(sal_False)
+    : HTMLParser(rIn)
+    , ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
+    , m_nTableCount(0)
+    , m_nWidth(0)
+    , m_nColumnWidth(87)
+    , m_bMetaOptions(sal_False)
+    , m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
