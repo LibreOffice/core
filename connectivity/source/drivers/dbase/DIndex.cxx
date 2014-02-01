@@ -72,11 +72,14 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const OUString& _rName)
-    :OIndex(_rName,OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
-    ,m_pFileStream(NULL)
-    ,m_aHeader(_rHeader)
-    ,m_nCurNode(NODE_NOTFOUND)
-    ,m_pTable(_pTable)
+    : OIndex(_rName,OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
+    , m_pFileStream(NULL)
+    , m_aHeader(_rHeader)
+    , m_nCurNode(NODE_NOTFOUND)
+    , m_nPageCount(0)
+    , m_nRootPage(0)
+    , m_pTable(_pTable)
+    , m_bUseCollector(sal_False)
 {
     construct();
 }
