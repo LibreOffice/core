@@ -65,7 +65,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     , m_pTable(_pTable)
     , m_bUseCollector(sal_False)
 {
-    m_aHeader = {};
+    memset(&m_aHeader, 0, sizeof(m_aHeader));
     construct();
 }
 // -------------------------------------------------------------------------
