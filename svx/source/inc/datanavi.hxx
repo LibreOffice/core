@@ -500,16 +500,11 @@ namespace svxform
     private:
         typedef std::vector< OUString > PrefixList;
 
-        FixedText           m_aNamespacesFT;
-        SvSimpleTableContainer m_aNamespacesListContainer;
-        SvSimpleTable      m_aNamespacesList;
-        PushButton          m_aAddNamespaceBtn;
-        PushButton          m_aEditNamespaceBtn;
-        PushButton          m_aDeleteNamespaceBtn;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        SvSimpleTable*      m_pNamespacesList;
+        PushButton*         m_pAddNamespaceBtn;
+        PushButton*         m_pEditNamespaceBtn;
+        PushButton*         m_pDeleteNamespaceBtn;
+        OKButton*           m_pOKBtn;
 
         AddConditionDialog* m_pConditionDlg;
         PrefixList          m_aRemovedList;

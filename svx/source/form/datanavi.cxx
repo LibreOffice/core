@@ -2893,57 +2893,57 @@ namespace svxform
     //========================================================================
 
     NamespaceItemDialog::NamespaceItemDialog(
-        AddConditionDialog* _pCondDlg, Reference< XNameContainer >& _rContainer ) :
-
-        ModalDialog( _pCondDlg, SVX_RES( RID_SVXDLG_NAMESPACE_ITEM ) ),
-
-        m_aNamespacesFT         ( this, SVX_RES( FT_NAMESPACES ) ),
-        m_aNamespacesListContainer  ( this, SVX_RES( LB_NAMESPACES ) ),
-        m_aNamespacesList       ( m_aNamespacesListContainer ),
-        m_aAddNamespaceBtn      ( this, SVX_RES( PB_ADD_NAMESPACE ) ),
-        m_aEditNamespaceBtn     ( this, SVX_RES( PB_EDIT_NAMESPACE ) ),
-        m_aDeleteNamespaceBtn   ( this, SVX_RES( PB_DELETE_NAMESPACE ) ),
-        m_aButtonsFL            ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn                ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn               ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn              ( this, SVX_RES( BTN_DATANAV_HELP ) ),
-
-        m_pConditionDlg         ( _pCondDlg ),
-        m_rNamespaces           ( _rContainer )
-
+        AddConditionDialog* _pCondDlg,
+            Reference< XNameContainer >& _rContainer )
+        : ModalDialog( _pCondDlg, "NamespaceDialog",
+            "svx/ui/namespacedialog.ui" )
+        , m_pConditionDlg(_pCondDlg)
+        , m_rNamespaces(_rContainer)
     {
+        get(m_pAddNamespaceBtn, "add");
+        get(m_pEditNamespaceBtn, "edit");
+        get(m_pDeleteNamespaceBtn, "delete");
+        get(m_pOKBtn, "ok");
+
+        SvSimpleTableContainer* pNamespacesListContainer =
+            get<SvSimpleTableContainer>("namespaces");
+        Size aControlSize(175, 72);
+        aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+        pNamespacesListContainer->set_width_request(aControlSize.Width());
+        pNamespacesListContainer->set_height_request(aControlSize.Height());
+        m_pNamespacesList = new SvSimpleTable(*pNamespacesListContainer, 0);
+
         static long aStaticTabs[]= { 3, 0, 35, 200 };
-        m_aNamespacesList.SvSimpleTable::SetTabs( aStaticTabs );
-        OUString sHeader = SVX_RESSTR( STR_HEADER_PREFIX );
+        m_pNamespacesList->SvSimpleTable::SetTabs( aStaticTabs );
+        OUString sHeader = get<FixedText>("prefix")->GetText();
         sHeader += "\t";
-        sHeader += SVX_RESSTR(STR_HEADER_URL);
-        m_aNamespacesList.InsertHeaderEntry(
+        sHeader += get<FixedText>("url")->GetText();
+        m_pNamespacesList->InsertHeaderEntry(
             sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
 
-        FreeResource();
-
-        m_aNamespacesList.SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
+        m_pNamespacesList->SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
         Link aLink = LINK( this, NamespaceItemDialog, ClickHdl );
-        m_aAddNamespaceBtn.SetClickHdl( aLink );
-        m_aEditNamespaceBtn.SetClickHdl( aLink );
-        m_aDeleteNamespaceBtn.SetClickHdl( aLink );
-        m_aOKBtn.SetClickHdl( LINK( this, NamespaceItemDialog, OKHdl ) );
+        m_pAddNamespaceBtn->SetClickHdl( aLink );
+        m_pEditNamespaceBtn->SetClickHdl( aLink );
+        m_pDeleteNamespaceBtn->SetClickHdl( aLink );
+        m_pOKBtn->SetClickHdl( LINK( this, NamespaceItemDialog, OKHdl ) );
 
         LoadNamespaces();
-        SelectHdl( &m_aNamespacesList );
+        SelectHdl( m_pNamespacesList );
     }
 
     //------------------------------------------------------------------------
     NamespaceItemDialog::~NamespaceItemDialog()
     {
+        delete m_pNamespacesList;
     }
 
     //------------------------------------------------------------------------
     IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *,  EMPTYARG )
     {
-        sal_Bool bEnable = ( m_aNamespacesList.FirstSelected() != NULL );
-        m_aEditNamespaceBtn.Enable( bEnable );
-        m_aDeleteNamespaceBtn.Enable( bEnable );
+        sal_Bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
+        m_pEditNamespaceBtn->Enable( bEnable );
+        m_pDeleteNamespaceBtn->Enable( bEnable );
 
         return 0;
     }
@@ -2951,7 +2951,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK( NamespaceItemDialog, ClickHdl, PushButton *, pBtn )
     {
-        if ( &m_aAddNamespaceBtn == pBtn )
+        if ( m_pAddNamespaceBtn == pBtn )
         {
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, false );
             if ( aDlg.Execute() == RET_OK )
@@ -2959,42 +2959,42 @@ namespace svxform
                 OUString sEntry = aDlg.GetPrefix();
                 sEntry += "\t";
                 sEntry += aDlg.GetURL();
-                m_aNamespacesList.InsertEntry( sEntry );
+                m_pNamespacesList->InsertEntry( sEntry );
             }
         }
-        else if ( &m_aEditNamespaceBtn == pBtn )
+        else if ( m_pEditNamespaceBtn == pBtn )
         {
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
-            SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
+            SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
             aDlg.SetNamespace(
                 sPrefix,
-                m_aNamespacesList.GetEntryText( pEntry, 1 ) );
+                m_pNamespacesList->GetEntryText( pEntry, 1 ) );
             if ( aDlg.Execute() == RET_OK )
             {
                 // if a prefix was changed, mark the old prefix as 'removed'
                 if( sPrefix != aDlg.GetPrefix() )
                     m_aRemovedList.push_back( sPrefix );
 
-                m_aNamespacesList.SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
-                m_aNamespacesList.SetEntryText( aDlg.GetURL(), pEntry, 1 );
+                m_pNamespacesList->SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
+                m_pNamespacesList->SetEntryText( aDlg.GetURL(), pEntry, 1 );
             }
         }
-        else if ( &m_aDeleteNamespaceBtn == pBtn )
+        else if ( m_pDeleteNamespaceBtn == pBtn )
         {
-            SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
+            SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
             m_aRemovedList.push_back( sPrefix );
-            m_aNamespacesList.GetModel()->Remove( pEntry );
+            m_pNamespacesList->GetModel()->Remove( pEntry );
         }
         else
         {
             SAL_WARN( "svx.form", "NamespaceItemDialog::ClickHdl(): invalid button" );
         }
 
-        SelectHdl( &m_aNamespacesList );
+        SelectHdl( m_pNamespacesList );
         return 0;
     }
 
@@ -3008,12 +3008,12 @@ namespace svxform
             for( i = 0; i < nRemovedCount; ++i )
                 m_rNamespaces->removeByName( m_aRemovedList[i] );
 
-            sal_Int32 nEntryCount = m_aNamespacesList.GetEntryCount();
+            sal_Int32 nEntryCount = m_pNamespacesList->GetEntryCount();
             for( i = 0; i < nEntryCount; ++i )
             {
-                SvTreeListEntry* pEntry = m_aNamespacesList.GetEntry(i);
-                OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
-                OUString sURL( m_aNamespacesList.GetEntryText( pEntry, 1 ) );
+                SvTreeListEntry* pEntry = m_pNamespacesList->GetEntry(i);
+                OUString sPrefix( m_pNamespacesList->GetEntryText( pEntry, 0 ) );
+                OUString sURL( m_pNamespacesList->GetEntryText( pEntry, 1 ) );
 
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                     m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
@@ -3051,7 +3051,7 @@ namespace svxform
                         sEntry += "\t";
                         sEntry += sURL;
 
-                        m_aNamespacesList.InsertEntry( sEntry );
+                        m_pNamespacesList->InsertEntry( sEntry );
                     }
                 }
             }

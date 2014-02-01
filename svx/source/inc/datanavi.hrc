@@ -20,12 +20,6 @@
 #ifndef _SVX_DATANAVI_HRC
 #define _SVX_DATANAVI_HRC
 
-// global
-#define FL_DATANAV_BTN          100
-#define BTN_DATANAV_OK          101
-#define BTN_DATANAV_ESC         102
-#define BTN_DATANAV_HELP        103
-
 // class XFormsInstancePage
 // Controls
 #define TB_ITEMS                10
@@ -82,13 +76,6 @@
 #define IID_ATTRIBUTE           4
 #define IID_TEXT                5
 #define IID_OTHER               6
-
-// class NamespaceItemDialog
-#define FT_NAMESPACES           10
-#define LB_NAMESPACES           11
-#define PB_ADD_NAMESPACE        12
-#define PB_EDIT_NAMESPACE       13
-#define PB_DELETE_NAMESPACE     14
 
 #define STR_HEADER_PREFIX       10
 #define STR_HEADER_URL          11
