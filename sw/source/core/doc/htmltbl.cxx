@@ -164,35 +164,58 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 typedef SwHTMLTableLayoutColumn *SwHTMLTableLayoutColumnPtr;
 typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
 
-SwHTMLTableLayout::SwHTMLTableLayout(
-                        const SwTable * pSwTbl,
-                        sal_uInt16 nRws, sal_uInt16 nCls, bool bColsOpt, bool bColTgs,
-                        sal_uInt16 nWdth, bool bPrcWdth, sal_uInt16 nBorderOpt,
-                        sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
-                        sal_uInt16 nLMargin, sal_uInt16 nRMargin,
-                        sal_uInt16 nBWidth, sal_uInt16 nLeftBWidth,
-                        sal_uInt16 nRightBWidth,
-                        sal_uInt16 nInhLeftBWidth, sal_uInt16 nInhRightBWidth ) :
-    aColumns( new SwHTMLTableLayoutColumnPtr[nCls] ),
-    aCells( new SwHTMLTableLayoutCellPtr[nRws*nCls] ),
-    pSwTable( pSwTbl ), pLeftFillerBox( 0 ), pRightFillerBox( 0 ),
-    nMin( 0 ), nMax( 0 ),
-    nRows( nRws ), nCols( nCls ),
-    nLeftMargin( nLMargin ), nRightMargin( nRMargin ),
-    nInhAbsLeftSpace( 0 ), nInhAbsRightSpace( 0 ),
-    nRelLeftFill( 0 ), nRelRightFill( 0 ),
-    nRelTabWidth( 0 ), nWidthOption( nWdth ),
-    nCellPadding( nCellPad ), nCellSpacing( nCellSp ), nBorder( nBorderOpt ),
-    nLeftBorderWidth( nLeftBWidth ), nRightBorderWidth( nRightBWidth ),
-    nInhLeftBorderWidth( nInhLeftBWidth ),
-    nInhRightBorderWidth( nInhRightBWidth ),
-    nBorderWidth( nBWidth ),
-    nDelayedResizeAbsAvail( 0 ), nLastResizeAbsAvail( 0 ),
-    nPass1Done( 0 ), nWidthSet( 0 ), eTableAdjust( eAdjust ),
-    bColsOption( bColsOpt ), bColTags( bColTgs ),
-    bPrcWidthOption( bPrcWdth ), bUseRelWidth( false ),
-    bMustResize( sal_True ), bExportable( sal_True ), bBordersChanged( sal_False ),
-    bMustNotResize( sal_False ), bMustNotRecalc( sal_False )
+SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
+                                      sal_uInt16 nRws, sal_uInt16 nCls,
+                                      bool bColsOpt, bool bColTgs,
+                                      sal_uInt16 nWdth, bool bPrcWdth,
+                                      sal_uInt16 nBorderOpt, sal_uInt16 nCellPad,
+                                      sal_uInt16 nCellSp, SvxAdjust eAdjust,
+                                      sal_uInt16 nLMargin, sal_uInt16 nRMargin,
+                                      sal_uInt16 nBWidth, sal_uInt16 nLeftBWidth,
+                                      sal_uInt16 nRightBWidth,
+                                      sal_uInt16 nInhLeftBWidth,
+                                      sal_uInt16 nInhRightBWidth )
+    : aColumns( new SwHTMLTableLayoutColumnPtr[nCls] )
+    , aCells( new SwHTMLTableLayoutCellPtr[nRws*nCls] )
+    , pSwTable( pSwTbl )
+    , pLeftFillerBox( 0 )
+    , pRightFillerBox( 0 )
+    , nMin( 0 )
+    , nMax( 0 )
+    , nRows( nRws )
+    , nCols( nCls )
+    , nLeftMargin( nLMargin )
+    , nRightMargin( nRMargin )
+    , nInhAbsLeftSpace( 0 )
+    , nInhAbsRightSpace( 0 )
+    , nRelLeftFill( 0 )
+    , nRelRightFill( 0 )
+    , nRelTabWidth( 0 )
+    , nWidthOption( nWdth )
+    , nCellPadding( nCellPad )
+    , nCellSpacing( nCellSp )
+    , nBorder( nBorderOpt )
+    , nLeftBorderWidth( nLeftBWidth )
+    , nRightBorderWidth( nRightBWidth )
+    , nInhLeftBorderWidth( nInhLeftBWidth )
+    , nInhRightBorderWidth( nInhRightBWidth )
+    , nBorderWidth( nBWidth )
+    , nDelayedResizeAbsAvail( 0 )
+    , nLastResizeAbsAvail( 0 )
+    , nPass1Done( 0 )
+    , nWidthSet( 0 )
+    , eTableAdjust( eAdjust )
+    , bColsOption( bColsOpt )
+    , bColTags( bColTgs )
+    , bPrcWidthOption( bPrcWdth )
+    , bUseRelWidth( false )
+    , bMustResize( sal_True )
+    , bExportable( sal_True )
+    , bBordersChanged( sal_False )
+    , bMayBeInFlyFrame( sal_False )
+    , bDelayedResizeRecalc( sal_False)
+    , bMustNotResize( sal_False )
+    , bMustNotRecalc( sal_False )
 {
     aResizeTimer.SetTimeoutHdl( STATIC_LINK( this, SwHTMLTableLayout,
                                              DelayedResize_Impl ) );
