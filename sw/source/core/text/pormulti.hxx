@@ -83,16 +83,16 @@ class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
     SwFldPortion *pFldRest; // Field rest from the previous line
-    sal_Bool bTab1      :1; // First line tabulator
-    sal_Bool bTab2      :1; // Second line includes tabulator
-    sal_Bool bDouble    :1; // Double line
-    bool bRuby          :1; // Phonetics
-    sal_Bool bBidi      :1;
-    sal_Bool bTop       :1; // Phonetic position
-    sal_Bool bFormatted :1; // Already formatted
-    sal_Bool bFollowFld :1; // Field follow inside
+    bool bTab1      :1;     // First line tabulator
+    bool bTab2      :1;     // Second line includes tabulator
+    bool bDouble    :1;     // Double line
+    bool bRuby      :1;     // Phonetics
+    bool bBidi      :1;
+    bool bTop       :1;     // Phonetic position
+    bool bFormatted :1;     // Already formatted
+    bool bFollowFld :1;     // Field follow inside
+    bool bFlyInCntnt:1;     // Fly as character inside
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
-    sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
     SwMultiPortion(sal_Int32 nEnd)
         : pFldRest(0)
@@ -104,21 +104,21 @@ protected:
         , bTop(false)
         , bFormatted(false)
         , bFollowFld(false)
-        , nDirection(0)
         , bFlyInCntnt(false)
+        , nDirection(0)
     {
         SetWhichPor(POR_MULTI);
         SetLen(nEnd);
     }
-    void SetDouble() { bDouble = sal_True; }
+    void SetDouble() { bDouble = true; }
     void SetRuby() { bRuby = true; }
-    void SetBidi() { bBidi = sal_True; }
-    void SetTop( sal_Bool bNew ) { bTop = bNew; }
-    void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
-    void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
+    void SetBidi() { bBidi = true; }
+    void SetTop( bool bNew ) { bTop = bNew; }
+    void SetTab1( bool bNew ) { bTab1 = bNew; }
+    void SetTab2( bool bNew ) { bTab2 = bNew; }
     void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
-    sal_Bool GetTab1() const { return bTab1; }
-    sal_Bool GetTab2() const { return bTab2; }
+    bool GetTab1() const { return bTab1; }
+    bool GetTab2() const { return bTab2; }
 public:
     ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
@@ -126,22 +126,22 @@ public:
     SwFldPortion* GetFldRest() { return pFldRest; }
     void SetFldRest( SwFldPortion* pNew ) { pFldRest = pNew; }
 
-    inline sal_Bool HasTabulator() const { return bTab1 || bTab2; }
-    inline sal_Bool IsFormatted() const { return bFormatted; }
-    inline void SetFormatted() { bFormatted = sal_True; }
-    inline sal_Bool IsFollowFld() const { return bFollowFld; }
-    inline void SetFollowFld() { bFollowFld = sal_True; }
-    inline sal_Bool HasFlyInCntnt() const { return bFlyInCntnt; }
-    inline void SetFlyInCntnt( sal_Bool bNew ) { bFlyInCntnt = bNew; }
-    inline sal_Bool IsDouble() const { return bDouble; }
+    inline bool HasTabulator() const { return bTab1 || bTab2; }
+    inline bool IsFormatted() const { return bFormatted; }
+    inline void SetFormatted() { bFormatted = true; }
+    inline bool IsFollowFld() const { return bFollowFld; }
+    inline void SetFollowFld() { bFollowFld = true; }
+    inline bool HasFlyInCntnt() const { return bFlyInCntnt; }
+    inline void SetFlyInCntnt( bool bNew ) { bFlyInCntnt = bNew; }
+    inline bool IsDouble() const { return bDouble; }
     inline bool IsRuby() const { return bRuby; }
-    inline sal_Bool IsBidi() const { return bBidi; }
+    inline bool IsBidi() const { return bBidi; }
     inline bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
     void CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf );
@@ -172,7 +172,7 @@ public:
 
     inline SwBracket* GetBrackets() const { return pBracket; }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
-    void PaintBracket( SwTxtPaintInfo& rInf, long nSpaceAdd, sal_Bool bOpen ) const;
+    void PaintBracket( SwTxtPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
     inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
     inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
@@ -191,7 +191,7 @@ public:
     inline sal_Int32 GetBlank2() const { return nBlank2; }
 
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 };
 
 class SwRubyPortion : public SwMultiPortion
@@ -205,7 +205,7 @@ public:
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                    const IDocumentSettingAccess& rIDocumentSettingAccess,
                    sal_Int32 nEnd, sal_Int32 nOffs,
-                   const sal_Bool* pForceRubyPos );
+                   const bool* pForceRubyPos );
 
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
@@ -220,7 +220,7 @@ public:
     SwRotatedPortion( sal_Int32 nEnd, sal_uInt8 nDir = 1 )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
     SwRotatedPortion( const SwMultiCreator& rCreate, sal_Int32 nEnd,
-                      sal_Bool bRTL );
+                      bool bRTL );
 };
 
 class SwBidiPortion : public SwMultiPortion
@@ -236,7 +236,7 @@ public:
     // Calculates extra spacing based on number of blanks
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     // Manipulate the spacing array at pCurr
-    virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 };
 
 // For cursor travelling in multiportions
@@ -248,7 +248,7 @@ class SwTxtCursorSave
     SwTwips nWidth;
     sal_Int32 nStart;
     sal_uInt8 nOldProp;
-    sal_Bool bSpaceChg;
+    bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
         SwTwips nY, sal_uInt16& nX, sal_Int32 nCurrStart, long nSpaceAdd );

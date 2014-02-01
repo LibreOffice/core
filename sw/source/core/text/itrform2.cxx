@@ -1268,8 +1268,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 else if ( SW_MC_RUBY == pCreate->nId )
                 {
                     Seek( rInf.GetIdx() );
-                    sal_Bool bRubyTop;
-                    sal_Bool* pRubyPos = 0;
+                    bool bRubyTop = false;
+                    bool* pRubyPos = 0;
 
                     if ( rInf.SnapToGrid() )
                     {

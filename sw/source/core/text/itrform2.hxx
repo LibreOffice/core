@@ -72,7 +72,7 @@ class SwTxtFormatter : public SwTxtPainter
     // The center pice of formatting
     void BuildPortions( SwTxtFormatInfo &rInf );
 
-    sal_Bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
+    bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
     /**
         Calculation of the emulated right side.

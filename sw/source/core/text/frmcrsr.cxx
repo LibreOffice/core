@@ -948,7 +948,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
 
     if ( bRight )
     {
-        sal_Bool bRecurse = pPor && pPor->IsMultiPortion() &&
+        bool bRecurse = pPor && pPor->IsMultiPortion() &&
                            ((SwMultiPortion*)pPor)->IsBidi();
 
         // 1. special case: at beginning of bidi portion
@@ -959,7 +959,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
             // leave bidi portion
             if ( nCrsrLevel != nDefaultDir )
             {
-                bRecurse = sal_False;
+                bRecurse = false;
             }
             else
                 // special case:
@@ -976,7 +976,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
             // enter bidi portion
             if ( nCrsrLevel != nDefaultDir )
             {
-                bRecurse = sal_True;
+                bRecurse = true;
                 nIdx = nIdx - pLast->GetLen();
                 pPor = pLast;
             }
