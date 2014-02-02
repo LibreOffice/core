@@ -129,6 +129,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         get(m_pLbCharset, "charsetlist");
         m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
     }
+    m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
     m_pLbCharset->Show();
     get(m_pFtFieldSep, "fieldft");
     get(m_pEdFieldSep, "field");
