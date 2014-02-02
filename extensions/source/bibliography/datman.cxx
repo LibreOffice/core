@@ -536,7 +536,6 @@ class DBChangeDialog_Impl : public ModalDialog
     HeaderBar       aSelectionHB;
     DBChangeDialogConfig_Impl   aConfig;
     OUString        aEntryST;
-    OUString        aURLST;
 
     BibDataManager* pDatMan;
 
@@ -557,7 +556,6 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     aSelectionLB(this,  BibResId( LB_SELECTION )),
     aSelectionHB(this,  BibResId( HB_SELECTION )),
     aEntryST(BIB_RESSTR(ST_ENTRY)),
-    aURLST(BIB_RESSTR(ST_URL)),
     pDatMan(pMan)
 {
     FreeResource();
