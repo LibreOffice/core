@@ -324,7 +324,7 @@ public:
 
     sal_Bool                HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
     void                    SetSwapStreamHdl();
-    void                    SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOutTimeout = 0UL );
+    void                    SetSwapStreamHdl(const Link& rHdl);
     sal_uLong               GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
 
     void                    FireSwapInRequest();
