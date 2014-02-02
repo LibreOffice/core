@@ -700,5 +700,9 @@
 #define HID_FUNC_QUARTILE_EXC                                   "SC_HID_FUNC_QUARTILE_EXC"
 #define HID_FUNC_RANK_EQ                                        "SC_HID_FUNC_RANK_EQ"
 #define HID_FUNC_RANK_AVG                                       "SC_HID_FUNC_RANK_AVG"
+#define HID_FUNC_MODAL_VALUE_MS                                 "SC_HID_FUNC_MODAL_VALUE_MS"
+#define HID_FUNC_MODAL_VALUE_MULTI                              "SC_HID_FUNC_MODAL_VALUE_MULTI"
+#define HID_FUNC_NEGBINOMDIST_MS                                "SC_HID_FUNC_NEGBINOMDIST_MS"
+#define HID_FUNC_Z_TEST_MS                                      "SC_HID_FUNC_Z_TEST_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

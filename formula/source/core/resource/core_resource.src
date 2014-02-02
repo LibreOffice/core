@@ -301,6 +301,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_WEIBULL_MS { Text = "COM.MICROSOFT.WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
+    String SC_OPCODE_NEG_BINOM_DIST_MS { Text = "COM.MICROSOFT.NEGBINOM.DIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "COM.MICROSOFT.BINOM.INV" ; };
     String SC_OPCODE_KURT { Text = "KURT" ; };
@@ -313,7 +314,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
+    String SC_OPCODE_MODAL_VALUE_MS { Text = "COM.MICROSOFT.MODE.SNGL" ; };
+    String SC_OPCODE_MODAL_VALUE_MULTI { Text = "COM.MICROSOFT.MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
+    String SC_OPCODE_Z_TEST_MS { Text = "COM.MICROSOFT.Z.TEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "COM.MICROSOFT.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -695,6 +699,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_WEIBULL_MS { Text = "_xlfn.WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
+    String SC_OPCODE_NEG_BINOM_DIST_MS { Text = "_xlfn.NEGBINOM.DIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "_xlfn.BINOM.INV" ; };
     String SC_OPCODE_KURT { Text = "KURT" ; };
@@ -707,7 +712,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
+    String SC_OPCODE_MODAL_VALUE_MS { Text = "_xlfn.MODE.SNGL" ; };
+    String SC_OPCODE_MODAL_VALUE_MULTI { Text = "_xlfn.MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
+    String SC_OPCODE_Z_TEST_MS { Text = "_xlfn.Z.TEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "_xlfn.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -1091,6 +1099,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_WEIBULL_MS { Text = "WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
+    String SC_OPCODE_NEG_BINOM_DIST_MS { Text = "NEGBINOM.DIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "BINOM.INV" ; };
     String SC_OPCODE_KURT { Text = "KURT" ; };
@@ -1103,7 +1112,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
+    String SC_OPCODE_MODAL_VALUE_MS { Text = "MODE.SNGL" ; };
+    String SC_OPCODE_MODAL_VALUE_MULTI { Text = "MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
+    String SC_OPCODE_Z_TEST_MS { Text = "Z.TEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -2249,6 +2261,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "NEGBINOMDIST" ;
     };
+    String SC_OPCODE_NEG_BINOM_DIST_MS
+    {
+        Text [ en-US ] = "NEGBINOM.DIST" ;
+    };
     String SC_OPCODE_KRIT_BINOM
     {
         Text [ en-US ] = "CRITBINOM" ;
@@ -2297,9 +2313,21 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "MODE" ;
     };
+    String SC_OPCODE_MODAL_VALUE_MS
+    {
+        Text [ en-US ] = "MODE.SNGL" ;
+    };
+    String SC_OPCODE_MODAL_VALUE_MULTI
+    {
+        Text [ en-US ] = "MODE.MULT" ;
+    };
     String SC_OPCODE_Z_TEST
     {
         Text [ en-US ] = "ZTEST" ;
+    };
+    String SC_OPCODE_Z_TEST_MS
+    {
+        Text [ en-US ] = "Z.TEST" ;
     };
     String SC_OPCODE_T_TEST
     {
