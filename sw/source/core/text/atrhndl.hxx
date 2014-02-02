@@ -95,15 +95,15 @@ private:
     // a template, if we have to restart the attribute evaluation
     SwFont* pFnt;
 
-    sal_Bool bVertLayout;
+    bool bVertLayout;
 
     // change font according to pool item
-    void FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPush );
+    void FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush );
 
     // push attribute to specified stack, returns true, if attribute has
     // been pushed on top of stack (important for stacks containing different
     // attributes with different priority and redlining)
-    sal_Bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem );
+    bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem );
 
     // apply top attribute on stack to font
     void ActivateTop( SwFont& rFnt, sal_uInt16 nStackPos );
@@ -120,7 +120,7 @@ public:
     void Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAttrSet,
                const IDocumentSettingAccess& rIDocumentSettingAccess,
                const SwViewShell* pShell, SwFont& rFnt,
-               sal_Bool bVertLayout );
+               bool bVertLayout );
 
     // remove everything from internal stacks, keep default data
     void Reset( );

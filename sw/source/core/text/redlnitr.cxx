@@ -64,13 +64,13 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
 
     // set font to vertical if frame layout is vertical
-    sal_Bool bVertLayout = sal_False;
-    sal_Bool bRTL = sal_False;
+    bool bVertLayout = false;
+    bool bRTL = sal_False;
     if ( pFrm )
     {
         if ( pFrm->IsVertical() )
         {
-            bVertLayout = sal_True;
+            bVertLayout = true;
             pFnt->SetVertical( pFnt->GetOrientation(), sal_True );
         }
         bRTL = pFrm->IsRightToLeft();

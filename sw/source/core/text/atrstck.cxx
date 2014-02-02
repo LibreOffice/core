@@ -195,7 +195,7 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 
     const SfxItemSet* pItemSet = CharFmt::GetItemSet( pAttr->GetAttr() );
     if ( pItemSet )
-        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, sal_True );
+        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, true );
 
     return bRet;
 }
@@ -240,7 +240,7 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                 rInetAttr.SetVisited( false );
                 const SwCharFmt* pTmpFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
                 const SfxPoolItem* pItem;
-                pTmpFmt->GetItemState( RES_CHRATR_COLOR, sal_True, &pItem );
+                pTmpFmt->GetItemState( RES_CHRATR_COLOR, true, &pItem );
                 *pColor = ((SvxColorItem*)pItem)->GetValue();
                 rInetAttr.SetVisited( true );
             }
@@ -383,8 +383,7 @@ sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
  *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
-SwAttrHandler::SwAttrHandler() : mpShell( 0 ), pFnt( 0 ), bVertLayout( sal_False )
-
+SwAttrHandler::SwAttrHandler() : mpShell( 0 ), pFnt( 0 ), bVertLayout( false )
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
@@ -406,13 +405,13 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
     mpShell = pSh;
 
     for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
-        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, sal_True );
+        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, true );
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
                           const SwViewShell* pSh,
-                          SwFont& rFnt, sal_Bool bVL )
+                          SwFont& rFnt, bool bVL )
 {
     // initialize default array
     memcpy( pDefaultArray, pPoolItem,
@@ -435,7 +434,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
             if (isCHRATR(nWhich))
             {
                 pDefaultArray[ StackPos[ nWhich ] ] = pItem;
-                FontChg( *pItem, rFnt, sal_True );
+                FontChg( *pItem, rFnt, true );
             }
 
             if( aIter.IsAtEnd() )
@@ -487,10 +486,10 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
                     if ( lcl_ChgHyperLinkColor( rAttr, *pItem, mpShell, &aColor ) )
                     {
                         SvxColorItem aItemNext( aColor, RES_CHRATR_COLOR );
-                        FontChg( aItemNext, rFnt, sal_True );
+                        FontChg( aItemNext, rFnt, true );
                     }
                     else
-                        FontChg( *pItem, rFnt, sal_True );
+                        FontChg( *pItem, rFnt, true );
                 }
             }
         }
@@ -501,7 +500,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     {
         if ( Push( rAttr, rAttr.GetAttr() ) )
             // we let pItem change rFnt
-            FontChg( rAttr.GetAttr(), rFnt, sal_True );
+            FontChg( rAttr.GetAttr(), rFnt, true );
     }
 }
 
@@ -509,14 +508,14 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
  *                      SwAttrHandler::Push()
  *************************************************************************/
 
-sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
+bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
     OSL_ENSURE( rItem.Which() < RES_TXTATR_WITHEND_END,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     // robust
     if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
-        return sal_False;
+        return false;
 
     const sal_uInt16 nStack = StackPos[ rItem.Which() ];
 
@@ -529,13 +528,13 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
               && !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, 0 ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
-        return sal_True;
+        return true;
     }
 
     const sal_uInt16 nPos = aAttrStack[ nStack ].Count();
     OSL_ENSURE( nPos, "empty stack?" );
     aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -624,18 +623,18 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
             if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, mpShell, &aColor ) )
             {
                 SvxColorItem aItemNext( aColor, RES_CHRATR_COLOR );
-                FontChg( aItemNext, rFnt, sal_False );
+                FontChg( aItemNext, rFnt, false );
             }
             else
-                FontChg( *pItemNext, rFnt, sal_False );
+                FontChg( *pItemNext, rFnt, false );
         }
         else
-            FontChg( pTopAt->GetAttr(), rFnt, sal_False );
+            FontChg( pTopAt->GetAttr(), rFnt, false );
     }
 
     // default value has to be set, we only have default values for char attribs
     else if ( nStackPos < NUM_DEFAULT_VALUES )
-        FontChg( *pDefaultArray[ nStackPos ], rFnt, sal_False );
+        FontChg( *pDefaultArray[ nStackPos ], rFnt, false );
     else if ( RES_TXTATR_REFMARK == nAttr )
         rFnt.GetRef()--;
     else if ( RES_TXTATR_TOXMARK == nAttr )
@@ -649,7 +648,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         // ruby stack has no more attributes
         // check, if an rotation attribute has to be applied
         sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
-        sal_Bool bTwoLineAct = sal_False;
+        bool bTwoLineAct = false;
         const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
         if ( pTwoLineAttr )
@@ -692,7 +691,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
  * a font depending on the stack id.
  *************************************************************************/
 
-void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPush )
+void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 {
     switch ( rItem.Which() )
     {
@@ -873,7 +872,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 break;
 
             sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
-            sal_Bool bTwoLineAct = sal_False;
+            bool bTwoLineAct = false;
             const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
             if ( pTwoLineAttr )
@@ -899,9 +898,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             // two line is activated, if
             // 1. no ruby attribute is set and
             // 2. attribute is active
-            sal_Bool bTwoLineAct = ((SvxTwoLinesItem&)rItem).GetValue();
-
-            if ( !bRuby && bTwoLineAct )
+            if ( !bRuby && ((SvxTwoLinesItem&)rItem).GetValue() )
             {
                 rFnt.SetVertical( 0, bVertLayout );
                 break;
