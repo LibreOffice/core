@@ -115,9 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/uno/unoviwou \
     editeng/source/xml/xmltxtexp \
     editeng/source/xml/xmltxtimp \
-    editeng/source/lookuptree/LatinLookupTree \
-    editeng/source/lookuptree/LatinTreeNode \
-    editeng/source/lookuptree/Node \
     editeng/source/lookuptree/Trie \
 ))
 
