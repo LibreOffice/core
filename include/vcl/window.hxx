@@ -325,7 +325,7 @@ struct WindowResHeader
     sal_uLong nRSStyle;
 };
 
-class VCL_DLLPUBLIC Window : public OutputDevice
+class VCL_DLLPUBLIC Window : public OutputDevice, public Resource
 {
     friend class Cursor;
     friend class OutputDevice;

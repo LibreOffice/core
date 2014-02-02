@@ -254,7 +254,7 @@ typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
-class VCL_DLLPUBLIC OutputDevice : public Resource
+class VCL_DLLPUBLIC OutputDevice
 {
     friend class Application;
     friend class Bitmap;
