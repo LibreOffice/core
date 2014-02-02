@@ -126,6 +126,35 @@ public:
     static Region GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly );
 };
 
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Region& rRegion)
+{
+    if (rRegion.IsEmpty())
+        return stream << "EMPTY";
+    if (rRegion.getB2DPolyPolygon())
+        return stream << "B2DPolyPolygon("
+                      << *rRegion.getB2DPolyPolygon()
+                      << ")";
+    if (rRegion.getPolyPolygon())
+        return stream << "PolyPolygon("
+                      << *rRegion.getPolyPolygon()
+                      << ")";
+    if (rRegion.getRegionBand())
+    {   // inlined because RegionBand is private to vcl
+        stream << "RegionBand(";
+        RectangleVector rects;
+        rRegion.GetRegionRectangles(rects);
+        if (rects.empty())
+            stream << "EMPTY";
+        for (size_t i = 0; i < rects.size(); ++i)
+            stream << "[" << i << "] " << rects[i];
+        stream << ")";
+    }
+    return stream;
+}
+
 #endif // INCLUDED_VCL_REGION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
