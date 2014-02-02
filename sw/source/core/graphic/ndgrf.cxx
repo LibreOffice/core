@@ -55,6 +55,8 @@
 
 using namespace com::sun::star;
 
+#define SWAPGRAPHIC_TIMEOUT     5000
+
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
         const String& rGrfName, const String& rFltName,
@@ -68,7 +70,7 @@ SwGrfNode::SwGrfNode(
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic), SWAPGRAPHIC_TIMEOUT );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
 
@@ -86,7 +88,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic), SWAPGRAPHIC_TIMEOUT );
     if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
         maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel= bLoadLowResGrf =
@@ -111,7 +113,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic), SWAPGRAPHIC_TIMEOUT );
 
     Graphic aGrf; aGrf.SetDefaultType();
     maGrfObj.SetGraphic( aGrf, rGrfName );
