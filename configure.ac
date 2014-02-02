@@ -8793,7 +8793,20 @@ AC_SUBST([MDDS_CPPFLAGS])
 dnl ===================================================================
 dnl Check for system glm
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([glm], [GLM], [glm >= 0.9.4])
+AC_MSG_CHECKING([which glm to use])
+if test "$with_system_glm" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_GLM=YES
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER([glm/glm.hpp], [],
+       [AC_MSG_ERROR([glm/glm.hpp not found. install glm])], [])
+    AC_LANG_POP([C++])
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE GLM"
+    SYSTEM_GLM=NO
+fi
+AC_SUBST([SYSTEM_GLM])
 
 dnl ===================================================================
 dnl Check for system glew
