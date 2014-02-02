@@ -456,7 +456,7 @@ bool ScTable::SetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
     ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    OSL_ENSURE( rCtx.getExtraHeight() == 0 || rCtx.isForceAutoSize(),
+    OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
@@ -486,7 +486,7 @@ void ScTable::SetOptimalHeightOnly(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
     ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    OSL_ENSURE( rCtx.getExtraHeight() == 0 || rCtx.isForceAutoSize(),
+    OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
