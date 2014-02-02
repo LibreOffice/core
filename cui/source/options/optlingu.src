@@ -17,116 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "optlingu.hrc"
 #include "helpid.hrc"
 
 #include <svtools/controldims.hrc>
 #include <sfx2/sfx.hrc>
 #include <cuires.hrc>
 
-// RID_SVXDLG_EDIT_MODULES ---------------------------------------------------
-
-ModalDialog RID_SVXDLG_EDIT_MODULES
+String RID_SVXSTR_SPELL
 {
-    HelpID = HID_EDIT_MODULES ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Size = MAP_APPFONT ( 240 , 197 ) ;
-    Text [ en-US ] = "Edit Modules";
+    Text [ en-US ] = "Spelling";
+};
 
-    FixedLine FL_EDIT_MODULES_OPTIONS
-    {
-        Pos = MAP_APPFONT ( RSC_SP_FLGR_INNERBORDER_LEFT , RSC_SP_FLGR_INNERBORDER_TOP ) ;
-        Size = MAP_APPFONT ( 240 - 2*RSC_SP_FLGR_INNERBORDER_LEFT , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ en-US ] = "Options";
-    };
-    FixedText FT_EDIT_MODULES_LANGUAGE
-    {
-        Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 68 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Language";
-    };
-    ListBox LB_EDIT_MODULES_LANGUAGE
-    {
-        HelpID = "cui:ListBox:RID_SVXDLG_EDIT_MODULES:LB_EDIT_MODULES_LANGUAGE";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 14 ) ;
-        Size = MAP_APPFONT ( 95 , 80 ) ;
-        DropDown = TRUE ;
-        Sort = TRUE ;
-    };
-    Control CLB_EDIT_MODULES_MODULES
-    {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 166 , 120 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    PushButton PB_EDIT_MODULES_PRIO_UP
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_UP";
-        Pos = MAP_APPFONT ( 184 , 32 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Move Up";
-    };
-    PushButton PB_EDIT_MODULES_PRIO_DOWN
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_DOWN";
-        Pos = MAP_APPFONT ( 184 , 49 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Move Down";
-    };
-    PushButton PB_EDIT_MODULES_PRIO_BACK
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_BACK";
-        Pos = MAP_APPFONT ( 184 , 66 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Back";
-    };
-    FixedText FT_EDIT_MODULES_NEWDICTSLINK
-    {
-        Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 169 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "~Get more dictionaries online...";
-    };
-    FixedLine FL_EDIT_MODULES_BUTTONS
-    {
-        Pos = MAP_APPFONT ( 0 , 166 ) ;
-        Size = MAP_APPFONT ( 240 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 12, 177 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 184 , 177 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ en-US ] = "Close";
-    };
+String RID_SVXSTR_HYPH
+{
+    Text [ en-US ] = "Hyphenation";
+};
 
-    String ST_SPELL
-    {
-        Text [ en-US ] = "Spelling";
-    };
-    String ST_HYPH
-    {
-        Text [ en-US ] = "Hyphenation";
-    };
-    String ST_THES
-    {
-        Text [ en-US ] = "Thesaurus";
-    };
-    String ST_GRAMMAR
-    {
-        Text [ en-US ] = "Grammar";
-    };
+String RID_SVXSTR_THES
+{
+    Text [ en-US ] = "Thesaurus";
+};
+
+String RID_SVXSTR_GRAMMAR
+{
+    Text [ en-US ] = "Grammar";
 };
 
 String RID_SVXSTR_CAPITAL_WORDS

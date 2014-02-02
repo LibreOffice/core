@@ -151,7 +151,6 @@
 #define RID_SVXDLG_JAVA_CLASSPATH           (RID_SVX_START + 255)
 #define RID_SVXERR_JRE_NOT_RECOGNIZED       (RID_SVX_START + 256)
 #define RID_SVXERR_JRE_FAILED_VERSION       (RID_SVX_START + 257)
-#define RID_SVXDLG_EDIT_MODULES             (RID_SVX_START +  831)
 #define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
 #define RID_SVXBMP_LOCK                     (RID_SVX_START + 118)
 #define RID_SVXSTR_READONLY_CONFIG_TIP      (RID_SVX_START + 1026)
@@ -441,6 +440,10 @@
 #define RID_SVXSTR_CHG_SMARTART                             (RID_SVX_START + 1251)
 
 #define RID_SVXSTR_PPI                                      (RID_SVX_START + 1252)
+#define RID_SVXSTR_SPELL                                    (RID_SVX_START + 1253)
+#define RID_SVXSTR_HYPH                                     (RID_SVX_START + 1254)
+#define RID_SVXSTR_THES                                     (RID_SVX_START + 1255)
+#define RID_SVXSTR_GRAMMAR                                  (RID_SVX_START + 1256)
 
 #endif
 

@@ -52,19 +52,15 @@ class SvxLinguData_Impl;
 
 class SvxEditModulesDlg : public ModalDialog
 {
-    FixedLine           aModulesFL;
-    FixedText           aLanguageFT;
-    SvxLanguageBox      aLanguageLB;
+    SvxLanguageBox*     m_pLanguageLB;
 
-    SvxCheckListBox     aModulesCLB;
-    PushButton          aPrioUpPB;
-    PushButton          aPrioDownPB;
-    PushButton          aBackPB;
-    FixedHyperlink      aMoreDictsLink;
+    SvxCheckListBox*    m_pModulesCLB;
+    PushButton*         m_pPrioUpPB;
+    PushButton*         m_pPrioDownPB;
+    PushButton*         m_pBackPB;
+    FixedHyperlink*     m_pMoreDictsLink;
 
-    FixedLine           aButtonsFL;
-    HelpButton          aHelpPB;
-    OKButton            aClosePB;
+    CloseButton*        m_pClosePB;
 
     OUString            sSpell;
     OUString            sHyph;
@@ -78,9 +74,9 @@ class SvxEditModulesDlg : public ModalDialog
 
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
-    DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
-    DECL_LINK( UpDownHdl_Impl, PushButton * );
-    DECL_LINK( ClickHdl_Impl, PushButton * );
+    DECL_LINK(SelectHdl_Impl, SvxCheckListBox *);
+    DECL_LINK(UpDownHdl_Impl, PushButton *);
+    DECL_LINK(ClickHdl_Impl, void *);
     DECL_LINK(BackHdl_Impl, void *);
     DECL_LINK( SelectHdlLB_Impl, ListBox * );
     DECL_LINK( LangSelectHdl_Impl, ListBox* );

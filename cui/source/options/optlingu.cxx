@@ -55,7 +55,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
-#include "optlingu.hrc"
 
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>
@@ -1113,8 +1112,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
-        m_pMoreDictsLink->SetURL( OUString(
-             "http://extensions.libreoffice.org/dictionaries/"  ) );
         m_pMoreDictsLink->SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -1876,63 +1873,55 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
     }
 }
 
-SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) :
-    ModalDialog( pParent, CUI_RES(RID_SVXDLG_EDIT_MODULES ) ),
-    aModulesFL      ( this, CUI_RES( FL_EDIT_MODULES_OPTIONS ) ),
-    aLanguageFT     ( this, CUI_RES( FT_EDIT_MODULES_LANGUAGE ) ),
-    aLanguageLB     ( this, CUI_RES( LB_EDIT_MODULES_LANGUAGE ), sal_False ),
-    aModulesCLB     ( this, CUI_RES( CLB_EDIT_MODULES_MODULES ) ),
-    aPrioUpPB       ( this, CUI_RES( PB_EDIT_MODULES_PRIO_UP ) ),
-    aPrioDownPB     ( this, CUI_RES( PB_EDIT_MODULES_PRIO_DOWN ) ),
-    aBackPB         ( this, CUI_RES( PB_EDIT_MODULES_PRIO_BACK ) ),
-    aMoreDictsLink  ( this, CUI_RES( FT_EDIT_MODULES_NEWDICTSLINK ) ),
-    aButtonsFL      ( this, CUI_RES( FL_EDIT_MODULES_BUTTONS ) ),
-    aHelpPB         ( this, CUI_RES( PB_HELP ) ),
-    aClosePB        ( this, CUI_RES( PB_OK ) ),
-    sSpell          (       CUI_RES( ST_SPELL ) ),
-    sHyph           (       CUI_RES( ST_HYPH ) ),
-    sThes           (       CUI_RES( ST_THES ) ),
-    sGrammar        (       CUI_RES( ST_GRAMMAR ) ),
-    rLinguData      ( rData )
+SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData)
+    : ModalDialog( pParent, "EditModulesDialog",
+        "cui/ui/editmodulesdialog.ui")
+    , sSpell(CUI_RES(RID_SVXSTR_SPELL))
+    , sHyph(CUI_RES(RID_SVXSTR_HYPH))
+    , sThes(CUI_RES(RID_SVXSTR_THES))
+    , sGrammar(CUI_RES(RID_SVXSTR_GRAMMAR))
+    , rLinguData(rData)
 {
+    get(m_pClosePB, "close");
+    get(m_pMoreDictsLink, "moredictslink");
+    get(m_pBackPB, "back");
+    get(m_pPrioDownPB, "down");
+    get(m_pPrioUpPB, "up");
+    get(m_pModulesCLB, "lingudicts");
+    Size aListSize(m_pModulesCLB->LogicToPixel(Size(166, 120), MAP_APPFONT));
+    m_pModulesCLB->set_height_request(aListSize.Height());
+    m_pModulesCLB->set_width_request(aListSize.Width());
+    get(m_pLanguageLB, "language");
+    m_pLanguageLB->SetStyle(m_pLanguageLB->GetStyle() | WB_SORT);
+
     pCheckButtonData = NULL;
-    FreeResource();
 
     pDefaultLinguData = new SvxLinguData_Impl( rLinguData );
 
-    aModulesCLB.SetStyle( aModulesCLB.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    aModulesCLB.SetHighlightRange();
-    aModulesCLB.SetHelpId(HID_CLB_EDIT_MODULES_MODULES );
-    aModulesCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
-    aModulesCLB.SetCheckButtonHdl( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl) );
+    m_pModulesCLB->SetStyle( m_pModulesCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    m_pModulesCLB->SetHighlightRange();
+    m_pModulesCLB->SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
+    m_pModulesCLB->SetCheckButtonHdl( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl) );
 
-    aClosePB   .SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
-    aPrioUpPB  .SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
-    aPrioDownPB.SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
-    aBackPB    .SetClickHdl( LINK( this, SvxEditModulesDlg, BackHdl_Impl ));
+    m_pClosePB->SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
+    m_pPrioUpPB->SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
+    m_pPrioDownPB->SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
+    m_pBackPB->SetClickHdl( LINK( this, SvxEditModulesDlg, BackHdl_Impl ));
     // in case of not installed language modules
-    aPrioUpPB  .Enable( false );
-    aPrioDownPB.Enable( false );
+    m_pPrioUpPB->Enable( false );
+    m_pPrioDownPB->Enable( false );
 
     if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
-        aMoreDictsLink.SetURL( OUString(
-             "http://extensions.libreoffice.org/dictionaries/" ) );
-        aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
+        m_pMoreDictsLink->SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else
     {
-        aMoreDictsLink.Hide();
-        long nPos = aMoreDictsLink.GetPosPixel().Y() + aMoreDictsLink.GetSizePixel().Height();
-        Size aSize = aModulesCLB.GetSizePixel();
-        aSize.Height() += ( nPos - ( aModulesCLB.GetPosPixel().Y() + aSize.Height() ) );
-        aModulesCLB.SetSizePixel( aSize );
+        m_pMoreDictsLink->Hide();
     }
 
-    //
     //fill language box
-    //
     Sequence< sal_Int16 > aAvailLang;
     uno::Reference< XAvailableLocales > xAvail( rLinguData.GetManager(), UNO_QUERY );
     if (xAvail.is())
@@ -1942,19 +1931,19 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     }
     const Sequence< Locale >& rLoc = rLinguData.GetAllSupportedLocales();
     const Locale* pLocales = rLoc.getConstArray();
-    aLanguageLB.Clear();
+    m_pLanguageLB->Clear();
     for(long i = 0; i < rLoc.getLength(); i++)
     {
         sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocales[i] );
-        aLanguageLB.InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
+        m_pLanguageLB->InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
     }
     LanguageType eSysLang = MsLangId::getSystemLanguage();
-    aLanguageLB.SelectLanguage( eSysLang );
-    if(!aLanguageLB.IsLanguageSelected( eSysLang ) )
-        aLanguageLB.SelectEntryPos(0);
+    m_pLanguageLB->SelectLanguage( eSysLang );
+    if(!m_pLanguageLB->IsLanguageSelected( eSysLang ) )
+        m_pLanguageLB->SelectEntryPos(0);
 
-    aLanguageLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, LangSelectHdl_Impl ));
-    LangSelectHdl_Impl(&aLanguageLB);
+    m_pLanguageLB->SetSelectHdl( LINK( this, SvxEditModulesDlg, LangSelectHdl_Impl ));
+    LangSelectHdl_Impl(m_pLanguageLB);
 }
 
 
@@ -1969,8 +1958,8 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     if( !pCheckButtonData )
     {
-        pCheckButtonData = new SvLBoxButtonData( &aModulesCLB );
-        pCheckButtonData->SetLink( aModulesCLB.GetCheckButtonHdl() );
+        pCheckButtonData = new SvLBoxButtonData(m_pModulesCLB);
+        pCheckButtonData->SetLink( m_pModulesCLB->GetCheckButtonHdl() );
     }
 
     OUString sEmpty;
@@ -1986,7 +1975,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
 
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
-    if (&aModulesCLB == pBox)
+    if (m_pModulesCLB == pBox)
     {
         sal_Bool bDisableUp = sal_True;
         sal_Bool bDisableDown = sal_True;
@@ -2008,8 +1997,8 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
                             GetEntry(nCurPos - 1)->GetUserData())->IsParent();
                 }
             }
-            aPrioUpPB.Enable(!bDisableUp);
-            aPrioDownPB.Enable(!bDisableDown);
+            m_pPrioUpPB->Enable(!bDisableUp);
+            m_pPrioDownPB->Enable(!bDisableDown);
         }
     }
     else
@@ -2022,7 +2011,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 
 IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
-        pBox = &aModulesCLB;
+        pBox = m_pModulesCLB;
         SvTreeListEntry *pCurEntry = pBox->GetCurEntry();
         if (pCurEntry)
         {
@@ -2052,10 +2041,10 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 
 IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 {
-    LanguageType  eCurLanguage = aLanguageLB.GetSelectLanguage();
+    LanguageType  eCurLanguage = m_pLanguageLB->GetSelectLanguage();
     static Locale aLastLocale;
     Locale aCurLocale( LanguageTag::convertToLocale( eCurLanguage));
-    SvTreeList *pModel = aModulesCLB.GetModel();
+    SvTreeList *pModel = m_pModulesCLB->GetModel();
 
     if (pBox)
     {
@@ -2067,9 +2056,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence< OUString > aChange;
         bool bChanged = false;
-        for(sal_uInt16 i = 0; i < aModulesCLB.GetEntryCount(); i++)
+        for(sal_uInt16 i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
         {
-            SvTreeListEntry *pEntry = aModulesCLB.GetEntry(i);
+            SvTreeListEntry *pEntry = m_pModulesCLB->GetEntry(i);
             ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
             if(pData->IsParent())
             {
@@ -2091,7 +2080,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                     }
                 }
                 nLocalIndex = nStart = 0;
-                aChange.realloc(aModulesCLB.GetEntryCount());
+                aChange.realloc(m_pModulesCLB->GetEntryCount());
                 bChanged = false;
             }
             else
@@ -2099,8 +2088,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 OUString* pChange = aChange.getArray();
                 pChange[nStart] = pData->GetImplName();
                 bChanged |= pData->GetIndex() != nLocalIndex ||
-                    pData->IsChecked() != aModulesCLB.IsChecked(i);
-                if(aModulesCLB.IsChecked(i))
+                    pData->IsChecked() != m_pModulesCLB->IsChecked(i);
+                if(m_pModulesCLB->IsChecked(i))
                     nStart++;
                 ++nLocalIndex;
             }
@@ -2112,13 +2101,13 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         }
     }
 
-    for(sal_uLong i = 0; i < aModulesCLB.GetEntryCount(); i++)
-        delete (ModuleUserData_Impl*)aModulesCLB.GetEntry(i)->GetUserData();
+    for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
+        delete (ModuleUserData_Impl*)m_pModulesCLB->GetEntry(i)->GetUserData();
 
     //
     // display entries for new selected language
     //
-    aModulesCLB.Clear();
+    m_pModulesCLB->Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
         sal_uLong n;
@@ -2307,46 +2296,38 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
 {
-    sal_Bool bUp = &aPrioUpPB == pBtn;
-    sal_uInt16  nCurPos = aModulesCLB.GetSelectEntryPos();
+    sal_Bool bUp = m_pPrioUpPB == pBtn;
+    sal_uInt16  nCurPos = m_pModulesCLB->GetSelectEntryPos();
     SvTreeListEntry* pEntry;
     if (nCurPos != LISTBOX_ENTRY_NOTFOUND  &&
-        0 != (pEntry = aModulesCLB.GetEntry(nCurPos)))
+        0 != (pEntry = m_pModulesCLB->GetEntry(nCurPos)))
     {
-        aModulesCLB.SetUpdateMode(sal_False);
-        SvTreeList *pModel = aModulesCLB.GetModel();
+        m_pModulesCLB->SetUpdateMode(sal_False);
+        SvTreeList *pModel = m_pModulesCLB->GetModel();
 
         ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-        OUString aStr(aModulesCLB.GetEntryText(pEntry));
+        OUString aStr(m_pModulesCLB->GetEntryText(pEntry));
         SvTreeListEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
         pToInsert->SetUserData( (void *)pData);
-        sal_Bool bIsChecked = aModulesCLB.IsChecked(nCurPos);
+        sal_Bool bIsChecked = m_pModulesCLB->IsChecked(nCurPos);
 
         pModel->Remove(pEntry);
 
         sal_uInt16 nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
         pModel->Insert(pToInsert, nDestPos);
-        aModulesCLB.CheckEntryPos(nDestPos, bIsChecked );
-        aModulesCLB.SelectEntryPos(nDestPos );
-        SelectHdl_Impl(&aModulesCLB);
-        aModulesCLB.SetUpdateMode(sal_True);
+        m_pModulesCLB->CheckEntryPos(nDestPos, bIsChecked );
+        m_pModulesCLB->SelectEntryPos(nDestPos );
+        SelectHdl_Impl(m_pModulesCLB);
+        m_pModulesCLB->SetUpdateMode(sal_True);
     }
     return 0;
 }
 
-IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
+IMPL_LINK_NOARG(SvxEditModulesDlg, ClickHdl_Impl)
 {
-    if (&aClosePB == pBtn)
-    {
-        // store language config
-        LangSelectHdl_Impl(&aLanguageLB);
-        EndDialog( RET_OK );
-    }
-    else
-    {
-        OSL_FAIL( "pBtn unexpected value" );
-    }
-
+    // store language config
+    LangSelectHdl_Impl(m_pLanguageLB);
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -2361,7 +2342,7 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl)
 
 IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl)
 {
-    OUString sURL( aMoreDictsLink.GetURL() );
+    OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );
     return 0;
 }
