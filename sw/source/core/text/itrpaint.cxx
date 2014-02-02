@@ -512,33 +512,22 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     if( HasHints() )
     {
-        bool bUnder = false;
-
         for ( MSHORT nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
         {
             SwTxtAttr* const pTxtAttr = pHints->GetStart( nTmp );
-            bool bUnderSelect = false;
 
             const SvxUnderlineItem* pItem =
                     static_cast<const SvxUnderlineItem*>(CharFmt::GetItem( *pTxtAttr, RES_CHRATR_UNDERLINE ));
 
             if ( pItem )
             {
-                bUnder = true;
-                bUnderSelect = pFnt->GetUnderline() == pItem->GetLineStyle();
-            }
-
-            if( bUnder )
-            {
-                sal_Int32 nSt = *pTxtAttr->GetStart();
-                sal_Int32 nEnd = *pTxtAttr->GetEnd();
+                const sal_Int32 nSt = *pTxtAttr->GetStart();
+                const sal_Int32 nEnd = *pTxtAttr->GetEnd();
                 if( nEnd > nSt )
                 {
-                    Range aTmp( nSt, nEnd - 1 );
-                    if( bUnder )
-                        aUnderMulti.Select( aTmp, bUnderSelect );
+                    const bool bUnderSelect = pFnt->GetUnderline() == pItem->GetLineStyle();
+                    aUnderMulti.Select( Range( nSt, nEnd - 1 ), bUnderSelect );
                 }
-                bUnder = false;
             }
         }
     }
