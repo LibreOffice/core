@@ -40,11 +40,11 @@ class SwTxtFormatter : public SwTxtPainter
     sal_uInt8 nCntMidHyph;  // Counts consecutive hyphens before flies
     sal_Int32 nLeftScanIdx; // for increasing performance during
     sal_Int32 nRightScanIdx; // scanning for portion ends
-    sal_Bool bOnceMore : 1; // Another round?
-    sal_Bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
-    sal_Bool bChanges : 1; // Flag for calculating the repaint rectangle
-    sal_Bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
-    sal_Bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
+    bool bOnceMore : 1; // Another round?
+    bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
+    bool bChanges : 1; // Flag for calculating the repaint rectangle
+    bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
+    bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     sal_uInt16 m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion bulding)
 
@@ -89,7 +89,7 @@ class SwTxtFormatter : public SwTxtPainter
     void CalcAdjustLine( SwLineLayout *pCurr );
 
     // consideres line spacing attributes
-    void CalcRealHeight( sal_Bool bNewLine = sal_False );
+    void CalcRealHeight( bool bNewLine = false );
 
     // Transfers the data to rInf
     void FeedInf( SwTxtFormatInfo &rInf ) const;
@@ -101,7 +101,7 @@ class SwTxtFormatter : public SwTxtPainter
     void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );
 
     // determines, if a optimized repaint rectange is allowed
-    sal_Bool AllowRepaintOpt() const;
+    bool AllowRepaintOpt() const;
 
     // Is called by by FormatLine
     void FormatReset( SwTxtFormatInfo &rInf );
@@ -114,7 +114,7 @@ class SwTxtFormatter : public SwTxtPainter
         Mainly to correct the X position.
      */
     void UpdatePos( SwLineLayout *pCurr, Point aStart, sal_Int32 nStartIdx,
-            sal_Bool bAlways = sal_False ) const;
+            bool bAlways = false ) const;
 
     /**
         Set all anchored as character objects to the passed BaseLine
@@ -129,7 +129,7 @@ class SwTxtFormatter : public SwTxtPainter
         We check this and return true, meaning that the line has to be
         formatted again.
      */
-    sal_Bool ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const;
+    bool ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const;
 
     // Insert portion
     void InsertPortion( SwTxtFormatInfo &rInf, SwLinePortion *pPor ) const;
@@ -150,12 +150,12 @@ public:
     void CalcUnclipped( SwTwips& rTop, SwTwips& rBottom );
 
     // Amongst others for DropCaps
-    sal_Bool CalcOnceMore();
+    bool CalcOnceMore();
 
     void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
     SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf )
         : SwTxtPainter(pTxtFrm!=NULL ? pTxtFrm->GetTxtNode() : NULL)
-        , bUnclipped(sal_False)
+        , bUnclipped(false)
         {
             CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf );
         }
@@ -166,7 +166,7 @@ public:
     void RecalcRealHeight();
 
     // We format a line for interactive hyphenation
-    sal_Bool Hyphenate( SwInterHyphInfo &rInf );
+    bool Hyphenate( SwInterHyphInfo &rInf );
 
     // A special method for QuoVadis texts:
     // nErgo is the page number of the ErgoSum Ftn
@@ -174,13 +174,13 @@ public:
     sal_Int32 FormatQuoVadis( const sal_Int32 nStart );
 
     // The emergency break: Cancel formatting, discard line
-    sal_Bool IsStop() const { return GetInfo().IsStop(); }
+    bool IsStop() const { return GetInfo().IsStop(); }
 
     // The counterpart: Continue formatting at all costs
-    sal_Bool IsNewLine() const { return GetInfo().IsNewLine(); }
+    bool IsNewLine() const { return GetInfo().IsNewLine(); }
 
     // FormatQuick(); Refresh formatting information
-    sal_Bool IsQuick() const { return GetInfo().IsQuick(); }
+    bool IsQuick() const { return GetInfo().IsQuick(); }
 
     // Create a SwLineLayout if needed, which avoids Ftn/Fly to oscillate
     void MakeDummyLine();
@@ -201,20 +201,20 @@ public:
 
     SwMultiPortion *GetMulti() const { return pMulti; }
 
-    sal_Bool IsOnceMore() const { return bOnceMore; }
-    void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
+    bool IsOnceMore() const { return bOnceMore; }
+    void SetOnceMore( bool bNew ) { bOnceMore = bNew; }
 
-    sal_Bool HasChanges() const { return bChanges; }
-    void       SetChanges()       { bChanges = sal_True; }
+    bool HasChanges() const { return bChanges; }
+    void SetChanges()       { bChanges = true; }
 
-    sal_Bool HasTruncLines() const { return bTruncLines; }
-    void       SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
+    bool HasTruncLines() const { return bTruncLines; }
+    void SetTruncLines( bool bNew ) { bTruncLines = bNew; }
 
-    sal_Bool IsUnclipped() const { return bUnclipped; }
-    void       SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
+    bool IsUnclipped() const { return bUnclipped; }
+    void SetUnclipped( bool bNew ) { bUnclipped = bNew; }
 
-    sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
-    void  SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
+    bool IsFlyInCntBase() const { return bFlyInCntBase; }
+    void SetFlyInCntBase( bool bNew = true ) { bFlyInCntBase = bNew; }
 
     SwTxtFormatInfo &GetInfo()
         { return (SwTxtFormatInfo&)SwTxtIter::GetInfo(); }

@@ -64,7 +64,7 @@
  * Adding some more conditions here means you also have to change them
  * in SwTxtPainter::CheckSpecialUnderline
  *************************************************************************/
-sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
+bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 {
     return UNDERLINE_NONE == rFnt.GetUnderline() ||
            rPor.IsFlyPortion() || rPor.IsFlyCntPortion() ||

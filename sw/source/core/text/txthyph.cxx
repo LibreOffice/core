@@ -130,10 +130,10 @@ void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
     pInf->pPara = pRoot;
 }
 
-sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     SwTxtFormatInfo &rInf = GetInfo();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // In der letzten Zeile gibt es nie etwas zu trennen.
     // Es sei denn, es befindet sich eine FlyPortion darin,

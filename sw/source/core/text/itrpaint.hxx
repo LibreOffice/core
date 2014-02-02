@@ -62,7 +62,7 @@ public:
         { return (const SwTxtPaintInfo&)SwTxtIter::GetInfo(); }
 };
 
-
+bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
 #endif
 
