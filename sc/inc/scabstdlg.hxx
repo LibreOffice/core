@@ -459,7 +459,6 @@ public:
                                                                 const OString& ) = 0;
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent,
-                                                                    int nId,
                                                                     sal_Bool                    bAscii = sal_True,
                                                                     const ScImportOptions*  pOptions = NULL,
                                                                     const OUString*         pStrTitle = NULL,

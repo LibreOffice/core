@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/dbgui/dpgroupdlg.src \
     sc/source/ui/dbgui/pvfundlg.src \
     sc/source/ui/dbgui/dapitype.src \
-    sc/source/ui/dbgui/imoptdlg.src \
     sc/source/ui/dbgui/scendlg.src \
     sc/source/ui/dbgui/validate.src \
     sc/source/ui/drawfunc/drformsh.src \

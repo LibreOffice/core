@@ -309,7 +309,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 
-        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
+        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg(NULL,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport);
         OSL_ENSURE(pDlg, "Dialog create fail!");

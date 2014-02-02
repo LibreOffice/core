@@ -960,7 +960,6 @@ AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
 }
 
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,
-                                                                    int nId,
                                                                     sal_Bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle,
@@ -968,19 +967,8 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
                                                                     sal_Bool                    bOnlyDbtoolsEncodings,
                                                                     sal_Bool                    bImport )
 {
-    ScImportOptionsDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_IMPORTOPT :
-            pDlg = new ScImportOptionsDlg( pParent, bAscii, pOptions,pStrTitle, bMultiByte,bOnlyDbtoolsEncodings, bImport );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScImportOptionsDlg_Impl( pDlg );
-    return 0;
+    ScImportOptionsDlg * pDlg = new ScImportOptionsDlg( pParent, bAscii, pOptions,pStrTitle, bMultiByte,bOnlyDbtoolsEncodings, bImport );
+    return new AbstractScImportOptionsDlg_Impl( pDlg );
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(SfxViewFrame* pFrame,
