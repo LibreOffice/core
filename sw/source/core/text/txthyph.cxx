@@ -133,13 +133,12 @@ void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     SwTxtFormatInfo &rInf = GetInfo();
-    bool bRet = false;
 
     // In der letzten Zeile gibt es nie etwas zu trennen.
     // Es sei denn, es befindet sich eine FlyPortion darin,
     // oder es ist die letzte Zeile des Masters
     if( !GetNext() && !rInf.GetTxtFly()->IsOn() && !pFrm->GetFollow() )
-        return bRet;
+        return false;
 
     sal_Int32 nWrdStart = nStart;
 
@@ -215,52 +214,49 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
     }
 
-    if( nWrdStart )
+    if( nWrdStart==0 )
+        return false;
+
+    // nWrdStart bezeichnet nun die Position im String, der
+    // fuer eine Trennung zur Debatte steht.
+    // Start() hangelt sich zum End()
+    rHyphInf.nWordStart = nWrdStart;
+
+    sal_Int32 nLen = 0;
+    const sal_Int32 nEnd = nWrdStart;
+
+    // Wir suchen vorwaerts
+    Reference< XHyphenatedWord > xHyphWord;
+
+    Boundary aBound =
+        g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
+        g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
+    nWrdStart = aBound.startPos;
+    nLen = aBound.endPos - nWrdStart;
+    if ( nLen == 0 )
+        return false;
+
+    OUString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
+    MSHORT nMinTrail = 0;
+    if( nWrdStart + nLen > nEnd )
+        nMinTrail = nWrdStart + nLen - nEnd - 1;
+
+    //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
+    xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
+    if ( xHyphWord.is() )
     {
-        // nWrdStart bezeichnet nun die Position im String, der
-        // fuer eine Trennung zur Debatte steht.
-        // Start() hangelt sich zum End()
+        rHyphInf.SetHyphWord( xHyphWord );
         rHyphInf.nWordStart = nWrdStart;
-
-        sal_Int32 nLen = 0;
-        const sal_Int32 nEnd = nWrdStart;
-
-        // Wir suchen vorwaerts
-        Reference< XHyphenatedWord > xHyphWord;
-
-        Boundary aBound =
-            g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
-            g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
-        nWrdStart = aBound.startPos;
-        nLen = aBound.endPos - nWrdStart;
-        bRet = 0 != nLen;
-        if( bRet )
-        {
-            OUString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
-
-            {
-                MSHORT nMinTrail = 0;
-                if( nWrdStart + nLen > nEnd )
-                    nMinTrail = nWrdStart + nLen - nEnd - 1;
-
-                //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
-                xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
-                bRet = xHyphWord.is();
-                if ( !rHyphInf.IsCheck() && sal_False == bRet )
-                    rHyphInf.SetNoLang( true );
-            }
-
-            if( bRet )
-            {
-                rHyphInf.SetHyphWord( xHyphWord );
-                rHyphInf.nWordStart = nWrdStart;
-                rHyphInf.nWordLen = nLen;
-                rHyphInf.SetNoLang( false );
-                rHyphInf.SetCheck( true );
-            }
-        }
+        rHyphInf.nWordLen = nLen;
+        rHyphInf.SetNoLang( false );
+        rHyphInf.SetCheck( true );
+        return true;
     }
-    return bRet;
+
+    if ( !rHyphInf.IsCheck() )
+        rHyphInf.SetNoLang( true );
+
+    return false;
 }
 
 /*************************************************************************
