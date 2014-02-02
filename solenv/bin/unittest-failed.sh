@@ -17,7 +17,19 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 
-printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport CPPUNITTRACE="gdb --args" # for interactive debugging on Linux\nexport CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s\n\n' $1 $2
+cat << EOF
+
+Error: a unit test failed, please do one of:
+
+export DEBUGCPPUNIT=TRUE            # for exception catching
+export CPPUNITTRACE="gdb --args"    # for interactive debugging on Linux
+export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio
+export VALGRIND=memcheck            # for memory checking
+
+and retry using: make $1Test_$2
+
+EOF
+
 exit 1
 
 # vim: set et sw=4:
