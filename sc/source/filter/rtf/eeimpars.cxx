@@ -52,6 +52,7 @@
 #include "rangenam.hxx"
 #include "progress.hxx"
 #include "stringutil.hxx"
+#include <rowheightcontext.hxx>
 
 #include "globstr.hrc"
 
@@ -441,9 +442,10 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / nOutputFactor;
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
-        mpDoc->SetOptimalHeight( 0, nEndRow, 0,
-            static_cast< sal_uInt16 >( ScGlobal::nLastRowHeightExtra ), &aVirtDev,
-            nPPTX, nPPTY, aZoom, aZoom, false );
+        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoom, aZoom, &aVirtDev);
+        aCxt.setExtraHeight(ScGlobal::nLastRowHeightExtra);
+        mpDoc->SetOptimalHeight(aCxt, 0, nEndRow, 0);
+
         if ( !maRowHeights.empty() )
         {
             for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )

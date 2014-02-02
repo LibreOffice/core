@@ -58,6 +58,7 @@ struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
 struct RowSpan;
+class RowHeightContext;
 
 }
 
@@ -437,9 +438,8 @@ public:
         bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const;
 
     void GetOptimalHeight(
-        SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
-        double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
-        bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart);
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
+        sal_uInt16 nMinHeight, SCROW nMinStart );
 
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;

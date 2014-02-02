@@ -75,7 +75,7 @@
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "tokenarray.hxx"
-
+#include <rowheightcontext.hxx>
 
 //==================================================================
 
@@ -2084,8 +2084,10 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                         aZoomX = aZoomY = Fraction( 1, 1 );
                     }
 
-                    pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, nSizeTwips, aProv.GetDevice(),
-                                                nPPTX, nPPTY, aZoomX, aZoomY, bAll );
+                    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+                    aCxt.setForceAutoSize(bAll);
+                    aCxt.setExtraHeight(nSizeTwips);
+                    pDoc->SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);
                     if (bAll)
                         pDoc->ShowRows( nStartNo, nEndNo, nTab, true );
 

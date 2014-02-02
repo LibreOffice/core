@@ -82,6 +82,7 @@
 #include "searchresults.hxx"
 #include "tokenarray.hxx"
 #include <columnspanset.hxx>
+#include <rowheightcontext.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -129,7 +130,8 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         aZoomX = aZoomY = Fraction( 1, 1 );
     }
 
-    sal_Bool bAnyChanged = false;
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    bool bAnyChanged = false;
     ScMarkData::iterator itr = pMarkData->begin(), itrEnd = pMarkData->end();
     for (; itr != itrEnd; ++itr)
     {
@@ -141,8 +143,7 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         {
             SCROW nStartNo = itRows->mnRow1;
             SCROW nEndNo = itRows->mnRow2;
-            if (pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, aProv.GetDevice(),
-                                        nPPTX, nPPTY, aZoomX, aZoomY, false ))
+            if (pDoc->SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab))
             {
                 if (!bChanged)
                     nPaintY = nStartNo;
@@ -183,8 +184,8 @@ sal_Bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool b
         nPPTY = aProv.GetPPTY();
         aZoomX = aZoomY = Fraction( 1, 1 );
     }
-    sal_Bool bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, aProv.GetDevice(),
-                                            nPPTX, nPPTY, aZoomX, aZoomY, false );
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    bool bChanged = pDoc->SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
 
     if (bChanged && ( nStartRow == nEndRow ))
     {

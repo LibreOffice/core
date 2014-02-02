@@ -3986,23 +3986,17 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 
-bool ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nExtra,
-                                    OutputDevice* pDev,
-                                    double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bShrink )
+bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
-//! MarkToMulti();
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->SetOptimalHeight( nStartRow, nEndRow, nExtra,
-                                                pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
-    OSL_FAIL("wrong table number");
-    return false;
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->SetOptimalHeight(rCxt, nStartRow, nEndRow);
 }
 
 
-void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY, const ScMarkData* pTabMark )
+void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark )
 {
     // one progress across all (selected) sheets
 
@@ -4017,8 +4011,7 @@ void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double n
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
-            maTabs[nTab]->SetOptimalHeightOnly( 0, MAXROW, 0,
-                        pDev, nPPTX, nPPTY, rZoomX, rZoomY, false, &aProgress, nProgressStart );
+            maTabs[nTab]->SetOptimalHeightOnly(rCxt, 0, MAXROW, &aProgress, nProgressStart);
             maTabs[nTab]->SetDrawPageSize(true, true);
             nProgressStart += maTabs[nTab]->GetWeightedCount();
         }

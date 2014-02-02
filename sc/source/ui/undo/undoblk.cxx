@@ -47,6 +47,7 @@
 #include "undoolk.hxx"
 #include "clipparam.hxx"
 #include "sc.hrc"
+#include <rowheightcontext.hxx>
 
 #include <set>
 
@@ -1179,12 +1180,11 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
     {
         VirtualDevice aVirtDev;
         ScViewData* pViewData = pViewShell->GetViewData();
+        sc::RowHeightContext aCxt(
+            pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomX(), pViewData->GetZoomY(),
+            &aVirtDev);
 
-        if ( pDoc->SetOptimalHeight( aRange.aStart.Row(), aRange.aEnd.Row(),
-                                     aRange.aStart.Tab(), 0, &aVirtDev,
-                                     pViewData->GetPPTX(),  pViewData->GetPPTY(),
-                                     pViewData->GetZoomX(), pViewData->GetZoomY(),
-                                     false ) )
+        if (pDoc->SetOptimalHeight(aCxt, aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab()))
         {
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);

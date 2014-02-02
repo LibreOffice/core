@@ -43,6 +43,7 @@
 #include "listenercontext.hxx"
 #include "mtvcellfunc.hxx"
 #include "scmatrix.hxx"
+#include <rowheightcontext.hxx>
 
 #include <math.h>
 
@@ -758,9 +759,8 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
 //  (is only evaluated with bStdAllowed)
 
 void ScColumn::GetOptimalHeight(
-    SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
-    double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
-    bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart)
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
+    sal_uInt16 nMinHeight, SCROW nMinStart )
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
@@ -917,12 +917,12 @@ void ScColumn::GetOptimalHeight(
                     {
                         //  only calculate the cell height when it's used later (#37928#)
 
-                        if ( bShrink || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
+                        if (rCxt.isForceAutoSize() || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
                         {
                             aOptions.pPattern = pPattern;
                             sal_uInt16 nHeight = (sal_uInt16)
-                                    ( GetNeededSize( nRow, pDev, nPPTX, nPPTY,
-                                                        rZoomX, rZoomY, false, aOptions ) / nPPTY );
+                                    ( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
+                                                        rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions ) / rCxt.getPPTY() );
                             if (nHeight > pHeight[nRow-nStartRow])
                                 pHeight[nRow-nStartRow] = nHeight;
                         }

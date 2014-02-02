@@ -69,6 +69,7 @@ struct RefUpdateMoveTabContext;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
+class RowHeightContext;
 
 }
 
@@ -661,19 +662,13 @@ public:
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
-    bool        SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
-                                    OutputDevice* pDev,
-                                    double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bForce,
-                                    ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
+    bool SetOptimalHeight(
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+        ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
 
-    void        SetOptimalHeightOnly(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
-                                     OutputDevice* pDev,
-                                     double nPPTX, double nPPTY,
-                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                     bool bForce,
-                                     ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
+    void SetOptimalHeightOnly(
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+        ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
 
     long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,

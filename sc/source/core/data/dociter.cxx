@@ -38,6 +38,7 @@
 #include "editutil.hxx"
 #include "cellvalue.hxx"
 #include "scmatrix.hxx"
+#include <rowheightcontext.hxx>
 
 #include "tools/fract.hxx"
 #include "editeng/editobj.hxx"
@@ -2440,6 +2441,7 @@ void ScDocRowHeightUpdater::update()
     Fraction aZoom(1, 1);
     itr = mpTabRangesArray->begin();
     sal_uInt32 nProgressStart = 0;
+    sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
     for (; itr != itrEnd; ++itr)
     {
         SCTAB nTab = itr->mnTab;
@@ -2454,7 +2456,7 @@ void ScDocRowHeightUpdater::update()
                 continue;
 
             mrDoc.maTabs[nTab]->SetOptimalHeight(
-                aData.mnRow1, aData.mnRow2, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
+                aCxt, aData.mnRow1, aData.mnRow2, &aProgress, nProgressStart);
 
             nProgressStart += aData.mnRow2 - aData.mnRow1 + 1;
         }
@@ -2475,15 +2477,14 @@ void ScDocRowHeightUpdater::updateAll()
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
 
     Fraction aZoom(1, 1);
+    sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
     sal_uLong nProgressStart = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
     {
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
             continue;
 
-        mrDoc.maTabs[nTab]->SetOptimalHeight(
-            0, MAXROW, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
-
+        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, MAXROW, &aProgress, nProgressStart);
         nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 }

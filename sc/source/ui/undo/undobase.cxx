@@ -31,6 +31,7 @@
 #include "subtotalparam.hxx"
 #include "bcaslot.hxx"
 #include "globstr.hrc"
+#include <rowheightcontext.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -234,9 +235,9 @@ sal_Bool ScBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
-    sal_Bool bRet = pDoc->SetOptimalHeight( aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(),
-/*!*/                                   aBlockRange.aStart.Tab(), 0, &aVirtDev,
-                                        nPPTX, nPPTY, aZoomX, aZoomY, false );
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
+    bool bRet = pDoc->SetOptimalHeight(
+        aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab());
 
     if (bRet)
         pDocShell->PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
@@ -332,12 +333,11 @@ void ScMultiBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
     {
         const ScRange& r = *maBlockRanges[i];
-        bool bRet = pDoc->SetOptimalHeight(
-            r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab(), 0, &aVirtDev,
-            nPPTX, nPPTY, aZoomX, aZoomY, false);
+        bool bRet = pDoc->SetOptimalHeight(aCxt, r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab());
 
         if (bRet)
             pDocShell->PostPaint(

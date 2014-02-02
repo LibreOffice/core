@@ -72,6 +72,7 @@ struct FormulaGroupContext;
 class DocumentStreamAccess;
 class DocumentLinkManager;
 class CellValues;
+class RowHeightContext;
 
 }
 
@@ -1480,15 +1481,12 @@ public:
                                         bool bFormula,
                                         const ScMarkData* pMarkData = NULL,
                                         const ScColWidthParam* pParam = NULL );
-    SC_DLLPUBLIC bool           SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nExtra,
-                                        OutputDevice* pDev,
-                                        double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                        bool bShrink );
-    void            UpdateAllRowHeights( OutputDevice* pDev,
-                                        double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                        const ScMarkData* pTabMark = NULL );
+
+    SC_DLLPUBLIC bool SetOptimalHeight(
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+
+    void UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark = NULL );
+
     long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,

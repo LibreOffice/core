@@ -48,6 +48,7 @@
 #include "cellvalue.hxx"
 #include "scmatrix.hxx"
 #include "refupdatecontext.hxx"
+#include <rowheightcontext.hxx>
 
 #include "formula/vectortoken.hxx"
 
@@ -79,9 +80,8 @@ ScProgress* GetProgressBar(
 }
 
 void GetOptimalHeightsInColumn(
-    ScColumn* pCol, SCROW nStartRow, SCROW nEndRow, vector<sal_uInt16>& aHeights,
-    OutputDevice* pDev, double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY, bool bForce,
-    ScProgress* pProgress, sal_uInt32 nProgressStart)
+    sc::RowHeightContext& rCxt, ScColumn* pCol, SCROW nStartRow, SCROW nEndRow,
+    vector<sal_uInt16>& aHeights, ScProgress* pProgress, sal_uInt32 nProgressStart )
 {
     SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
@@ -89,8 +89,7 @@ void GetOptimalHeightsInColumn(
     //  (mit der letzten Spalte in der Hoffnung, dass die am ehesten noch auf
     //   Standard formatiert ist)
 
-    pCol[MAXCOL].GetOptimalHeight(
-            nStartRow, nEndRow, &aHeights[0], pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce, 0, 0 );
+    pCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, &aHeights[0], 0, 0);
 
     //  daraus Standardhoehe suchen, die im unteren Bereich gilt
 
@@ -103,9 +102,7 @@ void GetOptimalHeightsInColumn(
     sal_uLong nWeightedCount = 0;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL schon oben
     {
-        pCol[nCol].GetOptimalHeight(
-            nStartRow, nEndRow, &aHeights[0], pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
-            nMinHeight, nMinStart );
+        pCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, &aHeights[0], nMinHeight, nMinStart);
 
         if (pProgress)
         {
@@ -455,11 +452,9 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
         ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions );
 }
 
-bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
-                                OutputDevice* pDev,
-                                double nPPTX, double nPPTY,
-                                const Fraction& rZoomX, const Fraction& rZoomY,
-                                bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
+bool ScTable::SetOptimalHeight(
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+    ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
     OSL_ENSURE( nExtra==0 || bForce, "automatic OptimalHeight with Extra" );
 
@@ -474,13 +469,11 @@ bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtr
 
     vector<sal_uInt16> aHeights(nCount, 0);
 
-    GetOptimalHeightsInColumn(
-        aCol, nStartRow, nEndRow, aHeights, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
-        pProgress, nProgressStart);
+    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, aHeights, pProgress, nProgressStart);
 
-    SetRowHeightRangeFunc aFunc(this, nPPTX, nPPTY);
+    SetRowHeightRangeFunc aFunc(this, rCxt.getPPTX(), rCxt.getPPTY());
     bool bChanged = SetOptimalHeightsToRows(
-        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
+        aFunc, pRowFlags, nStartRow, nEndRow, rCxt.getExtraHeight(), aHeights, rCxt.isForceAutoSize());
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -488,11 +481,9 @@ bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtr
     return bChanged;
 }
 
-void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
-                                OutputDevice* pDev,
-                                double nPPTX, double nPPTY,
-                                const Fraction& rZoomX, const Fraction& rZoomY,
-                                bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
+void ScTable::SetOptimalHeightOnly(
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+    ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
     OSL_ENSURE( nExtra==0 || bForce, "automatic OptimalHeight with Extra" );
 
@@ -505,13 +496,11 @@ void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
 
     vector<sal_uInt16> aHeights(nCount, 0);
 
-    GetOptimalHeightsInColumn(
-        aCol, nStartRow, nEndRow, aHeights, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
-        pProgress, nProgressStart);
+    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, aHeights, pProgress, nProgressStart);
 
     SetRowHeightOnlyFunc aFunc(this);
     SetOptimalHeightsToRows(
-        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
+        aFunc, pRowFlags, nStartRow, nEndRow, rCxt.getExtraHeight(), aHeights, rCxt.isForceAutoSize());
 
     if ( pProgress != pOuterProgress )
         delete pProgress;

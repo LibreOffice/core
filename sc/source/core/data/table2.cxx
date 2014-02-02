@@ -49,6 +49,7 @@
 #include "mtvcellfunc.hxx"
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
+#include <rowheightcontext.hxx>
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -2526,6 +2527,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
     for (SCCOL i = 0; i <= MAXCOL; ++i)
         aCol[i].FindStyleSheet(pStyleSheet, aUsedRows, bRemoved);
 
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, rZoomX, rZoomY, pDev);
     SCROW nRow = 0;
     while (nRow <= MAXROW)
     {
@@ -2536,7 +2538,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
 
         SCROW nEndRow = aData.mnRow2;
         if (aData.mbValue)
-            SetOptimalHeight(nRow, nEndRow, 0, pDev, nPPTX, nPPTY, rZoomX, rZoomY, false);
+            SetOptimalHeight(aCxt, nRow, nEndRow);
 
         nRow = nEndRow + 1;
     }

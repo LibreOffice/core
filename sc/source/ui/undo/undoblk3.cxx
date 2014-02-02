@@ -51,6 +51,7 @@
 #include "progress.hxx"
 #include "editutil.hxx"
 #include "editdataarray.hxx"
+#include <rowheightcontext.hxx>
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -849,8 +850,9 @@ void ScUndoAutoFormat::Redo()
             nPPTY = ScGlobal::nScreenPPTY;
         }
 
-        sal_Bool bFormula = false;  // remember
+        bool bFormula = false;  // remember
 
+        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
             ScMarkData aDestMark;
@@ -866,8 +868,8 @@ void ScUndoAutoFormat::Redo()
                 if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                     pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
             }
-            pDoc->SetOptimalHeight( nStartY, nEndY, nTab, 0, &aVirtDev,
-                                        nPPTX, nPPTY, aZoomX, aZoomY, false );
+
+            pDoc->SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
 
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
                 if (!pDoc->ColHidden(nCol, nTab))

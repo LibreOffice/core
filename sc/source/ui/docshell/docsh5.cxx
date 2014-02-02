@@ -47,6 +47,7 @@
 #include "waitoff.hxx"
 #include "sizedev.hxx"
 #include "clipparam.hxx"
+#include <rowheightcontext.hxx>
 
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
@@ -372,8 +373,9 @@ sal_Bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab
 {
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    sal_Bool bChange = aDocument.SetOptimalHeight( nStartRow,nEndRow, nTab, 0, aProv.GetDevice(),
-                                                aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, false );
+    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
+    bool bChange = aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
+
     if (bChange)
         PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID|PAINT_LEFT );
 
@@ -386,7 +388,8 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, pTabMark );
+    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
+    aDocument.UpdateAllRowHeights(aCxt, pTabMark);
 }
 
 void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )

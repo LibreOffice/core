@@ -83,6 +83,7 @@
 #include "stringutil.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include <rowheightcontext.hxx>
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -156,8 +157,8 @@ sal_Bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint )
     ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
-    sal_Bool bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, aProv.GetDevice(),
-                                            aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, false );
+    sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+    bool bChanged = pDoc->SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
 
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, MAXCOL, MAXROW, nTab),
@@ -3472,8 +3473,9 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
 
                 ScSizeDeviceProvider aProv( &rDocShell );
                 Fraction aOne(1,1);
-                pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, aProv.GetDevice(),
-                                        aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, bAll );
+                sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+                aCxt.setForceAutoSize(bAll);
+                pDoc->SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);
 
                 if (bAll)
                     pDoc->ShowRows( nStartNo, nEndNo, nTab, true );
