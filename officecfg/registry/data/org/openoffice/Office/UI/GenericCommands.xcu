@@ -3425,6 +3425,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:PasteUnformatted" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Paste Unformatted Text</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Delete" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete C~ontents...</value>

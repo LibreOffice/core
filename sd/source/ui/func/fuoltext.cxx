@@ -278,6 +278,21 @@ void FuOutlineText::DoPaste()
     pOutlineView->GetViewByWindow(mpWindow)->PasteSpecial();
 }
 
+/**
+ * Paste object as unformatted text from clipboard
+ */
+void FuOutlineText::DoPasteUnformatted()
+{
+   TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewShell->GetActiveWindow() ) );
+   if (aDataHelper.GetTransferable().is())
+   {
+       OUString aText;
+       if (aDataHelper.GetString(FORMAT_STRING, aText))
+           pOutlineView->GetViewByWindow(mpWindow)->InsertText(aText);
+   }
+}
+
+
 
 } // end of namespace sd
 

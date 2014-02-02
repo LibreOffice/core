@@ -36,6 +36,11 @@ interface OutlineView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+    SID_PASTE_UNFORMATTED // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DELETE // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

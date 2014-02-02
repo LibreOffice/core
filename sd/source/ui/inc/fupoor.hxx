@@ -63,6 +63,7 @@ public:
     virtual void DoCut();
     virtual void DoCopy();
     virtual void DoPaste();
+    virtual void DoPasteUnformatted();
 
     // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
