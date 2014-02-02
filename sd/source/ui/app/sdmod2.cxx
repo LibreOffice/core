@@ -275,7 +275,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 }
                 else if( pDoc )
                 {
-                    nPageCount = (sal_uInt16)pDoc->GetSdPageCount(PK_STANDARD);
+                    nPageCount = (sal_uInt16)pDoc->GetActiveSdPageCount();
                 }
             }
 
