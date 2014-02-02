@@ -29,7 +29,7 @@ class SwMultiPortion;
 
 class SwTxtPainter : public SwTxtCursor
 {
-    sal_Bool bPaintDrop;
+    bool bPaintDrop;
 
     SwLinePortion *CalcPaintOfst( const SwRect &rPaint );
     void CheckSpecialUnderline( const SwLinePortion* pPor,
@@ -38,7 +38,7 @@ protected:
     void CtorInitTxtPainter( SwTxtFrm *pFrm, SwTxtPaintInfo *pInf );
     inline SwTxtPainter(SwTxtNode* pTxtNode)
         : SwTxtCursor(pTxtNode)
-        , bPaintDrop(sal_False)
+        , bPaintDrop(false)
         { }
 
 public:
@@ -48,14 +48,14 @@ public:
             CtorInitTxtPainter( pTxtFrm, pTxtPaintInf );
         }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-                       const sal_Bool bUnderSz );
+                       const bool bUnderSz );
     void PaintDropPortion();
     // if PaintMultiPortion is called recursively, we have to pass the
     // surrounding SwBidiPortion
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti,
                             const SwMultiPortion* pEnvPor = 0 );
-    inline void SetPaintDrop( const sal_Bool bNew ) { bPaintDrop = bNew; }
-    inline sal_Bool IsPaintDrop() const { return bPaintDrop; }
+    inline void SetPaintDrop( const bool bNew ) { bPaintDrop = bNew; }
+    inline bool IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()
         { return (SwTxtPaintInfo&)SwTxtIter::GetInfo(); }
     inline const SwTxtPaintInfo &GetInfo() const

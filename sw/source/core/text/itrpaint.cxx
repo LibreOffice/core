@@ -92,7 +92,7 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
         pMyFnt->SetAlign( ALIGN_BASELINE );
     }
 #endif
-    bPaintDrop = sal_False;
+    bPaintDrop = false;
 }
 
 
@@ -153,7 +153,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
  * als Default eingestellt.
  *************************************************************************/
 void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-                                 const sal_Bool bUnderSz )
+                                 const bool bUnderSz )
 {
 #if OSL_DEBUG_LEVEL > 1
 //    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
@@ -173,7 +173,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     const bool bDrawInWindow = GetInfo().OnWin();
 
     // 6882: Leerzeilen duerfen nicht wegoptimiert werden bei Paragraphzeichen.
-    const sal_Bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetTxt().isEmpty();
+    const bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetTxt().isEmpty();
 
     SwLinePortion *pPor = bEndPor ? pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
@@ -284,7 +284,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( bEndPor )
         SeekStartAndChg( GetInfo() );
 
-    sal_Bool bRest = pCurr->IsRest();
+    const bool bRest = pCurr->IsRest();
     bool bFirst = true;
 
     SwArrowPortion *pArrow = NULL;
@@ -293,7 +293,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
-        sal_Bool bSeeked = sal_True;
+        bool bSeeked = true;
         GetInfo().SetLen( pPor->GetLen() );
 
         const SwTwips nOldY = GetInfo().Y();
@@ -319,7 +319,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else if ( pPor->IsQuoVadisPortion() )
         {
             sal_Int32 nOffset = GetInfo().GetIdx();
-            SeekStartAndChg( GetInfo(), sal_True );
+            SeekStartAndChg( GetInfo(), true );
             if( GetRedln() && pCurr->HasRedline() )
                 GetRedln()->Seek( *pFnt, nOffset, 0 );
         }
@@ -335,9 +335,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 SeekAndChgBefore( GetInfo() );
         }
         else
-            bSeeked = sal_False;
+            bSeeked = false;
 
-//      bRest = sal_False;
+//      bRest = false;
 
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
@@ -447,7 +447,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
         if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() )
         {
-            const sal_Bool bNextUndersized =
+            const bool bNextUndersized =
                 ( GetTxtFrm()->GetNext() &&
                   0 == GetTxtFrm()->GetNext()->Prt().Height() &&
                   GetTxtFrm()->GetNext()->IsTxtFrm() &&
@@ -519,20 +519,20 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     SwTxtAttr* pTxtAttr;
     if( HasHints() )
     {
-        sal_Bool bUnder = sal_False;
+        bool bUnder = false;
         MSHORT nTmp = 0;
 
         while( nTmp < pHints->GetStartCount() )
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
-            sal_Bool bUnderSelect = sal_False;
+            bool bUnderSelect = false;
 
             const SvxUnderlineItem* pItem =
                     static_cast<const SvxUnderlineItem*>(CharFmt::GetItem( *pTxtAttr, RES_CHRATR_UNDERLINE ));
 
             if ( pItem )
             {
-                bUnder = sal_True;
+                bUnder = true;
                 bUnderSelect = pFnt->GetUnderline() == pItem->GetLineStyle();
             }
 
@@ -546,7 +546,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                     if( bUnder )
                         aUnderMulti.Select( aTmp, bUnderSelect );
                 }
-                bUnder = sal_False;
+                bUnder = false;
             }
         }
     }
