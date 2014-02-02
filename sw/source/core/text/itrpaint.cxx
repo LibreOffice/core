@@ -497,34 +497,26 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
     //Bug 120769:Color of underline display wrongly
-        Color aAutoCo(COL_AUTO);
     if ( GetInfo().GetUnderFnt() &&
         GetInfo().GetUnderFnt()->GetFont().GetUnderline() == GetFnt()->GetUnderline() &&
-        GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != aAutoCo )
+        GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != Color(COL_AUTO) )
         return;
     //Bug 120769(End)
-    // calculate the new common underline font
-    SwFont* pUnderlineFnt = 0;
-    Point aCommonBaseLine;
-
-    Range aRange( 0, GetInfo().GetTxt().getLength() );
-    MultiSelection aUnderMulti( aRange );
 
     OSL_ENSURE( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
             "CheckSpecialUnderline without underlined font" );
+    MultiSelection aUnderMulti( Range( 0, GetInfo().GetTxt().getLength() ) );
     const SwFont* pParaFnt = GetAttrHandler().GetFont();
     if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();
 
-    SwTxtAttr* pTxtAttr;
     if( HasHints() )
     {
         bool bUnder = false;
-        MSHORT nTmp = 0;
 
-        while( nTmp < pHints->GetStartCount() )
+        for ( MSHORT nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
         {
-            pTxtAttr = pHints->GetStart( nTmp++ );
+            SwTxtAttr* const pTxtAttr = pHints->GetStart( nTmp );
             bool bUnderSelect = false;
 
             const SvxUnderlineItem* pItem =
@@ -551,14 +543,13 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         }
     }
 
-    MSHORT i;
-    sal_Int32 nIndx = GetInfo().GetIdx();
+    const sal_Int32 nIndx = GetInfo().GetIdx();
     long nUnderStart = 0;
     long nUnderEnd = 0;
-    MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
+    const MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
 
     // find the underline range the current portion is contained in
-    for( i = 0; i < nCnt; ++i )
+    for( MSHORT i = 0; i < nCnt; ++i )
     {
         const Range& rRange = aUnderMulti.GetRange( i );
         if( nUnderEnd == rRange.Min() )
@@ -579,6 +570,9 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     if ( GetEnd() && GetEnd() <= nUnderEnd )
         nUnderEnd = GetEnd() - 1;
 
+    // calculate the new common underline font
+    SwFont* pUnderlineFnt = 0;
+    Point aCommonBaseLine;
 
     // check, if underlining is not isolated
     if ( nIndx + GetInfo().GetLen() < nUnderEnd + 1 )
@@ -637,7 +631,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             ++nNumberOfPortions;
 
-            nTmpIdx = nTmpIdx + pPor->GetLen();
+            nTmpIdx += pPor->GetLen();
             pPor = pPor->GetPortion();
         }
 
