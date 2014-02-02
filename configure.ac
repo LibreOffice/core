@@ -1717,6 +1717,11 @@ AC_ARG_WITH(system-boost,
         [Use boost already on system.]),,
     [with_system_boost="$with_system_headers"])
 
+AC_ARG_WITH(system-glm,
+    AS_HELP_STRING([--with-system-glm],
+        [Use glm already on system.]),,
+    [with_system_glm="$with_system_headers"])
+
 AC_ARG_WITH(system-vigra,
     AS_HELP_STRING([--with-system-vigra],
         [Use vigra already on system.]),,
