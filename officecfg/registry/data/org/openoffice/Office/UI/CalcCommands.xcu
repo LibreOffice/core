@@ -984,7 +984,7 @@
       </node>
       <node oor:name=".uno:InsertContents" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paste Special</value>
+          <value xml:lang="en-US">Insert Con~tents</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertCell" oor:op="replace">
