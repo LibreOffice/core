@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_4bcc5936",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-02-02T11:43:42Z",
+      "side": 1,
+      "message": "MODE: changed limit of 30 to 100000 (actual limit)\nMODE.SNGL and MODE.MULT: added limit of 254 purely for Excel compatibility; code is limited to 100000",
+      "revId": "1ee976e5d07f0a78dc8e3b74c3b9c1a7f69bdd8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
