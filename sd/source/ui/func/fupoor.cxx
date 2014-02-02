@@ -938,6 +938,24 @@ void FuPoor::DoPaste()
 }
 
 /**
+ * Paste unformatted text from clipboard
+ */
+void FuPoor::DoPasteUnformatted()
+{
+    if (mpView)
+    {
+        sal_Int8 nAction = DND_ACTION_COPY;
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewShell->GetActiveWindow() ) );
+        if (aDataHelper.GetTransferable().is())
+        {
+            mpView->InsertData( aDataHelper,
+                                mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                                nAction, sal_False, FORMAT_STRING);
+        }
+    }
+}
+
+/**
  * Timer handler for Drag&Drop
  */
 IMPL_LINK_NOARG(FuPoor, DragHdl)

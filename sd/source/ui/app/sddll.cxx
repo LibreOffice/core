@@ -262,6 +262,7 @@ void SdDLL::RegisterControllers()
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
+    SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );

@@ -198,6 +198,7 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
         rBindings.Invalidate( SID_PASTE_SPECIAL );
+        rBindings.Invalidate( SID_PASTE_UNFORMATTED );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -601,6 +602,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // clipboard (paste)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE_SPECIAL ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE_UNFORMATTED ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
         if ( !mpClipEvtLstnr )
@@ -627,6 +629,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.DisableItem( SID_PASTE );
             rSet.DisableItem( SID_PASTE_SPECIAL );
+            rSet.DisableItem( SID_PASTE_UNFORMATTED );
             rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
         }
         else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
@@ -1062,6 +1065,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );
+        rSet.DisableItem( SID_PASTE_UNFORMATTED );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
 
         rSet.DisableItem( SID_INSERT_FLD_DATE_FIX );
