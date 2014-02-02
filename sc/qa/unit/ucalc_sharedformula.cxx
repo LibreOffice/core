@@ -679,4 +679,24 @@ void Test::testSharedFormulasCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaInsertColumn()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set shared formula group over H2:H3.
+    m_pDoc->SetString(ScAddress(7,1,0), "=G3*B3");
+    m_pDoc->SetString(ScAddress(7,2,0), "=G4*B4");
+
+    // Insert a single column at Column F. This used to crash before fdo#74041.
+    m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(8,1,0), "H3*B3"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*m_pDoc, ScAddress(8,2,0), "H4*B4"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -250,6 +250,7 @@ public:
     void testSharedFormulasDeleteRows();
     void testSharedFormulasRefUpdateMoveSheets();
     void testSharedFormulasCopyPaste();
+    void testSharedFormulaInsertColumn();
     void testFormulaPosition();
 
     void testMixData();
@@ -406,6 +407,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasDeleteRows);
     CPPUNIT_TEST(testSharedFormulasRefUpdateMoveSheets);
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
+    CPPUNIT_TEST(testSharedFormulaInsertColumn);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
