@@ -48,11 +48,19 @@ SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
     m_pEncTable = new SvxTextEncodingTable;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinBits = WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinBits |= WB_BORDER;
     SvxTextEncodingBox *pListBox = new SvxTextEncodingBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
+    if (bDropdown)
+        pListBox->EnableAutoSize(true);
+
     return pListBox;
 }
 

@@ -201,7 +201,16 @@
 
     <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
                         generic-name="TextEncodingBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Limit ListBox" name="dbulo-LimitBox"
                         generic-name="LimitBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

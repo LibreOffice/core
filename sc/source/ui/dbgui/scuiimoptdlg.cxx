@@ -25,7 +25,7 @@
 #include "scuiimoptdlg.hxx"
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
-#include "imoptdlg.hrc"
+#include "sc.hrc"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
@@ -117,23 +117,29 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         sal_Bool                    bMultiByte,
         sal_Bool                    bOnlyDbtoolsEncodings,
         sal_Bool                    bImport )
-
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aFtFont     ( this, ScResId( FT_FONT ) ),
-        aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
-        aFtFieldSep ( this, ScResId( FT_FIELDSEP ) ),
-        aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
-        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
-        aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
-        aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
-        aCbFormulas ( this, ScResId( CB_FORMULAS ) ),
-        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
-        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
-        aBtnOk      ( this, ScResId( BTN_OK ) ),
-        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) )
+    :   ModalDialog ( pParent, "ImOptDialog",
+            "modules/scalc/ui/imoptdialog.ui" )
 {
+    get(m_pFieldFrame, "fieldframe");
+    get(m_pFtCharset, "charsetft");
+    if (bAscii)
+        get(m_pLbCharset, "charsetdropdown");
+    else
+    {
+        get(m_pLbCharset, "charsetlist");
+        m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
+    }
+    m_pLbCharset->Show();
+    get(m_pFtFieldSep, "fieldft");
+    get(m_pEdFieldSep, "field");
+    get(m_pFtTextSep, "textft");
+    get(m_pEdTextSep, "text");
+    get(m_pCbShown, "asshown");
+    get(m_pCbFormulas, "formulas");
+    get(m_pCbQuoteAll, "quoteall");
+    get(m_pCbFixed, "fixedwidth");
+    get(m_pBtnOk, "ok");
+
     OUString sFieldSep(SC_RESSTR(SCSTR_FIELDSEP));
     sFieldSep = sFieldSep.replaceFirst( "%TAB",   SC_RESSTR(SCSTR_FIELDSEP_TAB) );
     sFieldSep = sFieldSep.replaceFirst( "%SPACE", SC_RESSTR(SCSTR_FIELDSEP_SPACE) );
@@ -147,7 +153,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     while ( !aStr.isEmpty() )
     {
-        aEdFieldSep.InsertEntry( aStr );
+        m_pEdFieldSep->InsertEntry( aStr );
         aStr = pFieldSepTab->NextDel();
     }
 
@@ -155,27 +161,27 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     while ( !aStr.isEmpty() )
     {
-        aEdTextSep.InsertEntry( aStr );
+        m_pEdTextSep->InsertEntry( aStr );
         aStr = pTextSepTab->NextDel();
     }
 
-    aEdFieldSep.SetText( aEdFieldSep.GetEntry(0) );
-    aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
+    m_pEdFieldSep->SetText( m_pEdFieldSep->GetEntry(0) );
+    m_pEdTextSep->SetText( m_pEdTextSep->GetEntry(0) );
 
     if ( bOnlyDbtoolsEncodings )
     {
         // Even dBase export allows multibyte now
         if ( bMultiByte )
-            aLbFont.FillFromDbTextEncodingMap( bImport );
+            m_pLbCharset->FillFromDbTextEncodingMap( bImport );
         else
-            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
+            m_pLbCharset->FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else if ( !bAscii )
     {   //!TODO: Unicode would need work in each filter
         if ( bMultiByte )
-            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
+            m_pLbCharset->FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
         else
-            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
+            m_pLbCharset->FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else
@@ -186,67 +192,60 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                aEdFieldSep.SetText( OUString((sal_Unicode)nCode) );
+                m_pEdFieldSep->SetText( OUString((sal_Unicode)nCode) );
             else
-                aEdFieldSep.SetText( aStr );
+                m_pEdFieldSep->SetText( aStr );
 
             nCode = pOptions->nTextSepCode;
             aStr  = pTextSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                aEdTextSep.SetText( OUString((sal_Unicode)nCode) );
+                m_pEdTextSep->SetText( OUString((sal_Unicode)nCode) );
             else
-                aEdTextSep.SetText( aStr );
+                m_pEdTextSep->SetText( aStr );
         }
         // all encodings allowed, even Unicode
-        aLbFont.FillFromTextEncodingTable( bImport );
+        m_pLbCharset->FillFromTextEncodingTable( bImport );
     }
 
     if( bAscii )
     {
-        Size aWinSize( GetSizePixel() );
-        aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
-        Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
-        aWinSize.Height() += aDiffSize.Height();
-        SetSizePixel( aWinSize );
-        aCbFixed.Show();
-        aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( false );
-        aCbShown.Show();
-        aCbShown.Check( sal_True );
-        aCbQuoteAll.Show();
-        aCbQuoteAll.Check( false );
-        aCbFormulas.Show();
+        m_pCbFixed->Show();
+        m_pCbFixed->SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
+        m_pCbFixed->Check( false );
+        m_pCbShown->Show();
+        m_pCbShown->Check( sal_True );
+        m_pCbQuoteAll->Show();
+        m_pCbQuoteAll->Check( false );
+        m_pCbFormulas->Show();
         ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current());
         bool bFormulas = (pViewSh ?
                 pViewSh->GetViewData()->GetOptions().GetOption( VOPT_FORMULAS) :
                 false);
-        aCbFormulas.Check( bFormulas );
+        m_pCbFormulas->Check( bFormulas );
     }
     else
     {
-        aFlFieldOpt.SetText( aFtFont.GetText() );
-        aFtFieldSep.Hide();
-        aFtTextSep.Hide();
-        aFtFont.Hide();
-        aEdFieldSep.Hide();
-        aEdTextSep.Hide();
-        aCbFixed.Hide();
-        aCbShown.Hide();
-        aCbQuoteAll.Hide();
-        aCbFormulas.Hide();
-        aLbFont.GrabFocus();
-        aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
+        m_pFieldFrame->set_label(m_pFtCharset->GetText());
+        m_pFtFieldSep->Hide();
+        m_pFtTextSep->Hide();
+        m_pFtCharset->Hide();
+        m_pEdFieldSep->Hide();
+        m_pEdTextSep->Hide();
+        m_pCbFixed->Hide();
+        m_pCbShown->Hide();
+        m_pCbQuoteAll->Hide();
+        m_pCbFormulas->Hide();
+        m_pLbCharset->GrabFocus();
+        m_pLbCharset->SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
 
-    aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
+    m_pLbCharset->SelectTextEncoding( pOptions ? pOptions->eCharSet :
         osl_getThreadTextEncoding() );
 
     // optionaler Titel:
     if ( pStrTitle )
         SetText( *pStrTitle );
-
-    FreeResource();
 }
 
 //------------------------------------------------------------------------
@@ -261,16 +260,16 @@ ScImportOptionsDlg::~ScImportOptionsDlg()
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
-    rOptions.SetTextEncoding( aLbFont.GetSelectTextEncoding() );
+    rOptions.SetTextEncoding( m_pLbCharset->GetSelectTextEncoding() );
 
-    if ( aCbFixed.IsVisible() )
+    if ( m_pCbFixed->IsVisible() )
     {
-        rOptions.nFieldSepCode = GetCodeFromCombo( aEdFieldSep );
-        rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
-        rOptions.bFixedWidth = aCbFixed.IsChecked();
-        rOptions.bSaveAsShown = aCbShown.IsChecked();
-        rOptions.bQuoteAllText = aCbQuoteAll.IsChecked();
-        rOptions.bSaveFormulas = aCbFormulas.IsChecked();
+        rOptions.nFieldSepCode = GetCodeFromCombo( *m_pEdFieldSep );
+        rOptions.nTextSepCode  = GetCodeFromCombo( *m_pEdTextSep );
+        rOptions.bFixedWidth = m_pCbFixed->IsChecked();
+        rOptions.bSaveAsShown = m_pCbShown->IsChecked();
+        rOptions.bQuoteAllText = m_pCbQuoteAll->IsChecked();
+        rOptions.bSaveFormulas = m_pCbFormulas->IsChecked();
     }
 }
 
@@ -282,7 +281,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     OUString  aStr( rEd.GetText() );
     sal_uInt16  nCode;
 
-    if ( &rEd == &aEdTextSep )
+    if ( &rEd == m_pEdTextSep )
         pTab = pTextSepTab;
     else
         pTab = pFieldSepTab;
@@ -306,24 +305,24 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
 IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {
-    if( pCheckBox == &aCbFixed )
+    if (pCheckBox == m_pCbFixed)
     {
-        sal_Bool bEnable = !aCbFixed.IsChecked();
-        aFtFieldSep.Enable( bEnable );
-        aEdFieldSep.Enable( bEnable );
-        aFtTextSep.Enable( bEnable );
-        aEdTextSep.Enable( bEnable );
-        aCbShown.Enable( bEnable );
-        aCbQuoteAll.Enable( bEnable );
+        sal_Bool bEnable = !m_pCbFixed->IsChecked();
+        m_pFtFieldSep->Enable( bEnable );
+        m_pEdFieldSep->Enable( bEnable );
+        m_pFtTextSep->Enable( bEnable );
+        m_pEdTextSep->Enable( bEnable );
+        m_pCbShown->Enable( bEnable );
+        m_pCbQuoteAll->Enable( bEnable );
     }
     return 0;
 }
 
 IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
 {
-    if ( pLb == &aLbFont )
+    if (pLb == m_pLbCharset)
     {
-        aBtnOk.Click();
+        m_pBtnOk->Click();
     }
     return 0;
 }

@@ -20,6 +20,7 @@
 #ifndef SCUI_IMOPTDLG_HXX
 #define SCUI_IMOPTDLG_HXX
 
+#include <vcl/layout.hxx>
 #include "imoptdlg.hxx"
 
 //===================================================================
@@ -30,33 +31,31 @@ class ScDelimiterTable;
 class ScImportOptionsDlg : public ModalDialog
 {
 public:
-                ScImportOptionsDlg( Window*                 pParent,
-                                    sal_Bool                    bAscii = sal_True,
-                                    const ScImportOptions*  pOptions = NULL,
-                                    const OUString*         pStrTitle = NULL,
-                                    sal_Bool                    bMultiByte = false,
-                                    sal_Bool                    bOnlyDbtoolsEncodings = false,
-                                    sal_Bool                    bImport = sal_True );
+    ScImportOptionsDlg( Window*                 pParent,
+                        sal_Bool                bAscii = sal_True,
+                        const ScImportOptions*  pOptions = NULL,
+                        const OUString*         pStrTitle = NULL,
+                        sal_Bool                bMultiByte = false,
+                        sal_Bool                bOnlyDbtoolsEncodings = false,
+                        sal_Bool                bImport = sal_True );
 
-                ~ScImportOptionsDlg();
+    ~ScImportOptionsDlg();
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
 
 private:
-    FixedLine           aFlFieldOpt;
-    FixedText           aFtFont;
-    SvxTextEncodingBox  aLbFont;
-    FixedText           aFtFieldSep;
-    ComboBox            aEdFieldSep;
-    FixedText           aFtTextSep;
-    ComboBox            aEdTextSep;
-    CheckBox            aCbShown;
-    CheckBox            aCbFormulas;
-    CheckBox            aCbQuoteAll;
-    CheckBox            aCbFixed;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    VclFrame*           m_pFieldFrame;
+    FixedText*          m_pFtCharset;
+    SvxTextEncodingBox* m_pLbCharset;
+    FixedText*          m_pFtFieldSep;
+    ComboBox*           m_pEdFieldSep;
+    FixedText*          m_pFtTextSep;
+    ComboBox*           m_pEdTextSep;
+    CheckBox*           m_pCbShown;
+    CheckBox*           m_pCbFormulas;
+    CheckBox*           m_pCbQuoteAll;
+    CheckBox*           m_pCbFixed;
+    OKButton*           m_pBtnOk;
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
