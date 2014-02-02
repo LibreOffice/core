@@ -4143,6 +4143,8 @@ StackVar ScInterpreter::Interpret()
                 case ocSchiefe          : ScSkew();                     break;
                 case ocSkewp            : ScSkewp();                    break;
                 case ocModalValue       : ScModalValue();               break;
+                case ocModalValue_MS    : ScModalValue();               break;
+                case ocModalValue_Multi : ScModalValue_Multi();         break;
                 case ocMedian           : ScMedian();                   break;
                 case ocGeoMean          : ScGeoMean();                  break;
                 case ocHarMean          : ScHarMean();                  break;
@@ -4151,9 +4153,11 @@ StackVar ScInterpreter::Interpret()
                 case ocBinomInv         :
                 case ocKritBinom        : ScCritBinom();                break;
                 case ocNegBinomVert     : ScNegBinomDist();             break;
+                case ocNegBinomDist_MS  : ScNegBinomDist_MS();          break;
                 case ocNoName           : ScNoName();                   break;
                 case ocBad              : ScBadName();                  break;
-                case ocZTest            : ScZTest();                    break;
+                case ocZTest            :
+                case ocZTest_MS         : ScZTest();                    break;
                 case ocTTest            :
                 case ocTTest_MS         : ScTTest();                    break;
                 case ocFTest            :

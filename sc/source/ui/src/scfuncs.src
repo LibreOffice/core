@@ -5591,6 +5591,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
+     // -=*# Resource for function MOD.SNGL #*=-
+    Resource SC_OPCODE_MODAL_VALUE_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the most common value in a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_MODAL_VALUE_MS );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
+        };
+    };
+     // -=*# Resource for function MOD.MULTI #*=-
+    Resource SC_OPCODE_MODAL_VALUE_MULTI
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the most common value in a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_MODAL_VALUE_MULTI );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 254 numerical arguments which portray a sample." ;
+        };
+    };
      // -=*# Resource for function MEDIAN #*=-
     Resource SC_OPCODE_MEDIAN
     {
@@ -6469,6 +6517,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 7 // Description of Parameter 3
         {
             Text [ en-US ] = "The success probability of a trial." ;
+        };
+    };
+     // -=*# Resource for function NEGBINOM.DIST #*=-
+    Resource SC_OPCODE_NEG_BINOM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the negative binomial distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_NEGBINOMDIST_MS );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "X" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number of failures in the trial range." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "R" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number of successes in the trial sequence." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "SP" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The success probability of a trial." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function KRITBINOM #*=-
@@ -8862,6 +8958,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_GTEST );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The given sample, drawn from a normally distributed population." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mu" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The known mean of the population." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "sigma" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The known standard deviation of the population. If omitted, the standard deviation of the given sample is used." ;
+        };
+    };
+     // -=*# Resource for function Z.TEST #*=-
+    Resource SC_OPCODE_Z_TEST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the probability of observing a z-statistic greater than the one computed based on a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_Z_TEST_MS );
             3;  0;  0;  1;
             0;
         };

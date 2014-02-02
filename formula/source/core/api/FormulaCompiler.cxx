@@ -842,6 +842,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocMatMult :
         case ocMatInv :
         case ocMatrixUnit :
+        case ocModalValue_Multi :
             return true;
         default:
         {

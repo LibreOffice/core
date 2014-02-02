@@ -459,10 +459,10 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 36, true  },
         { 37, true  },
         { 38, true  },
-        { 39, false },
-        { 40, false },
-        { 41, false },
-        { 42, false },
+        { 39, true  },
+        { 40, true  },
+        { 41, true  },
+        { 42, true  },
         { 43, false },
         { 44, true  },
         { 45, true  },
@@ -493,7 +493,7 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 70, true  },
         { 71, true  },
         { 72, false },
-        { 73, false }
+        { 73, true  }
     };
 
     for (size_t i=0; i < SAL_N_ELEMENTS(aTests); ++i)

@@ -477,7 +477,11 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR( ocPercentile_Exc,   2,  2,  0,  "PERCENTILE.EXC" ),
     EXC_FUNCENTRY_V_VR( ocPercentrank_Exc,  2,  3,  0,  "PERCENTRANK.EXC" ),
     EXC_FUNCENTRY_V_VR( ocQuartile_Exc,     2,  2,  0,  "QUARTILE.EXC" ),
-    EXC_FUNCENTRY_V_VR( ocRank_Avg,         2,  3,  0,  "RANK.AVG" )
+    EXC_FUNCENTRY_V_VR( ocRank_Avg,         2,  3,  0,  "RANK.AVG" ),
+    EXC_FUNCENTRY_V_RX( ocModalValue_MS,    1, MX,  0,  "MODE.SNGL" ),
+    EXC_FUNCENTRY_V_RX( ocModalValue_Multi, 1, MX,  0,  "MODE.MULT" ),
+    EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
+    EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
 };
 
 /** Functions new in Excel 2013.

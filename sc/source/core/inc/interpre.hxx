@@ -767,6 +767,7 @@ void ScChiInv();
 void ScBetaInv();
 void ScCritBinom();
 void ScNegBinomDist();
+void ScNegBinomDist_MS();
 void ScKurt();
 void ScHarMean();
 void ScGeoMean();
@@ -781,6 +782,7 @@ void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArra
 void GetSortArray(sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void ScModalValue();
+void ScModalValue_Multi();
 void ScAveDev();
 void ScDevSq();
 void ScZTest();
