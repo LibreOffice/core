@@ -159,6 +159,13 @@ FindFormulaEditText(const CellStoreType& rStore, SCROW nRow1, SCROW nRow2, _Func
     return FindElement2<CellStoreType, edittext_block, formula_block, _Func, _Func>(rStore, nRow1, nRow2, rFunc, rFunc);
 }
 
+template<typename _Func>
+void ProcessNote(CellNoteStoreType& rStore, _Func& rFunc)
+{
+    FuncElseNoOp<size_t> aElse;
+    ProcessElements1<CellNoteStoreType, cellnote_block, _Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
+}
+
 }
 
 #endif
