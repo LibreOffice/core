@@ -379,7 +379,6 @@ void  AccObject::SetValue( Any pAny )
     }
     Reference< XAccessibleText > pRText(m_xAccContextRef,UNO_QUERY);
     ::rtl::OUString val;
-    int index = 0 ;
     switch(m_accRole)
     {
     case SPIN_BOX:
