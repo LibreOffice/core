@@ -1367,7 +1367,10 @@ lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
 {
     static const sal_uInt16 s_MaxDaysPerMonth[12] =
         { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    OSL_ASSERT(0 < nMonth && nMonth <= 12);
+    if(nMonth <= 0 ||  nMonth > 12)
+    {
+        return 0;
+    }
     if ((2 == nMonth) && lcl_isLeapYear(nYear))
     {
         return 29;
