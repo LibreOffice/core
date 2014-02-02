@@ -1521,6 +1521,32 @@ void ScInterpreter::ScNegBinomDist()
     }
 }
 
+void ScInterpreter::ScNegBinomDist_MS()
+{
+    if ( MustHaveParamCount( GetByte(), 4 ) )
+    {
+        bool bCumulative = GetBool();
+        double p      = GetDouble();                    // p
+        double r      = GetDouble();                    // r
+        double x      = GetDouble();                    // x
+        if ( r < 0.0 || x < 0.0 || p < 0.0 || p > 1.0 )
+            PushIllegalArgument();
+        else
+        {
+            double q = 1.0 - p;
+            if ( bCumulative )
+                PushDouble( 1.0 - GetBetaDist( q, x + 1, r ) );
+            else
+            {
+                double fFactor = pow( p, r );
+                for ( double i = 0.0; i < x; i++ )
+                    fFactor *= ( i + r ) / ( i + 1.0 ) * q;
+                PushDouble( fFactor );
+            }
+        }
+    }
+}
+
 void ScInterpreter::ScNormDist( int nMinParamCount )
 {
     sal_uInt8 nParamCount = GetByte();
@@ -2571,6 +2597,7 @@ void ScInterpreter::ScZTest()
             PushDouble(0.5 - gauss((mue-x)*sqrt(rValCount)/sigma));
     }
 }
+
 bool ScInterpreter::CalculateTest(bool _bTemplin
                                   ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
