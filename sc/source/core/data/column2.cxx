@@ -1227,6 +1227,29 @@ size_t ScColumn::GetNoteCount() const
     return nCount;
 }
 
+namespace {
+
+class NoteCaptionCreator
+{
+    ScAddress maPos;
+public:
+    NoteCaptionCreator( SCTAB nTab, SCCOL nCol ) : maPos(nCol,0,nTab) {}
+
+    void operator() ( size_t nRow, ScPostIt* p )
+    {
+        maPos.SetRow(nRow);
+        p->GetOrCreateCaption(maPos);
+    }
+};
+
+}
+
+void ScColumn::CreateAllNoteCaptions()
+{
+    NoteCaptionCreator aFunc(nTab, nCol);
+    sc::ProcessNote(maCellNotes, aFunc);
+}
+
 SCROW ScColumn::GetNotePosition( size_t nIndex ) const
 {
     // Return the row position of the nth note in the column.

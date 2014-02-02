@@ -759,6 +759,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XCompon
 
 sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
+    rDoc.CreateAllNoteCaptions();
+
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);

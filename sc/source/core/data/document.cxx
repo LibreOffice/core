@@ -6224,6 +6224,17 @@ size_t ScDocument::GetNoteCount( SCTAB nTab, SCCOL nCol ) const
     return pTab->GetNoteCount(nCol);
 }
 
+void ScDocument::CreateAllNoteCaptions()
+{
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        if (p)
+            p->CreateAllNoteCaptions();
+    }
+}
+
 ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)

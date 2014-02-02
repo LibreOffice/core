@@ -1511,6 +1511,12 @@ SCROW ScTable::GetNotePosition( SCCOL nCol, size_t nIndex ) const
     return aCol[nCol].GetNotePosition(nIndex);
 }
 
+void ScTable::CreateAllNoteCaptions()
+{
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CreateAllNoteCaptions();
+}
+
 void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
     for (SCCOL nCol = 0; nCol < MAXCOLCOUNT; ++nCol)

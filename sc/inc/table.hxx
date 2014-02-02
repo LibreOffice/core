@@ -388,6 +388,7 @@ public:
 
     size_t GetNoteCount( SCCOL nCol ) const;
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
+    void CreateAllNoteCaptions();
 
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     void GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>& rNotes ) const;

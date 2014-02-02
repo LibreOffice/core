@@ -913,6 +913,12 @@ public:
     size_t CountNotes() const;
     size_t GetNoteCount( SCTAB nTab, SCCOL nCol ) const;
 
+    /**
+     * Ensure that all note objects have an associated sdr object.  The export
+     * code uses sdr objects to export note data.
+     */
+    void CreateAllNoteCaptions();
+
     ScAddress GetNotePosition( size_t nIndex ) const;
     SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
 

@@ -515,6 +515,7 @@ public:
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
 
     size_t GetNoteCount() const;
+    void CreateAllNoteCaptions();
     SCROW GetNotePosition( size_t nIndex ) const;
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     void GetNotesInRange( SCROW nStartRow, SCROW nEndRow, std::vector<sc::NoteEntry>& rNotes ) const;
