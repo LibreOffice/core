@@ -447,7 +447,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     // initialize the header
-    m_aHeader = {};
+    memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_aHeader.db_typ = dBaseIII;
     m_eEncoding = getConnection()->getTextEncoding();
 }
@@ -467,7 +467,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
     , m_bWriteableMemo(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
-    m_aHeader = {};
+    memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
