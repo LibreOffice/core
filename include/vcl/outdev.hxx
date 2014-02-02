@@ -359,9 +359,18 @@ public:
 
     /** Get the graphic context that the output device uses to draw on.
 
+     If no graphics device exists, then initialize it.
+
      @returns SalGraphics instance.
      */
-    SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
+    SAL_DLLPRIVATE SalGraphics const *ImplGetGraphics() const;
+    SAL_DLLPRIVATE SalGraphics* ImplGetGraphics();
+
+    /** Initialize the graphics device that the output device uses to draw on.
+
+     @returns true if was able to initialize the graphics device, false otherwise.
+     */
+    SAL_DLLPRIVATE bool         ImplInitGraphics() const;
 
     /** Release the graphics device, and remove it from the graphics device
      list.
