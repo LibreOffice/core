@@ -71,7 +71,7 @@ using namespace ::com::sun::star::io;
 
 // #i122985# it is not correct to set the swap-timeout to a hard-coded 5000ms as it was before.
 // Added code and experimented what to do as a good compromize, see description
-sal_uInt32 getCacheTimeInMs()
+SVX_DLLPUBLIC sal_uInt32 getCacheTimeInMs()
 {
     static bool bSetAtAll(true);
 
