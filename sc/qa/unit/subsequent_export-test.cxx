@@ -31,6 +31,7 @@
 #include "editutil.hxx"
 #include "scopetools.hxx"
 #include "cellvalue.hxx"
+#include <postit.hxx>
 
 #include "svx/svdoole2.hxx"
 #include "tabprotection.hxx"
@@ -67,6 +68,7 @@ public:
     void testRichTextExportODS();
 
     void testCellValuesExportODS();
+    void testCellNoteExportODS();
     void testFormatExportODS();
 
     void testInlineArrayXLS();
@@ -87,6 +89,7 @@ public:
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testCellValuesExportODS);
+    CPPUNIT_TEST(testCellNoteExportODS);
     CPPUNIT_TEST(testFormatExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
@@ -657,6 +660,34 @@ void ScExportTest::testCellValuesExportODS()
     if (!checkFormula(*pDoc, ScAddress(0,7,0), "$A$6"))
         CPPUNIT_FAIL("Wrong formula =$A$6");
     CPPUNIT_ASSERT_EQUAL( pDoc->GetValue(0,5,0), pDoc->GetValue(0,7,0) );
+
+    xNewDocSh->DoClose();
+}
+
+void ScExportTest::testCellNoteExportODS()
+{
+    ScDocShellRef xOrigDocSh = loadDoc("single-note.", ODS);
+    ScDocument* pDoc = xOrigDocSh->GetDocument();
+
+    ScAddress aPos(0,0,0); // Start with A1.
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
+
+    aPos.IncRow(); // Move to A2.
+    ScPostIt* pNote = pDoc->GetOrCreateNote(aPos);
+    pNote->SetText(aPos, "Note One");
+    pNote->SetAuthor("Author One");
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
+
+    // save and reload
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
+    xOrigDocSh->DoClose();
+    CPPUNIT_ASSERT(xNewDocSh.Is());
+    pDoc = xNewDocSh->GetDocument();
+
+    aPos.SetRow(0); // Move back to A1.
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
+    aPos.IncRow(); // Move to A2.
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
 
     xNewDocSh->DoClose();
 }
