@@ -511,8 +511,8 @@ void BrowseBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int3
         _rColumns.realloc( nCount );
 
         sal_Int32 nIndex = 0;
-        sal_uInt32 nRangeCount = pColumnSel->GetRangeCount();
-        for( sal_uInt32 nRange = 0; nRange < nRangeCount; ++nRange )
+        const size_t nRangeCount = pColumnSel->GetRangeCount();
+        for( size_t nRange = 0; nRange < nRangeCount; ++nRange )
         {
             const Range& rRange = pColumnSel->GetRange( nRange );
             // loop has to include aRange.Max()

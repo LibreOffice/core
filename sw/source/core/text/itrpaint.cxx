@@ -535,10 +535,10 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     const sal_Int32 nIndx = GetInfo().GetIdx();
     long nUnderStart = 0;
     long nUnderEnd = 0;
-    const MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
+    const size_t nCnt = aUnderMulti.GetRangeCount();
 
     // find the underline range the current portion is contained in
-    for( MSHORT i = 0; i < nCnt; ++i )
+    for( size_t i = 0; i < nCnt; ++i )
     {
         const Range& rRange = aUnderMulti.GetRange( i );
         if( nUnderEnd == rRange.Min() )

@@ -687,8 +687,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     CalcHiddenRanges( rNode, aHiddenMulti );
 
     aHiddenChg.clear();
-    sal_uInt16 i = 0;
-    for( i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+    for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
         const Range& rRange = aHiddenMulti.GetRange( i );
         const sal_Int32 nStart = rRange.Min();
@@ -1159,7 +1158,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // check kashida data
     long nTmpKashidaPos = -1;
     bool bWrongKash = false;
-    for (i = 0; i < aKashida.size(); ++i )
+    for (size_t i = 0; i < aKashida.size(); ++i )
     {
         long nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
@@ -1478,7 +1477,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
                             : 0);
         MultiSelection aHiddenMulti( aRange );
         SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
-        for( sal_uInt16 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+        for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
             const sal_Int32 nHiddenStart = rRange.Min();
@@ -1497,7 +1496,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
 
         if ( pList )
         {
-            for( sal_uInt16 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+            for( size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
             {
                 const Range& rRange = aHiddenMulti.GetRange( i );
                 pList->push_back( rRange.Min() );
