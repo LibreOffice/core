@@ -48,7 +48,7 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -124,7 +124,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_pInplaceMenuBar( NULL )
         , m_xModuleManager( ModuleManager::create( xContext ))
         , m_xUIElementFactoryManager( ui::theUIElementFactoryManager::get(xContext) )
-        , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( xContext ) )
+        , m_xPersistentWindowStateSupplier( ui::theWindowStateConfiguration::get( xContext ) )
         , m_pGlobalSettings( 0 )
         , m_aListenerContainer( m_aLock.getShareableOslMutex() )
         , m_pToolbarManager( 0 )

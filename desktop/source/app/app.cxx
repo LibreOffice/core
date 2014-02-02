@@ -70,7 +70,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
@@ -2133,7 +2133,7 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload window state configuration
-    xNameAccess = WindowStateConfiguration::create( xContext );
+    xNameAccess = theWindowStateConfiguration::get( xContext );
     Reference< XNameAccess > xWindowAccess;
     try
     {

@@ -86,7 +86,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -3603,7 +3603,7 @@ ToolbarSaveInData::ToolbarSaveInData(
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
-    uno::Reference< container::XNameAccess > xPWSS = css::ui::WindowStateConfiguration::create( xContext );
+    uno::Reference< container::XNameAccess > xPWSS = css::ui::theWindowStateConfiguration::get( xContext );
 
     xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }

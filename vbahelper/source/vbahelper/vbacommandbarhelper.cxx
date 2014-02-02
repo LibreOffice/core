@@ -24,7 +24,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -115,7 +115,7 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::WindowStateConfiguration::create( mxContext );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( mxContext );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }

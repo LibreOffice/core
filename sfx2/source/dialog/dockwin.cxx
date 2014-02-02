@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/theWindowContentFactoryManager.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
@@ -177,7 +177,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
         if ( !xWindowStateConfiguration.is() )
         {
-            xWindowStateConfiguration = ui::WindowStateConfiguration::create( xContext );
+            xWindowStateConfiguration = ui::theWindowStateConfiguration::get( xContext );
             m_xWindowStateConfiguration = xWindowStateConfiguration;
         }
 

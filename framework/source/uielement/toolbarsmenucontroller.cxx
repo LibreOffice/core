@@ -42,7 +42,7 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -820,7 +820,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
         if ( m_bInitialized )
         {
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::WindowStateConfiguration::create( m_xContext );
+            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::theWindowStateConfiguration::get( m_xContext );
 
             // Retrieve persistent window state reference for our module
             OUString aModuleIdentifier;
