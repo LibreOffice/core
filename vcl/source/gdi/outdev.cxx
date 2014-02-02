@@ -188,7 +188,7 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     if( !pGraphics )
     {
         if( !mpGraphics )
-            if( !ImplGetGraphics() )
+            if( !ImplInitGraphics() )
                 return false;
         pGraphics = mpGraphics;
     }
@@ -559,8 +559,20 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
-    if ( mpGraphics )
-        return mpGraphics;
+    if ( !mpGraphics )
+    {
+        if ( !ImplInitGraphics() )
+        {
+            assert(mpGraphics);
+        }
+    }
+
+    return mpGraphics;
+}
+
+bool OutputDevice::ImplInitGraphics() const
+{
+    DBG_TESTSOLARMUTEX();
 
     mbInitLineColor     = true;
     mbInitFillColor     = true;
@@ -569,6 +581,8 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();
+
+    // TODO: move this out of OutputDevice and into subclasses
     if ( meOutDevType == OUTDEV_WINDOW )
     {
         Window* pWindow = (Window*)this;
@@ -702,7 +716,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
     }
 
-    return mpGraphics;
+    return mpGraphics ? true : false;
 }
 
 void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
