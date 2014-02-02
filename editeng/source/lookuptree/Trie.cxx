@@ -196,5 +196,13 @@ void Trie::findSuggestions(OUString sWordPart, vector<OUString>& rSuggesstionLis
     }
 }
 
+void Trie::getAllEntries(std::vector<OUString>& entries)
+{
+    if (mRoot != NULL)
+    {
+        mRoot->collectSuggestions(OUString(), entries);
+    }
+}
+
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

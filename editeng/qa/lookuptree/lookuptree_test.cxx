@@ -34,10 +34,12 @@ class LookupTreeTest : public CppUnit::TestFixture
 public:
     void testLookupTree();
     void testTrie();
+    void testTrieGetAllEntries();
 
     CPPUNIT_TEST_SUITE(LookupTreeTest);
     CPPUNIT_TEST(testLookupTree);
     CPPUNIT_TEST(testTrie);
+    CPPUNIT_TEST(testTrieGetAllEntries);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -227,11 +229,11 @@ void LookupTreeTest::testTrie()
     editeng::Trie trie;
     std::vector<OUString> suggestions;
 
-    trie.findSuggestions( OUString(""), suggestions);
+    trie.findSuggestions( OUString(), suggestions);
     CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
 
-    trie.insert( OUString("") );
-    trie.findSuggestions( OUString(""), suggestions);
+    trie.insert( OUString() );
+    trie.findSuggestions( OUString(), suggestions);
     CPPUNIT_ASSERT_EQUAL( (size_t) 0, suggestions.size() );
 
     trie.findSuggestions( OUString("a"), suggestions);
@@ -302,7 +304,33 @@ void LookupTreeTest::testTrie()
     trie.findSuggestions( OUString(""), suggestions);
     CPPUNIT_ASSERT_EQUAL( (size_t) 6, suggestions.size() );
     suggestions.clear();
+}
 
+void LookupTreeTest::testTrieGetAllEntries()
+{
+    editeng::Trie trie;
+
+    std::vector<OUString> entries;
+
+    trie.getAllEntries(entries);
+    CPPUNIT_ASSERT_EQUAL( (size_t) 0, entries.size() );
+
+    trie.insert("A");
+    trie.getAllEntries(entries);
+    CPPUNIT_ASSERT_EQUAL( (size_t) 1, entries.size() );
+    entries.clear();
+
+    trie.insert("B");
+    trie.insert("C");
+    trie.getAllEntries(entries);
+    CPPUNIT_ASSERT_EQUAL( (size_t) 3, entries.size() );
+    entries.clear();
+
+    trie.insert("AA");
+    trie.insert("AAA");
+    trie.getAllEntries(entries);
+    CPPUNIT_ASSERT_EQUAL( (size_t) 5, entries.size() );
+    entries.clear();
 }
 
 } // namespace end
