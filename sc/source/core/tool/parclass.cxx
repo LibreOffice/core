@@ -139,6 +139,8 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocMinA,            {{ Reference                                            }, 1 }},
     { ocMIRR,            {{ Reference, Value, Value                              }, 0 }},
     { ocModalValue,      {{ ForceArray                                           }, 1 }},
+    { ocModalValue_MS,   {{ ForceArray                                           }, 1 }},
+    { ocModalValue_Multi,{{ ForceArray                                           }, 1 }},
     { ocMul,             {{ Array, Array                                         }, 0 }},
     { ocMultiArea,       {{ Reference                                            }, 1 }},
     { ocNPV,             {{ Value, Reference                                     }, 1 }},
@@ -197,6 +199,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, 0 }},
     { ocXor,             {{ Reference                                            }, 1 }},
     { ocZTest,           {{ Reference, Value, Value                              }, 0 }},
+    { ocZTest_MS,        {{ Reference, Value, Value                              }, 0 }},
     // Excel doubts:
     // ocN, ocT: Excel says (and handles) Reference, error? This means no
     // position dependent SingleRef if DoubleRef, and no array calculation,

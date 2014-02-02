@@ -2854,6 +2854,9 @@ void Test::testFunctionLists()
         "MIN",
         "MINA",
         "MODE",
+        "MODE.MULT",
+        "MODE.SNGL",
+        "NEGBINOM.DIST",
         "NEGBINOMDIST",
         "NORM.DIST",
         "NORM.INV",
@@ -2913,6 +2916,7 @@ void Test::testFunctionLists()
         "VARPA",
         "WEIBULL",
         "WEIBULL.DIST",
+        "Z.TEST",
         "ZTEST",
         0
     };

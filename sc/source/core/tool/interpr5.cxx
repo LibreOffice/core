@@ -832,6 +832,69 @@ void ScInterpreter::ScMatDet()
     }
 }
 
+void ScInterpreter::ScModalValue_Multi()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCountMin( nParamCount, 1 ) )
+        return;
+    vector<double> aSortArray;
+    GetSortArray(nParamCount, aSortArray);
+    SCSIZE nSize = aSortArray.size();
+    if ( aSortArray.empty() || nSize == 0 || nGlobalError )
+        PushNoValue();
+    else
+    {
+        SCSIZE nMax = 1, nCount = 1;
+        double nOldVal = aSortArray[0];
+        vector<double> aResultArray;
+        aResultArray.resize( 1 );
+        aResultArray[ 0 ] = aSortArray[ 0 ];
+        SCSIZE i;
+
+        for ( i = 1; i < nSize; i++ )
+        {
+            if ( aSortArray[ i ] == nOldVal )
+            {
+                nCount++;
+                if ( nCount > nMax && aResultArray.size() > 1 )
+                {
+                    aResultArray.clear();
+                    aResultArray.resize( 1 );
+                    aResultArray[ 0 ] = nOldVal;
+                }
+            }
+            else
+            {
+                nOldVal = aSortArray[ i ];
+                if ( nCount >= nMax )
+                {
+                    if ( nCount > nMax )
+                        nMax = nCount;
+                    aResultArray.resize( aResultArray.size() + 1 );
+                }
+                aResultArray[ aResultArray.size() -1  ] = nOldVal;
+                nCount = 1;
+            }
+        }
+        if ( nCount > nMax )
+            nMax = nCount;
+        else
+        {
+            if ( nCount < nMax )
+                aResultArray.resize( aResultArray.size() - 1 );
+        }
+
+        if ( nMax == 1 && nCount == 1 )
+            PushNoValue();
+        else
+        {
+            ScMatrixRef pResMatrix = GetNewMat( 1, aResultArray.size(), true );
+            pResMatrix->PutDoubleVector( aResultArray, 0, 0 );
+            PushMatrix( pResMatrix );
+        }
+    }
+}
+
 void ScInterpreter::ScMatInv()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
