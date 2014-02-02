@@ -101,6 +101,7 @@ public:
     void testFormulaParseReference();
     void testFetchVectorRefArray();
     void testFormulaHashAndTag();
+    void testFormulaTokenEquality();
     void testFormulaRefData();
     void testFormulaCompiler();
     void testFormulaRefUpdate();
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
     CPPUNIT_TEST(testFormulaHashAndTag);
+    CPPUNIT_TEST(testFormulaTokenEquality);
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
     CPPUNIT_TEST(testFormulaRefUpdate);

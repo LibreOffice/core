@@ -564,6 +564,61 @@ void Test::testFormulaHashAndTag()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaTokenEquality()
+{
+    struct Test
+    {
+        const char* mpFormula1;
+        const char* mpFormula2;
+        bool mbEqual;
+    };
+
+    Test aTests[] = {
+        { "R1C2", "R1C2", true },
+        { "R1C2", "R1C3", false },
+        { "R1C2", "R2C2", false },
+        { "RC2",  "RC[1]", false },
+        { "R1C2:R10C2", "R1C2:R10C2", true },
+        { "R1C2:R10C2", "R1C2:R11C2", false },
+        { "1", "2", false },
+        { "RC[1]+1.2", "RC[1]+1.2", true },
+        { "RC[1]*0.2", "RC[1]*0.5", false },
+        { "\"Test1\"", "\"Test2\"", false },
+        { "\"Test\"", "\"Test\"", true },
+        { "CONCATENATE(\"Test1\")", "CONCATENATE(\"Test1\")", true },
+        { "CONCATENATE(\"Test1\")", "CONCATENATE(\"Test2\")", false },
+    };
+
+    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        ScFormulaCell aCell1(m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula1), eGram);
+        ScFormulaCell aCell2(m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula2), eGram);
+
+        ScFormulaCell::CompareState eComp = aCell1.CompareByTokenArray(aCell2);
+        if (aTests[i].mbEqual)
+        {
+            if (eComp == ScFormulaCell::NotEqual)
+            {
+                std::ostringstream os;
+                os << "These two formulas should be evaluated equal: '"
+                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
+                CPPUNIT_FAIL(os.str().c_str());
+            }
+        }
+        else
+        {
+            if (eComp != ScFormulaCell::NotEqual)
+            {
+                std::ostringstream os;
+                os << "These two formulas should be evaluated non-equal: '"
+                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
+                CPPUNIT_FAIL(os.str().c_str());
+            }
+        }
+    }
+}
+
 void Test::testFormulaRefData()
 {
     ScAddress aAddr(4,5,3), aPos(2,2,2);
