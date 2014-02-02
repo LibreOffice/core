@@ -331,6 +331,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate(SID_CUT);
     Invalidate(SID_COPY);
     Invalidate(SID_PASTE);
+    Invalidate(SID_PASTE_UNFORMATTED);
 }
 
 void OutlineViewShell::ShowSlideShow(SfxRequest& rReq)
@@ -628,6 +629,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
     Invalidate(SID_CUT);
     Invalidate(SID_COPY);
     Invalidate(SID_PASTE);
+    Invalidate(SID_PASTE_UNFORMATTED);
 }
 
 

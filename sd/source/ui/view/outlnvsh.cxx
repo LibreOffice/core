@@ -475,6 +475,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         (nSlot == SID_TRANSLITERATE_KATAGANA) ||
         (nSlot == SID_CUT) ||
         (nSlot == SID_PASTE) ||
+        (nSlot == SID_PASTE_UNFORMATTED) ||
         (nSlot == SID_DELETE)))
     {
         aGuard.reset( new OutlineViewModelChangeGuard( *pOlView ) );
@@ -529,6 +530,29 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         }
         break;
 
+        case SID_PASTE_UNFORMATTED:
+        {
+            OutlineViewPageChangesGuard aGuard2(pOlView);
+
+            if(HasCurrentFunction())
+            {
+                GetCurrentFunction()->DoPasteUnformatted();
+            }
+            else if(pOlView)
+            {
+                sal_Int8 nAction = DND_ACTION_COPY;
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+                if (aDataHelper.GetTransferable().is())
+                {
+                    pOlView->InsertData( aDataHelper,
+                                         GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
+                                         nAction, sal_False, FORMAT_STRING);
+                }
+            }
+
+            rReq.Ignore ();
+        }
+        break;
         case SID_DELETE:
         {
             if( pOlView )
@@ -735,6 +759,7 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
         rBindings.Invalidate( SID_PASTE_SPECIAL );
+        rBindings.Invalidate( SID_PASTE_UNFORMATTED );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;

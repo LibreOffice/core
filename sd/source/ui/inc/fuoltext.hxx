@@ -50,6 +50,7 @@ public:
     virtual void DoCut();
     virtual void DoCopy();
     virtual void DoPaste();
+    virtual void DoPasteUnformatted();
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren

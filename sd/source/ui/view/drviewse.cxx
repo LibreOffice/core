@@ -798,6 +798,30 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
+        case SID_PASTE_UNFORMATTED:
+        {
+            WaitObject aWait( (Window*)GetActiveWindow() );
+
+            if(HasCurrentFunction())
+            {
+                GetCurrentFunction()->DoPasteUnformatted();
+            }
+            else if(mpDrawView)
+            {
+                sal_Int8 nAction = DND_ACTION_COPY;
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+                if (aDataHelper.GetTransferable().is())
+                {
+                    mpDrawView->InsertData( aDataHelper,
+                                            GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
+                                            nAction, sal_False, FORMAT_STRING);
+                }
+            }
+
+            rReq.Ignore ();
+        }
+        break;
+
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
             WaitObject              aWait( (Window*)GetActiveWindow() );
