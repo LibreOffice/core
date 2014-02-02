@@ -47,7 +47,7 @@ public:
     ~SwTxtGuess() { delete pHanging; }
 
     // true, if current portion still fits to current line
-    sal_Bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
+    bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                     const KSHORT nHeight );
     bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const sal_Int32 nPos );
 

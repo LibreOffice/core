@@ -50,14 +50,14 @@ using namespace ::com::sun::star::linguistic2;
  * otherwise possible break or hyphenation position is determined
  *************************************************************************/
 
-sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
+bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             const KSHORT nPorHeight )
 {
     nCutPos = rInf.GetIdx();
 
     // Empty strings are always 0
     if( !rInf.GetLen() || rInf.GetTxt().isEmpty() )
-        return sal_False;
+        return false;
 
     OSL_ENSURE( rInf.GetIdx() < rInf.GetTxt().getLength(),
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
@@ -84,7 +84,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         nMaxLen = rInf.GetLen();
 
     if( !nMaxLen )
-        return sal_False;
+        return false;
 
     KSHORT nItalic = 0;
     if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
@@ -145,7 +145,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             nBreakWidth += nLeftRightBorderSpace;
 
-            return sal_True;
+            return true;
         }
     }
 
@@ -184,7 +184,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen, nMaxComp,
                          nBreakWidth, nMaxSizeDiff );
 
-        // The following comparison should always give sal_True, otherwise
+        // The following comparison should always give true, otherwise
         // there likely has been a pixel rounding error in GetTxtBreak
         if ( nBreakWidth <= nLineWidth )
         {
@@ -197,7 +197,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             nBreakWidth += nLeftRightBorderSpace;
 
-            return sal_True;
+            return true;
         }
     }
 
@@ -207,7 +207,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nBreakPos = rInf.GetIdx();
         nCutPos = rInf.GetLen();
-        return sal_False;
+        return false;
     }
 
     sal_Int32 nPorLen = 0;
@@ -347,12 +347,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
 
-        const sal_Bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
+        const bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
                                       ! rPor.InFldGrp();
 
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
-                rInf.HasForbiddenChars(), bAllowHanging, sal_False );
+                rInf.HasForbiddenChars(), bAllowHanging, false );
 
         //! register listener to LinguServiceEvents now in order to get
         //! notified about relevant changes in the future
@@ -523,7 +523,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if( pHanging )
         nBreakPos = nCutPos;
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -540,7 +540,7 @@ bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     Boundary aBound =
         g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-        WordType::DICTIONARY_WORD, sal_True );
+        WordType::DICTIONARY_WORD, true );
     nBreakStart = aBound.startPos;
     sal_Int32 nWordLen = aBound.endPos - nBreakStart;
 

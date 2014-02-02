@@ -295,16 +295,16 @@ static bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
     return rFld.GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty();
 }
 
-sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
+bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 {
     // 5744: If only the hypen does not fit anymore, we still need to wrap
-    // the word, or else return sal_True!
+    // the word, or else return true!
     if( rInf.IsUnderFlow() && rInf.GetSoftHyphPos() )
     {
         // soft hyphen portion has triggered an underflow event because
         // of an alternative spelling position
-        sal_Bool bFull = sal_False;
-        const sal_Bool bHyph = rInf.ChgHyph( sal_True );
+        bool bFull = false;
+        const bool bHyph = rInf.ChgHyph( true );
         if( rInf.IsHyphenate() )
         {
             SwTxtGuess aGuess;
@@ -320,7 +320,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     }
 
     SwTxtGuess aGuess;
-    const sal_Bool bFull = !aGuess.Guess( *this, rInf, Height() );
+    const bool bFull = !aGuess.Guess( *this, rInf, Height() );
 
     // these are the possible cases:
     // A Portion fits to current line
@@ -372,9 +372,9 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         {
             CreateHyphen( rInf, aGuess );
             if ( rInf.GetFly() )
-                rInf.GetRoot()->SetMidHyph( sal_True );
+                rInf.GetRoot()->SetMidHyph( true );
             else
-                rInf.GetRoot()->SetEndHyph( sal_True );
+                rInf.GetRoot()->SetEndHyph( true );
         }
         // case C1
         // - Footnote portions with fake line start (i.e., not at beginning of line)
@@ -441,7 +441,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
-              rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, sal_True )))
+              rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, true )))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }

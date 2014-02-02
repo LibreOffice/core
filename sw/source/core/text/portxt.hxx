@@ -34,7 +34,7 @@ class SwTxtPortion : public SwLinePortion
 {
     void BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess );
     void BreakUnderflow( SwTxtFormatInfo &rInf );
-    sal_Bool _Format( SwTxtFormatInfo &rInf );
+    bool _Format( SwTxtFormatInfo &rInf );
 
 public:
     inline SwTxtPortion(){ SetWhichPor( POR_TXT ); }
