@@ -50,10 +50,10 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
     aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
-    if( pNode->GetSwAttrSet().GetRegister().GetValue() )
-        bRegisterOn = pFrm->FillRegister( nRegStart, nRegDiff );
-    else
-        bRegisterOn = sal_False;
+
+    // Order is important: only execute FillRegister if GetValue!=0
+    bRegisterOn = pNode->GetSwAttrSet().GetRegister().GetValue()
+        && pFrm->FillRegister( nRegStart, nRegDiff );
 }
 
 /*************************************************************************
@@ -65,7 +65,7 @@ void SwTxtIter::Init()
     pCurr = pInf->GetParaPortion();
     nStart = pInf->GetTxtStart();
     nY = nFrameStart;
-    bPrev = sal_True;
+    bPrev = true;
     pPrev = 0;
     nLineNr = 1;
 }
@@ -87,7 +87,7 @@ void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 SwLineLayout *SwTxtIter::_GetPrev()
 {
     pPrev = 0;
-    bPrev = sal_True;
+    bPrev = true;
     SwLineLayout *pLay = pInf->GetParaPortion();
     if( pCurr == pLay )
         return 0;
@@ -117,7 +117,7 @@ const SwLineLayout *SwTxtIter::Prev()
         _GetPrev();
     if( pPrev )
     {
-        bPrev = sal_False;
+        bPrev = false;
         pCurr = pPrev;
         nStart = nStart - pCurr->GetLen();
         nY = nY - GetLineHeight();
@@ -138,7 +138,7 @@ const SwLineLayout *SwTxtIter::Next()
     if(pCurr->GetNext())
     {
         pPrev = pCurr;
-        bPrev = sal_True;
+        bPrev = true;
         nStart = nStart + pCurr->GetLen();
         nY += GetLineHeight();
         if( pCurr->GetLen() || ( nLineNr>1 && !pCurr->IsDummy() ) )
@@ -259,11 +259,11 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
 {
     CharToLine( nPosition );
     if( nPosition != nStart )
-        bRightMargin = sal_False;
-    sal_Bool bPrevious = bRightMargin && pCurr->GetLen() && GetPrev() &&
+        bRightMargin = false;
+    bool bPrevious = bRightMargin && pCurr->GetLen() && GetPrev() &&
         GetPrev()->GetLen();
     if( bPrevious && nPosition && CH_BREAK == GetInfo().GetChar( nPosition-1 ) )
-        bPrevious = sal_False;
+        bPrevious = false;
     return bPrevious ? PrevLine() : pCurr;
 }
 
@@ -274,7 +274,7 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
 sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
                                     sal_uInt16 nPorHeight, sal_uInt16 nPorAscent,
-                                    const sal_Bool bAutoToCentered ) const
+                                    const bool bAutoToCentered ) const
 {
     if ( pPor )
     {
@@ -285,12 +285,11 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     sal_uInt16 nOfst = rLine.GetRealHeight() - rLine.Height();
 
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
 
-    if ( bHasGrid )
+    if ( pGrid && GetInfo().SnapToGrid() )
     {
         const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
-        const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
+        const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         if ( GetInfo().IsMulti() )
             // we are inside the GetCharRect recursion for multi portions
@@ -315,7 +314,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                  //                           nGridWidth;
                 nOfst += ( nLineNetto - nPorHeight ) / 2;
                 if ( bRubyTop )
-                    nOfst = nOfst + nRubyHeight;
+                    nOfst += nRubyHeight;
             }
         }
     }
@@ -368,10 +367,10 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
 //
 // Local helper function to check, if pCurr needs a field rest portion:
 //
-static sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
+static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
     const SwLinePortion *pPor = pCurr->GetPortion();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while( pPor && !bRet )
     {
         bRet = pPor->InFldGrp() && ((SwFldPortion*)pPor)->HasFollow();

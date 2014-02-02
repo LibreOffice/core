@@ -490,8 +490,8 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
     KSHORT nAscent = 0;
     KSHORT nHeight = 0;
     KSHORT nDropLns = 0;
-    sal_Bool bRegisterOld = IsRegisterOn();
-    bRegisterOn = sal_False;
+    const bool bRegisterOld = IsRegisterOn();
+    bRegisterOn = false;
 
     Top();
 

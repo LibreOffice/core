@@ -47,7 +47,7 @@ void SwTxtAdjuster::FormatBlock( )
 
     const SwLinePortion *pFly = 0;
 
-    sal_Bool bSkip = !IsLastBlock() &&
+    bool bSkip = !IsLastBlock() &&
         nStart + pCurr->GetLen() >= GetInfo().GetTxt().getLength();
 
     // Multi-line fields are tricky, because we need to check whether there are
@@ -61,7 +61,7 @@ void SwTxtAdjuster::FormatBlock( )
             while( pPor && bSkip )
             {
                 if( pPor->InTxtGrp() )
-                    bSkip = sal_False;
+                    bSkip = false;
                 pPor = pPor->GetPortion();
             }
             pLay = bSkip ? pLay->GetNext() : 0;

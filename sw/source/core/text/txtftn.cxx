@@ -1117,7 +1117,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     // Wir initialisieren uns also:
 //  ResetFont();
     FeedInf( rInf );
-    SeekStartAndChg( rInf, sal_True );
+    SeekStartAndChg( rInf, true );
     if( GetRedln() && pCurr->HasRedline() )
         GetRedln()->Seek( *pFnt, nOffset, 0 );
 

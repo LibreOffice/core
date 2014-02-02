@@ -50,7 +50,7 @@
 
 // Not reentrant !!!
 // is set in GetCharRect and is interpreted in UnitUp/Down.
-sal_Bool SwTxtCursor::bRightMargin = sal_False;
+bool SwTxtCursor::bRightMargin = false;
 
 
 /*************************************************************************
@@ -418,11 +418,11 @@ void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 
 // 1170: Ancient bug: Shift-End forgets the last character ...
 
-sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
+bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                   SwCrsrMoveState* pCMS, const long nMax )
 {
     // 1170: Ambiguity of document positions
-    bRightMargin = sal_True;
+    bRightMargin = true;
     CharCrsrToLine(nOfst);
 
     // Somehow twisted: nOfst names the position behind the last
@@ -431,7 +431,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     if( nOfst != GetStart() || !pCurr->GetLen() )
     {
         // 8810: Master line RightMargin, after that LeftMargin
-        const sal_Bool bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
+        const bool bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
         bRightMargin = nOfst >= GetEnd() && nOfst < GetInfo().GetTxt().getLength();
         return bRet;
     }
@@ -483,7 +483,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
         pCMS->aRealHeight.Y() = nPorHeight;
     }
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -899,7 +899,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         nY = nOldY;
-                        bPrev = sal_False;
+                        bPrev = false;
 
                         return;
                     }
@@ -1198,7 +1198,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
  *                      SwTxtCursor::GetCharRect()
  *************************************************************************/
 
-sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
+bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                SwCrsrMoveState* pCMS, const long nMax )
 {
     CharCrsrToLine(nOfst);
@@ -1228,7 +1228,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     GetAdjusted();
 
     const Point aCharPos( GetTopLeft() );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     _GetCharRect( pOrig, nFindOfst, pCMS );
 

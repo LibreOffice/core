@@ -46,11 +46,11 @@ protected:
     sal_Int32 nStart;          // Start in the text string, end = pCurr->GetLen()
     KSHORT nRegDiff;            // Register's line distance
     MSHORT nLineNr;             // Line number
-    sal_Bool bPrev          : 1;
-    sal_Bool bRegisterOn    : 1;    // Keep in register
-    sal_Bool bOneBlock      : 1;    // Justified text: Dispose single words
-    sal_Bool bLastBlock     : 1;    // Justified text: Also the last line
-    sal_Bool bLastCenter    : 1;    // Justified text: Center last line
+    bool bPrev          : 1;
+    bool bRegisterOn    : 1;    // Keep in register
+    bool bOneBlock      : 1;    // Justified text: Dispose single words
+    bool bLastBlock     : 1;    // Justified text: Also the last line
+    bool bLastCenter    : 1;    // Justified text: Center last line
 
     SwLineLayout *_GetPrev();
 
@@ -69,18 +69,18 @@ protected:
         , nStart(0)
         , nRegDiff(0)
         , nLineNr(0)
-        , bPrev(sal_False)
-        , bRegisterOn(sal_False)
-        , bOneBlock(sal_False)
-        , bLastBlock(sal_False)
-        , bLastCenter(sal_False)
+        , bPrev(false)
+        , bRegisterOn(false)
+        , bOneBlock(false)
+        , bLastBlock(false)
+        , bLastCenter(false)
         {}
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf )
         : SwAttrIter( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
-        , bOneBlock(sal_False)
-        , bLastBlock(sal_False)
-        , bLastCenter(sal_False)
+        , bOneBlock(false)
+        , bLastBlock(false)
+        , bLastCenter(false)
         {
             CtorInitTxtIter( pTxtFrm, pTxtInf );
         }
@@ -95,7 +95,7 @@ public:
 
     inline SwTwips RegStart() const { return nRegStart; }
     inline KSHORT RegDiff() const { return nRegDiff; }
-    inline sal_Bool IsRegisterOn() const { return bRegisterOn; }
+    inline bool IsRegisterOn() const { return bRegisterOn; }
 
     inline SwTxtInfo &GetInfo() { return *pInf; }
     inline const SwTxtInfo &GetInfo() const { return *pInf; }
@@ -131,9 +131,9 @@ public:
 
     const SwLineInfo &GetLineInfo() const { return aLineInf; }
     inline SwTwips GetFirstPos() const { return nFrameStart; }
-    inline sal_Bool SeekAndChg( SwTxtSizeInfo &rInf );
-    inline sal_Bool SeekAndChgBefore( SwTxtSizeInfo &rInf );
-    inline sal_Bool SeekStartAndChg( SwTxtSizeInfo &rInf, const sal_Bool bPara=sal_False );
+    inline bool SeekAndChg( SwTxtSizeInfo &rInf );
+    inline bool SeekAndChgBefore( SwTxtSizeInfo &rInf );
+    inline bool SeekStartAndChg( SwTxtSizeInfo &rInf, const bool bPara=false );
 
     inline SwTxtFrm *GetTxtFrm() { return pFrm; }
     inline const SwTxtFrm *GetTxtFrm() const { return pFrm; }
@@ -193,9 +193,9 @@ public:
            SwTwips GetLineStart() const;
     inline SwTwips GetLineEnd() const { return GetLineStart() + CurrWidth(); }
     inline Point GetTopLeft() const { return Point( GetLineStart(), Y() ); }
-    inline sal_Bool IsOneBlock() const { return bOneBlock; }
-    inline sal_Bool IsLastBlock() const { return bLastBlock; }
-    inline sal_Bool IsLastCenter() const { return bLastCenter; }
+    inline bool IsOneBlock() const { return bOneBlock; }
+    inline bool IsLastBlock() const { return bLastBlock; }
+    inline bool IsLastCenter() const { return bLastCenter; }
     inline MSHORT GetAdjust() const { return nAdjust; }
     inline KSHORT GetLineWidth() const
            { return KSHORT( Right() - GetLeftMargin() + 1 ); }
@@ -285,7 +285,7 @@ class SwTxtCursor : public SwTxtAdjuster
     friend class SwTxtCursorSave;
 
     // Ambiguities
-    static sal_Bool bRightMargin;
+    static bool bRightMargin;
     void _GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* );
 protected:
     void CtorInitTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
@@ -293,9 +293,9 @@ protected:
 public:
     inline SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtAdjuster(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtCursor( pTxtFrm, pTxtSizeInf ); }
-    sal_Bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
+    bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
         const long nMax = 0 );
-    sal_Bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
+    bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
         const long nMax = 0 );
     sal_Int32 GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 const MSHORT nChgNode, SwCrsrMoveState* = 0 ) const;
@@ -306,10 +306,10 @@ public:
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
     sal_uInt16 AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
                            sal_uInt16 nPorHeight = 0, sal_uInt16 nAscent = 0,
-                           const sal_Bool bAutoToCentered = sal_False ) const;
+                           const bool bAutoToCentered = false ) const;
 
-    static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }
-    static inline sal_Bool IsRightMargin() { return bRightMargin; }
+    static inline void SetRightMargin( const bool bNew ){ bRightMargin = bNew; }
+    static inline bool IsRightMargin() { return bRightMargin; }
 };
 
 /*************************************************************************
@@ -333,12 +333,12 @@ public:
  *                      Inline implementation
  *************************************************************************/
 
-inline sal_Bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )
+inline bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )
 {
     return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
-inline sal_Bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
+inline bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
 {
     if ( rInf.GetIdx() )
         return SeekAndChgAttrIter( rInf.GetIdx()-1, rInf.GetOut() );
@@ -346,7 +346,7 @@ inline sal_Bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
         return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
-inline sal_Bool SwTxtIter::SeekStartAndChg( SwTxtSizeInfo &rInf, const sal_Bool bPara )
+inline bool SwTxtIter::SeekStartAndChg( SwTxtSizeInfo &rInf, const bool bPara )
 {
     return SeekStartAndChgAttrIter( rInf.GetOut(), bPara );
 }
