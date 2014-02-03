@@ -50,6 +50,7 @@ namespace ConversionHelper{
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
 
+    com::sun::star::util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime );
 } // namespace ConversionHelper
 } //namespace dmapper
 } // namespace writerfilter
