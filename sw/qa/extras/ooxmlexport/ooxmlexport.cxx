@@ -2781,6 +2781,18 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
         CPPUNIT_ASSERT_EQUAL(aCoordinates[i].second, aPairs[i].Second.Value.get<sal_Int32>());
     }
 }
+
+DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
+{
+    /* fdo73545: Column Break with Column_count = 0 was not getting preserved.
+     * The <w:br w:type="column" /> was missing after roundtrip
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br","type","column");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
