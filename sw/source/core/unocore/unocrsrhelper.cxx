@@ -1292,6 +1292,63 @@ void makeRedline( SwPaM& rPaM,
         throw lang::IllegalArgumentException();
 }
 
+void makeTableRedline( SwTableLine& rTableLine,
+    const OUString& rRedlineType,
+    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    IDocumentRedlineAccess* pRedlineAccess = rTableLine.GetFrmFmt()->GetDoc();
+
+    RedlineType_t eType;
+    if ( rRedlineType == "TableRowInsert" )
+    {
+        eType = nsRedlineType_t::REDLINE_TABLE_ROW_INSERT;
+    }
+    else if ( rRedlineType == "TableRowDelete" )
+    {
+        eType = nsRedlineType_t::REDLINE_TABLE_ROW_DELETE;
+    }
+    else
+    {
+        throw lang::IllegalArgumentException();
+    }
+
+    comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
+    uno::Any aAuthorValue;
+    aAuthorValue = aPropMap.getUnpackedValueOrDefault("RedlineAuthor", aAuthorValue);
+    sal_uInt16 nAuthor = 0;
+    OUString sAuthor;
+    if( aAuthorValue >>= sAuthor )
+        nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
+
+    OUString sComment;
+    uno::Any aCommentValue;
+    aCommentValue = aPropMap.getUnpackedValueOrDefault("RedlineComment", aCommentValue);
+
+    SwRedlineData aRedlineData( eType, nAuthor );
+    if( aCommentValue >>= sComment )
+        aRedlineData.SetComment( sComment );
+
+    ::util::DateTime aStamp;
+    uno::Any aDateTimeValue;
+    aDateTimeValue = aPropMap.getUnpackedValueOrDefault("RedlineDateTime", aDateTimeValue);
+    if( aDateTimeValue >>= aStamp )
+    {
+       aRedlineData.SetTimeStamp(
+        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+    }
+
+    SwTableRowRedline* pRedline = new SwTableRowRedline( aRedlineData, rTableLine );
+    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+    pRedline->SetExtraData( NULL );
+
+    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+    bool bRet = pRedlineAccess->AppendTableRowRedline( pRedline, false );
+    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
+    if( !bRet )
+        throw lang::IllegalArgumentException();
+}
+
 SwAnyMapHelper::~SwAnyMapHelper()
 {
     AnyMapHelper_t::iterator aIt = begin();
