@@ -188,6 +188,8 @@ void SwDoc::SetRedlineMode( RedlineMode_t eMode )
         meRedlineMode = eMode;
         SetModified();
     }
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::IsRedlineOn() const
@@ -1277,6 +1279,8 @@ void SwDoc::CompressRedlines()
         }
     }
     _CHECK_REDLINE( this )
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::SplitRedline( const SwPaM& rRange )
@@ -1339,6 +1343,8 @@ bool SwDoc::SplitRedline( const SwPaM& rRange )
             break;
     }
     return bChg;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
@@ -1454,6 +1460,8 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
         SetModified();
 
     return bChg;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::DeleteRedline( const SwStartNode& rNode, bool bSaveInUndo,
@@ -1481,6 +1489,8 @@ sal_uInt16 SwDoc::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
             break;
     }
     return USHRT_MAX;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 const SwRangeRedline* SwDoc::GetRedline( const SwPosition& rPos,
@@ -1549,6 +1559,8 @@ const SwRangeRedline* SwDoc::GetRedline( const SwPosition& rPos,
     if( pFndPos )
         *pFndPos = nU;
     return 0;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 typedef sal_Bool (*Fn_AcceptReject)( SwRedlineTbl& rArr, sal_uInt16& rPos,
@@ -2093,6 +2105,8 @@ bool SwDoc::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
         }
     }
     return bRet;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
@@ -2137,6 +2151,8 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
     }
     return nRet != 0;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
@@ -2203,6 +2219,8 @@ bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
         }
     }
     return bRet;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
@@ -2248,6 +2266,8 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     }
 
     return nRet != 0;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
@@ -2365,6 +2385,8 @@ const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
     } while( bRestart );
 
     return pFnd;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
@@ -2484,6 +2506,8 @@ const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
     } while( bRestart );
 
     return pFnd;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 // Set comment at the Redline
@@ -2512,6 +2536,8 @@ bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
         SetModified();
 
     return bRet;
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 // Create a new author if necessary
@@ -2535,6 +2561,8 @@ void SwDoc::UpdateRedlineAttr()
         if( pRedl->IsVisible() )
             pRedl->InvalidateRange();
     }
+
+    // To-Do - add 'SwExtraRedlineTbl' also ?
 }
 
 /// Set comment text for the Redline, which is inserted later on via

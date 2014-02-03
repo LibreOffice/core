@@ -868,6 +868,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         if( !aBkmkArr.empty() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
 
+        // To-Do - add 'SwExtraRedlineTbl' also ?
         if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
         {
             SwPaM aPam( rPos );
@@ -906,6 +907,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
         GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
     }
 
+    // To-Do - add 'SwExtraRedlineTbl' also ?
     if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         SwPaM aPam( rPos );
@@ -997,6 +999,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
         }
     }
 
+    // To-Do - add 'SwExtraRedlineTbl' also ?
     if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         SwPaM aPam( rPos.nNode, aTmp.GetCntnt(),
