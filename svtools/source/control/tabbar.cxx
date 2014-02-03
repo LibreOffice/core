@@ -645,7 +645,7 @@ void TabBar::ImplFormat()
             pItem->maRect.SetEmpty();
         else
         {
-            // Slightly befor the tab before the first visible page
+            // Slightly before the tab before the first visible page
             // should also be visible
             if ( n+1 == mnFirstPos )
                 pItem->maRect.Left() = x-pItem->mnWidth;
@@ -1535,6 +1535,20 @@ void TabBar::Resize()
     {
         if ( ImplCalcWidth() )
             Invalidate();
+
+        ImplFormat();
+
+        // Ensure as many tabs as possible are visible:
+        sal_uInt16 nLastFirstPos = ImplGetLastFirstPos();
+        if ( mnFirstPos > nLastFirstPos )
+        {
+            mnFirstPos = nLastFirstPos;
+            mbFormat = sal_True;
+            Invalidate();
+        }
+        // Ensure the currently selected page is visible
+        ImplShowPage( GetPagePos( mnCurPageId ) );
+
         ImplFormat();
     }
 
