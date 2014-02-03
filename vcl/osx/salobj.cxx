@@ -73,6 +73,12 @@ AquaSalObject::~AquaSalObject()
     }
 }
 
+// Please note that the talk about QTMovieView below presumably refers
+// to stuff in the QuickTime avmedia thingie, and that QuickTime is
+// deprecated, not available for 64-bit code, and won't thus be used
+// in a "modern" build of LO anyway. So the relevance of the comment
+// is unclear.
+
 /*
    sadly there seems to be no way to impose clipping on a child view,
    especially a QTMovieView which seems to ignore the current context
