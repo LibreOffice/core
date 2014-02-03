@@ -465,7 +465,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 
     if ( !bUseSystemFont )
     {
-        ImplInitFontList();
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplInitFontList();
         OUString aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILanguageTag() );
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
