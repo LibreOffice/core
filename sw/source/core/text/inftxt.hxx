@@ -744,9 +744,6 @@ public:
     // Dropcaps called by SwTxtFormatter::CTOR
     const SwFmtDrop *GetDropFmt() const;
 
-    // Resets the FormatInfo back to its original state
-    void Reset( const SwTxtFrm *pFrame); // , const sal_Bool bAll );
-
     // Sets the last SwKernPortion as pLast, if it is followed by empty portions
     bool LastKernPortion();
 
