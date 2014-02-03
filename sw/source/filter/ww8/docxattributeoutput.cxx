@@ -106,6 +106,7 @@
 #include <txtinet.hxx>
 #include <fmtautofmt.hxx>
 #include <docsh.hxx>
+#include <docary.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -2196,6 +2197,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t p
                FSNS( XML_w, XML_val ), "true",
                FSEND );
 
+    TableRowRedline( pTableTextNodeInfoInner );
     TableHeight( pTableTextNodeInfoInner );
     TableCanSplit( pTableTextNodeInfoInner );
 
@@ -2400,6 +2402,52 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             FSNS( XML_w, XML_fill ), sColor.getStr( ),
             FSNS( XML_w, XML_val ), "clear",
             FSEND );
+}
+
+void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+{
+    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+    const SwTableLine * pTabLine = pTabBox->GetUpper();
+
+    // search next Redline
+    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->GetExtraRedlineTbl();
+    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTbl.GetSize(); ++nCurRedlinePos )
+    {
+        SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);
+        const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
+        if (pTableRowRedline && pTableRowRedline->GetTableLine() == pTabLine)
+        {
+            // Redline for this table row
+            const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
+            sal_uInt16 nRedlineType = aRedlineData.GetType();
+            switch (nRedlineType)
+            {
+                case nsRedlineType_t::REDLINE_TABLE_ROW_INSERT:
+                case nsRedlineType_t::REDLINE_TABLE_ROW_DELETE:
+                {
+                    OString aId( OString::number( m_nRedlineId++ ) );
+                    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( aRedlineData.GetAuthor() ) );
+                    OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+
+                    OString aDate( DateTimeToOString( aRedlineData.GetTimeStamp() ) );
+
+                    if (nRedlineType == nsRedlineType_t::REDLINE_TABLE_ROW_INSERT)
+                        m_pSerializer->singleElementNS( XML_w, XML_ins,
+                            FSNS( XML_w, XML_id ), aId.getStr(),
+                            FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                            FSNS( XML_w, XML_date ), aDate.getStr(),
+                            FSEND );
+                    else if (nRedlineType == nsRedlineType_t::REDLINE_TABLE_ROW_DELETE)
+                        m_pSerializer->singleElementNS( XML_w, XML_del,
+                            FSNS( XML_w, XML_id ), aId.getStr(),
+                            FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                            FSNS( XML_w, XML_date ), aDate.getStr(),
+                            FSEND );
+                }
+                break;
+            };
+        }
+    }
 }
 
 void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
