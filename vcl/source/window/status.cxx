@@ -482,7 +482,9 @@ void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDr
         }
     }
 
-    if ( !ImplIsRecordLayout() )
+    OutputDevice *pOutDev = GetOutDev();
+
+    if ( !pOutDev->ImplIsRecordLayout() )
         ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) sal_IntPtr(pItem->mnId) );
 }
 
