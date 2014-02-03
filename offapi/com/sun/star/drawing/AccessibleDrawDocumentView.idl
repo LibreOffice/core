@@ -69,8 +69,10 @@ service AccessibleDrawDocumentView
 
         <p>You can access the following information:
         <ul>
-        <li>Role: The object's role is
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT.</li>
+        <li>Role: The object's role might be
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT or
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION
+            , the former for a Draw and the latter for an Impress document.</li>
         <li>Name: Its name is "AccessibleDrawDocumentView",
         "AccessibleOutlineView", or "slide window".</li>
         <li>Description: The description is "Draw Document", "Accessible

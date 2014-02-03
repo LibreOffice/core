@@ -96,7 +96,7 @@ service AccessibleSpreadsheetPageView
         <li>The description is ???.</li>
         <li>The name is Spreadsheet Document Page Preview.</li>
         <li>The role is
-            ::com::sun::star::accessibility::AccessibleRole::DOCUMENT</li>
+            ::com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET</li>
         <li>There are no relations.</li>
         <li>The following states are supported:
             <ul>

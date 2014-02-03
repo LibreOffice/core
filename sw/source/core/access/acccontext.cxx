@@ -548,7 +548,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
     //Notify the frame is a document
-    if( nRole == AccessibleRole::DOCUMENT )
+    if( nRole == AccessibleRole::DOCUMENT_TEXT )
         bIsAccDocUse = sal_True;
 
     return bDisposing ? 0 : GetChildCount( *(GetMap()) );
@@ -563,7 +563,7 @@ uno::Reference< XAccessible> SAL_CALL
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     //Notify the frame is a document
-    if( nRole == AccessibleRole::DOCUMENT )
+    if( nRole == AccessibleRole::DOCUMENT_TEXT )
         bIsAccDocUse = sal_True;
 
     const SwAccessibleChild aChild( GetChild( *(GetMap()), nIndex ) );
@@ -582,7 +582,7 @@ uno::Reference< XAccessible> SAL_CALL
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 GetMap()->GetContextImpl( aChild.GetSwFrm(), !bDisposing )  );
         //Send out accessible event when begin load.
-        if( bBeginDocumentLoad && nRole == AccessibleRole::DOCUMENT )
+        if( bBeginDocumentLoad && nRole == AccessibleRole::DOCUMENT_TEXT )
         {
 
             FireStateChangedEvent( AccessibleStateType::FOCUSABLE,sal_True );
