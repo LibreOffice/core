@@ -2869,8 +2869,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent,
-        const BitmapEx* pOverlay, const Rectangle* pOverlayRect) const
+sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     VirtualDevice   aVDev;
@@ -2909,44 +2908,18 @@ sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExten
         aDrawSize.Height() = FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() );
     }
 
-    Size        aFullSize;
-    Point       aBackPosPix;
-    Rectangle   aOverlayRect;
-
-    // calculate additional positions and sizes if an overlay image is used
-    if (pOverlay)
-    {
-        aFullSize = Size( nMaximumExtent, nMaximumExtent );
-        aOverlayRect = Rectangle( aNullPt, aFullSize  );
-
-        aOverlayRect.Intersection( pOverlayRect ? *pOverlayRect : Rectangle( aNullPt, pOverlay->GetSizePixel() ) );
-
-        if ( !aOverlayRect.IsEmpty() )
-            aBackPosPix = Point( ( nMaximumExtent - aSizePix.Width() ) >> 1, ( nMaximumExtent - aSizePix.Height() ) >> 1 );
-        else
-            pOverlay = NULL;
-    }
-    else
-    {
-        aFullSize = aSizePix;
-        pOverlay = NULL;
-    }
-
     // draw image(s) into VDev and get resulting image
     // do it 4x larger to be able to scale it down & get beautiful antialias
-    Size aAntialiasSize(aFullSize.Width() * 4, aFullSize.Height() * 4);
+    Size aAntialiasSize(aSizePix.Width() * 4, aSizePix.Height() * 4);
     if (aVDev.SetOutputSizePixel(aAntialiasSize))
     {
         // antialias: provide 4x larger size, and then scale down the result
         Size aAntialias(aDrawSize.Width() * 4, aDrawSize.Height() * 4);
 
         // draw metafile into VDev
+        Point aBackPosPix;
         const_cast<GDIMetaFile *>(this)->WindStart();
         const_cast<GDIMetaFile *>(this)->Play(&aVDev, aBackPosPix, aAntialias);
-
-        // draw overlay if necessary
-        if ( pOverlay )
-            aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), *pOverlay );
 
         // get paint bitmap
         Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
