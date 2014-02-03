@@ -83,7 +83,7 @@ namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 //====================================================================
 //= VCLXWindowImpl
 //====================================================================
-class SAL_DLLPRIVATE VCLXWindowImpl
+class VCLXWindowImpl
 {
 private:
     typedef ::std::vector< VCLXWindow::Callback >                       CallbackArray;
