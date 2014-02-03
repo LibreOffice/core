@@ -941,15 +941,18 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
 
+    m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
+    m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
     if (rFrmSize.GetWidthPercent() != 0xff && rFrmSize.GetWidthPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
         sal_Int32 nSpace = rFrmSize.GetWidth() * 100 / rFrmSize.GetWidthPercent();
         m_aWidthED.SetRefValue( nSpace );
 
-        m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
-        m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
+        m_pRelWidthRelationLB->Enable();
     }
+    else
+        m_pRelWidthRelationLB->Disable();
 
     if (rFrmSize.GetHeightPercent() != 0xff && rFrmSize.GetHeightPercent() != 0)
     {
@@ -1733,6 +1736,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
     if (pBtn == m_pRelWidthCB)
     {
         m_aWidthED.ShowPercent(pBtn->IsChecked());
+        m_pRelWidthRelationLB->Enable(pBtn->IsChecked());
         if(pBtn->IsChecked())
             m_aWidthED.get()->SetMax(MAX_PERCENT_WIDTH);
     }
