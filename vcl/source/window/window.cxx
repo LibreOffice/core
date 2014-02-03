@@ -1452,7 +1452,8 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
     if( ImplIsAntiparallel() )
     {
         // - RTL - re-mirror frame pos at this window
-        ImplReMirror( aFramePos );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReMirror( aFramePos );
     }
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     if ( !aRect.IsInside( aFramePos ) )
@@ -2463,8 +2464,9 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             // - RTL - re-mirror paint rect and region at this window
             if( ImplIsAntiparallel() )
             {
-                ImplReMirror( aPaintRect );
-                ImplReMirror( aPaintRegion );
+                const OutputDevice *pOutDev = GetOutDev();
+                pOutDev->ImplReMirror( aPaintRect );
+                pOutDev->ImplReMirror( aPaintRegion );
             }
             aPaintRect = ImplDevicePixelToLogic( aPaintRect);
             mpWindowImpl->mpPaintRegion = &aPaintRegion;
@@ -2761,8 +2763,10 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             // --- RTL --- remirror region before intersecting it
             if ( ImplIsAntiparallel() )
             {
+                const OutputDevice *pOutDev = GetOutDev();
+
                 Region aRgn( *pRegion );
-                ImplReMirror( aRgn );
+                pOutDev->ImplReMirror( aRgn );
                 aRegion.Intersect( aRgn );
             }
             else
@@ -2985,7 +2989,8 @@ void Window::ImplScroll( const Rectangle& rRect,
     {
         // --- RTL --- make sure the invalidate region of this window is
         // computed in the same coordinate space as the one from the overlap windows
-        ImplReMirror( aRectMirror );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReMirror( aRectMirror );
     }
 
     // adapt paint areas
@@ -3051,7 +3056,8 @@ void Window::ImplScroll( const Rectangle& rRect,
             if( bReMirror )
             {
                 // --- RTL --- frame coordinates require re-mirroring
-                ImplReMirror( aRegion );
+                const OutputDevice *pOutDev = GetOutDev();
+                pOutDev->ImplReMirror( aRegion );
             }
 
             ImplSelectClipRegion( aRegion, pGraphics );
@@ -5970,7 +5976,10 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
         aWinClipRegion = *pWinChildClipRegion;
         // --- RTL --- remirror clip region before passing it to somebody
         if( ImplIsAntiparallel() )
-            ImplReMirror( aWinClipRegion );
+        {
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ImplReMirror( aWinClipRegion );
+        }
     }
 
     if ( nFlags & WINDOW_GETCLIPREGION_NULL )
@@ -6017,7 +6026,11 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
         Region aWinChildRegion = *ImplGetWinChildClipRegion();
         // --- RTL -- only this region is in frame coordinates, so re-mirror it
         if( ImplIsAntiparallel() )
-            ImplReMirror( aWinChildRegion );
+        {
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ImplReMirror( aWinChildRegion );
+        }
+
         aDevPixRegion.Intersect( aWinChildRegion );
         if( ! aDevPixRegion.IsEmpty() )
         {
@@ -7038,6 +7051,8 @@ void Window::setPosSizePixel( long nX, long nY,
 
 
         sal_uInt16 nSysFlags=0;
+        Window *pParent = GetParent();
+
         if( nFlags & WINDOW_POSSIZE_WIDTH )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
         if( nFlags & WINDOW_POSSIZE_HEIGHT )
@@ -7045,16 +7060,16 @@ void Window::setPosSizePixel( long nX, long nY,
         if( nFlags & WINDOW_POSSIZE_X )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_X;
-            if( pWindow->GetParent() && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                Window* pParent = pWindow->GetParent();
                 nX += pParent->mnOutOffX;
             }
-            if( GetParent() && GetParent()->ImplIsAntiparallel() )
+            if( pParent && pParent->ImplIsAntiparallel() )
             {
                 // --- RTL --- (re-mirror at parent window)
                 Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
-                GetParent()->ImplReMirror( aRect );
+                const OutputDevice *pParentOutDev = pParent->GetOutDev();
+                pParentOutDev->ImplReMirror( aRect );
                 nX = aRect.Left();
             }
         }
@@ -7062,7 +7077,7 @@ void Window::setPosSizePixel( long nX, long nY,
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
-            if( pWindow->GetParent() && pWindow->GetParent()->ImplHasMirroredGraphics() )
+            if( pParent && pParent->ImplHasMirroredGraphics() )
             {
                 long myWidth = nOldWidth;
                 if( !myWidth )
@@ -7071,10 +7086,10 @@ void Window::setPosSizePixel( long nX, long nY,
                     myWidth = nWidth;
                 nFlags |= WINDOW_POSSIZE_X;
                 nSysFlags |= SAL_FRAME_POSSIZE_X;
-                nX = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX -
+                nX = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX -
                     mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration;
-                nX = pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
-                    pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
+                nX = pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
+                    pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
                 if(!(nFlags & WINDOW_POSSIZE_Y))
                 {
                     nFlags |= WINDOW_POSSIZE_Y;
@@ -7087,9 +7102,8 @@ void Window::setPosSizePixel( long nX, long nY,
         if( nFlags & WINDOW_POSSIZE_Y )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
-            if( pWindow->GetParent() && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                Window* pParent = pWindow->GetParent();
                 nY += pParent->mnOutOffY;
             }
         }
@@ -7640,14 +7654,16 @@ void Window::SetPointerPosPixel( const Point& rPos )
         if( !IsRTLEnabled() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
-            ImplReMirror( aPos );
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ImplReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
         mpGraphics->mirror( aPos.X(), this );
     }
     else if( ImplIsAntiparallel() )
     {
-        ImplReMirror( aPos );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReMirror( aPos );
     }
     mpWindowImpl->mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
 }
@@ -7661,7 +7677,8 @@ Point Window::GetPointerPosPixel()
     if( ImplIsAntiparallel() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
-        ImplReMirror( aPos );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReMirror( aPos );
     }
     return ImplFrameToOutput( aPos );
 }
@@ -7675,7 +7692,8 @@ Point Window::GetLastPointerPosPixel()
     if( ImplIsAntiparallel() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
-        ImplReMirror( aPos );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReMirror( aPos );
     }
     return ImplFrameToOutput( aPos );
 }
@@ -7710,7 +7728,8 @@ Window::PointerState Window::GetPointerState()
         if( ImplIsAntiparallel() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
-            ImplReMirror( aSalPointerState.maPos );
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ImplReMirror( aSalPointerState.maPos );
         }
         aState.maPos = ImplFrameToOutput( aSalPointerState.maPos );
         aState.mnState = aSalPointerState.mnState;

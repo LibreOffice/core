@@ -3265,8 +3265,11 @@ void ImplListBoxFloatingWindow::StartFloat( sal_Bool bStartTracking )
         // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
         // where the document is unmirrored
         // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
-        if( GetParent()->GetParent()->ImplIsAntiparallel() )
-            GetParent()->GetParent()->ImplReMirror( aRect );
+        Window *pGrandparent = GetParent()->GetParent();
+        const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
+
+        if( pGrandparent->ImplIsAntiparallel() )
+            pGrandparentOutDev->ImplReMirror( aRect );
 
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
