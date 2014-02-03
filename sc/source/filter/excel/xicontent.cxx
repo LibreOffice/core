@@ -933,7 +933,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
 
         const sal_Unicode cSep = ';';
         OUString aQuotedPairs( "\"\"" );
-        xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
+        sal_Int32 nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
         maTables = "";
         sal_Int32 nStringIx = 0;
         for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )

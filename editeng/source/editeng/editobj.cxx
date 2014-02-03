@@ -892,9 +892,9 @@ namespace {
 
 class FindByParagraph : std::unary_function<editeng::Section, bool>
 {
-    size_t mnPara;
+    sal_Int32 mnPara;
 public:
-    FindByParagraph(size_t nPara) : mnPara(nPara) {}
+    FindByParagraph(sal_Int32 nPara) : mnPara(nPara) {}
     bool operator() (const editeng::Section& rAttr) const
     {
         return rAttr.mnParagraph == mnPara;
@@ -903,10 +903,10 @@ public:
 
 class FindBySectionStart : std::unary_function<editeng::Section, bool>
 {
-    size_t mnPara;
-    size_t mnStart;
+    sal_Int32 mnPara;
+    sal_Int32 mnStart;
 public:
-    FindBySectionStart(size_t nPara, size_t nStart) : mnPara(nPara), mnStart(nStart) {}
+    FindBySectionStart(sal_Int32 nPara, sal_Int32 nStart) : mnPara(nPara), mnStart(nStart) {}
     bool operator() (const editeng::Section& rAttr) const
     {
         return rAttr.mnParagraph == mnPara && rAttr.mnStart == mnStart;
@@ -982,7 +982,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
     // Go through all formatted paragraphs, and store format items.
     std::vector<editeng::Section>::iterator itAttr = aAttrs.begin();
-    for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
+    for (sal_Int32 nPara = 0; nPara < (sal_Int32)aContents.size(); ++nPara)
     {
         const ContentInfo& rC = aContents[nPara];
 
@@ -998,7 +998,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             if (!pItem)
                 continue;
 
-            size_t nStart = rXAttr.GetStart(), nEnd = rXAttr.GetEnd();
+            sal_Int32 nStart = rXAttr.GetStart(), nEnd = rXAttr.GetEnd();
             std::vector<editeng::Section>::iterator itCurAttr = itAttr;
 
             // Find the container whose start position matches.

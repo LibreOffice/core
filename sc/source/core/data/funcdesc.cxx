@@ -390,7 +390,7 @@ ScFunctionList::ScFunctionList() :
         nMaxFuncNameLen ( 0 )
 {
     ScFuncDesc* pDesc = NULL;
-    xub_StrLen nStrLen = 0;
+    sal_Int32 nStrLen = 0;
     ::std::list<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
     {

@@ -694,7 +694,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             osl_getThreadTextEncoding()));
                         // In case the xub_StrLen will be longer than USHORT
                         // one day, and room for pad byte check.
-                        if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
+                        if ( aTmp.getLength() > SAL_MAX_UINT16 - 2 )
                             return false;
                         // Append a 0-pad-byte if string length is odd
                         //! MUST be sal_uInt16 and not xub_StrLen

@@ -926,7 +926,7 @@ namespace accessibility
         else if ( AccessibleTextType::ATTRIBUTE_RUN == aTextType )
         {
               SvxAccessibleTextAdapter& rTextForwarder = mpImpl->GetParagraph( aPos.nIndex ).GetTextForwarder();
-              sal_uInt16 nStartIndex, nEndIndex;
+              sal_Int32 nStartIndex, nEndIndex;
               if ( rTextForwarder.GetAttributeRun( nStartIndex, nEndIndex, aPos.nPara, aPos.nIndex, sal_True ) )
               {
                      aResult.SegmentText = getTextRange( nStartIndex, nEndIndex );

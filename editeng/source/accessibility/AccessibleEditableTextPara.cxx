@@ -217,7 +217,7 @@ namespace accessibility
 
         rBoundary.startPos = rBoundary.endPos = -1;
 
-        const sal_uInt16 nLineCount=rCacheTF.GetLineCount( nParaIndex );
+        const sal_Int32 nLineCount=rCacheTF.GetLineCount( nParaIndex );
 
         if( nIndex == nTextLen )
         {
@@ -233,7 +233,7 @@ namespace accessibility
         else
         {
             // normal line search
-            sal_uInt16 nLine;
+            sal_Int32 nLine;
             sal_Int32 nCurIndex;
             for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
             {
@@ -650,9 +650,9 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleEditableTextPara::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nIndex )
+    sal_Bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex )
     {
-        DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
+        DBG_ASSERT(nIndex >= 0 && nIndex <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
@@ -1398,7 +1398,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         sal_Int32 nPara;
-        sal_uInt16 nIndex;
+        sal_Int32 nIndex;
 
         // offset from surrounding cell/shape
         Point aOffset( GetEEOffset() );
@@ -1821,7 +1821,7 @@ namespace accessibility
                 }
                 else
                 {
-                    sal_uInt16 nStartIndex, nEndIndex;
+                    sal_Int32 nStartIndex, nEndIndex;
                     //For the bullet paragraph, the bullet string is ingnored for IAText::attributes() function.
                     SvxTextForwarder&   rCacheTF = GetTextForwarder();
                     // MT IA2: Not used? sal_Int32 nBulletLen = 0;
@@ -1852,7 +1852,7 @@ namespace accessibility
                 CheckPosition(nIndex);
         if (nIndex != 0  && nIndex == getCharacterCount())
             --nIndex;
-                sal_uInt16 nLine, nLineCount=rCacheTF.GetLineCount( nParaIndex );
+                sal_Int32 nLine, nLineCount=rCacheTF.GetLineCount( nParaIndex );
                 sal_Int32 nCurIndex;
                 //the problem is that rCacheTF.GetLineLen() will include the bullet length. But for the bullet line,
                 //the text value doesn't contain the bullet characters. all of the bullet and numbering info are exposed
@@ -1921,7 +1921,7 @@ namespace accessibility
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
                 const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( GetParagraphIndex() );
-                sal_uInt16 nStartIndex, nEndIndex;
+                sal_Int32 nStartIndex, nEndIndex;
 
                 if( nIndex == nTextLen )
                 {
@@ -1958,7 +1958,7 @@ namespace accessibility
 
                 CheckPosition(nIndex);
 
-                sal_uInt16 nLine, nLineCount=rCacheTF.GetLineCount( static_cast< sal_uInt16 >( nParaIndex ) );
+                sal_Int32 nLine, nLineCount=rCacheTF.GetLineCount( nParaIndex );
                 //the problem is that rCacheTF.GetLineLen() will include the bullet length. But for the bullet line,
                 //the text value doesn't contain the bullet characters. all of the bullet and numbering info are exposed
                 //by the IAText::attributes(). So here must do special support for bullet line.
@@ -1981,7 +1981,7 @@ namespace accessibility
                         nLastLineLen = nCurLineLen - nBulletLen;
                     else
                         nLastLineLen = nCurLineLen;
-                    nCurLineLen = rCacheTF.GetLineLen(static_cast< sal_uInt16 >( nParaIndex ), nLine);
+                    nCurLineLen = rCacheTF.GetLineLen( nParaIndex, nLine);
                     //nCurIndex += nCurLineLen;
                     if (nLine == 0)
                         nCurIndex += nCurLineLen - nBulletLen;
@@ -2083,7 +2083,7 @@ namespace accessibility
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
-                sal_uInt16 nStartIndex, nEndIndex;
+                sal_Int32 nStartIndex, nEndIndex;
 
                 if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
                 {
@@ -2109,7 +2109,7 @@ namespace accessibility
 
                 CheckPosition(nIndex);
 
-                sal_uInt16 nLine, nLineCount=rCacheTF.GetLineCount( static_cast< sal_uInt16 >( nParaIndex ) );
+                sal_Int32 nLine, nLineCount = rCacheTF.GetLineCount( nParaIndex );
                 sal_Int32 nCurIndex;
                 //the problem is that rCacheTF.GetLineLen() will include the bullet length. But for the bullet line,
                 //the text value doesn't contain the bullet characters. all of the bullet and numbering info are exposed
@@ -2128,7 +2128,7 @@ namespace accessibility
                         }
                     }
                     //nCurIndex += rCacheTF.GetLineLen(static_cast< sal_uInt16 >( nParaIndex ), nLine);
-                    sal_Int32 nLineLen = rCacheTF.GetLineLen( static_cast< sal_uInt16 >( nParaIndex ), nLine);
+                    sal_Int32 nLineLen = rCacheTF.GetLineLen( nParaIndex, nLine);
 
                     if (nLine == 0)
                         nCurIndex += nLineLen - nBulletLen;
@@ -2139,7 +2139,7 @@ namespace accessibility
                         nLine < nLineCount-1 )
                     {
                         aResult.SegmentStart = nCurIndex;
-                        aResult.SegmentEnd = nCurIndex + rCacheTF.GetLineLen(static_cast< sal_uInt16 >( nParaIndex ), nLine+1);
+                        aResult.SegmentEnd = nCurIndex + rCacheTF.GetLineLen( nParaIndex, nLine+1);
                         aResult.SegmentText = GetTextRange( aResult.SegmentStart + nBulletLen, aResult.SegmentEnd + nBulletLen);
                         break;
                     }
@@ -2780,7 +2780,7 @@ namespace accessibility
         {
             // we explicitly allow for the index to point at the character right behind the text
             if (0 <= nIndex && nIndex <= rCacheTF.GetTextLen( nPara ))
-                nRes = rCacheTF.GetLineNumberAtIndex( nPara, static_cast< sal_uInt16 >(nIndex) );
+                nRes = rCacheTF.GetLineNumberAtIndex( nPara, nIndex );
             else
                 throw lang::IndexOutOfBoundsException();
         }
@@ -2800,9 +2800,9 @@ namespace accessibility
         {
             if (0 <= nLineNo && nLineNo < rCacheTF.GetLineCount( nPara ))
             {
-                sal_uInt16 nStart = 0, nEnd = 0;
-                rCacheTF.GetLineBoundaries( nStart, nEnd, nPara, static_cast< sal_uInt16 >(nLineNo) );
-                if (nStart != 0xFFFF && nEnd != 0xFFFF)
+                sal_Int32 nStart = 0, nEnd = 0;
+                rCacheTF.GetLineBoundaries( nStart, nEnd, nPara, nLineNo );
+                if (nStart >= 0 && nEnd >=  0)
                 {
                     try
                     {

@@ -2111,12 +2111,12 @@ void ScInterpreter::ScBase()
             0
         };
         static const int nDigits = (sizeof (pDigits)/sizeof(pDigits[0]))-1;
-        xub_StrLen nMinLen;
+        sal_Int32 nMinLen;
         if ( nParamCount == 3 )
         {
             double fLen = ::rtl::math::approxFloor( GetDouble() );
-            if ( 1.0 <= fLen && fLen < STRING_MAXLEN )
-                nMinLen = (xub_StrLen) fLen;
+            if ( 1.0 <= fLen && fLen < SAL_MAX_UINT16 )
+                nMinLen = (sal_Int32) fLen;
             else if ( fLen == 0.0 )
                 nMinLen = 1;
             else
@@ -2129,12 +2129,12 @@ void ScInterpreter::ScBase()
         double fChars = ((fVal > 0.0 && fBase > 0.0) ?
             (ceil( log( fVal ) / log( fBase ) ) + 2.0) :
             2.0);
-        if ( fChars >= STRING_MAXLEN )
+        if ( fChars >= SAL_MAX_UINT16 )
             nMinLen = 0;    // Error
 
         if ( !nGlobalError && nMinLen && 2 <= fBase && fBase <= nDigits && 0 <= fVal )
         {
-            const xub_StrLen nConstBuf = 128;
+            const sal_Int32 nConstBuf = 128;
             sal_Unicode aBuf[nConstBuf];
             sal_Int32 nBuf = std::max<sal_Int32>( fChars, nMinLen + 1 );
             sal_Unicode* pBuf = (nBuf <= nConstBuf ? aBuf : new sal_Unicode[nBuf]);

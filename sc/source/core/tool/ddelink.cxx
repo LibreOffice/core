@@ -181,7 +181,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
             aLine = aLinkStr.getToken( (sal_Int32) nR, '\n' );
             for (SCSIZE nC=0; nC<nCols; nC++)
             {
-                aEntry = aLine.getToken( (xub_StrLen) nC, '\t' );
+                aEntry = aLine.getToken( (sal_Int32) nC, '\t' );
                 sal_uInt32 nIndex = nStdFormat;
                 double fVal = double();
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )

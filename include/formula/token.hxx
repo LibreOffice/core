@@ -178,9 +178,9 @@ public:
     struct PrivateAccess { friend class FormulaCompiler; private: PrivateAccess() { }  };
     inline  void                NewOpCode( OpCode e, const PrivateAccess&  ) { eOp = e; }
 
-    static  size_t              GetStrLenBytes( xub_StrLen nLen )
+    static  sal_Int32           GetStrLenBytes( sal_Int32 nLen )
                                     { return nLen * sizeof(sal_Unicode); }
-    static  size_t              GetStrLenBytes( const OUString& rStr )
+    static  sal_Int32           GetStrLenBytes( const OUString& rStr )
                                     { return GetStrLenBytes( rStr.getLength() ); }
 };
 

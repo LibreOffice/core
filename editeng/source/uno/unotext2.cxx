@@ -290,7 +290,7 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        std::vector<sal_uInt16> aPortions;
+        std::vector<sal_Int32> aPortions;
         pForwarder->GetPortions( mnParagraph, aPortions );
         return !aPortions.empty();
     }
@@ -395,7 +395,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rT
 
     if( mpEditSource && mpEditSource->GetTextForwarder() )
     {
-        mpPortions = new std::vector<sal_uInt16>;
+        mpPortions = new std::vector<sal_Int32>;
         mpEditSource->GetTextForwarder()->GetPortions( nPara, *mpPortions );
     }
     else

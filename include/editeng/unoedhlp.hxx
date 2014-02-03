@@ -100,7 +100,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-     static sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell = sal_False);
+     static sal_Bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell = sal_False);
 
     /** Convert point from edit engine to user coordinate space
 

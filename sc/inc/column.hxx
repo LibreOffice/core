@@ -467,7 +467,7 @@ public:
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+    sal_Int32   GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
     sal_uInt16 GetTextWidth(SCROW nRow) const;

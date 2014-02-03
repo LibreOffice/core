@@ -315,7 +315,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
         //  dafuer muss oben die Selektion aufgehoben werden (vor QuickInsertText)
         pView->InsertText( EMPTY_OUSTRING, false );
 
-        xub_StrLen nLen = pEngine->GetTextLen(0);
+        sal_Int32 nLen = pEngine->GetTextLen(0);
         ESelection aSel( 0, nLen, 0, nLen );
         pView->SetSelection( aSel );                // Cursor ans Ende
     }
@@ -327,8 +327,8 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
     if ( pDocView && pRangeFindList && nIndex < pRangeFindList->Count() )
     {
         ScRangeFindData* pData = pRangeFindList->GetObject( nIndex );
-        xub_StrLen nOldStart = pData->nSelStart;
-        xub_StrLen nOldEnd = pData->nSelEnd;
+        sal_Int32 nOldStart = pData->nSelStart;
+        sal_Int32 nOldEnd = pData->nSelEnd;
 
         ScRange aJustified = rNew;
         aJustified.Justify();           // Ref in der Formel immer richtigherum anzeigen
@@ -349,14 +349,14 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         long nDiff = aNewStr.getLength() - (long)(nOldEnd-nOldStart);
 
         pData->aRef = rNew;
-        pData->nSelEnd = (xub_StrLen)(pData->nSelEnd + nDiff);
+        pData->nSelEnd = pData->nSelEnd + nDiff;
 
         sal_uInt16 nCount = (sal_uInt16) pRangeFindList->Count();
         for (sal_uInt16 i=nIndex+1; i<nCount; i++)
         {
             ScRangeFindData* pNext = pRangeFindList->GetObject( i );
-            pNext->nSelStart = (xub_StrLen)(pNext->nSelStart + nDiff);
-            pNext->nSelEnd   = (xub_StrLen)(pNext->nSelEnd   + nDiff);
+            pNext->nSelStart = pNext->nSelStart + nDiff;
+            pNext->nSelEnd   = pNext->nSelEnd   + nDiff;
         }
     }
     else
@@ -395,7 +395,7 @@ static void lcl_RemoveLineEnd(OUString& rStr)
     removeChars(rStr, '\n');
 }
 
-static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
+static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
 {
     int nDir;
     sal_Unicode c1, c2 = 0;
@@ -820,10 +820,10 @@ void ScInputHandler::ShowTipCursor()
         {
             if ( aFormula.getLength() < aSel.nEndPos )
                 return;
-            xub_StrLen nPos = aSel.nEndPos;
+            sal_Int32 nPos = aSel.nEndPos;
             OUString  aSelText = aFormula.copy( 0, nPos );
             sal_Int32   nNextFStart = 0;
-            xub_StrLen  nArgPos = 0;
+            sal_Int32  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< OUString> aArgs;
             sal_uInt16      nArgs;
@@ -856,7 +856,7 @@ void ScInputHandler::ShowTipCursor()
                                 sal_uInt16 nActive = 0;
                                 for( sal_uInt16 i=0; i < nArgs; i++ )
                                 {
-                                    xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
+                                    sal_Int32 nLength = aArgs[i].getLength();
                                     if( nArgPos <= aSelText.getLength()-1 )
                                     {
                                         nActive = i+1;
@@ -953,7 +953,7 @@ void ScInputHandler::ShowTipCursor()
                 }
                 else
                 {
-                    sal_uInt16 nPosition = 0;
+                    sal_Int32 nPosition = 0;
                     OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
                     /* XXX: dubious, what is this condition supposed to exactly match? */
                     if (aSel.nEndPos <= aText.getLength() && aText[ aSel.nEndPos-1 ] == '=')
@@ -1055,11 +1055,11 @@ void ScInputHandler::UseFormulaData()
 
         if ( aSel.nEndPos > 0 )
         {
-            xub_StrLen nPos = aSel.nEndPos;
+            sal_Int32 nPos = aSel.nEndPos;
             OUString  aFormula = aTotal.copy( 0, nPos );;
             sal_Int32   nLeftParentPos = 0;
             sal_Int32   nNextFStart = 0;
-            xub_StrLen  nArgPos = 0;
+            sal_Int32  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< OUString> aArgs;
             sal_uInt16      nArgs;
@@ -1107,7 +1107,7 @@ void ScInputHandler::UseFormulaData()
                             sal_uInt16 nActive = 0;
                             for( sal_uInt16 i=0; i < nArgs; i++ )
                             {
-                                xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
+                                sal_Int32 nLength = aArgs[i].getLength();
                                 if( nArgPos <= aFormula.getLength()-1 )
                                 {
                                     nActive = i+1;
@@ -1237,7 +1237,7 @@ static void lcl_CompleteFunction( EditView* pView, const OUString& rInsert, bool
         pView->SelectCurrentWord();
 
         OUString aInsStr = rInsert;
-        xub_StrLen nInsLen = aInsStr.getLength();
+        sal_Int32 nInsLen = aInsStr.getLength();
         bool bDoParen = ( nInsLen > 1 && aInsStr[nInsLen-2] == '('
                                       && aInsStr[nInsLen-1] == ')' );
         if ( bDoParen )
@@ -1409,7 +1409,7 @@ void ScInputHandler::PasteManualTip()
         if (!pActiveView->HasSelection())
         {
             //  nichts selektiert -> alles selektieren
-            xub_StrLen nOldLen = pEngine->GetTextLen(0);
+            sal_Int32 nOldLen = pEngine->GetTextLen(0);
             ESelection aAllSel( 0, 0, 0, nOldLen );
             if ( pTopView )
                 pTopView->SetSelection( aAllSel );
@@ -1427,7 +1427,7 @@ void ScInputHandler::PasteManualTip()
                 //  alles selektiert -> Anfuehrungszeichen weglassen
                 if ( aInsert[0] == '"' )
                     aInsert = aInsert.copy(1);
-                xub_StrLen nInsLen = aInsert.getLength();
+                sal_Int32 nInsLen = aInsert.getLength();
                 if ( aInsert.endsWith("\"") )
                     aInsert = aInsert.copy( 0, nInsLen-1 );
             }
@@ -1473,7 +1473,7 @@ bool ScInputHandler::CursorAtClosingPar()
     if ( pActiveView && !pActiveView->HasSelection() && bFormulaMode )
     {
         ESelection aSel = pActiveView->GetSelection();
-        xub_StrLen nPos = aSel.nStartPos;
+        sal_Int32 nPos = aSel.nStartPos;
         OUString aFormula = pEngine->GetText(0);
         if ( nPos < aFormula.getLength() && aFormula[nPos] == ')' )
             return true;
@@ -1545,7 +1545,7 @@ void ScInputHandler::UseColData()           // beim Tippen
         sal_Int32 nParCnt = pEngine->GetParagraphCount();
         if ( aSel.nEndPara+1 == nParCnt )
         {
-            xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
+            sal_Int32 nParLen = pEngine->GetTextLen( aSel.nEndPara );
             if ( aSel.nEndPos == nParLen )
             {
                 OUString aText = GetEditText(pEngine);
@@ -1621,8 +1621,8 @@ void ScInputHandler::NextAutoEntry( bool bBack )
             if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
             {
                 OUString aText = GetEditText(pEngine);
-                xub_StrLen nSelLen = aSel.nEndPos - aSel.nStartPos;
-                xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
+                sal_Int32 nSelLen = aSel.nEndPos - aSel.nStartPos;
+                sal_Int32 nParLen = pEngine->GetTextLen( aSel.nEndPara );
                 if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
                 {
                     OUString aNew;
@@ -1689,7 +1689,7 @@ void ScInputHandler::UpdateParenthesis()
             {
                 //  Das Zeichen links vom Cursor wird angeschaut
 
-                xub_StrLen nPos = aSel.nStartPos - 1;
+                sal_Int32 nPos = aSel.nStartPos - 1;
                 OUString aFormula = pEngine->GetText(0);
                 sal_Unicode c = aFormula[nPos];
                 if ( c == '(' || c == ')' )
@@ -2093,7 +2093,7 @@ static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
     sal_Int32 nCount = pEngine->GetParagraphCount();
     if (nCount > 1)
     {
-        xub_StrLen nParLen = pEngine->GetTextLen(rSel.nStartPara);
+        sal_Int32 nParLen = pEngine->GetTextLen(rSel.nStartPara);
         while (rSel.nStartPos > nParLen && rSel.nStartPara+1 < nCount)
         {
             rSel.nStartPos -= nParLen + 1;          // incl. Leerzeichen vom Umbruch
@@ -3794,7 +3794,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
 
             while ( nParCnt > 1 )
             {
-                xub_StrLen nLen = rDestEngine.GetTextLen( 0 );
+                sal_Int32 nLen = rDestEngine.GetTextLen( 0 );
                 ESelection aSel( 0,nLen, 1,0 );
                 rDestEngine.QuickInsertText( OUString(' '), aSel );       // Umbruch durch Space ersetzen
                 --nParCnt;

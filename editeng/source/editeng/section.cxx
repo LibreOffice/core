@@ -13,7 +13,7 @@ namespace editeng {
 
 Section::Section() : mnParagraph(0), mnStart(0), mnEnd(0) {}
 
-Section::Section(size_t nPara, size_t nStart, size_t nEnd) :
+Section::Section(sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd) :
     mnParagraph(nPara), mnStart(nStart), mnEnd(nEnd){}
 
 }

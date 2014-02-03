@@ -164,7 +164,7 @@ private:
         bool bAcceptStartOfWord = true);
 
     EDITENG_DLLPRIVATE long GetXPos(
-        const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false) const;
+        const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
 
     EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
         const ParaPortion* pParaPortion, const EditLine* pLine) const;
@@ -196,23 +196,23 @@ public:
     MapMode         GetRefMapMode();
 
     void            SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool            GetUpdateMode() const;
-    void                    SetUpdateModeForAcc( sal_Bool bUp);
-    sal_Bool                GetUpdateModeForAcc( ) const;
+    sal_Bool        GetUpdateMode() const;
+    void            SetUpdateModeForAcc( sal_Bool bUp);
+    sal_Bool        GetUpdateModeForAcc( ) const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
     Color           GetAutoColor() const;
     void            EnableAutoColor( sal_Bool b );
     void            ForceAutoColor( sal_Bool b );
-    sal_Bool            IsForceAutoColor() const;
+    sal_Bool        IsForceAutoColor() const;
 
     void            InsertView(EditView* pEditView, size_t nIndex = EE_APPEND);
     EditView*       RemoveView( EditView* pEditView );
     EditView*       RemoveView(size_t nIndex = EE_APPEND);
     EditView*       GetView(size_t nIndex = 0) const;
     size_t          GetViewCount() const;
-    sal_Bool            HasView( EditView* pView ) const;
+    sal_Bool        HasView( EditView* pView ) const;
     EditView*       GetActiveView() const;
     void SetActiveView(EditView* pView);
 
@@ -227,9 +227,9 @@ public:
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
-    sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
+    sal_uInt16      GetScriptType( const ESelection& rSelection ) const;
     LanguageType    GetLanguage(const EditPaM& rPaM) const;
-    LanguageType    GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const;
+    LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
     EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
@@ -240,9 +240,9 @@ public:
 
     void            SetAddExtLeading( sal_Bool b );
 
-    void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
-    void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
-    void                ClearPolygon();
+    void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
+    void            ClearPolygon();
 
     const Size&     GetMinAutoPaperSize() const;
     void            SetMinAutoPaperSize( const Size& rSz );
@@ -258,22 +258,22 @@ public:
     sal_uInt32      CalcTextWidth();
 
     OUString        GetText( sal_Int32 nParagraph ) const;
-    xub_StrLen      GetTextLen( sal_Int32 nParagraph ) const;
+    sal_Int32       GetTextLen( sal_Int32 nParagraph ) const;
     sal_uInt32      GetTextHeight( sal_Int32 nParagraph ) const;
 
     sal_Int32       GetParagraphCount() const;
 
-    sal_uInt16      GetLineCount( sal_Int32 nParagraph ) const;
-    xub_StrLen      GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const;
-    void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const;
-    sal_uInt16      GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const;
-    sal_uInt32      GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine = 0 );
+    sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
+    sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
+    void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
+    sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
+    sal_uInt32      GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
     ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
     sal_Int32       FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
     Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
 
-    OUString        GetWord(sal_Int32 nPara, xub_StrLen nIndex);
+    OUString        GetWord(sal_Int32 nPara, sal_Int32 nIndex);
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
 
@@ -296,7 +296,7 @@ public:
 
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    SfxItemSet      GetAttribs( sal_Int32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags = 0xFF ) const;
+    SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
     SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All );
 
     sal_Bool        HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
@@ -317,7 +317,7 @@ public:
     sal_Bool        IsInUndo();
 
     void            EnableUndo( sal_Bool bEnable );
-    sal_Bool            IsUndoEnabled();
+    sal_Bool        IsUndoEnabled();
 
     /** returns the value last used for bTryMerge while calling ImpEditEngine::InsertUndo
         This is currently used in a bad but needed hack to get undo actions merged in the
@@ -326,20 +326,20 @@ public:
 
     void            ClearModifyFlag();
     void            SetModified();
-    sal_Bool            IsModified() const;
+    sal_Bool        IsModified() const;
 
     void            SetModifyHdl( const Link& rLink );
     Link            GetModifyHdl() const;
 
-    sal_Bool            IsInSelectionMode() const;
+    sal_Bool        IsInSelectionMode() const;
 
     void            StripPortions();
-    void            GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rList );
+    void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
 
     long            GetFirstLineStartX( sal_Int32 nParagraph );
     Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
-    sal_Bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
+    sal_Bool        IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
 
     // StartDocPos corrresponds to VisArea.TopLeft().
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
@@ -361,7 +361,7 @@ public:
     Link            GetImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
-    sal_Bool            IsFlatMode() const;
+    sal_Bool        IsFlatMode() const;
     void            SetFlatMode( sal_Bool bFlat );
 
     void            SetControlWord( sal_uInt32 nWord );
@@ -412,15 +412,15 @@ public:
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
 
-    sal_Bool            HasOnlineSpellErrors() const;
+    sal_Bool        HasOnlineSpellErrors() const;
     void            CompleteOnlineSpelling();
 
-    sal_Bool            ShouldCreateBigTextObject() const;
+    sal_Bool        ShouldCreateBigTextObject() const;
 
     // For fast Pre-Test without view:
     EESpellState    HasSpellErrors();
     void ClearSpellErrors();
-    sal_Bool            HasText( const SvxSearchItem& rSearchItem );
+    sal_Bool        HasText( const SvxSearchItem& rSearchItem );
 
     //initialize sentence spelling
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
@@ -462,8 +462,8 @@ public:
     virtual void    ParagraphHeightChanged( sal_Int32 nPara );
 
     virtual void DrawingText(
-        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,
-        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray,
+        const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -475,7 +475,7 @@ public:
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const OUString& rChar,
-        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
@@ -483,9 +483,9 @@ public:
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual sal_Bool    FormattingParagraph( sal_Int32 nPara );
     virtual sal_Bool    SpellNextDocument();
-    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     // to be overloaded if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
@@ -546,7 +546,7 @@ public:
         const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
 
     void SeekCursor(
-        ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);
+        ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);
 
     EditPaM DeleteSelection(const EditSelection& rSel);
 
@@ -571,7 +571,7 @@ public:
     void UpdateSelections();
 
     void InsertContent(ContentNode* pNode, sal_Int32 nPos);
-    EditPaM SplitContent(sal_Int32 nNode, sal_uInt16 nSepPos);
+    EditPaM SplitContent(sal_Int32 nNode, sal_Int32 nSepPos);
     EditPaM ConnectContents(sal_Int32 nLeftNode, bool bBackward);
 
     EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);

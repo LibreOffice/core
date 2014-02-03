@@ -20,14 +20,14 @@ namespace editeng {
 
 struct EDITENG_DLLPUBLIC Section
 {
-    size_t mnParagraph;
-    size_t mnStart;
-    size_t mnEnd;
+    sal_Int32 mnParagraph;
+    sal_Int32 mnStart;
+    sal_Int32 mnEnd;
 
     std::vector<const SfxPoolItem*> maAttributes;
 
     Section();
-    Section(size_t nPara, size_t nStart, size_t nEnd);
+    Section(sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd);
 };
 
 }

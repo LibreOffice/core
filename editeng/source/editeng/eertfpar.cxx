@@ -268,7 +268,7 @@ void EditRTFParser::MovePos( int bForward )
 }
 
 void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                    sal_uInt16& rCntPos )
+                                    sal_Int32& rCntPos )
 {
     // The Intention is to: determine the current insert position of the
     //                      previous paragraph and set the end from this.
@@ -285,7 +285,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     rCntPos = pPrevNode->Len();
 }
 
-bool EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const
+bool EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const
 {
     return ( nCnt == ( ((EditNodeIdx*)pNd)->GetNode()->Len()) );
 }
@@ -622,7 +622,7 @@ sal_Int32 EditPosition::GetNodeIdx() const
     return mpEditEngine->GetEditDoc().GetPos(pN);
 }
 
-sal_uInt16 EditPosition::GetCntIdx() const
+sal_Int32 EditPosition::GetCntIdx() const
 {
     return mpCurSel->Max().GetIndex();
 }

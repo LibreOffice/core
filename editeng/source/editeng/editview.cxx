@@ -717,7 +717,7 @@ void EditView::StartTextConversion(
 }
 
 
-sal_uInt16 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
+sal_Int32 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
     return PIMPEE->StartSearchAndReplace( this, rSearchItem );
 }
@@ -1047,16 +1047,16 @@ void EditView::InsertField( const SvxFieldItem& rFld )
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
 {
     sal_Int32 nPara;
-    sal_uInt16 nPos;
+    sal_Int32 nPos;
     return GetFieldUnderMousePointer( nPara, nPos );
 }
 
-const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const
+const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
 {
     return pImpEditView->GetField( rPos, pPara, pPos );
 }
 
-const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_uInt16& nPos ) const
+const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const
 {
     Point aPos = pImpEditView->GetWindow()->GetPointerPosPixel();
     aPos = pImpEditView->GetWindow()->PixelToLogic( aPos );
@@ -1133,19 +1133,19 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
     {
         for( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
-            std::vector<sal_uInt16> aPortions;
+            std::vector<sal_Int32> aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
 
             if( aPortions.empty() )
                 aPortions.push_back( rEditEngine.GetTextLen(nPara) );
 
-            const sal_uInt16 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
-            const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : EE_TEXTPOS_ALL;
+            const sal_Int32 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
+            const sal_Int32 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : EE_TEXTPOS_ALL;
 
             for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
             {
-                sal_uInt16 nPortionEnd   = aPortions[ nPos ];
-                sal_uInt16 nPortionStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
+                sal_Int32 nPortionEnd   = aPortions[ nPos ];
+                sal_Int32 nPortionStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
 
                 if( (nPortionEnd < nBeginPos) || (nPortionStart > nEndPos) )
                     continue;

@@ -1252,7 +1252,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         return;
 
     SvxNodeIdx* pLastNd = pTmp->pEndNd;
-    xub_StrLen nLastCnt = pTmp->nEndCnt;
+    sal_Int32 nLastCnt = pTmp->nEndCnt;
 
     SfxItemSet aMrgSet( pTmp->aAttrSet );
     for( n = 1; n < pChildList->size(); ++n )

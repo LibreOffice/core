@@ -656,7 +656,7 @@ void lcl_GetColumnTypes(
         }
         else if ( nDbType == sdbc::DataType::DECIMAL )
         {   // maximale Feldbreite und Nachkommastellen bestimmen
-            xub_StrLen nLen;
+            sal_Int32 nLen;
             sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
@@ -668,7 +668,7 @@ void lcl_GetColumnTypes(
             if ( bPrecDefined && nPrecision != nPrec )
             {   // Laenge auf vorgegebene Nachkommastellen anpassen
                 if ( nPrecision )
-                    nLen = sal::static_int_cast<xub_StrLen>( nLen + ( nPrecision - nPrec ) );
+                    nLen = nLen + ( nPrecision - nPrec );
                 else
                     nLen -= nPrec+1;            // auch den . mit raus
             }
