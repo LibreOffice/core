@@ -67,7 +67,10 @@ Window* DNDEventDispatcher::findTopLevelWindow(Point location)
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
     if( pChildWindow->ImplIsAntiparallel() )
-        pChildWindow->ImplReMirror( location );
+    {
+        const OutputDevice *pChildWinOutDev = pChildWindow->GetOutDev();
+        pChildWinOutDev->ImplReMirror( location );
+    }
 
     return pChildWindow;
 }

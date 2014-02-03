@@ -386,7 +386,8 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         if( pChild->ImplIsAntiparallel() )
         {
             // - RTL - re-mirror frame pos at pChild
-            pChild->ImplReMirror( aMousePos );
+            const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
+            pChildWinOutDev->ImplReMirror( aMousePos );
         }
         // no mouse messages to system object windows ?
         // !!!KA: Is it OK to comment this out? !!!
