@@ -210,6 +210,11 @@ const SwRedlineTbl& SwDoc::GetRedlineTbl() const
     return *mpRedlineTbl;
 }
 
+const SwExtraRedlineTbl& SwDoc::GetExtraRedlineTbl() const
+{
+    return *mpExtraRedlineTbl;
+}
+
 bool SwDoc::IsRedlineMove() const
 {
     return mbIsRedlineMove;
@@ -3949,9 +3954,8 @@ void SwExtraRedlineTbl::DeleteAndDestroyAll()
 }
 
 
-SwExtraRedline::SwExtraRedline( RedlineType_t eTyp )
+SwExtraRedline::SwExtraRedline( )
 {
-    (void)eTyp;
 }
 
 SwExtraRedline::SwExtraRedline( const SwExtraRedline& rCpy )
@@ -3963,20 +3967,67 @@ SwExtraRedline::~SwExtraRedline()
 {
 }
 
-SwTableRowRedline::SwTableRowRedline( RedlineType_t eTyp, SwTableLine* pTableLine )
-:SwExtraRedline( eTyp )
+SwTableRowRedline::SwTableRowRedline( const SwRedlineData& rData, SwTableLine& aTableLine )
+: pRedlineData( new SwRedlineData( rData ))
 {
-    (void)pTableLine;
+    pTableLine = &aTableLine;
 }
 
 SwTableRowRedline::SwTableRowRedline( const SwTableRowRedline& rCpy )
 : SwExtraRedline( rCpy )
 {
-    (void)rCpy;
+    pTableLine = rCpy.pTableLine;
 }
 
 SwTableRowRedline::~SwTableRowRedline()
 {
+}
+
+bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete )
+{
+    (void)bCallDelete;
+
+    // TO-DO - equivelant for 'SwTableRowRedline'
+    bool bMerged = false;
+    /*
+    _CHECK_REDLINE( this )
+    */
+
+    if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
+    {
+        // TO-DO - equivelant for 'SwTableRowRedline'
+        /*
+        pNewRedl->InvalidateRange();
+        */
+
+        // ===========================================================
+        // Make equivelant of 'AppendRedline' checks inside here too
+        // ===========================================================
+
+        mpExtraRedlineTbl->Insert( pNewRedl );
+    }
+    else
+    {
+        // TO DO - equivelant for 'SwTableRowRedline'
+        /*
+        if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+        {
+            RedlineMode_t eOld = meRedlineMode;
+            // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
+            // The ShowMode needs to be retained!
+            meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
+            DeleteAndJoin( *pNewRedl );
+            meRedlineMode = eOld;
+        }
+        delete pNewRedl, pNewRedl = 0;
+        */
+    }
+    // TO-DO - equivelant for 'SwTableRowRedline'
+    /*
+    _CHECK_REDLINE( this )
+    */
+
+    return ( 0 != pNewRedl ) || bMerged;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

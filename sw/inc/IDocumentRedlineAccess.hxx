@@ -28,7 +28,9 @@
  #include <com/sun/star/uno/Sequence.hxx>
 
  class SwRangeRedline;
+ class SwTableRowRedline;
  class SwRedlineTbl;
+ class SwExtraRedlineTbl;
  class SwPaM;
  struct SwPosition;
  class SwStartNode;
@@ -64,7 +66,9 @@ namespace nsRedlineType_t
     const RedlineType_t REDLINE_FORMAT = 0x2;// Attributes have been applied.
     const RedlineType_t REDLINE_TABLE = 0x3;// Table structure has been altered.
     const RedlineType_t REDLINE_FMTCOLL = 0x4;// Style has been altered (Autoformat!).
-    const RedlineType_t REDLINE_PARAGRAPH_FORMAT = 0x5;// Paragraph attributes have been changed
+    const RedlineType_t REDLINE_PARAGRAPH_FORMAT = 0x5;// Paragraph attributes have been changed.
+    const RedlineType_t REDLINE_TABLE_ROW_INSERT = 0x6;// Table row has been inserted.
+    const RedlineType_t REDLINE_TABLE_ROW_DELETE = 0x7;// Table row has been deleted.
 
     // When larger than 128, flags can be inserted.
     const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
@@ -126,6 +130,7 @@ public:
     virtual bool IsIgnoreRedline() const = 0;
 
     virtual const SwRedlineTbl& GetRedlineTbl() const = 0;
+    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
 
@@ -142,6 +147,8 @@ public:
         @returns
     */
     virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
+
+    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) = 0;
 
