@@ -54,7 +54,7 @@ public:
 };
 
 void ImplDeletePrnQueueList();
-void SAL_DLLPRIVATE ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
+void ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
 
 
 #endif // INCLUDED_VCL_INC_PRINT_H

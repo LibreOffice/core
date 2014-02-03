@@ -32,7 +32,7 @@
 
 namespace vcl
 {
-struct SAL_DLLPRIVATE PDFExtOutDevDataSync
+struct PDFExtOutDevDataSync
 {
     enum Action{    CreateNamedDest,
                     CreateDest,
@@ -66,7 +66,7 @@ struct SAL_DLLPRIVATE PDFExtOutDevDataSync
     Action      eAct;
 };
 
-struct SAL_DLLPRIVATE PDFLinkDestination
+struct PDFLinkDestination
 {
     Rectangle               mRect;
     MapMode                 mMapMode;
@@ -74,7 +74,7 @@ struct SAL_DLLPRIVATE PDFLinkDestination
     PDFWriter::DestAreaType mAreaType;
 };
 
-struct SAL_DLLPRIVATE GlobalSyncData
+struct GlobalSyncData
 {
     std::deque< PDFExtOutDevDataSync::Action >  mActions;
     std::deque< MapMode >                       mParaMapModes;
@@ -285,7 +285,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
     }
 }
 
-struct SAL_DLLPRIVATE PageSyncData
+struct PageSyncData
 {
     std::deque< PDFExtOutDevDataSync >              mActions;
     std::deque< Rectangle >                         mParaRects;
