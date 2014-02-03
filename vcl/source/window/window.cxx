@@ -3061,14 +3061,16 @@ void Window::ImplScroll( const Rectangle& rRect,
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
         {
+
+            OutputDevice *pOutDev = GetOutDev();
+
             if( bReMirror )
             {
                 // --- RTL --- frame coordinates require re-mirroring
-                OutputDevice *pOutDev = GetOutDev();
                 pOutDev->ImplReMirror( aRegion );
             }
 
-            ImplSelectClipRegion( aRegion, pGraphics );
+            pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
@@ -3507,7 +3509,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             SalGraphics* pGraphics = ImplGetFrameGraphics();
                             if ( pGraphics )
                             {
-                                const bool bSelectClipRegion = ImplSelectClipRegion( aRegion, pGraphics );
+
+                                OutputDevice *pOutDev = GetOutDev();
+                                const bool bSelectClipRegion = pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
                                 if ( bSelectClipRegion )
                                 {
                                     pGraphics->CopyArea( mnOutOffX, mnOutOffY,
