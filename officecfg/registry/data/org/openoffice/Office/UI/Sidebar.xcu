@@ -750,18 +750,18 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Calc,  Auditing, hidden ;
-            Calc,  Cell,     hidden ;
-            Calc,  EditCell, hidden ;
-            Calc,  default,  hidden ;
-            Calc,  Pivot,    hidden ;
+            Calc,  Auditing, visible ;
+            Calc,  Cell,     visible ;
+            Calc,  EditCell, visible ;
+            Calc,  default,  visible ;
+            Calc,  Pivot,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
           <value>private:resource/toolpanel/ScPanelFactory/NumberFormatPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>400</value>
+          <value>150</value>
         </prop>
       </node>
 
