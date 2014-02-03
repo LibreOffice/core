@@ -48,7 +48,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = 
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType );
 sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE );
+EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
 
 class ContentNode;
 class EditDoc;
@@ -80,10 +80,10 @@ inline sal_Bool EPaM::operator == ( const EPaM& r ) const
 struct ScriptTypePosInfo
 {
     short   nScriptType;
-    sal_uInt16  nStartPos;
-    sal_uInt16  nEndPos;
+    sal_Int32  nStartPos;
+    sal_Int32  nEndPos;
 
-    ScriptTypePosInfo( short _Type, sal_uInt16 _Start, sal_uInt16 _End )
+    ScriptTypePosInfo( short _Type, sal_Int32 _Start, sal_Int32 _End )
     : nScriptType(_Type)
     , nStartPos(_Start)
     , nEndPos(_End)
@@ -96,10 +96,10 @@ typedef std::deque< ScriptTypePosInfo > ScriptTypePosInfos;
 struct WritingDirectionInfo
 {
     sal_uInt8   nType;
-    sal_uInt16  nStartPos;
-    sal_uInt16  nEndPos;
+    sal_Int32  nStartPos;
+    sal_Int32  nEndPos;
 
-    WritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
+    WritingDirectionInfo( sal_uInt8 _Type, sal_Int32 _Start, sal_Int32 _End )
     : nType(_Type)
     , nStartPos(_Start)
     , nEndPos(_End)
@@ -142,10 +142,10 @@ public:
             SvxColorList();
             ~SvxColorList();
 
-    size_t  GetId( const SvxColorItem& rColor );
-    size_t  Count() { return aColorList.size(); };
-    void    Insert( SvxColorItem* pItem, size_t nIndex );
-    SvxColorItem* GetObject( size_t nIndex );
+    sal_Int32  GetId( const SvxColorItem& rColor );
+    sal_Int32  Count() { return aColorList.size(); };
+    void    Insert( SvxColorItem* pItem, sal_Int32 nIndex );
+    SvxColorItem* GetObject( sal_Int32 nIndex );
 };
 
 //  ----------------------------------------------------------------------
@@ -157,13 +157,13 @@ class ItemList
 private:
     typedef std::vector<const SfxPoolItem*> DummyItemList;
     DummyItemList aItemPool;
-    size_t  CurrentItem;
+    sal_Int32  CurrentItem;
 
 public:
     ItemList();
     const SfxPoolItem*  First();
     const SfxPoolItem*  Next();
-    size_t              Count() { return aItemPool.size(); };
+    sal_Int32              Count() { return aItemPool.size(); };
     void                Insert( const SfxPoolItem* pItem );
     void                Clear() { aItemPool.clear(); };
 };
@@ -215,18 +215,18 @@ public:
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
     void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
-    const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
-    EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
-    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
-    EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    const EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
+    const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
+    EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const;
+    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
+    EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    const EditCharAttrib* FindFeature( sal_Int32 nPos ) const;
 
 
     void            ResortAttribs();
     void            OptimizeRanges( SfxItemPool& rItemPool );
 
-    size_t Count() const;
+    sal_Int32 Count() const;
 
     void            InsertAttrib( EditCharAttrib* pAttrib );
 
@@ -234,14 +234,14 @@ public:
 
     bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
     void SetHasEmptyAttribs(bool b);
-    bool HasBoundingAttrib( sal_uInt16 nBound ) const;
-    bool HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
+    bool HasBoundingAttrib( sal_Int32 nBound ) const;
+    bool HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const;
 
     AttribsType& GetAttribs();
     const AttribsType& GetAttribs() const;
 
     void Remove(const EditCharAttrib* p);
-    void Remove(size_t nPos);
+    void Remove(sal_Int32 nPos);
     void Release(const EditCharAttrib* p);
 
 #if OSL_DEBUG_LEVEL > 2
@@ -271,8 +271,8 @@ public:
     CharAttribList& GetCharAttribs()        { return aCharAttribList; }
     const CharAttribList& GetCharAttribs() const { return aCharAttribList; }
 
-    void            ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars, SfxItemPool& rItemPool );
-    void            CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars, SfxItemPool& rItemPool );
+    void            ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars, SfxItemPool& rItemPool );
+    void            CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars, SfxItemPool& rItemPool );
     void            AppendAttribs( ContentNode* pNextNode );
     void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs );
 
@@ -291,19 +291,19 @@ public:
     void            CreateWrongList();
     void            DestroyWrongList();
 
-    bool IsFeature( sal_uInt16 nPos ) const;
+    bool IsFeature( sal_Int32 nPos ) const;
 
-    sal_uInt16 Len() const;
+    sal_Int32 Len() const;
     const OUString& GetString() const;
 
-    void SetChar(sal_uInt16 nPos, sal_Unicode c);
-    void Insert(const OUString& rStr, sal_uInt16 nPos);
+    void SetChar(sal_Int32 nPos, sal_Unicode c);
+    void Insert(const OUString& rStr, sal_Int32 nPos);
     void Append(const OUString& rStr);
-    void Erase(sal_uInt16 nPos);
-    void Erase(sal_uInt16 nPos, sal_uInt16 nCount);
-    OUString Copy(sal_uInt16 nPos) const;
-    OUString Copy(sal_uInt16 nPos, sal_uInt16 nCount) const;
-    sal_Unicode GetChar(sal_uInt16 nPos) const;
+    void Erase(sal_Int32 nPos);
+    void Erase(sal_Int32 nPos, sal_Int32 nCount);
+    OUString Copy(sal_Int32 nPos) const;
+    OUString Copy(sal_Int32 nPos, sal_Int32 nCount) const;
+    sal_Unicode GetChar(sal_Int32 nPos) const;
 };
 
 // -------------------------------------------------------------------------
@@ -372,7 +372,7 @@ struct ExtraPortionInfo
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_uInt16 nLen );
+    void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen );
 };
 
 
@@ -383,7 +383,7 @@ class TextPortion
 {
 private:
     ExtraPortionInfo*   pExtraInfos;
-    sal_uInt16              nLen;
+    sal_Int32              nLen;
     Size                aOutSz;
     sal_uInt8               nKind;
     sal_uInt8                nRightToLeft;
@@ -401,7 +401,7 @@ private:
                 }
 
 public:
-                TextPortion( sal_uInt16 nL )
+                TextPortion( sal_Int32 nL )
                 : pExtraInfos( NULL )
                 , nLen( nL )
                 , aOutSz( -1, -1 )
@@ -422,8 +422,8 @@ public:
                 }
 
 
-    sal_uInt16      GetLen() const              { return nLen; }
-    void        SetLen( sal_uInt16 nL )         { nLen = nL; }
+    sal_Int32      GetLen() const              { return nLen; }
+    void        SetLen( sal_Int32 nL )         { nLen = nL; }
 
     Size&       GetSize()                   { return aOutSz; }
     const Size& GetSize() const             { return aOutSz; }
@@ -457,18 +457,18 @@ public:
             ~TextPortionList();
 
     void    Reset();
-    size_t FindPortion(
-        sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false) const;
-    sal_uInt16 GetStartPos(size_t nPortion);
-    void DeleteFromPortion(size_t nDelFrom);
-    size_t Count() const;
-    const TextPortion* operator[](size_t nPos) const;
-    TextPortion* operator[](size_t nPos);
+    sal_Int32 FindPortion(
+        sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false) const;
+    sal_Int32 GetStartPos(sal_Int32 nPortion);
+    void DeleteFromPortion(sal_Int32 nDelFrom);
+    sal_Int32 Count() const;
+    const TextPortion* operator[](sal_Int32 nPos) const;
+    TextPortion* operator[](sal_Int32 nPos);
 
     void Append(TextPortion* p);
-    void Insert(size_t nPos, TextPortion* p);
-    void Remove(size_t nPos);
-    size_t GetPos(const TextPortion* p) const;
+    void Insert(sal_Int32 nPos, TextPortion* p);
+    void Remove(sal_Int32 nPos);
+    sal_Int32 GetPos(const TextPortion* p) const;
 };
 
 class ParaPortion;
@@ -485,10 +485,10 @@ private:
     CharPosArrayType aPositions;
     long            nTxtWidth;
     sal_uInt16          nStartPosX;
-    sal_uInt16          nStart;     // could be replaced by nStartPortion
-    sal_uInt16          nEnd;       // could be replaced by nEndPortion
-    sal_uInt16          nStartPortion;
-    sal_uInt16          nEndPortion;
+    sal_Int32          nStart;     // could be replaced by nStartPortion
+    sal_Int32          nEnd;       // could be replaced by nEndPortion
+    sal_Int32          nStartPortion;
+    sal_Int32          nEndPortion;
     sal_uInt16          nHeight;    //  Total height of the line
     sal_uInt16          nTxtHeight; // Pure Text height
     sal_uInt16          nCrsrHeight;    // For contour flow high lines => cursor is large.
@@ -501,27 +501,27 @@ public:
                     EditLine( const EditLine& );
                     ~EditLine();
 
-    sal_Bool            IsIn( sal_uInt16 nIndex ) const
+    sal_Bool            IsIn( sal_Int32 nIndex ) const
                         { return ( (nIndex >= nStart ) && ( nIndex < nEnd ) ); }
 
-    sal_Bool            IsIn( sal_uInt16 nIndex, sal_Bool bInclEnd ) const
+    sal_Bool            IsIn( sal_Int32 nIndex, sal_Bool bInclEnd ) const
                         { return ( ( nIndex >= nStart ) && ( bInclEnd ? ( nIndex <= nEnd ) : ( nIndex < nEnd ) ) ); }
 
-    void            SetStart( sal_uInt16 n )            { nStart = n; }
-    sal_uInt16          GetStart() const                { return nStart; }
-    sal_uInt16&         GetStart()                      { return nStart; }
+    void            SetStart( sal_Int32 n )            { nStart = n; }
+    sal_Int32          GetStart() const                { return nStart; }
+    sal_Int32&         GetStart()                      { return nStart; }
 
-    void            SetEnd( sal_uInt16 n )              { nEnd = n; }
-    sal_uInt16          GetEnd() const                  { return nEnd; }
-    sal_uInt16&         GetEnd()                        { return nEnd; }
+    void            SetEnd( sal_Int32 n )              { nEnd = n; }
+    sal_Int32          GetEnd() const                  { return nEnd; }
+    sal_Int32&         GetEnd()                        { return nEnd; }
 
-    void            SetStartPortion( sal_uInt16 n )     { nStartPortion = n; }
-    sal_uInt16          GetStartPortion() const         { return nStartPortion; }
-    sal_uInt16&         GetStartPortion()               { return nStartPortion; }
+    void            SetStartPortion( sal_Int32 n )     { nStartPortion = n; }
+    sal_Int32          GetStartPortion() const         { return nStartPortion; }
+    sal_Int32&         GetStartPortion()               { return nStartPortion; }
 
-    void            SetEndPortion( sal_uInt16 n )       { nEndPortion = n; }
-    sal_uInt16          GetEndPortion() const           { return nEndPortion; }
-    sal_uInt16&         GetEndPortion()                 { return nEndPortion; }
+    void            SetEndPortion( sal_Int32 n )       { nEndPortion = n; }
+    sal_Int32          GetEndPortion() const           { return nEndPortion; }
+    sal_Int32&         GetEndPortion()                 { return nEndPortion; }
 
     void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 );
     sal_uInt16          GetHeight() const               { return nHeight; }
@@ -537,7 +537,7 @@ public:
     void            SetHangingPunctuation( bool b )     { bHangingPunctuation = b; }
     bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
-    sal_uInt16          GetLen() const                  { return nEnd - nStart; }
+    sal_Int32          GetLen() const                  { return nEnd - nStart; }
 
     sal_uInt16          GetStartPosX() const            { return nStartPosX; }
     void            SetStartPosX( long start );
@@ -574,14 +574,14 @@ public:
             ~EditLineList();
 
     void Reset();
-    void DeleteFromLine(size_t nDelFrom);
-    size_t FindLine(sal_uInt16 nChar, bool bInclEnd);
-    size_t Count() const;
-    const EditLine* operator[](size_t nPos) const;
-    EditLine* operator[](size_t nPos);
+    void DeleteFromLine(sal_Int32 nDelFrom);
+    sal_Int32 FindLine(sal_Int32 nChar, bool bInclEnd);
+    sal_Int32 Count() const;
+    const EditLine* operator[](sal_Int32 nPos) const;
+    EditLine* operator[](sal_Int32 nPos);
 
     void Append(EditLine* p);
-    void Insert(size_t nPos, EditLine* p);
+    void Insert(sal_Int32 nPos, EditLine* p);
 };
 
 // -------------------------------------------------------------------------
@@ -599,10 +599,10 @@ private:
     ScriptTypePosInfos      aScriptInfos;
     WritingDirectionInfos   aWritingDirectionInfos;
 
-    sal_uInt16              nInvalidPosStart;
-    sal_uInt16              nFirstLineOffset;   // For Writer-LineSpacing-Interpretation
-    sal_uInt16              nBulletX;
-    short                   nInvalidDiff;
+    sal_Int32              nInvalidPosStart;
+    sal_Int32              nFirstLineOffset;   // For Writer-LineSpacing-Interpretation
+    sal_uInt16             nBulletX;
+    sal_Int32              nInvalidDiff;
 
     sal_Bool                bInvalid            : 1;
     sal_Bool                bSimple             : 1;    // only linear Tap
@@ -615,7 +615,7 @@ public:
                         ParaPortion( ContentNode* pNode );
                         ~ParaPortion();
 
-    sal_uInt16 GetLineNumber( sal_uInt16 nIndex ) const;
+    sal_Int32 GetLineNumber( sal_Int32 nIndex ) const;
 
     EditLineList&       GetLines()                  { return aLineList; }
     const EditLineList& GetLines() const { return aLineList; }
@@ -630,8 +630,8 @@ public:
     sal_uInt16              GetBulletX() const          { return nBulletX; }
     void                SetBulletX( sal_uInt16 n )      { nBulletX = n; }
 
-    void                MarkInvalid( sal_uInt16 nStart, short nDiff);
-    void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );
+    void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff);
+    void                MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 nEnd );
 
     void                SetVisible( sal_Bool bVisible );
     bool                IsVisible() const { return bVisible; }
@@ -639,17 +639,17 @@ public:
     sal_Bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
-    sal_uInt16              GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
+    sal_Int32           GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
     void                ResetHeight()   { nHeight = 0; nFirstLineOffset = 0; }
 
     ContentNode*        GetNode() const             { return pNode; }
     TextPortionList&    GetTextPortions()           { return aTextPortionList; }
     const TextPortionList& GetTextPortions() const { return aTextPortionList; }
 
-    sal_uInt16              GetInvalidPosStart() const  { return nInvalidPosStart; }
+    sal_Int32           GetInvalidPosStart() const  { return nInvalidPosStart; }
     short               GetInvalidDiff() const      { return nInvalidDiff; }
 
-    void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
+    void                CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormattedLine );
 #if OSL_DEBUG_LEVEL > 2
     sal_Bool                DbgCheckTextPortions();
 #endif
@@ -660,7 +660,7 @@ public:
 // -------------------------------------------------------------------------
 class ParaPortionList
 {
-    mutable size_t nLastCache;
+    mutable sal_Int32 nLastCache;
     boost::ptr_vector<ParaPortion> maPortions;
 public:
                     ParaPortionList();
@@ -749,7 +749,7 @@ public:
 class EditDoc
 {
 private:
-    mutable size_t nLastCache;
+    mutable sal_Int32 nLastCache;
     boost::ptr_vector<ContentNode> maContents;
 
     SfxItemPool*    pItemPool;
@@ -792,7 +792,7 @@ public:
 
     EditPaM         Clear();
     EditPaM         RemoveText();
-    EditPaM         RemoveChars( EditPaM aPaM, sal_uInt16 nChars );
+    EditPaM         RemoveChars( EditPaM aPaM, sal_Int32 nChars );
     EditPaM         InsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM         InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
@@ -802,7 +802,7 @@ public:
     sal_uLong       GetTextLen() const;
 
     OUString       GetParaAsString( sal_Int32 nNode ) const;
-    OUString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
+    OUString       GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
 
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;
@@ -812,12 +812,12 @@ public:
 
     void RemoveItemsFromPool(const ContentNode& rNode);
 
-    void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd );
-    void            InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem );
-    void            InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem );
-    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt16 nWhich = 0 );
-    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
-    void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
+    void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd );
+    void            InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
+    void            InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
+    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich = 0 );
+    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
+    void            FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet );
 
     sal_Int32 GetPos(const ContentNode* pNode) const;
     const ContentNode* GetObject(sal_Int32 nPos) const;
@@ -834,9 +834,9 @@ public:
     static OUString GetSepStr( LineEnd eEnd );
 };
 
-inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, size_t nAttr)
+inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
 {
-    return (nAttr < rAttribs.size()) ? &rAttribs[nAttr] : NULL;
+    return (nAttr < (sal_Int32)rAttribs.size()) ? &rAttribs[nAttr] : NULL;
 }
 
 bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);

@@ -1961,7 +1961,7 @@ public:
     /** Maximum string length of numerical cells of a column, e.g. for dBase export.
         @return String length in characters (!) including the decimal
                 separator, and the decimal precision needed. */
-    xub_StrLen      GetMaxNumberStringLen( sal_uInt16& nPrecision,
+    sal_Int32       GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                            SCTAB nTab, SCCOL nCol,
                                            SCROW nRowStart, SCROW nRowEnd ) const;
 

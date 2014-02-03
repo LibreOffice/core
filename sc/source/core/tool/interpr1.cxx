@@ -7676,8 +7676,8 @@ void ScInterpreter::ScReplace()
         double fCount = ::rtl::math::approxFloor( GetDouble());
         double fPos   = ::rtl::math::approxFloor( GetDouble());
         OUString aOldStr = GetString().getString();
-        if (fPos < 1.0 || fPos > static_cast<double>(STRING_MAXLEN)
-                || fCount < 0.0 || fCount > static_cast<double>(STRING_MAXLEN))
+        if (fPos < 1.0 || fPos > static_cast<double>(SAL_MAX_UINT16)
+                || fCount < 0.0 || fCount > static_cast<double>(SAL_MAX_UINT16))
             PushIllegalArgument();
         else
         {
@@ -7801,7 +7801,7 @@ void ScInterpreter::ScLeft()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return ;
@@ -7909,7 +7909,7 @@ void ScInterpreter::ScRightB()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return ;
@@ -7960,7 +7960,7 @@ void ScInterpreter::ScLeftB()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return ;
@@ -7981,7 +7981,7 @@ void ScInterpreter::ScMidB()
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
+        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(SAL_MAX_UINT16) || fAnz > double(SAL_MAX_UINT16))
             PushIllegalArgument();
         else
         {
@@ -8003,7 +8003,7 @@ void ScInterpreter::ScRight()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return ;
@@ -8030,7 +8030,7 @@ void ScInterpreter::ScSearch()
         if (nParamCount == 3)
         {
             fAnz = ::rtl::math::approxFloor(GetDouble());
-            if (fAnz > double(STRING_MAXLEN))
+            if (fAnz > double(SAL_MAX_UINT16))
             {
                 PushIllegalArgument();
                 return;
@@ -8067,7 +8067,7 @@ void ScInterpreter::ScMid()
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
+        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(SAL_MAX_UINT16) || fAnz > double(SAL_MAX_UINT16))
             PushIllegalArgument();
         else
         {
@@ -8163,7 +8163,7 @@ void ScInterpreter::ScSubstitute()
         if (nParamCount == 4)
         {
             double fAnz = ::rtl::math::approxFloor(GetDouble());
-            if( fAnz < 1 || fAnz > STRING_MAXLEN )
+            if( fAnz < 1 || fAnz > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return;
@@ -8216,7 +8216,7 @@ void ScInterpreter::ScRept()
         OUString aStr = GetString().getString();
         if ( fAnz < 0.0 )
             PushIllegalArgument();
-        else if ( fAnz * aStr.getLength() > STRING_MAXLEN )
+        else if ( fAnz * aStr.getLength() > SAL_MAX_UINT16 )
         {
             PushError( errStringOverflow );
         }

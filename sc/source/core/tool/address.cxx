@@ -32,7 +32,6 @@
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
@@ -280,7 +279,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 if (*++p == '\'')
                 {
                     aTabName += OUString( pCurrentStart,
-                            sal::static_int_cast<xub_StrLen>( p - pCurrentStart));
+                            sal::static_int_cast<sal_Int32>( p - pCurrentStart));
                     pCurrentStart = ++p;
                 }
             }
@@ -292,7 +291,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 ++p;
         }
         if (pCurrentStart < p)
-            aTabName += OUString( pCurrentStart, sal::static_int_cast<xub_StrLen>( p - pCurrentStart));
+            aTabName += OUString( pCurrentStart, sal::static_int_cast<sal_Int32>( p - pCurrentStart));
         if (aTabName.isEmpty())
             return NULL;
         if (p == pMsoxlQuoteStop)
@@ -364,7 +363,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
         if( *p != '!' && ( !allow_3d || *p != ':' ) )
             return (!allow_3d && *p == ':') ? p : start;
 
-        aTabName += OUString( start, sal::static_int_cast<xub_StrLen>( p - start ) );
+        aTabName += OUString( start, sal::static_int_cast<sal_Int32>( p - start ) );
     }
 
     rExternTabName = aTabName;
@@ -465,7 +464,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
             p = ScGlobal::UnicodeStrChr( start+1, ']' );
             if( p == NULL )
                 return start;
-            rExternDocName += OUString( start+1, sal::static_int_cast<xub_StrLen>( p-(start+1) ) );
+            rExternDocName += OUString( start+1, sal::static_int_cast<sal_Int32>( p-(start+1) ) );
         }
         ++p;
 

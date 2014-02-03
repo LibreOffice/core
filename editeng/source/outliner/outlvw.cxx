@@ -374,15 +374,15 @@ sal_Int32 OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
     sal_Bool bWithChildren )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pParagraph );
-    sal_uInt16 nEnd = 0;
+    sal_Int32 nEnd = 0;
     if ( bSelect )
-        nEnd = 0xffff;
+        nEnd = SAL_MAX_INT32;
 
     sal_Int32 nChildCount = 0;
     if ( bWithChildren )
         nChildCount = pOwner->pParaList->GetChildCount( pParagraph );
 
-    ESelection aSel( nPara, 0,nPara+nChildCount, nEnd );
+    ESelection aSel( nPara, 0, nPara + nChildCount, nEnd );
     pEditView->SetSelection( aSel );
     return nChildCount+1;
 }
@@ -1287,7 +1287,7 @@ void OutlinerView::StartTextConversion(
 }
 
 
-sal_uInt16 OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
+sal_Int32 OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
     return pEditView->StartSearchAndReplace( rSearchItem );
 }

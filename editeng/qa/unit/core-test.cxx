@@ -403,26 +403,26 @@ void Test::testSectionAttributes()
 
         // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
         const editeng::Section* pSecAttr = &aAttrs[0];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
         // Second section should be 3-6, and it should be both bold and italic.
         pSecAttr = &aAttrs[1];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(6, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(2, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr));
 
         // Third section should be 6-9, and it should be only italic.
         pSecAttr = &aAttrs[2];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(6, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(9, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be italic.", hasItalic(*pSecAttr));
     }
 
@@ -452,37 +452,37 @@ void Test::testSectionAttributes()
 
         // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
         const editeng::Section* pSecAttr = &aAttrs[0];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
         pSecAttr = &aAttrs[2];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(2, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
         pSecAttr = &aAttrs[4];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pSecAttr->mnEnd);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_EQUAL(4, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(5, (int)pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
         // The 2nd and 4th paragraphs should be empty.
         pSecAttr = &aAttrs[1];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnEnd);
         CPPUNIT_ASSERT_MESSAGE("Attribute array should be empty.", pSecAttr->maAttributes.empty());
 
         pSecAttr = &aAttrs[3];
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnParagraph);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnEnd);
         CPPUNIT_ASSERT_MESSAGE("Attribute array should be empty.", pSecAttr->maAttributes.empty());
     }
 }

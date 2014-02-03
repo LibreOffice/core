@@ -495,7 +495,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
 
     if(!pTextObj->IsFieldObject())
     {
-        std::vector<sal_uInt16> aPosList;
+        std::vector<sal_Int32> aPosList;
         pEngine->GetPortions(0,aPosList);
         if(aPosList.size() == 2)
         {
@@ -601,7 +601,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 
             OUString aPageOfEntry(" " + m_pFtOf->GetText() + " ");
             m_pWndCenter->GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageOfEntry.getLength() );
+            aSel.nEndPos = aSel.nEndPos + aPageOfEntry.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
             m_pWndCenter->SetText(*pTextObj);
@@ -641,7 +641,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             OUString aPageEntry(", " + m_pFtPage->GetText() + " ");
             m_pWndCenter->GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nStartPos = aSel.nEndPos;
-            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageEntry.getLength() );
+            aSel.nEndPos = aSel.nEndPos + aPageEntry.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
             m_pWndCenter->SetText(*pTextObj);
@@ -670,7 +670,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 
             OUString aCommaSpace(", ");
             m_pWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.getLength() );
+            aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
             m_pWndCenter->SetText(*pTextObj);
@@ -690,7 +690,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ++aSel.nEndPos;
             OUString aCommaSpace(", ");
             m_pWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.getLength() );
+            aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
             m_pWndCenter->SetText(*pTextObj);

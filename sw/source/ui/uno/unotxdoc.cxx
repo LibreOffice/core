@@ -3263,15 +3263,15 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
             for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
             {
                 //every paragraph
-                std::vector<sal_uInt16> aPortions;
+                std::vector<sal_Int32> aPortions;
                 rEditEng.GetPortions( nPar, aPortions );
 
                 for ( size_t nPos = aPortions.size(); nPos; )
                 {
                     //every position
                     --nPos;
-                    sal_uInt16 nEnd = aPortions[ nPos ];
-                    sal_uInt16 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
+                    sal_Int32 nEnd = aPortions[ nPos ];
+                    sal_Int32 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
                     ESelection aSelection( nPar, nStart, nPar, nEnd );
                     SfxItemSet aAttr = rEditEng.GetAttribs( aSelection );
 

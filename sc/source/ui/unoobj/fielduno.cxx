@@ -173,23 +173,22 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     sal_Int32           mnFieldType;
     SvxFieldData*       pFound;         // lokale Kopie
     sal_Int32           nFieldPar;
-    xub_StrLen          nFieldPos;
+    sal_Int32           nFieldPos;
     sal_uInt16              nFieldIndex;
 
 public:
                 ScUnoEditEngine(ScEditEngineDefaulter* pSource);
                 ~ScUnoEditEngine();
 
-                    //! nPos should be xub_StrLen
-    virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
+    virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
                                     Color*& rTxtColor, Color*& rFldColor );
 
     sal_uInt16 CountFields();
     SvxFieldData* FindByIndex(sal_uInt16 nIndex);
-    SvxFieldData* FindByPos(sal_Int32 nPar, xub_StrLen nPos, sal_Int32 nType);
+    SvxFieldData* FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int32 nType);
 
     sal_Int32       GetFieldPar() const     { return nFieldPar; }
-    xub_StrLen      GetFieldPos() const     { return nFieldPos; }
+    sal_Int32       GetFieldPos() const     { return nFieldPos; }
 };
 
 ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource) :
@@ -213,7 +212,7 @@ ScUnoEditEngine::~ScUnoEditEngine()
 }
 
 OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-            sal_Int32 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor )
+            sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor )
 {
     OUString aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)
@@ -265,7 +264,7 @@ SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
     return pFound;
 }
 
-SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, xub_StrLen nPos, sal_Int32 nType)
+SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int32 nType)
 {
     eMode = SC_UNO_COLLECT_FINDPOS;
     nFieldPar = nPar;
@@ -343,7 +342,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
         return uno::Reference<text::XTextField>();
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
-    xub_StrLen nPos = aTempEngine.GetFieldPos();
+    sal_Int32 nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
 
     sal_Int32 eType = pData->GetClassId();
@@ -524,7 +523,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     xTextRange = xTemp;
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
-    xub_StrLen nPos = aTempEngine.GetFieldPos();
+    sal_Int32 nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
 
     sal_Int32 eRealType = pData->GetClassId();

@@ -435,8 +435,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
         if (aText.endsWith("\x0A"))
             aText = aText.copy(0, aText.getLength()-1); // Delete the last break
 
-        sal_uInt16 nCount = comphelper::string::getTokenCount(aText, '\x0A');
-        sal_uInt16 nPos = 0;
+        sal_Int32 nCount = comphelper::string::getTokenCount(aText, '\x0A');
+        sal_Int32 nPos = 0;
         sal_Int32 nInsPos = nPara+1;
         while( nCount > nPos )
         {
@@ -502,7 +502,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
 {
 
     bool bConverted = false;
-    sal_uInt16 nTabs = 0;
+    sal_Int32 nTabs = 0;
     ESelection aDelSel;
 
     OUString aName;
@@ -512,8 +512,8 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
     OUString aStr( pEditEngine->GetText( nPara ) );
     const sal_Unicode* pPtr = aStr.getStr();
 
-    sal_uInt16 nHeadingNumberStart = 0;
-    sal_uInt16 nNumberingNumberStart = 0;
+    sal_Int32 nHeadingNumberStart = 0;
+    sal_Int32 nNumberingNumberStart = 0;
     SfxStyleSheet* pStyle= pEditEngine->GetStyleSheet( nPara );
     if( pStyle )
     {
@@ -535,7 +535,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
             aDelSel = ESelection( nPara, 0, nPara, 2 );
         }
 
-        sal_uInt16 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
+        sal_Int32 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
         OUString aLevel = comphelper::string::stripStart(aName.copy(nPos), ' ');
         nTabs = sal::static_int_cast< sal_uInt16 >(aLevel.toInt32());
         if( nTabs )
@@ -649,7 +649,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-void Outliner::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos )
+void Outliner::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
 
     if ( aFieldClickedHdl.IsSet() )
@@ -661,7 +661,7 @@ void Outliner::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_uI
 }
 
 
-void Outliner::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos )
+void Outliner::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
     if ( !aFieldClickedHdl.IsSet() )
         return;
@@ -672,7 +672,7 @@ void Outliner::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_u
 }
 
 
-OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     if ( !aCalcFieldValueHdl.IsSet() )
         return OUString( ' ' );
@@ -1018,7 +1018,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf,
-                        aSvxFont, nPara, 0xFFFF, bRightToLeftPara, 0, 0, false, false, true, 0, Color(), Color());
+                        aSvxFont, nPara, -1, bRightToLeftPara, 0, 0, false, false, true, 0, Color(), Color());
 
                     delete[] pBuf;
                 }
@@ -1743,8 +1743,8 @@ void Outliner::StripPortions()
     bStrippingPortions = sal_False;
 }
 
-void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
-    sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
+void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
+    sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
     const SvxFieldData* pFieldData,
     bool bEndOfLine,
@@ -1765,7 +1765,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_u
 }
 
 void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar, const SvxFont& rFont,
-    sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
+    sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {
     if(aDrawPortionHdl.IsSet())

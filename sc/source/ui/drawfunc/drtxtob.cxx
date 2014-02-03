@@ -601,7 +601,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     ESelection aOldSel = rOutView.GetSelection();
     ESelection aSel = aOldSel;
     aSel.Adjust();
-    xub_StrLen nNewEnd = aSel.nEndPos;
+    sal_Int32 nNewEnd = aSel.nEndPos;
 
     sal_Bool bUpdate = pOutliner->GetUpdateMode();
     sal_Bool bChanged = false;
@@ -613,15 +613,14 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
         if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
         {
-            std::vector<sal_uInt16> aPortions;
+            std::vector<sal_Int32> aPortions;
             rEditEng.GetPortions( nPar, aPortions );
-            //! GetPortions should use xub_StrLen instead of USHORT
 
             for ( size_t nPos = aPortions.size(); nPos; )
             {
                 --nPos;
-                sal_uInt16 nEnd = aPortions[ nPos ];
-                sal_uInt16 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
+                sal_Int32 nEnd = aPortions[ nPos ];
+                sal_Int32 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
                 // fields are single characters
                 if ( nEnd == nStart+1 &&
                      ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&
@@ -644,7 +643,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                         pOutliner->QuickInsertText( aFieldText, aFieldSel );
                         if ( nPar == aSel.nEndPara )
                         {
-                            nNewEnd = sal::static_int_cast<xub_StrLen>( nNewEnd + aFieldText.getLength() );
+                            nNewEnd = nNewEnd + aFieldText.getLength();
                             --nNewEnd;
                         }
                     }

@@ -146,8 +146,8 @@ OUString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
     }
 }
 
-void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
-    const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
+void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen,
+    const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
     const SvxFieldData* pFieldData,
     bool bEndOfLine,
@@ -162,7 +162,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText
 }
 
 void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
-    const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+    const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
     bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {
@@ -170,18 +170,18 @@ void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUS
             bEndOfLine, bEndOfParagraph, rOverlineColor, rTextLineColor );
 }
 
-void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos )
+void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
     EditEngine::FieldClicked( rField, nPara, nPos );    // If URL
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 
-void OutlinerEditEng::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos )
+void OutlinerEditEng::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
     pOwner->FieldSelected( rField, nPara, nPos );
 }
 
-OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

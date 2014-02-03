@@ -1280,7 +1280,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     sal_Int32 nLastPar = pEngine->GetParagraphCount();
                     if (nLastPar)
                         --nLastPar;
-                    xub_StrLen nTxtLen = pEngine->GetTextLen(nLastPar);
+                    sal_Int32 nTxtLen = pEngine->GetTextLen(nLastPar);
                     ESelection aSelAll( 0, 0, nLastPar, nTxtLen );
 
                     pEngine->TransliterateText( aSelAll, nType );

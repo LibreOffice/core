@@ -309,7 +309,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 sal_Int32 nPar = pEngine->GetParagraphCount();
                 if (nPar)
                 {
-                    xub_StrLen nLen = pEngine->GetTextLen(nPar-1);
+                    sal_Int32 nLen = pEngine->GetTextLen(nPar-1);
                     pTableView->SetSelection(ESelection(0,0,nPar-1,nLen));
                     if (pTopView)
                         pTopView->SetSelection(ESelection(0,0,nPar-1,nLen));

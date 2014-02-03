@@ -23,7 +23,6 @@
 #include <math.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include "formula/errorcodes.hxx"
 #include "formula/tokenarray.hxx"
 #include "scdll.hxx"
@@ -906,7 +905,7 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 
 inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
 {
-    if ( (sal_uLong) rResult.getLength() + rAdd.getLength() > STRING_MAXLEN )
+    if ( rResult.getLength() + rAdd.getLength() > SAL_MAX_UINT16 )
     {
         SetError( errStringOverflow );
         rResult = "";

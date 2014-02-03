@@ -45,8 +45,8 @@ public:
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
 
     virtual void DrawingText(
-        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
-        sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
+        const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
+        sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -58,7 +58,7 @@ public:
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const OUString& rChar,
-        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
@@ -72,9 +72,9 @@ public:
     // for text conversion
     virtual sal_Bool        ConvertNextDocument();
 
-    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos );
-    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos );
-    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     virtual Rectangle   GetBulletArea( sal_Int32 nPara );
 

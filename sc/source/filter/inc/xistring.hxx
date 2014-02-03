@@ -101,8 +101,8 @@ private:
     const OUString&     mrText;         /// The processed string.
     const XclFormatRunVec& mrFormats;   /// The vector of formatting runs.
     size_t              mnPortion;      /// Current text portion.
-    xub_StrLen          mnTextBeg;      /// First character of current portion.
-    xub_StrLen          mnTextEnd;      /// First character of next portion.
+    sal_Int32           mnTextBeg;      /// First character of current portion.
+    sal_Int32           mnTextEnd;      /// First character of next portion.
     size_t              mnFormatsBeg;   /// Formatting run index for current portion.
     size_t              mnFormatsEnd;   /// Formatting run index for next portion.
 };

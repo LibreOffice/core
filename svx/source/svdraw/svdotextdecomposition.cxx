@@ -386,18 +386,18 @@ namespace
             // support for WrongSpellVector. Create WrongSpellPrimitives as needed
             if(rInfo.mpWrongSpellVector && !aDXArray.empty())
             {
-                const sal_uInt32 nSize(rInfo.mpWrongSpellVector->size());
-                const sal_uInt32 nDXCount(aDXArray.size());
+                const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
+                const sal_Int32 nDXCount(aDXArray.size());
                 const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
 
-                for(sal_uInt32 a(0); a < nSize; a++)
+                for(sal_Int32 a(0); a < nSize; a++)
                 {
                     const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
 
                     if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
                     {
-                        const sal_uInt32 nStart(rCandidate.nStart - rInfo.mnTextStart);
-                        const sal_uInt32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
+                        const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
+                        const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
                         double fStart(0.0);
                         double fEnd(0.0);
 

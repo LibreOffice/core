@@ -348,14 +348,15 @@ bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
                     sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
                     for ( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
                     {
-                        sal_uInt16 nLineCount = pTextForwarder->GetLineCount( nPara );
-                        for ( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
+                        sal_Int32 nLineCount = pTextForwarder->GetLineCount( nPara );
+                        for ( sal_Int32 nLine = 0; nLine < nLineCount; ++nLine )
                         {
-                            sal_uInt16 nLineStart = 0;
-                            sal_uInt16 nLineEnd = 0;
+                            sal_Int32 nLineStart = 0;
+                            sal_Int32 nLineEnd = 0;
                             pTextForwarder->GetLineBoundaries( nLineStart, nLineEnd, nPara, nLine );
-                            sal_uInt16 nWordStart = 0;
-                            sal_uInt16 nWordEnd = 0;
+                            assert(nLineStart >= 0);
+                            sal_Int32 nWordStart = 0;
+                            sal_Int32 nWordEnd = 0;
                             if ( pTextForwarder->GetWordIndices( nPara, nLineStart, nWordStart, nWordEnd ) &&
                                  ( nWordStart != nLineStart ) )
                             {

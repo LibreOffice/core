@@ -512,7 +512,7 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
             if( rDefName.matchIgnoreAsciiCase( aBuiltInName, nPrefixLen ) )
             {
                 // name can be followed by underline or space character
-                xub_StrLen nNextCharPos = nPrefixLen + nBuiltInLen;
+                sal_Int32 nNextCharPos = nPrefixLen + nBuiltInLen;
                 sal_Unicode cNextChar = (rDefName.getLength() > nNextCharPos) ? rDefName[nNextCharPos] : '\0';
                 if( (cNextChar == '\0') || (cNextChar == ' ') || (cNextChar == '_') )
                     return cBuiltIn;

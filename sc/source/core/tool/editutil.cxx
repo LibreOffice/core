@@ -649,16 +649,16 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 
         if ( pCharItems )
         {
-            std::vector<sal_uInt16> aPortions;
+            std::vector<sal_Int32> aPortions;
             GetPortions( nPar, aPortions );
 
             //  loop through the portions of the paragraph, and set only those items
             //  that are not overridden by existing character attributes
 
-            sal_uInt16 nStart = 0;
-            for ( std::vector<sal_uInt16>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
+            sal_Int32 nStart = 0;
+            for ( std::vector<sal_Int32>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
             {
-                sal_uInt16 nEnd = *it;
+                sal_Int32 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 SfxItemSet aOldCharAttrs = GetAttribs( aSel );
                 SfxItemSet aNewCharAttrs = *pCharItems;
@@ -800,7 +800,7 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, sal_Bool bDel
 }
 
 OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    sal_Int32 /* nPara */, sal_uInt16 /* nPos */,
+                                    sal_Int32 /* nPara */, sal_Int32 /* nPos */,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
@@ -868,7 +868,7 @@ ScFieldEditEngine::ScFieldEditEngine(
 }
 
 OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    sal_Int32 /* nPara */, sal_uInt16 /* nPos */,
+                                    sal_Int32 /* nPara */, sal_Int32 /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
@@ -879,7 +879,7 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor);
 }
 
-void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_uInt16 )
+void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 )
 {
     const SvxFieldData* pFld = rField.GetField();
 

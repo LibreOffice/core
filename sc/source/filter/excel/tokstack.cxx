@@ -685,7 +685,7 @@ const TokenId TokenPool::Store( const OUString& rString )
 
     if (ppP_Str[ nP_StrAkt ])
     {
-        DBG_ASSERT( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
+        /* attention trucate to 16 bits */
         pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->getLength();
     }
 
