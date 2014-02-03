@@ -16,6 +16,24 @@
       "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_665874fb",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-02-03T13:36:45Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure I follow why. My understanding of a const member function is that it does not alter the state of an object. I had to recheck my C++ reference book to make sure I was doing this correctly - and in fact, The C++ Programming Language 4th Edition, Stroustrup actually uses this as an example in chapter 16 with his Date::year() example.\n\nWhat in particular is wrong with this const?",
+      "parentUuid": "da9df570_8681d84c",
+      "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
