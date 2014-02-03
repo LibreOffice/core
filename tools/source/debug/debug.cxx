@@ -1116,6 +1116,9 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 break;
 
             case DBG_FUNC_TESTSOLARMUTEX:
+                SAL_WARN_IF(
+                    pDebugData->pDbgTestSolarMutex == 0, "tools.debug",
+                    "no DbgTestSolarMutex function set");
                 if ( pDebugData->pDbgTestSolarMutex )
                     pDebugData->pDbgTestSolarMutex();
                 break;
