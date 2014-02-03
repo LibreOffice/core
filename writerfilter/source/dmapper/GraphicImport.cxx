@@ -671,11 +671,19 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                              (text::TextContentAnchorType_AS_CHARACTER));
 
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
+
+                        // TextFrames can't be rotated. But for anything else,
+                        // make sure that setting size doesn't affect rotation,
+                        // that would not match Word's definition of rotation.
+                        bool bKeepRotation = false;
                         if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                        {
+                            bKeepRotation = true;
                             xShapeProps->setPropertyValue
                                 (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
                                  uno::makeAny
                                  (m_pImpl->rDomainMapper.GetCurrentTextRange()));
+                        }
 
                         awt::Size aSize(m_xShape->getSize());
 
@@ -684,7 +692,12 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         if (m_pImpl->isYSizeValis())
                             aSize.Height = m_pImpl->getYSize();
 
+                        uno::Any aRotation;
+                        if (bKeepRotation)
+                            aRotation = xShapeProps->getPropertyValue("RotateAngle");
                         m_xShape->setSize(aSize);
+                        if (bKeepRotation)
+                            xShapeProps->setPropertyValue("RotateAngle", aRotation);
 
                         m_pImpl->bIsGraphic = true;
                     }

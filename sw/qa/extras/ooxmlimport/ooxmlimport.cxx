@@ -1567,7 +1567,15 @@ DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was -7223 as it was set after the CustomShapeGeometry property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(210), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(208), xShape->getPosition().X);
+}
+
+DECLARE_OOXMLIMPORT_TEST(lineRotation, "line-rotation.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(3);
+    // This was 5096: the line was shifted towards the bottom, so the end of
+    // the 3 different lines wasn't at the same point.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4808), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
