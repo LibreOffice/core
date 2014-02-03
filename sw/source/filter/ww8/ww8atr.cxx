@@ -2384,24 +2384,24 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rFld )
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
-            rStr += "\\*ALPHABETIC ";
+            rStr += "\\* ALPHABETIC ";
             break;
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:
-            rStr += "\\*alphabetic ";
+            rStr += "\\* alphabetic ";
             break;
         case SVX_NUM_ROMAN_UPPER:
-            rStr += "\\*ROMAN ";
+            rStr += "\\* ROMAN ";
             break;
         case SVX_NUM_ROMAN_LOWER:
-            rStr += "\\*roman ";
+            rStr += "\\* roman ";
             break;
         default:
             OSL_ENSURE(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default of Arabic\n");
             //fallthrough
         case SVX_NUM_ARABIC:
-            rStr += "\\*Arabic ";
+            rStr += "\\* ARABIC ";
             break;
         case SVX_NUM_PAGEDESC:
             //Nothing, use word's default
@@ -2579,7 +2579,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_SETEXPFLD:
         if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
-            OUString sStr = FieldString(ww::eSEQ) + "\"" + pFld->GetTyp()->GetName() +"\" ";
+            OUString sStr = FieldString(ww::eSEQ) +  pFld->GetTyp()->GetName() + " ";
             GetNumberPara( sStr, *pFld );
             GetExport().OutputField(pFld, ww::eSEQ, sStr);
         }
