@@ -2956,16 +2956,16 @@ public:
         return const_cast<ScFormulaCell*>(p)->IsMultilineResult();
     }
 
-    std::pair<size_t,bool> operator() (mdds::mtv::element_t type, size_t nTopRow, size_t nDataSize)
+    std::pair<size_t,bool> operator() (const sc::CellStoreType::value_type& node, size_t nOffset)
     {
         typedef std::pair<size_t,bool> RetType;
 
-        if (type == sc::element_type_empty)
+        if (node.type == sc::element_type_empty)
             return RetType(0, false);
 
-        for (size_t i = 0; i < nDataSize; ++i)
+        for (size_t i = nOffset; i < node.size; ++i)
         {
-            SCROW nRow = nTopRow + i;
+            SCROW nRow = node.position + i;
             sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
             if (IsAmbiguousScriptNonZero(nScriptType))
                 // Return the offset from the first row.
