@@ -34,6 +34,24 @@
       "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_46d8d053",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-03T16:53:40Z",
+      "side": 1,
+      "message": "Returning a non const member variable from a const functions breaks const correctness. See for example http://www.parashift.com/c++-faq/return-const-ref-from-const-memfn.html\nWhile it talks about references the same is true for pointers. More or less a const function signals that it won\u0027t change the object in any way but returning a non const member variable is breaking this promise.\n\nThe correct way to do this is to have a const overload that returns a const pointer.",
+      "parentUuid": "da9df570_665874fb",
+      "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
