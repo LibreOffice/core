@@ -101,7 +101,9 @@ protected:
                   OUString aName, ::com::sun::star::beans::PropertyState& eState );
     const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
-    OUString WriteImage( const OUString& rURL );
+
+    /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
+    OUString WriteImage( const OUString& rURL, bool bRelPathToMedia = false);
     void WriteStyleProperties( sal_Int32 nTokenId, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties );
 
     const char* GetComponentDir();
@@ -117,7 +119,8 @@ public:
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
     DocumentType GetDocumentType() { return meDocumentType; }
 
-    OUString WriteImage( const Graphic &rGraphic );
+    /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
+    OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
     void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( OUString sColorSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
@@ -132,14 +135,19 @@ public:
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
     void WriteGrabBagGradientFill( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aGradientStops, ::com::sun::star::awt::Gradient rGradient);
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace );
+    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+                         OUString sBitmapURL, sal_Int32 nXmlNamespace,
+                         bool bWriteMode, bool bRelPathToMedia = false );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName );
+    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+                         OUString sURLPropName, sal_Int32 nXmlNamespace );
     void WriteSrcRect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, const OUString& );
     void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteStretch();
     void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
-    OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString& rURL, const Graphic *pGraphic=NULL );
+    OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+                            OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=NULL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,

@@ -507,7 +507,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
 
-    WriteBlip( xShapeProps, sGraphicURL, pGraphic );
+    WriteBlip( xShapeProps, sGraphicURL, false, pGraphic );
 
     WriteSrcRect( xShapeProps, sGraphicURL );
 

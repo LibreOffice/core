@@ -43,6 +43,7 @@ public:
     void testUpDownBars();
     void testDoughnutChart();
     void testFdo74115WallGradientFill();
+    void testFdo74115WallBitmapFill();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST(testFdo74115WallGradientFill);
+    CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -542,6 +544,14 @@ void Chart2ExportTest::testFdo74115WallGradientFill()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
+}
+
+void Chart2ExportTest::testFdo74115WallBitmapFill()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo74115_WallBitmapFill.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
