@@ -916,6 +916,8 @@ void OutputDevice::ImplInitFillColor()
     mbInitFillColor = false;
 }
 
+// TODO: fdo#74424 - this needs to be moved out of OutputDevice and into the
+// Window, VirtualDevice and Printer classes
 void OutputDevice::ImplInitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
