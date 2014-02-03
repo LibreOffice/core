@@ -1347,6 +1347,25 @@ void ScTable::SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditTe
     aCol[nCol].SetEditText(nRow, rEditText, pEditPool);
 }
 
+bool ScTable::HasEditText( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2) || nCol2 < nCol1)
+        return false;
+
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow2 < nRow1)
+        return false;
+
+    SCROW nFirst = -1;
+    for (SCCOL i = nCol1; i <= nCol2; ++i)
+    {
+        const ScColumn& rCol = aCol[i];
+        if (const_cast<ScColumn&>(rCol).HasEditCells(nRow1, nRow2, nFirst))
+            return true;
+    }
+
+    return false;
+}
+
 void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))

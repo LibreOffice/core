@@ -3210,6 +3210,15 @@ void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
 }
 
+bool ScDocument::HasEditText( const ScRange& rRange ) const
+{
+    const ScTable* pTab = FetchTable(rRange.aStart.Tab());
+    if (!pTab)
+        return false;
+
+    return pTab->HasEditText(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+}
+
 void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
 {
     if (!TableExists(rPos.Tab()))
