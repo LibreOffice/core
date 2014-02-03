@@ -2598,7 +2598,7 @@ void ScPrintFunc::ApplyPrintSettings()
 //--------------------------------------------------------------------
 //  rPageRanges   = range for all tables
 //  nStartPage    = rPageRanges starts at nStartPage
-//  nDisplayStart = continious number for displaying the page number
+//  nDisplayStart = continuous number for displaying the page number
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, bool bDoPrint,

@@ -983,7 +983,7 @@ SbMethod* SbiRuntime::GetCaller()
 
 //  Stacks
 
-// The expression-stack is available for the continous evaluation
+// The expression-stack is available for the continuous evaluation
 // of expressions.
 
 void SbiRuntime::PushVar( SbxVariable* pVar )

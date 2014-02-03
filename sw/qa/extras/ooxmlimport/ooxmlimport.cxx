@@ -517,7 +517,7 @@ DECLARE_OOXMLIMPORT_TEST(testN766487, "n766487.docx")
 DECLARE_OOXMLIMPORT_TEST(testN693238, "n693238.docx")
 {
     /*
-     * The problem was that a continous section break at the end of the doc caused the margins to be ignored.
+     * The problem was that a continuous section break at the end of the doc caused the margins to be ignored.
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
      */
@@ -682,7 +682,7 @@ DECLARE_OOXMLIMPORT_TEST(testN778140, "n778140.docx")
 DECLARE_OOXMLIMPORT_TEST(testN778828, "n778828.docx")
 {
     /*
-     * The problem was that a page break after a continous section break caused
+     * The problem was that a page break after a continuous section break caused
      * double page break on title page.
      */
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

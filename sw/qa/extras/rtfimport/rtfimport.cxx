@@ -939,7 +939,7 @@ DECLARE_RTFIMPORT_TEST(testFdo58646line, "fdo58646line.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo58646, "fdo58646.rtf")
 {
-    // Page break was ignored inside a continous section, on title page.
+    // Page break was ignored inside a continuous section, on title page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 

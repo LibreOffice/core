@@ -1715,7 +1715,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             AttrOutput().OutputStyleItemSet( aSet, true, bOutPgDscSet );
             bOutputStyleItemSet = true;
 
-            //Cannot export as normal page framedir, as continous sections
+            //Cannot export as normal page framedir, as continuous sections
             //cannot contain any grid settings like proper sections
             AttrOutput().SectionBiDi( FRMDIR_HORI_RIGHT_TOP == TrueFrameDirection( *rSepInfo.pSectionFmt ) );
 

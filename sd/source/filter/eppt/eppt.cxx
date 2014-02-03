@@ -783,7 +783,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                                     // Bit 3    Use named show
                                                     // Bit 4    Browse mode on
                                                     // Bit 5    Kiosk mode on
-                                                    // Bit 7    loop continously
+                                                    // Bit 7    loop continuously
                                                     // Bit ?    show scrollbar
 
                 if ( ImplGetPropertyValue( OUString( "CustomShow" ) ) )

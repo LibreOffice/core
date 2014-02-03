@@ -1913,7 +1913,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            // Ignore continous section break at the end of the document, if the previous section had the same type as well
+            // Ignore continuous section break at the end of the document, if the previous section had the same type as well
             // It makes the importer loose margin settings with no benefit
             SectionPropertyMap* pLastContext = m_pImpl->GetLastSectionContext();
             int nPrevBreakType = 0;

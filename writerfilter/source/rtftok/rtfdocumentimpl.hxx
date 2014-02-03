@@ -384,7 +384,7 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
-                /// Maps the non-continious font indexes to the continuous dmapper indexes.
+                /// Maps the non-continuous font indexes to the continuous dmapper indexes.
                 std::vector<int> m_aFontIndexes;
                 /// Maps style indexes to style names.
                 std::map<int, OUString> m_aStyleNames;

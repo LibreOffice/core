@@ -4485,7 +4485,7 @@ void wwSectionManager::InsertSegments()
 
             // End getting the bounds of this section, quite a job eh?
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
-            // The last section if continous is always unbalanced
+            // The last section if continuous is always unbalanced
             if (pRet)
             {
                 // Set the columns to be UnBalanced if that compatability option is set

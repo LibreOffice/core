@@ -916,7 +916,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             // Remark: For performance reasons there's only ONE BasicFormater-
             //    object created and 'stored', so that the expensive resource-
             //    loading is saved (for country-specific predefined outputs,
-            //    e. g. "On/Off") and the continous string-creation
+            //    e. g. "On/Off") and the continuous string-creation
             //    operations, too.
             // BUT: therefore this code is NOT multithreading capable!
 
