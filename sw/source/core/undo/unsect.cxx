@@ -296,7 +296,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
-SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
+SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
 {
     return new SwUndoDelSection(rFormat, *rFormat.GetSection(),
                 rFormat.GetCntnt().GetCntntIdx());
@@ -409,7 +409,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
-SW_DLLPRIVATE SwUndo *
+SwUndo *
 MakeUndoUpdateSection(SwSectionFmt const& rFormat, bool const bOnlyAttr)
 {
     return new SwUndoUpdateSection(*rFormat.GetSection(),

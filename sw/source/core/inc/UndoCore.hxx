@@ -45,7 +45,7 @@ public:
 };
 
 namespace sw {
-class SW_DLLPRIVATE UndoRedoContext
+class UndoRedoContext
     : public SfxUndoContext
 {
 public:
@@ -78,7 +78,7 @@ private:
     SdrMarkList * m_pMarkList;
 };
 
-class SW_DLLPRIVATE RepeatContext
+class RepeatContext
     : public SfxRepeatTarget
 {
 public:

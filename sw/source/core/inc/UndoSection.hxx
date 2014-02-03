@@ -61,9 +61,9 @@ public:
     void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };
 
-SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
+SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
-SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
+SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
 

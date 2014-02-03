@@ -40,7 +40,7 @@ typedef enum {
 } CopyOrNew_t;
 
 /// if COPY then pTxtNode must be given!
-SW_DLLPRIVATE SwTxtAttr * MakeTxtAttr(
+SwTxtAttr * MakeTxtAttr(
     SwDoc & rDoc,
     SfxPoolItem & rNew,
     sal_Int32 const nStt,
@@ -48,14 +48,14 @@ SW_DLLPRIVATE SwTxtAttr * MakeTxtAttr(
     CopyOrNew_t const bIsCopy = NEW,
     SwTxtNode *const pTxtNode = 0 );
 
-SW_DLLPRIVATE SwTxtAttr * MakeTxtAttr(
+SwTxtAttr * MakeTxtAttr(
     SwDoc & rDoc,
     const SfxItemSet & rSet,
     sal_Int32 nStt,
     sal_Int32 nEnd );
 
 /// create redline dummy text hint that must not be inserted into hints array
-SW_DLLPRIVATE SwTxtAttr* MakeRedlineTxtAttr(
+SwTxtAttr* MakeRedlineTxtAttr(
     SwDoc & rDoc,
     SfxPoolItem& rAttr );
 

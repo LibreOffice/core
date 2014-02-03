@@ -83,7 +83,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
 
-SwRewriter SW_DLLPRIVATE
+SwRewriter
 MakeUndoReplaceRewriter(sal_uLong const ocurrences,
     OUString const& sOld, OUString const& sNew);
 

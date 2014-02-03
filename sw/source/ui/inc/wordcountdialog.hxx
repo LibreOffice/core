@@ -46,7 +46,7 @@ class SwWordCountFloatDlg : public SfxModelessDialog
 
     CloseButton* m_pClosePB;
 
-    SW_DLLPRIVATE DECL_LINK( CloseHdl,     void* );
+    DECL_LINK( CloseHdl,     void* );
 public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,
