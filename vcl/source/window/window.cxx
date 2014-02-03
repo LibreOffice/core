@@ -9032,7 +9032,10 @@ void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
 {
     if( ! mpOutDevData )
-        ImplInitOutDevData();
+    {
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplInitOutDevData();
+    }
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;
     Paint( rRect );
@@ -9601,7 +9604,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
             long nDeltaX = pChild->mnOutOffX - mnOutOffX;
-            if( ImplHasMirroredGraphics() )
+
+            if( pOutDev->ImplHasMirroredGraphics() )
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
             long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
