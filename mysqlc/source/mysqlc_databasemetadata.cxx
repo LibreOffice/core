@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "mysqlc_databasemetadata.hxx"
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -1566,7 +1567,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getCatalogs());
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getCatalogs());
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -1601,7 +1602,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getSchemas());
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getSchemas());
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -1650,7 +1651,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
                 cNamePattern(OUStringToOString(columnNamePattern, m_rConnection.getConnectionEncoding()).getStr());
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getColumnPrivileges(cat, sch, tab, cNamePattern.compare("")? cNamePattern:wild));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getColumnPrivileges(cat, sch, tab, cNamePattern.compare("")? cNamePattern:wild));
 
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
@@ -1692,7 +1693,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
                 cNamePattern(OUStringToOString(columnNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
     try {
-        std::auto_ptr< sql::ResultSet> rset( meta->getColumns(cat,
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getColumns(cat,
                                                 sPattern.compare("")? sPattern:wild,
                                                 tNamePattern.compare("")? tNamePattern:wild,
                                                 cNamePattern.compare("")? cNamePattern:wild));
@@ -1750,7 +1751,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     }
 
     try {
-        std::auto_ptr< sql::ResultSet> rset( meta->getTables(cat,
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getTables(cat,
                                                sPattern.compare("")? sPattern:wild,
                                                tNamePattern.compare("")? tNamePattern:wild,
                                                tabTypes));
@@ -1818,7 +1819,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 
 
     try {
-        std::auto_ptr< sql::ResultSet> rset( meta->getProcedures(cat,
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getProcedures(cat,
                                                    sPattern.compare("")? sPattern:wild,
                                                    pNamePattern.compare("")? pNamePattern:wild));
 
@@ -1878,7 +1879,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getExportedKeys(cat, sch, tab));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getExportedKeys(cat, sch, tab));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -1920,7 +1921,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getImportedKeys(cat, sch, tab));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getImportedKeys(cat, sch, tab));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -1961,7 +1962,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getPrimaryKeys(cat, sch, tab));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getPrimaryKeys(cat, sch, tab));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -2004,7 +2005,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getIndexInfo(cat, sch, tab, unique, approximate));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getIndexInfo(cat, sch, tab, unique, approximate));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -2047,7 +2048,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getBestRowIdentifier(cat, sch, tab, scope, nullable));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getBestRowIdentifier(cat, sch, tab, scope, nullable));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
@@ -2108,7 +2109,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             }
         } else {
             rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-            std::auto_ptr< sql::ResultSet> rset( meta->getTablePrivileges(cat, sPattern.compare("")? sPattern:wild, tPattern.compare("")? tPattern:wild));
+            boost::scoped_ptr< sql::ResultSet> rset( meta->getTablePrivileges(cat, sPattern.compare("")? sPattern:wild, tPattern.compare("")? tPattern:wild));
             sql::ResultSetMetaData * rs_meta = rset->getMetaData();
             sal_uInt32 columns = rs_meta->getColumnCount();
             while (rset->next()) {
@@ -2156,7 +2157,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        std::auto_ptr< sql::ResultSet> rset( meta->getCrossReference(primaryCat, pSchema, pTable, foreignCat, fSchema, fTable));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getCrossReference(primaryCat, pSchema, pTable, foreignCat, fSchema, fTable));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
