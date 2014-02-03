@@ -749,30 +749,22 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
     return new SvxEventConfigPage( pParent, rSet, SvxEventConfigPage::EarlyInit() );
 }
 
-sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
+namespace {
+
+bool showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
-
-    try
+    if (!xFrame.is())
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        css::uno::Reference< css::frame::XDesktop2 >       xDesktop = css::frame::Desktop::create( xContext );
-        css::uno::Reference< css::frame::XModuleManager2 >      xMM = css::frame::ModuleManager::create(xContext);
-
-        if (xFrame.is())
-        {
-            OUString sModuleId = xMM->identify(xFrame);
-            if (
-                ( !sModuleId.isEmpty()                 ) &&
-                (!sModuleId.equals(MODULEID_STARTMODULE))
-               )
-               return sal_True;
-        }
+        return false;
     }
-    catch(const css::uno::Exception&)
-        {}
+    OUString sModuleId(
+        css::frame::ModuleManager::create(
+            comphelper::getProcessComponentContext())
+        ->identify(xFrame));
+    return !sModuleId.isEmpty()
+        && sModuleId != "com.sun.star.frame.StartModule";
+}
 
-    return sal_False;
 }
 
 /******************************************************************************
@@ -815,7 +807,7 @@ void SvxConfigDialog::SetFrame(const ::com::sun::star::uno::Reference< ::com::su
 {
     m_xFrame = xFrame;
 
-    if (!impl_showKeyConfigTabPage( xFrame ))
+    if (!showKeyConfigTabPage( xFrame ))
         RemoveTabPage(m_nKeyboardPageId);
 }
 
