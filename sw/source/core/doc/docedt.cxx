@@ -264,7 +264,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
             }
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
                     && pAPos->nNode.GetIndex() <= rEndNdIdx.GetIndex() - nOff ) ||
-                        ( bInsPos = rInsPos == pAPos->nNode ))
+                        ( bInsPos = (rInsPos == pAPos->nNode) ))
 
             {
                 _SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
