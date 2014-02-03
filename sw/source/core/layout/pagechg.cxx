@@ -1287,7 +1287,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         if ( rDesc.GetNumOffset() )
         {
             ::boost::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
-            bWishedOdd = (oNumOffset ? oNumOffset.get() : 0) % 2 ? true : false;
+            bWishedOdd = ((oNumOffset ? oNumOffset.get() : 0) % 2) ? true : false;
             //Die Gelegenheit nutzen wir um das Flag an der Root zu pflegen.
             pRoot->SetVirtPageNum( sal_True );
         }
@@ -1568,7 +1568,7 @@ void SwRootFrm::AssertFlyPages()
     {
         //Die Seiten werden ausgehend von der letzten Seite konsequent
         //nach den Regeln der PageDescs weitergefuehrt.
-        sal_Bool bOdd = pPage->GetPhyPageNum() % 2 ? sal_True : sal_False;
+        sal_Bool bOdd = (pPage->GetPhyPageNum() % 2) ? sal_True : sal_False;
         SwPageDesc *pDesc = pPage->GetPageDesc();
         SwFrm *pSibling = pPage->GetNext();
         for ( i = pPage->GetPhyPageNum(); i < nMaxPg; ++i  )
