@@ -254,7 +254,6 @@ sal_Int32 ConvertColor(sal_Int32 nWordColor)
     return nRet;
 }
 
-
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
@@ -410,6 +409,31 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     NS_ooxml::LN_Value_ST_NumberFormat_thaiNumbers = 91735;
     NS_ooxml::LN_Value_ST_NumberFormat_thaiCounting = 91736;*/
     return nRet;
+}
+
+com::sun::star::util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
+{
+    com::sun::star::util::DateTime aDateTime;
+    //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
+    //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
+    sal_Int32 nIndex = 0;
+    OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
+    // HACK: this is broken according to the spec, but MSOffice always treats the time as local,
+    // and writes it as Z (=UTC+0)
+    OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
+    nIndex = 0;
+    aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    if (nIndex != -1)
+        aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
+
+    nIndex = 0;
+    aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    if (nIndex != -1)
+        aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
+
+    return aDateTime;
 }
 
 

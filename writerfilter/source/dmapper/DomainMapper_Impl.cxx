@@ -1104,32 +1104,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 #endif
 }
 
-
-util::DateTime lcl_DateStringToDateTime( const OUString& rDateTime )
-{
-    util::DateTime aDateTime;
-    //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
-    //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
-    sal_Int32 nIndex = 0;
-    OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
-    // HACK: this is broken according to the spec, but MSOffice always treats the time as local,
-    // and writes it as Z (=UTC+0)
-    OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
-    nIndex = 0;
-    aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    if (nIndex != -1)
-        aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
-
-    nIndex = 0;
-    aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    if (nIndex != -1)
-        aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
-
-    return aDateTime;
-}
-
 void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
@@ -1549,10 +1523,9 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
             pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
             pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
             pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
-            pRedlineProperties[1].Value <<= lcl_DateStringToDateTime( pRedline->m_sDate );
+            pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
             pRedlineProperties[2].Name = rPropNameSupplier.GetName( PROP_REDLINE_REVERT_PROPERTIES );
             pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
-
             xRedline->makeRedline( sType, aRedlineProperties );
         }
         catch( const uno::Exception & )
@@ -3959,7 +3932,7 @@ void DomainMapper_Impl::SetCurrentRedlineDate( OUString sDate )
             pCurrent->m_sDate = sDate;
     }
     else
-        m_xAnnotationField->setPropertyValue("DateTimeValue", uno::makeAny(lcl_DateStringToDateTime(sDate)));
+        m_xAnnotationField->setPropertyValue("DateTimeValue", uno::makeAny(ConversionHelper::ConvertDateStringToDateTime(sDate)));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
