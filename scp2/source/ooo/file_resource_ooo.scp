@@ -83,7 +83,6 @@ STD_RES_FILE( gid_File_Res_Svt, svt )
 
 STD_RES_FILE( gid_File_Res_Svx, svx )
 STD_RES_FILE( gid_File_Res_Editeng, editeng )
-STD_RES_FILE( gid_File_Res_TextConversionDlgs, textconversiondlgs )
 
 STD_RES_FILE( gid_File_Res_Cui, cui )
 

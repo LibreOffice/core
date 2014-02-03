@@ -50,7 +50,6 @@ $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
     svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog \
     svx/source/unodialogs/textconversiondlgs/chinese_translationdialog \
     svx/source/unodialogs/textconversiondlgs/chinese_translation_unodialog \
-    svx/source/unodialogs/textconversiondlgs/resid \
 ))
 
 # vim: set noet sw=4 ts=4:

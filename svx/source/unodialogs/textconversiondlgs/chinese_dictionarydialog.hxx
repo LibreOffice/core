@@ -29,8 +29,7 @@
 #include <vcl/edit.hxx>
 // header for class ListBox
 #include <vcl/lstbox.hxx>
-// header for class SvHeaderTabListBox
-#include <svtools/svtabbx.hxx>
+#include <svtools/simptabl.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 
@@ -62,19 +61,15 @@ struct DictionaryEntry
     bool     m_bNewEntry;
 };
 
-class DictionaryList : public SvHeaderTabListBox
+class DictionaryList : public SvSimpleTable
 {
 public:
-    DictionaryList( Window* pParent, const ResId& );
-    DictionaryList( Window* pParent );
-    virtual ~DictionaryList();
+    DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
 
-    HeaderBar* createHeaderBar( const OUString& rColumn1, const OUString& rColumn2, const OUString& rColumn3
-                  , long nWidth1, long nWidth2, long nWidth3 );
+    void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
+        Window *pED_Term, Window *pED_Mapping, ListBox *pLB_Property,
+        Window *pFT_Term, Window *pFT_Mapping, Window *pFT_Property);
 
-    void initDictionaryControl( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary>& xDictionary
-                            , ListBox* pPropertyTypeNameListBox );
-    void activate( HeaderBar* pHeaderBar );
     void deleteAll();
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
     void save();
@@ -92,8 +87,6 @@ public:
     void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
     sal_uInt16 getSortColumn() const;
 
-    virtual void Resize();
-
 private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
     OUString makeTabString( const DictionaryEntry& rEntry ) const;
@@ -102,13 +95,17 @@ private:
     sal_Int32 ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
     SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
 
+    void setColSizes();
+
+    virtual void Resize();
+
 public:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XConversionDictionary>   m_xDictionary;
+    css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 
 private:
-    HeaderBar*  m_pHeaderBar;
-    ListBox*    m_pPropertyTypeNameListBox;
+    Window*     m_pED_Term;
+    Window*     m_pED_Mapping;
+    ListBox*    m_pLB_Property;
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
 
@@ -133,7 +130,10 @@ private:
     DECL_LINK( AddHdl, void* );
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( DeleteHdl, void* );
-    DECL_LINK( HeaderBarClick, void* );
+    DECL_LINK( HeaderBarClick, HeaderBar* );
+
+    void initDictionaryControl(DictionaryList *pList,
+        const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);
 
     void updateAfterDirectionChange();
     void updateButtons();
@@ -148,38 +148,32 @@ private:
     const DictionaryList& getReverseDictionary() const;
 
 private:
-    sal_Int32   m_nTextConversionOptions; //i18n::TextConversionOption
+    sal_Int32    m_nTextConversionOptions; //i18n::TextConversionOption
 
-    RadioButton m_aRB_To_Simplified;
-    RadioButton m_aRB_To_Traditional;
+    RadioButton* m_pRB_To_Simplified;
+    RadioButton* m_pRB_To_Traditional;
 
-    CheckBox    m_aCB_Reverse;
+    CheckBox*    m_pCB_Reverse;
 
-    FixedText   m_aFT_Term;
-    Edit        m_aED_Term;
+    FixedText*   m_pFT_Term;
+    Edit*        m_pED_Term;
 
-    FixedText   m_aFT_Mapping;
-    Edit        m_aED_Mapping;
+    FixedText*   m_pFT_Mapping;
+    Edit*        m_pED_Mapping;
 
-    FixedText   m_aFT_Property;
-    ListBox     m_aLB_Property;
+    FixedText*   m_pFT_Property;
+    ListBox*     m_pLB_Property;
 
-    HeaderBar*      m_pHeaderBar;
-    DictionaryList  m_aCT_DictionaryToSimplified;
-    DictionaryList  m_aCT_DictionaryToTraditional;
+    SvSimpleTableContainer* mpToSimplifiedContainer;
+    DictionaryList* m_pCT_DictionaryToSimplified;
+    SvSimpleTableContainer* mpToTraditionalContainer;
+    DictionaryList* m_pCT_DictionaryToTraditional;
 
-    PushButton  m_aPB_Add;
-    PushButton  m_aPB_Modify;
-    PushButton  m_aPB_Delete;
+    PushButton*  m_pPB_Add;
+    PushButton*  m_pPB_Modify;
+    PushButton*  m_pPB_Delete;
 
-    FixedLine   m_aFL_Bottomline;
-
-    OKButton        m_aBP_OK;
-    CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >              m_xContext;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
 };
 
 //.............................................................................

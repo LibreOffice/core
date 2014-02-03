@@ -19,8 +19,6 @@
 
 
 #include "chinese_dictionarydialog.hxx"
-#include "chinese_dictionarydialog.hrc"
-#include "resid.hxx"
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
@@ -55,21 +53,12 @@ using namespace ::com::sun::star::uno;
 
 #define HEADER_BAR_BITS ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_FIXED | HIB_FIXEDPOS )
 
-DictionaryList::DictionaryList( Window* pParent, const ResId& rResId)
-    : SvHeaderTabListBox( pParent, rResId )
+DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
+    : SvSimpleTable(rParent, nBits)
     , m_xDictionary(0)
-    , m_pHeaderBar(0)
-    , m_pPropertyTypeNameListBox(0)
-    , m_aToBeDeleted()
-    , m_nSortColumnIndex(0)
-{
-}
-
-DictionaryList::DictionaryList( Window* pParent )
-    : SvHeaderTabListBox( pParent, 0 )
-    , m_xDictionary(0)
-    , m_pHeaderBar(0)
-    , m_pPropertyTypeNameListBox(0)
+    , m_pED_Term(0)
+    , m_pED_Mapping(0)
+    , m_pLB_Property(0)
     , m_aToBeDeleted()
     , m_nSortColumnIndex(0)
 {
@@ -77,13 +66,13 @@ DictionaryList::DictionaryList( Window* pParent )
 
 OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
 {
-    if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
+    if(!m_pLB_Property || !m_pLB_Property->GetEntryCount())
         return OUString();
 
     sal_uInt16 nPos = static_cast<sal_uInt16>( nConversionPropertyType )-1;
-    if(nPos<m_pPropertyTypeNameListBox->GetEntryCount())
-        return m_pPropertyTypeNameListBox->GetEntry(nPos);
-    return m_pPropertyTypeNameListBox->GetEntry(0);
+    if(nPos<m_pLB_Property->GetEntryCount())
+        return m_pLB_Property->GetEntry(nPos);
+    return m_pLB_Property->GetEntry(0);
 }
 
 OUString DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
@@ -94,21 +83,6 @@ OUString DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
     aStr += "\t";
     aStr += getPropertyTypeName( rEntry.m_nConversionPropertyType );
     return aStr;
-}
-
-void DictionaryList::initDictionaryControl( const Reference< linguistic2::XConversionDictionary>& xDictionary
-                                           , ListBox* pPropertyTypeNameListBox )
-{
-    SetStyle( WB_VSCROLL | WB_TABSTOP );
-    SetSelectionMode( SINGLE_SELECTION );
-    SetBorderStyle( WINDOW_BORDER_MONO );
-    SetHighlightRange();
-
-    if(m_xDictionary.is())
-        return;
-
-    m_xDictionary = xDictionary;
-    m_pPropertyTypeNameListBox = pPropertyTypeNameListBox;
 }
 
 void DictionaryList::save()
@@ -289,55 +263,6 @@ sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
     return nPos;
 }
 
-DictionaryList::~DictionaryList()
-{
-}
-
-void DictionaryList::activate( HeaderBar* pHeaderBar )
-{
-    if(!m_pHeaderBar)
-    {
-        m_pHeaderBar = pHeaderBar;
-
-        Point aPos = GetPosPixel();
-        Size  aSize = GetSizePixel();
-        Size aHeadSize = pHeaderBar->GetSizePixel();
-
-        aPos.Y() += aHeadSize.Height();
-        SetPosSizePixel( aPos, Size( aSize.Width(), aSize.Height() - aHeadSize.Height() ) );
-        InitHeaderBar( pHeaderBar );
-    }
-    Show();
-}
-
-HeaderBar* DictionaryList::createHeaderBar( const OUString& rColumn1, const OUString& rColumn2, const OUString& rColumn3
-                  , long nWidth1, long nWidth2, long nWidth3 )
-{
-    HeaderBar* pHeaderBar = new HeaderBar( Control::GetParent(), WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    pHeaderBar->SetPosSizePixel( GetPosPixel(), pHeaderBar->CalcWindowSizePixel() );
-
-    HeaderBarItemBits nBits = HEADER_BAR_BITS;
-    pHeaderBar->InsertItem( 1, rColumn1, nWidth1, nBits | HIB_UPARROW );
-    pHeaderBar->InsertItem( 2, rColumn2, nWidth2, nBits );
-    pHeaderBar->InsertItem( 3, rColumn3, nWidth3, nBits );
-
-    pHeaderBar->Show();
-    return pHeaderBar;
-}
-
-void DictionaryList::Resize()
-{
-    SvHeaderTabListBox::Resize();
-    Size aBoxSize = GetOutputSizePixel();
-
-    if ( !aBoxSize.Width() )
-        return;
-
-       Size aBarSize = m_pHeaderBar->GetSizePixel();
-    aBarSize.Width() = GetSizePixel().Width();
-    m_pHeaderBar->SetSizePixel( aBarSize );
-}
-
 void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
 {
     m_nSortColumnIndex=nSortColumnIndex;
@@ -437,52 +362,115 @@ bool DictionaryEntry::operator==( const DictionaryEntry& rE ) const
             && m_nConversionPropertyType == rE.m_nConversionPropertyType;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+void DictionaryList::setColSizes()
+{
+    HeaderBar &rBar = GetTheHeaderBar();
+    if (rBar.GetItemCount() < 3)
+        return;
+
+    long nWidth1 = m_pED_Term->get_preferred_size().Width();
+    long nWidth2 = m_pED_Mapping->get_preferred_size().Width();
+    long nWidth3 = m_pLB_Property->get_preferred_size().Width();
+
+    long nWidth = GetSizePixel().Width();
+    long nPos3 = nWidth - nWidth3;
+    long nRemainder = nWidth - (nWidth1 + nWidth2 + nWidth3);
+
+    long aStaticTabs[] = { 3, 0, nWidth1 + (nRemainder/2), nPos3 };
+    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+}
+
+void DictionaryList::Resize()
+{
+    SvSimpleTable::Resize();
+    setColSizes();
+}
+
+void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& xDictionary,
+    Window *pED_Term, Window *pED_Mapping, ListBox *pLB_Property,
+    Window *pFT_Term, Window *pFT_Mapping, Window *pFT_Property)
+{
+    SetStyle( WB_VSCROLL | WB_TABSTOP );
+    SetSelectionMode( SINGLE_SELECTION );
+    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetHighlightRange();
+
+    if (m_xDictionary.is())
+        return;
+
+    m_xDictionary = xDictionary;
+
+    m_pED_Term = pED_Term;
+    m_pED_Mapping = pED_Mapping;
+    m_pLB_Property = pLB_Property;
+
+    HeaderBar& rHeaderBar = GetTheHeaderBar();
+
+    OUString aColumn1( OutputDevice::GetNonMnemonicString( pFT_Term->GetText() ) );
+    OUString aColumn2( OutputDevice::GetNonMnemonicString( pFT_Mapping->GetText() ) );
+    OUString aColumn3( OutputDevice::GetNonMnemonicString( pFT_Property->GetText() ) );
+
+    long nWidth1 = m_pED_Term->get_preferred_size().Width();
+    long nWidth2 = m_pED_Mapping->get_preferred_size().Width();
+    long nWidth3 = m_pLB_Property->get_preferred_size().Width();
+
+    HeaderBarItemBits nBits = HEADER_BAR_BITS;
+    rHeaderBar.InsertItem( 1, aColumn1, nWidth1, nBits | HIB_UPARROW );
+    rHeaderBar.InsertItem( 2, aColumn2, nWidth2, nBits );
+    rHeaderBar.InsertItem( 3, aColumn3, nWidth3, nBits );
+
+    long pTabs[] = { 3, 0, nWidth1, nWidth1 + nWidth2 };
+    SetTabs( &pTabs[0], MAP_PIXEL );
+}
+
+void ChineseDictionaryDialog::initDictionaryControl(DictionaryList *pList,
+    const Reference< linguistic2::XConversionDictionary>& xDictionary)
+{
+    //init HeaderBar and set tabs
+    HeaderBar& rHeaderBar = pList->GetTheHeaderBar();
+    //set hdl
+    rHeaderBar.SetSelectHdl( LINK( this, ChineseDictionaryDialog, HeaderBarClick ) );
+    //set widgets to track the width of for columns
+    pList->init(xDictionary,
+        m_pED_Term, m_pED_Mapping, m_pLB_Property,
+        m_pFT_Term, m_pFT_Mapping, m_pFT_Property);
+}
 
 ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
-    : ModalDialog( pParent, TextConversionDlgs_ResId( DLG_CHINESEDICTIONARY ) )
-    , m_nTextConversionOptions( i18n::TextConversionOption::NONE )
-    , m_aRB_To_Simplified( this, TextConversionDlgs_ResId( RB_TO_SIMPLIFIED ) )
-    , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
-    , m_aCB_Reverse( this, TextConversionDlgs_ResId( CB_REVERSE ) )
-    , m_aFT_Term( this, TextConversionDlgs_ResId( FT_TERM ) )
-    , m_aED_Term( this, TextConversionDlgs_ResId( ED_TERM ) )
-    , m_aFT_Mapping( this, TextConversionDlgs_ResId( FT_MAPPING ) )
-    , m_aED_Mapping( this, TextConversionDlgs_ResId( ED_MAPPING ) )
-    , m_aFT_Property( this, TextConversionDlgs_ResId( FT_PROPERTY ) )
-    , m_aLB_Property( this, TextConversionDlgs_ResId( LB_PROPERTY ) )
-    , m_pHeaderBar( 0 )
-    , m_aCT_DictionaryToSimplified( this, TextConversionDlgs_ResId( CT_MAPPINGLIST ) )
-    , m_aCT_DictionaryToTraditional( this )
-    , m_aPB_Add( this, TextConversionDlgs_ResId( PB_ADD ) )
-    , m_aPB_Modify( this, TextConversionDlgs_ResId( PB_MODIFY ) )
-    , m_aPB_Delete( this, TextConversionDlgs_ResId( PB_DELETE ) )
-    , m_aFL_Bottomline( this, TextConversionDlgs_ResId( FL_BOTTOMLINE ) )
-    , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
-    , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
-    , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
-    , m_xContext( 0 )
+    : ModalDialog(pParent, "ChineseDictionaryDialog",
+         "svx/ui/chinesedictionary.ui")
+    , m_nTextConversionOptions(i18n::TextConversionOption::NONE)
+    , m_xContext(0)
 {
-    FreeResource();
+    get(m_pRB_To_Simplified, "tradtosimple");
+    get(m_pRB_To_Traditional, "simpletotrad");
+    get(m_pCB_Reverse, "reverse");
+    get(m_pFT_Term, "termft");
+    get(m_pED_Term, "term");
+    get(m_pFT_Mapping, "mappingft");
+    get(m_pED_Mapping, "mapping");
+    get(m_pFT_Property, "propertyft");
+    get(m_pLB_Property, "property");
 
-    m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED );
-    m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL );
+    get(m_pPB_Add, "add");
+    get(m_pPB_Modify, "modify");
+    get(m_pPB_Delete, "delete");
 
-    m_aCB_Reverse.SetHelpId( HID_SVX_CHINESE_DICTIONARY_CB_REVERSE );
-
-    m_aCT_DictionaryToSimplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED );
-    m_aCT_DictionaryToTraditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL );
+    get(mpToSimplifiedContainer, "tradtosimpleview");
+    mpToSimplifiedContainer->set_height_request(mpToSimplifiedContainer->GetTextHeight() * 8);
+    m_pCT_DictionaryToSimplified = new DictionaryList(*mpToSimplifiedContainer, 0);
+    get(mpToTraditionalContainer, "simpletotradview");
+    mpToTraditionalContainer->set_height_request(mpToTraditionalContainer->GetTextHeight() * 8);
+    m_pCT_DictionaryToTraditional = new DictionaryList(*mpToTraditionalContainer, 0);
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
-        m_aCB_Reverse.Check( bValue );
+        m_pCB_Reverse->Check( bValue );
 
-    m_aLB_Property.SetDropDownLineCount( m_aLB_Property.GetEntryCount() );
-    m_aLB_Property.SelectEntryPos(0);
+    m_pLB_Property->SetDropDownLineCount( m_pLB_Property->GetEntryCount() );
+    m_pLB_Property->SelectEntryPos(0);
 
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Simplified(0);
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional(0);
@@ -533,79 +521,53 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                         xDictionary_To_Traditional->setActive( sal_True );
 
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception& )
                 {
                 }
             }
         }
     }
 
-    //init HeaderBar and set tabs
-    {
-        OUString aColumn1( OutputDevice::GetNonMnemonicString( m_aFT_Term.GetText() ) );
-        OUString aColumn2( OutputDevice::GetNonMnemonicString( m_aFT_Mapping.GetText() ) );
-        OUString aColumn3( OutputDevice::GetNonMnemonicString( m_aFT_Property.GetText() ) );
-
-        long nWidth1 = m_aED_Mapping.GetPosPixel().X() - m_aED_Term.GetPosPixel().X();
-        long nWidth2 = m_aLB_Property.GetPosPixel().X() - m_aED_Mapping.GetPosPixel().X();
-        long nWidth3 = m_aLB_Property.GetSizePixel().Width();
-
-        m_pHeaderBar = m_aCT_DictionaryToSimplified.createHeaderBar( aColumn1, aColumn2, aColumn3, nWidth1, nWidth2, nWidth3 );
-        if(m_pHeaderBar)
-            m_pHeaderBar->SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_HEADER );
-
-        long pTabs[] = { 3, 0, nWidth1, nWidth1 + nWidth2 };
-        m_aCT_DictionaryToSimplified.SetTabs( &pTabs[0], MAP_PIXEL );
-        m_aCT_DictionaryToTraditional.SetTabs( &pTabs[0], MAP_PIXEL );
-    }
-
     //init dictionary controls
-    m_aCT_DictionaryToTraditional.SetPosPixel( m_aCT_DictionaryToSimplified.GetPosPixel() );
-    m_aCT_DictionaryToTraditional.SetSizePixel( m_aCT_DictionaryToSimplified.GetSizePixel() );
+    initDictionaryControl(m_pCT_DictionaryToSimplified, xDictionary_To_Simplified);
+    initDictionaryControl(m_pCT_DictionaryToTraditional, xDictionary_To_Traditional);
 
-    m_aCT_DictionaryToSimplified.initDictionaryControl( xDictionary_To_Simplified, &m_aLB_Property );
-    m_aCT_DictionaryToTraditional.initDictionaryControl( xDictionary_To_Traditional, &m_aLB_Property );
-
-    //
     updateAfterDirectionChange();
 
-    //set hdl
-    if(m_pHeaderBar)
-        m_pHeaderBar->SetSelectHdl( LINK( this, ChineseDictionaryDialog, HeaderBarClick ) );
+    m_pED_Term->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_pED_Mapping->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_pLB_Property->SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
 
-    m_aED_Term.SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
-    m_aED_Mapping.SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
-    m_aLB_Property.SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_pRB_To_Simplified->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_pRB_To_Traditional->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
 
-    m_aRB_To_Simplified.SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
-    m_aRB_To_Traditional.SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_pCT_DictionaryToSimplified->SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
+    m_pCT_DictionaryToTraditional->SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
 
-    m_aCT_DictionaryToSimplified.SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
-    m_aCT_DictionaryToTraditional.SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
-
-    m_aPB_Add.SetClickHdl( LINK( this, ChineseDictionaryDialog, AddHdl ) );
-    m_aPB_Modify.SetClickHdl( LINK( this, ChineseDictionaryDialog, ModifyHdl ) );
-    m_aPB_Delete.SetClickHdl( LINK( this, ChineseDictionaryDialog, DeleteHdl ) );
+    m_pPB_Add->SetClickHdl( LINK( this, ChineseDictionaryDialog, AddHdl ) );
+    m_pPB_Modify->SetClickHdl( LINK( this, ChineseDictionaryDialog, ModifyHdl ) );
+    m_pPB_Delete->SetClickHdl( LINK( this, ChineseDictionaryDialog, DeleteHdl ) );
 }
 
 ChineseDictionaryDialog::~ChineseDictionaryDialog()
 {
     m_xContext=0;
-    delete m_pHeaderBar;
+    delete m_pCT_DictionaryToSimplified;
+    delete m_pCT_DictionaryToTraditional;
 }
 
 void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )
 {
-    if( bDirectionToSimplified == bool(m_aRB_To_Simplified.IsChecked())
+    if( bDirectionToSimplified == bool(m_pRB_To_Simplified->IsChecked())
         && nTextConversionOptions == m_nTextConversionOptions )
         return;
 
     m_nTextConversionOptions = nTextConversionOptions;
 
     if( bDirectionToSimplified )
-        m_aRB_To_Simplified.Check();
+        m_pRB_To_Simplified->Check();
     else
-        m_aRB_To_Traditional.Check();
+        m_pRB_To_Traditional->Check();
     updateAfterDirectionChange();
 }
 
@@ -619,17 +581,17 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
 {
     Reference< linguistic2::XConversionDictionary > xDictionary(0);
 
-    if( m_aRB_To_Simplified.IsChecked() )
+    if( m_pRB_To_Simplified->IsChecked() )
     {
-        m_aCT_DictionaryToSimplified.activate( m_pHeaderBar );
-        m_aCT_DictionaryToTraditional.Hide();
-        xDictionary = m_aCT_DictionaryToSimplified.m_xDictionary;
+        mpToTraditionalContainer->Hide();
+        mpToSimplifiedContainer->Show();
+        xDictionary = m_pCT_DictionaryToSimplified->m_xDictionary;
     }
     else
     {
-        m_aCT_DictionaryToTraditional.activate( m_pHeaderBar );
-        m_aCT_DictionaryToSimplified.Hide();
-        xDictionary = m_aCT_DictionaryToTraditional.m_xDictionary;
+        mpToSimplifiedContainer->Hide();
+        mpToTraditionalContainer->Show();
+        xDictionary = m_pCT_DictionaryToTraditional->m_xDictionary;
     }
 
     updateButtons();
@@ -645,13 +607,13 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if(pE)
     {
-        m_aED_Term.SetText( pE->m_aTerm );
-        m_aED_Mapping.SetText( pE->m_aMapping );
+        m_pED_Term->SetText( pE->m_aTerm );
+        m_pED_Mapping->SetText( pE->m_aMapping );
         sal_Int16 nPos = pE->m_nConversionPropertyType-1;
-        if( nPos<0 || nPos>=m_aLB_Property.GetEntryCount() )
+        if( nPos<0 || nPos>=m_pLB_Property->GetEntryCount() )
             nPos=0;
-        if( m_aLB_Property.GetEntryCount() )
-            m_aLB_Property.SelectEntryPos(nPos);
+        if( m_pLB_Property->GetEntryCount() )
+            m_pLB_Property->SelectEntryPos(nPos);
     }
 
     updateButtons();
@@ -660,7 +622,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
 
 bool ChineseDictionaryDialog::isEditFieldsHaveContent() const
 {
-    return !m_aED_Term.GetText().isEmpty() && !m_aED_Mapping.GetText().isEmpty();
+    return !m_pED_Term->GetText().isEmpty() && !m_pED_Mapping->GetText().isEmpty();
 }
 
 bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() const
@@ -668,11 +630,11 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if( pE )
     {
-        if( pE->m_aTerm != OUString( m_aED_Term.GetText() ) )
+        if( pE->m_aTerm != OUString( m_pED_Term->GetText() ) )
             return false;
-        if( pE->m_aMapping != OUString( m_aED_Mapping.GetText() ) )
+        if( pE->m_aMapping != OUString( m_pED_Mapping->GetText() ) )
             return false;
-        if( pE->m_nConversionPropertyType != m_aLB_Property.GetSelectEntryPos()+1 )
+        if( pE->m_nConversionPropertyType != m_pLB_Property->GetSelectEntryPos()+1 )
             return false;
         return true;
     }
@@ -681,38 +643,38 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
 
 const DictionaryList& ChineseDictionaryDialog::getActiveDictionary() const
 {
-    if( m_aRB_To_Traditional.IsChecked() )
-        return m_aCT_DictionaryToTraditional;
-    return m_aCT_DictionaryToSimplified;
+    if( m_pRB_To_Traditional->IsChecked() )
+        return *m_pCT_DictionaryToTraditional;
+    return *m_pCT_DictionaryToSimplified;
 }
 
 DictionaryList& ChineseDictionaryDialog::getActiveDictionary()
 {
-    if( m_aRB_To_Traditional.IsChecked() )
-        return m_aCT_DictionaryToTraditional;
-    return m_aCT_DictionaryToSimplified;
+    if( m_pRB_To_Traditional->IsChecked() )
+        return *m_pCT_DictionaryToTraditional;
+    return *m_pCT_DictionaryToSimplified;
 }
 
 const DictionaryList& ChineseDictionaryDialog::getReverseDictionary() const
 {
-    if( m_aRB_To_Traditional.IsChecked() )
-        return m_aCT_DictionaryToSimplified;
-    return m_aCT_DictionaryToTraditional;
+    if( m_pRB_To_Traditional->IsChecked() )
+        return *m_pCT_DictionaryToSimplified;
+    return *m_pCT_DictionaryToTraditional;
 }
 
 DictionaryList& ChineseDictionaryDialog::getReverseDictionary()
 {
-    if( m_aRB_To_Traditional.IsChecked() )
-        return m_aCT_DictionaryToSimplified;
-    return m_aCT_DictionaryToTraditional;
+    if( m_pRB_To_Traditional->IsChecked() )
+        return *m_pCT_DictionaryToSimplified;
+    return *m_pCT_DictionaryToTraditional;
 }
 
 void ChineseDictionaryDialog::updateButtons()
 {
-    bool bAdd = isEditFieldsHaveContent() && !getActiveDictionary().hasTerm( m_aED_Term.GetText() );
-    m_aPB_Add.Enable( bAdd );
+    bool bAdd = isEditFieldsHaveContent() && !getActiveDictionary().hasTerm( m_pED_Term->GetText() );
+    m_pPB_Add->Enable( bAdd );
 
-    m_aPB_Delete.Enable( !bAdd && getActiveDictionary().GetSelectedRowCount()>0 );
+    m_pPB_Delete->Enable( !bAdd && getActiveDictionary().GetSelectedRowCount()>0 );
 
 //    DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
 
@@ -720,11 +682,11 @@ void ChineseDictionaryDialog::updateButtons()
     {
         DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
         bModify = !bAdd && getActiveDictionary().GetSelectedRowCount()==1
-                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm.equals( m_aED_Term.GetText() );
+                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm.equals( m_pED_Term->GetText() );
         if( bModify && isEditFieldsContentEqualsSelectedListContent() )
             bModify = false;
     }
-    m_aPB_Modify.Enable( bModify );
+    m_pPB_Modify->Enable( bModify );
 }
 
 IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl)
@@ -732,14 +694,14 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl)
     if( !isEditFieldsHaveContent() )
         return 0;
 
-    sal_Int16 nConversionPropertyType = m_aLB_Property.GetSelectEntryPos()+1;
+    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectEntryPos()+1;
 
-    getActiveDictionary().addEntry( m_aED_Term.GetText(), m_aED_Mapping.GetText(), nConversionPropertyType );
+    getActiveDictionary().addEntry( m_pED_Term->GetText(), m_pED_Mapping->GetText(), nConversionPropertyType );
 
-    if( m_aCB_Reverse.IsChecked() )
+    if( m_pCB_Reverse->IsChecked() )
     {
-        getReverseDictionary().deleteEntries( m_aED_Mapping.GetText() );
-        getReverseDictionary().addEntry( m_aED_Mapping.GetText(), m_aED_Term.GetText(), nConversionPropertyType );
+        getReverseDictionary().deleteEntries( m_pED_Mapping->GetText() );
+        getReverseDictionary().addEntry( m_pED_Mapping->GetText(), m_pED_Term->GetText(), nConversionPropertyType );
     }
 
     updateButtons();
@@ -747,9 +709,9 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl)
 }
 IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl)
 {
-    OUString aTerm( m_aED_Term.GetText() );
-    OUString aMapping( m_aED_Mapping.GetText() );
-    sal_Int16 nConversionPropertyType = m_aLB_Property.GetSelectEntryPos()+1;
+    OUString aTerm( m_pED_Term->GetText() );
+    OUString aMapping( m_pED_Mapping->GetText() );
+    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectEntryPos()+1;
 
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();
@@ -762,7 +724,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl)
     {
         if( pE->m_aMapping != aMapping || pE->m_nConversionPropertyType != nConversionPropertyType )
         {
-            if( m_aCB_Reverse.IsChecked() )
+            if( m_pCB_Reverse->IsChecked() )
             {
                 sal_uIntPtr nPos = rReverse.deleteEntries( pE->m_aMapping );
                 nPos = rReverse.deleteEntries( aMapping );
@@ -797,7 +759,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl)
                 {
                     aMapping = pEntry->m_aMapping;
                     rActive.deleteEntryOnPos( nN );
-                    if( m_aCB_Reverse.IsChecked() )
+                    if( m_pCB_Reverse->IsChecked() )
                         rReverse.deleteEntries( aMapping  );
                 }
                 break;
@@ -815,8 +777,8 @@ short ChineseDictionaryDialog::Execute()
     if(m_nTextConversionOptions & i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
         nTextConversionOptions = nTextConversionOptions^i18n::TextConversionOption::USE_CHARACTER_VARIANTS ;
 
-    m_aCT_DictionaryToSimplified.refillFromDictionary( nTextConversionOptions );
-    m_aCT_DictionaryToTraditional.refillFromDictionary( m_nTextConversionOptions );
+    m_pCT_DictionaryToSimplified->refillFromDictionary( nTextConversionOptions );
+    m_pCT_DictionaryToTraditional->refillFromDictionary( m_nTextConversionOptions );
 
     short nRet = ModalDialog::Execute();
 
@@ -825,41 +787,39 @@ short ChineseDictionaryDialog::Execute()
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
         Any aAny;
-        aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
+        aAny <<= sal_Bool( !!m_pCB_Reverse->IsChecked() );
         aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), aAny );
 
-        m_aCT_DictionaryToSimplified.save();
-        m_aCT_DictionaryToTraditional.save();
+        m_pCT_DictionaryToSimplified->save();
+        m_pCT_DictionaryToTraditional->save();
     }
 
-    m_aCT_DictionaryToSimplified.deleteAll();
-    m_aCT_DictionaryToTraditional.deleteAll();
+    m_pCT_DictionaryToSimplified->deleteAll();
+    m_pCT_DictionaryToTraditional->deleteAll();
 
     return nRet;
 }
 
-IMPL_LINK_NOARG(ChineseDictionaryDialog, HeaderBarClick)
+IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar)
 {
-    if(m_pHeaderBar)
+    sal_uInt16 nId = pHeaderBar->GetCurItemId();
+    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nId);
+    if( nBits & HIB_CLICKABLE )
     {
-        sal_uInt16 nId = m_pHeaderBar->GetCurItemId();
-        HeaderBarItemBits nBits = m_pHeaderBar->GetItemBits(nId);
-        if( nBits & HIB_CLICKABLE )
-        {
-            //set new arrow positions in headerbar
-            m_pHeaderBar->SetItemBits( getActiveDictionary().getSortColumn()+1, HEADER_BAR_BITS );
-            if( nBits & HIB_UPARROW )
-                m_pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_DOWNARROW );
-            else
-                m_pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_UPARROW );
+        //set new arrow positions in headerbar
+        pHeaderBar->SetItemBits( getActiveDictionary().getSortColumn()+1, HEADER_BAR_BITS );
+        if( nBits & HIB_UPARROW )
+            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_DOWNARROW );
+        else
+            pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_UPARROW );
 
-            //sort lists
-            nBits = m_pHeaderBar->GetItemBits(nId);
-            bool bSortAtoZ = nBits & HIB_UPARROW;
-            getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
-            getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
-        }
+        //sort lists
+        nBits = pHeaderBar->GetItemBits(nId);
+        bool bSortAtoZ = nBits & HIB_UPARROW;
+        getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
+        getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
     }
+
     return 0;
 }
 

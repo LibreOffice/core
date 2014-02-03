@@ -19,7 +19,6 @@
 
 
 #include "chinese_translationdialog.hxx"
-#include "resid.hxx"
 #include "chinese_dictionarydialog.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 // header for define RET_OK
@@ -46,9 +45,6 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     get(m_pRB_To_Simplified, "tosimplified");
     get(m_pRB_To_Traditional, "totraditional");
     get(m_pCB_Translate_Commonterms, "commonterms");
-
-    m_pRB_To_Simplified->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
-    m_pRB_To_Traditional->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();

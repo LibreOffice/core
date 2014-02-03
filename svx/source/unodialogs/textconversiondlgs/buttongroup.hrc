@@ -19,8 +19,6 @@
 #ifndef _UNODIALOGS_BUTTONGROUP_HRC
 #define _UNODIALOGS_BUTTONGROUP_HRC
 
-#include "resids.hrc"
-
 #define PB_OK       1
 #define PB_CANCEL   1
 #define PB_HELP     1
