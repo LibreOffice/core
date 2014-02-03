@@ -130,7 +130,7 @@ namespace svxform
     // FormController
     //==================================================================
     class ColumnInfoCache;
-    class SAL_DLLPRIVATE FormController :public ::comphelper::OBaseMutex
+    class FormController :public ::comphelper::OBaseMutex
                                         ,public FormController_BASE
                                         ,public ::cppu::OPropertySetHelper
                                         ,public DispatchInterceptor

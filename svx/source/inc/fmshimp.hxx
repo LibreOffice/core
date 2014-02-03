@@ -88,7 +88,7 @@ typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::X
 //==============================================================================
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
-class SAL_DLLPRIVATE FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
+class FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
 {
 public:
     FmXBoundFormFieldIterator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
@@ -100,7 +100,7 @@ protected:
 
 class FmFormPage;
 //========================================================================
-struct SAL_DLLPRIVATE FmLoadAction
+struct FmLoadAction
 {
     FmFormPage* pPage;
     sal_uLong       nEventId;
@@ -122,7 +122,7 @@ typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyCh
                                         >   FmXFormShell_BD_BASE;
 
 //========================================================================
-class SAL_DLLPRIVATE FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
+class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
 {
     using ::com::sun::star::beans::XPropertyChangeListener::disposing;
 protected:
@@ -144,7 +144,7 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
+class FmXFormShell   :public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools
                                     ,public ::svx::IControllerFeatureInvalidation
@@ -554,7 +554,7 @@ inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 // = der Teil mit dem Container-Test fuer dieses Objekt.
 // =
 
-class SAL_DLLPRIVATE SearchableControlIterator : public ::comphelper::IndexAccessIterator
+class SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
     OUString         m_sCurrentValue;
         // der aktuelle Wert der ControlSource-::com::sun::star::beans::Property

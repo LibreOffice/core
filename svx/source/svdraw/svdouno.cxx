@@ -106,7 +106,7 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
 }
 
 // =============================================================================
-struct SAL_DLLPRIVATE SdrUnoObjDataHolder
+struct SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;

@@ -32,7 +32,7 @@
 
 //==================================================================
 class FmFieldWin;
-class SAL_DLLPRIVATE FmFieldWinListBox
+class FmFieldWinListBox
                     :public SvTreeListBox
 {
     FmFieldWin* pTabWin;
@@ -59,7 +59,7 @@ protected:
 
 //========================================================================
 class FmFormShell;
-class SAL_DLLPRIVATE FmFieldWinData
+class FmFieldWinData
 {
 public:
     FmFieldWinData();
@@ -67,7 +67,7 @@ public:
 };
 
 //========================================================================
-class SAL_DLLPRIVATE FmFieldWin :public SfxFloatingWindow
+class FmFieldWin :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
                     ,public ::svxform::OStaticDataAccessTools
@@ -120,7 +120,7 @@ protected:
 };
 
 //========================================================================
-class SAL_DLLPRIVATE FmFieldWinMgr : public SfxChildWindow
+class FmFieldWinMgr : public SfxChildWindow
 {
 public:
     FmFieldWinMgr(Window *pParent, sal_uInt16 nId,
