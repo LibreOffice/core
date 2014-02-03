@@ -28,7 +28,7 @@ using namespace ::com::sun::star::accessibility;
 
 ScAccessibleDocumentBase::ScAccessibleDocumentBase(
         const uno::Reference<XAccessible>& rxParent)
-    : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT)
+    : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT_SPREADSHEET)
 {
 }
 

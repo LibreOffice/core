@@ -603,7 +603,10 @@ sal_Bool AccObjectWinManager::InsertChildrenAccObj( com::sun::star::accessibilit
 
     short role = pRContext->getAccessibleRole();
 
-    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role )
+    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
     {
         if(IsStateManageDescendant(pXAcc))
         {

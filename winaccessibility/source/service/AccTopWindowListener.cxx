@@ -156,7 +156,10 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
 
 
     short role = pAccessibleContext->getAccessibleRole();
-    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role )
+    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
     {
         if(accManagerAgent.IsStateManageDescendant(pAccessible))
         {

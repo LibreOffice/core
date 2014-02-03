@@ -705,6 +705,30 @@ constants AccessibleRole
     */
     const short COMMENT_END = 82;
 
+    /** View of an presentation document.
+
+        <p>It's an specific variation of DOCUMENT for presentations.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short DOCUMENT_PRESENTATION = 83;
+
+    /** View of an spreadsheet document.
+
+        <p>It's an specific variation of DOCUMENT for spreadsheets.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short DOCUMENT_SPREADSHEET = 84;
+
+    /** View of an text document.
+
+        <p>It's an specific variation of DOCUMENT for text.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short DOCUMENT_TEXT = 85;
+
 };
 
 }; }; }; };

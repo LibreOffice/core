@@ -63,7 +63,10 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::ViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
-    : AccessibleContextBase (rxParent, AccessibleRole::DOCUMENT),
+    : AccessibleContextBase (rxParent,
+                             pViewShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ?
+                                     AccessibleRole::DOCUMENT_PRESENTATION :
+                                     AccessibleRole::DOCUMENT),
       mpWindow (pSdWindow),
       mxController (rxController),
       mxModel (NULL),

@@ -71,7 +71,7 @@ using lang::IndexOutOfBoundsException;
 // SwAccessiblePreview
 
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
-    SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT,
+    SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT_TEXT,
                          _pMap->GetShell()->GetLayout() ),
     mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     mpChildWin( 0 )

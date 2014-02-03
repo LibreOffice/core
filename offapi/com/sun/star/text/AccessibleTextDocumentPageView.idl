@@ -47,7 +47,7 @@ service AccessibleTextDocumentPageView
                 returns an object that supports one of the service
                 ::com::sun::star::text::AccessiblePageView.
             <li>The role is
-                ::com::sun::star::accessibility::AccessibleRole::DOCUMENT.
+                ::com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT.
             <li>The name is "document view" (or the equivalent term
                 in application's language).
             <li>The description also is "document view" (or the equivalent term

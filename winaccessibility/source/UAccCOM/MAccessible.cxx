@@ -1964,7 +1964,8 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
         *similarItemsInGroup = 0;
         *positionInGroup = 0;
 
-        if (Role != AccessibleRole::DOCUMENT)
+        if (Role != AccessibleRole::DOCUMENT && Role != AccessibleRole::DOCUMENT_PRESENTATION &&
+                Role != AccessibleRole::DOCUMENT_SPREADSHEET && Role != AccessibleRole::DOCUMENT_TEXT)
         {
             Reference< XAccessibleGroupPosition > xGroupPosition( pRContext, UNO_QUERY );
             if ( xGroupPosition.is() )

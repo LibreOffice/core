@@ -1531,7 +1531,10 @@ throw (uno::RuntimeException)
     }
 
     ::com::sun::star::uno::Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
-    if( xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT)//Document
+    if( xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT ||
+            xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT_PRESENTATION ||
+            xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT_SPREADSHEET ||
+            xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT_TEXT )//Document
     {
         Reference< XAccessibleGroupPosition > xGroupPosition( xParent,uno::UNO_QUERY );
         if ( xGroupPosition.is() )
