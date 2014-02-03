@@ -304,7 +304,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     bool bSomethingTested = false;
 
     // Now the different formats are checked. The order *does* matter. e.g. a MET file
-    // could also go through the BMP test, howeve a BMP file can hardly go through the MET test.
+    // could also go through the BMP test, however, a BMP file can hardly go through the MET test.
     // So MET should be tested prior to BMP. However, theoretically a BMP file could conceivably
     // go through the MET test. These problems are of course not only in MET and BMP.
     // Therefore, in the case of a format check (bTest == true)  we only test *exactly* this
