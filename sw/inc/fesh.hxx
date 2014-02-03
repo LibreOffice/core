@@ -300,7 +300,8 @@ public:
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
                         Point* _opRef = NULL,
-                        Size* _opPercent = NULL ) const;
+                        Size* _opPercent = NULL,
+                        const SwFmtFrmSize* pFmtFrmSize = 0 ) const;
 
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );

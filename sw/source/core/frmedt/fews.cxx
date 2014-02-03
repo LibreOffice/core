@@ -36,6 +36,7 @@
 #include <fmtpdsc.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
+#include <fmtfsize.hxx>
 #include <tabfrm.hxx>
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
@@ -709,7 +710,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
                                Point* _opRef,
-                               Size* _opPercent ) const
+                               Size* _opPercent,
+                               const SwFmtFrmSize* pFmtFrmSize) const
 {
     const SwFrm* pFrm;
     const SwFlyFrm* pFly;
@@ -870,7 +872,13 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                               pFrm : pFrm->GetUpper();
         SWRECTFN( pUpper );
         if ( _opPercent )
-            *_opPercent = pUpper->Prt().SSize();
+        {
+            if (pFmtFrmSize && pFmtFrmSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                // If the size is relative from page, then full size should be counted from the page frame.
+                *_opPercent = pPage->Frm().SSize();
+            else
+                *_opPercent = pUpper->Prt().SSize();
+        }
 
         bRTL = pFrm->IsRightToLeft();
         if ( bRTL )
