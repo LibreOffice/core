@@ -79,11 +79,6 @@
     #include <GL/glu.h>
     #include <GL/glext.h>
 #endif
-//[mod] by gaowei
-
-
-//[mod] by gaowei end
-
 
 class SystemWindow;
 class SystemChildWindow;
