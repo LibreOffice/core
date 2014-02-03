@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_8681d84c",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-03T09:18:24Z",
+      "side": 1,
+      "message": "You should not return non const member variables from a const method. While it is technically correct it is not a good practice.",
+      "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
