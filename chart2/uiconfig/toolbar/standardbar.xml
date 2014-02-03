@@ -28,7 +28,8 @@
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:text="" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:text="" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print" toolbar:text=""/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:text=""/>
  <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:text=""/>

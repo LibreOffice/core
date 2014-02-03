@@ -29,7 +29,8 @@
  <toolbar:toolbaritem xlink:href=".uno:EditDoc"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
- <toolbar:toolbaritem xlink:href=".uno:PrintDefault"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"  />

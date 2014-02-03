@@ -24,7 +24,8 @@
  <toolbar:toolbaritem xlink:href=".uno:SendMail"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
- <toolbar:toolbaritem xlink:href=".uno:PrintDefault"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
  <toolbar:toolbarseparator/>
