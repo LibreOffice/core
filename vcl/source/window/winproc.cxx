@@ -1025,8 +1025,9 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         return false;
 
     // --- RTL --- mirror cursor keys
+    OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
-      pChild->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
+      pChildOutDev->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
         aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler
