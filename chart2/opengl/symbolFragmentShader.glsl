@@ -37,37 +37,62 @@ void main()
         else if(p.y < 0 && abs(p.x) > 0.5)
             discard;
     }
-    else if(shape == 4)
+    else if(shape == 4) // arrow right
     {
         if(p.x > 0 && (abs(p.x) + abs(p.y)) > 1)
             discard;
         else if(p.x < 0 && abs(p.y) > 0.5)
             discard;
     }
-    else if(shape == 5)
+    else if(shape == 5) // arrow left
     {
         if(p.x < 0 && (abs(p.x) + abs(p.y)) > 1)
             discard;
         else if(p.x > 0 && abs(p.y) > 0.5)
             discard;
     }
-    else if(shape == 6)
+    else if(shape == 6) // hour glass
     {
         if(abs(p.x) < abs(p.y))
             discard;
     }
-    else if(shape == 7)
+    else if(shape == 7) // bow tie
     {
         if(abs(p.y) < abs(p.x))
             discard;
     }
-    else if(shape == 8)
+    else if(shape == 8) // circle
     {
         if(dot(p.x, p.y) > 1)
             discard;
     }
-    else if(shape == 9)
+    else if(shape == 9) // star
     {
+        if(sqrt(abs(p.x))+sqrt(abs(p.y)) > 1)
+            discard;
+    }
+    else if(shape == 10) // X
+    {
+        if(abs(abs(p.x) - abs(p.y)) > 0.2)
+            discard;
+    }
+    else if(shape == 11) // Plus
+    {
+        if(abs(p.x) > 0.2 && abs(p.y) > 0.2)
+            discard;
+    }
+    else if(shape == 12) // asterisk
+    {
+    }
+    else if(shape == 13) // horizontal bar
+    {
+        if(abs(p.y) > 0.2)
+            discard;
+    }
+    else if(shape == 14) // vertical bar
+    {
+        if(abs(p.x) > 0.2)
+            discard;
     }
     
     gl_FragColor = fragmentColor;
