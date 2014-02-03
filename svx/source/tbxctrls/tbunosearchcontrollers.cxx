@@ -598,9 +598,6 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
 // XStatusListener
 void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-    SolarMutexGuard aSolarMutexGuard;
-    if ( m_bDisposed )
-        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -702,12 +699,8 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
 }
 
 // XStatusListener
-void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException )
+void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException )
 {
-    (void) rEvent;
-    SolarMutexGuard aSolarMutexGuard;
-    if ( m_bDisposed )
-        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -795,9 +788,6 @@ void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) thr
 // XStatusListener
 void SAL_CALL FindAllToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-    SolarMutexGuard aSolarMutexGuard;
-    if ( m_bDisposed )
-        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -896,9 +886,6 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
 // XStatusListener
 void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-    SolarMutexGuard aSolarMutexGuard;
-    if ( m_bDisposed )
-        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
