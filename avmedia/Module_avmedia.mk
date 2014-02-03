@@ -37,9 +37,11 @@ endif
 
 ifeq ($(OS),MACOSX)
 ifneq ($(CPUNAME),X86_64)
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaQuickTime \
 ))
+endif
 endif
 endif
 
