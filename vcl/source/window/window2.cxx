@@ -173,9 +173,11 @@ void Window::ImplSaveOverlapBackground()
                     mpWindowImpl->mpOverlapData->mnSaveBackSize = nSaveBackSize;
                     mpWindowImpl->mpFrameData->mnAllSaveBackSize += nSaveBackSize;
                     Point aDevPt;
-                    mpWindowImpl->mpFrameWindow->ImplGetFrameDev( Point( mnOutOffX, mnOutOffY ),
-                                                    aDevPt, aOutSize,
-                                                    *(mpWindowImpl->mpOverlapData->mpSaveBackDev) );
+
+                    OutputDevice *pOutDev = mpWindowImpl->mpFrameWindow->GetOutDev();
+                    pOutDev->ImplGetFrameDev( Point( mnOutOffX, mnOutOffY ),
+                                              aDevPt, aOutSize,
+                                              *(mpWindowImpl->mpOverlapData->mpSaveBackDev) );
                     mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpFrameData->mpFirstBackWin;
                     mpWindowImpl->mpFrameData->mpFirstBackWin = this;
                 }
@@ -203,20 +205,23 @@ sal_Bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
             Point   aDevPt;
             Point   aDestPt( mnOutOffX, mnOutOffY );
             Size    aDevSize = mpWindowImpl->mpOverlapData->mpSaveBackDev->GetOutputSizePixel();
+
+            OutputDevice *pOutDev = mpWindowImpl->mpFrameWindow->GetOutDev();
+
             if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
             {
                 mpWindowImpl->mpOverlapData->mpSaveBackRgn->Intersect( mpWindowImpl->maWinClipRegion );
                 rInvRegion = mpWindowImpl->maWinClipRegion;
                 rInvRegion.Exclude( *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
-                mpWindowImpl->mpFrameWindow->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
-                                                 *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
-                                                 *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
+                pOutDev->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
+                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
+                                           *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
             }
             else
             {
-                mpWindowImpl->mpFrameWindow->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
-                                                 *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
-                                                 mpWindowImpl->maWinClipRegion );
+                pOutDev->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
+                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
+                                           mpWindowImpl->maWinClipRegion );
             }
             ImplDeleteOverlapBackground();
         }
