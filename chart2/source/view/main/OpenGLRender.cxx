@@ -1312,7 +1312,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_WARN("slideshow.opengl", "Error writing png to " << aName);
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
     }
 #endif
 
