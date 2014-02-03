@@ -50,7 +50,7 @@ enum TblStyleType
     TBL_STYLE_SWCELL
 };
 
-class WRITERFILTER_DLLPRIVATE TblStylePrHandler : public LoggedProperties
+class TblStylePrHandler : public LoggedProperties
 {
 private:
     DomainMapper &              m_rDMapper;

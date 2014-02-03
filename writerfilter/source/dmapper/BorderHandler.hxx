@@ -29,7 +29,7 @@ namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
-class WRITERFILTER_DLLPRIVATE BorderHandler : public LoggedProperties
+class BorderHandler : public LoggedProperties
 {
 public:
     //todo: order is a guess

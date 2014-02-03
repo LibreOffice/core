@@ -58,9 +58,6 @@
 #define WRITERFILTER_WRITERFILTER_UNO_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-// This one can be shared
-#define WRITERFILTER_DLLPRIVATE SAL_DLLPRIVATE
-
 #endif /* INCLUDED_WRITERFILTERDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

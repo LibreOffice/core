@@ -122,7 +122,7 @@ private:
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 
 
-class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry :
+class TableStyleSheetEntry :
     public StyleSheetEntry
 {
 private:

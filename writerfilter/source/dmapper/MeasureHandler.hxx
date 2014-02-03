@@ -31,7 +31,7 @@ namespace dmapper
     - Left indent of tables
     - Preferred width of tables
  */
-class WRITERFILTER_DLLPRIVATE MeasureHandler : public LoggedProperties
+class MeasureHandler : public LoggedProperties
 {
     sal_Int32 m_nMeasureValue;
     sal_Int32 m_nUnit;

@@ -43,7 +43,7 @@ namespace dmapper
 {
 /** Handler for OLE objects
  */
-class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties
+class OLEHandler : public LoggedProperties
 {
     OUString     m_sObjectType;
     OUString     m_sProgId;

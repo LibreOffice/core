@@ -42,7 +42,7 @@ using namespace std;
 
 struct SettingsTable_Impl;
 
-class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public LoggedTable
+class SettingsTable : public LoggedProperties, public LoggedTable
 {
     SettingsTable_Impl *m_pImpl;
 

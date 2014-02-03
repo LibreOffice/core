@@ -60,7 +60,7 @@ enum GraphicImportType
     IMPORT_AS_DETECTED_ANCHOR
 };
 
-class WRITERFILTER_DLLPRIVATE GraphicImport : public LoggedProperties, public LoggedTable
+class GraphicImport : public LoggedProperties, public LoggedTable
                     ,public BinaryObj, public LoggedStream
 {
     GraphicImport_Impl* m_pImpl;

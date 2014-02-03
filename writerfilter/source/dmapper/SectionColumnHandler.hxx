@@ -34,7 +34,7 @@ struct _Column
 };
 
 
-class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public LoggedProperties
+class SectionColumnHandler : public LoggedProperties
 {
     bool        bEqualWidth;
     sal_Int32   nSpace;

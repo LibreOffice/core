@@ -54,7 +54,7 @@ struct FontEntry
         {}
 };
 
-class WRITERFILTER_DLLPRIVATE FontTable : public LoggedProperties, public LoggedTable
+class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
     FontTable_Impl   *m_pImpl;

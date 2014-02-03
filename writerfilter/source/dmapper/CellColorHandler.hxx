@@ -29,7 +29,7 @@ namespace writerfilter {
 namespace dmapper
 {
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
+class CellColorHandler : public LoggedProperties
 {
 public:
     enum OutputFormat { Form, Paragraph, Character }; // for what part of the document

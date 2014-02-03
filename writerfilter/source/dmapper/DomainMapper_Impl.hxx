@@ -285,7 +285,7 @@ struct FloatingTableInfo
 };
 
 class DomainMapper;
-class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
+class DomainMapper_Impl
 {
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;

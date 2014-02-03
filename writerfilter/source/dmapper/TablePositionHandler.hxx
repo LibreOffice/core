@@ -20,7 +20,7 @@ namespace dmapper
 {
 
 /// Handler for floating table positioning
-class WRITERFILTER_DLLPRIVATE TablePositionHandler
+class TablePositionHandler
     : public LoggedProperties
 {
     OUString m_aVertAnchor;

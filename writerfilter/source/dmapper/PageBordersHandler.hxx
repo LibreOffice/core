@@ -46,7 +46,7 @@ public:
     ~_PgBorder( );
 };
 
-class WRITERFILTER_DLLPRIVATE PageBordersHandler : public LoggedProperties
+class PageBordersHandler : public LoggedProperties
 {
 private:
 

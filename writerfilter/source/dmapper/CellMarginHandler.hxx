@@ -28,7 +28,7 @@ namespace writerfilter {
 namespace dmapper
 {
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellMarginHandler : public LoggedProperties
+class CellMarginHandler : public LoggedProperties
 {
 private:
     sal_Int32   m_nValue; ///< Converted value.

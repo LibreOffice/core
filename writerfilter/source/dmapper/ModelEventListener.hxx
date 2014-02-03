@@ -27,7 +27,7 @@ namespace writerfilter {
 namespace dmapper{
 
 
-class WRITERFILTER_DLLPRIVATE ModelEventListener :
+class ModelEventListener :
     public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener >
 {
     bool m_bIndexes;

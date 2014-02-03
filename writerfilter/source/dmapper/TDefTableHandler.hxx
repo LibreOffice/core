@@ -37,7 +37,7 @@ namespace dmapper
 {
 class PropertyMap;
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE TDefTableHandler : public LoggedProperties
+class TDefTableHandler : public LoggedProperties
 {
 public:
 

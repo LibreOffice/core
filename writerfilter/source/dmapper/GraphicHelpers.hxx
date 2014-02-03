@@ -31,7 +31,7 @@ namespace writerfilter {
 namespace dmapper
 {
 
-class WRITERFILTER_DLLPRIVATE PositionHandler: public LoggedProperties
+class PositionHandler: public LoggedProperties
 {
 public:
     PositionHandler( bool vertical );
@@ -54,7 +54,7 @@ public:
 };
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 
-class WRITERFILTER_DLLPRIVATE WrapHandler: public LoggedProperties
+class WrapHandler: public LoggedProperties
 {
 public:
     WrapHandler( );
@@ -71,7 +71,7 @@ public:
 };
 typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
 
-class WRITERFILTER_DLLPRIVATE GraphicZOrderHelper
+class GraphicZOrderHelper
 {
 public:
     void addItem( uno::Reference< beans::XPropertySet > props, sal_Int32 relativeHeight );

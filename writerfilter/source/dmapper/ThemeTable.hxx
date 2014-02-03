@@ -33,7 +33,7 @@ namespace dmapper
 
 struct ThemeTable_Impl;
 
-class WRITERFILTER_DLLPRIVATE ThemeTable : public LoggedProperties, public LoggedTable
+class ThemeTable : public LoggedProperties, public LoggedTable
 {
     ThemeTable_Impl *m_pImpl;
 
