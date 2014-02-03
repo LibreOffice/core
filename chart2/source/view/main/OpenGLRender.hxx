@@ -9,22 +9,21 @@
 
 #if defined( MACOSX )
 #elif defined( UNX )
-#if defined( UNX )
-#include <prex.h>
-#include "GL/glxew.h"
-#include <postx.h>
+#  include <prex.h>
+#  include "GL/glxew.h"
+#  include <postx.h>
 #elif defined( _WIN32 )
-#include "prewin.h"
-#include "windows.h"
-#include "postwin.h"
+#  include "prewin.h"
+#  include "windows.h"
+#  include "postwin.h"
 #endif
 
 #if defined( MACOSX )
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
 #else
-#include <GL/gl.h>
-#include <GL/glu.h>
+#  include <GL/gl.h>
+#  include <GL/glu.h>
 #endif
 
 #include <vcl/window.hxx>
