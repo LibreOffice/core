@@ -1311,6 +1311,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+    OutputDevice *pChildOutDev = pChild->GetOutDev();
 
     if ( !pChild )
         pChild = ImplGetKeyInputWindow( pWindow );
@@ -1341,7 +1342,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
             else
                 rRect = Rectangle( Point( pChild->GetOutOffXPixel(), pChild->GetOutOffYPixel() ), Size() );
         }
-        rInputWidth = pChild->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
+        rInputWidth = pChildOutDev->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
         if ( !rInputWidth )
             rInputWidth = rRect.GetWidth();
     }
