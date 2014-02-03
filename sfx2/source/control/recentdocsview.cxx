@@ -190,7 +190,7 @@ void RecentDocsView::loadRecentDocs()
     }
     else
     {
-        set_width_request(mnItemMaxSize);
+        set_width_request(mnTextHeight + mnItemMaxSize + 2*mnItemPadding);
     }
 }
 
