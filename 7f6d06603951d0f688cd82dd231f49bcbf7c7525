@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9df570_26058cc2",
+        "filename": "cppuhelper/source/factory.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-03T14:33:40Z",
+      "side": 0,
+      "message": "Good catch, OFactoryProxyHelper is a special class that forwards its XServiceInfo functionality to another xFactory object.\n\nBut still, given how OFactoryProxyHelper::getSupportedServiceNames is implemented, and assuming that the forwarded-to xFactory\u0027s supportsService is implemented correctly, both versions of OFactoryProxyHelper::supportsService behave effectively the same (ignoring increased overhead in cases where there is a bridge between the two objects), so it should be OK to simplify this.",
+      "parentUuid": "da9df570_c66e8096",
+      "range": {
+        "startLine": 958,
+        "startChar": 11,
+        "endLine": 958,
+        "endChar": 16
+      },
+      "revId": "7f6d06603951d0f688cd82dd231f49bcbf7c7525",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_e66b8483",
         "filename": "forms/source/component/FormattedFieldWrapper.cxx",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2014-02-03T14:03:45Z",
       "side": 0,
       "message": "Same here...",
+      "revId": "7f6d06603951d0f688cd82dd231f49bcbf7c7525",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_460a90d3",
+        "filename": "forms/source/component/FormattedFieldWrapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-03T14:33:40Z",
+      "side": 0,
+      "message": "Same here...",
+      "parentUuid": "da9df570_e66b8483",
       "revId": "7f6d06603951d0f688cd82dd231f49bcbf7c7525",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
