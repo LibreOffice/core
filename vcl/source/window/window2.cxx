@@ -523,8 +523,9 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
+            OutputDevice *pOutDev = GetOutDev();
             ImplClipBoundaries( aRegion, sal_False, sal_False );
-            ImplSelectClipRegion( aRegion, pGraphics );
+            pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
         }
     }
 
@@ -587,8 +588,9 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
+            OutputDevice *pOutDev = GetOutDev();
             ImplClipBoundaries( aRegion, sal_False, sal_False );
-            ImplSelectClipRegion( aRegion, pGraphics );
+            pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
         }
     }
 
