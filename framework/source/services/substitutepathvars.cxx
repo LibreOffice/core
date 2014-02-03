@@ -34,6 +34,7 @@
 #include <osl/socket.hxx>
 #include <osl/process.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>
@@ -1262,6 +1263,184 @@ throw ( NoSuchElementException, RuntimeException )
     }
 }
 
+namespace {
+const char* GetLang( LanguageType& nType, sal_uInt16 nPrio )
+{
+    if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
+        nType = MsLangId::getSystemUILanguage();
+
+    if ( nPrio == 0 )
+    {
+        switch ( nType )
+        {
+            case LANGUAGE_DANISH:
+                return "45";
+
+            case LANGUAGE_DUTCH:
+            case LANGUAGE_DUTCH_BELGIAN:
+                return "31";
+
+            case LANGUAGE_ENGLISH:
+            case LANGUAGE_ENGLISH_UK:
+            case LANGUAGE_ENGLISH_EIRE:
+            case LANGUAGE_ENGLISH_SAFRICA:
+            case LANGUAGE_ENGLISH_JAMAICA:
+            case LANGUAGE_ENGLISH_BELIZE:
+            case LANGUAGE_ENGLISH_TRINIDAD:
+            case LANGUAGE_ENGLISH_ZIMBABWE:
+            case LANGUAGE_ENGLISH_PHILIPPINES:
+                return "44";
+
+            case LANGUAGE_ENGLISH_US:
+            case LANGUAGE_ENGLISH_CAN:
+                return "01";
+
+            case LANGUAGE_ENGLISH_AUS:
+            case LANGUAGE_ENGLISH_NZ:
+                return "61";
+            case LANGUAGE_ESTONIAN:
+                return "77";
+
+
+            case LANGUAGE_FINNISH:
+                return "35";
+
+            case LANGUAGE_FRENCH_CANADIAN:
+                return "02";
+
+            case LANGUAGE_FRENCH:
+            case LANGUAGE_FRENCH_BELGIAN:
+            case LANGUAGE_FRENCH_SWISS:
+            case LANGUAGE_FRENCH_LUXEMBOURG:
+            case LANGUAGE_FRENCH_MONACO:
+                return "33";
+
+            case LANGUAGE_GERMAN:
+            case LANGUAGE_GERMAN_SWISS:
+            case LANGUAGE_GERMAN_AUSTRIAN:
+            case LANGUAGE_GERMAN_LUXEMBOURG:
+            case LANGUAGE_GERMAN_LIECHTENSTEIN:
+                return "49";
+
+            case LANGUAGE_ITALIAN:
+            case LANGUAGE_ITALIAN_SWISS:
+                return "39";
+
+            case LANGUAGE_NORWEGIAN:
+            case LANGUAGE_NORWEGIAN_BOKMAL:
+                return "47";
+
+            case LANGUAGE_PORTUGUESE:
+                return "03";
+
+            case LANGUAGE_PORTUGUESE_BRAZILIAN:
+                return "55";
+
+            case LANGUAGE_SPANISH_DATED:
+            case LANGUAGE_SPANISH_MEXICAN:
+            case LANGUAGE_SPANISH_MODERN:
+            case LANGUAGE_SPANISH_GUATEMALA:
+            case LANGUAGE_SPANISH_COSTARICA:
+            case LANGUAGE_SPANISH_PANAMA:
+            case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
+            case LANGUAGE_SPANISH_VENEZUELA:
+            case LANGUAGE_SPANISH_COLOMBIA:
+            case LANGUAGE_SPANISH_PERU:
+            case LANGUAGE_SPANISH_ARGENTINA:
+            case LANGUAGE_SPANISH_ECUADOR:
+            case LANGUAGE_SPANISH_CHILE:
+            case LANGUAGE_SPANISH_URUGUAY:
+            case LANGUAGE_SPANISH_PARAGUAY:
+            case LANGUAGE_SPANISH_BOLIVIA:
+                return "34";
+
+            case LANGUAGE_SWEDISH:
+                return "46";
+
+            case LANGUAGE_POLISH:
+                return "48";
+            case LANGUAGE_CZECH:
+                return "42";
+            case LANGUAGE_SLOVENIAN:
+                return "50";
+            case LANGUAGE_HUNGARIAN:
+                return "36";
+            case LANGUAGE_RUSSIAN:
+                return "07";
+            case LANGUAGE_SLOVAK:
+                return "43";
+            case LANGUAGE_GREEK:
+                return "30";
+            case LANGUAGE_TURKISH:
+                return "90";
+
+            case LANGUAGE_CHINESE_SIMPLIFIED:
+                return "86";
+            case LANGUAGE_CHINESE_TRADITIONAL:
+                return "88";
+            case LANGUAGE_JAPANESE:
+                return "81";
+            case LANGUAGE_KOREAN:
+            case LANGUAGE_KOREAN_JOHAB:
+                return "82";
+            case LANGUAGE_THAI:
+                return "66";
+            case LANGUAGE_HINDI:
+                return "91";
+
+            case LANGUAGE_ARABIC_PRIMARY_ONLY:
+            case LANGUAGE_ARABIC_IRAQ:
+            case LANGUAGE_ARABIC_EGYPT:
+            case LANGUAGE_ARABIC_LIBYA:
+            case LANGUAGE_ARABIC_ALGERIA:
+            case LANGUAGE_ARABIC_MOROCCO:
+            case LANGUAGE_ARABIC_TUNISIA:
+            case LANGUAGE_ARABIC_OMAN:
+            case LANGUAGE_ARABIC_YEMEN:
+            case LANGUAGE_ARABIC_SYRIA:
+            case LANGUAGE_ARABIC_JORDAN:
+            case LANGUAGE_ARABIC_LEBANON:
+            case LANGUAGE_ARABIC_KUWAIT:
+            case LANGUAGE_ARABIC_UAE:
+            case LANGUAGE_ARABIC_BAHRAIN:
+            case LANGUAGE_ARABIC_QATAR:
+                return "96";
+
+            case LANGUAGE_HEBREW:
+                return "97";
+
+            case LANGUAGE_CATALAN:
+                return "37";
+
+            default:
+                return "99";
+        }
+    }
+    else if ( nPrio == 1 )
+    {
+        switch ( nType )
+        {
+            case LANGUAGE_FRENCH_CANADIAN:
+                return "33";
+
+            case LANGUAGE_PORTUGUESE_BRAZILIAN:
+                return "03";
+
+            default:
+                return NULL;
+        }
+    }
+    else if ( nPrio == 2 )
+        return "01";
+    else if ( nPrio == 3 )
+        return "44";
+    else if ( nPrio == 4 )
+        return "49";
+    else
+        return "99";
+}
+}
+
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
 
@@ -1318,7 +1497,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Set $(lang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANG ] = ConvertOSLtoUCBURL(
-    OUString::createFromAscii( ResMgr::GetLang( aPreDefPathVariables.m_eLanguageType, 0 ) ));
+    OUString::createFromAscii( GetLang( aPreDefPathVariables.m_eLanguageType, 0 ) ));
 
     // Set $(vlang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;

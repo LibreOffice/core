@@ -132,7 +132,6 @@ public:
     ~ResMgr();
 
     /// Language-dependent resource library
-    static const sal_Char*  GetLang( LanguageType& eLanguage, sal_uInt16 nPrio = 0 ); ///< @deprecated see "tools/source/rc/resmgr.cxx"
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
                                             LanguageTag& rLocale );
      static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
