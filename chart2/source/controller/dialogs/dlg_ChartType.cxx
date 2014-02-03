@@ -25,6 +25,7 @@
 #include "tp_ChartType.hxx"
 #include "macros.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 
@@ -36,21 +37,13 @@ using namespace ::com::sun::star::chart2;
 ChartTypeDialog::ChartTypeDialog( Window* pParent
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const uno::Reference< uno::XComponentContext >& xContext )
-                : ModalDialog( pParent, SchResId( DLG_DIAGRAM_TYPE ))
-                , m_aFL( this, SchResId( FL_BUTTONS ) )
-                , m_aBtnOK( this, SchResId( BTN_OK ) )
-                , m_aBtnCancel( this, SchResId( BTN_CANCEL ) )
-                , m_aBtnHelp( this, SchResId( BTN_HELP ) )
-                , m_pChartTypeTabPage(0)
-                , m_xChartModel(xChartModel)
-                , m_xCC( xContext )
+    : ModalDialog( pParent, "ChartTypeDialog",
+            "modules/schart/ui/charttypedialog.ui")
+    , m_pChartTypeTabPage(0)
+    , m_xChartModel(xChartModel)
+    , m_xCC( xContext )
 {
-    FreeResource();
-
-    this->SetText(SCH_RESSTR(STR_PAGE_CHARTTYPE));
-
-    //don't create the tabpages before FreeResource, otherwise the help ids are not matched correctly
-    m_pChartTypeTabPage = new ChartTypeTabPage(this,uno::Reference< XChartDocument >::query(m_xChartModel),m_xCC,true/*live update*/,true/*hide title description*/);
+    m_pChartTypeTabPage = new ChartTypeTabPage(get_content_area(),uno::Reference< XChartDocument >::query(m_xChartModel),m_xCC,true/*live update*/,true/*hide title description*/);
     m_pChartTypeTabPage->initializePage();
     m_pChartTypeTabPage->Show();
  }

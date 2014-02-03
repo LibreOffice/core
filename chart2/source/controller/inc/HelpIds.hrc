@@ -55,7 +55,6 @@
 #define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
 
-#define HID_DIAGRAM_TYPE                                    "CHART2_HID_DIAGRAM_TYPE"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
 

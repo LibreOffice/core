@@ -25,7 +25,6 @@
 //for Bimaps see Bimaps.hrc
 //-----------------------------------------------------------------------------
 //Dialog Ids:
-#define DLG_DIAGRAM_TYPE    743
 #define DLG_CHART_WIZARD    902
 #define DLG_DATA_SOURCE     901
 #define DLG_DATA_DESCR      836

@@ -43,11 +43,6 @@ public:
     ~ChartTypeDialog();
 
 private:
-    FixedLine           m_aFL;
-    OKButton            m_aBtnOK;
-    CancelButton        m_aBtnCancel;
-    HelpButton          m_aBtnHelp;
-
     ChartTypeTabPage*   m_pChartTypeTabPage;
 
     ::com::sun::star::uno::Reference<
