@@ -61,8 +61,14 @@
 #include <map>
 #include <boost/scoped_ptr.hpp>
 
+#if defined( MACOSX )
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -72,9 +78,6 @@
     #include <GL/glext.h>
     #include <GL/wglext.h>
 #elif defined( MACOSX )
-    #include "premac.h"
-    #include <Cocoa/Cocoa.h>
-    #include "postmac.h"
 #elif defined( UNX )
     #include <GL/glu.h>
     #include <GL/glext.h>

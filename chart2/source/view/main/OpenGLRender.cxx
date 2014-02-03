@@ -424,6 +424,8 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
+#elif defined( MACOSX )
+
 #elif defined( UNX )
     glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
@@ -663,6 +665,8 @@ void OpenGLRender::renderToBitmap()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
+#elif defined( MACOSX )
+
 #elif defined( UNX )
     glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
@@ -745,6 +749,8 @@ int OpenGLRender::RenderTexture(GLuint TexID)
     glUseProgram(0);
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
+#elif defined( MACOSX )
+
 #elif defined( UNX )
     glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
@@ -826,6 +832,8 @@ void OpenGLRender::Release()
     glDeleteRenderbuffers(1, &m_RboID);
 #if defined( WNT )
     wglMakeCurrent(NULL, NULL);
+#elif defined( MACOSX )
+
 #elif defined( UNX )
 
     glXMakeCurrent(glWin.dpy, None, NULL);

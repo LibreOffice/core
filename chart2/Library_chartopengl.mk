@@ -62,6 +62,10 @@ $(eval $(call gb_Library_use_system_win32_libs,chartopengl,\
 	gdi32 \
 	glu32 \
 ))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,chartopengl,\
+	OpenGL \
+))
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartopengl,\
     -ldl \

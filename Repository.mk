@@ -222,7 +222,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
-	$(if $(filter LINUX FREEBSD WNT,$(OS)),chartopengl) \
+	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),chartopengl) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \

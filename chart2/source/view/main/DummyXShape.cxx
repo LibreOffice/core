@@ -947,6 +947,13 @@ bool DummyChart::initWindow()
     return true;
 }
 
+#elif defined( MACOSX )
+
+bool DummyChart::initWindow()
+{
+    return false;
+}
+
 #elif defined( UNX )
 
 namespace {
@@ -1085,6 +1092,8 @@ bool DummyChart::initOpengl()
 
 #if defined( WNT )
     GLWin.hDC = GetDC(GLWin.hWnd);
+#elif defined( MACOSX )
+
 #elif defined( UNX )
     GLWin.ctx = glXCreateContext(GLWin.dpy,
                                  GLWin.vi,
@@ -1134,6 +1143,8 @@ bool DummyChart::initOpengl()
     SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
     GLWin.hRC  = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
+
+#elif defined( MACOSX )
 
 #elif defined( UNX )
     if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) )
@@ -1195,6 +1206,8 @@ bool DummyChart::initOpengl()
 #if defined( WNT )
     SwapBuffers(GLWin.hDC);
     glFlush();
+#elif defined( MACOSX )
+
 #elif defined( UNX )
     glXSwapBuffers(GLWin.dpy, GLWin.win);
 #endif
