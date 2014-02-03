@@ -44,7 +44,7 @@ namespace comphelper
 {
 //........................................................................
 
-    struct SAL_DLLPRIVATE UnoTypeLess : public ::std::unary_function< ::com::sun::star::uno::Type, bool >
+    struct UnoTypeLess : public ::std::unary_function< ::com::sun::star::uno::Type, bool >
     {
         inline bool operator()( const ::com::sun::star::uno::Type& _rLHS, const ::com::sun::star::uno::Type& _rRHS ) const
         {
