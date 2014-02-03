@@ -220,6 +220,9 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
 void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
 {
+    // show busy mouse pointer
+    SetPointer(Pointer(POINTER_WAIT));
+
     const RecentDocsViewItem* pRecentItem = dynamic_cast<const RecentDocsViewItem*>(pItem);
 
     Reference< XDispatch >            xDispatch;
