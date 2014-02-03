@@ -2905,7 +2905,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             pGraphic = pOLENode->GetGraphic();
 
         m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
+        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic, false ); // bRelPathToMedia is set as false
 
         aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
 
@@ -6273,7 +6273,7 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
             FSEND);
 
     m_rDrawingML.SetFS(m_pSerializer);
-    OUString aRelId = m_rDrawingML.WriteImage(rGraphic);
+    OUString aRelId = m_rDrawingML.WriteImage(rGraphic, false); // bRelPathToMedia is set as false
     m_pSerializer->singleElementNS( XML_v, XML_imagedata,
             FSNS(XML_r, XML_id), OUStringToOString(aRelId, RTL_TEXTENCODING_UTF8),
             FSNS(XML_o, XML_title), "",

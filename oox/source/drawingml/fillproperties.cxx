@@ -429,7 +429,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         // bitmap mode (single, repeat, stretch)
                         BitmapMode eBitmapMode = lclGetBitmapMode( maBlipProps.moBitmapMode.get( XML_TOKEN_INVALID ) );
-                        rPropMap.setProperty( SHAPEPROP_FillBitmapMode, eBitmapMode );
+                        rPropMap.setProperty( PROP_FillBitmapMode, eBitmapMode );
 
                         // additional settings for repeated bitmap
                         if( eBitmapMode == BitmapMode_REPEAT )

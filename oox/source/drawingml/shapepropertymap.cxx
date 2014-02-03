@@ -189,7 +189,7 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< OUString >() )
     {
         OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
-        return !aBitmapUrlName.isEmpty() && setProperty( nPropId, aBitmapUrlName );
+        return !aBitmapUrlName.isEmpty() && setProperty( PROP_FillBitmapName, aBitmapUrlName );
     }
 
     return false;
