@@ -107,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/GraphicImport \
     writerfilter/source/dmapper/LatentStyleHandler \
     writerfilter/source/dmapper/MeasureHandler \
+    writerfilter/source/dmapper/TrackChangesHandler \
     writerfilter/source/dmapper/ModelEventListener \
     writerfilter/source/dmapper/NumberingManager \
     writerfilter/source/dmapper/OLEHandler \
