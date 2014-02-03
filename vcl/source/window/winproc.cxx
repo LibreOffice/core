@@ -1025,8 +1025,9 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         return false;
 
     // --- RTL --- mirror cursor keys
+    const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
-      pChild->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
+      pChildOutDev->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
         aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler
@@ -2319,7 +2320,7 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
         {
-            OutputDevice *pChildOutDev = pChild->GetOutDev();
+            const OutputDevice *pChildOutDev = pChild->GetOutDev();
             const Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
             Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
             Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );

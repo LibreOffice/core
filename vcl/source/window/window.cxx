@@ -3338,7 +3338,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         long nOrgX = nX;
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
-        if( ImplHasMirroredGraphics() )
+        OutputDevice *pOutDev = GetOutDev();
+        if( pOutDev->ImplHasMirroredGraphics() )
         {
             mpGraphics->mirror( aPtDev.X(), this );
 
@@ -7090,25 +7091,29 @@ void Window::setPosSizePixel( long nX, long nY,
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
-            if( pParent && pParent->ImplHasMirroredGraphics() )
+            if ( pParent )
             {
-                long myWidth = nOldWidth;
-                if( !myWidth )
-                    myWidth = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth;
-                if( !myWidth )
-                    myWidth = nWidth;
-                nFlags |= WINDOW_POSSIZE_X;
-                nSysFlags |= SAL_FRAME_POSSIZE_X;
-                nX = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX -
-                    mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration;
-                nX = pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
-                    pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
-                if(!(nFlags & WINDOW_POSSIZE_Y))
+                OutputDevice *pParentOutDev = pParent->GetOutDev();
+                if( pParentOutDev->ImplHasMirroredGraphics() )
                 {
-                    nFlags |= WINDOW_POSSIZE_Y;
-                    nSysFlags |= SAL_FRAME_POSSIZE_Y;
-                    nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
-                        mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
+                    long myWidth = nOldWidth;
+                    if( !myWidth )
+                        myWidth = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth;
+                    if( !myWidth )
+                        myWidth = nWidth;
+                    nFlags |= WINDOW_POSSIZE_X;
+                    nSysFlags |= SAL_FRAME_POSSIZE_X;
+                    nX = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX -
+                        mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration;
+                    nX = pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
+                        pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
+                    if(!(nFlags & WINDOW_POSSIZE_Y))
+                    {
+                        nFlags |= WINDOW_POSSIZE_Y;
+                        nSysFlags |= SAL_FRAME_POSSIZE_Y;
+                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
+                            mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
+                    }
                 }
             }
         }
@@ -7197,7 +7202,8 @@ long Window::ImplGetUnmirroredOutOffX()
 {
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
     long offx = mnOutOffX;
-    if( ImplHasMirroredGraphics() )
+    OutputDevice *pOutDev = GetOutDev();
+    if( pOutDev->ImplHasMirroredGraphics() )
     {
         if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
         {
@@ -7663,14 +7669,13 @@ void Window::EnableChildPointerOverwrite( bool bOverwrite )
 
 void Window::SetPointerPosPixel( const Point& rPos )
 {
-
     Point aPos = ImplOutputToFrame( rPos );
-    if( ImplHasMirroredGraphics() )
+    const OutputDevice *pOutDev = GetOutDev();
+    if( pOutDev->ImplHasMirroredGraphics() )
     {
         if( !IsRTLEnabled() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
-            const OutputDevice *pOutDev = GetOutDev();
             pOutDev->ImplReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
@@ -7678,7 +7683,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
     }
     else if( ImplIsAntiparallel() )
     {
-        const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ImplReMirror( aPos );
     }
     mpWindowImpl->mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
