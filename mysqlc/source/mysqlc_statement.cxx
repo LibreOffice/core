@@ -32,6 +32,7 @@
 #include <cppconn/exception.h>
 #include <cppconn/statement.h>
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/heap_ptr.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
@@ -201,7 +202,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& 
 
     Reference< XResultSet > xResultSet;
     try {
-        std::auto_ptr< sql::ResultSet > rset(cppStatement->executeQuery(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
+        o3tl::heap_ptr< sql::ResultSet > rset(cppStatement->executeQuery(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
         xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
         rset.release();
     } catch (const sql::SQLException &e) {
@@ -307,7 +308,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
 
     Reference< XResultSet > xResultSet;
     try {
-        std::auto_ptr< sql::ResultSet > rset(cppStatement->getResultSet());
+        o3tl::heap_ptr< sql::ResultSet > rset(cppStatement->getResultSet());
         xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
         rset.release();
     } catch (const sql::SQLException &e) {
