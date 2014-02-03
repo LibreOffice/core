@@ -244,7 +244,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
     };
 }
 
-class SAL_DLLPRIVATE SvXMLImport_Impl
+class SvXMLImport_Impl
 {
 public:
     FontToSubsFontConverter hBatsFontConv;
@@ -1863,7 +1863,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
     }
 }
 
-SAL_DLLPRIVATE ::xmloff::RDFaImportHelper &
+::xmloff::RDFaImportHelper &
 SvXMLImport::GetRDFaImportHelper()
 {
     if (!mpImpl->mpRDFaHelper.get())

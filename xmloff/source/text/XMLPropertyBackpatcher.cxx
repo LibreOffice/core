@@ -152,7 +152,7 @@ void XMLPropertyBackpatcher<A>::SetDefault()
 template class XMLPropertyBackpatcher<sal_Int16>;
 template class XMLPropertyBackpatcher<OUString>;
 
-struct SAL_DLLPRIVATE XMLTextImportHelper::BackpatcherImpl
+struct XMLTextImportHelper::BackpatcherImpl
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     /// backpatcher for references to footnotes and endnotes

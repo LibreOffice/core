@@ -481,7 +481,7 @@ static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 // maximum allowed length of combined characters field
 #define MAX_COMBINED_CHARACTERS 6
 
-struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
+struct XMLTextImportHelper::Impl
     : private ::boost::noncopyable
 {
     boost::scoped_ptr<SvXMLTokenMap> m_pTextElemTokenMap;

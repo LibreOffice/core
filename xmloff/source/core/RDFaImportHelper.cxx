@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 namespace xmloff {
 
 /** a bit of context for parsing RDFa attributes */
-class SAL_DLLPRIVATE RDFaReader
+class RDFaReader
 {
     const SvXMLImport & m_rImport;
 
@@ -84,7 +84,7 @@ public:
 };
 
 /** helper to insert RDFa statements into the RDF repository */
-class SAL_DLLPRIVATE RDFaInserter
+class RDFaInserter
 {
     const uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference< rdf::XDocumentRepository > m_xRepository;
@@ -114,7 +114,7 @@ public:
 };
 
 /** store parsed RDFa attributes */
-struct SAL_DLLPRIVATE ParsedRDFaAttributes
+struct ParsedRDFaAttributes
 {
     OUString m_About;
     ::std::vector< OUString > m_Properties;
@@ -134,7 +134,7 @@ struct SAL_DLLPRIVATE ParsedRDFaAttributes
 };
 
 /** store metadatable object and its RDFa attributes */
-struct SAL_DLLPRIVATE RDFaEntry
+struct RDFaEntry
 {
     uno::Reference<rdf::XMetadatable> m_xObject;
     ::boost::shared_ptr<ParsedRDFaAttributes> m_pRDFaAttributes;

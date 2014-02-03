@@ -40,7 +40,7 @@ namespace xmloff {
 struct RDFaEntry;
 struct ParsedRDFaAttributes;
 
-class SAL_DLLPRIVATE RDFaImportHelper
+class RDFaImportHelper
 {
 
 private:

@@ -37,7 +37,7 @@ class SvXMLExport;
 
 namespace xmloff {
 
-class SAL_DLLPRIVATE RDFaExportHelper
+class RDFaExportHelper
 {
 private:
     SvXMLExport & m_rExport;

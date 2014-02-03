@@ -138,7 +138,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     { 0, 0, 0, 0 }
 };
 
-class SAL_DLLPRIVATE SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
+class SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
 {
 public:
     SettingsExportFacade( SvXMLExport& i_rExport )
@@ -236,7 +236,7 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
     }
 }
 
-class SAL_DLLPRIVATE SvXMLExport_Impl
+class SvXMLExport_Impl
 {
 public:
     SvXMLExport_Impl();
