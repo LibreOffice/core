@@ -7678,7 +7678,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
     }
     else if( ImplIsAntiparallel() )
     {
-        OutputDevice *pOutDev = GetOutDev();
         pOutDev->ImplReMirror( aPos );
     }
     mpWindowImpl->mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
@@ -9032,7 +9031,10 @@ void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
 {
     if( ! mpOutDevData )
-        ImplInitOutDevData();
+    {
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplInitOutDevData();
+    }
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;
     Paint( rRect );
@@ -9601,7 +9603,6 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
             long nDeltaX = pChild->mnOutOffX - mnOutOffX;
-            OutputDevice *pOutDev = GetOutDev();
 
             if( pOutDev->ImplHasMirroredGraphics() )
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
