@@ -20,8 +20,6 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include <unotools/viewoptions.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <editeng/udlnitem.hxx>

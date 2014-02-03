@@ -25,12 +25,9 @@
 #define VS_UNDERLINE_WIDTH  57
 #define VS_UNDERLINE_HEIGHT  12 * 10
 
-#define IMG_SPACING_D               71
-
 //popup window underline
 #define VS_UNDERLINE            1
 #define PB_OPTIONS              2
-#define BMP_UNDERLINE_MORE      3
 
 #define IMG_SINGLE              10
 #define IMG_DOUBLE              11
@@ -110,46 +107,6 @@
 #define STR_PT                      74
 
 //help ids
-#define HID_COMBO_FONT_NAME             "SVX_HID_COMBO_FONT_NAME"
-#define HID_METRIC_FONT_SIZE            "SVX_HID_METRIC_FONT_SIZE"
-#define HID_TB_INCREASE_DECREASE        "SVX_HID_TB_INCREASE_DECREASE"
-#define HID_TBI_INCREASE                "SVX_HID_TBI_INCREASE"
-#define HID_TBI_DECREASE                "SVX_HID_TBI_DECREASE"
-#define HID_TB_FONT                     "SVX_HID_TB_FONT"
-#define HID_TBI_FONT_BOLD               "SVX_HID_TBI_FONT_BOLD"
-#define HID_TBI_FONT_ITALIC             "SVX_HID_TBI_FONT_ITALIC"
-#define HID_TBI_FONT_UNDERLINE          "SVX_HID_TBI_FONT_UNDERLINE"
-#define HID_TBI_FONT_STRIKEOUT          "SVX_HID_TBI_FONT_STRIKEOUT"
-#define HID_TBI_FONT_SHADOWED           "SVX_HID_TBI_FONT_SHADOWED"
-#define HID_TB_COLOR                    "SVX_HID_TB_COLOR"
-#define HID_TBI_COLOR                   "SVX_HID_TBI_COLOR"
-#define HID_TB_SCRIPT                   "SVX_HID_TB_SCRIPT"
-#define HID_TBI_SCRIPT_SUPER            "SVX_HID_TBI_SCRIPT_SUPER"
-#define HID_TBI_SCRIPT_SUB              "SVX_HID_TBI_SCRIPT_SUB"
-#define HID_TB_SCRIPT_SW                "SVX_HID_TB_SCRIPT_SW"
-#define HID_TBI_SCRIPT_SW_SUPER         "SVX_HID_TBI_SCRIPT_SW_SUPER"
-#define HID_TBI_SCRIPT_SW_SUB           "SVX_HID_TBI_SCRIPT_SW_SUB"
-#define HID_TB_SPACING                  "SVX_HID_TB_SPACING"
-#define HID_TBI_SPACING                 "SVX_HID_TBI_SPACING"
-#define HID_TB_HIGHLIGHT                "SVX_HID_TB_HIGHLIGHT"
-#define HID_TBI_HIGHLIGHT               "SVX_HID_TBI_HIGHLIGHT"
-
-#define HID_UNDERLINE_VS                "SVX_HID_UNDERLINE_VS"
 #define HID_UNDERLINE_BTN               "SVX_HID_UNDERLINE_BTN"
-
-#define HID_COLOR_VS                    "SVX_HID_COLOR_VS"
-
-#define HID_SPACING_TB_VERY_LOOSE       "SVX_HID_SPACING_TB_VERY_LOOSE"
-#define HID_SPACING_TBI_VERY_LOOSE      "SVX_HID_SPACING_TBI_VERY_LOOSE"
-#define HID_SPACING_TB_LOOSE            "SVX_HID_SPACING_TB_LOOSE"
-#define HID_SPACING_TBI_LOOSE           "SVX_HID_SPACING_TBI_LOOSE"
-#define HID_SPACING_TB_NORMAL           "SVX_HID_SPACING_TB_NORMAL"
-#define HID_SPACING_TBI_NORMAL          "SVX_HID_SPACING_TBI_NORMAL"
-#define HID_SPACING_TB_TIGHT            "SVX_HID_SPACING_TB_TIGHT"
-#define HID_SPACING_TBI_TIGHT           "SVX_HID_SPACING_TBI_TIGHT"
-#define HID_SPACING_TB_VERY_TIGHT       "SVX_HID_SPACING_TB_VERY_TIGHT"
-#define HID_SPACING_TBI_VERY_TIGHT      "SVX_HID_SPACING_TBI_VERY_TIGHT"
-#define HID_SPACING_TB_CUSTOM           "SVX_HID_SPACING_TB_CUSTOM"
-#define HID_SPACING_TBI_CUSTOM          "SVX_HID_SPACING_TBI_CUSTOM"
 #define HID_SPACING_CB_KERN             "SVX_HID_SPACING_CB_KERN"
 #define HID_SPACING_MB_KERN             "SVX_HID_SPACING_MB_KERN"

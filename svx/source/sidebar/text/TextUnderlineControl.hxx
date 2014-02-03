@@ -21,12 +21,8 @@
 
 #include "svx/sidebar/PopupControl.hxx"
 #include <sfx2/bindings.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svtools/ctrltool.hxx>
 #include "TextPropertyPanel.hxx"
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-
 #include <vcl/vclenum.hxx>
 #include <svtools/valueset.hxx>
 

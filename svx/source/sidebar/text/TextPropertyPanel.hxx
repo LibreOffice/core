@@ -18,7 +18,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -34,9 +33,7 @@
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/vclenum.hxx>
 
-class FloatingWindow;
 class ToolBox;
 
 namespace svx { namespace sidebar {
@@ -84,7 +81,6 @@ private:
     FontSizeBox* mpFontSizeBox;
     ToolBox* mpToolBoxFont;
     ToolBox* mpToolBoxIncDec;
-    ToolBox* mpToolBoxScript;
     ToolBox* mpToolBoxSpacing;
     ToolBox* mpToolBoxFontColor;
 
