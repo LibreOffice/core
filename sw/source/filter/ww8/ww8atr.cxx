@@ -3627,10 +3627,7 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 // no break;
             case SVX_BREAK_COLUMN_AFTER:
             case SVX_BREAK_COLUMN_BOTH:
-                if ( GetExport().Sections().CurrentNumberOfColumns( *GetExport().pDoc ) > 1 )
-                {
-                    nC = msword::ColumnBreak;
-                }
+                nC = msword::ColumnBreak;
                 break;
 
             case SVX_BREAK_PAGE_BEFORE:                         // PageBreak
