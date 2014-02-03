@@ -173,7 +173,17 @@ namespace connectivity
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) : OCommonStatement(_pConnection, _cppStatement) {}
-            DECLARE_SERVICE_INFO();
+
+            virtual OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException) SAL_OVERRIDE;
+
+            virtual sal_Bool SAL_CALL supportsService(
+                OUString const & ServiceName) throw (css::uno::RuntimeException)
+                SAL_OVERRIDE;
+
+            virtual css::uno::Sequence<OUString> SAL_CALL
+            getSupportedServiceNames() throw (css::uno::RuntimeException)
+                SAL_OVERRIDE;
 
             Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
                                                 throw(RuntimeException);

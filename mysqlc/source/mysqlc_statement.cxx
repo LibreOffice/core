@@ -457,7 +457,24 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
 }
 /* }}} */
 
-IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
+OUString OStatement::getImplementationName() throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.sdbcx.OStatement");
+}
+
+css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<OUString> s(1);
+    s[0] = "com.sun.star.sdbc.Statement";
+    return s;
+}
+
+sal_Bool OStatement::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
 /* {{{ OCommonStatement::acquire() -I- */
 void SAL_CALL OCommonStatement::acquire()

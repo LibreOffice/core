@@ -62,7 +62,17 @@ namespace connectivity
                                                                                     throw (::com::sun::star::uno::Exception);
             virtual ~OPreparedStatement();
         public:
-            DECLARE_SERVICE_INFO();
+            virtual OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException) SAL_OVERRIDE;
+
+            virtual sal_Bool SAL_CALL supportsService(
+                OUString const & ServiceName) throw (css::uno::RuntimeException)
+                SAL_OVERRIDE;
+
+            virtual css::uno::Sequence<OUString> SAL_CALL
+            getSupportedServiceNames() throw (css::uno::RuntimeException)
+                SAL_OVERRIDE;
+
             OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * cppPrepStmt);
 
             //XInterface

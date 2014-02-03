@@ -59,9 +59,25 @@ static inline char * my_i_to_a(char * buf, size_t buf_size, int a)
 }
 /* }}} */
 
+OUString OPreparedStatement::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
+}
 
-IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mysqlc.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+css::uno::Sequence<OUString> OPreparedStatement::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<OUString> s(1);
+    s[0] = "com.sun.star.sdbc.PreparedStatement";
+    return s;
+}
 
+sal_Bool OPreparedStatement::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
 /* {{{ OPreparedStatement::OPreparedStatement() -I- */
 OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedStatement * _cppPrepStmt)

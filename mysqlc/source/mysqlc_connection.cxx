@@ -221,10 +221,24 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
 }
 /* }}} */
 
+OUString OConnection::getImplementationName() throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
+}
 
-// XServiceInfo
-IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mysqlc.OConnection", "com.sun.star.sdbc.Connection")
+css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<OUString> s(1);
+    s[0] = "com.sun.star.sdbc.Connection";
+    return s;
+}
 
+sal_Bool OConnection::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
 /* {{{ OConnection::createStatement() -I- */
 Reference< XStatement > SAL_CALL OConnection::createStatement()

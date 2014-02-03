@@ -49,7 +49,6 @@ using ::osl::MutexGuard;
 
 #include <stdio.h>
 
-//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 /* {{{ OResultSet::getImplementationName() -I- */
 OUString SAL_CALL OResultSet::getImplementationName()
     throw (RuntimeException)
