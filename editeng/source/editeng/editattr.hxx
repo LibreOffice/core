@@ -117,28 +117,28 @@ inline sal_uInt16 EditCharAttrib::GetLen() const
 
 inline void EditCharAttrib::MoveForward( sal_uInt16 nDiff )
 {
-    DBG_ASSERT( ((long)nEnd + nDiff) <= 0xFFFF, "EditCharAttrib: MoveForward?!" );
+    DBG_ASSERT( SAL_MAX_INT32 - nDiff > nEnd, "EditCharAttrib: MoveForward?!" );
     nStart = nStart + nDiff;
     nEnd = nEnd + nDiff;
 }
 
 inline void EditCharAttrib::MoveBackward( sal_uInt16 nDiff )
 {
-    DBG_ASSERT( ((long)nStart - nDiff) >= 0, "EditCharAttrib: MoveBackward?!" );
+    DBG_ASSERT( (nStart - nDiff) >= 0, "EditCharAttrib: MoveBackward?!" );
     nStart = nStart - nDiff;
     nEnd = nEnd - nDiff;
 }
 
 inline void EditCharAttrib::Expand( sal_uInt16 nDiff )
 {
-    DBG_ASSERT( ( ((long)nEnd + nDiff) <= (long)0xFFFF ), "EditCharAttrib: Expand?!" );
+    DBG_ASSERT( SAL_MAX_INT32 - nDiff > nEnd, "EditCharAttrib: Expand?!" );
     DBG_ASSERT( !bFeature, "Please do not expand any features!" );
     nEnd = nEnd + nDiff;
 }
 
 inline void EditCharAttrib::Collaps( sal_uInt16 nDiff )
 {
-    DBG_ASSERT( (long)nEnd - nDiff >= (long)nStart, "EditCharAttrib: Collaps?!" );
+    DBG_ASSERT( nEnd - nDiff >= nStart, "EditCharAttrib: Collaps?!" );
     DBG_ASSERT( !bFeature, "Please do not shrink any Features!" );
     nEnd = nEnd - nDiff;
 }

@@ -703,7 +703,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
         if (xISC.is())
         {
-            xub_StrLen nTmpPos = aPaM.GetIndex();
+            sal_Int32 nTmpPos = aPaM.GetIndex();
             sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 

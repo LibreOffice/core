@@ -391,7 +391,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
 }
 
 
-SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags ) const
+SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags ) const
 {
     // Optimized function with less Puts(), which cause unnecessary cloning from default items.
     // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
@@ -434,7 +434,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_uInt16 nStart, sal_uI
 
                 if ( nStart == nEnd )
                 {
-                    sal_uInt16 nCursorPos = nStart;
+                    sal_Int32 nCursorPos = nStart;
                     if ( ( rAttr.GetStart() <= nCursorPos ) && ( rAttr.GetEnd() >= nCursorPos ) )
                     {
                         // To be used the attribute has to start BEFORE the position, or it must be a
@@ -744,14 +744,14 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
 void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 {
     pNode->GetCharAttribs().DeleteEmptyAttribs( GetEditDoc().GetItemPool() );
-    xub_StrLen nEndPos = pNode->Len();
+    sal_Int32 nEndPos = pNode->Len();
     for ( sal_uInt16 nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         if ( pNode->GetContentAttribs().HasItem( nWhich ) )
         {
             const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
             // Fill the gap:
-            sal_uInt16 nLastEnd = 0;
+            sal_Int32 nLastEnd = 0;
             const EditCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( nWhich, nLastEnd );
             while ( pAttr )
             {

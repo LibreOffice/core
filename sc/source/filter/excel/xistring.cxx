@@ -166,7 +166,7 @@ XclImpStringIterator::XclImpStringIterator( const XclImpString& rString ) :
     if( !mrFormats.empty() && (mrFormats.front().mnChar == 0) )
         ++mnFormatsEnd;
     // find end position of the first portion
-    mnTextEnd = static_cast< xub_StrLen >( (mnFormatsEnd < mrFormats.size()) ?
+    mnTextEnd = (mnFormatsEnd < mrFormats.size() ?
         mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength() );
 }
 
@@ -194,8 +194,8 @@ XclImpStringIterator& XclImpStringIterator::operator++()
                 ++mnFormatsEnd;
             // character positions of next portion
             mnTextBeg = mnTextEnd;
-            mnTextEnd = static_cast< xub_StrLen >( (mnFormatsEnd < mrFormats.size()) ?
-                mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength() );
+            mnTextEnd = (mnFormatsEnd < mrFormats.size()) ?
+                mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength();
         }
         while( Is() && (mnTextBeg == mnTextEnd) );
     }

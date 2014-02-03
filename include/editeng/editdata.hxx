@@ -46,9 +46,9 @@ enum EVAnchorMode       {
 #define EE_PARA_ALL             SAL_MAX_INT32
 #define EE_PARA_MAX_COUNT       SAL_MAX_INT32
 
-#define EE_INDEX_NOT_FOUND      SAL_MAX_UINT16
-#define EE_TEXTPOS_ALL          SAL_MAX_UINT16
-#define EE_TEXTPOS_MAX_COUNT    SAL_MAX_UINT16
+#define EE_INDEX_NOT_FOUND      SAL_MAX_INT32
+#define EE_TEXTPOS_ALL          SAL_MAX_INT32
+#define EE_TEXTPOS_MAX_COUNT    SAL_MAX_INT32
 
 EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 
@@ -102,45 +102,42 @@ class SfxStyleSheet;
 struct EPosition
 {
     sal_Int32   nPara;
-    xub_StrLen  nIndex;
+    sal_Int32   nIndex;
 
-    EPosition() :
-        nPara( EE_PARA_NOT_FOUND ),
-        nIndex( EE_INDEX_NOT_FOUND )
-    {
-    }
+    EPosition()
+        : nPara( EE_PARA_NOT_FOUND )
+        , nIndex( EE_INDEX_NOT_FOUND )
+        { }
 
-    EPosition( sal_Int32 nPara_, xub_StrLen nPos_ ) :
-        nPara( nPara_ ),
-        nIndex( nPos_ )
-    {
-    }
+    EPosition( sal_Int32 nPara_, sal_Int32 nPos_ )
+        : nPara( nPara_ )
+        , nIndex( nPos_ )
+        { }
 };
 
 struct ESelection
 {
     sal_Int32   nStartPara;
-    xub_StrLen  nStartPos;
+    sal_Int32   nStartPos;
     sal_Int32   nEndPara;
-    xub_StrLen  nEndPos;
+    sal_Int32   nEndPos;
 
     ESelection() : nStartPara( 0 ), nStartPos( 0 ), nEndPara( 0 ), nEndPos( 0 ) {}
 
-    ESelection( sal_Int32 nStPara, xub_StrLen nStPos, sal_Int32 nEPara, xub_StrLen nEPos ) :
-        nStartPara( nStPara ),
-        nStartPos( nStPos ),
-        nEndPara( nEPara ),
-        nEndPos( nEPos )
-    {
-    }
+    ESelection( sal_Int32 nStPara, sal_Int32 nStPos,
+                sal_Int32 nEPara, sal_Int32 nEPos )
+        : nStartPara( nStPara )
+        , nStartPos( nStPos )
+        , nEndPara( nEPara )
+        , nEndPos( nEPos )
+        { }
 
-    ESelection( sal_Int32 nPara, xub_StrLen nPos ) :
-        nStartPara( nPara ),
-        nStartPos( nPos ),
-        nEndPara( nPara ),
-        nEndPos( nPos )
-    {
-    }
+    ESelection( sal_Int32 nPara, sal_Int32 nPos )
+        : nStartPara( nPara )
+        , nStartPos( nPos )
+        , nEndPara( nPara )
+        , nEndPos( nPos )
+        { }
 
     void    Adjust();
     bool    IsEqual( const ESelection& rS ) const;
@@ -185,15 +182,15 @@ inline bool ESelection::IsGreater( const ESelection& rS ) const
 
 inline void ESelection::Adjust()
 {
-    sal_Bool bSwap = sal_False;
+    bool bSwap = false;
     if ( nStartPara > nEndPara )
-        bSwap = sal_True;
+        bSwap = true;
     else if ( ( nStartPara == nEndPara ) && ( nStartPos > nEndPos ) )
-        bSwap = sal_True;
+        bSwap = true;
 
     if ( bSwap )
     {
-        sal_Int32  nSPar = nStartPara; sal_uInt16 nSPos = nStartPos;
+        sal_Int32  nSPar = nStartPara; sal_Int32 nSPos = nStartPos;
         nStartPara = nEndPara; nStartPos = nEndPos;
         nEndPara = nSPar; nEndPos = nSPos;
     }
@@ -206,7 +203,7 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     EPosition       aPosition;
 
     EFieldInfo();
-    EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_uInt16 nPos );
+    EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos );
     ~EFieldInfo();
 
     EFieldInfo( const EFieldInfo& );
@@ -275,8 +272,8 @@ struct EECharAttrib
     const SfxPoolItem*  pAttr;
 
     sal_Int32           nPara;
-    xub_StrLen          nStart;
-    xub_StrLen          nEnd;
+    sal_Int32           nStart;
+    sal_Int32           nEnd;
 };
 
 struct MoveParagraphsInfo
@@ -298,7 +295,7 @@ struct PasteOrDropInfos
     sal_Int32   nStartPara;
     sal_Int32   nEndPara;
 
-    PasteOrDropInfos() : nAction(0), nStartPara(0xFFFFFFFF), nEndPara(0xFFFFFFFF)  {}
+    PasteOrDropInfos() : nAction(0), nStartPara(-1), nEndPara(-1)  {}
 };
 
 enum EENotifyType

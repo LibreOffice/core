@@ -31,10 +31,10 @@ namespace EEngineData
     class WrongSpellClass
     {
     public:
-        sal_uInt32 nStart;
-        sal_uInt32 nEnd;
+        sal_Int32 nStart;
+        sal_Int32 nEnd;
 
-        WrongSpellClass(sal_uInt32 nS, sal_uInt32 nE) : nStart(nS), nEnd(nE) {}
+        WrongSpellClass(sal_Int32 nS, sal_Int32 nE) : nStart(nS), nEnd(nE) {}
     };
 
     typedef std::vector< WrongSpellClass > WrongSpellVector;
@@ -51,9 +51,9 @@ namespace EEngineData
     {
     public:
         TextMarkingType eType;
-        sal_uInt32 nIndex;
+        sal_Int32 nIndex;
 
-        TextMarkingClass(TextMarkingType eT, sal_uInt32 nI) : eType(eT), nIndex(nI) {}
+        TextMarkingClass(TextMarkingType eT, sal_Int32 nI) : eType(eT), nIndex(nI) {}
     };
 
     typedef std::vector< TextMarkingClass > TextMarkingVector;

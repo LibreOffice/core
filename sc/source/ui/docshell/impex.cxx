@@ -23,7 +23,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include "global.hxx"
@@ -62,7 +61,7 @@
 // times maximum cell content length, 2*1024*64K=128M, and because it's
 // sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
 // anyway.
-static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * STRING_MAXLEN;
+static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
 
 namespace
 {
@@ -354,7 +353,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
         eEnc = osl_getThreadTextEncoding();
 
     if (!nSizeLimit)
-        nSizeLimit = STRING_MAXLEN;
+        nSizeLimit = SAL_MAX_UINT16;
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( eEnc );
@@ -365,7 +364,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
         aStrm.WriteChar( (sal_Char) 0 );
         aStrm.Seek( STREAM_SEEK_TO_END );
         // Sicherheits-Check:
-        if( aStrm.Tell() <= (sal_uLong) STRING_MAXLEN )
+        if( aStrm.Tell() <= nSizeLimit )
         {
             rText = (const sal_Char*) aStrm.GetData();
             return true;
@@ -623,15 +622,15 @@ static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unic
  */
 static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const sal_Unicode* p2 )
 {
-    OSL_ENSURE( rField.getLength() + (p2 - p1) <= STRING_MAXLEN, "lcl_appendLineData: data overflow");
-    if (rField.getLength() + (p2 - p1) <= STRING_MAXLEN)
+    OSL_ENSURE( rField.getLength() + (p2 - p1) <= SAL_MAX_UINT16, "lcl_appendLineData: data overflow");
+    if (rField.getLength() + (p2 - p1) <= SAL_MAX_UINT16)
     {
         rField += OUString( p1, sal::static_int_cast<sal_Int32>( p2 - p1 ) );
         return true;
     }
     else
     {
-        rField += OUString( p1, STRING_MAXLEN - rField.getLength() );
+        rField += OUString( p1, SAL_MAX_UINT16 - rField.getLength() );
         return false;
     }
 }
@@ -1247,26 +1246,26 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
     rbIsQuoted = (pStr[nStart] == '"' && pStr[nSpace-1] == '"');
     if (rbIsQuoted)
     {
-        bool bFits = (nSpace - nStart - 3 <= STRING_MAXLEN);
+        bool bFits = (nSpace - nStart - 3 <= SAL_MAX_UINT16);
         OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
         if (bFits)
             return rLine.copy(nStart+1, nSpace-nStart-2);
         else
         {
             rbOverflowCell = true;
-            return rLine.copy(nStart+1, STRING_MAXLEN);
+            return rLine.copy(nStart+1, SAL_MAX_UINT16);
         }
     }
     else
     {
-        bool bFits = (nSpace - nStart <= STRING_MAXLEN);
+        bool bFits = (nSpace - nStart <= SAL_MAX_UINT16);
         OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
         if (bFits)
             return rLine.copy(nStart, nSpace-nStart);
         else
         {
             rbOverflowCell = true;
-            return rLine.copy(nStart, STRING_MAXLEN);
+            return rLine.copy(nStart, SAL_MAX_UINT16);
         }
     }
 }

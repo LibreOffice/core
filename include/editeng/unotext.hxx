@@ -173,13 +173,13 @@ public:
 
     // SvxTextForwarder
     virtual sal_Int32       GetParagraphCount() const;
-    virtual sal_uInt16      GetTextLen( sal_Int32 nParagraph ) const;
+    virtual sal_Int32       GetTextLen( sal_Int32 nParagraph ) const;
     virtual OUString        GetText( const ESelection& rSel ) const;
     virtual SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const;
     virtual SfxItemSet      GetParaAttribs( sal_Int32 nPara ) const;
     virtual void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
     virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
-    virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rList ) const;
+    virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const;
 
     sal_uInt16              GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
     sal_uInt16              GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const;
@@ -191,27 +191,27 @@ public:
     virtual void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     virtual void            QuickInsertLineBreak( const ESelection& rSel );
 
-    virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
-    virtual void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
+    virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
 
     virtual sal_Bool        IsValid() const;
 
     virtual void            SetNotifyHdl( const Link& );
-    virtual LanguageType    GetLanguage( sal_Int32, sal_uInt16 ) const;
-    virtual sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
+    virtual LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const;
+    virtual sal_Int32       GetFieldCount( sal_Int32 nPara ) const;
     virtual EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const;
-    virtual Rectangle       GetCharBounds( sal_Int32 nPara, sal_uInt16 nIndex ) const;
+    virtual Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const;
     virtual Rectangle       GetParaBounds( sal_Int32 nPara ) const;
     virtual MapMode         GetMapMode() const;
     virtual OutputDevice*   GetRefDevice() const;
-    virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_uInt16& nIndex ) const;
-    virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell = sal_False ) const;
-    virtual sal_uInt16      GetLineCount( sal_Int32 nPara ) const;
-    virtual sal_uInt16      GetLineLen( sal_Int32 nPara, sal_uInt16 nLine ) const;
-    virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const;
-    virtual sal_uInt16      GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const;
+    virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
+    virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
+    virtual sal_Bool        GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell = sal_False ) const;
+    virtual sal_Int32       GetLineCount( sal_Int32 nPara ) const;
+    virtual sal_Int32       GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const;
+    virtual void            GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
+    virtual sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const OUString&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False );
@@ -222,7 +222,7 @@ public:
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
-    virtual sal_uInt16  AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet );
+    virtual sal_Int32   AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet );
     //XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource);
 };
@@ -583,7 +583,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
     const SvxUnoTextBase&    mrParentText;
     sal_Int32                mnParagraph;
-    std::vector<sal_uInt16>* mpPortions;
+    std::vector<sal_Int32>*  mpPortions;
     sal_uInt16               mnNextPortion;
 
 public:

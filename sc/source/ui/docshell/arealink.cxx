@@ -280,7 +280,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     SCROW nHeight = 0;
     sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
     sal_Int32 nStringIx = 0;
-    xub_StrLen nToken;
+    sal_Int32 nToken;
 
     for( nToken = 0; nToken < nTokenCnt; nToken++ )
     {

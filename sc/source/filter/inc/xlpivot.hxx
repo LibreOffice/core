@@ -50,7 +50,7 @@ const sal_uInt16 EXC_PT_MAXSTRLEN           = 0xFFFE;
 // pivot cache fields
 const size_t EXC_PC_MAXFIELDCOUNT           = 0xFFFE;
 const sal_uInt16 EXC_PC_NOFIELD             = 0xFFFF;
-const xub_StrLen EXC_PC_MAXSTRLEN           = 255;
+const sal_Int32 EXC_PC_MAXSTRLEN           = 255;
 
 // pivot cache items
 const size_t EXC_PC_MAXITEMCOUNT            = 32500;

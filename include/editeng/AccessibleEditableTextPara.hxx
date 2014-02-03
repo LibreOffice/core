@@ -304,7 +304,7 @@ namespace accessibility
 
             @return sal_False, if the method was not able to determine the range
          */
-        sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nIndex );
+        sal_Bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex );
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;

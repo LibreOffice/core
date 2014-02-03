@@ -30,10 +30,10 @@ struct ScRangeFindData
 {
     ScRange     aRef;
     sal_uInt16      nFlags;
-    xub_StrLen  nSelStart;
-    xub_StrLen  nSelEnd;
+    sal_Int32  nSelStart;
+    sal_Int32  nSelEnd;
 
-    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE ) :
+    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, sal_Int32 nS, sal_Int32 nE ) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
 };
 

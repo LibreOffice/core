@@ -1418,7 +1418,7 @@ ESelection Outliner::GetSearchStartPosition (void)
             aPosition = ESelection();
         else
         {
-            xub_StrLen nLastParagraphLength = GetEditEngine().GetTextLen (
+            sal_Int32 nLastParagraphLength = GetEditEngine().GetTextLen (
                 nParagraphCount-1);
             aPosition = ESelection (nParagraphCount-1, nLastParagraphLength);
         }

@@ -483,7 +483,7 @@ void ScInputWindow::Select()
                                 //! SetSelection am InputHandler ???
                                 //! bSelIsRef setzen ???
                                 const sal_Int32 nOpen = aFormula.indexOf('(');
-                                const xub_StrLen nLen = aFormula.getLength();
+                                const sal_Int32 nLen = aFormula.getLength();
                                 if ( nOpen != -1 && nLen > nOpen )
                                 {
                                     sal_uInt8 nAdd(1);
@@ -758,7 +758,7 @@ void ScInputWindow::SwitchToTextWin()
         if (pView)
         {
             sal_Int32 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
-            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen( nPara );
+            sal_Int32 nLen = pView->GetEditEngine()->GetTextLen( nPara );
             ESelection aSel( nPara, nLen, nPara, nLen );
             pView->SetSelection( aSel );                // set cursor to end of text
         }

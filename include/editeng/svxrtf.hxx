@@ -69,7 +69,7 @@ public:
     virtual ~SvxPosition() {}
 
     virtual sal_Int32   GetNodeIdx() const = 0;
-    virtual xub_StrLen  GetCntIdx() const = 0;
+    virtual sal_Int32   GetCntIdx() const = 0;
 
     virtual SvxPosition* Clone() const = 0; // Cloning itself
     virtual SvxNodeIdx* MakeNodeIdx() const = 0; // Cloning NodeIndex
@@ -275,7 +275,7 @@ protected:
     virtual void InsertText() = 0;
     virtual void MovePos( int bForward = sal_True ) = 0;
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                 xub_StrLen& rCntPos )=0;
+                                 sal_Int32& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
     // for Tokens, which are not evaluated in ReadAttr
     virtual void UnknownAttrToken( int nToken, SfxItemSet* pSet );
@@ -328,7 +328,7 @@ public:
     inline const Color& GetColor( size_t nId ) const;
     const Font& GetFont( sal_uInt16 nId );      // Changes the dflt Font
 
-    virtual bool IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const = 0;
+    virtual bool IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
 
     // to det a different attribute pool. May only be done prior to CallParser!
     // The maps are not generated anew!
@@ -359,7 +359,7 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
     SfxItemSet  aAttrSet;
     SvxNodeIdx  *pSttNd, *pEndNd;
-    xub_StrLen nSttCnt, nEndCnt;
+    sal_Int32 nSttCnt, nEndCnt;
     SvxRTFItemStackList* pChildList;
     sal_uInt16 nStyleNo;
 
@@ -387,8 +387,8 @@ public:
     const SvxNodeIdx& GetSttNode() const { return *pSttNd; }
     const SvxNodeIdx& GetEndNode() const { return *pEndNd; }
 
-    xub_StrLen GetSttCnt() const { return nSttCnt; }
-    xub_StrLen GetEndCnt() const { return nEndCnt; }
+    sal_Int32 GetSttCnt() const { return nSttCnt; }
+    sal_Int32 GetEndCnt() const { return nEndCnt; }
 
           SfxItemSet& GetAttrSet()          { return aAttrSet; }
     const SfxItemSet& GetAttrSet() const    { return aAttrSet; }

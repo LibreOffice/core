@@ -191,7 +191,7 @@ public:
 
     EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
-    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
+    sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
     void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
@@ -202,13 +202,13 @@ public:
     sal_Bool        IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
     sal_Bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
     sal_Bool        IsShapeParaFocusable();
-    sal_Bool        WrongSpelledBreakPara(sal_Int32 nPara, sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nIndex);
+    sal_Bool        WrongSpelledBreakPara(sal_Int32 nPara, sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex);
     void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, xub_StrLen& nPos ) const;
-    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = NULL, xub_StrLen* pnPos = NULL ) const;
+    const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
+    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = NULL, sal_Int32* pnPos = NULL ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
 

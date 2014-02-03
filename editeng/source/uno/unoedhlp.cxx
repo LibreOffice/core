@@ -108,7 +108,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell )
+sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell )
 {
     // IA2 CWS introduced bInCell, but also did many other changes here.
     // Need to verify implementation with AT (IA2 and ATK)
@@ -120,8 +120,8 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
 
     if (!aTempCharAttribs.empty())
     {
-        sal_uInt32 nIndex2 = 0;
-        sal_uInt32 nParaLen = rEE.GetTextLen(nPara);
+        sal_Int32 nIndex2 = 0;
+        sal_Int32 nParaLen = rEE.GetTextLen(nPara);
         for (size_t nAttr = 0; nAttr < aTempCharAttribs.size(); ++nAttr)
         {
             if (nIndex2 < aTempCharAttribs[nAttr].nStart)
@@ -143,7 +143,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         }
     }
     // find closest index in front of nIndex
-    sal_uInt16 nCurrIndex;
+    sal_Int32 nCurrIndex;
     sal_Int32 nClosestStartIndex_s = 0, nClosestStartIndex_e = 0;
     for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
     {
@@ -184,29 +184,29 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
     }
     sal_Int32 nClosestEndIndex = nClosestEndIndex_s < nClosestEndIndex_e ? nClosestEndIndex_s : nClosestEndIndex_e;
 
-    nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );
-    nEndIndex = static_cast<sal_uInt16>( nClosestEndIndex );
+    nStartIndex = nClosestStartIndex;
+    nEndIndex = nClosestEndIndex;
 
     if ( bInCell )
     {
         EPosition aStartPos( nPara, nStartIndex ), aEndPos( nPara, nEndIndex );
-        sal_uInt32 nParaCount = rEE.GetParagraphCount();
-        sal_uInt32 nCrrntParaLen = rEE.GetTextLen(nPara);
+        sal_Int32 nParaCount = rEE.GetParagraphCount();
+        sal_Int32 nCrrntParaLen = rEE.GetTextLen(nPara);
         //need to find closest index in front of nIndex in the previous paragraphs
         if ( aStartPos.nIndex == 0 )
         {
             SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, 0, 1, GETATTRIBS_CHARATTRIBS );
             for ( sal_Int32 nParaIdx = nPara-1; nParaIdx >= 0; nParaIdx-- )
             {
-                sal_uInt32 nLen = rEE.GetTextLen( sal_uInt16(nParaIdx) );
+                sal_uInt32 nLen = rEE.GetTextLen(nParaIdx);
                 if ( nLen )
                 {
-                    sal_uInt16 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, sal_uInt16(nParaIdx), sal_uInt16(nLen), sal_False );
-                    SfxItemSet aSet = rEE.GetAttribs( sal_uInt16(nParaIdx), sal_uInt16(nLen-1), sal_uInt16(nLen), GETATTRIBS_CHARATTRIBS );
+                    sal_Int32 nStartIdx, nEndIdx;
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen, sal_False );
+                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, nLen-1, nLen, GETATTRIBS_CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
-                        aStartPos.nPara = sal_uInt16(nParaIdx);
+                        aStartPos.nPara = nParaIdx;
                         aStartPos.nIndex = nStartIdx;
                         if ( aStartPos.nIndex != 0 )
                         {
@@ -219,18 +219,18 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         //need find closest index behind nIndex in the following paragrphs
         if ( aEndPos.nIndex == nCrrntParaLen )
         {
-            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, sal_uInt16(nCrrntParaLen-1), sal_uInt16(nCrrntParaLen), GETATTRIBS_CHARATTRIBS );
-            for ( sal_uInt32 nParaIdx = nPara+1; nParaIdx < nParaCount; nParaIdx++ )
+            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, nCrrntParaLen-1, nCrrntParaLen, GETATTRIBS_CHARATTRIBS );
+            for ( sal_Int32 nParaIdx = nPara+1; nParaIdx < nParaCount; nParaIdx++ )
             {
-                sal_uInt32 nLen = rEE.GetTextLen( sal_uInt16(nParaIdx) );
+                sal_Int32 nLen = rEE.GetTextLen( nParaIdx );
                 if ( nLen )
                 {
-                    sal_uInt16 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, sal_uInt16(nParaIdx), 0, sal_False );
-                    SfxItemSet aSet = rEE.GetAttribs( sal_uInt16(nParaIdx), 0, 1, GETATTRIBS_CHARATTRIBS );
+                    sal_Int32 nStartIdx, nEndIdx;
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0, sal_False );
+                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, 0, 1, GETATTRIBS_CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
-                        aEndPos.nPara = sal_uInt16(nParaIdx);
+                        aEndPos.nPara = nParaIdx;
                         aEndPos.nIndex = nEndIdx;
                         if ( aEndPos.nIndex != nLen )
                         {
@@ -243,7 +243,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         nStartIndex = 0;
         if ( aStartPos.nPara > 0 )
         {
-            for ( sal_uInt16 i = 0; i < aStartPos.nPara; i++ )
+            for ( sal_Int32 i = 0; i < aStartPos.nPara; i++ )
             {
                 nStartIndex += rEE.GetTextLen(i)+1;
             }
@@ -252,7 +252,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         nEndIndex = 0;
         if ( aEndPos.nPara > 0 )
         {
-           for ( sal_uInt16 i = 0; i < aEndPos.nPara; i++ )
+           for ( sal_Int32 i = 0; i < aEndPos.nPara; i++ )
            {
                nEndIndex += rEE.GetTextLen(i)+1;
            }
