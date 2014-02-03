@@ -183,13 +183,13 @@
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:ControlProperties"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:Label" />
-                    <menu:menuitem menu:id=".uno:Edit" />
-                    <menu:menuitem menu:id=".uno:ImageControl" />
+                    <menu:menuitem menu:id=".uno:Label"/>
+                    <menu:menuitem menu:id=".uno:Edit"/>
+                    <menu:menuitem menu:id=".uno:ImageControl"/>
                     <menu:menuitem menu:id=".uno:InsertObjectChart"  />
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:HFixedLine" />
-                    <menu:menuitem menu:id=".uno:VFixedLine" />
+                    <menu:menuitem menu:id=".uno:HFixedLine"/>
+                    <menu:menuitem menu:id=".uno:VFixedLine"/>
                 </menu:menupopup>
             </menu:menu>
 
@@ -331,13 +331,13 @@
 
                     <menu:menu menu:id=".uno:CalloutShapesMenu" >
                         <menu:menupopup>
-                            <menu:menuitem menu:id=".uno:CalloutShapes.rectangular-callout" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.round-rectangular-callout" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.round-callout" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.cloud-callout" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-1" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-2" />
-                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-3" />
+                            <menu:menuitem menu:id=".uno:CalloutShapes.rectangular-callout"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.round-rectangular-callout"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.round-callout"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.cloud-callout"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-1"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-2"/>
+                            <menu:menuitem menu:id=".uno:CalloutShapes.line-callout-3"/>
                         </menu:menupopup>
                     </menu:menu>
 

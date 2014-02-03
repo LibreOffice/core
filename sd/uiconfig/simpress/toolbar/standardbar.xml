@@ -33,7 +33,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"  />
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
@@ -43,9 +43,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"  />
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
