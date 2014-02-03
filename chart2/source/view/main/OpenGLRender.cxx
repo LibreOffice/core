@@ -1074,18 +1074,18 @@ int OpenGLRender::CreateMultiSampleFrameBufObj()
 int OpenGLRender::Create2DCircle(int detail)
 {
     float angle;
-    int idx = 2;
     if (detail <= 0)
     {
         return -1;
     }
-    m_Bubble2DCircle.bufLen = 2 * (detail + 3)* sizeof(float);
-    m_Bubble2DCircle.pointBuf = (float *)malloc(m_Bubble2DCircle.bufLen);
-    memset(m_Bubble2DCircle.pointBuf, 0, m_Bubble2DCircle.bufLen);
+    m_Bubble2DCircle.clear();
+    m_Bubble2DCircle.reserve(2 * (detail + 3));
+    m_Bubble2DCircle.push_back(0);
+    m_Bubble2DCircle.push_back(0);
     for(angle = 2.0f * GL_PI; angle > -(2.0f * GL_PI / detail); angle -= (2.0f * GL_PI / detail))
     {
-        m_Bubble2DCircle.pointBuf[idx++] = sin(angle);
-        m_Bubble2DCircle.pointBuf[idx++] = cos(angle);
+        m_Bubble2DCircle.push_back(sin(angle));
+        m_Bubble2DCircle.push_back(cos(angle));
     }
     return 0;
 }
@@ -1093,7 +1093,7 @@ int OpenGLRender::Create2DCircle(int detail)
 int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float directionY)
 {
     //check whether to create the circle data
-    if (!m_Bubble2DCircle.pointBuf)
+    if (m_Bubble2DCircle.empty())
     {
         Create2DCircle(100);
     }
@@ -1126,11 +1126,11 @@ int OpenGLRender::RenderBubble2FBO(int)
         //render to fbo
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        if (!m_Bubble2DCircle.pointBuf)
+        if (m_Bubble2DCircle.empty())
         {
             Create2DCircle(100);
         }
-        glBufferData(GL_ARRAY_BUFFER, m_Bubble2DCircle.bufLen, m_Bubble2DCircle.pointBuf, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, m_Bubble2DCircle.size() * sizeof(GLfloat), &m_Bubble2DCircle[0], GL_STATIC_DRAW);
 
         glUseProgram(m_CommonProID);
 
@@ -1148,7 +1148,7 @@ int OpenGLRender::RenderBubble2FBO(int)
             0,                  // stride
             (void*)0            // array buffer offset
             );
-        glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.bufLen / sizeof(float) / 2);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.size() / 2);
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         m_Bubble2DShapePointList.pop_front();

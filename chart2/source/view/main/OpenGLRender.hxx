@@ -75,11 +75,7 @@ typedef struct Bubble2DPointList
     float yScale;
 }Bubble2DPointList;
 
-typedef struct Bubble2DCircle
-{
-    float *pointBuf;
-    int bufLen;
-}Bubble2DCircle;
+typedef std::vector<GLfloat> Bubble2DCircle;
 
 struct RectanglePointList
 {
