@@ -618,7 +618,7 @@ FindElement2(
             break;
             default:
             {
-                ElseRetType aRet = rFuncElse(it->type, nTopRow, nDataSize);
+                ElseRetType aRet = rFuncElse(*it, nOffset);
                 if (aRet.second)
                     return PositionType(it, aRet.first);
             }
