@@ -538,6 +538,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTblNd->MakeFrms( &aNdIdx );
 
+    // To-Do - add 'SwExtraRedlineTbl' also ?
     if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
