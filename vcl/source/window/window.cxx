@@ -9471,8 +9471,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     sal_Bool bDevOutput = mbDevOutput;
     mbDevOutput = true;
 
-    long nOldDPIX = ImplGetDPIX();
-    long nOldDPIY = ImplGetDPIY();
+    const OutputDevice *pOutDev = GetOutDev();
+    long nOldDPIX = pOutDev->ImplGetDPIX();
+    long nOldDPIY = pOutDev->ImplGetDPIY();
     mnDPIX = i_pTargetOutDev->ImplGetDPIX();
     mnDPIY = i_pTargetOutDev->ImplGetDPIY();
     sal_Bool bOutput = IsOutputEnabled();
