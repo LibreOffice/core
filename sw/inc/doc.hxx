@@ -144,6 +144,7 @@ class SwPageDesc;
 class SwPagePreviewPrtData;
 class SwRangeRedline;
 class SwRedlineTbl;
+class SwExtraRedlineTbl;
 class SwRootFrm;
 class SwRubyList;
 class SwRubyListEntry;
@@ -356,8 +357,9 @@ class SW_DLLPUBLIC SwDoc :
     /// relation between list style and its default list
     tHashMapForLists maListStyleLists;
 
-    SwRedlineTbl    *mpRedlineTbl;           ///< List of all Redlines.
-    OUString        *mpAutoFmtRedlnComment;  ///< Comment for Redlines inserted via AutoFormat.
+    SwRedlineTbl        *mpRedlineTbl;           ///< List of all Ranged Redlines.
+    SwExtraRedlineTbl   *mpExtraRedlineTbl;      ///< List of all Extra Redlines.
+    OUString            *mpAutoFmtRedlnComment;  ///< Comment for Redlines inserted via AutoFormat.
 
     SwUnoCrsrTbl    *mpUnoCrsrTbl;
 
@@ -767,7 +769,9 @@ public:
     virtual bool IsIgnoreRedline() const;
     virtual bool IsInRedlines(const SwNode& rNode) const;
     virtual const SwRedlineTbl& GetRedlineTbl() const;
+    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const;
     virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete);
+    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete);
     virtual bool SplitRedline(const SwPaM& rPam);
     virtual bool DeleteRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType);
     virtual bool DeleteRedline(/*[in]*/const SwStartNode& rSection, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType);

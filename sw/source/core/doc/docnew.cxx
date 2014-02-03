@@ -225,6 +225,7 @@ SwDoc::SwDoc()
     maLists(),
     maListStyleLists(),
     mpRedlineTbl( new SwRedlineTbl ),
+    mpExtraRedlineTbl ( new SwExtraRedlineTbl ),
     mpAutoFmtRedlnComment( 0 ),
     mpUnoCrsrTbl( new SwUnoCrsrTbl() ),
     mpPgPViewPrtData( 0 ),
@@ -529,6 +530,7 @@ SwDoc::~SwDoc()
     mbDtor = true;
 
     delete mpRedlineTbl;
+    delete mpExtraRedlineTbl;
     delete mpUnoCrsrTbl;
     delete mpAutoFmtRedlnComment;
     delete mpUpdtFlds;
@@ -804,6 +806,7 @@ void SwDoc::ClearDoc()
                 "not all DrawObjects removed from the page" );
 
     mpRedlineTbl->DeleteAndDestroyAll();
+    mpExtraRedlineTbl->DeleteAndDestroyAll();
 
     delete mpACEWord;
 

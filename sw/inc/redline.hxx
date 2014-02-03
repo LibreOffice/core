@@ -304,7 +304,7 @@ public:
 class SW_DLLPUBLIC SwExtraRedline
 {
 public:
-    SwExtraRedline( RedlineType_t eType );
+    SwExtraRedline( );
     SwExtraRedline( const SwExtraRedline& );
     virtual ~SwExtraRedline();
 };
@@ -312,10 +312,25 @@ public:
 /// Redline that holds information about a table-row that had some change
 class SW_DLLPUBLIC SwTableRowRedline : public SwExtraRedline
 {
+private:
+    SwRedlineData* pRedlineData;
+    const SwTableLine* pTableLine;
+
 public:
-    SwTableRowRedline( RedlineType_t eType, SwTableLine* pTableLine );
+    SwTableRowRedline( const SwRedlineData& rData, SwTableLine& aTableLine );
     SwTableRowRedline( const SwTableRowRedline& );
     virtual ~SwTableRowRedline();
+
+    /** ExtraData gets copied, the pointer is therefor not taken over by
+     *  the RedLineObject.*/
+    void SetExtraData( const SwRedlineExtraData* pData )
+        { pRedlineData->SetExtraData( pData ); }
+    const SwRedlineExtraData* GetExtraData() const
+        { return pRedlineData->GetExtraData(); }
+    const SwTableLine* GetTableLine() const
+        { return pTableLine; }
+    const SwRedlineData& GetRedlineData() const
+        { return *pRedlineData; }
 };
 
 
