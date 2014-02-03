@@ -111,7 +111,7 @@ public:
     DECL_LINK( EndDropHdl, void * );
     DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
 
-    sal_uLong         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
+    sal_uLong         GetPaperWidth();
 
     sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
 
@@ -187,6 +187,8 @@ private:
     sal_Int32               mnPagesProcessed;
 
     sal_Bool                mbFirstPaint;
+
+    sal_uLong               mnPaperWidth;
 
     SfxProgress*        mpProgress;
 
