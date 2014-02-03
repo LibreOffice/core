@@ -21,7 +21,6 @@
 #include <threadhelp/resetableguard.hxx>
 
 #include <macros/generic.hxx>
-#include <fwidllapi.h>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
