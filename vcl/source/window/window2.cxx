@@ -424,7 +424,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !pOutDev->ImplGetGraphics() )
             return;
     }
 
@@ -505,7 +505,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
         // we need a graphics
         if ( !mpGraphics )
         {
-            if ( !ImplGetGraphics() )
+            if ( !pOutDev->ImplGetGraphics() )
                 return;
         }
 
