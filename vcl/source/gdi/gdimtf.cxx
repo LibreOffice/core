@@ -2915,8 +2915,8 @@ sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
     Point       aBackPosPix;
     Rectangle   aOverlayRect;
 
-    // calculate addigtional positions and sizes if an overlay image is used
-    if (  pOverlay )
+    // calculate additional positions and sizes if an overlay image is used
+    if (pOverlay)
     {
         aFullSize = Size( nMaximumExtent, nMaximumExtent );
         aOverlayRect = Rectangle( aNullPt, aFullSize  );
@@ -2935,11 +2935,16 @@ sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
     }
 
     // draw image(s) into VDev and get resulting image
-    if ( aVDev.SetOutputSizePixel( aFullSize ) )
+    // do it 4x larger to be able to scale it down & get beautiful antialias
+    Size aAntialiasSize(aFullSize.Width() * 4, aFullSize.Height() * 4);
+    if (aVDev.SetOutputSizePixel(aAntialiasSize))
     {
+        // antialias: provide 4x larger size, and then scale down the result
+        Size aAntialias(aDrawSize.Width() * 4, aDrawSize.Height() * 4);
+
         // draw metafile into VDev
         const_cast<GDIMetaFile *>(this)->WindStart();
-        const_cast<GDIMetaFile *>(this)->Play( &aVDev, aBackPosPix, aDrawSize );
+        const_cast<GDIMetaFile *>(this)->Play(&aVDev, aBackPosPix, aAntialias);
 
         // draw overlay if necessary
         if ( pOverlay )
@@ -2952,32 +2957,10 @@ sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
         if ( aBmp.GetBitCount() != 24 )
             aBmp.Convert( BMP_CONVERSION_24BIT );
 
-        // create resulting mask bitmap with metafile output set to black
-        GDIMetaFile aMonchromeMtf( GetMonochromeMtf( COL_BLACK ) );
-        aVDev.DrawWallpaper( Rectangle( aNullPt, aSizePix ), Wallpaper( Color( COL_WHITE ) ) );
-        aMonchromeMtf.WindStart();
-        aMonchromeMtf.Play( &aVDev, aBackPosPix, aDrawSize );
+        // downsize, to get the antialiased picture
+        aBmp.Scale(aDrawSize, BMP_SCALE_BESTQUALITY);
 
-        // watch for overlay mask
-        if ( pOverlay  )
-        {
-            Bitmap aOverlayMergeBmp( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ) );
-
-            // create ANDed resulting mask at overlay area
-            if ( pOverlay->IsTransparent() )
-                aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), pOverlay->GetMask() );
-            else
-            {
-                aVDev.SetLineColor( COL_BLACK );
-                aVDev.SetFillColor( COL_BLACK );
-                aVDev.DrawRect( aOverlayRect);
-            }
-
-            aOverlayMergeBmp.CombineSimple( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ), BMP_COMBINE_AND );
-            aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), aOverlayMergeBmp );
-        }
-
-        rBmpEx = BitmapEx( aBmp, aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+        rBmpEx = BitmapEx(aBmp);
     }
 
     return !rBmpEx.IsEmpty();

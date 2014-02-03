@@ -34,12 +34,6 @@ class GraphicHelper
     static sal_Bool mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapEx& rOverlay,
                    const Rectangle& rOverlayRect, BitmapEx& rReturn );
 
-    static sal_Bool createThumb_Impl( const GDIMetaFile& rMtf,
-                       sal_uInt32 nMaximumExtent,
-                       BitmapEx& rBmpEx,
-                       const BitmapEx* pOverlay = NULL,
-                       const Rectangle* pOverlayRect = NULL );
-
 public:
 
     static SvMemoryStream* getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat );
