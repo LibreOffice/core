@@ -151,9 +151,9 @@ public:
     BitmapEx GetAsBitmap();
 #if defined( _WIN32 )
     bool InitMultisample(PIXELFORMATDESCRIPTOR pfd);
-#endif
     bool GetMSAASupport();
     int GetMSAAFormat();
+#endif
     void SetColor(sal_uInt32 color);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO(int wholeFlag);
@@ -204,7 +204,7 @@ private:
     glm::mat4 m_Projection;
     // Camera matrix
     glm::mat4 m_View;
-    // Model matrix : an identity matrix (model will be at the origin#elif defined( UNX )
+    // Model matrix : an identity matrix (model will be at the origin
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
@@ -247,8 +247,11 @@ private:
     std::list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
+
     bool mbArbMultisampleSupported;
+#if defined( _WIN32 )
     int m_iArbMultisampleFormat;
+#endif
 
     glm::vec4 m_2DColor;
     GLuint m_frameBufferMS;

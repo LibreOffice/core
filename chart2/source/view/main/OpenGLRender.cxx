@@ -761,15 +761,16 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_iHeight(0),
     mxRenderTarget(xTarget),
     mbArbMultisampleSupported(false),
+#if defined( _WIN32 )
+    m_iArbMultisampleFormat(0),
+#endif
     m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_frameBufferMS(0),
     m_TextVertexID(0),
-    m_TextTexCoordID(1),
+    m_TextTexCoordID(1)
 {
     //TODO: moggi: use STL
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
-
-    m_iArbMultisampleFormat = 0;
 
     //TODO: moggi: use STL
     for (size_t i = 0; i < sizeof(m_BackgroundColor) / sizeof(float); i++)
@@ -950,7 +951,6 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     DestroyWindow(hWnd);
     return  mbArbMultisampleSupported;
 }
-#endif
 
 bool OpenGLRender::GetMSAASupport()
 {
@@ -962,7 +962,6 @@ int OpenGLRender::GetMSAAFormat()
     return m_iArbMultisampleFormat;
 }
 
-#if defined( _WIN32 )
 //TODO: moggi: why the hell do we need another implementation here?
 int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd)
 {
