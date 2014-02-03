@@ -43,12 +43,7 @@ const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
 const char UNO_NUMBERFORMATDATE[]     = ".uno:NumberFormatDate";
 const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace open
-
 namespace sc { namespace sidebar {
-
-//////////////////////////////////////////////////////////////////////////////
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     Window* pParent,
@@ -56,9 +51,6 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     SfxBindings* pBindings)
   : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame),
     maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this),
-
-    // Caution! SID_NUMBER_FORMAT is reworked in symphony code, may be needed (!) If
-    // yes, grep for it in SC and symphony (!)
     maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this),
 
     mnCategorySelected(0),
@@ -76,20 +68,16 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     Initialize();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void NumberFormatPropertyPanel::Initialize()
 {
     Link aLink = LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl);
     mpLbCategory->SetSelectHdl ( aLink );
     mpLbCategory->SelectEntryPos(0);
-    mpLbCategory->SetAccessibleName(OUString( "Category"));     //wj acc
+    mpLbCategory->SetAccessibleName(OUString( "Category"));
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
     aLink = LINK(this, NumberFormatPropertyPanel, NumFormatHdl);
@@ -99,15 +87,14 @@ void NumberFormatPropertyPanel::Initialize()
 
     mpEdDecimals->SetModifyHdl( aLink );
     mpEdLeadZeroes->SetModifyHdl( aLink );
-    mpEdDecimals->SetAccessibleName(OUString( "Decimal Places"));       //wj acc
-    mpEdLeadZeroes->SetAccessibleName(OUString( "Leading Zeroes"));     //wj acc
+    mpEdDecimals->SetAccessibleName(OUString( "Decimal Places"));
+    mpEdLeadZeroes->SetAccessibleName(OUString( "Leading Zeroes"));
+
     mpBtnNegRed->SetClickHdl( aLink );
     mpBtnThousand->SetClickHdl( aLink );
 
     mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
 {
@@ -133,8 +120,6 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
 {
     sal_uInt16 nVal = pBox->GetSelectEntryPos();
@@ -146,8 +131,6 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
     }
     return 0L;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
 {
@@ -183,8 +166,6 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
@@ -203,15 +184,11 @@ NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void NumberFormatPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void NumberFormatPropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
@@ -224,12 +201,8 @@ void NumberFormatPropertyPanel::HandleContextChange(
 
     maContext = aContext;
 
-
-
     // todo
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void NumberFormatPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -343,19 +316,11 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SfxBindings* NumberFormatPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
-
 }} // end of namespace ::sc::sidebar
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
