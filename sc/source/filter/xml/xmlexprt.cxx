@@ -3308,7 +3308,7 @@ void ScXMLExport::WriteEditCell(const EditTextObject* pText)
     pText->GetAllSections(aAttrs);
     std::vector<editeng::Section>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
     std::vector<editeng::Section>::const_iterator itPara = itSec;
-    size_t nCurPara = 0; // current paragraph
+    sal_Int32 nCurPara = 0; // current paragraph
     for (; itSec != itSecEnd; ++itSec)
     {
         const editeng::Section& rSec = *itSec;
