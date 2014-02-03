@@ -201,7 +201,7 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
     //if rScheme is empty or unknown the default beaviour is like it where MAIL
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
-    bool bMail = rScheme.startsWith(sNewsScheme);
+    bool bMail = !rScheme.startsWith(sNewsScheme);
 
     //update protocol button selection:
     maRbtMail.Check(bMail);
