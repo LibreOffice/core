@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <unotools/moduleoptions.hxx>
 #include <rtl/ustring.h>
 #include<sfx2/viewfrm.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -63,7 +64,10 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::ViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
-    : AccessibleContextBase (rxParent, AccessibleRole::DOCUMENT),
+    : AccessibleContextBase (rxParent,
+                             pViewShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ?
+                                     AccessibleRole::DOCUMENT_PRESENTATION :
+                                     AccessibleRole::DOCUMENT),
       mpWindow (pSdWindow),
       mxController (rxController),
       mxModel (NULL),
