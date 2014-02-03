@@ -1671,7 +1671,7 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
                                    XML_y, I64S( rPoly[j].Y() - aRect.Top() ),
                                    FSEND );
 
-            if( ( flags == POLY_NORMAL || flags == POLY_SYMMTR ) && bBezier )
+            if( ( flags == POLY_NORMAL || flags == POLY_SYMMTR || j == rPoly.GetSize() - 1) && bBezier )
             {
                 mpFS->endElementNS( XML_a, XML_cubicBezTo );
                 bBezier = sal_False;

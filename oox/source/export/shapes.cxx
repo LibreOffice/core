@@ -353,14 +353,22 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false);
-    if( nAdjustmentValuesIndex != -1 )
+
+    if( sShapeType == "ooxml-non-primitive" ) // non-primitiv -> custom geometry
     {
-        sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
-        WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
-                          nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
+        WritePolyPolygon( EscherPropertyContainer::GetPolyPolygon( xShape ) );
     }
-    else
-        WritePresetShape( sPresetShape );
+    else // preset geometry
+    {
+        if( nAdjustmentValuesIndex != -1 )
+        {
+            sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
+            WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
+                              nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
+        }
+        else
+            WritePresetShape( sPresetShape );
+    }
     if( rXPropSet.is() )
     {
         WriteFill( rXPropSet );

@@ -1785,6 +1785,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
     OUString sPolyPolygonBezier ( "PolyPolygonBezier" );
     OUString sPolyPolygon       ( "PolyPolygon" );
     OUString sPolygon           ( "Polygon" );
+    OUString sCustomShapeGeometry   ( "CustomShapeGeometry" );
 
     if ( aAny >>= aXPropSet )
     {
@@ -1793,6 +1794,8 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
             bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygon, sal_True );
         if ( !bHasProperty )
             bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolygon, sal_True );
+        if ( !bHasProperty )
+            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sCustomShapeGeometry, sal_True );
         if ( bHasProperty )
             aRetPolyPoly = GetPolyPolygon( aAny );
     }
@@ -1915,6 +1918,92 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                     pArray++;
                 }
                 aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+            }
+        }
+    }
+    else if ( rAny.getValueType() == ::getCppuType( ( const uno::Sequence< beans::PropertyValue >* ) 0 ) )
+    {
+        uno::Sequence< beans::PropertyValue >* pGeometrySeq =
+            (uno::Sequence< beans::PropertyValue >*)rAny.getValue();
+
+        if ( pGeometrySeq )
+        {
+            for( int i = 0; i < pGeometrySeq->getLength(); ++i )
+            {
+                const beans::PropertyValue& rProp = (*pGeometrySeq)[ i ];
+                if ( rProp.Name == "Path" )
+                {
+                    uno::Sequence<beans::PropertyValue> aPathProp;
+                    rProp.Value >>= aPathProp;
+
+                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+                    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+                    for (int j = 0; j < aPathProp.getLength(); ++j )
+                    {
+                        const beans::PropertyValue& rPathProp = aPathProp[j];
+                        if (rPathProp.Name == "Coordinates")
+                            rPathProp.Value >>= aPairs;
+                        else if (rPathProp.Name == "Segments")
+                            rPathProp.Value >>= aSegments;
+                    }
+
+                    aPolygon = Polygon( aPairs.getLength() );
+                    for( int j = 0; j < aPairs.getLength(); ++j )
+                    {
+                        aPolygon[j] = Point( aPairs[j].First.Value.get<sal_Int32>(), aPairs[j].Second.Value.get<sal_Int32>() );
+                    }
+
+                    int nPointIndex = 0;
+                    for( int j = 0; j < aSegments.getLength(); ++j )
+                    {
+                        for ( int k = 0; k < aSegments[j].Count; ++k )
+                        {
+                            switch( aSegments[ j ].Command )
+                            {
+                                case drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN: break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::MOVETO : nPointIndex++; break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::LINETO : nPointIndex++; break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
+                                {
+                                    aPolygon.SetFlags( nPointIndex, POLY_CONTROL);
+                                    aPolygon.SetFlags( nPointIndex+1, POLY_CONTROL);
+                                    aPolygon.SetFlags( nPointIndex+2, POLY_CONTROL);
+                                    nPointIndex += 3;
+                                    break;
+                                }
+                                case drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
+                                case drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
+                                case drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
+                                case drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
+                                    break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+                                case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+                                    nPointIndex += 3;
+                                    break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
+                                case drawing::EnhancedCustomShapeSegmentCommand::ARC :
+                                case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+                                case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+                                    nPointIndex += 4;
+                                    break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+                                case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+                                    nPointIndex++;
+                                    break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
+                                case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
+                                    nPointIndex += 2;
+                                    break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::DARKEN : break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS : break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN : break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS : break;
+                                    break;
+                            }
+                        }
+                    }
+                    aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                }
             }
         }
     }

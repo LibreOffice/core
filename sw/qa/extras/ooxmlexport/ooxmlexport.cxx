@@ -46,6 +46,9 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
@@ -2716,6 +2719,67 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
     // Theme color (a:schemeClr)
     xShape.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.docx")
+{
+
+    // The problem was that a custom shape was not exported.
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(getShape(1), "CustomShapeGeometry");
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            rProp.Value >>= aPathProps;
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    for (int i = 0; i < aPathProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aPathProps[i];
+        if (rProp.Name == "Coordinates")
+            rProp.Value >>= aPairs;
+        else if (rProp.Name == "Segments")
+            rProp.Value >>= aSegments;
+    }
+
+    // (a:moveTo)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[0].Count);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::MOVETO), aSegments[0].Command );
+
+    // (a:cubicBezTo)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), aSegments[1].Count);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::CURVETO), aSegments[1].Command );
+
+    // Coordinates
+    sal_Int32 nLength = 16;
+    CPPUNIT_ASSERT_EQUAL(nLength, aPairs.getLength());
+    std::pair<sal_Int32,sal_Int32> aCoordinates[] =
+    {
+        std::pair<sal_Int32,sal_Int32>(607, 0),
+        std::pair<sal_Int32,sal_Int32>(450, 44),
+        std::pair<sal_Int32,sal_Int32>(300, 57),
+        std::pair<sal_Int32,sal_Int32>(176, 57),
+        std::pair<sal_Int32,sal_Int32>(109, 57),
+        std::pair<sal_Int32,sal_Int32>(49, 53),
+        std::pair<sal_Int32,sal_Int32>(0, 48),
+        std::pair<sal_Int32,sal_Int32>(66, 58),
+        std::pair<sal_Int32,sal_Int32>(152, 66),
+        std::pair<sal_Int32,sal_Int32>(251, 66),
+        std::pair<sal_Int32,sal_Int32>(358, 66),
+        std::pair<sal_Int32,sal_Int32>(480, 56),
+        std::pair<sal_Int32,sal_Int32>(607, 27),
+        std::pair<sal_Int32,sal_Int32>(607, 0),
+        std::pair<sal_Int32,sal_Int32>(607, 0),
+        std::pair<sal_Int32,sal_Int32>(607, 0)
+    };
+
+    for( int i = 0; i < nLength; ++i )
+    {
+        CPPUNIT_ASSERT_EQUAL(aCoordinates[i].first, aPairs[i].First.Value.get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(aCoordinates[i].second, aPairs[i].Second.Value.get<sal_Int32>());
+    }
 }
 #endif
 
