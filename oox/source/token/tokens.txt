@@ -4995,6 +4995,8 @@ tableColumnId
 tableColumns
 tablePart
 tableParts
+tableRowInsert
+tableRowDelete
 tableStyle
 tableStyleElement
 tableStyleId
