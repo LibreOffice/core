@@ -1141,6 +1141,15 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     const SwFmtFrmSize& rOldSize = (const SwFmtFrmSize& )rOldSet.Get(RES_FRM_SIZE);
     SwFmtFrmSize aSz( rOldSize );
 
+    sal_uInt16 nRelWidthRelation = m_pRelWidthRelationLB->GetSelectEntryPos();
+    if (nRelWidthRelation != LISTBOX_ENTRY_NOTFOUND)
+    {
+        if (nRelWidthRelation == 0)
+            aSz.SetWidthPercentRelation(text::RelOrientation::FRAME);
+        else if (nRelWidthRelation == 1)
+            aSz.SetWidthPercentRelation(text::RelOrientation::PAGE_FRAME);
+    }
+
     bool bValueModified = (m_aWidthED.IsValueModified() || m_aHeightED.IsValueModified());
     bool bCheckChanged = (m_pRelWidthCB->GetSavedValue() != m_pRelWidthCB->IsChecked()
                         || m_pRelHeightCB->GetSavedValue() != m_pRelHeightCB->IsChecked());
