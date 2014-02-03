@@ -409,6 +409,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testSharedFormulaInsertColumn);
     CPPUNIT_TEST(testFormulaPosition);
+    CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
