@@ -129,10 +129,10 @@ public:
     void SetCaptionFmt(SwFrmFmt* pFmt);
     SwFrmFmt* GetCaptionFmt() const;
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> const& GetXObject() const
             { return m_wXObject; }
-    SW_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }
 

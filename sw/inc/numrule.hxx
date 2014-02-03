@@ -52,8 +52,8 @@ class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
     SwFmtVertOrient* pVertOrient;
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     cGrfBulletCP;
-    SW_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
-    SW_DLLPRIVATE virtual void NotifyGraphicArrived();
+    SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
+    SAL_DLLPRIVATE virtual void NotifyGraphicArrived();
 
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;

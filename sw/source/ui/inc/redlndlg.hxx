@@ -94,25 +94,25 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
-    SW_DLLPRIVATE DECL_LINK( AcceptHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( AcceptAllHdl,  void* );
-    SW_DLLPRIVATE DECL_LINK( RejectHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( RejectAllHdl,  void* );
-    SW_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
-    SW_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
-    SW_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
-    SW_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
-    SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
+    SAL_DLLPRIVATE DECL_LINK( AcceptHdl,     void* );
+    SAL_DLLPRIVATE DECL_LINK( AcceptAllHdl,  void* );
+    SAL_DLLPRIVATE DECL_LINK( RejectHdl,     void* );
+    SAL_DLLPRIVATE DECL_LINK( RejectAllHdl,  void* );
+    SAL_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
+    SAL_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
+    SAL_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
+    SAL_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
+    SAL_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
-    SW_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
-    SW_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);
-    SW_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
-    SW_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
-    SW_DLLPRIVATE void          InitAuthors();
+    SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
+    SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);
+    SAL_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
+    SAL_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
+    SAL_DLLPRIVATE void          InitAuthors();
 
-    SW_DLLPRIVATE OUString      GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
+    SAL_DLLPRIVATE OUString      GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
+    SAL_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
+    SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt = sal_False);

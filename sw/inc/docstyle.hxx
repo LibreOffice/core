@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 
 
     /// Make empty shell a real StyleSheet (Core).
-    SW_DLLPRIVATE void              Create();
+    SAL_DLLPRIVATE void              Create();
 
     /// Fill StyleSheet with data.
     enum FillStyleType {
@@ -77,7 +77,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
         FillPhysical
     };
 
-    SW_DLLPRIVATE sal_Bool FillStyleSheet( FillStyleType eFType );
+    SAL_DLLPRIVATE sal_Bool FillStyleSheet( FillStyleType eFType );
 
 protected:
     virtual ~SwDocStyleSheet();

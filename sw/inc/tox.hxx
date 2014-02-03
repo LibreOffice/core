@@ -131,10 +131,10 @@ public:
     const SwTxtTOXMark* GetTxtTOXMark() const   { return pTxtAttr; }
           SwTxtTOXMark* GetTxtTOXMark()         { return pTxtAttr; }
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XDocumentIndexMark> const& GetXTOXMark() const
             { return m_wXDocumentIndexMark; }
-    SW_DLLPRIVATE void SetXTOXMark(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXTOXMark(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XDocumentIndexMark> const& xMark)
             { m_wXDocumentIndexMark = xMark; }
     void DeRegister() { GetRegisteredInNonConst()->Remove( this ); }
@@ -269,7 +269,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
        @return the token
      */
-    SW_DLLPRIVATE SwFormToken BuildToken( const OUString & sPattern,
+    SAL_DLLPRIVATE SwFormToken BuildToken( const OUString & sPattern,
                                           sal_Int32 & nCurPatternPos ) const;
 
     /**
@@ -280,7 +280,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
        @return   the string representation of the token
     */
-    SW_DLLPRIVATE OUString SearchNextToken( const OUString & sPattern,
+    SAL_DLLPRIVATE OUString SearchNextToken( const OUString & sPattern,
                                             sal_Int32 nStt ) const;
 
     /**
@@ -294,7 +294,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
        @return the type of the token
     */
-    SW_DLLPRIVATE FormTokenType GetTokenType(const OUString & sToken,
+    SAL_DLLPRIVATE FormTokenType GetTokenType(const OUString & sToken,
                                              sal_Int32 * pTokenLen) const;
 
 public:

@@ -171,41 +171,41 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     SdrDropMarkerOverlay *pChainFrom, *pChainTo;
     sal_Bool bCheckForOLEInCaption;
 
-    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
-    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
+    SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
+    SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
-    SW_DLLPRIVATE void EndAllActionAndCall();
+    SAL_DLLPRIVATE void EndAllActionAndCall();
 
-    SW_DLLPRIVATE void ScrollTo( const Point &rPt );
+    SAL_DLLPRIVATE void ScrollTo( const Point &rPt );
 
-    SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
+    SAL_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
 
     /** Used for mouse operations on a table:
      @return a cell frame that is 'close' to rPt. */
-    SW_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0, bool* pbCol = 0 ) const;
+    SAL_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0, bool* pbCol = 0 ) const;
 
     // 0 == not in any column.
-    SW_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrm *pFrm,
+    SAL_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrm *pFrm,
                           SwGetCurColNumPara* pPara ) const;
 
-    SW_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
-    SW_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    SAL_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    SAL_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
 
-    SW_DLLPRIVATE sal_Bool ImpEndCreate();
+    SAL_DLLPRIVATE sal_Bool ImpEndCreate();
 
-    SW_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
+    SAL_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
 
     /// Methods for copying of draw objects.
-    SW_DLLPRIVATE sal_Bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
+    SAL_DLLPRIVATE sal_Bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                 const Point& rInsPt, sal_Bool bIsMove,
                                 sal_Bool bSelectInsert );
 
     /// Get list of marked SdrObjects;
     /// helper method for GetSelFrmType, IsSelContainsControl.
-    SW_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
+    SAL_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
 
-    SW_DLLPRIVATE sal_Bool CheckHeadline( bool bRepeat ) const;
+    SAL_DLLPRIVATE sal_Bool CheckHeadline( bool bRepeat ) const;
 
     using SwEditShell::Copy;
 

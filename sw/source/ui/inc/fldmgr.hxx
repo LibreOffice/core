@@ -117,11 +117,11 @@ private:
     sal_uLong           nCurFmt;
     sal_Bool            bEvalExp;
 
-    SW_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
+    SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
-    SW_DLLPRIVATE com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
+    SAL_DLLPRIVATE com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
 
 public:
     SwFldMgr(SwWrtShell* pSh = 0);

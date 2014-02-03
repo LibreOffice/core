@@ -76,39 +76,39 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     bool                    bIsATemplate;      ///< prevent nested calls of UpdateFontList
 
     /// Methods for access to doc.
-    SW_DLLPRIVATE void                  AddLink();
-    SW_DLLPRIVATE void                  RemoveLink();
+    SAL_DLLPRIVATE void                  AddLink();
+    SAL_DLLPRIVATE void                  RemoveLink();
 
     /// Catch hint for DocInfo.
-    SW_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     /// FileIO
-    SW_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    SW_DLLPRIVATE virtual sal_Bool Load( SfxMedium& rMedium );
-    SW_DLLPRIVATE virtual sal_Bool LoadFrom( SfxMedium& rMedium );
-    SW_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
-    SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE virtual sal_Bool Load( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual sal_Bool LoadFrom( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
+    SAL_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
+    SAL_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    SW_DLLPRIVATE virtual bool     PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool     PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
-    SW_DLLPRIVATE virtual bool     InsertGeneratedStream(SfxMedium& rMedium,
+    SAL_DLLPRIVATE virtual bool     InsertGeneratedStream(SfxMedium& rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
         SAL_OVERRIDE;
 
     /// Make DocInfo known to the Doc.
-    SW_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
+    SAL_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                     Window *pParent, const SfxItemSet &);
     /// OLE-stuff
-    SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16);
+    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16);
 
     /// Methods for StyleSheets
 
     // @param nSlot
     // Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
     // Used to activate certain dialog pane
-    SW_DLLPRIVATE sal_uInt16 Edit(
+    SAL_DLLPRIVATE sal_uInt16 Edit(
         const OUString &rName,
         const OUString& rParent,
         const sal_uInt16 nFamily,
@@ -118,23 +118,23 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
         SwWrtShell* pActShell = 0,
         const sal_Bool bBasic = sal_False );
 
-    SW_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
-    SW_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
-    SW_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
+    SAL_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
+    SAL_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
+    SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
                                                     sal_uInt16 nMode = 0 );
-    SW_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
-    SW_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
-    SW_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
+    SAL_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
+    SAL_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
+    SAL_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
                                         sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
 
-    SW_DLLPRIVATE void                  InitDraw();
-    SW_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
+    SAL_DLLPRIVATE void                  InitDraw();
+    SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 
-    SW_DLLPRIVATE void                  RemoveOLEObjects();
-    SW_DLLPRIVATE void                  CalcLayoutForOLEObjects();
+    SAL_DLLPRIVATE void                  RemoveOLEObjects();
+    SAL_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 
-    SW_DLLPRIVATE void                  Init_Impl();
-    SW_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
+    SAL_DLLPRIVATE void                  Init_Impl();
+    SAL_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
 
 
     using SfxObjectShell::GetVisArea;
@@ -296,8 +296,8 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
-    SW_DLLPRIVATE sal_Bool IsTemplate() { return bIsATemplate; }
-    SW_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
+    SAL_DLLPRIVATE sal_Bool IsTemplate() { return bIsATemplate; }
+    SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
 

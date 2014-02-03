@@ -47,7 +47,7 @@ class SW_DLLPUBLIC SwTableFUNC
     SwTabCols   aCols;
 
 private:
-    SW_DLLPRIVATE int GetRightSeparator(int nNum) const;
+    SAL_DLLPRIVATE int GetRightSeparator(int nNum) const;
 
 public:
     inline SwTableFUNC(SwFrmFmt &);

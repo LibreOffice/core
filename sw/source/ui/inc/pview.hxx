@@ -180,23 +180,23 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     sal_Bool                mbResetFormDesignMode:1;
     sal_Bool                mbFormDesignModeToReset:1;
 
-    SW_DLLPRIVATE void            Init(const SwViewOption* = 0);
-    SW_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
+    SAL_DLLPRIVATE void            Init(const SwViewOption* = 0);
+    SAL_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
 
-    SW_DLLPRIVATE int             _CreateScrollbar( sal_Bool bHori );
-    SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
-    SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
-    SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
-    SW_DLLPRIVATE bool            ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
+    SAL_DLLPRIVATE int             _CreateScrollbar( sal_Bool bHori );
+    SAL_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
+    SAL_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
+    SAL_DLLPRIVATE bool            ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
 
 
-    SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SW_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    SW_DLLPRIVATE virtual bool            HasPrintOptionsPage() const;
-    SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
+    SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const;
+    SAL_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
 
-    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
+    SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
 
     /** Helper method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
@@ -207,7 +207,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
         @param _pReq
         optional input parameter - pointer to the <SfxRequest> instance, if existing.
     */
-    SW_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
+    SAL_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
                              SfxRequest* _pReq = 0 );
 
 protected:

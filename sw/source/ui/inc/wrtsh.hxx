@@ -475,8 +475,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
 private:
 
-    SW_DLLPRIVATE void  OpenMark();
-    SW_DLLPRIVATE void  CloseMark( bool bOkFlag );
+    SAL_DLLPRIVATE void  OpenMark();
+    SAL_DLLPRIVATE void  CloseMark( bool bOkFlag );
 
     struct ModeStack
     {
@@ -530,21 +530,21 @@ private:
     Point   aDest;
     bool    bDestOnStack;
     bool    HasCrsrStack() const { return 0 != pCrsrStack; }
-    SW_DLLPRIVATE sal_Bool  PushCrsr(SwTwips lOffset, sal_Bool bSelect);
-    SW_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
+    SAL_DLLPRIVATE sal_Bool  PushCrsr(SwTwips lOffset, sal_Bool bSelect);
+    SAL_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
 
     // take END cursor along when PageUp / -Down
-    SW_DLLPRIVATE bool _SttWrd();
-    SW_DLLPRIVATE bool _EndWrd();
-    SW_DLLPRIVATE sal_Bool _NxtWrd();
-    SW_DLLPRIVATE sal_Bool _PrvWrd();
+    SAL_DLLPRIVATE bool _SttWrd();
+    SAL_DLLPRIVATE bool _EndWrd();
+    SAL_DLLPRIVATE sal_Bool _NxtWrd();
+    SAL_DLLPRIVATE sal_Bool _PrvWrd();
     // #i92468#
-    SW_DLLPRIVATE sal_Bool _NxtWrdForDelete();
-    SW_DLLPRIVATE sal_Bool _PrvWrdForDelete();
-    SW_DLLPRIVATE sal_Bool _FwdSentence();
-    SW_DLLPRIVATE sal_Bool _BwdSentence();
+    SAL_DLLPRIVATE sal_Bool _NxtWrdForDelete();
+    SAL_DLLPRIVATE sal_Bool _PrvWrdForDelete();
+    SAL_DLLPRIVATE sal_Bool _FwdSentence();
+    SAL_DLLPRIVATE sal_Bool _BwdSentence();
     sal_Bool _FwdPara();
-    SW_DLLPRIVATE sal_Bool _BwdPara();
+    SAL_DLLPRIVATE sal_Bool _BwdPara();
 
         // selections
     sal_Bool    bIns            :1;
@@ -564,40 +564,40 @@ private:
     Link    aSelTblLink;
 
     // resets the cursor stack after movement by PageUp/-Down
-    SW_DLLPRIVATE void  _ResetCursorStack();
+    SAL_DLLPRIVATE void  _ResetCursorStack();
 
-    SW_DLLPRIVATE void  SttDragDrop(Timer *);
+    SAL_DLLPRIVATE void  SttDragDrop(Timer *);
 
     using SwCrsrShell::SetCrsr;
-    SW_DLLPRIVATE long  SetCrsr(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  SetCrsr(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  SetCrsrKillSel(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  SetCrsrKillSel(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  StdSelect(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  BeginDrag(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  Drag(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  EndDrag(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  StdSelect(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  BeginDrag(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  Drag(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  EndDrag(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  ExtSelWrd(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  ExtSelLn(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  ExtSelWrd(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  ExtSelLn(const Point *, sal_Bool bProp=sal_False );
 
     // move text from Drag and Drop; Point is destination for all selections.
-    SW_DLLPRIVATE long  MoveText(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  MoveText(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  BeginFrmDrag(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  BeginFrmDrag(const Point *, sal_Bool bProp=sal_False );
 
     // after SSize/Move of a frame update; Point is destination.
-    SW_DLLPRIVATE long  UpdateLayoutFrm(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  UpdateLayoutFrm(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  SttLeaveSelect(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  AddLeaveSelect(const Point *, sal_Bool bProp=sal_False );
-    SW_DLLPRIVATE long  Ignore(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  SttLeaveSelect(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  AddLeaveSelect(const Point *, sal_Bool bProp=sal_False );
+    SAL_DLLPRIVATE long  Ignore(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = sal_False;}
+    SAL_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = sal_False;}
 
-    SW_DLLPRIVATE sal_Bool  GoStart(sal_Bool KeepArea = sal_False, sal_Bool * = 0,
+    SAL_DLLPRIVATE sal_Bool  GoStart(sal_Bool KeepArea = sal_False, sal_Bool * = 0,
             sal_Bool bSelect = sal_False, sal_Bool bDontMoveRegion = sal_False);
-    SW_DLLPRIVATE sal_Bool  GoEnd(sal_Bool KeepArea = sal_False, sal_Bool * = 0);
+    SAL_DLLPRIVATE sal_Bool  GoEnd(sal_Bool KeepArea = sal_False, sal_Bool * = 0);
 
     enum BookMarkMove
     {
@@ -607,7 +607,7 @@ private:
         BOOKMARK_LAST_LAST_ENTRY
     };
 
-    SW_DLLPRIVATE sal_Bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=NULL);
+    SAL_DLLPRIVATE sal_Bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=NULL);
 };
 
 inline void SwWrtShell::ResetCursorStack()

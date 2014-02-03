@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     OUString maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
-    class SW_DLLPRIVATE _SwNumFmtGlobal
+    class SAL_DLLPRIVATE _SwNumFmtGlobal
     {
         SwNumFmt aFmt;
         OUString sCharFmtName;

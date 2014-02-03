@@ -97,7 +97,7 @@ public:
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
-    SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
+    SAL_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 
     /// Get and set TxtNode pointer.
            const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }

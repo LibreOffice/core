@@ -38,11 +38,11 @@ class SW_DLLPUBLIC SwGlossaryHdl
     SwWrtShell*     pWrtShell;
     SwTextBlocks*   pCurGrp;
 
-    SW_DLLPRIVATE void  _SetMacros(const OUString &rName,
+    SAL_DLLPRIVATE void  _SetMacros(const OUString &rName,
                        const SvxMacro *pStart,
                        const SvxMacro *pEnd);
 
-    SW_DLLPRIVATE sal_Bool  Expand( const OUString& rShortName,
+    SAL_DLLPRIVATE sal_Bool  Expand( const OUString& rShortName,
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary );
 

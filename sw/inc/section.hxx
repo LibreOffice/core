@@ -106,10 +106,10 @@ public:
     void SetHidden(bool const bFlag = true) { m_bHidden = bFlag; }
 
     bool IsHiddenFlag() const { return m_bHiddenFlag; }
-    SW_DLLPRIVATE void
+    SAL_DLLPRIVATE void
         SetHiddenFlag(bool const bFlag) { m_bHiddenFlag = bFlag; }
     bool IsProtectFlag() const { return m_bProtectFlag; }
-    SW_DLLPRIVATE void
+    SAL_DLLPRIVATE void
         SetProtectFlag(bool const bFlag) { m_bProtectFlag = bFlag; }
     bool IsEditInReadonlyFlag() const { return m_bEditInReadonlyFlag; }
     void SetEditInReadonlyFlag(bool const bFlag)
@@ -158,7 +158,7 @@ private:
     SwServerObjectRef m_RefObj; // Set if DataServer.
     ::sfx2::SvBaseLinkRef m_RefLink;
 
-    SW_DLLPRIVATE void ImplSetHiddenFlag(
+    SAL_DLLPRIVATE void ImplSetHiddenFlag(
             bool const bHidden, bool const bCondition);
 
 protected:
@@ -295,7 +295,7 @@ class SW_DLLPUBLIC SwSectionFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
 
-    SW_DLLPRIVATE void UpdateParent();      // Parent has been changed.
+    SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
@@ -337,10 +337,10 @@ public:
     // Is section a valid one for global document?
     const SwSection* GetGlobalDocSection() const;
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> const& GetXTextSection() const
             { return m_wXTextSection; }
-    SW_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextSection> const& xTextSection)
             { m_wXTextSection = xTextSection; }
 

@@ -38,11 +38,11 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
                                               //to be shown in the number format dialog
     sal_Bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
-    SW_DLLPRIVATE DECL_LINK( SelectHdl, ListBox * );
+    SAL_DLLPRIVATE DECL_LINK( SelectHdl, ListBox * );
 
-    SW_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
-    SW_DLLPRIVATE void            Init(short nFormatType, sal_Bool bUsrFmts);
-    SW_DLLPRIVATE SwView*           GetView();
+    SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
+    SAL_DLLPRIVATE void            Init(short nFormatType, sal_Bool bUsrFmts);
+    SAL_DLLPRIVATE SwView*           GetView();
 
 public:
     NumFormatListBox(Window* pWin, WinBits nStyle);

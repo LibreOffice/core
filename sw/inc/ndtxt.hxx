@@ -115,25 +115,25 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> m_wXParagraph;
 
-    SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
+    SAL_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
 
     /// Copies the attributes at nStart to pDest.
-    SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
+    SAL_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
-    SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, sal_Bool bNext = sal_True,
+    SAL_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, sal_Bool bNext = sal_True,
                                 sal_Bool bChgFollow = sal_True );
 
-    SW_DLLPRIVATE void CutImpl(
+    SAL_DLLPRIVATE void CutImpl(
           SwTxtNode * const pDest, const SwIndex & rDestStart,
           const SwIndex & rStart, /*const*/ sal_Int32 nLen,
           const bool bUpdate = true );
 
     /// Move all comprising hard attributes to the AttrSet of the paragraph.
-    SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // Called by SplitNode.
+    SAL_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // Called by SplitNode.
 
     /// Create the specific AttrSet.
-    SW_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
+    SAL_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
 
     /// Optimization: Asking for information about hidden characters at SwScriptInfo
     /// updates these flags.
@@ -146,25 +146,25 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
         m_bRecalcHiddenCharFlags = false;
     }
 
-    SW_DLLPRIVATE void CalcHiddenCharFlags() const;
+    SAL_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SW_DLLPRIVATE SwNumRule * _GetNumRule(sal_Bool bInParent = sal_True) const;
+    SAL_DLLPRIVATE SwNumRule * _GetNumRule(sal_Bool bInParent = sal_True) const;
 
-    SW_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
+    SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
             const Font *pFont,  sal_uInt16 nFontWhichId );
 
     /// Start: Data collected during idle time
 
-    SW_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
-    SW_DLLPRIVATE sal_uLong GetParaNumberOfWords() const;
-    SW_DLLPRIVATE void SetParaNumberOfAsianWords( sal_uLong nTmpAsianWords ) const;
-    SW_DLLPRIVATE sal_uLong GetParaNumberOfAsianWords() const;
-    SW_DLLPRIVATE void SetParaNumberOfChars( sal_uLong nTmpChars ) const;
-    SW_DLLPRIVATE sal_uLong GetParaNumberOfChars() const;
-    SW_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( sal_uLong nTmpChars ) const;
-    SW_DLLPRIVATE sal_uLong GetParaNumberOfCharsExcludingSpaces() const;
-    SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
+    SAL_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
+    SAL_DLLPRIVATE sal_uLong GetParaNumberOfWords() const;
+    SAL_DLLPRIVATE void SetParaNumberOfAsianWords( sal_uLong nTmpAsianWords ) const;
+    SAL_DLLPRIVATE sal_uLong GetParaNumberOfAsianWords() const;
+    SAL_DLLPRIVATE void SetParaNumberOfChars( sal_uLong nTmpChars ) const;
+    SAL_DLLPRIVATE sal_uLong GetParaNumberOfChars() const;
+    SAL_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( sal_uLong nTmpChars ) const;
+    SAL_DLLPRIVATE sal_uLong GetParaNumberOfCharsExcludingSpaces() const;
+    SAL_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
     /** create number for this text node, if not already existing
 
@@ -174,7 +174,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     inline void TryDeleteSwpHints();
 
-    SW_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
+    SAL_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
 
     const SwTxtInputFld* GetOverlappingInputFld( const SwTxtAttr& rTxtAttr ) const;
 
@@ -772,10 +772,10 @@ public:
 
     sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> const& GetXParagraph() const
             { return m_wXParagraph; }
-    SW_DLLPRIVATE void SetXParagraph(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXParagraph(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextContent> const& xParagraph)
             { m_wXParagraph = xParagraph; }
 

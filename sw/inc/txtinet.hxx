@@ -44,7 +44,7 @@ public:
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
-    SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
+    SAL_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
 
     // get and set TxtNode pointer
     const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }

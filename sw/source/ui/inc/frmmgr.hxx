@@ -60,12 +60,12 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     sal_Bool        bIsInVerticalL2R;
 
     // internal calculation for borders
-    SW_DLLPRIVATE SwTwips           CalcTopSpace();
-    SW_DLLPRIVATE SwTwips           CalcBottomSpace();
-    SW_DLLPRIVATE SwTwips           CalcLeftSpace();
-    SW_DLLPRIVATE SwTwips           CalcRightSpace();
+    SAL_DLLPRIVATE SwTwips           CalcTopSpace();
+    SAL_DLLPRIVATE SwTwips           CalcBottomSpace();
+    SAL_DLLPRIVATE SwTwips           CalcLeftSpace();
+    SAL_DLLPRIVATE SwTwips           CalcRightSpace();
 
-    SW_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insert or update
+    SAL_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insert or update
 
 public:
     SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType );

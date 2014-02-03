@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
                              When it is set (again) the visual arrangement is recalculated.
                              The flag is initially set. */
 
-    SW_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
+    SAL_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
 public:
     SwFmtCol();

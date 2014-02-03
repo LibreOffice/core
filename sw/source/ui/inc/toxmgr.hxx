@@ -265,7 +265,7 @@ class SW_DLLPUBLIC SwTOXMgr
     SwTOXMark*          pCurTOXMark;
     SwTOXMarks          aCurMarks;
 
-    SW_DLLPRIVATE sal_uInt16                GetUserTypeID(const OUString& rStr);
+    SAL_DLLPRIVATE sal_uInt16                GetUserTypeID(const OUString& rStr);
 
 public:
     // single argument ctors shall be explicit.

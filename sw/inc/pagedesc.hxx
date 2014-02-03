@@ -151,11 +151,11 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
     /** Called for mirroring of Chg (doc).
        No adjustment at any other place. */
-    SW_DLLPRIVATE void Mirror();
+    SAL_DLLPRIVATE void Mirror();
 
-    SW_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
+    SAL_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
 
-    SW_DLLPRIVATE SwPageDesc(const OUString&, SwFrmFmt*, SwDoc *pDc );
+    SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrmFmt*, SwDoc *pDc );
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );

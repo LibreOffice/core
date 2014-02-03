@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     sal_Bool bCRLFFlag : 1;
     sal_Bool bDeleted : 1;
 
-    SW_DLLPRIVATE void _RefCntChgd();
+    SAL_DLLPRIVATE void _RefCntChgd();
 
 public:
     SwDDEFieldType( const OUString& rName, const OUString& rCmd,

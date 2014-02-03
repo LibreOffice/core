@@ -202,22 +202,22 @@ friend class SwConnectionDisposedListener_Impl;
     SwNewDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
-    SW_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
-    SW_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, sal_Bool bCreate);
+    SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
+    SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, sal_Bool bCreate);
 
 
-    SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
+    SAL_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
     /// Insert data record as text into document.
-    SW_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
+    SAL_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
 
     /// Insert a single data record as text into document.
-    SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
+    SAL_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     /// merge to file _and_ merge to e-Mail
-    SW_DLLPRIVATE sal_Bool          MergeMailFiles(SwWrtShell* pSh,
+    SAL_DLLPRIVATE sal_Bool          MergeMailFiles(SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor );
-    SW_DLLPRIVATE sal_Bool          ToNextRecord(SwDSParam* pParam);
+    SAL_DLLPRIVATE sal_Bool          ToNextRecord(SwDSParam* pParam);
 
 public:
     SwNewDBMgr();

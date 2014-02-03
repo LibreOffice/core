@@ -167,23 +167,23 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     SwRootFrmPtr            mpLayout;
 
     // Initialization; called by the diverse constructors.
-    SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
+    SAL_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
 
     inline void ResetInvalidRect();
 
-    SW_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
+    SAL_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
 
-    SW_DLLPRIVATE void PaintDesktop( const SwRect & );  // Collect values for painting of desktop
+    SAL_DLLPRIVATE void PaintDesktop( const SwRect & );  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.
-    SW_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
+    SAL_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
 
-    SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
+    SAL_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
 
-    SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
+    SAL_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
-    SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
+    SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
     static ShellResource*   mpShellRes;      ///< Resources for the Shell.

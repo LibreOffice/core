@@ -106,10 +106,10 @@ public:
     bool IsFldInDoc() const;
     sal_Bool IsProtect() const;
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextField> const& GetXTextField() const
             { return m_wXTextField; }
-    SW_DLLPRIVATE void SetXTextField(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXTextField(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextField> const& xTextField)
             { m_wXTextField = xTextField; }
 };

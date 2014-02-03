@@ -252,10 +252,10 @@ protected:
 
 public:
 
-    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::beans::XPropertySet> const& GetXObject() const
             { return m_wXFieldMaster; }
-    SW_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> const& xFieldMaster)
             { m_wXFieldMaster = xFieldMaster; }
 

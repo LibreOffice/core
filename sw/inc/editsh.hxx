@@ -149,15 +149,15 @@ class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
     /// For the PamCorrAbs/-Rel methods.
     friend class SwUndo;
 
-    SW_DLLPRIVATE SfxPoolItem& _GetChrFmt( SfxPoolItem& ) const;
+    SAL_DLLPRIVATE SfxPoolItem& _GetChrFmt( SfxPoolItem& ) const;
 
     /** Returns pointer to a SwGrfNode
      that will be used by GetGraphic() and GetGraphicSize(). */
-    SW_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;
+    SAL_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;
 
-    SW_DLLPRIVATE void DeleteSel( SwPaM& rPam, sal_Bool* pUndo = 0 );
+    SAL_DLLPRIVATE void DeleteSel( SwPaM& rPam, sal_Bool* pUndo = 0 );
 
-    SW_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
 
     using SwViewShell::UpdateFlds;
     using SwModify::GetInfo;

@@ -55,12 +55,12 @@ class SW_DLLPUBLIC SwGlossaries
     std::vector<OUString>   m_GlosArr;
     sal_Bool                m_bError;
 
-    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, sal_Bool bCreate = sal_True) const;
-    SW_DLLPRIVATE std::vector<OUString> & GetNameList();
+    SAL_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, sal_Bool bCreate = sal_True) const;
+    SAL_DLLPRIVATE std::vector<OUString> & GetNameList();
 
     // implementation in unoatxt.cxx
-    SW_DLLPRIVATE void RemoveFileFromList( const OUString& rGroup );
-    SW_DLLPRIVATE void InvalidateUNOOjects();
+    SAL_DLLPRIVATE void RemoveFileFromList( const OUString& rGroup );
+    SAL_DLLPRIVATE void InvalidateUNOOjects();
 
 public:
     SwGlossaries();

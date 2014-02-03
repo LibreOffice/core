@@ -191,16 +191,16 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    SW_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, void* );
-    SW_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
-    SW_DLLPRIVATE DECL_LINK( CloseHdl_Impl, void* );
-    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
-    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
-    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer* );
+    SAL_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, void* );
+    SAL_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
+    SAL_DLLPRIVATE DECL_LINK( CloseHdl_Impl, void* );
+    SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
+    SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
+    SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer* );
 
-    SW_DLLPRIVATE void        IterateMails();
-    SW_DLLPRIVATE void        SendMails();
-    SW_DLLPRIVATE void        UpdateTransferStatus();
+    SAL_DLLPRIVATE void        IterateMails();
+    SAL_DLLPRIVATE void        SendMails();
+    SAL_DLLPRIVATE void        UpdateTransferStatus();
 
     virtual void        StateChanged( StateChangedType nStateChange );
 

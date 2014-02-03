@@ -26,7 +26,7 @@ struct SwDBData;
 
 class SW_DLLPUBLIC SwDBConfig : public utl::ConfigItem
 {
-    SW_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    SAL_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     SwDBData*       pAdrImpl;
     SwDBData*       pBibImpl;

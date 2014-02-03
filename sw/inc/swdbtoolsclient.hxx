@@ -34,12 +34,12 @@ private:
     ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >   m_xAccessTypeConversion;
     ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >     m_xDataAccessFactory;
 
-    SW_DLLPRIVATE static void registerClient();
-    SW_DLLPRIVATE static void revokeClient();
-    SW_DLLPRIVATE void getFactory();
+    SAL_DLLPRIVATE static void registerClient();
+    SAL_DLLPRIVATE static void revokeClient();
+    SAL_DLLPRIVATE void getFactory();
 
-    SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
-    SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
+    SAL_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
+    SAL_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
 
 public:
     SwDbtoolsClient();

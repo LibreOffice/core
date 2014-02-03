@@ -232,11 +232,11 @@ private:
 
     SwFrm* m_oldColFrm;
 
-    SW_DLLPRIVATE void UpdateCrsr(
+    SAL_DLLPRIVATE void UpdateCrsr(
         sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
         sal_Bool bIdleEnd = sal_False );
 
-    SW_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
+    SAL_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
     /** Mark a certain list level of a certain list
 
@@ -247,23 +247,23 @@ private:
 
         An empty sListId denotes that no level of a list is marked.
      */
-    SW_DLLPRIVATE void MarkListLevel( const OUString& sListId,
+    SAL_DLLPRIVATE void MarkListLevel( const OUString& sListId,
                                       const int nLevel );
 
     // private method(s) accessed from public inline method(s) must be exported.
                   sal_Bool LeftRight( sal_Bool, sal_uInt16, sal_uInt16, sal_Bool );
-    SW_DLLPRIVATE sal_Bool UpDown( sal_Bool, sal_uInt16 );
-    SW_DLLPRIVATE sal_Bool LRMargin( sal_Bool, sal_Bool bAPI = sal_False );
-    SW_DLLPRIVATE sal_Bool IsAtLRMargin( sal_Bool, sal_Bool bAPI = sal_False ) const;
+    SAL_DLLPRIVATE sal_Bool UpDown( sal_Bool, sal_uInt16 );
+    SAL_DLLPRIVATE sal_Bool LRMargin( sal_Bool, sal_Bool bAPI = sal_False );
+    SAL_DLLPRIVATE sal_Bool IsAtLRMargin( sal_Bool, sal_Bool bAPI = sal_False ) const;
 
-    SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
+    SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 
-    SW_DLLPRIVATE bool isInHiddenTxtFrm(SwShellCrsr* pShellCrsr);
+    SAL_DLLPRIVATE bool isInHiddenTxtFrm(SwShellCrsr* pShellCrsr);
 
 typedef sal_Bool (SwCursor:: *FNCrsr)();
-    SW_DLLPRIVATE sal_Bool CallCrsrFN( FNCrsr );
+    SAL_DLLPRIVATE sal_Bool CallCrsrFN( FNCrsr );
 
-    SW_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect );
+    SAL_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect );
 
 protected:
 
@@ -296,7 +296,7 @@ protected:
 
     /** Updates the marked list level according to the cursor.
     */
-    SW_DLLPRIVATE void UpdateMarkedListLevel();
+    SAL_DLLPRIVATE void UpdateMarkedListLevel();
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);

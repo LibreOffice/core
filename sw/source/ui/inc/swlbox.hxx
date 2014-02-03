@@ -60,9 +60,9 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
     SwEntryLst              aDelEntryLst;
     SwBoxEntry              aDefault;
 
-    SW_DLLPRIVATE void InitComboBox();
-    SW_DLLPRIVATE void InsertSorted(SwBoxEntry* pEntry);
-    SW_DLLPRIVATE void Init();
+    SAL_DLLPRIVATE void InitComboBox();
+    SAL_DLLPRIVATE void InsertSorted(SwBoxEntry* pEntry);
+    SAL_DLLPRIVATE void Init();
 
 public:
 

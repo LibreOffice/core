@@ -273,96 +273,96 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // methods for searching
     // set search context
-    SW_DLLPRIVATE sal_Bool              SearchAndWrap(sal_Bool bApi = sal_False);
-    SW_DLLPRIVATE sal_Bool          SearchAll(sal_uInt16* pFound = 0);
-    SW_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
-    SW_DLLPRIVATE void          Replace();
+    SAL_DLLPRIVATE sal_Bool              SearchAndWrap(sal_Bool bApi = sal_False);
+    SAL_DLLPRIVATE sal_Bool          SearchAll(sal_uInt16* pFound = 0);
+    SAL_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
+    SAL_DLLPRIVATE void          Replace();
 
     bool                        IsDocumentBorder();
 
-    SW_DLLPRIVATE bool          IsTextTool() const;
+    SAL_DLLPRIVATE bool          IsTextTool() const;
 
     // create control elements
-    SW_DLLPRIVATE void          CreateBtns();
-    SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
+    SAL_DLLPRIVATE void          CreateBtns();
+    SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
-    SW_DLLPRIVATE DECL_LINK( TimeoutHdl, void* );
-    SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
+    SAL_DLLPRIVATE DECL_LINK( TimeoutHdl, void* );
+    SAL_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
-    SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, void* );
+    SAL_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, void* );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
-    SW_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
-    SW_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
+    SAL_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
+    SAL_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
                             sal_uInt16 nRangeX = USHRT_MAX,
                             sal_uInt16 nRangeY = USHRT_MAX);
 
-    SW_DLLPRIVATE sal_Bool          GetPageScrollUpOffset(SwTwips& rOff) const;
-    SW_DLLPRIVATE sal_Bool          GetPageScrollDownOffset(SwTwips& rOff) const;
+    SAL_DLLPRIVATE sal_Bool          GetPageScrollUpOffset(SwTwips& rOff) const;
+    SAL_DLLPRIVATE sal_Bool          GetPageScrollDownOffset(SwTwips& rOff) const;
 
     // scrollbar movements
-    SW_DLLPRIVATE long          PageUp();
-    SW_DLLPRIVATE long          PageDown();
-    SW_DLLPRIVATE long          PageUpCrsr(sal_Bool bSelect);
-    SW_DLLPRIVATE long          PageDownCrsr(sal_Bool bSelect);
-    SW_DLLPRIVATE long          PhyPageUp();
-    SW_DLLPRIVATE long          PhyPageDown();
+    SAL_DLLPRIVATE long          PageUp();
+    SAL_DLLPRIVATE long          PageDown();
+    SAL_DLLPRIVATE long          PageUpCrsr(sal_Bool bSelect);
+    SAL_DLLPRIVATE long          PageDownCrsr(sal_Bool bSelect);
+    SAL_DLLPRIVATE long          PhyPageUp();
+    SAL_DLLPRIVATE long          PhyPageDown();
 
-    SW_DLLPRIVATE int               _CreateScrollbar( sal_Bool bHori );
-    SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
-    SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
-    SW_DLLPRIVATE sal_Bool          UpdateScrollbars();
-    SW_DLLPRIVATE DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
-    SW_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
+    SAL_DLLPRIVATE int               _CreateScrollbar( sal_Bool bHori );
+    SAL_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
+    SAL_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    SAL_DLLPRIVATE sal_Bool          UpdateScrollbars();
+    SAL_DLLPRIVATE DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+    SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
-    SW_DLLPRIVATE void            CreatePageButtons(sal_Bool bShow);
+    SAL_DLLPRIVATE void            CreatePageButtons(sal_Bool bShow);
 
     // linguistics functions
-    SW_DLLPRIVATE void          HyphenateDocument();
-    SW_DLLPRIVATE sal_Bool          IsDrawTextHyphenate();
-    SW_DLLPRIVATE void          HyphenateDrawText();
-    SW_DLLPRIVATE void          StartThesaurus();
+    SAL_DLLPRIVATE void          HyphenateDocument();
+    SAL_DLLPRIVATE sal_Bool          IsDrawTextHyphenate();
+    SAL_DLLPRIVATE void          HyphenateDrawText();
+    SAL_DLLPRIVATE void          StartThesaurus();
 
     // text conversion
-    SW_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+    SAL_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     // used for spell checking and text conversion
-    SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
+    SAL_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
                                         bool bEndDone, SwConversionArgs *pConvArgs = 0 );
-    SW_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
+    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
-    SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SW_DLLPRIVATE sal_Bool      CheckSpecialCntnt();
-    SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
+    SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
+    SAL_DLLPRIVATE sal_Bool      CheckSpecialCntnt();
+    SAL_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
                             { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
     // methods for printing
-    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SW_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
-    SW_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
+    SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
+    SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // for readonly switching
-    SW_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    SW_DLLPRIVATE void          _CheckReadonlyState();
-    SW_DLLPRIVATE void          _CheckReadonlySelection();
+    SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SAL_DLLPRIVATE void          _CheckReadonlyState();
+    SAL_DLLPRIVATE void          _CheckReadonlySelection();
 
     // method for rotating PageDesc
-    SW_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
+    SAL_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
 
-    SW_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
+    SAL_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
                               SvxZoomType eZoomType,
                               short nFactor = 100,
                               sal_Bool bViewOnly = sal_False);
-    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
+    SAL_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
 
-    SW_DLLPRIVATE void          ShowAtResize();
+    SAL_DLLPRIVATE void          ShowAtResize();
 
-    SW_DLLPRIVATE virtual void  Move();
+    SAL_DLLPRIVATE virtual void  Move();
 
-    SW_DLLPRIVATE sal_Bool      InsertGraphicDlg( SfxRequest& );
+    SAL_DLLPRIVATE sal_Bool      InsertGraphicDlg( SfxRequest& );
 
-    SW_DLLPRIVATE void          DocumentStatsChanged();
+    SAL_DLLPRIVATE void          DocumentStatsChanged();
 
 protected:
 
