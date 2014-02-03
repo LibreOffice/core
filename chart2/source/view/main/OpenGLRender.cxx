@@ -727,9 +727,13 @@ void OpenGLRender::Release()
     glDeleteProgram(m_CommonProID);
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_BackgroundProID);
+    glDeleteProgram(m_SymbolProID);
     glDeleteFramebuffers(1, &m_FboID);
+    glDeleteFramebuffers(1, &m_frameBufferMS);
     glDeleteTextures(1, &m_TextureObj);
     glDeleteRenderbuffers(1, &m_RboID);
+    glDeleteRenderbuffers(1, &m_renderBufferColorMS);
+    glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 #if defined( WNT )
     wglMakeCurrent(NULL, NULL);
 #elif defined( MACOSX )
@@ -757,6 +761,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     mxRenderTarget(xTarget),
     mbArbMultisampleSupported(false),
     m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
+    m_frameBufferMS(0),
     m_TextVertexID(0),
     m_TextTexCoordID(1),
     m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -780,6 +785,7 @@ OpenGLRender::~OpenGLRender()
     Release();
 }
 
+// TODO: moggi: that screws up FBO if called after buffers have been created!!!!
 void OpenGLRender::SetWidth(int width)
 {
     m_iWidth = width;
