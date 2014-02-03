@@ -73,9 +73,6 @@ using namespace ::com::sun::star::frame;
 
 namespace sd {
 
-// width: DIN A4, two margins at 1 cm each
-#define OUTLINE_PAPERWIDTH 19000
-
 // a progress bar gets displayed when more than
 // PROCESS_WITH_PROGRESS_THRESHOLD pages are concerned
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
@@ -90,9 +87,9 @@ struct SdParaAndPos
 
 TYPEINIT1( OutlineView, ::sd::View );
 
-OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewSh)
-: ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewSh)
-, mrOutlineViewShell(rOutlineViewSh)
+OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewShell)
+: ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
+, mrOutlineViewShell(rOutlineViewShell)
 , mrOutliner(*mrDoc.GetOutliner(sal_True))
 , mnPagesToProcess(0)
 , mnPagesProcessed(0)
@@ -109,8 +106,9 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
         bInitOutliner = sal_True;
         mrOutliner.Init( OUTLINERMODE_OUTLINEVIEW );
         mrOutliner.SetRefDevice( SD_MOD()->GetRefDevice( rDocSh ) );
-        sal_uLong nWidth = OUTLINE_PAPERWIDTH;
-        mrOutliner.SetPaperSize(Size(nWidth, 400000000));
+        //viewsize without the width of the image and number in front
+        mnPaperWidth = (mrOutlineViewShell.GetActiveWindow()->GetViewSize().Width() - 4000);
+        mrOutliner.SetPaperSize(Size(mnPaperWidth, 400000000));
     }
 
     // insert View into Outliner
@@ -798,16 +796,16 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
     Rectangle     aVis          = pOutlinerView->GetVisArea();
-    sal_uLong nWidth = OUTLINE_PAPERWIDTH;
     Rectangle aText = Rectangle(Point(0,0),
-                                   Size(nWidth,
-                                        mrOutliner.GetTextHeight()));
+                                Size(mnPaperWidth,
+                                     mrOutliner.GetTextHeight()));
     Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
     aWin = pWin->PixelToLogic(aWin);
 
     if (!aVis.IsEmpty())        // not when opening
     {
-        aText.Bottom() += aWin.GetHeight();
+        if (aWin.GetHeight() > aText.Bottom())
+            aText.Bottom() = aWin.GetHeight();
 
         mrOutlineViewShell.InitWindows(Point(0,0), aText.GetSize(),
                                        Point(aVis.TopLeft()));
@@ -1042,6 +1040,11 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     }
 
     return GetOutlineTextObject(pPage);
+}
+
+sal_uLong OutlineView::GetPaperWidth()
+{
+    return mnPaperWidth;
 }
 
 /** updates draw model with all changes from outliner model */
