@@ -119,6 +119,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpCharFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
+    mpExtraRedlineTbl->dumpAsXml( writer );
     writer.endElement();
 }
 
@@ -592,7 +593,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                 else
                     writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "UNKNOWN" ) );
             }
-            writer.endElement( );    // end_swposition
+            writer.endElement( );    // extra_redline_data
         }
 
         writer.endElement( );    // extra_redline_data
@@ -615,8 +616,13 @@ void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
         const SwExtraRedline* pExtraRedline = extraRedlineTbl.GetRedline( nCurExtraRedlinePos );
 
         writer.startElement( "swextraredline" );
-        writer.writeFormatAttribute( "ptr", "%p", pExtraRedline );
-
+        {
+            const SwTableRowRedline*           pTableRowRedline           = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
+            if (pTableRowRedline)
+                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "table row" ) );
+            else
+                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "UNKNOWN" ) );
+        }
         writer.endElement( );    // extra_redline_data
     }
 
