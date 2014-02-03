@@ -255,10 +255,10 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     cssd::ProjectionMode eProjMode = bParallel ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
 
     // set rotation properties
+    aPropSet.setProperty( PROP_RightAngledAxes, bRightAngled );
     aPropSet.setProperty( PROP_RotationVertical, nRotationY );
     aPropSet.setProperty( PROP_RotationHorizontal, nRotationX );
     aPropSet.setProperty( PROP_Perspective, nPerspective );
-    aPropSet.setProperty( PROP_RightAngledAxes, bRightAngled );
     aPropSet.setProperty( PROP_D3DScenePerspective, eProjMode );
 
     // set light settings
