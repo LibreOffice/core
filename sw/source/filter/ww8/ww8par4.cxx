@@ -30,6 +30,7 @@
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/sprmids.hxx>
 #include <svx/unoapi.hxx>
 
 #include <sot/exchange.hxx>
@@ -503,7 +504,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
             pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
             pSprmCIbstRMark = aResult.empty() ? 0 : aResult.back();
             aResult.clear();
-            pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864, aResult);
+            pPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::LN_CDttmRMarkDel, aResult);
             pSprmCDttmRMark = aResult.empty() ? 0 : aResult.back();
         }
     }

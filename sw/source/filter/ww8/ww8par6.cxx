@@ -5853,7 +5853,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x4863, 0},                                 //"sprmCIbstRMarkDel"
                                                      //chp.ibstRMarkDel;index into
                                                      //sttbRMark;short;
-        {0x6864, 0},                                 //"sprmCDttmRMarkDel"
+        {NS_sprm::LN_CDttmRMarkDel, 0},
                                                      //chp.dttmRMarkDel;DTTM;long;
         {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
         {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd" chp.shd;SHD;short;

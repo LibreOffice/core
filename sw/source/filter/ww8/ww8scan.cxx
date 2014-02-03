@@ -617,7 +617,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.ibstDispFldRMark, chp.dttmDispFldRMark ;
         {0x4863, 2, L_FIX}, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
                             // sttbRMark;short;
-        {0x6864, 4, L_FIX}, // "sprmCDttmRMarkDel" chp.dttmRMarkDel;DTTM;long;
+        {NS_sprm::LN_CDttmRMarkDel, 4, L_FIX}, // chp.dttmRMarkDel;DTTM;long;
         {0x6865, 4, L_FIX}, // "sprmCBrc" chp.brc;BRC;long;
         {0x4866, 2, L_FIX}, // "sprmCShd" chp.shd;SHD;short;
         {0x4867, 2, L_FIX}, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
