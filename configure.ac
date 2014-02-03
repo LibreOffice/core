@@ -1912,11 +1912,8 @@ AC_ARG_WITH(branding,
     AS_HELP_STRING([--with-branding],
         [Use given path to retrieve branding images set.])
     [
-                          Search for intro.png about.svg flat_logo.svg
-                          backing_left.png backing_right.png
-                          backing_rtl_left.png backing_rtl_right.png
-                          backing_space.png. If any is missing, default
-                          ones will be used instead.
+                          Search for intro.png about.svg and flat_logo.svg.
+                          If any is missing, default ones will be used instead.
 
                           Search also progress.conf for progress
                           settings on intro screen :
@@ -12304,11 +12301,7 @@ dnl branding
 dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
-BRAND_INTRO_IMAGES="flat_logo.svg intro.png"
-brand_files="$BRAND_INTRO_IMAGES about.svg \
-    backing_left.png backing_right.png \
-    backing_rtl_left.png backing_rtl_right.png \
-    backing_space.png"
+BRAND_INTRO_IMAGES="flat_logo.svg intro.png about.svg"
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
