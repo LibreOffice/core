@@ -1166,8 +1166,37 @@ void ChartExport::exportFill( Reference< XPropertySet > xPropSet )
         case FillStyle_GRADIENT :
             exportGradientFill( xPropSet );
             break;
+        case FillStyle_BITMAP :
+            exportBitmapFill( xPropSet );
+            break;
         default:
             WriteFill( xPropSet );
+    }
+}
+
+void ChartExport::exportBitmapFill( Reference< XPropertySet > xPropSet )
+{
+    if( xPropSet.is() )
+     {
+        OUString sFillGradientName;
+        xPropSet->getPropertyValue("FillBitmapName") >>= sFillGradientName;
+
+        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+        try
+        {
+            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+            uno::Any rValue = xGradient->getByName( sFillGradientName );
+            OUString sBitmapURL;
+            if( (rValue >>= sBitmapURL) )
+            {
+                WriteBlipFill( xPropSet, sBitmapURL, XML_a, true, true );
+            }
+        }
+        catch( const uno::Exception & rEx )
+        {
+            DBG_WARNING( "Bitmap Property not Found; ChartExport::exportBitmapFill" );
+        }
+
     }
 }
 
@@ -1191,7 +1220,7 @@ void ChartExport::exportGradientFill( Reference< XPropertySet > xPropSet )
         }
         catch( const uno::Exception & rEx )
         {
-            DBG_WARNING( "Gradient Property not Found; ChartExport::exportPlotAreaGradientFill" );
+            DBG_WARNING( "Gradient Property not Found; ChartExport::exportGradientFill" );
         }
 
     }

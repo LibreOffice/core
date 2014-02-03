@@ -661,7 +661,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
     mpFS->endElementNS( XML_a, XML_ln );
 }
 
-OUString DrawingML::WriteImage( const OUString& rURL )
+OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
 {
     OString aURLBS(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
@@ -673,7 +673,7 @@ OUString DrawingML::WriteImage( const OUString& rURL )
         DBG(fprintf (stderr, "begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
         Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
 
-        return WriteImage( aGraphic );
+        return WriteImage( aGraphic , bRelPathToMedia );
     } else {
         // add link to relations
     }
@@ -705,7 +705,7 @@ const char* DrawingML::GetRelationCompPrefix()
     return "unknown";
 }
 
-OUString DrawingML::WriteImage( const Graphic& rGraphic )
+OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 {
     GfxLink aLink = rGraphic.GetLink ();
     OUString sMediaType;
@@ -780,11 +780,14 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     xOutStream->writeBytes( Sequence< sal_Int8 >( (const sal_Int8*) aData, nDataSize ) );
     xOutStream->closeOutput();
 
+    OString sRelPathToMedia = "media/image";
+    if ( bRelPathToMedia )
+        sRelPathToMedia = "../" + sRelPathToMedia;
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                                 OUStringBuffer()
                                 .appendAscii( GetRelationCompPrefix() )
-                                .appendAscii( "media/image" )
+                                .appendAscii( sRelPathToMedia.getStr() )
                                 .append( (sal_Int32) mnImageCounter ++ )
                                 .appendAscii( pExtension )
                                 .makeStringAndClear() );
@@ -792,9 +795,9 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, const Graphic *pGraphic )
+OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
 {
-    OUString sRelId = pGraphic ? WriteImage( *pGraphic ) : WriteImage( rURL );
+    OUString sRelId = pGraphic ? WriteImage( *pGraphic, bRelPathToMedia ) : WriteImage( rURL, bRelPathToMedia );
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
 
@@ -845,17 +848,27 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
     if ( GetProperty( rXPropSet, sURLPropName ) ) {
         OUString aURL;
         mAny >>= aURL;
+        bool bWriteMode = false;
+        if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
+            bWriteMode = true;
+        WriteBlipFill( rXPropSet, aURL, nXmlNamespace, bWriteMode );
+    }
+}
 
-        DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sBitmapURL, sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia )
+{
+    if ( !sBitmapURL.isEmpty() ) {
+        DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( sBitmapURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
 
-        if( aURL.isEmpty() )
+
+        if( sBitmapURL.isEmpty() )
             return;
 
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
-        WriteBlip( rXPropSet, aURL );
+        WriteBlip( rXPropSet, sBitmapURL, bRelPathToMedia );
 
-        if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
+        if( bWriteMode )
             WriteBlipMode( rXPropSet );
         else if( GetProperty( rXPropSet, "FillBitmapStretch" ) ) {
                 bool bStretch = false;
@@ -864,7 +877,6 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
                 if( bStretch )
                     WriteStretch();
         }
-
         mpFS->endElementNS( nXmlNamespace, XML_blipFill );
     }
 }

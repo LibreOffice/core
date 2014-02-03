@@ -123,6 +123,7 @@ private:
     void exportPlotAreaShapeProps( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet  );
     void exportFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
     void exportGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
+    void exportBitmapFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
     void exportDataTable( );
 
     void exportAreaChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
