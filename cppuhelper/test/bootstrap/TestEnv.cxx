@@ -36,7 +36,7 @@
 #endif
 
 
-class SAL_DLLPRIVATE TestEnv : public cppu::Enterable
+class TestEnv : public cppu::Enterable
 {
     int m_inCount;
 
