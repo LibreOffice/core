@@ -4231,7 +4231,8 @@ void Window::ImplNewInputContext()
     aNewContext.mpFont = NULL;
     if (!rFontName.isEmpty())
     {
-        Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
+        OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
+        Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetSize() );
         if ( !aSize.Height() )
         {
             // only set default sizes if the font height in logical
@@ -7343,7 +7344,8 @@ void Window::Scroll( long nHorzScroll, long nVertScroll,
                      const Rectangle& rRect, sal_uInt16 nFlags )
 {
 
-    Rectangle aRect = ImplLogicToDevicePixel( rRect );
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     aRect.Intersection( Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
     if ( !aRect.IsEmpty() )
         ImplScroll( aRect, nHorzScroll, nVertScroll, nFlags );
@@ -7368,7 +7370,9 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
 
-    Rectangle aRect = ImplLogicToDevicePixel( rRect );
+
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     if ( !aRect.IsEmpty() )
     {
         Region aRegion( aRect );
