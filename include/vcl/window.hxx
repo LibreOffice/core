@@ -582,7 +582,8 @@ public:
                         Window( Window* pParent, const ResId& rResId );
     virtual             ~Window();
 
-    OutputDevice*       GetOutDev() { return mpOutputDevice; };
+    OutputDevice const* GetOutDev() const { return mpOutputDevice; };
+    OutputDevice*       GetOutDev()       { return mpOutputDevice; };
 
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
