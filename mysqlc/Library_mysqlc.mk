@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,mysqlc))
 
-$(eval $(call gb_Library_set_warnings_not_errors,mysqlc))
-
 $(eval $(call gb_Library_add_cxxflags,mysqlc,-DRTL_DISABLE_FAST_STRING))
 
 $(eval $(call gb_Library_use_externals,mysqlc,\
