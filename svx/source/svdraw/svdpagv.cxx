@@ -350,7 +350,16 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
                     // Copy existing paint region to use the same as prepared in BeginDrawLayer
                     SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
                     const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                    if ( rRect.IsEmpty() )
+                    bool bUseRect(false);
+                    if (!rRect.IsEmpty())
+                    {
+                        Region r(rExistingRegion);
+                        r.Intersect(rRect);
+                        // fdo#74435: FIXME: visibility check broken if empty
+                        if (!r.IsEmpty())
+                            bUseRect = true;
+                    }
+                    if (!bUseRect)
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     else
                         aTemporaryPaintWindow.SetRedrawRegion(Region(rRect));
