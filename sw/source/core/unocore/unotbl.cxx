@@ -95,6 +95,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -1353,51 +1354,74 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
         SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
         if(pLn)
         {
-            const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap().getByName(rPropertyName);
-            SwDoc* pDoc = pFmt->GetDoc();
-            if (!pEntry)
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-            switch(pEntry->nWID)
+            // Check for a specific property
+            if  ( rPropertyName == "TableRedlineParams" )
             {
-                case FN_UNO_ROW_HEIGHT:
-                case FN_UNO_ROW_AUTO_HEIGHT:
+                // Get the table row properties
+                uno::Sequence< beans::PropertyValue > tableRowProperties;
+                tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+                comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
+                OUString sRedlineType;
+                uno::Any sRedlineTypeValue;
+                sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
+                if( sRedlineTypeValue >>= sRedlineType )
                 {
-                    SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
-                    if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
-                    {
-                        sal_Bool bSet = *(sal_Bool*)aValue.getValue();
-                        aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
-                    }
-                    else
-                    {
-                        sal_Int32 nHeight = 0;
-                        aValue >>= nHeight;
-                         Size aSz(aFrmSize.GetSize());
-                        aSz.Height() = MM100_TO_TWIP(nHeight);
-                        aFrmSize.SetSize(aSz);
-                    }
-                    pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
+                    // Create a 'Table Redline' object
+                    SwUnoCursorHelper::makeTableRedline( *pLn, sRedlineType, tableRowProperties);
                 }
-                break;
-
-                case FN_UNO_TABLE_COLUMN_SEPARATORS:
+                else
                 {
-                    UnoActionContext aContext(pDoc);
-                    SwTable* pTable2 = SwTable::FindTable( pFmt );
-                    lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], sal_True, pDoc);
+                    throw beans::UnknownPropertyException(OUString( "No redline type property: " ), static_cast < cppu::OWeakObject * > ( this ) );
                 }
-                break;
+            }
+            else
+            {
+                const SfxItemPropertySimpleEntry* pEntry =
+                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
+                SwDoc* pDoc = pFmt->GetDoc();
+                if (!pEntry)
+                    throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+                    throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-                default:
+                switch(pEntry->nWID)
                 {
-                    SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
-                    SwAttrSet aSet(pLnFmt->GetAttrSet());
-                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
-                    pDoc->SetAttr(aSet, *pLnFmt);
+                    case FN_UNO_ROW_HEIGHT:
+                    case FN_UNO_ROW_AUTO_HEIGHT:
+                    {
+                        SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
+                        if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
+                        {
+                            sal_Bool bSet = *(sal_Bool*)aValue.getValue();
+                            aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+                        }
+                        else
+                        {
+                            sal_Int32 nHeight = 0;
+                            aValue >>= nHeight;
+                             Size aSz(aFrmSize.GetSize());
+                            aSz.Height() = MM100_TO_TWIP(nHeight);
+                            aFrmSize.SetSize(aSz);
+                        }
+                        pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
+                    }
+                    break;
+
+                    case FN_UNO_TABLE_COLUMN_SEPARATORS:
+                    {
+                        UnoActionContext aContext(pDoc);
+                        SwTable* pTable2 = SwTable::FindTable( pFmt );
+                        lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], sal_True, pDoc);
+                    }
+                    break;
+
+                    default:
+                    {
+                        SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
+                        SwAttrSet aSet(pLnFmt->GetAttrSet());
+                        m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                        pDoc->SetAttr(aSet, *pLnFmt);
+                    }
                 }
             }
         }

@@ -22,6 +22,7 @@
 #include "CellMarginHandler.hxx"
 #include "ConversionHelper.hxx"
 #include "MeasureHandler.hxx"
+#include "TrackChangesHandler.hxx"
 #include "TablePropertiesHandler.hxx"
 #include "TDefTableHandler.hxx"
 #include "DomainMapperTableManager.hxx"
@@ -32,6 +33,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <dmapperLoggers.hxx>
+#include <ooxml/OOXMLFastTokens.hxx>
 
 
 namespace writerfilter {
@@ -63,7 +65,7 @@ namespace dmapper {
         Value::Pointer_t pValue = rSprm.getValue();
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
         switch( nSprmId )
-       {
+        {
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
             case NS_ooxml::LN_CT_TblPrBase_jc:
             case 0x5400: // sprmTJc
@@ -101,6 +103,37 @@ namespace dmapper {
                         pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
 
                     pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                    insertRowProps(pPropMap);
+                }
+            }
+            break;
+            case NS_ooxml::LN_CT_TrPr_ins:
+            case NS_ooxml::LN_CT_TrPr_del:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    sal_Int32 nToken;
+                    switch( nSprmId )
+                    {
+                        case NS_ooxml::LN_CT_TrPr_ins:
+                            nToken = ooxml::OOXML_tableRowInsert;
+                            break;
+                        case NS_ooxml::LN_CT_TrPr_del:
+                            nToken = ooxml::OOXML_tableRowDelete;
+                            break;
+                        default:
+                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
+                            break;
+                    };
+                    TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
+                    pProperties->resolve(*pTrackChangesHandler);
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
+
+                    // Add the 'track changes' properties to the 'table row' via UNO.
+                    // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
+                    uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
                     insertRowProps(pPropMap);
                 }
             }
