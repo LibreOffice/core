@@ -329,7 +329,7 @@ public:
 
     void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
     void SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
-    bool HasEditText( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    SCROW GetFirstEditTextRow( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
     void SetEmptyCell( SCCOL nCol, SCROW nRow );
     void SetFormula(

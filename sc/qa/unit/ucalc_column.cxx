@@ -10,17 +10,20 @@
 #include <ucalc.hxx>
 #include <editutil.hxx>
 #include <cellvalue.hxx>
+#include <svl/languageoptions.hxx>
 
 void Test::testColumnFindEditCells()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    bool bRes = m_pDoc->HasEditText(ScRange(0,0,0,0,MAXROW,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", !bRes);
-    bRes = m_pDoc->HasEditText(ScRange(0,0,0,0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", !bRes);
-    bRes = m_pDoc->HasEditText(ScRange(0,0,0,0,10,0));
-    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", !bRes);
+    // Test the basics with real edit cells, using Column A.
+
+    SCROW nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,MAXROW,0));
+    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
+    nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
+    nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,10,0));
+    CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
 
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetText("Test");
@@ -29,23 +32,23 @@ void Test::testColumnFindEditCells()
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell here.", pObj);
 
     ScRange aRange(0,0,0,0,0,0);
-    bRes = m_pDoc->HasEditText(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There is an edit cell here.", bRes);
+    nResRow = m_pDoc->GetFirstEditTextRow(aRange);
+    CPPUNIT_ASSERT_MESSAGE("There is an edit cell here.", nResRow == 0);
 
     aRange.aStart.SetRow(1);
     aRange.aEnd.SetRow(1);
-    bRes = m_pDoc->HasEditText(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", !bRes);
+    nResRow = m_pDoc->GetFirstEditTextRow(aRange);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
 
     aRange.aStart.SetRow(2);
     aRange.aEnd.SetRow(4);
-    bRes = m_pDoc->HasEditText(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", !bRes);
+    nResRow = m_pDoc->GetFirstEditTextRow(aRange);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
 
     aRange.aStart.SetRow(0);
     aRange.aEnd.SetRow(MAXROW);
-    bRes = m_pDoc->HasEditText(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn be an edit cell in specified range.", bRes);
+    nResRow = m_pDoc->GetFirstEditTextRow(aRange);
+    CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in specified range.", nResRow == 0);
 
     m_pDoc->SetString(ScAddress(0,0,0), "Test");
     m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
@@ -61,8 +64,24 @@ void Test::testColumnFindEditCells()
 
     aRange.aStart.SetRow(1);
     aRange.aEnd.SetRow(1);
-    bRes = m_pDoc->HasEditText(aRange);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", !bRes);
+    nResRow = m_pDoc->GetFirstEditTextRow(aRange);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
+
+    // Test with non-edit cell but with ambiguous script type.
+
+    m_pDoc->SetString(ScAddress(1,11,0), "Some text");
+    m_pDoc->SetString(ScAddress(1,12,0), "Some text");
+    m_pDoc->SetString(ScAddress(1,13,0), "Other text");
+
+    m_pDoc->SetScriptType(ScAddress(1,11,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+    m_pDoc->SetScriptType(ScAddress(1,12,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+    m_pDoc->SetScriptType(ScAddress(1,13,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+
+    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,11,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), nResRow);
+    CPPUNIT_ASSERT_MESSAGE("String with mixed script types is considered an edit cell.", nResRow == 11);
+    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,12,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), nResRow);
 
     m_pDoc->DeleteTab(0);
 }

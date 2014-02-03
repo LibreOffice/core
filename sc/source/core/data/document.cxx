@@ -3210,13 +3210,13 @@ void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
 }
 
-bool ScDocument::HasEditText( const ScRange& rRange ) const
+SCROW ScDocument::GetFirstEditTextRow( const ScRange& rRange ) const
 {
     const ScTable* pTab = FetchTable(rRange.aStart.Tab());
     if (!pTab)
-        return false;
+        return -1;
 
-    return pTab->HasEditText(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    return pTab->GetFirstEditTextRow(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
 void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )

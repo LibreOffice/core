@@ -802,7 +802,7 @@ public:
 
     SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, const OUString& rStr );
 
-    SC_DLLPUBLIC bool HasEditText( const ScRange& rRange ) const;
+    SC_DLLPUBLIC SCROW GetFirstEditTextRow( const ScRange& rRange ) const;
 
     /**
      * Call this if you are not sure whether to put this as an edit text or a

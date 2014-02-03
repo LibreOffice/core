@@ -1347,23 +1347,30 @@ void ScTable::SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditTe
     aCol[nCol].SetEditText(nRow, rEditText, pEditPool);
 }
 
-bool ScTable::HasEditText( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+SCROW ScTable::GetFirstEditTextRow( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     if (!ValidCol(nCol1) || !ValidCol(nCol2) || nCol2 < nCol1)
-        return false;
+        return -1;
 
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow2 < nRow1)
-        return false;
+        return -1;
 
-    SCROW nFirst = -1;
+    SCROW nFirst = MAXROW+1;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
         const ScColumn& rCol = aCol[i];
-        if (const_cast<ScColumn&>(rCol).HasEditCells(nRow1, nRow2, nFirst))
-            return true;
+        SCROW nThisFirst = -1;
+        if (const_cast<ScColumn&>(rCol).HasEditCells(nRow1, nRow2, nThisFirst))
+        {
+            if (nThisFirst == nRow1)
+                return nRow1;
+
+            if (nThisFirst < nFirst)
+                nFirst = nThisFirst;
+        }
     }
 
-    return false;
+    return nFirst == (MAXROW+1) ? -1 : nFirst;
 }
 
 void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
