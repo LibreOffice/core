@@ -642,6 +642,7 @@ SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pWidthAutoFT, "autowidthft");
     m_aWidthED.set(get<MetricField>("width"));
     get(m_pRelWidthCB, "relwidth");
+    get(m_pRelWidthRelationLB, "relwidthrelation");
     get(m_pAutoWidthCB, "autowidth");
 
     get(m_pHeightFT, "heightft");
@@ -821,6 +822,7 @@ void SwFrmPage::setOptimalRelWidth()
     Size aBiggest(m_pHoriRelationLB->GetOptimalSize());
     m_pHoriRelationLB->set_width_request(aBiggest.Width());
     m_pVertRelationLB->set_width_request(aBiggest.Width());
+    m_pRelWidthRelationLB->set_width_request(aBiggest.Width());
     m_pHoriRelationLB->Clear();
 }
 
@@ -944,6 +946,9 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         //calculate the rerference value from the with and relative width values
         sal_Int32 nSpace = rFrmSize.GetWidth() * 100 / rFrmSize.GetWidthPercent();
         m_aWidthED.SetRefValue( nSpace );
+
+        m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
+        m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
     }
 
     if (rFrmSize.GetHeightPercent() != 0xff && rFrmSize.GetHeightPercent() != 0)
@@ -2308,6 +2313,11 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
     }
     m_pRelWidthCB->SaveValue();
     m_pRelHeightCB->SaveValue();
+
+    if (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+        m_pRelWidthRelationLB->SelectEntryPos(1);
+    else
+        m_pRelWidthRelationLB->SelectEntryPos(0);
 }
 
 sal_uInt16* SwFrmPage::GetRanges()
