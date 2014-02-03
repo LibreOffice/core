@@ -681,22 +681,10 @@ AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormat
     return NULL;
 }
 
-AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg (Window* pParent ,
-                                                                                              int nId )
+AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(Window* pParent)
 {
-    ScDataPilotDatabaseDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DAPIDATA :
-            pDlg = new ScDataPilotDatabaseDlg( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDataPilotDatabaseDlg_Impl( pDlg );
-    return 0;
+    ScDataPilotDatabaseDlg * pDlg = new ScDataPilotDatabaseDlg( pParent );
+    return new AbstractScDataPilotDatabaseDlg_Impl( pDlg );
 }
 
 AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(

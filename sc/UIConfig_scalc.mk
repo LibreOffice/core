@@ -135,6 +135,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scgeneralpage \
 	sc/uiconfig/scalc/ui/searchresults \
+	sc/uiconfig/scalc/ui/selectdatasource \
 	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/selectsource \
 	sc/uiconfig/scalc/ui/sheetprintpage \

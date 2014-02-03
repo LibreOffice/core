@@ -32,11 +32,5 @@
 #define ED_USER         16
 #define FT_PASSWD       17
 #define ED_PASSWD       18
-#define FT_DATABASE     19
-#define LB_DATABASE     20
-#define FT_OBJECT       21
-#define CB_OBJECT       22
-#define FT_OBJTYPE      23
-#define LB_OBJTYPE      24
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

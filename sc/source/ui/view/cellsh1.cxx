@@ -2576,7 +2576,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
                 ::boost::scoped_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
                     pFact->CreateScDataPilotDatabaseDlg(
-                        pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA));
+                        pTabViewShell->GetDialogParent()));
 
                 OSL_ENSURE(pDataDlg, "Dialog create fail!");
                 if ( pDataDlg->Execute() == RET_OK )

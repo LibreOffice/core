@@ -22,42 +22,28 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 
-//------------------------------------------------------------------------
-
 struct ScImportSourceDesc;
-
 
 class ScDataPilotDatabaseDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    FixedText       aFtDatabase;
-    ListBox         aLbDatabase;
-    FixedText       aFtObject;
-    ComboBox        aCbObject;
-    FixedText       aFtType;
-    ListBox         aLbType;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    ListBox*  m_pLbDatabase;
+    ComboBox* m_pCbObject;
+    ListBox*  m_pLbType;
 
     void    FillObjects();
 
     DECL_LINK( SelectHdl, void* );
 
 public:
-            ScDataPilotDatabaseDlg( Window* pParent );
-            ~ScDataPilotDatabaseDlg();
+    ScDataPilotDatabaseDlg(Window* pParent);
 
     void    GetValues( ScImportSourceDesc& rDesc );
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

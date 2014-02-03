@@ -347,7 +347,7 @@ public:
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId ) = 0;
 
-    virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0;
+    virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg(Window* pParent) = 0;
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg(Window* pParent,
         bool bEnableExternal) = 0;

@@ -55,20 +55,12 @@ using namespace com::sun::star;
 //-------------------------------------------------------------------------
 
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPIDATA ) ),
-    //
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aFtDatabase     ( this, ScResId( FT_DATABASE ) ),
-    aLbDatabase     ( this, ScResId( LB_DATABASE ) ),
-    aFtObject       ( this, ScResId( FT_OBJECT ) ),
-    aCbObject       ( this, ScResId( CB_OBJECT ) ),
-    aFtType         ( this, ScResId( FT_OBJTYPE ) ),
-    aLbType         ( this, ScResId( LB_OBJTYPE ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+    ModalDialog(pParent, "SelectDataSourceDialog",
+        "modules/scalc/ui/selectdatasource.ui")
 {
-    FreeResource();
+    get(m_pLbDatabase, "database");
+    get(m_pCbObject, "datasource");
+    get(m_pLbType, "type");
 
     WaitObject aWait( this );       // initializing the database service the first time takes a while
 
@@ -84,7 +76,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
         for (long nPos = 0; nPos < nCount; nPos++)
         {
             OUString aName = pArray[nPos];
-            aLbDatabase.InsertEntry( aName );
+            m_pLbDatabase->InsertEntry( aName );
         }
     }
     catch(uno::Exception&)
@@ -92,25 +84,21 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
         OSL_FAIL("exception in database");
     }
 
-    aLbDatabase.SelectEntryPos( 0 );
-    aLbType.SelectEntryPos( 0 );
+    m_pLbDatabase->SelectEntryPos( 0 );
+    m_pLbType->SelectEntryPos( 0 );
 
     FillObjects();
 
-    aLbDatabase.SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
-    aLbType.SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
-}
-
-ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
-{
+    m_pLbDatabase->SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
+    m_pLbType->SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
 }
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
-    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = m_pLbType->GetSelectEntryPos();
 
-    rDesc.aDBName = aLbDatabase.GetSelectEntry();
-    rDesc.aObject = aCbObject.GetText();
+    rDesc.aDBName = m_pLbDatabase->GetSelectEntry();
+    rDesc.aObject = m_pCbObject->GetText();
 
     if (rDesc.aDBName.isEmpty() || rDesc.aObject.isEmpty())
         rDesc.nType = sheet::DataImportMode_NONE;
@@ -132,13 +120,13 @@ IMPL_LINK_NOARG(ScDataPilotDatabaseDlg, SelectHdl)
 
 void ScDataPilotDatabaseDlg::FillObjects()
 {
-    aCbObject.Clear();
+    m_pCbObject->Clear();
 
-    OUString aDatabaseName = aLbDatabase.GetSelectEntry();
+    OUString aDatabaseName = m_pLbDatabase->GetSelectEntry();
     if (aDatabaseName.isEmpty())
         return;
 
-    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = m_pLbType->GetSelectEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 
@@ -193,7 +181,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         for( long nPos=0; nPos<nCount; nPos++ )
         {
             OUString aName = pArray[nPos];
-            aCbObject.InsertEntry( aName );
+            m_pCbObject->InsertEntry( aName );
         }
     }
     catch(uno::Exception&)
