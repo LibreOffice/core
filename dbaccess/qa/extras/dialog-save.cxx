@@ -61,6 +61,12 @@ DialogSaveTest::DialogSaveTest()
 
 void DialogSaveTest::test()
 {
+    // UnoApiTest::setUp (via InitVCL) puts each test under a locked SolarMutex,
+    // but at least the below xDocCloseable->close call could lead to a deadlock
+    // then, and it looks like none of the code here requires the SolarMutex to
+    // be locked anyway:
+    SolarMutexReleaser rel;
+
     OUString aFileName;
     aFileName = getURLFromWorkdir("CppunitTest/testDialogSave.odb");
     {
@@ -101,7 +107,7 @@ void DialogSaveTest::test()
         // close
         uno::Reference< util::XCloseable > xDocCloseable(xComponent, UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xDocCloseable.is());
-        //xDocCloseable->close(false);
+        xDocCloseable->close(false);
 
         // All our uno::References are (should?) be invalid now -> let them go out of scope
     }
