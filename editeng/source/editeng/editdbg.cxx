@@ -326,7 +326,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     for ( sal_Int32 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions().Count(); nPortion++)
     {
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
-        fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %i, Invalid = %i\nText = '%s'",
+        fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
                  nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(),
                  OUStringToOString(pPPortion->GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nVorlage:" );
@@ -408,8 +408,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine* pLine = pPPortion->GetLines()[nLine];
-            fprintf( fp, "\nZeile %i:\tStart: %i,\tEnd: %i", nLine, pLine->GetStart(), pLine->GetEnd() );
-            fprintf( fp, "\t\tPortions: %i - %i.\tHight: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
+            fprintf( fp, "\nZeile %i:\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, pLine->GetStart(), pLine->GetEnd() );
+            fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
         }
 
         fprintf( fp, "\n-----------------------------------------------------------------------------" );
@@ -461,7 +461,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         aR = pV->GetVisArea();
         fprintf( fp, "\n  VisArea: nX=%li, nY=%li, dX=%li, dY=%li", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );
         ESelection aSel = pV->GetSelection();
-        fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%u, End=%" SAL_PRIdINT32 ",%u", aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
+        fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }
     if ( pEE->GetActiveView() )
     {
