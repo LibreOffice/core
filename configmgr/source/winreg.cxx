@@ -53,7 +53,7 @@ namespace {
 // </item>
 //
 // Another example:
-// [HKEY_LOCAL_MACHINE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\Java/#fuse\Hide]
+// [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\Java/#fuse\Hide]
 // "Value"="true"
 // becomes the following in configuration:
 // <!-- Hide Tools - Options - LibreOffice - Advanced panel -->
