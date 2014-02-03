@@ -73,7 +73,7 @@ public:
 };
 
 
-sal_Bool SAL_DLLPRIVATE SdPageObjsTLB::bIsInDrag = sal_False;
+sal_Bool SdPageObjsTLB::bIsInDrag = sal_False;
 
 sal_Bool SdPageObjsTLB::IsInDrag()
 {
