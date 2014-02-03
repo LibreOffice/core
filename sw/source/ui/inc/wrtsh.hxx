@@ -73,7 +73,11 @@ namespace nsSelectionType
     const SelectionType SEL_POSTIT          = 0x020000; //annotation
 }
 
+/** Used by the UI to modify the document model.
 
+Eg. the Insert() method will take the current cursor position, insert the
+string, and take care of undo etc.
+*/
 class SW_DLLPUBLIC SwWrtShell: public SwFEShell
 {
 private:
