@@ -1130,7 +1130,8 @@ void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
     if ( bRemoveFrameData )
     {
         // release the graphic
-        ImplReleaseGraphics();
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReleaseGraphics();
     }
 }
 
@@ -3154,7 +3155,8 @@ void Window::ImplUpdateWindowPtr( Window* pWindow )
     if ( mpWindowImpl->mpFrameWindow != pWindow->mpWindowImpl->mpFrameWindow )
     {
         // release graphic
-        ImplReleaseGraphics();
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ImplReleaseGraphics();
     }
 
     mpWindowImpl->mpFrameData     = pWindow->mpWindowImpl->mpFrameData;
@@ -4656,7 +4658,8 @@ Window::~Window()
     }
 
     // release SalGraphics
-    ImplReleaseGraphics();
+    OutputDevice *pOutDev = GetOutDev();
+    pOutDev->ImplReleaseGraphics();
 
     // notify ImplDelData subscribers of this window about the window deletion
     ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
