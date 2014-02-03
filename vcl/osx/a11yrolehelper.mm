@@ -122,6 +122,10 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::TREE_ITEM, NSAccessibilityUnknownRole );
         MAP( AccessibleRole::TREE_TABLE, NSAccessibilityUnknownRole );
 
+        MAP( AccessibleRole::DOCUMENT_PRESENTATION, NSAccessibilityGroupRole );
+        MAP( AccessibleRole::DOCUMENT_SPREADSHEET, NSAccessibilityGroupRole );
+        MAP( AccessibleRole::DOCUMENT_TEXT, NSAccessibilityGroupRole );
+
 #undef MAP
         default:
             break;
@@ -248,6 +252,10 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::SECTION, @"" );
         MAP( AccessibleRole::TREE_ITEM, @"" );
         MAP( AccessibleRole::TREE_TABLE, @"" );
+
+        MAP( AccessibleRole::DOCUMENT_PRESENTATION, @"" );
+        MAP( AccessibleRole::DOCUMENT_SPREADSHEET, @"" );
+        MAP( AccessibleRole::DOCUMENT_TEXT, @"" );
 
 #undef MAP
         default:
