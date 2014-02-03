@@ -3114,6 +3114,18 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
     CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
+{
+    // fdo#74141 :There was a problem that in style.xml and document.xml in <w:ind> tag "right" & "left" margin
+    // attributes gets added(w:right=0 & w:left=0) if these attributes are not set in original document.
+    // This test is to verify <w:ind> does not contain w:right attribute.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end", "");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

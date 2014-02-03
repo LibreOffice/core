@@ -5424,10 +5424,14 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     else
     {
         FastAttributeList *pLRSpaceAttrList = m_pSerializer->createAttrList();
-
-        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTxtLeft() ) );
-        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
-
+        if((0 != rLRSpace.GetTxtLeft()) || ((0 == rLRSpace.GetTxtLeft()) && (sal_True == rLRSpace.IsExplicitZeroMarginValLeft())))
+        {
+            pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTxtLeft() ) );
+        }
+        if((0 != rLRSpace.GetRight()) || ((0 == rLRSpace.GetRight()) && (sal_True == rLRSpace.IsExplicitZeroMarginValRight())))
+        {
+            pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
+        }
         sal_Int32 nFirstLineAdjustment = rLRSpace.GetTxtFirstLineOfst();
         if (nFirstLineAdjustment > 0)
             pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
