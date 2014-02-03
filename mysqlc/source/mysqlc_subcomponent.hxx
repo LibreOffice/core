@@ -193,11 +193,12 @@ namespace connectivity
 
             return aReturn;
         }
+    }
 
 #define DECLARE_SERVICE_INFO()                                                                                                               \
     virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);                                       \
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);                   \
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)                               \
     OUString SAL_CALL classname::getImplementationName() throw (::com::sun::star::uno::RuntimeException) \
@@ -212,9 +213,9 @@ namespace connectivity
     }                                                                                                                                            \
     sal_Bool SAL_CALL classname::supportsService(const OUString& _rServiceName) throw(::com::sun::star::uno::RuntimeException)   \
     {                                                                                                                            \
-        return cppu::supportsService(this, ServiceName);                                                                         \
-    }                                                                                                                            \
+        return cppu::supportsService(this, _rServiceName);                                                                       \
     }
+
 }
 #endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_
 
