@@ -1516,6 +1516,8 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
             case ooxml::OOXML_ParagraphFormat:
                 sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
                 break;
+            default:
+                throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
             }
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
