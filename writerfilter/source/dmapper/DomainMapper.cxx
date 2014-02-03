@@ -2303,26 +2303,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
     {
-        m_pImpl->AddNewRedline( );
-
-        if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
-        {
-            m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_ParagraphFormat );
-        }
-
-        resolveSprmProps(*this, rSprm );
-        // now the properties author, date and id should be available
-        sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
-        switch( nToken & 0xffff )
-        {
-            case ooxml::OOXML_mod :
-            case ooxml::OOXML_ins :
-            case ooxml::OOXML_del :
-            case ooxml::OOXML_ParagraphFormat :
-                break;
-            default: OSL_FAIL( "redline token other than mod, ins or del" );
-        }
-        m_pImpl->EndParaMarkerChange( );
+        HandleRedline( rSprm );
     }
     break;
     case NS_ooxml::LN_endtrackchange:
@@ -3267,6 +3248,42 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
 uno::Sequence<beans::PropertyValue> DomainMapper::GetThemeFontLangProperties() const
 {
     return m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
+}
+
+void DomainMapper::HandleRedline( Sprm& rSprm )
+{
+    sal_uInt32 nSprmId = rSprm.getId();
+
+    m_pImpl->AddNewRedline( );
+
+    if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
+    {
+        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_ParagraphFormat );
+    }
+    else if (nSprmId == NS_ooxml::LN_CT_TrPr_ins)
+    {
+        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableRowInsert );
+    }
+    else if (nSprmId == NS_ooxml::LN_CT_TrPr_del)
+    {
+        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableRowDelete );
+    }
+
+    resolveSprmProps(*this, rSprm );
+    // now the properties author, date and id should be available
+    sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
+    switch( nToken & 0xffff )
+    {
+        case ooxml::OOXML_mod :
+        case ooxml::OOXML_ins :
+        case ooxml::OOXML_del :
+        case ooxml::OOXML_ParagraphFormat :
+        case ooxml::OOXML_tableRowInsert:
+        case ooxml::OOXML_tableRowDelete:
+            break;
+        default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
+    }
+    m_pImpl->EndParaMarkerChange( );
 }
 
 } //namespace dmapper
