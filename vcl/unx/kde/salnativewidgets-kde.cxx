@@ -1278,7 +1278,7 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
     {
     // make position relative to rControlRegion
     Point aPos = rPos - rControlRegion.TopLeft();
-    rIsInside = sal_False;
+    rIsInside = false;
 
     sal_Bool bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
 
@@ -1322,7 +1322,7 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
     {
         case PART_BUTTON_LEFT:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
-            rIsInside = sal_True;
+            rIsInside = true;
         else if ( bTwoSubButtons )
         {
             qRectAddLine.setWidth( qRectAddLine.width() / 2 );
@@ -1332,7 +1332,7 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
 
         case PART_BUTTON_UP:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
-            rIsInside = sal_True;
+            rIsInside = true;
         else if ( bTwoSubButtons )
         {
             qRectAddLine.setHeight( qRectAddLine.height() / 2 );
