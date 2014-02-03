@@ -521,7 +521,8 @@ namespace {
             sal_Bool bMatch;
             if( !_rEntry.hasSubFilters() )
                 // a real filter
-                bMatch = ( _rEntry.getTitle() == rTitle );
+                bMatch = (_rEntry.getTitle() == rTitle)
+                      || (shrinkFilterName(_rEntry.getTitle()) == rTitle);
             else
                 // a filter group -> search the sub filters
                 bMatch =
