@@ -517,7 +517,7 @@ public class _XBreakIterator extends MultiMethodTest {
     /**
     * Tries to determine script type (of all four types). <p>
     * Has <b>OK</b> status if <code>LATIN</code> type returned
-    * for ACSII character, <code>ASIAN</code> for Katakana Unicode
+    * for ASCII character, <code>ASIAN</code> for Katakana Unicode
     * codepoints, <code>COMPLEX</code> for Arabic Unicode
     * codepoints and <code>WEAK</code> for codepoints from Arrows
     * Unicode block.
