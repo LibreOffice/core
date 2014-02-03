@@ -1125,7 +1125,7 @@ yyerrlab:   /* here on detecting error */
 
       count = 0;
       /* Start X at -yyn if nec to avoid negative indexes in yycheck.  */
-      for (x = (yyn < 0 ? -yyn : 0);
+      for (x = ((yyn < 0) ? -yyn : 0);
            x < (sizeof(yytname) / sizeof(char *)); x++)
         if (yycheck[x + yyn] == x)
           size += strlen(yytname[x]) + 15, count++;
@@ -1137,7 +1137,7 @@ yyerrlab:   /* here on detecting error */
           if (count < 5)
         {
           count = 0;
-          for (x = (yyn < 0 ? -yyn : 0);
+          for (x = ((yyn < 0) ? -yyn : 0);
                x < (sizeof(yytname) / sizeof(char *)); x++)
             if (yycheck[x + yyn] == x)
               {
