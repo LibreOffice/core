@@ -45,6 +45,7 @@ public:
     void testDisplayUnits();
     void testFdo74115WallGradientFill();
     void testFdo74115WallBitmapFill();
+    void testBarChartRotation();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testDisplayUnits);
     CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
+    CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -564,6 +566,16 @@ void Chart2ExportTest::testFdo74115WallBitmapFill()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
+}
+
+void Chart2ExportTest::testBarChartRotation()
+{
+    load ("/chart2/qa/extras/data/docx/", "barChartRotation.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", "30");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "50");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
