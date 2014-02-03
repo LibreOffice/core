@@ -805,6 +805,58 @@ DummyGroup2D::DummyGroup2D(const OUString& rName)
     setName(rName);
 }
 
+awt::Point DummyGroup2D::getPosition()
+    throw(uno::RuntimeException)
+{
+    long nTop = std::numeric_limits<long>::max();
+    long nLeft = std::numeric_limits<long>::max();
+    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
+            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    {
+        awt::Point aPoint = (*itr)->getPosition();
+        if(aPoint.X >= 0 && aPoint.Y >= 0)
+        {
+            nLeft = std::min<long>(nLeft, aPoint.X);
+            nTop = std::min<long>(nTop, aPoint.Y);
+        }
+    }
+
+    return awt::Point(nTop, nLeft);
+}
+
+awt::Size DummyGroup2D::getSize()
+    throw(uno::RuntimeException)
+{
+    long nTop = std::numeric_limits<long>::max();
+    long nLeft = std::numeric_limits<long>::max();
+    long nBottom = 0;
+    long nRight = 0;
+    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
+            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    {
+        awt::Point aPoint = (*itr)->getPosition();
+        nLeft = std::min<long>(nLeft, aPoint.X);
+        nTop = std::min<long>(nTop, aPoint.Y);
+        awt::Size aSize = (*itr)->getSize();
+        nRight = std::max<long>(nRight, aPoint.X + aSize.Width);
+        nBottom = std::max<long>(nBottom, aPoint.Y + aSize.Height);
+    }
+
+    return awt::Size(nRight - nLeft, nBottom - nTop);
+}
+
+void DummyGroup2D::setPosition( const awt::Point& )
+    throw(uno::RuntimeException)
+{
+    SAL_WARN("chart2.opengl", "set position on group shape");
+}
+
+void DummyGroup2D::setSize( const awt::Size& )
+    throw( beans::PropertyVetoException, uno::RuntimeException )
+{
+    SAL_WARN("chart2.opengl", "set size on group shape");
+}
+
 DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
         const uno::Reference< graphic::XGraphic > xGraphic ):
     mxGraphic(xGraphic)
