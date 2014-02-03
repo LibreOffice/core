@@ -58,22 +58,22 @@
 #define DEBUG_POSITIONING 0
 #define RENDER_TO_FILE 0
 
-typedef struct PosVecf3
+struct PosVecf3
 {
     float x;
     float y;
     float z;
-}PosVecf3;
+};
 
 typedef std::vector<GLfloat> Line2DPointList;
 
-typedef struct Bubble2DPointList
+struct Bubble2DPointList
 {
     float x;
     float y;
     float xScale;
     float yScale;
-}Bubble2DPointList;
+};
 
 typedef std::vector<GLfloat> Bubble2DCircle;
 
@@ -82,7 +82,7 @@ struct RectanglePointList
     float points[12];
 };
 
-typedef struct TextInfo
+struct TextInfo
 {
     GLuint texture;
     float x;
@@ -90,7 +90,7 @@ typedef struct TextInfo
     float z;
     double rotation;
     float vertex[12];
-}TextInfo;
+};
 
 typedef std::vector<GLfloat> Area2DPointList;
 typedef std::vector<GLfloat> PieSegment2DPointList;
