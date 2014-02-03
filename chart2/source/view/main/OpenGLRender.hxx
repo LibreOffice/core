@@ -285,7 +285,6 @@ private:
     GLint m_BackgroundColorID;
 
     float m_BackgroundColor[16];
-    glm::vec4 m_ClearColor;
 
     std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
     PointList m_Symbol2DPointList;

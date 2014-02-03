@@ -252,7 +252,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor (m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
+    glClearColor (1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -764,7 +764,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_frameBufferMS(0),
     m_TextVertexID(0),
     m_TextTexCoordID(1),
-    m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 {
     //TODO: moggi: use STL
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
