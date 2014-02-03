@@ -3126,6 +3126,62 @@ DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end", "");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCaption1, "EquationAsScientificNumbering.docx")
+{
+    // fdo#74431 : This test case is to verify the Captions are comming properly
+    //earlier it was comming as "SEQ "scientific"\*ROMAN now it is SEQ scientific\* ROMAN"
+
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" SEQ scientific \\* ROMAN"));
+}
+
+
+
+DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
+{
+    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
+    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[5]/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" SEQ Equation \\* ARABIC"));
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testCaption3, "FigureAsLabelPicture.docx")
+{
+    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
+    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" SEQ picture \\* ARABIC"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCaption4, "TableWithAboveCaptions.docx")
+{
+    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
+    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" SEQ Table \\* ARABIC"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
