@@ -294,6 +294,7 @@ private:
     GLuint m_SymbolVertexID;
     GLuint m_SymbolMatrixID;
     GLuint m_SymbolColorID;
+    GLuint m_SymbolShapeID;
 
 #if DEBUG_POSITIONING
     GLuint m_DebugProID;

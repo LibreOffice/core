@@ -16,9 +16,8 @@ varying vec4 fragmentColor;
 
 void main()
 {
-    gl_Position =  MVP * vec4(vPosition, 1);
+    gl_Position = MVP * vec4(vPosition, 1);
     fragmentColor = vColor;
-    gl_PointSize = 10.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

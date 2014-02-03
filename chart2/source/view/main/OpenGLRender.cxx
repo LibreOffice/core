@@ -297,8 +297,9 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 
     m_SymbolProID = LoadShaders("symbolVertexShader", "symbolFragmentShader");
     m_SymbolVertexID = glGetAttribLocation(m_SymbolProID, "vPosition");
-    m_SymbolMatrixID = glGetAttribLocation(m_SymbolProID, "MVP");
-    m_SymbolColorID = glGetAttribLocation(m_SymbolProID, "vColor");
+    m_SymbolMatrixID = glGetUniformLocation(m_SymbolProID, "MVP");
+    m_SymbolColorID = glGetUniformLocation(m_SymbolProID, "vColor");
+    m_SymbolShapeID = glGetUniformLocation(m_SymbolProID, "shape");
 
     CHECK_GL_ERROR();
 
@@ -1204,11 +1205,13 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         RectanglePointList &pointList = m_RectangleShapePointList.front();
-        PosVecf3 trans = {0, 0, 0};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1, 1, 1.0f};
-        MoveModelf(trans, angle, scale);
-        m_MVP = m_Projection * m_View * m_Model;
+        {
+            PosVecf3 trans = {0, 0, 0};
+            PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+            PosVecf3 scale = {1, 1, 1.0f};
+            MoveModelf(trans, angle, scale);
+            m_MVP = m_Projection * m_View * m_Model;
+        }
 
         //render to fbo
         //fill vertex buffer
@@ -1251,6 +1254,17 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
         }
         if(bBorder)
         {
+            if(bFill)
+            {
+                PosVecf3 trans = {0.0, 0.0, Z_STEP };
+                PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+                PosVecf3 scale = {1, 1, 1.0f};
+                MoveModelf(trans, angle, scale);
+                m_MVP = m_Projection * m_View * m_Model;
+
+                m_fZStep += Z_STEP;
+                glUniformMatrix4fv(m_BackgroundMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+            }
             SetBackGroundColor(COL_BLACK, COL_BLACK);
 
             glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
@@ -1649,31 +1663,36 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     return 0;
 }
 
-int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float height, sal_Int32)
+int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int32 nSymbol)
 {
     CHECK_GL_ERROR();
 
-    glDisable(GL_POINT_SMOOTH);
-    glDisable(GL_MULTISAMPLE);
-    glPointSize(10.f);
+    glPointSize(20.f);
     CHECK_GL_ERROR();
-    PosVecf3 trans = {x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep};
+    PosVecf3 trans = {0.0, 0.0, 0.0};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {width/OPENGL_SCALE_VALUE, height/OPENGL_SCALE_VALUE, 1.0f};
+    PosVecf3 scale = {1.0, 1.0, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 
-    float aPos[3] = { 0.f, 0.f, 0.f };
+    float aPos[3] = { x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep };
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+    CHECK_GL_ERROR();
     glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float), aPos, GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
     // Use our shader
     glUseProgram(m_SymbolProID);
+    CHECK_GL_ERROR();
+
     glUniform4fv(m_SymbolColorID, 1, &m_2DColor[0]);
+    glUniform1i(m_SymbolShapeID, nSymbol);
+    CHECK_GL_ERROR();
+
     glUniformMatrix4fv(m_SymbolMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
 
+    CHECK_GL_ERROR();
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(m_SymbolVertexID);
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
@@ -1685,12 +1704,11 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float heigh
             0,                  // stride
             (void*)0            // array buffer offset
             );
-    glDrawArrays(GL_POINTS, 0, 1); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawArrays(GL_POINTS, 0, 1);
 
     glDisableVertexAttribArray(m_SymbolVertexID);
+    CHECK_GL_ERROR();
     glUseProgram(0);
-    glEnable(GL_MULTISAMPLE);
-    glEnable(GL_POINT_SMOOTH);
     m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
