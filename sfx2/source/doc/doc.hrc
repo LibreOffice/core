@@ -135,7 +135,6 @@
 #define STR_LABEL_FILEFORMAT                (RID_SFX_DOC_START+96)
 
 // some icons are commented out since they are removed
-#define BMP_SIGNATURE                       (RID_SFX_DOC_START+97)
 #define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
 #define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
 #define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)

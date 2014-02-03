@@ -1457,7 +1457,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // the thumbnail is not stored in case of encrypted document
             AddLog( OUString( OSL_LOG_PREFIX "Thumbnail creation."  ) );
             if ( !GenerateAndStoreThumbnail( bPasswdProvided,
-                                            sal_False,
                                             pFilter->IsOwnTemplateFormat(),
                                             xMedStorage ) )
             {
@@ -3525,7 +3524,6 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
 }
 
 sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
-                                                    sal_Bool bSigned,
                                                     sal_Bool bIsTemplate,
                                                     const uno::Reference< embed::XStorage >& xStor )
 {
@@ -3545,7 +3543,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
                                                         OUString("thumbnail.png"),
                                                         embed::ElementModes::READWRITE );
 
-            if ( xStream.is() && WriteThumbnail( bEncrypted, bSigned, bIsTemplate, xStream ) )
+            if (xStream.is() && WriteThumbnail(bEncrypted, bIsTemplate, xStream))
             {
                 uno::Reference< embed::XTransactedObject > xTransact( xThumbnailStor, uno::UNO_QUERY_THROW );
                 xTransact->commit();
@@ -3563,7 +3561,6 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 }
 
 sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
-                                         sal_Bool bSigned,
                                          sal_Bool bIsTemplate,
                                          const uno::Reference< io::XStream >& xStream )
 {
@@ -3585,19 +3582,7 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
                                         OUString::createFromAscii( GetFactory().GetShortName() ),
                                         bIsTemplate );
                 if ( nResID )
-                {
-                    if ( !bSigned )
-                    {
-                        bResult = GraphicHelper::getThumbnailReplacement_Impl( nResID, xStream );
-                    }
-                    else
-                    {
-                        // retrieve the bitmap and write a signature bitmap over it
-                        SfxResId aResId( nResID );
-                        BitmapEx aThumbBitmap( aResId );
-                        bResult = GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( aThumbBitmap, xStream );
-                    }
-                }
+                    bResult = GraphicHelper::getThumbnailReplacement_Impl(nResID, xStream);
             }
             else
             {
@@ -3606,7 +3591,7 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
                 if ( pMetaFile )
                 {
                     bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(
-                                pMetaFile.get(), bSigned, xStream );
+                                pMetaFile.get(), xStream);
                 }
             }
         }

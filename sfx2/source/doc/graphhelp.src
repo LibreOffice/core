@@ -19,11 +19,6 @@
 
 #include "doc.hrc"
 
-Bitmap BMP_SIGNATURE
-{
-    File = "signet.png";
-};
-
 Bitmap BMP_128X128_CALC_DOC
 {
     File = "128x128_calc_doc-p.png";

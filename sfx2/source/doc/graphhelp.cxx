@@ -65,10 +65,6 @@
 
 using namespace ::com::sun::star;
 
-#define THUMBNAIL_RESOLUTION 256
-
-//---------------------------------------------------------------
-// static
 SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat )
 {
     SvMemoryStream* pResult = NULL;
@@ -266,7 +262,6 @@ sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapE
 
 // static
 sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
-                                                        sal_Bool bSigned,
                                                         const uno::Reference< io::XStream >& xStream )
 {
     sal_Bool bResult = sal_False;
@@ -278,20 +273,13 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
     if ( pMetaFile && pStream && !pStream->GetError() )
     {
         BitmapEx aResultBitmap;
-        BitmapEx* pSignatureBitmap = NULL;
 
-        if ( bSigned )
-            pSignatureBitmap = new BitmapEx( SfxResId( BMP_SIGNATURE ) );
-
-        bResult = pMetaFile->CreateThumbnail(aResultBitmap, THUMBNAIL_RESOLUTION, pSignatureBitmap);
+        bResult = pMetaFile->CreateThumbnail(aResultBitmap);
 
         if ( bResult )
             bResult = ( !aResultBitmap.IsEmpty()
                         && GraphicConverter::Export( *pStream, aResultBitmap, CVT_PNG ) == 0
                         && ( pStream->Flush(), !pStream->GetError() ) );
-
-        if ( pSignatureBitmap )
-            delete pSignatureBitmap;
 
         delete pStream;
     }
@@ -299,41 +287,6 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
     return bResult;
 }
 
-//---------------------------------------------------------------
-// static
-sal_Bool GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx& aBitmap,
-                                                                 const uno::Reference< io::XStream >& xStream )
-{
-    sal_Bool bResult = sal_False;
-    SvStream* pStream = NULL;
-
-    if ( xStream.is() )
-        pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
-
-    if ( pStream && !pStream->GetError() )
-    {
-        BitmapEx aResultBitmap;
-        BitmapEx aSignatureBitmap( SfxResId( BMP_SIGNATURE ) );
-
-        bResult = mergeBitmaps_Impl( aBitmap,
-                                    aSignatureBitmap,
-                                    Rectangle( Point(), aBitmap.GetSizePixel() ),
-                                    aResultBitmap );
-
-        if ( bResult )
-        {
-            bResult = ( !aResultBitmap.IsEmpty()
-                        && GraphicConverter::Export( *pStream, aResultBitmap, CVT_PNG ) == 0
-                        && ( pStream->Flush(), !pStream->GetError() ) );
-        }
-
-        delete pStream;
-    }
-
-    return bResult;
-}
-
-//---------------------------------------------------------------
 // static
 sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
 {

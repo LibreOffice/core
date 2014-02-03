@@ -427,13 +427,11 @@ public:
 
     sal_Bool                    GenerateAndStoreThumbnail(
                                     sal_Bool bEncrypted,
-                                    sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor );
 
     sal_Bool                    WriteThumbnail(
                                     sal_Bool bEncrypted,
-                                    sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 

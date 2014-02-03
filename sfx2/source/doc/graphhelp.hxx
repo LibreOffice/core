@@ -46,11 +46,6 @@ public:
 
     static sal_Bool getThumbnailFormatFromGDI_Impl(
             GDIMetaFile* pMetaFile,
-            sal_Bool bSigned,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
-
-    static sal_Bool getSignedThumbnailFormatFromBitmap_Impl(
-            const BitmapEx& aBitmap,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
     static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName,
