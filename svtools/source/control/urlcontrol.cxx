@@ -18,8 +18,9 @@
  */
 
 
+#include <svl/filenotation.hxx>
 #include <svtools/urlcontrol.hxx>
-#include "svl/filenotation.hxx"
+#include <vcl/layout.hxx>
 
 //.........................................................................
 namespace svt
@@ -31,9 +32,24 @@ namespace svt
     //=====================================================================
     //---------------------------------------------------------------------
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
-        :SvtURLBox(_pParent, _rId, INET_PROT_FILE)
+        : SvtURLBox(_pParent, _rId, INET_PROT_FILE)
     {
         DisableHistory();
+    }
+
+    OFileURLControl::OFileURLControl(Window* _pParent, WinBits nStyle)
+        : SvtURLBox(_pParent, nStyle, INET_PROT_FILE)
+    {
+        DisableHistory();
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOFileURLControl(Window *pParent, VclBuilder::stringmap &)
+    {
+        WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
+                           WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
+        OFileURLControl* pListBox = new OFileURLControl(pParent, nWinBits);
+        pListBox->EnableAutoSize(true);
+        return pListBox;
     }
 
     //---------------------------------------------------------------------

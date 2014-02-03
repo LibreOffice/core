@@ -18,7 +18,6 @@
  */
 
 #include "doclinkdialog.hxx"
-#include "doclinkdialog.hrc"
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
@@ -45,65 +44,59 @@ namespace svx
     //==================================================================
     //------------------------------------------------------------------
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
-        :ModalDialog( _pParent, CUI_RES(DLG_DOCUMENTLINK) )
-        ,m_aURLLabel        (this, CUI_RES(FT_URL))
-        ,m_aURL             (this, CUI_RES(CMB_URL))
-        ,m_aBrowseFile      (this, CUI_RES(PB_BROWSEFILE))
-        ,m_aNameLabel       (this, CUI_RES(FT_NAME))
-        ,m_aName            (this, CUI_RES(ET_NAME))
-        ,m_aBottomLine      (this, CUI_RES(FL_BOTTOM))
-        ,m_aOK              (this, CUI_RES(BTN_OK))
-        ,m_aCancel          (this, CUI_RES(BTN_CANCEL))
-        ,m_aHelp            (this, CUI_RES(BTN_HELP))
+        : ModalDialog(_pParent, "DatabaseLinkDialog",
+            "cui/ui/databaselinkdialog.ui")
         ,m_bCreatingNew(_bCreateNew)
     {
-        OUString sText = CUI_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK );
-        SetText(sText);
+        get(m_pURL, "url");
+        get(m_pOK, "ok");
+        get(m_pName, "name");
+        get(m_pBrowseFile, "browse");
 
-        FreeResource();
+        if (!m_bCreatingNew)
+            SetText(get<FixedText>("alttitle")->GetText());
 
-        OUString sTemp("*.odb");
-        m_aURL.SetFilter(sTemp);
+        m_pURL->SetFilter("*.odb");
 
-        m_aName.SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
-        m_aURL.SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
-        m_aBrowseFile.SetClickHdl( LINK(this, ODocumentLinkDialog, OnBrowseFile) );
-        m_aOK.SetClickHdl( LINK(this, ODocumentLinkDialog, OnOk) );
+        m_pName->SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
+        m_pURL->SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
+        m_pBrowseFile->SetClickHdl( LINK(this, ODocumentLinkDialog, OnBrowseFile) );
+        m_pOK->SetClickHdl( LINK(this, ODocumentLinkDialog, OnOk) );
 
-        m_aURL.SetDropDownLineCount(10);
+        m_pURL->SetDropDownLineCount(10);
 
         validate();
 
-        m_aURL.SetDropDownLineCount( 5 );
+        m_pURL->SetDropDownLineCount( 5 );
     }
 
     //------------------------------------------------------------------
-    void ODocumentLinkDialog::set( const OUString& _rName, const OUString& _rURL )
+    void ODocumentLinkDialog::setLink( const OUString& _rName, const OUString& _rURL )
     {
-        m_aName.SetText(_rName);
-        m_aURL.SetText(_rURL);
+        m_pName->SetText(_rName);
+        m_pURL->SetText(_rURL);
         validate();
     }
 
     //------------------------------------------------------------------
-    void ODocumentLinkDialog::get( OUString& _rName, OUString& _rURL ) const
+    void ODocumentLinkDialog::getLink( OUString& _rName, OUString& _rURL ) const
     {
-        _rName = m_aName.GetText();
-        _rURL = m_aURL.GetText();
+        _rName = m_pName->GetText();
+        _rURL = m_pURL->GetText();
     }
 
     //------------------------------------------------------------------
     void ODocumentLinkDialog::validate( )
     {
 
-        m_aOK.Enable( ( !m_aName.GetText().isEmpty()) && ( !m_aURL.GetText().isEmpty() ) );
+        m_pOK->Enable( ( !m_pName->GetText().isEmpty()) && ( !m_pURL->GetText().isEmpty() ) );
     }
 
     //------------------------------------------------------------------
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk)
     {
         // get the current URL
-        OUString sURL = m_aURL.GetText();
+        OUString sURL = m_pURL->GetText();
         OFileNotation aTransformer(sURL);
         sURL = aTransformer.get(OFileNotation::N_URL);
 
@@ -122,7 +115,7 @@ namespace svx
         if (!bFileExists)
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_DOESNOTEXIST);
-            sMsg = sMsg.replaceFirst("$file$", m_aURL.GetText());
+            sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
             return 0L;
@@ -131,13 +124,13 @@ namespace svx
         if ( aURL.GetProtocol() != INET_PROT_FILE )
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
-            sMsg = sMsg.replaceFirst("$file$", m_aURL.GetText());
+            sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
             return 0L;
         }
 
-        OUString sCurrentText = m_aName.GetText();
+        OUString sCurrentText = m_pName->GetText();
         if ( m_aNameValidator.IsSet() )
         {
             if ( !m_aNameValidator.Call( &sCurrentText ) )
@@ -147,8 +140,8 @@ namespace svx
                 InfoBox aError(this, sMsg);
                 aError.Execute();
 
-                m_aName.SetSelection(Selection(0,sCurrentText.getLength()));
-                m_aName.GrabFocus();
+                m_pName->SetSelection(Selection(0,sCurrentText.getLength()));
+                m_pName->GrabFocus();
                 return 0L;
             }
         }
@@ -169,7 +162,7 @@ namespace svx
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
 
-        OUString sPath = m_aURL.GetText();
+        OUString sPath = m_pURL->GetText();
         if (!sPath.isEmpty())
         {
             OFileNotation aTransformer( sPath, OFileNotation::N_SYSTEM );
@@ -179,24 +172,24 @@ namespace svx
         if (0 != aFileDlg.Execute())
             return 0L;
 
-        if (m_aName.GetText().isEmpty())
+        if (m_pName->GetText().isEmpty())
         {   // default the name to the base of the chosen URL
             INetURLObject aParser;
 
             aParser.SetSmartProtocol(INET_PROT_FILE);
             aParser.SetSmartURL(aFileDlg.GetPath());
 
-            m_aName.SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET));
+            m_pName->SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET));
 
-            m_aName.SetSelection(Selection(0,m_aName.GetText().getLength()));
-            m_aName.GrabFocus();
+            m_pName->SetSelection(Selection(0,m_pName->GetText().getLength()));
+            m_pName->GrabFocus();
         }
         else
-            m_aURL.GrabFocus();
+            m_pURL->GrabFocus();
 
         // get the path in system notation
         OFileNotation aTransformer(aFileDlg.GetPath(), OFileNotation::N_URL);
-        m_aURL.SetText(aTransformer.get(OFileNotation::N_SYSTEM));
+        m_pURL->SetText(aTransformer.get(OFileNotation::N_SYSTEM));
 
         validate();
         return 0L;

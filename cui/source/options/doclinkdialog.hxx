@@ -40,16 +40,10 @@ namespace svx
     class ODocumentLinkDialog : public ModalDialog
     {
     protected:
-        FixedText               m_aURLLabel;
-        ::svt::OFileURLControl  m_aURL;
-        PushButton              m_aBrowseFile;
-        FixedText               m_aNameLabel;
-        Edit                    m_aName;
-
-        FixedLine               m_aBottomLine;
-        OKButton                m_aOK;
-        CancelButton            m_aCancel;
-        HelpButton              m_aHelp;
+        ::svt::OFileURLControl* m_pURL;
+        PushButton*             m_pBrowseFile;
+        Edit*                   m_pName;
+        OKButton*               m_pOK;
 
         sal_Bool                m_bCreatingNew;
 
@@ -64,8 +58,8 @@ namespace svx
         void    setNameValidator( const Link& _rValidator ) { m_aNameValidator = _rValidator; }
         Link    getNameValidator( ) const { return m_aNameValidator; }
 
-        void    set( const  OUString& _rName, const   OUString& _rURL );
-        void    get(        OUString& _rName,         OUString& _rURL ) const;
+        void    setLink( const  OUString& _rName, const   OUString& _rURL );
+        void    getLink(        OUString& _rName,         OUString& _rURL ) const;
 
     protected:
         DECL_LINK(OnTextModified, void *);

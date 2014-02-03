@@ -415,13 +415,13 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);
 
-    aDlg.set(_sOldName,_sOldLocation);
+    aDlg.setLink(_sOldName,_sOldLocation);
     aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
 
     if ( aDlg.Execute() == RET_OK )
     {
         OUString sNewName,sNewLocation;
-        aDlg.get(sNewName,sNewLocation);
+        aDlg.getLink(sNewName,sNewLocation);
         if ( _pEntry == NULL || sNewName != _sOldName || sNewLocation != _sOldLocation )
         {
             if ( _pEntry )

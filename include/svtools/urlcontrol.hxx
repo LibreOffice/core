@@ -38,6 +38,7 @@ namespace svt
 
     public:
         OFileURLControl(Window* _pParent, const ResId& _rId);
+        OFileURLControl(Window* _pParent, WinBits nStyle);
 
     protected:
         virtual bool        PreNotify( NotifyEvent& rNEvt );
