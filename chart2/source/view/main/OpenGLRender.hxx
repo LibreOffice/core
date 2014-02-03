@@ -7,17 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <vcl/font.hxx>
-
 #if defined( MACOSX )
 #elif defined( UNX )
+#if defined( UNX )
 #include <prex.h>
 #include "GL/glxew.h"
 #include <postx.h>
-#endif
-
-#if defined( _WIN32 )
+#elif defined( _WIN32 )
 #include "prewin.h"
 #include "windows.h"
 #include "postwin.h"
@@ -36,17 +32,16 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <vcl/font.hxx>
+
 
 #if defined( _WIN32 )
-#include <GL/glu.h>
 #include <GL/glext.h>
 #include <GL/wglext.h>
 #elif defined( MACOSX )
 #elif defined( UNX )
-
-#include <GL/glu.h>
 #include <GL/glext.h>
-
 #define GLX_GLXEXT_PROTOTYPES 1
 #include <GL/glx.h>
 #include <GL/glxext.h>
