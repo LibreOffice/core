@@ -51,7 +51,7 @@ namespace utl
     //==================================================================================================================
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseListener_Base;
-    class SAL_DLLPRIVATE CloseListener_Impl : public CloseListener_Base
+    class CloseListener_Impl : public CloseListener_Base
     {
     public:
         CloseListener_Impl()
@@ -103,7 +103,7 @@ namespace utl
     //==================================================================================================================
     //= CloseVeto_Data
     //==================================================================================================================
-    struct SAL_DLLPRIVATE CloseVeto_Data
+    struct CloseVeto_Data
     {
         Reference< XCloseable >                 xCloseable;
         ::rtl::Reference< CloseListener_Impl >  pListener;
