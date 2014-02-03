@@ -35,7 +35,6 @@
 #include <osl/diagnose.h>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
-#include "queryfilter.hrc"
 #include "dbustrings.hrc"
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
@@ -69,132 +68,126 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XSingleSelectQueryComposer >& _rxComposer,
                              const Reference< XNameAccess>& _rxCols
                              )
-    :ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
-    ,aLB_WHEREFIELD1    ( this, ModuleRes( LB_WHEREFIELD1 ) )
-    ,aLB_WHERECOMP1     ( this, ModuleRes( LB_WHERECOMP1 ) )
-    ,aET_WHEREVALUE1    ( this, ModuleRes( ET_WHEREVALUE1 ) )
-    ,aLB_WHERECOND2     ( this, ModuleRes( LB_WHERECOND2 ) )
-    ,aLB_WHEREFIELD2    ( this, ModuleRes( LB_WHEREFIELD2 ) )
-    ,aLB_WHERECOMP2     ( this, ModuleRes( LB_WHERECOMP2 ) )
-    ,aET_WHEREVALUE2    ( this, ModuleRes( ET_WHEREVALUE2 ) )
-    ,aLB_WHERECOND3     ( this, ModuleRes( LB_WHERECOND3 ) )
-    ,aLB_WHEREFIELD3    ( this, ModuleRes( LB_WHEREFIELD3 ) )
-    ,aLB_WHERECOMP3     ( this, ModuleRes( LB_WHERECOMP3 ) )
-    ,aET_WHEREVALUE3    ( this, ModuleRes( ET_WHEREVALUE3 ) )
-    ,aFT_WHEREFIELD     ( this, ModuleRes( FT_WHEREFIELD ) )
-    ,aFT_WHERECOMP      ( this, ModuleRes( FT_WHERECOMP ) )
-    ,aFT_WHEREVALUE     ( this, ModuleRes( FT_WHEREVALUE ) )
-    ,aFT_WHEREOPER      ( this, ModuleRes( FT_WHEREOPER ) )
-    ,aFL_FIELDS         ( this, ModuleRes( FL_FIELDS ) )
-    ,aBT_OK             ( this, ModuleRes( BT_OK ) )
-    ,aBT_CANCEL         ( this, ModuleRes( BT_CANCEL ) )
-    ,aBT_HELP           ( this, ModuleRes( BT_HELP ) )
-    ,aSTR_NOENTRY       ( ModuleRes( STR_NOENTRY ) )
-    ,aSTR_COMPARE_OPERATORS( ModuleRes( STR_COMPARE_OPERATORS ) )
+    : ModalDialog(pParent, "QueryFilterDialog",
+        "dbaccess/ui/queryfilterdialog.ui")
+
     ,m_xQueryComposer(_rxComposer)
     ,m_xColumns( _rxCols )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )
     ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
 {
-    // Write the String for noEntry into the ListBoxes of the field names
-    aLB_WHEREFIELD1.InsertEntry( aSTR_NOENTRY );
-    aLB_WHEREFIELD2.InsertEntry( aSTR_NOENTRY );
-    aLB_WHEREFIELD3.InsertEntry( aSTR_NOENTRY );
+    get(m_pLB_WHEREFIELD1, "field1");
+    get(m_pLB_WHERECOMP1, "cond1");
+    get(m_pET_WHEREVALUE1, "value1");
 
-    try
+    get(m_pLB_WHERECOND2, "op2");
+    get(m_pLB_WHEREFIELD2, "field2");
+    get(m_pLB_WHERECOMP2, "cond2");
+    get(m_pET_WHEREVALUE2, "value2");
+
+    get(m_pLB_WHERECOND3, "op3");
+    get(m_pLB_WHEREFIELD3, "field3");
+    get(m_pLB_WHERECOMP3, "cond3");
+    get(m_pET_WHEREVALUE3, "value3");
+
+    //set all condition preferred width to max width
+    //if all entries exist
+    Size aSize(m_pLB_WHERECOMP1->get_preferred_size());
+    m_pLB_WHERECOMP1->set_width_request(aSize.Width());
+    m_pLB_WHERECOMP2->set_width_request(aSize.Width());
+    m_pLB_WHERECOMP3->set_width_request(aSize.Width());
+    sal_uInt16 nEntryCount =  m_pLB_WHERECOMP1->GetEntryCount();
+    for (sal_uInt16 i = 0; i < nEntryCount; ++i)
     {
-        // ... also write it into the remaining fields
-        Sequence< OUString> aNames = m_xColumns->getElementNames();
-        const OUString* pIter = aNames.getConstArray();
-        const OUString* pEnd   = pIter + aNames.getLength();
-        Reference<XPropertySet> xColumn;
-        for(;pIter != pEnd;++pIter)
-        {
-            try
-            {
-                xColumn.set( m_xColumns->getByName( *pIter ), UNO_QUERY_THROW );
-
-                sal_Int32 nDataType( 0 );
-                OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= nDataType );
-                sal_Int32 eColumnSearch = ::dbtools::getSearchColumnFlag( m_xConnection, nDataType );
-                if ( eColumnSearch == ColumnSearch::NONE )
-                    continue;
-
-                sal_Bool bIsSearchable( sal_True );
-                OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISSEARCHABLE ) >>= bIsSearchable );
-                if ( !bIsSearchable )
-                    continue;
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-            aLB_WHEREFIELD1.InsertEntry( *pIter );
-            aLB_WHEREFIELD2.InsertEntry( *pIter );
-            aLB_WHEREFIELD3.InsertEntry( *pIter );
-        }
-
-        Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY)->getColumns();
-        aNames = xSelectColumns->getElementNames();
-        pIter = aNames.getConstArray();
-        pEnd   = pIter + aNames.getLength();
-        for(;pIter != pEnd;++pIter)
-        {
-            // don't insert a column name twice
-            if ( !m_xColumns->hasByName(*pIter) )
-            {
-                xColumn.set(xSelectColumns->getByName(*pIter),UNO_QUERY);
-                OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
-                sal_Int32 nDataType(0);
-                xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
-                sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
-                // TODO
-                // !pColumn->IsFunction()
-                if(eColumnSearch != ColumnSearch::NONE)
-                {
-                    aLB_WHEREFIELD1.InsertEntry( *pIter );
-                    aLB_WHEREFIELD2.InsertEntry( *pIter );
-                    aLB_WHEREFIELD3.InsertEntry( *pIter );
-                }
-            }
-        }
-        // initialize the listboxes with noEntry
-        aLB_WHEREFIELD1.SelectEntryPos(0);
-        aLB_WHEREFIELD2.SelectEntryPos(0);
-        aLB_WHEREFIELD3.SelectEntryPos(0);
-
-        // insert the criteria into the dialog
-        Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
-        fillLines(aValues);
-        aValues = m_xQueryComposer->getStructuredHavingClause();
-        fillLines(aValues);
-
+        if (i > 0)
+            m_aSTR_COMPARE_OPERATORS += ";";
+        m_aSTR_COMPARE_OPERATORS += m_pLB_WHERECOMP1->GetEntry(i);
     }
-    catch(const Exception&)
+    m_pLB_WHERECOMP1->Clear();
+
+    // ... also write it into the remaining fields
+    Sequence< OUString> aNames = m_xColumns->getElementNames();
+    const OUString* pIter = aNames.getConstArray();
+    const OUString* pEnd   = pIter + aNames.getLength();
+    Reference<XPropertySet> xColumn;
+    for(;pIter != pEnd;++pIter)
     {
-        FreeResource();
-        throw;
+        try
+        {
+            xColumn.set( m_xColumns->getByName( *pIter ), UNO_QUERY_THROW );
+
+            sal_Int32 nDataType( 0 );
+            OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= nDataType );
+            sal_Int32 eColumnSearch = ::dbtools::getSearchColumnFlag( m_xConnection, nDataType );
+            if ( eColumnSearch == ColumnSearch::NONE )
+                continue;
+
+            sal_Bool bIsSearchable( sal_True );
+            OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISSEARCHABLE ) >>= bIsSearchable );
+            if ( !bIsSearchable )
+                continue;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        m_pLB_WHEREFIELD1->InsertEntry( *pIter );
+        m_pLB_WHEREFIELD2->InsertEntry( *pIter );
+        m_pLB_WHEREFIELD3->InsertEntry( *pIter );
     }
+
+    Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY)->getColumns();
+    aNames = xSelectColumns->getElementNames();
+    pIter = aNames.getConstArray();
+    pEnd   = pIter + aNames.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        // don't insert a column name twice
+        if ( !m_xColumns->hasByName(*pIter) )
+        {
+            xColumn.set(xSelectColumns->getByName(*pIter),UNO_QUERY);
+            OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
+            sal_Int32 nDataType(0);
+            xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
+            sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
+            // TODO
+            // !pColumn->IsFunction()
+            if(eColumnSearch != ColumnSearch::NONE)
+            {
+                m_pLB_WHEREFIELD1->InsertEntry( *pIter );
+                m_pLB_WHEREFIELD2->InsertEntry( *pIter );
+                m_pLB_WHEREFIELD3->InsertEntry( *pIter );
+            }
+        }
+    }
+    // initialize the listboxes with noEntry
+    m_pLB_WHEREFIELD1->SelectEntryPos(0);
+    m_pLB_WHEREFIELD2->SelectEntryPos(0);
+    m_pLB_WHEREFIELD3->SelectEntryPos(0);
+
+    // insert the criteria into the dialog
+    Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
+    fillLines(aValues);
+    aValues = m_xQueryComposer->getStructuredHavingClause();
+    fillLines(aValues);
 
     EnableLines();
 
-    aLB_WHEREFIELD1.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
-    aLB_WHEREFIELD2.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
-    aLB_WHEREFIELD3.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
+    m_pLB_WHEREFIELD1->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
+    m_pLB_WHEREFIELD2->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
+    m_pLB_WHEREFIELD3->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectHdl));
 
-    aLB_WHERECOMP1.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
-    aLB_WHERECOMP2.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
-    aLB_WHERECOMP3.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
+    m_pLB_WHERECOMP1->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
+    m_pLB_WHERECOMP2->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
+    m_pLB_WHERECOMP3->SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
 
-    aET_WHEREVALUE1.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
-    aET_WHEREVALUE2.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
-    aET_WHEREVALUE3.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+    m_pET_WHEREVALUE1->SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+    m_pET_WHEREVALUE2->SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+    m_pET_WHEREVALUE3->SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
 
-    if ( aET_WHEREVALUE1.IsEnabled() )
-        aET_WHEREVALUE1.GrabFocus();
-
-    FreeResource();
+    if ( m_pET_WHEREVALUE1->IsEnabled() )
+        m_pET_WHEREVALUE1->GrabFocus();
 }
 
 DlgFilterCrit::~DlgFilterCrit()
@@ -207,8 +200,8 @@ DlgFilterCrit::~DlgFilterCrit()
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
-    for ( sal_Int32 i=0; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
-        if ( aSTR_COMPARE_OPERATORS.getToken(i, ';') == _rSelectedPredicate )
+    for ( sal_Int32 i=0; i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';'); ++i)
+        if ( m_aSTR_COMPARE_OPERATORS.getToken(i, ';') == _rSelectedPredicate )
         {
             nPredicateIndex = i;
             break;
@@ -422,17 +415,17 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
 {
     // the name
     OUString sField;
-    if ( &_rValueInput == &aET_WHEREVALUE1 )
+    if ( &_rValueInput == m_pET_WHEREVALUE1 )
     {
-        sField = aLB_WHEREFIELD1.GetSelectEntry();
+        sField = m_pLB_WHEREFIELD1->GetSelectEntry();
     }
-    else if ( &_rValueInput == &aET_WHEREVALUE2 )
+    else if ( &_rValueInput == m_pET_WHEREVALUE2 )
     {
-        sField = aLB_WHEREFIELD2.GetSelectEntry();
+        sField = m_pLB_WHEREFIELD2->GetSelectEntry();
     }
-    else if ( &_rValueInput == &aET_WHEREVALUE3 )
+    else if ( &_rValueInput == m_pET_WHEREVALUE3 )
     {
-        sField = aLB_WHEREFIELD3.GetSelectEntry();
+        sField = m_pLB_WHEREFIELD3->GetSelectEntry();
     }
     else {
         OSL_FAIL( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
@@ -516,23 +509,23 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     switch( nIdx )
     {
         case 0:
-            pColumnListControl = &aLB_WHEREFIELD1;
-            pPredicateListControl = &aLB_WHERECOMP1;
-            pPredicateValueControl = &aET_WHEREVALUE1;
+            pColumnListControl = m_pLB_WHEREFIELD1;
+            pPredicateListControl = m_pLB_WHERECOMP1;
+            pPredicateValueControl = m_pET_WHEREVALUE1;
             break;
         case 1:
-            aLB_WHERECOND2.SelectEntryPos( _bOr ? 1 : 0 );
+            m_pLB_WHERECOND2->SelectEntryPos( _bOr ? 1 : 0 );
 
-            pColumnListControl = &aLB_WHEREFIELD2;
-            pPredicateListControl = &aLB_WHERECOMP2;
-            pPredicateValueControl = &aET_WHEREVALUE2;
+            pColumnListControl = m_pLB_WHEREFIELD2;
+            pPredicateListControl = m_pLB_WHERECOMP2;
+            pPredicateValueControl = m_pET_WHEREVALUE2;
             break;
         case 2:
-            aLB_WHERECOND3.SelectEntryPos( _bOr ? 1 : 0 );
+            m_pLB_WHERECOND3->SelectEntryPos( _bOr ? 1 : 0 );
 
-            pColumnListControl = &aLB_WHEREFIELD3;
-            pPredicateListControl = &aLB_WHERECOMP3;
-            pPredicateValueControl = &aET_WHEREVALUE3;
+            pColumnListControl = m_pLB_WHEREFIELD3;
+            pPredicateListControl = m_pLB_WHERECOMP3;
+            pPredicateValueControl = m_pET_WHEREVALUE3;
             break;
     }
 
@@ -576,123 +569,123 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const OUString& rField )
 void DlgFilterCrit::EnableLines()
 {
     // enabling/disabling of whole lines
-    if( LbPos(aLB_WHEREFIELD1) == 0 )
+    if( LbPos(*m_pLB_WHEREFIELD1) == 0 )
     {
-        aLB_WHEREFIELD2.Disable();
-        aLB_WHERECOND2.Disable();
-        aLB_WHERECOMP2.Disable();
-        aET_WHEREVALUE2.Disable();
+        m_pLB_WHEREFIELD2->Disable();
+        m_pLB_WHERECOND2->Disable();
+        m_pLB_WHERECOMP2->Disable();
+        m_pET_WHEREVALUE2->Disable();
 
-        aLB_WHEREFIELD3.Disable();
-        aLB_WHERECOND3.Disable();
-        aLB_WHERECOMP3.Disable();
-        aET_WHEREVALUE3.Disable();
+        m_pLB_WHEREFIELD3->Disable();
+        m_pLB_WHERECOND3->Disable();
+        m_pLB_WHERECOMP3->Disable();
+        m_pET_WHEREVALUE3->Disable();
     }
     else
     {
-        aLB_WHEREFIELD2.Enable();
-        aLB_WHERECOND2.Enable();
-        aLB_WHERECOMP2.Enable();
-        aET_WHEREVALUE2.Enable();
+        m_pLB_WHEREFIELD2->Enable();
+        m_pLB_WHERECOND2->Enable();
+        m_pLB_WHERECOMP2->Enable();
+        m_pET_WHEREVALUE2->Enable();
 
-        aLB_WHEREFIELD3.Enable();
-        aLB_WHERECOND3.Enable();
-        aLB_WHERECOMP3.Enable();
-        aET_WHEREVALUE3.Enable();
+        m_pLB_WHEREFIELD3->Enable();
+        m_pLB_WHERECOND3->Enable();
+        m_pLB_WHERECOMP3->Enable();
+        m_pET_WHEREVALUE3->Enable();
     }
 
-    if( LbPos(aLB_WHEREFIELD2) == 0 )
+    if( LbPos(*m_pLB_WHEREFIELD2) == 0 )
     {
-        aLB_WHEREFIELD3.Disable();
-        aLB_WHERECOND3.Disable();
-        aLB_WHERECOMP3.Disable();
-        aET_WHEREVALUE3.Disable();
+        m_pLB_WHEREFIELD3->Disable();
+        m_pLB_WHERECOND3->Disable();
+        m_pLB_WHERECOMP3->Disable();
+        m_pET_WHEREVALUE3->Disable();
     }
     else
     {
-        aLB_WHEREFIELD3.Enable();
-        aLB_WHERECOND3.Enable();
-        aLB_WHERECOMP3.Enable();
-        aET_WHEREVALUE3.Enable();
+        m_pLB_WHEREFIELD3->Enable();
+        m_pLB_WHERECOND3->Enable();
+        m_pLB_WHERECOMP3->Enable();
+        m_pET_WHEREVALUE3->Enable();
     }
 
     // comparison field equal to NOENTRY
-    if( LbPos(aLB_WHEREFIELD1) == 0 )
+    if( LbPos(*m_pLB_WHEREFIELD1) == 0 )
     {
-        aLB_WHERECOMP1.Disable();
-        aET_WHEREVALUE1.Disable();
+        m_pLB_WHERECOMP1->Disable();
+        m_pET_WHEREVALUE1->Disable();
     }
     else
     {
-        aLB_WHEREFIELD1.Enable();
-        aLB_WHERECOMP1.Enable();
-        aET_WHEREVALUE1.Enable();
+        m_pLB_WHEREFIELD1->Enable();
+        m_pLB_WHERECOMP1->Enable();
+        m_pET_WHEREVALUE1->Enable();
     }
 
-    if( LbPos(aLB_WHEREFIELD2) == 0 )
+    if( LbPos(*m_pLB_WHEREFIELD2) == 0 )
     {
-        aLB_WHERECOND2.Disable();
-        aLB_WHERECOMP2.Disable();
-        aET_WHEREVALUE2.Disable();
+        m_pLB_WHERECOND2->Disable();
+        m_pLB_WHERECOMP2->Disable();
+        m_pET_WHEREVALUE2->Disable();
     }
     else
     {
-        aLB_WHERECOND2.Enable();
-        aLB_WHEREFIELD2.Enable();
-        aLB_WHERECOMP2.Enable();
-        aET_WHEREVALUE2.Enable();
+        m_pLB_WHERECOND2->Enable();
+        m_pLB_WHEREFIELD2->Enable();
+        m_pLB_WHERECOMP2->Enable();
+        m_pET_WHEREVALUE2->Enable();
     }
 
-    if( LbPos(aLB_WHEREFIELD3) == 0 )
+    if( LbPos(*m_pLB_WHEREFIELD3) == 0 )
     {
-        aLB_WHERECOND3.Disable();
-        aLB_WHERECOMP3.Disable();
-        aET_WHEREVALUE3.Disable();
+        m_pLB_WHERECOND3->Disable();
+        m_pLB_WHERECOMP3->Disable();
+        m_pET_WHEREVALUE3->Disable();
     }
     else
     {
-        aLB_WHERECOND3.Enable();
-        aLB_WHERECOND3.Enable();
-        aLB_WHEREFIELD3.Enable();
-        aLB_WHERECOMP3.Enable();
-        aET_WHEREVALUE3.Enable();
+        m_pLB_WHERECOND3->Enable();
+        m_pLB_WHERECOND3->Enable();
+        m_pLB_WHEREFIELD3->Enable();
+        m_pLB_WHERECOMP3->Enable();
+        m_pET_WHEREVALUE3->Enable();
     }
 
     // comparison operator equal to ISNULL or ISNOTNULL
-    if(aLB_WHERECOMP1.GetEntryCount() > 2 &&
-        ((LbPos(aLB_WHERECOMP1) == aLB_WHERECOMP1.GetEntryCount()-1) ||
-         (LbPos(aLB_WHERECOMP1) == aLB_WHERECOMP1.GetEntryCount()-2)) )
-        aET_WHEREVALUE1.Disable();
+    if(m_pLB_WHERECOMP1->GetEntryCount() > 2 &&
+        ((LbPos(*m_pLB_WHERECOMP1) == m_pLB_WHERECOMP1->GetEntryCount()-1) ||
+         (LbPos(*m_pLB_WHERECOMP1) == m_pLB_WHERECOMP1->GetEntryCount()-2)) )
+        m_pET_WHEREVALUE1->Disable();
 
-    if(aLB_WHERECOMP2.GetEntryCount() > 2 &&
-        ((LbPos(aLB_WHERECOMP2) == aLB_WHERECOMP2.GetEntryCount()-1) ||
-         (LbPos(aLB_WHERECOMP2) == aLB_WHERECOMP2.GetEntryCount()-2)) )
-        aET_WHEREVALUE2.Disable();
+    if(m_pLB_WHERECOMP2->GetEntryCount() > 2 &&
+        ((LbPos(*m_pLB_WHERECOMP2) == m_pLB_WHERECOMP2->GetEntryCount()-1) ||
+         (LbPos(*m_pLB_WHERECOMP2) == m_pLB_WHERECOMP2->GetEntryCount()-2)) )
+        m_pET_WHEREVALUE2->Disable();
 
-    if(aLB_WHERECOMP3.GetEntryCount() > 2 &&
-        ((LbPos(aLB_WHERECOMP3) == aLB_WHERECOMP3.GetEntryCount()-1) ||
-         (LbPos(aLB_WHERECOMP3) == aLB_WHERECOMP3.GetEntryCount()-2)) )
-        aET_WHEREVALUE3.Disable();
+    if(m_pLB_WHERECOMP3->GetEntryCount() > 2 &&
+        ((LbPos(*m_pLB_WHERECOMP3) == m_pLB_WHERECOMP3->GetEntryCount()-1) ||
+         (LbPos(*m_pLB_WHERECOMP3) == m_pLB_WHERECOMP3->GetEntryCount()-2)) )
+        m_pET_WHEREVALUE3->Disable();
 }
 
 IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 {
     OUString aName;
     ListBox* pComp;
-    if(pListBox == &aLB_WHEREFIELD1)
+    if(pListBox == m_pLB_WHEREFIELD1)
     {
-        aName = LbText(aLB_WHEREFIELD1);
-        pComp = &aLB_WHERECOMP1;
+        aName = LbText(*m_pLB_WHEREFIELD1);
+        pComp = m_pLB_WHERECOMP1;
     }
-    else if(pListBox == &aLB_WHEREFIELD2)
+    else if(pListBox == m_pLB_WHEREFIELD2)
     {
-        aName = LbText(aLB_WHEREFIELD2);
-        pComp = &aLB_WHERECOMP2;
+        aName = LbText(*m_pLB_WHEREFIELD2);
+        pComp = m_pLB_WHERECOMP2;
     }
     else
     {
-        aName = LbText(aLB_WHEREFIELD3);
-        pComp = &aLB_WHERECOMP3;
+        aName = LbText(*m_pLB_WHEREFIELD3);
+        pComp = m_pLB_WHERECOMP3;
     }
 
     pComp->Clear();
@@ -706,21 +699,21 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 
         if(eColumnSearch  == ColumnSearch::FULL)
         {
-            for(sal_Int32 i=0;i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';');i++)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+            for(sal_Int32 i=0;i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';');i++)
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else if(eColumnSearch == ColumnSearch::CHAR)
         {
             for(sal_Int32 i=6; i<10; i++)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else if(eColumnSearch == ColumnSearch::BASIC)
         {
             sal_Int32 i;
             for( i = 0; i < 6; i++ )
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
-            for(i=8; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+            for(i=8; i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';'); ++i)
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else
         {
@@ -747,10 +740,10 @@ void DlgFilterCrit::BuildWherePart()
     aFilter.realloc(1);
     aHaving.realloc(1);
 
-    if( LbPos(aLB_WHEREFIELD1) != 0 )
+    if( LbPos(*m_pLB_WHEREFIELD1) != 0 )
     {
         PropertyValue aValue;
-        if ( getCondition(aLB_WHEREFIELD1,aLB_WHERECOMP1,aET_WHEREVALUE1,aValue) )
+        if ( getCondition(*m_pLB_WHEREFIELD1,*m_pLB_WHERECOMP1,*m_pET_WHEREVALUE1,aValue) )
         {
             aHaving[0].realloc(1);
             aHaving[0][0] = aValue;
@@ -762,14 +755,14 @@ void DlgFilterCrit::BuildWherePart()
         }
     }
 
-    if( LbPos(aLB_WHEREFIELD2) != 0 )
+    if( LbPos(*m_pLB_WHEREFIELD2) != 0 )
     {
         PropertyValue aValue;
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
-        if ( getCondition(aLB_WHEREFIELD2,aLB_WHERECOMP2,aET_WHEREVALUE2,aValue) )
+        if ( getCondition(*m_pLB_WHEREFIELD2,*m_pLB_WHERECOMP2,*m_pET_WHEREVALUE2,aValue) )
             _rValues = aHaving;
         PropertyValue* pPos = NULL;
-        if ( aLB_WHERECOND2.GetSelectEntryPos() )
+        if ( m_pLB_WHERECOND2->GetSelectEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();
             _rValues.realloc( nPos + 1);
@@ -786,14 +779,14 @@ void DlgFilterCrit::BuildWherePart()
         *pPos = aValue;
     }
 
-    if( LbPos(aLB_WHEREFIELD3) != 0 )
+    if( LbPos(*m_pLB_WHEREFIELD3) != 0 )
     {
         PropertyValue aValue;
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
-        if ( getCondition(aLB_WHEREFIELD3,aLB_WHERECOMP3,aET_WHEREVALUE3,aValue) )
+        if ( getCondition(*m_pLB_WHEREFIELD3,*m_pLB_WHERECOMP3,*m_pET_WHEREVALUE3,aValue) )
             _rValues = aHaving;
         PropertyValue* pPos = NULL;
-        if ( aLB_WHERECOND3.GetSelectEntryPos() )
+        if ( m_pLB_WHERECOND3->GetSelectEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();
             _rValues.realloc( nPos + 1);

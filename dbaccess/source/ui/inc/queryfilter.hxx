@@ -67,27 +67,21 @@ namespace dbaui
                         ,public ::svxform::OParseContextClient
     {
     private:
-        ListBox         aLB_WHEREFIELD1;
-        ListBox         aLB_WHERECOMP1;
-        Edit            aET_WHEREVALUE1;
-        ListBox         aLB_WHERECOND2;
-        ListBox         aLB_WHEREFIELD2;
-        ListBox         aLB_WHERECOMP2;
-        Edit            aET_WHEREVALUE2;
-        ListBox         aLB_WHERECOND3;
-        ListBox         aLB_WHEREFIELD3;
-        ListBox         aLB_WHERECOMP3;
-        Edit            aET_WHEREVALUE3;
-        FixedText       aFT_WHEREFIELD;
-        FixedText       aFT_WHERECOMP;
-        FixedText       aFT_WHEREVALUE;
-        FixedText       aFT_WHEREOPER;
-        FixedLine       aFL_FIELDS;
-        OKButton        aBT_OK;
-        CancelButton    aBT_CANCEL;
-        HelpButton      aBT_HELP;
-        OUString        aSTR_NOENTRY;
-        OUString        aSTR_COMPARE_OPERATORS;
+        ListBox*        m_pLB_WHEREFIELD1;
+        ListBox*        m_pLB_WHERECOMP1;
+        Edit*           m_pET_WHEREVALUE1;
+
+        ListBox*        m_pLB_WHERECOND2;
+        ListBox*        m_pLB_WHEREFIELD2;
+        ListBox*        m_pLB_WHERECOMP2;
+        Edit*           m_pET_WHEREVALUE2;
+
+        ListBox*        m_pLB_WHERECOND3;
+        ListBox*        m_pLB_WHEREFIELD3;
+        ListBox*        m_pLB_WHERECOMP3;
+        Edit*           m_pET_WHEREVALUE3;
+
+        OUString        m_aSTR_COMPARE_OPERATORS;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
