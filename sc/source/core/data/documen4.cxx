@@ -596,7 +596,7 @@ sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
         return 0;
 }
 
-xub_StrLen ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab,
+sal_Int32 ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab,
                                     SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd ) const
 {

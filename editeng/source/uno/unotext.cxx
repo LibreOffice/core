@@ -403,7 +403,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
         //! on QuickInsertText...
         CollapseToStart();
 
-        sal_uInt16 nLen = aConverted.getLength();
+        sal_Int32 nLen = aConverted.getLength();
         if (nLen)
             GoRight( nLen, sal_True );
     }
@@ -1417,12 +1417,12 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
     {
         CheckSelection( maSelection, pForwarder );
 
-        sal_uInt16 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
+        sal_Int32 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
         sal_Int32  nNewPar = maSelection.nEndPara;
 
         sal_Bool bOk = sal_True;
         sal_Int32 nParCount = pForwarder->GetParagraphCount();
-        sal_uInt16 nThisLen = pForwarder->GetTextLen( nNewPar );
+        sal_Int32 nThisLen = pForwarder->GetTextLen( nNewPar );
         while ( nNewPos > nThisLen && bOk )
         {
             if ( nNewPar + 1 >= nParCount )
@@ -2209,9 +2209,9 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
         sal_Int32 nPara = nParaCount - 1;
         SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
-        sal_uInt16 nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
+        sal_Int32 nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
         pEditSource->UpdateData();
-        xub_StrLen nEnd   = pTextForwarder->GetTextLen( nPara );
+        sal_Int32 nEnd   = pTextForwarder->GetTextLen( nPara );
 
         // set properties for the new text portion
         ESelection aSel( nPara, nStart, nPara, nEnd );
@@ -2437,7 +2437,7 @@ sal_Int32 SvxDummyTextSource::GetParagraphCount() const
     return 0;
 }
 
-sal_uInt16 SvxDummyTextSource::GetTextLen( sal_Int32 ) const
+sal_Int32 SvxDummyTextSource::GetTextLen( sal_Int32 ) const
 {
     return 0;
 }
@@ -2468,7 +2468,7 @@ void SvxDummyTextSource::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt1
 {
 }
 
-void SvxDummyTextSource::GetPortions( sal_Int32, std::vector<sal_uInt16>& ) const
+void SvxDummyTextSource::GetPortions( sal_Int32, std::vector<sal_Int32>& ) const
 {
 }
 
@@ -2503,12 +2503,12 @@ void SvxDummyTextSource::QuickInsertLineBreak( const ESelection& )
 {
 };
 
-OUString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_uInt16, Color*&, Color*& )
+OUString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& )
 {
     return OUString();
 }
 
-void SvxDummyTextSource::FieldClicked( const SvxFieldItem&, sal_Int32, xub_StrLen )
+void SvxDummyTextSource::FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 )
 {
 }
 
@@ -2521,12 +2521,12 @@ void SvxDummyTextSource::SetNotifyHdl( const Link& )
 {
 }
 
-LanguageType SvxDummyTextSource::GetLanguage( sal_Int32, sal_uInt16 ) const
+LanguageType SvxDummyTextSource::GetLanguage( sal_Int32, sal_Int32 ) const
 {
     return LANGUAGE_DONTKNOW;
 }
 
-sal_uInt16 SvxDummyTextSource::GetFieldCount( sal_Int32 ) const
+sal_Int32 SvxDummyTextSource::GetFieldCount( sal_Int32 ) const
 {
     return 0;
 }
@@ -2541,7 +2541,7 @@ EBulletInfo SvxDummyTextSource::GetBulletInfo( sal_Int32 ) const
     return EBulletInfo();
 }
 
-Rectangle SvxDummyTextSource::GetCharBounds( sal_Int32, sal_uInt16 ) const
+Rectangle SvxDummyTextSource::GetCharBounds( sal_Int32, sal_Int32 ) const
 {
     return Rectangle();
 }
@@ -2561,37 +2561,37 @@ OutputDevice* SvxDummyTextSource::GetRefDevice() const
     return NULL;
 }
 
-sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, sal_Int32&, sal_uInt16& ) const
+sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const
 {
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_uInt16, sal_uInt16&, sal_uInt16& ) const
+sal_Bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const
 {
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_Int32, sal_uInt16, sal_Bool ) const
+sal_Bool SvxDummyTextSource::GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, sal_Bool ) const
 {
     return sal_False;
 }
 
-sal_uInt16 SvxDummyTextSource::GetLineCount( sal_Int32 ) const
+sal_Int32 SvxDummyTextSource::GetLineCount( sal_Int32 ) const
 {
     return 0;
 }
 
-sal_uInt16 SvxDummyTextSource::GetLineLen( sal_Int32, sal_uInt16 ) const
+sal_Int32 SvxDummyTextSource::GetLineLen( sal_Int32, sal_Int32 ) const
 {
     return 0;
 }
 
-void SvxDummyTextSource::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 /*nParagraph*/, sal_uInt16 /*nLine*/ ) const
+void SvxDummyTextSource::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 /*nParagraph*/, sal_Int32 /*nLine*/ ) const
 {
     rStart = rEnd = 0;
 }
 
-sal_uInt16 SvxDummyTextSource::GetLineNumberAtIndex( sal_Int32 /*nPara*/, sal_uInt16 /*nIndex*/ ) const
+sal_Int32 SvxDummyTextSource::GetLineNumberAtIndex( sal_Int32 /*nPara*/, sal_Int32 /*nIndex*/ ) const
 {
     return 0;
 }
@@ -2630,7 +2630,7 @@ void SvxDummyTextSource::AppendParagraph()
 {
 }
 
-sal_uInt16 SvxDummyTextSource::AppendTextPortion( sal_Int32, const OUString &, const SfxItemSet & )
+sal_Int32 SvxDummyTextSource::AppendTextPortion( sal_Int32, const OUString &, const SfxItemSet & )
 {
     return 0;
 }

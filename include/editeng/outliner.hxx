@@ -162,7 +162,7 @@ struct ParaRange
             ParaRange( sal_Int32 nS, sal_Int32 nE ) { nStartPara = nS, nEndPara = nE; }
 
     void    Adjust();
-    sal_uInt16  Len() const { return 1 + ( ( nEndPara > nStartPara ) ? (nEndPara-nStartPara) : (nStartPara-nEndPara) ); }
+    sal_Int32  Len() const { return 1 + ( ( nEndPara > nStartPara ) ? (nEndPara-nStartPara) : (nStartPara-nEndPara) ); }
 };
 
 inline void ParaRange::Adjust()
@@ -280,7 +280,7 @@ public:
 
     EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
-    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
+    sal_Int32          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
     void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
@@ -368,10 +368,10 @@ class EDITENG_DLLPUBLIC DrawPortionInfo
 public:
     const Point&        mrStartPos;
     const OUString      maText;
-    sal_uInt16          mnTextStart;
-    sal_uInt16          mnTextLen;
+    sal_Int32           mnTextStart;
+    sal_Int32           mnTextLen;
     sal_Int32           mnPara;
-    xub_StrLen          mnIndex;
+    sal_Int32           mnIndex;
     const SvxFont&      mrFont;
     const sal_Int32*    mpDXArray;
 
@@ -397,11 +397,11 @@ public:
     DrawPortionInfo(
         const Point& rPos,
         const OUString& rTxt,
-        sal_uInt16 nTxtStart,
-        sal_uInt16 nTxtLen,
+        sal_Int32 nTxtStart,
+        sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        xub_StrLen nIdx,
+        sal_Int32 nIdx,
         const sal_Int32* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -481,8 +481,8 @@ private:
     OUString            aRepresentation;
 
     sal_Int32           nPara;
-    xub_StrLen          nPos;
-    sal_Bool                bSimpleClick;
+    sal_Int32           nPos;
+    sal_Bool            bSimpleClick;
 
                         EditFieldInfo();
                         EditFieldInfo( const EditFieldInfo& );
@@ -490,7 +490,7 @@ private:
     SdrPage*            mpSdrPage;
 
 public:
-                    EditFieldInfo( Outliner* pOutl, const SvxFieldItem& rFItem, sal_Int32 nPa, xub_StrLen nPo )
+                    EditFieldInfo( Outliner* pOutl, const SvxFieldItem& rFItem, sal_Int32 nPa, sal_Int32 nPo )
                         : rFldItem( rFItem )
                     {
                         pOutliner = pOutl;
@@ -519,7 +519,7 @@ public:
                         { delete pFldColor; pFldColor = 0; }
 
     sal_Int32           GetPara() const { return nPara; }
-    xub_StrLen          GetPos() const { return nPos; }
+    sal_Int32           GetPos() const { return nPos; }
 
     sal_Bool            IsSimpleClick() const { return bSimpleClick; }
     void            SetSimpleClick( sal_Bool bSimple ) { bSimpleClick = bSimple; }
@@ -676,7 +676,7 @@ public:
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
     sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
-    LanguageType    GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const;
+    LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
     void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );
 
@@ -832,13 +832,13 @@ public:
 
     void        SetWordDelimiters( const OUString& rDelimiters );
     OUString    GetWordDelimiters() const;
-    OUString    GetWord( sal_Int32 nPara, xub_StrLen nIndex );
+    OUString    GetWord( sal_Int32 nPara, sal_Int32 nIndex );
 
     void            StripPortions();
 
     virtual void DrawingText(
-        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
-        const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen,
+        const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -850,7 +850,7 @@ public:
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const OUString& rChar,
-        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
@@ -891,8 +891,8 @@ public:
     void            SetEndMovingHdl( const Link& rLink){aEndMovingHdl=rLink;}
 
     sal_uLong           GetLineCount( sal_Int32 nParagraph ) const;
-    sal_uInt16          GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const;
-    sal_uLong           GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine = 0 );
+    sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
+    sal_uLong           GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
 
     sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
@@ -912,9 +912,9 @@ public:
     sal_Bool            UpdateFields();
     void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
 
-    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &xSpeller );

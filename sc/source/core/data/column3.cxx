@@ -2680,7 +2680,7 @@ public:
 
 }
 
-xub_StrLen ScColumn::GetMaxNumberStringLen(
+sal_Int32 ScColumn::GetMaxNumberStringLen(
     sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     nPrecision = pDocument->GetDocOptions().GetStdPrecision();

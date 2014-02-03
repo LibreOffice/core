@@ -128,14 +128,14 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken )
 
 // --- class ScRawToken -----------------------------------------------------
 
-xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
+sal_Int32 ScRawToken::GetStrLen( const sal_Unicode* pStr )
 {
     if ( !pStr )
         return 0;
     const sal_Unicode* p = pStr;
     while ( *p )
         p++;
-    return sal::static_int_cast<xub_StrLen>( p - pStr );
+    return sal::static_int_cast<sal_Int32>( p - pStr );
 }
 
 
@@ -278,7 +278,7 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
     eOp   = ocExternal;
     eType = svExternal;
-    xub_StrLen nLen = GetStrLen( pStr ) + 1;
+    sal_Int32 nLen = GetStrLen( pStr ) + 1;
     if( nLen >= MAXSTRLEN )
         nLen = MAXSTRLEN-1;
     // Platz fuer Byte-Parameter lassen!

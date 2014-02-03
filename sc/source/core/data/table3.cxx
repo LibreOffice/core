@@ -1449,7 +1449,7 @@ public:
                     OUString aQuer( mpTransliteration->transliterate(
                         aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
                         NULL ) );
-                    xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
+                    sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH
                         || rEntry.eOp == SC_DOES_NOT_END_WITH) ? (aCell.getLength()-aQuer.getLength()) : 0;
                     sal_Int32 nStrPos = aCell.indexOf( aQuer, nIndex );
                     switch (rEntry.eOp)
@@ -2299,7 +2299,7 @@ sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
         return 0;
 }
 
-xub_StrLen ScTable::GetMaxNumberStringLen(
+sal_Int32 ScTable::GetMaxNumberStringLen(
     sal_uInt16& nPrecision, SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
     if ( ValidCol(nCol) )

@@ -50,7 +50,7 @@ public:
     EditPosition(EditEngine* pIEE, EditSelection* pSel);
 
     virtual sal_Int32   GetNodeIdx() const;
-    virtual sal_uInt16  GetCntIdx() const;
+    virtual sal_Int32   GetCntIdx() const;
 
     // clone
     virtual SvxPosition* Clone() const;
@@ -81,12 +81,12 @@ protected:
     virtual void        InsertText();
     virtual void        MovePos( int bForward = sal_True );
     virtual void        SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                            sal_uInt16& rCntPos );
+                                            sal_Int32& rCntPos );
 
     virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet );
     virtual void        NextToken( int nToken );
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet );
-    virtual bool        IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const;
+    virtual bool        IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const;
     virtual void        CalcValue();
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );

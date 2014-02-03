@@ -323,7 +323,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
 
                             if( *pNameBuffer == SC_COMPILER_FILE_TAB_SEP )  // after the last quote of the docname should be the # char
                             {
-                                xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
+                                sal_Int32 nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
                                 if(aName == aLinkTabName.copy(nIndex, nLinkTabNameLength) &&
                                     (aName[nIndex - 1] == '#') && // before the table name should be the # char

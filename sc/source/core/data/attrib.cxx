@@ -748,7 +748,7 @@ static void lcl_SetSpace( OUString& rStr, const ESelection& rSel )
 {
     // Text replaced by a space to ensure they are positions:
 
-    xub_StrLen nLen = rSel.nEndPos-rSel.nStartPos;
+    sal_Int32 nLen = rSel.nEndPos-rSel.nStartPos;
     rStr = rStr.replaceAt( rSel.nStartPos, nLen, " " );
 }
 

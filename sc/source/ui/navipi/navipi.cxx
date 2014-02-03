@@ -57,7 +57,7 @@
 //  maximum values for UI
 #define SCNAV_MAXCOL        (MAXCOLCOUNT)
 // macro is sufficient since only used in ctor
-#define SCNAV_COLDIGITS     (static_cast<xub_StrLen>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
+#define SCNAV_COLDIGITS     (static_cast<sal_Int32>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
 // precomputed constant because it is used in every change of spin button field
 static const sal_Int32 SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).getLength();    // A...IV...ZZZ
 

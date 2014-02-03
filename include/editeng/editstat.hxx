@@ -90,10 +90,10 @@ class EditStatus
 protected:
     sal_uLong   nStatusBits;
     sal_uLong   nControlBits;
-    sal_uInt16  nPrevPara;                  // for EE_STAT_CRSRLEFTPARA
+    sal_Int32   nPrevPara;                  // for EE_STAT_CRSRLEFTPARA
 
 public:
-            EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = 0xFFFF; }
+            EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = -1; }
 
     void    Clear()                     { nStatusBits = 0; }
     void    SetControlBits( sal_uLong nMask, bool bOn )
@@ -105,8 +105,8 @@ public:
     sal_uLong   GetControlWord() const      { return nControlBits; }
     sal_uLong&  GetControlWord()            { return nControlBits; }
 
-    sal_uInt16  GetPrevParagraph() const    { return nPrevPara; }
-    sal_uInt16& GetPrevParagraph()          { return nPrevPara; }
+    sal_Int32   GetPrevParagraph() const    { return nPrevPara; }
+    sal_Int32&  GetPrevParagraph()          { return nPrevPara; }
 };
 
 #define SPELLCMD_IGNOREWORD         0x0001

@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;
 /** Maximum length of a cell string. */
-const xub_StrLen CSV_MAXSTRLEN          = 0x7FFF;
+const sal_Int32 CSV_MAXSTRLEN          = 0x7FFF;
 /** Transparency for header color of selected columns. */
 const sal_uInt16 CSV_HDR_TRANSPARENCY   = 85;
 /** Minimum distance to border for auto scroll. */
@@ -78,7 +78,7 @@ struct ScCsvExpData
     sal_uInt8                   mnType;         /// External type of the column.
 
     inline                      ScCsvExpData() : mnIndex( 0 ), mnType( SC_COL_STANDARD ) {}
-    inline                      ScCsvExpData( xub_StrLen nIndex, sal_uInt8 nType ) :
+    inline                      ScCsvExpData( sal_Int32 nIndex, sal_uInt8 nType ) :
                                     mnIndex( nIndex ), mnType( nType ) {}
 };
 

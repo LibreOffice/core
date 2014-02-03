@@ -190,8 +190,8 @@ public:
     formula::FormulaToken* CreateToken() const;   // create typified token
     void Load( SvStream&, sal_uInt16 nVer );
 
-    static xub_StrLen GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
-    static size_t GetStrLenBytes( xub_StrLen nLen )
+    static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
+    static size_t GetStrLenBytes( sal_Int32 nLen )
         { return nLen * sizeof(sal_Unicode); }
     static size_t GetStrLenBytes( const sal_Unicode* pStr )
         { return GetStrLenBytes( GetStrLen( pStr ) ); }
@@ -327,7 +327,7 @@ private:
     bool   NextNewToken(bool bInArray = false);
 
     virtual void SetError(sal_uInt16 nError);
-    xub_StrLen NextSymbol(bool bInArray);
+    sal_Int32 NextSymbol(bool bInArray);
     bool IsValue( const OUString& );
     bool IsOpCode( const OUString&, bool bInArray );
     bool IsOpCode2( const OUString& );
@@ -451,7 +451,7 @@ public:
         in nFlags, all bits must match. If bTestLetterNumeric is false and
         char>=128, no LetterNumeric test is done and false is returned. */
     static bool IsCharFlagAllConventions(
-        OUString const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
+        OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
 
 private:
     // FormulaCompiler

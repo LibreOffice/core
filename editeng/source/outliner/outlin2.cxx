@@ -169,7 +169,7 @@ OUString Outliner::GetWordDelimiters() const
     return pEditEngine->GetWordDelimiters();
 }
 
-OUString Outliner::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
+OUString Outliner::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
 {
     return pEditEngine->GetWord( nPara, nIndex );
 }
@@ -324,12 +324,12 @@ sal_uLong Outliner::GetLineCount( sal_Int32 nParagraph ) const
     return pEditEngine->GetLineCount( nParagraph );
 }
 
-sal_uInt16 Outliner::GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const
+sal_Int32 Outliner::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
     return pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
-sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine )
+sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
     return pEditEngine->GetLineHeight( nParagraph, nLine );
 }
@@ -552,7 +552,7 @@ sal_uInt16 Outliner::GetScriptType( const ESelection& rSelection ) const
     return pEditEngine->GetScriptType( rSelection );
 }
 
-LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const
+LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
     return pEditEngine->GetLanguage( nPara, nPos );
 }

@@ -70,11 +70,11 @@ public:
  */
 class WrongList
 {
-    static size_t Valid;
+    static sal_Int32 Valid;
 
     std::vector<editeng::MisspellRange> maRanges;
-    size_t mnInvalidStart;
-    size_t mnInvalidEnd;
+    sal_Int32 mnInvalidStart;
+    sal_Int32 mnInvalidEnd;
 
     bool DbgIsBuggy() const;
 
@@ -91,20 +91,20 @@ public:
 
     bool IsValid() const;
     void SetValid();
-    void SetInvalidRange( size_t nStart, size_t nEnd );
-    void ResetInvalidRange( size_t nStart, size_t nEnd );
+    void SetInvalidRange( sal_Int32 nStart, sal_Int32 nEnd );
+    void ResetInvalidRange( sal_Int32 nStart, sal_Int32 nEnd );
 
-    size_t GetInvalidStart() const { return mnInvalidStart; }
-    size_t GetInvalidEnd() const   { return mnInvalidEnd; }
+    sal_Int32 GetInvalidStart() const { return mnInvalidStart; }
+    sal_Int32 GetInvalidEnd() const   { return mnInvalidEnd; }
 
-    void TextInserted( size_t nPos, size_t nLength, bool bPosIsSep );
-    void TextDeleted( size_t nPos, size_t nLength );
+    void TextInserted( sal_Int32 nPos, sal_Int32 nLength, bool bPosIsSep );
+    void TextDeleted( sal_Int32 nPos, sal_Int32 nLength );
 
-    void InsertWrong( size_t nStart, size_t nEnd );
-    bool NextWrong( size_t& rnStart, size_t& rnEnd ) const;
-    bool HasWrong( size_t nStart, size_t nEnd ) const;
-    bool HasAnyWrong( size_t nStart, size_t nEnd ) const;
-    void ClearWrongs( size_t nStart, size_t nEnd, const ContentNode* pNode );
+    void InsertWrong( sal_Int32 nStart, sal_Int32 nEnd );
+    bool NextWrong( sal_Int32& rnStart, sal_Int32& rnEnd ) const;
+    bool HasWrong( sal_Int32 nStart, sal_Int32 nEnd ) const;
+    bool HasAnyWrong( sal_Int32 nStart, sal_Int32 nEnd ) const;
+    void ClearWrongs( sal_Int32 nStart, sal_Int32 nEnd, const ContentNode* pNode );
     void MarkWrongsInvalid();
 
     WrongList*  Clone() const;

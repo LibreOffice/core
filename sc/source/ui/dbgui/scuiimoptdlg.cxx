@@ -53,8 +53,8 @@ public:
 private:
     const OUString      theDelTab;
     const sal_Unicode   cSep;
-    const xub_StrLen    nCount;
-    xub_StrLen          nIter;
+    const sal_Int32    nCount;
+    sal_Int32          nIter;
 };
 
 //------------------------------------------------------------------------
@@ -65,7 +65,7 @@ sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 
     if ( nCount >= 2 )
     {
-        xub_StrLen i = 0;
+        sal_Int32 i = 0;
         while ( i<nCount )
         {
             if ( rDel == theDelTab.getToken( i, cSep ) )
@@ -89,7 +89,7 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 
     if ( nCount >= 2 )
     {
-        xub_StrLen i = 0;
+        sal_Int32 i = 0;
         while ( i<nCount )
         {
             if ( nCode == (sal_Unicode) theDelTab.getToken( i+1, cSep ).toInt32() )

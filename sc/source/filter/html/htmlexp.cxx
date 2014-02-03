@@ -1146,7 +1146,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             }
             else
             {
-                xub_StrLen nStartPos = 0;
+                sal_Int32 nStartPos = 0;
                 do
                 {
                     OUString aSingleLine = aStr.copy( nStartPos, nPos - nStartPos );
@@ -1195,12 +1195,12 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
         {
             if ( nPar > 0 )
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
-            std::vector<sal_uInt16> aPortions;
+            std::vector<sal_Int32> aPortions;
             rEngine.GetPortions( nPar, aPortions );
-            sal_uInt16 nStart = 0;
-            for ( std::vector<sal_uInt16>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
+            sal_Int32 nStart = 0;
+            for ( std::vector<sal_Int32>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
             {
-                sal_uInt16 nEnd = *it;
+                sal_Int32 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 sal_Bool bUrl = false;
                 // fields are single characters

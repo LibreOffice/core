@@ -388,7 +388,7 @@ XclExpStringRef lclCreateFormattedString(
         SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, rItemSet, nScript ) );
 
         // Excel start position of this portion
-        sal_uInt16 nXclPortionStart = xString->Len();
+        sal_Int32 nXclPortionStart = xString->Len();
         // add portion text to Excel string
         XclExpStringHelper::AppendString( *xString, rRoot, aOUText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
         if( nXclPortionStart < xString->Len() )
@@ -446,13 +446,13 @@ XclExpStringRef lclCreateFormattedString(
         ESelection aSel( nPara, 0 );
         OUString aParaText( rEE.GetText( nPara ) );
 
-        std::vector<sal_uInt16> aPosList;
+        std::vector<sal_Int32> aPosList;
         rEE.GetPortions( nPara, aPosList );
 
         // process all portions in the paragraph
-        for( std::vector<sal_uInt16>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
+        for( std::vector<sal_Int32>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
         {
-            aSel.nEndPos = static_cast< xub_StrLen >( *it );
+            aSel.nEndPos =  *it;
             OUString aXclPortionText = aParaText.copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
             aItemSet.ClearItem();
@@ -488,7 +488,7 @@ XclExpStringRef lclCreateFormattedString(
             }
 
             // Excel start position of this portion
-            sal_uInt16 nXclPortionStart = xString->Len();
+            sal_Int32 nXclPortionStart = xString->Len();
             // add portion text to Excel string
             XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
             if( (nXclPortionStart < xString->Len()) || (aParaText.isEmpty()) )
@@ -719,12 +719,12 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
         ESelection aSel( nPara, 0 );
         OUString aParaText;
         sal_Int32 nParaHeight = 0;
-        std::vector<sal_uInt16> aPosList;
+        std::vector<sal_Int32> aPosList;
         mrEE.GetPortions( nPara, aPosList );
 
-        for( std::vector<sal_uInt16>::const_iterator it( aPosList.begin() ); it != aPosList.end(); ++it )
+        for( std::vector<sal_Int32>::const_iterator it( aPosList.begin() ); it != aPosList.end(); ++it )
         {
-            aSel.nEndPos = static_cast< xub_StrLen >( *it );
+            aSel.nEndPos = *it;
             if( aSel.nStartPos < aSel.nEndPos )
             {
 

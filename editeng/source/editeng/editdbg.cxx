@@ -371,7 +371,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         aPortionStr.append("\nA");
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
         aPortionStr.append(": ");
-        sal_uLong n = 0;
+        sal_Int32 n = 0;
         for ( z = 0; z < nTextPortions; z++ )
         {
             TextPortion* pPortion = pPPortion->GetTextPortions()[z];

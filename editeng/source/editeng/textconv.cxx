@@ -287,8 +287,8 @@ void TextConvWrapper::SelectNewUnit_impl(
     ESelection  aSelection = m_pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
         "paragraph mismatch in selection" );
-    aSelection.nStartPos = (sal_uInt16) (m_nLastPos + m_nUnitOffset + nUnitStart);
-    aSelection.nEndPos   = (sal_uInt16) (m_nLastPos + m_nUnitOffset + nUnitEnd);
+    aSelection.nStartPos = (m_nLastPos + m_nUnitOffset + nUnitStart);
+    aSelection.nEndPos   = (m_nLastPos + m_nUnitOffset + nUnitEnd);
     m_pEditView->SetSelection( aSelection );
 }
 
@@ -370,8 +370,7 @@ void TextConvWrapper::ReplaceUnit(
         default:
             OSL_FAIL( "unexpected case" );
     }
-    m_nUnitOffset = sal::static_int_cast< sal_uInt16 >(
-        m_nUnitOffset + nUnitStart + aNewTxt.getLength());
+    m_nUnitOffset = m_nUnitOffset + nUnitStart + aNewTxt.getLength();
 
     // remember current original language for kater use
     ImpEditEngine *pImpEditEng = m_pEditView->GetImpEditEngine();
@@ -401,8 +400,7 @@ void TextConvWrapper::ReplaceUnit(
 
         ESelection aOldSel = m_pEditView->GetSelection();
         ESelection aNewSel( aOldSel );
-        aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
-            aNewSel.nStartPos - aNewTxt.getLength());
+        aNewSel.nStartPos = aNewSel.nStartPos - aNewTxt.getLength();
 
         if (pNewUnitLanguage)
         {
@@ -423,14 +421,12 @@ void TextConvWrapper::ReplaceUnit(
     {
         // Note: replacement is always done in the current paragraph
         // which is the one ConvContinue points to
-        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< sal_uInt16 >(
-            pConvInfo->aConvContinue.nIndex + nDelta);
+        pConvInfo->aConvContinue.nIndex = pConvInfo->aConvContinue.nIndex + nDelta;
 
         // if that is the same as the one where the conversions ends
         // the end needs to be updated also
         if (pConvInfo->aConvTo.nPara == pConvInfo->aConvContinue.nPara)
-            pConvInfo->aConvTo.nIndex = sal::static_int_cast< sal_uInt16 >(
-                pConvInfo->aConvTo.nIndex + nDelta);
+            pConvInfo->aConvTo.nIndex = pConvInfo->aConvTo.nIndex + nDelta;
     }
 }
 

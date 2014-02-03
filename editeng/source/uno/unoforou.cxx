@@ -58,7 +58,7 @@ sal_Int32 SvxOutlinerForwarder::GetParagraphCount() const
     return rOutliner.GetParagraphCount();
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetTextLen( sal_Int32 nParagraph ) const
+sal_Int32 SvxOutlinerForwarder::GetTextLen( sal_Int32 nParagraph ) const
 {
     return rOutliner.GetEditEngine().GetTextLen( nParagraph );
 }
@@ -190,7 +190,7 @@ SfxItemPool* SvxOutlinerForwarder::GetPool() const
     return rOutliner.GetEmptyItemSet().GetPool();
 }
 
-void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rList ) const
+void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const
 {
     ((EditEngine&)rOutliner.GetEditEngine()).GetPortions( nPara, rList );
 }
@@ -226,12 +226,12 @@ void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelec
     rOutliner.QuickSetAttribs( rSet, rSel );
 }
 
-OUString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos )
+void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
     rOutliner.FieldClicked( rField, nPara, nPos );
 }
@@ -272,12 +272,12 @@ void SvxOutlinerForwarder::flushCache()
     }
 }
 
-LanguageType SvxOutlinerForwarder::GetLanguage( sal_Int32 nPara, sal_uInt16 nIndex ) const
+LanguageType SvxOutlinerForwarder::GetLanguage( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     return rOutliner.GetLanguage(nPara, nIndex);
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetFieldCount( sal_Int32 nPara ) const
+sal_Int32 SvxOutlinerForwarder::GetFieldCount( sal_Int32 nPara ) const
 {
     return rOutliner.GetEditEngine().GetFieldCount(nPara);
 }
@@ -292,7 +292,7 @@ EBulletInfo SvxOutlinerForwarder::GetBulletInfo( sal_Int32 nPara ) const
     return rOutliner.GetBulletInfo( nPara );
 }
 
-Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_uInt16 nIndex ) const
+Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
@@ -371,7 +371,7 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
     return rOutliner.GetRefDevice();
 }
 
-sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_uInt16& nIndex ) const
+sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
@@ -387,7 +387,7 @@ sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nP
     return sal_True;
 }
 
-sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
+sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
     ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
@@ -403,27 +403,27 @@ sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_uInt16 nInde
     return sal_False;
 }
 
-sal_Bool SvxOutlinerForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell ) const
+sal_Bool SvxOutlinerForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell ) const
 {
     return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rOutliner.GetEditEngine(), nPara, nIndex, bInCell );
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetLineCount( sal_Int32 nPara ) const
+sal_Int32 SvxOutlinerForwarder::GetLineCount( sal_Int32 nPara ) const
 {
-    return static_cast < sal_uInt16 >( rOutliner.GetLineCount(nPara) );
+    return rOutliner.GetLineCount(nPara);
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetLineLen( sal_Int32 nPara, sal_uInt16 nLine ) const
+sal_Int32 SvxOutlinerForwarder::GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const
 {
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
-void SvxOutlinerForwarder::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nPara, sal_uInt16 nLine ) const
+void SvxOutlinerForwarder::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nPara, sal_Int32 nLine ) const
 {
     return rOutliner.GetEditEngine().GetLineBoundaries( rStart, rEnd, nPara, nLine );
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const
+sal_Int32 SvxOutlinerForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     return rOutliner.GetEditEngine().GetLineNumberAtIndex( nPara, nIndex );
 }
@@ -489,7 +489,7 @@ sal_Bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
     return sal_False;
 }
 
-sal_Int16 SvxOutlinerForwarder::GetNumberingStartValue( sal_Int32 nPara )
+sal_Int32 SvxOutlinerForwarder::GetNumberingStartValue( sal_Int32 nPara )
 {
     if( 0 <= nPara && nPara < GetParagraphCount() )
     {
@@ -502,7 +502,7 @@ sal_Int16 SvxOutlinerForwarder::GetNumberingStartValue( sal_Int32 nPara )
     }
 }
 
-void SvxOutlinerForwarder::SetNumberingStartValue(  sal_Int32 nPara, sal_Int16 nNumberingStartValue )
+void SvxOutlinerForwarder::SetNumberingStartValue(  sal_Int32 nPara, sal_Int32 nNumberingStartValue )
 {
     if( 0 <= nPara && nPara < GetParagraphCount() )
     {
@@ -551,9 +551,9 @@ void SvxOutlinerForwarder::AppendParagraph()
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), OUString() );
 }
 
-sal_uInt16 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )
+sal_Int32 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )
 {
-    sal_uInt16 nLen = 0;
+    sal_Int32 nLen = 0;
 
     EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
     sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
@@ -580,12 +580,12 @@ void  SvxOutlinerForwarder::CopyText(const SvxTextForwarder& rSource)
 //------------------------------------------------------------------------
 
 
-sal_Int16 SvxTextForwarder::GetNumberingStartValue( sal_Int32 )
+sal_Int32 SvxTextForwarder::GetNumberingStartValue( sal_Int32 )
 {
     return -1;
 }
 
-void SvxTextForwarder::SetNumberingStartValue( sal_Int32, sal_Int16 )
+void SvxTextForwarder::SetNumberingStartValue( sal_Int32, sal_Int32 )
 {
 }
 

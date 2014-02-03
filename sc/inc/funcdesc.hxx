@@ -236,13 +236,13 @@ public:
 
     const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
-    xub_StrLen GetMaxFuncNameLen() const
+    sal_Int32 GetMaxFuncNameLen() const
                { return nMaxFuncNameLen; }
 
 private:
     ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
     ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
-    xub_StrLen  nMaxFuncNameLen; /**< Length of longest function name */
+    sal_Int32  nMaxFuncNameLen; /**< Length of longest function name */
 };
 
 /**

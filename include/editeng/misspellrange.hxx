@@ -18,19 +18,19 @@ namespace editeng {
 
 struct EDITENG_DLLPUBLIC MisspellRange
 {
-    size_t mnStart;
-    size_t mnEnd;
+    sal_Int32 mnStart;
+    sal_Int32 mnEnd;
 
     MisspellRange();
-    MisspellRange(size_t nStart, size_t nEnd);
+    MisspellRange(sal_Int32 nStart, sal_Int32 nEnd);
 };
 
 struct EDITENG_DLLPUBLIC MisspellRanges
 {
-    size_t mnParagraph;
+    sal_Int32 mnParagraph;
     std::vector<MisspellRange> maRanges;
 
-    MisspellRanges(size_t nParagraph, const std::vector<MisspellRange>& rRanges);
+    MisspellRanges(sal_Int32 nParagraph, const std::vector<MisspellRange>& rRanges);
 };
 
 }

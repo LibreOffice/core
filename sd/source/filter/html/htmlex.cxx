@@ -1290,13 +1290,13 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
         return OUString();
 
     HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : Color(COL_BLACK) );
-    std::vector<sal_uInt16> aPortionList;
+    std::vector<sal_Int32> aPortionList;
     rEditEngine.GetPortions( nPara, aPortionList );
 
-    sal_uInt16 nPos1 = 0;
-    for( std::vector<sal_uInt16>::const_iterator it( aPortionList.begin() ); it != aPortionList.end(); ++it )
+    sal_Int32 nPos1 = 0;
+    for( std::vector<sal_Int32>::const_iterator it( aPortionList.begin() ); it != aPortionList.end(); ++it )
     {
-        sal_uInt16 nPos2 = *it;
+        sal_Int32 nPos2 = *it;
 
         ESelection aSelection( nPara, nPos1, nPara, nPos2);
 

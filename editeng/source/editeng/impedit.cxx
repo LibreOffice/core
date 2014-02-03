@@ -256,8 +256,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
             }
             else
             {
-                sal_uInt16 nTmpStartIndex = nStartIndex;
-                sal_uInt16 nWritingDirStart, nTmpEndIndex;
+                sal_Int32 nTmpStartIndex = nStartIndex;
+                sal_Int32 nWritingDirStart, nTmpEndIndex;
 
                 while ( nTmpStartIndex < nEndIndex )
                 {
@@ -652,7 +652,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
 
     EditPaM aPaM( aEditSelection.Max() );
 
-    sal_uInt16 nTextPortionStart = 0;
+    sal_Int32 nTextPortionStart = 0;
     sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return;
@@ -680,7 +680,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             // If we are behind a portion, and the next portion has other direction, we must change position...
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
+            sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
@@ -1173,7 +1173,7 @@ void ImpEditView::DeleteSelected()
     ShowCursor( DoAutoScroll(), sal_True );
 }
 
-const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const
+const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
 {
     if( !GetOutputArea().IsInside( rPos ) )
         return 0;
@@ -1547,7 +1547,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     {
         // Field?!
         sal_Int32 nPara;
-        sal_uInt16 nPos;
+        sal_Int32 nPos;
         Point aMousePos = GetWindow()->PixelToLogic( aMousePosPixel );
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )

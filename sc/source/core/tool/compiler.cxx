@@ -28,7 +28,6 @@
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
@@ -468,7 +467,7 @@ static bool lcl_parseExternalName(
                 aEndTabName, nFlags, true, pExternalLinks );
         if (!p || p == pStart)
             return false;
-        i = xub_StrLen(p - pStart);
+        i = sal_Int32(p - pStart);
         cPrev = *(p-1);
     }
     for ( ; i < nLen; ++i, ++p)
@@ -1727,7 +1726,7 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
 //               | Sonst             | Symbol=Symbol+Zeichen | GetString
 //---------------+-------------------+-----------------------+---------------
 
-xub_StrLen ScCompiler::NextSymbol(bool bInArray)
+sal_Int32 ScCompiler::NextSymbol(bool bInArray)
 {
     cSymbol[MAXSTRLEN-1] = 0;       // Stopper
     sal_Unicode* pSym = cSymbol;
@@ -1739,7 +1738,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     bool bQuote = false;
     mnRangeOpPosInSymbol = -1;
     ScanState eState = ssGetChar;
-    xub_StrLen nSpaces = 0;
+    sal_Int32 nSpaces = 0;
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
@@ -2488,7 +2487,7 @@ bool ScCompiler::IsString()
     const sal_Unicode* p = cSymbol;
     while ( *p )
         p++;
-    xub_StrLen nLen = sal::static_int_cast<xub_StrLen>( p - cSymbol - 1 );
+    sal_Int32 nLen = sal::static_int_cast<sal_Int32>( p - cSymbol - 1 );
     bool bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
     if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN-1)
     {
@@ -3254,8 +3253,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 OUString aSym, aTmp2;
                 bool bLastAlp, bNextNum;
                 bLastAlp = bNextNum = true;
-                xub_StrLen nStrip = 0;
-                xub_StrLen nCount = nRefs;
+                sal_Int32 nStrip = 0;
+                sal_Int32 nCount = nRefs;
                 for ( sal_Int32 j=1; j<nCount; j++ )
                 {
                     aTmp2 = aSymbol.getToken( 0, ':', nIndex );
@@ -3383,7 +3382,7 @@ static inline bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg,
 bool ScCompiler::NextNewToken( bool bInArray )
 {
     bool bAllowBooleans = bInArray;
-    xub_StrLen nSpaces = NextSymbol(bInArray);
+    sal_Int32 nSpaces = NextSymbol(bInArray);
 
     if (!cSymbol[0])
         return false;
@@ -4058,7 +4057,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 }
 
 bool ScCompiler::IsCharFlagAllConventions(
-    OUString const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric )
+    OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags, bool bTestLetterNumeric )
 {
     sal_Unicode c = rStr[ nPos ];
     sal_Unicode cLast = nPos > 0 ? rStr[ nPos-1 ] : 0;
