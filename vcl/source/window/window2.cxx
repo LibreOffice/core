@@ -378,7 +378,8 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
@@ -387,7 +388,6 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
     // we need a graphics
     if ( !mpGraphics )
     {
-        OutputDevice *pOutDev = GetOutDev();
         if ( !pOutDev->ImplGetGraphics() )
             return;
     }
@@ -418,12 +418,12 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     if ( nPoints < 2 )
         return;
 
-    Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
+    OutputDevice *pOutDev = GetOutDev();
+    Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
 
     // we need a graphics
     if ( !mpGraphics )
     {
-        OutputDevice *pOutDev = GetOutDev();
         if ( !pOutDev->ImplGetGraphics() )
             return;
     }
@@ -488,7 +488,8 @@ void Window::HideTracking()
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
@@ -504,7 +505,6 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
         // we need a graphics
         if ( !mpGraphics )
         {
-            OutputDevice *pOutDev = GetOutDev();
             if ( !pOutDev->ImplGetGraphics() )
                 return;
         }
@@ -526,7 +526,6 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
-            OutputDevice *pOutDev = GetOutDev();
             ImplClipBoundaries( aRegion, sal_False, sal_False );
             pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
         }
@@ -558,7 +557,9 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     if ( nPoints < 2 )
         return;
 
-    Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
+    OutputDevice *pOutDev = GetOutDev();
+
+    Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
 
     SalGraphics* pGraphics;
 
@@ -570,7 +571,6 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
         // we need a graphics
         if ( !mpGraphics )
         {
-            OutputDevice *pOutDev = GetOutDev();
             if ( !pOutDev->ImplGetGraphics() )
                 return;
         }
@@ -592,7 +592,6 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
-            OutputDevice *pOutDev = GetOutDev();
             ImplClipBoundaries( aRegion, sal_False, sal_False );
             pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
         }
