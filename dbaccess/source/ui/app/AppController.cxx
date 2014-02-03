@@ -403,7 +403,8 @@ void SAL_CALL OApplicationController::disposing()
                             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                             aFilter,
                             getStrippedDatabaseName(),
-                            OUString() );
+                            OUString(),
+                            OUString());
 
                     // add to recent document list
                     if ( aURL.GetProtocol() == INET_PROT_FILE )

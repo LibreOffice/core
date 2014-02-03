@@ -36,6 +36,7 @@
 #define HISTORY_PROPERTYNAME_FILTER         OUString("Filter")
 #define HISTORY_PROPERTYNAME_TITLE          OUString("Title")
 #define HISTORY_PROPERTYNAME_PASSWORD       OUString("Password")
+#define HISTORY_PROPERTYNAME_THUMBNAIL      OUString("Thumbnail")
 
 /*-************************************************************************************************************//**
     @descr          You can use these enum values to specify right history if you call ouer interface methods.
@@ -162,11 +163,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void AppendItem(            EHistoryType        eHistory    ,
-                            const   OUString&    sURL        ,
-                            const   OUString&    sFilter     ,
-                            const   OUString&    sTitle      ,
-                            const   OUString&    sPassword   );
+        void AppendItem(EHistoryType eHistory,
+                const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
+                const OUString& sPassword, const OUString& sThumbnail);
 
     private:
 

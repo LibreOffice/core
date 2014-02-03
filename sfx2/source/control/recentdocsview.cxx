@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sax/tools/converter.hxx>
 #include <sfx2/recentdocsview.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -140,9 +141,9 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     return aImg;
 }
 
-void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId)
+void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
 {
-    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, nId);
+    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, rThumbnail, nId);
 
     AppendItem(pChild);
 }
@@ -158,6 +159,7 @@ void RecentDocsView::loadRecentDocs()
 
         OUString aURL;
         OUString aTitle;
+        BitmapEx aThumbnail;
 
         for ( int j = 0; j < rRecentEntry.getLength(); j++ )
         {
@@ -167,11 +169,25 @@ void RecentDocsView::loadRecentDocs()
                 a >>= aURL;
             else if (rRecentEntry[j].Name == "Title")
                 a >>= aTitle;
+            else if (rRecentEntry[j].Name == "Thumbnail")
+            {
+                OUString aBase64;
+                a >>= aBase64;
+                if (!aBase64.isEmpty())
+                {
+                    Sequence<sal_Int8> aDecoded;
+                    sax::Converter::decodeBase64(aDecoded, aBase64);
+
+                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), STREAM_READ);
+                    vcl::PNGReader aReader(aStream);
+                    aThumbnail = aReader.Read();
+                }
+            }
         }
 
-        if( isAcceptedFile(aURL) )
+        if (isAcceptedFile(aURL))
         {
-            insertItem(aURL, aTitle, i+1);
+            insertItem(aURL, aTitle, aThumbnail, i+1);
         }
     }
 

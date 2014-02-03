@@ -1250,7 +1250,7 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     {
         OUString aTitle = GetEntry(i);
         OUString* pURL = (OUString*)(sal_uIntPtr)GetEntryData(i);
-        aHistOpt.AppendItem( eHELPBOOKMARKS, OUString( *pURL ), sEmpty, OUString( aTitle ), sEmpty );
+        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, sEmpty);
         delete pURL;
     }
 }

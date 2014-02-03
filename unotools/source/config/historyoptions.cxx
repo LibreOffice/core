@@ -50,6 +50,7 @@ namespace {
     static const ::sal_Int32 s_nOffsetFilter            = 1;
     static const ::sal_Int32 s_nOffsetTitle             = 2;
     static const ::sal_Int32 s_nOffsetPassword          = 3;
+    static const ::sal_Int32 s_nOffsetThumbnail         = 4;
 
     const char s_sCommonHistory[] = "org.openoffice.Office.Common/History";
     const char s_sHistories[] = "org.openoffice.Office.Histories/Histories";
@@ -65,35 +66,8 @@ namespace {
     const char s_sFilter[] = "Filter";
     const char s_sTitle[] = "Title";
     const char s_sPassword[] = "Password";
+    const char s_sThumbnail[] = "Thumbnail";
 }
-
-struct IMPL_THistoryItem
-{
-    IMPL_THistoryItem()
-    {
-    }
-
-    IMPL_THistoryItem( const OUString& sNewURL   ,
-        const OUString& sNewFilter  ,
-        const OUString& sNewTitle  ,
-        const OUString& sNewPassword )
-    {
-        sURL  = sNewURL  ;
-        sFilter  = sNewFilter ;
-        sTitle  = sNewTitle  ;
-        sPassword = sNewPassword ;
-    }
-
-    sal_Bool operator==( const OUString& sSearchedURL ) const
-    {
-        return( sURL == sSearchedURL );
-    }
-
-    OUString sURL  ;
-    OUString sFilter  ;
-    OUString sTitle  ;
-    OUString sPassword ;
-};
 
 //*****************************************************************************************************************
 //  class SvtHistoryOptions_Impl
@@ -108,11 +82,9 @@ public:
     sal_uInt32 GetSize( EHistoryType eHistory );
     void Clear( EHistoryType eHistory );
     Sequence< Sequence< PropertyValue > > GetList( EHistoryType eHistory );
-    void                                  AppendItem(       EHistoryType eHistory ,
-        const OUString&    sURL     ,
-        const OUString&    sFilter  ,
-        const OUString&    sTitle   ,
-        const OUString&    sPassword );
+    void AppendItem(EHistoryType eHistory,
+        const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
+        const OUString& sPassword, const OUString& sThumbnail);
 
 private:
     void impl_truncateList (EHistoryType eHistory, sal_uInt32 nSize);
@@ -339,7 +311,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     impl_truncateList (eHistory, GetSize (eHistory));
 
     Sequence< Sequence< PropertyValue > > seqReturn; // Set default return value.
-    Sequence< PropertyValue >             seqProperties( 4 );
+    Sequence< PropertyValue >             seqProperties(5);
 
     css::uno::Reference< css::container::XNameAccess > xListAccess;
     css::uno::Reference< css::container::XNameAccess > xItemList;
@@ -350,6 +322,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     seqProperties[s_nOffsetFilter    ].Name = HISTORY_PROPERTYNAME_FILTER;
     seqProperties[s_nOffsetTitle     ].Name = HISTORY_PROPERTYNAME_TITLE;
     seqProperties[s_nOffsetPassword  ].Name = HISTORY_PROPERTYNAME_PASSWORD;
+    seqProperties[s_nOffsetThumbnail ].Name = HISTORY_PROPERTYNAME_THUMBNAIL;
 
     try
     {
@@ -401,6 +374,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                         xSet->getPropertyValue(OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
                         xSet->getPropertyValue(OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
                         xSet->getPropertyValue(OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
+                        xSet->getPropertyValue(OUString(s_sThumbnail))>>= seqProperties[s_nOffsetThumbnail].Value;
                         aRet[nCount++] = seqProperties;
                     }
                 }
@@ -433,11 +407,9 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 //  public method
 //  implements a deque in XML
 //*****************************************************************************************************************
-void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
-                                        const OUString& sURL        ,
-                                        const OUString& sFilter     ,
-                                        const OUString& sTitle      ,
-                                        const OUString& sPassword   )
+void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
+        const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
+        const OUString& sPassword, const OUString& sThumbnail)
 {
     impl_truncateList (eHistory, GetSize (eHistory));
 
@@ -482,9 +454,16 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
         sal_Int32 nLength = xOrderList->getElementNames().getLength();
 
         OUString sHistoryItemRef(s_sHistoryItemRef);
-        // The item to be appended is already existing!
+        // The item to be appended already exists
         if (xItemList->hasByName(sURL))
         {
+            if (!sThumbnail.isEmpty())
+            {
+                // update the thumbnail
+                xItemList->getByName(sURL) >>= xSet;
+                xSet->setPropertyValue(OUString(s_sThumbnail), css::uno::makeAny(sThumbnail));
+            }
+
             for (sal_Int32 i=0; i<nLength; ++i)
             {
                 OUString sTmp;
@@ -509,15 +488,13 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
                     }
                     xOrderList->getByName( OUString::number(0) ) >>= xSet;
                     xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sFind));
-
-                    ::comphelper::ConfigurationHelper::flush(m_xCfg);
                     break;
                 }
             }
-        }
 
-        // The item to be appended is not existing!
-        else
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+        }
+        else // The item to be appended does not exist yet
         {
             css::uno::Reference< css::lang::XSingleServiceFactory > xFac;
             css::uno::Reference< css::uno::XInterface >             xInst;
@@ -574,6 +551,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             xSet->setPropertyValue(OUString(s_sFilter), css::uno::makeAny(sFilter));
             xSet->setPropertyValue(OUString(s_sTitle), css::uno::makeAny(sTitle));
             xSet->setPropertyValue(OUString(s_sPassword), css::uno::makeAny(sPassword));
+            xSet->setPropertyValue(OUString(s_sThumbnail), css::uno::makeAny(sThumbnail));
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
@@ -658,14 +636,12 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType e
 //*****************************************************************************************************************
 // public method
 //*****************************************************************************************************************
-void SvtHistoryOptions::AppendItem(   EHistoryType eHistory ,
-                                   const OUString&  sURL  ,
-                                   const OUString&  sFilter  ,
-                                   const OUString&  sTitle  ,
-                                   const OUString&  sPassword )
+void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
+        const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
+        const OUString& sPassword, const OUString& sThumbnail)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->AppendItem( eHistory, sURL, sFilter, sTitle, sPassword );
+    m_pDataContainer->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
 }
 
 namespace

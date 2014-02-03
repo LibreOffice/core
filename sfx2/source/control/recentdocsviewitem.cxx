@@ -15,7 +15,7 @@
 #include <tools/urlobj.hxx>
 
 RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-    const OUString &rTitle, sal_uInt16 nId)
+    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId),
       maURL(rURL)
 {
@@ -33,8 +33,8 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
 
-    BitmapEx aThumbnail;
-    if (aURLObj.GetProtocol() == INET_PROT_FILE)
+    BitmapEx aThumbnail(rThumbnail);
+    if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INET_PROT_FILE)
         aThumbnail = ThumbnailView::readThumbnail(rURL);
 
     if (aThumbnail.IsEmpty())

@@ -16,7 +16,7 @@ class RecentDocsViewItem : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-        const OUString &rTitle, sal_uInt16 nId);
+        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
 
     /// Text to be used for the tooltip.

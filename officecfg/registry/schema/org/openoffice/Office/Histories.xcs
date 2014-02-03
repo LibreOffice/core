@@ -41,6 +41,11 @@
           <desc>Contains an encoded password used to open the document.</desc>
         </info>
       </prop>
+      <prop oor:name="Thumbnail" oor:type="xs:string">
+        <info>
+          <desc>Contains a base64 encoded thumbnail of the document.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="HistoryOrder">
       <info>

@@ -17,15 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <sax/tools/converter.hxx>
 #include <svl/inethist.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/pngwrite.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -188,12 +190,34 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
+    // generate a thumbnail
+    OUString aThumbnail;
+    if (!pDocSh->IsModified())
+    {
+        // not modified => the document matches what is in the shell
+        boost::shared_ptr<GDIMetaFile> pMetaFile = pDocSh->GetPreviewMetaFile();
+        BitmapEx aResultBitmap;
+        if (pMetaFile->CreateThumbnail(aResultBitmap))
+        {
+            SvMemoryStream aStream(65535, 65535);
+            vcl::PNGWriter aWriter(aResultBitmap);
+            if (aWriter.Write(aStream))
+            {
+                Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()), aStream.Tell());
+                OUStringBuffer aBuffer;
+                ::sax::Converter::encodeBase64(aBuffer, aSequence);
+                aThumbnail = aBuffer.makeStringAndClear();
+            }
+        }
+    }
+
     // add to svtool history options
     SvtHistoryOptions().AppendItem( ePICKLIST,
             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
             aFilter,
             aTitle,
-            OUString() );
+            OUString(),
+            aThumbnail);
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
