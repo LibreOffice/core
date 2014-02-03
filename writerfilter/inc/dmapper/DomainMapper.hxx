@@ -129,6 +129,8 @@ public:
 
     uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
 
+    void HandleRedline( Sprm& rSprm );
+
 private:
     // Stream
     virtual void lcl_startSectionGroup();
