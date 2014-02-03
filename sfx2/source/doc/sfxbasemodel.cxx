@@ -4185,7 +4185,7 @@ namespace sfx { namespace intern {
     /** a class which, in its dtor, cleans up variuos objects (well, at the moment only the frame) collected during
         the creation of a document view, unless the creation was successful.
     */
-    class SAL_DLLPRIVATE ViewCreationGuard
+    class ViewCreationGuard
     {
     public:
         ViewCreationGuard()

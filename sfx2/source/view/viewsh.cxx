@@ -412,7 +412,7 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
 
 //--------------------------------------------------------------------
 
-SAL_DLLPRIVATE void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
+void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {
     SfxInPlaceClientList* pClientList = GetIPClientList_Impl(sal_True);
 
