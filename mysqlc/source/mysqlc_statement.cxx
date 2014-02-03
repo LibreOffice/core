@@ -35,8 +35,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-#define USE_CPP_CONN 1
-
 using namespace connectivity::mysqlc;
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
