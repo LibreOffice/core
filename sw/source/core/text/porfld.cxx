@@ -182,7 +182,7 @@ SwFldSlot::~SwFldSlot()
         pInf->SetTxt( *pOldTxt );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
-        pInf->SetFakeLineStart( sal_False );
+        pInf->SetFakeLineStart( false );
     }
 }
 
@@ -726,7 +726,7 @@ static sal_Char const sDoubleSpace[] = "  ";
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
                     SwTxtSlot aDiffTxt( &aInf, this, true, false, sDoubleSpace );
-                    aInf.DrawText( *this, aInf.GetLen(), sal_True );
+                    aInf.DrawText( *this, aInf.GetLen(), true );
                 }
             }
             pThis->Width( nOldWidth );
@@ -835,11 +835,11 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         {
             SetLen( 0 );
             SetNoPaint( sal_True );
-            rInf.SetNumDone( sal_False );
+            rInf.SetNumDone( false );
             return sal_True;
         }
     }
-    rInf.SetNumDone( sal_True );
+    rInf.SetNumDone( true );
 //    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0

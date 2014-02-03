@@ -1873,7 +1873,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
 
-    SwTxtFormatInfo aInf( pFrm, sal_False, sal_True, sal_True );
+    SwTxtFormatInfo aInf( pFrm, false, true, true );
     SwTxtFormatter  aLine( pFrm, &aInf );
 
     pFrm->_Format( aLine, aInf );
@@ -2123,8 +2123,8 @@ SwTwips SwTxtFrm::CalcFitToContent()
     // #i31490#
     SwTxtFrmLocker aLock( this );
 
-    SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
-    aInf.SetIgnoreFly( sal_True );
+    SwTxtFormatInfo aInf( this, false, true, true );
+    aInf.SetIgnoreFly( true );
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
@@ -2183,8 +2183,8 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
             SwTxtFrmLocker aLock( this );
 
             // simulate text formatting
-            SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
-            aInf.SetIgnoreFly( sal_True );
+            SwTxtFormatInfo aInf( this, false, true, true );
+            aInf.SetIgnoreFly( true );
             SwTxtFormatter aLine( this, &aInf );
             SwHookOut aHook( aInf );
             aLine._CalcFitToContent();

@@ -434,7 +434,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                 {
                     bFull = false;
                     if ( bTabOverflow && !IsAutoTabStop() )
-                        rInf.SetTabOverflow( sal_True );
+                        rInf.SetTabOverflow( true );
                 }
 
                 break;
@@ -620,7 +620,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             KSHORT nChar = Width() / nCharWidth;
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, ' ');
-            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
+            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, true);
         }
     }
 
@@ -639,7 +639,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 ++nChar; // to avoid gaps (Bug 13430)
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, cFill);
-            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
+            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, true);
         }
     }
 }

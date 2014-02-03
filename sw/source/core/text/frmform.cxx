@@ -1937,7 +1937,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     SwFrmSwapper aSwapper( this, sal_True );
 
     SwTxtFrmLocker aLock(this);
-    SwTxtFormatInfo aInf( this, sal_False, sal_True );
+    SwTxtFormatInfo aInf( this, false, true );
     if( 0 != aInf.MaxHyph() )   // Respect MaxHyphen!
         return sal_False;
 

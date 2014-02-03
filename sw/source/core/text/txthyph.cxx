@@ -83,7 +83,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         if ( IsVertical() )
             SwapWidthAndHeight();
 
-        SwTxtFormatInfo aInf( this, sal_True );     // sal_True fuer interactive hyph!
+        SwTxtFormatInfo aInf( this, true );     // true for interactive hyph!
         SwTxtFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
         // Wenn wir innerhalb des ersten Wortes einer Zeile stehen, so koennte
@@ -500,7 +500,7 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
         if( rInf.GetSoftHyphPos() )
             return sal_True;
 
-        const sal_Bool bHyph = rInf.ChgHyph( sal_True );
+        const bool bHyph = rInf.ChgHyph( true );
         if( rInf.IsHyphenate() )
         {
             rInf.SetSoftHyphPos( rInf.GetIdx() );

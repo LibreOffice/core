@@ -133,11 +133,6 @@ SwDropPortion::~SwDropPortion()
         pBlink->Delete( this );
 }
 
-sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, sal_Int32 nPos )
-{
-    return 0 != pTxtNode->GetTxtAttrForCharAt(nPos);
-}
-
 /*************************************************************************
  *                    SwTxtNode::GetDropLen()
  *
@@ -1101,7 +1096,7 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
             bFull = SwTxtPortion::Format( rInf );
         }
         else
-            rInf.SetDropInit( sal_True );
+            rInf.SetDropInit( true );
 
         Height( rInf.GetTxtHeight() );
         SetAscent( rInf.GetAscent() );

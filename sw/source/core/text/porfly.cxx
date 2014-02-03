@@ -119,7 +119,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         else
         {
             if( !rInf.GetFly() )
-                rInf.SetNewLine( sal_True );
+                rInf.SetNewLine( true );
             Width(0);
             SetAscent(0);
             SetLen(0);

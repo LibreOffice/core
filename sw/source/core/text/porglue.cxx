@@ -94,7 +94,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
         comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
         OUString aTxt(aBuf.makeStringAndClear());
         SwTxtPaintInfo aInf( rInf, &aTxt );
-        aInf.DrawText( *this, aTxt.getLength(), sal_True );
+        aInf.DrawText( *this, aTxt.getLength(), true );
     }
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
@@ -116,12 +116,12 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
             aBulletPor.Width( aBulletSize.Width() );
             aBulletPor.Height( aBulletSize.Height() );
             aBulletPor.SetAscent( GetAscent() );
-            aInf.DrawText( aBulletPor, aBullet.getLength(), sal_True );
+            aInf.DrawText( aBulletPor, aBullet.getLength(), true );
         }
         else
         {
             SwTxtSlot aSlot( &rInf, this, true, false );
-            rInf.DrawText( *this, rInf.GetLen(), sal_True );
+            rInf.DrawText( *this, rInf.GetLen(), true );
         }
     }
 }

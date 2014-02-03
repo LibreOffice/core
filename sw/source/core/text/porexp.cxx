@@ -112,10 +112,10 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     // ST2
     if ( rInf.GetSmartTags() || rInf.GetGrammarCheckList() )
-        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False,
+        rInf.DrawMarkedText( *this, rInf.GetLen(), false, false,
             0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
     else
-        rInf.DrawText( *this, rInf.GetLen(), sal_False );
+        rInf.DrawText( *this, rInf.GetLen(), false );
 
     if( GetJoinBorderWithPrev() || GetJoinBorderWithNext() )
         *const_cast<SwTxtPaintInfo&>(rInf).GetFont() = aOldFont;

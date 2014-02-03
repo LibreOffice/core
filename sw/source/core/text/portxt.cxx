@@ -587,9 +587,9 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
         const bool bSmartTags = 0 != pSmarttags;
 
         if ( bWrong || bSmartTags || bGrammarCheck )
-            rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, bWrong, bSmartTags, bGrammarCheck );
+            rInf.DrawMarkedText( *this, rInf.GetLen(), false, bWrong, bSmartTags, bGrammarCheck );
         else
-            rInf.DrawText( *this, rInf.GetLen(), sal_False );
+            rInf.DrawText( *this, rInf.GetLen(), false );
     }
 }
 

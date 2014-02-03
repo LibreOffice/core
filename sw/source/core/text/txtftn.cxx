@@ -910,7 +910,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
             {
                 if( !pFtnCont )
                 {
-                    rInf.SetStop( sal_True );
+                    rInf.SetStop( true );
                     UNDO_SWAP( pFrm )
                     return 0;
                 }
@@ -927,7 +927,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                             SwFtnFrm* pTmpFrm = (SwFtnFrm*)pFtnC->Lower();
                             if( pTmpFrm && *pTmpFrm < pFtn )
                             {
-                                rInf.SetStop( sal_True );
+                                rInf.SetStop( true );
                                 UNDO_SWAP( pFrm )
                                 return 0;
                             }
@@ -955,7 +955,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                 // Wir sind in der letzte Zeile und die Fussnote
                                 // ist auf eine andere Seite gewandert, dann wollen
                                 // wir mit ...
-                                rInf.SetStop( sal_True );
+                                rInf.SetStop( true );
                                 UNDO_SWAP( pFrm )
                                 return 0;
                             }
@@ -1435,7 +1435,7 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
     // an underflow during SwTxtGuess::Guess
     rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
     sal_Bool bFull = SwFldPortion::Format( rInf );
-    rInf.SetFakeLineStart( sal_False );
+    rInf.SetFakeLineStart( false );
     SetAscent( rInf.GetAscent() );
     Height( rInf.GetTxtHeight() );
     rInf.SetFtnDone( !bFull );
@@ -1561,7 +1561,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
         SwTxtSlot aDiffTxt( &rInf, this, true, false );
         SwFontSave aSave( rInf, pFnt );
-        rInf.DrawText( *this, rInf.GetLen(), sal_True );
+        rInf.DrawText( *this, rInf.GetLen(), true );
     }
 }
 
@@ -1598,7 +1598,7 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
-    rInf.SetErgoDone( sal_True );
+    rInf.SetErgoDone( true );
 
     // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
     if( bFull && rInf.GetRest() )

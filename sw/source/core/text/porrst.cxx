@@ -111,7 +111,7 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
     if ( rInf.GetIdx()+1 == rInf.GetTxt().getLength() )
-        rInf.SetNewLine( sal_True );
+        rInf.SetNewLine( true );
     return sal_True;
 }
 
@@ -170,7 +170,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
             aClip.ChgClip( aClipRect, 0 );
-            rInf.DrawText( aTxtDouble, *this, 0, 2, sal_True );
+            rInf.DrawText( aTxtDouble, *this, 0, 2, true );
         }
     }
 }
