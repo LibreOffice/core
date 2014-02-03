@@ -153,6 +153,8 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TOP_BORDER            :    sName = "TopBorder";break;
             case PROP_BOTTOM_BORDER         :    sName = "BottomBorder";break;
             case PROP_TABLE_BORDER         :    sName = "TableBorder";break;
+            case PROP_TABLE_ROW_DELETE      :    sName = "TableRowDelete"; break;
+            case PROP_TABLE_ROW_INSERT      :    sName = "TableRowInsert"; break;
             case PROP_LEFT_BORDER_DISTANCE  :    sName = "LeftBorderDistance"; break;
             case PROP_RIGHT_BORDER_DISTANCE :    sName = "RightBorderDistance"; break;
             case PROP_TOP_BORDER_DISTANCE   :    sName = "TopBorderDistance";break;
@@ -270,10 +272,16 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SIZE_TYPE             :    sName = "SizeType"; break;
             case PROP_TABLE_COLUMN_SEPARATORS:   sName = "TableColumnSeparators"; break;
             case META_PROP_TABLE_STYLE_NAME  :    sName = "TableStyleName"; break;
+            case PROP_TABLE_REDLINE_PARAMS  :    sName = "TableRedlineParams"; break;
+            case PROP_TABLE_REDLINE_AUTHOR  :    sName = "TableRedlineAuthor"; break;
+            case PROP_TABLE_REDLINE_DATE    :    sName = "TableRedlineDate"; break;
+            case PROP_TABLE_REDLINE_ID      :    sName = "TableRedlineID"; break;
+            case PROP_TABLE_REDLINE_TOKEN   :    sName = "TableRedlineToken"; break;
             case PROP_REDLINE_AUTHOR        :    sName = "RedlineAuthor"; break;
             case PROP_REDLINE_DATE_TIME     :    sName = "RedlineDateTime"; break;
             case PROP_REDLINE_COMMENT       :    sName = "RedlineComment"; break;
             case PROP_REDLINE_TYPE          :    sName = "RedlineType"; break;
+            case PROP_REDLINE_TOKEN         :    sName = "RedlineToken"; break;
             case PROP_REDLINE_REVERT_PROPERTIES: sName = "RedlineRevertProperties"; break;
             case PROP_REDLINE_SUCCESSOR_DATA:    sName = "RedlineSuccessorData"; break;
             case PROP_REDLINE_IDENTIFIER    :    sName = "RedlineIdentifier"; break;
