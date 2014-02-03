@@ -2781,6 +2781,18 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
         CPPUNIT_ASSERT_EQUAL(aCoordinates[i].second, aPairs[i].Second.Value.get<sal_Int32>());
     }
 }
+
+DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
+{
+    // fdo#74141 :There was a problem that in style.xml and document.xml in <w:ind> tag "right" & "left" margin
+    // attributes gets added(w:right=0 & w:left=0) if these attributes are not set in original document.
+    // This test is to verify <w:ind> does not contain w:right attribute.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end", "");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

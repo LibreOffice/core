@@ -420,7 +420,9 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 )
+    bAutoFirst      ( 0 ),
+    bExplicitZeroMarginValRight(sal_False),
+    bExplicitZeroMarginValLeft(sal_False)
 {
 }
 
@@ -439,7 +441,9 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 )
+    bAutoFirst      ( 0 ),
+    bExplicitZeroMarginValRight(sal_False),
+    bExplicitZeroMarginValLeft(sal_False)
 {
 }
 
@@ -574,7 +578,9 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nPropFirstLineOfst == rOther.GetPropTxtFirstLineOfst() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
-        bAutoFirst == rOther.IsAutoFirst() );
+        bAutoFirst == rOther.IsAutoFirst() &&
+        bExplicitZeroMarginValRight == rOther.IsExplicitZeroMarginValRight() &&
+        bExplicitZeroMarginValLeft == rOther.IsExplicitZeroMarginValLeft() );
 }
 
 // -----------------------------------------------------------------------
