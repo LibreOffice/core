@@ -214,7 +214,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_IMAGE,           // GRAPHIC
         ATK_ROLE_UNKNOWN,         // GROUP_BOX - registered below
         ATK_ROLE_HEADER,
-        ATK_ROLE_PARAGRAPH,       // HEADING - registered below
+        ATK_ROLE_HEADING,         // HEADING - registered below
         ATK_ROLE_TEXT,            // HYPER_LINK - registered below
         ATK_ROLE_ICON,
         ATK_ROLE_INTERNAL_FRAME,
