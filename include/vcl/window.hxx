@@ -362,6 +362,10 @@ private:
     //
     WindowImpl* mpWindowImpl;
 
+    // This is a first attempt to start to remove the dependency of Window on
+    // OutputDevice
+    OutputDevice* mpOutputDevice;
+
     SAL_DLLPRIVATE void ImplInitWindowData( WindowType nType );
 
 #ifdef DBG_UTIL
@@ -577,6 +581,9 @@ public:
 
                         Window( Window* pParent, const ResId& rResId );
     virtual             ~Window();
+
+    OutputDevice const* GetOutDev() const { return mpOutputDevice; };
+    OutputDevice*       GetOutDev()       { return mpOutputDevice; };
 
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
