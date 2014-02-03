@@ -206,6 +206,8 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
                 ++n;
             }
         }
+
+        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
     }
 
     if(bMoveCrsr)
@@ -311,6 +313,8 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
             // lies on the position ??
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
+
+        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
     }
 
     if(bMoveCrsr)
