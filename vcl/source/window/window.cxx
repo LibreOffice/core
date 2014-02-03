@@ -2983,6 +2983,8 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( !mpWindowImpl->mpFirstChild )
         bScrollChildren = sal_False;
 
+    OutputDevice *pOutDev = GetOutDev();
+
     // --- RTL --- check if this window requires special action
     sal_Bool bReMirror = ( ImplIsAntiparallel() );
 
@@ -2991,7 +2993,6 @@ void Window::ImplScroll( const Rectangle& rRect,
     {
         // --- RTL --- make sure the invalidate region of this window is
         // computed in the same coordinate space as the one from the overlap windows
-        const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ImplReMirror( aRectMirror );
     }
 
@@ -3055,9 +3056,6 @@ void Window::ImplScroll( const Rectangle& rRect,
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
         {
-
-            OutputDevice *pOutDev = GetOutDev();
-
             if( bReMirror )
             {
                 // --- RTL --- frame coordinates require re-mirroring
@@ -4221,7 +4219,8 @@ void Window::ImplNewInputContext()
     aNewContext.mpFont = NULL;
     if (!rFontName.isEmpty())
     {
-        Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
+        OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
+        Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetSize() );
         if ( !aSize.Height() )
         {
             // only set default sizes if the font height in logical
@@ -7328,7 +7327,8 @@ void Window::Scroll( long nHorzScroll, long nVertScroll,
                      const Rectangle& rRect, sal_uInt16 nFlags )
 {
 
-    Rectangle aRect = ImplLogicToDevicePixel( rRect );
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     aRect.Intersection( Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
     if ( !aRect.IsEmpty() )
         ImplScroll( aRect, nHorzScroll, nVertScroll, nFlags );
@@ -7353,7 +7353,9 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
 
-    Rectangle aRect = ImplLogicToDevicePixel( rRect );
+
+    OutputDevice *pOutDev = GetOutDev();
+    Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     if ( !aRect.IsEmpty() )
     {
         Region aRegion( aRect );

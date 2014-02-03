@@ -1322,16 +1322,17 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
 
     if ( pChild )
     {
+        const OutputDevice *pChildOutDev = pChild->GetOutDev();
         ImplCallCommand( pChild, COMMAND_CURSORPOS );
         const Rectangle* pRect = pChild->GetCursorRect();
         if ( pRect )
-            rRect = pChild->ImplLogicToDevicePixel( *pRect );
+            rRect = pChildOutDev->ImplLogicToDevicePixel( *pRect );
         else
         {
             Cursor* pCursor = pChild->GetCursor();
             if ( pCursor )
             {
-                Point aPos = pChild->ImplLogicToDevicePixel( pCursor->GetPos() );
+                Point aPos = pChildOutDev->ImplLogicToDevicePixel( pCursor->GetPos() );
                 Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
                 if ( !aSize.Width() )
                     aSize.Width() = pChild->GetSettings().GetStyleSettings().GetCursorSize();
@@ -2318,8 +2319,9 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
         {
+            OutputDevice *pChildOutDev = pChild->GetOutDev();
             const Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
-            Rectangle aDeviceRect = pChild->ImplLogicToDevicePixel( aRect );
+            Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
             Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
             pEvt->mnCursorBoundX = aAbsScreenPos.X();
             pEvt->mnCursorBoundY = aAbsScreenPos.Y();
