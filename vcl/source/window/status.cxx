@@ -282,7 +282,9 @@ void StatusBar::ImplFormat()
             nExtraWidth2 = 0;
         }
         nX = STATUSBAR_OFFSET_X;
-        if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+
+        const OutputDevice *pOutDev = GetOutDev();
+        if( pOutDev->ImplHasMirroredGraphics() && IsRTLEnabled() )
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
@@ -481,7 +483,6 @@ void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDr
     }
 
     const OutputDevice *pOutDev = GetOutDev();
-
     if ( !pOutDev->ImplIsRecordLayout() )
         ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) sal_IntPtr(pItem->mnId) );
 }
