@@ -99,33 +99,18 @@ public:
 
     void            ClearHeader();
 
-    // to be removed all calls of the related methods are redirected to *Table() methods
-    using Window::Show;
-    using Window::Hide;
-    using Window::Enable;
-    using Window::Disable;
-    using Window::ToTop;
-
-    void            Show();
-    void            Hide();
-    void            Enable();
-    void            Disable();
-    void            ToTop();
-
-    // remove until this line
-
     void            ShowTable();
     void            HideTable();
-    sal_Bool            IsVisible() const;
+    sal_Bool        IsVisible() const;
 
     void            EnableTable();
     void            DisableTable();
-    sal_Bool            IsEnabled() const;
+    sal_Bool        IsEnabled() const;
 
-    sal_uInt16          GetSelectedCol();
+    sal_uInt16      GetSelectedCol();
     void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
-    sal_Bool            GetSortDirection(){ return bSortDirection;}
-    sal_uInt16          GetSortedCol(){ return nSortCol;}
+    sal_Bool        GetSortDirection(){ return bSortDirection;}
+    sal_uInt16      GetSortedCol(){ return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     CommandEvent    GetCommandEvent()const;
