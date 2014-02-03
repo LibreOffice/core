@@ -80,20 +80,20 @@ public:
 
 private:
     /** Initializes the children controls (pos/size, scroll bars, ...). */
-    SC_DLLPRIVATE void                        InitControls();
+    SAL_DLLPRIVATE void                        InitControls();
     /** Initializes size and position data of horizontal scrollbar. */
-    SC_DLLPRIVATE void                        InitHScrollBar();
+    SAL_DLLPRIVATE void                        InitHScrollBar();
     /** Initializes size and position data of vertical scrollbar. */
-    SC_DLLPRIVATE void                        InitVScrollBar();
+    SAL_DLLPRIVATE void                        InitVScrollBar();
 
     /** Calculates and sets valid position offset nearest to nPos. */
-    SC_DLLPRIVATE inline void                 ImplSetPosOffset( sal_Int32 nPos )
+    SAL_DLLPRIVATE inline void                 ImplSetPosOffset( sal_Int32 nPos )
                                     { maData.mnPosOffset = std::max( std::min( nPos, GetMaxPosOffset() ), sal_Int32( 0 ) ); }
     /** Calculates and sets valid line offset nearest to nLine. */
-    SC_DLLPRIVATE inline void                 ImplSetLineOffset( sal_Int32 nLine )
+    SAL_DLLPRIVATE inline void                 ImplSetLineOffset( sal_Int32 nLine )
                                     { maData.mnLineOffset = std::max( std::min( nLine, GetMaxLineOffset() ), sal_Int32( 0 ) ); }
     /** Moves controls (not cursors!) so that nPos becomes visible. */
-    SC_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
 
     // cell contents ----------------------------------------------------------
 public:
@@ -129,9 +129,9 @@ protected:
     virtual Size                GetOptimalSize() const;
 
 private:
-    SC_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );
-    SC_DLLPRIVATE              DECL_LINK( ScrollHdl, ScrollBar* );
-    SC_DLLPRIVATE              DECL_LINK( ScrollEndHdl, ScrollBar* );
+    SAL_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );
+    SAL_DLLPRIVATE              DECL_LINK( ScrollHdl, ScrollBar* );
+    SAL_DLLPRIVATE              DECL_LINK( ScrollEndHdl, ScrollBar* );
 
     // accessibility ----------------------------------------------------------
 public:

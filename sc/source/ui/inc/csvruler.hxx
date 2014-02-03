@@ -75,19 +75,19 @@ public:
 
 private:
     /** Reads colors from system settings. */
-    SC_DLLPRIVATE void                        InitColors();
+    SAL_DLLPRIVATE void                        InitColors();
     /** Initializes all data dependent from the control's size. */
-    SC_DLLPRIVATE void                        InitSizeData();
+    SAL_DLLPRIVATE void                        InitSizeData();
 
     /** Moves cursor to a new position.
         @param bScroll  sal_True = The method may scroll the ruler. */
-    SC_DLLPRIVATE void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
+    SAL_DLLPRIVATE void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
     /** Moves cursor to the given direction. */
-    SC_DLLPRIVATE void                        MoveCursorRel( ScMoveMode eDir );
+    SAL_DLLPRIVATE void                        MoveCursorRel( ScMoveMode eDir );
     /** Sets cursor to an existing split, according to eDir. */
-    SC_DLLPRIVATE void                        MoveCursorToSplit( ScMoveMode eDir );
+    SAL_DLLPRIVATE void                        MoveCursorToSplit( ScMoveMode eDir );
     /** Scrolls data grid vertically. */
-    SC_DLLPRIVATE void                        ScrollVertRel( ScMoveMode eDir );
+    SAL_DLLPRIVATE void                        ScrollVertRel( ScMoveMode eDir );
 
     // split handling ---------------------------------------------------------
 public:
@@ -115,12 +115,12 @@ public:
 
 private:
     /** Finds next position without a split. */
-    SC_DLLPRIVATE sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
+    SAL_DLLPRIVATE sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
 
     /** Moves split and cursor to nNewPos and commits event. */
-    SC_DLLPRIVATE void                        MoveCurrSplit( sal_Int32 nNewPos );
+    SAL_DLLPRIVATE void                        MoveCurrSplit( sal_Int32 nNewPos );
     /** Moves split and cursor to the given direction and commits event. */
-    SC_DLLPRIVATE void                        MoveCurrSplitRel( ScMoveMode eDir );
+    SAL_DLLPRIVATE void                        MoveCurrSplitRel( ScMoveMode eDir );
 
     // event handling ---------------------------------------------------------
 protected:
@@ -137,12 +137,12 @@ protected:
 
 private:
     /** Starts tracking at the specified position. */
-    SC_DLLPRIVATE void                        StartMouseTracking( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        StartMouseTracking( sal_Int32 nPos );
     /** Moves tracking to a new position. */
-    SC_DLLPRIVATE void                        MoveMouseTracking( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        MoveMouseTracking( sal_Int32 nPos );
     /** Applies tracking action for the current tracking position.
         @param bApply  sal_True = apply action, sal_False = cancel action. */
-    SC_DLLPRIVATE void                        EndMouseTracking( bool bApply );
+    SAL_DLLPRIVATE void                        EndMouseTracking( bool bApply );
 
     // painting ---------------------------------------------------------------
 protected:
@@ -159,24 +159,24 @@ private:
     inline sal_Int32            GetHeight() const { return maWinSize.Height(); }
 
     /** Draws the background and active area to maBackgrDev (only the given X range). */
-    SC_DLLPRIVATE void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );
+    SAL_DLLPRIVATE void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );
     /** Draws the entire ruler background with scaling to maBackgrDev. */
-    SC_DLLPRIVATE void                        ImplDrawBackgrDev();
+    SAL_DLLPRIVATE void                        ImplDrawBackgrDev();
 
     /** Draws a split to maRulerDev. */
-    SC_DLLPRIVATE void                        ImplDrawSplit( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        ImplDrawSplit( sal_Int32 nPos );
     /** Erases a split from maRulerDev. */
-    SC_DLLPRIVATE void                        ImplEraseSplit( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        ImplEraseSplit( sal_Int32 nPos );
     /** Draws the ruler background, all splits and the cursor to maRulerDev. */
-    SC_DLLPRIVATE void                        ImplDrawRulerDev();
+    SAL_DLLPRIVATE void                        ImplDrawRulerDev();
 
     /** Inverts the cursor bar at the specified position in maRulerDev. */
-    SC_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
     /** Draws directly tracking rectangle to the column with the specified index. */
-    SC_DLLPRIVATE void                        ImplDrawTrackingRect();
+    SAL_DLLPRIVATE void                        ImplDrawTrackingRect();
 
     /** Sets arrow or horizontal split pointer. */
-    SC_DLLPRIVATE void                        ImplSetMousePointer( sal_Int32 nPos );
+    SAL_DLLPRIVATE void                        ImplSetMousePointer( sal_Int32 nPos );
 
     // accessibility ----------------------------------------------------------
 protected:

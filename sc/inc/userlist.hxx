@@ -42,7 +42,7 @@ private:
     SubStringsType maSubStrings;
     OUString aStr;
 
-    SC_DLLPRIVATE void  InitTokens();
+    SAL_DLLPRIVATE void  InitTokens();
 
 public:
     ScUserListData(const OUString& rStr);

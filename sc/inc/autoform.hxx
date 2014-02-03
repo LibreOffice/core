@@ -269,8 +269,8 @@ private:
 
     ScAutoFormatDataField**     ppDataField;
 
-    SC_DLLPRIVATE ScAutoFormatDataField&       GetField( sal_uInt16 nIndex );
-    SC_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;
+    SAL_DLLPRIVATE ScAutoFormatDataField&       GetField( sal_uInt16 nIndex );
+    SAL_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;
 
 public:
     ScAutoFormatData();

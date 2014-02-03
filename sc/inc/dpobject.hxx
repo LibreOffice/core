@@ -104,11 +104,11 @@ private:
     bool                    bSettingsChanged:1;
     bool                    mbEnableGetPivotData:1;
 
-    SC_DLLPRIVATE ScDPTableData*    GetTableData();
-    SC_DLLPRIVATE void              CreateObjects();
-    SC_DLLPRIVATE void              CreateOutput();
-    SC_DLLPRIVATE void ClearSource();
-    SC_DLLPRIVATE bool FillLabelDataForDimension(
+    SAL_DLLPRIVATE ScDPTableData*    GetTableData();
+    SAL_DLLPRIVATE void              CreateObjects();
+    SAL_DLLPRIVATE void              CreateOutput();
+    SAL_DLLPRIVATE void ClearSource();
+    SAL_DLLPRIVATE bool FillLabelDataForDimension(
         const com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess>& xDims,
         sal_Int32 nDim, ScDPLabelData& rLabelData);

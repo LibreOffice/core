@@ -119,10 +119,10 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScCollaboration*      mpCollaboration;
 #endif
 
-    SC_DLLPRIVATE void          InitItems();
-    SC_DLLPRIVATE void          DoEnterHandler();
-    SC_DLLPRIVATE void          InitOptions(bool bForLoading);
-    SC_DLLPRIVATE void          ResetDrawObjectShell();
+    SAL_DLLPRIVATE void          InitItems();
+    SAL_DLLPRIVATE void          DoEnterHandler();
+    SAL_DLLPRIVATE void          InitOptions(bool bForLoading);
+    SAL_DLLPRIVATE void          ResetDrawObjectShell();
 
     // SUNWS needs a forward declared friend, otherwise types and members
     // of the outer class are not accessible.
@@ -139,32 +139,32 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
                         ScDocShell & mrDocShell;
     };
 
-    SC_DLLPRIVATE sal_Bool            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    SC_DLLPRIVATE sal_Bool            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    SC_DLLPRIVATE SCTAB         GetSaveTab();
+    SAL_DLLPRIVATE sal_Bool            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SAL_DLLPRIVATE sal_Bool            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SAL_DLLPRIVATE SCTAB         GetSaveTab();
 
-    SC_DLLPRIVATE bool SaveCurrentChart( SfxMedium& rMedium );
+    SAL_DLLPRIVATE bool SaveCurrentChart( SfxMedium& rMedium );
 
-    SC_DLLPRIVATE sal_uLong         DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
+    SAL_DLLPRIVATE sal_uLong         DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                              ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
-    SC_DLLPRIVATE sal_uLong DBaseExport(
+    SAL_DLLPRIVATE sal_uLong DBaseExport(
         const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo );
 
-    SC_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
-    SC_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );
-    SC_DLLPRIVATE static bool       IsDocument( const INetURLObject& rURL );
+    SAL_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    SAL_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );
+    SAL_DLLPRIVATE static bool       IsDocument( const INetURLObject& rURL );
 
-    SC_DLLPRIVATE void          LockPaint_Impl(sal_Bool bDoc);
-    SC_DLLPRIVATE void          UnlockPaint_Impl(sal_Bool bDoc);
-    SC_DLLPRIVATE void          LockDocument_Impl(sal_uInt16 nNew);
-    SC_DLLPRIVATE void          UnlockDocument_Impl(sal_uInt16 nNew);
+    SAL_DLLPRIVATE void          LockPaint_Impl(sal_Bool bDoc);
+    SAL_DLLPRIVATE void          UnlockPaint_Impl(sal_Bool bDoc);
+    SAL_DLLPRIVATE void          LockDocument_Impl(sal_uInt16 nNew);
+    SAL_DLLPRIVATE void          UnlockDocument_Impl(sal_uInt16 nNew);
 
-    SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
-    SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
+    SAL_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
 
-    SC_DLLPRIVATE void          UseSheetSaveEntries();
+    SAL_DLLPRIVATE void          UseSheetSaveEntries();
 
-    SC_DLLPRIVATE ScDocFunc    *CreateDocFunc();
+    SAL_DLLPRIVATE ScDocFunc    *CreateDocFunc();
 
 protected:
 
@@ -185,7 +185,7 @@ public:
     using SfxShell::Deactivate;         // with sal_Bool bMDI
 
 #if ENABLE_TELEPATHY
-    SC_DLLPRIVATE ScCollaboration* GetCollaboration();
+    SAL_DLLPRIVATE ScCollaboration* GetCollaboration();
 #endif
     virtual void    Activate();
     virtual void    Deactivate();

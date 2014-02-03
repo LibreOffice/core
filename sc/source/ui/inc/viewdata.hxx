@@ -216,15 +216,15 @@ private:
     bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
-    SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, void*);
-    SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
+    SAL_DLLPRIVATE DECL_LINK (EmptyEditHdl, void*);
+    SAL_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
 
-    SC_DLLPRIVATE void          CalcPPT();
-    SC_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
-    SC_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
-    SC_DLLPRIVATE void          CreateSelectedTabData();
-    SC_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
-    SC_DLLPRIVATE void          UpdateCurrentTab();
+    SAL_DLLPRIVATE void          CalcPPT();
+    SAL_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
+    SAL_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
+    SAL_DLLPRIVATE void          CreateSelectedTabData();
+    SAL_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
+    SAL_DLLPRIVATE void          UpdateCurrentTab();
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );

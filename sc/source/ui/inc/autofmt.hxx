@@ -78,31 +78,31 @@ private:
     const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
-    SC_DLLPRIVATE void  Init            ();
-    SC_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
-    SC_DLLPRIVATE void  CalcCellArray   ( bool bFitWidth );
-    SC_DLLPRIVATE void  CalcLineMap     ();
-    SC_DLLPRIVATE void  PaintCells      ();
+    SAL_DLLPRIVATE void  Init            ();
+    SAL_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
+    SAL_DLLPRIVATE void  CalcCellArray   ( bool bFitWidth );
+    SAL_DLLPRIVATE void  CalcLineMap     ();
+    SAL_DLLPRIVATE void  PaintCells      ();
 
 /*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
     conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
     expects size_t coordinates. */
 
-    SC_DLLPRIVATE sal_uInt16              GetFormatIndex( size_t nCol, size_t nRow ) const;
-    SC_DLLPRIVATE const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
-    SC_DLLPRIVATE const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
+    SAL_DLLPRIVATE sal_uInt16              GetFormatIndex( size_t nCol, size_t nRow ) const;
+    SAL_DLLPRIVATE const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
+    SAL_DLLPRIVATE const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
-    SC_DLLPRIVATE void                DrawString( size_t nCol, size_t nRow );
-    SC_DLLPRIVATE void                DrawStrings();
-    SC_DLLPRIVATE void                DrawBackground();
+    SAL_DLLPRIVATE void                DrawString( size_t nCol, size_t nRow );
+    SAL_DLLPRIVATE void                DrawStrings();
+    SAL_DLLPRIVATE void                DrawBackground();
 
-    SC_DLLPRIVATE void    MakeFonts       ( sal_uInt16 nIndex,
+    SAL_DLLPRIVATE void    MakeFonts       ( sal_uInt16 nIndex,
                               Font& rFont,
                               Font& rCJKFont,
                               Font& rCTLFont );
 
-    SC_DLLPRIVATE OUString MakeNumberString( OUString cellString, sal_Bool bAddDec );
-    SC_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
+    SAL_DLLPRIVATE OUString MakeNumberString( OUString cellString, sal_Bool bAddDec );
+    SAL_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
                               Point                 from,
                               Point                 to,
                               sal_Bool                  bHorizontal,
@@ -112,10 +112,10 @@ private:
                               const ::editeng::SvxBorderLine&   rLineRT,
                               const ::editeng::SvxBorderLine&   rLineR,
                               const ::editeng::SvxBorderLine&   rLineRB );
-    SC_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
+    SAL_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
                               AutoFmtLine       eLine,
                               ::editeng::SvxBorderLine& rLine );
-    SC_DLLPRIVATE void  GetLines        ( sal_uInt16 nIndex, AutoFmtLine eLine,
+    SAL_DLLPRIVATE void  GetLines        ( sal_uInt16 nIndex, AutoFmtLine eLine,
                               ::editeng::SvxBorderLine& rLineD,
                               ::editeng::SvxBorderLine& rLineLT,
                               ::editeng::SvxBorderLine& rLineL,
