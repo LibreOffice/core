@@ -384,7 +384,7 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
-                /// Maps the non-continious font indexes to the continous dmapper indexes.
+                /// Maps the non-continious font indexes to the continuous dmapper indexes.
                 std::vector<int> m_aFontIndexes;
                 /// Maps style indexes to style names.
                 std::map<int, OUString> m_aStyleNames;
@@ -464,7 +464,7 @@ namespace writerfilter {
                 oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
                 /// Normal text property, that is math italic and math spacing are not applied to the current run.
                 bool m_bMathNor;
-                /// If the next continous section break should be ignored.
+                /// If the next continuous section break should be ignored.
                 bool m_bIgnoreNextContSectBreak;
                 /// If a section break is needed before the end of the doc (false right after a section break).
                 bool m_bNeedSect;

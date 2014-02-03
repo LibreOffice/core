@@ -2004,7 +2004,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAGE:
             {
-                // If we're inside a continous section, we should send a section break, not a page one.
+                // If we're inside a continuous section, we should send a section break, not a page one.
                 RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
                 // Unless we're on a title page.
                 RTFValue::Pointer_t pTitlePg = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
