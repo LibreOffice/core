@@ -79,7 +79,6 @@ void Test::testColumnFindEditCells()
 
     nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,11,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), nResRow);
-    CPPUNIT_ASSERT_MESSAGE("String with mixed script types is considered an edit cell.", nResRow == 11);
     nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,12,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), nResRow);
 
