@@ -63,7 +63,6 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moCaseMap = rAttribs.getToken( XML_cap );
 
     /* TODO / unhandled so far:
-       XML_cap
        A_TOKEN( kern )
        XML_altLang
        A_TOKEN( kumimoji )
@@ -154,6 +153,22 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             break;
         case OOX_TOKEN( doc, szCs ):
+            break;
+        case OOX_TOKEN( doc, caps ):
+            {
+                if( rAttribs.getBool(OOX_TOKEN( doc, val ), true) )
+                    mrTextCharacterProperties.moCaseMap = XML_all;
+                else
+                    mrTextCharacterProperties.moCaseMap = XML_none;
+            }
+            break;
+        case OOX_TOKEN( doc, smallCaps ):
+            {
+                if( rAttribs.getBool(OOX_TOKEN( doc, val ), true) )
+                    mrTextCharacterProperties.moCaseMap = XML_small;
+                else
+                    mrTextCharacterProperties.moCaseMap = XML_none;
+            }
             break;
         default:
             SAL_WARN("oox", "TextCharacterPropertiesContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));

@@ -47,6 +47,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <vcl/svapp.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1773,6 +1774,20 @@ DECLARE_OOXMLIMPORT_TEST(testRelSizeRound, "rel-size-round.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(10), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")
+{
+    // Capitalization inside a group shape was not imported
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    // 2nd line is written with uppercase letters
+    CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(getRun(getParagraphOfText(2, xText), 1), "CharCaseMap"));
+    // 3rd line has no capitalization
+    CPPUNIT_ASSERT_EQUAL(style::CaseMap::NONE, getProperty<sal_Int16>(getRun(getParagraphOfText(3, xText), 1), "CharCaseMap"));
+    // 4th line has written with small capitals
+    CPPUNIT_ASSERT_EQUAL(style::CaseMap::SMALLCAPS, getProperty<sal_Int16>(getRun(getParagraphOfText(4, xText), 1), "CharCaseMap"));
+    // 5th line has no capitalization
+    CPPUNIT_ASSERT_EQUAL(style::CaseMap::NONE, getProperty<sal_Int16>(getRun(getParagraphOfText(5, xText), 1), "CharCaseMap"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
