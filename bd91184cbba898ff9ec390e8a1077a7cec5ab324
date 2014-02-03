@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_26a10caa",
+        "filename": "sax/source/tools/converter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-03T20:56:33Z",
+      "side": 1,
+      "message": "it is an error to call this function with an invalid month - actually that was impossible before commit cc407e50e8a1a74f9d1ed29d444dce9bd2e9167a\n\nthat introduced the bIgnoreInvalidOrMissingDate parameter and the problem is that the call to lcl_MaxDaysPerMonth on line 1549 should be moved into the \"if (!bIgnoreInvalidOrMissingDate)\" since it\u0027s pointless to check that in this case.\n\n(changing the old OSL_ASSERT to assert would be a good idea too)",
+      "revId": "bd91184cbba898ff9ec390e8a1077a7cec5ab324",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
