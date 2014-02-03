@@ -213,7 +213,8 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    sal_Bool        CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+    /// Creates an antialiased thumbnail, with maximum height or width of nMaximumExtent.
+    sal_Bool        CreateThumbnail( BitmapEx& rBmpEx, sal_uInt32 nMaximumSize = 256, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
 
     void            UseCanvas( sal_Bool _bUseCanvas );
     sal_Bool        GetUseCanvas() const { return bUseCanvas; }

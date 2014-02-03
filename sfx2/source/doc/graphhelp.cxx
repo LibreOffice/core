@@ -283,7 +283,7 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
         if ( bSigned )
             pSignatureBitmap = new BitmapEx( SfxResId( BMP_SIGNATURE ) );
 
-        bResult = pMetaFile->CreateThumbnail(THUMBNAIL_RESOLUTION, aResultBitmap, pSignatureBitmap);
+        bResult = pMetaFile->CreateThumbnail(aResultBitmap, THUMBNAIL_RESOLUTION, pSignatureBitmap);
 
         if ( bResult )
             bResult = ( !aResultBitmap.IsEmpty()

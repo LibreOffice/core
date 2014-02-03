@@ -1111,8 +1111,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     ::boost::shared_ptr<GDIMetaFile> pMetaFile =
                         pDocShell->GetPreviewMetaFile();
                     BitmapEx aBitmap;
-                    if ( pMetaFile && pMetaFile->CreateThumbnail( 160, /* magic value taken from GraphicHelper::getThumbnailFormatFromGDI_Impl() */
-                                                                  aBitmap ) )
+                    if (pMetaFile && pMetaFile->CreateThumbnail(aBitmap))
                     {
                         SvMemoryStream aMemStream;
                         WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);

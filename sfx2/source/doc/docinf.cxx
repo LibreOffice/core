@@ -306,8 +306,8 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
     if (i_pThumb) {
         BitmapEx aBitmap;
         SvMemoryStream aStream;
-// magic value 160 taken from GraphicHelper::getThumbnailFormatFromGDI_Impl()
-        if( i_pThumb->CreateThumbnail( 160, aBitmap ) ) {
+        if (i_pThumb->CreateThumbnail(aBitmap))
+        {
             WriteDIB(aBitmap.GetBitmap(), aStream, false, false);
             aStream.Seek(STREAM_SEEK_TO_END);
             uno::Sequence<sal_uInt8> aSeq(aStream.Tell());

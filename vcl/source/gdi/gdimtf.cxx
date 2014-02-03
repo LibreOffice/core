@@ -2869,10 +2869,8 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
-                                    BitmapEx& rBmpEx,
-                                    const BitmapEx* pOverlay,
-                                    const Rectangle* pOverlayRect ) const
+sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent,
+        const BitmapEx* pOverlay, const Rectangle* pOverlayRect) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     VirtualDevice   aVDev;
