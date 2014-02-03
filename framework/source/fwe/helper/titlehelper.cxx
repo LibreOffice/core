@@ -486,10 +486,13 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     OUStringBuffer sTitle (256);
 
     impl_appendComponentTitle   (sTitle, xComponent);
+#ifndef MACOSX
+    // fdo#70376: We want the window title to contain just the
+    // document name (from the above "component title").
     impl_appendProductName      (sTitle);
     impl_appendModuleName       (sTitle);
     impl_appendDebugVersion     (sTitle);
-
+#endif
     // SYNCHRONIZED ->
     aLock.reset ();
 
