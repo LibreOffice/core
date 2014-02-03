@@ -119,7 +119,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/impress/wpftimpress \
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter-out X86_64,$(CPUNAME)), \
-			avmedia/source/quicktime/avmediaQuickTime \
+			$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \
+				avmedia/source/quicktime/avmediaQuickTime \
+			) \
 		) \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 		fpicker/source/aqua/fps_aqua \
