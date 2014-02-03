@@ -854,7 +854,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             throw ::com::sun::star::uno::RuntimeException(
                 OUString( "Could not create system window!"  ),
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-            //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         }
 
         pFrame->SetCallback( this, ImplWindowFrameProc );

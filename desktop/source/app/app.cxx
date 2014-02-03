@@ -1303,13 +1303,6 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
             break;
         }
 
-        case EXC_SYSOBJNOTCREATED:
-        {
-            OUString aSysResExceptionString;
-            Application::Abort( aSysResExceptionString );
-            break;
-        }
-
         default:
         {
             m_xLockfile.reset();

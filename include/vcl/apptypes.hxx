@@ -24,7 +24,6 @@
 #include <tools/rtti.hxx>
 
 #define EXC_RSCNOTLOADED            ((sal_uInt16)0x0100)
-#define EXC_SYSOBJNOTCREATED        ((sal_uInt16)0x0200)
 #define EXC_SYSTEM                  ((sal_uInt16)0x0300)
 #define EXC_DISPLAY                 ((sal_uInt16)0x0400)
 #define EXC_REMOTE                  ((sal_uInt16)0x0500)

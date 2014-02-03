@@ -68,7 +68,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         throw ::com::sun::star::uno::RuntimeException(
             OUString( "Could not create system bitmap!" ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-        //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
     }
 
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );

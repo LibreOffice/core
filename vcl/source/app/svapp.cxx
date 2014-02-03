@@ -290,9 +290,6 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
         case EXC_RSCNOTLOADED:
             Abort(OUString("Resource not loaded"));
             break;
-        case EXC_SYSOBJNOTCREATED:
-            Abort(OUString("System Object not created"));
-            break;
         default:
             Abort(OUString("Unknown Error"));
             break;
