@@ -35,7 +35,7 @@
 using namespace com::sun::star;
 
 
-struct SAL_DLLPRIVATE oslThreadIdentifier_equal
+struct oslThreadIdentifier_equal
 {
     bool operator()(oslThreadIdentifier s1, oslThreadIdentifier s2) const;
 };
@@ -48,7 +48,7 @@ bool oslThreadIdentifier_equal::operator()(oslThreadIdentifier s1, oslThreadIden
 }
 
 
-struct SAL_DLLPRIVATE oslThreadIdentifier_hash
+struct oslThreadIdentifier_hash
 {
     size_t operator()(oslThreadIdentifier s1) const;
 };

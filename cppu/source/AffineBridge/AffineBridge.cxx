@@ -42,7 +42,7 @@
 class InnerThread;
 class OuterThread;
 
-class SAL_DLLPRIVATE AffineBridge : public cppu::Enterable
+class AffineBridge : public cppu::Enterable
 {
 public:
     enum Msg
@@ -81,7 +81,7 @@ public:
     void outerDispatch(int loop);
 };
 
-class SAL_DLLPRIVATE InnerThread : public osl::Thread
+class InnerThread : public osl::Thread
 {
     virtual void SAL_CALL run(void);
 
@@ -102,7 +102,7 @@ void InnerThread::run(void)
     m_pAffineBridge->leave();
 }
 
-class SAL_DLLPRIVATE OuterThread : public osl::Thread
+class OuterThread : public osl::Thread
 {
     virtual void SAL_CALL run(void);
 

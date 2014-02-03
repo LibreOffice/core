@@ -32,7 +32,7 @@
 namespace cssu = com::sun::star::uno;
 
 
-class SAL_DLLPRIVATE Proxy : public uno_Interface
+class Proxy : public uno_Interface
 {
     oslInterlockedCount                 m_nRef;
 
@@ -76,7 +76,7 @@ public:
 
 };
 
-extern "C" SAL_DLLPRIVATE void SAL_CALL Proxy_free(uno_ExtEnvironment * pEnv, void * pProxy) SAL_THROW_EXTERN_C();
+extern "C" void SAL_CALL Proxy_free(uno_ExtEnvironment * pEnv, void * pProxy) SAL_THROW_EXTERN_C();
 
 #endif
 

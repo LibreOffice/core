@@ -40,7 +40,7 @@
 #endif
 
 
-class SAL_DLLPRIVATE UnsafeBridge : public cppu::Enterable
+class UnsafeBridge : public cppu::Enterable
 {
     osl::Mutex          m_mutex;
     sal_Int32           m_count;
