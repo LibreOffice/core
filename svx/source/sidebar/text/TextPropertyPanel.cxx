@@ -20,8 +20,6 @@
 #include "TextPropertyPanel.hxx"
 #include "SvxSBFontNameBox.hxx"
 
-#include "svx/dialmgr.hxx"
-
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -30,12 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/ControllerFactory.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
-#include "sfx2/imagemgr.hxx"
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
 
@@ -51,8 +44,6 @@
 
 using namespace css;
 using namespace cssu;
-using ::sfx2::sidebar::Theme;
-using ::sfx2::sidebar::ControlFactory;
 
 const char UNO_BACKCOLOR[] = ".uno:BackColor";
 const char UNO_COLOR[] = ".uno:Color";
@@ -61,8 +52,6 @@ const char UNO_SPACING[] = ".uno:Spacing";
 const char UNO_UNDERLINE[] = ".uno:Underline";
 
 namespace svx { namespace sidebar {
-
-#undef HAS_IA2
 
 PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
 {
@@ -127,7 +116,6 @@ TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<cs
     get(mpFontSizeBox, "fontsize");
     get(mpToolBoxFont, "fonteffects");
     get(mpToolBoxIncDec, "fontadjust");
-    get(mpToolBoxScript, "position");
     get(mpToolBoxSpacing, "spacingbar");
     get(mpToolBoxFontColor, "colorbar");
 
@@ -253,18 +241,6 @@ void TextPropertyPanel::Initialize (void)
     SetupToolboxItems();
     InitToolBoxFont();
     InitToolBoxSpacing();
-
-#ifdef HAS_IA2
-    mpFontNameBox->SetAccRelationLabeledBy(mpFontNameBox);
-    mpFontNameBox->SetMpSubEditAccLableBy(mpFontNameBox);
-    mpFontSizeBox->SetAccRelationLabeledBy(mpFontSizeBox);
-    mpFontSizeBox->SetMpSubEditAccLableBy(mpFontSizeBox);
-    mpToolBoxFont->SetAccRelationLabeledBy(mpToolBoxFont);
-    mpToolBoxIncDec->SetAccRelationLabeledBy(mpToolBoxIncDec);
-    mpToolBoxFontColor->SetAccRelationLabeledBy(mpToolBoxFontColor);
-    mpToolBoxScript->SetAccRelationLabeledBy(mpToolBoxScript);
-    mpToolBoxSpacing->SetAccRelationLabeledBy(mpToolBoxSpacing);
-#endif
 
     //init state
     mpHeightItem = NULL;
