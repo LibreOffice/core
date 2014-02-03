@@ -28,13 +28,8 @@
 
 class FilterConfigItem;
 
-// MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
-
-//============================== defines ===================================
-
-#define OOODEBUG(str,Num) //InfoBox(NULL,String(str)+String(" ")+String(Num)).Execute();
 
 // -----------------------------Feld-Typen-------------------------------
 
@@ -1424,13 +1419,13 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdGivStx: ReadChrStr(sal_True , sal_False, sal_True , nOrderLen); break;
         case GOrdCurStx: ReadChrStr(sal_False, sal_False, sal_True , nOrderLen); break;
 
-        case GOrdGivImg: OOODEBUG("GOrdGivImg",0);
+        case GOrdGivImg: SAL_INFO("filter.os2met","GOrdGivImg");
             break;
-        case GOrdCurImg: OOODEBUG("GOrdCurImg",0);
+        case GOrdCurImg: SAL_INFO("filter.os2met","GOrdCurImg");
             break;
-        case GOrdImgDat: OOODEBUG("GOrdImgDat",0);
+        case GOrdImgDat: SAL_INFO("filter.os2met","GOrdImgDat");
             break;
-        case GOrdEndImg: OOODEBUG("GOrdEndImg",0);
+        case GOrdEndImg: SAL_INFO("filter.os2met","GOrdEndImg");
             break;
 
         case GOrdBegAra: {
@@ -1475,9 +1470,9 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
         break;
 
-        case GOrdBegElm:// OOODEBUG("GOrdBegElm",0);
+        case GOrdBegElm: SAL_INFO("filter.os2met","GOrdBegElm");
             break;
-        case GOrdEndElm:// OOODEBUG("GOrdEndElm",0);
+        case GOrdEndElm: SAL_INFO("filter.os2met","GOrdEndElm");
             break;
 
         case GOrdBegPth: {
@@ -1586,7 +1581,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             }
             break;
         }
-        case GOrdSClPth: {  OOODEBUG("GOrdSClPth",0);
+        case GOrdSClPth: {  SAL_INFO("filter.os2met","GOrdSClPth");
             sal_uInt32 nID;
             OSPath * p=pPathList;
             pOS2MET->SeekRel(2);
@@ -1599,29 +1594,29 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
         case GOrdNopNop:
             break;
-        case GOrdRemark: //OOODEBUG("GOrdRemark",0);
+        case GOrdRemark: SAL_INFO("filter.os2met","GOrdRemark");
             break;
-        case GOrdSegLab: OOODEBUG("GOrdSegLab",0);
+        case GOrdSegLab: SAL_INFO("filter.os2met","GOrdSegLab");
             break;
 
         case GOrdBitBlt: ReadBitBlt(); break;
 
-        case GOrdCalSeg: OOODEBUG("GOrdCalSeg",0);
+        case GOrdCalSeg: SAL_INFO("filter.os2met","GOrdCalSeg");
             break;
-        case GOrdSSgBnd: OOODEBUG("GOrdSSgBnd",0);
+        case GOrdSSgBnd: SAL_INFO("filter.os2met","GOrdSSgBnd");
             break;
-        case GOrdSegChr: OOODEBUG("GOrdSegChr",0);
+        case GOrdSegChr: SAL_INFO("filter.os2met","GOrdSegChr");
             break;
         case GOrdCloFig:
             CloseFigure();
             break;
-        case GOrdEndSym: OOODEBUG("GOrdEndSym",0);
+        case GOrdEndSym: SAL_INFO("filter.os2met","GOrdEndSym");
             break;
-        case GOrdEndPlg: OOODEBUG("GOrdEndPlg",0);
+        case GOrdEndPlg: SAL_INFO("filter.os2met","GOrdEndPlg");
             break;
-        case GOrdEscape: OOODEBUG("GOrdEscape",0);
+        case GOrdEscape: SAL_INFO("filter.os2met","GOrdEscape");
             break;
-        case GOrdExtEsc: OOODEBUG("GOrdExtEsc",0);
+        case GOrdExtEsc: SAL_INFO("filter.os2met","GOrdExtEsc");
             break;
 
         case GOrdPolygn: ReadPolygons(); break;
@@ -1841,7 +1836,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPPtSet: PushAttr(nOrderID);
-        case GOrdSPtSet: OOODEBUG("GOrdSPtSet",0);
+        case GOrdSPtSet: SAL_INFO("filter.os2met","GOrdSPtSet");
             break;
 
         case GOrdPPtSym: PushAttr(nOrderID);
@@ -1853,7 +1848,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPPtRef: PushAttr(nOrderID);
-        case GOrdSPtRef: OOODEBUG("GOrdSPtRef",0);
+        case GOrdSPtRef: SAL_INFO("filter.os2met","GOrdSPtRef");
             break;
 
         case GOrdPLnEnd: PushAttr(nOrderID);
@@ -1964,7 +1959,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
 
         case GOrdPTxAlg: PushAttr(nOrderID);
-        case GOrdSTxAlg: OOODEBUG("GOrdSTxAlg",0);
+        case GOrdSTxAlg: SAL_INFO("filter.os2met","GOrdSTxAlg");
             break;
 
         case GOrdPMkPrc: PushAttr(nOrderID);
@@ -2023,20 +2018,20 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
 
         case GOrdPMdTrn: PushAttr(nOrderID);
-        case GOrdSMdTrn: OOODEBUG("GOrdSMdTrn",0);
+        case GOrdSMdTrn: SAL_INFO("filter.os2met","GOrdSMdTrn");
             break;
 
         case GOrdPPkIdn: PushAttr(nOrderID);
-        case GOrdSPkIdn: OOODEBUG("GOrdSPkIdn",0);
+        case GOrdSPkIdn: SAL_INFO("filter.os2met","GOrdSPkIdn");
             break;
 
-        case GOrdSVwTrn: OOODEBUG("GOrdSVwTrn",0);
+        case GOrdSVwTrn: SAL_INFO("filter.os2met","GOrdSVwTrn");
             break;
 
         case GOrdPVwWin: PushAttr(nOrderID);
-        case GOrdSVwWin: OOODEBUG("GOrdSVwWin",0);
+        case GOrdSVwWin: SAL_INFO("filter.os2met","GOrdSVwWin");
             break;
-        default: OOODEBUG("Order unbekannt:",nOrderID);
+        default: SAL_INFO("filter.os2met","Unknown order: " << nOrderID);
     }
 }
 
@@ -2461,11 +2456,10 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 nPos=pOS2MET->Tell();
                 ReadOrder(nOrderID, nOrderLen);
                 if (nPos+nOrderLen < pOS2MET->Tell()) {
-                    OOODEBUG("Order shorter than he assumes! OrderID:",nOrderID);
-                    OOODEBUG("...und zwar bei Position (Parameteranfang):",nPos);
+                    SAL_INFO("filter.os2met","Order is shorter than expected. OrderID: " << nOrderID << " Position: " << nPos);
                 }
                 else if (nPos+nOrderLen != pOS2MET->Tell()) {
-                    OOODEBUG(String(nOrderID)+String(" Order nicht alles gelesen! bei:"),nPos);
+                    SAL_INFO("filter.os2met","Order was not read completely. OrderID: " << nOrderID << " Position: " << nPos);
                 }
                 pOS2MET->Seek(nPos+nOrderLen);
             }
@@ -2698,7 +2692,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pOS2MET->SetNumberFormatInt(nOrigNumberFormat);
 
     if (pOS2MET->GetError()) {
-        OOODEBUG("Fehler Nr.:",ErrorCode);
+        SAL_INFO("filter.os2met","Error code: " << ErrorCode);
         pOS2MET->Seek(nOrigPos);
     }
 }

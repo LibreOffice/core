@@ -25,8 +25,6 @@
 
 class FilterConfigItem;
 
-#define OOODEBUG(str,Num) //(InfoBox(NULL,String(str)+String(" ")+String(Num)).Execute();
-
 namespace {
 
 template< typename T > T BYTESWAP(T nByte) {
@@ -75,7 +73,7 @@ private:
     sal_uLong               nCellWidth;                 //
     sal_uLong               nCellLength;                //
     sal_uLong               nFillOrder;                 //
-    sal_uLong*              pStripOffsets;              // Fiels of offsets to the Bitmap-Data-"Strips"
+    sal_uLong*              pStripOffsets;              // field of offsets to the Bitmap-Data-"Strips"
     sal_uLong               nNumStripOffsets;           // size of the field above
     sal_uLong               nOrientation;               //
     sal_uLong               nSamplesPerPixel;           // number of layers
@@ -148,7 +146,7 @@ sal_uLong TIFFReader::DataTypeSize()
     switch ( nDataType )
     {
         case 1 :            // BYTE
-        case 2 :            // ACSII
+        case 2 :            // ASCII
         case 6 :            // SIGNED Byte
         case 7 :            // UNDEFINED
             nSize = 1;
@@ -163,7 +161,7 @@ sal_uLong TIFFReader::DataTypeSize()
             nSize = 4;
             break;
         case 5 :            // RATIONAL
-        case 10 :           // SIGNED RATINAL
+        case 10 :           // SIGNED RATIONAL
         case 12 :           // DOUBLE
             nSize = 8;
             break;
@@ -268,44 +266,44 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
     {
         case 0x00fe:   // New Sub File
             nNewSubFile = ReadIntData();
-            OOODEBUG("NewSubFile",nNewSubFile);
+            SAL_INFO("filter.tiff","NewSubFile: " << nNewSubFile);
             break;
 
         case 0x00ff:   // Sub File
             nSubFile = ReadIntData();
-            OOODEBUG("SubFile",nSubFile);
+            SAL_INFO("filter.tiff","SubFile: " << nSubFile);
             break;
 
         case 0x0100:   // Image Width
             nImageWidth = ReadIntData();
-            OOODEBUG("ImageWidth",nImageWidth);
+            SAL_INFO("filter.tiff","ImageWidth: " << nImageWidth);
             break;
 
         case 0x0101:   // Image Length
             nImageLength = ReadIntData();
-            OOODEBUG("ImageLength",nImageLength);
+            SAL_INFO("filter.tiff","ImageLength: " << nImageLength);
             break;
 
         case 0x0102:   // Bits Per Sample
             nBitsPerSample = ReadIntData();
-            OOODEBUG("BitsPerSample",nBitsPerSample);
+            SAL_INFO("filter.tiff","BitsPerSample: " << nBitsPerSample);
             if ( nBitsPerSample >= 32 ) // 32 bit and larger samples are not supported
                 bStatus = sal_False;
             break;
 
         case 0x0103:   // Compression
             nCompression = ReadIntData();
-            OOODEBUG("Compression",nCompression);
+            SAL_INFO("filter.tiff","Compression: " << nCompression);
             break;
 
         case 0x0106:   // Photometric Interpreation
             nPhotometricInterpretation = ReadIntData();
-            OOODEBUG("PhotometricInterpretation",nPhotometricInterpretation);
+            SAL_INFO("filter.tiff","PhotometricInterpretation: " << nPhotometricInterpretation);
             break;
 
         case 0x0107:   // Thresholding
             nThresholding = ReadIntData();
-            OOODEBUG("Thresholding",nThresholding);
+            SAL_INFO("filter.tiff","Thresholding: " << nThresholding);
             break;
 
         case 0x0108:   // Cell Width
@@ -318,7 +316,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 
         case 0x010a:   // Fill Order
             nFillOrder = ReadIntData();
-            OOODEBUG("FillOrder",nFillOrder);
+            SAL_INFO("filter.tiff","FillOrder: " << nFillOrder);
             break;
 
         case 0x0111: { // Strip Offset(s)
@@ -349,22 +347,22 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 }
                 delete[] pOldSO;
             }
-            OOODEBUG("StripOffsets (Anzahl:)",nDataLen);
+            SAL_INFO("filter.tiff","StripOffsets (Number:) " << nDataLen);
             break;
         }
         case 0x0112:   // Orientation
             nOrientation = ReadIntData();
-            OOODEBUG("Orientation",nOrientation);
+            SAL_INFO("filter.tiff","Orientation: " << nOrientation);
             break;
 
         case 0x0115:   // Samples Per Pixel
             nSamplesPerPixel = ReadIntData();
-            OOODEBUG("SamplesPerPixel",nSamplesPerPixel);
+            SAL_INFO("filter.tiff","SamplesPerPixel: " << nSamplesPerPixel);
             break;
 
         case 0x0116:   // Rows Per Strip
             nRowsPerStrip = ReadIntData();
-            OOODEBUG("RowsPerStrip",nRowsPerStrip);
+            SAL_INFO("filter.tiff","RowsPerStrip: " << nRowsPerStrip);
             break;
 
         case 0x0117: { // Strip Byte Counts
@@ -395,17 +393,17 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 }
                 delete[] pOldSBC;
             }
-            OOODEBUG("StripByteCounts (Anzahl:)",nDataLen);
+            SAL_INFO("filter.tiff","StripByteCounts (Number:) " << nDataLen);
             break;
         }
         case 0x0118:   // Min Sample Value
             nMinSampleValue = ReadIntData();
-            OOODEBUG("MinSampleValue",nMinSampleValue);
+            SAL_INFO("filter.tiff","MinSampleValue: " << nMinSampleValue);
             break;
 
         case 0x0119:   // Max Sample Value
             nMaxSampleValue = ReadIntData();
-            OOODEBUG("MaxSampleValue",nMaxSampleValue);
+            SAL_INFO("filter.tiff","MaxSampleValue: " << nMaxSampleValue);
             break;
 
         case 0x011a:   // X Resolution
@@ -418,17 +416,17 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 
         case 0x011c:   // Planar Configuration
             nPlanarConfiguration = ReadIntData();
-            OOODEBUG("PlanarConfiguration",nPlanarConfiguration);
+            SAL_INFO("filter.tiff","PlanarConfiguration: " << nPlanarConfiguration);
             break;
 
         case 0x0124:   // Group 3 Options
             nGroup3Options = ReadIntData();
-            OOODEBUG("Group3Options",nGroup3Options);
+            SAL_INFO("filter.tiff","Group3Options: " << nGroup3Options);
             break;
 
         case 0x0125:   // Group 4 Options
             nGroup4Options = ReadIntData();
-            OOODEBUG("Group4Options",nGroup4Options);
+            SAL_INFO("filter.tiff","Group4Options: " << nGroup4Options);
             break;
 
         case 0x0128:   // Resolution Unit
@@ -437,7 +435,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 
         case 0x013d:   // Predictor
             nPredictor = ReadIntData();
-            OOODEBUG("Predictor",nPredictor);
+            SAL_INFO("filter.tiff","Predictor: " << nPredictor);
             break;
 
         case 0x0140: { // Color Map
@@ -467,7 +465,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             }
             else
                 bStatus = sal_False;
-            OOODEBUG("ColorMap (Anzahl Farben:)", nNumColors);
+            SAL_INFO("filter.tiff","ColorMap (number of colors): " << nNumColors);
             break;
         }
 

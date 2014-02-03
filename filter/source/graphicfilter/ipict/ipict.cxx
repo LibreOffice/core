@@ -62,7 +62,6 @@ namespace PictReaderInternal {
     //! returns true if this is the default pattern
     bool isDefault() const { return isRead == false; }
 
-    // MT: NOOLDSV, someone should change the code...
     enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
     enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
               BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
