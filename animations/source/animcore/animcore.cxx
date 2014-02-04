@@ -2060,9 +2060,13 @@ void AnimationNode::fireChangeListener()
         }
     }
 
-    //fdo#69645 use get() on WeakReference of mxParent to test if mpParent is still valid
-    if( mpParent && mxParent.get().is() )
-        mpParent->fireChangeListener();
+    //fdo#69645 use WeakReference of mxParent to test if mpParent is still valid
+    if (mpParent)
+    {
+        Reference<XInterface> xGuard(mxParent);
+        if (xGuard.is())
+            mpParent->fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
