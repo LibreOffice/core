@@ -24,6 +24,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <string.h>
 #include <limits.h>
 
@@ -2814,6 +2816,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     pSVData->maNWFData.mnMenuFormatBorderY = 0;
     pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
     GetSalData()->mbThemeMenuSupport = FALSE;
+    if (officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get())
+    {
+        aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
+        aStyleSettings.SetWorkspaceColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
+    }
     aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
     aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
     aStyleSettings.SetMenuBarRolloverColor( aStyleSettings.GetHighlightColor() );
