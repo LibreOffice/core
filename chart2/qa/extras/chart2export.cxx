@@ -42,6 +42,7 @@ public:
     void testAreaChartLoad();
     void testUpDownBars();
     void testDoughnutChart();
+    void testChartInFooter();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
+    CPPUNIT_TEST(testChartInFooter);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -113,10 +115,10 @@ public:
         if(!rName.startsWith(aDir))
             return false;
 
-        if(!rName.endsWith(".xml"))
-            return false;
+        if(rName.endsWith(".xml") || rName.endsWith(".rels"))
+            return true;
 
-        return true;
+        return false;
     }
 };
 
@@ -160,6 +162,7 @@ xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& r
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("tmpRels"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     return pXmlXpathObj->nodesetval;
 }
@@ -533,6 +536,26 @@ void Chart2ExportTest::testDoughnutChart()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
 }
 
+void Chart2ExportTest::testChartInFooter()
+{
+    // fdo#73872: document contains chart in footer.
+    // The problem was that  footer1.xml.rels files for footer1.xml
+    // files were missing from docx file after roundtrip.
+    load ("/chart2/qa/extras/data/docx/", "chart-in-footer.docx");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    if (xDrawPageSupplier.is())
+    {
+            // If xDrawPage->getCount()==1, then document conatins one shape.
+            uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount()); // One shape in the doc
+            xmlDocPtr pXmlDoc = parseExport("word/_rels/footer1.xml.rels", "Office Open XML Text");
+            if(!pXmlDoc)
+                return;
+            // Check footer1.xml.rels contains in doc after roundtrip.
+            // Check Id = rId1 in footer1.xml.rels
+            assertXPath(pXmlDoc,"/tmpRels:Relationships/tmpRels:Relationship","Id","rId1");
+    }
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
