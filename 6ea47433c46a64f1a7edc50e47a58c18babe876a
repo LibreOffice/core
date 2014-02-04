@@ -52,6 +52,24 @@
       "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_06efa8b1",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-02-04T07:53:22Z",
+      "side": 1,
+      "message": "So that should be OutputDevice const* GetOutDev() const?",
+      "parentUuid": "da9df570_46d8d053",
+      "revId": "6ea47433c46a64f1a7edc50e47a58c18babe876a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
