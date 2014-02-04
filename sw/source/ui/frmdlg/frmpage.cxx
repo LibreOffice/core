@@ -649,6 +649,7 @@ SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pHeightAutoFT, "autoheightft");
     m_aHeightED.set(get<MetricField>("height"));
     get(m_pRelHeightCB, "relheight");
+    get(m_pRelHeightRelationLB, "relheightrelation");
     get(m_pAutoHeightCB, "autoheight");
 
     get(m_pFixedRatioCB, "ratio");
@@ -823,6 +824,7 @@ void SwFrmPage::setOptimalRelWidth()
     m_pHoriRelationLB->set_width_request(aBiggest.Width());
     m_pVertRelationLB->set_width_request(aBiggest.Width());
     m_pRelWidthRelationLB->set_width_request(aBiggest.Width());
+    m_pRelHeightRelationLB->set_width_request(aBiggest.Width());
     m_pHoriRelationLB->Clear();
 }
 
@@ -954,12 +956,18 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     else
         m_pRelWidthRelationLB->Disable();
 
+    m_pRelHeightRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
+    m_pRelHeightRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
     if (rFrmSize.GetHeightPercent() != 0xff && rFrmSize.GetHeightPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
         sal_Int32 nSpace = rFrmSize.GetHeight() * 100 / rFrmSize.GetHeightPercent();
         m_aHeightED.SetRefValue( nSpace );
+
+        m_pRelHeightRelationLB->Enable();
     }
+    else
+        m_pRelHeightRelationLB->Disable();
 
     // general initialisation part
     switch(rAnchor.GetAnchorId())
@@ -1151,6 +1159,14 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
             aSz.SetWidthPercentRelation(text::RelOrientation::FRAME);
         else if (nRelWidthRelation == 1)
             aSz.SetWidthPercentRelation(text::RelOrientation::PAGE_FRAME);
+    }
+    sal_uInt16 nRelHeightRelation = m_pRelHeightRelationLB->GetSelectEntryPos();
+    if (nRelHeightRelation != LISTBOX_ENTRY_NOTFOUND)
+    {
+        if (nRelHeightRelation == 0)
+            aSz.SetHeightPercentRelation(text::RelOrientation::FRAME);
+        else if (nRelHeightRelation == 1)
+            aSz.SetHeightPercentRelation(text::RelOrientation::PAGE_FRAME);
     }
 
     bool bValueModified = (m_aWidthED.IsValueModified() || m_aHeightED.IsValueModified());
@@ -1743,6 +1759,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
     else // pBtn == m_pRelHeightCB
     {
         m_aHeightED.ShowPercent(pBtn->IsChecked());
+        m_pRelHeightRelationLB->Enable(pBtn->IsChecked());
         if(pBtn->IsChecked())
             m_aHeightED.get()->SetMax(MAX_PERCENT_HEIGHT);
     }
@@ -2331,6 +2348,11 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
         m_pRelWidthRelationLB->SelectEntryPos(1);
     else
         m_pRelWidthRelationLB->SelectEntryPos(0);
+
+    if (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
+        m_pRelHeightRelationLB->SelectEntryPos(1);
+    else
+        m_pRelHeightRelationLB->SelectEntryPos(0);
 }
 
 sal_uInt16* SwFrmPage::GetRanges()
