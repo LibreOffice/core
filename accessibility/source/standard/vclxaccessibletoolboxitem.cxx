@@ -148,14 +148,14 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 //              sRet += String( RTL_CONSTASCII_USTRINGPARAM( " " ) );
 //          sRet += sWinText;
 //      }
-        if (  sRet.getLength() == 0 )
+        if (  sRet.isEmpty() )
         {
             Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
             if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
                  pItemWindow->GetAccessible()->getAccessibleContext().is() )
             {
                 ::rtl::OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-                 if ( sWinText.getLength() > 0 )
+                 if ( !sWinText.isEmpty() )
                     sRet = sWinText;
             }
         }
@@ -642,7 +642,7 @@ awt::FontDescriptor SAL_CALL VCLXAccessibleToolBoxItem::getFontMetrics( const Re
             sRet = m_pToolBox->GetHelpText( m_nItemId );
         else
             sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
-        if ( !sRet.getLength() )
+        if ( sRet.isEmpty() )
             // no help text set, so use item text
             sRet = m_pToolBox->GetItemText( m_nItemId );
     }

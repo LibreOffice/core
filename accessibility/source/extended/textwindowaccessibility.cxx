@@ -1955,7 +1955,7 @@ Document::changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uI
         m_rView.DeleteSelected();
     if (bPaste)
         m_rView.Paste();
-    else if (rText.getLength() != 0)
+    else if ( !rText.isEmpty() )
         m_rView.InsertText(rText);
 }
 

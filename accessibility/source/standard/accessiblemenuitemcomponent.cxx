@@ -205,7 +205,7 @@ void OAccessibleMenuItemComponent::SetAccessibleName( const ::rtl::OUString& sAc
     {
         sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
         sName = m_pParent->GetAccessibleName( nItemId );
-        if ( sName.getLength() == 0 )
+        if ( sName.isEmpty() )
             sName = m_pParent->GetItemText( nItemId );
         sName = OutputDevice::GetNonMnemonicString( sName );
 

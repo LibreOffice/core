@@ -114,7 +114,7 @@ void MacroRecorder::LogVCL( rtl::OString aParentID, sal_uInt16 nVCLWindowType, r
 Window* MacroRecorder::GetParentWithID( Window* pThis )
 {
     Window *pOverlap = pThis->GetWindow( WINDOW_OVERLAP );
-    while ( pOverlap != pThis && !pThis->GetUniqueOrHelpId().getLength() && pThis->GET_REAL_PARENT() )
+    while ( pOverlap != pThis && pThis->GetUniqueOrHelpId().isEmpty() && pThis->GET_REAL_PARENT() )
         pThis = pThis->GET_REAL_PARENT();
     return pThis;
 }
@@ -330,7 +330,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_BUTTON_CLICK:
                         Window* pParent = pWin->GetParent();
                         sal_Bool bDone = sal_False;
-                        if ( pParent->IsDialog() && !pWin->GetUniqueOrHelpId().getLength() )
+                        if ( pParent->IsDialog() && pWin->GetUniqueOrHelpId().isEmpty() )
                         {
                             switch ( pParent->GetType() )
                             {
@@ -413,7 +413,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         }
                         if ( m_bRecord )
                         {
-                            if ( !bSendData && pWin->GetUniqueOrHelpId().getLength() )
+                            if ( !bSendData && !pWin->GetUniqueOrHelpId().isEmpty() )
                             {
                                 StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Click );
                                 bSendData = sal_True;
@@ -536,7 +536,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 // compare to 1 for floating ToolBoxes
                                 if ( m_bRecord )
                                 {
-                                    if ( !pWin->GetUniqueOrHelpId().getLength() /* || pWin->GetUniqueOrHelpId().Matches( 1 ) */ )
+                                    if ( pWin->GetUniqueOrHelpId().isEmpty() /* || pWin->GetUniqueOrHelpId().Matches( 1 ) */ )
                                         // generate direct Button access
                                         StatementList::pRet->GenReturn( RET_MacroRecorder, Str2Id( pTB->GetItemCommand( pTB->GetCurItemId() ) ), (comm_USHORT)(M_Click) );
                                     else
