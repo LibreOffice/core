@@ -120,7 +120,16 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         // remove the rest from parent
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            removeGraphicFromImportContext(**maImplContextVector[a]);
+            SvXMLImportContext& rCandidate = **maImplContextVector[a];
+
+            if(pContext)
+            {
+                // #i124143# evtl. copy imported GluePoints before deprecating
+                // this graphic and context
+                pContext->onDemandRescueUsefulDataFromTemporary(rCandidate);
+            }
+
+            removeGraphicFromImportContext(rCandidate);
         }
     }
     else if (maImplContextVector.size() == 1)

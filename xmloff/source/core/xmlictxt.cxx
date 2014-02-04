@@ -69,5 +69,8 @@ void SvXMLImportContext::Characters( const OUString& )
 {
 }
 
+void SvXMLImportContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& )
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

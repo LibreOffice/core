@@ -89,6 +89,11 @@ public:
     /** This method is called for all characters that are contained in the
      * current element. The default is to ignore them. */
     virtual void Characters( const OUString& rChars );
+
+    // #i124143# allow to copy evtl. useful data from another temporary import context, e.g. used to
+    // support multiple images and to rescue evtl. GluePoints imported with one of the
+    // to be deprecated contents
+    virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
 };
 
 SV_DECL_REF( SvXMLImportContext )
