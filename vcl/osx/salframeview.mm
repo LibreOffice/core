@@ -1742,6 +1742,8 @@ private:
 
 -(NSView*)viewElementForParent
 {
+    // Interestingly enough, despite being declared as returning a NSView*, what this method actually
+    // does return is a NSWindow*, and that is what the caller expects. Go figure.
     return (NSView*) mpFrame->getNSWindow();
 }
 
