@@ -934,6 +934,29 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     }
 }
 
+void SwTxtPaintInfo::DrawSpecial( const SwLinePortion &rPor, sal_Unicode cChar, Color* pColor ) const
+{
+    if( OnWin() )
+    {
+        KSHORT nOldWidth = rPor.Width();
+        OUString sChar( cChar );
+        SwPosSize aSize( GetTxtSize( sChar ) );
+
+        ((SwLinePortion&)rPor).Width( aSize.Width() );
+
+        SwRect aRect;
+        CalcRect( rPor, &aRect );
+
+        if( aRect.HasArea() )
+        {
+            const sal_uInt8 nOptions = 0;
+            lcl_DrawSpecial( *this, rPor, aRect, pColor, cChar, nOptions );
+        }
+
+        ((SwLinePortion&)rPor).Width( nOldWidth );
+    }
+}
+
 void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
@@ -944,11 +967,10 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
-        const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
-                                  CHAR_TAB_RTL : CHAR_TAB;
-        const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER |
-                              DRAW_SPECIAL_OPTIONS_ROTATE;
-        lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
+        const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
+        const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
+
+        lcl_DrawSpecial( *this, rPor, aRect, new Color(0x6a, 0xbe, 0xd3), cChar, nOptions );
     }
 }
 
@@ -967,7 +989,8 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
             const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
             const sal_uInt8 nOptions = 0;
-            lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
+
+            lcl_DrawSpecial( *this, rPor, aRect, new Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
         }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
@@ -1064,7 +1087,7 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
         if (OnWin() && SwViewOption::IsFieldShadings() &&
                 !GetOpt().IsPagePreview())
         {
-           OutputDevice* pOut = (OutputDevice*)GetOut();
+            OutputDevice* pOut = (OutputDevice*)GetOut();
             pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
             pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
             pOut->SetLineColor();

@@ -69,9 +69,7 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsParagraph() )
     {
-        SwDefFontSave aSave( rInf );
-        const OUString aTmp( CH_PAR );
-        rInf.DrawText( aTmp, *this );
+        rInf.DrawSpecial( *this, CH_PAR, new Color(NON_PRINTING_CHARACTER_COLOR) );
     }
 }
 

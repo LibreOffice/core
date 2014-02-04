@@ -560,6 +560,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( sal_False );
 
+                    pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
                     pFnt->_DrawText( aDrawInf );
                 }
                 delete pClip;

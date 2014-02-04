@@ -45,6 +45,8 @@ class SwScriptInfo;
 class SwViewOption;
 class SwWrongList;
 
+#define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA( 0x6A, 0xBE, 0xD3 )
+
 /// Represents the visualization of a paragraph.
 class SwTxtFrm: public SwCntntFrm
 {

@@ -1443,6 +1443,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     {
         const OUString* pStr = &rInf.GetText();
         OUString aStr;
+        OUString aBulletOverlay;
         sal_Bool bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = sal_False;
@@ -1569,8 +1570,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             aStr = rInf.GetText().copy( nCopyStart, nCopyLen );
             pStr = &aStr;
 
-            for( sal_Int32 i = 0; i < aStr.getLength(); ++i )
-                if( CH_BLANK == aStr[ i ] )
+            aBulletOverlay = rInf.GetText().copy( nCopyStart, nCopyLen );
+
+            for( sal_Int32 i = 0; i < aBulletOverlay.getLength(); ++i )
+                if( CH_BLANK == aBulletOverlay[ i ] )
                 {
                     /* fdo#72488 Hack: try to see if the space is zero width
                      * and don't bother with inserting a bullet in this case.
@@ -1578,8 +1581,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ((i + nCopyStart + 1 >= rInf.GetLen()) ||
                         pKernArray[i + nCopyStart] != pKernArray[ i + nCopyStart + 1])
                     {
-                        aStr = aStr.replaceAt(i, 1, OUString(CH_BULLET));
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BULLET));
                     }
+                    else
+                    {
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
+                    }
+                }
+                else
+                {
+                    aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
                 }
         }
 
@@ -1808,6 +1819,29 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                              nTmpIdx + nOffs , nLen - nOffs );
+                if (bBullet)
+                {
+                    rInf.GetOut().Push();
+                    Color aPreviousColor = pTmpFont->GetColor();
+
+                    FontUnderline aPreviousUnderline = pTmpFont->GetUnderline();
+                    FontUnderline aPreviousOverline = pTmpFont->GetOverline();
+                    FontStrikeout aPreviousStrikeout = pTmpFont->GetStrikeout();
+
+                    pTmpFont->SetColor( Color(NON_PRINTING_CHARACTER_COLOR) );
+                    pTmpFont->SetUnderline(UNDERLINE_NONE);
+                    pTmpFont->SetOverline(UNDERLINE_NONE);
+                    pTmpFont->SetStrikeout(STRIKEOUT_NONE);
+                    rInf.GetOut().SetFont( *pTmpFont );
+                    rInf.GetOut().DrawTextArray( aPos, aBulletOverlay, pKernArray + nOffs,
+                                                 nTmpIdx + nOffs , nLen - nOffs );
+                    pTmpFont->SetColor( aPreviousColor );
+
+                    pTmpFont->SetUnderline(aPreviousUnderline);
+                    pTmpFont->SetOverline(aPreviousOverline);
+                    pTmpFont->SetStrikeout(aPreviousStrikeout);
+                    rInf.GetOut().Pop();
+                }
             }
         }
         delete[] pScrArray;
