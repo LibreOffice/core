@@ -40,6 +40,7 @@
 #include <mdiexp.hxx>
 #include <wrtsh.hxx>
 #include <comcore.hrc>
+#include <view.hxx>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -584,7 +585,7 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 short SwShellCrsr::MaxReplaceArived()
 {
     short nRet = RET_YES;
-    Window* pDlg = ::GetSearchDialog();
+    Window* pDlg = (Window*) SwView::GetSearchDialog();
     if( pDlg )
     {
         // Terminate old actions. The table-frames get constructed and

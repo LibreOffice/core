@@ -130,11 +130,6 @@ void SwAccessibilityScrollMDI(SwViewShell* pVwSh, const SwRect& rRect , sal_uInt
 
 }
 
-Dialog* GetSearchDialog()
-{
-    return SwView::GetSearchDialog();
-}
-
 TblChgMode GetTblChgDefaultMode()
 {
     SwModuleOptions* pOpt = SW_MOD()->GetModuleConfig();

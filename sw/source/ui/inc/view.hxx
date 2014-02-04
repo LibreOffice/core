@@ -483,7 +483,7 @@ public:
             void    CheckVisArea();
 
     void RecheckBrowseMode();
-    static Dialog* GetSearchDialog();
+    static SvxSearchDialog* GetSearchDialog();
 
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);

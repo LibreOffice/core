@@ -26,7 +26,6 @@
 
 class SwRect;
 class Size;
-class Dialog;
 class SwViewShell;
 class SwDoc;
 class SwDocShell;
@@ -51,8 +50,6 @@ void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 
 void EnableCmdInterface(sal_Bool bEnable = sal_True);
-
-Dialog* GetSearchDialog();
 
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 

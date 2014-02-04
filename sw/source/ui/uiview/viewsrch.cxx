@@ -77,22 +77,15 @@ struct SwSearchOptions
     SwSearchOptions( SwWrtShell* pSh, sal_Bool bBackward );
 };
 
-static Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
+static Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
 {
-    Window* pWin;
-    if( m_pSrchDlg && m_pSrchDlg->IsVisible() )
-        pWin = m_pSrchDlg;
-    else
-        pWin = 0;
-    return pWin;
+    return pSrchDlg && pSrchDlg->IsVisible() ? pSrchDlg : 0;
 }
 
 void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
     sal_Bool bQuiet = sal_False;
     if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SEARCH_QUIET, sal_False, &pItem))
         bQuiet = ((const SfxBoolItem*) pItem)->GetValue();
@@ -135,9 +128,9 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             DELETEZ( m_pSrchList );
             DELETEZ( m_pReplList );
 
-            if ( pWrp )
+            m_pSrchDlg = GetSearchDialog();
+            if (m_pSrchDlg)
             {
-                m_pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
                 // We will remember the search-/replace items.
                 const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
@@ -156,14 +149,9 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             {
                 if(FID_SEARCH_NOW == nSlot && !rReq.IsAPI())
                     SwView::SetMoveType(NID_SRCH_REP);
-                if ( pWrp )
-                {
-                    m_pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
-                }
-                else
-                    m_pSrchDlg = 0;
             }
 
+            m_pSrchDlg = GetSearchDialog();
             if (m_pSrchDlg)
             {
                 DELETEZ( m_pSrchList );
@@ -503,10 +491,6 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     else
         m_bExtra = !m_bExtra;
 
-    const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
-    m_pSrchDlg = pDlgWrp ? static_cast <SvxSearchDialog*> (pDlgWrp->getDialog ()) : 0;
-
         // If starting position is at the end or beginning of the document.
     if (aOpts.bDontWrap)
     {
@@ -775,14 +759,11 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     return nFound;
 }
 
-Dialog* SwView::GetSearchDialog()
+SvxSearchDialog* SwView::GetSearchDialog()
 {
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)SfxViewFrame::Current()->GetChildWindow(nId);
-    if ( pWrp )
-        m_pSrchDlg = pWrp->getDialog ();
-    else
-        m_pSrchDlg = 0;
+    SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*) SfxViewFrame::Current()->GetChildWindow(nId);
+    m_pSrchDlg = pWrp ? pWrp->getDialog () : 0;
     return m_pSrchDlg;
 }
 
