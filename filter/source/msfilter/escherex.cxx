@@ -1961,8 +1961,10 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                             switch( aSegments[ j ].Command )
                             {
                                 case drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN: break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::MOVETO : nPointIndex++; break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::LINETO : nPointIndex++; break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+                                case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
+                                    nPointIndex++;
+                                    break;
                                 case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
                                 {
                                     aPolygon.SetFlags( nPointIndex, POLY_CONTROL);
@@ -1994,10 +1996,10 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                                 case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
                                     nPointIndex += 2;
                                     break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::DARKEN : break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS : break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN : break;
-                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS : break;
+                                case drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
+                                case drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
+                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
+                                case drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
                                     break;
                             }
                         }
