@@ -697,6 +697,15 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 ))
 endif
 
+$(eval $(call gb_Helper_register_packages_for_install,ure,\
+	ure_install \
+	$(if $(ENABLE_JAVA),\
+		jvmfwk_javavendors \
+		jvmfwk_jreproperties \
+		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
+	) \
+))
+
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
 	genbrk \
