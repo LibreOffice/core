@@ -873,11 +873,17 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         SWRECTFN( pUpper );
         if ( _opPercent )
         {
+            // If the size is relative from page, then full size should be counted from the page frame.
             if (pFmtFrmSize && pFmtFrmSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
-                // If the size is relative from page, then full size should be counted from the page frame.
-                *_opPercent = pPage->Frm().SSize();
+                _opPercent->setWidth(pPage->Frm().Width());
             else
-                *_opPercent = pUpper->Prt().SSize();
+                _opPercent->setWidth(pUpper->Prt().Width());
+
+            if (pFmtFrmSize && pFmtFrmSize->GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                // If the size is relative from page, then full size should be counted from the page frame.
+                _opPercent->setHeight(pPage->Frm().Height());
+            else
+                _opPercent->setHeight(pUpper->Prt().Height());
         }
 
         bRTL = pFrm->IsRightToLeft();
