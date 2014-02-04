@@ -140,7 +140,7 @@ private:
     /** Fills the field windows from the current pivot table settings. */
     void                InitFieldWindows();
     /** Sets focus to the specified field control, if it is not empty. */
-    void                GrabFieldFocus( ScDPFieldControlBase& rFieldWindow );
+    void                GrabFieldFocus( ScDPFieldControlBase* rFieldWindow );
 
     void InitWndSelect(const ScDPLabelDataVector& rLabels);
     void InitWndData(const std::vector<ScPivotField>& rFields);
@@ -198,41 +198,38 @@ private:
 private:
     typedef boost::scoped_ptr<ScDPObject> ScDPObjectPtr;
 
-    FixedLine               maFlLayout;
-    FixedText               maFtPage;
-    ScDPPageFieldControl    maWndPage;
-    FixedText               maFtCol;
-    ScDPColFieldControl     maWndCol;
-    FixedText               maFtRow;
-    ScDPRowFieldControl     maWndRow;
-    FixedText               maFtData;
-    ScDPDataFieldControl    maWndData;
-    ScDPSelectFieldControl  maWndSelect;
-    FixedInfo               maFtInfo;
+    FixedText*               mpFtPage;
+    ScDPPageFieldControl*    mpWndPage;
+    FixedText*               mpFtCol;
+    ScDPColFieldControl*     mpWndCol;
+    FixedText*               mpFtRow;
+    ScDPRowFieldControl*     mpWndRow;
+    FixedText*               mpFtData;
+    ScDPDataFieldControl*    mpWndData;
+    ScDPSelectFieldControl*  mpWndSelect;
+    FixedInfo*               mpFtInfo;
 
     std::vector<ScDPFieldControlBase*> maFieldCtrls;
 
-    FixedLine               maFlAreas;
-    FixedText               maFtInArea;
-    ::formula::RefEdit      maEdInPos;
-    ::formula::RefButton    maRbInPos;
-    ListBox                 maLbOutPos;
-    FixedText               maFtOutArea;
-    formula::RefEdit        maEdOutPos;
-    formula::RefButton      maRbOutPos;
-    CheckBox                maBtnIgnEmptyRows;
-    CheckBox                maBtnDetectCat;
-    CheckBox                maBtnTotalCol;
-    CheckBox                maBtnTotalRow;
-    CheckBox                maBtnFilter;
-    CheckBox                maBtnDrillDown;
+    FixedText*               mpFtInArea;
+    ::formula::RefEdit*      mpEdInPos;
+    ::formula::RefButton*    mpRbInPos;
+    ListBox*                 mpLbOutPos;
+    FixedText*               mpFtOutArea;
+    formula::RefEdit*        mpEdOutPos;
+    formula::RefButton*      mpRbOutPos;
+    CheckBox*                mpBtnIgnEmptyRows;
+    CheckBox*                mpBtnDetectCat;
+    CheckBox*                mpBtnTotalCol;
+    CheckBox*                mpBtnTotalRow;
+    CheckBox*                mpBtnFilter;
+    CheckBox*                mpBtnDrillDown;
 
-    OKButton                maBtnOk;
-    CancelButton            maBtnCancel;
-    HelpButton              maBtnHelp;
-    PushButton              maBtnRemove;
-    PushButton              maBtnOptions;
-    MoreButton              maBtnMore;
+    OKButton*                mpBtnOk;
+    CancelButton*            mpBtnCancel;
+    PushButton*              mpBtnRemove;
+    PushButton*              mpBtnOptions;
+    MoreButton*              mpBtnMore;
     std::vector<OUString> maFuncNames;     /// Localized function names from resource.
     boost::ptr_vector<OUString> maRefStrs; /// Reference strings stored with the output list box.
     ScDPObjectPtr           mxDlgDPObject;      /// Clone of the pivot table object this dialog is based on.
