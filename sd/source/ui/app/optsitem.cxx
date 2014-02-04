@@ -487,7 +487,6 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
     bPickThrough( sal_True ),
     bDoubleClickTextEdit( sal_True ),
     bClickChangeRotation( sal_False ),
-    bStartWithActualPage( sal_False ),
     bEnableSdremote( sal_False ),
     bEnablePresenterScreen( sal_True),
     bSolidDragging( sal_True ),
@@ -523,7 +522,6 @@ sal_Bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsPickThrough() == rOpt.IsPickThrough() &&
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
-            IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
             IsEnableSdremote() == rOpt.IsEnableSdremote() &&
             IsEnablePresenterScreen() == rOpt.IsEnablePresenterScreen()&&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
@@ -569,7 +567,6 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
         // just for impress
         "NewDoc/AutoPilot",
-        "Start/CurrentPage",
         "Compatibility/AddBetween",
         "ShowUndoDeleteWarning",
         "SlideshowRespectZOrder",
@@ -616,38 +613,36 @@ sal_Bool SdOptionsMisc::ReadData( const Any* pValues )
         if( pValues[14].hasValue() )
             SetStartWithTemplate( *(sal_Bool*) pValues[ 14 ].getValue() );
         if( pValues[15].hasValue() )
-            SetStartWithActualPage( *(sal_Bool*) pValues[ 15 ].getValue() );
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 15 ].getValue() );
         if( pValues[16].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 16 ].getValue() );
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 16 ].getValue() );
+
         if( pValues[17].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 17 ].getValue() );
+            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 17 ].getValue());
 
         if( pValues[18].hasValue() )
-            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 18 ].getValue());
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 18 ].getValue());
 
         if( pValues[19].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 19 ].getValue());
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 19 ].getValue());
 
         if( pValues[20].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 20 ].getValue());
 
         if( pValues[21].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 21 ].getValue());
+            SetDisplay(*(sal_Int32*) pValues[ 21 ].getValue());
 
         if( pValues[22].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 22 ].getValue());
+            SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 22 ] ) );
 
         if( pValues[23].hasValue() )
-            SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 23 ] ) );
+            SetPresentationPenWidth( getSafeValue< double >( pValues[ 23 ] ) );
 
         if( pValues[24].hasValue() )
-            SetPresentationPenWidth( getSafeValue< double >( pValues[ 24 ] ) );
+            SetEnableSdremote( *(sal_Bool*) pValues[ 24 ].getValue() );
 
         if( pValues[25].hasValue() )
-            SetEnableSdremote( *(sal_Bool*) pValues[ 25 ].getValue() );
-
-        if( pValues[26].hasValue() )
-            SetEnablePresenterScreen( *(sal_Bool*) pValues[ 26 ].getValue() );
+            SetEnablePresenterScreen( *(sal_Bool*) pValues[ 25 ].getValue() );
     }
 
     return sal_True;
@@ -677,21 +672,20 @@ sal_Bool SdOptionsMisc::WriteData( Any* pValues ) const
     if( GetConfigId() == SDCFG_IMPRESS )
     {
         pValues[ 14 ] <<= IsStartWithTemplate();
-        pValues[ 15 ] <<= IsStartWithActualPage();
-        pValues[ 16 ] <<= IsSummationOfParagraphs();
-        pValues[ 17 ] <<= IsShowUndoDeleteWarning();
-        pValues[ 18 ] <<= IsSlideshowRespectZOrder();
+        pValues[ 15 ] <<= IsSummationOfParagraphs();
+        pValues[ 16 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 17 ] <<= IsSlideshowRespectZOrder();
 
-        pValues[ 19 ] <<= IsPreviewNewEffects();
-        pValues[ 20 ] <<= IsPreviewChangedEffects();
-        pValues[ 21 ] <<= IsPreviewTransitions();
+        pValues[ 18 ] <<= IsPreviewNewEffects();
+        pValues[ 19 ] <<= IsPreviewChangedEffects();
+        pValues[ 20 ] <<= IsPreviewTransitions();
 
-        pValues[ 22 ] <<= GetDisplay();
+        pValues[ 21 ] <<= GetDisplay();
 
-        pValues[ 23 ] <<= GetPresentationPenColor();
-        pValues[ 24 ] <<= GetPresentationPenWidth();
-        pValues[ 25 ] <<= IsEnableSdremote();
-        pValues[ 26 ] <<= IsEnablePresenterScreen();
+        pValues[ 22 ] <<= GetPresentationPenColor();
+        pValues[ 23 ] <<= GetPresentationPenWidth();
+        pValues[ 24 ] <<= IsEnableSdremote();
+        pValues[ 25 ] <<= IsEnablePresenterScreen();
     }
 
     return sal_True;
@@ -718,7 +712,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
     if( pOpts )
     {
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
-        maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
         maOptionsMisc.SetEnableSdremote( pOpts->IsEnableSdremote() );
         maOptionsMisc.SetEnablePresenterScreen( pOpts->IsEnablePresenterScreen() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
@@ -802,7 +795,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
         pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
         pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
-        pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
         pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
         pOpts->SetEnablePresenterScreen( maOptionsMisc.IsEnablePresenterScreen() );
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );

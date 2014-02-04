@@ -916,9 +916,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         OUString  aPresSlide( maPresSettings.maPresPage );
         SdPage* pStartPage = mpViewShell ? mpViewShell->GetActualPage() : 0;
-        bool    bStartWithActualSlide =  pStartPage &&
-                                        ( (meAnimationMode != ANIMATIONMODE_SHOW) ||
-                                           SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage() );
+        bool    bStartWithActualSlide =  pStartPage;
 
         // times should be measured?
         if( mbRehearseTimings )
