@@ -23,6 +23,8 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -30,7 +32,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
@@ -57,12 +59,16 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-class SfxAppDispatchProvider : public ::cppu::WeakImplHelper2< css::frame::XAppDispatchProvider,
-                                                               css::lang::XServiceInfo>
+class SfxAppDispatchProvider : public ::cppu::WeakImplHelper3< css::frame::XAppDispatchProvider,
+                                                               css::lang::XServiceInfo,
+                                                               css::lang::XInitialization >
 {
     css::uno::WeakReference < css::frame::XFrame > m_xFrame;
 public:
-    SfxAppDispatchProvider(const css::uno::Sequence< css::uno::Any >&aArguments)
+    SfxAppDispatchProvider() {}
+
+    virtual void SAL_CALL initialize(
+        css::uno::Sequence<css::uno::Any> const & aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getImplementationName()
@@ -90,15 +96,17 @@ public:
         throw (css::uno::RuntimeException);
 };
 
-SfxAppDispatchProvider::SfxAppDispatchProvider(const css::uno::Sequence< css::uno::Any >& aArguments)
-    throw (uno::Exception, uno::RuntimeException)
+void SfxAppDispatchProvider::initialize(
+    css::uno::Sequence<css::uno::Any> const & aArguments)
+    throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    Reference < XFrame > xFrame;
-    if ( aArguments.getLength() )
-    {
-        aArguments[0] >>= xFrame;
-        m_xFrame = xFrame;
+    css::uno::Reference<css::frame::XFrame> f;
+    if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
+        throw css::lang::IllegalArgumentException(
+            "SfxAppDispatchProvider::initialize expects one XFrame argument",
+            static_cast<OWeakObject *>(this), 0);
     }
+    m_xFrame = f;
 }
 
 OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::uno::RuntimeException )
@@ -253,9 +261,9 @@ throw (uno::RuntimeException)
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new SfxAppDispatchProvider(arguments));
+    return cppu::acquire(new SfxAppDispatchProvider);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

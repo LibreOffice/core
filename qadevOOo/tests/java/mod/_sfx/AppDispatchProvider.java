@@ -88,6 +88,8 @@ public class AppDispatchProvider extends TestCase {
         // adding relation for :XDispatchProvider
         tEnv.addObjRelation("XDispatchProvider.URL", ".uno:BibliographyComponent") ;
 
+        tEnv.addObjRelation("XInitialization.args", new Object[] { null });
+
         return tEnv;
     } // finish method getTestEnvironment
 
