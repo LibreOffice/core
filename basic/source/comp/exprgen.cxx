@@ -171,7 +171,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
 #ifdef DBG_UTIL
-    if( (eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G && eOp != _FIND_CM )
+    if ((eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G && eOp != _FIND_CM && eOp != _FIND_STATIC)
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
