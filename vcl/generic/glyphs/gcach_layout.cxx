@@ -438,11 +438,18 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (pHbUnicodeFuncs == NULL)
                 pHbUnicodeFuncs = getUnicodeFuncs();
 
+            int nHbFlags = HB_BUFFER_FLAG_DEFAULT;
+            if (nMinRunPos == 0)
+                nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
+            if (nEndRunPos == rArgs.mnLength)
+                nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
+
             hb_buffer_t *pHbBuffer = hb_buffer_create();
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
             hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
             hb_buffer_set_script(pHbBuffer, maHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+            hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
             hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
             hb_shape(pHbFont, pHbBuffer, NULL, 0);
 
