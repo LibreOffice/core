@@ -105,11 +105,7 @@ namespace
 
 struct SearchDlg_Impl
 {
-    FixedText*  m_pSearchFormats;
-    FixedText*  m_pReplaceFormats;
-
-    sal_Bool    bMultiLineEdit : 1,
-                bSaveToModule  : 1,
+    sal_Bool    bSaveToModule  : 1,
                 bFocusOnSearch : 1;
     sal_uInt16* pRanges;
     Timer       aSelectionTimer;
@@ -119,16 +115,11 @@ struct SearchDlg_Impl
     util::URL   aCommand1URL;
     util::URL   aCommand2URL;
 
-    SearchDlg_Impl( SvxSearchDialog* pParent )
-        : bMultiLineEdit(false)
-        , bSaveToModule(true)
+    SearchDlg_Impl()
+        : bSaveToModule(true)
         , bFocusOnSearch(true)
         , pRanges(NULL)
     {
-        pParent->get(m_pSearchFormats, "searchformat");
-        m_pSearchFormats->SetStyle(m_pSearchFormats->GetStyle() | WB_PATHELLIPSIS);
-        pParent->get(m_pReplaceFormats, "replaceformat");
-        m_pReplaceFormats->SetStyle(m_pReplaceFormats->GetStyle() | WB_PATHELLIPSIS);
         aCommand1URL.Complete = aCommand1URL.Main = "vnd.sun.search:SearchViaComponent1";
         aCommand1URL.Protocol = "vnd.sun.search:";
         aCommand1URL.Path = "SearchViaComponent1";
@@ -373,7 +364,7 @@ SvxSearchDialog::~SvxSearchDialog()
 void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
-    pImpl = new SearchDlg_Impl( this );
+    pImpl = new SearchDlg_Impl();
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
@@ -592,10 +583,7 @@ void SvxSearchDialog::InitControls_Impl()
 
     Link aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
     m_pSearchLB->SetGetFocusHdl( aLink );
-    pImpl->m_pSearchFormats->SetGetFocusHdl( aLink );
-
     m_pReplaceLB->SetGetFocusHdl( aLink );
-    pImpl->m_pReplaceFormats->SetGetFocusHdl( aLink );
 
     aLink = LINK( this, SvxSearchDialog, LoseFocusHdl_Impl );
     m_pSearchLB->SetLoseFocusHdl( aLink );
@@ -734,31 +722,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     SvtSearchOptions aOpt;
 
     bWriter = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_WRITER );
-
-    pImpl->bMultiLineEdit = sal_False;
-
-    if ( !pImpl->bMultiLineEdit )
-    {
-        pImpl->m_pSearchFormats->Hide();
-        m_pSearchAttrText->Show();
-        pImpl->m_pReplaceFormats->Hide();
-        m_pReplaceAttrText->Show();
-    }
-    else
-    {
-        OUString aText = m_pSearchAttrText->GetText();
-        m_pSearchAttrText->Hide();
-
-        if ( !aText.isEmpty() )
-            pImpl->m_pSearchFormats->SetText( aText );
-        pImpl->m_pSearchFormats->Show();
-        aText = m_pReplaceAttrText->GetText();
-        m_pReplaceAttrText->Hide();
-
-        if ( !aText.isEmpty() )
-            pImpl->m_pReplaceFormats->SetText( aText );
-        pImpl->m_pReplaceFormats->Show();
-    }
 
     if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
          m_pWordBtn->Check( pSearchItem->GetWordOnly() );
@@ -979,14 +942,8 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         else
             EnableControl_Impl(m_pWordBtn);
 
-        OUString aSrchAttrTxt;
-
-        if ( pImpl->bMultiLineEdit )
-            aSrchAttrTxt = pImpl->m_pSearchFormats->GetText();
-        else
-            aSrchAttrTxt = m_pSearchAttrText->GetText();
-
-        bDisableSearch = m_pSearchLB->GetText().isEmpty() && aSrchAttrTxt.isEmpty();
+        bDisableSearch = m_pSearchLB->GetText().isEmpty() &&
+            m_pSearchAttrText->GetText().isEmpty();
     }
     FocusHdl_Impl(m_pSearchLB);
 
@@ -1014,8 +971,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         }
     }
 
-    if ( ( !pImpl->bMultiLineEdit && !m_pSearchAttrText->GetText().isEmpty() ) ||
-            ( pImpl->bMultiLineEdit && !pImpl->m_pSearchFormats->GetText().isEmpty() ) )
+    if (!m_pSearchAttrText->GetText().isEmpty())
         EnableControl_Impl(m_pNoFormatBtn);
     else
         m_pNoFormatBtn->Disable();
@@ -1070,10 +1026,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         {
             pSearchList->Put( *pSSet );
 
-            if ( !pImpl->bMultiLineEdit )
-                m_pSearchAttrText->SetText( BuildAttrText_Impl( aDesc, sal_True ) );
-            else
-                pImpl->m_pSearchFormats->SetText( BuildAttrText_Impl( aDesc, sal_True ) );
+            m_pSearchAttrText->SetText( BuildAttrText_Impl( aDesc, sal_True ) );
 
             if ( !aDesc.isEmpty() )
                 bFormat |= sal_True;
@@ -1089,10 +1042,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         {
             pReplaceList->Put( *pRSet );
 
-            if ( !pImpl->bMultiLineEdit )
-                m_pReplaceAttrText->SetText( BuildAttrText_Impl( aDesc, sal_False ) );
-            else
-                pImpl->m_pReplaceFormats->SetText( BuildAttrText_Impl( aDesc, sal_False ) );
+            m_pReplaceAttrText->SetText( BuildAttrText_Impl( aDesc, sal_False ) );
 
             if ( !aDesc.isEmpty() )
                 bFormat |= sal_True;
@@ -1403,12 +1353,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         sal_Int32 nReplTxtLen = 0;
         if (bAllowEmptySearch)
             nReplTxtLen = m_pReplaceLB->GetText().getLength();
-        sal_Int32 nAttrTxtLen = 0;
-
-        if ( !pImpl->bMultiLineEdit )
-            nAttrTxtLen = m_pSearchAttrText->GetText().getLength();
-        else
-            nAttrTxtLen = pImpl->m_pSearchFormats->GetText().getLength();
+        sal_Int32 nAttrTxtLen = m_pSearchAttrText->GetText().getLength();
 
         if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
         {
@@ -1483,16 +1428,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
             m_pSearchLB->Hide();
             m_pReplaceLB->Hide();
 
-            if ( !pImpl->bMultiLineEdit )
-            {
-                m_pSearchAttrText->SetText( sDesc );
-                m_pReplaceAttrText->SetText( sDesc );
-            }
-            else
-            {
-                pImpl->m_pSearchFormats->SetText( sDesc );
-                pImpl->m_pReplaceFormats->SetText( sDesc );
-            }
+            m_pSearchAttrText->SetText( sDesc );
+            m_pReplaceAttrText->SetText( sDesc );
         }
         m_pFormatBtn->Disable();
         m_pNoFormatBtn->Disable();
@@ -1512,16 +1449,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
         m_pSearchTmplLB->Hide();
         m_pReplaceTmplLB->Hide();
 
-        if ( !pImpl->bMultiLineEdit )
-        {
-            m_pSearchAttrText->SetText( BuildAttrText_Impl( sDesc, sal_True ) );
-            m_pReplaceAttrText->SetText( BuildAttrText_Impl( sDesc, sal_False ) );
-        }
-        else
-        {
-            pImpl->m_pSearchFormats->SetText( BuildAttrText_Impl( sDesc, sal_True ) );
-            pImpl->m_pReplaceFormats->SetText( BuildAttrText_Impl( sDesc, sal_False ) );
-        }
+        m_pSearchAttrText->SetText( BuildAttrText_Impl( sDesc, sal_True ) );
+        m_pReplaceAttrText->SetText( BuildAttrText_Impl( sDesc, sal_False ) );
 
         EnableControl_Impl(m_pFormatBtn);
         EnableControl_Impl(m_pAttributeBtn);
@@ -1828,13 +1757,9 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 
 IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 {
-    sal_Int32 nTxtLen;
-    if ( !pImpl->bMultiLineEdit )
-        nTxtLen = m_pSearchAttrText->GetText().getLength();
-    else
-        nTxtLen = pImpl->m_pSearchFormats->GetText().getLength();
+    sal_Int32 nTxtLen = m_pSearchAttrText->GetText().getLength();
 
-    if ( pCtrl == m_pSearchLB || pCtrl == pImpl->m_pSearchFormats )
+    if ( pCtrl == m_pSearchLB )
     {
         if ( pCtrl->HasChildPathFocus() )
             pImpl->bFocusOnSearch = sal_True;
@@ -1853,8 +1778,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
         pCtrl = m_pReplaceLB;
         bSearch = sal_False;
 
-        if ( ( !pImpl->bMultiLineEdit && !m_pReplaceAttrText->GetText().isEmpty() ) ||
-                ( pImpl->bMultiLineEdit && !pImpl->m_pReplaceFormats->GetText().isEmpty() ) )
+        if (!m_pReplaceAttrText->GetText().isEmpty())
             EnableControl_Impl(m_pNoFormatBtn);
         else
             m_pNoFormatBtn->Disable();
@@ -2020,18 +1944,12 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 
     if ( bSearch )
     {
-        if ( !pImpl->bMultiLineEdit )
-            m_pSearchAttrText->SetText( "" );
-        else
-            pImpl->m_pSearchFormats->SetText( "" );
+        m_pSearchAttrText->SetText( "" );
         pSearchList->Clear();
     }
     else
     {
-        if ( !pImpl->bMultiLineEdit )
-            m_pReplaceAttrText->SetText( "" );
-        else
-            pImpl->m_pReplaceFormats->SetText( "" );
+        m_pReplaceAttrText->SetText( "" );
         pReplaceList->Clear();
     }
     pImpl->bSaveToModule = sal_False;
@@ -2164,18 +2082,12 @@ void SvxSearchDialog::PaintAttrText_Impl()
 
     if ( bSearch )
     {
-        if ( !pImpl->bMultiLineEdit )
-            m_pSearchAttrText->SetText( aDesc );
-        else
-            pImpl->m_pSearchFormats->SetText( aDesc );
+        m_pSearchAttrText->SetText( aDesc );
         FocusHdl_Impl(m_pSearchLB);
     }
     else
     {
-        if ( !pImpl->bMultiLineEdit )
-            m_pReplaceAttrText->SetText( aDesc );
-        else
-            pImpl->m_pReplaceFormats->SetText( aDesc );
+        m_pReplaceAttrText->SetText( aDesc );
         FocusHdl_Impl(m_pReplaceLB);
     }
 }
