@@ -41,8 +41,6 @@ namespace vcl
     class IImageListProvider;
 }
 
-using namespace com::sun::star;
-
 #define TOOLBOX_CUSTOMIZE_RESIZE        ((sal_uInt16)0xFFFE)
 
 class VCL_DLLPUBLIC ToolBoxCustomizeEvent
@@ -329,7 +327,7 @@ public:
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
-                                    const uno::Reference<frame::XFrame>& rFrame,
+                                    const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
                                     ToolBoxItemBits nBits = 0,
                                     const Size& rRequestedSize = Size(),
                                     sal_uInt16 nPos = TOOLBOX_APPEND );

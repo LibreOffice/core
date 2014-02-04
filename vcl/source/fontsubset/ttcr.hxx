@@ -19,7 +19,7 @@
 
 /**
  *
- * @file ttcr.hxx
+ * @file ttcr.h
  * @brief TrueType font creator
  * @author Alexander Gelfenbain
  */

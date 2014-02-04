@@ -602,7 +602,7 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
  * in a PDF file seen through an Internet browser should be
  * specially crafted, in order to be used directly by the browser.
  * In this way the fragment part of a hyperlink to a PDF file (e.g. something
- * as 'test1/test2/a-file.pdf\#thefragment) will be (hopefully) interpreted by the
+ * as 'test1/test2/a-file.pdf#thefragment) will be (hopefully) interpreted by the
  * PDF reader (currently only Adobe Reader plug-in seems to be working that way) called
  * from inside the Internet browser as: 'open the file test1/test2/a-file.pdf
  * and go to named destination thefragment using default zoom'.
