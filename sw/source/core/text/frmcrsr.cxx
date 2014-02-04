@@ -722,7 +722,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
         }
     }
     pPam->GetPoint()->nContent = SwIndex( pFrm->GetTxtNode(), nIndx );
-    SwTxtCursor::SetRightMargin( sal_False );
+    SwTxtCursor::SetRightMargin( false );
     return sal_True;
 }
 
@@ -1342,7 +1342,7 @@ sal_Bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
     const SwTxtFrm *pFrm = GetAdjFrmAtPos((SwTxtFrm*)this, *(pPam->GetPoint()),
                                            SwTxtCursor::IsRightMargin() );
     const sal_Bool bRet = pFrm->_UnitDown( pPam, nOffset, bSetInReadOnly );
-    SwTxtCursor::SetRightMargin( sal_False );
+    SwTxtCursor::SetRightMargin( false );
     return bRet;
 }
 

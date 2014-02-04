@@ -604,7 +604,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     // font is used.
     if ( GetDropLines() < 2 )
     {
-        ((SwTxtFormatter*)this)->SetPaintDrop( sal_True );
+        ((SwTxtFormatter*)this)->SetPaintDrop( true );
         return pDropPor;
     }
 
@@ -650,7 +650,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         pCurrPart = pPart;
     }
 
-    ((SwTxtFormatter*)this)->SetPaintDrop( sal_True );
+    ((SwTxtFormatter*)this)->SetPaintDrop( true );
     return pDropPor;
 }
 

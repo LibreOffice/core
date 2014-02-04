@@ -608,7 +608,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             GetFollow()->ManipOfst( 0 );
 
         if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOfst there
-            rLine.SetOnceMore( sal_True );
+            rLine.SetOnceMore( true );
     }
 }
 
@@ -1202,7 +1202,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
             if( !rLine.IsUnclipped() || nOldBottom > rRepaint.Bottom() )
             {
                 rRepaint.Bottom( nOldBottom - 1 );
-                rLine.SetUnclipped( sal_True );
+                rLine.SetUnclipped( true );
             }
         }
         if( rLine.GetCurr()->IsClipping() && rLine.IsFlyInCntBase() )
@@ -1214,7 +1214,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
             if( !rLine.IsUnclipped() || nTmpBottom > rRepaint.Bottom() )
             {
                 rRepaint.Bottom( nTmpBottom - 1 );
-                rLine.SetUnclipped( sal_True );
+                rLine.SetUnclipped( true );
             }
         }
         else
@@ -1222,7 +1222,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
             if( !rLine.IsUnclipped() || nBottom > rRepaint.Bottom() )
             {
                 rRepaint.Bottom( nBottom - 1 );
-                rLine.SetUnclipped( sal_False );
+                rLine.SetUnclipped( false );
             }
         }
         SwTwips nRght = std::max( nOldWidth, pNew->Width() +
@@ -1283,7 +1283,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     OSL_ENSURE( ! IsVertical() || IsSwapped(),"SwTxtFrm::_Format with unswapped frame" );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
-    rLine.SetUnclipped( sal_False );
+    rLine.SetUnclipped( false );
 
     // That was too complicated for the C30: aString( GetTxt() );
     const OUString &rString = GetTxtNode()->GetTxt();
@@ -1574,7 +1574,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             rLine.GetCurr()->GetNext() )
         {
             rLine.TruncLines();
-            rLine.SetTruncLines( sal_True );
+            rLine.SetTruncLines( true );
         }
     }
 
@@ -1587,7 +1587,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         }
         if( rRepaint.HasArea() )
             SetRepaint();
-        rLine.SetTruncLines( sal_False );
+        rLine.SetTruncLines( false );
         if( nOldBottom ) // We check whether paragraphs that need scrolling can
                          // be shrunk, so that they don't need scrolling anymore
         {
@@ -1620,7 +1620,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         rInf.Init();
         rLine.Top();
         if( !rLine.GetDropFmt() )
-            rLine.SetOnceMore( sal_False );
+            rLine.SetOnceMore( false );
         SwCharRange aRange( 0, rInf.GetTxt().getLength() );
         *(pPara->GetReformat()) = aRange;
         _Format( rLine, rInf );
@@ -1709,13 +1709,13 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
             SVX_ADJUST_BLOCK != aLine.GetAdjust() )
         {
             aLine.CalcDropAdjust();
-            aLine.SetPaintDrop( sal_True );
+            aLine.SetPaintDrop( true );
         }
 
         if( aLine.IsPaintDrop() )
         {
             aLine.CalcDropRepaint();
-            aLine.SetPaintDrop( sal_False );
+            aLine.SetPaintDrop( false );
         }
     }
 }

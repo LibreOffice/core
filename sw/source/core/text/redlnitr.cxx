@@ -65,7 +65,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
 
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
-    bool bRTL = sal_False;
+    bool bRTL = false;
     if ( pFrm )
     {
         if ( pFrm->IsVertical() )
