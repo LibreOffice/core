@@ -478,11 +478,11 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
             ;
 
         rnChgPos = sal::static_int_cast< sal_Int16 >(nPosL);
-        rnChgLen = sal::static_int_cast< sal_Int16 >(nPosR - nPosL + 1);
+        rnChgLen = sal::static_int_cast< sal_Int16 >(nAltPosR - nPosL);
         DBG_ASSERT( rnChgLen >= 0, "nChgLen < 0");
 
         sal_Int32 nTxtStart = nPosL;
-        sal_Int32 nTxtLen   = nAltPosL - nPosL + 1;
+        sal_Int32 nTxtLen   = nAltPosR - nPosL + 1;
         rRplc = aHyphenatedWord.copy( nTxtStart, nTxtLen );
     }
     return bRes;
@@ -558,7 +558,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
                 --nPos;
 
             aLeft = rOrigWord.copy( 0, nPos );
-            aRight = rOrigWord.copy( nPos + nChgLen );
+            aRight = rOrigWord.copy( nPos ); // FIXME: changes at the right side
 
             aOrigHyphenatedWord =  aLeft;
             aOrigHyphenatedWord += aRplc;

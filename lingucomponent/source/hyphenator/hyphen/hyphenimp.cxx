@@ -514,10 +514,8 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    // FIXME: multiple character change, eg. briddzsel -> bridzs-dzsel is not supported,
-    // because Writer has got a layout problem here.
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
-    for (int extrachar = 1; extrachar < 2; extrachar++) // temporarily i < 2 instead of i <= 2
+    for (int extrachar = 1; extrachar <= 2; extrachar++)
     {
         Reference< XHyphenatedWord > xRes = hyphenate(aWord, aLocale, nIndex + 1 + extrachar, aProperties);
         if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)

@@ -456,15 +456,9 @@ Reference< XHyphenatedWord > SAL_CALL
 
         if (xEntry.is())
         {
-            // FIXME: multiple character change, eg. briddzsel -> bridzs-dzsel is not supported,
-            // because Writer has got a layout problem here.
-            // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
-            for (int extrachar = 1; extrachar < 2; extrachar++) // temporarily i < 2 instead of i <= 2
-            {
-                xRes = buildHyphWord(aChkWord, xEntry, nLanguage, nIndex + 1 + extrachar);
-                if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)
+            xRes = buildHyphWord(aChkWord, xEntry, nLanguage, nIndex + 1);
+            if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)
                     return xRes;
-            }
         }
         else
         {
