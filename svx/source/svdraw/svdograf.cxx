@@ -287,36 +287,29 @@ void SdrGrafObj::onGraphicChanged()
     if (!pGraphic || pGraphic->IsSwappedOut()) // don't force swap-in for this
         return;
 
-    OUString aName;
-    OUString aTitle;
-    OUString aDesc;
+    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
 
-    if(pGraphic)
-    {
-        const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+    if (!rSvgDataPtr.get())
+        return;
 
-        if(rSvgDataPtr.get())
-        {
-            const drawinglayer::primitive2d::Primitive2DSequence aSequence(rSvgDataPtr->getPrimitive2DSequence());
+    const drawinglayer::primitive2d::Primitive2DSequence aSequence(rSvgDataPtr->getPrimitive2DSequence());
 
-            if(aSequence.hasElements())
-            {
-                drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
+    if (!aSequence.hasElements())
+        return;
 
-                aProcessor.process(aSequence);
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
 
-                const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
+    aProcessor.process(aSequence);
 
-                if(pResult)
-                {
-                    aName = pResult->getName();
-                    aTitle = pResult->getTitle();
-                    aDesc = pResult->getDesc();
-                }
-            }
-        }
-    }
+    const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
+
+    if (!pResult)
+        return;
+
+    OUString aName = pResult->getName();
+    OUString aTitle = pResult->getTitle();
+    OUString aDesc = pResult->getDesc();
 
     if(!aName.isEmpty())
     {
