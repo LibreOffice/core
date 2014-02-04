@@ -380,6 +380,13 @@ constants AccessibleEventId
     const short PAGE_CHANGED =38;
     const short SECTION_CHANGED =39;
     const short COLUMN_CHANGED =40;
+
+    /** Constant used to indicate that the role of an accessible object has
+        changed.
+
+        @since LibreOffice 4.3
+    */
+    const short ROLE_CHANGED =41;
 };
 
 }; }; }; };
