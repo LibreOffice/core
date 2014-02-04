@@ -57,6 +57,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moStrikeout = aAttribs.getToken( XML_strike );
     if ( aAttribs.hasAttribute( XML_baseline ) )
         mrTextCharacterProperties.moBaseline = aAttribs.getInteger( XML_baseline );
+    if( aAttribs.hasAttribute( XML_cap ) )
+        mrTextCharacterProperties.moCaseMap = aAttribs.getToken( XML_cap );
 
     if ( aAttribs.hasAttribute( XML_b ) )
         mrTextCharacterProperties.moBold = aAttribs.getBool( XML_b );

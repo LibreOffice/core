@@ -47,6 +47,7 @@ class SvxEmphasisMarkItem;
 class SvxCharReliefItem;
 class SfxVoidItem;
 class OutputDevice;
+class SvxCaseMapItem;
 
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      (sal_Unicode)   0x01
@@ -214,6 +215,17 @@ class EditCharAttribStrikeout : public EditCharAttrib
 {
 public:
     EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+};
+
+// -------------------------------------------------------------------------
+// class EditCharAttribCaseMap
+// -------------------------------------------------------------------------
+class EditCharAttribCaseMap : public EditCharAttrib
+{
+public:
+    EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
