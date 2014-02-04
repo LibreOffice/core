@@ -1635,6 +1635,8 @@ private:
 
     const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
     int GetAnnotationIndex(sal_uInt32 nTag);
+    /// Return the end index based on the start one.
+    sal_uInt16 GetAnnotationEndIndex(sal_uInt16 nStart);
     WW8_CP GetAnnotationStart(int nIndex);
     WW8_CP GetAnnotationEnd(int nIndex);
 
