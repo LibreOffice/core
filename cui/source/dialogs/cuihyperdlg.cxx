@@ -287,21 +287,12 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             nPageId = RID_SVXPAGE_HYPERLINK_MAIL;
             break;
         default :
-            sal_Char const sNewsSrvScheme[] = "news://";
-                // TODO news:// is nonsense
-
-            if (aStrURL.startsWith(sNewsSrvScheme))
+            if (aStrURL.startsWith("#"))
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             else
             {
-                sal_Char const sHash[] = "#";
-                if (aStrURL.startsWith(sHash))
-                    nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
-                else
-                {
-                    eProtocolTyp = INET_PROT_NOT_VALID;
-                    nPageId = GetCurPageId();
-                }
+                eProtocolTyp = INET_PROT_NOT_VALID;
+                nPageId = GetCurPageId();
             }
             break;
     }
