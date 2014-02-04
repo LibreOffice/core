@@ -49,7 +49,7 @@ namespace vcl
                 The MenomonicEngine itself does not use this value, it
                 is only passed to other methods of this callback interface.
 
-                If this value is <NULL/>, searching stops.
+                If this value is NULL, searching stops.
         */
         virtual const void* FirstSearchEntry( OUString& _rEntryText ) const = 0;
 
@@ -60,10 +60,10 @@ namespace vcl
                 The MenomonicEngine itself does not use this value, it
                 is only passed to other methods of this callback interface.
 
-                If this value is <NULL/>, searching stops.
+                If this value is NULL, searching stops.
 
                 If this value is the same as returned by the previous call
-                to <member>FirstSearchEntry</member> (i.e. you cycled
+                to FirstSearchEntry (i.e. you cycled
                 around), then searching stops, too.
         */
         virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const = 0;
@@ -77,37 +77,37 @@ namespace vcl
 
             @param _pEntry
                 the entry to select. This is the return value of a previous call
-                to <member>FirstSearchEntry</member> or <member>NextSearchEntry</member>.
+                to FirstSearchEntry or NextSearchEntry.
         */
         virtual void    SelectSearchEntry( const void* _pEntry ) = 0;
 
         /** "executes" the current search entry, i.e. the one returned
-            in the previous <member>NextSearchEntry</member> call.
+            in the previous NextSearchEntry call.
 
             Note: The semantics of "execute" depends on your implementation. You
             might even have a list of entries which cannot be executed at all.
 
-            This method is called after <member>SelectSearchEntry</member>,
+            This method is called after SelectSearchEntry,
             if and only if the current entry's mnemonic is unambiguous.
 
             For instance, imagine a list which has two entries with the same mnemonic
             character, say "c". Now if the user presses <code>Alt-C</code>, the MnemonicEngine
-            will call <member>SelectCurrentEntry</member> as soon as it encounters
-            the first entry, but it'll never call <member>ExecuteSearchEntry</member>.
+            will call SelectCurrentEntry as soon as it encounters
+            the first entry, but it'll never call ExecuteSearchEntry.
 
             If, however, "c" is a unique mnemonic character in your entry list, then the
-            call of <member>SelectSearchEntry</member> will be followed by a
-            call to <member>ExecuteSearchEntry</member>.
+            call of SelectSearchEntry will be followed by a
+            call to ExecuteSearchEntry.
 
             This way, you can implement cyclic selection of entries: In
-            <member>FirstSearchEntry</member>, return the entry which was previously
-            selected, and in <member>NextSearchEntry</member>, interlly cycle around
+            FirstSearchEntry, return the entry which was previously
+            selected, and in NextSearchEntry, interlly cycle around
             in your list. Then, multiple user inputs of <code>Alt-C</code> will
             cycle through all entries with the mnemonic being "c".
 
             @param _pEntry
                 the entry to select. This is the return value of a previous call
-                to <member>FirstSearchEntry</member> or <member>NextSearchEntry</member>.
+                to FirstSearchEntry or NextSearchEntry.
         */
         virtual void    ExecuteSearchEntry( const void* _pEntry ) const = 0;
 
@@ -131,11 +131,11 @@ namespace vcl
 
             If the key event denotes pressing an accelerator key, then the
             entry list is searched for a matching entry. If such an entry is
-            found, <member>IMnemonicEntryList::SelectSearchEntry</member>
+            found, IMnemonicEntryList::SelectSearchEntry
             is called.
 
             If the entry is the only one with the given mnemonic character, then
-            also <member>IMnemonicEntryList::ExecuteSearchEntry</member>
+            also IMnemonicEntryList::ExecuteSearchEntry
             is called.
 
             @return

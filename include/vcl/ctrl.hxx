@@ -105,13 +105,13 @@ public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;
     /** draws a frame around the give rectangle, onto the given device
 
-        only to be used from within the <member>Window::Draw</member> method of your sub class.
+        only to be used from within the Window::Draw method of your sub class.
 
         The frame is always drawn with a single line (without 3D effects). In addition, any mono
         color set at the control's settings is respected. Yet more additionally, if we're living
         in a themed desktop, this theming is ignored.
 
-        Note that this makes sense, since the *only known* clients of <member>Window::Draw</member>
+        Note that this makes sense, since the *only known* clients of Window::Draw
         are form controls, when printed or print-previewed. For form controls embedded in office documents,
         you don't want to have the theme look.
 
@@ -149,9 +149,8 @@ public:
     Pair GetLineStartEnd( long nLine ) const;
     /** ToRelativeLineIndex changes a layout data index to a count relative to its line.
 
-    <p>This is equivalent to getting the line start/end pairs with
-    <member>GetLineStartEnd</member> until the index lies within [start,end] of a line
-    </p>
+    This is equivalent to getting the line start/end pairs with
+    GetLineStartEnd() until the index lies within [start,end] of a line
 
     @param nIndex
     the absolute index inside the display text to be changed to a relative index
@@ -176,7 +175,7 @@ public:
     virtual Size    GetOptimalSize() const;
 
     /** sets a reference device used for rendering control text
-        @seealso DrawControlText
+        @see DrawControlText
     */
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;

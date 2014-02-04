@@ -398,11 +398,11 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
             {
-               xContext = (::accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
+               xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
             }
             else
             {
-               xContext = (::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( _pXWindow );
+               xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleComponent( _pXWindow );
             }
         }
 

@@ -315,8 +315,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
 
 /**
  * Reads polygons from the stream.
- * The <class T> parameter is for the type of the points (sal_uInt32 or sal_uInt16).
- * The <class Drawer> parameter is a boost binding for the method that will draw the polygon.
+ * The \<class T> parameter is for the type of the points (sal_uInt32 or sal_uInt16).
+ * The \<class Drawer> parameter is a boost binding for the method that will draw the polygon.
  * skipFirst: if the first point read is the 0th point or the 1st point in the array.
  * */
 template <class T, class Drawer>
@@ -338,7 +338,7 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst)
 
 /**
  * Reads polygons from the stream.
- * The <class T> parameter is for the type of the points
+ * The \<class T> parameter is for the type of the points
  * nStartIndex: which is the starting index in the polygon of the first point read
  * nPoints: number of points
  * pWMF: the stream containings the polygons
@@ -366,7 +366,7 @@ Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 
 /**
  * Reads a polyline from the WMF file and draws it
- * The <class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
+ * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
  * */
 template <class T>
 void EnhWMFReader::ReadAndDrawPolyLine()
@@ -401,7 +401,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
 
 /**
  * Reads a poly polygon from the WMF file and draws it.
- * The <class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
+ * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
  * */
 template <class T>
 void EnhWMFReader::ReadAndDrawPolyPolygon()

@@ -7387,7 +7387,7 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                        sal_Bool bOptimize, sal_uLong nLayoutWidth, const sal_Int32* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -7427,7 +7427,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     {
         sal_Int32 nStart = std::min( nBase, nIndex );
         sal_Int32 nOfsLen = std::max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nLayoutWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7438,7 +7438,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
     if( pSalLayout )
     {
         bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
@@ -7487,7 +7487,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     // is one-to-one. This is most probably valid for the old bitmap fonts.
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nOrgWidth = pSalLayout->GetTextWidth();
@@ -7512,7 +7512,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     aVDev.SetTextColor( Color(COL_BLACK) );
     aVDev.SetTextFillColor();
 
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
@@ -7532,7 +7532,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     {
         sal_Int32 nStart  = ((nBase < nIndex) ? nBase : nIndex);
         sal_Int32 nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
-        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point(0,0), nLayoutWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7553,7 +7553,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nLayoutWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();

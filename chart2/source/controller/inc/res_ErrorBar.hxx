@@ -52,7 +52,7 @@ public:
     };
 
     ErrorBarResources(
-        VclBuilderContainer* pParent, Dialog* pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, ::chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
+        VclBuilderContainer* pParent, Dialog* pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
     virtual ~ErrorBarResources();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );

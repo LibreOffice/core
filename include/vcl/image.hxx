@@ -57,14 +57,14 @@ public:
                     explicit Image( const Bitmap& rBitmap );
                     Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
-                    explicit Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
+                    explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
                     ~Image();
 
     Size            GetSizePixel() const;
 
     BitmapEx        GetBitmapEx() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
+    css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
 

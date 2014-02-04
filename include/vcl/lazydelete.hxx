@@ -262,10 +262,10 @@ namespace vcl
 
         Use like
             static DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory>
-                xStaticFactory (<create factory object>);
+                xStaticFactory (\<create factory object>);
             Reference<lang::XMultiServiceFactory> xFactory (xStaticFactory.get());
             if (xFactory.is())
-                <do something with xFactory>
+                \<do something with xFactory>
     */
     template <typename I>
     class DeleteUnoReferenceOnDeinit : public ::vcl::DeleteOnDeinitBase

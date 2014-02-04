@@ -474,7 +474,7 @@ Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos
 {
     Rectangle aRect;
 
-    ::Pair aEntryCharacterRange = GetLineStartEnd( _nEntryPos );
+    Pair aEntryCharacterRange = GetLineStartEnd( _nEntryPos );
     if ( aEntryCharacterRange.A() + _nCharacterIndex < aEntryCharacterRange.B() )
     {
         aRect = GetCharacterBounds( aEntryCharacterRange.A() + _nCharacterIndex );
