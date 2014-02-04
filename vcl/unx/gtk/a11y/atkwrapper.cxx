@@ -877,6 +877,14 @@ void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child
 
 /*****************************************************************************/
 
+void atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role)
+{
+    AtkObject *atk_obj = ATK_OBJECT( wrapper );
+    atk_object_set_role( atk_obj, mapToAtkRole( role ) );
+}
+
+/*****************************************************************************/
+
 #define RELEASE(i) if( i ) { i->release(); i = NULL; }
 
 void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)

@@ -84,6 +84,7 @@ AtkObject *            atk_object_wrapper_new(
 
 void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
 void                   atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
+void                   atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role);
 
 void                   atk_object_wrapper_dispose(AtkObjectWrapper* wrapper);
 

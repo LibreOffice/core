@@ -549,6 +549,14 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-hypertext-offset");
             break;
 
+        case accessibility::AccessibleEventId::ROLE_CHANGED:
+        {
+            uno::Reference< accessibility::XAccessibleContext > xContext;
+            xContext = getAccessibleContextFromSource( aEvent.Source );
+            atk_object_wrapper_set_role( mpWrapper, xContext->getAccessibleRole() );
+            break;
+        }
+
     default:
             g_warning( "Unknown event notification %d", aEvent.EventId );
             break;

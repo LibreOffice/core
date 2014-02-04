@@ -440,7 +440,16 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
             bIsHeading = bNewIsHeading;
     }
 
-    if( bNewIsHeading != bOldIsHeading || rText != sOldText )
+    if( bNewIsHeading != bOldIsHeading )
+    {
+        // The role has changed
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ROLE_CHANGED;
+
+        FireAccessibleEvent( aEvent );
+    }
+
+    if( rText != sOldText )
     {
         OUString sNewDesc( GetDescription() );
         OUString sOldDesc;
