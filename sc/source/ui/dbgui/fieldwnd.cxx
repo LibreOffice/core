@@ -118,12 +118,26 @@ ScAccessibleDataPilotControl *ScDPFieldControlBase::AccessRef::operator -> () co
 
 ScDPFieldControlBase::ScDPFieldControlBase(
     ScPivotLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    Control(pParent, rResId),
+    Control(pParent),
     mpDlg(pParent),
     mpCaption(pCaption),
     mnFieldSelected(0)
 {
     SetHelpId( pcHelpId );
+
+    if (pCaption)
+        maName = MnemonicGenerator::EraseAllMnemonicChars( pCaption->GetText() );
+}
+
+ScDPFieldControlBase::ScDPFieldControlBase( Window* pParent ) :
+    Control (pParent),
+    mnFieldSelected(0)
+{
+}
+
+void ScDPFieldControlBase::Init( ScPivotLayoutDlg* pDlg, FixedText* pCaption )
+{
+    mpDlg = pDlg;
 
     if (pCaption)
         maName = MnemonicGenerator::EraseAllMnemonicChars( pCaption->GetText() );
@@ -897,6 +911,14 @@ ScDPHorFieldControl::ScDPHorFieldControl(
     AppendPaintable(&maScroll);
 }
 
+ScDPHorFieldControl::ScDPHorFieldControl ( Window* pParent )  :
+    ScDPFieldControlBase( pParent ),
+    maScroll(this, WB_HORZ | WB_DRAG),
+    mnFieldBtnRowCount(0),
+    mnFieldBtnColCount(0)
+{
+}
+
 ScDPHorFieldControl::~ScDPHorFieldControl()
 {
 }
@@ -1149,6 +1171,17 @@ ScDPPageFieldControl::ScDPPageFieldControl(
 {
 }
 
+ScDPPageFieldControl::ScDPPageFieldControl ( Window* pParent )  :
+    ScDPHorFieldControl( pParent )
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPPageFieldControl( Window *pParent, VclBuilder::stringmap & )
+{
+    return new ScDPPageFieldControl( pParent );
+}
+
+
 ScDPPageFieldControl::~ScDPPageFieldControl()
 {
 }
@@ -1169,6 +1202,16 @@ ScDPColFieldControl::ScDPColFieldControl(
     ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
     ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
+}
+
+ScDPColFieldControl::ScDPColFieldControl ( Window* pParent )  :
+    ScDPHorFieldControl( pParent )
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPColFieldControl( Window *pParent, VclBuilder::stringmap & )
+{
+    return new ScDPColFieldControl( pParent );
 }
 
 ScDPColFieldControl::~ScDPColFieldControl()
@@ -1199,6 +1242,24 @@ ScDPRowFieldControl::ScDPRowFieldControl(
 
     AppendPaintable(&maScroll);
 }
+
+ScDPRowFieldControl::ScDPRowFieldControl ( Window* pParent )  :
+    ScDPFieldControlBase( pParent ),
+    maScroll(this, WB_VERT | WB_DRAG),
+    mnColumnBtnCount(0)
+{
+    maScroll.SetScrollHdl( LINK(this, ScDPRowFieldControl, ScrollHdl) );
+    maScroll.SetEndScrollHdl( LINK(this, ScDPRowFieldControl, EndScrollHdl) );
+    maScroll.Show(false);
+
+    AppendPaintable(&maScroll);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPRowFieldControl( Window *pParent, VclBuilder::stringmap & )
+{
+    return new ScDPRowFieldControl( pParent );
+}
+
 
 ScDPRowFieldControl::~ScDPRowFieldControl()
 {
@@ -1424,6 +1485,17 @@ ScDPSelectFieldControl::ScDPSelectFieldControl(
     SetName(OUString(ScResId(STR_SELECT)));
 }
 
+ScDPSelectFieldControl::ScDPSelectFieldControl(  Window* pParent ):
+    ScDPHorFieldControl( pParent )
+{
+    SetName(OUString(ScResId(STR_SELECT)));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPSelectFieldControl( Window *pParent, VclBuilder::stringmap & )
+{
+    return new ScDPSelectFieldControl( pParent );
+}
+
 ScDPSelectFieldControl::~ScDPSelectFieldControl()
 {
 }
@@ -1444,6 +1516,16 @@ ScDPDataFieldControl::ScDPDataFieldControl(
     ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
     ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
+}
+
+ScDPDataFieldControl::ScDPDataFieldControl(  Window* pParent ):
+    ScDPHorFieldControl( pParent )
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPDataFieldControl( Window *pParent, VclBuilder::stringmap & )
+{
+    return new ScDPDataFieldControl( pParent );
 }
 
 ScDPDataFieldControl::~ScDPDataFieldControl()
