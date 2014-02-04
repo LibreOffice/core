@@ -370,7 +370,7 @@ sal_Bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 if ( aDocument.isInVBAMode() )
-                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).getLength() > 0 ) ? sal_True : sal_False;
+                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).isEmpty() == false ) ? sal_True : sal_False;
                 else
                     pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
             }

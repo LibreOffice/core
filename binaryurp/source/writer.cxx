@@ -210,7 +210,7 @@ void Writer::sendRequest(
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext)
 {
-    OSL_ASSERT(tid.getLength() != 0 && oid.getLength() != 0 && member.is());
+    OSL_ASSERT(tid.getLength() != 0 && !oid.isEmpty() && member.is());
     css::uno::TypeDescription t(type);
     sal_Int32 functionId = 0;
     bool forceSynchronous = false;

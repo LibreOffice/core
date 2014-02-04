@@ -183,7 +183,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     aPureIdStr += aDot;
     aPureIdStr += aDialogName;
     aPureIdStr += aDot;
-    if( aCtrlName.getLength() )
+    if( !aCtrlName.isEmpty() )
     {
         aPureIdStr += aCtrlName;
         aPureIdStr += aDot;
@@ -243,7 +243,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Replace string by id, add id+string to StringResource
                     if( eMode == SET_IDS )
                     {
-                        bool bEscAlreadyExisting = (aPropStr.getLength() && aPropStr.getStr()[0] == '&' );
+                        bool bEscAlreadyExisting = (!aPropStr.isEmpty() && aPropStr.getStr()[0] == '&' );
                         if( bEscAlreadyExisting )
                             continue;
 
@@ -436,7 +436,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         for ( i = 0; i < nPropStringCount; ++i )
                         {
                             ::rtl::OUString aPropStr = pPropStrings[i];
-                            bool bEscAlreadyExisting = (aPropStr.getLength() && aPropStr.getStr()[0] == '&' );
+                            bool bEscAlreadyExisting = (!aPropStr.isEmpty() && aPropStr.getStr()[0] == '&' );
                             if( bEscAlreadyExisting )
                             {
                                 pIdStrings[i] = aPropStr;

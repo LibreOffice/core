@@ -298,7 +298,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // Source?
-    if( aOUSource.getLength() && SbiGood( r ) )
+    if( !aOUSource.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
         String aTmp;

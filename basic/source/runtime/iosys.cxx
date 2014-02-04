@@ -274,7 +274,7 @@ sal_Bool needSecurityRestrictions( void )
             const Reference< XBridge >& rxBridge = pBridges[ i ];
             ::rtl::OUString aDescription = rxBridge->getDescription();
             ::rtl::OUString aPortalUser = findUserInDescription( aDescription );
-            if( aPortalUser.getLength() > 0 )
+            if( !aPortalUser.isEmpty() )
             {
                 // User Found, compare to system user
                 if( aPortalUser == aSystemUser )
