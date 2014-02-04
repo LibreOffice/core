@@ -56,7 +56,7 @@ namespace dbaui
                         ,public OSQLNameChecker
     {
     public:
-        OSQLNameEdit(Window* _pParent,const OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+        OSQLNameEdit(Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,nStyle)
             ,OSQLNameChecker(_rAllowedChars)
         {
@@ -77,14 +77,14 @@ namespace dbaui
                             ,public OSQLNameChecker
     {
     public:
-        OSQLNameComboBox(Window* _pParent,const OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+        OSQLNameComboBox(Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,nStyle)
-            ,OSQLNameChecker(_rAllowedChars)
+            , OSQLNameChecker(_rAllowedChars)
         {
         }
         OSQLNameComboBox(Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,_rRes)
-            ,OSQLNameChecker(_rAllowedChars)
+            , OSQLNameChecker(_rAllowedChars)
         {
         }
 

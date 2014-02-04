@@ -229,7 +229,7 @@ void OTableEditorCtrl::InitCellController()
         OSL_FAIL("getMaxColumnNameLength");
     }
 
-    pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );
+    pNameCell = new OSQLNameEdit(&GetDataWindow(), WB_LEFT, sExtraNameChars);
     pNameCell->SetMaxTextLen( nMaxTextLen );
     pNameCell->setCheck( isSQL92CheckEnabled(xCon) );
 

@@ -62,7 +62,7 @@ namespace dbaui
                                                     sal_uInt16 nHelpId,
                                                     short nPosition,
                                                     WinBits nWinStyle)
-        :OSQLNameEdit(pParent, _rAllowedChars,nWinStyle)
+        :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
         ,m_nPos(nPosition)
     {
         m_strHelpText = ModuleRes(nHelpId);
