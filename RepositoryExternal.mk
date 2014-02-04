@@ -128,7 +128,14 @@ endif
 
 ifeq ($(SYSTEM_GLEW),YES)
 
-gb_LinkTarget__use_glew :=
+define gb_LinkTarget__use_glew
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(GLEW_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
+
+endef
 
 else
 
