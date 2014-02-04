@@ -3218,15 +3218,16 @@ public:
 
 class CompileNameFormulaHandler
 {
+    sc::CompileFormulaContext& mrCxt;
     bool mbCreateFormulaString;
 
 public:
-    CompileNameFormulaHandler(bool bCreateFormulaString) :
-        mbCreateFormulaString(bCreateFormulaString) {}
+    CompileNameFormulaHandler( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString) :
+        mrCxt(rCxt), mbCreateFormulaString(bCreateFormulaString) {}
 
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileNameFormula(mbCreateFormulaString);
+        p->CompileNameFormula(mrCxt, mbCreateFormulaString);
     }
 };
 
@@ -3254,9 +3255,9 @@ void ScColumn::CompileDBFormula( bool bCreateFormulaString )
     RegroupFormulaCells();
 }
 
-void ScColumn::CompileNameFormula( bool bCreateFormulaString )
+void ScColumn::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
-    CompileNameFormulaHandler aFunc(bCreateFormulaString);
+    CompileNameFormulaHandler aFunc(rCxt, bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
 }
 

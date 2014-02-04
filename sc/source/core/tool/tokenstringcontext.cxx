@@ -105,6 +105,21 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     }
 }
 
+CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
+    mpDoc(pDoc), meGram(eGram)
+{
+    if (!pDoc)
+        return;
+
+    // Fetch all sheet names.
+    maTabNames = pDoc->GetAllTableNames();
+    {
+        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+        for (; it != itEnd; ++it)
+            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
+    }
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

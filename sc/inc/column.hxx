@@ -59,6 +59,7 @@ class DocumentStreamAccess;
 class CellValues;
 struct RowSpan;
 class RowHeightContext;
+struct CompileFormulaContext;
 
 }
 
@@ -463,7 +464,7 @@ public:
 
     void        CompileDBFormula();
     void        CompileDBFormula( bool bCreateFormulaString );
-    void        CompileNameFormula( bool bCreateFormulaString );
+    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;

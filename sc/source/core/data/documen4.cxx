@@ -44,6 +44,7 @@
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include <tokenstringcontext.hxx>
 
 using namespace formula;
 
@@ -558,11 +559,12 @@ void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 
 void ScDocument::CompileNameFormula( bool bCreateFormulaString )
 {
+    sc::CompileFormulaContext aCxt(this, eGrammar);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileNameFormula( bCreateFormulaString );
+            (*it)->CompileNameFormula(aCxt, bCreateFormulaString);
     }
 }
 

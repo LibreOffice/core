@@ -44,6 +44,7 @@ struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
+struct CompileFormulaContext;
 
 }
 
@@ -221,6 +222,9 @@ public:
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
+    void Compile(
+        sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening = false );
+
     void            CompileTokenArray( bool bNoListening = false );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
@@ -287,7 +291,7 @@ public:
     void            SetRunning( bool bVal );
     void            CompileDBFormula();
     void            CompileDBFormula( bool bCreateFormulaString );
-    void            CompileNameFormula( bool bCreateFormulaString );
+    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void            CompileColRowNameFormula();
     ScFormulaCell*  GetPrevious() const;
     ScFormulaCell*  GetNext() const;

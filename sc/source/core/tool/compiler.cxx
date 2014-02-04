@@ -67,6 +67,7 @@
 #include "formulaparserpool.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include <tokenstringcontext.hxx>
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -1537,6 +1538,23 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
                 ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
         }
     }
+}
+
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
+    pDoc(rCxt.mpDoc),
+    aPos(rPos),
+    mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
+    pCharClass(ScGlobal::pCharClass),
+    mnPredetectedReference(0),
+    mnRangeOpPosInSymbol(-1),
+    pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
+    meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
+    mbCloseBrackets(true),
+    mbRewind(false),
+    maTabNames(rCxt.maTabNames)
+{
+    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
+    SetGrammar(rCxt.meGram);
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)

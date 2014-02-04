@@ -70,6 +70,7 @@ struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
 class RowHeightContext;
+struct CompileFormulaContext;
 
 }
 
@@ -1013,7 +1014,7 @@ private:
     bool        TestTabRefAbs(SCTAB nTable) const;
     void        CompileDBFormula();
     void        CompileDBFormula( bool bCreateFormulaString );
-    void        CompileNameFormula( bool bCreateFormulaString );
+    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void        CompileColRowNameFormula();
     void        RebuildFormulaGroups();
 

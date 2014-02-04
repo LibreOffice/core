@@ -939,6 +939,40 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
         pDocument->PutInFormulaTree( this );
 }
 
+void ScFormulaCell::Compile(
+    sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening )
+{
+    if ( pDocument->IsClipOrUndo() )
+        return;
+    bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
+    if ( bWasInFormulaTree )
+        pDocument->RemoveFromFormulaTree( this );
+    // pCode may not deleted for queries, but must be empty
+    if ( pCode )
+        pCode->Clear();
+    ScTokenArray* pCodeOld = pCode;
+    ScCompiler aComp(rCxt, aPos);
+    pCode = aComp.CompileString( rFormula );
+    if ( pCodeOld )
+        delete pCodeOld;
+    if( !pCode->GetCodeError() )
+    {
+        if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )
+        {   // not recursive CompileTokenArray/Compile/CompileTokenArray
+            if ( rFormula[0] == '=' )
+                pCode->AddBad( rFormula.copy(1) );
+            else
+                pCode->AddBad( rFormula );
+        }
+        bCompile = true;
+        CompileTokenArray( bNoListening );
+    }
+    else
+        bChanged = true;
+
+    if ( bWasInFormulaTree )
+        pDocument->PutInFormulaTree( this );
+}
 
 void ScFormulaCell::CompileTokenArray( bool bNoListening )
 {
@@ -3278,7 +3312,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
     }
 }
 
-void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
+void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
     // Two phases must be called after each other
     // 1. Formula String with old generated names
@@ -3319,7 +3353,8 @@ void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
     }
     else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
-        Compile( aResult.GetHybridFormula(), false, eTempGrammar );
+        assert(rCxt.meGram == eTempGrammar);
+        Compile(rCxt, aResult.GetHybridFormula(), false);
         aResult.SetToken( NULL);
         SetDirty();
     }
