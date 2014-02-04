@@ -272,7 +272,6 @@ public:
     sal_Bool    IsPickThrough() const { Init(); return (sal_Bool) bPickThrough; }
     sal_Bool    IsDoubleClickTextEdit() const { Init(); return (sal_Bool) bDoubleClickTextEdit; }
     sal_Bool    IsClickChangeRotation() const { Init(); return (sal_Bool) bClickChangeRotation; }
-    sal_Bool    IsStartWithActualPage() const { Init(); return (sal_Bool) bStartWithActualPage; }
     sal_Bool    IsEnableSdremote() const { Init(); return (sal_Bool) bEnableSdremote; }
     sal_Bool    IsEnablePresenterScreen() const { Init(); return (sal_Bool) bEnablePresenterScreen; }
     sal_Bool    IsSolidDragging() const { Init(); return (sal_Bool) bSolidDragging; }

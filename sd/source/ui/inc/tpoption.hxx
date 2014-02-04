@@ -89,7 +89,6 @@ private:
     ListBox     *m_pLbMetric;
     MetricField *m_pMtrFldTabstop;
 
-    CheckBox    *m_pCbxStartWithActualPage;
     CheckBox    *m_pCbxEnableSdremote;
     CheckBox    *m_pCbxEnablePresenterScreen;
     CheckBox    *m_pCbxUsePrinterMetrics;
