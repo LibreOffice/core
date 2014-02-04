@@ -56,7 +56,6 @@ private:
     HeaderBar           aHeaderBar;
     long                nOldPos;
     sal_uInt16              nHeaderItemId;
-    sal_Bool                bResizeFlag;
     sal_Bool                bPaintFlag;
     sal_Bool                bSortDirection;
     sal_uInt16              nSortCol;

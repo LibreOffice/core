@@ -92,7 +92,6 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         m_rParentTableContainer(rParent),
         aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
-        bResizeFlag(sal_False),
         bPaintFlag(sal_True)
 {
     m_rParentTableContainer.SetTable(this);
