@@ -444,7 +444,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_GRAY, //CALCPAGEBREAKAUTOMATIC
         COL_LIGHTBLUE, // CALCDETECTIVE
         COL_LIGHTRED, // CALCDETECTIVEERROR
-        COL_LIGHTRED, // CALCREFERENCE
+        0xef0fff, // CALCREFERENCE
         0xffffc0, // CALCNOTESBACKGROUND
         0xc0c0c0, // DRAWGRID
         COL_GREEN, // BASICIDENTIFIER,
