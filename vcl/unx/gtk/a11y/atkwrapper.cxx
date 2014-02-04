@@ -276,6 +276,11 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         , ATK_ROLE_DOCUMENT_PRESENTATION
         , ATK_ROLE_DOCUMENT_SPREADSHEET
         , ATK_ROLE_DOCUMENT_TEXT
+#else
+        //older version should fallback to DOCUMENT_FRAME role
+        , ATK_ROLE_DOCUMENT_FRAME
+        , ATK_ROLE_DOCUMENT_FRAME
+        , ATK_ROLE_DOCUMENT_FRAME
 #endif
     };
 
