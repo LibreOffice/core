@@ -35,6 +35,16 @@
 #define NSAppKitVersionNumber10_7 1138
 #endif
 
+extern "C"
+{
+    typedef CFTypeRef CUIRendererRef;
+    void CUIDraw(CUIRendererRef r, CGRect rect, CGContextRef ctx, CFDictionaryRef options, CFDictionaryRef* result);
+}
+
+@interface NSWindow(CoreUIRendererPrivate)
++ (CUIRendererRef)coreUIRenderer;
+@end
+
 class AquaBlinker : public Timer
 {
     AquaSalFrame*       mpFrame;
@@ -524,11 +534,30 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_TOOLBAR:
         {
-            HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
-            aMenuItemDrawInfo.version = 0;
-            aMenuItemDrawInfo.state = kThemeMenuActive;
-            aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
-            HIThemeDrawMenuItem(&rc,&rc,&aMenuItemDrawInfo,mrContext,kHIThemeOrientationNormal,NULL);
+            if (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT)
+            {
+                BOOL isMain = [mpFrame->getNSWindow() isMainWindow];
+                CGFloat unifiedHeight = rControlRegion.GetHeight();
+                CGRect drawRect = CGRectMake(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
+                CUIDraw([NSWindow coreUIRenderer], drawRect, mrContext,
+                        (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
+                        @"kCUIWidgetWindowFrame", @"widget",
+                        @"regularwin", @"windowtype",
+                        (isMain ? @"normal" : @"inactive"), @"state",
+                        [NSNumber numberWithDouble:unifiedHeight], @"kCUIWindowFrameUnifiedTitleBarHeightKey",
+                        [NSNumber numberWithBool:YES], @"kCUIWindowFrameDrawTitleSeparatorKey",
+                        [NSNumber numberWithBool:YES], @"is.flipped",
+                        nil],
+                        nil);;
+            }
+            else
+            {
+                HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
+                aMenuItemDrawInfo.version = 0;
+                aMenuItemDrawInfo.state = kThemeMenuActive;
+                aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
+                HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, mrContext, kHIThemeOrientationNormal, NULL);
+            }
             bOK = true;
         }
         break;
