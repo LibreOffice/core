@@ -222,6 +222,14 @@
         Styles   = (PACKED,DONT_OVERWRITE); \
     End
 
+#define URE_JAR_FILE(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Name = name; \
+        Dir = GID_DIR_URE_JAVA; \
+        Styles = (PACKED); \
+    End
+
 #define JARFILENAME(name) STRING(CONCAT2(name,.jar))
 
 #define SPECIAL_COMPONENT_LIB_FILE(id,name) \

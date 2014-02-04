@@ -510,55 +510,6 @@ End
 
 #endif
 
-// Public JARs:
-
-#if defined ENABLE_JAVA
-File gid_File_Java_UnoloaderJar
-    TXT_FILE_BODY;
-    Dir = GID_DIR_URE_JAVA;
-    Name = "unoloader.jar";
-    Styles = (PACKED);
-End
-#endif
-
-#if defined ENABLE_JAVA
-File gid_File_Java_JuhJar
-    TXT_FILE_BODY;
-    Dir = GID_DIR_URE_JAVA;
-    Name = "juh.jar";
-    Styles = (PACKED);
-End
-#endif
-
-#if defined ENABLE_JAVA
-File gid_File_Java_JurtJar
-    TXT_FILE_BODY;
-    Dir = GID_DIR_URE_JAVA;
-    Name = "jurt.jar";
-    Styles = (PACKED);
-End
-#endif
-
-#if defined ENABLE_JAVA
-File gid_File_Java_RidlJar
-    TXT_FILE_BODY;
-    Dir = GID_DIR_URE_JAVA;
-    Name = "ridl.jar";
-    Styles = (PACKED);
-End
-#endif
-
-// Private JARs:
-
-#if defined ENABLE_JAVA
-File gid_File_Java_JavaUnoJar
-    TXT_FILE_BODY;
-    Dir = GID_DIR_URE_JAVA;
-    Name = "java_uno.jar";
-    Styles = (PACKED);
-End
-#endif
-
 // Public Miscellaneous Files:
 
 File gid_File_Misc_TypesRdb
@@ -647,11 +598,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Lib_Msvcp80_Ure,
             gid_File_Lib_Msvcm80_Ure,
             gid_File_Msvcm80crt_Manifest_Ure,
-            gid_File_Java_UnoloaderJar,
-            gid_File_Java_JuhJar,
-            gid_File_Java_JurtJar,
-            gid_File_Java_RidlJar,
-            gid_File_Java_JavaUnoJar,
             gid_File_Misc_TypesRdb,
             gid_File_Misc_ServicesRdb,
             gid_File_Misc_JavavendorsXml);

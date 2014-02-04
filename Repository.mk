@@ -636,13 +636,17 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	passive_native \
 ))
 
-$(eval $(call gb_Helper_register_jars,URE, \
+ifneq ($(ENABLE_JAVA),)
+$(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 	java_uno \
 	juh \
 	jurt \
 	ridl \
-	testComponent \
 	unoloader \
+))
+
+$(eval $(call gb_Helper_register_jars,URE, \
+	testComponent \
 ))
 
 $(eval $(call gb_Helper_register_jars,OOO, \
@@ -694,6 +698,7 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 	test \
 	test-tools \
 ))
+endif
 
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
