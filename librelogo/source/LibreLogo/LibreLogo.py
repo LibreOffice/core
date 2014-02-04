@@ -56,7 +56,9 @@ __MM10_TO_TWIP__ = 1/(2540.0/72/20) # 0.01 mm to twentieth point
 __FILLCOLOR__ = 0x8000cc00
 __LINEWIDTH__ = 0.5 * __PT_TO_TWIP__
 __ENCODED_STRING__ = "_s_%s___"
+__ENCODED_COMMENT__ = "_c_%s___"
 __DECODE_STRING_REGEX__ = "_s_([0-9]+)___"
+__DECODE_COMMENT_REGEX__ = "_c_([0-9]+)___"
 __LINEBREAK__ = "#_@L_i_N_e@_#"
 __TURTLE__ = "turtle"
 __ACTUAL__ = "actual"
@@ -345,8 +347,10 @@ def __translate__(arg = None):
     rq = '\'' + lang['RIGHTSTRING'].replace("|", "")
     __strings__ = []
 
+    text = re.sub(r"^(([ \t]*[;#][^\n]*))", __encodecomment__, text)
     text = re.sub("(?u)([%s])([^\n%s]*)(?<!\\\\)[%s]" % (lq, rq, rq), __encodestring__, selection.getString())
     text = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, text)
+    text = re.sub(r";(([^\n]*))", __encodecomment__, text)
 
     # translate the program to the language of the document FIXME space/tab
     exception = ['DECIMAL']
@@ -364,11 +368,12 @@ def __translate__(arg = None):
         text = re.sub(r'(?ui)(?<!:)\b(%s)\b' % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
     text = re.sub(r"(?<=\d)[%s](?=\d)" % lang['DECIMAL'], __l12n__(_.lng)['DECIMAL'], text)
 
-    # decode strings
+    # decode strings and comments
     quoted = u"(?ui)(?<=%s)(%%s)(?=%s)" % (__l12n__(_.lng)['LEFTSTRING'][0], __l12n__(_.lng)['RIGHTSTRING'][0])
     text = re.sub(__DECODE_STRING_REGEX__, __decodestring2__, text)
     for i in __STRCONST__:
         text = re.sub(quoted % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
+    text = re.sub(__DECODE_COMMENT_REGEX__, __decodecomment__, text)
     selection.setString(text)
     # convert to paragraphs
     __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
@@ -438,11 +443,18 @@ def __encodestring__(m):
     __strings__.append(re.sub("\\[^\\]", "", m.group(2)))
     return __ENCODED_STRING__ % (len(__strings__) - 1)
 
+def __encodecomment__(m):
+    __strings__.append(re.sub("\\[^\\]", "", m.group(2)))
+    return __ENCODED_COMMENT__ % (len(__strings__) - 1)
+
 def __decodestring__(m):
     return "u'%s'" % __strings__[int(m.group(1))]
 
 def __decodestring2__(m):
     return __l12n__(_.lng)['LEFTSTRING'][0] + __strings__[int(m.group(1))] + __l12n__(_.lng)['RIGHTSTRING'][0]
+
+def __decodecomment__(m):
+    return ";" + __strings__[int(m.group(1))]
 
 def __initialize__():
     global __halt__, __thread__
