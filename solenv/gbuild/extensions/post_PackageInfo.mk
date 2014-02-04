@@ -28,6 +28,7 @@ define gb_PackageInfo_emit_binaries_command
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf))
 @$(foreach executable,$(gb_Executable_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Executable_get_target,$(executable)))" >> $(gb_PackageInfo_get_target)/$(1).executables &&) true
 @$(foreach library,$(gb_Library_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Library_get_target,$(library)))" >> $(gb_PackageInfo_get_target)/$(1).libraries &&) true
+@$(foreach jar,$(gb_Jar_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Jar_get_target,$(jar)))" >> $(gb_PackageInfo_get_target)/$(1).jars &&) true
 @echo "$(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
@@ -99,6 +100,10 @@ install-package-%: $(gb_PackageInfo_get_target)/packageinfo_all
 	for library in `cat $(gb_PackageInfo_get_target)/$*.libraries`; \
 	do \
 		install -D -m644 $(INSTDIR)/$${library} $(INSTALLDIR)/$${library}; \
+	done
+	for jar in `cat $(gb_PackageInfo_get_target)/$*.jars`; \
+	do \
+		install -D -m644 $(INSTDIR)/$${jar} $(INSTALLDIR)/$${jar}; \
 	done
 	for file in `cat $(gb_PackageInfo_get_target)/$*.files`; \
 	do \

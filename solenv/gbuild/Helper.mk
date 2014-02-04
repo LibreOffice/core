@@ -178,6 +178,14 @@ gb_Jar_$(1) += $(2)
 
 endef
 
+# $(call gb_Helper_register_jars_for_install,layer,installmodule,jars)
+define gb_Helper_register_jars_for_install
+$(call gb_Helper_register_jars,$(1),$(3))
+
+gb_Jar_MODULE_$(2) += $(3)
+
+endef
+
 define gb_Helper_define_if_set
 $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef
