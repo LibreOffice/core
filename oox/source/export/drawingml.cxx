@@ -181,6 +181,10 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
 
 void DrawingML::WriteColor( OUString sColorSchemeName, Sequence< PropertyValue > aTransformations )
 {
+    // prevent writing a tag with empty val attribute
+    if( sColorSchemeName.isEmpty() )
+        return;
+
     if( aTransformations.hasElements() )
     {
         mpFS->startElementNS( XML_a, XML_schemeClr,
@@ -219,17 +223,14 @@ void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
     if( nAlpha < MAX_PERCENT )
     {
-        mpFS->startElementNS( XML_a, XML_schemeClr, XML_val,
-            OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-            FSEND );
-        mpFS->singleElementNS( XML_a, XML_alpha, XML_val, OString::number(nAlpha), FSEND );
-        mpFS->endElementNS( XML_a, XML_schemeClr );
+        Sequence< PropertyValue > aTransformations(1);
+        aTransformations[0].Name = "alpha";
+        aTransformations[0].Value <<= nAlpha;
+        WriteColor( sSchemeName, aTransformations );
     }
     else
     {
-        mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
-            OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-            FSEND );
+        WriteColor( sSchemeName );
     }
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
