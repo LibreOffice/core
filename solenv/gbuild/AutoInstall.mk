@@ -25,13 +25,16 @@ $(call gb_AutoInstall_get_target,%) : $(SRCDIR)/Repository.mk $(GBUILDDIR)/AutoI
 	$(call gb_AutoInstall__make_define,\
 		$(foreach lib,$(gb_Library_MODULE_$*),auto_$*_lib_$(lib)) \
 		$(foreach exe,$(gb_Executable_MODULE_$*),auto_$*_exe_$(exe)) \
-		$(foreach jar,$(gb_Jar_MODULE_$*),auto_$*_jar_$(jar)))
+		$(foreach jar,$(gb_Jar_MODULE_$*),auto_$*_jar_$(jar)) \
+		$(foreach pkg,$(gb_Package_MODULE_$*),auto_$*_pkg_$(pkg)))
 	$(foreach lib,$(gb_Library_MODULE_$*),\
 		echo '$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))' >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
 		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst -,_,$(exe)),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
 	$(foreach jar,$(gb_Jar_MODULE_$*),\
 		echo '$(SCP2JARTEMPLATE)(auto_$*_jar_$(subst -,_,$(jar)),$(jar).jar)' >> $@;)
+	$(foreach pkg,$(gb_Package_MODULE_$*),\
+		echo 'PACKAGE_FILELIST(auto_$*_pkg_$(subst -,_,$(pkg)),$(pkg).filelist)' >> $@;)
 
 
 $(call gb_AutoInstall_get_clean_target,%) :

@@ -140,6 +140,13 @@
         Styles = (FILELIST,HELPPACK,LANGUAGEMODULE)
 #endif
 
+#define PACKAGE_FILELIST(id,name) \
+File id \
+    Dir = FILELIST_DIR; \
+    Name = name; \
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
+End
+
 #define PACKED_LIB_FILE_BODY \
         LIB_FILE_BODY; \
         Styles = (PACKED); \

@@ -186,6 +186,13 @@ gb_Jar_MODULE_$(2) += $(3)
 
 endef
 
+# $(call gb_Helper_register_packages_for_install,installmodule,packages)
+define gb_Helper_register_packages_for_install
+
+gb_Package_MODULE_$(1) += $(2)
+
+endef
+
 define gb_Helper_define_if_set
 $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef

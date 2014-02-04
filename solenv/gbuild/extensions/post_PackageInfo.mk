@@ -29,6 +29,7 @@ define gb_PackageInfo_emit_binaries_command
 @$(foreach executable,$(gb_Executable_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Executable_get_target,$(executable)))" >> $(gb_PackageInfo_get_target)/$(1).executables &&) true
 @$(foreach library,$(gb_Library_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Library_get_target,$(library)))" >> $(gb_PackageInfo_get_target)/$(1).libraries &&) true
 @$(foreach jar,$(gb_Jar_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Jar_get_target,$(jar)))" >> $(gb_PackageInfo_get_target)/$(1).jars &&) true
+@$(foreach pkg,$(gb_Package_MODULE_$(1)),echo "$(call gb_Package_get_target,$(pkg))" >> $(gb_PackageInfo_get_target)/$(1).packages &&) true
 @echo "$(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
