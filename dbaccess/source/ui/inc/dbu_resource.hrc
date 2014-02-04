@@ -81,7 +81,6 @@
 #define DLG_DATASOURCE_SELECTION        RID_DIALOG_START +  4
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 
-#define DLG_SAVE_AS                     RID_DIALOG_START + 11
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
@@ -267,6 +266,11 @@
 #define STR_PAGETITLE_ADVANCED              RID_STR_GEN_START + 39
 #define RID_STR_EXTENSION_NOT_PRESENT       RID_STR_GEN_START + 40
 #define STR_PAGETITLE_CONNECTION            RID_STR_GEN_START + 41
+#define STR_TBL_LABEL                       RID_STR_GEN_START + 42
+#define STR_VW_LABEL                        RID_STR_GEN_START + 43
+#define STR_QRY_LABEL                       RID_STR_GEN_START + 44
+#define STR_TITLE_RENAME                    RID_STR_GEN_START + 45
+#define STR_TITLE_PASTE_AS                  RID_STR_GEN_START + 46
 
 //========================================================================
 // untyped resources

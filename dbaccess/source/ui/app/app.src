@@ -471,4 +471,29 @@ String STR_PAGETITLE_CONNECTION
     Text [ en-US ] = "Connection settings" ;
 };
 
+String STR_TBL_LABEL
+{
+    Text [ en-US ] = "~Table Name" ;
+};
+
+String STR_VW_LABEL
+{
+    Text [ en-US ] = "~Name of table view" ;
+};
+
+String STR_QRY_LABEL
+{
+    Text [ en-US ] = "~Query name" ;
+};
+
+String STR_TITLE_RENAME
+{
+    Text [ en-US ] = "Rename to";
+};
+
+String STR_TITLE_PASTE_AS
+{
+    Text [ en-US ] = "Insert as";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

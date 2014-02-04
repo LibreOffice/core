@@ -78,7 +78,6 @@
 #define HID_DLG_ERROR                                     "DBACCESS_HID_DLG_ERROR"
 #define HID_DLG_TEXT                                      "DBACCESS_HID_DLG_TEXT"
 #define UID_SQLERROR_BUTTONMORE                           "DBACCESS_UID_SQLERROR_BUTTONMORE"
-#define HID_DLG_SAVE_AS                                   "DBACCESS_HID_DLG_SAVE_AS"
 
 #define HID_BROWSER_QUERY_EDIT                            "DBACCESS_HID_BROWSER_QUERY_EDIT"
 #define HID_BROWSER_QUERY_DELETE                          "DBACCESS_HID_BROWSER_QUERY_DELETE"
@@ -246,8 +245,6 @@
 #define HID_DSADMIN_CHARSET_USERDEF                       "DBACCESS_HID_DSADMIN_CHARSET_USERDEF"
 #define HID_DSADMIN_USESSL_LDAP                           "DBACCESS_HID_DSADMIN_USESSL_LDAP"
 #define HID_BROWSER_QUERY_WIZARD                          "DBACCESS_HID_BROWSER_QUERY_WIZARD"
-
-#define HID_DLG_RENAME                                    "DBACCESS_HID_DLG_RENAME"
 
 #define HID_DSADMIN_PAGE_MYSQL_JDBC                       "DBACCESS_HID_DSADMIN_PAGE_MYSQL_JDBC"
 

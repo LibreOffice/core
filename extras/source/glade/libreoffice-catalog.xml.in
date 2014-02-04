@@ -33,6 +33,9 @@
     <glade-widget-class title="Hyphen Edit" name="cuilo-HyphenEdit"
                         generic-name="ReplaceEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="OSQL NameEdit" name="dbulo-OSQLNameEdit"
+                        generic-name="OSQLNameEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
                         generic-name="ComboBoxText" parent="GtkComboBoxText"
@@ -214,6 +217,11 @@
     <glade-widget-class title="Limit ListBox" name="dbulo-LimitBox"
                         generic-name="LimitBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="OSQL NameComboBox" name="dbulo-OSQLNameComboBox"
+                        generic-name="OSQLNameComboBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea">

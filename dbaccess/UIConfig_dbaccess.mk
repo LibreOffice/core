@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/rowheightdialog \
+    dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/tablesfilterdialog \

@@ -18,6 +18,8 @@
  */
 
 #include "SqlNameEdit.hxx"
+#include <vcl/builder.hxx>
+
 namespace dbaui
 {
     sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars)
@@ -77,6 +79,16 @@ namespace dbaui
         }
         ComboBox::Modify();
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOSQLNameEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new dbaui::OSQLNameEdit(pParent);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOSQLNameComboBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new dbaui::OSQLNameComboBox(pParent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
