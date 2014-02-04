@@ -611,6 +611,8 @@ int OpenGLRender::RenderTexture2FBO(GLuint TexID)
     glUseProgram(0);
     glDepthMask(GL_TRUE);
     CHECK_GL_ERROR();
+
+    m_fZStep += Z_STEP;
     return 0;
 }
 
@@ -657,6 +659,7 @@ int OpenGLRender::RenderTexture(GLuint TexID)
     glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
+    m_fZStep += Z_STEP;
     return 0;
 }
 
@@ -1162,6 +1165,7 @@ int OpenGLRender::RenderBubble2FBO(int)
         return -1;
     }
     CHECK_GL_ERROR();
+    m_fZStep += Z_STEP;
     return 0;
 }
 
