@@ -45,7 +45,7 @@ public class PathSubstitutionTest extends java.lang.Object {
      */
     private static String[] predefinedPathVariables = {
         "$(home)","$(inst)","$(prog)","$(temp)","$(user)",
-        "$(work)","$(path)","$(lang)","$(langid)","$(vlang)"
+        "$(work)","$(path)","$(langid)","$(vlang)"
     };
 
     /*
