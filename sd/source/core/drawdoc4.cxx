@@ -64,6 +64,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/shdditem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflgrit.hxx>
@@ -210,6 +211,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
     rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+    rISet.Put(SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP ));
     rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));

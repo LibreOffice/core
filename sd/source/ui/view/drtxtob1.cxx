@@ -54,6 +54,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/itemiter.hxx>
+#include <editeng/cmapitem.hxx>
 
 #include "app.hrc"
 
@@ -416,6 +417,12 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         aNewAttr.Put( SvxShadowedItem( !( (const SvxShadowedItem&) aEditAttr.
                                         Get( EE_CHAR_SHADOW ) ).GetValue(), EE_CHAR_SHADOW ) );
+                    }
+                    break;
+                    case SID_ATTR_CHAR_CASEMAP:
+                    {
+                        aNewAttr.Put( SvxCaseMapItem( ( (const SvxCaseMapItem&) aEditAttr.
+                                        Get( EE_CHAR_CASEMAP ) ) ) );
                     }
                     break;
                     case SID_ATTR_CHAR_STRIKEOUT:

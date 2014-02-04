@@ -59,6 +59,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moBold = rAttribs.getBool( XML_b );
     if ( rAttribs.hasAttribute( XML_i ) )
         mrTextCharacterProperties.moItalic = rAttribs.getBool( XML_i );
+    if( rAttribs.hasAttribute( XML_cap ) )
+        mrTextCharacterProperties.moCaseMap = rAttribs.getToken( XML_cap );
 
     /* TODO / unhandled so far:
        XML_cap

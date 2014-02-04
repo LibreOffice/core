@@ -58,6 +58,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -151,14 +152,15 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[45] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
         ppDefItems[47] = new SvxOverlineItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
+        ppDefItems[48] = new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP );
 
         // Features
-        ppDefItems[48] = new SfxVoidItem( EE_FEATURE_TAB );
-        ppDefItems[49] = new SfxVoidItem( EE_FEATURE_LINEBR );
-        ppDefItems[50] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
-        ppDefItems[51] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+        ppDefItems[49] = new SfxVoidItem( EE_FEATURE_TAB );
+        ppDefItems[50] = new SfxVoidItem( EE_FEATURE_LINEBR );
+        ppDefItems[51] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+        ppDefItems[52] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 52, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 53, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],

@@ -73,6 +73,8 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/cmapitem.hxx>
 #include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
 #include "svx/dlgutil.hxx"
@@ -629,6 +631,10 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_STRIKEOUT );
                 if ( pItem )
                     aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_CASEMAP );
+                if ( pItem )
+                    ((SvxFont &)aFont).SetCaseMap( static_cast< const SvxCaseMapItem* >( pItem )->GetCaseMap() );
 
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_EMPHASISMARK );
                 if ( pItem )
