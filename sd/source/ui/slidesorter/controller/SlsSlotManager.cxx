@@ -644,14 +644,22 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 
 
     // Disable the rename slots when there are no or more than one slides/master
-    // pages selected.
+    // pages selected; disable the duplicate slot when there are no slides
+    // selected:
     if (rSet.GetItemState(SID_RENAMEPAGE) == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_RENAME_MASTER_PAGE)  == SFX_ITEM_AVAILABLE)
+        || rSet.GetItemState(SID_RENAME_MASTER_PAGE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_DUPLICATE_PAGE) == SFX_ITEM_AVAILABLE)
     {
-        if (mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount() != 1)
+        int n = mrSlideSorter.GetController().GetPageSelector()
+            .GetSelectedPageCount();
+        if (n != 1)
         {
             rSet.DisableItem(SID_RENAMEPAGE);
             rSet.DisableItem(SID_RENAME_MASTER_PAGE);
+        }
+        if (n == 0)
+        {
+            rSet.DisableItem(SID_DUPLICATE_PAGE);
         }
     }
 
