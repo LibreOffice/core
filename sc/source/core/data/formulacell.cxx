@@ -1076,7 +1076,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
     // Not already compiled?
     if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
-        assert(rCxt.meGram == eTempGrammar);
+        rCxt.setGrammar(eTempGrammar);
         Compile(rCxt, aResult.GetHybridFormula(), bNoListening);
     }
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
@@ -1180,13 +1180,14 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 }
 
 
-void ScFormulaCell::CalcAfterLoad()
+void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
 {
     bool bNewCompiled = false;
     // If a Calc 1.0-doc is read, we have a result, but no token array
     if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
-        Compile( aResult.GetHybridFormula(), true, eTempGrammar);
+        rCxt.setGrammar(eTempGrammar);
+        Compile(rCxt, aResult.GetHybridFormula(), true);
         aResult.SetToken( NULL);
         bDirty = true;
         bNewCompiled = true;
@@ -1194,8 +1195,7 @@ void ScFormulaCell::CalcAfterLoad()
     // The RPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
     if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
+        ScCompiler aComp(rCxt, aPos, *pCode);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
         bDirty = true;
@@ -3357,7 +3357,7 @@ void ScFormulaCell::CompileDBFormula()
     }
 }
 
-void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
+void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
     // Two phases must be called after each other
     // 1. Formula String with old generated names
@@ -3385,8 +3385,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
         }
         if ( bRecompile )
         {
-            OUString aFormula;
-            GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
+            OUString aFormula = GetFormula(rCxt);
             if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
                 if ( aFormula[ aFormula.getLength()-1 ] == '}' )
@@ -3397,12 +3396,13 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
-            SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
+            SetHybridFormula(aFormula, rCxt.getGrammar());
         }
     }
     else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
-        Compile( aResult.GetHybridFormula(), false, eTempGrammar );
+        rCxt.setGrammar(eTempGrammar);
+        Compile(rCxt, aResult.GetHybridFormula(), false);
         aResult.SetToken( NULL);
         SetDirty();
     }
@@ -3443,12 +3443,12 @@ void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bC
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
-            SetHybridFormula(aFormula, rCxt.meGram);
+            SetHybridFormula(aFormula, rCxt.getGrammar());
         }
     }
     else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
-        assert(rCxt.meGram == eTempGrammar);
+        rCxt.setGrammar(eTempGrammar);
         Compile(rCxt, aResult.GetHybridFormula(), false);
         aResult.SetToken( NULL);
         SetDirty();

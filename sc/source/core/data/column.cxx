@@ -2912,11 +2912,15 @@ public:
     bool isCompiled() const { return mbCompiled; }
 };
 
-struct CalcAfterLoadHandler
+class CalcAfterLoadHandler
 {
+    sc::CompileFormulaContext& mrCxt;
+public:
+    CalcAfterLoadHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        pCell->CalcAfterLoad();
+        pCell->CalcAfterLoad(mrCxt);
     }
 };
 
@@ -3185,9 +3189,9 @@ bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
     return aHdl.isCompiled();
 }
 
-void ScColumn::CalcAfterLoad()
+void ScColumn::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
 {
-    CalcAfterLoadHandler aFunc;
+    CalcAfterLoadHandler aFunc(rCxt);
     sc::ProcessFormula(maCells, aFunc);
 }
 

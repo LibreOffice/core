@@ -1516,7 +1516,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr ) :
     FormulaCompiler(rArr),
-    pDoc(rCxt.mpDoc),
+    pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pDoc->GetFormatTable()),
     pCharClass(ScGlobal::pCharClass),
@@ -1526,10 +1526,10 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
     mbCloseBrackets(true),
     mbRewind(false),
-    maTabNames(rCxt.maTabNames)
+    maTabNames(rCxt.getTabNames())
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
-    SetGrammar(rCxt.meGram);
+    SetGrammar(rCxt.getGrammar());
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
@@ -1559,7 +1559,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
-    pDoc(rCxt.mpDoc),
+    pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
     pCharClass(ScGlobal::pCharClass),
@@ -1569,10 +1569,10 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
     meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
     mbCloseBrackets(true),
     mbRewind(false),
-    maTabNames(rCxt.maTabNames)
+    maTabNames(rCxt.getTabNames())
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
-    SetGrammar(rCxt.meGram);
+    SetGrammar(rCxt.getGrammar());
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)

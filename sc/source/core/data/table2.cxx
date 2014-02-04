@@ -1766,9 +1766,10 @@ bool ScTable::CompileErrorCells(sal_uInt16 nErrCode)
     return bCompiled;
 }
 
-void ScTable::CalcAfterLoad()
+void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CalcAfterLoad();
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CalcAfterLoad(rCxt);
 }
 
 bool ScTable::IsEmptyData( SCCOL nCol ) const

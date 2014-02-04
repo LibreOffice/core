@@ -70,7 +70,7 @@ struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
 class RowHeightContext;
-struct CompileFormulaContext;
+class CompileFormulaContext;
 
 }
 
@@ -520,7 +520,7 @@ public:
     void        SetDirtyVar();
     void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
-    void        CalcAfterLoad();
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
 
@@ -1013,7 +1013,7 @@ private:
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
     bool        TestTabRefAbs(SCTAB nTable) const;
     void        CompileDBFormula();
-    void        CompileDBFormula( bool bCreateFormulaString );
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void        CompileColRowNameFormula();
     void        RebuildFormulaGroups();

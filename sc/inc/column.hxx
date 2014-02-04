@@ -59,7 +59,7 @@ class DocumentStreamAccess;
 class CellValues;
 struct RowSpan;
 class RowHeightContext;
-struct CompileFormulaContext;
+class CompileFormulaContext;
 
 }
 
@@ -335,7 +335,7 @@ public:
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
-    void        CalcAfterLoad();
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
 
@@ -463,7 +463,7 @@ public:
     void BroadcastRecalcOnRefMove();
 
     void        CompileDBFormula();
-    void        CompileDBFormula( bool bCreateFormulaString );
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void        CompileColRowNameFormula();
 

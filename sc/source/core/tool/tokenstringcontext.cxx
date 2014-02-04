@@ -111,13 +111,41 @@ CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::Formula
     if (!pDoc)
         return;
 
+    updateTabNames();
+}
+
+void CompileFormulaContext::updateTabNames()
+{
     // Fetch all sheet names.
-    maTabNames = pDoc->GetAllTableNames();
+    maTabNames = mpDoc->GetAllTableNames();
     {
         std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
         for (; it != itEnd; ++it)
-            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
+            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGram));
     }
+}
+
+formula::FormulaGrammar::Grammar CompileFormulaContext::getGrammar() const
+{
+    return meGram;
+}
+
+void CompileFormulaContext::setGrammar( formula::FormulaGrammar::Grammar eGram )
+{
+    bool bUpdate = (meGram != eGram);
+    meGram = eGram;
+    if (bUpdate)
+        updateTabNames();
+}
+
+const std::vector<OUString>& CompileFormulaContext::getTabNames() const
+{
+    return maTabNames;
+}
+
+ScDocument* CompileFormulaContext::getDoc()
+{
+    return mpDoc;
 }
 
 }

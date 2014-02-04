@@ -3204,15 +3204,16 @@ struct CompileDBFormulaHandler
 
 class CompileDBFormula2Handler
 {
+    sc::CompileFormulaContext& mrCxt;
     bool mbCreateFormulaString;
 
 public:
-    CompileDBFormula2Handler(bool bCreateFormulaString) :
-        mbCreateFormulaString(bCreateFormulaString) {}
+    CompileDBFormula2Handler( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString ) :
+        mrCxt(rCxt), mbCreateFormulaString(bCreateFormulaString) {}
 
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileDBFormula(mbCreateFormulaString);
+        p->CompileDBFormula(mrCxt, mbCreateFormulaString);
     }
 };
 
@@ -3248,9 +3249,9 @@ void ScColumn::CompileDBFormula()
     RegroupFormulaCells();
 }
 
-void ScColumn::CompileDBFormula( bool bCreateFormulaString )
+void ScColumn::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
-    CompileDBFormula2Handler aFunc(bCreateFormulaString);
+    CompileDBFormula2Handler aFunc(rCxt, bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }

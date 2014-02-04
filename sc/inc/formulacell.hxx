@@ -44,7 +44,7 @@ struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
-struct CompileFormulaContext;
+class CompileFormulaContext;
 
 }
 
@@ -230,7 +230,7 @@ public:
     void CompileTokenArray( bool bNoListening = false );
     void CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening = false );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
-    void            CalcAfterLoad();
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     bool            MarkUsedExternalReferences();
     void            Interpret();
     bool IsIterCell() const;
@@ -293,7 +293,7 @@ public:
     bool            IsRunning() const;
     void            SetRunning( bool bVal );
     void            CompileDBFormula();
-    void            CompileDBFormula( bool bCreateFormulaString );
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void            CompileColRowNameFormula();
     ScFormulaCell*  GetPrevious() const;

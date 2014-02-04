@@ -549,11 +549,12 @@ void ScDocument::CompileDBFormula()
 
 void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 {
+    sc::CompileFormulaContext aCxt(this, eGrammar);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileDBFormula( bCreateFormulaString );
+            (*it)->CompileDBFormula(aCxt, bCreateFormulaString);
     }
 }
 

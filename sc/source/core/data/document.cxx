@@ -96,6 +96,7 @@
 #include "refupdatecontext.hxx"
 #include "formulagroup.hxx"
 #include <tokenarray.hxx>
+#include <tokenstringcontext.hxx>
 
 #include "formula/vectortoken.hxx"
 
@@ -3755,11 +3756,12 @@ void ScDocument::CalcAfterLoad()
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = true;
+    sc::CompileFormulaContext aCxt(this, eGrammar);
     {
         TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
-                (*it)->CalcAfterLoad();
+                (*it)->CalcAfterLoad(aCxt);
         for (it = maTabs.begin(); it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetDirtyAfterLoad();

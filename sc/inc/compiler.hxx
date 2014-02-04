@@ -80,7 +80,7 @@ class ScTokenArray;
 
 namespace sc {
 
-struct CompileFormulaContext;
+class CompileFormulaContext;
 
 }
 
