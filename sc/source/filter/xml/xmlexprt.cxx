@@ -2883,8 +2883,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         case table::CellContentType_TEXT :
             {
                 OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
-                if (aCell.maBaseCell.isEmpty())
-                    aCell.maBaseCell.assign( *pDoc, aCellPos);
+                aCell.maBaseCell.assign( *pDoc, aCellPos);
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sCellString, sFormula, true, true);
