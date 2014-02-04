@@ -62,7 +62,7 @@ using namespace std;
 #define WGL_SAMPLES_ARB          0x2042
 #endif
 
-#define Z_STEP 0.001
+#define Z_STEP 0.001f
 
 int static checkGLError(const char *file, int line)
 {
