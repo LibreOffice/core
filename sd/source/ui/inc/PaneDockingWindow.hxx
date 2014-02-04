@@ -69,11 +69,6 @@ public:
         Otherwise UnknownOrientation is returned.
     */
     Orientation GetOrientation (void) const;
-
-    /** The current height of the title bar.
-    */
-    sal_Int32 mnTitleBarHeight;
-
 };
 
 } // end of namespace ::sd
