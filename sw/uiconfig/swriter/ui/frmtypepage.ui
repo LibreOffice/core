@@ -140,7 +140,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relwidth">
-                                <property name="label" translatable="yes">Relat_ive from</property>
+                                <property name="label" translatable="yes">Relat_ive to</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -275,7 +275,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relheight">
-                                <property name="label" translatable="yes">Re_lative from</property>
+                                <property name="label" translatable="yes">Re_lative to</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
