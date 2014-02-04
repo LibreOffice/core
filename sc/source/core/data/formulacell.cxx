@@ -50,6 +50,7 @@
 #include "types.hxx"
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
+#include <tokenstringcontext.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -881,6 +882,62 @@ void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Gramma
     rFormula = rBuffer.makeStringAndClear();
 }
 
+OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
+{
+    OUStringBuffer aBuf;
+    if (pCode->GetCodeError() && !pCode->GetLen())
+    {
+        aBuf = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
+        return aBuf.makeStringAndClear();
+    }
+    else if( cMatrixFlag == MM_REFERENCE )
+    {
+        // Reference to another cell that contains a matrix formula.
+        pCode->Reset();
+        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        if( p )
+        {
+            /* FIXME: original GetFormula() code obtained
+             * pCell only if (!this->IsInChangeTrack()),
+             * GetEnglishFormula() omitted that test.
+             * Can we live without in all cases? */
+            ScFormulaCell* pCell = NULL;
+            ScSingleRefData& rRef = p->GetSingleRef();
+            ScAddress aAbs = rRef.toAbs(aPos);
+            if (ValidAddress(aAbs))
+                pCell = pDocument->GetFormulaCell(aAbs);
+
+            if (pCell)
+            {
+                return pCell->GetFormula(rCxt);
+            }
+            else
+            {
+                ScCompiler aComp(rCxt, aPos, *pCode);
+                aComp.CreateStringFromTokenArray(aBuf);
+            }
+        }
+        else
+        {
+            OSL_FAIL("ScFormulaCell::GetFormula: not a matrix");
+        }
+    }
+    else
+    {
+        ScCompiler aComp(rCxt, aPos, *pCode);
+        aComp.CreateStringFromTokenArray(aBuf);
+    }
+
+    aBuf.insert( 0, '=');
+    if( cMatrixFlag )
+    {
+        aBuf.insert( 0, '{');
+        aBuf.append( '}');
+    }
+
+    return aBuf.makeStringAndClear();
+}
+
 void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 {
     MaybeInterpret();
@@ -965,7 +1022,7 @@ void ScFormulaCell::Compile(
                 pCode->AddBad( rFormula );
         }
         bCompile = true;
-        CompileTokenArray( bNoListening );
+        CompileTokenArray(rCxt, bNoListening);
     }
     else
         bChanged = true;
@@ -1014,6 +1071,45 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
     }
 }
 
+void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening )
+{
+    // Not already compiled?
+    if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
+    {
+        assert(rCxt.meGram == eTempGrammar);
+        Compile(rCxt, aResult.GetHybridFormula(), bNoListening);
+    }
+    else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
+    {
+        // RPN length may get changed
+        bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
+        if ( bWasInFormulaTree )
+            pDocument->RemoveFromFormulaTree( this );
+
+        // Loading from within filter? No listening yet!
+        if( pDocument->IsInsertingFromOtherDoc() )
+            bNoListening = true;
+
+        if( !bNoListening && pCode->GetCodeLen() )
+            EndListeningTo( pDocument );
+        ScCompiler aComp(rCxt, aPos, *pCode);
+        bSubTotal = aComp.CompileTokenArray();
+        if( !pCode->GetCodeError() )
+        {
+            nFormatType = aComp.GetNumFormatType();
+            bChanged = true;
+            aResult.SetToken( NULL);
+            bCompile = false;
+            if ( !bNoListening )
+                StartListeningTo( pDocument );
+        }
+        if ( bWasInFormulaTree )
+            pDocument->PutInFormulaTree( this );
+
+        if (bSubTotal)
+            pDocument->AddSubTotalCell(this);
+    }
+}
 
 void ScFormulaCell::CompileXML( ScProgress& rProgress )
 {
@@ -3336,8 +3432,7 @@ void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bC
         }
         if ( bRecompile )
         {
-            OUString aFormula;
-            GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
+            OUString aFormula = GetFormula(rCxt);
             if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
                 if ( aFormula[ aFormula.getLength()-1 ] == '}' )
@@ -3348,7 +3443,7 @@ void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bC
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
-            SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
+            SetHybridFormula(aFormula, rCxt.meGram);
         }
     }
     else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )

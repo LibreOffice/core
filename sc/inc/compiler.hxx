@@ -366,6 +366,8 @@ public:
 
     ScCompiler( ScDocument* pDocument, const ScAddress&);
 
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
+
     ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
 
     virtual ~ScCompiler();

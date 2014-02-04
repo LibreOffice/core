@@ -1514,6 +1514,24 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 };
 
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr ) :
+    FormulaCompiler(rArr),
+    pDoc(rCxt.mpDoc),
+    aPos(rPos),
+    mpFormatter(pDoc->GetFormatTable()),
+    pCharClass(ScGlobal::pCharClass),
+    mnPredetectedReference(0),
+    mnRangeOpPosInSymbol(-1),
+    pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
+    meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
+    mbCloseBrackets(true),
+    mbRewind(false),
+    maTabNames(rCxt.maTabNames)
+{
+    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
+    SetGrammar(rCxt.meGram);
+}
+
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
         : FormulaCompiler(rArr),
         pDoc( pDocument ),

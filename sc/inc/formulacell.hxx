@@ -206,6 +206,8 @@ public:
     void            GetFormula( OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
+    OUString GetFormula( sc::CompileFormulaContext& rCxt ) const;
+
     void            SetDirty( bool bDirtyFlag=true );
     void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
@@ -225,7 +227,8 @@ public:
     void Compile(
         sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening = false );
 
-    void            CompileTokenArray( bool bNoListening = false );
+    void CompileTokenArray( bool bNoListening = false );
+    void CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening = false );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
     bool            MarkUsedExternalReferences();
