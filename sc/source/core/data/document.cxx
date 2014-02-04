@@ -3756,7 +3756,7 @@ void ScDocument::CalcAfterLoad()
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = true;
-    sc::CompileFormulaContext aCxt(this, eGrammar);
+    sc::CompileFormulaContext aCxt(this);
     {
         TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)

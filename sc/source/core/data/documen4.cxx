@@ -549,7 +549,7 @@ void ScDocument::CompileDBFormula()
 
 void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 {
-    sc::CompileFormulaContext aCxt(this, eGrammar);
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
@@ -560,7 +560,7 @@ void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 
 void ScDocument::CompileNameFormula( bool bCreateFormulaString )
 {
-    sc::CompileFormulaContext aCxt(this, eGrammar);
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {

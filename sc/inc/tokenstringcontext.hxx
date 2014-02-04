@@ -55,7 +55,7 @@ class CompileFormulaContext
     void updateTabNames();
 
 public:
-    CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
+    CompileFormulaContext( ScDocument* pDoc );
 
     formula::FormulaGrammar::Grammar getGrammar() const;
     void setGrammar( formula::FormulaGrammar::Grammar eGram );
