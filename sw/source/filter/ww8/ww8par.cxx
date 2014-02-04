@@ -2162,7 +2162,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
             if (nAtnIndex != -1)
             {
                 WW8_CP nStart = GetAnnotationStart(nAtnIndex);
-                WW8_CP nEnd = GetAnnotationEnd(nAtnIndex);
+                WW8_CP nEnd = GetAnnotationEnd(GetAnnotationEndIndex(nAtnIndex));
                 sal_Int32 nLen = nEnd - nStart;
                 if( nLen )
                  {
@@ -5949,6 +5949,18 @@ int SwWW8ImplReader::GetAnnotationIndex(sal_uInt32 nTag)
             return it->second;
     }
     return -1;
+}
+
+sal_uInt16 SwWW8ImplReader::GetAnnotationEndIndex(sal_uInt16 nStart)
+{
+    WW8_CP nStartAkt;
+    void* p;
+    if (mpAtnStarts->GetData(nStart, nStartAkt, p) && p)
+    {
+        // p is an FBKF, and its first 2 bytes is the ibkl member, which is the end index.
+        return SVBT16ToShort(*((SVBT16*)p));
+    }
+    return nStart;
 }
 
 WW8_CP SwWW8ImplReader::GetAnnotationStart(int nIndex)
