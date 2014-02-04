@@ -81,6 +81,8 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_libs,vcl,\
     -framework IOKit \
+    -F/System/Library/PrivateFrameworks \
+    -framework CoreUI \
     -lobjc \
 ))
 endif

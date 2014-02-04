@@ -1301,6 +1301,9 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     rSettings.SetStyleSettings( aStyleSettings );
 
+    // don't draw frame around each and every toolbar
+    ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames = true;
+
     [mpNSView unlockFocus];
 }
 
