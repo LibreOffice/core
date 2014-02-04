@@ -95,6 +95,7 @@
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
 #include "formulagroup.hxx"
+#include <tokenstringcontext.hxx>
 
 #include "formula/vectortoken.hxx"
 
@@ -3644,10 +3645,11 @@ void ScDocument::CalcAll()
 
 void ScDocument::CompileAll()
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
         if (*it)
-            (*it)->CompileAll();
+            (*it)->CompileAll(aCxt);
     SetDirty();
 }
 
@@ -3659,17 +3661,19 @@ void ScDocument::CompileXML()
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
+    sc::CompileFormulaContext aCxt(this);
+
     // set AutoNameCache to speed up automatic name lookup
     OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
     pAutoNameCache = new ScAutoNameCache( this );
 
     if (pRangeName)
-        pRangeName->CompileUnresolvedXML();
+        pRangeName->CompileUnresolvedXML(aCxt);
 
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
         if (*it)
-            (*it)->CompileXML( aProgress );
+            (*it)->CompileXML(aCxt, aProgress);
 
     DELETEZ( pAutoNameCache );  // valid only during CompileXML, where cell contents don't change
 
@@ -3682,6 +3686,7 @@ void ScDocument::CompileXML()
 bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
 {
     bool bCompiled = false;
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
@@ -3689,7 +3694,7 @@ bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
         if (!pTab)
             continue;
 
-        if (pTab->CompileErrorCells(nErrCode))
+        if (pTab->CompileErrorCells(aCxt, nErrCode))
             bCompiled = true;
     }
 
@@ -3702,11 +3707,12 @@ void ScDocument::CalcAfterLoad()
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = true;
+    sc::CompileFormulaContext aCxt(this);
     {
         TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
-                (*it)->CalcAfterLoad();
+                (*it)->CalcAfterLoad(aCxt);
         for (it = maTabs.begin(); it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetDirtyAfterLoad();

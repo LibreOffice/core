@@ -3181,75 +3181,87 @@ void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListe
 
 namespace {
 
-struct CompileDBFormulaHandler
+class CompileDBFormulaHandler
 {
+    sc::CompileFormulaContext& mrCxt;
+
+public:
+    CompileDBFormulaHandler( sc::CompileFormulaContext& rCxt ) :
+        mrCxt(rCxt) {}
+
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileDBFormula();
+        p->CompileDBFormula(mrCxt);
     }
 };
 
 class CompileDBFormula2Handler
 {
+    sc::CompileFormulaContext& mrCxt;
     bool mbCreateFormulaString;
 
 public:
-    CompileDBFormula2Handler(bool bCreateFormulaString) :
-        mbCreateFormulaString(bCreateFormulaString) {}
+    CompileDBFormula2Handler( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString ) :
+        mrCxt(rCxt), mbCreateFormulaString(bCreateFormulaString) {}
 
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileDBFormula(mbCreateFormulaString);
+        p->CompileDBFormula(mrCxt, mbCreateFormulaString);
     }
 };
 
 class CompileNameFormulaHandler
 {
+    sc::CompileFormulaContext& mrCxt;
     bool mbCreateFormulaString;
 
 public:
-    CompileNameFormulaHandler(bool bCreateFormulaString) :
-        mbCreateFormulaString(bCreateFormulaString) {}
+    CompileNameFormulaHandler( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString) :
+        mrCxt(rCxt), mbCreateFormulaString(bCreateFormulaString) {}
 
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileNameFormula(mbCreateFormulaString);
+        p->CompileNameFormula(mrCxt, mbCreateFormulaString);
     }
 };
 
 struct CompileColRowNameFormulaHandler
 {
+    sc::CompileFormulaContext& mrCxt;
+public:
+    CompileColRowNameFormulaHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+
     void operator() (size_t, ScFormulaCell* p)
     {
-        p->CompileColRowNameFormula();
+        p->CompileColRowNameFormula(mrCxt);
     }
 };
 
 }
 
-void ScColumn::CompileDBFormula()
+void ScColumn::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
-    CompileDBFormulaHandler aFunc;
+    CompileDBFormulaHandler aFunc(rCxt);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }
 
-void ScColumn::CompileDBFormula( bool bCreateFormulaString )
+void ScColumn::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
-    CompileDBFormula2Handler aFunc(bCreateFormulaString);
+    CompileDBFormula2Handler aFunc(rCxt, bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }
 
-void ScColumn::CompileNameFormula( bool bCreateFormulaString )
+void ScColumn::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
 {
-    CompileNameFormulaHandler aFunc(bCreateFormulaString);
+    CompileNameFormulaHandler aFunc(rCxt, bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::CompileColRowNameFormula()
+void ScColumn::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
-    CompileColRowNameFormulaHandler aFunc;
+    CompileColRowNameFormulaHandler aFunc(rCxt);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }

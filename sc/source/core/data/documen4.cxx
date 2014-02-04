@@ -44,6 +44,7 @@
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include <tokenstringcontext.hxx>
 
 using namespace formula;
 
@@ -538,41 +539,45 @@ bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileDBFormula();
+            (*it)->CompileDBFormula(aCxt);
     }
 }
 
 void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileDBFormula( bCreateFormulaString );
+            (*it)->CompileDBFormula(aCxt, bCreateFormulaString);
     }
 }
 
 void ScDocument::CompileNameFormula( bool bCreateFormulaString )
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileNameFormula( bCreateFormulaString );
+            (*it)->CompileNameFormula(aCxt, bCreateFormulaString);
     }
 }
 
 void ScDocument::CompileColRowNameFormula()
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileColRowNameFormula();
+            (*it)->CompileColRowNameFormula(aCxt);
     }
 }
 

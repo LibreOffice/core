@@ -44,6 +44,7 @@ struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
+class CompileFormulaContext;
 
 }
 
@@ -205,6 +206,8 @@ public:
     void            GetFormula( OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
+    OUString GetFormula( sc::CompileFormulaContext& rCxt ) const;
+
     void            SetDirty( bool bDirtyFlag=true );
     void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
@@ -221,9 +224,13 @@ public:
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void            CompileTokenArray( bool bNoListening = false );
-    void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
-    void            CalcAfterLoad();
+    void Compile(
+        sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening = false );
+
+    void CompileTokenArray( bool bNoListening = false );
+    void CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening = false );
+    void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );        // compile temporary string tokens
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     bool            MarkUsedExternalReferences();
     void            Interpret();
     bool IsIterCell() const;
@@ -285,10 +292,10 @@ public:
 
     bool            IsRunning() const;
     void            SetRunning( bool bVal );
-    void            CompileDBFormula();
-    void            CompileDBFormula( bool bCreateFormulaString );
-    void            CompileNameFormula( bool bCreateFormulaString );
-    void            CompileColRowNameFormula();
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
+    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
+    void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     ScFormulaCell*  GetPrevious() const;
     ScFormulaCell*  GetNext() const;
     void            SetPrevious( ScFormulaCell* pF );

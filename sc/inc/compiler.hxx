@@ -78,6 +78,12 @@ class ScRangeData;
 class ScExternalRefManager;
 class ScTokenArray;
 
+namespace sc {
+
+class CompileFormulaContext;
+
+}
+
 // constants and data types internal to compiler
 
 /*
@@ -362,7 +368,11 @@ private:
     static void InitCharClassEnglish();
 
 public:
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos );
+
     ScCompiler( ScDocument* pDocument, const ScAddress&);
+
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
 
     ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
 
