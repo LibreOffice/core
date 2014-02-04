@@ -30,8 +30,6 @@
 
 #define STR_EDIT_FOOTNOTE           (RC_VIEW_BEGIN + 14)
 
-#define MSG_SEARCH_START            (RC_VIEW_BEGIN + 17)
-#define MSG_SEARCH_END              (RC_VIEW_BEGIN + 18)
 #define STR_NB_REPLACED             (RC_VIEW_BEGIN + 20)
 #define MSG_SCAN_NOSOURCE           (RC_VIEW_BEGIN + 21)
 
