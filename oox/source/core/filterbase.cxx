@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/filterbase.hxx"
-
-#include <set>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/docpasswordhelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
+#include <set>
+
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
@@ -40,8 +41,6 @@
 
 namespace oox {
 namespace core {
-
-// ============================================================================
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -58,8 +57,6 @@ using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 using ::oox::ole::VbaProject;
 
-// ============================================================================
-
 namespace {
 
 struct UrlPool
@@ -69,8 +66,6 @@ struct UrlPool
 };
 
 struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
-
-// ----------------------------------------------------------------------------
 
 /** This guard prevents recursive loading/saving of the same document. */
 class DocumentOpenedGuard
@@ -111,8 +106,6 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
 
 } // namespace
 
-// ============================================================================
-
 /** Specifies whether this filter is an import or export filter. */
 enum FilterDirection
 {
@@ -120,8 +113,6 @@ enum FilterDirection
     FILTERDIRECTION_IMPORT,
     FILTERDIRECTION_EXPORT
 };
-
-// ----------------------------------------------------------------------------
 
 struct FilterBaseImpl
 {
@@ -160,8 +151,6 @@ struct FilterBaseImpl
 
     void                initializeFilter();
 };
-
-// ----------------------------------------------------------------------------
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     meDirection( FILTERDIRECTION_UNKNOWN ),
@@ -352,7 +341,7 @@ void FilterBase::commitStorage() const
     mxImpl->mxStorage->commit();
 }
 
-// helpers --------------------------------------------------------------------
+// helpers
 
 GraphicHelper& FilterBase::getGraphicHelper() const
 {
@@ -399,7 +388,7 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
     return true;
 }
 
-// com.sun.star.lang.XServiceInfo interface -----------------------------------
+// com.sun.star.lang.XServiceInfo interface
 
 OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
 {
@@ -408,9 +397,7 @@ OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
 
 sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName ) throw( RuntimeException )
 {
-    return
-        (rServiceName == "com.sun.star.document.ImportFilter" ) ||
-        (rServiceName == "com.sun.star.document.ExportFilter" );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( RuntimeException )
@@ -421,7 +408,7 @@ Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( Runt
     return aServiceNames;
 }
 
-// com.sun.star.lang.XInitialization interface --------------------------------
+// com.sun.star.lang.XInitialization interface
 
 void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
 {
@@ -434,7 +421,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exce
     }
 }
 
-// com.sun.star.document.XImporter interface ----------------------------------
+// com.sun.star.document.XImporter interface
 
 void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
@@ -442,7 +429,7 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
     mxImpl->meDirection = FILTERDIRECTION_IMPORT;
 }
 
-// com.sun.star.document.XExporter interface ----------------------------------
+// com.sun.star.document.XExporter interface
 
 void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
@@ -450,7 +437,7 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
     mxImpl->meDirection = FILTERDIRECTION_EXPORT;
 }
 
-// com.sun.star.document.XFilter interface ------------------------------------
+// com.sun.star.document.XFilter interface
 
 sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
 {
@@ -491,7 +478,7 @@ void SAL_CALL FilterBase::cancel() throw( RuntimeException )
 {
 }
 
-// protected ------------------------------------------------------------------
+// protected
 
 Reference< XInputStream > FilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
 {
@@ -513,7 +500,7 @@ Reference< XStream > FilterBase::getMainDocumentStream( ) const
     return mxImpl->mxOutStream;
 }
 
-// private --------------------------------------------------------------------
+// private
 
 void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDescSeq )
 {
@@ -567,8 +554,6 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
     // default: return base implementation without any special behaviour
     return new GraphicHelper( mxImpl->mxComponentContext, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
-
-// ============================================================================
 
 } // namespace core
 } // namespace oox
