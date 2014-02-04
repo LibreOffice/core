@@ -314,7 +314,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     else if( !rURL.isEmpty() )
         rURL = OUString();
 
-    return( !rURL.isEmpty() );
+    return !rURL.isEmpty();
 }
 
 // -------------------------------------------------------------------------

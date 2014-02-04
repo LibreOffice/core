@@ -98,7 +98,7 @@ bool FrameGrabber::create( const OUString& rURL )
     else
         maURL = OUString();
 
-    return( maURL.getLength() > 0 );
+    return !maURL.isEmpty();
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )

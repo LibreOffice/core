@@ -285,7 +285,7 @@ void MediaControl::setState( const MediaItem& rItem )
 
 void MediaControl::implUpdateToolboxes()
 {
-    const bool bValidURL = ( !maItem.getURL().isEmpty());
+    const bool bValidURL = !maItem.getURL().isEmpty();
 
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_INSERT, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );

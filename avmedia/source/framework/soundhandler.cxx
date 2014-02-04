@@ -349,7 +349,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     OUString                      sReferer   = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
 
     if (
-        (sURL.getLength()           ) &&
+        !sURL.isEmpty() &&
         (avmedia::MediaWindow::isMediaURL(sURL, sReferer))
        )
     {
