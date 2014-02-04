@@ -107,6 +107,7 @@ class SvxItemPropertySet;
     { MAP_CHAR_LEN("CharOverlineHasColor"),         EE_CHAR_OVERLINE,   &::getBooleanCppuType(),                    0, MID_TL_HASCOLOR } , \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_CROSSEDOUT),  EE_CHAR_STRIKEOUT,  &::getBooleanCppuType(),                    0, MID_CROSSED_OUT }, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STRIKEOUT),   EE_CHAR_STRIKEOUT,  &::getCppuType((const sal_Int16*)0),        0, MID_CROSS_OUT}, \
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_CASEMAP),     EE_CHAR_CASEMAP,    &::getCppuType((const sal_Int16*)0),        0, 0 }, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_SHADOWED),    EE_CHAR_SHADOW,     &::getBooleanCppuType(),                    0, 0 }, \
     { MAP_CHAR_LEN("CharContoured"),                EE_CHAR_OUTLINE,    &::getBooleanCppuType(),                    0, 0 }, \
     { MAP_CHAR_LEN("CharEscapementHeight"),         EE_CHAR_ESCAPEMENT, &::getCppuType((const sal_Int8*)0),         0, MID_ESC_HEIGHT },\

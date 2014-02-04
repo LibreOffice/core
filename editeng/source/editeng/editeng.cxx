@@ -37,6 +37,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
+#include <editeng/cmapitem.hxx>
 #include <vcl/graph.hxx>
 
 #include <editeng/autokernitem.hxx>
@@ -2786,6 +2787,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxUnderlineItem( rFont.GetUnderline(), EE_CHAR_UNDERLINE )  );
     rSet.Put( SvxOverlineItem( rFont.GetOverline(), EE_CHAR_OVERLINE )  );
     rSet.Put( SvxCrossedOutItem( rFont.GetStrikeout(), EE_CHAR_STRIKEOUT )  );
+    rSet.Put( SvxCaseMapItem( rFont.GetCaseMap(), EE_CHAR_CASEMAP )  );
     rSet.Put( SvxPostureItem( rFont.GetItalic(), EE_CHAR_ITALIC )  );
     rSet.Put( SvxContourItem( rFont.IsOutline(), EE_CHAR_OUTLINE )  );
     rSet.Put( SvxAutoKernItem( rFont.IsKerning(), EE_CHAR_PAIRKERNING ) );

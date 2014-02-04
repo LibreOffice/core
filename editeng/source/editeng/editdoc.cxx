@@ -33,6 +33,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/shdditem.hxx>
@@ -216,6 +217,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
         { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // EE_CHAR_CASEMAP
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
@@ -366,6 +368,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         case EE_CHAR_XMLATTRIBS:
         {
             pNew = new EditCharAttrib( rNew, nS, nE );  // Attribute is only for holding XML information...
+        }
+        break;
+        case EE_CHAR_CASEMAP:
+        {
+            pNew = new EditCharAttribCaseMap( (const SvxCaseMapItem&)rNew, nS, nE );
         }
         break;
         case EE_FEATURE_TAB:
@@ -1958,6 +1965,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
         rFont.SetOverline( ((const SvxOverlineItem&)rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON ) )
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_CASEMAP ) == SFX_ITEM_ON ) )
+        rFont.SetCaseMap( ((const SvxCaseMapItem&)rSet.Get( EE_CHAR_CASEMAP )).GetCaseMap() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SFX_ITEM_ON ) )
         rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( nWhich_Italic )).GetPosture() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON ) )
