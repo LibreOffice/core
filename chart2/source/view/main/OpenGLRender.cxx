@@ -241,6 +241,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
@@ -1487,6 +1488,31 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     return 0;
 }
 
+namespace {
+
+// only 2D
+bool checkCCW(const Area2DPointList& rPoints)
+{
+    if(rPoints.size() < 3)
+        return true;
+
+    GLfloat sum = 0;
+    for(size_t i = 1; i < rPoints.size()/3; i += 3)
+    {
+        GLfloat x1 = rPoints[(i-1)*3];
+        GLfloat x2 = rPoints[i*3];
+        GLfloat y1 = rPoints[(i-1)*3 + 1];
+        GLfloat y2 = rPoints[i*3 + 1];
+        GLfloat prod = (x2-x1)*(y2+y1);
+
+        sum += prod;
+    }
+
+    return (sum <= 0);
+}
+
+}
+
 int OpenGLRender::RenderArea2DShape()
 {
     CHECK_GL_ERROR();
@@ -1501,6 +1527,9 @@ int OpenGLRender::RenderArea2DShape()
     for (size_t i = 0; i < listNum; ++i)
     {
         Area2DPointList &pointList = m_Area2DShapePointList.front();
+        bool bIsCCW = checkCCW(pointList); // is it counter clockwise (CCW) or clockwise (CW)
+        if(!bIsCCW)
+            glFrontFace(GL_CW);
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
@@ -1522,9 +1551,12 @@ int OpenGLRender::RenderArea2DShape()
             0,                  // stride
             (void*)0            // array buffer offset
             );
+        // TODO: moggi: remove deprecated GL_POLYGON
         glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
+        if(!bIsCCW)
+            glFrontFace(GL_CCW);
         m_Area2DShapePointList.pop_front();
     }
     glEnable(GL_MULTISAMPLE);
