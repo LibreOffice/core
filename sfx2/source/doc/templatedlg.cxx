@@ -1458,6 +1458,9 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             if (!aFolderList.isEmpty())
             {
             }
+
+            // After save file, just close the dialog
+            Close();
         }
     }
 }
