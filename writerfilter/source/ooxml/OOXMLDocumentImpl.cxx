@@ -178,6 +178,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream,
     {
         SAL_WARN("writerfilter", "importSubStreamRelations: exception while "
             "importing stream " << nType << " : " << e.Message);
+        return;
     }
 
     uno::Reference<io::XInputStream> xcpInputStream =

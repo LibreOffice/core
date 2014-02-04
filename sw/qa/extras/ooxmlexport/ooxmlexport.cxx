@@ -155,6 +155,7 @@ xmlNodeSetPtr Test::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     return pXmlXpathObj->nodesetval;
 }
@@ -3198,8 +3199,6 @@ DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent","cx","0");
 }
 
-#endif
-
 DECLARE_OOXMLEXPORT_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
 {
     /* Number of children required by cubicBexTo is 3 of type "pt".
@@ -3214,6 +3213,30 @@ DECLARE_OOXMLEXPORT_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
     assertXPath( pXmlDoc,
         "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
+{
+    // fdo#73872: document contains chart in footer.
+    // The problem was that  footer1.xml.rels files for footer1.xml
+    // files were missing from docx file after roundtrip.
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/footer1.xml.rels");
+    if(!pXmlDoc)
+        return;
+
+    // Check footer1.xml.rels contains in doc after roundtrip.
+    // Check Id = rId1 in footer1.xml.rels
+    assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship","Id","rId1");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    if (xDrawPageSupplier.is())
+    {
+        // If xDrawPage->getCount()==1, then document conatins one shape.
+        uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount()); // One shape in the doc
+    }
+}
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
