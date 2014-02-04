@@ -43,6 +43,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
+#include <editeng/cmapitem.hxx>
 
 #include "editattr.hxx"
 
@@ -185,12 +186,26 @@ void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
 EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_uInt16 _nStart, sal_uInt16 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_STRIKEOUT, "Not a Size attribute!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_STRIKEOUT, "Not a Strikeout attribute!" );
 }
 
 void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 {
     rFont.SetStrikeout( (FontStrikeout)((const SvxCrossedOutItem*)GetItem())->GetValue() );
+}
+
+// -------------------------------------------------------------------------
+// class EditCharAttribCaseMap
+// -------------------------------------------------------------------------
+EditCharAttribCaseMap::EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_uInt16 _nStart, sal_uInt16 _nEnd )
+    : EditCharAttrib( rAttr, _nStart, _nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_CASEMAP, "Not a CaseMap Item!" );
+}
+
+void EditCharAttribCaseMap::SetFont( SvxFont& rFont, OutputDevice* )
+{
+    rFont.SetCaseMap( ((const SvxCaseMapItem*)GetItem())->GetCaseMap() );
 }
 
 // -------------------------------------------------------------------------
