@@ -1513,16 +1513,6 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
         m_aStylesInfo.getLabel4Style(aStyle);
         return aStyle.sLabel;
     }
-    else
-    {
-        OUString aRet("Symbols: ");
-        sal_Int32 nPos = sCommand.indexOf(".uno:InsertSymbol?Symbols:string=");
-        if ( nPos == 0 )
-        {
-            aRet += sCommand.copy(34, sCommand.getLength()-34);
-            return aRet;
-        }
-    }
 
     return sCommand;
 }
