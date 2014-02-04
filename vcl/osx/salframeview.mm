@@ -1722,7 +1722,7 @@ private:
 }
 
 -(id)parentAttribute {
-    return mpFrame->getNSWindow();
+    return (NSView*) mpFrame->getNSWindow();
 }
 
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
@@ -1742,7 +1742,7 @@ private:
 
 -(NSView*)viewElementForParent
 {
-    return mpFrame->getNSView();
+    return (NSView*) mpFrame->getNSWindow();
 }
 
 -(void)registerMouseEventListener: (id)theListener
