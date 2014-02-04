@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_46cc5036",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-04T10:30:24Z",
+      "side": 1,
+      "message": "\"fetch abiword bz attachments (for future use)\" - surely you mean a different commit?",
+      "revId": "1ca33061739f18883c6f4554863ab3d65a820995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
