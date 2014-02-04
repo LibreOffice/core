@@ -207,7 +207,6 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     get(m_pCbxCopy , "copywhenmove");
     get(m_pCbxMarkedHitMovesAlways , "objalwymov");
     get(m_pLbMetric , "units");
-    get(m_pCbxStartWithActualPage , "strtwithPag");
     get(m_pCbxEnableSdremote , "enremotcont");
     get(m_pCbxEnablePresenterScreen , "enprsntcons");
     get(m_pCbxUsePrinterMetrics , "printermetrics");
@@ -376,7 +375,6 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         m_pCbxPickThrough->GetSavedValue()         != m_pCbxPickThrough->IsChecked() ||
         m_pCbxMasterPageCache->GetSavedValue()     != m_pCbxMasterPageCache->IsChecked() ||
         m_pCbxCopy->GetSavedValue()                != m_pCbxCopy->IsChecked() ||
-        m_pCbxStartWithActualPage->GetSavedValue() != m_pCbxStartWithActualPage->IsChecked() ||
         m_pCbxEnableSdremote->GetSavedValue()      != m_pCbxEnableSdremote->IsChecked() ||
         m_pCbxEnablePresenterScreen->GetSavedValue()!= m_pCbxEnablePresenterScreen->IsChecked() ||
         m_pCbxCompatibility->GetSavedValue()       != m_pCbxCompatibility->IsChecked() ||
@@ -390,7 +388,6 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsMisc().SetPickThrough( m_pCbxPickThrough->IsChecked() );
         aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_pCbxMasterPageCache->IsChecked() );
         aOptsItem.GetOptionsMisc().SetDragWithCopy( m_pCbxCopy->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetStartWithActualPage( m_pCbxStartWithActualPage->IsChecked() );
         aOptsItem.GetOptionsMisc().SetEnableSdremote( m_pCbxEnableSdremote->IsChecked() );
         aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_pCbxEnablePresenterScreen->IsChecked() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_pCbxCompatibility->IsChecked() );
@@ -448,7 +445,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     m_pCbxPickThrough->Check( aOptsItem.GetOptionsMisc().IsPickThrough() );
     m_pCbxMasterPageCache->Check( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
     m_pCbxCopy->Check( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
-    m_pCbxStartWithActualPage->Check( aOptsItem.GetOptionsMisc().IsStartWithActualPage() );
     m_pCbxEnableSdremote->Check( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
     m_pCbxEnablePresenterScreen->Check( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
     m_pCbxCompatibility->Check( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
@@ -552,7 +548,6 @@ void    SdTpOptionsMisc::SetDrawMode()
 {
     m_pScaleFrame->Show();
     m_pNewDocumentFrame->Hide();
-    m_pCbxStartWithActualPage->Hide();
     m_pCbxEnableSdremote->Hide();
     m_pCbxEnablePresenterScreen->Hide();
     m_pCbxCompatibility->Hide();

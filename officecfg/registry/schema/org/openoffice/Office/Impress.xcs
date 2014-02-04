@@ -614,16 +614,6 @@
         <info>
           <desc>Specifies configuration items governing behavior when starting a presentation.</desc>
         </info>
-        <prop oor:name="CurrentPage" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Impress/Other/Start -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Presentation  Other  [Section] Start presentation -->
-          <info>
-            <desc>Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
-            <label>Always with current page</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="EnableSdremote" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Indicates whether to enable the Impress remote controller.</desc>
