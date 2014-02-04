@@ -158,6 +158,13 @@
         Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY); \
     End
 
+#define LIBO_LIB_FILE_COMPONENTCONDITION(id,name,cond) \
+    File id \
+        Name = name; \
+        PACKED_LIB_FILE_BODY; \
+        ComponentCondition = cond; \
+    End
+
 #define STD_LIB_FILE(id,name) \
     File id \
         Name   = LIBNAME(name); \
