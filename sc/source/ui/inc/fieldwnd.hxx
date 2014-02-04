@@ -25,6 +25,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/layout.hxx>
 
 #include "address.hxx"
 #include "pivot.hxx"
@@ -91,9 +92,12 @@ public:
 
     ScDPFieldControlBase(
         ScPivotLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPFieldControlBase(  Window* pParent );
     virtual ~ScDPFieldControlBase();
 
     virtual void CalcSize() = 0;
+
+    virtual void Init( ScPivotLayoutDlg* pDlg, FixedText* pCaption );
 
     virtual bool IsValidIndex( size_t nIndex ) const = 0;
     /** @return  The pixel position of a field (without bound check). */
@@ -276,6 +280,7 @@ protected:
 public:
     ScDPHorFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPHorFieldControl(  Window* pParent );
 
     virtual                 ~ScDPHorFieldControl();
 
@@ -313,6 +318,7 @@ class ScDPPageFieldControl : public ScDPHorFieldControl
 public:
     ScDPPageFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPPageFieldControl(  Window* pParent );
     virtual ~ScDPPageFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
@@ -326,6 +332,7 @@ class ScDPColFieldControl : public ScDPHorFieldControl
 public:
     ScDPColFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPColFieldControl(  Window* pParent );
     virtual ~ScDPColFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
@@ -342,6 +349,7 @@ class ScDPRowFieldControl : public ScDPFieldControlBase
 public:
     ScDPRowFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPRowFieldControl(  Window* pParent );
 
     virtual                 ~ScDPRowFieldControl();
 
@@ -383,6 +391,7 @@ class ScDPSelectFieldControl : public ScDPHorFieldControl
 public:
     ScDPSelectFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPSelectFieldControl(  Window* pParent );
     virtual ~ScDPSelectFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
@@ -396,6 +405,7 @@ class ScDPDataFieldControl : public ScDPHorFieldControl
 public:
     ScDPDataFieldControl(
         ScPivotLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption, const char* pcHelpId);
+    ScDPDataFieldControl(  Window* pParent );
     virtual ~ScDPDataFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
