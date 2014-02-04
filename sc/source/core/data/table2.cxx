@@ -1704,44 +1704,46 @@ void ScTable::CalcAll()
 }
 
 
-void ScTable::CompileAll()
+void ScTable::CompileAll( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CompileAll();
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CompileAll(rCxt);
 
     if(mpCondFormatList)
         mpCondFormatList->CompileAll();
 }
 
 
-void ScTable::CompileXML( ScProgress& rProgress )
+void ScTable::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress )
 {
     if (mpRangeName)
-        mpRangeName->CompileUnresolvedXML();
+        mpRangeName->CompileUnresolvedXML(rCxt);
 
     for (SCCOL i=0; i <= MAXCOL; i++)
     {
-        aCol[i].CompileXML( rProgress );
+        aCol[i].CompileXML(rCxt, rProgress);
     }
 
     if(mpCondFormatList)
         mpCondFormatList->CompileXML();
 }
 
-bool ScTable::CompileErrorCells(sal_uInt16 nErrCode)
+bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode )
 {
     bool bCompiled = false;
     for (SCCOL i = 0; i <= MAXCOL; ++i)
     {
-        if (aCol[i].CompileErrorCells(nErrCode))
+        if (aCol[i].CompileErrorCells(rCxt, nErrCode))
             bCompiled = true;
     }
 
     return bCompiled;
 }
 
-void ScTable::CalcAfterLoad()
+void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CalcAfterLoad();
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CalcAfterLoad(rCxt);
 }
 
 bool ScTable::IsEmptyData( SCCOL nCol ) const

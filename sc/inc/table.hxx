@@ -68,6 +68,7 @@ struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 struct NoteEntry;
 class DocumentStreamAccess;
+class CompileFormulaContext;
 
 }
 
@@ -509,11 +510,11 @@ public:
     void        SetDirtyVar();
     void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
-    void        CalcAfterLoad();
-    void        CompileAll();
-    void        CompileXML( ScProgress& rProgress );
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
+    void CompileAll( sc::CompileFormulaContext& rCxt );
+    void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );
 
-    bool CompileErrorCells(sal_uInt16 nErrCode);
+    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
 
     void UpdateReference(
         sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL,
@@ -986,10 +987,10 @@ private:
                                     const ScMarkData& rMark) const;
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
     bool        TestTabRefAbs(SCTAB nTable) const;
-    void        CompileDBFormula();
-    void        CompileDBFormula( bool bCreateFormulaString );
-    void        CompileNameFormula( bool bCreateFormulaString );
-    void        CompileColRowNameFormula();
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
+    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
+    void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     void        RebuildFormulaGroups();
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
