@@ -109,7 +109,7 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
         // to compensate the valid size range for that.
         const SvBorder aBorder (GetDecorationBorder());
         sal_Int32 nCompensation (pSplitWindow->IsHorizontal()
-            ? mnTitleBarHeight + aBorder.Top() + aBorder.Bottom()
+            ? aBorder.Top() + aBorder.Bottom()
             : aBorder.Left() + aBorder.Right());
         pSplitWindow->SetItemSizeRange(
             nSetId,
