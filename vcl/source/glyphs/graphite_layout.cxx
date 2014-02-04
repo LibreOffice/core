@@ -48,6 +48,10 @@
 #include <unicode/ubidi.h>
 #include <unicode/uscript.h>
 
+#include <vcl/unohelp.hxx>
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/UnicodeType.hpp>
+
 // Graphite Libraries (must be after vcl headers on windows)
 #include <graphite2/Segment.h>
 
@@ -589,9 +593,13 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
                     nSegCharLimit - rArgs.mnEndCharPos, bRtl);
             }
         }
-//        int numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
-//                rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
-          int numchars = rArgs.mnEndCharPos - mnSegCharOffset; // fdo#52540, fdo#68313, FIXME
+
+        static com::sun::star::uno::Reference< com::sun::star::i18n::XCharacterClassification > xCharClass;
+        if ( !xCharClass.is() )
+            xCharClass = vcl::unohelper::CreateCharacterClassification();
+        int numchars = rArgs.mnEndCharPos - mnSegCharOffset; // fdo#52540, fdo#68313, fdo#70666 avoid bad ligature replacement
+        if (xCharClass->getType(rArgs.mpStr, numchars + 1) != ::com::sun::star::i18n::UnicodeType::LOWERCASE_LETTER)
+            numchars += 64;
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
                                         rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
