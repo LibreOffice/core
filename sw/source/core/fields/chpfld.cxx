@@ -34,7 +34,7 @@ namespace
 
 OUString removeControlChars(OUString sIn)
 {
-    OUStringBuffer aBuf(sIn);
+    OUStringBuffer aBuf(sIn.replace('\n', ' '));
     sal_Int32 nLen = aBuf.getLength();
     for (sal_Int32 i = 0; i < nLen; ++i)
     {
