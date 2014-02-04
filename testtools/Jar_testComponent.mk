@@ -23,7 +23,7 @@ $(eval $(call gb_Jar_set_packageroot,testComponent,com))
 
 $(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star/comp/bridge/manifest))
 
-$(eval $(call gb_Jar_set_componentfile,testComponent,testtools/source/bridgetest/testComponent,URE))
+$(eval $(call gb_Jar_set_componentfile,testComponent,testtools/source/bridgetest/testComponent,NONE))
 
 $(eval $(call gb_Jar_add_packagedirs,testComponent,\
     $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)/test \

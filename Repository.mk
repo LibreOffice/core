@@ -645,10 +645,6 @@ $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 	unoloader \
 ))
 
-$(eval $(call gb_Helper_register_jars,URE, \
-	testComponent \
-))
-
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
 	ScriptFramework \
@@ -697,6 +693,7 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 	TestExtension \
 	test \
 	test-tools \
+	testComponent \
 ))
 endif
 
