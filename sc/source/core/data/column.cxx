@@ -2836,24 +2836,30 @@ struct CalcAllHandler
     }
 };
 
-struct CompileAllHandler
+class CompileAllHandler
 {
+    sc::CompileFormulaContext& mrCxt;
+public:
+    CompileAllHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
         // for unconditional compilation
         // bCompile=true and pCode->nError=0
         pCell->GetCode()->SetCodeError(0);
         pCell->SetCompile(true);
-        pCell->CompileTokenArray();
+        pCell->CompileTokenArray(mrCxt);
     }
 };
 
 class CompileXMLHandler
 {
+    sc::CompileFormulaContext& mrCxt;
     ScProgress& mrProgress;
     const ScColumn& mrCol;
 public:
-    CompileXMLHandler(ScProgress& rProgress, const ScColumn& rCol) :
+    CompileXMLHandler( sc::CompileFormulaContext& rCxt, ScProgress& rProgress, const ScColumn& rCol) :
+        mrCxt(rCxt),
         mrProgress(rProgress),
         mrCol(rCol) {}
 
@@ -2865,23 +2871,24 @@ public:
         else
             pCell->SetDirtyVar();
 
-        pCell->CompileXML(mrProgress);
+        pCell->CompileXML(mrCxt, mrProgress);
     }
 };
 
 class CompileErrorCellsHandler
 {
+    sc::CompileFormulaContext& mrCxt;
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
     sal_uInt16 mnErrCode;
     FormulaGrammar::Grammar meGram;
     bool mbCompiled;
 public:
-    CompileErrorCellsHandler(ScColumn& rColumn, sal_uInt16 nErrCode, FormulaGrammar::Grammar eGram) :
+    CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, sal_uInt16 nErrCode ) :
+        mrCxt(rCxt),
         mrColumn(rColumn),
         miPos(mrColumn.GetCellStore().begin()),
         mnErrCode(nErrCode),
-        meGram(eGram),
         mbCompiled(false)
     {
     }
@@ -2901,9 +2908,8 @@ public:
         miPos = aPos.first;
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->GetCode()->SetCodeError(0);
-        OUStringBuffer aBuf;
-        pCell->GetFormula(aBuf, meGram);
-        pCell->Compile(aBuf.makeStringAndClear(), false, meGram);
+        OUString aFormula = pCell->GetFormula(mrCxt);
+        pCell->Compile(mrCxt, aFormula, false);
         mrColumn.JoinNewFormulaCell(aPos, *pCell);
 
         mbCompiled = true;
@@ -3169,22 +3175,22 @@ void ScColumn::CalcAll()
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::CompileAll()
+void ScColumn::CompileAll( sc::CompileFormulaContext& rCxt )
 {
-    CompileAllHandler aFunc;
+    CompileAllHandler aFunc(rCxt);
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::CompileXML( ScProgress& rProgress )
+void ScColumn::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress )
 {
-    CompileXMLHandler aFunc(rProgress, *this);
+    CompileXMLHandler aFunc(rCxt, rProgress, *this);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }
 
-bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
+bool ScColumn::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode )
 {
-    CompileErrorCellsHandler aHdl(*this, nErrCode, pDocument->GetGrammar());
+    CompileErrorCellsHandler aHdl(rCxt, *this, nErrCode);
     sc::ProcessFormula(maCells, aHdl);
     return aHdl.isCompiled();
 }

@@ -336,10 +336,10 @@ public:
     void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
-    void        CompileAll();
-    void        CompileXML( ScProgress& rProgress );
+    void CompileAll( sc::CompileFormulaContext& rCxt );
+    void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );
 
-    bool CompileErrorCells(sal_uInt16 nErrCode);
+    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
@@ -462,10 +462,10 @@ public:
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
 
-    void        CompileDBFormula();
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
-    void        CompileColRowNameFormula();
+    void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;
     sal_Int32   GetMaxNumberStringLen( sal_uInt16& nPrecision,

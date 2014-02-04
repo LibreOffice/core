@@ -34,6 +34,7 @@
 #include "refupdat.hxx"
 #include "document.hxx"
 #include "refupdatecontext.hxx"
+#include <tokenstringcontext.hxx>
 
 #include "formula/errorcodes.hxx"
 
@@ -181,14 +182,14 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     }
 }
 
-void ScRangeData::CompileUnresolvedXML()
+void ScRangeData::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
 {
     if (pCode->GetCodeError() == errNoName)
     {
         // Reconstruct the symbol/formula and then recompile.
         OUString aSymbol;
-        ScCompiler aComp( pDoc, aPos, *pCode);
-        aComp.SetGrammar( eTempGrammar);
+        rCxt.setGrammar(eTempGrammar);
+        ScCompiler aComp(rCxt, aPos, *pCode);
         aComp.CreateStringFromTokenArray( aSymbol);
         // Don't let the compiler set an error for unknown names on final
         // compile, errors are handled by the interpreter thereafter.
@@ -764,11 +765,11 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
         itr->second->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
-void ScRangeName::CompileUnresolvedXML()
+void ScRangeName::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->CompileUnresolvedXML();
+        itr->second->CompileUnresolvedXML(rCxt);
 }
 
 ScRangeName::const_iterator ScRangeName::begin() const

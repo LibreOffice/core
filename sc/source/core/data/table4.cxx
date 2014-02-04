@@ -2176,9 +2176,10 @@ bool ScTable::TestTabRefAbs(SCTAB nTable) const
     return false;
 }
 
-void ScTable::CompileDBFormula()
+void ScTable::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i=0; i<=MAXCOL; i++) aCol[i].CompileDBFormula();
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CompileDBFormula(rCxt);
 }
 
 void ScTable::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
@@ -2193,9 +2194,10 @@ void ScTable::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateF
         aCol[i].CompileNameFormula(rCxt, bCreateFormulaString);
 }
 
-void ScTable::CompileColRowNameFormula()
+void ScTable::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i=0; i<=MAXCOL; i++) aCol[i].CompileColRowNameFormula();
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].CompileColRowNameFormula(rCxt);
 }
 
 SCSIZE ScTable::GetPatternCount( SCCOL nCol ) const

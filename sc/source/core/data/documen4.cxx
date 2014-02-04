@@ -539,11 +539,12 @@ bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileDBFormula();
+            (*it)->CompileDBFormula(aCxt);
     }
 }
 
@@ -571,11 +572,12 @@ void ScDocument::CompileNameFormula( bool bCreateFormulaString )
 
 void ScDocument::CompileColRowNameFormula()
 {
+    sc::CompileFormulaContext aCxt(this);
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
         if (*it)
-            (*it)->CompileColRowNameFormula();
+            (*it)->CompileColRowNameFormula(aCxt);
     }
 }
 

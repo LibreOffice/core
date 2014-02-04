@@ -35,10 +35,13 @@ class ScDocument;
 class ScTokenArray;
 
 namespace sc {
-    struct RefUpdateContext;
-    struct RefUpdateInsertTabContext;
-    struct RefUpdateDeleteTabContext;
-    struct RefUpdateMoveTabContext;
+
+struct RefUpdateContext;
+struct RefUpdateInsertTabContext;
+struct RefUpdateDeleteTabContext;
+struct RefUpdateMoveTabContext;
+class CompileFormulaContext;
+
 }
 
 typedef sal_uInt16 RangeType;
@@ -151,7 +154,7 @@ public:
     SCROW GetMaxRow() const;
     SCCOL GetMaxCol() const;
 
-    void            CompileUnresolvedXML();
+    void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
@@ -201,7 +204,7 @@ public:
     /** Compile those names that couldn't be resolved during loading and
         inserting because they may have referred a name that was inserted later.
      */
-    void CompileUnresolvedXML();
+    void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 
     SC_DLLPUBLIC const_iterator begin() const;
     SC_DLLPUBLIC const_iterator end() const;

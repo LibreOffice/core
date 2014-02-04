@@ -229,7 +229,7 @@ public:
 
     void CompileTokenArray( bool bNoListening = false );
     void CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening = false );
-    void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
+    void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );        // compile temporary string tokens
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     bool            MarkUsedExternalReferences();
     void            Interpret();
@@ -292,10 +292,10 @@ public:
 
     bool            IsRunning() const;
     void            SetRunning( bool bVal );
-    void            CompileDBFormula();
+    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
-    void            CompileColRowNameFormula();
+    void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     ScFormulaCell*  GetPrevious() const;
     ScFormulaCell*  GetNext() const;
     void            SetPrevious( ScFormulaCell* pF );

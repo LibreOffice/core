@@ -96,6 +96,7 @@
 #include "scopetools.hxx"
 #include "formulagroup.hxx"
 #include "documentlinkmgr.hxx"
+#include <tokenstringcontext.hxx>
 
 using namespace com::sun::star;
 
@@ -1002,7 +1003,8 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
-            maTabs[nDestPos]->CompileAll();
+            sc::CompileFormulaContext aFormulaCxt(this);
+            maTabs[nDestPos]->CompileAll(aFormulaCxt);
         }
 
         SetNoListening( false );

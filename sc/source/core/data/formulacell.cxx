@@ -1111,7 +1111,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
     }
 }
 
-void ScFormulaCell::CompileXML( ScProgress& rProgress )
+void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress )
 {
     if ( cMatrixFlag == MM_REFERENCE )
     {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
@@ -1125,8 +1125,8 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     bool bWasInFormulaTree = pDocument->IsInFormulaTree( this);
     if (bWasInFormulaTree)
         pDocument->RemoveFromFormulaTree( this);
-    ScCompiler aComp( pDocument, aPos, *pCode);
-    aComp.SetGrammar(eTempGrammar);
+    rCxt.setGrammar(eTempGrammar);
+    ScCompiler aComp(rCxt, aPos, *pCode);
     OUString aFormula, aFormulaNmsp;
     aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
@@ -3342,7 +3342,7 @@ void ScFormulaCell::SetRunning( bool bVal )
     bRunning = bVal;
 }
 
-void ScFormulaCell::CompileDBFormula()
+void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
@@ -3350,7 +3350,7 @@ void ScFormulaCell::CompileDBFormula()
             || (p->GetOpCode() == ocName && p->GetIndex() >= SC_START_INDEX_DB_COLL) )
         {
             bCompile = true;
-            CompileTokenArray();
+            CompileTokenArray(rCxt);
             SetDirty();
             break;
         }
@@ -3455,7 +3455,7 @@ void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bC
     }
 }
 
-void ScFormulaCell::CompileColRowNameFormula()
+void ScFormulaCell::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
     pCode->Reset();
     for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
@@ -3463,7 +3463,7 @@ void ScFormulaCell::CompileColRowNameFormula()
         if ( p->GetOpCode() == ocColRowName )
         {
             bCompile = true;
-            CompileTokenArray();
+            CompileTokenArray(rCxt);
             SetDirty();
             break;
         }
