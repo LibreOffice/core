@@ -1002,9 +1002,9 @@ i12626
         of the current structure element
 
         @returns
-        true if no NonStructElement was found in ancestor path and tagged
+        <true/> if no NonStructElement was found in ancestor path and tagged
         PDF output is enabled
-        false else
+        <false/> else
      */
     bool checkEmitStructure();
 

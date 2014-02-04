@@ -116,7 +116,7 @@ enum VclPackType
 };
 
 // Return Values from Dialog::Execute
-//!!! bei Aenderungen /basic/source/runtime/methods.cxx msgbox anpassen
+//!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
 
 enum VclResponseType
 {

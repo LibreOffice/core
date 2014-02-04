@@ -30,8 +30,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-using namespace ::com::sun::star;
-
 class FilterConfigCache;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
@@ -172,14 +170,14 @@ public:
 
     /** Ctor to set a filename
 
-        Detect() must be called to identify the file
+        ::Detect() must be called to identify the file
         If the file has no unique header (Mtf's), the format
         is determined from the extension */
     GraphicDescriptor( const INetURLObject& rPath );
 
     /** Ctor using a stream
 
-        Detect() must be called to identify the file
+        ::Detect() must be called to identify the file
         As some formats (Mtf's) do not have a unique header, it makes sense
         to supply the file name (incl. ext.), so that the format can be
         derived from the extension */
@@ -280,10 +278,10 @@ public:
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                        const uno::Sequence< beans::PropertyValue >* pFilterData = NULL );
+                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                     SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                        const uno::Sequence< beans::PropertyValue >* pFilterData = NULL );
+                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
     long            GetExportGraphicHint() const { return nExpGraphHint; }
 
     sal_uInt16          CanImportGraphic( const INetURLObject& rPath,

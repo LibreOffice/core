@@ -185,7 +185,7 @@ public :
     /** Create a new named destination to be used in a link to this document from another PDF document
  (see PDF spec 1.4, 8.2.1)
 
-    @param sDestName
+    @parm sDestName
     the name this destination will be addressed with from others PDF document
 
     @param rRect
@@ -295,7 +295,7 @@ public :
         @param rText
         sets the title text of the item
 
-        @param nDestID
+        @param nDestId
         declares which Dest (created with CreateDest) the outline item
         will point to
 
@@ -332,17 +332,17 @@ public :
     must be called while drawing the next page.
 
     BeginStructureElement and EndStructureElement must be called only after
-    PDFWriter::NewPage has been called and before
-    PDFWriter::Emit gets called. The current page
+    <member scope="vcl">PDFWriter::NewPage</member> has been called and before
+    <member scope="vcl">PDFWriter::Emit</member>gets called. The current page
     number is an implicit context parameter for Begin/EndStructureElement.
 
     For pagination artifacts that are not part of the logical structure
     of the document (like header, footer or page number) the special
-    StructElement NonStructElement exists. To place content
+    StructElement <code>NonStructElement</code> exists. To place content
     outside of the struture tree simply call
-    BeginStructureElement( NonStructElement ) then draw your
-    content and then call EndStructureElement(). Any children
-    of a NonStructElement will not be part of the structure as well.
+    <code>BeginStructureElement( NonStructElement )</code> then draw your
+    content and then call <code>EndStructureElement()</code>. Any children
+    of a <code>NonStructElement</code> will not be part of the structure as well.
 
     @param eType
     denotes what kind of element to begin (e.g. a heading or paragraph)
@@ -365,7 +365,7 @@ public :
     <p>
     For different purposes it may be useful to paint a structure element's
     content discontinously. In that case an already existing structure element
-    can be appended to by using SetCurrentStructureElement. The
+    can be appended to by using <code>SetCurrentStructureElement</code>. The
     refenrenced structure element becomes the current structure element with
     all consequences: all following structure elements are appended as children
     of the current element.
@@ -375,8 +375,8 @@ public :
     the id of the new current structure element
 
     @returns
-    True if the current structure element could be set successfully
-    False if the current structure element could not be changed
+    <true/> if the current structure element could be set successfully
+    <false/> if the current structure element could not be changed
     (e.g. if the passed element id is invalid)
      */
     bool SetCurrentStructureElement( sal_Int32 nElement );
@@ -391,7 +391,7 @@ public :
 
     SetStructureAttribute sets an attribute of the current structural element to a
     new value. A consistency check is performed before actually setting the value;
-    if the check fails, the function returns False and the attribute remains
+    if the check fails, the function returns <FALSE/> and the attribute remains
     unchanged.
 
     @param eAttr
@@ -401,15 +401,15 @@ public :
     the value to set the attribute to
 
     @returns
-    True if the value was valid and the change has been performed,
-    False if the attribute or value was invalid; attribute remains unchanged
+    <TRUE/> if the value was valid and the change has been performed,
+    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
 
     SetStructureAttributeNumerical sets an attribute of the current structural element
     to a new numerical value. A consistency check is performed before actually setting
-    the value; if the check fails, the function returns False and the attribute
+    the value; if the check fails, the function returns <FALSE/> and the attribute
     remains unchanged.
 
     @param eAttr
@@ -419,15 +419,15 @@ public :
     the value to set the attribute to
 
     @returns
-    True if the value was valid and the change has been performed,
-    False if the attribute or value was invalid; attribute remains unchanged
+    <TRUE/> if the value was valid and the change has been performed,
+    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttributeNumerical( PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     /** set the bounding box of a structural element
 
     SetStructureBoundingBox sets the BBox attribute to a new value. Since the BBox
-    attribute can only be applied to Table, Figure,
-    Form and Formula elements, a call of this function
+    attribute can only be applied to <code>Table</code>, <code>Figure</code>,
+    <code>Form</code> and <code>Formula</code> elements, a call of this function
     for other element types will be ignored and the BBox attribute not be set.
 
     @param rRect
@@ -476,14 +476,11 @@ public :
     /** create a new form control
 
     This function creates a new form control in the PDF and sets its various
-    properties. Do not pass an actual AnyWidget as rControlType
+    properties. Do not pass an actual AnyWidget as <code>rControlType</code>
     will be cast to the type described by the type member.
 
     @param rControlType
-    a descendant of AnyWidget determing the control's properties
-
-    @param nPageNr
-    the page number to apply the effect to; -1 denotes the current page
+    a descendant of <code>AnyWidget</code> determing the control's properties
      */
     void    CreateControl( const PDFWriter::AnyWidget& rControlType, sal_Int32 nPageNr = -1 );
 };

@@ -449,6 +449,9 @@ public:
 
         @param nDitherFlags
         The algorithm to be used for dithering
+
+        @param pDitherPal
+        A custom palette to be used when dithering (not yet implemented, leave NULL)
      */
     sal_Bool                    Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
 
@@ -588,9 +591,6 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
-        @param nScaleFlag
-        Method of scaling - it is recommended that either BMP_SCALE_DEFAULT or BMP_SCALE_BESTQUALITY be used.
-
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
@@ -688,16 +688,16 @@ public:
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
-        @param pSearchColors
+        @param pSearchColor
         Array of colors specifying which pixel should be replaced
 
-        @param rReplaceColors
+        @param pReplaceColor
         Array of colors to be placed in all changed pixel
 
         @param nColorCount
         Size of the aforementioned color arrays
 
-        @param pTols
+        @param nTol
         Tolerance value. Specifies the maximal difference between
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.

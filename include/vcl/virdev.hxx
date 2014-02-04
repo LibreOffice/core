@@ -51,7 +51,7 @@ private:
 
     /** Used for alpha VDev, to set areas to opaque
 
-        @since \#i32109#
+        @since #i32109#
      */
     SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const Rectangle& rRect );
 

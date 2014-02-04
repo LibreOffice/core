@@ -93,16 +93,16 @@
         virtual bool        set_property(const OString &rKey, const OString &rValue);
 
 
-        /** sets m_aClickHdl with rLink.
+        /** sets <member>m_aClickHdl</member> with <arg>rLink</arg>.
 
-            m_aClickHdl is called if the text is clicked.
+            <member>m_aClickHdl</member> is called if the text is clicked.
         */
         inline void         SetClickHdl( const Link& rLink ) { m_aClickHdl = rLink; }
 
-        /** returns m_aClickHdl.
+        /** returns <member>m_aClickHdl</member>.
 
             @return
-                m_aClickHdl
+                <member>m_aClickHdl</member>
         */
         inline const Link&  GetClickHdl() const { return m_aClickHdl; }
 
@@ -114,7 +114,7 @@
         /** returns the URL of the hyperlink.
 
             @return
-                m_sURL
+                <member>m_sURL</member>
         */
         OUString    GetURL() const;
 

@@ -375,9 +375,8 @@ public:
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry,
                                              const OutputDevice *pOutDev );
-    bool                    DrawPolyPolygon( const basegfx::B2DPolyPolygon &i_rPolyPolygon,
-                                             double i_fTransparency,
-                                             const OutputDevice *i_pOutDev);
+    bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
+
     bool                    DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
                                           double i_fTransparency,
                                           const basegfx::B2DVector& i_rLineWidth,

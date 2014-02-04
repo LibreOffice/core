@@ -33,8 +33,6 @@ struct ImplImage;
 struct ImplImageList;
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
-using namespace ::com::sun::star;
-
 #define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
@@ -59,14 +57,14 @@ public:
                     explicit Image( const Bitmap& rBitmap );
                     Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
-                    explicit Image( const uno::Reference< graphic::XGraphic >& rxGraphic );
+                    explicit Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
                     ~Image();
 
     Size            GetSizePixel() const;
 
     BitmapEx        GetBitmapEx() const;
-    uno::Reference< graphic::XGraphic > GetXGraphic() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
 

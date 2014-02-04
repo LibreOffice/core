@@ -18,7 +18,7 @@
  */
 
 /**
- * @file sft.hxx
+ * @file sft.h
  * @brief Sun Font Tools
  * @author Alexander Gelfenbain
  */

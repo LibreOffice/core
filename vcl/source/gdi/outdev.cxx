@@ -2014,12 +2014,12 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
-void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
+void OutputDevice::DrawPolygon( const ::basegfx::B2DPolygon& rB2DPolygon)
 {
     // AW: Do NOT paint empty polygons
     if(rB2DPolygon.count())
     {
-        basegfx::B2DPolyPolygon aPP( rB2DPolygon );
+        ::basegfx::B2DPolyPolygon aPP( rB2DPolygon );
         DrawPolyPolygon( aPP );
     }
 }
