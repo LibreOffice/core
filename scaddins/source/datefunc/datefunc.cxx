@@ -17,35 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------
-//
-// date functions add in
-//
-//------------------------------------------------------------------
-
 #include "datefunc.hxx"
 #include "datefunc.hrc"
+#include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/rcid.h>
-#include <com/sun/star/util/Date.hpp>
+#include <tools/resmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-
-//------------------------------------------------------------------
 
 #define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
 #define MY_SERVICE              "com.sun.star.sheet.addin.DateFunctions"
 #define MY_IMPLNAME             "com.sun.star.sheet.addin.DateFunctionsImpl"
 
-//------------------------------------------------------------------
-
 #define STR_FROM_ANSI( s )      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-
-//------------------------------------------------------------------
 
 const sal_uInt32 ScaList::nStartSize = 16;
 const sal_uInt32 ScaList::nIncrSize = 16;
@@ -74,23 +63,16 @@ void ScaList::_Grow()
     pData = pNewData;
 }
 
-//------------------------------------------------------------------
-
 ScaStringList::~ScaStringList()
 {
     for( OUString* pStr = First(); pStr; pStr = Next() )
         delete pStr;
 }
 
-//------------------------------------------------------------------
-
 ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
     ResId( nId, rResMgr )
 {
 }
-
-
-//------------------------------------------------------------------
 
 #define UNIQUE              sal_False   // function name does not exist in Calc
 
@@ -113,9 +95,6 @@ const ScaFuncDataBase pFuncDataArr[] =
 };
 
 #undef FUNCDATA
-
-
-//------------------------------------------------------------------
 
 ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
@@ -145,8 +124,6 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
     return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
 }
 
-
-//------------------------------------------------------------------
 
 ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
     nLast( 0xFFFFFFFF )
@@ -179,9 +156,6 @@ const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) con
     return NULL;
 }
 
-
-//------------------------------------------------------------------
-
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
     Resource( rResId )
 {
@@ -189,22 +163,13 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-
-//------------------------------------------------------------------
-//
 //  entry points for service registration / instantiation
-//
-//------------------------------------------------------------------
-
 uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
     static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new ScaDateAddIn();
     return xInst;
 }
-
-
-//------------------------------------------------------------------------
 
 extern "C" {
 
@@ -234,12 +199,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 
 }   // extern C
 
-//------------------------------------------------------------------------
-//
 //  "normal" service implementation
-//
-//------------------------------------------------------------------------
-
 ScaDateAddIn::ScaDateAddIn() :
     pDefLocales( NULL ),
     pResMgr( NULL ),
@@ -331,9 +291,6 @@ OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex 
     return aRet;
 }
 
-
-//------------------------------------------------------------------------
-
 OUString ScaDateAddIn::getImplementationName_Static()
 {
     return OUString( MY_IMPLNAME );
@@ -349,7 +306,6 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 }
 
 // XServiceName
-
 OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
@@ -357,7 +313,6 @@ OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -365,7 +320,7 @@ OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeExcep
 
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
 {
-    return aServiceName == ADDIN_SERVICE || aServiceName == MY_SERVICE;
+    return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
@@ -374,7 +329,6 @@ uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() thro
 }
 
 // XLocalizable
-
 void SAL_CALL ScaDateAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
@@ -385,14 +339,6 @@ lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException )
 {
     return aFuncLoc;
 }
-
-//------------------------------------------------------------------
-//
-//  function descriptions start here
-//
-//------------------------------------------------------------------
-
-// XAddIn
 
 OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
@@ -500,9 +446,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
-
 // XCompatibilityNames
-
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
@@ -523,8 +467,8 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNam
 }
 
 namespace {
-// auxiliary functions
 
+// auxiliary functions
 sal_Bool IsLeapYear( sal_uInt16 nYear )
 {
     return ((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
@@ -630,7 +574,6 @@ void DaysToDate( sal_Int32 nDays,
  * this function returns this internal Date value for the document null date
  *
  */
-
 sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
         throw( uno::RuntimeException )
 {
@@ -745,7 +688,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
  *
  * mode 1 is the difference in calendar month
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
@@ -791,7 +733,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
  *
  * mode 1 is the difference in calendar years
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
@@ -816,7 +757,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
 /**
  * Check if a Date is in a leap year in the Gregorian calendar
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -833,7 +773,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
 /**
  * Get the Number of Days in the month for a date
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
         const uno::Reference<beans::XPropertySet>& xOptions,
         sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -850,7 +789,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
 /**
  * Get number of days in the year of a date specified
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -879,7 +817,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  *
  * @see #IsLeapYear #WeekNumber
  */
-
 sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -909,7 +846,6 @@ sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
  * This function rotates each character by 13 in the alphabet.
  * Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
  */
-
 OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     OUStringBuffer aBuffer( aSrcString );
@@ -923,7 +859,5 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( un
     }
     return aBuffer.makeStringAndClear();
 }
-
-//------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

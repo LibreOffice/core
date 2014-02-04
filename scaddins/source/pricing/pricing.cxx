@@ -17,42 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------
-//
 // pricing functions add in
 //
 // all of the UNO add-in technical details have been copied from
 // ../datefunc/datefunc.cxx
-//
-//------------------------------------------------------------------
 
 #include "pricing.hxx"
 #include "black_scholes.hxx"
 #include "pricing.hrc"
-#include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
-#include <tools/resmgr.hxx>
-#include <tools/rcid.h>
 
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <iostream>
+#include <osl/diagnose.h>
+#include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <tools/rcid.h>
+#include <tools/resmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace sca::pricing;
 
 
-//------------------------------------------------------------------
-
 #define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
 #define MY_SERVICE              "com.sun.star.sheet.addin.PricingFunctions"
 #define MY_IMPLNAME             "com.sun.star.sheet.addin.PricingFunctionsImpl"
 
-//------------------------------------------------------------------
-
 #define STR_FROM_ANSI( s )      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-
-//------------------------------------------------------------------
 
 const sal_uInt32 ScaList::nStartSize = 16;
 const sal_uInt32 ScaList::nIncrSize = 16;
@@ -81,23 +72,16 @@ void ScaList::_Grow()
     pData = pNewData;
 }
 
-//------------------------------------------------------------------
-
 ScaStringList::~ScaStringList()
 {
     for( OUString* pStr = First(); pStr; pStr = Next() )
         delete pStr;
 }
 
-//------------------------------------------------------------------
-
 ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
     ResId( nId, rResMgr )
 {
 }
-
-
-//------------------------------------------------------------------
 
 #define UNIQUE              sal_False   // function name does not exist in Calc
 
@@ -115,9 +99,6 @@ const ScaFuncDataBase pFuncDataArr[] =
 };
 
 #undef FUNCDATA
-
-
-//------------------------------------------------------------------
 
 ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
@@ -146,9 +127,6 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
         nParam++;
     return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
 }
-
-
-//------------------------------------------------------------------
 
 ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
     nLast( 0xFFFFFFFF )
@@ -183,7 +161,6 @@ const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) con
 }
 
 
-//------------------------------------------------------------------
 
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
     Resource( rResId )
@@ -192,13 +169,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-
-//------------------------------------------------------------------
-//
-//  entry points for service registration / instantiation
-//
-//------------------------------------------------------------------
-
+// entry points for service registration / instantiation
 uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
@@ -206,8 +177,6 @@ uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
     return xInst;
 }
 
-
-//------------------------------------------------------------------------
 
 extern "C" {
 
@@ -237,12 +206,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
 
 }   // extern C
 
-//------------------------------------------------------------------------
-//
 //  "normal" service implementation
-//
-//------------------------------------------------------------------------
-
 ScaPricingAddIn::ScaPricingAddIn() :
     pDefLocales( NULL ),
     pResMgr( NULL ),
@@ -335,9 +299,6 @@ OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrInd
     return aRet;
 }
 
-
-//------------------------------------------------------------------------
-
 OUString ScaPricingAddIn::getImplementationName_Static()
 {
     return OUString( MY_IMPLNAME );
@@ -353,7 +314,6 @@ uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames_Static()
 }
 
 // XServiceName
-
 OUString SAL_CALL ScaPricingAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
@@ -361,7 +321,6 @@ OUString SAL_CALL ScaPricingAddIn::getServiceName() throw( uno::RuntimeException
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScaPricingAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -369,7 +328,7 @@ OUString SAL_CALL ScaPricingAddIn::getImplementationName() throw( uno::RuntimeEx
 
 sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
 {
-    return aServiceName == ADDIN_SERVICE || aServiceName == MY_SERVICE;
+    return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
@@ -378,7 +337,6 @@ uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames() t
 }
 
 // XLocalizable
-
 void SAL_CALL ScaPricingAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
@@ -390,12 +348,7 @@ lang::Locale SAL_CALL ScaPricingAddIn::getLocale() throw( uno::RuntimeException 
     return aFuncLoc;
 }
 
-//------------------------------------------------------------------
-//
-//  function descriptions start here
-//
-//------------------------------------------------------------------
-
+// function descriptions start here
 // XAddIn
 OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
@@ -503,9 +456,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayCategoryName(
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
-
 // XCompatibilityNames
-
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
@@ -525,13 +476,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
     return aRet;
 }
 
-
-
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
 // actual function implementation starts here
-//
-
 // auxillary input handling functions
 namespace {
 
@@ -639,7 +584,6 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
 
 } // namespace for auxillary functions
 
-
 // OPT_BARRIER(...)
 double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
@@ -728,8 +672,5 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-
-
-//------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
