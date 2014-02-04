@@ -196,7 +196,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     return OUString();
 }
 
-void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xShape )
+void GraphicHelper::SaveShapeAsGraphic( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     try
     {
