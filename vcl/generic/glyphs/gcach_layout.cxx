@@ -132,9 +132,6 @@ std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
     return s;
 }
 
-static hb_font_funcs_t* pHbFontFuncs = NULL;
-static hb_unicode_funcs_t* pHbUnicodeFuncs = NULL;
-
 static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
@@ -374,8 +371,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     SAL_INFO("vcl.harfbuzz", "layout(" << this << ",rArgs=" << rArgs << ")");
 
-    if (pHbFontFuncs == NULL)
-        pHbFontFuncs = getFontFuncs();
+    static hb_font_funcs_t* pHbFontFuncs = getFontFuncs();
 
     hb_font_t *pHbFont = hb_font_create(mpHbFace);
     hb_font_set_funcs(pHbFont, pHbFontFuncs, &rFont, NULL);
@@ -435,8 +431,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
             OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
-            if (pHbUnicodeFuncs == NULL)
-                pHbUnicodeFuncs = getUnicodeFuncs();
+            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
 
             int nHbFlags = HB_BUFFER_FLAG_DEFAULT;
             if (nMinRunPos == 0)
