@@ -26,4 +26,6 @@
   <toolbar:toolbaritem xlink:href=".uno:MatchCase"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
+  <toolbar:toolbarseparator/>
+  <toolbar:toolbaritem xlink:href=".uno:SearchLabel"/>
 </toolbar:toolbar>

@@ -79,6 +79,13 @@ public:
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
+enum SearchLabel
+{
+    SL_Empty,
+    SL_NotFound,
+    SL_End
+};
+
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
@@ -89,6 +96,7 @@ public:
 
     ~SvxSearchDialogWrapper ();
     SvxSearchDialog *getDialog ();
+    static void SetSearchLabel(const SearchLabel& rSL);
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };
 
@@ -139,6 +147,8 @@ public:
 
     void            SetSaveToModule(bool b);
 
+    void SetSearchLabel(const OUString& rStr) { m_pSearchLabel->SetText(rStr); }
+
 private:
     Window*         mpDocWin;
     sal_Bool        mbSuccess;
@@ -147,6 +157,7 @@ private:
     ComboBox*       m_pSearchLB;
     ListBox*        m_pSearchTmplLB;
     FixedText*      m_pSearchAttrText;
+    FixedText*      m_pSearchLabel;
 
     VclFrame*       m_pReplaceFrame;
     ComboBox*       m_pReplaceLB;

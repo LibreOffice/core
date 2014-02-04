@@ -30,4 +30,5 @@
   <toolbar:toolbaritem xlink:href=".uno:ScrollToPrevious"/>
   <toolbar:toolbaritem xlink:href=".uno:NavigationPopup"/>
   <toolbar:toolbaritem xlink:href=".uno:ScrollToNext"/>
+  <toolbar:toolbaritem xlink:href=".uno:SearchLabel"/>
 </toolbar:toolbar>

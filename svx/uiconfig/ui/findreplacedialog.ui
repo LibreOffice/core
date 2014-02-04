@@ -197,7 +197,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="searchformat">
+                              <object class="GtkLabel" id="searchlabel">
                                 <property name="width_request">1</property>
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>

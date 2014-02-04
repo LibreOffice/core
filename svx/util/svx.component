@@ -60,6 +60,10 @@
       constructor="com_sun_star_svx_FindAllToolboxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.svx.SearchLabelToolboxController"
+      constructor="com_sun_star_svx_SearchLabelToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.svx.FontHeightToolBoxController"
       constructor="com_sun_star_svx_FontHeightToolBoxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

@@ -396,6 +396,17 @@
           <value>com.sun.star.svx.FindTextToolboxController</value>
         </prop>
       </node>
+      <node oor:name="com.sun.star.svx.SearchLabelToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SearchLabel</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.SearchLabelToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.DownSearchToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:DownSearch</value>

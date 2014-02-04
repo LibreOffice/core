@@ -42,6 +42,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
 
+#include <vcl/fixed.hxx>
+
 using namespace css;
 
 namespace {
@@ -439,11 +441,6 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-// XToolbarController
-void SAL_CALL FindTextToolbarController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
-{
-}
-
 css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
@@ -674,11 +671,6 @@ void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< 
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-// XToolbarController
-void SAL_CALL MatchCaseToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
-{
-}
-
 css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
@@ -889,6 +881,88 @@ void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::Feat
 }
 
 //-----------------------------------------------------------------------------------------------------------
+// class SearchLabelToolboxController
+
+SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+    : svt::ToolboxController( rxContext,
+            css::uno::Reference< css::frame::XFrame >(),
+            OUString( ".uno:SearchLabel" ) )
+{
+}
+
+SearchLabelToolboxController::~SearchLabelToolboxController()
+{
+}
+
+// XInterface
+css::uno::Any SAL_CALL SearchLabelToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+{
+    css::uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
+}
+
+void SAL_CALL SearchLabelToolboxController::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL SearchLabelToolboxController::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+OUString SAL_CALL SearchLabelToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+{
+    return OUString( "com.sun.star.svx.SearchLabelToolboxController" );
+}
+
+
+sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+{
+    css::uno::Sequence< OUString > aSNS( 1 );
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    return aSNS;
+}
+
+// XComponent
+void SAL_CALL SearchLabelToolboxController::dispose() throw ( css::uno::RuntimeException )
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+
+    svt::ToolboxController::dispose();
+}
+
+// XInitialization
+void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+{
+    svt::ToolboxController::initialize( aArguments );
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+}
+
+// XStatusListener
+void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException )
+{
+}
+
+css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
+{
+    Window *pSL= new FixedText(VCLUnoHelper::GetWindow( Parent ));
+    pSL->SetSizePixel(Size(250, 25));
+    return VCLUnoHelper::GetInterface(pSL);
+}
+
+//-----------------------------------------------------------------------------------------------------------
 // class FindbarDispatcher
 
 FindbarDispatcher::FindbarDispatcher()
@@ -1084,6 +1158,14 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new FindAllToolboxController(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_svx_SearchLabelToolboxController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SearchLabelToolboxController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

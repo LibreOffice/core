@@ -34,14 +34,17 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
@@ -63,6 +66,7 @@
 #include <editeng/brushitem.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
+#include <vcl/toolbox.hxx>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -285,6 +289,10 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, Sf
     get(m_pSearchAllBtn, "searchall");
     get(m_pSearchAttrText, "searchdesc");
     m_pSearchAttrText->SetStyle(m_pSearchAttrText->GetStyle() | WB_PATHELLIPSIS);
+    m_pSearchAttrText->Show();
+    get(m_pSearchLabel, "searchlabel");
+    m_pSearchLabel->SetStyle(m_pSearchLabel->GetStyle() | WB_PATHELLIPSIS);
+    m_pSearchLabel->Show();
 
     get(m_pReplaceFrame, "replaceframe");
     get(m_pReplaceLB, "replaceterm");
@@ -294,6 +302,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, Sf
     get(m_pReplaceAllBtn, "replaceall");
     get(m_pReplaceAttrText, "replacedesc");
     m_pReplaceAttrText->SetStyle(m_pReplaceAttrText->GetStyle() | WB_PATHELLIPSIS);
+    m_pReplaceAttrText->Show();
 
     get(m_pComponentFrame, "componentframe");
     get(m_pSearchComponent1PB, "component1");
@@ -2322,6 +2331,49 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     aInfo.bVisible = sal_False;
     return aInfo;
+}
+
+
+static Window* lcl_GetSearchLabelWindow()
+{
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(
+            SfxViewFrame::Current()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    css::uno::Reference< css::ui::XUIElement > xUIElement =
+        xLayoutManager->getElement("private:resource/toolbar/findbar");
+    if (!xUIElement.is())
+        return 0;
+    css::uno::Reference< css::awt::XWindow > xWindow(
+            xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
+    ToolBox* pToolBox = (ToolBox*) VCLUnoHelper::GetWindow(xWindow);
+    for (size_t i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
+        if (pToolBox->GetItemCommand(i) == ".uno:SearchLabel")
+            return pToolBox->GetItemWindow(i);
+    return 0;
+}
+
+void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
+{
+    OUString sStr;
+    if (rSL == SL_End)
+        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END);
+    else if (rSL == SL_NotFound)
+        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_NOT_FOUND);
+
+    if (Window *pSearchLabel = lcl_GetSearchLabelWindow())
+    {
+        if (sStr.isEmpty())
+            pSearchLabel->Hide();
+        else
+        {
+            pSearchLabel->SetText(sStr);
+            pSearchLabel->Show();
+        }
+    }
+    if (SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*) SfxViewFrame::Current()->
+            GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() ))
+        pWrp->getDialog()->SetSearchLabel(sStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

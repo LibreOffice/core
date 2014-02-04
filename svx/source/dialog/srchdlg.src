@@ -42,5 +42,13 @@ String RID_SVXSTR_REPLACE
 {
     Text [ en-US ] = "(Replace)" ;
 };
+String RID_SVXSTR_SEARCH_END
+{
+    Text [ en-US ] = "Reached the end of the document" ;
+};
+String RID_SVXSTR_SEARCH_NOT_FOUND
+{
+    Text [ en-US ] = "Search key not found" ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

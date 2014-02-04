@@ -23,6 +23,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <hintids.hxx>
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
@@ -84,18 +85,6 @@ static Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
     else
         pWin = 0;
     return pWin;
-}
-
-static void ShowNotFoundInfoBox( SvxSearchDialog* m_pSrchDlg )
-{
-    Window* pParentWindow = GetParentWindow( m_pSrchDlg );
-    MessageDialog aBox(pParentWindow, "InfoNotFoundDialog",
-        "modules/swriter/ui/infonotfounddialog.ui");
-    if (pParentWindow)
-    {
-        aBox.SetText(pParentWindow->GetText());
-    }
-    aBox.Execute();
 }
 
 void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
@@ -231,9 +220,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 if( !bRet )
                 {
                     if( !bApi )
-                    {
-                        ShowNotFoundInfoBox( m_pSrchDlg );
-                    }
+                        SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
                     m_bFound = sal_False;
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
@@ -349,9 +336,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     if( !nFound )
                     {
                         if( !bApi )
-                        {
-                            ShowNotFoundInfoBox( m_pSrchDlg );
-                        }
+                            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
                         m_bFound = sal_False;
                         return;
                     }
@@ -527,9 +512,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     {
         m_pWrtShell->EndAllAction();
         if( !bApi )
-        {
-            ShowNotFoundInfoBox( m_pSrchDlg );
-        }
+            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
         m_bFound = sal_False;
         m_pWrtShell->Pop();
         return sal_False;
@@ -537,27 +520,6 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     m_pWrtShell->EndAllAction();
         // Try again with WrapAround?
 
-    int nRet = RET_NO;
-    if( !bApi )
-    {
-        if (DOCPOS_START == aOpts.eEnd)
-        {
-            nRet = MessageDialog(GetParentWindow(m_pSrchDlg), "QueryContinueEndDialog",
-                "modules/swriter/ui/querycontinueenddialog.ui").Execute();
-        }
-        else
-        {
-            nRet = MessageDialog(GetParentWindow(m_pSrchDlg), "QueryContinueBeginDialog",
-                "modules/swriter/ui/querycontinuebegindialog.ui").Execute();
-        }
-    }
-
-    if (nRet == RET_NO)
-    {
-        m_bFound = sal_False;
-        m_pWrtShell->Pop();
-        return sal_False;
-    }
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Pop(sal_False);
     pWait.reset(new SwWait( *GetDocShell(), true ));
@@ -576,16 +538,15 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
             m_pWrtShell->SttDoc();
     }
 
-    m_bFound = 0 != FUNC_Search( aOpts );
+    m_bFound = bool(FUNC_Search( aOpts ));
     m_pWrtShell->EndAllAction();
     pWait.reset();
-    if ( m_bFound )
-        return m_bFound;
-    if(!bApi)
-    {
-        ShowNotFoundInfoBox( m_pSrchDlg );
-    }
-    return m_bFound = sal_False;
+
+    if (m_bFound)
+        SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+    else if(!bApi)
+        SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+    return m_bFound;
 }
 
 
@@ -728,6 +689,8 @@ SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, sal_Bool bBackward )
 
 sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 {
+    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+
     sal_Bool bDoReplace = m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE ||
                       m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
 
