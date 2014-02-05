@@ -29,6 +29,7 @@
 
  class SwRangeRedline;
  class SwTableRowRedline;
+ class SwTableCellRedline;
  class SwRedlineTbl;
  class SwExtraRedlineTbl;
  class SwPaM;
@@ -69,6 +70,8 @@ namespace nsRedlineType_t
     const RedlineType_t REDLINE_PARAGRAPH_FORMAT = 0x5;// Paragraph attributes have been changed.
     const RedlineType_t REDLINE_TABLE_ROW_INSERT = 0x6;// Table row has been inserted.
     const RedlineType_t REDLINE_TABLE_ROW_DELETE = 0x7;// Table row has been deleted.
+    const RedlineType_t REDLINE_TABLE_CELL_INSERT = 0x8;// Table cell has been inserted.
+    const RedlineType_t REDLINE_TABLE_CELL_DELETE = 0x9;// Table cell has been deleted.
 
     // When larger than 128, flags can be inserted.
     const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
@@ -149,6 +152,7 @@ public:
     virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
+    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) = 0;
 
