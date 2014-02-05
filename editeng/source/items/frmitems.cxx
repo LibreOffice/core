@@ -3461,17 +3461,15 @@ SvxBrushItem::SvxBrushItem(
 // -----------------------------------------------------------------------
 
 SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
-                            sal_uInt16 _nWhich ) :
-
-    SfxPoolItem( _nWhich ),
-
-    aColor            ( COL_TRANSPARENT ),
-    nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
-    maStrLink         (),
-    maStrFilter       (),
-    eGraphicPos       ( GPOS_NONE )
-
+                            sal_uInt16 _nWhich )
+    : SfxPoolItem( _nWhich )
+    , aColor            ( COL_TRANSPARENT )
+    , nShadingValue     ( ShadingPattern::CLEAR )
+    , pImpl             ( new SvxBrushItem_Impl( NULL ) )
+    , maStrLink         ()
+    , maStrFilter       ()
+    , eGraphicPos       ( GPOS_NONE )
+    , bLoadAgain (sal_False)
 {
     sal_Bool bTrans;
     Color aTempColor;
