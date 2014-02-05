@@ -74,11 +74,12 @@ public class TableCellLayoutController extends SectionLayoutController
                 FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
             }
             // #i114108#: except on form elements, the only value-type that can
-            // occur without an accompanying value attribute is "string"
+            // occur without an accompanying value attribute is "string";
+            // the content is then in the body.
             else if (!"string".equals(valueType))
             {
                 attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
-                    FormatValueUtility.VALUE_TYPE, "void");
+                    FormatValueUtility.VALUE_TYPE, "string");
             }
         }
         catch (Exception e)
