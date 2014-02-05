@@ -270,8 +270,6 @@ public:
     void testGraphicsInGroup();
     void testGraphicsOnSheetMove();
 
-    void testPostIts();
-
     /**
      * Test toggling relative/absolute flag of cell and cell range references.
      * This corresponds with hitting Shift-F4 while the cursor is on a formula
@@ -298,6 +296,8 @@ public:
     void testSortWithFormulaRefs();
     void testSortWithStrings();
     void testShiftCells();
+
+    void testNoteBasic();
     void testNoteDeleteRow();
     void testNoteDeleteCol();
     void testAreasWithNotes();
@@ -391,7 +391,7 @@ public:
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testGraphicsOnSheetMove);
-    CPPUNIT_TEST(testPostIts);
+    CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
