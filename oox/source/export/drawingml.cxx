@@ -400,7 +400,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                                    FSEND );
         }
         else
-        switch( aGradient.Style ) {
+            switch( aGradient.Style ) {
             default:
             case GradientStyle_LINEAR:
                 mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
@@ -438,7 +438,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                                        XML_path, ( aGradient.Style == awt::GradientStyle_RADIAL || aGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect",
                                        FSEND );
                 break;
-        }
+            }
 
         mpFS->endElementNS( XML_a, XML_gradFill );
     }
