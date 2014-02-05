@@ -835,9 +835,9 @@ int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 }
 #endif
 
-void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b)
+void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha)
 {
-    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
+    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, nAlpha/255.f);
 }
 
 void OpenGLRender::SetLine2DWidth(int width)
@@ -1046,12 +1046,12 @@ bool OpenGLRender::WGLisExtensionSupported(const char *extension)
 }
 #endif
 
-void OpenGLRender::SetColor(sal_uInt32 color)
+void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
 {
     sal_uInt8 r = (color & 0x00FF0000) >> 16;
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
     sal_uInt8 b = (color & 0x000000FF);
-    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
+    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, nAlpha/ 255.f);
 }
 
 int OpenGLRender::CreateMultiSampleFrameBufObj()
@@ -1169,12 +1169,6 @@ int OpenGLRender::RenderBubble2FBO(int)
     return 0;
 }
 
-void OpenGLRender::SetTransparency(sal_uInt32 transparency)
-{
-    m_fAlpha = (float)transparency / 255.0;
-    m_2DColor = glm::vec4(m_2DColor.r, m_2DColor.g, m_2DColor.b, m_fAlpha);
-}
-
 int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
 {
     //check whether to create the circle data
@@ -1269,7 +1263,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
                 m_fZStep += Z_STEP;
                 glUniformMatrix4fv(m_BackgroundMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
             }
-            SetBackGroundColor(COL_BLACK, COL_BLACK);
+            SetBackGroundColor(COL_BLACK, COL_BLACK, 255);
 
             glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
             glBufferData(GL_ARRAY_BUFFER, sizeof(m_BackgroundColor), m_BackgroundColor, GL_STATIC_DRAW);
@@ -1571,7 +1565,7 @@ int OpenGLRender::RenderArea2DShape()
     return 0;
 }
 
-void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
+void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha)
 {
     sal_uInt8 r = (color1 & 0x00FF0000) >> 16;
     sal_uInt8 g = (color1 & 0x0000FF00) >> 8;
@@ -1580,12 +1574,12 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
     m_BackgroundColor[0] = (float)r / 255.0f;
     m_BackgroundColor[1] = (float)g / 255.0f;
     m_BackgroundColor[2] = (float)b / 255.0f;
-    m_BackgroundColor[3] = m_fAlpha;
+    m_BackgroundColor[3] = nAlpha / 255.0f;
 
     m_BackgroundColor[4] = (float)r / 255.0f;
     m_BackgroundColor[5] = (float)g / 255.0f;
     m_BackgroundColor[6] = (float)b / 255.0f;
-    m_BackgroundColor[7] = m_fAlpha;
+    m_BackgroundColor[7] = nAlpha / 255.0f;
 
     r = (color2 & 0x00FF0000) >> 16;
     g = (color2 & 0x0000FF00) >> 8;
@@ -1594,12 +1588,12 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
     m_BackgroundColor[8] = (float)r / 255.0f;
     m_BackgroundColor[9] = (float)g / 255.0f;
     m_BackgroundColor[10] = (float)b / 255.0f;
-    m_BackgroundColor[11] = 1.0;
+    m_BackgroundColor[11] = nAlpha / 255.0f;
 
     m_BackgroundColor[12] = (float)r / 255.0f;
     m_BackgroundColor[13] = (float)g / 255.0f;
     m_BackgroundColor[14] = (float)b / 255.0f;
-    m_BackgroundColor[15] = 1.0;
+    m_BackgroundColor[15] = nAlpha / 255.0f;
     SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
 
 }

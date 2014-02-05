@@ -141,7 +141,7 @@ public:
 #endif
     int RenderLine2FBO(int wholeFlag);
     int SetLine2DShapePoint(float x, float y, int listLength);
-    void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);
+    void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
     void SetLine2DWidth(int width);
     BitmapEx GetAsBitmap();
 #if defined( _WIN32 )
@@ -149,15 +149,13 @@ public:
     bool GetMSAASupport();
     int GetMSAAFormat();
 #endif
-    void SetColor(sal_uInt32 color);
+    void SetColor(sal_uInt32 color, sal_uInt8 nAlpha);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO(int wholeFlag);
 
     void prepareToRender();
     void renderToBitmap();
 
-
-    void SetTransparency(sal_uInt32 transparency);
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
@@ -178,7 +176,7 @@ public:
     void renderDebug();
 #endif
 
-    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
+    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
 
 private:
     GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
@@ -261,8 +259,6 @@ private:
     GLint m_2DColorID;
 
     float m_fZStep;
-
-    float m_fAlpha;
 
     std::list <RectanglePointList> m_RectangleShapePointList;
     // add for text

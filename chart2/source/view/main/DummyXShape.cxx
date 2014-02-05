@@ -361,17 +361,18 @@ void DummyPieSegment2D::render()
     pChart->m_GLRender.GeneratePieSegment2D(mfUnitCircleInnerRadius, mfUnitCircleOuterRadius,
             mfUnitCircleStartAngleDegree, mfUnitCircleWidthAngleDegree);
 
-    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find(UNO_NAME_FILLCOLOR);
+    sal_uInt8 nAlpha = 255;
+    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find(UNO_NAME_FILL_TRANSPARENCE);
+    if(itr != maProperties.end())
+    {
+        nAlpha = 255 - itr->second.get<sal_Int32>();
+    }
+
+    itr = maProperties.find(UNO_NAME_FILLCOLOR);
     if(itr != maProperties.end())
     {
         sal_Int32 nColor = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetColor(nColor);
-    }
-    itr = maProperties.find(UNO_NAME_FILL_TRANSPARENCE);
-    if(itr != maProperties.end())
-    {
-        sal_Int32 transparency = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetTransparency(255-(transparency&(0xFF)));
+        pChart->m_GLRender.SetColor(nColor, nAlpha);
     }
 
     float nSize = std::max<float>(maUnitCircleToScene.Line1.Column1, maUnitCircleToScene.Line2.Column2);
@@ -424,7 +425,7 @@ void DummyArea2D::render()
     if(itr != maProperties.end())
     {
         sal_Int32 nColor = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetColor(nColor);
+        pChart->m_GLRender.SetColor(nColor, 255);
     }
 
     pChart->m_GLRender.RenderArea2DShape();
@@ -445,7 +446,7 @@ void DummySymbol2D::render()
 {
     DummyChart* pChart = getRootShape();
 
-    pChart->m_GLRender.SetColor(mnFillColor);
+    pChart->m_GLRender.SetColor(mnFillColor, 255);
 
     pChart->m_GLRender.RenderSymbol2DShape(maPosition.X, maPosition.Y, maSize.Width, maSize.Height, mnStandardSymbol);
 }
@@ -465,10 +466,11 @@ void DummyCircle::render()
     if(itr != maProperties.end())
     {
         sal_Int32 nColor = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetColor(nColor);
+        pChart->m_GLRender.SetColor(nColor, 255);
     }
     else
         SAL_WARN("chart2.opengl", "missing color");
+
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);
     pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
@@ -530,19 +532,41 @@ void DummyLine2D::render()
     SAL_WARN("chart2.opengl", "rendering line 2D");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
-    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find(UNO_NAME_LINECOLOR);
+
+    //add style and transparency
+    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find(UNO_NAME_LINESTYLE);
+    if (itr != maProperties.end())
+    {
+        uno::Any cow = itr->second;
+        drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
+        if (drawing::LineStyle_NONE == nStyle)
+        {
+            // nothing to render
+            return;
+        }
+    }
+
+    sal_uInt8 nAlpha = 255;
+    itr = maProperties.find("LineTransparence");
+    if(itr != maProperties.end())
+    {
+        uno::Any al = itr->second;
+        nAlpha = 255 - al.get<sal_Int32>();
+    }
+
+    itr = maProperties.find(UNO_NAME_LINECOLOR);
     if(itr != maProperties.end())
     {
         //set line color
         uno::Any co =  itr->second;
         sal_Int32 nColorValue = co.get<sal_Int32>();
-        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue);
+        SAL_INFO("chart2.opengl", "line colorvalue = " << nColorValue);
         sal_uInt8 R = (nColorValue & 0x00FF0000) >> 16;
         sal_uInt8 G = (nColorValue & 0x0000FF00) >> 8;
         sal_uInt8 B = (nColorValue & 0x000000FF);
-        pChart->m_GLRender.SetLine2DColor(R, G, B);
+        pChart->m_GLRender.SetLine2DColor(R, G, B, nAlpha);
 
-        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue << ", R = " << (int)R << ", G = " << (int)G << ", B = " << (int)B);
+        SAL_INFO("chart2.opengl", "line colorvalue = " << nColorValue << ", R = " << (int)R << ", G = " << (int)G << ", B = " << (int)B);
     }
     else
         SAL_WARN("chart2.opengl", "no line color set");
@@ -559,22 +583,6 @@ void DummyLine2D::render()
     }
     else
         SAL_WARN("chart2.opengl", "no line width set");
-
-    //add style and transparency
-    itr =  maProperties.find(UNO_NAME_LINESTYLE);
-    if (itr != maProperties.end())
-    {
-        uno::Any cow = itr->second;
-        drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
-        if (drawing::LineStyle_NONE == nStyle)
-        {
-            pChart->m_GLRender.SetTransparency(0);
-        }
-        else
-        {
-            pChart->m_GLRender.SetTransparency(255);
-        }
-    }
 
     sal_Int32 pointsscount = maPoints.getLength();
     for(sal_Int32 i = 0; i < pointsscount; i++)
@@ -636,7 +644,15 @@ void DummyRectangle::render()
     {
         uno::Any co =  itr->second;
         sal_Int32 nColorValue = co.get<sal_Int32>();
-        pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue);
+
+        itr = maProperties.find("FillTransparence");
+        sal_uInt8 nAlpha = 255;
+        if(itr != maProperties.end())
+        {
+            uno::Any al = itr->second;
+            nAlpha = al.get<sal_Int32>();
+        }
+        pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue, nAlpha);
     }
 
     bool bBorder = true;
