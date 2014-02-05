@@ -1627,7 +1627,7 @@ SvStream &SfxItemSet::Load
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::operator==(const SfxItemSet &rCmp) const
+bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     DBG_CHKOBJ(&rCmp, SfxItemSet, DbgCheckItemSet);
@@ -1636,13 +1636,13 @@ int SfxItemSet::operator==(const SfxItemSet &rCmp) const
     if ( _pParent != rCmp._pParent ||
          _pPool != rCmp._pPool ||
          Count() != rCmp.Count() )
-        return sal_False;
+        return false;
 
     // Ranges durchzaehlen lassen dauert laenger, muss aber auch gleich sein
     sal_uInt16 nCount1 = TotalCount();
     sal_uInt16 nCount2 = rCmp.TotalCount();
     if ( nCount1 != nCount2 )
-        return sal_False;
+        return false;
 
     // sind die Ranges selbst ungleich?
     for ( sal_uInt16 nRange = 0; _pWhichRanges[nRange]; nRange += 2 )
@@ -1664,15 +1664,15 @@ int SfxItemSet::operator==(const SfxItemSet &rCmp) const
                         ( !pItem1 || IsInvalidItem(pItem1) ||
                           ( _pPool->IsItemFlag(*pItem1, SFX_ITEM_POOLABLE) &&
                             *pItem1 != *pItem2 ) ) ) )
-                    return sal_False;
+                    return false;
             }
 
-            return sal_True;
+            return true;
         }
 
     // Pointer alle gleich?
     if ( 0 == memcmp( _aItems, rCmp._aItems, nCount1 * sizeof(_aItems[0]) ) )
-        return sal_True;
+        return true;
 
     // dann werden wir wohl alle einzeln vergleichen muessen
     const SfxPoolItem **ppItem1 = (const SfxPoolItem**) _aItems;
@@ -1686,13 +1686,13 @@ int SfxItemSet::operator==(const SfxItemSet &rCmp) const
                ( IsInvalidItem(*ppItem1) || IsInvalidItem(*ppItem2) ) ||
                ( _pPool->IsItemFlag(**ppItem1, SFX_ITEM_POOLABLE) ) ||
                  **ppItem1 != **ppItem2 ) )
-            return sal_False;
+            return false;
 
         ++ppItem1;
         ++ppItem2;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

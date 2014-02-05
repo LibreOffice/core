@@ -143,7 +143,7 @@ public:
                                       const SfxItemPool *pRefPool = 0 );
     virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
-    virtual int                 operator==(const SfxItemSet &) const;
+    bool                        operator==(const SfxItemSet &) const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
