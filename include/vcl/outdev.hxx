@@ -551,8 +551,14 @@ protected:
                         OutputDevice();
 
 private:
+    typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
+
     SAL_DLLPRIVATE                OutputDevice( const OutputDevice& rOutDev );
     SAL_DLLPRIVATE OutputDevice&  operator =( const OutputDevice& rOutDev );
+
+    SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
 
 public:
     virtual             ~OutputDevice();
