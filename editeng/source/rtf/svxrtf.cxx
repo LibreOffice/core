@@ -60,18 +60,24 @@ static rtl_TextEncoding lcl_GetDefaultTextEncodingForRTF()
 SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             uno::Reference<document::XDocumentProperties> i_xDocProps,
             int bReadNewDoc )
-    : SvRTFParser( rIn, 5 ),
-    rStrm(rIn),
-    pInsPos( 0 ),
-    pAttrPool( &rPool ),
-    m_xDocProps( i_xDocProps ),
-    pRTFDefaults( 0 ),
-    nVersionNo( 0 )
+    : SvRTFParser( rIn, 5 )
+    , rStrm(rIn)
+    , pInsPos( 0 )
+    , pAttrPool( &rPool )
+    , m_xDocProps( i_xDocProps )
+    , pRTFDefaults( 0 )
+    , nVersionNo( 0 )
+    , nDfltFont( 0)
+    , bNewDoc( bReadNewDoc )
+    , bNewGroup( sal_False)
+    , bIsSetDfltTab( sal_False)
+    , bChkStyleAttr( sal_False )
+    , bCalcValue( sal_False )
+    , bPardTokenRead( sal_False)
+    , bReadDocInfo( sal_False )
+    , bIsLeftToRightDef( sal_True)
+    , bIsInReadStyleTab( sal_False)
 {
-    bNewDoc = bReadNewDoc;
-
-    bChkStyleAttr = bCalcValue = bReadDocInfo = bIsInReadStyleTab = sal_False;
-    bIsLeftToRightDef = sal_True;
 
     {
         RTFPlainAttrMapIds aTmp( rPool );
