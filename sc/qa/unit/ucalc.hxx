@@ -300,6 +300,7 @@ public:
     void testNoteBasic();
     void testNoteDeleteRow();
     void testNoteDeleteCol();
+    void testNoteLifeCycle();
     void testAreasWithNotes();
     void testAnchoredRotatedShape();
     void testCellTextWidth();
@@ -428,6 +429,7 @@ public:
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteDeleteRow);
     CPPUNIT_TEST(testNoteDeleteCol);
+    CPPUNIT_TEST(testNoteLifeCycle);
     CPPUNIT_TEST(testAreasWithNotes);
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);

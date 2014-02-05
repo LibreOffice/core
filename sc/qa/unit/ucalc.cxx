@@ -69,6 +69,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdocapt.hxx>
 #include "svl/srchitem.hxx"
 #include "svl/sharedstringpool.hxx"
 
@@ -4754,6 +4755,49 @@ void Test::testNoteDeleteCol()
     CPPUNIT_ASSERT_MESSAGE("there should be no more note", !pDoc->HasNote(1, 1, 0));
 
     pDoc->DeleteTab(0);
+}
+
+void Test::testNoteLifeCycle()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
+    ScAddress aPos(1,1,0);
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new cell comment.", pNote);
+
+    pNote->SetText(aPos, "New note");
+    ScPostIt* pNote2 = m_pDoc->ReleaseNote(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This note instance is expected to be identical to the original.", pNote == pNote2);
+    CPPUNIT_ASSERT_MESSAGE("The note shouldn't be here after it's been released.", !m_pDoc->HasNote(aPos));
+
+    // Modify the internal state of the note instance to make sure it's really
+    // been released.
+    pNote->SetText(aPos, "New content");
+
+    // Re-insert the note back to the same place.
+    m_pDoc->SetNote(aPos, pNote);
+    const SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create a caption object.", pCaption);
+    CPPUNIT_ASSERT_MESSAGE("This caption should belong to the drawing layer of the document.",
+                           pCaption->GetModel() == m_pDoc->GetDrawLayer());
+
+    // Copy B2 with note to a clipboard.
+
+    ScClipParam aClipParam(aPos, false);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScMarkData aMarkData;
+    aMarkData.SelectOneTable(0);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true, true, false);
+
+    ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
+    CPPUNIT_ASSERT_MESSAGE("Note on the clipboard should share the same caption object from the original.",
+                           pClipNote->GetCaption() == pCaption);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testAreasWithNotes()
