@@ -192,8 +192,6 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     maStrProperty = mpFTProperty->GetText();
 
     fillDurationComboBox( mpCBSpeed );
-    mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
-    mpPBMoveDown->SetSymbol( SYMBOL_ARROW_DOWN );
 
     mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBChangeEffect->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
