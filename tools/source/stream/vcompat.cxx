@@ -37,8 +37,8 @@ VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16
         }
         else
         {
-            *mpRWStm >> mnVersion;
-            *mpRWStm >> mnTotalSize;
+            mpRWStm->ReadUInt16( mnVersion );
+            mpRWStm->ReadUInt32( mnTotalSize );
             mnCompatPos = mpRWStm->Tell();
         }
     }

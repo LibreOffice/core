@@ -1408,15 +1408,15 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
     // more than likely this is functionality used in the binfilter alone
     SbxValue::Clear();
     sal_uInt16 nType;
-    r >> nType;
+    r.ReadUInt16( nType );
     aData.eType = SbxDataType( nType );
     switch( nType )
     {
         case SbxBOOL:
         case SbxINTEGER:
-            r >> aData.nInteger; break;
+            r.ReadInt16( aData.nInteger ); break;
         case SbxLONG:
-            r >> aData.nLong; break;
+            r.ReadInt32( aData.nLong ); break;
         case SbxSINGLE:
         {
             // Floats as ASCII
@@ -1451,13 +1451,13 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             r.ReadInt64(aData.nInt64);
             break;
         case SbxSALUINT64:
-            r >> aData.uInt64;
+            r.ReadUInt64( aData.uInt64 );
             break;
         case SbxCURRENCY:
         {
             sal_uInt32 tmpHi = 0;
             sal_uInt32 tmpLo = 0;
-            r >> tmpHi >> tmpLo;
+            r.ReadUInt32( tmpHi ).ReadUInt32( tmpLo );
             aData.nInt64 = ((sal_Int64)tmpHi << 32);
             aData.nInt64 |= (sal_Int64)tmpLo;
             break;
@@ -1474,11 +1474,11 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             }
             case SbxERROR:
             case SbxUSHORT:
-                r >> aData.nUShort; break;
+                r.ReadUInt16( aData.nUShort ); break;
             case SbxOBJECT:
             {
                 sal_uInt8 nMode;
-                r >> nMode;
+                r.ReadUChar( nMode );
                 switch( nMode )
                 {
                     case 0:
@@ -1496,24 +1496,24 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxCHAR:
             {
                 char c;
-                r >> c;
+                r.ReadChar( c );
                 aData.nChar = c;
                 break;
             }
             case SbxBYTE:
-                r >> aData.nByte; break;
+                r.ReadUChar( aData.nByte ); break;
             case SbxULONG:
-                r >> aData.nULong; break;
+                r.ReadUInt32( aData.nULong ); break;
             case SbxINT:
             {
                 sal_uInt8 n;
-                r >> n;
+                r.ReadUChar( n );
                 // Match the Int on this system?
                 if( n > SAL_TYPES_SIZEOFINT )
-                    r >> aData.nLong, aData.eType = SbxLONG;
+                    r.ReadInt32( aData.nLong ), aData.eType = SbxLONG;
                 else {
                     sal_Int32 nInt;
-                    r >> nInt;
+                    r.ReadInt32( nInt );
                     aData.nInt = nInt;
                 }
                 break;
@@ -1521,13 +1521,13 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxUINT:
             {
                 sal_uInt8 n;
-                r >> n;
+                r.ReadUChar( n );
                 // Match the UInt on this system?
                 if( n > SAL_TYPES_SIZEOFINT )
-                    r >> aData.nULong, aData.eType = SbxULONG;
+                    r.ReadUInt32( aData.nULong ), aData.eType = SbxULONG;
                 else {
                     sal_uInt32 nUInt;
-                    r >> nUInt;
+                    r.ReadUInt32( nUInt );
                     aData.nUInt = nUInt;
                 }
                 break;
@@ -1537,7 +1537,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxVOID:
                 break;
             case SbxDATAOBJECT:
-                r >> aData.nLong;
+                r.ReadInt32( aData.nLong );
                 break;
             // #78919 For backwards compatibility
             case SbxWSTRING:

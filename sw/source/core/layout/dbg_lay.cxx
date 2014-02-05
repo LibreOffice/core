@@ -459,7 +459,7 @@ void SwImplProtocol::FileInit()
         while( aStream.good() )
         {
             sal_Char c;
-            aStream >> c;
+            aStream.ReadChar( c );
             if( '\n' == c || '\r' == c )    // line ending
             {
                 aLine = aLine.trim();

@@ -176,8 +176,7 @@ struct BLENDFUNCTION{
 
 SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun )
 {
-    rIn >> rBlendFun.aBlendOperation >> rBlendFun.aBlendFlags >>
-             rBlendFun.aSrcConstantAlpha >> rBlendFun.aAlphaFormat;
+    rIn.ReadUChar( rBlendFun.aBlendOperation ).ReadUChar( rBlendFun.aBlendFlags ).             ReadUChar( rBlendFun.aSrcConstantAlpha ).ReadUChar( rBlendFun.aAlphaFormat );
     return rIn;
 }
 SvStream& operator>>( SvStream& rIn, XForm& rXForm )
@@ -197,8 +196,8 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
     rXForm.eDx = GetSwapFloat( rIn );
     rXForm.eDy = GetSwapFloat( rIn );
 #else
-    rIn >> rXForm.eM11 >> rXForm.eM12 >> rXForm.eM21 >> rXForm.eM22
-            >> rXForm.eDx >> rXForm.eDy;
+    rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
+           .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
 #endif
     }
     return rIn;
@@ -210,10 +209,10 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nL
     if ( nLen )
     {
         sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
-        rSt >> nHdSize
-            >> nType
-            >> nCount
-            >> nRgnSize;
+        rSt.ReadUInt32( nHdSize )
+           .ReadUInt32( nType )
+           .ReadUInt32( nCount )
+           .ReadUInt32( nRgnSize );
 
         if ( nCount && ( nType == RDH_RECTANGLES ) &&
                 ( nLen >= ( ( nCount << 4 ) + ( nHdSize - 16 ) ) ) )
@@ -222,7 +221,7 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nL
 
             for ( i = 0; i < nCount; i++ )
             {
-                rSt >> nx1 >> ny1 >> nx2 >> ny2;
+                rSt.ReadInt32( nx1 ).ReadInt32( ny1 ).ReadInt32( nx2 ).ReadInt32( ny2 );
 
                 Rectangle aRect( Point( nx1, ny1 ), Point( nx2, ny2 ) );
                 Polygon aPolygon( aRect );
@@ -290,7 +289,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         sal_uInt16 type(0), flags(0);
         sal_uInt32 size(0), dataSize(0);
 
-        *pWMF >> type >> flags >> size >> dataSize;
+        pWMF->ReadUInt16( type ).ReadUInt16( flags ).ReadUInt32( size ).ReadUInt32( dataSize );
         nRemainder -= nRequiredHeaderSize;
 
         SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
@@ -324,7 +323,7 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst)
 {
     sal_uInt32 nPoints(0), nStartIndex(0);
     pWMF->SeekRel( 16 );
-    *pWMF >> nPoints;
+    pWMF->ReadUInt32( nPoints );
     if (skipFirst)
     {
         nPoints ++;
@@ -375,7 +374,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
     sal_Int32   i, nPoly(0), nGesPoints(0);
     pWMF->SeekRel( 0x10 );
     // Number of Polygons:
-    *pWMF >> nPoly >> nGesPoints;
+    pWMF->ReadInt32( nPoly ).ReadInt32( nGesPoints );
 
     // taking the amount of points of each polygon, retrieving the total number of points
     if ( pWMF->good() &&
@@ -386,7 +385,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
         sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
         for ( i = 0; i < nPoly && pWMF->good(); i++ )
         {
-            *pWMF >> nPoints;
+            pWMF->ReadUInt32( nPoints );
             pnPoints[ i ] = (sal_uInt16)nPoints;
         }
         // Get polygon points:
@@ -409,7 +408,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
     sal_uInt32 nPoly(0), nGesPoints(0), nReadPoints(0);
     pWMF->SeekRel( 0x10 );
     // Number of polygons
-    *pWMF >> nPoly >> nGesPoints;
+    pWMF->ReadUInt32( nPoly ).ReadUInt32( nGesPoints );
     if ( pWMF->good() &&
         ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && //check against numeric overflowing
         ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
@@ -420,7 +419,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
             sal_uInt32 nPoints(0);
-            *pWMF >> nPoints;
+            pWMF->ReadUInt32( nPoints );
             pnPoints[ i ] = (sal_uInt16)nPoints;
         }
         if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
@@ -467,7 +466,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {
-        *pWMF >> nRecType >> nRecSize;
+        pWMF->ReadUInt32( nRecType ).ReadUInt32( nRecSize );
 
         if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameters are always divisible by 4
         {
@@ -497,7 +496,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
         if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
             sal_uInt32 length;
 
-            *pWMF >> length;
+            pWMF->ReadUInt32( length );
 
             SAL_INFO("vcl.emf", "\tGDI comment");
             SAL_INFO("vcl.emf", "\t\tlength: " << length);
@@ -505,7 +504,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             if( pWMF->good() && length >= 4 ) {
                 sal_uInt32 id;
 
-                *pWMF >> id;
+                pWMF->ReadUInt32( id );
 
                 SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(id & 0xff) << (char)((id & 0xff00) >> 8) << (char)((id & 0xff0000) >> 16) << (char)((id & 0xff000000) >> 24) << " id: 0x" << std::hex << id << std::dec);
 
@@ -552,42 +551,42 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_SETWINDOWEXTEX :
                 {                                                       // #75383#
-                    *pWMF >> nW >> nH;
+                    pWMF->ReadUInt32( nW ).ReadUInt32( nH );
                     pOut->SetWinExt( Size( nW, nH ), true);
                 }
                 break;
 
                 case EMR_SETWINDOWORGEX :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->SetWinOrg( Point( nX32, nY32 ), true);
                 }
                 break;
 
                 case EMR_SCALEWINDOWEXTEX :
                 {
-                    *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
+                    pWMF->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
                     pOut->ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
                 }
                 break;
 
                 case EMR_SETVIEWPORTORGEX :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->SetDevOrg( Point( nX32, nY32 ) );
                 }
                 break;
 
                 case EMR_SCALEVIEWPORTEXTEX :
                 {
-                    *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
+                    pWMF->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
                     pOut->ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
                 }
                 break;
 
                 case EMR_SETVIEWPORTEXTEX :
                 {
-                    *pWMF >> nW >> nH;
+                    pWMF->ReadUInt32( nW ).ReadUInt32( nH );
                     pOut->SetDevExt( Size( nW, nH ) );
                 }
                 break;
@@ -598,7 +597,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_SETPIXELV :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->DrawPixel( Point( nX32, nY32 ), ReadColor() );
                 }
                 break;
@@ -606,14 +605,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SETMAPMODE :
                 {
                     sal_uInt32 nMapMode;
-                    *pWMF >> nMapMode;
+                    pWMF->ReadUInt32( nMapMode );
                     pOut->SetMapMode( nMapMode );
                 }
                 break;
 
                 case EMR_SETBKMODE :
                 {
-                    *pWMF >> nDat32;
+                    pWMF->ReadUInt32( nDat32 );
                     pOut->SetBkMode( nDat32 );
                 }
                 break;
@@ -623,20 +622,20 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_SETROP2 :
                 {
-                    *pWMF >> nDat32;
+                    pWMF->ReadUInt32( nDat32 );
                     pOut->SetRasterOp( nDat32 );
                 }
                 break;
 
                 case EMR_SETSTRETCHBLTMODE :
                 {
-                    *pWMF >> nStretchBltMode;
+                    pWMF->ReadUInt32( nStretchBltMode );
                 }
                 break;
 
                 case EMR_SETTEXTALIGN :
                 {
-                    *pWMF >> nDat32;
+                    pWMF->ReadUInt32( nDat32 );
                     pOut->SetTextAlign( nDat32 );
                 }
                 break;
@@ -655,21 +654,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_OFFSETCLIPRGN :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->MoveClipRegion( Size( nX32, nY32 ) );
                 }
                 break;
 
                 case EMR_MOVETOEX :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->MoveTo( Point( nX32, nY32 ), bRecordPath );
                 }
                 break;
 
                 case EMR_INTERSECTCLIPRECT :
                 {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
                     pOut->IntersectClipRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
                 }
                 break;
@@ -698,21 +697,22 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     sal_uInt32  nMode;
                     XForm   aTempXForm;
-                    *pWMF >> aTempXForm >> nMode;
+                    *pWMF >> aTempXForm;
+                    pWMF->ReadUInt32( nMode );
                     pOut->ModifyWorldTransform( aTempXForm, nMode );
                 }
                 break;
 
                 case EMR_SELECTOBJECT :
                 {
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     pOut->SelectObject( nIndex );
                 }
                 break;
 
                 case EMR_CREATEPEN :
                 {
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
 
@@ -722,7 +722,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         // #fdo39428 Remove SvStream operator>>(long&)
                         sal_Int32 nTmpW(0), nTmpH(0);
 
-                        *pWMF >> nStyle >> nTmpW >> nTmpH;
+                        pWMF->ReadUInt32( nStyle ).ReadInt32( nTmpW ).ReadInt32( nTmpH );
                         aSize.Width() = nTmpW;
                         aSize.Height() = nTmpH;
 
@@ -808,12 +808,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
                     Color       aColorRef;
 
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
-                        *pWMF >> offBmi >> cbBmi >> offBits >> cbBits >>  nStyle >> nWidth >> nBrushStyle;
+                        pWMF->ReadUInt32( offBmi ).ReadUInt32( cbBmi ).ReadUInt32( offBits ).ReadUInt32( cbBits ). ReadUInt32( nStyle ).ReadUInt32( nWidth ).ReadUInt32( nBrushStyle );
                          aColorRef = ReadColor();
-                         *pWMF >> elpHatch >> elpNumEntries;
+                         pWMF->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
 
                         LineInfo    aLineInfo;
                         if ( nWidth )
@@ -859,10 +859,10 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_CREATEBRUSHINDIRECT :
                 {
                     sal_uInt32  nStyle;
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
-                        *pWMF >> nStyle;
+                        pWMF->ReadUInt32( nStyle );
                         pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
                     }
                 }
@@ -870,7 +870,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_DELETEOBJECT :
                 {
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         pOut->DeleteObject( nIndex );
                 }
@@ -878,21 +878,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_ELLIPSE :
                 {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
                     pOut->DrawEllipse( ReadRectangle( nX32, nY32, nx32, ny32 ) );
                 }
                 break;
 
                 case EMR_RECTANGLE :
                 {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
                     pOut->DrawRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
                 }
                 break;
 
                 case EMR_ROUNDRECT :
                 {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nW >> nH;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nW ).ReadUInt32( nH );
                     Size aSize( Size( nW, nH ) );
                     pOut->DrawRoundRect( ReadRectangle( nX32, nY32, nx32, ny32 ), aSize );
                 }
@@ -901,7 +901,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_ARC :
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                     pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
                 }
                 break;
@@ -909,7 +909,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_CHORD :
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                     pOut->DrawChord( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
                 }
                 break;
@@ -917,7 +917,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_PIE :
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                     const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
 
                     // #i73608# OutputDevice deviates from WMF
@@ -931,7 +931,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_LINETO :
                 {
-                    *pWMF >> nX32 >> nY32;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 );
                     pOut->LineTo( Point( nX32, nY32 ), bRecordPath );
                 }
                 break;
@@ -939,7 +939,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_ARCTO :
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                    pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
                     pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), sal_True );
                 }
                 break;
@@ -976,7 +976,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SELECTCLIPPATH :
                 {
                     sal_Int32 nClippingMode;
-                    *pWMF >> nClippingMode;
+                    pWMF->ReadInt32( nClippingMode );
                     pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, sal_True );
                 }
                 break;
@@ -984,8 +984,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_EXTSELECTCLIPRGN :
                 {
                     sal_Int32 iMode, cbRgnData;
-                    *pWMF >> cbRgnData
-                          >> iMode;
+                    pWMF->ReadInt32( cbRgnData )
+                         .ReadInt32( iMode );
 
                     PolyPolygon aPolyPoly;
                     if ( cbRgnData )
@@ -1007,9 +1007,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32   nStart = pWMF->Tell() - 8;
                     pWMF->SeekRel( 0x10 );
 
-                    *pWMF >> xDest >> yDest >> cxDest >> cyDest >> aFunc >> xSrc >> ySrc
-                            >> xformSrc >> BkColorSrc >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                                >> offBitsSrc >> cbBitsSrc >>cxSrc>>cySrc ;
+                    pWMF->ReadInt32( xDest ).ReadInt32( yDest ).ReadInt32( cxDest ).ReadInt32( cyDest );
+                    *pWMF >> aFunc;
+                    pWMF->ReadInt32( xSrc ).ReadInt32( ySrc );
+                    *pWMF >> xformSrc;
+                    pWMF->ReadUInt32( BkColorSrc ).ReadUInt32( iUsageSrc ).ReadUInt32( offBmiSrc ).ReadUInt32( cbBmiSrc )
+                               .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
                     sal_uInt32  dwRop = SRCAND|SRCINVERT;
 
@@ -1064,12 +1067,13 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32  nStart = pWMF->Tell() - 8;
 
                     pWMF->SeekRel( 0x10 );
-                    *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
-                            >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                                >> offBitsSrc >> cbBitsSrc;
+                    pWMF->ReadInt32( xDest ).ReadInt32( yDest ).ReadInt32( cxDest ).ReadInt32( cyDest ).ReadUInt32( dwRop ).ReadInt32( xSrc ).ReadInt32( ySrc )
+                            >> xformSrc;
+                    pWMF->ReadUInt32( nColor ).ReadUInt32( iUsageSrc ).ReadUInt32( offBmiSrc ).ReadUInt32( cbBmiSrc )
+                               .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc );
 
                     if ( nRecType == EMR_STRETCHBLT )
-                        *pWMF >> cxSrc >> cySrc;
+                        pWMF->ReadInt32( cxSrc ).ReadInt32( cySrc );
                     else
                         cxSrc = cySrc = 0;
 
@@ -1124,20 +1128,20 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32  nStart = pWMF->Tell() - 8;
 
                     pWMF->SeekRel( 0x10 );
-                    *pWMF >> xDest
-                          >> yDest
-                          >> xSrc
-                          >> ySrc
-                          >> cxSrc
-                          >> cySrc
-                          >> offBmiSrc
-                          >> cbBmiSrc
-                          >> offBitsSrc
-                          >> cbBitsSrc
-                          >> iUsageSrc
-                          >> dwRop
-                          >> cxDest
-                          >> cyDest;
+                    pWMF->ReadInt32( xDest )
+                         .ReadInt32( yDest )
+                         .ReadInt32( xSrc )
+                         .ReadInt32( ySrc )
+                         .ReadInt32( cxSrc )
+                         .ReadInt32( cySrc )
+                         .ReadUInt32( offBmiSrc )
+                         .ReadUInt32( cbBmiSrc )
+                         .ReadUInt32( offBitsSrc )
+                         .ReadUInt32( cbBitsSrc )
+                         .ReadUInt32( iUsageSrc )
+                         .ReadUInt32( dwRop )
+                         .ReadInt32( cxDest )
+                         .ReadInt32( cyDest );
 
                     Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
@@ -1189,30 +1193,30 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_EXTCREATEFONTINDIRECTW :
                 {
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
                         LOGFONTW aLogFont;
-                        *pWMF >> aLogFont.lfHeight
-                              >> aLogFont.lfWidth
-                              >> aLogFont.lfEscapement
-                              >> aLogFont.lfOrientation
-                              >> aLogFont.lfWeight
-                              >> aLogFont.lfItalic
-                              >> aLogFont.lfUnderline
-                              >> aLogFont.lfStrikeOut
-                              >> aLogFont.lfCharSet
-                              >> aLogFont.lfOutPrecision
-                              >> aLogFont.lfClipPrecision
-                              >> aLogFont.lfQuality
-                              >> aLogFont.lfPitchAndFamily;
+                        pWMF->ReadInt32( aLogFont.lfHeight )
+                             .ReadInt32( aLogFont.lfWidth )
+                             .ReadInt32( aLogFont.lfEscapement )
+                             .ReadInt32( aLogFont.lfOrientation )
+                             .ReadInt32( aLogFont.lfWeight )
+                             .ReadUChar( aLogFont.lfItalic )
+                             .ReadUChar( aLogFont.lfUnderline )
+                             .ReadUChar( aLogFont.lfStrikeOut )
+                             .ReadUChar( aLogFont.lfCharSet )
+                             .ReadUChar( aLogFont.lfOutPrecision )
+                             .ReadUChar( aLogFont.lfClipPrecision )
+                             .ReadUChar( aLogFont.lfQuality )
+                             .ReadUChar( aLogFont.lfPitchAndFamily );
 
                         sal_Unicode lfFaceName[ LF_FACESIZE ];
 
                         for ( int i = 0; i < LF_FACESIZE; i++ )
                         {
                             sal_uInt16 nChar;
-                            *pWMF >> nChar;
+                            pWMF->ReadUInt16( nChar );
                             lfFaceName[ i ] = nChar;
                         }
                         aLogFont.alfFaceName = OUString( lfFaceName );
@@ -1246,11 +1250,11 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                     nCurPos = pWMF->Tell() - 8;
 
-                    *pWMF >> nLeft >> nTop >> nRight >> nBottom >> nGfxMode >> nXScale >> nYScale
-                        >> ptlReferenceX >> ptlReferenceY >> nLen >> nOffString >> nOptions;
+                    pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom ).ReadInt32( nGfxMode ).ReadInt32( nXScale ).ReadInt32( nYScale )
+                       .ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
 
                     pWMF->SeekRel( 0x10 );
-                    *pWMF >> offDx;
+                    pWMF->ReadUInt32( offDx );
 
                     sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
                     if ( nOptions & ETO_RTLREADING )
@@ -1269,7 +1273,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 pDX = new sal_Int32[ nLen ];
                                 sal_Int32 i;
                                 for ( i = 0; i < nLen; i++ )
-                                    *pWMF >> pDX[ i ];
+                                    pWMF->ReadInt32( pDX[ i ] );
                             }
                         }
                         pWMF->Seek( nCurPos + nOffString );
@@ -1356,7 +1360,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32 nLen;
                     PolyPolygon aPolyPoly;
                     pWMF->SeekRel( 0x10 );
-                    *pWMF >> nLen >> nIndex;
+                    pWMF->ReadUInt32( nLen ).ReadUInt32( nIndex );
 
                     if ( ImplReadRegion( aPolyPoly, *pWMF, nRecSize ) )
                     {
@@ -1373,17 +1377,17 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_uInt32  nStart = pWMF->Tell() - 8;
                     Bitmap aBitmap;
 
-                    *pWMF >> nIndex;
+                    pWMF->ReadUInt32( nIndex );
 
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
                         sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
 
-                        *pWMF >> usage;
-                        *pWMF >> offBmi;
-                        *pWMF >> cbBmi;
-                        *pWMF >> offBits;
-                        *pWMF >> cbBits;
+                        pWMF->ReadUInt32( usage );
+                        pWMF->ReadUInt32( offBmi );
+                        pWMF->ReadUInt32( cbBmi );
+                        pWMF->ReadUInt32( offBits );
+                        pWMF->ReadUInt32( cbBits );
 
                         if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
                            bStatus = sal_False;
@@ -1494,7 +1498,7 @@ sal_Bool EnhWMFReader::ReadHeader()
 
     // Spare me the METAFILEHEADER here
     // Reading the METAHEADER - EMR_HEADER ([MS-EMF] section 2.3.4.2 EMR_HEADER Record Types)
-    *pWMF >> nType >> nHeaderSize;
+    pWMF->ReadUInt32( nType ).ReadUInt32( nHeaderSize );
     if ( nType != 1 ) { // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
         SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
         return sal_False;
@@ -1504,7 +1508,7 @@ sal_Bool EnhWMFReader::ReadHeader()
 
     // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
     Rectangle rclBounds;    // rectangle in logical units
-    *pWMF >> nLeft >> nTop >> nRight >> nBottom;
+    pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
     rclBounds.Left() = nLeft;
     rclBounds.Top() = nTop;
     rclBounds.Right() = nRight;
@@ -1512,13 +1516,13 @@ sal_Bool EnhWMFReader::ReadHeader()
 
     // picture frame size (RectL object)
     Rectangle rclFrame;     // rectangle in device units 1/100th mm
-    *pWMF >> nLeft >> nTop >> nRight >> nBottom;
+    pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
     rclFrame.Left() = nLeft;
     rclFrame.Top() = nTop;
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nSignature;
+    pWMF->ReadUInt32( nSignature );
 
     // nSignature MUST be the ASCII characters "FME", see [WS-EMF] 2.2.9 Header Object
     // and 2.1.14 FormatSignature Enumeration
@@ -1527,13 +1531,13 @@ sal_Bool EnhWMFReader::ReadHeader()
         return sal_False;
     }
 
-    *pWMF >> nVersion;  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
+    pWMF->ReadUInt32( nVersion );  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
                         // Microsoft note that not even Windows checks this...
     if ( nVersion != 0x00010000 ) {
         SAL_WARN("vcl.emf", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
     }
 
-    *pWMF >> nEndPos;                                   // size of metafile
+    pWMF->ReadUInt32( nEndPos );                                   // size of metafile
     nEndPos += nStartPos;
 
     sal_uInt32 nStrmPos = pWMF->Tell();                 // checking if nEndPos is valid
@@ -1548,7 +1552,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     }
     pWMF->Seek( nStrmPos );
 
-    *pWMF >> nRecordCount;
+    pWMF->ReadInt32( nRecordCount );
 
     if ( !nRecordCount ) {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as 0! This shouldn't "
@@ -1559,14 +1563,14 @@ sal_Bool EnhWMFReader::ReadHeader()
     // the number of "handles", or graphics objects used in the metafile
 
     sal_uInt16 nHandlesCount;
-    *pWMF >> nHandlesCount;
+    pWMF->ReadUInt16( nHandlesCount );
 
     // the next 2 bytes are reserved, but according to [MS-EMF] section 2.2.9
     // it MUST be 0x000 and MUST be ignored... the thing is, having such a specific
     // value is actually pretty useful in checking if there is possible corruption
 
     sal_uInt16 nReserved;
-    *pWMF >> nReserved;
+    pWMF->ReadUInt16( nReserved );
 
     if ( nReserved != 0x0000 ) {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
@@ -1581,7 +1585,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     pWMF->SeekRel( 0x8 );
 
     sal_Int32 nPixX, nPixY, nMillX, nMillY;
-    *pWMF >> nPalEntries >> nPixX >> nPixY >> nMillX >> nMillY;
+    pWMF->ReadUInt32( nPalEntries ).ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
 
     pOut->SetrclFrame( rclFrame );
     pOut->SetrclBounds( rclBounds );

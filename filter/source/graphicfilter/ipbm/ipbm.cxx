@@ -157,7 +157,7 @@ sal_Bool PBMReader::ImplReadHeader()
     sal_uInt8   nMax, nCount = 0;
     sal_Bool    bFinished = sal_False;
 
-    mrPBM >> nID[ 0 ] >> nID[ 1 ];
+    mrPBM.ReadUChar( nID[ 0 ] ).ReadUChar( nID[ 1 ] );
     if ( nID[ 0 ] != 'P' )
         return sal_False;
     mnMaxVal = mnWidth = mnHeight = 0;
@@ -190,7 +190,7 @@ sal_Bool PBMReader::ImplReadHeader()
         if ( mrPBM.GetError() )
             return sal_False;
 
-        mrPBM >> nDat;
+        mrPBM.ReadUChar( nDat );
 
         if ( nDat == '#' )
         {
@@ -268,7 +268,7 @@ sal_Bool PBMReader::ImplReadBody()
 
                     if ( --nShift < 0 )
                     {
-                        mrPBM >> nDat;
+                        mrPBM.ReadUChar( nDat );
                         nShift = 7;
                     }
                     mpAcc->SetPixelIndex( nHeight, nWidth, nDat >> nShift );
@@ -289,7 +289,7 @@ sal_Bool PBMReader::ImplReadBody()
                     if ( mrPBM.IsEof() || mrPBM.GetError() )
                         return sal_False;
 
-                    mrPBM >> nDat;
+                    mrPBM.ReadUChar( nDat );
                     mpAcc->SetPixelIndex( nHeight, nWidth++, nDat);
 
                     if ( nWidth == mnWidth )
@@ -310,7 +310,7 @@ sal_Bool PBMReader::ImplReadBody()
 
                     sal_uInt8   nR, nG, nB;
                     sal_uLong   nRed, nGreen, nBlue;
-                    mrPBM >> nR >> nG >> nB;
+                    mrPBM.ReadUChar( nR ).ReadUChar( nG ).ReadUChar( nB );
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
@@ -334,7 +334,7 @@ sal_Bool PBMReader::ImplReadBody()
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return sal_False;
 
-                mrPBM >> nDat;
+                mrPBM.ReadUChar( nDat );
 
                 if ( nDat == '#' )
                 {
@@ -395,7 +395,7 @@ sal_Bool PBMReader::ImplReadBody()
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return sal_False;
 
-                mrPBM >> nDat;
+                mrPBM.ReadUChar( nDat );
 
                 if ( nDat == '#' )
                 {
@@ -471,7 +471,7 @@ sal_Bool PBMReader::ImplReadBody()
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return sal_False;
 
-                mrPBM >> nDat;
+                mrPBM.ReadUChar( nDat );
 
                 if ( nDat == '#' )
                 {

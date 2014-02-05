@@ -84,21 +84,21 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
     //#fdo39428 Remove SvStream operator>>(long&)
     sal_Int32 nTmp(0);
 
-    rIStm >> nSize;
+    rIStm.ReadUInt32( nSize );
     rIStm >> rObjDesc.maClassName;
-    rIStm >> nViewAspect;
-    rIStm >> nTmp;
+    rIStm.ReadUInt32( nViewAspect );
+    rIStm.ReadInt32( nTmp );
     rObjDesc.maSize.Width() = nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadInt32( nTmp );
     rObjDesc.maSize.Height() = nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadInt32( nTmp );
     rObjDesc.maDragStartPos.X() = nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadInt32( nTmp );
     rObjDesc.maDragStartPos.Y() = nTmp;
     rObjDesc.maTypeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
     rObjDesc.maDisplayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
 
-    rIStm >> nSig1 >> nSig2;
+    rIStm.ReadUInt32( nSig1 ).ReadUInt32( nSig2 );
 
     rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
 

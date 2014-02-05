@@ -215,7 +215,7 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
 SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
 {
     if ( bNewFormat )
-        rIStm >> mnColor;
+        rIStm.ReadUInt32( mnColor );
     else
         ReadColor( rIStm, *this );
 
@@ -240,7 +240,7 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
 
     sal_uInt16      nColorName;
 
-    rIStream >> nColorName;
+    rIStream.ReadUInt16( nColorName );
 
     if ( nColorName & COL_NAME_USER )
     {
@@ -248,9 +248,9 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
         sal_uInt16 nGreen;
         sal_uInt16 nBlue;
 
-        rIStream >> nRed;
-        rIStream >> nGreen;
-        rIStream >> nBlue;
+        rIStream.ReadUInt16( nRed );
+        rIStream.ReadUInt16( nGreen );
+        rIStream.ReadUInt16( nBlue );
 
         rColor.mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
     }

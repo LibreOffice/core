@@ -372,7 +372,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
 
     rStrm.Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt16 nBofId, nBofSize;
-    rStrm >> nBofId >> nBofSize;
+    rStrm.ReadUInt16( nBofId ).ReadUInt16( nBofSize );
 
     if( (4 <= nBofSize) && (nBofSize <= 16) ) switch( nBofId )
     {
@@ -388,7 +388,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
         case EXC_ID5_BOF:
         {
             sal_uInt16 nVersion;
-            rStrm >> nVersion;
+            rStrm.ReadUInt16( nVersion );
             // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
             switch( nVersion & 0xFF00 )
             {
@@ -585,7 +585,7 @@ sal_uInt16 XclImpStream::GetNextRecId()
         if( mnNextRecPos < mnStreamSize )
         {
             mrStrm.Seek( mnNextRecPos );
-            mrStrm >> nRecId;
+            mrStrm.ReadUInt16( nRecId );
         }
         PopPosition();
     }
@@ -599,7 +599,7 @@ sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
     {
         sal_Size nCurPos = mrStrm.Tell();
         mrStrm.Seek(nPos);
-        mrStrm >> nRecId;
+        mrStrm.ReadUInt16( nRecId );
         mrStrm.Seek(nCurPos);
     }
     return nRecId;
@@ -614,7 +614,7 @@ XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
         if( mbUseDecr )
             mxDecrypter->Read( mrStrm, &rnValue, 1 );
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadSChar( rnValue );
         --mnRawRecLeft;
     }
     return *this;
@@ -627,7 +627,7 @@ XclImpStream& XclImpStream::operator>>( sal_uInt8& rnValue )
         if( mbUseDecr )
             mxDecrypter->Read( mrStrm, &rnValue, 1 );
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadUChar( rnValue );
         --mnRawRecLeft;
     }
     return *this;
@@ -644,7 +644,7 @@ XclImpStream& XclImpStream::operator>>( sal_Int16& rnValue )
             rnValue = static_cast< sal_Int16 >( SVBT16ToShort( pnBuffer ) );
         }
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadInt16( rnValue );
         mnRawRecLeft -= 2;
     }
     return *this;
@@ -661,7 +661,7 @@ XclImpStream& XclImpStream::operator>>( sal_uInt16& rnValue )
             rnValue = SVBT16ToShort( pnBuffer );
         }
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadUInt16( rnValue );
         mnRawRecLeft -= 2;
     }
     return *this;
@@ -678,7 +678,7 @@ XclImpStream& XclImpStream::operator>>( sal_Int32& rnValue )
             rnValue = static_cast< sal_Int32 >( SVBT32ToUInt32( pnBuffer ) );
         }
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadInt32( rnValue );
         mnRawRecLeft -= 4;
     }
     return *this;
@@ -695,7 +695,7 @@ XclImpStream& XclImpStream::operator>>( sal_uInt32& rnValue )
             rnValue = SVBT32ToUInt32( pnBuffer );
         }
         else
-            mrStrm >> rnValue;
+            mrStrm.ReadUInt32( rnValue );
         mnRawRecLeft -= 4;
     }
     return *this;
@@ -713,7 +713,7 @@ XclImpStream& XclImpStream::operator>>( float& rfValue )
             memcpy( &rfValue, &nValue, 4 );
         }
         else
-            mrStrm >> rfValue;
+            mrStrm.ReadFloat( rfValue );
         mnRawRecLeft -= 4;
     }
     return *this;
@@ -730,7 +730,7 @@ XclImpStream& XclImpStream::operator>>( double& rfValue )
             rfValue = SVBT64ToDouble( pnBuffer );
         }
         else
-            mrStrm >> rfValue;
+            mrStrm.ReadDouble( rfValue );
         mnRawRecLeft -= 8;
     }
     return *this;
@@ -1045,7 +1045,7 @@ bool XclImpStream::ReadNextRawRecHeader()
     bool bRet = (nSeekedPos == mnNextRecPos) && (mnNextRecPos + 4 <= mnStreamSize);
     if( bRet )
     {
-        mrStrm >> mnRawRecId >> mnRawRecSize;
+        mrStrm.ReadUInt16( mnRawRecId ).ReadUInt16( mnRawRecSize );
         bRet = mrStrm.good();
     }
     return bRet;

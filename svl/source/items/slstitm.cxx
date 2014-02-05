@@ -79,7 +79,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
 {
     //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nEntryCount;
-    rStream >> nEntryCount;
+    rStream.ReadInt32( nEntryCount );
 
     if( nEntryCount )
         pImp = new SfxImpStringList;

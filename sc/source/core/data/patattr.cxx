@@ -153,14 +153,14 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     OUString* pStr;
     sal_Bool    bHasStyle;
 
-    rStream >> bHasStyle;
+    rStream.ReadUChar( bHasStyle );
 
     if ( bHasStyle )
     {
         short   eFamDummy;
         pStr = new OUString;
         *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        rStream >> eFamDummy; // wg. altem Dateiformat
+        rStream.ReadInt16( eFamDummy ); // wg. altem Dateiformat
     }
     else
         pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );

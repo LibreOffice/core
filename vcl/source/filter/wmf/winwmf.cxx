@@ -135,7 +135,7 @@ static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, 
 inline Point WMFReader::ReadPoint()
 {
     short nX = 0, nY = 0;
-    *pWMF >> nX >> nY;
+    pWMF->ReadInt16( nX ).ReadInt16( nY );
     return Point( nX, nY );
 }
 
@@ -144,7 +144,7 @@ inline Point WMFReader::ReadPoint()
 inline Point WMFReader::ReadYX()
 {
     short nX = 0, nY = 0;
-    *pWMF >> nY >> nX;
+    pWMF->ReadInt16( nY ).ReadInt16( nX );
     return Point( nX, nY );
 }
 
@@ -165,7 +165,7 @@ Rectangle WMFReader::ReadRectangle()
 Size WMFReader::ReadYXExt()
 {
     short nW=0, nH=0;
-    *pWMF >> nH >> nW;
+    pWMF->ReadInt16( nH ).ReadInt16( nW );
     return Size( nW, nH );
 }
 
@@ -184,7 +184,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SETBKMODE:
         {
             sal_uInt16 nDat = 0;
-            *pWMF >> nDat;
+            pWMF->ReadUInt16( nDat );
             pOut->SetBkMode( nDat );
         }
         break;
@@ -193,7 +193,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SETMAPMODE:
         {
             sal_Int16 nMapMode = 0;
-            *pWMF >> nMapMode;
+            pWMF->ReadInt16( nMapMode );
             pOut->SetMapMode( nMapMode );
         }
         break;
@@ -201,7 +201,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SETROP2:
         {
             sal_uInt16 nROP2 = 0;
-            *pWMF >> nROP2;
+            pWMF->ReadUInt16( nROP2 );
             pOut->SetRasterOp( nROP2 );
         }
         break;
@@ -221,7 +221,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SETWINDOWEXT:
         {
             short nWidth = 0, nHeight = 0;
-            *pWMF >> nHeight >> nWidth;
+            pWMF->ReadInt16( nHeight ).ReadInt16( nWidth );
             pOut->SetWinExt( Size( nWidth, nHeight ) );
         }
         break;
@@ -229,7 +229,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_OFFSETWINDOWORG:
         {
             short nXAdd = 0, nYAdd = 0;
-            *pWMF >> nYAdd >> nXAdd;
+            pWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
             pOut->SetWinOrgOffset( nXAdd, nYAdd );
         }
         break;
@@ -237,7 +237,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SCALEWINDOWEXT:
         {
             short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
-            *pWMF >> nYDenom >> nYNum >> nXDenom >> nXNum;
+            pWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
             pOut->ScaleWinExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
         }
         break;
@@ -249,7 +249,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_OFFSETVIEWPORTORG:
         {
             short nXAdd = 0, nYAdd = 0;
-            *pWMF >> nYAdd >> nXAdd;
+            pWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
             pOut->SetDevOrgOffset( nXAdd, nYAdd );
         }
         break;
@@ -257,7 +257,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SCALEVIEWPORTEXT:
         {
             short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
-            *pWMF >> nYDenom >> nYNum >> nXDenom >> nXNum;
+            pWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
             pOut->ScaleDevExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
         }
         break;
@@ -338,7 +338,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_POLYGON:
         {
             sal_uInt16 nPoints = 0;
-            *pWMF >> nPoints;
+            pWMF->ReadUInt16( nPoints );
             Polygon aPoly( nPoints );
             for( sal_uInt16 i = 0; i < nPoints; i++ )
                 aPoly[ i ] = ReadPoint();
@@ -351,7 +351,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             bool bRecordOk = true;
             sal_uInt16 nPolyCount(0);
             // Number of polygons:
-            *pWMF >> nPolyCount;
+            pWMF->ReadUInt16( nPolyCount );
             if (nPolyCount && pWMF->good())
             {
                 // Number of points of each polygon. Determine total number of points
@@ -361,7 +361,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 sal_uInt16 nPoints = 0;
                 for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
                 {
-                    *pWMF >> pnPoints[a];
+                    pWMF->ReadUInt16( pnPoints[a] );
 
                     if (pnPoints[a] > SAL_MAX_UINT16 - nPoints)
                     {
@@ -413,7 +413,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_POLYLINE:
         {
             sal_uInt16 nPoints = 0;
-            *pWMF >> nPoints;
+            pWMF->ReadUInt16( nPoints );
             Polygon aPoly( nPoints );
             for(sal_uInt16 i = 0; i < nPoints; i++ )
                 aPoly[ i ] = ReadPoint();
@@ -449,7 +449,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_TEXTOUT:
         {
             sal_uInt16 nLength = 0;
-            *pWMF >> nLength;
+            pWMF->ReadUInt16( nLength );
             if ( nLength )
             {
                 char*   pChar = new char[ ( nLength + 1 ) &~ 1 ];
@@ -472,10 +472,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
             pWMF->SeekRel(-6);
             nRecordPos = pWMF->Tell();
-            *pWMF >> nRecordSize;
+            pWMF->ReadInt32( nRecordSize );
             pWMF->SeekRel(2);
             aPosition = ReadYX();
-            *pWMF >> nLen >> nOptions;
+            pWMF->ReadUInt16( nLen ).ReadUInt16( nOptions );
 
             sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
             if ( nOptions & ETO_RTLREADING )
@@ -515,7 +515,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
                                 break;
-                            *pWMF >> nDx;
+                            pWMF->ReadInt16( nDx );
                             if ( nNewTextLen != nOriginalTextLen )
                             {
                                 sal_Unicode nUniChar = aText[i];
@@ -527,7 +527,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                         break;
                                     while ( nDxCount-- )
                                     {
-                                        *pWMF >> nDxTmp;
+                                        pWMF->ReadInt16( nDxTmp );
                                         nDx = nDx + nDxTmp;
                                     }
                                 }
@@ -551,7 +551,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SELECTOBJECT:
         {
             sal_Int16   nObjIndex = 0;
-            *pWMF >> nObjIndex;
+            pWMF->ReadInt16( nObjIndex );
             pOut->SelectObject( nObjIndex );
         }
         break;
@@ -559,7 +559,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SETTEXTALIGN:
         {
             sal_uInt16  nAlign = 0;
-            *pWMF >> nAlign;
+            pWMF->ReadUInt16( nAlign );
             pOut->SetTextAlign( nAlign );
         }
         break;
@@ -584,10 +584,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nDontKnow = 0, nWidth = 0, nHeight = 0, nBytesPerScan = 0;
             sal_uInt8   nPlanes, nBitCount;
 
-            *pWMF >> nWinROP
-                  >> nSy >> nSx >> nSye >> nSxe;
+            pWMF->ReadInt32( nWinROP )
+                 .ReadUInt16( nSy ).ReadUInt16( nSx ).ReadUInt16( nSye ).ReadUInt16( nSxe );
             Point aPoint( ReadYX() );
-            *pWMF >> nDontKnow >> nWidth >> nHeight >> nBytesPerScan >> nPlanes >> nBitCount;
+            pWMF->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
             if ( nWidth && nHeight && ( nPlanes == 1 ) && ( nBitCount == 1 ) )
             {
@@ -602,7 +602,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
                         {
                             sal_Int8 nEightPixels = 0;
-                            *pWMF >> nEightPixels;
+                            pWMF->ReadSChar( nEightPixels );
                             for (sal_Int8 i = 7; i >= 0; i-- )
                             {
                                 if ( x < nWidth )
@@ -637,24 +637,24 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nUsage = 0;
             Bitmap      aBmp;
 
-            *pWMF >> nWinROP;
+            pWMF->ReadInt32( nWinROP );
 
             if( nFunc == W_META_STRETCHDIB )
-                *pWMF >> nUsage;
+                pWMF->ReadUInt16( nUsage );
 
             // nSye and nSxe is the number of pixels that has to been used
             // If they are set to zero, it is as indicator not to scale the bitmap later
             //
             if( nFunc == W_META_STRETCHDIB || nFunc == W_META_STRETCHBLT || nFunc == W_META_DIBSTRETCHBLT )
-                *pWMF >> nSye >> nSxe;
+                pWMF->ReadUInt16( nSye ).ReadUInt16( nSxe );
 
             // nSy and nx is the offset of the first pixel
-            *pWMF >> nSy >> nSx;
+            pWMF->ReadUInt16( nSy ).ReadUInt16( nSx );
 
             if( nFunc == W_META_STRETCHDIB || nFunc == W_META_DIBBITBLT || nFunc == W_META_DIBSTRETCHBLT )
             {
                 if ( nWinROP == PATCOPY )
-                    *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
+                    pWMF->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
                                         // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
 
                 Size aDestSize( ReadYXExt() );
@@ -685,7 +685,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
             sal_uInt16  nFunction = 0;
 
-            *pWMF >> nFunction >> nFunction;
+            pWMF->ReadUInt16( nFunction ).ReadUInt16( nFunction );
 
             ReadDIB(aBmp, *pWMF, false);
             pBmp = aBmp.AcquireReadAccess();
@@ -715,7 +715,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_DELETEOBJECT:
         {
             sal_Int16 nIndex = 0;
-            *pWMF >> nIndex;
+            pWMF->ReadInt16( nIndex );
             pOut->DeleteObject( nIndex );
         }
         break;
@@ -743,7 +743,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             LineInfo    aLineInfo;
             sal_uInt16      nStyle = 0, nWidth = 0, nHeight = 0;
 
-            *pWMF >> nStyle >> nWidth >> nHeight;
+            pWMF->ReadUInt16( nStyle ).ReadUInt16( nWidth ).ReadUInt16( nHeight );
 
             if ( nWidth )
                 aLineInfo.SetWidth( nWidth );
@@ -823,7 +823,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_CREATEBRUSHINDIRECT:
         {
             sal_uInt16  nStyle = 0;
-            *pWMF >> nStyle;
+            pWMF->ReadUInt16( nStyle );
             pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
         }
         break;
@@ -836,9 +836,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
             LOGFONTW aLogFont;
             aFontSize = ReadYXExt();
-            *pWMF >> lfEscapement >> lfOrientation >> lfWeight
-                    >> aLogFont.lfItalic >> aLogFont.lfUnderline >> aLogFont.lfStrikeOut >> aLogFont.lfCharSet >> aLogFont.lfOutPrecision
-                        >> aLogFont.lfClipPrecision >> aLogFont.lfQuality >> aLogFont.lfPitchAndFamily;
+            pWMF->ReadInt16( lfEscapement ).ReadInt16( lfOrientation ).ReadInt16( lfWeight )
+                   .ReadUChar( aLogFont.lfItalic ).ReadUChar( aLogFont.lfUnderline ).ReadUChar( aLogFont.lfStrikeOut ).ReadUChar( aLogFont.lfCharSet ).ReadUChar( aLogFont.lfOutPrecision )
+                       .ReadUChar( aLogFont.lfClipPrecision ).ReadUChar( aLogFont.lfQuality ).ReadUChar( aLogFont.lfPitchAndFamily );
             pWMF->Read( lfFaceName, LF_FACESIZE );
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
@@ -888,7 +888,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_PATBLT:
         {
             sal_uInt32 nROP = 0, nOldROP = 0;
-            *pWMF >> nROP;
+            pWMF->ReadUInt32( nROP );
             Size aSize = ReadYXExt();
             nOldROP = pOut->SetRasterOp( nROP );
             pOut->DrawRect( Rectangle( ReadYX(), aSize ), sal_False );
@@ -899,7 +899,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_SELECTCLIPREGION:
         {
             sal_Int16 nObjIndex = 0;
-            *pWMF >> nObjIndex;
+            pWMF->ReadInt16( nObjIndex );
             if ( !nObjIndex )
             {
                 PolyPolygon aEmptyPolyPoly;
@@ -923,22 +923,22 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( nRecSize >= 4 )    // minimal escape length
             {
                 sal_uInt16  nMode = 0, nLen = 0;
-                *pWMF >> nMode
-                      >> nLen;
+                pWMF->ReadUInt16( nMode )
+                     .ReadUInt16( nLen );
                 if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 4 ) )
                 {
                     sal_uInt32 nNewMagic = 0; // we have to read int32 for
-                    *pWMF >> nNewMagic;   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
+                    pWMF->ReadUInt32( nNewMagic );   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
 
                     if( nNewMagic == 0x2c2a4f4f &&  nLen >= 14 )
                     {
                         sal_uInt16 nMagic2 = 0;
-                        *pWMF >> nMagic2;
+                        pWMF->ReadUInt16( nMagic2 );
                         if( nMagic2 == 0x0a ) // 2nd half of magic
                         {                     // continue with private escape
                             sal_uInt32 nCheck = 0, nEsc = 0;
-                            *pWMF >> nCheck
-                                  >> nEsc;
+                            pWMF->ReadUInt32( nCheck )
+                                 .ReadUInt32( nEsc );
 
                             sal_uInt32 nEscLen = nLen - 14;
                             if ( nEscLen <= ( nRecSize * 2 ) )
@@ -980,9 +980,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
                                                 //#fdo39428 SvStream no longer supports operator>>(long&)
                                                 sal_Int32 nTmpX(0), nTmpY(0);
-                                                aMemoryStream >> nTmpX
-                                                              >> nTmpY
-                                                              >> nStringLen;
+                                                aMemoryStream.ReadInt32( nTmpX )
+                                                             .ReadInt32( nTmpY )
+                                                             .ReadUInt32( nStringLen );
                                                  aPt.X() = nTmpX;
                                                  aPt.Y() = nTmpY;
 
@@ -990,14 +990,14 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 {
 
                                                     aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
-                                                    aMemoryStream >> nDXCount;
+                                                    aMemoryStream.ReadUInt32( nDXCount );
                                                     if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                         nDXCount = 0;
                                                     if ( nDXCount )
                                                         pDXAry = new sal_Int32[ nDXCount ];
                                                     for  (sal_uInt32 i = 0; i < nDXCount; i++ )
-                                                        aMemoryStream >> pDXAry[ i ];
-                                                    aMemoryStream >> nSkipActions;
+                                                        aMemoryStream.ReadInt32( pDXAry[ i ] );
+                                                    aMemoryStream.ReadUInt32( nSkipActions );
                                                     pOut->DrawText( aPt, aString, pDXAry );
                                                     delete[] pDXAry;
                                                 }
@@ -1016,9 +1016,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                    nCurRecSize = 0, nRemainingSize = 0, nEMFTotalSize = 0;
                         sal_uInt16 nCheck = 0;
 
-                        *pWMF >> nComType >> nVersion >> nCheck >> nFlags
-                              >> nComRecCount >> nCurRecSize
-                              >> nRemainingSize >> nEMFTotalSize; // the nRemainingSize is not mentioned in MSDN documentation
+                        pWMF->ReadUInt32( nComType ).ReadUInt32( nVersion ).ReadUInt16( nCheck ).ReadUInt32( nFlags )
+                             .ReadUInt32( nComRecCount ).ReadUInt32( nCurRecSize )
+                             .ReadUInt32( nRemainingSize ).ReadUInt32( nEMFTotalSize ); // the nRemainingSize is not mentioned in MSDN documentation
                                                                   // but it seems to be required to read in data produced by OLE
 
                         if( nComType == 0x01 && nVersion == 0x10000 && nComRecCount )
@@ -1097,7 +1097,7 @@ sal_Bool WMFReader::ReadHeader()
 
     sal_uInt32 nPlaceableMetaKey(0);
     // if available read the METAFILEHEADER
-    *pWMF >> nPlaceableMetaKey;
+    pWMF->ReadUInt32( nPlaceableMetaKey );
     if (!pWMF->good())
         return false;
 
@@ -1111,17 +1111,17 @@ sal_Bool WMFReader::ReadHeader()
         pWMF->SeekRel(2);
 
         // BoundRect
-        *pWMF >> nVal;
+        pWMF->ReadInt16( nVal );
         aPlaceableBound.Left() = nVal;
-        *pWMF >> nVal;
+        pWMF->ReadInt16( nVal );
         aPlaceableBound.Top() = nVal;
-        *pWMF >> nVal;
+        pWMF->ReadInt16( nVal );
         aPlaceableBound.Right() = nVal;
-        *pWMF >> nVal;
+        pWMF->ReadInt16( nVal );
         aPlaceableBound.Bottom() = nVal;
 
         // inch
-        *pWMF >> nUnitsPerInch;
+        pWMF->ReadUInt16( nUnitsPerInch );
 
         // reserved
         pWMF->SeekRel( 4 );
@@ -1163,13 +1163,13 @@ sal_Bool WMFReader::ReadHeader()
 
     // read the METAHEADER
     sal_uInt32 nMetaKey(0);
-    *pWMF >> nMetaKey; // type and headersize
+    pWMF->ReadUInt32( nMetaKey ); // type and headersize
     if (!pWMF->good())
         return false;
     if (nMetaKey != 0x00090001)
     {
         sal_uInt16 aNextWord(0);
-        *pWMF >> aNextWord;
+        pWMF->ReadUInt16( aNextWord );
         if (nMetaKey != 0x10000 || aNextWord != 0x09)
         {
             pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -1228,7 +1228,7 @@ void WMFReader::ReadWMF()
                     Callback( (sal_uInt16) nPercent );
                     nLastPercent = nPercent;
                 }
-                *pWMF >> nRecSize >> nFunction;
+                pWMF->ReadUInt32( nRecSize ).ReadUInt16( nFunction );
 
                 if(  pWMF->GetError()
                   || ( nRecSize < 3 )
@@ -1328,7 +1328,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
         while( bRet )
         {
-            *pStm >> nRSize >> nFunction;
+            pStm->ReadUInt32( nRSize ).ReadUInt16( nFunction );
 
             if( pStm->GetError() || ( nRSize < 3 ) || ( nRSize==3 && nFunction==0 ) || pStm->IsEof() )
             {
@@ -1352,13 +1352,13 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_SETWINDOWEXT:
                 {
                     sal_Int16 nWidth(0), nHeight(0);
-                    *pStm >> nHeight >> nWidth;
+                    pStm->ReadInt16( nHeight ).ReadInt16( nWidth );
                     rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
                 }
                 break;
 
                 case W_META_SETMAPMODE :
-                    *pStm >> nMapMode;
+                    pStm->ReadInt16( nMapMode );
                 break;
 
                 case W_META_MOVETO:
@@ -1389,7 +1389,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_POLYGON:
                 {
                     sal_uInt16 nPoints;
-                    *pStm >> nPoints;
+                    pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
@@ -1399,11 +1399,11 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 {
                     bool bRecordOk = true;
                     sal_uInt16 nPoly, nPoints = 0;
-                    *pStm >> nPoly;
+                    pStm->ReadUInt16( nPoly );
                     for(sal_uInt16 i = 0; i < nPoly; i++ )
                     {
                         sal_uInt16 nP = 0;
-                        *pStm >> nP;
+                        pStm->ReadUInt16( nP );
                         if (nP > SAL_MAX_UINT16 - nPoints)
                         {
                             bRecordOk = false;
@@ -1440,7 +1440,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_POLYLINE:
                 {
                     sal_uInt16 nPoints;
-                    *pStm >> nPoints;
+                    pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
@@ -1456,7 +1456,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_TEXTOUT:
                 {
                     sal_uInt16 nLength;
-                    *pStm >> nLength;
+                    pStm->ReadUInt16( nLength );
                     // todo: we also have to take care of the text width
                     if ( nLength )
                     {
@@ -1472,7 +1472,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     Point       aPosition;
 
                     aPosition = ReadYX();
-                    *pStm >> nLen >> nOptions;
+                    pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                     // todo: we also have to take care of the text width
                     if( nLen )
                         GetWinExtMax( aPosition, rPlaceableBound, nMapMode );
@@ -1486,24 +1486,24 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 {
                     sal_Int32   nWinROP;
                     sal_uInt16  nSx, nSy, nSxe, nSye, nUsage;
-                    *pStm >> nWinROP;
+                    pStm->ReadInt32( nWinROP );
 
                     if( nFunction == W_META_STRETCHDIB )
-                        *pStm >> nUsage;
+                        pStm->ReadUInt16( nUsage );
 
                     // nSye and nSxe is the number of pixels that has to been used
                     if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
-                        *pStm >> nSye >> nSxe;
+                        pStm->ReadUInt16( nSye ).ReadUInt16( nSxe );
                     else
                         nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
 
                     // nSy and nx is the offset of the first pixel
-                    *pStm >> nSy >> nSx;
+                    pStm->ReadUInt16( nSy ).ReadUInt16( nSx );
 
                     if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
                     {
                         if ( nWinROP == PATCOPY )
-                            *pStm >> nUsage;    // i don't know anything of this parameter, so its called nUsage
+                            pStm->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
                                                 // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
 
                         Size aDestSize( ReadYXExt() );
@@ -1519,7 +1519,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_PATBLT:
                 {
                     sal_uInt32 nROP;
-                    *pStm >> nROP;
+                    pStm->ReadUInt32( nROP );
                     Size aSize = ReadYXExt();
                     GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );
                 }

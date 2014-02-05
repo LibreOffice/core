@@ -95,7 +95,7 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const OUString& rName) :
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, SvStream& rIn) :
     SfxStringItem(_nWhich, rIn)
 {
-    rIn >> nPalIndex;
+    rIn.ReadInt32( nPalIndex );
 }
 
 NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
@@ -683,12 +683,12 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
         sal_uInt32  nLTemp;
         sal_Int32   nITemp;
 
-        rIn >> nITemp; aDash.SetDashStyle((XDashStyle)nITemp);
-        rIn >> nSTemp; aDash.SetDots(nSTemp);
-        rIn >> nLTemp; aDash.SetDotLen(nLTemp);
-        rIn >> nSTemp; aDash.SetDashes(nSTemp);
-        rIn >> nLTemp; aDash.SetDashLen(nLTemp);
-        rIn >> nLTemp; aDash.SetDistance(nLTemp);
+        rIn.ReadInt32( nITemp ); aDash.SetDashStyle((XDashStyle)nITemp);
+        rIn.ReadUInt16( nSTemp ); aDash.SetDots(nSTemp);
+        rIn.ReadUInt32( nLTemp ); aDash.SetDotLen(nLTemp);
+        rIn.ReadUInt16( nSTemp ); aDash.SetDashes(nSTemp);
+        rIn.ReadUInt32( nLTemp ); aDash.SetDashLen(nLTemp);
+        rIn.ReadUInt32( nLTemp ); aDash.SetDistance(nLTemp);
     }
 }
 
@@ -1225,7 +1225,7 @@ namespace
     {
         basegfx::B2DPolyPolygon aRetval;
         sal_uInt32 nPolygonCount;
-        rIn >> nPolygonCount;
+        rIn.ReadUInt32( nPolygonCount );
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
@@ -1233,9 +1233,9 @@ namespace
             sal_uInt8 bClosed;
             sal_uInt8 bControlPoints;
 
-            rIn >> nPointCount;
-            rIn >> bClosed;
-            rIn >> bControlPoints;
+            rIn.ReadUInt32( nPointCount );
+            rIn.ReadUChar( bClosed );
+            rIn.ReadUChar( bControlPoints );
 
             basegfx::B2DPolygon aCandidate;
             aCandidate.setClosed(0 != bClosed);
@@ -1243,23 +1243,23 @@ namespace
             for(sal_uInt32 b(0L); b < nPointCount; b++)
             {
                 double fX, fY;
-                rIn >> fX;
-                rIn >> fY;
+                rIn.ReadDouble( fX );
+                rIn.ReadDouble( fY );
                 aCandidate.append(basegfx::B2DPoint(fX, fY));
 
                 if(0 != bControlPoints)
                 {
                     sal_uInt8 bEdgeIsCurve;
-                    rIn >> bEdgeIsCurve;
+                    rIn.ReadUChar( bEdgeIsCurve );
 
                     if(0 != bEdgeIsCurve)
                     {
-                        rIn >> fX;
-                        rIn >> fY;
+                        rIn.ReadDouble( fX );
+                        rIn.ReadDouble( fY );
                         aCandidate.setPrevControlPoint(b, basegfx::B2DVector(fX, fY));
 
-                        rIn >> fX;
-                        rIn >> fY;
+                        rIn.ReadDouble( fX );
+                        rIn.ReadDouble( fY );
                         aCandidate.setNextControlPoint(b, basegfx::B2DVector(fX, fY));
                     }
                 }
@@ -2570,30 +2570,30 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
         sal_Int16  nITemp;
         sal_Int32  nLTemp;
 
-        rIn >> nITemp; aGradient.SetGradientStyle((XGradientStyle)nITemp);
-        rIn >> nRed;
-        rIn >> nGreen;
-        rIn >> nBlue;
+        rIn.ReadInt16( nITemp ); aGradient.SetGradientStyle((XGradientStyle)nITemp);
+        rIn.ReadUInt16( nRed );
+        rIn.ReadUInt16( nGreen );
+        rIn.ReadUInt16( nBlue );
         Color aCol;
         aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
         aGradient.SetStartColor( aCol );
 
-        rIn >> nRed;
-        rIn >> nGreen;
-        rIn >> nBlue;
+        rIn.ReadUInt16( nRed );
+        rIn.ReadUInt16( nGreen );
+        rIn.ReadUInt16( nBlue );
         aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
         aGradient.SetEndColor(aCol);
-        rIn >> nLTemp; aGradient.SetAngle(nLTemp);
-        rIn >> nUSTemp; aGradient.SetBorder(nUSTemp);
-        rIn >> nUSTemp; aGradient.SetXOffset(nUSTemp);
-        rIn >> nUSTemp; aGradient.SetYOffset(nUSTemp);
-        rIn >> nUSTemp; aGradient.SetStartIntens(nUSTemp);
-        rIn >> nUSTemp; aGradient.SetEndIntens(nUSTemp);
+        rIn.ReadInt32( nLTemp ); aGradient.SetAngle(nLTemp);
+        rIn.ReadUInt16( nUSTemp ); aGradient.SetBorder(nUSTemp);
+        rIn.ReadUInt16( nUSTemp ); aGradient.SetXOffset(nUSTemp);
+        rIn.ReadUInt16( nUSTemp ); aGradient.SetYOffset(nUSTemp);
+        rIn.ReadUInt16( nUSTemp ); aGradient.SetStartIntens(nUSTemp);
+        rIn.ReadUInt16( nUSTemp ); aGradient.SetEndIntens(nUSTemp);
 
         // for newer versions consider the step width as well
         if (nVer >= 1)
         {
-            rIn >> nUSTemp; aGradient.SetSteps(nUSTemp);
+            rIn.ReadUInt16( nUSTemp ); aGradient.SetSteps(nUSTemp);
         }
     }
 }
@@ -3086,16 +3086,16 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
         sal_Int16  nITemp;
         sal_Int32  nLTemp;
 
-        rIn >> nITemp; aHatch.SetHatchStyle((XHatchStyle)nITemp);
-        rIn >> nRed;
-        rIn >> nGreen;
-        rIn >> nBlue;
+        rIn.ReadInt16( nITemp ); aHatch.SetHatchStyle((XHatchStyle)nITemp);
+        rIn.ReadUInt16( nRed );
+        rIn.ReadUInt16( nGreen );
+        rIn.ReadUInt16( nBlue );
 
         Color aCol;
         aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
         aHatch.SetColor(aCol);
-        rIn >> nLTemp; aHatch.SetDistance(nLTemp);
-        rIn >> nLTemp; aHatch.SetAngle(nLTemp);
+        rIn.ReadInt32( nLTemp ); aHatch.SetDistance(nLTemp);
+        rIn.ReadInt32( nLTemp ); aHatch.SetAngle(nLTemp);
     }
 }
 

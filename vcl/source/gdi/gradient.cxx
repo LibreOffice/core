@@ -291,17 +291,11 @@ SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
 
-    rIStm >> nTmp16; rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
 
     ReadColor( rIStm, rImpl_Gradient.maStartColor );
     ReadColor( rIStm, rImpl_Gradient.maEndColor );
-    rIStm >> rImpl_Gradient.mnAngle >>
-             rImpl_Gradient.mnBorder >>
-             rImpl_Gradient.mnOfsX >>
-             rImpl_Gradient.mnOfsY >>
-             rImpl_Gradient.mnIntensityStart >>
-             rImpl_Gradient.mnIntensityEnd >>
-             rImpl_Gradient.mnStepCount;
+    rIStm.ReadUInt16( rImpl_Gradient.mnAngle ).             ReadUInt16( rImpl_Gradient.mnBorder ).             ReadUInt16( rImpl_Gradient.mnOfsX ).             ReadUInt16( rImpl_Gradient.mnOfsY ).             ReadUInt16( rImpl_Gradient.mnIntensityStart ).             ReadUInt16( rImpl_Gradient.mnIntensityEnd ).             ReadUInt16( rImpl_Gradient.mnStepCount );
 
     return rIStm;
 }

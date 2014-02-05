@@ -108,14 +108,14 @@ const transition* transition::find( const OUString& rName )
 
 SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
-    rIn >> rNode.mnU1;
-    rIn >> rNode.mnRestart;
-    rIn >> rNode.mnGroupType;
-    rIn >> rNode.mnFill;
-    rIn >> rNode.mnU3;
-    rIn >> rNode.mnU4;
-    rIn >> rNode.mnDuration;
-    rIn >> rNode.mnNodeType;
+    rIn.ReadInt32( rNode.mnU1 );
+    rIn.ReadInt32( rNode.mnRestart );
+    rIn.ReadInt32( rNode.mnGroupType );
+    rIn.ReadInt32( rNode.mnFill );
+    rIn.ReadInt32( rNode.mnU3 );
+    rIn.ReadInt32( rNode.mnU4 );
+    rIn.ReadInt32( rNode.mnDuration );
+    rIn.ReadInt32( rNode.mnNodeType );
 
     return rIn;
 }
@@ -1444,7 +1444,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                         float fInterval;
                         sal_Int32 nTextUnitEffect, nU1, nU2, nU3;
 
-                        mrStCtrl >> fInterval >> nTextUnitEffect >> nU1 >> nU2 >> nU3;
+                        mrStCtrl.ReadFloat( fInterval ).ReadInt32( nTextUnitEffect ).ReadInt32( nU1 ).ReadInt32( nU2 ).ReadInt32( nU3 );
 
                         Reference< XIterateContainer > xIter( xNode, UNO_QUERY );
                         if( xIter.is() )
@@ -1600,8 +1600,8 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
             case DFF_msofbtAnimateFilterData:
             {
                 sal_uInt32 transition;
-                mrStCtrl >> nBits;
-                mrStCtrl >> transition;
+                mrStCtrl.ReadUInt32( nBits );
+                mrStCtrl.ReadUInt32( transition );
 
                 if( nBits & 1 )
                     xFilter->setMode( transition == 0 );
@@ -1706,7 +1706,7 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
                     sal_uInt32 nAccumulate;
                     sal_uInt32 nTransformType;
 
-                    mrStCtrl >> nBits >> nAdditive >> nAccumulate >> nTransformType;
+                    mrStCtrl.ReadUInt32( nBits ).ReadUInt32( nAdditive ).ReadUInt32( nAccumulate ).ReadUInt32( nTransformType );
 
                     // nBits %0001: additive, %0010: accumulate, %0100: attributeName, %1000: transformtype
                     // nAdditive 0 = base, 1 = sum, 2 = replace, 3 = multiply, 4 = none
@@ -1892,10 +1892,10 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
                 sal_Int32 nByMode, nByA, nByB, nByC;
                 sal_Int32 nFromMode, nFromA, nFromB, nFromC;
                 sal_Int32 nToMode, nToA, nToB, nToC;
-                mrStCtrl >> nBits;
-                mrStCtrl >> nByMode >> nByA >> nByB >> nByC;
-                mrStCtrl >> nFromMode >> nFromA >> nFromB >> nFromC;
-                mrStCtrl >> nToMode >> nToA >> nToB >> nToC;
+                mrStCtrl.ReadUInt32( nBits );
+                mrStCtrl.ReadInt32( nByMode ).ReadInt32( nByA ).ReadInt32( nByB ).ReadInt32( nByC );
+                mrStCtrl.ReadInt32( nFromMode ).ReadInt32( nFromA ).ReadInt32( nFromB ).ReadInt32( nFromC );
+                mrStCtrl.ReadInt32( nToMode ).ReadInt32( nToA ).ReadInt32( nToB ).ReadInt32( nToC );
 
                 if( nBits & 1 )
                 {
@@ -1961,7 +1961,7 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
             case DFF_msofbtAnimateSetData:
             {
                 sal_Int32 nU1, nU2;
-                mrStCtrl >> nU1 >> nU2;
+                mrStCtrl.ReadInt32( nU1 ).ReadInt32( nU2 );
 
                 dump( " set_1=\"%ld\"", nU1 ),
                 dump( " set_2=\"%ld\"", nU2 );
@@ -2020,7 +2020,7 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
             case DFF_msofbtAnimateData:
             {
                 sal_uInt32 nCalcmode, nBits, nValueType;
-                mrStCtrl >> nCalcmode >> nBits >> nValueType;
+                mrStCtrl.ReadUInt32( nCalcmode ).ReadUInt32( nBits ).ReadUInt32( nValueType );
 
                 if( nBits & 0x08 )
                 {
@@ -2101,7 +2101,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                 sal_uInt32 nBits, nOrigin;
                 float fByX, fByY, fFromX, fFromY, fToX, fToY;
 
-                mrStCtrl >> nBits >> fByX >> fByY >> fFromX >> fFromY >> fToX >> fToY >> nOrigin;
+                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nOrigin );
 
 #ifdef DBG_ANIM_LOG
                 if( nBits & 1 )
@@ -2185,8 +2185,8 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 sal_Int32 nCommandType;
                 // looks like U1 is a bitset, bit 1 enables the type and bit 2 enables
                 // a propertyvalue that follows
-                mrStCtrl >> nBits;
-                mrStCtrl >> nCommandType;
+                mrStCtrl.ReadInt32( nBits );
+                mrStCtrl.ReadInt32( nCommandType );
 
                 if( nBits & 1 )
                 {
@@ -2398,7 +2398,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                 float fByX, fByY, fFromX, fFromY, fToX, fToY;
 
                 // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
-                mrStCtrl >> nBits >> fByX >> fByY >> fFromX >> fFromY >> fToX >> fToY >> nZoomContents;
+                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nZoomContents );
 
                 ValuePair aPair;
                 // 'from' value
@@ -2499,7 +2499,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 float fBy, fFrom, fTo;
 
                 // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
-                mrStCtrl >> nBits >> fBy >> fFrom >> fTo >> nU1;
+                mrStCtrl.ReadUInt32( nBits ).ReadFloat( fBy ).ReadFloat( fFrom ).ReadFloat( fTo ).ReadUInt32( nU1 );
 
                 if( nBits & 1 )
                     xTransform->setBy( makeAny( (double) fBy ) );
@@ -2590,13 +2590,13 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
         while( pValueAtom && pValueAtom->seekToContent() )
         {
             sal_uInt32 nType;
-            mrStCtrl >> nType;
+            mrStCtrl.ReadUInt32( nType );
             switch( nType )
             {
             case 0:
             {
                 float fRepeat;
-                mrStCtrl >> fRepeat;
+                mrStCtrl.ReadFloat( fRepeat );
                 xNode->setRepeatCount( (fRepeat < ((float)3.40282346638528860e+38)) ? makeAny( (double)fRepeat ) : makeAny( Timing_INDEFINITE ) );
 
 #ifdef DBG_ANIM_LOG
@@ -2615,7 +2615,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
             case 3:
             {
                 float faccelerate;
-                mrStCtrl >> faccelerate;
+                mrStCtrl.ReadFloat( faccelerate );
                 xNode->setAcceleration( faccelerate );
                 dump( " accelerate=\"%g\"", (double)faccelerate );
             }
@@ -2624,7 +2624,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
             case 4:
             {
                 float fdecelerate;
-                mrStCtrl >> fdecelerate;
+                mrStCtrl.ReadFloat( fdecelerate );
                 xNode->setDecelerate( fdecelerate );
                 dump( " decelerate=\"%g\"", (double)fdecelerate );
             }
@@ -2633,7 +2633,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
             case 5:
             {
                 sal_Int32 nAutoreverse;
-                mrStCtrl >> nAutoreverse;
+                mrStCtrl.ReadInt32( nAutoreverse );
                 xNode->setAutoReverse( nAutoreverse != 0 );
                 dump( " autoreverse=\"%#lx\"", nAutoreverse );
             }
@@ -2642,7 +2642,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
             default:
             {
                 sal_uInt32 nUnknown;
-                mrStCtrl >> nUnknown;
+                mrStCtrl.ReadUInt32( nUnknown );
 #ifdef DBG_ANIM_LOG
                 fprintf(mpFile, " attribute_%d=\"%#lx\"", nType, nUnknown );
 #endif
@@ -2683,7 +2683,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         {
             if( pIter->seekToContent() )
             {
-                mrStCtrl >> nTemp;
+                mrStCtrl.ReadInt32( nTemp );
                 double fTemp = (double)nTemp / 1000.0;
                 aKeyTimes[nKeyTime] = fTemp;
 
@@ -2803,7 +2803,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
         if ( nRecLen >= 1 )
         {
             sal_Int8 nType;
-            mrStCtrl >> nType;
+            mrStCtrl.ReadSChar( nType );
             switch( nType )
             {
                 case DFF_ANIM_PROP_TYPE_BYTE :
@@ -2811,7 +2811,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                     if ( nRecLen == 2 )
                     {
                         sal_uInt8 nByte;
-                        mrStCtrl >> nByte;
+                        mrStCtrl.ReadUChar( nByte );
                         rAny <<= nByte;
 
                         bOk = true;
@@ -2824,7 +2824,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                     if ( nRecLen == 5 )
                     {
                         sal_uInt32 nInt32;
-                        mrStCtrl >> nInt32;
+                        mrStCtrl.ReadUInt32( nInt32 );
                         rAny <<= nInt32;
 
                         bOk = true;
@@ -2837,7 +2837,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                     if( nRecLen == 5 )
                     {
                         float fFloat;
-                        mrStCtrl >> fFloat;
+                        mrStCtrl.ReadFloat( fFloat );
                         rAny <<= (double)fFloat;
 
                         bOk = true;
@@ -2900,10 +2900,10 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                 case DFF_msofbtAnimTrigger:
                 {
                     sal_Int32 nU1, nTrigger, nU3, nBegin;
-                    mrStCtrl >> nU1;
-                    mrStCtrl >> nTrigger;
-                    mrStCtrl >> nU3;
-                    mrStCtrl >> nBegin;
+                    mrStCtrl.ReadInt32( nU1 );
+                    mrStCtrl.ReadInt32( nTrigger );
+                    mrStCtrl.ReadInt32( nU3 );
+                    mrStCtrl.ReadInt32( nBegin );
 
                     switch( nTrigger )
                     {
@@ -2995,11 +2995,11 @@ void AnimationImporter::importAnimationActions( const Atom* pAtom, const Referen
         if( pActionAtom && pActionAtom->seekToContent() )
         {
             sal_Int32 nConcurrent, nNextAction, nEndSync, nU4, nU5;
-            mrStCtrl >> nConcurrent;
-            mrStCtrl >> nNextAction;
-            mrStCtrl >> nEndSync;
-            mrStCtrl >> nU4;
-            mrStCtrl >> nU5;
+            mrStCtrl.ReadInt32( nConcurrent );
+            mrStCtrl.ReadInt32( nNextAction );
+            mrStCtrl.ReadInt32( nEndSync );
+            mrStCtrl.ReadInt32( nU4 );
+            mrStCtrl.ReadInt32( nU5 );
 
             if( nEndSync == 1 )
                 xNode->setEndSync( makeAny( AnimationEndSync::ALL ) );
@@ -3040,11 +3040,11 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
             {
                 sal_Int32 nRefType,nRefId;
                 sal_Int32 begin,end;
-                mrStCtrl >> nRefMode;
-                mrStCtrl >> nRefType;
-                mrStCtrl >> nRefId;
-                mrStCtrl >> begin;
-                mrStCtrl >> end;
+                mrStCtrl.ReadInt32( nRefMode );
+                mrStCtrl.ReadInt32( nRefType );
+                mrStCtrl.ReadInt32( nRefId );
+                mrStCtrl.ReadInt32( begin );
+                mrStCtrl.ReadInt32( end );
 
                 switch( nRefType )
                 {
@@ -3128,7 +3128,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
             case 0x2b01:
             {
                 sal_Int32 nU1;
-                mrStCtrl >> nU1;
+                mrStCtrl.ReadInt32( nU1 );
             }
             break;
             default:

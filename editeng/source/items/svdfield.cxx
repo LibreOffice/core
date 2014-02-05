@@ -39,7 +39,7 @@ bool SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 void SdrMeasureField::Load(SvPersistStream& rIn)
 {
     sal_uInt16 nFieldKind;
-    rIn>>nFieldKind;
+    rIn.ReadUInt16( nFieldKind );
     eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
 }
 

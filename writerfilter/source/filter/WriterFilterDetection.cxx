@@ -91,7 +91,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                 {
                     xRef->Seek(2);
                     sal_Int16 nWord;
-                    *xRef >> nWord;
+                    xRef->ReadInt16( nWord );
                     //version detection
                     bWord = nWord >= 0x6a && nWord <= 0xc1;
                 }

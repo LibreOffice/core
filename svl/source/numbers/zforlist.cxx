@@ -689,11 +689,11 @@ bool SvNumberFormatter::Load( SvStream& rStream )
 
     ImpSvNumMultipleReadHeader aHdr( rStream );
     sal_uInt16 nVersion;
-    rStream >> nVersion;
+    rStream.ReadUInt16( nVersion );
     SvNumberformat* pEntry;
     sal_uInt32 nPos;
     sal_uInt16 nSysOnStore, eLge, eDummy;       // Dummy for compatible format
-    rStream >> nSysOnStore >> eLge;             // system language from document
+    rStream.ReadUInt16( nSysOnStore ).ReadUInt16( eLge );             // system language from document
 
     SAL_WARN_IF( nVersion < SV_NUMBERFORMATTER_VERSION_CALENDAR, "svl.numbers", "SvNumberFormatter::Load: where does this unsupported old data come from?!?");
 
@@ -701,10 +701,10 @@ bool SvNumberFormatter::Load( SvStream& rStream )
     LanguageType eLnge = (LanguageType) eLge;
     ImpChangeSysCL( eLnge, true );
 
-    rStream >> nPos;
+    rStream.ReadUInt32( nPos );
     while (nPos != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        rStream >> eDummy >> eLge;
+        rStream.ReadUInt16( eDummy ).ReadUInt16( eLge );
         eLnge = (LanguageType) eLge;
         ImpGenerateCL( eLnge, true );           // create new standard formats if necessary
 
@@ -743,7 +743,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
             SAL_WARN( "svl.numbers", "SvNumberFormatter::Load: dup position");
             delete pEntry;
         }
-        rStream >> nPos;
+        rStream.ReadUInt32( nPos );
     }
 
     // as of SV_NUMBERFORMATTER_VERSION_YEAR2000
@@ -753,7 +753,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
         if ( aHdr.BytesLeft() >= sizeof(sal_uInt16) )
         {
             sal_uInt16 nY2k;
-            rStream >> nY2k;
+            rStream.ReadUInt16( nY2k );
             if ( nVersion < SV_NUMBERFORMATTER_VERSION_TWODIGITYEAR && nY2k < 100 )
             {
                 nY2k += 1901;       // was before src513e: 29, now: 1930

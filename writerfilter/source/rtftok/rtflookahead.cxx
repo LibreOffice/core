@@ -65,7 +65,7 @@ int RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
 int RTFLookahead::resolveChars(char ch)
 {
     while(!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
-        m_rStream >> ch;
+        m_rStream.ReadChar( ch );
     if (!m_rStream.IsEof())
         m_rStream.SeekRel(-1);
     return 0;

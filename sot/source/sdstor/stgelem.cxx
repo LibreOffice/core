@@ -37,17 +37,17 @@ static const sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A
 
 SvStream& ReadClsId( SvStream& r, ClsId& rId )
 {
-    r >> rId.n1
-      >> rId.n2
-      >> rId.n3
-      >> rId.n4
-      >> rId.n5
-      >> rId.n6
-      >> rId.n7
-      >> rId.n8
-      >> rId.n9
-      >> rId.n10
-      >> rId.n11;
+    r.ReadInt32( rId.n1 )
+     .ReadInt16( rId.n2 )
+     .ReadInt16( rId.n3 )
+     .ReadUChar( rId.n4 )
+     .ReadUChar( rId.n5 )
+     .ReadUChar( rId.n6 )
+     .ReadUChar( rId.n7 )
+     .ReadUChar( rId.n8 )
+     .ReadUChar( rId.n9 )
+     .ReadUChar( rId.n10 )
+     .ReadUChar( rId.n11 );
     return r;
 }
 
@@ -132,21 +132,21 @@ bool StgHeader::Load( SvStream& r )
     r.Seek( 0L );
     r.Read( cSignature, 8 );
     ReadClsId( r, aClsId );         // 08 Class ID
-    r >> nVersion                   // 1A version number
-      >> nByteOrder                 // 1C Unicode byte order indicator
-      >> nPageSize                  // 1E 1 << nPageSize = block size
-      >> nDataPageSize;             // 20 1 << this size == data block size
+    r.ReadInt32( nVersion )                   // 1A version number
+     .ReadUInt16( nByteOrder )                 // 1C Unicode byte order indicator
+     .ReadInt16( nPageSize )                  // 1E 1 << nPageSize = block size
+     .ReadInt16( nDataPageSize );             // 20 1 << this size == data block size
     r.SeekRel( 10 );
-    r >> nFATSize                   // 2C total number of FAT pages
-      >> nTOCstrm                   // 30 starting page for the TOC stream
-      >> nReserved                  // 34
-      >> nThreshold                 // 38 minimum file size for big data
-      >> nDataFAT                   // 3C page # of 1st data FAT block
-      >> nDataFATSize               // 40 # of data FATpages
-      >> nMasterChain               // 44 chain to the next master block
-      >> nMaster;                   // 48 # of additional master blocks
+    r.ReadInt32( nFATSize )                   // 2C total number of FAT pages
+     .ReadInt32( nTOCstrm )                   // 30 starting page for the TOC stream
+     .ReadInt32( nReserved )                  // 34
+     .ReadInt32( nThreshold )                 // 38 minimum file size for big data
+     .ReadInt32( nDataFAT )                   // 3C page # of 1st data FAT block
+     .ReadInt32( nDataFATSize )               // 40 # of data FATpages
+     .ReadInt32( nMasterChain )               // 44 chain to the next master block
+     .ReadInt32( nMaster );                   // 48 # of additional master blocks
     for( short i = 0; i < cFATPagesInHeader; i++ )
-        r >> nMasterFAT[ i ];
+        r.ReadInt32( nMasterFAT[ i ] );
 
     return (r.GetErrorCode() == ERRCODE_NONE) && Check();
 }
@@ -369,22 +369,22 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 
     SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
     for( short i = 0; i < 32; i++ )
-        r >> nName[ i ];            // 00 name as WCHAR
-    r >> nNameLen                   // 40 size of name in bytes including 00H
-      >> cType                      // 42 entry type
-      >> cFlags                     // 43 0 or 1 (tree balance?)
-      >> nLeft                      // 44 left node entry
-      >> nRight                     // 48 right node entry
-      >> nChild;                    // 4C 1st child entry if storage
+        r.ReadUInt16( nName[ i ] );            // 00 name as WCHAR
+    r.ReadUInt16( nNameLen )                   // 40 size of name in bytes including 00H
+     .ReadUChar( cType )                      // 42 entry type
+     .ReadUChar( cFlags )                     // 43 0 or 1 (tree balance?)
+     .ReadInt32( nLeft )                      // 44 left node entry
+     .ReadInt32( nRight )                     // 48 right node entry
+     .ReadInt32( nChild );                    // 4C 1st child entry if storage
     ReadClsId( r, aClsId );         // 50 class ID (optional)
-    r >> nFlags                     // 60 state flags(?)
-      >> nMtime[ 0 ]                // 64 modification time
-      >> nMtime[ 1 ]                // 64 modification time
-      >> nAtime[ 0 ]                // 6C creation and access time
-      >> nAtime[ 1 ]                // 6C creation and access time
-      >> nPage1                     // 74 starting block (either direct or translated)
-      >> nSize                      // 78 file size
-      >> nUnknown;                  // 7C unknown
+    r.ReadInt32( nFlags )                     // 60 state flags(?)
+     .ReadInt32( nMtime[ 0 ] )                // 64 modification time
+     .ReadInt32( nMtime[ 1 ] )                // 64 modification time
+     .ReadInt32( nAtime[ 0 ] )                // 6C creation and access time
+     .ReadInt32( nAtime[ 1 ] )                // 6C creation and access time
+     .ReadInt32( nPage1 )                     // 74 starting block (either direct or translated)
+     .ReadInt32( nSize )                      // 78 file size
+     .ReadInt32( nUnknown );                  // 7C unknown
 
     sal_uInt16 n = nNameLen;
     if( n )

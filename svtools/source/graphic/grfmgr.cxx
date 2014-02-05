@@ -1153,7 +1153,7 @@ SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     ReadGraphic( rIStm, aGraphic );
     ReadGraphicAttr( rIStm, aAttr );
-    rIStm >> bLink;
+    rIStm.ReadUChar( bLink );
 
     rGraphicObj.SetGraphic( aGraphic );
     rGraphicObj.SetAttr( aAttr );

@@ -281,7 +281,7 @@ SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
 {
     double _fVal;
-    rIn >> _fVal;
+    rIn.ReadDouble( _fVal );
     return new SvxDoubleItem(_fVal, Which());
 }
 

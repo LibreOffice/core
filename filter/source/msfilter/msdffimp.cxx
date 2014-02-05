@@ -369,12 +369,12 @@ DffPropertyReader::~DffPropertyReader()
 
 SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
-    rIn >> rRule.nRuleId
-        >> rRule.nShapeA
-        >> rRule.nShapeB
-        >> rRule.nShapeC
-        >> rRule.ncptiA
-        >> rRule.ncptiB;
+    rIn.ReadUInt32( rRule.nRuleId )
+       .ReadUInt32( rRule.nShapeA )
+       .ReadUInt32( rRule.nShapeB )
+       .ReadUInt32( rRule.nShapeC )
+       .ReadUInt32( rRule.ncptiA )
+       .ReadUInt32( rRule.ncptiB );
 
     return rIn;
 }
@@ -1064,13 +1064,13 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
         if ( rProperties.SeekToContent( DFF_Prop_fillShadeColors, rIn ) )
         {
             sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
-            rIn >> nNumElem >> nNumElemReserved >> nSize;
+            rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemReserved ).ReadUInt16( nSize );
             for ( ; i < nNumElem; i++ )
             {
                 sal_Int32   nColor;
                 sal_Int32   nDist;
 
-                rIn >> nColor >> nDist;
+                rIn.ReadInt32( nColor ).ReadInt32( nDist );
                 rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( nColor, DFF_Prop_fillColor ), 1.0 - ( nDist / 65536.0 ) ) );
             }
         }
@@ -1870,7 +1870,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             sal_uInt16 nNumElemMem = 0;
             sal_uInt16 nElemSize = 8;
-            rIn >> nNumElem >> nNumElemMem >> nElemSize;
+            rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
         }
         sal_Int16 nP1, nP2, nP3;
         sal_uInt16 nFlags;
@@ -1878,7 +1878,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         uno::Sequence< OUString > aEquations( nNumElem );
         for ( sal_uInt16 i = 0; i < nNumElem; i++ )
         {
-            rIn >> nFlags >> nP1 >> nP2 >> nP3;
+            rIn.ReadUInt16( nFlags ).ReadInt16( nP1 ).ReadInt16( nP2 ).ReadInt16( nP3 );
             aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
         }
         // pushing the whole Equations element
@@ -1899,7 +1899,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( SeekToContent( DFF_Prop_Handles, rIn ) )
         {
             sal_uInt16 nNumElemMem = 0;
-            rIn >> nNumElem >> nNumElemMem >> nElemSize;
+            rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
         }
         if ( nElemSize == 36 )
         {
@@ -1909,15 +1909,15 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 PropVec aHandlePropVec;
                 sal_uInt32  nFlags;
                 sal_Int32   nPositionX, nPositionY, nCenterX, nCenterY, nRangeXMin, nRangeXMax, nRangeYMin, nRangeYMax;
-                rIn >> nFlags
-                    >> nPositionX
-                    >> nPositionY
-                    >> nCenterX
-                    >> nCenterY
-                    >> nRangeXMin
-                    >> nRangeXMax
-                    >> nRangeYMin
-                    >> nRangeYMax;
+                rIn.ReadUInt32( nFlags )
+                   .ReadInt32( nPositionX )
+                   .ReadInt32( nPositionY )
+                   .ReadInt32( nCenterX )
+                   .ReadInt32( nCenterY )
+                   .ReadInt32( nRangeXMin )
+                   .ReadInt32( nRangeXMax )
+                   .ReadInt32( nRangeYMin )
+                   .ReadInt32( nRangeYMax );
 
                 if ( nPositionX == 2 )  // replacing center position with absolute value
                     nPositionX = nCoordWidth / 2;
@@ -2141,7 +2141,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( SeekToContent( DFF_Prop_pVertices, rIn ) )
             {
                 sal_uInt16 nNumElemMemVert = 0;
-                rIn >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+                rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             }
             if ( nNumElemVert )
             {
@@ -2152,13 +2152,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 {
                     if ( nElemSizeVert == 8 )
                     {
-                        rIn >> nX
-                            >> nY;
+                        rIn.ReadInt32( nX )
+                           .ReadInt32( nY );
                     }
                     else
                     {
-                        rIn >> nTmpA
-                            >> nTmpB;
+                        rIn.ReadInt16( nTmpA )
+                           .ReadInt16( nTmpB );
 
                         nX = nTmpA;
                         nY = nTmpB;
@@ -2184,7 +2184,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             {
                 sal_uInt16 nNumElemMemSeg = 0;
                 sal_uInt16 nElemSizeSeg = 2;
-                rIn >> nNumElemSeg >> nNumElemMemSeg >> nElemSizeSeg;
+                rIn.ReadUInt16( nNumElemSeg ).ReadUInt16( nNumElemMemSeg ).ReadUInt16( nElemSizeSeg );
             }
             if ( nNumElemSeg )
             {
@@ -2193,7 +2193,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 aSegments.realloc( nNumElemSeg );
                 for ( i = 0; i < nNumElemSeg; i++ )
                 {
-                    rIn >> nTmp;
+                    rIn.ReadUInt16( nTmp );
                     nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
                     nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
                     switch( nTmp >> 13 )//First 3 bits for command type
@@ -2311,7 +2311,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( SeekToContent( DFF_Prop_textRectangles, rIn ) )
             {
                 sal_uInt16 nNumElemMem = 0;
-                rIn >> nNumElem >> nNumElemMem >> nElemSize;
+                rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
             }
             if ( nElemSize == 16 )
             {
@@ -2319,10 +2319,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
                 for ( sal_uInt16 i = 0; i < nNumElem; i++ )
                 {
-                    rIn >> nLeft
-                        >> nTop
-                        >> nRight
-                        >> nBottom;
+                    rIn.ReadInt32( nLeft )
+                       .ReadInt32( nTop )
+                       .ReadInt32( nRight )
+                       .ReadInt32( nBottom );
 
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.First,  nLeft );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.Second, nTop  );
@@ -2344,7 +2344,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             sal_uInt16 nElemSizeVert = 8;
 
             if ( SeekToContent( DFF_Prop_connectorPoints, rIn ) )
-                rIn >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+                rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
 
             sal_Int32 nX, nY;
             sal_Int16 nTmpA, nTmpB;
@@ -2353,13 +2353,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             {
                 if ( nElemSizeVert == 8 )
                 {
-                    rIn >> nX
-                        >> nY;
+                    rIn.ReadInt32( nX )
+                       .ReadInt32( nY );
                 }
                 else
                 {
-                    rIn >> nTmpA
-                        >> nTmpB;
+                    rIn.ReadInt16( nTmpA )
+                       .ReadInt16( nTmpB );
 
                     nX = nTmpA;
                     nY = nTmpB;
@@ -3162,7 +3162,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
                         DffRecordHeader aShapeHd;
                         if ( SeekToRec( rSt, DFF_msofbtSp, aEscherObjListHd.GetRecEndFilePos(), &aShapeHd ) )
                         {
-                            rSt >> nShapeId;
+                            rSt.ReadUInt32( nShapeId );
                             if ( nId == nShapeId )
                             {
                                 aEscherObjListHd.SeekToBegOfRecord( rSt );
@@ -4087,10 +4087,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         sal_uInt16  nPID;
         while( 5 < nBytesLeft )
         {
-            rSt >> nPID;
+            rSt.ReadUInt16( nPID );
             if ( rSt.GetError() != 0 )
                 break;
-            rSt >> nUDData;
+            rSt.ReadUInt32( nUDData );
             if ( rSt.GetError() != 0 )
                 break;
             if ( nPID == 447 ) //
@@ -4104,8 +4104,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
     if ( aObjData.bShapeType )
     {
-        rSt >> aObjData.nShapeId
-            >> aObjData.nSpFlags;
+        rSt.ReadUInt32( aObjData.nShapeId )
+           .ReadUInt32( aObjData.nSpFlags );
         aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
     }
     else
@@ -4148,7 +4148,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if ( aObjData.bChildAnchor )
     {
         sal_Int32 l, o, r, u;
-        rSt >> l >> o >> r >> u;
+        rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
         Scale( l );
         Scale( o );
         Scale( r );
@@ -4744,12 +4744,12 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                         sal_Int32 l, t, r, b;
                         if ( aShapeAtom.nRecLen == 16 )
                         {
-                            rSt >> l >> t >> r >> b;
+                            rSt.ReadInt32( l ).ReadInt32( t ).ReadInt32( r ).ReadInt32( b );
                         }
                         else
                         {
                             sal_Int16 ls, ts, rs, bs;
-                            rSt >> ts >> ls >> rs >> bs; // the order of coordinates is a bit strange...
+                            rSt.ReadInt16( ts ).ReadInt16( ls ).ReadInt16( rs ).ReadInt16( bs ); // the order of coordinates is a bit strange...
                             l = ls, t = ts, r = rs, b = bs;
                         }
                         Scale( l );
@@ -4772,7 +4772,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                 else if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
                 {
                     sal_Int32 l, o, r, u;
-                    rSt >> l >> o >> r >> u;
+                    rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
                     Scale( l );
                     Scale( o );
                     Scale( r );
@@ -4816,7 +4816,7 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                 if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
                 {
                     sal_Int32 l, o, r, u;
-                    rSt >> l >> o >> r >> u;
+                    rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
                     Scale( l );
                     Scale( o );
                     Scale( r );
@@ -4902,10 +4902,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             sal_uInt16  nPID;
             while( 5 < nBytesLeft )
             {
-                rSt >> nPID;
+                rSt.ReadUInt16( nPID );
                 if ( rSt.GetError() != 0 )
                     break;
-                rSt >> nUDData;
+                rSt.ReadUInt32( nUDData );
                 switch( nPID )
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
@@ -5289,7 +5289,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             delete pTextImpRec->pWrapPolygon;
             pTextImpRec->pWrapPolygon = NULL;
             sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
-            rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
             {
                 pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
@@ -5297,11 +5297,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     sal_Int32 nX, nY;
                     if (nElemSizeVert == 8)
-                        rSt >> nX >> nY;
+                        rSt.ReadInt32( nX ).ReadInt32( nY );
                     else
                     {
                         sal_Int16 nSmallX, nSmallY;
-                        rSt >> nSmallX >> nSmallY;
+                        rSt.ReadInt16( nSmallX ).ReadInt16( nSmallY );
                         nX = nSmallX;
                         nY = nSmallY;
                     }
@@ -5581,10 +5581,10 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
         if ( SeekToRec( rStCtrl, DFF_msofbtDgg, aRecHd.GetRecEndFilePos(), &aDggAtomHd ) )
         {
             aDggAtomHd.SeekToContent( rStCtrl );
-            rStCtrl >> mnCurMaxShapeId
-                    >> mnIdClusters
-                    >> nDummy
-                    >> mnDrawingsSaved;
+            rStCtrl.ReadUInt32( mnCurMaxShapeId )
+                   .ReadUInt32( mnIdClusters )
+                   .ReadUInt32( nDummy )
+                   .ReadUInt32( mnDrawingsSaved );
 
             if ( mnIdClusters-- > 2 )
             {
@@ -5599,8 +5599,8 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                     maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
                     {
-                        rStCtrl >> maFidcls[ i ].dgid
-                                >> maFidcls[ i ].cspidCur;
+                        rStCtrl.ReadUInt32( maFidcls[ i ].dgid )
+                               .ReadUInt32( maFidcls[ i ].cspidCur );
                     }
                 }
             }
@@ -5788,9 +5788,9 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
             if( bOk )
             {
                 rSt.SeekRel( nSkipBLIPLen );
-                rSt >> nBLIPLen;
+                rSt.ReadUInt32( nBLIPLen );
                 rSt.SeekRel( nSkipBLIPPos );
-                rSt >> nBLIPPos;
+                rSt.ReadUInt32( nBLIPPos );
                 bOk = rSt.GetError() == 0;
 
                 nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
@@ -5933,7 +5933,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             // we've found the FSP gefunden: note Shape Type and Id!
             eShapeType = (MSO_SPT)nInst;
-            rSt >> aInfo.nShapeId;
+            rSt.ReadUInt32( aInfo.nShapeId );
             rSt.SeekRel( nLength - 4 );
             nReadSpCont += nLength;
         }
@@ -5948,8 +5948,8 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             long nStartShapePropTbl = rSt.Tell();
             do
             {
-                rSt >> nPropId
-                    >> nPropVal;
+                rSt.ReadUInt16( nPropId )
+                   .ReadUInt32( nPropVal );
                 nPropRead += 6;
 
                 switch( nPropId )
@@ -6031,7 +6031,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         }
         else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Entry found
         {
-            rSt >> aInfo.nTxBxComp;
+            rSt.ReadUInt32( aInfo.nTxBxComp );
             // Add internal drawing container id to text id.
             // Note: The text id uses the first two bytes, while the internal
             // drawing container id used the second two bytes.
@@ -6234,7 +6234,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
 
                 // read in size of metafile in EMUS
                 sal_Int32 width, height;
-                rBLIPStream >> width >> height;
+                rBLIPStream.ReadInt32( width ).ReadInt32( height );
                 aMtfSize100.Width() = width;
                 aMtfSize100.Height() = height;
 
@@ -6385,7 +6385,7 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     sal_uInt8& rVer, sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)
 {
     sal_uInt16 nTmp(0);
-    rSt >> nTmp >> rFbt >> rLength;
+    rSt.ReadUInt16( nTmp ).ReadUInt16( rFbt ).ReadUInt32( rLength );
     rVer = sal::static_int_cast< sal_uInt8 >(nTmp & 15);
     rInst = nTmp >> 4;
     if (!rSt.good())
@@ -6619,9 +6619,9 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
     sal_uInt32 nBytesRead = 0;
     do
     {
-        rStm >> nType;
-        rStm >> nRecType;
-        rStm >> nStrLen;
+        rStm.ReadUInt32( nType );
+        rStm.ReadUInt32( nRecType );
+        rStm.ReadUInt32( nStrLen );
         if( nStrLen )
         {
             if( 0x10000L > nStrLen )
@@ -6634,9 +6634,9 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             else
                 break;
         }
-        rStm >> nDummy0;
-        rStm >> nDummy1;
-        rStm >> nDataLen;
+        rStm.ReadUInt32( nDummy0 );
+        rStm.ReadUInt32( nDummy1 );
+        rStm.ReadUInt32( nDataLen );
 
         nBytesRead += 6 * sizeof( sal_uInt32 ) + nStrLen + nDataLen;
 
@@ -6849,7 +6849,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
             SotStorageStreamRef xStr = rSrcStg.OpenSotStream( OUString( "package_stream" ), STREAM_STD_READ );
-            *xStr >> *xMemStream;
+            xStr->ReadStream( *xMemStream );
         }
         else
         {
@@ -7019,7 +7019,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
-                            *xObjInfoSrc >> nByte;
+                            xObjInfoSrc->ReadUChar( nByte );
                             if ( ( nByte >> 4 ) & embed::Aspects::MSOLE_ICON )
                                 nAspect = embed::Aspects::MSOLE_ICON;
                         }
@@ -7068,7 +7068,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         else if( pDataStrm )
         {
             sal_uInt32 nLen, nDummy;
-            *pDataStrm >> nLen >> nDummy;
+            pDataStrm->ReadUInt32( nLen ).ReadUInt32( nDummy );
             if( SVSTREAM_OK != pDataStrm->GetError() ||
                 // Id in BugDoc - exist there other Ids?
                 // The ConvertToOle2 - does not check for consistent

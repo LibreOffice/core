@@ -116,11 +116,11 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 
     // read on type and version
     rIStm.SeekRel( 2 );
-    rIStm >> nReadVersion;
-    rIStm >> nTextEncoding;
+    rIStm.ReadUInt16( nReadVersion );
+    rIStm.ReadUInt16( nTextEncoding );
     aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
     aAltText = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
-    rIStm >> bActive;
+    rIStm.ReadUChar( bActive );
     aTarget = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
 
     // make URL absolute
@@ -308,7 +308,7 @@ void IMapCircleObject::ReadIMapObject( SvStream& rIStm )
     sal_uInt32 nTmp;
 
     ReadPair( rIStm, aCenter );
-    rIStm >> nTmp;
+    rIStm.ReadUInt32( nTmp );
 
     nRadius = nTmp;
 }
@@ -450,7 +450,7 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
     // Version >= 2 has additional ellipses information
     if ( nReadVersion >= 2 )
     {
-        rIStm >> bEllipse;
+        rIStm.ReadUChar( bEllipse );
         ReadRectangle( rIStm, aEllipse );
     }
 }
@@ -894,7 +894,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
     {
         sal_uInt16 nType;
 
-        rIStm >> nType;
+        rIStm.ReadUInt16( nType );
         rIStm.SeekRel( -2 );
 
         switch( nType )
@@ -993,7 +993,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
 
         aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, osl_getThreadTextEncoding());
         read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
-        rIStm >> nCount;
+        rIStm.ReadUInt16( nCount );
         read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
 
         pCompat = new IMapCompat( rIStm, STREAM_READ );
