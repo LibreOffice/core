@@ -1580,27 +1580,29 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
 
-    if (bRecord && !pDoc->IsUndoEnabled())
+    if (!pDoc->IsUndoEnabled())
         bRecord = false;
-    SCCOLROW* pRanges = new SCCOLROW[MAXCOLROWCOUNT];
-    SCCOLROW nRangeCnt = bRows ? aFuncMark.GetMarkRowRanges( pRanges ) :
-                                aFuncMark.GetMarkColumnRanges( pRanges );
-    if (nRangeCnt == 0)
+
+    std::vector<sc::ColRowSpan> aSpans;
+    if (bRows)
+        aSpans = aFuncMark.GetMarkedRowSpans();
+    else
+        aSpans = aFuncMark.GetMarkedColSpans();
+
+    if (aSpans.empty())
     {
-        pRanges[0] = pRanges[1] = bRows ? static_cast<SCCOLROW>(GetViewData()->GetCurY()) : static_cast<SCCOLROW>(GetViewData()->GetCurX());
-        nRangeCnt = 1;
+        SCCOLROW nCurPos = bRows ? GetViewData()->GetCurY() : GetViewData()->GetCurX();
+        aSpans.push_back(sc::ColRowSpan(nCurPos, nCurPos));
     }
 
     //  test if allowed
 
-    SCCOLROW* pOneRange = pRanges;
     sal_uInt16 nErrorId = 0;
     bool bNeedRefresh = false;
-    SCCOLROW nRangeNo;
-    for (nRangeNo=0; nRangeNo<nRangeCnt && !nErrorId; nRangeNo++)
+    for (size_t i = 0, n = aSpans.size(); i < n && !nErrorId; ++i)
     {
-        SCCOLROW nStart = *(pOneRange++);
-        SCCOLROW nEnd = *(pOneRange++);
+        SCCOLROW nStart = aSpans[i].mnStart;
+        SCCOLROW nEnd = aSpans[i].mnEnd;
 
         SCCOL nStartCol, nEndCol;
         SCROW nStartRow, nEndRow;
@@ -1620,7 +1622,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         }
 
         // cell protection (only needed for first range, as all following cells are moved)
-        if ( nRangeNo == 0 )
+        if (i == 0)
         {
             // test to the end of the sheet
             ScEditableTester aTester( pDoc, nTab, nStartCol, nStartRow, MAXCOL, MAXROW );
@@ -1654,7 +1656,6 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     if ( nErrorId )
     {
         ErrorMessage( nErrorId );
-        delete[] pRanges;
         return;
     }
 
@@ -1669,11 +1670,10 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nTab, nTab, !bRows, bRows );      // row height
 
-        pOneRange = pRanges;
-        for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+        for (size_t i = 0, n = aSpans.size(); i < n; ++i)
         {
-            SCCOLROW nStart = *(pOneRange++);
-            SCCOLROW nEnd = *(pOneRange++);
+            SCCOLROW nStart = aSpans[i].mnStart;
+            SCCOLROW nEnd = aSpans[i].mnEnd;
             if (bRows)
                 pDoc->CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, IDF_ALL,false,pUndoDoc );
             else
@@ -1692,11 +1692,11 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         pDoc->BeginDrawUndo();
     }
 
-    pOneRange = &pRanges[2*nRangeCnt];      // backwards
-    for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+    std::vector<sc::ColRowSpan>::const_reverse_iterator ri = aSpans.rbegin(), riEnd = aSpans.rend();
+    for (; ri != riEnd; ++ri)
     {
-        SCCOLROW nEnd = *(--pOneRange);
-        SCCOLROW nStart = *(--pOneRange);
+        SCCOLROW nEnd = ri->mnEnd;
+        SCCOLROW nStart = ri->mnStart;
 
         if (bRows)
             pDoc->DeleteRow( 0,nTab, MAXCOL,nTab, nStart, static_cast<SCSIZE>(nEnd-nStart+1) );
@@ -1706,7 +1706,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
     if (bNeedRefresh)
     {
-        SCCOLROW nFirstStart = pRanges[0];
+        SCCOLROW nFirstStart = aSpans[0].mnStart;
         SCCOL nStartCol = bRows ? 0 : static_cast<SCCOL>(nFirstStart);
         SCROW nStartRow = bRows ? static_cast<SCROW>(nFirstStart) : 0;
         SCCOL nEndCol = MAXCOL;
@@ -1719,17 +1719,24 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteMulti( pDocSh, bRows, bNeedRefresh, nTab, pRanges, nRangeCnt,
-                                    pUndoDoc, pUndoData ) );
+            new ScUndoDeleteMulti(
+                pDocSh, bRows, bNeedRefresh, nTab, aSpans, pUndoDoc, pUndoData));
     }
 
     if (!AdjustRowHeight(0, MAXROW))
     {
         if (bRows)
-            pDocSh->PostPaint( 0,pRanges[0],nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT );
+        {
+            pDocSh->PostPaint(
+                0, aSpans[0].mnStart, nTab,
+                MAXCOL, MAXROW, nTab, (PAINT_GRID | PAINT_LEFT));
+        }
         else
-            pDocSh->PostPaint( static_cast<SCCOL>(pRanges[0]),0,nTab,
-                    MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_TOP );
+        {
+            pDocSh->PostPaint(
+                static_cast<SCCOL>(aSpans[0].mnStart), 0, nTab,
+                MAXCOL, MAXROW, nTab, (PAINT_GRID | PAINT_TOP));
+        }
     }
 
     ResetAutoSpell();
@@ -1741,12 +1748,10 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();
     if ( bRows )
-        nCurY = pRanges[0];
+        nCurY = aSpans[0].mnStart;
     else
-        nCurX = static_cast<SCCOL>(pRanges[0]);
+        nCurX = static_cast<SCCOL>(aSpans[0].mnStart);
     SetCursor( nCurX, nCurY );
-
-    delete[] pRanges;
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }

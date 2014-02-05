@@ -25,6 +25,7 @@
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
 #include "paramisc.hxx"
+#include <columnspanset.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -110,10 +111,12 @@ class ScUndoDeleteMulti: public ScMoveUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                       sal_Bool bNewRows, sal_Bool bNeedsRefresh, SCTAB nNewTab,
-                                       const SCCOLROW* pRng, SCCOLROW nRngCnt,
-                                       ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+
+    ScUndoDeleteMulti( ScDocShell* pNewDocShell,
+                       bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
+                       const std::vector<sc::ColRowSpan>& rSpans,
+                       ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+
     virtual         ~ScUndoDeleteMulti();
 
     virtual void    Undo();
@@ -124,11 +127,10 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    sal_Bool            bRows;
-    sal_Bool            bRefresh;
+    bool mbRows:1;
+    bool mbRefresh:1;
     SCTAB           nTab;
-    SCCOLROW*       pRanges;
-    SCCOLROW        nRangeCnt;
+    std::vector<sc::ColRowSpan> maSpans;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 

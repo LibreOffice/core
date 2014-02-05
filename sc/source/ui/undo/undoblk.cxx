@@ -554,24 +554,22 @@ bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 // delete cells in multiselection
-ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                        sal_Bool bNewRows, sal_Bool bNeedsRefresh, SCTAB nNewTab,
-                                        const SCCOLROW* pRng, SCCOLROW nRngCnt,
-                                        ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
+ScUndoDeleteMulti::ScUndoDeleteMulti(
+    ScDocShell* pNewDocShell,
+    bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
+    const std::vector<sc::ColRowSpan>& rSpans,
+    ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
-    bRows( bNewRows ),
-    bRefresh( bNeedsRefresh ),
+    mbRows(bNewRows),
+    mbRefresh(bNeedsRefresh),
     nTab( nNewTab ),
-    nRangeCnt( nRngCnt )
+    maSpans(rSpans)
 {
-    pRanges = new SCCOLROW[ 2 * nRangeCnt ];
-    memcpy(pRanges,pRng,nRangeCnt*2*sizeof(SCCOLROW));
     SetChangeTrack();
 }
 
 ScUndoDeleteMulti::~ScUndoDeleteMulti()
 {
-    delete [] pRanges;
 }
 
 OUString ScUndoDeleteMulti::GetComment() const
@@ -584,20 +582,20 @@ void ScUndoDeleteMulti::DoChange() const
     SCCOL nStartCol;
     SCROW nStartRow;
     sal_uInt16 nPaint;
-    if (bRows)
+    if (mbRows)
     {
         nStartCol = 0;
-        nStartRow = static_cast<SCROW>(pRanges[0]);
+        nStartRow = static_cast<SCROW>(maSpans[0].mnStart);
         nPaint = PAINT_GRID | PAINT_LEFT;
     }
     else
     {
-        nStartCol = static_cast<SCCOL>(pRanges[0]);
+        nStartCol = static_cast<SCCOL>(maSpans[0].mnStart);
         nStartRow = 0;
         nPaint = PAINT_GRID | PAINT_TOP;
     }
 
-    if ( bRefresh )
+    if (mbRefresh)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         SCCOL nEndCol = MAXCOL;
@@ -622,17 +620,17 @@ void ScUndoDeleteMulti::SetChangeTrack()
     {
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         ScRange aRange( 0, 0, nTab, 0, 0, nTab );
-        if ( bRows )
+        if (mbRows)
             aRange.aEnd.SetCol( MAXCOL );
         else
             aRange.aEnd.SetRow( MAXROW );
         // delete in reverse
-        SCCOLROW* pOneRange = &pRanges[2*nRangeCnt];
-        for ( SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++ )
+        std::vector<sc::ColRowSpan>::const_reverse_iterator ri = maSpans.rbegin(), riEnd = maSpans.rend();
+        for (; ri != riEnd; ++ri)
         {
-            SCCOLROW nEnd = *(--pOneRange);
-            SCCOLROW nStart = *(--pOneRange);
-            if ( bRows )
+            SCCOLROW nEnd = ri->mnEnd;
+            SCCOLROW nStart = ri->mnStart;
+            if (mbRows)
             {
                 aRange.aStart.SetRow( nStart );
                 aRange.aEnd.SetRow( nEnd );
@@ -657,27 +655,25 @@ void ScUndoDeleteMulti::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    SCCOLROW* pOneRange;
-    SCCOLROW nRangeNo;
 
     // reverse delete -> forward insert
-    pOneRange = pRanges;
-    for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+    std::vector<sc::ColRowSpan>::const_iterator it = maSpans.begin(), itEnd = maSpans.end();
+    for (; it != itEnd; ++it)
     {
-        SCCOLROW nStart = *(pOneRange++);
-        SCCOLROW nEnd = *(pOneRange++);
-        if (bRows)
+        SCCOLROW nStart = it->mnStart;
+        SCCOLROW nEnd = it->mnEnd;
+        if (mbRows)
             pDoc->InsertRow( 0,nTab, MAXCOL,nTab, nStart,static_cast<SCSIZE>(nEnd-nStart+1) );
         else
             pDoc->InsertCol( 0,nTab, MAXROW,nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
     }
 
-    pOneRange = pRanges;
-    for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+    it = maSpans.begin();
+    for (; it != itEnd; ++it)
     {
-        SCCOLROW nStart = *(pOneRange++);
-        SCCOLROW nEnd = *(pOneRange++);
-        if (bRows)
+        SCCOLROW nStart = it->mnStart;
+        SCCOLROW nEnd = it->mnEnd;
+        if (mbRows)
             pRefUndoDoc->CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, IDF_ALL,false,pDoc );
         else
             pRefUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart),0,nTab,
@@ -704,13 +700,13 @@ void ScUndoDeleteMulti::Redo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    // reverese delet
-    SCCOLROW* pOneRange = &pRanges[2*nRangeCnt];
-    for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+    // reverese delete
+    std::vector<sc::ColRowSpan>::const_reverse_iterator ri = maSpans.rbegin(), riEnd = maSpans.rend();
+    for (; ri != riEnd; ++ri)
     {
-        SCCOLROW nEnd = *(--pOneRange);
-        SCCOLROW nStart = *(--pOneRange);
-        if (bRows)
+        SCCOLROW nEnd = ri->mnEnd;
+        SCCOLROW nStart = ri->mnStart;
+        if (mbRows)
             pDoc->DeleteRow( 0,nTab, MAXCOL,nTab, nStart,static_cast<SCSIZE>(nEnd-nStart+1) );
         else
             pDoc->DeleteCol( 0,nTab, MAXROW,nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
