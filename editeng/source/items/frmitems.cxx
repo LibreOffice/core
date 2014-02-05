@@ -4166,6 +4166,10 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
         maStrLink    = rItem.GetBitmapURL();
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
     }
+    else
+    {
+        SetGraphicPos( GPOS_NONE );
+    }
 }
 
 void  SvxBrushItem::ApplyGraphicTransparency_Impl()
