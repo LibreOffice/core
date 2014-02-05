@@ -170,13 +170,13 @@ namespace cppcanvas
                         // EMFPlusPoint: stored in signed short 16bit integer format
                         sal_Int16 x, y;
 
-                        s >> x >> y;
+                        s.ReadInt16( x ).ReadInt16( y );
                         SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPoint [x,y]: " << x << "," << y);
                         pPoints [i*2] = x;
                         pPoints [i*2 + 1] = y;
                     } else if (!(pathFlags & 0xC000)) {
                         // EMFPlusPointF: stored in Single (float) format
-                        s >> pPoints [i*2] >> pPoints [i*2 + 1];
+                        s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
                         SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
                     } else { //if (pathFlags & 0x8000)
                         // EMFPlusPointR: points are stored in EMFPlusInteger7 or
@@ -188,7 +188,7 @@ namespace cppcanvas
 
                 if (pPointTypes)
                     for (int i = 0; i < nPoints; i ++) {
-                        s >> pPointTypes [i];
+                        s.ReadUChar( pPointTypes [i] );
                         SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes [i]);
                     }
 
@@ -314,7 +314,7 @@ namespace cppcanvas
             {
                 sal_uInt32 header;
 
-                s >> header >> parts;
+                s.ReadUInt32( header ).ReadInt32( parts );
 
                 SAL_INFO ("cppcanvas.emf", "EMF+\tregion");
                 SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec );
@@ -326,12 +326,12 @@ namespace cppcanvas
                     combineMode = new sal_Int32 [parts];
 
                     for (int i = 0; i < parts; i ++) {
-                        s >> combineMode [i];
+                        s.ReadInt32( combineMode [i] );
                         SAL_INFO ("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode [i] << std::dec);
                     }
                 }
 
-                s >> initialState;
+                s.ReadInt32( initialState );
                 SAL_INFO ("cppcanvas.emf", "EMF+\tinitial state: 0x" << std::hex << initialState << std::dec);
             }
         };
@@ -400,7 +400,7 @@ namespace cppcanvas
             {
                 sal_uInt32 header;
 
-                s >> header >> type;
+                s.ReadUInt32( header ).ReadUInt32( type );
 
                 SAL_INFO ("cppcanvas.emf", "EMF+\tbrush");
                 SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
@@ -410,7 +410,7 @@ namespace cppcanvas
                     {
                         sal_uInt32 color;
 
-                        s >> color;
+                        s.ReadUInt32( color );
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO ("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color << std::dec);
 
@@ -419,20 +419,20 @@ namespace cppcanvas
                 // path gradient
                 case 3:
                     {
-                        s >> additionalFlags >> wrapMode;
+                        s.ReadUInt32( additionalFlags ).ReadInt32( wrapMode );
 
                         SAL_INFO ("cppcanvas.emf", "EMF+\tpath gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
 
                         sal_uInt32 color;
 
-                        s >> color;
+                        s.ReadUInt32( color );
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("cppcanvas.emf", "EMF+\tcenter color: 0x" << std::hex << color << std::dec);
 
-                        s >> areaX >> areaY;
+                        s.ReadFloat( areaX ).ReadFloat( areaY );
                         SAL_INFO("cppcanvas.emf", "EMF+\tcenter point: " << areaX << "," << areaY);
 
-                        s >> surroundColorsNumber;
+                        s.ReadInt32( surroundColorsNumber );
                         SAL_INFO("cppcanvas.emf", "EMF+\tsurround colors: " << surroundColorsNumber);
 
                         if( surroundColorsNumber<0 || sal_uInt32(surroundColorsNumber)>SAL_MAX_INT32/sizeof(::Color) )
@@ -440,7 +440,7 @@ namespace cppcanvas
 
                         surroundColors = new ::Color [surroundColorsNumber];
                         for (int i = 0; i < surroundColorsNumber; i++) {
-                            s >> color;
+                            s.ReadUInt32( color );
                             surroundColors[i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                             if (i == 0)
                                 secondColor = surroundColors [0];
@@ -450,7 +450,7 @@ namespace cppcanvas
                         if (additionalFlags & 0x01) {
                             sal_Int32 pathLength;
 
-                            s >> pathLength;
+                            s.ReadInt32( pathLength );
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath length: " << pathLength);
 
                             sal_uInt32 pos = s.Tell ();
@@ -460,7 +460,7 @@ namespace cppcanvas
 
                             sal_uInt32 pathHeader;
                             sal_Int32 pathPoints, pathFlags;
-                            s >> pathHeader >> pathPoints >> pathFlags;
+                            s.ReadUInt32( pathHeader ).ReadInt32( pathPoints ).ReadInt32( pathFlags );
 
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath (brush path gradient)");
                             SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
@@ -488,24 +488,24 @@ namespace cppcanvas
 
                         }
                         if (additionalFlags & 0x08) {
-                            s >> blendPoints;
+                            s.ReadInt32( blendPoints );
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
-                                s >> blendPositions [i];
+                                s.ReadFloat( blendPositions [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions [i]);
                             }
                             for (int i=0; i < blendPoints; i ++) {
-                                s >> blendFactors [i];
+                                s.ReadFloat( blendFactors [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors [i]);
                             }
                         }
 
                         if (additionalFlags & 0x04) {
-                            s >> colorblendPoints;
+                            s.ReadInt32( colorblendPoints );
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
@@ -514,11 +514,11 @@ namespace cppcanvas
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
-                                s >> colorblendPositions [i];
+                                s.ReadFloat( colorblendPositions [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions [i]);
                             }
                             for (int i=0; i < colorblendPoints; i ++) {
-                                s >> color;
+                                s.ReadUInt32( color );
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                                 SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
                             }
@@ -533,27 +533,27 @@ namespace cppcanvas
                 // linear gradient
                 case 4:
                     {
-                        s >> additionalFlags >> wrapMode;
+                        s.ReadUInt32( additionalFlags ).ReadInt32( wrapMode );
 
                         SAL_INFO("cppcanvas.emf", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
 
-                        s >> areaX >> areaY >> areaWidth >> areaHeight;
+                        s.ReadFloat( areaX ).ReadFloat( areaY ).ReadFloat( areaWidth ).ReadFloat( areaHeight );
 
                         SAL_INFO("cppcanvas.emf", "EMF+\tarea: " << areaX << "," << areaY << " - " << areaWidth << "x" << areaHeight);
 
                         sal_uInt32 color;
 
-                        s >> color;
+                        s.ReadUInt32( color );
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("cppcanvas.emf", "EMF+\tfirst color: 0x" << std::hex << color << std::dec);
 
-                        s >> color;
+                        s.ReadUInt32( color );
                         secondColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("cppcanvas.emf", "EMF+\tsecond color: 0x" << std::hex << color << std::dec);
 
                         // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
-                        s >> color;
-                        s >> color;
+                        s.ReadUInt32( color );
+                        s.ReadUInt32( color );
 
                         if (additionalFlags & 0x02) {
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
@@ -565,24 +565,24 @@ namespace cppcanvas
                                     "\nEMF+\tdx: "  << transformation.eDx  << " dy: "  << transformation.eDy);
                         }
                         if (additionalFlags & 0x08) {
-                            s >> blendPoints;
+                            s.ReadInt32( blendPoints );
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
-                                s >> blendPositions [i];
+                                s.ReadFloat( blendPositions [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions [i]);
                             }
                             for (int i=0; i < blendPoints; i ++) {
-                                s >> blendFactors [i];
+                                s.ReadFloat( blendFactors [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors [i]);
                             }
                         }
 
                         if (additionalFlags & 0x04) {
-                            s >> colorblendPoints;
+                            s.ReadInt32( colorblendPoints );
                             SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
@@ -591,11 +591,11 @@ namespace cppcanvas
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
-                                s >> colorblendPositions [i];
+                                s.ReadFloat( colorblendPositions [i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions [i]);
                             }
                             for (int i=0; i < colorblendPoints; i ++) {
-                                s >> color;
+                                s.ReadUInt32( color );
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                                 SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
                             }
@@ -672,12 +672,12 @@ namespace cppcanvas
             void ReadPath(SvStream& s, ImplRenderer& rR, bool bFill)
             {
                 sal_Int32 pathLength;
-                s >> pathLength;
+                s.ReadInt32( pathLength );
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
 
                 sal_uInt32 pathHeader;
                 sal_Int32 pathPoints, pathFlags;
-                s >> pathHeader >> pathPoints >> pathFlags;
+                s.ReadUInt32( pathHeader ).ReadInt32( pathPoints ).ReadInt32( pathFlags );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap line path)");
                 SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
@@ -700,7 +700,7 @@ namespace cppcanvas
             {
                 sal_uInt32 header;
 
-                s >> header >> type;
+                s.ReadUInt32( header ).ReadUInt32( type );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcustom cap");
                 SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
@@ -712,10 +712,10 @@ namespace cppcanvas
                     float widthScale;
                     float fillHotSpotX, fillHotSpotY, strokeHotSpotX, strokeHotSpotY;
 
-                    s >> customLineCapDataFlags >> baseCap >> baseInset
-                      >> strokeStartCap >> strokeEndCap >> strokeJoin
-                      >> miterLimit >> widthScale
-                      >> fillHotSpotX >> fillHotSpotY >> strokeHotSpotX >> strokeHotSpotY;
+                    s.ReadUInt32( customLineCapDataFlags ).ReadUInt32( baseCap ).ReadFloat( baseInset )
+                     .ReadUInt32( strokeStartCap ).ReadUInt32( strokeEndCap ).ReadUInt32( strokeJoin )
+                     .ReadFloat( miterLimit ).ReadFloat( widthScale )
+                     .ReadFloat( fillHotSpotX ).ReadFloat( fillHotSpotY ).ReadFloat( strokeHotSpotX ).ReadFloat( strokeHotSpotY );
 
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomLineCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tbaseCap: 0x" << std::hex << baseCap);
@@ -745,9 +745,9 @@ namespace cppcanvas
                     sal_Int32 lineEndCap, lineJoin, widthScale;
                     float fillHotSpotX, fillHotSpotY, lineHotSpotX, lineHotSpotY;
 
-                    s >> width >> height >> middleInset >> fillState >> lineStartCap
-                      >> lineEndCap >> lineJoin >> miterLimit >> widthScale
-                      >> fillHotSpotX >> fillHotSpotY >> lineHotSpotX >> lineHotSpotY;
+                    s.ReadInt32( width ).ReadInt32( height ).ReadInt32( middleInset ).ReadInt32( fillState ).ReadInt32( lineStartCap )
+                     .ReadInt32( lineEndCap ).ReadInt32( lineJoin ).ReadFloat( miterLimit ).ReadInt32( widthScale )
+                     .ReadFloat( fillHotSpotX ).ReadFloat( fillHotSpotY ).ReadFloat( lineHotSpotX ).ReadFloat( lineHotSpotY );
 
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
                 }
@@ -839,7 +839,7 @@ namespace cppcanvas
                 sal_uInt32 header, unknown, penFlags, unknown2;
                 int i;
 
-                s >> header >> unknown >> penFlags >> unknown2 >> width;
+                s.ReadUInt32( header ).ReadUInt32( unknown ).ReadUInt32( penFlags ).ReadUInt32( unknown2 ).ReadFloat( width );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\tpen");
                 SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " unknown: 0x" << unknown <<
@@ -850,7 +850,7 @@ namespace cppcanvas
 
                 if (penFlags & 2)
                 {
-                    s >> startCap;
+                    s.ReadInt32( startCap );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
                 }
                 else
@@ -858,37 +858,37 @@ namespace cppcanvas
 
                 if (penFlags & 4)
                 {
-                    s >> endCap;
+                    s.ReadInt32( endCap );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tendCap: 0x" << std::hex << endCap);
                 }
                 else
                     endCap = 0;
 
                 if (penFlags & 8)
-                    s >> lineJoin;
+                    s.ReadInt32( lineJoin );
                 else
                     lineJoin = 0;
 
                 if (penFlags & 16)
-                    s >> mitterLimit;
+                    s.ReadFloat( mitterLimit );
                 else
                     mitterLimit = 0;
 
                 if (penFlags & 32)
                 {
-                    s >> dashStyle;
+                    s.ReadInt32( dashStyle );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
                 }
                 else
                     dashStyle = 0;
 
                 if (penFlags & 64)
-                    s >> dashCap;
+                    s.ReadInt32( dashCap );
                 else
                     dashCap = 0;
 
                 if (penFlags & 128)
-                    s >> dashOffset;
+                    s.ReadFloat( dashOffset );
                 else
                     dashOffset = 0;
 
@@ -896,7 +896,7 @@ namespace cppcanvas
                 {
                     dashStyle = EmfPlusLineStyleCustom;
 
-                    s >> dashPatternLen;
+                    s.ReadInt32( dashPatternLen );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tdashPatternLen: " << dashPatternLen);
 
                     if( dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32/sizeof(float) )
@@ -904,7 +904,7 @@ namespace cppcanvas
                     dashPattern = new float [dashPatternLen];
                     for (i = 0; i < dashPatternLen; i++)
                     {
-                        s >> dashPattern [i];
+                        s.ReadFloat( dashPattern [i] );
                         SAL_INFO("cppcanvas.emf", "EMF+\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
                     }
                 }
@@ -912,23 +912,23 @@ namespace cppcanvas
                     dashPatternLen = 0;
 
                 if (penFlags & 512)
-                    s >> alignment;
+                    s.ReadInt32( alignment );
                 else
                     alignment = 0;
 
                 if (penFlags & 1024) {
-                    s >> compoundArrayLen;
+                    s.ReadInt32( compoundArrayLen );
                     if( compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32/sizeof(float) )
                         compoundArrayLen = SAL_MAX_INT32/sizeof(float);
                     compoundArray = new float [compoundArrayLen];
                     for (i = 0; i < compoundArrayLen; i++)
-                        s >> compoundArray [i];
+                        s.ReadFloat( compoundArray [i] );
                 } else
                     compoundArrayLen = 0;
 
                 if (penFlags & 2048)
                 {
-                    s >> customStartCapLen;
+                    s.ReadInt32( customStartCapLen );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
                     sal_uInt32 pos = s.Tell();
 
@@ -943,7 +943,7 @@ namespace cppcanvas
 
                 if (penFlags & 4096)
                 {
-                    s >> customEndCapLen;
+                    s.ReadInt32( customEndCapLen );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
                     sal_uInt32 pos = s.Tell();
 
@@ -974,12 +974,12 @@ namespace cppcanvas
             {
                 sal_uInt32 header, unknown;
 
-                s >> header >> type;
+                s.ReadUInt32( header ).ReadUInt32( type );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec );
 
                 if (type == 1) { // bitmap
-                    s >> width >> height >> stride >> pixelFormat >> unknown;
+                    s.ReadInt32( width ).ReadInt32( height ).ReadInt32( stride ).ReadInt32( pixelFormat ).ReadUInt32( unknown );
                     SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
                     if (width == 0) { // non native formats
                         GraphicFilter filter;
@@ -991,7 +991,7 @@ namespace cppcanvas
                 } else if (type == 2) {
                     sal_Int32 mfType, mfSize;
 
-                    s >> mfType >> mfSize;
+                    s.ReadInt32( mfType ).ReadInt32( mfSize );
                     SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize - 16);
 
                     GraphicFilter filter;
@@ -1031,7 +1031,7 @@ namespace cppcanvas
                 sal_uInt32 reserved;
                 sal_uInt32 length;
 
-                s >> header >> emSize >> sizeUnit >> fontFlags >> reserved >> length;
+                s.ReadUInt32( header ).ReadFloat( emSize ).ReadUInt32( sizeUnit ).ReadInt32( fontFlags ).ReadUInt32( reserved ).ReadUInt32( length );
 
                 OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
@@ -1043,7 +1043,7 @@ namespace cppcanvas
                     sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
 
                     for( sal_uInt32 i = 0; i < length; i++ )
-                        s >> chars[ i ];
+                        s.ReadUInt16( chars[ i ] );
 
                     family = OUString( chars, length );
                     SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); // TODO: can we just use family?
@@ -1056,14 +1056,14 @@ namespace cppcanvas
             if (bCompressed) {
                 sal_Int16 ix, iy, iw, ih;
 
-                s >> ix >> iy >> iw >> ih;
+                s.ReadInt16( ix ).ReadInt16( iy ).ReadInt16( iw ).ReadInt16( ih );
 
                 x = ix;
                 y = iy;
                 width = iw;
                 height = ih;
             } else
-                s >> x >> y >> width >> height;
+                s.ReadFloat( x ).ReadFloat( y ).ReadFloat( width ).ReadFloat( height );
         }
 
         void ImplRenderer::ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags)
@@ -1071,12 +1071,12 @@ namespace cppcanvas
             if (flags & 0x4000) {
                 sal_Int16 ix, iy;
 
-                s >> ix >> iy;
+                s.ReadInt16( ix ).ReadInt16( iy );
 
                 x = ix;
                 y = iy;
             } else
-                s >> x >> y;
+                s.ReadFloat( x ).ReadFloat( y );
         }
 
         void ImplRenderer::MapToDevice (double& x, double& y)
@@ -1518,7 +1518,7 @@ namespace cppcanvas
                 sal_uInt32 header, pathFlags;
                 sal_Int32 points;
 
-                rObjectStream >> header >> points >> pathFlags;
+                rObjectStream.ReadUInt32( header ).ReadInt32( points ).ReadUInt32( pathFlags );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\tpath");
                 SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
@@ -1627,7 +1627,7 @@ namespace cppcanvas
                 sal_uInt32 size, dataSize;
                 sal_uInt32 next;
 
-                rMF >> type >> flags >> size >> dataSize;
+                rMF.ReadUInt16( type ).ReadUInt16( flags ).ReadUInt32( size ).ReadUInt32( dataSize );
 
                 next = rMF.Tell() + ( size - 12 );
 
@@ -1662,7 +1662,7 @@ namespace cppcanvas
                     case EmfPlusRecordTypeHeader:
                         sal_uInt32 header, version;
 
-                        rMF >> header >> version >> nHDPI >> nVDPI;
+                        rMF.ReadUInt32( header ).ReadUInt32( version ).ReadInt32( nHDPI ).ReadInt32( nVDPI );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ Header");
                         SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
@@ -1683,7 +1683,7 @@ namespace cppcanvas
                             sal_uInt32 brushIndexOrColor;
                             float startAngle, sweepAngle;
 
-                            rMF >> brushIndexOrColor >> startAngle >> sweepAngle;
+                            rMF.ReadUInt32( brushIndexOrColor ).ReadFloat( startAngle ).ReadFloat( sweepAngle );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor << " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
@@ -1726,7 +1726,7 @@ namespace cppcanvas
                             sal_uInt32 index = flags & 0xff;
                             sal_uInt32 brushIndexOrColor;
 
-                            rMF >> brushIndexOrColor;
+                            rMF.ReadUInt32( brushIndexOrColor );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
@@ -1742,7 +1742,7 @@ namespace cppcanvas
                             sal_uInt32 brushIndexOrColor = 1234567;
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
-                                rMF >> brushIndexOrColor;
+                                rMF.ReadUInt32( brushIndexOrColor );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
 
@@ -1774,7 +1774,7 @@ namespace cppcanvas
                             bool isColor = (flags & 0x8000);
                             ::basegfx::B2DPolygon polygon;
 
-                            rMF >> brushIndexOrColor >> rectangles;
+                            rMF.ReadUInt32( brushIndexOrColor ).ReadInt32( rectangles );
 
                             SAL_INFO("cppcanvas.emf", "EMF+\t" << ((flags & 0x8000) ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
 
@@ -1783,7 +1783,7 @@ namespace cppcanvas
                                     /* 16bit integers */
                                     sal_Int16 x, y, width, height;
 
-                                    rMF >> x >> y >> width >> height;
+                                    rMF.ReadInt16( x ).ReadInt16( y ).ReadInt16( width ).ReadInt16( height );
 
                                     polygon.append (Map (x, y));
                                     polygon.append (Map (x + width, y));
@@ -1795,7 +1795,7 @@ namespace cppcanvas
                                     /* Single's */
                                     float x, y, width, height;
 
-                                    rMF >> x >> y >> width >> height;
+                                    rMF.ReadFloat( x ).ReadFloat( y ).ReadFloat( width ).ReadFloat( height );
 
                                     polygon.append (Map (x, y));
                                     polygon.append (Map (x + width, y));
@@ -1817,8 +1817,8 @@ namespace cppcanvas
                             sal_uInt32 brushIndexOrColor;
                             sal_Int32 points;
 
-                            rMF >> brushIndexOrColor;
-                            rMF >> points;
+                            rMF.ReadUInt32( brushIndexOrColor );
+                            rMF.ReadInt32( points );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
                             SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
@@ -1834,7 +1834,7 @@ namespace cppcanvas
                         {
                             sal_uInt32 points;
 
-                            rMF >> points;
+                            rMF.ReadUInt32( points );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
 
@@ -1849,7 +1849,7 @@ namespace cppcanvas
                         {
                             sal_uInt32 penIndex;
 
-                            rMF >> penIndex;
+                            rMF.ReadUInt32( penIndex );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
                             SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
@@ -1867,7 +1867,7 @@ namespace cppcanvas
                             sal_uInt32 attrIndex;
                             sal_Int32 sourceUnit;
 
-                            rMF >> attrIndex >> sourceUnit;
+                            rMF.ReadUInt32( attrIndex ).ReadInt32( sourceUnit );
 
                             SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
@@ -1887,7 +1887,7 @@ namespace cppcanvas
                                 bool bValid = false;
 
                                 if (type == EmfPlusRecordTypeDrawImagePoints) {
-                                    rMF >> aCount;
+                                    rMF.ReadInt32( aCount );
 
                                     if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
                                         float x1, y1, x2, y2, x3, y3;
@@ -1957,13 +1957,13 @@ namespace cppcanvas
                             sal_uInt32 formatId;
                             sal_uInt32 stringLength;
 
-                            rMF >> brushId >> formatId >> stringLength;
+                            rMF.ReadUInt32( brushId ).ReadUInt32( formatId ).ReadUInt32( stringLength );
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString brushId: " << brushId << " formatId: " << formatId << " length: " << stringLength);
 
                             if (flags & 0x8000) {
                                 float lx, ly, lw, lh;
 
-                                rMF >> lx >> ly >> lw >> lh;
+                                rMF.ReadFloat( lx ).ReadFloat( ly ).ReadFloat( lw ).ReadFloat( lh );
 
                                 SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
 
@@ -2009,14 +2009,14 @@ namespace cppcanvas
                         }
                         break;
                     case EmfPlusRecordTypeSetPageTransform:
-                        rMF >> fPageScale;
+                        rMF.ReadFloat( fPageScale );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
                         SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
                         SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetRenderingOrigin:
-                        rMF >> nOriginX >> nOriginY;
+                        rMF.ReadInt32( nOriginX ).ReadInt32( nOriginY );
                         SAL_INFO("cppcanvas.emf", "EMF+ SetRenderingOrigin");
                         SAL_INFO("cppcanvas.emf", "EMF+\torigin [x,y]: " << nOriginX << "," << nOriginY);
                         break;
@@ -2044,7 +2044,7 @@ namespace cppcanvas
                     {
                         sal_uInt32 stackIndex;
 
-                        rMF >> stackIndex;
+                        rMF.ReadUInt32( stackIndex );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ Save stack index: " << stackIndex);
 
@@ -2056,7 +2056,7 @@ namespace cppcanvas
                     {
                         sal_uInt32 stackIndex;
 
-                        rMF >> stackIndex;
+                        rMF.ReadUInt32( stackIndex );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ Restore stack index: " << stackIndex);
 
@@ -2068,7 +2068,7 @@ namespace cppcanvas
                     {
                         sal_uInt32 stackIndex;
 
-                        rMF >> stackIndex;
+                        rMF.ReadUInt32( stackIndex );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ Begin Container No Params stack index: " << stackIndex);
 
@@ -2079,7 +2079,7 @@ namespace cppcanvas
                     {
                         sal_uInt32 stackIndex;
 
-                        rMF >> stackIndex;
+                        rMF.ReadUInt32( stackIndex );
 
                         SAL_INFO("cppcanvas.emf", "EMF+ End Container stack index: " << stackIndex);
 
@@ -2189,7 +2189,7 @@ namespace cppcanvas
                         sal_uInt32 hasMatrix;
                         sal_uInt32 glyphsCount;
 
-                        rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
+                        rMF.ReadUInt32( brushIndexOrColor ).ReadUInt32( optionFlags ).ReadUInt32( hasMatrix ).ReadUInt32( glyphsCount );
 
                         SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
                         SAL_INFO("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags << std::dec);
@@ -2203,7 +2203,7 @@ namespace cppcanvas
                             OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
                             for( sal_uInt32 i=0; i<glyphsCount; i++) {
-                                rMF >> charsPosX[i] >> charsPosY[i];
+                                rMF.ReadFloat( charsPosX[i] ).ReadFloat( charsPosY[i] );
                                 SAL_INFO("cppcanvas.emf", "EMF+\tglyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
                             }
 

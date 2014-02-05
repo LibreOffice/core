@@ -850,11 +850,11 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
         // get DIB parameters
         aMemStm.Seek( 0 );
-        aMemStm >> nHeaderSize;
+        aMemStm.ReadUInt32( nHeaderSize );
         aMemStm.SeekRel( 10 );
-        aMemStm >> nBitCount >> nCompression >> nImageSize;
+        aMemStm.ReadUInt16( nBitCount ).ReadUInt32( nCompression ).ReadUInt32( nImageSize );
         aMemStm.SeekRel( 8 );
-        aMemStm >> nColsUsed;
+        aMemStm.ReadUInt32( nColsUsed );
 
         nPalCount = ( nBitCount <= 8 ) ? ( nColsUsed ? nColsUsed : ( 1 << (sal_uInt32) nBitCount ) ) :
                                          ( ( 3 == nCompression ) ? 12 : 0 );

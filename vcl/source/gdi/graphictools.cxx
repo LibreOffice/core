@@ -165,21 +165,21 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
     rClass.maPath.Read( rIStm );
     rClass.maStartArrow.Read( rIStm );
     rClass.maEndArrow.Read( rIStm );
-    rIStm >> rClass.mfTransparency;
-    rIStm >> rClass.mfStrokeWidth;
+    rIStm.ReadDouble( rClass.mfTransparency );
+    rIStm.ReadDouble( rClass.mfStrokeWidth );
     sal_uInt16 nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maCapType = SvtGraphicStroke::CapType(nTmp);
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maJoinType = SvtGraphicStroke::JoinType(nTmp);
-    rIStm >> rClass.mfMiterLimit;
+    rIStm.ReadDouble( rClass.mfMiterLimit );
 
     sal_uInt32 nSize;
-    rIStm >> nSize;
+    rIStm.ReadUInt32( nSize );
     rClass.maDashArray.resize(nSize);
     size_t i;
     for(i=0; i<rClass.maDashArray.size(); ++i)
-        rIStm >> rClass.maDashArray[i];
+        rIStm.ReadDouble( rClass.maDashArray[i] );
 
     return rIStm;
 }
@@ -322,25 +322,25 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
 
     rClass.maPath.Read( rIStm );
     ReadColor( rIStm, rClass.maFillColor );
-    rIStm >> rClass.mfTransparency;
+    rIStm.ReadDouble( rClass.mfTransparency );
     sal_uInt16 nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maFillRule = SvtGraphicFill::FillRule( nTmp );
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maFillType = SvtGraphicFill::FillType( nTmp );
     int i;
     for(i=0; i<SvtGraphicFill::Transform::MatrixSize; ++i)
-        rIStm >> rClass.maFillTransform.matrix[i];
-    rIStm >> nTmp;
+        rIStm.ReadDouble( rClass.maFillTransform.matrix[i] );
+    rIStm.ReadUInt16( nTmp );
     rClass.mbTiling = nTmp;
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maHatchType = SvtGraphicFill::HatchType( nTmp );
     ReadColor( rIStm, rClass.maHatchColor );
-    rIStm >> nTmp;
+    rIStm.ReadUInt16( nTmp );
     rClass.maGradientType = SvtGraphicFill::GradientType( nTmp );
     ReadColor( rIStm, rClass.maGradient1stColor );
     ReadColor( rIStm, rClass.maGradient2ndColor );
-    rIStm >> rClass.maGradientStepCount;
+    rIStm.ReadInt32( rClass.maGradientStepCount );
     ReadGraphic( rIStm, rClass.maFillGraphic );
 
     return rIStm;

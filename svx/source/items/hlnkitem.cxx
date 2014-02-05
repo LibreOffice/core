@@ -131,12 +131,12 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     // UNICODE: rStrm >> pNew->sTarget;
     pNew->sTarget = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
-    rStrm >> nType;
+    rStrm.ReadUInt32( nType );
     pNew->eType = (SvxLinkInsertMode) nType;
 
     sal_uInt32 nPos = rStrm.Tell();
     sal_uInt32 nMarker;
-    rStrm >> nMarker;
+    rStrm.ReadUInt32( nMarker );
     if ( nMarker == HYPERLINKFF_MARKER )
     {
         // new data
@@ -144,17 +144,17 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
         pNew->sIntName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
         // macro-events
-        rStrm >> pNew->nMacroEvents;
+        rStrm.ReadUInt16( pNew->nMacroEvents );
 
         // macros
         sal_uInt16 nCnt;
-        rStrm >> nCnt;
+        rStrm.ReadUInt16( nCnt );
         while( nCnt-- )
         {
             sal_uInt16 nCurKey;
             OUString aLibName, aMacName;
 
-            rStrm >> nCurKey;
+            rStrm.ReadUInt16( nCurKey );
             // UNICODE: rStrm >> aLibName;
             aLibName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
@@ -164,13 +164,13 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
             pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName, STARBASIC ) );
         }
 
-        rStrm >> nCnt;
+        rStrm.ReadUInt16( nCnt );
         while( nCnt-- )
         {
             sal_uInt16 nCurKey, nScriptType;
             OUString aLibName, aMacName;
 
-            rStrm >> nCurKey;
+            rStrm.ReadUInt16( nCurKey );
 
             // UNICODE: rStrm >> aLibName;
             aLibName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
@@ -178,7 +178,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
             // UNICODE: rStrm >> aMacName;
             aMacName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
-            rStrm >> nScriptType;
+            rStrm.ReadUInt16( nScriptType );
 
             pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName,
                                         (ScriptType)nScriptType ) );

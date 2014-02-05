@@ -748,7 +748,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nStmPos = rIStm.Tell();
-    rIStm >> nAnimMagic1 >> nAnimMagic2;
+    rIStm.ReadUInt32( nAnimMagic1 ).ReadUInt32( nAnimMagic2 );
 
     rAnimation.Clear();
 
@@ -762,7 +762,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
         rIStm.Seek( nStmPos );
         ReadDIBBitmapEx(rAnimation.maBitmapEx, rIStm);
         nStmPos = rIStm.Tell();
-        rIStm >> nAnimMagic1 >> nAnimMagic2;
+        rIStm.ReadUInt32( nAnimMagic1 ).ReadUInt32( nAnimMagic2 );
 
         if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
             bReadAnimations = true;
@@ -785,15 +785,15 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             ReadPair( rIStm, aAnimBmp.aPosPix );
             ReadPair( rIStm, aAnimBmp.aSizePix );
             ReadPair( rIStm, rAnimation.maGlobalSize );
-            rIStm >> nTmp16; aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
-            rIStm >> nTmp16; aAnimBmp.eDisposal = ( Disposal) nTmp16;
-            rIStm >> cTmp; aAnimBmp.bUserInput = (sal_Bool) cTmp;
-            rIStm >> nTmp32; rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
-            rIStm >> nTmp32; // Unused
-            rIStm >> nTmp32; // Unused
-            rIStm >> nTmp32; // Unused
+            rIStm.ReadUInt16( nTmp16 ); aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
+            rIStm.ReadUInt16( nTmp16 ); aAnimBmp.eDisposal = ( Disposal) nTmp16;
+            rIStm.ReadUChar( cTmp ); aAnimBmp.bUserInput = (sal_Bool) cTmp;
+            rIStm.ReadUInt32( nTmp32 ); rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
+            rIStm.ReadUInt32( nTmp32 ); // Unused
+            rIStm.ReadUInt32( nTmp32 ); // Unused
+            rIStm.ReadUInt32( nTmp32 ); // Unused
             read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Unused
-            rIStm >> nTmp16; // The rest to read
+            rIStm.ReadUInt16( nTmp16 ); // The rest to read
 
             rAnimation.Insert( aAnimBmp );
         }

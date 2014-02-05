@@ -406,7 +406,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 uno::Reference < io::XStream > xStm = xDocStor->openStreamElement( rObjName,
                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStm );
-                *pTemp >> *pStream;
+                pTemp->ReadStream( *pStream );
                 delete pStream;
 
                 // TODO/LATER: what to do when other types of objects are based on substream persistence?

@@ -1889,7 +1889,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
 
     sal_uInt16 nMod;
     pModules->Clear();
-    r >> nMod;
+    r.ReadUInt16( nMod );
     for( sal_uInt16 i = 0; i < nMod; i++ )
     {
         SbxBase* pBase = SbxBase::Load( r );

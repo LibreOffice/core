@@ -498,10 +498,10 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
     sal_uInt32  nOrigPos = nPSStreamPos = rStream.Tell();
     sal_uInt16  nOldFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    rStream >> nSignature;
+    rStream.ReadUInt32( nSignature );
     if ( nSignature == 0xc6d3d0c5 )
     {
-        rStream >> nPSStreamPos >> nPSSize >> nPosWMF >> nSizeWMF;
+        rStream.ReadUInt32( nPSStreamPos ).ReadUInt32( nPSSize ).ReadUInt32( nPosWMF ).ReadUInt32( nSizeWMF );
 
         // first we try to get the metafile grafix
 
@@ -516,7 +516,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
         }
         else
         {
-            rStream >> nPosTIFF >> nSizeTIFF;
+            rStream.ReadUInt32( nPosTIFF ).ReadUInt32( nSizeTIFF );
 
             // else we have to get the tiff grafix
 
@@ -584,7 +584,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                         {
                                             while ( bIsValid && ( nBitsLeft != 7 ) )
                                             {
-                                                rStream >> nByte;
+                                                rStream.ReadChar( nByte );
                                                 switch ( nByte )
                                                 {
                                                     case 0x0a :

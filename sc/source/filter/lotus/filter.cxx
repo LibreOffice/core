@@ -102,7 +102,7 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
     {
         sal_uInt16 nOpcode, nLength;
 
-        aStream >> nOpcode >> nLength;
+        aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
         bEOF = sal_True;
@@ -118,11 +118,11 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
             {
         // This is really ugly - needs re-factoring ...
         aStream.SeekRel(nLength);
-        aStream >> nOpcode >> nLength;
+        aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
         if ( nOpcode == 0x29a)
         {
             aStream.SeekRel(nLength);
-            aStream >> nOpcode >> nLength;
+            aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
             if ( nOpcode == 0x804 )
             {
             aStream.SeekRel(nLength);
@@ -152,11 +152,11 @@ WKTYP ScanVersion( SvStream& aStream )
     sal_uInt16          nOpcode, nVersNr, nRecLen;
 
     // erstes Byte muss wegen BOF zwingend 0 sein!
-    aStream >> nOpcode;
+    aStream.ReadUInt16( nOpcode );
     if( nOpcode != nBOF )
         return eWK_UNKNOWN;
 
-    aStream >> nRecLen >> nVersNr;
+    aStream.ReadUInt16( nRecLen ).ReadUInt16( nVersNr );
 
     if( aStream.IsEof() )
         return eWK_Error;
@@ -176,7 +176,7 @@ WKTYP ScanVersion( SvStream& aStream )
                 return eWK_UNKNOWN;
 
         case 0x1000:
-            aStream >> nVersNr;
+            aStream.ReadUInt16( nVersNr );
             if( aStream.IsEof() ) return eWK_Error;
             if( nVersNr == 0x0004 && nRecLen == 26 )
 			{	// 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)

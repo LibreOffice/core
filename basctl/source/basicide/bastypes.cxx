@@ -707,14 +707,14 @@ sal_uLong CalcLineCount( SvStream& rStream )
     char c;
 
     rStream.Seek( 0 );
-    rStream >> c;
+    rStream.ReadChar( c );
     while ( !rStream.IsEof() )
     {
         if ( c == '\n' )
             nLFs++;
         else if ( c == '\r' )
             nCRs++;
-        rStream >> c;
+        rStream.ReadChar( c );
     }
 
     rStream.Seek( 0 );

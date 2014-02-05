@@ -152,15 +152,15 @@ void PCXReader::ImplReadHeader()
     sal_uInt16 nushort;
     sal_uInt16 nMinX,nMinY,nMaxX,nMaxY;
 
-    m_rPCX >> nbyte >> nVersion >> nEncoding;
+    m_rPCX.ReadUChar( nbyte ).ReadUChar( nVersion ).ReadUChar( nEncoding );
     if ( nbyte!=0x0a || (nVersion != 0 && nVersion != 2 && nVersion != 3 && nVersion != 5) || nEncoding > 1 )
     {
         nStatus = sal_False;
         return;
     }
 
-    m_rPCX >> nbyte; nBitsPerPlanePix = (sal_uLong)nbyte;
-    m_rPCX >> nMinX >> nMinY >> nMaxX >> nMaxY;
+    m_rPCX.ReadUChar( nbyte ); nBitsPerPlanePix = (sal_uLong)nbyte;
+    m_rPCX.ReadUInt16( nMinX ).ReadUInt16( nMinY ).ReadUInt16( nMaxX ).ReadUInt16( nMaxY );
 
     if ((nMinX > nMaxX) || (nMinY > nMaxY))
     {
@@ -171,17 +171,17 @@ void PCXReader::ImplReadHeader()
     nWidth = nMaxX-nMinX+1;
     nHeight = nMaxY-nMinY+1;
 
-    m_rPCX >> nResX;
-    m_rPCX >> nResY;
+    m_rPCX.ReadUInt16( nResX );
+    m_rPCX.ReadUInt16( nResY );
     if ( nResX >= nWidth || nResY >= nHeight || ( nResX != nResY ) )
         nResX = nResY = 0;
 
     ImplReadPalette( 16 );
 
     m_rPCX.SeekRel( 1 );
-    m_rPCX >> nbyte;   nPlanes = (sal_uLong)nbyte;
-    m_rPCX >> nushort; nBytesPerPlaneLin = (sal_uLong)nushort;
-    m_rPCX >> nPaletteInfo;
+    m_rPCX.ReadUChar( nbyte );   nPlanes = (sal_uLong)nbyte;
+    m_rPCX.ReadUInt16( nushort ); nBytesPerPlaneLin = (sal_uLong)nushort;
+    m_rPCX.ReadUInt16( nPaletteInfo );
 
     m_rPCX.SeekRel( 58 );
 
@@ -245,11 +245,11 @@ void PCXReader::ImplReadBody()
                 }
                 while ( nx > 0 )
                 {
-                    m_rPCX >> nDat;
+                    m_rPCX.ReadUChar( nDat );
                     if ( ( nDat & 0xc0 ) == 0xc0 )
                     {
                         nCount =( (sal_uLong)nDat ) & 0x003f;
-                        m_rPCX >> nDat;
+                        m_rPCX.ReadUChar( nDat );
                         if ( nCount < nx )
                         {
                             nx -= nCount;
@@ -387,7 +387,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
     sal_uInt8*  pPtr = pPalette;
     for ( sal_uLong i = 0; i < nCol; i++ )
     {
-        m_rPCX >> r >> g >> b;
+        m_rPCX.ReadUChar( r ).ReadUChar( g ).ReadUChar( b );
         *pPtr++ = r;
         *pPtr++ = g;
         *pPtr++ = b;

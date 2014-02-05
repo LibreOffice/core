@@ -1668,7 +1668,7 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     // As a precaution...
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     sal_uInt8 bImage;
-    rStrm >> bImage;
+    rStrm.ReadUChar( bImage );
     if( bImage )
     {
         SbiImage* p = new SbiImage;
@@ -2076,10 +2076,10 @@ sal_Bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( !SbxMethod::LoadData( rStrm, 1 ) )
         return sal_False;
     sal_Int16 n;
-    rStrm >> n;
+    rStrm.ReadInt16( n );
     sal_Int16 nTempStart = (sal_Int16)nStart;
     if( nVer == 2 )
-        rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;
+        rStrm.ReadUInt16( nLine1 ).ReadUInt16( nLine2 ).ReadInt16( nTempStart ).ReadUChar( bInvalid );
     // HACK ue to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
     nStart = nTempStart;

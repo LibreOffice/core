@@ -191,45 +191,45 @@ sal_uLong TIFFReader::ReadIntData()
         case 1 :
         case 2 :
         case 7 :
-            *pTIFF >> nBYTE;
+            pTIFF->ReadUChar( nBYTE );
             nUINT32a = (sal_uLong)nBYTE;
         break;
         case 3 :
-             *pTIFF >> nUINT16;
+             pTIFF->ReadUInt16( nUINT16 );
              nUINT32a = (sal_uLong)nUINT16;
         break;
         case 9 :
         case 4 :
-            *pTIFF >> nUINT32a;
+            pTIFF->ReadUInt32( nUINT32a );
         break;
         case  5 :
-            *pTIFF >> nUINT32a >> nUINT32b;
+            pTIFF->ReadUInt32( nUINT32a ).ReadUInt32( nUINT32b );
             if ( nUINT32b != 0 )
                 nUINT32a /= nUINT32b;
         break;
         case 6 :
-            *pTIFF >> nCHAR;
+            pTIFF->ReadChar( nCHAR );
             nUINT32a = (sal_Int32)nCHAR;
         break;
         case 8 :
-            *pTIFF >> nINT16;
+            pTIFF->ReadInt16( nINT16 );
             nUINT32a = (sal_Int32)nINT16;
         break;
         case 10 :
-            *pTIFF >> nUINT32a >> nINT32;
+            pTIFF->ReadUInt32( nUINT32a ).ReadInt32( nINT32 );
             if ( nINT32 != 0 )
                 nUINT32a /= nINT32;
         break;
         case 11 :
-            *pTIFF >> nFLOAT;
+            pTIFF->ReadFloat( nFLOAT );
             nUINT32a = (sal_Int32)nFLOAT;
         break;
         case 12 :
-            *pTIFF >> nDOUBLE;
+            pTIFF->ReadDouble( nDOUBLE );
             nUINT32a = (sal_Int32)nDOUBLE;
         break;
         default:
-            *pTIFF >> nUINT32a;
+            pTIFF->ReadUInt32( nUINT32a );
         break;
     }
     return nUINT32a;
@@ -244,9 +244,9 @@ double TIFFReader::ReadDoubleData()
 
     if ( nDataType == 5 )
     {
-        *pTIFF >> nulong;
+        pTIFF->ReadUInt32( nulong );
         nd = (double)nulong;
-        *pTIFF >> nulong;
+        pTIFF->ReadUInt32( nulong );
         if ( nulong != 0 )
             nd /= (double)nulong;
     }
@@ -449,17 +449,17 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                     pColorMap[ i ] = 0;
                 for ( i = 0; i < nNumColors; i++ )
                 {
-                    *pTIFF >> nVal;
+                    pTIFF->ReadUInt16( nVal );
                     pColorMap[ i ] |= ( ( (sal_uLong)nVal ) << 8 ) & 0x00ff0000;
                 }
                 for ( i = 0; i < nNumColors; i++ )
                 {
-                    *pTIFF >> nVal;
+                    pTIFF->ReadUInt16( nVal );
                     pColorMap[ i ] |= ( (sal_uLong)nVal ) & 0x0000ff00;
                 }
                 for ( i = 0; i < nNumColors; i++ )
                 {
-                    *pTIFF >> nVal;
+                    pTIFF->ReadUInt16( nVal );
                     pColorMap[ i ] |= ( ( (sal_uLong)nVal ) >> 8 ) & 0x000000ff;
                 }
             }
@@ -621,7 +621,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 pdst=pMap[ np ];
                 do
                 {
-                    *pTIFF >> nRecHeader;
+                    pTIFF->ReadUChar( nRecHeader );
                     if ((nRecHeader&0x80)==0)
                     {
                         nRecCount=0x00000001+((sal_uLong)nRecHeader);
@@ -642,7 +642,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 //                          return;
 
                         }
-                        *pTIFF >> nRecData;
+                        pTIFF->ReadUChar( nRecData );
                         for ( i = 0; i < nRecCount; i++ )
                             *(pdst++) = nRecData;
                         nRowBytesLeft -= nRecCount;
@@ -1082,13 +1082,13 @@ void TIFFReader::ReadHeader()
     sal_uInt8 nbyte1, nbyte2;
     sal_uInt16 nushort;
 
-    *pTIFF >> nbyte1;
+    pTIFF->ReadUChar( nbyte1 );
     if ( nbyte1 == 'I' )
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     else
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
-    *pTIFF >> nbyte2 >> nushort;
+    pTIFF->ReadUChar( nbyte2 ).ReadUInt16( nushort );
     if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
         bStatus = sal_False;
 }
@@ -1127,7 +1127,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     ReadHeader();
 
     // read first IFD:
-    *pTIFF >> nFirstIfd;
+    pTIFF->ReadUInt32( nFirstIfd );
 
     if( !nFirstIfd || pTIFF->GetError() )
         bStatus = sal_False;
@@ -1148,17 +1148,17 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             };
             nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
 
-            *pTIFF >> nNumTags;
+            pTIFF->ReadUInt16( nNumTags );
 
             // loop through tags:
             for( i = 0; i < nNumTags; i++ )
             {
-                *pTIFF >> nTagType >> nDataType >> nDataLen >> nOffset;
+                pTIFF->ReadUInt16( nTagType ).ReadUInt16( nDataType ).ReadUInt32( nDataLen ).ReadUInt32( nOffset );
 
                 if( DataTypeSize() * nDataLen > 4 )
                     nMaxPos = std::max( nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
             }
-            *pTIFF >> nOffset;
+            pTIFF->ReadUInt32( nOffset );
             if ( pTIFF->IsEof() )
                 nOffset = 0;
 
@@ -1207,17 +1207,17 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 pStripByteCounts = NULL;
                 pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = NULL;
 
-                *pTIFF >> nNumTags;
+                pTIFF->ReadUInt16( nNumTags );
                 nPos = pTIFF->Tell();
 
                 // Schleife ueber Tags:
                 for( i = 0; i < nNumTags; i++ )
                 {
-                    *pTIFF >> nTagType >> nDataType >> nDataLen;
+                    pTIFF->ReadUInt16( nTagType ).ReadUInt16( nDataType ).ReadUInt32( nDataLen );
 
                     if( DataTypeSize() * nDataLen > 4 )
                     {
-                        *pTIFF >> nOffset;
+                        pTIFF->ReadUInt32( nOffset );
                         pTIFF->Seek( nOrigPos + nOffset );
                     }
                     ReadTagData( nTagType, nDataLen );
@@ -1229,7 +1229,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if ( bStatus == sal_False )
                         break;
                 }
-                *pTIFF >> nNextIfd;
+                pTIFF->ReadUInt32( nNextIfd );
                 if ( pTIFF->IsEof() )
                     nNextIfd = 0;
             }

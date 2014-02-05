@@ -201,17 +201,17 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
 
     aCRD.InitFlags();
     aSRD.InitFlags();
-    maIn >> nRef;
+    maIn.ReadUInt16( nRef );
 
     if( nRef < nBufSize )
     {
         for( i=0; i < nRef; i++)
         {
-            maIn >> nFmla[i];
+            maIn.ReadUChar( nFmla[i] );
 
             if( nFmla[ i ] == 0x05 )
             {
-                maIn >> nInt;
+                maIn.ReadUInt16( nInt );
                 nIntArray[ nIntCount ] = nInt;
                 SAFEDEC_OR_RET(nRef, 2, ConvErrCount);
                 nIntCount++;
@@ -219,7 +219,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
 
             if( nFmla[ i ] == 0x00 )
             {
-                maIn >> nFloat;
+                maIn.ReadDouble( nFloat );
                 nFloatArray[ nFloatCount ] = nFloat;
                 SAFEDEC_OR_RET(nRef, 8, ConvErrCount);
                 nFloatCount++;
@@ -227,7 +227,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
 
             if( nFmla[ i ] == 0x1a )
             {
-                maIn >> nArg >> nDummy >> nDLLId;
+                maIn.ReadUChar( nArg ).ReadUInt16( nDummy ).ReadUInt16( nDLLId );
                 nArgArray[ nArgCount ] = nArg;
                 nDLLArray[ nDLLCount ] = nDLLId;
                 SAFEDEC_OR_RET(nRef, 5, ConvErrCount);
@@ -299,15 +299,15 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 break;
 
             case FT_Cref : // Single cell reference
-                maIn >> nNote >> nCol >> nPage >> nRelBits;
+                maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aSRD, nPage, nCol, nRelBits );
                 aStack << aPool.Store( aSRD );
                 break;
 
             case FT_Range: // Block reference
-                maIn >> nNote >> nCol >> nPage >> nRelBits;
+                maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aCRD.Ref1, nPage, nCol, nRelBits );
-                maIn >> nCol >> nPage >> nRelBits;
+                maIn.ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 ReadSRD( aCRD.Ref2, nPage, nCol, nRelBits );
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.Tab() == aCRD.Ref2.Tab() &&

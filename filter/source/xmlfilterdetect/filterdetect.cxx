@@ -143,7 +143,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
         if ( nUniPos == 0 ) // No BOM detected, try to guess UTF-16 endianness
         {
             sal_uInt16 sHeader = 0;
-            *pInStream >> sHeader;
+            pInStream->ReadUInt16( sHeader );
             if ( sHeader == 0x003C )
                 bTryUtf16 = true;
             else if ( sHeader == 0x3C00 )

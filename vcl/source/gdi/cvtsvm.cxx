@@ -53,7 +53,7 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 {
     sal_Int32   nSize;
 
-    rIStm >> nSize;
+    rIStm.ReadInt32( nSize );
     rPoly = Polygon( (sal_uInt16) nSize );
 
     for( sal_uInt16 i = 0; i < (sal_uInt16) nSize; i++ )
@@ -65,7 +65,7 @@ void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
     Polygon aPoly;
     sal_Int32   nPolyCount;
 
-    rIStm >> nPolyCount;
+    rIStm.ReadInt32( nPolyCount );
 
     for( sal_uInt16 i = 0; i < (sal_uInt16) nPolyCount; i++ )
     {
@@ -107,9 +107,9 @@ void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
     sal_Int16 nVal;
 
-    rIStm >> nVal; rColor.SetRed( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
-    rIStm >> nVal; rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
-    rIStm >> nVal; rColor.SetBlue( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetRed( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm.ReadInt16( nVal ); rColor.SetBlue( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
 }
 
 void ImplWriteColor( SvStream& rOStm, const Color& rColor )
@@ -135,9 +135,9 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     sal_Int32   nYDenom;
     sal_Int16   nUnit;
 
-    rIStm >> nUnit;
+    rIStm.ReadInt16( nUnit );
     ReadPair( rIStm, aOrg );
-    rIStm >> nXNum >> nXDenom >> nYNum >> nYDenom;
+    rIStm.ReadInt32( nXNum ).ReadInt32( nXDenom ).ReadInt32( nYNum ).ReadInt32( nYDenom );
     rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
 }
 
@@ -286,8 +286,8 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
         sal_Size    nStringLen;
 
         rIStm.Seek( nStrmPos );
-        rIStm   >> nType
-                >> nActionSize;
+        rIStm  .ReadUInt16( nType )
+               .ReadUInt32( nActionSize );
 
         nStringLen = (nActionSize - 4) >> 1;
 
@@ -304,7 +304,7 @@ void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
 
     for( sal_uLong i = 0UL; i < nSkipCount; i++ )
     {
-        rIStm >> nType >> nActionSize;
+        rIStm.ReadInt16( nType ).ReadInt32( nActionSize );
         rIStm.SeekRel( nActionSize - 4L );
     }
 }
@@ -393,12 +393,12 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
 {
     rPolyPoly.Clear();
     sal_uInt16 nPolygonCount(0);
-    rIStm >> nPolygonCount;
+    rIStm.ReadUInt16( nPolygonCount );
 
     for(sal_uInt16 a(0); a < nPolygonCount; a++)
     {
         sal_uInt16 nPointCount(0);
-        rIStm >> nPointCount;
+        rIStm.ReadUInt16( nPointCount );
         Polygon aCandidate(nPointCount);
 
         if(nPointCount)
@@ -409,7 +409,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
             }
 
             sal_uInt8 bHasFlags(false);
-            rIStm >> bHasFlags;
+            rIStm.ReadUChar( bHasFlags );
 
             if(bHasFlags)
             {
@@ -417,7 +417,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
 
                 for(sal_uInt16 c(0); c < nPointCount; c++)
                 {
-                    rIStm >> aPolyFlags;
+                    rIStm.ReadUChar( aPolyFlags );
                     aCandidate.SetFlags(c, (PolyFlags)aPolyFlags);
                 }
             }
@@ -452,13 +452,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     // read header
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Identifier
-    rIStm >> nSize;                                 // Size
-    rIStm >> nVersion;                              // Version
+    rIStm.ReadInt16( nSize );                                 // Size
+    rIStm.ReadInt16( nVersion );                              // Version
     //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp32(0);
-    rIStm >> nTmp32;
+    rIStm.ReadInt32( nTmp32 );
     aPrefSz.Width() = nTmp32;                       // PrefSize.Width()
-    rIStm >> nTmp32;
+    rIStm.ReadInt32( nTmp32 );
     aPrefSz.Height() = nTmp32;                      // PrefSize.Height()
 
     // check header-magic and version
@@ -493,7 +493,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         sal_Int32       nUnicodeCommentActionNumber = 0;
 
         ImplReadMapMode( rIStm, aMapMode );             // MapMode
-        rIStm >> nActions;                              // Action count
+        rIStm.ReadInt32( nActions );                              // Action count
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
@@ -501,9 +501,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
         for (sal_Int32 i = 0; i < nActions; ++i)
         {
-            rIStm >> nType;
+            rIStm.ReadInt16( nType );
             sal_Int32 nActBegin = rIStm.Tell();
-            rIStm >> nActionSize;
+            rIStm.ReadInt32( nActionSize );
 
             DBG_ASSERT( ( nType <= 33 ) || ( nType >= 1024 ), "Unknown GDIMetaAction while converting!" );
 
@@ -535,7 +535,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case (GDI_LINEJOIN_ACTION) :
                 {
                     sal_Int16 nLineJoin(0);
-                    rIStm >> nLineJoin;
+                    rIStm.ReadInt16( nLineJoin );
                     aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
                 }
                 break;
@@ -543,7 +543,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case (GDI_LINECAP_ACTION) :
                 {
                     sal_Int16 nLineCap(0);
-                    rIStm >> nLineCap;
+                    rIStm.ReadInt16( nLineCap );
                     aLineInfo.SetLineCap((com::sun::star::drawing::LineCap)nLineCap);
                 }
                 break;
@@ -553,11 +553,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16 a(0);
                     sal_Int32 b(0);
 
-                    rIStm >> a; aLineInfo.SetDashCount(a);
-                    rIStm >> b; aLineInfo.SetDashLen(b);
-                    rIStm >> a; aLineInfo.SetDotCount(a);
-                    rIStm >> b; aLineInfo.SetDotLen(b);
-                    rIStm >> b; aLineInfo.SetDistance(b);
+                    rIStm.ReadInt16( a ); aLineInfo.SetDashCount(a);
+                    rIStm.ReadInt32( b ); aLineInfo.SetDashLen(b);
+                    rIStm.ReadInt16( a ); aLineInfo.SetDotCount(a);
+                    rIStm.ReadInt32( b ); aLineInfo.SetDotLen(b);
+                    rIStm.ReadInt32( b ); aLineInfo.SetDistance(b);
 
                     if(((aLineInfo.GetDashCount() && aLineInfo.GetDashLen())
                         || (aLineInfo.GetDotCount() && aLineInfo.GetDotLen()))
@@ -639,7 +639,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_RECT_ACTION ):
                 {
                     ImplReadRect( rIStm, aRect );
-                    rIStm >> nTmp >> nTmp1;
+                    rIStm.ReadInt32( nTmp ).ReadInt32( nTmp1 );
 
                     if( nTmp || nTmp1 )
                         rMtf.AddAction( new MetaRoundRectAction( aRect, nTmp, nTmp1 ) );
@@ -794,10 +794,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                     rIStm.Read( aName, 32 );
                     aFont.SetName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
-                    rIStm >> nWidth >> nHeight;
-                    rIStm >> nCharOrient >> nLineOrient;
-                    rIStm >> nCharSet >> nFamily >> nPitch >> nAlign >> nWeight >> nUnderline >> nStrikeout;
-                    rIStm >> bItalic >> bOutline >> bShadow >> bTransparent;
+                    rIStm.ReadInt32( nWidth ).ReadInt32( nHeight );
+                    rIStm.ReadInt16( nCharOrient ).ReadInt16( nLineOrient );
+                    rIStm.ReadInt16( nCharSet ).ReadInt16( nFamily ).ReadInt16( nPitch ).ReadInt16( nAlign ).ReadInt16( nWeight ).ReadInt16( nUnderline ).ReadInt16( nStrikeout );
+                    rIStm.ReadUChar( bItalic ).ReadUChar( bOutline ).ReadUChar( bShadow ).ReadUChar( bTransparent );
 
                     aFont.SetSize( Size( nWidth, nHeight ) );
                     aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
@@ -832,12 +832,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     sal_Int32       nIndex, nLen;
 
-                    ReadPair( rIStm, aPt ) >> nIndex >> nLen >> nTmp;
+                    ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp );
                     if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
-                        rIStm >> nTerminator;
+                        rIStm.ReadUChar( nTerminator );
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
@@ -854,12 +854,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32*  pDXAry = NULL;
                     sal_Int32   nIndex, nLen, nAryLen;
 
-                    ReadPair( rIStm, aPt ) >> nIndex >> nLen >> nTmp >> nAryLen;
+                    ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nAryLen );
                     if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
-                        rIStm >> nTerminator;
+                        rIStm.ReadUChar( nTerminator );
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
@@ -871,7 +871,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             pDXAry = new sal_Int32[ std::max( nAryLen, nStrLen ) ];
 
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
-                                rIStm >> nTmp, pDXAry[ j ] = nTmp;
+                                rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
 
                             // #106172# Add last DX array elem, if missing
                             if( nAryLen != nStrLen )
@@ -916,12 +916,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     sal_Int32       nIndex, nLen, nWidth;
 
-                    ReadPair( rIStm, aPt ) >> nIndex >> nLen >> nTmp >> nWidth;
+                    ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nWidth );
                     if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
-                        rIStm >> nTerminator;
+                        rIStm.ReadUChar( nTerminator );
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
@@ -974,7 +974,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16 nPenStyle;
 
                     ImplReadColor( rIStm, aActionColor );
-                    rIStm >> nPenWidth >> nPenStyle;
+                    rIStm.ReadInt32( nPenWidth ).ReadInt16( nPenStyle );
 
                     aLineInfo.SetStyle( nPenStyle ? LINE_SOLID : LINE_NONE );
                     aLineInfo.SetWidth( nPenWidth );
@@ -990,7 +990,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     ImplReadColor( rIStm, aActionColor );
                     rIStm.SeekRel( 6L );
-                    rIStm >> nBrushStyle;
+                    rIStm.ReadInt16( nBrushStyle );
                     rMtf.AddAction( new MetaFillColorAction( aActionColor, nBrushStyle != 0 ) );
                     rIStm.SeekRel( 2L );
                 }
@@ -1013,7 +1013,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16   bIntersect;
                     sal_Bool    bClip = sal_False;
 
-                    rIStm >> nRegType >> bIntersect;
+                    rIStm.ReadInt16( nRegType ).ReadInt16( bIntersect );
                     ImplReadRect( rIStm, aRect );
 
                     switch( nRegType )
@@ -1044,7 +1044,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             PolyPolygon aPolyPoly;
                             sal_Int32       nPolyCount;
 
-                            rIStm >> nPolyCount;
+                            rIStm.ReadInt32( nPolyCount );
 
                             for( sal_uInt16 j = 0; j < (sal_uInt16) nPolyCount; j++ )
                             {
@@ -1067,7 +1067,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_MOVECLIPREGION_ACTION ):
                 {
-                    rIStm >> nTmp >> nTmp1;
+                    rIStm.ReadInt32( nTmp ).ReadInt32( nTmp1 );
                     rMtf.AddAction( new MetaMoveClipRegionAction( nTmp, nTmp1 ) );
                 }
                 break;
@@ -1084,7 +1084,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     RasterOp    eRasterOp;
                     sal_Int16       nRasterOp;
 
-                    rIStm >> nRasterOp;
+                    rIStm.ReadInt16( nRasterOp );
 
                     switch( nRasterOp )
                     {
@@ -1156,10 +1156,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16   nIntensityEnd;
 
                     ImplReadRect( rIStm, aRect );
-                    rIStm >> nStyle;
+                    rIStm.ReadInt16( nStyle );
                     ImplReadColor( rIStm, aStartCol );
                     ImplReadColor( rIStm, aEndCol );
-                    rIStm >> nAngle >> nBorder >> nOfsX >> nOfsY >> nIntensityStart >> nIntensityEnd;
+                    rIStm.ReadInt16( nAngle ).ReadInt16( nBorder ).ReadInt16( nOfsX ).ReadInt16( nOfsY ).ReadInt16( nIntensityStart ).ReadInt16( nIntensityEnd );
 
                     Gradient aGrad( (GradientStyle) nStyle, aStartCol, aEndCol );
 
@@ -1180,7 +1180,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16       nTrans;
 
                     ReadPolyPolygon( rIStm, aPolyPoly );
-                    rIStm >> nTrans >> nFollowingActionCount;
+                    rIStm.ReadInt16( nTrans ).ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTransparentAction( aPolyPoly, nTrans ) );
 
@@ -1200,7 +1200,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ReadPair( rIStm, aPos );
                     ReadPair( rIStm, aSize );
                     ReadGradient( rIStm, aGradient );
-                    rIStm >> nFollowingActionCount;
+                    rIStm.ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, aGradient ) );
 
@@ -1216,7 +1216,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     ReadPolyPolygon( rIStm, aPolyPoly );
                     ReadHatch( rIStm, aHatch );
-                    rIStm >> nFollowingActionCount;
+                    rIStm.ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaHatchAction( aPolyPoly, aHatch ) );
 
@@ -1231,7 +1231,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32   nFollowingActionCount;
 
                     ReadPair( rIStm, aRefPoint );
-                    rIStm >> bSet >> nFollowingActionCount;
+                    rIStm.ReadUChar( bSet ).ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaRefPointAction( aRefPoint, bSet ) );
 
@@ -1252,7 +1252,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32   nFollowingActionCount;
 
                     ReadColor( rIStm, aColor );
-                    rIStm >> bSet >> nFollowingActionCount;
+                    rIStm.ReadUChar( bSet ).ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineColorAction( aColor, bSet ) );
 
@@ -1270,7 +1270,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32   nFollowingActionCount;
 
                     ReadPair( rIStm, aStartPt );
-                    rIStm >> nWidth >> nStrikeout >> nUnderline >> nFollowingActionCount;
+                    rIStm.ReadInt32( nWidth ).ReadUInt32( nStrikeout ).ReadUInt32( nUnderline ).ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                             (FontStrikeout) nStrikeout,
@@ -1289,7 +1289,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     ReadPolyPolygon( rIStm, aPolyPoly );
                     ReadGradient( rIStm, aGradient );
-                    rIStm >> nFollowingActionCount;
+                    rIStm.ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaGradientExAction( aPolyPoly, aGradient ) );
 
@@ -1305,7 +1305,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32       nFollowingActionCount;
 
                     OString aComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
-                    rIStm >> nValue >> nDataSize;
+                    rIStm.ReadInt32( nValue ).ReadUInt32( nDataSize );
 
                     if( nDataSize )
                     {
@@ -1315,7 +1315,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     else
                         pData = NULL;
 
-                    rIStm >> nFollowingActionCount;
+                    rIStm.ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaCommentAction( aComment, nValue, pData, nDataSize ) );
 

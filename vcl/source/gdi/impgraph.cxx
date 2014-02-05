@@ -1005,7 +1005,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
     }
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    rIStm >> nId;
+    rIStm.ReadUInt32( nId );
 
     // check version
     if( GRAPHIC_FORMAT_50 == nId )
@@ -1013,8 +1013,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
         // read new style header
         VersionCompat* pCompat = new VersionCompat( rIStm, STREAM_READ );
 
-        rIStm >> nType;
-        rIStm >> nLen;
+        rIStm.ReadInt32( nType );
+        rIStm.ReadInt32( nLen );
         ReadPair( rIStm, aSize );
         ReadMapMode( rIStm, aMapMode );
 
@@ -1030,9 +1030,9 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
         rIStm.SeekRel( -4L );
 
-        rIStm >> nType >> nLen >> nWidth >> nHeight;
-        rIStm >> nMapMode >> nScaleNumX >> nScaleDenomX >> nScaleNumY;
-        rIStm >> nScaleDenomY >> nOffsX >> nOffsY;
+        rIStm.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
+        rIStm.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
+        rIStm.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
 
         // swapped
         if( nType > 100L )
@@ -1598,7 +1598,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             rImpGraphic.ImplClear();
 
         // read Id
-        rIStm >> nTmp;
+        rIStm.ReadUInt32( nTmp );
 
         // if there is no more data, avoid further expensive
         // reading which will create VDevs and other stuff, just to
@@ -1659,7 +1659,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     sal_uInt32  nMagic1(0), nMagic2(0);
                     sal_uLong   nActPos = rIStm.Tell();
 
-                    rIStm >> nMagic1 >> nMagic2;
+                    rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
                     rIStm.Seek( nActPos );
 
                     rImpGraphic = ImpGraphic( aBmpEx );
@@ -1697,12 +1697,12 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                         sal_uInt32 nMagic;
                         rIStm.Seek(nStmPos1);
                         rIStm.ResetError();
-                        rIStm >> nMagic;
+                        rIStm.ReadUInt32( nMagic );
 
                         if(nSvgMagic == nMagic)
                         {
                             sal_uInt32 mnSvgDataArrayLength(0);
-                            rIStm >> mnSvgDataArrayLength;
+                            rIStm.ReadUInt32( mnSvgDataArrayLength );
 
                             if(mnSvgDataArrayLength)
                             {

@@ -56,7 +56,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 
     nOutBufDataLen=0;
 
-    *pIStream >> nInputBitsBuf;
+    pIStream->ReadUChar( nInputBitsBuf );
 
     nInputBitsBufSize=8;
 
@@ -124,7 +124,7 @@ sal_uInt16 LZWDecompressor::GetNextCode()
         {
             nCode=(nCode<<nInputBitsBufSize) | nInputBitsBuf;
             nBits = nBits - nInputBitsBufSize;
-            *pIStream >> nInputBitsBuf;
+            pIStream->ReadUChar( nInputBitsBuf );
             if ( bInvert )
                 nInputBitsBuf = ( ( nInputBitsBuf & 1 ) << 7 ) | ( ( nInputBitsBuf & 2 ) << 5 ) | ( ( nInputBitsBuf & 4 ) << 3 ) | ( ( nInputBitsBuf & 8 ) << 1 ) | ( ( nInputBitsBuf & 16 ) >> 1 ) | ( ( nInputBitsBuf & 32 ) >> 3 ) | ( ( nInputBitsBuf & 64 ) >> 5 ) | ( (nInputBitsBuf & 128 ) >> 7 );
             nInputBitsBufSize=8;

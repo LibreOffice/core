@@ -148,7 +148,7 @@ SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     return new SvxOrientationItem( (SvxCellOrientation)nVal, Which() );
 }
 
@@ -313,10 +313,10 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
     sal_Int16   nTop;
     sal_Int16   nRight;
     sal_Int16   nBottom;
-    rStream >> nLeft;
-    rStream >> nTop;
-    rStream >> nRight;
-    rStream >> nBottom;
+    rStream.ReadInt16( nLeft );
+    rStream.ReadInt16( nTop );
+    rStream.ReadInt16( nRight );
+    rStream.ReadInt16( nBottom );
     return new SvxMarginItem( nLeft, nTop, nRight, nBottom, Which() );
 }
 

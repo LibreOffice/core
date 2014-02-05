@@ -142,14 +142,14 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
     rObj.NewImp(); // copy if necessary
 
     sal_uInt32 a;
-    rStr >> a;
+    rStr.ReadUInt32( a );
     memcpy(rObj.pImp->szData, &a, sizeof(sal_uInt32));
 
     sal_uInt16 b;
-    rStr >> b;
+    rStr.ReadUInt16( b );
     memcpy(rObj.pImp->szData+4, &b, sizeof(sal_uInt16));
 
-    rStr >> b;
+    rStr.ReadUInt16( b );
     memcpy(rObj.pImp->szData+6, &b, sizeof(sal_uInt16));
 
     rStr.Read( (sal_Char *)&rObj.pImp->szData[ 8 ], 8 );

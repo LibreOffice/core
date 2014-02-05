@@ -44,7 +44,7 @@ sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
     sal_Bool        bRet;
     sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
-    rStm >> cByte1 >> cByte2 >> cByte3 >> cByte4 >> cByte5 >> cByte6;
+    rStm.ReadUChar( cByte1 ).ReadUChar( cByte2 ).ReadUChar( cByte3 ).ReadUChar( cByte4 ).ReadUChar( cByte5 ).ReadUChar( cByte6 );
 
     if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
@@ -96,7 +96,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         sal_uInt32  nCompressedSize, nUnCompressedSize;
 
         rStm.SeekRel( 6 );
-        rStm >> nUnCompressedSize >> nCompressedSize;
+        rStm.ReadUInt32( nUnCompressedSize ).ReadUInt32( nCompressedSize );
 
         // decompress
         if( 1 == nVersion )

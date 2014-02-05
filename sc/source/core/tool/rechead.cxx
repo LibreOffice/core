@@ -26,14 +26,14 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
     sal_uInt32 nDataSize;
-    rStream >> nDataSize;
+    rStream.ReadUInt32( nDataSize );
     sal_uLong nDataPos = rStream.Tell();
     nTotalEnd = nDataPos + nDataSize;
     nEntryEnd = nTotalEnd;
 
     rStream.SeekRel(nDataSize);
     sal_uInt16 nID;
-    rStream >> nID;
+    rStream.ReadUInt16( nID );
     if (nID != SCID_SIZES)
     {
         OSL_FAIL("SCID_SIZES not found");
@@ -47,7 +47,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     else
     {
         sal_uInt32 nSizeTableLen;
-        rStream >> nSizeTableLen;
+        rStream.ReadUInt32( nSizeTableLen );
         pBuf = new sal_uInt8[nSizeTableLen];
         rStream.Read( pBuf, nSizeTableLen );
         pMemStream = new SvMemoryStream( (char*)pBuf, nSizeTableLen, STREAM_READ );
@@ -89,7 +89,7 @@ void ScMultipleReadHeader::StartEntry()
 {
     sal_uLong nPos = rStream.Tell();
     sal_uInt32 nEntrySize;
-    (*pMemStream) >> nEntrySize;
+    (*pMemStream).ReadUInt32( nEntrySize );
 
     nEntryEnd = nPos + nEntrySize;
     OSL_ENSURE( nEntryEnd <= nTotalEnd, "read too many entries" );

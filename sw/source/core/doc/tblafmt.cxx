@@ -148,7 +148,7 @@ namespace
     bool WriterSpecificBlockExists(SvStream &stream)
     {
         sal_uInt64 endOfSwBlock = 0;
-        stream >> endOfSwBlock;
+        stream.ReadUInt64( endOfSwBlock );
 
         // end-of-block pointing to itself indicates a zero-size block.
         return endOfSwBlock != stream.Tell();
@@ -222,39 +222,39 @@ SwAfVersions::SwAfVersions() :
 
 void SwAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 {
-    rStream >> nFontVersion;
-    rStream >> nFontHeightVersion;
-    rStream >> nWeightVersion;
-    rStream >> nPostureVersion;
-    rStream >> nUnderlineVersion;
+    rStream.ReadUInt16( nFontVersion );
+    rStream.ReadUInt16( nFontHeightVersion );
+    rStream.ReadUInt16( nWeightVersion );
+    rStream.ReadUInt16( nPostureVersion );
+    rStream.ReadUInt16( nUnderlineVersion );
     if ( nVer >= AUTOFORMAT_ID_300OVRLN )
-        rStream >> nOverlineVersion;
-    rStream >> nCrossedOutVersion;
-    rStream >> nContourVersion;
-    rStream >> nShadowedVersion;
-    rStream >> nColorVersion;
-    rStream >> nBoxVersion;
+        rStream.ReadUInt16( nOverlineVersion );
+    rStream.ReadUInt16( nCrossedOutVersion );
+    rStream.ReadUInt16( nContourVersion );
+    rStream.ReadUInt16( nShadowedVersion );
+    rStream.ReadUInt16( nColorVersion );
+    rStream.ReadUInt16( nBoxVersion );
     if ( nVer >= AUTOFORMAT_ID_680DR14 )
-        rStream >> nLineVersion;
-    rStream >> nBrushVersion;
-    rStream >> nAdjustVersion;
+        rStream.ReadUInt16( nLineVersion );
+    rStream.ReadUInt16( nBrushVersion );
+    rStream.ReadUInt16( nAdjustVersion );
     if (nVer >= AUTOFORMAT_ID_31005 && WriterSpecificBlockExists(rStream))
     {
-        rStream >> m_nTextOrientationVersion;
-        rStream >> m_nVerticalAlignmentVersion;
+        rStream.ReadUInt16( m_nTextOrientationVersion );
+        rStream.ReadUInt16( m_nVerticalAlignmentVersion );
     }
 
-    rStream >> nHorJustifyVersion;
-    rStream >> nVerJustifyVersion;
-    rStream >> nOrientationVersion;
-    rStream >> nMarginVersion;
-    rStream >> nBoolVersion;
+    rStream.ReadUInt16( nHorJustifyVersion );
+    rStream.ReadUInt16( nVerJustifyVersion );
+    rStream.ReadUInt16( nOrientationVersion );
+    rStream.ReadUInt16( nMarginVersion );
+    rStream.ReadUInt16( nBoolVersion );
     if ( nVer >= AUTOFORMAT_ID_504 )
     {
-        rStream >> nInt32Version;
-        rStream >> nRotateModeVersion;
+        rStream.ReadUInt16( nInt32Version );
+        rStream.ReadUInt16( nRotateModeVersion );
     }
-    rStream >> nNumFmtVersion;
+    rStream.ReadUInt16( nNumFmtVersion );
 }
 
 SwBoxAutoFmt::SwBoxAutoFmt()
@@ -475,7 +475,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         // --- from 680/dr25 on: store strings as UTF-8
         rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         sNumFmtString = rStream.ReadUniOrByteString( eCharSet );
-        rStream >> eSys >> eLge;
+        rStream.ReadUInt16( eSys ).ReadUInt16( eLge );
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // from old versions (Calc)
@@ -900,7 +900,7 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
     sal_uInt16  nVal = 0;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     sal_Bool bRet = 0 == rStream.GetError();
 
     if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
@@ -912,7 +912,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
         m_aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
-            rStream >> nStrResId;
+            rStream.ReadUInt16( nStrResId );
             sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
             if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
                 nId < RID_SVXSTR_TBLAFMT_END )
@@ -922,12 +922,12 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             else
                 nStrResId = USHRT_MAX;
         }
-        rStream >> b; bInclFont = b;
-        rStream >> b; bInclJustify = b;
-        rStream >> b; bInclFrame = b;
-        rStream >> b; bInclBackground = b;
-        rStream >> b; bInclValueFormat = b;
-        rStream >> b; bInclWidthHeight = b;
+        rStream.ReadUChar( b ); bInclFont = b;
+        rStream.ReadUChar( b ); bInclJustify = b;
+        rStream.ReadUChar( b ); bInclFrame = b;
+        rStream.ReadUChar( b ); bInclBackground = b;
+        rStream.ReadUChar( b ); bInclValueFormat = b;
+        rStream.ReadUChar( b ); bInclWidthHeight = b;
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
@@ -937,7 +937,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             READ(m_aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION);
             READ(m_aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION);
 
-            rStream >> m_aRepeatHeading >> m_bLayoutSplit >> m_bRowSplit >> m_bCollapsingBorders;
+            rStream.ReadUInt16( m_aRepeatHeading ).ReadUChar( m_bLayoutSplit ).ReadUChar( m_bRowSplit ).ReadUChar( m_bCollapsingBorders );
 
             READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
         }
@@ -1131,7 +1131,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
     {
         // Attention: We need to read a general Header here
         sal_uInt16 nVal = 0;
-        rStream >> nVal;
+        rStream.ReadUInt16( nVal );
         bRet = 0 == rStream.GetError();
 
         if( bRet )
@@ -1148,7 +1148,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
             {
                 sal_uInt8 nChrSet, nCnt;
                 long nPos = rStream.Tell();
-                rStream >> nCnt >> nChrSet;
+                rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
                     OSL_ENSURE( !this, "The Header contains more or newer Data" );
@@ -1165,7 +1165,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 
                 SwTableAutoFmt* pNew;
                 sal_uInt16 nAnz = 0;
-                rStream >> nAnz;
+                rStream.ReadUInt16( nAnz );
 
                 bRet = 0 == rStream.GetError();
 

@@ -133,7 +133,7 @@ xmlDocPtr Test::parseExport(const OUString& rStreamName)
     char ch;
     for (sal_Size i = 0; i < nSize; ++i)
     {
-        *pStream >> ch;
+        pStream->ReadChar( ch );
         aDocument.append(ch);
     }
 

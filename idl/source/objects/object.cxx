@@ -36,7 +36,7 @@ SvClassElement::SvClassElement()
 void SvClassElement::Load( SvPersistStream & rStm )
 {
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x08 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -79,7 +79,7 @@ void SvMetaClass::Load( SvPersistStream & rStm )
     SvMetaType::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );

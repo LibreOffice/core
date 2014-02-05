@@ -773,7 +773,7 @@ sal_Bool CCIDecompressor::ReadEOL( sal_uInt32 /*nMaxFillBits*/ )
     {
         while ( nInputBitsBufSize < 12 )
         {
-            *pIStream >> nByte;
+            pIStream->ReadUChar( nByte );
             if ( pIStream->IsEof() )
                 return sal_False;
             if ( pIStream->Tell() > nMaxPos )
@@ -804,7 +804,7 @@ sal_Bool CCIDecompressor::Read2DTag()
 
     // read abit and return sal_True if it's 0, otherwise return sal_False
     if (nInputBitsBufSize==0) {
-        *pIStream >> nByte;
+        pIStream->ReadUChar( nByte );
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
         nInputBitsBuf=(sal_uLong)nByte;
@@ -822,7 +822,7 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
 
     // read a bit and deliver 0x00 if it's 0, otherwise 0xff
     if (nInputBitsBufSize==0) {
-        *pIStream >> nByte;
+        pIStream->ReadUChar( nByte );
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
         nInputBitsBuf=(sal_uLong)nByte;
@@ -841,7 +841,7 @@ sal_uInt16 CCIDecompressor::ReadCodeAndDecode(const CCILookUpTableEntry * pLookU
     while (nInputBitsBufSize<nMaxCodeBits)
     {
         sal_uInt8 nByte(0);
-        *pIStream >> nByte;
+        pIStream->ReadUChar( nByte );
         if ( nOptions  & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
         nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;
@@ -929,7 +929,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
         // fetch next 13 bits into nCodem but dont remove them from
         // the input buffer:
         while (nInputBitsBufSize<13) {
-            *pIStream >> nByte;
+            pIStream->ReadUChar( nByte );
             if ( nOptions & CCI_OPTION_INVERSEBITORDER )
                 nByte = pByteSwap[ nByte ];
             nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;

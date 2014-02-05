@@ -1645,7 +1645,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     if ( pStream )
     {
         rStream.Seek(0);
-        rStream >> *pStream;
+        rStream.ReadStream( *pStream );
         pStream->Flush();
         DELETEZ( pStream );
     }
@@ -2309,7 +2309,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
                             m_pSource->SetStreamSize(0);
                             // m_pSource->Seek(0);
-                            *pStream >> *m_pSource;
+                            pStream->ReadStream( *m_pSource );
                             DELETEZ( pStream );
                             m_pSource->Seek(0);
                         }
@@ -3101,7 +3101,7 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
 
     pFile->Seek(0);
     sal_uInt32 nBytes(0);
-    *pFile >> nBytes;
+    pFile->ReadUInt32( nBytes );
 
     // search for the magic bytes
     bool bRet = ( nBytes == 0x04034b50 );
@@ -3112,7 +3112,7 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
         if ( bRet )
         {
             nBytes = 0;
-            *pFile >> nBytes;
+            pFile->ReadUInt32( nBytes );
             bRet = ( nBytes == 0x04034b50 );
         }
     }
@@ -3133,13 +3133,13 @@ bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
 
     pFile->Seek(0);
     sal_uInt32 nBytes;
-    *pFile >> nBytes;
+    pFile->ReadUInt32( nBytes );
 
     // disk spanned file have an additional header in front of the usual one
     bool bRet = ( nBytes == 0x08074b50 );
     if ( bRet )
     {
-        *pFile >> nBytes;
+        pFile->ReadUInt32( nBytes );
         bRet = ( nBytes == 0x04034b50 );
     }
 
@@ -3157,7 +3157,7 @@ OUString UCBStorage::GetLinkedFile( SvStream &rStream )
 
     rStream.Seek(0);
     sal_uInt32 nBytes;
-    rStream >> nBytes;
+    rStream.ReadUInt32( nBytes );
     if( nBytes == 0x04034b50 )
     {
         OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);

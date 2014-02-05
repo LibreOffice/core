@@ -188,7 +188,7 @@ void PCDReader::ReadOrientation()
     if ( bStatus == sal_False )
         return;
     m_rPCD.Seek( 194635 );
-    m_rPCD >> nOrientation;
+    m_rPCD.ReadUChar( nOrientation );
     nOrientation &= 0x03;
 }
 

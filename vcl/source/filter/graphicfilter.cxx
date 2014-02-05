@@ -202,7 +202,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
         rStream.SeekRel(2);
         // bounding box (bytes 2 -> 9)
         rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
-        rStream >> y1 >> x1 >> y2 >> x2;
+        rStream.ReadInt16( y1 ).ReadInt16( x1 ).ReadInt16( y2 ).ReadInt16( x2 );
         rStream.SetNumberFormatInt(oldNumberFormat); // reset format
 
         if (x1 > x2 || y1 > y2 || // bad bdbox
@@ -321,12 +321,12 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             sal_uInt16 nFieldSize;
             sal_uInt8 nMagic;
             bool bOK=true;
-            rStream >> nFieldSize >> nMagic;
+            rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
             for (i=0; i<3; i++) {
                 if (nFieldSize<6) { bOK=false; break; }
                 if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=false; break; }
                 rStream.SeekRel(nFieldSize-3);
-                rStream >> nFieldSize >> nMagic;
+                rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
                 if (nMagic!=0xd3) { bOK=false; break; }
             }
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );

@@ -63,7 +63,7 @@ css::awt::Size BitmapTransporter::getSize() throw()
     if( nLen > 15 )
     {
         m_aStream.Seek( 4 );
-        m_aStream >> aRet.Width >> aRet.Height;
+        m_aStream.ReadInt32( aRet.Width ).ReadInt32( aRet.Height );
     }
     else
         aRet.Width = aRet.Height = 0;

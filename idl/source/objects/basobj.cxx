@@ -64,7 +64,7 @@ sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegP
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
-        rOutStm >> c;
+        rOutStm.ReadChar( c );
         if( !isspace( c ) )
             bOnlySpace = sal_False;
     }
@@ -82,12 +82,12 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.SeekRel( -1 );
     char c = 0;
-    rOutStm >> c;
+    rOutStm.ReadChar( c );
 
     while( isspace( c ) && rOutStm.Tell() != 1 )
     {
         rOutStm.SeekRel( -2 );
-        rOutStm >> c;
+        rOutStm.ReadChar( c );
     }
 
     if( c == ';' || c == ',' )
@@ -119,7 +119,7 @@ void SvMetaName::Load( SvPersistStream & rStm )
 {
     SvMetaObject::Load( rStm );
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
 
     if( nMask >= 0x20 )
     {
@@ -347,7 +347,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
-        rOutStm >> c;
+        rOutStm.ReadChar( c );
         if( !isspace( c ) )
             bOnlySpace = sal_False;
     }
@@ -402,7 +402,7 @@ void SvMetaReference::Load( SvPersistStream & rStm )
     SvMetaName::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x2 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -445,7 +445,7 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
     SvMetaReference::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );

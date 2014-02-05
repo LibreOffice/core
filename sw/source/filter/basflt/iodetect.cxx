@@ -174,7 +174,7 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
                             STREAM_STD_READ | STREAM_NOCREATE );
                 xRef->Seek(10);
                 sal_uInt8 nByte;
-                *xRef >> nByte;
+                xRef->ReadUChar( nByte );
                 bRet = !(nByte & 1);
             }
         }

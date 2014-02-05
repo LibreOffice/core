@@ -216,14 +216,14 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
 {
     sal_uInt16 nSbxId, nFlags, nVer;
     sal_uInt32 nCreator, nSize;
-    rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
+    rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
 
     // Correcting a foolishness of mine:
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
     sal_uIntPtr nOldPos = rStrm.Tell();
-    rStrm >> nSize;
+    rStrm.ReadUInt32( nSize );
     SbxBase* p = Create( nSbxId, nCreator );
     if( p )
     {
@@ -260,10 +260,10 @@ void SbxBase::Skip( SvStream& rStrm )
 {
     sal_uInt16 nSbxId, nFlags, nVer;
     sal_uInt32 nCreator, nSize;
-    rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
+    rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
 
     sal_uIntPtr nStartPos = rStrm.Tell();
-    rStrm >> nSize;
+    rStrm.ReadUInt32( nSize );
 
     rStrm.Seek( nStartPos + nSize );
 }
@@ -372,16 +372,16 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         RTL_TEXTENCODING_ASCII_US);
     aHelpFile = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
         RTL_TEXTENCODING_ASCII_US);
-    rStrm >> nHelpId >> nParam;
+    rStrm.ReadUInt32( nHelpId ).ReadUInt16( nParam );
     while( nParam-- )
     {
         sal_uInt16 nType, nFlags;
         sal_uInt32 nUserData = 0;
         OUString aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm >> nType >> nFlags;
+        rStrm.ReadUInt16( nType ).ReadUInt16( nFlags );
         if( nVer > 1 )
-            rStrm >> nUserData;
+            rStrm.ReadUInt32( nUserData );
         AddParam( aName, (SbxDataType) nType, nFlags );
         SbxParamInfo& p(aParams.back());
         p.nUserData = nUserData;

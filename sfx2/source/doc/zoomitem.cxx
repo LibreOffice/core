@@ -76,7 +76,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
     sal_uInt16 nValue;
     sal_uInt16 nValSet;
     sal_Int8 nType;
-    rStrm >> nValue >> nValSet >> nType;
+    rStrm.ReadUInt16( nValue ).ReadUInt16( nValSet ).ReadSChar( nType );
     SvxZoomItem* pNew = new SvxZoomItem( (SvxZoomType)nType, nValue, Which() );
     pNew->SetValueSet( nValSet );
     return pNew;

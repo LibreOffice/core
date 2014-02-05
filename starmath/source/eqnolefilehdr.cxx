@@ -42,7 +42,7 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     //
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
-    *pS >> nVer;
+    pS->ReadUChar( nVer );
 
     if (!pS->GetError())
     {

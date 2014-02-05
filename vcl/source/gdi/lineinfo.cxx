@@ -236,31 +236,31 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     sal_Int32       nTmp32(0);
 
     //#fdo39428 SvStream no longer supports operator>>(long&)
-    rIStm >> nTmp16; rImplLineInfo.meStyle = (LineStyle) nTmp16;
-    rIStm >> nTmp32;
+    rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meStyle = (LineStyle) nTmp16;
+    rIStm.ReadInt32( nTmp32 );
     rImplLineInfo.mnWidth = nTmp32;
 
     if( aCompat.GetVersion() >= 2 )
     {
         // version 2
-        rIStm >> rImplLineInfo.mnDashCount >> nTmp32;
+        rIStm.ReadUInt16( rImplLineInfo.mnDashCount ).ReadInt32( nTmp32 );
         rImplLineInfo.mnDashLen = nTmp32;
-        rIStm >> rImplLineInfo.mnDotCount >> nTmp32;
+        rIStm.ReadUInt16( rImplLineInfo.mnDotCount ).ReadInt32( nTmp32 );
         rImplLineInfo.mnDotLen = nTmp32;
-        rIStm >> nTmp32;
+        rIStm.ReadInt32( nTmp32 );
         rImplLineInfo.mnDistance = nTmp32;
     }
 
     if( aCompat.GetVersion() >= 3 )
     {
         // version 3
-        rIStm >> nTmp16; rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
     }
 
     if( aCompat.GetVersion() >= 4 )
     {
         // version 4
-        rIStm >> nTmp16; rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
     }
 
     return rIStm;

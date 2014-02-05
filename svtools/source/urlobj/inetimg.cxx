@@ -101,12 +101,12 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
-            rIStm >> nVal;  aSizePixel.Width() = nVal;
-            rIStm >> nVal;  aSizePixel.Height() = nVal;
+            rIStm.ReadInt32( nVal );  aSizePixel.Width() = nVal;
+            rIStm.ReadInt32( nVal );  aSizePixel.Height() = nVal;
             // skip over iHSpace, iVSpace, iBorder, iLowResOffset
             rIStm.SeekRel( 3 * sizeof( sal_Int32 ) + sizeof( int ) );
-            rIStm >> nAltOffset;
-            rIStm >> nAnchorOffset;
+            rIStm.ReadInt32( nAltOffset );
+            rIStm.ReadInt32( nAnchorOffset );
             // skip over iExtraHTML_Offset
             rIStm.SeekRel( sizeof( int ) );
 

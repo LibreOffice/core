@@ -542,7 +542,7 @@ SvParserState SvRTFParser::CallParser()
 {
     sal_Char cFirstCh;
     nNextChPos = rInput.Tell();
-    rInput >> cFirstCh; nNextCh = cFirstCh;
+    rInput.ReadChar( cFirstCh ); nNextCh = cFirstCh;
     eState = SVPAR_WORKING;
     nOpenBrakets = 0;
     SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );

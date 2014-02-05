@@ -3497,10 +3497,10 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
 
         rStrm.SeekRel(IsUnicode() ? -2 : -1);
         if (IsUnicode())
-            rStrm >> nUCode;
+            rStrm.ReadUInt16( nUCode );
         else
         {
-            rStrm >> nBCode;
+            rStrm.ReadUChar( nBCode );
             nUCode = nBCode;
         }
         //If the last char was a cr
@@ -3511,10 +3511,10 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
             {
                 rStrm.SeekRel( IsUnicode() ? -4 : -2 );
                 if (IsUnicode())
-                    rStrm >> nUCode;
+                    rStrm.ReadUInt16( nUCode );
                 else
                 {
-                    rStrm >> nUCode;
+                    rStrm.ReadUInt16( nUCode );
                     nUCode = nBCode;
                 }
             }

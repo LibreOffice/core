@@ -305,7 +305,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
     // Version 1
-    rIStream >> nType >> nSize >> nUserId;
+    rIStream.ReadUInt16( nType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
 
     if( pCompat->GetVersion() >= 2 )
     {

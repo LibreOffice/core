@@ -115,8 +115,8 @@ bool SwCTBWrapper::Read( SvStream& rS )
     SAL_INFO("sw.ww8","SwCTBWrapper::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS >> reserved2 >> reserved3 >> reserved4 >> reserved5;
-    rS >> cbTBD >> cCust >> cbDTBC;
+    rS.ReadUInt16( reserved2 ).ReadUChar( reserved3 ).ReadUInt16( reserved4 ).ReadUInt16( reserved5 );
+    rS.ReadInt16( cbTBD ).ReadInt16( cCust ).ReadInt32( cbDTBC );
     long nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
@@ -254,7 +254,7 @@ bool Customization::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","Custimization::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> tbidForTBD >> reserved1 >> ctbds;
+    rS.ReadInt32( tbidForTBD ).ReadUInt16( reserved1 ).ReadInt16( ctbds );
     if ( tbidForTBD )
     {
         for ( sal_Int32 index = 0; index < ctbds; ++index )
@@ -447,8 +447,8 @@ bool TBDelta::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","TBDelta::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> doprfatendFlags >> ibts >> cidNext >> cid >> fc ;
-    rS >> CiTBDE >> cbTBC;
+    rS.ReadUChar( doprfatendFlags ).ReadUChar( ibts ).ReadInt32( cidNext ).ReadInt32( cid ).ReadInt32( fc ) ;
+    rS.ReadUInt16( CiTBDE ).ReadUInt16( cbTBC );
     return true;
 }
 
@@ -495,7 +495,7 @@ bool SwCTB::Read( SvStream &rS)
     nOffSet = rS.Tell();
     if ( !name.Read( rS ) )
         return false;
-    rS >> cbTBData;
+    rS.ReadInt32( cbTBData );
     if ( !tb.Read( rS ) )
         return false;
     for ( short index = 0; index < nVisualData; ++index )
@@ -505,7 +505,7 @@ bool SwCTB::Read( SvStream &rS)
         rVisualData.push_back( aVisData );
     }
 
-    rS >> iWCTBl >> reserved >> unused >> cCtls;
+    rS.ReadInt32( iWCTBl ).ReadUInt16( reserved ).ReadUInt16( unused ).ReadInt32( cCtls );
 
     if ( cCtls )
     {
@@ -620,7 +620,7 @@ bool SwTBC::Read( SvStream &rS )
     if ( tbch.getTcID() != 0x1 && tbch.getTcID() != 0x1051 )
     {
         cid.reset( new sal_uInt32 );
-        rS >> *cid;
+        rS.ReadUInt32( *cid );
     }
     // MUST exist if tbch.tct is not equal to 0x16
     if ( tbch.getTct() != 0x16 )
@@ -787,7 +787,7 @@ bool Tcg::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Tcg::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> nTcgVer;
+    rS.ReadSChar( nTcgVer );
     if ( nTcgVer != -1 )
         return false;
     tcg.reset( new Tcg255() );
@@ -892,13 +892,13 @@ bool Tcg255::Read(SvStream &rS)
     SAL_INFO("sw.ww8","Tcg255::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     sal_uInt8 nId = 0x40;
-    rS >> nId;
+    rS.ReadUChar( nId );
     while (  nId != 0x40  )
     {
         if ( !processSubStruct( nId, rS ) )
             return false;
         nId = 0x40;
-        rS >> nId;
+        rS.ReadUChar( nId );
     }
     return true;
     // Peek at
@@ -929,7 +929,7 @@ bool Tcg255SubStruct::Read(SvStream &rS)
     SAL_INFO("sw.ww8","Tcg255SubStruct::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     if ( mbReadId )
-        rS >> ch;
+        rS.ReadUChar( ch );
     return true;
 }
 
@@ -944,7 +944,7 @@ bool PlfMcd::Read(SvStream &rS)
     SAL_INFO("sw.ww8","PffMcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS >> iMac;
+    rS.ReadInt32( iMac );
     if ( iMac )
     {
         rgmcd.resize(iMac);
@@ -987,7 +987,7 @@ bool PlfAcd::Read( SvStream &rS)
     SAL_INFO("sw.ww8","PffAcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS >> iMac;
+    rS.ReadInt32( iMac );
     if ( iMac )
     {
         rgacd = new Acd[ iMac ];
@@ -1030,7 +1030,7 @@ bool PlfKme::Read(SvStream &rS)
     SAL_INFO("sw.ww8","PlfKme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS >> iMac;
+    rS.ReadInt32( iMac );
     if ( iMac )
     {
         rgkme = new Kme[ iMac ];
@@ -1092,15 +1092,15 @@ bool TcgSttbfCore::Read( SvStream& rS )
 {
     SAL_INFO("sw.ww8","TcgSttbfCore::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> fExtend >> cData >> cbExtra;
+    rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
     if ( cData )
     {
         dataItems = new SBBItem[ cData ];
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
-            rS >> dataItems[ index ].cchData;
+            rS.ReadUInt16( dataItems[ index ].cchData );
             dataItems[ index ].data = read_uInt16s_ToOUString(rS, dataItems[index].cchData);
-            rS >> dataItems[ index ].extraData;
+            rS.ReadUInt16( dataItems[ index ].extraData );
         }
     }
     return true;
@@ -1138,7 +1138,7 @@ bool MacroNames::Read( SvStream &rS)
     SAL_INFO("sw.ww8","MacroNames::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS >> iMac;
+    rS.ReadUInt16( iMac );
     if ( iMac )
     {
         rgNames = new MacroName[ iMac ];
@@ -1173,7 +1173,7 @@ bool MacroName::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MacroName::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> ibst;
+    rS.ReadUInt16( ibst );
     return xstz.Read( rS );
 }
 
@@ -1196,7 +1196,7 @@ Xstz::Read(SvStream &rS)
     nOffSet = rS.Tell();
     if ( !xst.Read( rS ) )
         return false;
-    rS >> chTerm;
+    rS.ReadUInt16( chTerm );
     if ( chTerm != 0 ) // should be an assert
         return false;
     return true;
@@ -1229,7 +1229,7 @@ Kme::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Kme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> reserved1 >> reserved2 >> kcm1 >> kcm2 >> kt >> param;
+    rS.ReadInt16( reserved1 ).ReadInt16( reserved2 ).ReadUInt16( kcm1 ).ReadUInt16( kcm2 ).ReadUInt16( kt ).ReadUInt32( param );
     return true;
 }
 
@@ -1255,7 +1255,7 @@ bool Acd::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Acd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> ibst >> fciBasedOnABC;
+    rS.ReadInt16( ibst ).ReadUInt16( fciBasedOnABC );
     return true;
 }
 
@@ -1315,8 +1315,8 @@ bool MCD::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MCD::Read() stream pos 0x" << rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> reserved1 >> reserved2 >> ibst >> ibstName >> reserved3;
-    rS >> reserved4 >> reserved5 >> reserved6 >> reserved7;
+    rS.ReadSChar( reserved1 ).ReadUChar( reserved2 ).ReadUInt16( ibst ).ReadUInt16( ibstName ).ReadUInt16( reserved3 );
+    rS.ReadUInt32( reserved4 ).ReadUInt32( reserved5 ).ReadUInt32( reserved6 ).ReadUInt32( reserved7 );
     return true;
 }
 

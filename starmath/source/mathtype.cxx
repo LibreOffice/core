@@ -564,11 +564,11 @@ int MathType::Parse(SotStorage *pStor)
 
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
-    *pS >> nVersion;
-    *pS >> nPlatform;
-    *pS >> nProduct;
-    *pS >> nProdVersion;
-    *pS >> nProdSubVersion;
+    pS->ReadUChar( nVersion );
+    pS->ReadUChar( nPlatform );
+    pS->ReadUChar( nProduct );
+    pS->ReadUChar( nProdVersion );
+    pS->ReadUChar( nProdSubVersion );
 
     if (nVersion > 3)   // allow only supported versions of MathType to be parsed
         return 0;
@@ -636,15 +636,15 @@ static void lcl_AppendDummyTerm(OUString &rRet)
 void MathType::HandleNudge()
 {
     sal_uInt8 nXNudge;
-    *pS >> nXNudge;
+    pS->ReadUChar( nXNudge );
     sal_uInt8 nYNudge;
-    *pS >> nYNudge;
+    pS->ReadUChar( nYNudge );
     if (nXNudge == 128 && nYNudge == 128)
     {
         sal_uInt16 nXLongNudge;
         sal_uInt16 nYLongNudge;
-        *pS >> nXLongNudge;
-        *pS >> nYLongNudge;
+        pS->ReadUInt16( nXLongNudge );
+        pS->ReadUInt16( nYLongNudge );
     }
 }
 /*Fabously complicated as many tokens have to be reordered and generally
@@ -669,7 +669,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     do
     {
         nTag = 0;
-        *pS >> nTag;
+        pS->ReadUChar( nTag );
         nRecord = nTag&0x0F;
 
         /*MathType strings can of course include words which
@@ -1719,31 +1719,31 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 HandleEmblishments();
                 break;
             case RULER:
-                *pS >> nTabStops;
+                pS->ReadUChar( nTabStops );
                 for (i=0;i<nTabStops;i++)
                 {
-                    *pS >> nTabType;
-                    *pS >> nTabOffset;
+                    pS->ReadUChar( nTabType );
+                    pS->ReadUInt16( nTabOffset );
                 }
                 SAL_WARN("starmath", "Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
                 {
                     MathTypeFont aFont;
-                    *pS >> aFont.nTface;
+                    pS->ReadUChar( aFont.nTface );
                     /*
                     The typeface number is the negative (which makes it
                     positive) of the typeface value (unbiased) that appears in
                     CHAR records that might follow a given FONT record
                     */
                     aFont.nTface = 128-aFont.nTface;
-                    *pS >> aFont.nStyle;
+                    pS->ReadUChar( aFont.nStyle );
                     aUserStyles.insert(aFont);
                     std::vector<sal_Char> aSeq;
                     while(true)
                     {
                         sal_Char nChar8(0);
-                        *pS >> nChar8;
+                        pS->ReadChar( nChar8 );
                         if (nChar8 == 0)
                             break;
                         aSeq.push_back(nChar8);
@@ -2655,8 +2655,8 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
 int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nVariation)
 {
-    *pS >> nHAlign;
-    *pS >> nVAlign;
+    pS->ReadUChar( nHAlign );
+    pS->ReadUChar( nVAlign );
 
     HandleAlign(nHAlign,nVAlign,rSetAlign);
 
@@ -2677,11 +2677,11 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nVariation)
 {
     sal_uInt8 nH_just,nV_just,nRows,nCols;
-    *pS >> nVAlign;
-    *pS >> nH_just;
-    *pS >> nV_just;
-    *pS >> nRows;
-    *pS >> nCols;
+    pS->ReadUChar( nVAlign );
+    pS->ReadUChar( nH_just );
+    pS->ReadUChar( nV_just );
+    pS->ReadUChar( nRows );
+    pS->ReadUChar( nCols );
     int nBytes = ((nRows+1)*2)/8;
     if (((nRows+1)*2)%8)
         nBytes++;
@@ -2706,9 +2706,9 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
-    *pS >> rSelector;
-    *pS >> rVariation;
-    *pS >> nOption;
+    pS->ReadUChar( rSelector );
+    pS->ReadUChar( rVariation );
+    pS->ReadUChar( nOption );
     OSL_ENSURE(rSelector < 48,"Selector out of range");
     if ((rSelector >= 21) && (rSelector <=26))
     {
@@ -2757,7 +2757,7 @@ void MathType::HandleEmblishments()
     sal_uInt8 nEmbel;
     do
     {
-        *pS >> nEmbel;
+        pS->ReadUChar( nEmbel );
         switch (nEmbel)
         {
         case 0x02:
@@ -2835,21 +2835,21 @@ void MathType::HandleEmblishments()
 void MathType::HandleSetSize()
 {
     sal_uInt8 nTemp;
-    *pS >> nTemp;
+    pS->ReadUChar( nTemp );
     switch (nTemp)
     {
         case 101:
-            *pS >> nLSize;
+            pS->ReadInt16( nLSize );
             nLSize = -nLSize;
             break;
         case 100:
-            *pS >> nTemp;
+            pS->ReadUChar( nTemp );
             nLSize = nTemp;
-            *pS >> nDSize;
+            pS->ReadInt16( nDSize );
             break;
         default:
             nLSize = nTemp;
-            *pS >> nTemp;
+            pS->ReadUChar( nTemp );
             nDSize = nTemp-128;
             break;
     }
@@ -2868,15 +2868,15 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
     }
 
     sal_uInt8 nOldTypeFace = nTypeFace;
-    *pS >> nTypeFace;
+    pS->ReadUChar( nTypeFace );
     if (nVersion < 3)
     {
         sal_uInt8 nChar8;
-        *pS >> nChar8;
+        pS->ReadUChar( nChar8 );
         nChar = nChar8;
     }
     else
-        *pS >> nChar;
+        pS->ReadUInt16( nChar );
 
     /*
     bad character, old mathtype < 3 has these

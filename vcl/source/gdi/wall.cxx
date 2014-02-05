@@ -113,14 +113,14 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
     // version 1
     ReadColor( rIStm, rImplWallpaper.maColor );
-    rIStm >> nTmp16; rImplWallpaper.meStyle = (WallpaperStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImplWallpaper.meStyle = (WallpaperStyle) nTmp16;
 
     // version 2
     if( aCompat.GetVersion() >= 2 )
     {
         sal_Bool bRect, bGrad, bBmp, bDummy;
 
-        rIStm >> bRect >> bGrad >> bBmp >> bDummy >> bDummy >> bDummy;
+        rIStm.ReadUChar( bRect ).ReadUChar( bGrad ).ReadUChar( bBmp ).ReadUChar( bDummy ).ReadUChar( bDummy ).ReadUChar( bDummy );
 
         if( bRect )
         {

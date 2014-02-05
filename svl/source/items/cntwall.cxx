@@ -40,7 +40,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
     sal_uInt32 nMagic = 0;
-    rStream >> nMagic;
+    rStream.ReadUInt32( nMagic );
     if ( nMagic == CNTWALLPAPERITEM_STREAM_MAGIC )
     {
         // Okay, data were stored by CntWallpaperItem.
@@ -49,7 +49,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
         // !!! Color stream operators do not work - they discard any
         // transparency info !!!
         _nColor.Read( rStream, true );
-        rStream >> _nStyle;
+        rStream.ReadUInt16( _nStyle );
     }
     else
     {

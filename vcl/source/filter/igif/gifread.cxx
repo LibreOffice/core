@@ -145,11 +145,11 @@ bool GIFReader::ReadGlobalHeader()
                 SvMemoryStream aMemStm;
 
                 aMemStm.SetBuffer( pBuf, 7, false, 7 );
-                aMemStm >> nGlobalWidth;
-                aMemStm >> nGlobalHeight;
-                aMemStm >> nRF;
-                aMemStm >> nBackgroundColor;
-                aMemStm >> nAspect;
+                aMemStm.ReadUInt16( nGlobalWidth );
+                aMemStm.ReadUInt16( nGlobalHeight );
+                aMemStm.ReadUChar( nRF );
+                aMemStm.ReadUChar( nBackgroundColor );
+                aMemStm.ReadUChar( nAspect );
 
                 bGlobalPalette = ( nRF & 0x80 );
 
@@ -210,11 +210,11 @@ bool GIFReader::ReadExtension()
     bool    bOverreadDataBlocks = false;
 
     // Extension-Label
-    rIStm >> cFunction;
+    rIStm.ReadUChar( cFunction );
     if( NO_PENDING( rIStm ) )
     {
         // Block length
-        rIStm >> cSize;
+        rIStm.ReadUChar( cSize );
 
         switch( cFunction )
         {
@@ -223,10 +223,10 @@ bool GIFReader::ReadExtension()
             {
                 sal_uInt8 cFlags;
 
-                rIStm >> cFlags;
-                rIStm >> nTimer;
-                rIStm >> nGCTransparentIndex;
-                rIStm >> cByte;
+                rIStm.ReadUChar( cFlags );
+                rIStm.ReadUInt16( nTimer );
+                rIStm.ReadUChar( nGCTransparentIndex );
+                rIStm.ReadUChar( cByte );
 
                 if ( NO_PENDING( rIStm ) )
                 {
@@ -251,21 +251,21 @@ bool GIFReader::ReadExtension()
                     {
                         OString aAppId = read_uInt8s_ToOString(rIStm, 8);
                         OString aAppCode = read_uInt8s_ToOString(rIStm, 3);
-                        rIStm >> cSize;
+                        rIStm.ReadUChar( cSize );
 
                         // NetScape-Extension
                         if( aAppId == "NETSCAPE" && aAppCode == "2.0" && cSize == 3 )
                         {
-                            rIStm >> cByte;
+                            rIStm.ReadUChar( cByte );
 
                             // Loop-Extension
                             if ( cByte == 0x01 )
                             {
-                                rIStm >> cByte;
+                                rIStm.ReadUChar( cByte );
                                 nLoops = cByte;
-                                rIStm >> cByte;
+                                rIStm.ReadUChar( cByte );
                                 nLoops |= ( (sal_uInt16) cByte << 8 );
-                                rIStm >> cByte;
+                                rIStm.ReadUChar( cByte );
 
                                 bStatus = ( cByte == 0 );
                                 bRet = NO_PENDING( rIStm );
@@ -282,13 +282,13 @@ bool GIFReader::ReadExtension()
                         }
                         else if ( aAppId == "STARDIV " && aAppCode == "5.0" && cSize == 9 )
                         {
-                            rIStm >> cByte;
+                            rIStm.ReadUChar( cByte );
 
                             // Loop extension
                             if ( cByte == 0x01 )
                             {
-                                rIStm >> nLogWidth100 >> nLogHeight100;
-                                rIStm >> cByte;
+                                rIStm.ReadUInt32( nLogWidth100 ).ReadUInt32( nLogHeight100 );
+                                rIStm.ReadUChar( cByte );
                                 bStatus = ( cByte == 0 );
                                 bRet = NO_PENDING( rIStm );
                                 bOverreadDataBlocks = false;
@@ -348,11 +348,11 @@ bool GIFReader::ReadLocalHeader()
         sal_uInt8           nFlags;
 
         aMemStm.SetBuffer( (char*) pBuf, 9, false, 9 );
-        aMemStm >> nImagePosX;
-        aMemStm >> nImagePosY;
-        aMemStm >> nImageWidth;
-        aMemStm >> nImageHeight;
-        aMemStm >> nFlags;
+        aMemStm.ReadUInt16( nImagePosX );
+        aMemStm.ReadUInt16( nImagePosY );
+        aMemStm.ReadUInt16( nImageWidth );
+        aMemStm.ReadUInt16( nImageHeight );
+        aMemStm.ReadUChar( nFlags );
 
         // if interlaced, first define startvalue
         bInterlaced = ( ( nFlags & 0x40 ) == 0x40 );
@@ -386,7 +386,7 @@ sal_uLong GIFReader::ReadNextBlock()
     sal_uLong   nRead;
     sal_uInt8   cBlockSize;
 
-    rIStm >> cBlockSize;
+    rIStm.ReadUChar( cBlockSize );
 
     if ( rIStm.IsEof() )
         nRet = 4UL;
@@ -607,7 +607,7 @@ bool GIFReader::ProcessGIF()
         {
             sal_uInt8 cByte;
 
-            rIStm >> cByte;
+            rIStm.ReadUChar( cByte );
 
             if( rIStm.IsEof() )
                 eActAction = END_READING;
@@ -665,7 +665,7 @@ bool GIFReader::ProcessGIF()
         {
             sal_uInt8 cDataSize;
 
-            rIStm >> cDataSize;
+            rIStm.ReadUChar( cDataSize );
 
             if( rIStm.IsEof() )
                 eActAction = ABORT_READING;

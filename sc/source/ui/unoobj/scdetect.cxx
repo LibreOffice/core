@@ -145,7 +145,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 {
     sal_uInt8 nByte;
     rStr.Seek( 0 ); // am Anfang war alles Uebel...
-    rStr >> nByte;
+    rStr.ReadUChar( nByte );
     bool bSync = true;
     while( !rStr.IsEof() && bSync )
     {
@@ -177,7 +177,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         }
 
         pSearch++;
-        rStr >> nByte;
+        rStr.ReadUChar( nByte );
     }
 
     return false;
@@ -240,7 +240,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         0x03, 0x04, 0x05, 0x30, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
     sal_uInt8 nMark;
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
-    rStream >> nMark;
+    rStream.ReadUChar( nMark );
     bool bValidMark = false;
     for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
     {
@@ -262,7 +262,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     // length of header starts at 8
     rStream.Seek(8);
     sal_uInt16 nHeaderLen;
-    rStream >> nHeaderLen;
+    rStream.ReadUInt16( nHeaderLen );
 
     if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
         return false;
@@ -277,7 +277,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     sal_uInt8 nEndFlag = 0;
     while ( nBlocks > 1 && nEndFlag != 0x0d ) {
         rStream.Seek( nBlocks-- * nHeaderBlockSize );
-        rStream >> nEndFlag;
+        rStream.ReadUChar( nEndFlag );
     }
 
     return ( 0x0d == nEndFlag );

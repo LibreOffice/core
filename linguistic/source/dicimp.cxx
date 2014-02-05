@@ -145,7 +145,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
 
         rpStream->Seek (nSniffPos );
 
-        *rpStream >> nLen;
+        rpStream->ReadUInt16( nLen );
         if (nLen >= MAX_HEADER_LENGTH)
             return -1;
 
@@ -167,14 +167,14 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
             DIC_VERSION_6 == nDicVersion)
         {
             // The language of the dictionary
-            *rpStream >> nLng;
+            rpStream->ReadUInt16( nLng );
 
             if (VERS2_NOLANGUAGE == nLng)
                 nLng = LANGUAGE_NONE;
 
             // Negative Flag
             sal_Char nTmp;
-            *rpStream >> nTmp;
+            rpStream->ReadChar( nTmp );
             bNeg = (sal_Bool)nTmp;
         }
     }
@@ -300,7 +300,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         // Read the first word
         if (!pStream->IsEof())
         {
-            *pStream >> nLen;
+            pStream->ReadUInt16( nLen );
             if (0 != (nErr = pStream->GetError()))
                 return nErr;
             if ( nLen < BUFSIZE )
@@ -326,7 +326,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                 addEntry_Impl( xEntry , sal_True ); //! don't launch events here
             }
 
-            *pStream >> nLen;
+            pStream->ReadUInt16( nLen );
             if (pStream->IsEof())
                 break;
             if (0 != (nErr = pStream->GetError()))

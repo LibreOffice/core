@@ -211,9 +211,9 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 
     // check the PNG header magic
     sal_uInt32 nDummy = 0;
-    mrPNGStream >> nDummy;
+    mrPNGStream.ReadUInt32( nDummy );
     mbStatus = (nDummy == 0x89504e47);
-    mrPNGStream >> nDummy;
+    mrPNGStream.ReadUInt32( nDummy );
     mbStatus = (nDummy == 0x0d0a1a0a) && mbStatus;
 
     mnPreviewShift = 0;
@@ -259,7 +259,7 @@ bool PNGReaderImpl::ReadNextChunk()
         PNGReader::ChunkData& rChunkData = *maChunkIter;
 
         // read the chunk header
-        mrPNGStream >> mnChunkLen >> mnChunkType;
+        mrPNGStream.ReadInt32( mnChunkLen ).ReadUInt32( mnChunkType );
         rChunkData.nType = mnChunkType;
 
         // fdo#61847 truncate over-long, trailing chunks
@@ -289,7 +289,7 @@ bool PNGReaderImpl::ReadNextChunk()
             maDataIter = rChunkData.aData.begin();
         }
         sal_uInt32 nCheck(0);
-        mrPNGStream >> nCheck;
+        mrPNGStream.ReadUInt32( nCheck );
         if( nCRC32 != nCheck )
             return false;
     }

@@ -486,9 +486,9 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp(0);
-    rIStream >> nTmp;
+    rIStream.ReadInt32( nTmp );
     rFract.nNumerator = nTmp;
-    rIStream >> nTmp;
+    rIStream.ReadInt32( nTmp );
     rFract.nDenominator = nTmp;
     return rIStream;
 }

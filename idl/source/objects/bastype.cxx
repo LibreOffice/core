@@ -77,7 +77,7 @@ SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
 SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
 {
     sal_uInt8 n;
-    rStm >> n;
+    rStm.ReadUChar( n );
     rb.nVal = (n & 0x01) ? sal_True : sal_False;
     rb.bSet = (n & 0x02) ? sal_True : sal_False;
     if( n & ~0x03 )
@@ -112,11 +112,11 @@ SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
 SvStream& operator >> (SvStream & rStm, SvVersion & r )
 {
     sal_uInt8 n;
-    rStm >> n;
+    rStm.ReadUChar( n );
     if( n == 0 )
     { // not compressed
-        rStm >> r.nMajorVersion;
-        rStm >> r.nMinorVersion;
+        rStm.ReadUInt16( r.nMajorVersion );
+        rStm.ReadUInt16( r.nMinorVersion );
     }
     else
     { // compressed

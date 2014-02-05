@@ -405,10 +405,10 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
 
     // First check what type of Object...
     sal_uInt16 nWhich;
-    rIStream >> nWhich;
+    rIStream.ReadUInt16( nWhich );
 
     sal_uInt32 nStructSz;
-    rIStream >> nStructSz;
+    rIStream.ReadUInt32( nStructSz );
 
     if (nWhich != EE_FORMAT_BIN)
     {
@@ -1272,13 +1272,13 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
 void EditTextObjectImpl::CreateData( SvStream& rIStream )
 {
-    rIStream >> nVersion;
+    rIStream.ReadUInt16( nVersion );
 
     // The text object was first created with the current setting of
     // pTextObjectPool.
     sal_Bool bOwnerOfCurrent = bOwnerOfPool;
     sal_Bool b;
-    rIStream >> b;
+    rIStream.ReadUChar( b );
     bOwnerOfPool = b;
 
     if ( bOwnerOfCurrent && !bOwnerOfPool )
@@ -1298,13 +1298,13 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     // CharSet, in which it was saved:
     sal_uInt16 nCharSet;
-    rIStream >> nCharSet;
+    rIStream.ReadUInt16( nCharSet );
 
     rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet );
 
     // The number of paragraphs ...
     sal_uInt16 nParagraphs;
-    rIStream >> nParagraphs;
+    rIStream.ReadUInt16( nParagraphs );
 
     // The individual paragraphs ...
     for ( sal_uLong nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1318,7 +1318,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         // StyleName and Family...
         pC->GetStyle() = rIStream.ReadUniOrByteString(eSrcEncoding);
         sal_uInt16 nStyleFamily;
-        rIStream >> nStyleFamily;
+        rIStream.ReadUInt16( nStyleFamily );
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
 
         // Paragraph attributes ...
@@ -1326,7 +1326,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
         // The number of attributes ...
         sal_uInt16 nTmp16;
-        rIStream >> nTmp16;
+        rIStream.ReadUInt16( nTmp16 );
         size_t nAttribs = nTmp16;
 
         // And the individual attributes
@@ -1338,11 +1338,11 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             sal_uInt16 _nWhich, nStart, nEnd;
             const SfxPoolItem* pItem;
 
-            rIStream >> _nWhich;
+            rIStream.ReadUInt16( _nWhich );
             _nWhich = pPool->GetNewWhich( _nWhich );
             pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
-            rIStream >> nStart;
-            rIStream >> nEnd;
+            rIStream.ReadUInt16( nStart );
+            rIStream.ReadUInt16( nEnd );
             if ( pItem )
             {
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
@@ -1464,7 +1464,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     if ( nVersion >= 400 )
     {
         sal_uInt16 nTmpMetric;
-        rIStream >> nTmpMetric;
+        rIStream.ReadUInt16( nTmpMetric );
         if ( nVersion >= 401 )
         {
             // In the 400 there was a bug in text objects with the own Pool,
@@ -1477,23 +1477,23 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 600 )
     {
-        rIStream >> nUserType;
-        rIStream >> nObjSettings;
+        rIStream.ReadUInt16( nUserType );
+        rIStream.ReadUInt32( nObjSettings );
     }
 
     if ( nVersion >= 601 )
     {
         sal_Bool bTmp;
-        rIStream >> bTmp;
+        rIStream.ReadUChar( bTmp );
         bVertical = bTmp;
     }
 
     if ( nVersion >= 602 )
     {
-        rIStream >> nScriptType;
+        rIStream.ReadUInt16( nScriptType );
 
         sal_Bool bUnicodeStrings;
-        rIStream >> bUnicodeStrings;
+        rIStream.ReadUChar( bUnicodeStrings );
         if ( bUnicodeStrings )
         {
             for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1502,7 +1502,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 sal_uInt16 nL;
 
                 // Text
-                rIStream >> nL;
+                rIStream.ReadUInt16( nL );
                 if ( nL )
                 {
                     rtl_uString *pStr = rtl_uString_alloc(nL);
@@ -1511,7 +1511,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 }
 
                 // StyleSheetName
-                rIStream >> nL;
+                rIStream.ReadUInt16( nL );
                 if ( nL )
                 {
                     rtl_uString *pStr = rtl_uString_alloc(nL);

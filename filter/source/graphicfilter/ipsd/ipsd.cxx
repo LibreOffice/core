@@ -178,9 +178,7 @@ sal_Bool PSDReader::ImplReadHeader()
     if ( !mpFileHeader )
         return sal_False;
 
-    m_rPSD >> mpFileHeader->nSignature >> mpFileHeader->nVersion >> mpFileHeader->nPad1 >>
-        mpFileHeader->nPad2 >> mpFileHeader->nChannels >> mpFileHeader->nRows >>
-            mpFileHeader->nColumns >> mpFileHeader->nDepth >> mpFileHeader->nMode;
+    m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
 
     if ( ( mpFileHeader->nSignature != 0x38425053 ) || ( mpFileHeader->nVersion != 1 ) )
         return sal_False;
@@ -197,7 +195,7 @@ sal_Bool PSDReader::ImplReadHeader()
 
     mnDestBitDepth = ( nDepth == 16 ) ? 8 : nDepth;
 
-    m_rPSD >> nColorLength;
+    m_rPSD.ReadUInt32( nColorLength );
     if ( mpFileHeader->nMode == PSD_CMYK )
     {
         switch ( mpFileHeader->nChannels )
@@ -277,7 +275,7 @@ sal_Bool PSDReader::ImplReadHeader()
         default:
             return sal_False;
     }
-    m_rPSD >> nResourceLength;
+    m_rPSD.ReadUInt32( nResourceLength );
     sal_uInt32 nLayerPos = m_rPSD.Tell() + nResourceLength;
 
     // this is a loop over the resource entries to get the resolution info
@@ -287,14 +285,14 @@ sal_Bool PSDReader::ImplReadHeader()
         sal_uInt32 nType, nPStringLen, nResEntryLen;
         sal_uInt16 nUniqueID;
 
-        m_rPSD >> nType >> nUniqueID >> n8;
+        m_rPSD.ReadUInt32( nType ).ReadUInt16( nUniqueID ).ReadUChar( n8 );
         nPStringLen = n8;
         if ( nType != 0x3842494d )
             break;
         if ( ! ( nPStringLen & 1 ) )
             nPStringLen++;
         m_rPSD.SeekRel( nPStringLen );  // skipping the pstring
-        m_rPSD >> nResEntryLen;
+        m_rPSD.ReadUInt32( nResEntryLen );
         if ( nResEntryLen & 1 )
             nResEntryLen++;             // the resource entries are padded
         sal_uInt32 nCurrentPos = m_rPSD.Tell();
@@ -306,18 +304,18 @@ sal_Bool PSDReader::ImplReadHeader()
             {
                 sal_Int16   nUnit;
 
-                m_rPSD >> mnXResFixed >> nUnit >> nUnit
-                       >> mnYResFixed >> nUnit >> nUnit;
+                m_rPSD.ReadUInt32( mnXResFixed ).ReadInt16( nUnit ).ReadInt16( nUnit )
+                      .ReadUInt32( mnYResFixed ).ReadInt16( nUnit ).ReadInt16( nUnit );
             }
             break;
         }
         m_rPSD.Seek( nCurrentPos + nResEntryLen );          // set the stream to the next
     }                                                       // resource entry
     m_rPSD.Seek( nLayerPos );
-    m_rPSD >> nLayerMaskLength;
+    m_rPSD.ReadUInt32( nLayerMaskLength );
     m_rPSD.SeekRel( nLayerMaskLength );
 
-    m_rPSD >> nCompression;
+    m_rPSD.ReadUInt16( nCompression );
     if ( nCompression == 0 )
     {
         mbCompression = sal_False;
@@ -353,13 +351,13 @@ sal_Bool PSDReader::ImplReadBody()
                 if ( nBitCount == -1 )
                 {
                     if ( mbCompression )    // else nRunCount = 0 -> so we use only single raw packets
-                        m_rPSD >> nRunCount;
+                        m_rPSD.ReadChar( nRunCount );
                 }
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
                     if ( nBitCount == -1 )  // bits left in nDat?
                     {
-                        m_rPSD >> nDat;
+                        m_rPSD.ReadUChar( nDat );
                         nDat ^= 0xff;
                         nBitCount = 7;
                     }
@@ -382,7 +380,7 @@ sal_Bool PSDReader::ImplReadBody()
                     {
                         if ( nBitCount == -1 )  // bits left in nDat ?
                         {
-                            m_rPSD >> nDat;
+                            m_rPSD.ReadUChar( nDat );
                             nDat ^= 0xff;
                             nBitCount = 7;
                         }
@@ -406,13 +404,13 @@ sal_Bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                    m_rPSD >> nRunCount;
+                    m_rPSD.ReadChar( nRunCount );
 
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    m_rPSD >> nDat;
+                    m_rPSD.ReadUChar( nDat );
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                        m_rPSD >> nDummy;
+                        m_rPSD.ReadUChar( nDummy );
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
                         mpWriteAcc->SetPixelIndex( nY, nX, nDat );
@@ -429,9 +427,9 @@ sal_Bool PSDReader::ImplReadBody()
                 {
                     for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                     {
-                        m_rPSD >> nDat;
+                        m_rPSD.ReadUChar( nDat );
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                            m_rPSD >> nDummy;
+                            m_rPSD.ReadUChar( nDummy );
                         mpWriteAcc->SetPixelIndex( nY, nX, nDat );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
@@ -455,13 +453,13 @@ sal_Bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                    m_rPSD >> nRunCount;
+                    m_rPSD.ReadChar( nRunCount );
 
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    m_rPSD >> nRed;
+                    m_rPSD.ReadUChar( nRed );
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                        m_rPSD >> nDummy;
+                        m_rPSD.ReadUChar( nDummy );
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, (sal_uInt8)0, (sal_uInt8)0 ) );
@@ -478,9 +476,9 @@ sal_Bool PSDReader::ImplReadBody()
                 {
                     for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                     {
-                        m_rPSD >> nRed;
+                        m_rPSD.ReadUChar( nRed );
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                            m_rPSD >> nDummy;
+                            m_rPSD.ReadUChar( nDummy );
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( nRed, (sal_uInt8)0, (sal_uInt8)0 ) );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
@@ -496,12 +494,12 @@ sal_Bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )
-                    m_rPSD >> nRunCount;
+                    m_rPSD.ReadChar( nRunCount );
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    m_rPSD >> nGreen;
+                    m_rPSD.ReadUChar( nGreen );
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                        m_rPSD >> nDummy;
+                        m_rPSD.ReadUChar( nDummy );
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
                         aBitmapColor = mpReadAcc->GetPixel( nY, nX );
@@ -519,9 +517,9 @@ sal_Bool PSDReader::ImplReadBody()
                 {
                     for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                     {
-                        m_rPSD >> nGreen;
+                        m_rPSD.ReadUChar( nGreen );
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                            m_rPSD >> nDummy;
+                            m_rPSD.ReadUChar( nDummy );
                         aBitmapColor = mpReadAcc->GetPixel( nY, nX );
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( aBitmapColor.GetRed(), nGreen, aBitmapColor.GetBlue() ) );
                         if ( ++nX == mpFileHeader->nColumns )
@@ -538,12 +536,12 @@ sal_Bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )
-                    m_rPSD >> nRunCount;
+                    m_rPSD.ReadChar( nRunCount );
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    m_rPSD >> nBlue;
+                    m_rPSD.ReadUChar( nBlue );
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                        m_rPSD >> nDummy;
+                        m_rPSD.ReadUChar( nDummy );
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
                         aBitmapColor = mpReadAcc->GetPixel( nY, nX );
@@ -561,9 +559,9 @@ sal_Bool PSDReader::ImplReadBody()
                 {
                     for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                     {
-                        m_rPSD >> nBlue;
+                        m_rPSD.ReadUChar( nBlue );
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                            m_rPSD >> nDummy;
+                            m_rPSD.ReadUChar( nDummy );
                         aBitmapColor = mpReadAcc->GetPixel( nY, nX );
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( aBitmapColor.GetRed(), aBitmapColor.GetGreen(), nBlue ) );
                         if ( ++nX == mpFileHeader->nColumns )
@@ -584,14 +582,14 @@ sal_Bool PSDReader::ImplReadBody()
                 while ( nY < mpFileHeader->nRows )
                 {
                     if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                        m_rPSD >> nRunCount;
+                        m_rPSD.ReadChar( nRunCount );
 
                     if ( nRunCount & 0x80 )     // a run length packet
                     {
-                        m_rPSD >> nDat;
+                        m_rPSD.ReadUChar( nDat );
 
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                            m_rPSD >> nDummy;
+                            m_rPSD.ReadUChar( nDummy );
 
                         for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                         {
@@ -618,10 +616,10 @@ sal_Bool PSDReader::ImplReadBody()
                     {
                         for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                         {
-                            m_rPSD >> nDat;
+                            m_rPSD.ReadUChar( nDat );
 
                             if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                                m_rPSD >> nDummy;
+                                m_rPSD.ReadUChar( nDummy );
                             nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetRed() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
@@ -670,17 +668,17 @@ sal_Bool PSDReader::ImplReadBody()
         while ( nY < mpFileHeader->nRows )
         {
             if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                m_rPSD >> nRunCount;
+                m_rPSD.ReadChar( nRunCount );
 
             if ( nRunCount & 0x80 )     // a run length packet
             {
-                m_rPSD >> nDat;
+                m_rPSD.ReadUChar( nDat );
                 if ( nDat )
                     nDat = 0;
                 else
                     nDat = 1;
                 if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                    m_rPSD >> nDummy;
+                    m_rPSD.ReadUChar( nDummy );
                 for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                 {
                     mpMaskWriteAcc->SetPixelIndex( nY, nX, nDat );
@@ -697,13 +695,13 @@ sal_Bool PSDReader::ImplReadBody()
             {
                 for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                 {
-                    m_rPSD >> nDat;
+                    m_rPSD.ReadUChar( nDat );
                     if ( nDat )
                         nDat = 0;
                     else
                         nDat = 1;
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
-                        m_rPSD >> nDummy;
+                        m_rPSD.ReadUChar( nDummy );
                     mpMaskWriteAcc->SetPixelIndex( nY, nX, nDat );
                     if ( ++nX == mpFileHeader->nColumns )
                     {

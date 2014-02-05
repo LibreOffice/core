@@ -249,14 +249,14 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 
     rDesign.m_aDesignName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
-    rIn >> nTemp16;
+    rIn.ReadUInt16( nTemp16 );
     rDesign.m_eMode = (HtmlPublishMode)nTemp16;
-    rIn >> rDesign.m_bContentPage;
-    rIn >> rDesign.m_bNotes;
-    rIn >> rDesign.m_nResolution;
+    rIn.ReadUChar( rDesign.m_bContentPage );
+    rIn.ReadUChar( rDesign.m_bNotes );
+    rIn.ReadUInt16( rDesign.m_nResolution );
     rDesign.m_aCompression = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
-    rIn >> nTemp16;
+    rIn.ReadUInt16( nTemp16 );
     rDesign.m_eFormat = (PublishingFormat)nTemp16;
     rDesign.m_aAuthor = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
@@ -266,30 +266,30 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
         RTL_TEXTENCODING_UTF8);
     rDesign.m_aMisc = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
-    rIn >> rDesign.m_bDownload;
-    rIn >> rDesign.m_bCreated;      // not used
-    rIn >> rDesign.m_nButtonThema;
-    rIn >> rDesign.m_bUserAttr;
+    rIn.ReadUChar( rDesign.m_bDownload );
+    rIn.ReadUChar( rDesign.m_bCreated );      // not used
+    rIn.ReadInt16( rDesign.m_nButtonThema );
+    rIn.ReadUChar( rDesign.m_bUserAttr );
     ReadColor( rIn, rDesign.m_aBackColor );
     ReadColor( rIn, rDesign.m_aTextColor );
     ReadColor( rIn, rDesign.m_aLinkColor );
     ReadColor( rIn, rDesign.m_aVLinkColor );
     ReadColor( rIn, rDesign.m_aALinkColor );
-    rIn >> rDesign.m_bUseAttribs;
-    rIn >> rDesign.m_bUseColor;
+    rIn.ReadUChar( rDesign.m_bUseAttribs );
+    rIn.ReadUChar( rDesign.m_bUseColor );
 
-    rIn >> nTemp16;
+    rIn.ReadUInt16( nTemp16 );
     rDesign.m_eScript = (PublishingScript)nTemp16;
     rDesign.m_aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
     rDesign.m_aCGI = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn,
         RTL_TEXTENCODING_UTF8);
 
-    rIn >> rDesign.m_bAutoSlide;
-    rIn >> rDesign.m_nSlideDuration;
-    rIn >> rDesign.m_bEndless;
-    rIn >> rDesign.m_bSlideSound;
-    rIn >> rDesign.m_bHiddenSlides;
+    rIn.ReadUChar( rDesign.m_bAutoSlide );
+    rIn.ReadUInt32( rDesign.m_nSlideDuration );
+    rIn.ReadUChar( rDesign.m_bEndless );
+    rIn.ReadUChar( rDesign.m_bSlideSound );
+    rIn.ReadUChar( rDesign.m_bHiddenSlides );
 
     return rIn;
 }
@@ -1521,7 +1521,7 @@ sal_Bool SdPublishingDlg::Load()
         return( sal_False );
 
     sal_uInt16 aCheck;
-    *pStream >> aCheck;
+    pStream->ReadUInt16( aCheck );
 
     if(aCheck != nMagic)
         return sal_False;
@@ -1529,7 +1529,7 @@ sal_Bool SdPublishingDlg::Load()
     SdIOCompat aIO(*pStream, STREAM_READ);
 
     sal_uInt16 nDesigns;
-    *pStream >> nDesigns;
+    pStream->ReadUInt16( nDesigns );
 
     for( sal_uInt16 nIndex = 0;
          pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;

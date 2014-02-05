@@ -793,7 +793,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     ScMultipleReadHeader aHdr( rStream );
 
     sal_uInt16 nCount;
-    rStream >> nCount;
+    rStream.ReadUInt16( nCount );
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
