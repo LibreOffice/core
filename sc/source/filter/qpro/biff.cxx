@@ -63,7 +63,7 @@ bool ScBiffReader::nextRecord()
         mpStream->Seek( mnOffset + mnLength );
 
     mnLength = mnId = 0;
-    *mpStream >> mnId >> mnLength;
+    mpStream->ReadUInt16( mnId ).ReadUInt16( mnLength );
 
     mnOffset = mpStream->Tell();
 #if OSL_DEBUG_LEVEL > 1

@@ -182,11 +182,11 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
     for (sal_uInt16 i = 0; i < nAnz; ++i)
     {
         sStrArray[i] = SvNumberformat::LoadString( rStream );
-        rStream >> nTypeArray[i];
+        rStream.ReadInt16( nTypeArray[i] );
     }
     sal_Bool bStreamThousand;
-    rStream >> eScannedType >> bStreamThousand >> nThousand
-            >> nCntPre >> nCntPost >> nCntExp;
+    rStream.ReadInt16( eScannedType ).ReadUChar( bStreamThousand ).ReadUInt16( nThousand )
+           .ReadUInt16( nCntPre ).ReadUInt16( nCntPost ).ReadUInt16( nCntExp );
     bThousand = bStreamThousand;
 }
 
@@ -452,7 +452,7 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
                        OUString& rLoadedColorName )
 {
     sal_uInt16 nAnz;
-    rStream >> nAnz; //! Not nAnzStrings right away due to Enlarge
+    rStream.ReadUInt16( nAnz ); //! Not nAnzStrings right away due to Enlarge
     Enlarge( nAnz );
     aI.Load( rStream, nAnz );
     sColorName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
@@ -527,12 +527,12 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
 void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
 {
     sal_uInt16 nCnt;
-    rStream >> nCnt;
+    rStream.ReadUInt16( nCnt );
     for ( sal_uInt16 j=0; j<nCnt; j++ )
     {
         sal_uInt16 nPos;
         short nType;
-        rStream >> nPos >> nType;
+        rStream.ReadUInt16( nPos ).ReadInt16( nType );
         if ( nPos < nAnzStrings )
         {
             aI.nTypeArray[nPos] = nType;
@@ -1703,8 +1703,8 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     sal_uInt16 nOp1, nOp2;
     sFormatstring = SvNumberformat::LoadString( rStream );
     sal_Bool bStreamStandard, bStreamUsed;
-    rStream >> eType >> fLimit1 >> fLimit2
-            >> nOp1 >> nOp2 >> bStreamStandard >> bStreamUsed;
+    rStream.ReadInt16( eType ).ReadDouble( fLimit1 ).ReadDouble( fLimit2 )
+           .ReadUInt16( nOp1 ).ReadUInt16( nOp2 ).ReadUChar( bStreamStandard ).ReadUChar( bStreamUsed );
     bStandard = bStreamStandard;
     bIsUsed = bStreamUsed;
     NfHackConversion eHackConversion = NF_CONVERT_NONE;
@@ -1764,7 +1764,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     {
         // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
         aComment = SvNumberformat::LoadString( rStream );
-        rStream >> nNewStandardDefined;
+        rStream.ReadUInt16( nNewStandardDefined );
     }
 
     sal_Int32 nNewCurrencyEnd = -1;
@@ -1779,12 +1779,12 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
         sal_uInt16 nId;
         sal_Bool bStreamCurr;
-        rStream >> nId;
+        rStream.ReadUInt16( nId );
         switch ( nId )
         {
         case nNewCurrencyVersionId :
             bNewCurrencyLoaded = true;
-            rStream >> bStreamCurr;
+            rStream.ReadUChar( bStreamCurr );
             bNewCurrency = bStreamCurr;
             if ( bNewCurrency )
             {
@@ -1795,7 +1795,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             }
             break;
         case nNewStandardFlagVersionId :
-            rStream >> bStreamStandard; // the real standard flag
+            rStream.ReadUChar( bStreamStandard ); // the real standard flag
             bStandard = bStreamStandard;
             break;
         default:

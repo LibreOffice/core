@@ -1588,7 +1588,7 @@ SvStream &SfxItemSet::Load
 
     // Anzahl der zu ladenden Items laden und dann ebensoviele Items
     sal_uInt16 nCount = 0;
-    rStream >> nCount;
+    rStream.ReadUInt16( nCount );
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         // Surrogat/Item laden und (Surrogat) aufl"osen lassen

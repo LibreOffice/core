@@ -2750,10 +2750,10 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
             pCompat = new VersionCompat( rIStm, STREAM_READ );
 
-            rIStm >> nStmCompressMode;
+            rIStm.ReadUInt32( nStmCompressMode );
             ReadMapMode( rIStm, rGDIMetaFile.aPrefMapMode );
             ReadPair( rIStm, rGDIMetaFile.aPrefSize );
-            rIStm >> nCount;
+            rIStm.ReadUInt32( nCount );
 
             delete pCompat;
 

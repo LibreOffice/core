@@ -48,7 +48,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
 {
     sal_uInt16 nSysLang, nLang;
     sFormatstring = rStream.ReadUniOrByteString( eByteStrSet );
-    rStream >> nSysLang >> nLang;
+    rStream.ReadUInt16( nSysLang ).ReadUInt16( nLang );
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
     if ( eSysLnge == LANGUAGE_SYSTEM )          // old versions did write it

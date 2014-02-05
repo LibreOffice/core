@@ -183,10 +183,10 @@ void NBOTypeMgrBase::ImplLoad(OUString filename)
     if( pIStm ) {
         sal_uInt32                  nVersion = 0;
         sal_Int32                   nNumIndex = 0;
-        *pIStm >> nVersion;
+        pIStm->ReadUInt32( nVersion );
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
-            *pIStm >> nNumIndex;
+            pIStm->ReadInt32( nNumIndex );
             sal_uInt16 mLevel = 0x1;
             while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
                 SvxNumRule aNum(*pIStm);
@@ -204,7 +204,7 @@ void NBOTypeMgrBase::ImplLoad(OUString filename)
                     }
                 }
                 RelplaceNumRule(aNum,nNumIndex,mLevel);
-                *pIStm >> nNumIndex;
+                pIStm->ReadInt32( nNumIndex );
             }
         }
         delete pIStm;

@@ -49,7 +49,7 @@ namespace
         CPPUNIT_ASSERT(std_a == 'f');
 
         char tools_a(78);
-        aMemStream >> tools_a;
+        aMemStream.ReadChar( tools_a );
         CPPUNIT_ASSERT(tools_a == 'f');
 
         iss.seekg(0, std::ios_base::end);
@@ -75,7 +75,7 @@ namespace
         CPPUNIT_ASSERT(iss.rdstate() == (std::ios::failbit|std::ios::eofbit));
 
         tools_a = 78;
-        aMemStream >> tools_a;
+        aMemStream.ReadChar( tools_a );
         //so, now eof is set
         CPPUNIT_ASSERT(aMemStream.eof());
         //a failed read doesn't change the data, it remains unchanged
@@ -92,7 +92,7 @@ namespace
         aMemStream.SeekRel(-1);
         CPPUNIT_ASSERT(!aMemStream.eof());
         CPPUNIT_ASSERT(aMemStream.good());
-        aMemStream >> tools_b;
+        aMemStream.ReadUInt16( tools_b );
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(aMemStream.eof());
         CPPUNIT_ASSERT(tools_b == 0x1122);
@@ -105,7 +105,7 @@ namespace
 
         aMemStream.Seek(0);
         CPPUNIT_ASSERT(aMemStream.good());
-        aMemStream >> tools_a;
+        aMemStream.ReadChar( tools_a );
         CPPUNIT_ASSERT(tools_a == 'f');
 
         //failbit is rather subtle wrt e.g seeks

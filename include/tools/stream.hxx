@@ -300,20 +300,42 @@ public:
                         { eLineDelimiter = eLineEnd; }
     LineEnd         GetLineDelimiter() const { return eLineDelimiter; }
 
-    SvStream&       operator>>( sal_uInt16& rUInt16 );
-    SvStream&       operator>>( sal_uInt32& rUInt32 );
-    SvStream&       operator>>( sal_uInt64& rUInt64 );
-    SvStream&       operator>>( sal_Int16& rInt16 );
-    SvStream&       operator>>( sal_Int32& rInt32 );
+    SvStream&       operator>>( sal_uInt16& rUInt16 )
+                        { return ReadUInt16(rUInt16); }
+    SvStream&       operator>>( sal_uInt32& rUInt32 )
+                        { return ReadUInt32(rUInt32); }
+    SvStream&       operator>>( sal_uInt64& rUInt64 )
+                        { return ReadUInt64(rUInt64); }
+    SvStream&       operator>>( sal_Int16& rInt16 )
+                        { return ReadInt16(rInt16); }
+    SvStream&       operator>>( sal_Int32& rInt32 )
+                        { return ReadInt32(rInt32); }
     SvStream&       operator>>( sal_Int64& rInt64 ) SAL_DELETED_FUNCTION;
-    SvStream&       ReadInt64(sal_Int64 & rInt64);
+    SvStream&       operator>>( signed char& rChar )
+                        { return ReadSChar(rChar); }
+    SvStream&       operator>>( char& rChar )
+                        { return ReadChar(rChar); }
+    SvStream&       operator>>( unsigned char& rChar )
+                        { return ReadUChar(rChar); }
+    SvStream&       operator>>( float& rFloat )
+                        { return ReadFloat(rFloat); }
+    SvStream&       operator>>( double& rDouble )
+                        { return ReadDouble(rDouble); }
+    SvStream&       operator>>( SvStream& rStream )
+                        { return ReadStream(rStream); }
 
-    SvStream&       operator>>( signed char& rChar );
-    SvStream&       operator>>( char& rChar );
-    SvStream&       operator>>( unsigned char& rChar );
-    SvStream&       operator>>( float& rFloat );
-    SvStream&       operator>>( double& rDouble );
-    SvStream&       operator>>( SvStream& rStream );
+    SvStream&       ReadUInt16( sal_uInt16& rUInt16 );
+    SvStream&       ReadUInt32( sal_uInt32& rUInt32 );
+    SvStream&       ReadUInt64( sal_uInt64& rUInt64 );
+    SvStream&       ReadInt16( sal_Int16& rInt16 );
+    SvStream&       ReadInt32( sal_Int32& rInt32 );
+    SvStream&       ReadInt64(sal_Int64 & rInt64);
+    SvStream&       ReadSChar( signed char& rChar );
+    SvStream&       ReadChar( char& rChar );
+    SvStream&       ReadUChar( unsigned char& rChar );
+    SvStream&       ReadFloat( float& rFloat );
+    SvStream&       ReadDouble( double& rDouble );
+    SvStream&       ReadStream( SvStream& rStream );
 
     SvStream&       WriteUInt16( sal_uInt16 nUInt16 );
     SvStream&       WriteUInt32( sal_uInt32 nUInt32 );

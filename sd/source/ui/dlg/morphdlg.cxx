@@ -76,7 +76,7 @@ void MorphDlg::LoadSettings()
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
 
-        *xIStm >> nSteps >> bOrient >> bAttrib;
+        xIStm->ReadUInt16( nSteps ).ReadUChar( bOrient ).ReadUChar( bAttrib );
     }
     else
     {

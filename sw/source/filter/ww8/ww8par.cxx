@@ -191,7 +191,7 @@ void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell* pDocShell)
 void lclIgnoreString32( SvMemoryStream& rStrm, bool b16Bit )
 {
     sal_uInt32 nChars(0);
-    rStrm >> nChars;
+    rStrm.ReadUInt32( nChars );
     if( b16Bit )
         nChars *= 2;
     rStrm.SeekRel( nChars );
@@ -215,7 +215,7 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
         sal_uInt16 nReadChar;
         for( ;  (pcUniChar < pcEndChar); ++pcUniChar )
         {
-            rStrm >> (nReadChar);
+            rStrm.ReadUInt16( nReadChar );
             (*pcUniChar) = (nReadChar == WW8_NUL) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
         }
     }
@@ -224,7 +224,7 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
         sal_uInt8 nReadChar;
         for( ; (pcUniChar < pcEndChar); ++pcUniChar )
         {
-            rStrm >> nReadChar ;
+            rStrm.ReadUChar( nReadChar ) ;
             (*pcUniChar) = (nReadChar == WW8_NUL_C) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
         }
     }
@@ -245,7 +245,7 @@ void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, sal_uInt32 nCha
 void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, bool b16Bit)
 {
     sal_uInt32 nValue(0);
-    rStrm >> nValue;
+    rStrm.ReadUInt32( nValue );
     lclAppendString32(rString, rStrm, nValue, b16Bit);
 }
 
@@ -275,7 +275,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
 
     rStrm.Read(aGuid, 16);
     rStrm.SeekRel( 4 );
-    rStrm >> nFlags;
+    rStrm.ReadUInt32( nFlags );
 
     sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
     boost::scoped_ptr< OUString > xLongName;    // link / file name
@@ -308,17 +308,17 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
 
         if( (memcmp(aGuid, maGuidFileMoniker, 16) == 0) )
         {
-            rStrm >> nLevel;
+            rStrm.ReadUInt16( nLevel );
             xShortName.reset( new OUString );
             lclAppendString32( *xShortName,rStrm, false );
             rStrm.SeekRel( 24 );
 
             sal_uInt32 nStrLen(0);
-            rStrm >> nStrLen;
+            rStrm.ReadUInt32( nStrLen );
             if( nStrLen )
             {
                 nStrLen = 0;
-                rStrm >> nStrLen;
+                rStrm.ReadUInt32( nStrLen );
                 nStrLen /= 2;
                 rStrm.SeekRel( 2 );
                 xLongName.reset( new OUString );
@@ -331,7 +331,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
         else if( (memcmp(aGuid, maGuidUrlMoniker, 16) == 0) )
         {
             sal_uInt32 nStrLen(0);
-            rStrm >> nStrLen;
+            rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
             xLongName.reset( new OUString );
             lclAppendString32( *xLongName,rStrm, nStrLen, true );
@@ -462,13 +462,13 @@ bool Sttb::Read( SvStream& rS )
 {
     OSL_TRACE("Sttb::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> fExtend >> cData >> cbExtra;
+    rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
     if ( cData )
     {
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             SBBItem aItem;
-            rS >> aItem.cchData;
+            rS.ReadUInt16( aItem.cchData );
             aItem.data = read_uInt16s_ToOUString(rS, aItem.cchData);
             dataItems.push_back( aItem );
         }
@@ -658,10 +658,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             sal_uInt16  nPID;
             while( 5 < nBytesLeft )
             {
-                rSt >> nPID;
+                rSt.ReadUInt16( nPID );
                 if ( rSt.GetError() != 0 )
                     break;
-                rSt >> nUDData;
+                rSt.ReadUInt32( nUDData );
                 switch( nPID )
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
@@ -1044,7 +1044,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->pWrapPolygon = NULL;
 
             sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
-            rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
             {
                 pImpRec->pWrapPolygon = new Polygon(nNumElemVert);
@@ -1052,11 +1052,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     sal_Int32 nX, nY;
                     if (nElemSizeVert == 8)
-                        rSt >> nX >> nY;
+                        rSt.ReadInt32( nX ).ReadInt32( nY );
                     else
                     {
                         sal_Int16 nSmallX, nSmallY;
-                        rSt >> nSmallX >> nSmallY;
+                        rSt.ReadInt16( nSmallX ).ReadInt16( nSmallY );
                         nX = nSmallX;
                         nY = nSmallY;
                     }
@@ -1134,7 +1134,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
             bool bRet =  4 <= mnStreamSize;
             if( bRet )
-                aMemStream >> mnRawRecId >> mnRawRecSize;
+                aMemStream.ReadUInt16( mnRawRecId ).ReadUInt16( mnRawRecSize );
             SwDocShell* pDocShell = rReader.mpDocShell;
             if(pDocShell)
             {
@@ -3049,10 +3049,10 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     for( nL2 = 0; nL2 < nStrLen; ++nL2, ++pWork )
     {
         if (bIsUnicode)
-            *pStrm >> nUCode; // unicode  --> read 2 bytes
+            pStrm->ReadUInt16( nUCode ); // unicode  --> read 2 bytes
         else
         {
-            *pStrm >> nBCode; // old code --> read 1 byte
+            pStrm->ReadUChar( nBCode ); // old code --> read 1 byte
             nUCode = nBCode;
         }
 
@@ -3475,10 +3475,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     sal_uInt8 nBCode(0);
     sal_uInt16 nWCharVal(0);
     if( bIsUnicode )
-        *pStrm >> nWCharVal; // unicode  --> read 2 bytes
+        pStrm->ReadUInt16( nWCharVal ); // unicode  --> read 2 bytes
     else
     {
-        *pStrm  >>  nBCode; // old code --> read 1 byte
+        pStrm -> ReadUChar( nBCode ); // old code --> read 1 byte
         nWCharVal = nBCode;
     }
 
@@ -3570,11 +3570,11 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     sal_uInt16 nWordCode(0);
 
                     if( bIsUnicode )
-                        *pStrm >> nWordCode;
+                        pStrm->ReadUInt16( nWordCode );
                     else
                     {
                         sal_uInt8 nByteCode(0);
-                        *pStrm >> nByteCode;
+                        pStrm->ReadUChar( nByteCode );
                         nWordCode = nByteCode;
                     }
                     if( nWordCode == 0x1 )
@@ -5549,7 +5549,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
                 {
                     pTableStream->Seek(0);
                     sal_uInt32 nEncType;
-                    *pTableStream >> nEncType;
+                    pTableStream->ReadUInt32( nEncType );
                     if (nEncType == 0x10001)
                         eAlgo = RC4;
                 }
@@ -6008,7 +6008,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     }
 
     sal_uInt16 nMagic(0);
-    *pStrm >> nMagic;
+    pStrm->ReadUInt16( nMagic );
 
     // Remember: 6 means "6 OR 7", 7 means "JUST 7"
     switch (nWantedVersion)
@@ -6027,7 +6027,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
                     if (pStrm->Seek(nCurPos + 22))
                     {
                         sal_uInt32 nfcMin;
-                        *pStrm >> nfcMin;
+                        pStrm->ReadUInt32( nfcMin );
                         if (0x300 != nfcMin)
                             nErrRet = ERR_WW6_NO_WW6_FILE_ERR;
                     }

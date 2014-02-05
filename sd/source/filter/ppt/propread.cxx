@@ -84,13 +84,13 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
     if ( nStringType == VT_EMPTY )
     {
         nType = VT_NULL; // Initialize in case stream fails.
-        *this >> nType;
+        ReadUInt32( nType );
     }
     else
         nType = nStringType & VT_TYPEMASK;
 
     nItemSize = 0; // Initialize in case stream fails.
-    *this >> nItemSize;
+    ReadUInt32( nItemSize );
 
     switch( nType )
     {
@@ -108,7 +108,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
                         {
                             sal_Unicode* pWString = (sal_Unicode*)pString;
                             for ( i = 0; i < nItemSize; i++ )
-                                *this >> pWString[ i ];
+                                ReadUInt16( pWString[ i ] );
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
                         else
@@ -147,7 +147,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
                 {
                     sal_Unicode* pString = new sal_Unicode[ nItemSize ];
                     for ( i = 0; i < nItemSize; i++ )
-                        *this >> pString[ i ];
+                        ReadUInt16( pString[ i ] );
                     if ( pString[ i - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
@@ -280,10 +280,10 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
         sal_uInt32 nDictCount, nId, nSize, nPos;
         SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, STREAM_READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
-        aStream >> nDictCount;
+        aStream.ReadUInt32( nDictCount );
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )
         {
-            aStream >> nId >> nSize;
+            aStream.ReadUInt32( nId ).ReadUInt32( nSize );
             if ( nSize )
             {
                 OUString aString;
@@ -298,7 +298,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                         aStream.Seek( nPos );
                         sal_Unicode* pWString = (sal_Unicode*)pString;
                         for ( i = 0; i < nSize; i++ )
-                            aStream >> pWString[ i ];
+                            aStream.ReadUInt16( pWString[ i ] );
                         aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
                     }
                     else
@@ -331,22 +331,22 @@ void Section::Read( SvStorageStream *pStrm )
     pStrm->Seek( nSecOfs );
 
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
-    *pStrm >> nSecSize >> nPropCount;
+    pStrm->ReadUInt32( nSecSize ).ReadUInt32( nPropCount );
     while( nPropCount-- && ( pStrm->GetError() == ERRCODE_NONE ) )
     {
-        *pStrm >> nPropId >> nPropOfs;
+        pStrm->ReadUInt32( nPropId ).ReadUInt32( nPropOfs );
         nCurrent = pStrm->Tell();
         pStrm->Seek( nPropOfs + nSecOfs );
         if ( nPropId )                  // do not read dictionary
         {
 
-            *pStrm >> nPropType;
+            pStrm->ReadUInt32( nPropType );
 
             nPropSize = 4;
 
             if ( nPropType & VT_VECTOR )
             {
-                *pStrm >> nVectorCount;
+                pStrm->ReadUInt32( nVectorCount );
                 nPropType &=~VT_VECTOR;
                 nPropSize += 4;
             }
@@ -360,7 +360,7 @@ void Section::Read( SvStorageStream *pStrm )
             {
                 if ( bVariant )
                 {
-                    *pStrm >> nPropType;
+                    pStrm->ReadUInt32( nPropType );
                     nPropSize += 4;
                 }
                 switch( nPropType )
@@ -392,18 +392,18 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
 
                     case VT_BSTR :
-                        *pStrm >> nTemp;
+                        pStrm->ReadUInt32( nTemp );
                         nPropSize += ( nTemp + 4 );
                     break;
 
                     case VT_LPSTR :
-                        *pStrm >> nTemp;
+                        pStrm->ReadUInt32( nTemp );
                         nPropSize += ( nTemp + 4 );
                     break;
 
                     case VT_LPWSTR :
                         {
-                        *pStrm >> nTemp;
+                        pStrm->ReadUInt32( nTemp );
                         // looks like these are aligned to 4 bytes
                         sal_uInt32 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
                         nPropSize += ( nTemp << 1 ) + 4 + (nLength % 4);
@@ -413,7 +413,7 @@ void Section::Read( SvStorageStream *pStrm )
                     case VT_BLOB_OBJECT :
                     case VT_BLOB :
                     case VT_CF :
-                        *pStrm >> nTemp;
+                        pStrm->ReadUInt32( nTemp );
                         nPropSize += ( nTemp + 4 );
                     break;
 
@@ -457,10 +457,10 @@ void Section::Read( SvStorageStream *pStrm )
                 if ( GetProperty( 1, aPropItem ) )
                 {
                     sal_uInt16 nCodePage;
-                    aPropItem >> nPropType;
+                    aPropItem.ReadUInt32( nPropType );
                     if ( nPropType == VT_I2 )
                     {
-                        aPropItem >> nCodePage;
+                        aPropItem.ReadUInt16( nCodePage );
 
                         if ( nCodePage == 1200 )
                         {
@@ -483,10 +483,10 @@ void Section::Read( SvStorageStream *pStrm )
         else
         {
             sal_uInt32 nDictCount, nSize;
-            *pStrm >> nDictCount;
+            pStrm->ReadUInt32( nDictCount );
             for ( i = 0; i < nDictCount; i++ )
             {
-                *pStrm >> nSize >> nSize;
+                pStrm->ReadUInt32( nSize ).ReadUInt32( nSize );
                 pStrm->SeekRel( nSize );
             }
             nSize = pStrm->Tell();
@@ -572,12 +572,12 @@ void PropRead::Read()
         sal_uInt32  nSections;
         sal_uInt32  nSectionOfs;
         sal_uInt32  nCurrent;
-        *mpSvStream >> mnByteOrder >> mnFormat >> mnVersionLo >> mnVersionHi;
+        mpSvStream->ReadUInt16( mnByteOrder ).ReadUInt16( mnFormat ).ReadUInt16( mnVersionLo ).ReadUInt16( mnVersionHi );
         if ( mnByteOrder == 0xfffe )
         {
             sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
             mpSvStream->Read( mApplicationCLSID, 16 );
-            *mpSvStream >> nSections;
+            mpSvStream->ReadUInt32( nSections );
             if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
             {
                 mbStatus = sal_False;
@@ -585,7 +585,7 @@ void PropRead::Read()
             else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {
                 mpSvStream->Read( pSectCLSID, 16 );
-                *mpSvStream >> nSectionOfs;
+                mpSvStream->ReadUInt32( nSectionOfs );
                 nCurrent = mpSvStream->Tell();
                 mpSvStream->Seek( nSectionOfs );
                 Section aSection( pSectCLSID );

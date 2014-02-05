@@ -654,12 +654,12 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
 //------------------------------------------------------------------
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
-    rStream >> aKey.nRecord; // key
+    rStream.ReadUInt32( aKey.nRecord ); // key
 
     if (rIndex.getHeader().db_keytype)
     {
         double aDbl;
-        rStream >> aDbl;
+        rStream.ReadDouble( aDbl );
         aKey = ONDXKey(aDbl,aKey.nRecord);
     }
     else
@@ -787,7 +787,7 @@ const ORowSetValue& ONDXKey::getValue() const
 // -----------------------------------------------------------------------------
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPage)
 {
-    rStream >> rPage.nPagePos;
+    rStream.ReadUInt32( rPage.nPagePos );
     return rStream;
 }
 // -----------------------------------------------------------------------------
@@ -836,7 +836,7 @@ static sal_uInt32 nValue;
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
     rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
-    rStream >> nValue >> rPage.aChild;
+    rStream.ReadUInt32( nValue ) >> rPage.aChild;
     rPage.nCount = sal_uInt16(nValue);
 
     for (sal_uInt16 i = 0; i < rPage.nCount; i++)

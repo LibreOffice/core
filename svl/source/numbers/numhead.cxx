@@ -31,19 +31,19 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
     sal_uInt32 nDataSize;
-    rStream >> nDataSize;
+    rStream.ReadUInt32( nDataSize );
     sal_uLong nDataPos = rStream.Tell();
     nEntryEnd = nDataPos;
 
     rStream.SeekRel(nDataSize);
     sal_uInt16 nID;
-    rStream >> nID;
+    rStream.ReadUInt16( nID );
     if (nID != SV_NUMID_SIZES)
     {
         OSL_FAIL("SV_NUMID_SIZES not found");
     }
     sal_uInt32 nSizeTableLen;
-    rStream >> nSizeTableLen;
+    rStream.ReadUInt32( nSizeTableLen );
     pBuf = new char[nSizeTableLen];
     rStream.Read( pBuf, nSizeTableLen );
     pMemStream = new SvMemoryStream( pBuf, nSizeTableLen, STREAM_READ );
@@ -80,7 +80,7 @@ void ImpSvNumMultipleReadHeader::StartEntry()
 {
     sal_uLong nPos = rStream.Tell();
     sal_uInt32 nEntrySize;
-    (*pMemStream) >> nEntrySize;
+    (*pMemStream).ReadUInt32( nEntrySize );
 
     nEntryEnd = nPos + nEntrySize;
 }

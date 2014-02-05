@@ -523,9 +523,9 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     // 1. LVLF einlesen
     //
     memset(&aLVL, 0, sizeof( aLVL ));
-    rSt >> aLVL.nStartAt;
-    rSt >> aLVL.nNFC;
-    rSt >> aBits1;
+    rSt.ReadInt32( aLVL.nStartAt );
+    rSt.ReadUChar( aLVL.nNFC );
+    rSt.ReadUChar( aBits1 );
     if( 0 != rSt.GetError() ) return false;
     aLVL.nAlign = (aBits1 & 0x03);
     if( aBits1 & 0x10 ) aLVL.bV6Prev    = true;
@@ -535,7 +535,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     sal_uInt8 nLevelB = 0;
     for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
-        rSt >> aLVL.aOfsNumsXCH[ nLevelB ];
+        rSt.ReadUChar( aLVL.aOfsNumsXCH[ nLevelB ] );
         if( 0 != rSt.GetError() )
         {
             bLVLOkB = false;
@@ -547,11 +547,11 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         return false;
 
     sal_uInt8 ixchFollow(0);
-    rSt >> ixchFollow;
-    rSt >> aLVL.nV6DxaSpace;
-    rSt >> aLVL.nV6Indent;
-    rSt >> aLVL.nLenGrpprlChpx;
-    rSt >> aLVL.nLenGrpprlPapx;
+    rSt.ReadUChar( ixchFollow );
+    rSt.ReadInt32( aLVL.nV6DxaSpace );
+    rSt.ReadInt32( aLVL.nV6Indent );
+    rSt.ReadUChar( aLVL.nLenGrpprlChpx );
+    rSt.ReadUChar( aLVL.nLenGrpprlPapx );
     rSt.SeekRel( 2 );
     if( 0 != rSt.GetError()) return false;
 
@@ -1131,7 +1131,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     sal_uInt32 nRemainingPlcfLst = rFib.lcbPlcfLst;
 
     sal_uInt16 nListCount(0);
-    rSt >> nListCount;
+    rSt.ReadUInt16( nListCount );
     nRemainingPlcfLst -= 2;
     bOk = nListCount > 0;
 
@@ -1152,13 +1152,13 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 1.1.1 Daten einlesen
         //
-        rSt >> aLST.nIdLst;
-        rSt >> aLST.nTplC;
+        rSt.ReadUInt32( aLST.nIdLst );
+        rSt.ReadUInt32( aLST.nTplC );
         for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
-            rSt >> aLST.aIdSty[ nLevel ];
+            rSt.ReadUInt16( aLST.aIdSty[ nLevel ] );
 
         sal_uInt8 aBits1(0);
-        rSt >> aBits1;
+        rSt.ReadUChar( aBits1 );
 
         rSt.SeekRel( 1 );
 
@@ -1248,7 +1248,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         return;
 
     sal_Int32 nLfoCount(0);
-    rSt >> nLfoCount;
+    rSt.ReadInt32( nLfoCount );
     bOk = nLfoCount > 0;
 
     if (!bOk)
@@ -1267,9 +1267,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         WW8LFO aLFO;
         memset(&aLFO, 0, sizeof( aLFO ));
 
-        rSt >> aLFO.nIdLst;
+        rSt.ReadUInt32( aLFO.nIdLst );
         rSt.SeekRel( 8 );
-        rSt >> aLFO.nLfoLvl;
+        rSt.ReadUChar( aLFO.nLfoLvl );
         rSt.SeekRel( 3 );
         // soviele Overrides existieren
         if ((nMaxLevel < aLFO.nLfoLvl) || rSt.GetError())
@@ -1361,11 +1361,11 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //4 byte header, there might be more than one if
                 //that header was 0xFFFFFFFF, e.g. #114412# ?
                 sal_uInt32 nTest;
-                rSt >> nTest;
+                rSt.ReadUInt32( nTest );
                 do
                 {
                     nTest = 0;
-                    rSt >> nTest;
+                    rSt.ReadUInt32( nTest );
                 }
                 while (nTest == 0xFFFFFFFF);
                 rSt.SeekRel(-4);
@@ -1379,9 +1379,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     //
                     // 2.2.2.1 den LFOLVL einlesen
                     //
-                    rSt >> aLFOLVL.nStartAt;
+                    rSt.ReadInt32( aLFOLVL.nStartAt );
                     sal_uInt8 aBits1(0);
-                    rSt >> aBits1;
+                    rSt.ReadUChar( aBits1 );
                     rSt.SeekRel( 3 );
                     if (rSt.GetError())
                         break;
@@ -2178,14 +2178,14 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     // The following is a FFData structure as described in
     // Microsoft's DOC specification (chapter 2.9.78)
 
-    *pDataStream >> nHeaderByte;
+    pDataStream->ReadUInt32( nHeaderByte );
 
     // might be better to read the bits as a 16 bit word
     // ( like it is in the spec. )
     sal_uInt8 bits1 = 0;
-    *pDataStream >> bits1;
+    pDataStream->ReadUChar( bits1 );
     sal_uInt8 bits2 = 0;
-    *pDataStream >> bits2;
+    pDataStream->ReadUChar( bits2 );
 
     sal_uInt8 iType = ( bits1 & 0x3 );
 
@@ -2197,10 +2197,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     sal_uInt8 iRes = (bits1 & 0x7C) >> 2;
 
     sal_uInt16 cch = 0;
-    *pDataStream >> cch;
+    pDataStream->ReadUInt16( cch );
 
     sal_uInt16 hps = 0;
-    *pDataStream >> hps;
+    pDataStream->ReadUInt16( hps );
 
     // xstzName
     sTitle = read_uInt16_BeltAndBracesString(*pDataStream);
@@ -2215,7 +2215,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     {
         // CheckBox or ComboBox
         sal_uInt16 wDef = 0;
-        *pDataStream >> wDef;
+        pDataStream->ReadUInt16( wDef );
         nChecked = wDef; // default
         if (nWhich == WW8_CT_CHECKBOX)
         {
@@ -2239,18 +2239,18 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         bool bAllOk = true;
         // SSTB (see Spec. 2.2.4)
         sal_uInt16 fExtend = 0;
-        *pDataStream >> fExtend;
+        pDataStream->ReadUInt16( fExtend );
         sal_uInt16 nNoStrings = 0;
 
         // Isn't it that if fExtend isn't 0xFFFF then fExtend actually
         // doesn't exist and we really have just read nNoStrings ( or cData )?
         if (fExtend != 0xFFFF)
             bAllOk = false;
-        *pDataStream >> nNoStrings;
+        pDataStream->ReadUInt16( nNoStrings );
 
         // I guess this should be zero ( and we should ensure that )
         sal_uInt16 cbExtra = 0;
-        *pDataStream >> cbExtra;
+        pDataStream->ReadUInt16( cbExtra );
 
         OSL_ENSURE(bAllOk,
             "Unknown formfield dropdown list structure. Report to cmc");

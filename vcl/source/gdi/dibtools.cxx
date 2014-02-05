@@ -171,17 +171,17 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
     const sal_Size aStartPos(rIStm.Tell());
-    rIStm >> rHeader.nSize;
+    rIStm.ReadUInt32( rHeader.nSize );
 
     // BITMAPCOREHEADER
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
         sal_Int16 nTmp16;
 
-        rIStm >> nTmp16; rHeader.nWidth = nTmp16;
-        rIStm >> nTmp16; rHeader.nHeight = nTmp16;
-        rIStm >> rHeader.nPlanes;
-        rIStm >> rHeader.nBitCount;
+        rIStm.ReadInt16( nTmp16 ); rHeader.nWidth = nTmp16;
+        rIStm.ReadInt16( nTmp16 ); rHeader.nHeight = nTmp16;
+        rIStm.ReadUInt16( rHeader.nPlanes );
+        rIStm.ReadUInt16( rHeader.nBitCount );
     }
     else
     {
@@ -189,42 +189,42 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         sal_Size nUsed(sizeof(rHeader.nSize));
 
         // read DIBInfoHeader entries
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nWidth; nUsed += sizeof(rHeader.nWidth); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nHeight; nUsed += sizeof(rHeader.nHeight); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nPlanes; nUsed += sizeof(rHeader.nPlanes); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nBitCount;  nUsed += sizeof(rHeader.nBitCount); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nCompression;  nUsed += sizeof(rHeader.nCompression); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nSizeImage;  nUsed += sizeof(rHeader.nSizeImage); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nXPelsPerMeter;  nUsed += sizeof(rHeader.nXPelsPerMeter); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nYPelsPerMeter;  nUsed += sizeof(rHeader.nYPelsPerMeter); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nColsUsed;  nUsed += sizeof(rHeader.nColsUsed); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nColsImportant;  nUsed += sizeof(rHeader.nColsImportant); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nWidth ); nUsed += sizeof(rHeader.nWidth); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nHeight ); nUsed += sizeof(rHeader.nHeight); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt16( rHeader.nPlanes ); nUsed += sizeof(rHeader.nPlanes); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt16( rHeader.nBitCount );  nUsed += sizeof(rHeader.nBitCount); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nCompression );  nUsed += sizeof(rHeader.nCompression); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nSizeImage );  nUsed += sizeof(rHeader.nSizeImage); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nXPelsPerMeter );  nUsed += sizeof(rHeader.nXPelsPerMeter); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nYPelsPerMeter );  nUsed += sizeof(rHeader.nYPelsPerMeter); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nColsUsed );  nUsed += sizeof(rHeader.nColsUsed); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nColsImportant );  nUsed += sizeof(rHeader.nColsImportant); }
 
         // read DIBV5HEADER members
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5RedMask; nUsed += sizeof(rHeader.nV5RedMask); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5GreenMask; nUsed += sizeof(rHeader.nV5GreenMask);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5BlueMask; nUsed += sizeof(rHeader.nV5BlueMask);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5AlphaMask; nUsed += sizeof(rHeader.nV5AlphaMask);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5CSType; nUsed += sizeof(rHeader.nV5CSType);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5RedMask ); nUsed += sizeof(rHeader.nV5RedMask); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5GreenMask ); nUsed += sizeof(rHeader.nV5GreenMask);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5BlueMask ); nUsed += sizeof(rHeader.nV5BlueMask);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5AlphaMask ); nUsed += sizeof(rHeader.nV5AlphaMask);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5CSType ); nUsed += sizeof(rHeader.nV5CSType);  }
 
         // read contained CIEXYZTriple's
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzRed.aXyzX; nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzX); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzRed.aXyzY; nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzY); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzRed.aXyzZ; nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzZ); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzGreen.aXyzX; nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzX); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzGreen.aXyzY; nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzY); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzGreen.aXyzZ; nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzZ); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzBlue.aXyzX; nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzX); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzBlue.aXyzY; nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzY); }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.aV5Endpoints.aXyzBlue.aXyzZ; nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzZ); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzX ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzX); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzY ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzY); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzRed.aXyzZ ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzRed.aXyzZ); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzGreen.aXyzX ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzX); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzGreen.aXyzY ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzY); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzGreen.aXyzZ ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzGreen.aXyzZ); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzBlue.aXyzX ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzX); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzBlue.aXyzY ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzY); }
+        if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.aV5Endpoints.aXyzBlue.aXyzZ ); nUsed += sizeof(rHeader.aV5Endpoints.aXyzBlue.aXyzZ); }
 
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5GammaRed; nUsed += sizeof(rHeader.nV5GammaRed);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5GammaGreen; nUsed += sizeof(rHeader.nV5GammaGreen);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5GammaBlue; nUsed += sizeof(rHeader.nV5GammaBlue);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5Intent; nUsed += sizeof(rHeader.nV5Intent);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5ProfileData; nUsed += sizeof(rHeader.nV5ProfileData);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5ProfileSize; nUsed += sizeof(rHeader.nV5ProfileSize);  }
-        if(nUsed < rHeader.nSize) { rIStm >> rHeader.nV5Reserved; nUsed += sizeof(rHeader.nV5Reserved);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5GammaRed ); nUsed += sizeof(rHeader.nV5GammaRed);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5GammaGreen ); nUsed += sizeof(rHeader.nV5GammaGreen);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5GammaBlue ); nUsed += sizeof(rHeader.nV5GammaBlue);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5Intent ); nUsed += sizeof(rHeader.nV5Intent);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5ProfileData ); nUsed += sizeof(rHeader.nV5ProfileData);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5ProfileSize ); nUsed += sizeof(rHeader.nV5ProfileSize);  }
+        if(nUsed < rHeader.nSize) { rIStm.ReadUInt32( rHeader.nV5Reserved ); nUsed += sizeof(rHeader.nV5Reserved);  }
 
         // seek to EndPos
         rIStm.Seek(aStartPos + rHeader.nSize);
@@ -422,9 +422,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         if(bTCMask && BITFIELDS == rHeader.nCompression)
         {
             rIStm.SeekRel( -12L );
-            rIStm >> nRMask;
-            rIStm >> nGMask;
-            rIStm >> nBMask;
+            rIStm.ReadUInt32( nRMask );
+            rIStm.ReadUInt32( nGMask );
+            rIStm.ReadUInt32( nBMask );
         }
 
         if(bRLE)
@@ -669,7 +669,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 sal_uLong nCodedPos(0);
 
                 // read coding information
-                rIStm >> nCodedSize >> nUncodedSize >> aHeader.nCompression;
+                rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
                 pData = (sal_uInt8*) rtl_allocateMemory( nUncodedSize );
 
                 // decode buffer
@@ -763,23 +763,23 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
     sal_uInt16  nTmp16 = 0;
     bool    bRet = false;
 
-    rIStm >> nTmp16;
+    rIStm.ReadUInt16( nTmp16 );
 
     if ( ( 0x4D42 == nTmp16 ) || ( 0x4142 == nTmp16 ) )
     {
         if ( 0x4142 == nTmp16 )
         {
             rIStm.SeekRel( 12L );
-            rIStm >> nTmp16;
+            rIStm.ReadUInt16( nTmp16 );
             rIStm.SeekRel( 8L );
-            rIStm >> nTmp32;
+            rIStm.ReadUInt32( nTmp32 );
             rOffset = nTmp32 - 28UL;
             bRet = ( 0x4D42 == nTmp16 );
         }
         else // 0x4D42 == nTmp16, 'MB' from BITMAPFILEHEADER
         {
             rIStm.SeekRel( 8L );        // we are on bfSize member of BITMAPFILEHEADER, forward to bfOffBits
-            rIStm >> nTmp32;            // read bfOffBits
+            rIStm.ReadUInt32( nTmp32 );            // read bfOffBits
             rOffset = nTmp32 - 14UL;    // adapt offset by sizeof(BITMAPFILEHEADER)
             bRet = ( rIStm.GetError() == 0UL );
         }
@@ -1449,14 +1449,14 @@ bool ReadDIBBitmapEx(
         sal_uInt32 nMagic2(0);
 
         rTarget = BitmapEx(aBmp);
-        rIStm >> nMagic1 >> nMagic2;
+        rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
         bRetval = (0x25091962 == nMagic1) && (0xACB20201 == nMagic2) && !rIStm.GetError();
 
         if(bRetval)
         {
             sal_uInt8 bTransparent(false);
 
-            rIStm >> bTransparent;
+            rIStm.ReadUChar( bTransparent );
             bRetval = !rIStm.GetError();
 
             if(bRetval)

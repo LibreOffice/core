@@ -4277,15 +4277,15 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 pMergePicStreamBSE->Seek( pBlibEntry->mnPictureOffset );
                 sal_uInt16 n16;
                 // record version and instance
-                *pMergePicStreamBSE >> n16;
+                pMergePicStreamBSE->ReadUInt16( n16 );
                 rSt.WriteUInt16( n16 );
                 // record type
-                *pMergePicStreamBSE >> n16;
+                pMergePicStreamBSE->ReadUInt16( n16 );
                 rSt.WriteUInt16( sal_uInt16( ESCHER_BlipFirst + nBlibType ) );
                 DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
                 sal_uInt32 n32;
                 // record size
-                *pMergePicStreamBSE >> n32;
+                pMergePicStreamBSE->ReadUInt32( n32 );
                 nBlipSize -= 8;
                 rSt.WriteUInt32( nBlipSize );
                 DBG_ASSERT( nBlipSize == n32, "EscherGraphicProvider::WriteBlibStoreContainer: BLIP sizes differ" );
@@ -5122,7 +5122,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     mpOutStrm->Seek( mnStrmStartOfs );
     while ( mpOutStrm->Tell() < nCurPos )
     {
-        *mpOutStrm >> nType >> nSize;
+        mpOutStrm->ReadUInt32( nType ).ReadUInt32( nSize );
         sal_uInt32 nEndOfRecord = mpOutStrm->Tell() + nSize;
         bool bContainer = (nType & 0x0F) == 0x0F;
         /*  Expand the record, if the insertion position is inside, or if the

@@ -157,7 +157,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
     MetaAction* pAction = NULL;
     sal_uInt16 nType = 0;
 
-    rIStm >> nType;
+    rIStm.ReadUInt16( nType );
 
     SAL_INFO("vcl.gdi", "ReadMetaAction " << nType);
 
@@ -599,7 +599,7 @@ void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    ReadRectangle( rIStm, maRect ) >> mnHorzRound >> mnVertRound;
+    ReadRectangle( rIStm, maRect ).ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
 }
 
 // ========================================================================
@@ -1002,7 +1002,7 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     if ( aCompat.GetVersion() >= 3 )
     {
         sal_uInt8 bHasPolyFlags;
-        rIStm >> bHasPolyFlags;
+        rIStm.ReadUChar( bHasPolyFlags );
         if ( bHasPolyFlags )
             maPoly.Read( rIStm );
     }
@@ -1084,7 +1084,7 @@ void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     if( aCompat.GetVersion() >= 2 )     // Version 2
     {
         sal_uInt8 bHasPolyFlags;
-        rIStm >> bHasPolyFlags;
+        rIStm.ReadUChar( bHasPolyFlags );
         if ( bHasPolyFlags )
             maPoly.Read( rIStm );
     }
@@ -1184,10 +1184,10 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     if ( aCompat.GetVersion() >= 2 )    // Version 2
     {
         sal_uInt16 i, nIndex, nNumberOfComplexPolygons;
-        rIStm >> nNumberOfComplexPolygons;
+        rIStm.ReadUInt16( nNumberOfComplexPolygons );
         for ( i = 0; i < nNumberOfComplexPolygons; i++ )
         {
-            rIStm >> nIndex;
+            rIStm.ReadUInt16( nIndex );
             Polygon aPoly;
             aPoly.Read( rIStm );
             maPolyPoly.Replace( aPoly, nIndex );
@@ -1271,8 +1271,8 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm   >> mnIndex;
-    rIStm   >> mnLen;
+    rIStm  .ReadInt32( mnIndex );
+    rIStm  .ReadInt32( mnLen );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
@@ -1416,9 +1416,9 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maStartPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm   >> mnIndex;
-    rIStm   >> mnLen;
-    rIStm   >> nAryLen;
+    rIStm  .ReadInt32( mnIndex );
+    rIStm  .ReadInt32( mnLen );
+    rIStm  .ReadInt32( nAryLen );
 
     if ( mnIndex + mnLen > maStr.getLength() )
     {
@@ -1437,7 +1437,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
             {
                 sal_Int32 i;
                 for( i = 0; i < nAryLen; i++ )
-                    rIStm >> mpDXAry[ i ];
+                    rIStm.ReadInt32( mpDXAry[ i ] );
 
                 // #106172# setup remainder
                 for( ; i < mnLen; i++ )
@@ -1546,9 +1546,9 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm   >> mnWidth;
-    rIStm   >> mnIndex;
-    rIStm   >> mnLen;
+    rIStm  .ReadUInt32( mnWidth );
+    rIStm  .ReadInt32( mnIndex );
+    rIStm  .ReadInt32( mnLen );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
@@ -1627,7 +1627,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadRectangle( rIStm, maRect );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm   >> mnStyle;
+    rIStm  .ReadUInt16( mnStyle );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
@@ -1719,14 +1719,14 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     sal_uInt32 nTemp;
     sal_Int32 nTemp2;
     ReadPair( rIStm, maPos );
-    rIStm >> nTemp2;
+    rIStm.ReadInt32( nTemp2 );
     mnWidth = nTemp2;
-    rIStm >> nTemp;
+    rIStm.ReadUInt32( nTemp );
     meStrikeout = (FontStrikeout)nTemp;
-    rIStm >> nTemp;
+    rIStm.ReadUInt32( nTemp );
     meUnderline = (FontUnderline)nTemp;
     if ( aCompat.GetVersion() >= 2 ) {
-        rIStm >> nTemp;
+        rIStm.ReadUInt32( nTemp );
         meUnderline = (FontUnderline)nTemp;
     }
 }
@@ -2835,7 +2835,7 @@ void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     ReadRegion( rIStm, maRegion );
-    rIStm >> mbClip;
+    rIStm.ReadUChar( mbClip );
 }
 
 // ========================================================================
@@ -3029,7 +3029,7 @@ void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     COMPAT( rIStm );
     //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpHM(0), nTmpVM(0);
-    rIStm >> nTmpHM >> nTmpVM;
+    rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
     mnHorzMove = nTmpHM;
     mnVertMove = nTmpVM;
 }
@@ -3089,7 +3089,7 @@ void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, true );
-    rIStm >> mbSet;
+    rIStm.ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -3147,7 +3147,7 @@ void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, true );
-    rIStm >> mbSet;
+    rIStm.ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -3256,7 +3256,7 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, true );
-    rIStm >> mbSet;
+    rIStm.ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -3314,7 +3314,7 @@ void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, true );
-    rIStm >> mbSet;
+    rIStm.ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -3372,7 +3372,7 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, true );
-    rIStm >> mbSet;
+    rIStm.ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -3425,7 +3425,7 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
     sal_uInt16 nTmp16;
 
     COMPAT( rIStm );
-    rIStm >> nTmp16; maAlign = (TextAlign) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
 }
 
 // ========================================================================
@@ -3613,7 +3613,7 @@ void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> mnFlags;
+    rIStm.ReadUInt16( mnFlags );
 }
 
 // ========================================================================
@@ -3700,7 +3700,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     sal_uInt16 nTmp16;
 
     COMPAT( rIStm );
-    rIStm >> nTmp16; meRasterOp = (RasterOp) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
 // ========================================================================
@@ -3783,7 +3783,7 @@ void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     ReadPolyPolygon( rIStm, maPolyPoly );
-    rIStm >> mnTransPercent;
+    rIStm.ReadUInt16( mnTransPercent );
 }
 
 // ========================================================================
@@ -4003,7 +4003,7 @@ void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    ReadPair( rIStm, maRefPoint ) >> mbSet;
+    ReadPair( rIStm, maRefPoint ).ReadUChar( mbSet );
 }
 
 // ========================================================================
@@ -4175,9 +4175,9 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 float m11, m12, m21, m22, mdx, mdy;
 
                 // read data
-                aMemStm >> nLeft >> nTop >> nRight >> nBottom;
-                aMemStm >> nPixX >> nPixY >> nMillX >> nMillY;
-                aMemStm >> m11 >> m12 >> m21 >> m22 >> mdx >> mdy;
+                aMemStm.ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
+                aMemStm.ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
+                aMemStm.ReadFloat( m11 ).ReadFloat( m12 ).ReadFloat( m21 ).ReadFloat( m22 ).ReadFloat( mdx ).ReadFloat( mdy );
 
                 // add scale to the transformation
                 m11 *= fXScale;
@@ -4225,7 +4225,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
-    rIStm >> mnValue >> mnDataSize;
+    rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
     SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << maComment);
 
@@ -4288,7 +4288,7 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> mnLayoutMode;
+    rIStm.ReadUInt32( mnLayoutMode );
 }
 
 // ========================================================================
@@ -4339,7 +4339,7 @@ void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> meTextLanguage;
+    rIStm.ReadUInt16( meTextLanguage );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

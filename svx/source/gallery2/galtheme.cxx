@@ -154,7 +154,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
             // Check to ensure that the file is a valid SGA file
             pIStm->Seek( pEntry->nOffset );
-            *pIStm >> nInventor;
+            pIStm->ReadUInt32( nInventor );
 
             if( nInventor == COMPAT_FORMAT( 'S', 'G', 'A', '3' ) )
             {
@@ -255,7 +255,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
 
         if( pIStm )
         {
-            *pIStm >> nNextNumber;
+            pIStm->ReadUInt32( nNextNumber );
             delete pIStm;
         }
     }
@@ -700,7 +700,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
             sal_uInt16      nVersion;
             sal_Bool        bThemeNameFromResource = sal_False;
 
-            *pIStm >> nVersion;
+            pIStm->ReadUInt16( nVersion );
 
             if( nVersion <= 0x00ff )
             {
@@ -715,7 +715,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                     sal_uInt32  nCount;
                     sal_uInt16  nTemp16;
 
-                    *pIStm >> nCount >> nTemp16;
+                    pIStm->ReadUInt32( nCount ).ReadUInt16( nTemp16 );
                     pIStm->Seek( STREAM_SEEK_TO_END );
 
                     // check whether there is a newer version;
@@ -726,18 +726,18 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                         sal_uInt32 nId1, nId2;
 
                         pIStm->SeekRel( -520 );
-                        *pIStm >> nId1 >> nId2;
+                        pIStm->ReadUInt32( nId1 ).ReadUInt32( nId2 );
 
                         if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
                             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
                         {
                             VersionCompat* pCompat = new VersionCompat( *pIStm, STREAM_READ );
 
-                            *pIStm >> nThemeId;
+                            pIStm->ReadUInt32( nThemeId );
 
                             if( pCompat->GetVersion() >= 2 )
                             {
-                                *pIStm >> bThemeNameFromResource;
+                                pIStm->ReadUChar( bThemeNameFromResource );
                             }
 
                             delete pCompat;
@@ -1383,14 +1383,14 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     OUString            aThemeName;
     rtl_TextEncoding    nTextEncoding;
 
-    rIStm >> nVersion;
+    rIStm.ReadUInt16( nVersion );
     OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
-    rIStm >> nCount;
+    rIStm.ReadUInt32( nCount );
 
     if( nVersion >= 0x0004 )
     {
         sal_uInt16 nTmp16;
-        rIStm >> nTmp16;
+        rIStm.ReadUInt16( nTmp16 );
         nTextEncoding = (rtl_TextEncoding) nTmp16;
     }
     else
@@ -1423,10 +1423,10 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             OUString    aPath;
             sal_uInt16  nTemp;
 
-            rIStm >> bRel;
+            rIStm.ReadUChar( bRel );
             OString aTempFileName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
-            rIStm >> pObj->nOffset;
-            rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
+            rIStm.ReadUInt32( pObj->nOffset );
+            rIStm.ReadUInt16( nTemp ); pObj->eObjKind = (SgaObjKind) nTemp;
 
             aFileName = OStringToOUString(aTempFileName, osl_getThreadTextEncoding());
 
@@ -1480,7 +1480,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             aObjectList.push_back( pObj );
         }
 
-        rIStm >> nId1 >> nId2;
+        rIStm.ReadUInt32( nId1 ).ReadUInt32( nId2 );
 
         // In newer versions a 512 byte reserve buffer is located at the end,
         // the data is located at the beginning of this buffer and are clamped
@@ -1493,11 +1493,11 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             sal_uInt32      nTemp32;
             sal_Bool            bThemeNameFromResource = sal_False;
 
-            rIStm >> nTemp32;
+            rIStm.ReadUInt32( nTemp32 );
 
             if( pCompat->GetVersion() >= 2 )
             {
-                rIStm >> bThemeNameFromResource;
+                rIStm.ReadUChar( bThemeNameFromResource );
             }
 
             SetId( nTemp32, bThemeNameFromResource );

@@ -64,7 +64,7 @@ void SvMetaSlot::Load( SvPersistStream & rStm )
     SvMetaAttribute::Load( rStm );
 
     sal_uInt16 nMask;
-    rStm >> nMask;
+    rStm.ReadUInt16( nMask );
 
     TEST_READ
     if( nMask & 0x0001 )
@@ -106,7 +106,7 @@ void SvMetaSlot::Load( SvPersistStream & rStm )
     if( nMask & 0x8000 ) rStm >> aAsynchron;
 
     nMask = 0;
-    rStm >> nMask;
+    rStm.ReadUInt16( nMask );
 
     TEST_READ
     if( nMask & 0x0001 ) rStm >> aRecordPerItem;
@@ -149,7 +149,7 @@ void SvMetaSlot::Load( SvPersistStream & rStm )
     if( nMask & 0x8000 ) rStm >> aImageRotation;
 
     nMask = 0;
-    rStm >> nMask;
+    rStm.ReadUInt16( nMask );
 
     TEST_READ
     if( nMask & 0x0001 ) rStm >> aUnoName;

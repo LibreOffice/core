@@ -98,15 +98,15 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
           nCropRight,
           nCropBottom;
     pS->Seek( 0x14 );
-    *pS >> nOrgWidth    // Original Size in 1/100 mm
-        >> nOrgHeight;
+    pS->ReadInt32( nOrgWidth )    // Original Size in 1/100 mm
+       .ReadInt32( nOrgHeight );
     pS->Seek( 0x2c );
-    *pS >> nScaleX      // Scaling in Promille
-        >> nScaleY
-        >> nCropLeft    // Cropping in 1/100 mm
-        >> nCropTop
-        >> nCropRight
-        >> nCropBottom;
+    pS->ReadInt32( nScaleX )      // Scaling in Promille
+       .ReadInt32( nScaleY )
+       .ReadInt32( nCropLeft )    // Cropping in 1/100 mm
+       .ReadInt32( nCropTop )
+       .ReadInt32( nCropRight )
+       .ReadInt32( nCropBottom );
 
     rX = nOrgWidth  - nCropLeft - nCropRight;
     rY = nOrgHeight - nCropTop  - nCropBottom;
@@ -431,7 +431,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {
                     sal_uInt8 nByte = 0;
-                    *xObjInfoSrc >> nByte;
+                    xObjInfoSrc->ReadUChar( nByte );
                     if ( ( nByte >> 4 ) & embed::Aspects::MSOLE_ICON )
                         nAspect = embed::Aspects::MSOLE_ICON;
                 }

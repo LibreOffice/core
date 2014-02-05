@@ -27,7 +27,7 @@ SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 
     //39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpA(0), nTmpB(0);
-    rIStream >> nTmpA >> nTmpB;
+    rIStream.ReadInt32( nTmpA ).ReadInt32( nTmpB );
     rPair.nA = nTmpA;
     rPair.nB = nTmpB;
 
@@ -176,7 +176,7 @@ SvStream& ReadRectangle( SvStream& rIStream, Rectangle& rRect )
     //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
 
-    rIStream >> nTmpL >> nTmpT >> nTmpR >> nTmpB;
+    rIStream.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
 
     rRect.nLeft = nTmpL;
     rRect.nTop = nTmpT;

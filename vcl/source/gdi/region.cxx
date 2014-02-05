@@ -1568,10 +1568,10 @@ SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
     rRegion.SetEmpty();
 
     // get version of streamed region
-    rIStrm >> nVersion;
+    rIStrm.ReadUInt16( nVersion );
 
     // get type of region
-    rIStrm >> nTmp16;
+    rIStrm.ReadUInt16( nTmp16 );
 
     enum RegionType { REGION_NULL, REGION_EMPTY, REGION_RECTANGLE, REGION_COMPLEX };
     RegionType meStreamedType = (RegionType)nTmp16;
@@ -1600,7 +1600,7 @@ SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
             {
                 sal_Bool bHasPolyPolygon(sal_False);
 
-                rIStrm >> bHasPolyPolygon;
+                rIStrm.ReadUChar( bHasPolyPolygon );
 
                 if(bHasPolyPolygon)
                 {

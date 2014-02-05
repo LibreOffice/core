@@ -201,7 +201,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
         // Header lesen
         DBG( DbgOutf( "SfxFileRec: searching record at %ul", pStream->Tell() ) );
         sal_uInt32 nHeader;
-        *pStream >> nHeader;
+        pStream->ReadUInt32( nHeader );
 
         // Headerdaten von Basisklasse extrahieren lassen
         SetHeader_Impl( nHeader );
@@ -264,13 +264,13 @@ inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 
     // Basisklassen-Header einlesen
     sal_uInt32 nHeader=0;
-    *_pStream >> nHeader;
+    _pStream->ReadUInt32( nHeader );
     if ( !SetHeader_Impl( nHeader ) )
         bRet = false;
     else
     {
         // eigenen Header einlesen
-        *_pStream >> nHeader;
+        _pStream->ReadUInt32( nHeader );
         _nRecordVer = sal::static_int_cast< sal_uInt8 >(SFX_REC_VER(nHeader));
         _nRecordTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_TAG(nHeader));
 
@@ -308,7 +308,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
         // Header lesen
         sal_uInt32 nHeader;
         DBG( DbgOutf( "SfxFileRec: searching record at %ul", _pStream->Tell() ) );
-        *_pStream >> nHeader;
+        _pStream->ReadUInt32( nHeader );
         if ( !SetHeader_Impl( nHeader ) )
             // EOR => Such-Schleife abbreichen
             break;
@@ -317,7 +317,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
         if ( _nPreTag == SFX_REC_PRETAG_EXT )
         {
             // Extended Header lesen
-            *_pStream >> nHeader;
+            _pStream->ReadUInt32( nHeader );
             _nRecordTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_TAG(nHeader));
 
             // richtigen Record gefunden?
@@ -566,8 +566,8 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
 
 {
     // eigenen Header lesen
-    *_pStream >> _nContentCount;
-    *_pStream >> _nContentSize; // Fix: jedes einzelnen, Var|Mix: Tabellen-Pos.
+    _pStream->ReadUInt16( _nContentCount );
+    _pStream->ReadUInt32( _nContentSize ); // Fix: jedes einzelnen, Var|Mix: Tabellen-Pos.
 
     // mu\s noch eine Tabelle mit Content-Offsets geladen werden?
     if ( _nRecordType != SFX_REC_TYPE_FIXSIZE )
@@ -665,7 +665,7 @@ bool SfxMultiRecordReader::GetContent()
         {
             _nContentVer = sal::static_int_cast< sal_uInt8 >(
                 SFX_REC_CONTENT_VER(_pContentOfs[_nContentNo]));
-            *_pStream >> _nContentTag;
+            _pStream->ReadUInt16( _nContentTag );
         }
 
         // ContentNo weiterz"ahlen

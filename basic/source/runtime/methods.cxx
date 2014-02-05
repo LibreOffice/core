@@ -3320,7 +3320,7 @@ RTLFUNC(EOF)
         if ( pSbStrm->IsText() )
         {
             char cBla;
-            (*pSvStrm) >> cBla; // can we read another character?
+            (*pSvStrm).ReadChar( cBla ); // can we read another character?
             bIsEof = pSvStrm->IsEof();
             if ( !bIsEof )
             {

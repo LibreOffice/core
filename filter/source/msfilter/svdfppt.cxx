@@ -162,14 +162,14 @@ SvStream& ReadPptCurrentUserAtom( SvStream& rIn, PptCurrentUserAtom& rAtom )
     {
         sal_uInt32 nLen;
         sal_uInt16 nUserNameLen, nPad;
-        rIn >> nLen
-            >> rAtom.nMagic
-            >> rAtom.nCurrentUserEdit
-            >> nUserNameLen
-            >> rAtom.nDocFileVersion
-            >> rAtom.nMajorVersion
-            >> rAtom.nMinorVersion
-            >> nPad;
+        rIn.ReadUInt32( nLen )
+           .ReadUInt32( rAtom.nMagic )
+           .ReadUInt32( rAtom.nCurrentUserEdit )
+           .ReadUInt16( nUserNameLen )
+           .ReadUInt16( rAtom.nDocFileVersion )
+           .ReadUChar( rAtom.nMajorVersion )
+           .ReadUChar( rAtom.nMinorVersion )
+           .ReadUInt16( nPad );
         rAtom.aCurrentUser = SvxMSDffManager::MSDFFReadZString( rIn, nUserNameLen, true );
     }
     aHd.SeekToEndOfRecord( rIn );
@@ -185,10 +185,10 @@ SvStream& ReadPptSlidePersistAtom( SvStream& rIn, PptSlidePersistAtom& rAtom )
 {
     DffRecordHeader aHd;
     ReadDffRecordHeader( rIn, aHd )
-        >> rAtom.nPsrReference
-        >> rAtom.nFlags
-        >> rAtom.nNumberTexts
-        >> rAtom.nSlideId;
+       .ReadUInt32( rAtom.nPsrReference )
+       .ReadUInt32( rAtom.nFlags )
+       .ReadUInt32( rAtom.nNumberTexts )
+       .ReadUInt32( rAtom.nSlideId );
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -204,16 +204,16 @@ sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
 
 SvStream& ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
 {
-    rIn >> rAtom.nSoundRef
-        >> rAtom.nExHyperlinkId
-        >> rAtom.nAction
-        >> rAtom.nOleVerb
-        >> rAtom.nJump
-        >> rAtom.nFlags
-        >> rAtom.nHyperlinkType
-        >> rAtom.nUnknown1
-        >> rAtom.nUnknown2
-        >> rAtom.nUnknown3;
+    rIn.ReadUInt32( rAtom.nSoundRef )
+       .ReadUInt32( rAtom.nExHyperlinkId )
+       .ReadUChar( rAtom.nAction )
+       .ReadUChar( rAtom.nOleVerb )
+       .ReadUChar( rAtom.nJump )
+       .ReadUChar( rAtom.nFlags )
+       .ReadUChar( rAtom.nHyperlinkType )
+       .ReadUChar( rAtom.nUnknown1 )
+       .ReadUChar( rAtom.nUnknown2 )
+       .ReadUChar( rAtom.nUnknown3 );
     return rIn;
 }
 
@@ -223,12 +223,12 @@ SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom )
     sal_uInt32 nDummy2;
     sal_uInt32 nDummy4;
 
-    rIn >> rAtom.nAspect
-        >> nDummy1
-        >> rAtom.nId
-        >> nDummy2
-        >> rAtom.nPersistPtr
-        >> nDummy4;
+    rIn.ReadUInt32( rAtom.nAspect )
+       .ReadUInt32( nDummy1 )
+       .ReadUInt32( rAtom.nId )
+       .ReadUInt32( nDummy2 )
+       .ReadUInt32( rAtom.nPersistPtr )
+       .ReadUInt32( nDummy4 );
     return rIn;
 }
 
@@ -258,17 +258,17 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
     sal_Int8    nEmbeddedTrueType, nTitlePlaceHoldersOmitted, nRightToLeft, nShowComments;
 
     ReadDffRecordHeader( rIn, aHd )
-        >> nSlideX >> nSlideY
-        >> nNoticeX >> nNoticeY
-        >> nDummy >> nDummy             // skip ZoomRation
-        >> rAtom.nNotesMasterPersist
-        >> rAtom.nHandoutMasterPersist
-        >> rAtom.n1stPageNumber
-        >> nSlidePageFormat
-        >> nEmbeddedTrueType
-        >> nTitlePlaceHoldersOmitted
-        >> nRightToLeft
-        >> nShowComments;
+       .ReadInt32( nSlideX ).ReadInt32( nSlideY )
+       .ReadInt32( nNoticeX ).ReadInt32( nNoticeY )
+       .ReadInt32( nDummy ).ReadInt32( nDummy )             // skip ZoomRation
+       .ReadUInt32( rAtom.nNotesMasterPersist )
+       .ReadUInt32( rAtom.nHandoutMasterPersist )
+       .ReadUInt16( rAtom.n1stPageNumber )
+       .ReadUInt16( nSlidePageFormat )
+       .ReadSChar( nEmbeddedTrueType )
+       .ReadSChar( nTitlePlaceHoldersOmitted )
+       .ReadSChar( nRightToLeft )
+       .ReadSChar( nShowComments );
     rAtom.aSlidesPageSize.Width() = nSlideX;
     rAtom.aSlidesPageSize.Height() = nSlideY;
     rAtom.aNotesPageSize.Width() = nNoticeX;
@@ -291,7 +291,7 @@ void PptSlideLayoutAtom::Clear()
 
 SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
 {
-    rIn >> rAtom.eLayout;
+    rIn.ReadInt32( rAtom.eLayout );
     rIn.Read( rAtom.aPlaceholderId, 8 );
     return rIn;
 }
@@ -301,9 +301,9 @@ SvStream& ReadPptSlideAtom( SvStream& rIn, PptSlideAtom& rAtom )
     DffRecordHeader aHd;
     ReadDffRecordHeader( rIn, aHd );
     ReadPptSlideLayoutAtom( rIn, rAtom.aLayout );
-    rIn >> rAtom.nMasterId
-        >> rAtom.nNotesId
-        >> rAtom.nFlags;
+    rIn.ReadUInt32( rAtom.nMasterId )
+       .ReadUInt32( rAtom.nNotesId )
+       .ReadUInt16( rAtom.nFlags );
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -318,8 +318,8 @@ SvStream& ReadPptNotesAtom( SvStream& rIn, PptNotesAtom& rAtom )
 {
     DffRecordHeader aHd;
     ReadDffRecordHeader( rIn, aHd )
-        >> rAtom.nSlideId
-        >> rAtom.nFlags;
+       .ReadUInt32( rAtom.nSlideId )
+       .ReadUInt16( rAtom.nFlags );
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -366,10 +366,10 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
 
     sal_uInt8   lfCharset, lfPitchAndFamily;
 
-    rIn >> lfCharset
-        >> rAtom.lfClipPrecision
-        >> rAtom.lfQuality
-        >> lfPitchAndFamily;
+    rIn.ReadUChar( lfCharset )
+       .ReadUChar( rAtom.lfClipPrecision )
+       .ReadUChar( rAtom.lfQuality )
+       .ReadUChar( lfPitchAndFamily );
 
     switch( lfCharset )
     {
@@ -445,13 +445,13 @@ class PptFontCollection: public boost::ptr_vector<PptFontEntityAtom> {
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 {
     ReadDffRecordHeader( rIn, rAtom.aHd )
-        >> rAtom.nLastSlideID
-        >> rAtom.nVersion
-        >> rAtom.nOffsetLastEdit
-        >> rAtom.nOffsetPersistDirectory
-        >> rAtom.nDocumentRef
-        >> rAtom.nMaxPersistWritten
-        >> rAtom.eLastViewType;
+       .ReadInt32( rAtom.nLastSlideID )
+       .ReadUInt32( rAtom.nVersion )
+       .ReadUInt32( rAtom.nOffsetLastEdit )
+       .ReadUInt32( rAtom.nOffsetPersistDirectory )
+       .ReadUInt32( rAtom.nDocumentRef )
+       .ReadUInt32( rAtom.nMaxPersistWritten )
+       .ReadInt16( rAtom.eLastViewType );
     rAtom.aHd.SeekToEndOfRecord(rIn);
     return rIn;
 }
@@ -464,9 +464,9 @@ void PptOEPlaceholderAtom::Clear()
 
 SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 {
-    rIn >> rAtom.nPlacementId
-        >> rAtom.nPlaceholderId
-        >> rAtom.nPlaceholderSize;
+    rIn.ReadUInt32( rAtom.nPlacementId )
+       .ReadUChar( rAtom.nPlaceholderId )
+       .ReadUChar( rAtom.nPlaceholderSize );
     return rIn;
 }
 
@@ -577,12 +577,12 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     sal_Int32 l, t, r, b;
     if ( rHd.nRecLen == 16 )
     {
-        rSt >> l >> t >> r >> b;
+        rSt.ReadInt32( l ).ReadInt32( t ).ReadInt32( r ).ReadInt32( b );
     }
     else
     {
         sal_Int16 ls, ts, rs, bs;
-        rSt >> ts >> ls >> rs >> bs; // the order of coordinates is a bit strange...
+        rSt.ReadInt16( ts ).ReadInt16( ls ).ReadInt16( rs ).ReadInt16( bs ); // the order of coordinates is a bit strange...
         l = ls, t = ts, r = rs, b = bs;
     }
     Scale( l );
@@ -600,12 +600,12 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     {
         sal_uInt16 nX, nGlobalColorsCount, nFillColorsCount;
 
-        rSt >> nX
-            >> nGlobalColorsCount
-            >> nFillColorsCount
-            >> nX
-            >> nX
-            >> nX;
+        rSt.ReadUInt16( nX )
+           .ReadUInt16( nGlobalColorsCount )
+           .ReadUInt16( nFillColorsCount )
+           .ReadUInt16( nX )
+           .ReadUInt16( nX )
+           .ReadUInt16( nX );
 
         if ( ( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 ) )
         {
@@ -631,17 +631,17 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                         sal_uInt32 nIndex, nPos = rSt.Tell();
                         sal_uInt8  nDummy, nRed, nGreen, nBlue;
                         sal_uInt16 nChanged;
-                        rSt >> nChanged;
+                        rSt.ReadUInt16( nChanged );
                         if ( nChanged & 1 )
                         {
                             sal_uInt32 nColor = 0;
-                            rSt >> nDummy
-                                >> nRed
-                                >> nDummy
-                                >> nGreen
-                                >> nDummy
-                                >> nBlue
-                                >> nIndex;
+                            rSt.ReadUChar( nDummy )
+                               .ReadUChar( nRed )
+                               .ReadUChar( nDummy )
+                               .ReadUChar( nGreen )
+                               .ReadUChar( nDummy )
+                               .ReadUChar( nBlue )
+                               .ReadUInt32( nIndex );
 
                             if ( nIndex < 8 )
                             {
@@ -652,12 +652,12 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                             }
                             nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
                             *pCurrentNew++ = nColor;
-                            rSt >> nDummy
-                                >> nRed
-                                >> nDummy
-                                >> nGreen
-                                >> nDummy
-                                >> nBlue;
+                            rSt.ReadUChar( nDummy )
+                               .ReadUChar( nRed )
+                               .ReadUChar( nDummy )
+                               .ReadUChar( nGreen )
+                               .ReadUChar( nDummy )
+                               .ReadUChar( nBlue );
                             nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
                             *pCurrentOriginal++ = nColor;
                             (*pCount)++;
@@ -1184,14 +1184,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( aSecPropSet.SeekToContent( DFF_Prop_tableRowProperties, rSt ) )
                 {
                     sal_Int16 i, nRowCount = 0;
-                    rSt >> nRowCount >> i >> i;
+                    rSt.ReadInt16( nRowCount ).ReadInt16( i ).ReadInt16( i );
                     if ( nRowCount )
                     {
                         sal_uInt32* pTableArry = new sal_uInt32[ nRowCount + 2 ];
                         pTableArry[ 0 ] = nTableProperties;
                         pTableArry[ 1 ] = nRowCount;
                         for ( i = 0; i < nRowCount; i++ )
-                            rSt >> pTableArry[ i + 2 ];
+                            rSt.ReadUInt32( pTableArry[ i + 2 ] );
                         rData.pTableRowProperties = pTableArry;
                     }
                 }
@@ -1344,14 +1344,14 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                         while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
                         {
                             sal_uInt32 nOfs(0);
-                            rStCtrl >> nOfs;
+                            rStCtrl.ReadUInt32( nOfs );
                             sal_uInt32 nAnz = nOfs;
                             nOfs &= 0x000FFFFF;
                             nAnz >>= 20;
                             while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs <= nPersistPtrAnz ) )
                             {
                                 sal_uInt32 nPt(0);
-                                rStCtrl >> nPt;
+                                rStCtrl.ReadUInt32( nPt );
                                 if ( !pPersistPtr[ nOfs ] )
                                 {
                                     pPersistPtr[ nOfs ] = nPt;
@@ -1942,7 +1942,7 @@ SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, 
             sal_uInt32 nLen = aHd.nRecLen - 4;
             if ( (sal_Int32)nLen > 0 )
             {
-                rStCtrl >> nOleId;
+                rStCtrl.ReadUInt32( nOleId );
                 pRet = new SvMemoryStream;
                 ZCodec aZCodec( 0x8000, 0x8000 );
                 aZCodec.BeginCompression();
@@ -1975,9 +1975,9 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                     if ( SeekToRec( rStCtrl, PPT_PST_VBAInfoAtom, pHd->GetRecEndFilePos(), pHd ) )
                     {
                         sal_uInt32 nPersistPtr, nIDoNotKnow1, nIDoNotKnow2;
-                        rStCtrl >> nPersistPtr
-                                >> nIDoNotKnow1
-                                >> nIDoNotKnow2;
+                        rStCtrl.ReadUInt32( nPersistPtr )
+                               .ReadUInt32( nIDoNotKnow1 )
+                               .ReadUInt32( nIDoNotKnow2 );
 
                         sal_uInt32 nOleId;
                         SvMemoryStream* pBas = ImportExOleObjStg( nPersistPtr, nOleId );
@@ -2093,7 +2093,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             ReadDffRecordHeader( rStCtrl, aHd );
                             if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                             {
-                                rStCtrl >> nId;
+                                rStCtrl.ReadUInt32( nId );
                                 aOleObjectList.push_back(
                                     new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect ) );
                             }
@@ -2651,17 +2651,17 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
 
             case PPT_PST_CommentAtom10 :
             {
-                rStCtrl >> nIndex
-                        >> aDateTime.Year
-                        >> aDateTime.Month
-                        >> aDateTime.Day    // DayOfWeek
-                        >> aDateTime.Day
-                        >> aDateTime.Hours
-                        >> aDateTime.Minutes
-                        >> aDateTime.Seconds
-                        >> aDateTime.NanoSeconds
-                        >> nPosX
-                        >> nPosY;
+                rStCtrl.ReadInt32( nIndex )
+                       .ReadInt16( aDateTime.Year )
+                       .ReadUInt16( aDateTime.Month )
+                       .ReadUInt16( aDateTime.Day )    // DayOfWeek
+                       .ReadUInt16( aDateTime.Day )
+                       .ReadUInt16( aDateTime.Hours )
+                       .ReadUInt16( aDateTime.Minutes )
+                       .ReadUInt16( aDateTime.Seconds )
+                       .ReadUInt32( aDateTime.NanoSeconds )
+                       .ReadInt32( nPosX )
+                       .ReadInt32( nPosY );
 
                 aDateTime.NanoSeconds *= ::Time::nanoPerMilli;
             }
@@ -2783,7 +2783,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         if ( aShapeHd.nRecType == DFF_msofbtSp )
                                         {
                                             sal_uInt32 nSpFlags;
-                                            rStCtrl >> nSpFlags >> nSpFlags;
+                                            rStCtrl.ReadUInt32( nSpFlags ).ReadUInt32( nSpFlags );
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
@@ -3096,7 +3096,7 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
         switch ( aHd.nRecType )
         {
             case PPT_PST_HeadersFootersAtom :
-                rStCtrl >> rE.nAtom;
+                rStCtrl.ReadUInt32( rE.nAtom );
             break;
 
             case PPT_PST_CString :
@@ -3138,18 +3138,18 @@ PPTExtParaLevel::PPTExtParaLevel()
 SvStream& ReadPPTExtParaLevel( SvStream& rIn, PPTExtParaLevel& rLevel )
 {
     rLevel.mbSet = sal_True;
-    rIn >> rLevel.mnExtParagraphMask;
+    rIn.ReadUInt32( rLevel.mnExtParagraphMask );
     if ( rLevel.mnExtParagraphMask & 0x00800000 )
-        rIn >> rLevel.mnBuBlip;
+        rIn.ReadUInt16( rLevel.mnBuBlip );
     if ( rLevel.mnExtParagraphMask & 0x02000000 )
-        rIn >> rLevel.mnHasAnm;
+        rIn.ReadUInt16( rLevel.mnHasAnm );
     if ( rLevel.mnExtParagraphMask & 0x01000000 )
-        rIn >> rLevel.mnAnmScheme;
+        rIn.ReadUInt32( rLevel.mnAnmScheme );
     if ( rLevel.mnExtParagraphMask & 0x04000000 )
-        rIn >> rLevel.mpfPP10Ext;
-    rIn >> rLevel.mnExtCharacterMask;
+        rIn.ReadUInt32( rLevel.mpfPP10Ext );
+    rIn.ReadUInt32( rLevel.mnExtCharacterMask );
     if ( rLevel.mnExtCharacterMask & 0x100000 )
-        rIn >> rLevel.mcfPP10Ext;
+        rIn.ReadUInt32( rLevel.mcfPP10Ext );
     return rIn;
 }
 
@@ -3211,7 +3211,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                         ReadDffRecordHeader( rSt, aBuGraAtomHd );
                         if ( aBuGraAtomHd.nRecType == PPT_PST_ExtendedBuGraAtom )
                         {
-                            rSt >> nType;
+                            rSt.ReadUInt16( nType );
                             Graphic aGraphic;
                             if ( rMan.GetBLIPDirect( rSt, aGraphic, NULL ) )
                             {
@@ -3288,7 +3288,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
                     {
                         sal_uInt16 nDepth, i = 0;
-                        rSt >> nDepth;
+                        rSt.ReadUInt16( nDepth );
                         if ( i <= 5 )
                         {
 
@@ -3777,35 +3777,35 @@ void PPTCharSheet::Read( SvStream& rIn, sal_Bool /*bMasterStyle*/, sal_uInt32 nL
     // Zeichenattribute
     sal_uInt32 nCMask;
     sal_uInt16 nVal16;
-    rIn >> nCMask;
+    rIn.ReadUInt32( nCMask );
 
     if ( nCMask & 0x0000FFFF )
     {
         sal_uInt16 nBitAttr;
         maCharLevel[ nLevel ].mnFlags &= ~( (sal_uInt16)nCMask );
-        rIn >> nBitAttr; // Bit attributes (bold, underlined, ...)
+        rIn.ReadUInt16( nBitAttr ); // Bit attributes (bold, underlined, ...)
         maCharLevel[ nLevel ].mnFlags |= nBitAttr;
     }
     if ( nCMask & ( 1 << PPT_CharAttr_Font ) )                  // 0x00010000
-        rIn >> maCharLevel[ nLevel ].mnFont;
+        rIn.ReadUInt16( maCharLevel[ nLevel ].mnFont );
     if ( nCMask & ( 1 << PPT_CharAttr_AsianOrComplexFont ) )    // 0x00200000
-        rIn >> maCharLevel[ nLevel ].mnAsianOrComplexFont;
+        rIn.ReadUInt16( maCharLevel[ nLevel ].mnAsianOrComplexFont );
     if ( nCMask & ( 1 << PPT_CharAttr_ANSITypeface ) )          // 0x00400000
-        rIn >> nVal16;
+        rIn.ReadUInt16( nVal16 );
     if ( nCMask & ( 1 << PPT_CharAttr_Symbol ) )                // 0x00800000
-        rIn >> nVal16;
+        rIn.ReadUInt16( nVal16 );
     if ( nCMask & ( 1 << PPT_CharAttr_FontHeight ) )            // 0x00020000
-        rIn >> maCharLevel[ nLevel ].mnFontHeight;
+        rIn.ReadUInt16( maCharLevel[ nLevel ].mnFontHeight );
     if ( nCMask & ( 1 << PPT_CharAttr_FontColor ) )             // 0x00040000
     {
-        rIn >> maCharLevel[ nLevel ].mnFontColor;
+        rIn.ReadUInt32( maCharLevel[ nLevel ].mnFontColor );
         if( ! (maCharLevel[ nLevel ].mnFontColor & 0xff000000 ) )
             maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
     }
     if ( nCMask & ( 1 << PPT_CharAttr_Escapement ) )            // 0x00080000
-        rIn >> maCharLevel[ nLevel ].mnEscapement;
+        rIn.ReadUInt16( maCharLevel[ nLevel ].mnEscapement );
     if ( nCMask & 0x00100000 )                                  // 0x00100000
-        rIn >> nVal16;
+        rIn.ReadUInt16( nVal16 );
 
     nCMask >>= 24;
     while( nCMask )
@@ -3813,7 +3813,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_Bool /*bMasterStyle*/, sal_uInt32 nL
         if ( nCMask & 1 )
         {
             OSL_FAIL( "PPTCharSheet::Read - unknown attribute, send me this document (SJ)" );
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         }
         nCMask >>= 1;
     }
@@ -3878,90 +3878,90 @@ void PPTParaSheet::Read( SdrPowerPointImport&
     // Absatzattribute
     sal_uInt16  nVal16, i, nMask16;
     sal_uInt32  nVal32, nPMask;
-    rIn >> nPMask;
+    rIn.ReadUInt32( nPMask );
 
     nMask16 = (sal_uInt16)nPMask & 0xf;
     if ( nMask16 )
     {
-        rIn >> nVal16;
+        rIn.ReadUInt16( nVal16 );
         maParaLevel[ nLevel ].mnBuFlags &=~ nMask16;
         nVal16 &= nMask16;
         maParaLevel[ nLevel ].mnBuFlags |= nVal16;
     }
     if ( nPMask & 0x0080 )
-        rIn >> maParaLevel[ nLevel ].mnBulletChar;
+        rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletChar );
     if ( nPMask & 0x0010 )
-        rIn >> maParaLevel[ nLevel ].mnBulletFont;
+        rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletFont );
     if ( nPMask & 0x0040 )
     {
-        rIn >> nVal16;
+        rIn.ReadUInt16( nVal16 );
         maParaLevel[ nLevel ].mnBulletHeight = nVal16;
     }
     if ( nPMask & 0x0020 )
     {
-        rIn >> nVal32;
+        rIn.ReadUInt32( nVal32 );
         maParaLevel[ nLevel ].mnBulletColor = nVal32;
     }
     if ( bFirst )
     {
         if ( nPMask & 0xF00 )
         {   // AbsJust!
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
             maParaLevel[ nLevel ].mnAdjust = nVal16 & 3;
         }
         if ( nPMask & 0x1000 )
-            rIn >> maParaLevel[ nLevel ].mnLineFeed;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnLineFeed );
         if ( nPMask & 0x2000 )
-            rIn >> maParaLevel[ nLevel ].mnUpperDist;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnUpperDist );
         if ( nPMask & 0x4000 )
-            rIn >> maParaLevel[ nLevel ].mnLowerDist;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnLowerDist );
         if ( nPMask & 0x8000 )
-            rIn >> maParaLevel[ nLevel ].mnTextOfs;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnTextOfs );
         if ( nPMask & 0x10000 )
-            rIn >> maParaLevel[ nLevel ].mnBulletOfs;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletOfs );
         if ( nPMask & 0x20000 )
-            rIn >> maParaLevel[ nLevel ].mnDefaultTab;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnDefaultTab );
         if ( nPMask & 0x200000 )
         {
             // number of tabulators
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
             for ( i = 0; i < nVal16; i++ )
-                rIn >> nVal32;      // reading the tabulators
+                rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x40000 )
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         if ( nPMask & 0x80000 )
-            rIn >> maParaLevel[ nLevel ].mnAsianLineBreak;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnAsianLineBreak );
         if ( nPMask & 0x100000 )
-            rIn >> maParaLevel[ nLevel ].mnBiDi;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBiDi );
     }
     else
     {
         if ( nPMask & 0x800 )
         {
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
             maParaLevel[ nLevel ].mnAdjust = nVal16 & 3;
         }
         if ( nPMask & 0x1000 )
-            rIn >> maParaLevel[ nLevel ].mnLineFeed;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnLineFeed );
         if ( nPMask & 0x2000 )
-            rIn >> maParaLevel[ nLevel ].mnUpperDist;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnUpperDist );
         if ( nPMask & 0x4000 )
-            rIn >> maParaLevel[ nLevel ].mnLowerDist;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnLowerDist );
         if ( nPMask & 0x8000 )
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         if ( nPMask & 0x100 )
-            rIn >> maParaLevel[ nLevel ].mnTextOfs;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnTextOfs );
         if ( nPMask & 0x200 )
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         if ( nPMask & 0x400 )
-            rIn >> maParaLevel[ nLevel ].mnBulletOfs;
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletOfs );
         if ( nPMask & 0x10000 )
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         if ( nPMask & 0xe0000 )
         {
             sal_uInt16 nFlagsToModifyMask = (sal_uInt16)( ( nPMask >> 17 ) & 7 );
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
             // bits that are not involved to zero
             nVal16 &= nFlagsToModifyMask;
             // bits that are to change to zero
@@ -3972,12 +3972,12 @@ void PPTParaSheet::Read( SdrPowerPointImport&
         if ( nPMask & 0x100000 )
         {
             // number of tabulators
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
             for ( i = 0; i < nVal16; i++ )
-                rIn >> nVal32;      // reading the tabulators
+                rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x200000 )
-            rIn >> maParaLevel[ nLevel ].mnBiDi;        // #88602#
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBiDi );        // #88602#
     }
 
     nPMask >>= 22;
@@ -3991,7 +3991,7 @@ void PPTParaSheet::Read( SdrPowerPointImport&
                 OSL_FAIL( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             }
 #endif
-            rIn >> nVal16;
+            rIn.ReadUInt16( nVal16 );
         }
         nPMask >>= 1;
     }
@@ -4050,7 +4050,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
             {
                 sal_uInt16 nLevelAnz;
-                rIn >> nLevelAnz;
+                rIn.ReadUInt16( nLevelAnz );
 
                 sal_uInt16 nLev = 0;
                 sal_Bool bFirst = sal_True;
@@ -4141,7 +4141,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 }
             }
             sal_uInt16 nLevelAnz;
-            rIn >> nLevelAnz;
+            rIn.ReadUInt16( nLevelAnz );
             if ( nLevelAnz > 5 )
             {
                 OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
@@ -4164,7 +4164,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     bFirst = sal_False;
 
                     sal_uInt16 nDontKnow;
-                    rIn >> nDontKnow;
+                    rIn.ReadUInt16( nDontKnow );
                 }
                 mpParaSheet[ nInstance ]->Read( rManager, rIn, sal_True, nLev, bFirst );
                 mpCharSheet[ nInstance ]->Read( rIn, sal_True, nLev, bFirst );
@@ -4235,7 +4235,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 if ( aTxMasterStyleHd2.nRecType == PPT_PST_TxMasterStyleAtom )
                 {
                     sal_uInt16 nLevelAnz;
-                    rIn >> nLevelAnz;
+                    rIn.ReadUInt16( nLevelAnz );
 
                     sal_uInt16 nLev = 0;
                     sal_Bool bFirst = sal_True;
@@ -4526,33 +4526,33 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
         {
             sal_Int16   nTCount;
             sal_Int32   i;
-            rIn >> mpImplRuler->nFlags;
+            rIn.ReadInt32( mpImplRuler->nFlags );
 
             // number of indent levels, unused now
             if ( mpImplRuler->nFlags & 2 )
-                rIn >> nTCount;
+                rIn.ReadInt16( nTCount );
             if ( mpImplRuler->nFlags & 1 )
-                rIn >> mpImplRuler->nDefaultTab;
+                rIn.ReadUInt16( mpImplRuler->nDefaultTab );
             if ( mpImplRuler->nFlags & 4 )
             {
-                rIn >> nTCount;
+                rIn.ReadInt16( nTCount );
                 if ( nTCount )
                 {
                     mpImplRuler->nTabCount = (sal_uInt16)nTCount;
                     mpImplRuler->pTab = new PPTTabEntry[ mpImplRuler->nTabCount ];
                     for ( i = 0; i < nTCount; i++ )
                     {
-                        rIn >> mpImplRuler->pTab[ i ].nOffset
-                            >> mpImplRuler->pTab[ i ].nStyle;
+                        rIn.ReadUInt16( mpImplRuler->pTab[ i ].nOffset )
+                           .ReadUInt16( mpImplRuler->pTab[ i ].nStyle );
                     }
                 }
             }
             for ( i = 0; i < 5; i++ )
             {
                 if ( mpImplRuler->nFlags & ( 8 << i ) )
-                    rIn >> mpImplRuler->nTextOfs[ i ];
+                    rIn.ReadUInt16( mpImplRuler->nTextOfs[ i ] );
                 if ( mpImplRuler->nFlags & ( 256 << i ) )
-                    rIn >> mpImplRuler->nBulletOfs[ i ];
+                    rIn.ReadUInt16( mpImplRuler->nBulletOfs[ i ] );
                 if( mpImplRuler->nBulletOfs[ i ] > 0x7fff)
                 {
                     // workaround
@@ -4624,12 +4624,12 @@ sal_Bool PPTTextCharacterStyleAtomInterpreter::Read( SvStream& rIn, const DffRec
 {
     rRecHd.SeekToContent( rIn );
 
-    rIn >> nFlags1
-        >> nFlags2
-        >> nFlags3
-        >> n1
-        >> nFontHeight
-        >> nFontColor;
+    rIn.ReadUInt16( nFlags1 )
+       .ReadUInt16( nFlags2 )
+       .ReadUInt16( nFlags3 )
+       .ReadInt32( n1 )
+       .ReadUInt16( nFontHeight )
+       .ReadInt32( nFontColor );
 
     return sal_True;
 }
@@ -4653,40 +4653,40 @@ sal_Bool PPTTextParagraphStyleAtomInterpreter::Read( SvStream& rIn, const DffRec
     sal_uInt32 nDummy32, nFlags, nRecEndPos = rRecHd.GetRecEndFilePos();
     sal_uInt16 nDummy16;
 
-    rIn >> nDummy16
-        >> nFlags;
+    rIn.ReadUInt16( nDummy16 )
+       .ReadUInt32( nFlags );
 
     if ( nFlags & 0xf && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // BuFlags
+        rIn.ReadUInt16( nDummy16 );    // BuFlags
     if ( nFlags & 0x80 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // BuChar
+        rIn.ReadUInt16( nDummy16 );    // BuChar
     if ( nFlags & 0x10 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // nBuFont;
+        rIn.ReadUInt16( nDummy16 );    // nBuFont;
     if ( nFlags & 0x40 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // nBuHeight;
+        rIn.ReadUInt16( nDummy16 );    // nBuHeight;
     if ( nFlags & 0x0020 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy32;    // nBuColor;
+        rIn.ReadUInt32( nDummy32 );    // nBuColor;
     if ( nFlags & 0x800 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // AbsJust!
+        rIn.ReadUInt16( nDummy16 );    // AbsJust!
     if ( nFlags & 0x400 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
     if ( nFlags & 0x200 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
     if ( nFlags & 0x100 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
     if ( nFlags & 0x1000 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // LineFeed
+        rIn.ReadUInt16( nDummy16 );    // LineFeed
     if ( nFlags & 0x2000 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // nUpperDist
+        rIn.ReadUInt16( nDummy16 );    // nUpperDist
     if ( nFlags & 0x4000 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;    // nLowerDist
+        rIn.ReadUInt16( nDummy16 );    // nLowerDist
     if ( nFlags & 0x8000 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
     if ( nFlags & 0x10000 && ( rIn.Tell() < nRecEndPos ) )
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
     if ( nFlags & 0xe0000 && ( rIn.Tell() < nRecEndPos ) )
     {
-        rIn >> nDummy16;
+        rIn.ReadUInt16( nDummy16 );
         if ( nFlags & 0x20000 )
             bForbiddenRules = ( nDummy16 & 1 ) == 1;
         if ( nFlags & 0x40000 )
@@ -4700,7 +4700,7 @@ sal_Bool PPTTextParagraphStyleAtomInterpreter::Read( SvStream& rIn, const DffRec
     {
         if ( nFlags & nMask )
         {
-            rIn >> nDummy16;
+            rIn.ReadUInt16( nDummy16 );
             nFlags ^= nMask;
         }
         nMask <<= 1;
@@ -4746,10 +4746,10 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
 
         if ( nRecordType == PPT_PST_TextSpecInfoAtom )
         {
-            rIn >> nCharCount;
+            rIn.ReadUInt32( nCharCount );
             nCharIdx += nCharCount;
         }
-        rIn >> nFlags;
+        rIn.ReadUInt32( nFlags );
 
         PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
         if ( pTextSpecDefault )
@@ -4765,9 +4765,9 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
             switch( nFlags & i )
             {
                 case 0 : break;
-                case 1 : rIn >> pEntry->nDontKnow; break;
-                case 2 : rIn >> nLang; break;
-                case 4 : rIn >> nLang; break;
+                case 1 : rIn.ReadUInt16( pEntry->nDontKnow ); break;
+                case 2 : rIn.ReadUInt16( nLang ); break;
+                case 4 : rIn.ReadUInt16( nLang ); break;
                 default :
                 {
                     rIn.SeekRel( 2 );
@@ -4801,23 +4801,23 @@ PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 
 void StyleTextProp9::Read( SvStream& rIn )
 {
-    rIn >> mnExtParagraphMask;
+    rIn.ReadUInt32( mnExtParagraphMask );
     if ( mnExtParagraphMask & 0x800000 )
-        rIn >> mnBuBlip;
+        rIn.ReadUInt16( mnBuBlip );
     if ( mnExtParagraphMask & 0x2000000 )
-        rIn >> mnHasAnm;
+        rIn.ReadUInt16( mnHasAnm );
     if ( mnExtParagraphMask & 0x1000000 )
-        rIn >> mnAnmScheme;
+        rIn.ReadUInt32( mnAnmScheme );
     if ( mnExtParagraphMask & 0x4000000 )
-        rIn >> mpfPP10Ext;
-    rIn >> mnExtCharacterMask;
+        rIn.ReadUInt32( mpfPP10Ext );
+    rIn.ReadUInt32( mnExtCharacterMask );
     if ( mnExtCharacterMask & 0x100000 )
-        rIn >> mncfPP10Ext;
-    rIn >> mnSpecialInfoMask;
+        rIn.ReadUInt32( mncfPP10Ext );
+    rIn.ReadUInt32( mnSpecialInfoMask );
     if ( mnSpecialInfoMask & 0x20 )
-        rIn >> mnPP10Ext;
+        rIn.ReadUInt32( mnPP10Ext );
     if ( mnSpecialInfoMask & 0x40 )
-        rIn >> mfBidi;
+        rIn.ReadUInt16( mfBidi );
 }
 
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
@@ -4846,8 +4846,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
         ImplPPTParaPropSet& aSet = *aParaPropSet.pParaSet;
         if ( bTextPropAtom )
         {
-            rIn >> nCharCount
-                >> aParaPropSet.pParaSet->mnDepth;  // indent depth
+            rIn.ReadUInt32( nCharCount )
+               .ReadUInt16( aParaPropSet.pParaSet->mnDepth );  // indent depth
 
             aParaPropSet.pParaSet->mnDepth =        // taking care of about using not more than 9 outliner levels
                 std::min(sal_uInt16(8),
@@ -4855,22 +4855,22 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
 
             nCharCount--;
 
-            rIn >> nMask;
+            rIn.ReadUInt32( nMask );
             aSet.mnAttrSet = nMask & 0x207df7;
             sal_uInt16 nBulFlg = 0;
             if ( nMask & 0xF )
-                rIn >> nBulFlg; // Bullet-HardAttr-Flags
+                rIn.ReadUInt16( nBulFlg ); // Bullet-HardAttr-Flags
             aSet.mpArry[ PPT_ParaAttr_BulletOn    ] = ( nBulFlg & 1 ) ? 1 : 0;
             aSet.mpArry[ PPT_ParaAttr_BuHardFont  ] = ( nBulFlg & 2 ) ? 1 : 0;
             aSet.mpArry[ PPT_ParaAttr_BuHardColor ] = ( nBulFlg & 4 ) ? 1 : 0;
 
             if ( nMask & 0x0080 )   // buChar
-                rIn >> aSet.mpArry[ PPT_ParaAttr_BulletChar ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletChar ] );
             if ( nMask & 0x0010 )   // buTypeface
-                rIn >> aSet.mpArry[ PPT_ParaAttr_BulletFont ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletFont ] );
             if ( nMask & 0x0040 )   // buSize
             {
-                rIn >> aSet.mpArry[ PPT_ParaAttr_BulletHeight ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletHeight ] );
                 if ( ! ( ( nMask & ( 1 << PPT_ParaAttr_BuHardHeight ) )
                          && ( nBulFlg & ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
                     aSet.mnAttrSet ^= 0x40;
@@ -4878,7 +4878,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             if ( nMask & 0x0020 )   // buColor
             {
                 sal_uInt32 nVal32, nHiByte;
-                rIn >> nVal32;
+                rIn.ReadUInt32( nVal32 );
                 nHiByte = nVal32 >> 24;
                 if ( nHiByte <= 8 )
                     nVal32 = nHiByte | PPT_COLSCHEME;
@@ -4886,42 +4886,42 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             }
             if ( nMask & 0x0800 )   // pfAlignment
             {
-                rIn >> nDummy16;
+                rIn.ReadUInt16( nDummy16 );
                 aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
             }
             if ( nMask & 0x1000 )   // pfLineSpacing
-                rIn >> aSet.mpArry[ PPT_ParaAttr_LineFeed ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_LineFeed ] );
             if ( nMask & 0x2000 )   // pfSpaceBefore
-                rIn >> aSet.mpArry[ PPT_ParaAttr_UpperDist ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_UpperDist ] );
             if ( nMask & 0x4000 )   // pfSpaceAfter
-                rIn >> aSet.mpArry[ PPT_ParaAttr_LowerDist ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_LowerDist ] );
             if ( nMask & 0x100 )    // pfLeftMargin
             {
-                rIn >> aSet.mpArry[ PPT_ParaAttr_TextOfs ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_TextOfs ] );
                 aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
             }
             if ( nMask & 0x400 )    // pfIndent
             {
-                rIn >> aSet.mpArry[ PPT_ParaAttr_BulletOfs ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletOfs ] );
                 aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
             }
             if ( nMask & 0x8000 )   // pfDefaultTabSize
-                rIn >> nDummy16;
+                rIn.ReadUInt16( nDummy16 );
             if ( nMask & 0x100000 ) // pfTabStops
             {
                 sal_uInt16 i, nDistance, nAlignment, nNumberOfTabStops = 0;
-                rIn >> nNumberOfTabStops;
+                rIn.ReadUInt16( nNumberOfTabStops );
                 for ( i = 0; i < nNumberOfTabStops; i++ )
                 {
-                    rIn >> nDistance
-                        >> nAlignment;
+                    rIn.ReadUInt16( nDistance )
+                       .ReadUInt16( nAlignment );
                 }
             }
             if ( nMask & 0x10000 )  // pfBaseLine
-                rIn >> nDummy16;
+                rIn.ReadUInt16( nDummy16 );
             if ( nMask & 0xe0000 )  // pfCharWrap, pfWordWrap, pfOverflow
             {
-                rIn >> nDummy16;
+                rIn.ReadUInt16( nDummy16 );
                 if ( nMask & 0x20000 )
                     aSet.mpArry[ PPT_ParaAttr_AsianLB_1 ] = nDummy16 & 1;
                 if ( nMask & 0x40000 )
@@ -4931,7 +4931,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
                 aSet.mnAttrSet |= ( ( nMask >> 17 ) & 7 ) << PPT_ParaAttr_AsianLB_1;
             }
             if ( nMask & 0x200000 ) // pfTextDirection
-                rIn >> aSet.mpArry[ PPT_ParaAttr_BiDi ];
+                rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BiDi ] );
         }
         else
             nCharCount = nStringLen;
@@ -4988,9 +4988,9 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     sal_Int32   nCharsToRead;
     sal_uInt16  nStringLen = aString.getLength();
 
-    rIn >> nDummy16;
+    rIn.ReadUInt16( nDummy16 );
     nCharCount = nDummy16;
-    rIn >> nDummy16;
+    rIn.ReadUInt16( nDummy16 );
     nCharsToRead = nStringLen - ( nCharAnzRead + nCharCount );
     if ( nCharsToRead < 0 )
     {
@@ -5004,41 +5004,41 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     ImplPPTCharPropSet& aSet = *aCharPropSet.pCharSet;
 
     // character attributes
-    rIn >> nMask;
+    rIn.ReadUInt32( nMask );
     if ( (sal_uInt16)nMask )
     {
         aSet.mnAttrSet |= (sal_uInt16)nMask;
-        rIn >> aSet.mnFlags;
+        rIn.ReadUInt16( aSet.mnFlags );
     }
     if ( nMask & 0x10000 )  // cfTypeface
     {
-        rIn >> aSet.mnFont;
+        rIn.ReadUInt16( aSet.mnFont );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_Font;
     }
     if ( nMask & 0x200000 ) // cfFEOldTypeface
     {
-        rIn >> aSet.mnAsianOrComplexFont;
+        rIn.ReadUInt16( aSet.mnAsianOrComplexFont );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_AsianOrComplexFont;
     }
     if ( nMask & 0x400000 ) // cfANSITypeface
     {
-        rIn >> aSet.mnANSITypeface;
+        rIn.ReadUInt16( aSet.mnANSITypeface );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_ANSITypeface;
     }
     if ( nMask & 0x800000 ) // cfSymbolTypeface
     {
-        rIn >> aSet.mnSymbolFont;
+        rIn.ReadUInt16( aSet.mnSymbolFont );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_Symbol;
     }
     if ( nMask & 0x20000 )  // cfSize
     {
-        rIn >> aSet.mnFontHeight;
+        rIn.ReadUInt16( aSet.mnFontHeight );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_FontHeight;
     }
     if ( nMask & 0x40000 )  // cfColor
     {
         sal_uInt32 nVal;
-        rIn >> nVal;
+        rIn.ReadUInt32( nVal );
         if ( !( nVal & 0xff000000 ) )
             nVal = PPT_COLSCHEME_HINTERGRUND;
         aSet.mnColor = nVal;
@@ -5046,7 +5046,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     }
     if ( nMask & 0x80000 )  // cfPosition
     {
-        rIn >> aSet.mnEscapement;
+        rIn.ReadUInt16( aSet.mnEscapement );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
     }
     if ( nExtParaPos )
@@ -6411,7 +6411,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_OutlineTextRefAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
             {
                 sal_uInt32 nRefNum;
-                rIn >> nRefNum;
+                rIn.ReadUInt32( nRefNum );
 
                 if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextRulerAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
                     nTextRulerAtomOfs = rIn.Tell();
@@ -6451,8 +6451,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             while ( pHd )
                             {
                                 pHd->SeekToContent( rIn );
-                                rIn >> nTmpSlideId
-                                    >> nTmpRef;         // this seems to be the instance
+                                rIn.ReadUInt32( nTmpSlideId )
+                                   .ReadUInt32( nTmpRef );         // this seems to be the instance
 
                                 if ( ( nTmpSlideId == nSlideId ) && ( pHd->nRecInstance == nRefNum ) )
                                 {
@@ -6529,7 +6529,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 {
                     // TextHeaderAtom is always the first Atom
                     sal_uInt16 nInstance;
-                    rIn >> nInstance;   // this number tells us the TxMasterStyleAtom Instance
+                    rIn.ReadUInt16( nInstance );   // this number tells us the TxMasterStyleAtom Instance
                     if ( nInstance > 8 )
                         nInstance = 4;
                     aTextHd.SeekToEndOfRecord( rIn );
@@ -6624,9 +6624,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_DateTimeMCAtom :
                                     {
                                         pEntry = new PPTFieldEntry;
-                                        rIn >> pEntry->nPos
-                                            >> nVal
-                                            >> nVal;
+                                        rIn.ReadUInt16( pEntry->nPos )
+                                           .ReadUInt16( nVal )
+                                           .ReadUInt16( nVal );
                                         pEntry->SetDateTime( nVal & 0xff );
                                     }
                                     break;
@@ -6634,7 +6634,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_FooterMCAtom :
                                     {
                                         pEntry = new PPTFieldEntry;
-                                        rIn >> pEntry->nPos;
+                                        rIn.ReadUInt16( pEntry->nPos );
                                         pEntry->pField1 = new SvxFieldItem( SvxFooterField(), EE_FEATURE_FIELD );
                                     }
                                     break;
@@ -6642,7 +6642,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_HeaderMCAtom :
                                     {
                                         pEntry = new PPTFieldEntry;
-                                        rIn >> pEntry->nPos;
+                                        rIn.ReadUInt16( pEntry->nPos );
                                         pEntry->pField1 = new SvxFieldItem( SvxHeaderField(), EE_FEATURE_FIELD );
                                     }
                                     break;
@@ -6650,7 +6650,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_GenericDateMCAtom :
                                     {
                                         pEntry = new PPTFieldEntry;
-                                        rIn >> pEntry->nPos;
+                                        rIn.ReadUInt16( pEntry->nPos );
                                         pEntry->pField1 = new SvxFieldItem( SvxDateTimeField(), EE_FEATURE_FIELD );
                                         if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
                                         {                                       // that there is no HeaderFooterEntry available
@@ -6668,8 +6668,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         pEntry = new PPTFieldEntry;
                                         if ( aTextHd.nRecLen >= 4 )
                                         {
-                                            rIn >> pEntry->nPos
-                                                >> nVal;
+                                            rIn.ReadUInt16( pEntry->nPos )
+                                               .ReadUInt16( nVal );
 
                                             // evaluate ID
                                             //SvxFieldItem* pFieldItem = NULL;
@@ -6701,7 +6701,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         for (int nLen = 0; nLen < 64; ++nLen)
                                                         {
                                                             sal_Unicode n(0);
-                                                            rIn >> n;
+                                                            rIn.ReadUInt16( n );
 
                                                             // Collect quoted characters into aStr
                                                             if ( n == '\'')
@@ -6758,8 +6758,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     else
                                                     {
                                                         sal_uInt32 nStartPos, nEndPos;
-                                                        rIn >> nStartPos
-                                                            >> nEndPos;
+                                                        rIn.ReadUInt32( nStartPos )
+                                                           .ReadUInt32( nEndPos );
                                                         if ( nEndPos )
                                                         {
                                                             pEntry = new PPTFieldEntry;

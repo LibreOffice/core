@@ -251,7 +251,7 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 
     SvMemoryStream aMem( (char*) data.getConstArray(), data.getLength(), STREAM_READ );
     sal_uInt32 nMarker;
-    aMem >> nMarker;
+    aMem.ReadUInt32( nMarker );
     DBG_ASSERT( nMarker == BINARYSETUPMARKER, "setBinarySetup - invalid!" );
     if ( nMarker == BINARYSETUPMARKER )
     {

@@ -530,12 +530,12 @@ sal_Bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Bool bRes = sal_True;
     sal_uInt16 f = nFlags;
     nFlags |= SBX_WRITE;
-    rStrm >> nElem;
+    rStrm.ReadUInt16( nElem );
     nElem &= 0x7FFF;
     for( sal_uInt32 n = 0; n < nElem; n++ )
     {
         sal_uInt16 nIdx;
-        rStrm >> nIdx;
+        rStrm.ReadUInt16( nIdx );
         SbxVariable* pVar = (SbxVariable*) Load( rStrm );
         if( pVar )
         {
@@ -818,11 +818,11 @@ SbxVariable* SbxDimArray::Get( SbxArray* pPar )
 sal_Bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     short nDimension;
-    rStrm >> nDimension;
+    rStrm.ReadInt16( nDimension );
     for( short i = 0; i < nDimension && rStrm.GetError() == SVSTREAM_OK; i++ )
     {
         sal_Int16 lb, ub;
-        rStrm >> lb >> ub;
+        rStrm.ReadInt16( lb ).ReadInt16( ub );
         AddDim( lb, ub );
     }
     return SbxArray::LoadData( rStrm, nVer );

@@ -66,7 +66,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
     // check if we can real ALL
     mrIStm.Seek( STREAM_SEEK_TO_END );
-    mrIStm >> cDummy;
+    mrIStm.ReadUChar( cDummy );
 
     // if we could not read all
     // return and wait for new data

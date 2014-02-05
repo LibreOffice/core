@@ -89,7 +89,7 @@ void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
     SCTAB           nTab = 0;
     sal_Int16           nValue;
 
-    r >> nFormat >> nCol >> nRow >> nValue;
+    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow ).ReadInt16( nValue );
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
@@ -109,7 +109,7 @@ void OP_Number( SvStream& r, sal_uInt16 /*n*/ )
     SCTAB           nTab = 0;
     double          fValue;
 
-    r >> nFormat >> nCol >> nRow >> fValue;
+    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow ).ReadDouble( fValue );
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
@@ -128,7 +128,7 @@ void OP_Label( SvStream& r, sal_uInt16 n )
     sal_uInt16          nCol, nRow;
     SCTAB           nTab = 0;
 
-    r >> nFormat >> nCol >> nRow;
+    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
 
     n -= (n > 5) ? 5 : n;
 
@@ -155,9 +155,9 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
     sal_uInt16              nCol, nRow, nFormulaSize;
     SCTAB                   nTab = 0;
 
-    r >> nFormat >> nCol >> nRow;
+    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
     r.SeekRel( 8 );    // Ergebnis ueberspringen
-    r >> nFormulaSize;
+    r.ReadUInt16( nFormulaSize );
 
     const ScTokenArray* pErg;
     sal_Int32               nBytesLeft = nFormulaSize;
@@ -186,7 +186,7 @@ void OP_ColumnWidth( SvStream& r, sal_uInt16 /*n*/ )
     sal_uInt8               nWidthSpaces;
     SCTAB                   nTab = 0;
 
-    r >> nCol >> nWidthSpaces;
+    r.ReadUInt16( nCol ).ReadUChar( nWidthSpaces );
 
     if (ValidCol( static_cast<SCCOL>(nCol)))
     {
@@ -213,7 +213,7 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
     r.Read( cPuffer, 16 );
     cPuffer[ 16 ] = 0;
 
-    r >> nColSt >> nRowSt >> nColEnd >> nRowEnd;
+    r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd );
 
     if (ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
     {
@@ -253,7 +253,7 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
     r.Read( cPuffer, 16 );
     cPuffer[ 16 ] = 0;
 
-    r >> nColSt >> nRowSt >> nColEnd >> nRowEnd >> nType;
+    r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd ).ReadUChar( nType );
 
     if (ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
     {
@@ -309,7 +309,7 @@ void OP_HiddenCols( SvStream& r, sal_uInt16 /*n*/ )
 
     for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes mit ...
     {
-        r >> nAkt;
+        r.ReadUChar( nAkt );
         for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...jeweils 8 Bits = 256 Bits
         {
             if( nAkt & 0x01 )   // unterstes Bit gesetzt?
@@ -327,11 +327,11 @@ void OP_Window1( SvStream& r, sal_uInt16 n )
 {
     r.SeekRel( 4 );    // Cursor Pos ueberspringen
 
-    r >> nDefaultFormat;
+    r.ReadUChar( nDefaultFormat );
 
     r.SeekRel( 1 );    // 'unused' ueberspringen
 
-    r >> nDefWidth;
+    r.ReadUInt16( nDefWidth );
 
     r.SeekRel( n - 8 );  // und den Rest ueberspringen
 
@@ -347,7 +347,7 @@ void OP_Blank( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt16      nCol, nRow;
     sal_uInt8       nFormat;
-    r >> nFormat >> nCol >> nRow;
+    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
 
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat );
 }
@@ -367,7 +367,7 @@ void OP_Label123( SvStream& r, sal_uInt16 n )
 {
     sal_uInt8      nTab, nCol;
     sal_uInt16    nRow;
-    r >> nRow >> nTab >> nCol;
+    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
     n -= (n > 4) ? 4 : n;
 
     sal_Char* pText = new sal_Char[n + 1];
@@ -385,7 +385,7 @@ void OP_Number123( SvStream& r, sal_uInt16 /*n*/ )
     sal_uInt16  nRow;
     sal_uInt32   nValue;
 
-    r >> nRow >> nTab >> nCol >> nValue;
+    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol ).ReadUInt32( nValue );
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
@@ -400,7 +400,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     sal_uInt8 nCol,nTab;
     sal_uInt16 nRow;
 
-    r >> nRow >> nTab >> nCol;
+    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
     r.SeekRel( 8 );    // Result- jump over
 
     const ScTokenArray* pErg;
@@ -426,7 +426,7 @@ void OP_IEEENumber123( SvStream& r, sal_uInt16 /*n*/ )
     sal_uInt16 nRow;
     double dValue;
 
-    r >> nRow >> nTab >> nCol >> dValue;
+    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol ).ReadDouble( dValue );
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
@@ -439,7 +439,7 @@ void OP_Note123( SvStream& r, sal_uInt16 n)
 {
     sal_uInt8 nTab, nCol;
     sal_uInt16 nRow;
-    r >> nRow >> nTab >> nCol;
+    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
     n -= (n > 4) ? 4 : n;
 
     sal_Char* pText = new sal_Char[n + 1];
@@ -522,12 +522,12 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
     ScPatternAttr aPattern(pDoc->GetPool());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
 
-    r >> nCode;
+    r.ReadUInt16( nCode );
     n -= (n > 2) ? 2 : n;
 
     if ( nCode == 0x0fd2 )
     {
-        r >> nPatternId;
+        r.ReadUInt16( nPatternId );
 
         sal_uInt8 Hor_Align, Ver_Align, temp;
         sal_Bool bIsBold,bIsUnderLine,bIsItalics;
@@ -535,7 +535,7 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
         r.SeekRel(12);
 
         // Read 17th Byte
-        r >> temp;
+        r.ReadUChar( temp );
 
         bIsBold = (temp & 0x01);
         bIsItalics = (temp & 0x02);
@@ -551,10 +551,10 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
         r.SeekRel(3);
 
         // Read 21st Byte
-        r >> Hor_Align;
+        r.ReadUChar( Hor_Align );
         OP_HorAlign123( Hor_Align, rItemSet );
 
-        r >> Ver_Align;
+        r.ReadUChar( Ver_Align );
         OP_VerAlign123( Ver_Align, rItemSet );
 
         aLotusPatternPool.insert( std::map<sal_uInt16, ScPatternAttr>::value_type( nPatternId, aPattern ) );
@@ -574,8 +574,8 @@ void OP_SheetName123( SvStream& rStream, sal_uInt16 nLength )
     // B0 36 [sheet number (2 bytes?)] [sheet name (null terminated char array)]
 
     sal_uInt16 nDummy;
-    rStream >> nDummy; // ignore the first 2 bytes (B0 36).
-    rStream >> nDummy;
+    rStream.ReadUInt16( nDummy ); // ignore the first 2 bytes (B0 36).
+    rStream.ReadUInt16( nDummy );
     SCTAB nSheetNum = static_cast<SCTAB>(nDummy);
     pDoc->MakeTable(nSheetNum);
 
@@ -584,7 +584,7 @@ void OP_SheetName123( SvStream& rStream, sal_uInt16 nLength )
     for (sal_uInt16 i = 4; i < nLength; ++i)
     {
         sal_Char c;
-        rStream >> c;
+        rStream.ReadChar( c );
         sSheetName.push_back(c);
     }
 
@@ -602,7 +602,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
 
     do
     {
-        rStream >> nOpcode >> nLength;
+        rStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
         switch ( nOpcode )
         {
             case ROW_FORMAT_MARKER:
@@ -620,7 +620,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
             case LOTUS_FORMAT_INDEX:
                 if( nLength >= 2 )
                 {
-                    rStream >> nData;
+                    rStream.ReadUInt16( nData );
                     rStream.SeekRel( nLength - 2 );
                     if( nLevel == 1 )
                         nTabCount = nData;
@@ -645,7 +645,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
             case LOTUS_FORMAT_INFO:
                 if( nLength >= 2 )
                 {
-                    rStream >> nData;
+                    rStream.ReadUInt16( nData );
                     rStream.SeekRel( nLength - 2 );
                     std::map<sal_uInt16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
                     // #126338# apparently, files with invalid index occur in the wild -> don't crash then

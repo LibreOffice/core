@@ -167,7 +167,7 @@ bool IsUserWordbook( const OUString& rFile )
             {
                 sal_uInt16 nLen;
                 pStream->Seek (nSniffPos);
-                *pStream >> nLen;
+                pStream->ReadUInt16( nLen );
                 if ( nLen < MAX_HEADER_LENGTH )
                 {
                    pStream->Read(pMagicHeader, nLen);

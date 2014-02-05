@@ -198,13 +198,13 @@ bool TBCHeader::Read( SvStream &rS )
 {
     OSL_TRACE("TBCHeader::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> bSignature >> bVersion >> bFlagsTCR >> tct >> tcid >> tbct >> bPriority;
+    rS.ReadSChar( bSignature ).ReadSChar( bVersion ).ReadUChar( bFlagsTCR ).ReadUChar( tct ).ReadUInt16( tcid ).ReadUInt32( tbct ).ReadUChar( bPriority );
     //  bit 4 ( from lsb )
     if ( bFlagsTCR & 0x10 )
     {
         width.reset( new sal_uInt16 );
         height.reset( new sal_uInt16 );
-        rS >> *width >> *height;
+        rS.ReadUInt16( *width ).ReadUInt16( *height );
     }
     return true;
 }
@@ -378,7 +378,7 @@ WString::Read( SvStream &rS )
     OSL_TRACE("WString::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     sal_uInt8 nChars = 0;
-    rS >> nChars;
+    rS.ReadUChar( nChars );
     sString = read_uInt16s_ToOUString(rS, nChars);
     return true;
 }
@@ -395,12 +395,12 @@ TBCExtraInfo::Read( SvStream &rS )
     if( !wstrHelpFile.Read( rS )  )
         return false;
 
-    rS >> idHelpContext;
+    rS.ReadInt32( idHelpContext );
 
     if ( !wstrTag.Read( rS ) || !wstrOnAction.Read( rS ) || !wstrParam.Read( rS ) )
         return false;
 
-    rS >> tbcu >> tbmg;
+    rS.ReadSChar( tbcu ).ReadSChar( tbmg );
     return true;
 }
 
@@ -437,7 +437,7 @@ bool TBCGeneralInfo::Read( SvStream &rS )
 {
     OSL_TRACE("TBCGeneralInfo::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> bFlags;
+    rS.ReadUChar( bFlags );
 
     if ( ( bFlags & 0x1 ) && !customText.Read( rS ) )
         return false;
@@ -517,7 +517,7 @@ TBCMenuSpecific::Read( SvStream &rS)
 {
     OSL_TRACE("TBCMenuSpecific::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> tbid;
+    rS.ReadInt32( tbid );
     if ( tbid == 1 )
     {
         name.reset( new WString() );
@@ -552,7 +552,7 @@ bool TBCBSpecific::Read( SvStream &rS)
 {
     OSL_TRACE("TBCBSpecific::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> bFlags;
+    rS.ReadUChar( bFlags );
 
     // bFlags determines what we read next
 
@@ -568,7 +568,7 @@ bool TBCBSpecific::Read( SvStream &rS)
     if ( bFlags & 0x10 )
     {
         iBtnFace.reset( new sal_uInt16 );
-        rS >> *iBtnFace.get();
+        rS.ReadUInt16( *iBtnFace.get() );
     }
     // if bFlags.fAccelerator equals 1 ( 0x04 )
     if ( bFlags & 0x04 )
@@ -659,7 +659,7 @@ TBCCDData::~TBCCDData()
 bool TBCCDData::Read( SvStream &rS)
 {
     nOffSet = rS.Tell();
-    rS >> cwstrItems;
+    rS.ReadInt16( cwstrItems );
     if ( cwstrItems )
     {
         for( sal_Int32 index=0; index < cwstrItems; ++index )
@@ -670,7 +670,7 @@ bool TBCCDData::Read( SvStream &rS)
             wstrList.push_back( aString );
         }
     }
-    rS >> cwstrMRU >> iSel >> cLines >> dxWidth;
+    rS.ReadInt16( cwstrMRU ).ReadInt16( iSel ).ReadInt16( cLines ).ReadInt16( dxWidth );
 
     return wstrEdit.Read( rS );
 }
@@ -711,7 +711,7 @@ bool TBCBitMap::Read( SvStream& rS)
 {
     OSL_TRACE("TBCBitMap::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> cbDIB;
+    rS.ReadInt32( cbDIB );
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
     return ReadDIB(mBitMap, rS, false);
 }
@@ -737,7 +737,7 @@ bool TB::Read(SvStream &rS)
 {
     OSL_TRACE("TB::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> bSignature >> bVersion >> cCL >> ltbid >> ltbtr >> cRowsDefault >> bFlags;
+    rS.ReadUChar( bSignature ).ReadUChar( bVersion ).ReadInt16( cCL ).ReadInt32( ltbid ).ReadUInt32( ltbtr ).ReadUInt16( cRowsDefault ).ReadUInt16( bFlags );
     name.Read( rS );
     return true;
 
@@ -770,7 +770,7 @@ bool TBVisualData::Read( SvStream& rS )
 {
     OSL_TRACE("TBVisualData::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> tbds >> tbv >> tbdsDock >> iRow;
+    rS.ReadSChar( tbds ).ReadSChar( tbv ).ReadSChar( tbdsDock ).ReadSChar( iRow );
     rcDock.Read( rS );
     rcFloat.Read( rS );
     return true;

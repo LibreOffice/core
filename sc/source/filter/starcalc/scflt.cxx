@@ -95,7 +95,7 @@ static void lcl_ReadFixedString( SvStream& rStream, void* pData, size_t nLen )
 static void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 {
     lcl_ReadFixedString( rStream, &rFileHeader.CopyRight, sizeof(rFileHeader.CopyRight));
-    rStream >> rFileHeader.Version;
+    rStream.ReadUInt16( rFileHeader.Version );
     rStream.Read(&rFileHeader.Reserved, sizeof(rFileHeader.Reserved));
 }
 
@@ -103,25 +103,25 @@ static void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 static void lcl_ReadTabProtect(SvStream& rStream, Sc10TableProtect& rProtect)
 {
     lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
-    rStream >> rProtect.Flags;
-    rStream >> rProtect.Protect;
+    rStream.ReadUInt16( rProtect.Flags );
+    rStream.ReadUChar( rProtect.Protect );
 }
 
 
 static void lcl_ReadSheetProtect(SvStream& rStream, Sc10SheetProtect& rProtect)
 {
     lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
-    rStream >> rProtect.Flags;
-    rStream >> rProtect.Protect;
+    rStream.ReadUInt16( rProtect.Flags );
+    rStream.ReadUChar( rProtect.Protect );
 }
 
 
 static void lcl_ReadRGB(SvStream& rStream, Sc10Color& rColor)
 {
-    rStream >> rColor.Dummy;
-    rStream >> rColor.Blue;
-    rStream >> rColor.Green;
-    rStream >> rColor.Red;
+    rStream.ReadUChar( rColor.Dummy );
+    rStream.ReadUChar( rColor.Blue );
+    rStream.ReadUChar( rColor.Green );
+    rStream.ReadUChar( rColor.Red );
 }
 
 
@@ -134,36 +134,36 @@ static void lcl_ReadPalette(SvStream& rStream, Sc10Color* pPalette)
 
 static void lcl_ReadValueFormat(SvStream& rStream, Sc10ValueFormat& rFormat)
 {
-    rStream >> rFormat.Format;
-    rStream >> rFormat.Info;
+    rStream.ReadUChar( rFormat.Format );
+    rStream.ReadUChar( rFormat.Info );
 }
 
 
 static void lcl_ReadLogFont(SvStream& rStream, Sc10LogFont& rFont)
 {
-    rStream >> rFont.lfHeight;
-    rStream >> rFont.lfWidth;
-    rStream >> rFont.lfEscapement;
-    rStream >> rFont.lfOrientation;
-    rStream >> rFont.lfWeight;
-    rStream >> rFont.lfItalic;
-    rStream >> rFont.lfUnderline;
-    rStream >> rFont.lfStrikeOut;
-    rStream >> rFont.lfCharSet;
-    rStream >> rFont.lfOutPrecision;
-    rStream >> rFont.lfClipPrecision;
-    rStream >> rFont.lfQuality;
-    rStream >> rFont.lfPitchAndFamily;
+    rStream.ReadInt16( rFont.lfHeight );
+    rStream.ReadInt16( rFont.lfWidth );
+    rStream.ReadInt16( rFont.lfEscapement );
+    rStream.ReadInt16( rFont.lfOrientation );
+    rStream.ReadInt16( rFont.lfWeight );
+    rStream.ReadUChar( rFont.lfItalic );
+    rStream.ReadUChar( rFont.lfUnderline );
+    rStream.ReadUChar( rFont.lfStrikeOut );
+    rStream.ReadUChar( rFont.lfCharSet );
+    rStream.ReadUChar( rFont.lfOutPrecision );
+    rStream.ReadUChar( rFont.lfClipPrecision );
+    rStream.ReadUChar( rFont.lfQuality );
+    rStream.ReadUChar( rFont.lfPitchAndFamily );
     lcl_ReadFixedString( rStream, &rFont.lfFaceName, sizeof(rFont.lfFaceName));
 }
 
 
 static void lcl_ReadBlockRect(SvStream& rStream, Sc10BlockRect& rBlock)
 {
-    rStream >> rBlock.x1;
-    rStream >> rBlock.y1;
-    rStream >> rBlock.x2;
-    rStream >> rBlock.y2;
+    rStream.ReadInt16( rBlock.x1 );
+    rStream.ReadInt16( rBlock.y1 );
+    rStream.ReadInt16( rBlock.x2 );
+    rStream.ReadInt16( rBlock.y2 );
 }
 
 
@@ -171,15 +171,15 @@ static void lcl_ReadHeadFootLine(SvStream& rStream, Sc10HeadFootLine& rLine)
 {
     lcl_ReadFixedString( rStream, &rLine.Title, sizeof(rLine.Title));
     lcl_ReadLogFont(rStream, rLine.LogFont);
-    rStream >> rLine.HorJustify;
-    rStream >> rLine.VerJustify;
-    rStream >> rLine.Raster;
-    rStream >> rLine.Frame;
+    rStream.ReadUChar( rLine.HorJustify );
+    rStream.ReadUChar( rLine.VerJustify );
+    rStream.ReadUInt16( rLine.Raster );
+    rStream.ReadUInt16( rLine.Frame );
     lcl_ReadRGB(rStream, rLine.TextColor);
     lcl_ReadRGB(rStream, rLine.BackColor);
     lcl_ReadRGB(rStream, rLine.RasterColor);
-    rStream >> rLine.FrameColor;
-    rStream >> rLine.Reserved;
+    rStream.ReadUInt16( rLine.FrameColor );
+    rStream.ReadUInt16( rLine.Reserved );
 }
 
 
@@ -187,49 +187,49 @@ static void lcl_ReadPageFormat(SvStream& rStream, Sc10PageFormat& rFormat)
 {
     lcl_ReadHeadFootLine(rStream, rFormat.HeadLine);
     lcl_ReadHeadFootLine(rStream, rFormat.FootLine);
-    rStream >> rFormat.Orientation;
-    rStream >> rFormat.Width;
-    rStream >> rFormat.Height;
-    rStream >> rFormat.NonPrintableX;
-    rStream >> rFormat.NonPrintableY;
-    rStream >> rFormat.Left;
-    rStream >> rFormat.Top;
-    rStream >> rFormat.Right;
-    rStream >> rFormat.Bottom;
-    rStream >> rFormat.Head;
-    rStream >> rFormat.Foot;
-    rStream >> rFormat.HorCenter;
-    rStream >> rFormat.VerCenter;
-    rStream >> rFormat.PrintGrid;
-    rStream >> rFormat.PrintColRow;
-    rStream >> rFormat.PrintNote;
-    rStream >> rFormat.TopBottomDir;
+    rStream.ReadInt16( rFormat.Orientation );
+    rStream.ReadInt16( rFormat.Width );
+    rStream.ReadInt16( rFormat.Height );
+    rStream.ReadInt16( rFormat.NonPrintableX );
+    rStream.ReadInt16( rFormat.NonPrintableY );
+    rStream.ReadInt16( rFormat.Left );
+    rStream.ReadInt16( rFormat.Top );
+    rStream.ReadInt16( rFormat.Right );
+    rStream.ReadInt16( rFormat.Bottom );
+    rStream.ReadInt16( rFormat.Head );
+    rStream.ReadInt16( rFormat.Foot );
+    rStream.ReadUChar( rFormat.HorCenter );
+    rStream.ReadUChar( rFormat.VerCenter );
+    rStream.ReadUChar( rFormat.PrintGrid );
+    rStream.ReadUChar( rFormat.PrintColRow );
+    rStream.ReadUChar( rFormat.PrintNote );
+    rStream.ReadUChar( rFormat.TopBottomDir );
     lcl_ReadFixedString( rStream, &rFormat.PrintAreaName, sizeof(rFormat.PrintAreaName));
     lcl_ReadBlockRect(rStream, rFormat.PrintArea);
     rStream.Read(&rFormat.PrnZoom, sizeof(rFormat.PrnZoom));
-    rStream >> rFormat.FirstPageNo;
-    rStream >> rFormat.RowRepeatStart;
-    rStream >> rFormat.RowRepeatEnd;
-    rStream >> rFormat.ColRepeatStart;
-    rStream >> rFormat.ColRepeatEnd;
+    rStream.ReadInt16( rFormat.FirstPageNo );
+    rStream.ReadInt16( rFormat.RowRepeatStart );
+    rStream.ReadInt16( rFormat.RowRepeatEnd );
+    rStream.ReadInt16( rFormat.ColRepeatStart );
+    rStream.ReadInt16( rFormat.ColRepeatEnd );
     rStream.Read(&rFormat.Reserved, sizeof(rFormat.Reserved));
 }
 
 
 static void lcl_ReadGraphHeader(SvStream& rStream, Sc10GraphHeader& rHeader)
 {
-    rStream >> rHeader.Typ;
-    rStream >> rHeader.CarretX;
-    rStream >> rHeader.CarretY;
-    rStream >> rHeader.CarretZ;
-    rStream >> rHeader.x;
-    rStream >> rHeader.y;
-    rStream >> rHeader.w;
-    rStream >> rHeader.h;
-    rStream >> rHeader.IsRelPos;
-    rStream >> rHeader.DoPrint;
-    rStream >> rHeader.FrameType;
-    rStream >> rHeader.IsTransparent;
+    rStream.ReadUChar( rHeader.Typ );
+    rStream.ReadInt16( rHeader.CarretX );
+    rStream.ReadInt16( rHeader.CarretY );
+    rStream.ReadInt16( rHeader.CarretZ );
+    rStream.ReadInt32( rHeader.x );
+    rStream.ReadInt32( rHeader.y );
+    rStream.ReadInt32( rHeader.w );
+    rStream.ReadInt32( rHeader.h );
+    rStream.ReadUChar( rHeader.IsRelPos );
+    rStream.ReadUChar( rHeader.DoPrint );
+    rStream.ReadUInt16( rHeader.FrameType );
+    rStream.ReadUChar( rHeader.IsTransparent );
     lcl_ReadRGB(rStream, rHeader.FrameColor);
     lcl_ReadRGB(rStream, rHeader.BackColor);
     rStream.Read(&rHeader.Reserved, sizeof(rHeader.Reserved));
@@ -239,90 +239,90 @@ static void lcl_ReadGraphHeader(SvStream& rStream, Sc10GraphHeader& rHeader)
 static void lcl_ReadImageHeaer(SvStream& rStream, Sc10ImageHeader& rHeader)
 {
     lcl_ReadFixedString( rStream, &rHeader.FileName, sizeof(rHeader.FileName));
-    rStream >> rHeader.Typ;
-    rStream >> rHeader.Linked;
-    rStream >> rHeader.x1;
-    rStream >> rHeader.y1;
-    rStream >> rHeader.x2;
-    rStream >> rHeader.y2;
-    rStream >> rHeader.Size;
+    rStream.ReadInt16( rHeader.Typ );
+    rStream.ReadUChar( rHeader.Linked );
+    rStream.ReadInt16( rHeader.x1 );
+    rStream.ReadInt16( rHeader.y1 );
+    rStream.ReadInt16( rHeader.x2 );
+    rStream.ReadInt16( rHeader.y2 );
+    rStream.ReadUInt32( rHeader.Size );
 }
 
 
 static void lcl_ReadChartHeader(SvStream& rStream, Sc10ChartHeader& rHeader)
 {
-    rStream >> rHeader.MM;
-    rStream >> rHeader.xExt;
-    rStream >> rHeader.yExt;
-    rStream >> rHeader.Size;
+    rStream.ReadInt16( rHeader.MM );
+    rStream.ReadInt16( rHeader.xExt );
+    rStream.ReadInt16( rHeader.yExt );
+    rStream.ReadUInt32( rHeader.Size );
 }
 
 
 static void lcl_ReadChartSheetData(SvStream& rStream, Sc10ChartSheetData& rSheetData)
 {
-    rStream >> rSheetData.HasTitle;
-    rStream >> rSheetData.TitleX;
-    rStream >> rSheetData.TitleY;
-    rStream >> rSheetData.HasSubTitle;
-    rStream >> rSheetData.SubTitleX;
-    rStream >> rSheetData.SubTitleY;
-    rStream >> rSheetData.HasLeftTitle;
-    rStream >> rSheetData.LeftTitleX;
-    rStream >> rSheetData.LeftTitleY;
-    rStream >> rSheetData.HasLegend;
-    rStream >> rSheetData.LegendX1;
-    rStream >> rSheetData.LegendY1;
-    rStream >> rSheetData.LegendX2;
-    rStream >> rSheetData.LegendY2;
-    rStream >> rSheetData.HasLabel;
-    rStream >> rSheetData.LabelX1;
-    rStream >> rSheetData.LabelY1;
-    rStream >> rSheetData.LabelX2;
-    rStream >> rSheetData.LabelY2;
-    rStream >> rSheetData.DataX1;
-    rStream >> rSheetData.DataY1;
-    rStream >> rSheetData.DataX2;
-    rStream >> rSheetData.DataY2;
+    rStream.ReadUChar( rSheetData.HasTitle );
+    rStream.ReadInt16( rSheetData.TitleX );
+    rStream.ReadInt16( rSheetData.TitleY );
+    rStream.ReadUChar( rSheetData.HasSubTitle );
+    rStream.ReadInt16( rSheetData.SubTitleX );
+    rStream.ReadInt16( rSheetData.SubTitleY );
+    rStream.ReadUChar( rSheetData.HasLeftTitle );
+    rStream.ReadInt16( rSheetData.LeftTitleX );
+    rStream.ReadInt16( rSheetData.LeftTitleY );
+    rStream.ReadUChar( rSheetData.HasLegend );
+    rStream.ReadInt16( rSheetData.LegendX1 );
+    rStream.ReadInt16( rSheetData.LegendY1 );
+    rStream.ReadInt16( rSheetData.LegendX2 );
+    rStream.ReadInt16( rSheetData.LegendY2 );
+    rStream.ReadUChar( rSheetData.HasLabel );
+    rStream.ReadInt16( rSheetData.LabelX1 );
+    rStream.ReadInt16( rSheetData.LabelY1 );
+    rStream.ReadInt16( rSheetData.LabelX2 );
+    rStream.ReadInt16( rSheetData.LabelY2 );
+    rStream.ReadInt16( rSheetData.DataX1 );
+    rStream.ReadInt16( rSheetData.DataY1 );
+    rStream.ReadInt16( rSheetData.DataX2 );
+    rStream.ReadInt16( rSheetData.DataY2 );
     rStream.Read(&rSheetData.Reserved, sizeof(rSheetData.Reserved));
 }
 
 
 static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeData)
 {
-    rStream >> rTypeData.NumSets;
-    rStream >> rTypeData.NumPoints;
-    rStream >> rTypeData.DrawMode;
-    rStream >> rTypeData.GraphType;
-    rStream >> rTypeData.GraphStyle;
+    rStream.ReadInt16( rTypeData.NumSets );
+    rStream.ReadInt16( rTypeData.NumPoints );
+    rStream.ReadInt16( rTypeData.DrawMode );
+    rStream.ReadInt16( rTypeData.GraphType );
+    rStream.ReadInt16( rTypeData.GraphStyle );
     lcl_ReadFixedString( rStream, &rTypeData.GraphTitle, sizeof(rTypeData.GraphTitle));
     lcl_ReadFixedString( rStream, &rTypeData.BottomTitle, sizeof(rTypeData.BottomTitle));
     sal_uInt16 i;
     for (i = 0; i < 256; i++)
-        rStream >> rTypeData.SymbolData[i];
+        rStream.ReadInt16( rTypeData.SymbolData[i] );
     for (i = 0; i < 256; i++)
-        rStream >> rTypeData.ColorData[i];
+        rStream.ReadInt16( rTypeData.ColorData[i] );
     for (i = 0; i < 256; i++)
-        rStream >> rTypeData.ThickLines[i];
+        rStream.ReadInt16( rTypeData.ThickLines[i] );
     for (i = 0; i < 256; i++)
-        rStream >> rTypeData.PatternData[i];
+        rStream.ReadInt16( rTypeData.PatternData[i] );
     for (i = 0; i < 256; i++)
-        rStream >> rTypeData.LinePatternData[i];
+        rStream.ReadInt16( rTypeData.LinePatternData[i] );
     for (i = 0; i < 11; i++)
-        rStream >> rTypeData.NumGraphStyles[i];
-    rStream >> rTypeData.ShowLegend;
+        rStream.ReadInt16( rTypeData.NumGraphStyles[i] );
+    rStream.ReadInt16( rTypeData.ShowLegend );
     for (i = 0; i < 256; i++)
         lcl_ReadFixedString( rStream, &rTypeData.LegendText[i], sizeof(Sc10ChartText));
-    rStream >> rTypeData.ExplodePie;
-    rStream >> rTypeData.FontUse;
+    rStream.ReadInt16( rTypeData.ExplodePie );
+    rStream.ReadInt16( rTypeData.FontUse );
     for (i = 0; i < 5; i++)
-        rStream >> rTypeData.FontFamily[i];
+        rStream.ReadInt16( rTypeData.FontFamily[i] );
     for (i = 0; i < 5; i++)
-        rStream >> rTypeData.FontStyle[i];
+        rStream.ReadInt16( rTypeData.FontStyle[i] );
     for (i = 0; i < 5; i++)
-        rStream >> rTypeData.FontSize[i];
-    rStream >> rTypeData.GridStyle;
-    rStream >> rTypeData.Labels;
-    rStream >> rTypeData.LabelEvery;
+        rStream.ReadInt16( rTypeData.FontSize[i] );
+    rStream.ReadInt16( rTypeData.GridStyle );
+    rStream.ReadInt16( rTypeData.Labels );
+    rStream.ReadInt16( rTypeData.LabelEvery );
     for (i = 0; i < 50; i++)
         lcl_ReadFixedString( rStream, &rTypeData.LabelText[i], sizeof(Sc10ChartText));
     lcl_ReadFixedString( rStream, &rTypeData.LeftTitle, sizeof(rTypeData.LeftTitle));
@@ -406,11 +406,11 @@ template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStrea
 
 Sc10FontData::Sc10FontData(SvStream& rStream)
 {
-    rStream >> Height;
-    rStream >> CharSet;
-    rStream >> PitchAndFamily;
+    rStream.ReadInt16( Height );
+    rStream.ReadUChar( CharSet );
+    rStream.ReadUChar( PitchAndFamily );
     sal_uInt16 nLen;
-    rStream >> nLen;
+    rStream.ReadUInt16( nLen );
     if (nLen < sizeof(FaceName))
         rStream.Read(FaceName, nLen);
     else
@@ -423,11 +423,11 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
     nError     (0)
 {
   sal_uInt16 ID;
-  rStream >> ID;
+  rStream.ReadUInt16( ID );
   if (ID == FontID)
   {
     sal_uInt16 nAnz;
-    rStream >> nAnz;
+    rStream.ReadUInt16( nAnz );
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
     {
         nError = insert_new<Sc10FontData>( this, rStream);
@@ -447,13 +447,13 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
     sal_uInt8 nLen;
-    rStream >> nLen;
+    rStream.ReadUChar( nLen );
     rStream.Read(Name, sizeof(Name) - 1);
     if (nLen >= sizeof(Name))
         nLen = sizeof(Name) - 1;
     Name[nLen] = 0;
 
-    rStream >> nLen;
+    rStream.ReadUChar( nLen );
     rStream.Read(Reference, sizeof(Reference) - 1);
     if (nLen >= sizeof(Reference))
         nLen = sizeof(Reference) - 1;
@@ -467,11 +467,11 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     nError     (0)
 {
   sal_uInt16 ID;
-  rStream >> ID;
+  rStream.ReadUInt16( ID );
   if (ID == NameID)
   {
     sal_uInt16 nAnz;
-    rStream >> nAnz;
+    rStream.ReadUInt16( nAnz );
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
     {
         nError = insert_new<Sc10NameData>( this, rStream);
@@ -494,14 +494,14 @@ Sc10PatternData::Sc10PatternData(SvStream& rStream)
   lcl_ReadValueFormat(rStream, ValueFormat);
   lcl_ReadLogFont(rStream, LogFont);
 
-  rStream >> Attr;
-  rStream >> Justify;
-  rStream >> Frame;
-  rStream >> Raster;
-  rStream >> nColor;
-  rStream >> FrameColor;
-  rStream >> Flags;
-  rStream >> FormatFlags;
+  rStream.ReadUInt16( Attr );
+  rStream.ReadUInt16( Justify );
+  rStream.ReadUInt16( Frame );
+  rStream.ReadUInt16( Raster );
+  rStream.ReadUInt16( nColor );
+  rStream.ReadUInt16( FrameColor );
+  rStream.ReadUInt16( Flags );
+  rStream.ReadUInt16( FormatFlags );
   rStream.Read(Reserved, sizeof(Reserved));
 }
 
@@ -511,11 +511,11 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   nError     (0)
 {
   sal_uInt16 ID;
-  rStream >> ID;
+  rStream.ReadUInt16( ID );
   if (ID == PatternID)
   {
     sal_uInt16 nAnz;
-    rStream >> nAnz;
+    rStream.ReadUInt16( nAnz );
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
     {
         nError = insert_new<Sc10PatternData>( this, rStream);
@@ -535,34 +535,34 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
     lcl_ReadFixedString( rStream, &DataBaseRec.Name, sizeof(DataBaseRec.Name));
-    rStream >> DataBaseRec.Tab;
+    rStream.ReadInt16( DataBaseRec.Tab );
     lcl_ReadBlockRect(rStream, DataBaseRec.Block);
-    rStream >> DataBaseRec.RowHeader;
-    rStream >> DataBaseRec.SortField0;
-    rStream >> DataBaseRec.SortUpOrder0;
-    rStream >> DataBaseRec.SortField1;
-    rStream >> DataBaseRec.SortUpOrder1;
-    rStream >> DataBaseRec.SortField2;
-    rStream >> DataBaseRec.SortUpOrder2;
-    rStream >> DataBaseRec.IncludeFormat;
+    rStream.ReadUChar( DataBaseRec.RowHeader );
+    rStream.ReadInt16( DataBaseRec.SortField0 );
+    rStream.ReadUChar( DataBaseRec.SortUpOrder0 );
+    rStream.ReadInt16( DataBaseRec.SortField1 );
+    rStream.ReadUChar( DataBaseRec.SortUpOrder1 );
+    rStream.ReadInt16( DataBaseRec.SortField2 );
+    rStream.ReadUChar( DataBaseRec.SortUpOrder2 );
+    rStream.ReadUChar( DataBaseRec.IncludeFormat );
 
-    rStream >> DataBaseRec.QueryField0;
-    rStream >> DataBaseRec.QueryOp0;
-    rStream >> DataBaseRec.QueryByString0;
+    rStream.ReadInt16( DataBaseRec.QueryField0 );
+    rStream.ReadInt16( DataBaseRec.QueryOp0 );
+    rStream.ReadUChar( DataBaseRec.QueryByString0 );
     lcl_ReadFixedString( rStream, &DataBaseRec.QueryString0, sizeof(DataBaseRec.QueryString0));
     DataBaseRec.QueryValue0 = ScfTools::ReadLongDouble(rStream);
 
-    rStream >> DataBaseRec.QueryConnect1;
-    rStream >> DataBaseRec.QueryField1;
-    rStream >> DataBaseRec.QueryOp1;
-    rStream >> DataBaseRec.QueryByString1;
+    rStream.ReadInt16( DataBaseRec.QueryConnect1 );
+    rStream.ReadInt16( DataBaseRec.QueryField1 );
+    rStream.ReadInt16( DataBaseRec.QueryOp1 );
+    rStream.ReadUChar( DataBaseRec.QueryByString1 );
     lcl_ReadFixedString( rStream, &DataBaseRec.QueryString1, sizeof(DataBaseRec.QueryString1));
     DataBaseRec.QueryValue1 = ScfTools::ReadLongDouble(rStream);
 
-    rStream >> DataBaseRec.QueryConnect2;
-    rStream >> DataBaseRec.QueryField2;
-    rStream >> DataBaseRec.QueryOp2;
-    rStream >> DataBaseRec.QueryByString2;
+    rStream.ReadInt16( DataBaseRec.QueryConnect2 );
+    rStream.ReadInt16( DataBaseRec.QueryField2 );
+    rStream.ReadInt16( DataBaseRec.QueryOp2 );
+    rStream.ReadUChar( DataBaseRec.QueryByString2 );
     lcl_ReadFixedString( rStream, &DataBaseRec.QueryString2, sizeof(DataBaseRec.QueryString2));
     DataBaseRec.QueryValue2 = ScfTools::ReadLongDouble(rStream);
 }
@@ -573,12 +573,12 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   nError     (0)
 {
   sal_uInt16 ID;
-  rStream >> ID;
+  rStream.ReadUInt16( ID );
   if (ID == DataBaseID)
   {
     lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
     sal_uInt16 nAnz;
-    rStream >> nAnz;
+    rStream.ReadUInt16( nAnz );
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
     {
         nError = insert_new<Sc10DataBaseData>( this, rStream);
@@ -1086,7 +1086,7 @@ void Sc10Import::LoadProtect()
 void Sc10Import::LoadViewColRowBar()
 {
     sal_uInt8 ViewColRowBar;
-    rStream >> ViewColRowBar;
+    rStream.ReadUChar( ViewColRowBar );
     nError = rStream.GetError();
     aSc30ViewOpt.SetOption( VOPT_HEADER, (sal_Bool)ViewColRowBar );
 }
@@ -1404,7 +1404,7 @@ void Sc10Import::LoadTables()
     Sc10PageCollection aPageCollection;
 
     sal_Int16 nTabCount;
-    rStream >> nTabCount;
+    rStream.ReadInt16( nTabCount );
     for (sal_Int16 Tab = 0; (Tab < nTabCount) && (nError == 0); Tab++)
     {
         Sc10PageFormat   PageFormat;
@@ -1429,7 +1429,7 @@ void Sc10Import::LoadTables()
 
         pPrgrsBar->Progress();
 
-        rStream >> DataBaseIndex;
+        rStream.ReadInt16( DataBaseIndex );
 
         lcl_ReadTabProtect(rStream, TabProtect);
 
@@ -1438,17 +1438,17 @@ void Sc10Import::LoadTables()
         aProtection.setPassword(SC10TOSTRING(TabProtect.PassWord));
         pDoc->SetTabProtection(static_cast<SCTAB>(Tab), &aProtection);
 
-        rStream >> TabNo;
+        rStream.ReadInt16( TabNo );
 
         sal_uInt8 nLen;
-        rStream >> nLen;
+        rStream.ReadUChar( nLen );
         rStream.Read(TabName, sizeof(TabName) - 1);
         if (nLen >= sizeof(TabName))
             nLen = sizeof(TabName) - 1;
         TabName[nLen] = 0;
 
         //----------------------------------------------------------
-        rStream >> Display;
+        rStream.ReadUInt16( Display );
 
         if ( Tab == (sal_Int16)nShowTab )
         {
@@ -1479,7 +1479,7 @@ void Sc10Import::LoadTables()
         }
 
         //--------------------------------------------------------------------
-        rStream >> Visible;
+        rStream.ReadUChar( Visible );
 
         nError = rStream.GetError();
         if (nError != 0) return;
@@ -1494,26 +1494,26 @@ void Sc10Import::LoadTables()
         if (Visible == 0) pDoc->SetVisible(static_cast<SCTAB> (TabNo), false);
 
         // ColWidth
-        rStream >> ID;
+        rStream.ReadUInt16( ID );
         if (ID != ColWidthID)
         {
             OSL_FAIL( "ColWidthID" );
             nError = errUnknownID;
             return;
         }
-        rStream >> DataCount;
+        rStream.ReadUInt16( DataCount );
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
-            rStream >> DataEnd;
-            rStream >> DataValue;
+            rStream.ReadUInt16( DataEnd );
+            rStream.ReadUInt16( DataValue );
             for (SCCOL j = static_cast<SCCOL>(DataStart); j <= static_cast<SCCOL>(DataEnd); j++) pDoc->SetColWidth(j, static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
 
         // ColAttr
-        rStream >> ID;
+        rStream.ReadUInt16( ID );
         if (ID != ColAttrID)
         {
             OSL_FAIL( "ColAttrID" );
@@ -1521,12 +1521,12 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream >> DataCount;
+        rStream.ReadUInt16( DataCount );
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
-            rStream >> DataEnd;
-            rStream >> DataValue;
+            rStream.ReadUInt16( DataEnd );
+            rStream.ReadUInt16( DataValue );
             if (DataValue != 0)
             {
                 bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
@@ -1543,7 +1543,7 @@ void Sc10Import::LoadTables()
         pPrgrsBar->Progress();
 
         // RowHeight
-        rStream >> ID;
+        rStream.ReadUInt16( ID );
         if (ID != RowHeightID)
         {
             OSL_FAIL( "RowHeightID" );
@@ -1551,19 +1551,19 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream >> DataCount;
+        rStream.ReadUInt16( DataCount );
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
-            rStream >> DataEnd;
-            rStream >> DataValue;
+            rStream.ReadUInt16( DataEnd );
+            rStream.ReadUInt16( DataValue );
             pDoc->SetRowHeightRange(static_cast<SCROW> (DataStart), static_cast<SCROW> (DataEnd), static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
 
         // RowAttr
-        rStream >> ID;
+        rStream.ReadUInt16( ID );
         if (ID != RowAttrID)
         {
             OSL_FAIL( "RowAttrID" );
@@ -1571,12 +1571,12 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream >> DataCount;
+        rStream.ReadUInt16( DataCount );
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
-            rStream >> DataEnd;
-            rStream >> DataValue;
+            rStream.ReadUInt16( DataEnd );
+            rStream.ReadUInt16( DataValue );
             if (DataValue != 0)
             {
                 bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
@@ -1593,7 +1593,7 @@ void Sc10Import::LoadTables()
         pPrgrsBar->Progress();
 
         // DataTable
-        rStream >> ID;
+        rStream.ReadUInt16( ID );
         if (ID != TableID)
         {
             OSL_FAIL( "TableID" );
@@ -1602,7 +1602,7 @@ void Sc10Import::LoadTables()
         }
         for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == 0); Col++)
         {
-            rStream >> Count;
+            rStream.ReadUInt16( Count );
             nError = rStream.GetError();
             if ((Count != 0) && (nError == 0))
                 LoadCol(Col, static_cast<SCTAB> (TabNo));
@@ -1622,13 +1622,13 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
     sal_uInt16 CellCount;
     sal_uInt8   CellType;
     sal_uInt16 Row;
-    rStream >> CellCount;
+    rStream.ReadUInt16( CellCount );
     SCROW nScCount = static_cast< SCROW >( CellCount );
     if (nScCount > MAXROW) nError = errUnknownFormat;
     for (sal_uInt16 i = 0; (i < CellCount) && (nError == 0); i++)
     {
-        rStream >> CellType;
-        rStream >> Row;
+        rStream.ReadUChar( CellType );
+        rStream.ReadUInt16( Row );
         nError = rStream.GetError();
         if (nError == 0)
         {
@@ -1654,7 +1654,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 {
                     sal_uInt8 Len;
                     sal_Char s[256];
-                    rStream >> Len;
+                    rStream.ReadUChar( Len );
                     rStream.Read(s, Len);
                     s[Len] = 0;
 
@@ -1666,7 +1666,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     /*double Value =*/ ScfTools::ReadLongDouble(rStream);
                     sal_uInt8 Len;
                     sal_Char s[256+1];
-                    rStream >> Len;
+                    rStream.ReadUChar( Len );
                     rStream.Read(&s[1], Len);
                     s[0] = '=';
                     s[Len + 1] = 0;
@@ -1683,7 +1683,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     break;
             }
             sal_uInt16 NoteLen;
-            rStream >> NoteLen;
+            rStream.ReadUInt16( NoteLen );
             if (NoteLen != 0)
             {
                 sal_Char* pNote = new sal_Char[NoteLen+1];
@@ -2154,7 +2154,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 {
     // rAttr is not reused, otherwise we'd have to delete [] rAttr.pData;
-    rStream >> rAttr.Count;
+    rStream.ReadUInt16( rAttr.Count );
     if (rAttr.Count)
     {
         rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
@@ -2162,8 +2162,8 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
         {
             for (sal_uInt16 i = 0; i < rAttr.Count; i++)
             {
-                rStream >> rAttr.pData[i].Row;
-                rStream >> rAttr.pData[i].Value;
+                rStream.ReadUInt16( rAttr.pData[i].Row );
+                rStream.ReadUInt16( rAttr.pData[i].Value );
             }
             nError = rStream.GetError();
         }
@@ -2322,12 +2322,12 @@ void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& n
 void Sc10Import::LoadObjects()
 {
   sal_uInt16 ID;
-  rStream >> ID;
+  rStream.ReadUInt16( ID );
   if (rStream.IsEof()) return;
   if (ID == ObjectID)
   {
     sal_uInt16 nAnz;
-    rStream >> nAnz;
+    rStream.ReadUInt16( nAnz );
     sal_Char Reserved[32];
     rStream.Read(Reserved, sizeof(Reserved));
     nError = rStream.GetError();
@@ -2338,7 +2338,7 @@ void Sc10Import::LoadObjects()
       sal_Bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
       for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
-        rStream >> ObjectType;
+        rStream.ReadUChar( ObjectType );
         lcl_ReadGraphHeader(rStream, GraphHeader);
 
         double nPPTX = ScGlobal::nScreenPPTX;

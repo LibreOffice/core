@@ -138,9 +138,9 @@ namespace dbaui
     }
     SvStream& ReadOTableRow( SvStream& _rStr, OTableRow& _rRow )
     {
-        _rStr >> _rRow.m_nPos;
+        _rStr.ReadInt32( _rRow.m_nPos );
         sal_Int32 nValue = 0;
-        _rStr >> nValue;
+        _rStr.ReadInt32( nValue );
         if ( nValue )
         {
             OFieldDescription* pFieldDesc = new OFieldDescription();
@@ -153,14 +153,14 @@ namespace dbaui
             sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
             pFieldDesc->SetHelpText(sValue);
 
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             Any aControlDefault;
             switch ( nValue )
             {
                 case 1:
                 {
                     double nControlDefault;
-                    _rStr >> nControlDefault;
+                    _rStr.ReadDouble( nControlDefault );
                     aControlDefault <<= nControlDefault;
                     break;
                 }
@@ -172,25 +172,25 @@ namespace dbaui
 
             pFieldDesc->SetControlDefault(aControlDefault);
 
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetTypeValue(nValue);
 
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetPrecision(nValue);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetScale(nValue);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetIsNullable(nValue);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetFormatKey(nValue);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetHorJustify((SvxCellHorJustify)nValue);
 
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetAutoIncrement(nValue != 0);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetPrimaryKey(nValue != 0);
-            _rStr >> nValue;
+            _rStr.ReadInt32( nValue );
             pFieldDesc->SetCurrency(nValue != 0);
         }
         return _rStr;

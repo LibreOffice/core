@@ -505,7 +505,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     sal_uInt16 nType;
     sal_uInt8 cMark;
-    rStrm >> cMark;
+    rStrm.ReadUChar( cMark );
     if( cMark == 0xFF )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
@@ -515,17 +515,17 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
-        rStrm >> nTemp;
+        rStrm.ReadUInt32( nTemp );
         nUserData = nTemp;
     }
     else
     {
         rStrm.SeekRel( -1L );
-        rStrm >> nType;
+        rStrm.ReadUInt16( nType );
         maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
-        rStrm >> nTemp;
+        rStrm.ReadUInt32( nTemp );
         nUserData = nTemp;
         // correction: old methods have instead of SbxNULL now SbxEMPTY
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
@@ -542,9 +542,9 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         case SbxBOOL:
         case SbxERROR:
         case SbxINTEGER:
-            rStrm >> aTmp.nInteger; break;
+            rStrm.ReadInt16( aTmp.nInteger ); break;
         case SbxLONG:
-            rStrm >> aTmp.nLong; break;
+            rStrm.ReadInt32( aTmp.nLong ); break;
         case SbxSINGLE:
         {
             // Floats as ASCII
@@ -592,7 +592,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             return sal_False;
         }
     }
-    rStrm >> cMark;
+    rStrm.ReadUChar( cMark );
     // cMark is also a version number!
     // 1: initial version
     // 2: with nUserData

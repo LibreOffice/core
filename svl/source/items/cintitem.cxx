@@ -88,7 +88,7 @@ SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     short nTheValue = 0;
-    rStream >> nTheValue;
+    rStream.ReadInt16( nTheValue );
     return new CntByteItem(Which(), sal_uInt8(nTheValue));
 }
 
@@ -141,7 +141,7 @@ CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
 {
     DBG_CTOR(CntUInt16Item, 0);
     sal_uInt16 nTheValue = 0;
-    rStream >> nTheValue;
+    rStream.ReadUInt16( nTheValue );
     m_nValue = nTheValue;
 }
 
@@ -260,7 +260,7 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
 {
     DBG_CTOR(CntInt32Item, 0);
     //fdo#39428 SvStream no longer supports operator>>(long&)
-    rStream >> m_nValue;
+    rStream.ReadInt32( m_nValue );
 }
 
 // virtual
@@ -376,7 +376,7 @@ CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
 {
     DBG_CTOR(CntUInt32Item, 0);
     sal_uInt32 nTheValue = 0;
-    rStream >> nTheValue;
+    rStream.ReadUInt32( nTheValue );
     m_nValue = nTheValue;
 }
 

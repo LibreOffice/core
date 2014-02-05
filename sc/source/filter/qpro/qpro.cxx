@@ -54,7 +54,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
         {
             case 0x000f:{ // Label cell
                 OUString aLabel;
-                *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nDummy;
+                mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadUChar( nDummy );
                 sal_uInt16 nLen = getLength();
                 if (nLen >= 7)
                 {
@@ -74,14 +74,14 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 break;
 
             case 0x000c: // Blank cell
-                *mpStream >> nCol >> nDummy >> nRow >> nStyle;
+                mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                 break;
 
             case 0x000d:{ // Integer cell
                 sal_Int16 nValue;
-                *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nValue;
+                mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadInt16( nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                 pDoc->EnsureTable(nTab);
@@ -91,7 +91,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
 
             case 0x000e:{ // Floating point cell
                 double nValue;
-                *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nValue;
+                mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                 pDoc->EnsureTable(nTab);
@@ -102,7 +102,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
             case 0x0010:{ // Formula cell
                 double nValue;
                 sal_uInt16 nState, nLen;
-                *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nValue >> nState >> nLen;
+                mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue ).ReadUInt16( nState ).ReadUInt16( nLen );
                 ScAddress aAddr( nCol, nRow, nTab );
                 const ScTokenArray *pArray;
                 QProToSc aConv( *mpStream, aAddr );
@@ -154,7 +154,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
         switch( getId() )
         {
             case 0x0000: // Begginning of file
-                *mpStream >> nVersion;
+                mpStream->ReadUInt16( nVersion );
                 break;
 
             case 0x00ca: // Beginning of sheet
@@ -181,7 +181,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
             case 0x00ce:{ // Attribute cell
                 sal_uInt8 nFormat, nAlign, nFont;
                 sal_Int16 nColor;
-                *mpStream >> nFormat >> nAlign >> nColor >> nFont;
+                mpStream->ReadUChar( nFormat ).ReadUChar( nAlign ).ReadInt16( nColor ).ReadUChar( nFont );
                 pStyleElement->setAlign( i, nAlign );
                 pStyleElement->setFont( i, nFont );
                 i++;
@@ -191,7 +191,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
             case 0x00cf:{ // Font description
                 sal_uInt16 nPtSize, nFontAttr;
                 OUString aLabel;
-                *mpStream >> nPtSize >> nFontAttr;
+                mpStream->ReadUInt16( nPtSize ).ReadUInt16( nFontAttr );
                 pStyleElement->setFontRecord( j, nFontAttr, nPtSize );
                 sal_uInt16 nLen = getLength();
                 if (nLen >= 4)

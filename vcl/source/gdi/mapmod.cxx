@@ -48,11 +48,11 @@ SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
 
-    rIStm >> nTmp16; rImplMapMode.meUnit = (MapUnit) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImplMapMode.meUnit = (MapUnit) nTmp16;
     ReadPair( rIStm, rImplMapMode.maOrigin );
     ReadFraction( rIStm, rImplMapMode.maScaleX );
     ReadFraction( rIStm, rImplMapMode.maScaleY );
-    rIStm >> rImplMapMode.mbSimple;
+    rIStm.ReadUChar( rImplMapMode.mbSimple );
 
     return rIStm;
 }

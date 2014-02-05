@@ -221,12 +221,12 @@ AffineMatrixItem::AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2
 AffineMatrixItem::AffineMatrixItem(SvStream& rIn)
 :   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
 {
-    rIn >> maMatrix.m00;
-    rIn >> maMatrix.m01;
-    rIn >> maMatrix.m02;
-    rIn >> maMatrix.m10;
-    rIn >> maMatrix.m11;
-    rIn >> maMatrix.m12;
+    rIn.ReadDouble( maMatrix.m00 );
+    rIn.ReadDouble( maMatrix.m01 );
+    rIn.ReadDouble( maMatrix.m02 );
+    rIn.ReadDouble( maMatrix.m10 );
+    rIn.ReadDouble( maMatrix.m11 );
+    rIn.ReadDouble( maMatrix.m12 );
 }
 
 AffineMatrixItem::AffineMatrixItem(const AffineMatrixItem& rRef)

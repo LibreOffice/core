@@ -266,7 +266,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
     // check if we can read ALL
     rIStm.Seek( STREAM_SEEK_TO_END );
-    rIStm >> cDummy;
+    rIStm.ReadUChar( cDummy );
 
     // if we cannot read all
     // we returnn and wait for new data

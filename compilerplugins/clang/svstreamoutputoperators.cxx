@@ -66,59 +66,103 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
     if( func->getNumParams() != 1 )
         return true;
     string qualifiedName = func->getQualifiedNameAsString();
-    if( qualifiedName != "SvStream::operator<<" )
+    bool bOutputOperator;
+    if( qualifiedName == "SvStream::operator<<" )
+      bOutputOperator = true;
+    else if( qualifiedName == "SvStream::operator>>" )
+      bOutputOperator = false;
+    else
         return true;
 
     string arg0 = func->getParamDecl( 0 )->getType().getAsString();
-    string newWriteMethod;
-    if( arg0 == "sal_uInt16" )
-        newWriteMethod = "WriteUInt16";
-    else if( arg0 == "sal_uInt32" )
-        newWriteMethod = "WriteUInt32";
-    else if( arg0 == "sal_uInt64" )
-        newWriteMethod = "WriteUInt64";
-    else if( arg0 == "sal_Int16" )
-        newWriteMethod = "WriteInt16";
-    else if( arg0 == "sal_Int32" )
-        newWriteMethod = "WriteInt32";
-    else if( arg0 == "sal_Int64" )
-        newWriteMethod = "WriteInt64";
-    else if( arg0 == "sal_uInt8" )
-        newWriteMethod = "WriteUInt8";
-    else if( arg0 == "sal_Unicode" )
-        newWriteMethod = "WriteUnicode";
-    else if( arg0 == "rtl::OString" )
-        newWriteMethod = "WriteOString";
-    else if( arg0 == "bool" )
-        newWriteMethod = "WriteBool";
-    else if( arg0 == "signed char" )
-        newWriteMethod = "WriteSChar";
-    else if( arg0 == "char" )
-        newWriteMethod = "WriteChar";
-    else if( arg0 == "unsigned char" )
-        newWriteMethod = "WriteUChar";
-    else if( arg0 == "float" )
-        newWriteMethod = "WriteFloat";
-    else if( arg0 == "double" )
-        newWriteMethod = "WriteDouble";
-    else if( arg0 == "const double &" )
-        newWriteMethod = "WriteDouble";
-    else if( arg0 == "const char *" )
-        newWriteMethod = "WriteCharPtr";
-    else if( arg0 == "char *" )
-        newWriteMethod = "WriteCharPtr";
-    else if( arg0 == "const unsigned char *" )
-        newWriteMethod = "WriteUCharPtr";
-    else if( arg0 == "unsigned char *" )
-        newWriteMethod = "WriteUCharPtr";
-    else if( arg0 == "class SvStream &" )
-        newWriteMethod = "WriteStream";
+    string newIOMethod;
+    if (bOutputOperator)
+    {
+        if( arg0 == "sal_uInt16" )
+            newIOMethod = "WriteUInt16";
+        else if( arg0 == "sal_uInt32" )
+            newIOMethod = "WriteUInt32";
+        else if( arg0 == "sal_uInt64" )
+            newIOMethod = "WriteUInt64";
+        else if( arg0 == "sal_Int16" )
+            newIOMethod = "WriteInt16";
+        else if( arg0 == "sal_Int32" )
+            newIOMethod = "WriteInt32";
+        else if( arg0 == "sal_Int64" )
+            newIOMethod = "WriteInt64";
+        else if( arg0 == "sal_uInt8" )
+            newIOMethod = "WriteUInt8";
+        else if( arg0 == "sal_Unicode" )
+            newIOMethod = "WriteUnicode";
+        else if( arg0 == "rtl::OString" )
+            newIOMethod = "WriteOString";
+        else if( arg0 == "bool" )
+            newIOMethod = "WriteBool";
+        else if( arg0 == "signed char" )
+            newIOMethod = "WriteSChar";
+        else if( arg0 == "char" )
+            newIOMethod = "WriteChar";
+        else if( arg0 == "unsigned char" )
+            newIOMethod = "WriteUChar";
+        else if( arg0 == "float" )
+            newIOMethod = "WriteFloat";
+        else if( arg0 == "double" )
+            newIOMethod = "WriteDouble";
+        else if( arg0 == "const double &" )
+            newIOMethod = "WriteDouble";
+        else if( arg0 == "const char *" )
+            newIOMethod = "WriteCharPtr";
+        else if( arg0 == "char *" )
+            newIOMethod = "WriteCharPtr";
+        else if( arg0 == "const unsigned char *" )
+            newIOMethod = "WriteUCharPtr";
+        else if( arg0 == "unsigned char *" )
+            newIOMethod = "WriteUCharPtr";
+        else if( arg0 == "class SvStream &" )
+            newIOMethod = "WriteStream";
+        else
+        {
+            report( DiagnosticsEngine::Warning,
+                    "found call to operator<< that I cannot convert with type: " + arg0,
+                    callExpr->getLocStart());
+            return true;
+        }
+    }
     else
     {
-        report( DiagnosticsEngine::Warning,
-                "found call to operator<< that I cannot convert with type: " + arg0,
-                callExpr->getLocStart());
-        return true;
+        if( arg0 == "sal_uInt16 &" )
+            newIOMethod = "ReadUInt16";
+        else if( arg0 == "sal_uInt32 &" )
+            newIOMethod = "ReadUInt32";
+        else if( arg0 == "sal_uInt64 &" )
+            newIOMethod = "ReadUInt64";
+        else if( arg0 == "sal_Int16 &" )
+            newIOMethod = "ReadInt16";
+        else if( arg0 == "sal_Int32 &" )
+            newIOMethod = "ReadInt32";
+        else if( arg0 == "sal_Int64 &" )
+            newIOMethod = "ReadInt64";
+        else if( arg0 == "sal_uInt8 &" )
+            newIOMethod = "ReadUInt8";
+        else if( arg0 == "signed char &" )
+            newIOMethod = "ReadSChar";
+        else if( arg0 == "char &" )
+            newIOMethod = "ReadChar";
+        else if( arg0 == "unsigned char &" )
+            newIOMethod = "ReadUChar";
+        else if( arg0 == "float &" )
+            newIOMethod = "ReadFloat";
+        else if( arg0 == "double &" )
+            newIOMethod = "ReadDouble";
+        else if( arg0 == "class SvStream &" )
+            newIOMethod = "ReadStream";
+        else
+        {
+            report( DiagnosticsEngine::Warning,
+                    "found call to operator>> that I cannot convert with type: " + arg0,
+                    callExpr->getLocStart());
+            return true;
+        }
     }
 
     // CallExpr overrides the children() method from Stmt, but not the const variant of it, so we need to cast const away.
@@ -141,7 +185,7 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
             return true;
     }
 
-    if( !insertTextBefore( callExpr->getArg( 1 )->getLocStart(), newWriteMethod + "( " ) )
+    if( !insertTextBefore( callExpr->getArg( 1 )->getLocStart(), newIOMethod + "( " ) )
         return true;
     if( !insertTextAfter( after( callExpr->getLocEnd() ), " )" ) )
         return true;

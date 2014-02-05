@@ -88,7 +88,7 @@ bool ScCTB::Read( SvStream &rS )
         aVisData.Read( rS );
         rVisualData.push_back( aVisData );
     }
-    rS >> ectbid;
+    rS.ReadUInt32( ectbid );
 
     for ( sal_Int16 index = 0; index < tb.getcCL(); ++index )
     {
@@ -190,7 +190,7 @@ bool CTBS::Read( SvStream &rS )
 {
     OSL_TRACE("CTBS::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> bSignature >> bVersion >> reserved1 >> reserved2 >> reserved3 >> ctb >> ctbViews >> ictbView;
+    rS.ReadUChar( bSignature ).ReadUChar( bVersion ).ReadUInt16( reserved1 ).ReadUInt16( reserved2 ).ReadUInt16( reserved3 ).ReadUInt16( ctb ).ReadUInt16( ctbViews ).ReadUInt16( ictbView );
     return true;
 }
 
@@ -326,9 +326,9 @@ bool TBCCmd::Read( SvStream &rS )
 {
     OSL_TRACE("TBCCmd::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    rS >> cmdID;
+    rS.ReadUInt16( cmdID );
     sal_uInt16 temp;
-    rS >> temp;
+    rS.ReadUInt16( temp );
     OSL_TRACE("TBCmd temp = 0x%x", temp );
     A = (temp & 0x8000 ) == 0x8000;
     B = (temp & 0x4000) == 0x4000;

@@ -86,7 +86,7 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
 void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream & rStm )
 {
     sal_uInt8 nVer;
-    rStm >> nVer;
+    rStm.ReadUChar( nVer );
 
     if( (nVer & ~PERSIST_LIST_DBGUTIL) != PERSIST_LIST_VER )
     {
@@ -99,7 +99,7 @@ void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream &
         nObjLen = rStm.ReadLen( &nObjPos );
 
     sal_uInt32 nCount;
-    rStm >> nCount;
+    rStm.ReadUInt32( nCount );
     for( sal_uIntPtr n = 0; n < nCount && rStm.GetError() == SVSTREAM_OK; n++ )
     {
         SvPersistBase * pObj;
@@ -269,25 +269,25 @@ sal_uInt32 SvPersistStream::ReadCompressed( SvStream & rStm )
 {
     sal_uInt32 nRet(0);
     sal_uInt8   nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask & LEN_1 )
         nRet = ~LEN_1 & nMask;
     else if( nMask & LEN_2 )
     {
         nRet = ~LEN_2 & nMask;
         nRet <<= 8;
-        rStm >> nMask;
+        rStm.ReadUChar( nMask );
         nRet |= nMask;
     }
     else if( nMask & LEN_4 )
     {
         nRet = ~LEN_4 & nMask;
         nRet <<= 8;
-        rStm >> nMask;
+        rStm.ReadUChar( nMask );
         nRet |= nMask;
         nRet <<= 16;
         sal_uInt16 n;
-        rStm >> n;
+        rStm.ReadUInt16( n );
         nRet |= n;
     }
     else if( nMask & LEN_5 )
@@ -297,7 +297,7 @@ sal_uInt32 SvPersistStream::ReadCompressed( SvStream & rStm )
             rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
             OSL_FAIL( "format error" );
         }
-        rStm >> nRet;
+        rStm.ReadUInt32( nRet );
     }
     else
     {
@@ -418,7 +418,7 @@ void SvPersistStream::WriteLen( sal_uInt32 nObjPos )
 sal_uInt32 SvPersistStream::ReadLen( sal_uInt32 * pTestPos )
 {
     sal_uInt32 nLen;
-    *this >> nLen;
+    ReadUInt32( nLen );
     if( pTestPos )
         *pTestPos = Tell();
     return nLen;
@@ -484,7 +484,7 @@ static void ReadId
 )
 {
     nClassId = 0;
-    rStm >> nHdr;
+    rStm.ReadUChar( nHdr );
     if( nHdr & P_ID_0 )
         nId = 0;
     else
@@ -696,11 +696,11 @@ SvStream& operator >>
     rThis.SetStream( &rStm );
 
     sal_uInt8 nVers;
-    rThis >> nVers; // Version
+    rThis.ReadUChar( nVers ); // Version
     if( 0 == nVers )
     {
         sal_uInt32 nCount = 0;
-        rThis >> nCount;
+        rThis.ReadUInt32( nCount );
         for( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SvPersistBase * pEle;

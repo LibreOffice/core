@@ -106,12 +106,12 @@ bool StgCompObjStream::Load()
         return false;
     Seek( 8L );     // skip the first part
     sal_Int32 nMarker = 0;
-    *this >> nMarker;
+    ReadInt32( nMarker );
     if( nMarker == -1L )
     {
         ReadClsId( *this, aClsId );
         sal_Int32 nLen1 = 0;
-        *this >> nLen1;
+        ReadInt32( nLen1 );
         if ( nLen1 > 0 )
         {
             // higher bits are ignored
@@ -174,7 +174,7 @@ bool StgOleStream::Load()
 
     sal_Int32 version = 0;
     Seek( 0L );
-    *this >> version >> nFlags;
+    ReadInt32( version ).ReadUInt32( nFlags );
     return GetError() == SVSTREAM_OK;
 }
 

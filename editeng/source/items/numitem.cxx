@@ -181,36 +181,36 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 {
     sal_uInt16 nTmp16;
     sal_Int32  nTmp32;
-    rStream >> nTmp16; // Version number
+    rStream.ReadUInt16( nTmp16 ); // Version number
 
-    rStream >> nTmp16; SetNumberingType( nTmp16 );
-    rStream >> nTmp16; eNumAdjust = ( SvxAdjust )nTmp16;
-    rStream >> nTmp16; nInclUpperLevels = nTmp16;
-    rStream >> nStart;
-    rStream >> nTmp16; cBullet = (sal_Unicode)nTmp16;
+    rStream.ReadUInt16( nTmp16 ); SetNumberingType( nTmp16 );
+    rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); nInclUpperLevels = nTmp16;
+    rStream.ReadUInt16( nStart );
+    rStream.ReadUInt16( nTmp16 ); cBullet = (sal_Unicode)nTmp16;
 
-    rStream >> nFirstLineOffset;
-    rStream >> nAbsLSpace;
-    rStream >> nLSpace;
+    rStream.ReadInt16( nFirstLineOffset );
+    rStream.ReadInt16( nAbsLSpace );
+    rStream.ReadInt16( nLSpace );
 
-    rStream >> nCharTextDistance;
+    rStream.ReadInt16( nCharTextDistance );
 
     sPrefix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
     sSuffix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
     sCharStyleName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
     sal_uInt16 hasGraphicBrush = 0;
-    rStream >> hasGraphicBrush;
+    rStream.ReadUInt16( hasGraphicBrush );
     if ( hasGraphicBrush )
     {
         pGraphicBrush = new SvxBrushItem( SID_ATTR_BRUSH );
         pGraphicBrush = (SvxBrushItem*)(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
     }
     else pGraphicBrush = 0;
-    rStream >> nTmp16; eVertOrient = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
 
     sal_uInt16 hasBulletFont = 0;
-    rStream >> hasBulletFont;
+    rStream.ReadUInt16( hasBulletFont );
     if ( hasBulletFont )
     {
         pBulletFont = new Font( );
@@ -220,14 +220,14 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     ReadPair( rStream, aGraphicSize );
 
     ReadColor( rStream, nBulletColor );
-    rStream >> nBulletRelSize;
-    rStream >> nTmp16; SetShowSymbol( nTmp16 );
+    rStream.ReadUInt16( nBulletRelSize );
+    rStream.ReadUInt16( nTmp16 ); SetShowSymbol( nTmp16 );
 
-    rStream >> nTmp16; mePositionAndSpaceMode = ( SvxNumPositionAndSpaceMode )nTmp16;
-    rStream >> nTmp16; meLabelFollowedBy = ( LabelFollowedBy )nTmp16;
-    rStream >> nTmp32; mnListtabPos = nTmp32;
-    rStream >> nTmp32; mnFirstLineIndent = nTmp32;
-    rStream >> nTmp32; mnIndentAt = nTmp32;
+    rStream.ReadUInt16( nTmp16 ); mePositionAndSpaceMode = ( SvxNumPositionAndSpaceMode )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); meLabelFollowedBy = ( LabelFollowedBy )nTmp16;
+    rStream.ReadInt32( nTmp32 ); mnListtabPos = nTmp32;
+    rStream.ReadInt32( nTmp32 ); mnFirstLineIndent = nTmp32;
+    rStream.ReadInt32( nTmp32 ); mnIndentAt = nTmp32;
 
 }
 SvxNumberFormat::~SvxNumberFormat()
@@ -677,17 +677,17 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 SvxNumRule::SvxNumRule( SvStream &rStream )
 {
     sal_uInt16 nTmp16;
-    rStream >> nTmp16; // NUM_ITEM_VERSION
-    rStream >> nLevelCount;
+    rStream.ReadUInt16( nTmp16 ); // NUM_ITEM_VERSION
+    rStream.ReadUInt16( nLevelCount );
 
     // first nFeatureFlags of old Versions
-    rStream >> nTmp16; nFeatureFlags = nTmp16;
-    rStream >> nTmp16; bContinuousNumbering = nTmp16;
-    rStream >> nTmp16; eNumberingType = ( SvxNumRuleType )nTmp16;
+    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); bContinuousNumbering = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); eNumberingType = ( SvxNumRuleType )nTmp16;
 
     for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
-        rStream >> nTmp16;
+        rStream.ReadUInt16( nTmp16 );
         sal_Bool hasNumberingFormat = nTmp16 & 1;
         aFmtsSet[i] = nTmp16 & 2; // fdo#68648 reset flag
         if ( hasNumberingFormat ){
@@ -700,7 +700,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
         }
     }
     //second nFeatureFlags for new versions
-    rStream >> nTmp16; nFeatureFlags = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
 }
 
 SvxNumRule* SvxNumRule::Create( SvStream & rStream )

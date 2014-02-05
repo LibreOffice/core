@@ -1787,9 +1787,9 @@ namespace cppcanvas
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
 
-                            rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
+                            rMF.ReadInt32( nFrameLeft ).ReadInt32( nFrameTop ).ReadInt32( nFrameRight ).ReadInt32( nFrameBottom );
                             SAL_INFO ("cppcanvas.emf", "EMF+ picture frame: " << nFrameLeft << "," << nFrameTop << " - " << nFrameRight << "," << nFrameBottom);
-                            rMF >> nPixX >> nPixY >> nMmX >> nMmY;
+                            rMF.ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMmX ).ReadInt32( nMmY );
                             SAL_INFO ("cppcanvas.emf", "EMF+ ref device pixel size: " << nPixX << "x" << nPixY << " mm size: " << nMmX << "x" << nMmY);
 
                             ReadXForm( rMF, aBaseTransform );

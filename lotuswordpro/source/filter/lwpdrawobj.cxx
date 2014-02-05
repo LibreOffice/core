@@ -106,13 +106,13 @@ void LwpDrawObj::ReadObjHeaderRecord()
     m_pStream->SeekRel(1);
 
     //record Length
-    *m_pStream >> m_aObjHeader.nRecLen;
+    m_pStream->ReadUInt16( m_aObjHeader.nRecLen );
 
     //boundrect
-    *m_pStream >> m_aObjHeader.nLeft;
-    *m_pStream >> m_aObjHeader.nTop;
-    *m_pStream >> m_aObjHeader.nRight;
-    *m_pStream >> m_aObjHeader.nBottom;
+    m_pStream->ReadInt16( m_aObjHeader.nLeft );
+    m_pStream->ReadInt16( m_aObjHeader.nTop );
+    m_pStream->ReadInt16( m_aObjHeader.nRight );
+    m_pStream->ReadInt16( m_aObjHeader.nBottom );
 
     //nextObj, prevObj
     m_pStream->SeekRel(4);
@@ -128,29 +128,29 @@ void LwpDrawObj::ReadClosedObjStyle()
         m_pStream->SeekRel(8);
     }
 
-    *m_pStream >> m_aClosedObjStyleRec.nLineWidth;
-    *m_pStream >> m_aClosedObjStyleRec.nLineStyle;
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.nLineWidth );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.nLineStyle );
 
     // pen color
-    *m_pStream >> m_aClosedObjStyleRec.aPenColor.nR;
-    *m_pStream >> m_aClosedObjStyleRec.aPenColor.nG;
-    *m_pStream >> m_aClosedObjStyleRec.aPenColor.nB;
-    *m_pStream >> m_aClosedObjStyleRec.aPenColor.unused;
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nR );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nG );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nB );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.unused );
 
     // foreground color
-    *m_pStream >> m_aClosedObjStyleRec.aForeColor.nR;
-    *m_pStream >> m_aClosedObjStyleRec.aForeColor.nG;
-    *m_pStream >> m_aClosedObjStyleRec.aForeColor.nB;
-    *m_pStream >> m_aClosedObjStyleRec.aForeColor.unused;
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nR );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nG );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nB );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.unused );
 
     // background color
-    *m_pStream >> m_aClosedObjStyleRec.aBackColor.nR;
-    *m_pStream >> m_aClosedObjStyleRec.aBackColor.nG;
-    *m_pStream >> m_aClosedObjStyleRec.aBackColor.nB;
-    *m_pStream >> m_aClosedObjStyleRec.aBackColor.unused;
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nR );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nG );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nB );
+    m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.unused );
 
     // fill style
-    *m_pStream >> m_aClosedObjStyleRec.nFillType;
+    m_pStream->ReadUInt16( m_aClosedObjStyleRec.nFillType );
     m_pStream->Read(m_aClosedObjStyleRec.pFillPattern,
         sizeof(m_aClosedObjStyleRec.pFillPattern));
 }
@@ -421,18 +421,18 @@ LwpDrawLine::LwpDrawLine(SvStream * pStream, DrawingOffsetAndScale* pTransData)
  */
 void LwpDrawLine::Read()
 {
-    *m_pStream >> m_aLineRec.nStartX;
-    *m_pStream >> m_aLineRec.nStartY;
-    *m_pStream >> m_aLineRec.nEndX;
-    *m_pStream >> m_aLineRec.nEndY;
-    *m_pStream >> m_aLineRec.nLineWidth;
-    *m_pStream >> m_aLineRec.nLineEnd;
-    *m_pStream >> m_aLineRec.nLineStyle;
+    m_pStream->ReadInt16( m_aLineRec.nStartX );
+    m_pStream->ReadInt16( m_aLineRec.nStartY );
+    m_pStream->ReadInt16( m_aLineRec.nEndX );
+    m_pStream->ReadInt16( m_aLineRec.nEndY );
+    m_pStream->ReadUChar( m_aLineRec.nLineWidth );
+    m_pStream->ReadUChar( m_aLineRec.nLineEnd );
+    m_pStream->ReadUChar( m_aLineRec.nLineStyle );
 
-    *m_pStream >> m_aLineRec.aPenColor.nR;
-    *m_pStream >> m_aLineRec.aPenColor.nG;
-    *m_pStream >> m_aLineRec.aPenColor.nB;
-    *m_pStream >> m_aLineRec.aPenColor.unused;
+    m_pStream->ReadUChar( m_aLineRec.aPenColor.nR );
+    m_pStream->ReadUChar( m_aLineRec.aPenColor.nG );
+    m_pStream->ReadUChar( m_aLineRec.aPenColor.nB );
+    m_pStream->ReadUChar( m_aLineRec.aPenColor.unused );
 }
 
 OUString LwpDrawLine::RegisterStyle()
@@ -496,21 +496,21 @@ LwpDrawPolyLine::~LwpDrawPolyLine()
  */
 void LwpDrawPolyLine::Read()
 {
-    *m_pStream >> m_aPolyLineRec.nLineWidth;
-    *m_pStream >> m_aPolyLineRec.nLineEnd;
-    *m_pStream >> m_aPolyLineRec.nLineStyle;
-    *m_pStream >> m_aPolyLineRec.aPenColor.nR;
-    *m_pStream >> m_aPolyLineRec.aPenColor.nG;
-    *m_pStream >> m_aPolyLineRec.aPenColor.nB;
-    *m_pStream >> m_aPolyLineRec.aPenColor.unused;
-    *m_pStream >> m_aPolyLineRec.nNumPoints;
+    m_pStream->ReadUChar( m_aPolyLineRec.nLineWidth );
+    m_pStream->ReadUChar( m_aPolyLineRec.nLineEnd );
+    m_pStream->ReadUChar( m_aPolyLineRec.nLineStyle );
+    m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.nR );
+    m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.nG );
+    m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.nB );
+    m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.unused );
+    m_pStream->ReadUInt16( m_aPolyLineRec.nNumPoints );
 
     m_pVector= new SdwPoint [m_aPolyLineRec.nNumPoints];
 
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        *m_pStream >> m_pVector[nC].x;
-        *m_pStream >> m_pVector[nC].y;
+        m_pStream->ReadInt16( m_pVector[nC].x );
+        m_pStream->ReadInt16( m_pVector[nC].y );
     }
 }
 
@@ -583,14 +583,14 @@ LwpDrawPolygon::~LwpDrawPolygon()
 void LwpDrawPolygon::Read()
 {
     this->ReadClosedObjStyle();
-    *m_pStream >> m_nNumPoints;
+    m_pStream->ReadUInt16( m_nNumPoints );
 
     m_pVector = new SdwPoint [m_nNumPoints];
 
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
-        *m_pStream >> m_pVector[nC].x;
-        *m_pStream >> m_pVector[nC].y;
+        m_pStream->ReadInt16( m_pVector[nC].x );
+        m_pStream->ReadInt16( m_pVector[nC].y );
     }
 }
 
@@ -669,8 +669,8 @@ void LwpDrawRectangle::Read()
 
     for (sal_uInt8 nC = 0; nC < nPointsCount; nC++)
     {
-        *m_pStream >> m_aVector[nC].x;
-        *m_pStream >> m_aVector[nC].y;
+        m_pStream->ReadInt16( m_aVector[nC].x );
+        m_pStream->ReadInt16( m_aVector[nC].y );
     }
 }
 
@@ -828,8 +828,8 @@ void LwpDrawEllipse::Read()
 
     for (sal_uInt8 nC = 0; nC < 13; nC++)
     {
-        *m_pStream >> m_aVector[nC].x;
-        *m_pStream >> m_aVector[nC].y;
+        m_pStream->ReadInt16( m_aVector[nC].x );
+        m_pStream->ReadInt16( m_aVector[nC].y );
     }
 }
 
@@ -897,18 +897,18 @@ void LwpDrawArc::Read()
 {
     m_pStream->SeekRel(16);// arcRect, startPt, endPt
 
-    *m_pStream >> m_aArcRec.nLineWidth;
-    *m_pStream >> m_aArcRec.nLineStyle;
-    *m_pStream >> m_aArcRec.aPenColor.nR;
-    *m_pStream >> m_aArcRec.aPenColor.nG;
-    *m_pStream >> m_aArcRec.aPenColor.nB;
-    *m_pStream >> m_aArcRec.aPenColor.unused;
-    *m_pStream >> m_aArcRec.nLineEnd;
+    m_pStream->ReadUChar( m_aArcRec.nLineWidth );
+    m_pStream->ReadUChar( m_aArcRec.nLineStyle );
+    m_pStream->ReadUChar( m_aArcRec.aPenColor.nR );
+    m_pStream->ReadUChar( m_aArcRec.aPenColor.nG );
+    m_pStream->ReadUChar( m_aArcRec.aPenColor.nB );
+    m_pStream->ReadUChar( m_aArcRec.aPenColor.unused );
+    m_pStream->ReadUChar( m_aArcRec.nLineEnd );
 
     for (sal_uInt8 nC = 0; nC < 4; nC++)
     {
-        *m_pStream >> m_aVector[nC].x;
-        *m_pStream >> m_aVector[nC].y;
+        m_pStream->ReadInt16( m_aVector[nC].x );
+        m_pStream->ReadInt16( m_aVector[nC].y );
     }
 }
 
@@ -1019,32 +1019,32 @@ void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
  */
 void LwpDrawTextBox::Read()
 {
-    *m_pStream >> m_aVector.x;
-    *m_pStream >> m_aVector.y;
-    *m_pStream >> m_aTextRec.nTextWidth;
+    m_pStream->ReadInt16( m_aVector.x );
+    m_pStream->ReadInt16( m_aVector.y );
+    m_pStream->ReadInt16( m_aTextRec.nTextWidth );
 
     if (m_aTextRec.nTextWidth == 0)
         m_aTextRec.nTextWidth = 1;
 
-    *m_pStream >> m_aTextRec.nTextHeight;
+    m_pStream->ReadInt16( m_aTextRec.nTextHeight );
     m_pStream->Read(m_aTextRec.tmpTextFaceName, DRAW_FACESIZE);
     m_pStream->SeekRel(1);// PitchAndFamily
 
-    *m_pStream >> m_aTextRec.nTextSize;
+    m_pStream->ReadInt16( m_aTextRec.nTextSize );
 
     if (m_aTextRec.nTextSize < 0)
         m_aTextRec.nTextSize = -m_aTextRec.nTextSize;
 
     //color
-    *m_pStream >> m_aTextRec.aTextColor.nR;
-    *m_pStream >> m_aTextRec.aTextColor.nG;
-    *m_pStream >> m_aTextRec.aTextColor.nB;
-    *m_pStream >> m_aTextRec.aTextColor.unused;
+    m_pStream->ReadUChar( m_aTextRec.aTextColor.nR );
+    m_pStream->ReadUChar( m_aTextRec.aTextColor.nG );
+    m_pStream->ReadUChar( m_aTextRec.aTextColor.nB );
+    m_pStream->ReadUChar( m_aTextRec.aTextColor.unused );
 
-    *m_pStream >> m_aTextRec.nTextAttrs;
-    *m_pStream >> m_aTextRec.nTextCharacterSet;
-    *m_pStream >> m_aTextRec.nTextRotation;
-    *m_pStream >> m_aTextRec.nTextExtraSpacing;
+    m_pStream->ReadUInt16( m_aTextRec.nTextAttrs );
+    m_pStream->ReadUInt16( m_aTextRec.nTextCharacterSet );
+    m_pStream->ReadInt16( m_aTextRec.nTextRotation );
+    m_pStream->ReadInt16( m_aTextRec.nTextExtraSpacing );
 
     // some draw files in version 1.2 have an extra byte following '\0'.
     // can't rely on that, so read in the whole string into memory.
@@ -1187,37 +1187,37 @@ void LwpDrawTextArt::Read()
 {
     for (sal_uInt8 nC = 0; nC < 4; nC++)
     {
-        *m_pStream >> m_aVector[nC].x;
-        *m_pStream >> m_aVector[nC].y;
+        m_pStream->ReadInt16( m_aVector[nC].x );
+        m_pStream->ReadInt16( m_aVector[nC].y );
     }
 
     this->ReadClosedObjStyle();
     m_aTextArtRec.aTextColor = m_aClosedObjStyleRec.aForeColor;
 
-    *m_pStream >> m_aTextArtRec.nIndex;
-    *m_pStream >> m_aTextArtRec.nRotation;
+    m_pStream->ReadUChar( m_aTextArtRec.nIndex );
+    m_pStream->ReadInt16( m_aTextArtRec.nRotation );
 
     sal_uInt16 nPointNumber;
     sal_Int16 nX, nY;
-    *m_pStream >> nPointNumber;
+    m_pStream->ReadUInt16( nPointNumber );
     m_aTextArtRec.aPath[0].n = nPointNumber;
     m_aTextArtRec.aPath[0].pPts = new SdwPoint [nPointNumber*3+1];
     sal_uInt16 nPt = 0;
     for ( nPt = 0; nPt <= nPointNumber*3; nPt++)
     {
-        *m_pStream >> nX;
-        *m_pStream >> nY;
+        m_pStream->ReadInt16( nX );
+        m_pStream->ReadInt16( nY );
         m_aTextArtRec.aPath[0].pPts[nPt].x = nX;
         m_aTextArtRec.aPath[0].pPts[nPt].y = nY;
     }
 
-    *m_pStream >> nPointNumber;
+    m_pStream->ReadUInt16( nPointNumber );
     m_aTextArtRec.aPath[1].n = nPointNumber;
     m_aTextArtRec.aPath[1].pPts = new SdwPoint [nPointNumber*3+1];
     for (nPt = 0; nPt <= nPointNumber*3; nPt++)
     {
-        *m_pStream >> nX;
-        *m_pStream >> nY;
+        m_pStream->ReadInt16( nX );
+        m_pStream->ReadInt16( nY );
         m_aTextArtRec.aPath[1].pPts[nPt].x = nX;
         m_aTextArtRec.aPath[1].pPts[nPt].y = nY;
     }
@@ -1227,15 +1227,15 @@ void LwpDrawTextArt::Read()
     m_pStream->Read(m_aTextArtRec.tmpTextFaceName, DRAW_FACESIZE);
     m_pStream->SeekRel(1);// PitchAndFamily
 
-    *m_pStream >> m_aTextArtRec.nTextSize;
+    m_pStream->ReadInt16( m_aTextArtRec.nTextSize );
 
     if (m_aTextArtRec.nTextSize < 0)
         m_aTextArtRec.nTextSize = -m_aTextArtRec.nTextSize;
 
-    *m_pStream >> m_aTextArtRec.nTextAttrs;
-    *m_pStream >> m_aTextArtRec.nTextCharacterSet;
+    m_pStream->ReadUInt16( m_aTextArtRec.nTextAttrs );
+    m_pStream->ReadUInt16( m_aTextArtRec.nTextCharacterSet );
     m_aTextArtRec.nTextRotation = 0;
-    *m_pStream >> m_aTextArtRec.nTextExtraSpacing;
+    m_pStream->ReadInt16( m_aTextArtRec.nTextExtraSpacing );
 
     const sal_uInt16 nTextArtFixedLength = 105;
     m_aTextArtRec.nTextLen = m_aObjHeader.nRecLen - nTextArtFixedLength
@@ -1347,8 +1347,8 @@ LwpDrawBitmap::~LwpDrawBitmap()
  */
 void LwpDrawBitmap::Read()
 {
-    *m_pStream >> m_aBmpRec.nTranslation;
-    *m_pStream >> m_aBmpRec.nRotation;
+    m_pStream->ReadUInt16( m_aBmpRec.nTranslation );
+    m_pStream->ReadUInt16( m_aBmpRec.nRotation );
 
     // 20 == length of draw-specific fields.
     // 14 == length of bmp file header.
@@ -1356,17 +1356,17 @@ void LwpDrawBitmap::Read()
     m_pImageData = new sal_uInt8 [m_aBmpRec.nFileSize];
 
     BmpInfoHeader2 aInfoHeader2;
-    *m_pStream >> aInfoHeader2.nHeaderLen;
+    m_pStream->ReadUInt32( aInfoHeader2.nHeaderLen );
 
     sal_uInt32 N;
     sal_uInt32 rgbTableSize;
 
     if (aInfoHeader2.nHeaderLen == sizeof(BmpInfoHeader))
     {
-        *m_pStream >> aInfoHeader2.nWidth;
-        *m_pStream >> aInfoHeader2.nHeight;
-        *m_pStream >> aInfoHeader2.nPlanes;
-        *m_pStream >> aInfoHeader2.nBitCount;
+        m_pStream->ReadUInt32( aInfoHeader2.nWidth );
+        m_pStream->ReadUInt32( aInfoHeader2.nHeight );
+        m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
+        m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
         if (N == 24)
@@ -1380,10 +1380,10 @@ void LwpDrawBitmap::Read()
     }
     else
     {
-        *m_pStream >> aInfoHeader2.nWidth;
-        *m_pStream >> aInfoHeader2.nHeight;
-        *m_pStream >> aInfoHeader2.nPlanes;
-        *m_pStream >> aInfoHeader2.nBitCount;
+        m_pStream->ReadUInt32( aInfoHeader2.nWidth );
+        m_pStream->ReadUInt32( aInfoHeader2.nHeight );
+        m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
+        m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
         if (N == 24)
         {

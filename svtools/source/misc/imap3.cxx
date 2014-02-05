@@ -45,7 +45,7 @@ IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode ) :
         else
         {
             sal_uInt32 nTotalSizeTmp;
-            *pRWStm >> nTotalSizeTmp;
+            pRWStm->ReadUInt32( nTotalSizeTmp );
             nTotalSize = nTotalSizeTmp;
             nCompatPos = pRWStm->Tell();
         }
