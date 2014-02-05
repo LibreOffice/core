@@ -23171,6 +23171,8 @@
       <element name="tcFitText" tokenid="ooxml:CT_TcPrBase_tcFitText"/>
       <element name="vAlign" tokenid="ooxml:CT_TcPrBase_vAlign"/>
       <element name="hideMark" tokenid="ooxml:CT_TcPrBase_hideMark"/>
+      <element name="cellDel" tokenid="ooxml:CT_TcPrBase_cellDel"/>
+      <element name="cellIns" tokenid="ooxml:CT_TcPrBase_cellIns"/>
     </resource>
     <resource name="CT_TcPr" resource="Properties" tag="table">
       <element name="tcPrChange" tokenid="ooxml:CT_TcPr_tcPrChange"/>
