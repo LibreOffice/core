@@ -106,7 +106,7 @@ public class FormattedTextLayoutController
         // a variable like that. It complicates things, is fragile
         // (because the variable-set is done in *every* detail section
         //  again and again. This in itself is not that bad, but when
-        //  the detail section is of height zero, the "set" us never done...
+        //  the detail section is of height zero, the "set" is never done...
         //  and this whole schema fails). For now, keep the code in case
         //  something break. If we survive the 4.2 cycle (in its entirety)
         //  without regression traced to this, then remove it (for 4.4 or
