@@ -42,9 +42,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     bInner( bInnr ),
     bVertical( bVert )
 {
-#ifdef DBG_UTIL
-    bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = sal_False;
-#endif
     sal_uInt32 nCount(rPolyPolygon.count());
     mpPolyPolygon = new PolyPolygon( (sal_uInt16)nCount );
 

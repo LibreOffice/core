@@ -257,22 +257,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
 
         delete pPolyPolygon;
-        // UPPER_LOWER_TEST
-#ifdef DBG_UTIL
-        const SwViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
-        if( pTmpViewShell )
-        {
-            sal_Bool bT2 = pTmpViewShell->GetViewOptions()->IsTest2();
-            sal_Bool bT6 = pTmpViewShell->GetViewOptions()->IsTest6();
-            if( bT2 || bT6 )
-            {
-                if( bT2 )
-                    pTextRanger[ 0 ]->SetFlag7( sal_True );
-                else
-                    pTextRanger[ 0 ]->SetFlag6( sal_True );
-            }
-        }
-#endif
+
         nPntCnt += pTextRanger[ 0 ]->GetPointCount();
         while( nPntCnt > POLY_MAX && nObjCnt > POLY_MIN )
         {
