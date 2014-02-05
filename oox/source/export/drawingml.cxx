@@ -230,7 +230,8 @@ void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
     }
     else
     {
-        WriteColor( sSchemeName );
+        Sequence< PropertyValue > aTransformations(0);
+        WriteColor( sSchemeName, aTransformations );
     }
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
