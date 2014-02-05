@@ -478,58 +478,47 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     BOOST_STATIC_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
     BOOST_STATIC_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
     BOOST_STATIC_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
-    if ((JNI_FALSE == sal_False) &&
-        (JNI_TRUE == sal_True) &&
-        (sizeof (jboolean) == sizeof (sal_Bool)) &&
-        (sizeof (jchar) == sizeof (sal_Unicode)) &&
-        (sizeof (jdouble) == sizeof (double)) &&
-        (sizeof (jfloat) == sizeof (float)) &&
-        (sizeof (jbyte) == sizeof (sal_Int8)) &&
-        (sizeof (jshort) == sizeof (sal_Int16)) &&
-        (sizeof (jint) == sizeof (sal_Int32)) &&
-        (sizeof (jlong) == sizeof (sal_Int64)))
+
+    OUString const & from_env_typename =
+        OUString::unacquired( &pFrom->pTypeName );
+    OUString const & to_env_typename =
+        OUString::unacquired( &pTo->pTypeName );
+
+    uno_Mapping * mapping = 0;
+
+    try
     {
-        OUString const & from_env_typename =
-            OUString::unacquired( &pFrom->pTypeName );
-        OUString const & to_env_typename =
-            OUString::unacquired( &pTo->pTypeName );
-
-        uno_Mapping * mapping = 0;
-
-        try
+        if ( from_env_typename == UNO_LB_JAVA && to_env_typename == UNO_LB_UNO )
         {
-            if ( from_env_typename == UNO_LB_JAVA && to_env_typename == UNO_LB_UNO )
-            {
-                Bridge * bridge =
-                    new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
-                mapping = &bridge->m_java2uno;
-                uno_registerMapping(
-                    &mapping, Bridge_free,
-                    pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
-            }
-            else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
-            {
-                Bridge * bridge =
-                    new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
-                mapping = &bridge->m_uno2java;
-                uno_registerMapping(
-                    &mapping, Bridge_free,
-                    (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
-            }
+            Bridge * bridge =
+                new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
+            mapping = &bridge->m_java2uno;
+            uno_registerMapping(
+                &mapping, Bridge_free,
+                pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
         }
-        catch (const BridgeRuntimeError & err)
+        else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
         {
-            SAL_WARN(
-                "bridges",
-                "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
+            Bridge * bridge =
+                new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
+            mapping = &bridge->m_uno2java;
+            uno_registerMapping(
+                &mapping, Bridge_free,
+                (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
         }
-        catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-        {
-            SAL_WARN("bridges", "attaching current thread to java failed");
-        }
-
-        *ppMapping = mapping;
     }
+    catch (const BridgeRuntimeError & err)
+    {
+        SAL_WARN(
+            "bridges",
+            "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
+    }
+    catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    {
+        SAL_WARN("bridges", "attaching current thread to java failed");
+    }
+
+    *ppMapping = mapping;
 }
 
 }
