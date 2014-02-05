@@ -2881,7 +2881,6 @@ class CompileErrorCellsHandler
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
     sal_uInt16 mnErrCode;
-    FormulaGrammar::Grammar meGram;
     bool mbCompiled;
 public:
     CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, sal_uInt16 nErrCode ) :
