@@ -83,6 +83,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         return new TextFieldContext( *this, rAttribs, *pField );
     }
     case A_TOKEN( pPr ):
+    case OOX_TOKEN( doc, pPr ):
         return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
     case A_TOKEN( endParaRPr ):
         return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );

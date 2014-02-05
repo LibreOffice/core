@@ -48,6 +48,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <vcl/svapp.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1787,6 +1788,25 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capita
     CPPUNIT_ASSERT_EQUAL(style::CaseMap::SMALLCAPS, getProperty<sal_Int16>(getRun(getParagraphOfText(4, xText), 1), "CharCaseMap"));
     // 5th line has no capitalization
     CPPUNIT_ASSERT_EQUAL(style::CaseMap::NONE, getProperty<sal_Int16>(getRun(getParagraphOfText(5, xText), 1), "CharCaseMap"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeParaAdjust, "dml-groupshape-paraadjust.docx")
+{
+    // Paragraph adjustment inside a group shape was not imported
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    // 2nd line is adjusted to the right
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getRun(getParagraphOfText(2, xText), 1), "ParaAdjust"));
+    // 3rd line has no adjustment
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(3, xText), 1), "ParaAdjust"));
+    // 4th line is adjusted to center
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getRun(getParagraphOfText(4, xText), 1), "ParaAdjust"));
+    // 5th line has no adjustment
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(5, xText), 1), "ParaAdjust"));
+    // 6th line is justified
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_BLOCK), getProperty<sal_Int16>(getRun(getParagraphOfText(6, xText), 1), "ParaAdjust"));
+    // 7th line has no adjustment
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(7, xText), 1), "ParaAdjust"));
 }
 #endif
 

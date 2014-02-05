@@ -21,6 +21,7 @@
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
@@ -153,6 +154,9 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
     rPropertyMap[ PROP_NumberingLevel ] <<= nLevel;
     rPropertyMap[ PROP_NumberingIsNumber ] <<= sal_True;
+
+    if( mrTextParagraphProperties.getParaAdjust() )
+        rPropertyMap[ PROP_ParaAdjust ] <<= mrTextParagraphProperties.getParaAdjust().get();
 }
 
 // --------------------------------------------------------------------
@@ -238,6 +242,23 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new TextTabStopListContext( *this, maTabList );
         case A_TOKEN( defRPr ):         // CT_TextCharacterProperties
             return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
+        case OOX_TOKEN( doc, jc ):
+            {
+                OptValue< OUString > oParaAdjust = rAttribs.getString( OOX_TOKEN(doc, val) );
+                if( oParaAdjust.has() && !oParaAdjust.get().isEmpty() )
+                {
+                    const OUString& sParaAdjust = oParaAdjust.get();
+                    if( sParaAdjust == "left" )
+                        mrTextParagraphProperties.setParaAdjust(ParagraphAdjust_LEFT);
+                    else if ( sParaAdjust == "right" )
+                        mrTextParagraphProperties.setParaAdjust(ParagraphAdjust_RIGHT);
+                    else if ( sParaAdjust == "center" )
+                        mrTextParagraphProperties.setParaAdjust(ParagraphAdjust_CENTER);
+                    else if ( sParaAdjust == "both" )
+                        mrTextParagraphProperties.setParaAdjust(ParagraphAdjust_BLOCK);
+                }
+            }
+            break;
     }
     return this;
 }

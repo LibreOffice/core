@@ -94,6 +94,9 @@ public:
     boost::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
     boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
+    boost::optional< sal_Int16 >&       getParaAdjust() { return moParaAdjust; }
+    void                                setParaAdjust( sal_Int16 nParaAdjust ) { moParaAdjust = nParaAdjust; }
+
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
@@ -118,6 +121,7 @@ protected:
     TextSpacing                     maParaBottomMargin;
     boost::optional< sal_Int32 >    moParaLeftMargin;
     boost::optional< sal_Int32 >    moFirstLineIndentation;
+    boost::optional< sal_Int16 >    moParaAdjust;
     sal_Int16                       mnLevel;
 };
 
