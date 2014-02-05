@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
-
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
 
@@ -38,7 +37,6 @@ class ToolBox;
 
 namespace svx { namespace sidebar {
 
-class SvxSBFontNameBox;
 class PopupControl;
 class PopupContainer;
 
@@ -58,10 +56,8 @@ public:
 
     ::sfx2::sidebar::ControllerItem& GetSpaceController();
     long GetSelFontSize();
-    void SetSpacing(long nKern);
     void EndSpacingPopupMode (void);
     void EndUnderlinePopupMode (void);
-    void SetUnderline(FontUnderline eUnderline);
     Color& GetUnderlineColor();
 
 
@@ -77,15 +73,13 @@ public:
 
 private:
     //ui controls
-    SvxSBFontNameBox* mpFontNameBox;
-    FontSizeBox* mpFontSizeBox;
     ToolBox* mpToolBoxFont;
     ToolBox* mpToolBoxIncDec;
     ToolBox* mpToolBoxSpacing;
+    ToolBox* mpToolBoxFontColorSw;
     ToolBox* mpToolBoxFontColor;
 
     //control items
-    ::sfx2::sidebar::ControllerItem maFontNameControl;
     ::sfx2::sidebar::ControllerItem maFontSizeControl;
     ::sfx2::sidebar::ControllerItem maUnderlineControl;
     ::sfx2::sidebar::ControllerItem maSpacingControl;
@@ -97,7 +91,6 @@ private:
     long                        mlKerning;
     SvxFontHeightItem*          mpHeightItem;
 
-    bool mbFocusOnFontSizeCtrl;
     TextCharacterSpacingPopup maCharSpacePopup;
     TextUnderlinePopup maUnderlinePopup;
 
@@ -115,20 +108,11 @@ private:
     PopupControl* CreateCharacterSpacingControl (PopupContainer* pParent);
     PopupControl* CreateUnderlinePopupControl (PopupContainer* pParent);
     DECL_LINK(SpacingClickHdl, ToolBox*);
-    DECL_LINK(ToolBoxUnderlineClickHdl, ToolBox* );
+    DECL_LINK(UnderlineClickHdl, ToolBox* );
 
-    void Initialize (void);
     void SetupToolboxItems (void);
     void InitToolBoxFont();
     void InitToolBoxSpacing();
-
-    DECL_LINK(FontSelHdl, FontNameBox *);
-    DECL_LINK(FontSizeModifyHdl, FontSizeBox *);
-    DECL_LINK(FontSizeSelHdl, FontSizeBox *);
-    DECL_LINK(FontSizeLoseFocus, FontSizeBox *);
-    DECL_LINK(ToolboxFontSelectHandler, ToolBox *);
-
-    void UpdateFontColorToolbox (bool bWriterText);
 };
 
 } } // end of namespace ::svx::sidebar

@@ -18,21 +18,13 @@
 
 #include "TextPropertyPanel.hrc"
 #include "TextPropertyPanel.hxx"
-#include "SvxSBFontNameBox.hxx"
 
-#include <editeng/flstitem.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include "TextCharacterSpacingControl.hxx"
 #include "TextCharacterSpacingPopup.hxx"
@@ -45,9 +37,6 @@
 using namespace css;
 using namespace cssu;
 
-const char UNO_BACKCOLOR[] = ".uno:BackColor";
-const char UNO_COLOR[] = ".uno:Color";
-const char UNO_FONTCOLOR[] = ".uno:FontColor";
 const char UNO_SPACING[] = ".uno:Spacing";
 const char UNO_UNDERLINE[] = ".uno:Underline";
 
@@ -72,7 +61,6 @@ long TextPropertyPanel::GetSelFontSize()
     return nH;
 }
 
-
 TextPropertyPanel* TextPropertyPanel::Create (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
@@ -93,7 +81,6 @@ TextPropertyPanel* TextPropertyPanel::Create (
         rContext);
 }
 
-
 ::sfx2::sidebar::ControllerItem& TextPropertyPanel::GetSpaceController()
 {
     return maSpacingControl;
@@ -101,42 +88,38 @@ TextPropertyPanel* TextPropertyPanel::Create (
 
 TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
-        maFontNameControl   (SID_ATTR_CHAR_FONT,        *pBindings, *this, OUString("CharFontName"), rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
         maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, OUString("Spacing"),      rxFrame),
 
-        mbFocusOnFontSizeCtrl(false),
         maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
         maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
         maContext(),
         mpBindings(pBindings)
 {
-    get(mpFontNameBox, "font");
-    get(mpFontSizeBox, "fontsize");
     get(mpToolBoxFont, "fonteffects");
     get(mpToolBoxIncDec, "fontadjust");
     get(mpToolBoxSpacing, "spacingbar");
-    get(mpToolBoxFontColor, "colorbar");
+    get(mpToolBoxFontColorSw, "colorbar");
+    get(mpToolBoxFontColor, "colorsingle");
 
-    Initialize();
+    //toolbox
+    SetupToolboxItems();
+    InitToolBoxFont();
+    InitToolBoxSpacing();
+
+    //init state
+    mpHeightItem = NULL;
+    meUnderline = UNDERLINE_NONE;
+    meUnderlineColor = COL_AUTO;
+    mbKernAvailable = true;
+    mbKernLBAvailable = true;
+    mlKerning = 0;
 }
-
-
-
 
 TextPropertyPanel::~TextPropertyPanel (void)
 {
 }
-
-
-
-
-void TextPropertyPanel::SetSpacing(long nKern)
-{
-    mlKerning = nKern;
-}
-
 
 void TextPropertyPanel::HandleContextChange (
     const ::sfx2::sidebar::EnumContext aContext)
@@ -183,83 +166,13 @@ void TextPropertyPanel::HandleContextChange (
             break;
     }
 
-    UpdateFontColorToolbox(bWriterText);
+    mpToolBoxFontColor->Show(!bWriterText);
+    mpToolBoxFontColorSw->Show(bWriterText);
 }
-
-void TextPropertyPanel::UpdateFontColorToolbox (bool bWriterText)
-{
-    if (bWriterText)
-    {
-        mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_COLOR));
-        mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_FONTCOLOR));
-        mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-    }
-    else
-    {
-        mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_COLOR));
-        mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_FONTCOLOR));
-        mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-    }
-}
-
 
 void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
     SetupToolboxItems();
-}
-
-
-
-
-void TextPropertyPanel::Initialize (void)
-{
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = NULL;
-    const FontList* pFontList = NULL;
-    bool  bMustDelete = false;
-
-    if (pDocSh != NULL)
-        pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
-    if (pItem != NULL)
-        pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
-    else
-    {
-        pFontList = new FontList( Application::GetDefaultDevice() );
-        bMustDelete = true;
-    }
-
-    const FontInfo aFontInfo (pFontList->Get( OUString( "" ), OUString( "" )));
-    mpFontSizeBox->Fill(&aFontInfo,pFontList);
-
-    if (bMustDelete)
-        delete pFontList;
-
-    mpFontNameBox->SetAccessibleName(mpFontNameBox->GetQuickHelpText());
-    mpFontSizeBox->SetAccessibleName(mpFontSizeBox->GetQuickHelpText());
-
-    //toolbox
-    SetupToolboxItems();
-    InitToolBoxFont();
-    InitToolBoxSpacing();
-
-    //init state
-    mpHeightItem = NULL;
-    meUnderline = UNDERLINE_NONE;
-    meUnderlineColor = COL_AUTO;
-    mbKernAvailable = true;
-    mbKernLBAvailable = true;
-    mlKerning = 0;
-
-    //set handler
-    mpFontNameBox->SetBindings(mpBindings);
-    Link aLink = LINK(this, TextPropertyPanel, FontSelHdl);
-    mpFontNameBox->SetSelectHdl(aLink);
-    aLink = LINK(this, TextPropertyPanel, FontSizeModifyHdl);
-    mpFontSizeBox->SetModifyHdl(aLink);
-    aLink = LINK(this, TextPropertyPanel, FontSizeSelHdl);
-    mpFontSizeBox->SetSelectHdl(aLink);
-    aLink = LINK(this, TextPropertyPanel, FontSizeLoseFocus);
-    mpFontSizeBox->SetLoseFocusHdl(aLink);
 }
 
 void TextPropertyPanel::EndSpacingPopupMode (void)
@@ -272,18 +185,11 @@ void TextPropertyPanel::EndUnderlinePopupMode (void)
     maUnderlinePopup.Hide();
 }
 
-
 void TextPropertyPanel::InitToolBoxFont()
 {
-    Link aLink = LINK(this, TextPropertyPanel, ToolboxFontSelectHandler);
-    mpToolBoxFont->SetSelectHdl ( aLink );
-
-    aLink = LINK(this, TextPropertyPanel, ToolBoxUnderlineClickHdl);
+    Link aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
     mpToolBoxFont->SetDropdownClickHdl(aLink);
 }
-
-
-
 
 void TextPropertyPanel::InitToolBoxSpacing()
 {
@@ -295,94 +201,13 @@ void TextPropertyPanel::InitToolBoxSpacing()
     mpToolBoxSpacing->SetSelectHdl( aLink );
 }
 
-
-
-
 void TextPropertyPanel::SetupToolboxItems (void)
 {
     maUnderlineControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_UNDERLINE));
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, mpToolBoxSpacing->GetItemId(UNO_SPACING));
 }
 
-
-
-
-IMPL_LINK( TextPropertyPanel, FontSelHdl, FontNameBox*, pBox )
-{
-    if ( !pBox->IsTravelSelect() )
-    {
-        if( SfxViewShell::Current() )
-        {
-            Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-
-            if ( pShellWnd )
-                pShellWnd->GrabFocus();
-        }
-    }
-    return 0;
-}
-
-IMPL_LINK( TextPropertyPanel, FontSizeModifyHdl, FontSizeBox*, pSizeBox )
-{
-    if (pSizeBox == mpFontSizeBox)
-    {
-        long nSize = pSizeBox->GetValue();
-        mbFocusOnFontSizeCtrl = true;
-
-        float fSize = (float)nSize / 10;
-        SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
-        SvxFontHeightItem aItem( CalcToUnit( fSize, eUnit ), 100, SID_ATTR_CHAR_FONTHEIGHT ) ;
-
-        mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aItem, 0L );
-        mpBindings->Invalidate(SID_ATTR_CHAR_FONTHEIGHT,true,false);
-    }
-    return 0;
-}
-
-IMPL_LINK( TextPropertyPanel, FontSizeSelHdl, FontSizeBox*, pSizeBox )
-{
-    if ( !pSizeBox->IsTravelSelect() )
-    {
-        if( SfxViewShell::Current() )
-        {
-            Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-
-            if ( pShellWnd )
-                pShellWnd->GrabFocus();
-        }
-    }
-
-    return 0;
-}
-
-IMPL_LINK(TextPropertyPanel, FontSizeLoseFocus, FontSizeBox*, pSizeBox)
-{
-    if(pSizeBox == mpFontSizeBox)
-    {
-        mbFocusOnFontSizeCtrl = false;
-    }
-    return 0;
-}
-
-IMPL_LINK(TextPropertyPanel, ToolboxFontSelectHandler, ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    EndTracking();
-
-    if (aCommand == UNO_UNDERLINE)
-        meUnderline = UNDERLINE_NONE;
-
-    dispatch(aCommand);
-
-    return 0;
-}
-
-
-
-
-IMPL_LINK(TextPropertyPanel, ToolBoxUnderlineClickHdl, ToolBox*, pToolBox)
+IMPL_LINK(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     const OUString aCommand(pToolBox->GetItemCommand(nId));
@@ -396,9 +221,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxUnderlineClickHdl, ToolBox*, pToolBox)
 
     return 0L;
 }
-
-
-
 
 IMPL_LINK(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox)
 {
@@ -415,74 +237,32 @@ IMPL_LINK(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox)
     return 0L;
 }
 
-
-
-
 void TextPropertyPanel::NotifyItemUpdate (
     const sal_uInt16 nSID,
     const SfxItemState eState,
     const SfxPoolItem* pState,
     const bool bIsEnabled)
 {
-    bool bIsControlEnabled (bIsEnabled);
-
     switch(nSID)
     {
-    case SID_ATTR_CHAR_FONT:
-        {
-            if (  eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxFontItem) )
-            {
-                const SvxFontItem* pFontItem = (const SvxFontItem*)pState;
-                mpFontNameBox->SetText( pFontItem->GetFamilyName() );
-            }
-            else
-            {
-                mpFontNameBox->SetText( "" );
-                if (SFX_ITEM_DISABLED == eState)
-                    bIsControlEnabled = false;
-            }
-            mpFontNameBox->Enable(bIsControlEnabled);
-        }
-        break;
     case SID_ATTR_CHAR_FONTHEIGHT:
         {
             if (  eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxFontHeightItem) )
-            {
-                mpHeightItem = (SvxFontHeightItem*)pState;//const SvxFontHeightItem*
-                SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
-                const sal_Int64 nValue (CalcToPoint(mpHeightItem->GetHeight(), eUnit, 10 ));
-
-                if( mbFocusOnFontSizeCtrl )
-                    return;
-
-                mpFontSizeBox->SetValue(nValue);
-                mpFontSizeBox->LoseFocus();
-            }
+                mpHeightItem = (SvxFontHeightItem*)pState;
             else
-            {
                 mpHeightItem = NULL;
-                mpFontSizeBox->SetText( "" );
-                if ( eState <= SFX_ITEM_READONLY )
-                    bIsControlEnabled = false;
-            }
-            mpFontSizeBox->Enable(bIsControlEnabled);
         }
         break;
     case SID_ATTR_CHAR_UNDERLINE:
         {
-            if( eState >= SFX_ITEM_DEFAULT)
+            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxUnderlineItem) )
             {
-                if(pState->ISA(SvxUnderlineItem))
-                {
-                    const SvxUnderlineItem* pItem = (const SvxUnderlineItem*)pState;
-                    meUnderline = (FontUnderline)pItem->GetValue();
-                    meUnderlineColor = pItem->GetColor();
-                }
+                const SvxUnderlineItem* pItem = (const SvxUnderlineItem*)pState;
+                meUnderline = (FontUnderline)pItem->GetValue();
+                meUnderlineColor = pItem->GetColor();
             }
             else
-            {
                 meUnderline = UNDERLINE_NONE;
-            }
         }
         break;
     case SID_ATTR_CHAR_KERNING:
@@ -521,17 +301,9 @@ void TextPropertyPanel::NotifyItemUpdate (
     }
 }
 
-
-
-
 Color& TextPropertyPanel::GetUnderlineColor()
 {
     return meUnderlineColor;
-}
-
-void TextPropertyPanel::SetUnderline(FontUnderline  eUnderline)
-{
-    meUnderline = eUnderline;
 }
 
 } } // end of namespace svx::sidebar
