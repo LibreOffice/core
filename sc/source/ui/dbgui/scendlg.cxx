@@ -37,35 +37,31 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "scendlg.hrc"
 #include "scendlg.hxx"
 
 //========================================================================
 
 ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
 
-    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
-        aFlName         ( this, ScResId( FL_NAME )),
-        aEdName         ( this, ScResId( ED_NAME ) ),
-        aFlComment      ( this, ScResId( FL_COMMENT ) ),
-        aEdComment      ( this, ScResId( ED_COMMENT ) ),
-        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        aCbShowFrame    ( this, ScResId( CB_SHOWFRAME ) ),
-        aLbColor        ( this, ScResId( LB_COLOR ) ),
-        //aCbPrintFrame ( this, ScResId( CB_PRINTFRAME ) ),
-        aCbTwoWay       ( this, ScResId( CB_TWOWAY ) ),
-        //aCbAttrib     ( this, ScResId( CB_ATTRIB ) ),
-        //aCbValue      ( this, ScResId( CB_VALUE ) ),
-        aCbCopyAll      ( this, ScResId( CB_COPYALL ) ),
-        aCbProtect      ( this, ScResId( CB_PROTECT ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aDefScenarioName( rName ),
-        bIsEdit         ( bEdit )
+    : ModalDialog(pParent, "ScenarioDialog",
+        "modules/scalc/ui/scenariodialog.ui")
+    , aDefScenarioName(rName)
+    , bIsEdit(bEdit)
 {
+    get(m_pEdName, "name");
+    get(m_pEdComment, "comment");
+    Size aSize(m_pEdComment->LogicToPixel(Size(183, 46), MAP_APPFONT));
+    m_pEdComment->set_width_request(aSize.Width());
+    m_pEdComment->set_height_request(aSize.Height());
+    get(m_pCbShowFrame, "showframe");
+    get(m_pLbColor, "bordercolor");
+    get(m_pCbTwoWay, "copyback");
+    get(m_pCbCopyAll, "copysheet");
+    get(m_pCbProtect, "preventchanges");
+    get(m_pBtnOk, "ok");
+
     if (bIsEdit)
-        SetText(OUString(ScResId(STR_EDIT)));
+        SetText(get<FixedText>("alttitle")->GetText());
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
@@ -76,65 +72,45 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, sal_
             XColorListRef pColorList = ((SvxColorListItem*)pItem)->GetColorList();
             if (pColorList.is())
             {
-                aLbColor.SetUpdateMode( false );
+                m_pLbColor->SetUpdateMode( false );
                 long nCount = pColorList->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
                     XColorEntry* pEntry = pColorList->GetColor(n);
-                    aLbColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+                    m_pLbColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
-                aLbColor.SetUpdateMode( sal_True );
+                m_pLbColor->SetUpdateMode( sal_True );
             }
         }
     }
 
     SvtUserOptions aUserOpt;
 
-    OUString aComment(OUString(ScResId(STR_CREATEDBY)) + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
-              + ", " + OUString(ScResId(STR_ON)) + " " + ScGlobal::GetpLocaleData()->getDate(Date(Date::SYSTEM))
+    OUString sCreatedBy(get<FixedText>("createdft")->GetText());
+    OUString sOn(get<FixedText>("onft")->GetText());
+
+    OUString aComment(sCreatedBy + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
+              + ", " + sOn + " " + ScGlobal::GetpLocaleData()->getDate(Date(Date::SYSTEM))
               + ", " + ScGlobal::GetpLocaleData()->getTime(Time(Time::SYSTEM)));
 
-    aEdComment.SetText(aComment);
-    aEdName.SetText(rName);
-    aBtnOk.SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
-    aCbShowFrame.SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
+    m_pEdComment->SetText(aComment);
+    m_pEdName->SetText(rName);
+    m_pBtnOk->SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
+    m_pCbShowFrame->SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
-    aLbColor.SetAccessibleName(OUString(ScResId( STR_COLOR ) ));
-
-    FreeResource();
-
-    aLbColor.SelectEntry( Color( COL_LIGHTGRAY ) );
-    aCbShowFrame.Check(sal_True);
-    //aCbPrintFrame.Check(sal_True);
-    aCbTwoWay.Check(sal_True);
-    //aCbAttrib.Check(sal_False);
-    //aCbValue.Check(sal_False);
-    aCbCopyAll.Check(false);
-    aCbProtect.Check(sal_True);
+    m_pLbColor->SelectEntry( Color( COL_LIGHTGRAY ) );
+    m_pCbShowFrame->Check(sal_True);
+    m_pCbTwoWay->Check(sal_True);
+    m_pCbCopyAll->Check(false);
+    m_pCbProtect->Check(sal_True);
 
     if (bIsEdit)
-        aCbCopyAll.Enable(false);
+        m_pCbCopyAll->Enable(false);
     // If the Sheet is protected then we disable the Scenario Protect input
     // and default it to true above. Note we are in 'Add' mode here as: if
     // Sheet && scenario protection are true, then we cannot edit this dialog.
     if (bSheetProtected)
-        aCbProtect.Enable(false);
-
-    //! die drei funktionieren noch nicht...
-    /*
-    aCbPrintFrame.Enable(sal_False);
-    aCbAttrib.Enable(sal_False);
-    aCbValue.Enable(sal_False);
-    */
-
-    aEdComment.SetAccessibleRelationMemberOf(&aFlComment);
-    aLbColor.SetAccessibleRelationLabeledBy(&aCbShowFrame);
-}
-
-//------------------------------------------------------------------------
-
-ScNewScenarioDlg::~ScNewScenarioDlg()
-{
+        m_pCbProtect->Enable(false);
 }
 
 //------------------------------------------------------------------------
@@ -142,31 +118,21 @@ ScNewScenarioDlg::~ScNewScenarioDlg()
 void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
-    rComment = aEdComment.GetText();
-    rName    = aEdName.GetText();
+    rComment = m_pEdComment->GetText();
+    rName    = m_pEdName->GetText();
 
     if (rName.isEmpty())
         rName = aDefScenarioName;
 
-    rColor = aLbColor.GetSelectEntryColor();
+    rColor = m_pLbColor->GetSelectEntryColor();
     sal_uInt16 nBits = 0;
-    if (aCbShowFrame.IsChecked())
+    if (m_pCbShowFrame->IsChecked())
         nBits |= SC_SCENARIO_SHOWFRAME;
-    /*
-    if (aCbPrintFrame.IsChecked())
-        nBits |= SC_SCENARIO_PRINTFRAME;
-    */
-    if (aCbTwoWay.IsChecked())
+    if (m_pCbTwoWay->IsChecked())
         nBits |= SC_SCENARIO_TWOWAY;
-    /*
-    if (aCbAttrib.IsChecked())
-        nBits |= SC_SCENARIO_ATTRIB;
-    if (aCbValue.IsChecked())
-        nBits |= SC_SCENARIO_VALUE;
-    */
-    if (aCbCopyAll.IsChecked())
+    if (m_pCbCopyAll->IsChecked())
         nBits |= SC_SCENARIO_COPYALL;
-    if (aCbProtect.IsChecked())
+    if (m_pCbProtect->IsChecked())
         nBits |= SC_SCENARIO_PROTECT;
     rFlags = nBits;
 }
@@ -174,38 +140,35 @@ void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
 void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& rComment,
                                         const Color& rColor, sal_uInt16 nFlags )
 {
-    aEdComment.SetText(rComment);
-    aEdName.SetText(rName);
-    aLbColor.SelectEntry(rColor);
+    m_pEdComment->SetText(rComment);
+    m_pEdName->SetText(rName);
+    m_pLbColor->SelectEntry(rColor);
 
-    aCbShowFrame.Check ( (nFlags & SC_SCENARIO_SHOWFRAME)  != 0 );
-    EnableHdl( &aCbShowFrame );
-    //aCbPrintFrame.Check( (nFlags & SC_SCENARIO_PRINTFRAME) != 0 );
-    aCbTwoWay.Check    ( (nFlags & SC_SCENARIO_TWOWAY)     != 0 );
-    //aCbAttrib.Check    ( (nFlags & SC_SCENARIO_ATTRIB)     != 0 );
-    //aCbValue.Check     ( (nFlags & SC_SCENARIO_VALUE)      != 0 );
+    m_pCbShowFrame->Check ( (nFlags & SC_SCENARIO_SHOWFRAME)  != 0 );
+    EnableHdl(m_pCbShowFrame);
+    m_pCbTwoWay->Check    ( (nFlags & SC_SCENARIO_TWOWAY)     != 0 );
     //  CopyAll nicht
-    aCbProtect.Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
+    m_pCbProtect->Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
 }
 
 //------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
-    OUString      aName = comphelper::string::strip(aEdName.GetText(), ' ');
+    OUString      aName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->GetViewData()->GetDocument();
 
-    aEdName.SetText( aName );
+    m_pEdName->SetText( aName );
 
     if ( !pDoc->ValidTabName( aName ) )
     {
         InfoBox( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) ).Execute();
-        aEdName.GrabFocus();
+        m_pEdName->GrabFocus();
     }
     else if ( !bIsEdit && !pDoc->ValidNewTabName( aName ) )
     {
         InfoBox( this, ScGlobal::GetRscString( STR_NEWTABNAMENOTUNIQUE ) ).Execute();
-        aEdName.GrabFocus();
+        m_pEdName->GrabFocus();
     }
     else
         EndDialog( RET_OK );
@@ -218,8 +181,8 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 
 IMPL_LINK( ScNewScenarioDlg, EnableHdl, CheckBox *, pBox )
 {
-    if( pBox == &aCbShowFrame )
-        aLbColor.Enable( aCbShowFrame.IsChecked() );
+    if (pBox == m_pCbShowFrame)
+        m_pLbColor->Enable( m_pCbShowFrame->IsChecked() );
     return 0;
 }
 

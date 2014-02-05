@@ -869,7 +869,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetActiveDialogParent(), aName, RID_SCDLG_NEWSCENARIO, true,bSheetProtected);
+                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected);
                                 OSL_ENSURE(pNewDlg, "Dialog create fail!");
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )

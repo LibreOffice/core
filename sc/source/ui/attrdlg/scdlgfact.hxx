@@ -511,7 +511,6 @@ public:
                                                                 sal_uInt16 nOrient );
 
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
-                                                                int nId,
                                                                 sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
     virtual AbstractScShowTabDlg * CreateScShowTabDlg(Window* pParent);
 

@@ -901,23 +901,11 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
     return 0;
 }
 
-AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
-                                                                int nId,
-                                                                sal_Bool bEdit , sal_Bool bSheetProtected )
+AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(Window* pParent, const OUString& rName,
+    sal_Bool bEdit, sal_Bool bSheetProtected)
 {
-    ScNewScenarioDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_NEWSCENARIO :
-            pDlg = new ScNewScenarioDlg( pParent, rName, bEdit,bSheetProtected );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScNewScenarioDlg_Impl( pDlg );
-    return 0;
+    ScNewScenarioDlg *pDlg = new ScNewScenarioDlg(pParent, rName, bEdit, bSheetProtected);
+    return new AbstractScNewScenarioDlg_Impl( pDlg );
 }
 
 AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg(Window* pParent)
