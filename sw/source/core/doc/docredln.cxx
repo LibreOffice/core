@@ -4058,4 +4058,68 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
     return ( 0 != pNewRedl ) || bMerged;
 }
 
+SwTableCellRedline::SwTableCellRedline( const SwRedlineData& rData, SwTableBox& aTableBox )
+: pRedlineData( new SwRedlineData( rData ))
+{
+    pTableBox = &aTableBox;
+}
+
+SwTableCellRedline::SwTableCellRedline( const SwTableCellRedline& rCpy )
+: SwExtraRedline( rCpy )
+{
+    pTableBox = rCpy.pTableBox;
+}
+
+SwTableCellRedline::~SwTableCellRedline()
+{
+}
+
+bool SwDoc::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDelete )
+{
+    (void)bCallDelete;
+
+    // TO-DO - equivelant for 'SwTableCellRedline'
+    bool bMerged = false;
+    /*
+    _CHECK_REDLINE( this )
+    */
+
+    if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
+    {
+        // TO-DO - equivelant for 'SwTableCellRedline'
+        /*
+        pNewRedl->InvalidateRange();
+        */
+
+        // ===========================================================
+        // Make equivelant of 'AppendRedline' checks inside here too
+        // ===========================================================
+
+        mpExtraRedlineTbl->Insert( pNewRedl );
+    }
+    else
+    {
+        // TO DO - equivelant for 'SwTableCellRedline'
+        /*
+        if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
+        {
+            RedlineMode_t eOld = meRedlineMode;
+            // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
+            // The ShowMode needs to be retained!
+            meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
+            DeleteAndJoin( *pNewRedl );
+            meRedlineMode = eOld;
+        }
+        delete pNewRedl, pNewRedl = 0;
+        */
+    }
+    // TO-DO - equivelant for 'SwTableCellRedline'
+    /*
+    _CHECK_REDLINE( this )
+    */
+
+    return ( 0 != pNewRedl ) || bMerged;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
