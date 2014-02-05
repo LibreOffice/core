@@ -4756,9 +4756,8 @@ void Test::testNoteDeleteCol()
     pDoc->DeleteTab(0);
 }
 
-void Test::testAerasWithNotes()
+void Test::testAreasWithNotes()
 {
-
     ScDocument* pDoc = getDocShell().GetDocument();
     OUString aSheet1("Sheet1");
     pDoc->InsertTab(0, aSheet1);
@@ -4859,10 +4858,6 @@ void Test::testAerasWithNotes()
     dataFound = pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row", row == 3);
-
-
-    std::cout << "cell area col " << col << std::endl;
-    std::cout << "cell area row " << row << std::endl;
 
     pDoc->DeleteTab(0);
 }
