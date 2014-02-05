@@ -1302,6 +1302,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode( rKEvt.GetKeyCode());
     sal_uInt16 nCode = aKeyCode.GetCode();
     bool bAlternate = aKeyCode.IsMod2();
+    bool bCtrl = aKeyCode.IsMod1();
 
     if( m_apAccelExecute.get() )
         bReturn = m_apAccelExecute->execute( aKeyCode );
@@ -1498,6 +1499,17 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     }
                 }
             }
+        }
+    }
+
+    // dumping the shape
+    if( !bReturn && bCtrl && nCode == KEY_F12)
+    {
+        uno::Reference< qa::XDumper > xChartModel( getModel(), uno::UNO_QUERY );
+        if(xChartModel.is())
+        {
+            OUString aDump = xChartModel->dump();
+            SAL_WARN("chart2", aDump);
         }
     }
 
