@@ -37,7 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -65,11 +65,8 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 
 typedef sal_Int32 FrameSearchFlags;
 
-//________________________________________________________________________________________________________________________
 //  macros for declaration and definition of uno-services
-//________________________________________________________________________________________________________________________
 
-//************************************************************************************************************************
 //  declaration of      XInterface::queryInterface()
 //                      XInterface::aquire()
 //                      XInterface::release()
@@ -81,7 +78,6 @@ typedef sal_Int32 FrameSearchFlags;
 //                      static xxx::impl_getStaticSupportedServiceNames()
 //                      static xxx::impl_getStaticImplementationName()
 //                      static xxx::impl_createInstance()
-//************************************************************************************************************************
 #define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                         \
     /* XServiceInfo */                                                                                                          \
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );                                 \
@@ -95,7 +91,6 @@ typedef sal_Int32 FrameSearchFlags;
     /* Helper for registry */                                                                                                   \
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
 
-//************************************************************************************************************************
 //  declaration of      XInterface::queryInterface()
 //                      XInterface::aquire()
 //                      XInterface::release()
@@ -108,19 +103,16 @@ typedef sal_Int32 FrameSearchFlags;
 //                      static xxx::impl_getStaticImplementationName()
 //                      static xxx::impl_createInstance()
 //                      static xxx::impl_createFactory()
-//************************************************************************************************************************
 #define SFX_DECL_XSERVICEINFO                                                                                             \
     SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                       \
     static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
-//************************************************************************************************************************
 //  implementation of   XServiceInfo::getImplementationName()
 //                      XServiceInfo::supportsService()
 //                      XServiceInfo::getSupportedServiceNames()
 //                      static xxx::impl_getStaticSupportedServiceNames()
 //                      static xxx::impl_getStaticImplementationName()
 //                      static xxx::impl_createInstance()
-//************************************************************************************************************************
 #define SFX_IMPL_XSERVICEINFO( IMPLCLASS, IMPLSERVICENAME, IMPLNAME )                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
@@ -132,16 +124,7 @@ typedef sal_Int32 FrameSearchFlags;
     /* XServiceInfo */                                                                                                                              \
     sal_Bool SAL_CALL IMPLCLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
     {                                                                                                                                               \
-        css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();                                                           \
-        const OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
-        for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )                                                              \
-        {                                                                                                                                           \
-            if ( pArray[nCounter] == sServiceName )                                                                                                 \
-            {                                                                                                                                       \
-                return sal_True ;                                                                                                                   \
-            }                                                                                                                                       \
-        }                                                                                                                                           \
-        return sal_False ;                                                                                                                          \
+        return cppu::supportsService(this, sServiceName);                                                                                            \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
@@ -170,14 +153,12 @@ typedef sal_Int32 FrameSearchFlags;
         return css::uno::Reference< css::uno::XInterface >( *new IMPLCLASS( xServiceManager ) );                                                    \
     }
 
-//************************************************************************************************************************
 //  implementation of   XServiceInfo::getImplementationName()
 //                      XServiceInfo::supportsService()
 //                      XServiceInfo::getSupportedServiceNames()
 //                      static xxx::impl_getStaticSupportedServiceNames()
 //                      static xxx::impl_getStaticImplementationName()
 //                      static xxx::impl_createInstance()
-//************************************************************************************************************************
 #define SFX_IMPL_XSERVICEINFO_CTX( IMPLCLASS, IMPLSERVICENAME, IMPLNAME )                                                                           \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
@@ -189,16 +170,7 @@ typedef sal_Int32 FrameSearchFlags;
     /* XServiceInfo */                                                                                                                              \
     sal_Bool SAL_CALL IMPLCLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
     {                                                                                                                                               \
-        css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();                                                           \
-        const OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
-        for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )                                                              \
-        {                                                                                                                                           \
-            if ( pArray[nCounter] == sServiceName )                                                                                                 \
-            {                                                                                                                                       \
-                return sal_True ;                                                                                                                   \
-            }                                                                                                                                       \
-        }                                                                                                                                           \
-        return sal_False ;                                                                                                                          \
+        return cppu::supportsService(this, sServiceName);                                                                                           \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
@@ -227,9 +199,7 @@ typedef sal_Int32 FrameSearchFlags;
         return css::uno::Reference< css::uno::XInterface >( *new IMPLCLASS( comphelper::getComponentContext(xServiceManager) ) );                   \
     }
 
-//************************************************************************************************************************
 //  definition of createFactory() for MultiServices
-//************************************************************************************************************************
 #define SFX_IMPL_SINGLEFACTORY( IMPLCLASS )                                                                                                         \
                                                                                                                                                     \
     css::uno::Reference< css::lang::XSingleServiceFactory > IMPLCLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )        \
@@ -243,9 +213,7 @@ typedef sal_Int32 FrameSearchFlags;
         return xReturn ;                                                                                                                            \
     }
 
-//************************************************************************************************************************
 //  definition of createFactory() for OneInstance-Services
-//************************************************************************************************************************
 #define SFX_IMPL_ONEINSTANCEFACTORY( IMPLCLASS )                                                                                                    \
                                                                                                                                                     \
     css::uno::Reference< css::lang::XSingleServiceFactory > IMPLCLASS::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )        \
@@ -259,17 +227,13 @@ typedef sal_Int32 FrameSearchFlags;
         return xReturn ;                                                                                                                            \
     }
 
-//************************************************************************************************************************
 //  definition for "extern c sfx_component_getFactory()"
-//************************************************************************************************************************
 #define CREATEFACTORY(CLASS)                                                                                            \
                                                                                                                         \
     /* Create right factory ... */                                                                                      \
     xFactory = CLASS::impl_createFactory( xServiceManager );
 
-//************************************************************************************************************************
 //  definition for "extern c sfx_component_getFactory()"
-//************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY(CLASS)                                                                           \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )    \

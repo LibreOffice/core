@@ -42,6 +42,7 @@
 #include "FamilyType.hxx"
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::osl;
 using namespace ::xmloff::token;
@@ -2007,10 +2008,10 @@ OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
     return Oasis2OOoTransformer_getImplementationName();
 }
 
-sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& )
+sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )

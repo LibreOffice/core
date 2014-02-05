@@ -36,6 +36,7 @@
 #include <osl/interlck.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;
@@ -50,7 +51,6 @@ namespace jvmaccess { class VirtualMachine; }
 
 namespace connectivity
 {
-    //------------------------------------------------------------------------------
     OOO_DLLPUBLIC_DBTOOLS sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
     inline sal_Bool match(const OUString &rWild, const OUString &rStr, const sal_Unicode cEscape)
     {
@@ -62,9 +62,7 @@ namespace connectivity
 
     typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;
 
-    // -------------------------------------------------------------------------
     // class ORefVector allows reference counting on a std::vector
-    // -------------------------------------------------------------------------
     template< class VectorVal > class ORefVector
     {
         std::vector< VectorVal > m_vector;
@@ -112,11 +110,10 @@ namespace connectivity
         }
 
     };
-    // -------------------------------------------------------------------------
+
     // class ORowVector incudes refcounting and initialze himself
     // with at least one element. This first element is reserved for
     // the bookmark
-    // -------------------------------------------------------------------------
     template< class VectorVal > class ORowVector : public  ORefVector< VectorVal >
     {
     public:
@@ -127,7 +124,6 @@ namespace connectivity
 
     typedef ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> > OSQLColumns;
 
-    // =======================================================================================
     // search from __first to __last the column with the name _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
@@ -135,7 +131,7 @@ namespace connectivity
                                         OSQLColumns::Vector::const_iterator __last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
-    // =======================================================================================
+
     // search from __first to __last the column with the realname _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
@@ -144,9 +140,7 @@ namespace connectivity
                                                 const OUString& _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
 
-    // =======================================================================================
     // the first two find methods are much faster than the one below
-    // =======================================================================================
     // search from __first to __last the column with the property _rProp equals the value _rVal
     // when no such column exist __last is returned
     OOO_DLLPUBLIC_DBTOOLS
@@ -177,8 +171,6 @@ namespace connectivity
 #endif
 }
 
-//==================================================================================
-
 #define DECLARE_SERVICE_INFO()  \
     virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException); \
@@ -197,16 +189,8 @@ namespace connectivity
     }   \
     sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     {   \
-        Sequence< OUString > aSupported(getSupportedServiceNames());             \
-        const OUString* pSupported = aSupported.getConstArray();                 \
-        const OUString* pEnd = pSupported + aSupported.getLength();              \
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
-            ;                                                                           \
-                                                                                        \
-        return pSupported != pEnd;                                                      \
+        return cppu::supportsService(this, _rServiceName); \
     }   \
-
-//==================================================================================
 
 #endif // INCLUDED_CONNECTIVITY_COMMONTOOLS_HXX
 
