@@ -64,8 +64,8 @@ void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
     // rOldText: text to be replaced
     // rNewText: replacement text
 
-    sal_Int32 nOldLen = rOldText.getLength(),
-                nNewLen = rNewText.getLength();
+    sal_Int32 nOldLen = rOldText.getLength();
+    sal_Int32 nNewLen = rNewText.getLength();
     if (nOldLen && nNewLen)
     {
         bool bOldHasDot = '.' == rOldText[ nOldLen - 1 ],

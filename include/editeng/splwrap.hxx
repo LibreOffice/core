@@ -56,7 +56,6 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyph;
     SdrObject*  mpTextObj;
-    sal_uInt16  nOldLang;        // Set Language, only call SetLanguage on changes
     sal_Bool    bOtherCntnt : 1; // set => Check special sections initially
     sal_Bool    bDialog     : 1; // Is pWin the Svx...Dialog?
     sal_Bool    bHyphen     : 1; // Split instead of spell checking
@@ -111,11 +110,6 @@ public:
                     GetXHyphenator()    { return xHyph; }
     inline sal_Bool             IsAllRight()        { return bAllRight; }
     inline Window*  GetWin() { return pWin; }
-    // can possibly be omitted in ONE_LINGU:
-    inline void     SetOldLang( const sal_uInt16 nNew ){ nOldLang = nNew; }
-    // can possibly be omitted in ONE_LINGU:
-    inline void     ChangeLanguage( const sal_uInt16 nNew ) // call SetLanguage if needed.
-        { if ( nNew != nOldLang ) { SetLanguage( nNew ); nOldLang = nNew; } }
     inline void     EnableAutoCorrect() { bAuto = sal_True; }
 
 protected:
