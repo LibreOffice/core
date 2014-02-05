@@ -622,17 +622,9 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::InsertItem(): ItemId already exists" );
 
-    Image aImage(rImage);
-    if (GetDPIScaleFactor() > 1)
-    {
-        BitmapEx aBitmap(aImage.GetBitmapEx());
-        aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
-        aImage = Image(aBitmap);
-    }
-
-    mpData->m_aItems.insert((nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
-            ImplToolItem(nItemId, aImage, nBits));
-
+    // Item anlegen und in die Liste einfuegen
+    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, nBits ) );
+    SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( sal_True );
@@ -652,17 +644,9 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::InsertItem(): ItemId already exists" );
 
-    Image aImage(rImage);
-    if (GetDPIScaleFactor() > 1)
-    {
-        BitmapEx aBitmap(aImage.GetBitmapEx());
-        aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
-        aImage = Image(aBitmap);
-    }
-
-    mpData->m_aItems.insert((nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
-            ImplToolItem(nItemId, aImage, ImplConvertMenuString(rText), nBits));
-
+    // Item anlegen und in die Liste einfuegen
+    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ) );
+    SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( sal_True );
@@ -1369,11 +1353,17 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     {
         Image aImage(rImage);
 
-        if (GetDPIScaleFactor() > 1)
+        if ( GetDPIScaleFactor() > 1)
         {
             BitmapEx aBitmap(aImage.GetBitmapEx());
-            aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
-            aImage = Image(aBitmap);
+
+            // Some code calls this twice, so add a sanity check
+            // FIXME find out what that code is & fix accordingly
+            if (aBitmap.GetSizePixel().Width() < 32)
+            {
+                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+                aImage = Image(aBitmap);
+            }
         }
 
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
@@ -1497,20 +1487,7 @@ Image ToolBox::GetItemImage( sal_uInt16 nItemId ) const
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
-    {
-        Image aImage(pItem->maImage);
-
-        if (GetDPIScaleFactor() > 1)
-        {
-            // we have scaled everything we have inserted, so scale it back to
-            // the original size
-            BitmapEx aBitmap(aImage.GetBitmapEx());
-            aBitmap.Scale(1.0/GetDPIScaleFactor(), 1.0/GetDPIScaleFactor(), BMP_SCALE_FAST);
-            aImage = Image(aBitmap);
-        }
-
-        return aImage;
-    }
+        return pItem->maImage;
     else
         return Image();
 }
