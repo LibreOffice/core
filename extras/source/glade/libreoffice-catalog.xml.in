@@ -138,10 +138,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Sidebar Font Name ListBox" name="svxlo-SvxSBFontNameBox"
-                        generic-name="Sidebar Font name ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Font Size ListBox" name="svtlo-FontSizeBox"
                         generic-name="Font Size ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">

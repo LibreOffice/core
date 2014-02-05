@@ -304,7 +304,6 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             nKern = (short)maEditKerning.Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-            mrTextPropertyPanel.SetSpacing(-nKern);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 2)
@@ -313,14 +312,12 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             nKern = (short)maEditKerning.Denormalize(nVal);
             SvxKerningItem aKernItem(-nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-            mrTextPropertyPanel.SetSpacing(-nKern);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 3)
         {
             SvxKerningItem aKernItem(0, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-            mrTextPropertyPanel.SetSpacing(0);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 4)
@@ -329,7 +326,6 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             nKern = (short)maEditKerning.Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-            mrTextPropertyPanel.SetSpacing(nKern);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 5)
@@ -338,7 +334,6 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             nKern = (short)maEditKerning.Denormalize(nVal);
             SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
             mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-            mrTextPropertyPanel.SetSpacing(nKern);
             mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
         }
         else if(iPos == 6)
@@ -350,7 +345,6 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
                 nKern = (short)maEditKerning.Denormalize(nVal);
                 SvxKerningItem aKernItem(nKern , SID_ATTR_CHAR_KERNING);
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-                mrTextPropertyPanel.SetSpacing(nKern);
                 mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
             }
             else
@@ -443,7 +437,6 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*, EMPTYARG)
     }
     SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
     mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
-    mrTextPropertyPanel.SetSpacing(nKern);
     return 0;
 }
 short  TextCharacterSpacingControl::GetLastCustomState()
