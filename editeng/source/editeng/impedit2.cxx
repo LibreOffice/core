@@ -3578,11 +3578,11 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
         // Syndicate and more ...
         aRange.Max() = aRange.Min();
         aRange.Max() += pPortion->GetFirstLineOffset();
-        if ( nFirstInvalid > 0 )   // Only if the first line is invalid
+        if (nFirstInvalid >= 0)   // Only if the first line is invalid
             aRange.Min() = aRange.Max();
 
         sal_Int32 nLastInvalid = pPortion->GetLines().Count()-1;
-        if(nFirstInvalid > 0)
+        if (nFirstInvalid >= 0)
         {
             for ( nLine = nFirstInvalid; nLine < pPortion->GetLines().Count(); nLine++ )
             {
