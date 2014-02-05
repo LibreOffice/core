@@ -138,6 +138,37 @@ namespace dmapper {
                 }
             }
             break;
+            case NS_ooxml::LN_CT_TcPrBase_cellIns:
+            case NS_ooxml::LN_CT_TcPrBase_cellDel:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    sal_Int32 nToken;
+                    switch( nSprmId )
+                    {
+                        case NS_ooxml::LN_CT_TcPrBase_cellIns:
+                            nToken = ooxml::OOXML_tableCellInsert;
+                            break;
+                        case NS_ooxml::LN_CT_TcPrBase_cellDel:
+                            nToken = ooxml::OOXML_tableCellDelete;
+                            break;
+                        default:
+                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
+                            break;
+                    };
+                    TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
+                    pProperties->resolve(*pTrackChangesHandler);
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
+
+                    // Add the 'track changes' properties to the 'table row' via UNO.
+                    // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
+                    uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
+                    cellProps(pPropMap);
+                }
+            }
+            break;
             case 0x3403: // sprmTFCantSplit
             case NS_sprm::LN_TCantSplit: // 0x3644
             {
