@@ -6,16 +6,45 @@ GNUMAKE=$2
 cd ${SRCDIR}
 which callcatcher > /dev/null 2>&1 || \
 	(echo "callcatcher not installed" && false)
-mkdir -p ${SRCDIR}/callcatcher/config_host
-cp config_host/* callcatcher/config_host
-cp config_host.mk* callcatcher
-cat config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > ${SRCDIR}/callcatcher/config_host.mk
-sed -i -e s,g++,"callcatcher g++",g ${SRCDIR}/callcatcher/config_host.mk
-sed -i -e s,gcc,"callcatcher gcc",g ${SRCDIR}/callcatcher/config_host.mk
-echo unexport ARCH_FLAGS >> ${SRCDIR}/callcatcher/config_host.mk
-echo unexport CFLAGS >> ${SRCDIR}/callcatcher/config_host.mk
-echo unexport CXXFLAGS >> ${SRCDIR}/callcatcher/config_host.mk
-${GNUMAKE} -f ${SRCDIR}/solenv/bin/callcatcher.Makefile findunusedcode
+
+mkdir -p ${SRCDIR}/callcatcher
+cd ${SRCDIR}/callcatcher
+
+echo "--without-doxygen
+      --enable-verbose
+      --enable-gio
+      --enable-packagekit
+      --disable-gnome-vfs
+      --enable-extension-integration
+      --enable-graphite
+      --enable-evolution2
+      --enable-lockdown
+      --enable-online-update
+      --enable-dbgutil
+      --enable-werror
+      --enable-gtk3
+      --enable-kde4
+      --enable-dbus
+      --enable-gstreamer
+      --disable-gstreamer-0-10"
+	 > autogen.input
+
+export CC="callcatcher ${CC:-gcc}"
+export CXX="callcatcher ${CXX:-g++}"
+export AR="callarchive ${AR:-ar}"
+
+/bin/env -i CC="$CC" CXX="$CXX" AR="$AR" /bin/bash -l ../autogen.sh
+
+export dbglevel=2
+
+make
+
+callanalyse \
+  instdir/program/* \
+  workdir/LinkTarget/*/* workdir/LinkTarget/*/*/* \
+  workdir/UnpackedTarball/cppunit/src/cppunit/.libs/libcppunit.so* \
+  > unusedcode.all
+
 grep ::.*\( unusedcode.all \
 		  | grep -v ^Atom \
 		  | grep -v ^atom:: \
@@ -46,4 +75,4 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^WPS \
 		  | grep -v WPX \
 		  | grep -v ^WSObject \
-		  > unusedcode.easy
+		  > ../unusedcode.easy
