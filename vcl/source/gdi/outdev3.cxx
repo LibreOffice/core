@@ -156,7 +156,7 @@ static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
     }
 }
 
-void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
+void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 {
     // the currently selected logical font is no longer needed
     if ( mpFontEntry )
@@ -207,6 +207,38 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
                         delete mpFontList;
                     if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
                         delete mpFontCache;
+                    mpFontList = 0;
+                    mpFontCache = 0;
+                }
+            }
+        }
+    }
+
+    // also update child windows if needed
+    if ( GetOutDevType() == OUTDEV_WINDOW )
+    {
+        Window* pChild = ((Window*)this)->mpWindowImpl->mpFirstChild;
+        while ( pChild )
+        {
+            pChild->ImplClearFontData( true );
+            pChild = pChild->mpWindowImpl->mpNext;
+        }
+    }
+}
+
+void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
+{
+//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+
+        if ( bNewFontLists )
+        {
+            // we need a graphics
+            if ( ImplGetGraphics() )
+            {
+                if( mpPDFWriter )
+                {
                     mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
                     mpFontCache = new ImplFontCache( sal_False );
                 }
@@ -227,15 +259,23 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
         Window* pChild = ((Window*)this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
-            pChild->ImplUpdateFontData( true );
+            pChild->ImplRefreshFontData( true );
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
 }
 
+void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
+{
+    ImplClearFontData( bNewFontLists );
+    ImplRefreshFontData( bNewFontLists );
+}
+
 void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
 {
     ImplSVData* pSVData = ImplGetSVData();
+
+    ImplUpdateFontDataForAllFrames( &OutputDevice::ImplClearFontData, bNewFontLists );
 
     // clear global font lists to have them updated
     pSVData->maGDIData.mpScreenFontCache->Invalidate();
@@ -255,16 +295,23 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
         }
     }
 
+    ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
+}
+
+void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHdl, const bool bNewFontLists )
+{
+    ImplSVData* const pSVData = ImplGetSVData();
+
     // update all windows
     Window* pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
     {
-        pFrame->ImplUpdateFontData( bNewFontLists );
+        ( pFrame->*pHdl )( bNewFontLists );
 
         Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
-            pSysWin->ImplUpdateFontData( bNewFontLists );
+            ( pSysWin->*pHdl )( bNewFontLists );
             pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
         }
 
@@ -275,7 +322,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     VirtualDevice* pVirDev = pSVData->maGDIData.mpFirstVirDev;
     while ( pVirDev )
     {
-        pVirDev->ImplUpdateFontData( bNewFontLists );
+        ( pVirDev->*pHdl )( bNewFontLists );
         pVirDev = pVirDev->mpNext;
     }
 
@@ -283,7 +330,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     Printer* pPrinter = pSVData->maGDIData.mpFirstPrinter;
     while ( pPrinter )
     {
-        pPrinter->ImplUpdateFontData( bNewFontLists );
+        ( pPrinter->*pHdl )( bNewFontLists );
         pPrinter = pPrinter->mpNext;
     }
 }
