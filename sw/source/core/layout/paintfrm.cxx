@@ -615,9 +615,6 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
 void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                                const SwTabFrm *pTab, const sal_uInt8 nSCol )
 {
-    //Rueckwaerts durch, weil Linien die zusammengefasst werden koennen i.d.R.
-    //im gleichen Kontext gepaintet werden.
-
     //Loop backwards because lines which can be combined, can usually be painted
     //in the same context.
 
@@ -1187,7 +1184,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 }
 
 //-------------------------------------------------------------------------
-//Diverse Functions die in diesem File so verwendet werden.
+// Various functions that are use in this file.
 
 // Note: function <SwAlignRect(..)> also used outside this file.
 // Correction: adjust rectangle on pixel level in order
@@ -1789,11 +1786,11 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         pOut->IntersectClipRegion( rOut.SVRect() );
     }
 
-    //Hier kein Link, wir wollen die Grafik synchron laden!
+    /// No Link here, we want to load the graphic synchronously!
     ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
     GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
-    /// Outsourcing drawing of background with a background color.
+    /// Outsource drawing of background with a background color
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
 
     /// Because for drawing a graphic left-top-corner and size coordinations are
@@ -1814,7 +1811,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                               const sal_uInt8 nGrfNum,
                               const sal_Bool bConsiderBackgroundTransparency )
     /// Add 6th parameter to indicate that method should
-    ///   consider background transparency, saved in the color of the brush item
+    /// consider background transparency, saved in the color of the brush item
 {
     SwViewShell &rSh = *pGlobalShell;
     bool bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
@@ -2443,7 +2440,7 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
     aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
     rDev.SetClipRegion(Region(Rectangle(rRect.Pos(), aSize)));
 
-    // The following stuff if necessary to have the new table borders fit
+    // The following stuff is necessary to have the new table borders fit
     // into a ::SwAlignRect adjusted world.
     const SwTwips nTwipXCorr =  bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
     const SwTwips nTwipYCorr = !bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
@@ -4419,7 +4416,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     if( !aRegion.empty() && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        // Is heigh contrast mode, the output device has already set the
+        // In high contrast mode, the output device has already set the
         // DRAWMODE_SETTINGSFILL flag. This causes the SetFillColor function
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
@@ -4735,7 +4732,7 @@ lcl_MakeBorderLine(SwRect const& rRect,
         aEnd.setY(fStartY);
     }
 
-    // WHen rendering to very small (virtual) devices, like when producing
+    // When rendering to very small (virtual) devices, like when producing
     // page thumbnails in a mobile device app, the line geometry can end up
     // bogus (negative width or height), so just ignore such border lines.
     // Otherwise we will run into assertions later in lcl_TryMergeBorderLine()
@@ -5245,7 +5242,7 @@ void SwFrm::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSeque
 void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
-    //fuer (Row,Body,Ftn,Root,Column,NoTxt) gibt's hier nix zu tun
+    // There's nothing (Row,Body,Ftn,Root,Column,NoTxt) need to do here
     if ( (GetType() & 0x90C5) )
         return;
 

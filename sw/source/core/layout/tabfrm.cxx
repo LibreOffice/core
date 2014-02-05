@@ -3077,9 +3077,6 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     {
         SwRect aOldFrm( Frm() );
 
-        //Der Upper wird nur soweit wie notwendig gegrowed. In nReal wird erstmal
-        //die bereits zur Verfuegung stehende Strecke bereitgestellt.
-
         //The upper only grows as far as needed. nReal provides the distance
         //which is already available.
         SwTwips nReal = (GetUpper()->Prt().*fnRect->fnGetHeight)();
@@ -4527,8 +4524,8 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         return 0L;
     }
 
-    //bInfo wird ggf. vom SwRowFrm::Format auf sal_True gesetzt, hier muss dann
-    //entsprechend reagiert werden
+    // bInfo may be set to sal_True by SwRowFrm::Format; we need to hangle this
+    // here accordingly
     const sal_Bool bShrinkAnyway = bInfo;
 
     //Only shrink as much as the content of the biggest cell allows.
@@ -4993,7 +4990,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             const SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
-            OSL_ENSURE( nWish, "Tabele without width?" );
+            OSL_ENSURE( nWish, "Table without width?" );
             OSL_ENSURE( nWidth <= nWish, "Width of cell larger than table." );
             OSL_ENSURE( nWidth > 0, "Box without width" );
 
@@ -5157,7 +5154,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if( ( bVertDir && ( nRemaining -= lcl_CalcTopAndBottomMargin( *this, *pAttrs ) ) < nPrtHeight ) ||
             (Lower()->Frm().*fnRect->fnGetTop)() != (this->*fnRect->fnGetPrtTop)() )
         {
-               long nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
+            long nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
             if ( nDiff >= 0 )
             {
                 long lTopOfst = 0;

@@ -424,7 +424,7 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     // OD 2004-03-22 #i26791#
     SetDrawObj( *(CreateNewRef( pContact )) );
 
-    //Den richtigen Layer setzen.
+    // Set the right Layer
     // OD 2004-01-19 #110582#
     SdrLayerID nHeavenId = pIDDMA->GetHeavenId();
     SdrLayerID nHellId = pIDDMA->GetHellId();
@@ -580,11 +580,10 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     }
 
     // The Follow needs his own content to be served
-    //Der Follow muss mit seinem eigenen Inhalt versorgt werden.
     const SwFmtCntnt &rCntnt = pFollow->GetFmt()->GetCntnt();
     OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( No content prepared." );
     sal_uLong nIndex = rCntnt.GetCntntIdx()->GetIndex();
-    // Lower() bedeutet SwColumnFrm, dieser beinhaltet wieder einen SwBodyFrm
+    // Lower() means SwColumnFrm: this one contains another SwBodyFrm
     ::_InsertCnt( pFollow->Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)pFollow->Lower())->Lower()
                                    : (SwLayoutFrm*)pFollow,
                   pFollow->GetFmt()->GetDoc(), ++nIndex );
@@ -610,7 +609,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     // We look for the Fly that's in the same Area.
     // Areas can for now only be Head/Footer or Flys.
 
-    if ( !pAnch ) // If an Anchor was passed along, that one couts (ctor!)
+    if ( !pAnch ) // If an Anchor was passed along, that one counts (ctor!)
         pAnch = AnchorFrm();
 
     SwLayoutFrm *pLay;
@@ -646,7 +645,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     }
     else if ( pFly )
     {
-        OSL_ENSURE( !aIter.Next(), "chain with more than one inkarnation" );
+        OSL_ENSURE( !aIter.Next(), "chain with more than one instance" );
     }
     return pFly;
 }
@@ -831,12 +830,12 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             const SwRect aTmp( GetObjRectWithSpaces() );
             NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_ATTR_CHG );
 
-            // Durch eine Umlaufaenderung von rahmengebundenen Rahmen kann eine
-            // vertikale Ausrichtung aktiviert/deaktiviert werden => MakeFlyPos
+            // By changing the flow of frame-bound Frames, a vertical alignment
+            // can be activated/deactivated => MakeFlyPos
             if( FLY_AT_FLY == GetFmt()->GetAnchor().GetAnchorId() )
                 rInvFlags |= 0x09;
 
-            //Ggf. die Kontur am Node loeschen.
+            // Delete contour in the Node if necessary
             if ( Lower() && Lower()->IsNoTxtFrm() &&
                  !GetFmt()->GetSurround().IsContour() )
             {
@@ -894,10 +893,10 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 aNew.Union( aOld );
                 NotifyBackground( FindPageFrm(), aNew, PREP_CLEAR );
 
-                //Dummer Fall. Bei der Zusweisung einer Vorlage k?nnen wir uns
-                //nicht auf das alte Spaltenattribut verlassen. Da diese
-                //wenigstens anzahlgemass fuer ChgColumns vorliegen muessen,
-                //bleibt uns nur einen temporaeres Attribut zu basteln.
+                // Special case:
+                // When assigning a template we cannot rely on the old column
+                // attribute. As there need to be at least enough for ChgColumns,
+                // we need to create a temporary attribute.
                 SwFmtCol aCol;
                 if ( Lower() && Lower()->IsColumnFrm() )
                 {
@@ -918,7 +917,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 const SwFmtFrmSize &rOld = nWhich == RES_FRM_SIZE ?
                                 *(SwFmtFrmSize*)pNew :
                                 ((SwFmtChg*)pOld)->pChangedFmt->GetFrmSize();
-                //#35091# Kann beim Laden von Vorlagen mal 0 sein
+                //#35091# Can be "times zero", when loading the template
                 if ( rOld.GetWidth() && rOld.GetHeight() )
                 {
 
@@ -945,7 +944,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
             if ( Lower() )
             {
-                //Ggf. die Kontur am Node loeschen.
+                // Delete contour in the Node if necessary
                 if( Lower()->IsNoTxtFrm() &&
                      !GetFmt()->GetSurround().IsContour() )
                 {
@@ -1029,8 +1028,8 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_URL:
-            //Das Interface arbeitet bei Textrahmen auf der Rahmengroesse,
-            //die Map muss sich aber auf die FrmSize beziehen
+            // The interface changes the frame size when interacting with text frames,
+            // the Map, however, needs to be relative to FrmSize().
             if ( (!Lower() || !Lower()->IsNoTxtFrm()) &&
                  ((SwFmtURL*)pNew)->GetMap() && ((SwFmtURL*)pOld)->GetMap() )
             {
@@ -1048,7 +1047,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pFmt->UnlockModify();
                 }
             }
-            /* Keine Invalidierung notwendig */
+            // No invalidation necessary
             break;
 
         case RES_CHAIN:
@@ -1109,18 +1108,17 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
 /*************************************************************************
 |*
-|*                SwFlyFrm::GetInfo()
+|*    SwFlyFrm::GetInfo()
 |*
-|*    Beschreibung      erfragt Informationen
+|*   Gets information from the Modify
 |*
 *************************************************************************/
 
-    // erfrage vom Modify Informationen
 bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-        return false;   // es gibt einen FlyFrm also wird er benutzt
-    return true;        // weiter suchen
+        return false;   // There's a FlyFrm, so use it
+    return true;        // Continue searching
 }
 
 /*************************************************************************
@@ -1137,8 +1135,8 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
     SwFlyFrm *pFrm;
     if ( GetAnchorFrm() && 0 != (pFrm = AnchorFrm()->FindFlyFrm()) )
     {
-        //Gaanz dumm: Wenn der Fly innerhalb eines Fly gebunden ist, der
-        //Spalten enthaehlt, sollte das Format von diesem ausgehen.
+        // Very bad case: If the Fly is bound within another Fly which
+        // contains columns, the Format should be from that one.
         if ( !pFrm->IsLocked() && !pFrm->IsColLocked() &&
              pFrm->Lower() && pFrm->Lower()->IsColumnFrm() )
             pFrm->InvalidateSize();
@@ -1163,8 +1161,9 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 |*
 |*  SwFlyFrm::ChgRelPos()
 |*
-|*  Beschreibung        Aenderung der relativen Position, die Position wird
-|*      damit automatisch Fix, das Attribut wird entprechend angepasst.
+|*  Change the relative position
+|*  The position will be Fix automatically and the attribute is changed
+|*  accordingly.
 |*
 |*************************************************************************/
 
@@ -1229,8 +1228,8 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         aVert.SetPos( nTmpY );
         aSet.Put( aVert );
 
-        //Fuer Flys im Cnt ist die horizontale Ausrichtung uninteressant,
-        //den sie ist stets 0.
+        // For Flys in the Cnt, the horizontal orientation is of no interest,
+        // as it's always 0
         if ( !IsFlyInCntFrm() )
         {
             const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
@@ -1285,14 +1284,14 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 |*
 |*  SwFlyFrm::Format()
 |*
-|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
-|*                      Die Fixsize wird hier nicht eingestellt.
+|*  "Formats" the Frame; Frm and PrtArea.
+|*  The FixSize is not inserted here.
 |*
 |*************************************************************************/
 
 void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    OSL_ENSURE( pAttrs, "FlyFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "FlyFrm::Format, pAttrs is 0." );
 
     ColLock();
 
@@ -1300,14 +1299,14 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
     {
         if ( Frm().Top() == FAR_AWAY && Frm().Left() == FAR_AWAY )
         {
-            //Sicherheitsschaltung wegnehmen (siehe SwFrm::CTor)
+            // Remove safety switch (see SwFrm::CTor)
             Frm().Pos().setX(0);
             Frm().Pos().setY(0);
             // #i68520#
             InvalidateObjRectWithSpaces();
         }
 
-        //Breite der Spalten pruefen und ggf. einstellen.
+        // Check column width and set it if needed
         if ( Lower() && Lower()->IsColumnFrm() )
             AdjustColumns( 0, sal_False );
 
@@ -1318,8 +1317,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
               Size aRelSize( CalcRel( rFrmSz ) );
 
-        OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
-        OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
+        OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "FrameAttr height is 0." );
+        OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "FrameAttr width is 0." );
 
         SWRECTFN( this )
         if( !HasFixSize() )
@@ -1344,7 +1343,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                     {
                         nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
                         if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
-                            // Dieser TxtFrm waere gern ein bisschen groesser
+                            // This TxtFrm would like to be a bit larger
                             nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
                                     - (pFrm->Prt().*fnRect->fnGetHeight)();
                         else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
@@ -1389,12 +1388,12 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
                 nRemaining = nMinHeight - nUL;
-            //Weil das Grow/Shrink der Flys die Groessen nicht direkt
-            //einstellt, sondern indirekt per Invalidate ein Format
-            //ausloesst, muessen die Groessen hier direkt eingestellt
-            //werden. Benachrichtung laeuft bereits mit.
-            //Weil bereits haeufiger 0en per Attribut hereinkamen wehre
-            //ich mich ab sofort dagegen.
+            // Because the Grow/Shrink of the Flys does not directly
+            // set the size - only indirectly by triggering a Format()
+            // via Invalidate() - the sizes need to be set here.
+            // Notification is running along already.
+            // As we already got a lot of zeros per attribute, we block them
+            // from now on.
             if ( nRemaining < MINFLY )
                 nRemaining = MINFLY;
             (Prt().*fnRect->fnSetHeight)( nRemaining );
@@ -1409,8 +1408,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         }
         else
         {
-            mbValidSize = sal_True;  //Fixe Frms formatieren sich nicht.
-                                //Flys stellen ihre Groesse anhand des Attr ein.
+            mbValidSize = sal_True;  // Fixed Frms do not Format itself
+            // Flys set their size using the attr
             SwTwips nNewSize = bVert ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
             if( nNewSize < MINFLY )
@@ -1631,13 +1630,13 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             if ( pAgainObj2 == pAnchoredObj )
                             {
                                 OSL_FAIL( "::CalcCntnt(..) - loop detected, perform attribute changes to avoid the loop" );
-                                //Oszillation unterbinden.
+                                // Prevent oscillation
                                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                                 SwFmtSurround aAttr( rFmt.GetSurround() );
                                 if( SURROUND_THROUGHT != aAttr.GetSurround() )
                                 {
-                                    // Bei autopositionierten hilft manchmal nur
-                                    // noch, auf Durchlauf zu schalten
+                                    // When on auto position, we can only set it to
+                                    // flow through
                                     if ((rFmt.GetAnchor().GetAnchorId() ==
                                             FLY_AT_CHAR) &&
                                         (SURROUND_PARALLEL ==
@@ -1724,12 +1723,12 @@ void CalcCntnt( SwLayoutFrm *pLay,
             pFrm = bPrevInvalid ? pTmpPrev : pFrm->FindNext();
             if( !bPrevInvalid && pFrm && pFrm->IsSctFrm() && pSect )
             {
-                // Es koennen hier leere SectionFrms herumspuken
+                // Empty SectionFrms could be present here
                 while( pFrm && pFrm->IsSctFrm() && !((SwSectionFrm*)pFrm)->GetSection() )
                     pFrm = pFrm->FindNext();
-                // Wenn FindNext den Follow des urspruenglichen Bereichs liefert,
-                // wollen wir mit dessen Inhalt weitermachen, solange dieser
-                // zurueckfliesst.
+
+                // If FindNext returns the Follow of the original Area, we want to
+                // continue with this content as long as it flows back.
                 if( pFrm && pFrm->IsSctFrm() && ( pFrm == pSect->GetFollow() ||
                     ((SwSectionFrm*)pFrm)->IsAnFollow( pSect ) ) )
                 {
@@ -1738,9 +1737,10 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         pFrm->_InvalidatePos();
                 }
             }
-            // Im pLay bleiben, Ausnahme, bei SectionFrms mit Follow wird der erste
-            // CntntFrm des Follows anformatiert, damit er die Chance erhaelt, in
-            // pLay zu landen. Solange diese Frames in pLay landen, geht's weiter.
+          // Stay in the pLay
+          // Except for SectionFrms with Follow: the first CntntFrm of the Follow
+          // will be formatted, so that it get's a chance to load in the pLay.
+          // As long as these Frames are loading in pLay, we continue
         } while ( pFrm &&
                   ( pLay->IsAnLower( pFrm ) ||
                     ( pSect &&
@@ -1850,8 +1850,8 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
             return 0L;
 
         if ( Lower()->IsColumnFrm() )
-        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
-            //das Wachstum (wg. des Ausgleichs).
+        {   // If it's a Column Frame, the Format takes control of the
+            // resizing (due to the adjustment).
             if ( !bTst )
             {
                 // #i28701# - unlock position of Writer fly frame
@@ -1934,8 +1934,8 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
             return 0L;
 
         if ( Lower()->IsColumnFrm() )
-        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
-            //das Wachstum (wg. des Ausgleichs).
+        {   // If it's a Column Frame, the Format takes control of the
+            // resizing (due to the adjustment).
             if ( !bTst )
             {
                 SwRect aOld( GetObjRectWithSpaces() );
@@ -2081,12 +2081,9 @@ sal_Bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::Cut()
-|*
-|*************************************************************************/
-
+/**
+ * TODO: Implement SwFlyFrm::Cut()
+ */
 void SwFlyFrm::Cut()
 {
 }
@@ -2104,19 +2101,18 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
     mpDrawObjs->Insert( *pNew );
     pNew->ChgAnchorFrm( this );
 
-    //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
-    //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
+    // Register at the page
+    // If there's none present, register via SwPageFrm::PreparePage
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
     {
         if ( pNew->IsFlyAtCntFrm() && pNew->Frm().Top() == FAR_AWAY )
         {
-            //Versuch die Seitenformatierung von neuen Dokumenten etwas
-            //guenstiger zu gestalten.
-            //Wir haengen die Flys erstenmal nach hinten damit sie bei heftigem
-            //Fluss der Anker nicht unoetig oft formatiert werden.
-            //Damit man noch brauchbar an das Ende des Dokumentes springen
-            //kann werden die Flys nicht ganz an das Ende gehaengt.
+            // Try to make the page formatting of new documents a bit handier:
+            // In the beginning we add the Flys to the back, so that the Anchors
+            // do not have to be reformatted unnecessarily often.
+            // However, we do not add them all the way at the end, so that we
+            // can still jump to the document's end in a meaningful way.
             SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
             if( !SwLayHelper::CheckPageFlyCache( pPage, pNew ) )
             {
@@ -2127,7 +2123,7 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
                     {
                         pTmp = (SwPageFrm*)pTmp->GetPrev();
                         if( pTmp->GetPhyPageNum() <= pPage->GetPhyPageNum() )
-                            break; // damit wir nicht vor unserem Anker landen
+                            break; // So that we don't end up before the Anchor
                     }
                     if ( pTmp->IsEmptyPage() )
                         pTmp = (SwPageFrm*)pTmp->GetPrev();
@@ -2143,8 +2139,8 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
 
 void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 {
-    //Bei der Seite Abmelden - kann schon passiert sein weil die Seite
-    //bereits destruiert wurde.
+    // Deregister from the page
+    // Could already have happened, if the page was already destructed
     SwPageFrm *pPage = pToRemove->FindPageFrm();
     if ( pPage && pPage->GetSortedObjs() )
     {
@@ -2630,8 +2626,8 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
                 pNd->CreateContour();
             }
             pNd->GetContour( rContour );
-            //Der Node haelt das Polygon passend zur Originalgroesse der Grafik
-            //hier muss die Skalierung einkalkuliert werden.
+            // The Node holds the Polygon matching the original size of the graphic
+            // We need to include the scaling here
             SwRect aClip;
             SwRect aOrig;
             Lower()->Calc();
