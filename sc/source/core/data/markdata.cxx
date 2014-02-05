@@ -551,7 +551,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     return nRangeCnt;
 }
 
-std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans( SCTAB nTab ) const
+std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans() const
 {
     typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
 
@@ -562,16 +562,13 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans( SCTAB nTab ) const
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
         const ScRange& r = *aRanges[i];
-        if (r.aStart.Tab() != nTab)
-            continue;
-
         itPos = aSpans.insert(itPos, r.aStart.Row(), r.aEnd.Row()+1, true).first;
     }
 
     return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
 }
 
-std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans( SCTAB nTab ) const
+std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
 {
     typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
 
@@ -582,9 +579,6 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans( SCTAB nTab ) const
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
         const ScRange& r = *aRanges[i];
-        if (r.aStart.Tab() != nTab)
-            continue;
-
         itPos = aSpans.insert(itPos, r.aStart.Col(), r.aEnd.Col()+1, true).first;
     }
 

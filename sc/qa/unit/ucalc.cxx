@@ -614,45 +614,45 @@ void Test::testMarkData()
     ScMarkData aMarkData;
 
     // Empty mark. Nothing is selected.
-    std::vector<sc::ColRowSpan> aSpans = aMarkData.GetMarkedRowSpans(0);
+    std::vector<sc::ColRowSpan> aSpans = aMarkData.GetMarkedRowSpans();
     CPPUNIT_ASSERT_MESSAGE("Span should be empty.", aSpans.empty());
-    aSpans = aMarkData.GetMarkedColSpans(0);
+    aSpans = aMarkData.GetMarkedColSpans();
     CPPUNIT_ASSERT_MESSAGE("Span should be empty.", aSpans.empty());
 
     // Select B3:F7.
     aMarkData.SetMarkArea(ScRange(1,2,0,5,6,0));
-    aSpans = aMarkData.GetMarkedRowSpans(0);
+    aSpans = aMarkData.GetMarkedRowSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be one selected row span.", aSpans.size() == 1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(2), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(6), aSpans[0].mnEnd);
 
-    aSpans = aMarkData.GetMarkedColSpans(0);
+    aSpans = aMarkData.GetMarkedColSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be one selected column span.", aSpans.size() == 1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(1), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(5), aSpans[0].mnEnd);
 
     // Select A11:B13.
     aMarkData.SetMultiMarkArea(ScRange(0,10,0,1,12,0));
-    aSpans = aMarkData.GetMarkedRowSpans(0);
+    aSpans = aMarkData.GetMarkedRowSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be 2 selected row spans.", aSpans.size() == 2);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(2), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(6), aSpans[0].mnEnd);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(10), aSpans[1].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(12), aSpans[1].mnEnd);
 
-    aSpans = aMarkData.GetMarkedColSpans(0);
+    aSpans = aMarkData.GetMarkedColSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be one selected column span.", aSpans.size() == 1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(0), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(5), aSpans[0].mnEnd);
 
     // Select C8:C10.
     aMarkData.SetMultiMarkArea(ScRange(2,7,0,2,9,0));
-    aSpans = aMarkData.GetMarkedRowSpans(0);
+    aSpans = aMarkData.GetMarkedRowSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be one selected row span.", aSpans.size() == 1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(2), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(12), aSpans[0].mnEnd);
 
-    aSpans = aMarkData.GetMarkedColSpans(0);
+    aSpans = aMarkData.GetMarkedColSpans();
     CPPUNIT_ASSERT_MESSAGE("There should be one selected column span.", aSpans.size() == 1);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(0), aSpans[0].mnStart);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(5), aSpans[0].mnEnd);

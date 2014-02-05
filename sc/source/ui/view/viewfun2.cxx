@@ -109,8 +109,7 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         pMarkData = &GetViewData()->GetMarkData();
 
     ScDocument* pDoc = pDocSh->GetDocument();
-    std::vector<sc::ColRowSpan> aMarkedRows =
-        pMarkData->GetMarkedRowSpans(GetViewData()->GetTabNo());
+    std::vector<sc::ColRowSpan> aMarkedRows = pMarkData->GetMarkedRowSpans();
 
     if (aMarkedRows.empty())
     {

@@ -110,8 +110,8 @@ public:
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
     SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
 
-    std::vector<sc::ColRowSpan> GetMarkedRowSpans( SCTAB nTab ) const;
-    std::vector<sc::ColRowSpan> GetMarkedColSpans( SCTAB nTab ) const;
+    std::vector<sc::ColRowSpan> GetMarkedRowSpans() const;
+    std::vector<sc::ColRowSpan> GetMarkedColSpans() const;
 
     bool        IsColumnMarked( SCCOL nCol ) const;
     bool        IsRowMarked( SCROW nRow ) const;
