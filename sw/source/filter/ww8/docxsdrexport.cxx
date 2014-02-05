@@ -571,7 +571,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
     {
         // Distance is measured diagonally from corner
-        double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
+        double nShadowDist = sqrt((double)aShadowItem.GetWidth()*aShadowItem.GetWidth()*2.0);
         OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
         OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
         OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());

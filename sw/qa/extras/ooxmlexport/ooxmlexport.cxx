@@ -3182,6 +3182,14 @@ DECLARE_OOXMLEXPORT_TEST(testCaption4, "TableWithAboveCaptions.docx")
     CPPUNIT_ASSERT(contents.match(" SEQ Table \\* ARABIC"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOuterShdw,"testOuterShdw.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "57811035");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
