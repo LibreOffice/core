@@ -18,7 +18,7 @@
  */
 
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -34,7 +34,6 @@ XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter(
 XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
 {
 }
-
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument( void )
     throw( SAXException, RuntimeException )
@@ -153,10 +152,10 @@ OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
     return aStr;
 }
 
-sal_Bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& )
+sal_Bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL XMLEmbeddedObjectExportFilter::getSupportedServiceNames(  )

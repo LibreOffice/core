@@ -38,6 +38,7 @@
 #include "PropertyActionsOOo.hxx"
 #include "TransformerActions.hxx"
 #include "OOo2Oasis.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -2019,10 +2020,10 @@ OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
     return m_aImplName;
 }
 
-sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& )
+sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
