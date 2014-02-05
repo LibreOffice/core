@@ -500,7 +500,7 @@ bool OutputDevice::ImplHasMirroredGraphics() const
 {
    // HOTFIX for #i55719#
    if( meOutDevType == OUTDEV_PRINTER )
-       return sal_False;
+       return false;
 
    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
