@@ -109,12 +109,13 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         pMarkData = &GetViewData()->GetMarkData();
 
     ScDocument* pDoc = pDocSh->GetDocument();
-    std::vector<sc::RowSpan> aMarkedRows;
-    pMarkData->GetMarkedRowSpans(GetViewData()->GetTabNo(), aMarkedRows);
+    std::vector<sc::ColRowSpan> aMarkedRows =
+        pMarkData->GetMarkedRowSpans(GetViewData()->GetTabNo());
+
     if (aMarkedRows.empty())
     {
         SCROW nCurRow = GetViewData()->GetCurY();
-        aMarkedRows.push_back(sc::RowSpan(nCurRow, nCurRow));
+        aMarkedRows.push_back(sc::ColRowSpan(nCurRow, nCurRow));
     }
 
     double nPPTX = GetViewData()->GetPPTX();
@@ -138,11 +139,11 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         SCTAB nTab = *itr;
         bool bChanged = false;
         SCROW nPaintY = 0;
-        std::vector<sc::RowSpan>::const_iterator itRows = aMarkedRows.begin(), itRowsEnd = aMarkedRows.end();
+        std::vector<sc::ColRowSpan>::const_iterator itRows = aMarkedRows.begin(), itRowsEnd = aMarkedRows.end();
         for (; itRows != itRowsEnd; ++itRows)
         {
-            SCROW nStartNo = itRows->mnRow1;
-            SCROW nEndNo = itRows->mnRow2;
+            SCROW nStartNo = itRows->mnStart;
+            SCROW nEndNo = itRows->mnEnd;
             if (pDoc->SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab))
             {
                 if (!bChanged)

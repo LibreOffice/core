@@ -29,6 +29,7 @@
 namespace sc {
 
 struct RowSpan;
+struct ColRowSpan;
 
 }
 
@@ -109,7 +110,7 @@ public:
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
     SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
 
-    void GetMarkedRowSpans( SCTAB nTab, std::vector<sc::RowSpan>& rSpans );
+    std::vector<sc::ColRowSpan> GetMarkedRowSpans( SCTAB nTab ) const;
 
     bool        IsColumnMarked( SCCOL nCol ) const;
     bool        IsRowMarked( SCROW nRow ) const;

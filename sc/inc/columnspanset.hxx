@@ -33,6 +33,14 @@ struct RowSpan
     RowSpan(SCROW nRow1, SCROW nRow2);
 };
 
+struct ColRowSpan
+{
+    SCCOLROW mnStart;
+    SCCOLROW mnEnd;
+
+    ColRowSpan(SCCOLROW nStart, SCCOLROW nEnd);
+};
+
 /**
  * Structure that stores segments of boolean flags per column, and perform
  * custom action on those segments.

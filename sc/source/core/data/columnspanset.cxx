@@ -15,12 +15,15 @@
 #include "mtvfunctions.hxx"
 #include "markdata.hxx"
 #include "rangelst.hxx"
+#include <fstalgorithm.hxx>
 
 #include <algorithm>
 
 namespace sc {
 
 RowSpan::RowSpan(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
+
+ColRowSpan::ColRowSpan(SCCOLROW nStart, SCCOLROW nEnd) : mnStart(nStart), mnEnd(nEnd) {}
 
 ColumnSpanSet::ColumnType::ColumnType(SCROW nStart, SCROW nEnd, bool bInit) :
     maSpans(nStart, nEnd+1, bInit), miPos(maSpans.begin()) {}
@@ -262,22 +265,7 @@ void SingleColumnSpanSet::getRows(std::vector<SCROW> &rRows) const
 
 void SingleColumnSpanSet::getSpans(SpansType& rSpans) const
 {
-    SpansType aSpans;
-    ColumnSpansType::const_iterator it = maSpans.begin(), itEnd = maSpans.end();
-    SCROW nLastRow = it->first;
-    bool bLastVal = it->second;
-    for (++it; it != itEnd; ++it)
-    {
-        SCROW nThisRow = it->first;
-        bool bThisVal = it->second;
-
-        if (bLastVal)
-            aSpans.push_back(RowSpan(nLastRow, nThisRow-1));
-
-        nLastRow = nThisRow;
-        bLastVal = bThisVal;
-    }
-
+    SpansType aSpans = toSpanArray<SCROW,RowSpan>(maSpans);
     rSpans.swap(aSpans);
 }
 

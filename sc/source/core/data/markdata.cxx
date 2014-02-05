@@ -21,6 +21,9 @@
 #include "markarr.hxx"
 #include "rangelst.hxx"
 #include <columnspanset.hxx>
+#include <fstalgorithm.hxx>
+
+#include <mdds/flat_segment_tree.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -548,24 +551,24 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     return nRangeCnt;
 }
 
-void ScMarkData::GetMarkedRowSpans( SCTAB nTab, std::vector<sc::RowSpan>& rSpans )
+std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans( SCTAB nTab ) const
 {
-    std::vector<sc::RowSpan> aSpans;
+    typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
 
-    if (bMarked)
-        MarkToMulti();
+    ScRangeList aRanges = GetMarkedRanges();
+    SpansType aSpans(0, MAXROW+1, false);
+    SpansType::const_iterator itPos = aSpans.begin();
 
-    if (!bMultiMarked)
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
-        rSpans.swap(aSpans);
-        return;
+        const ScRange& r = *aRanges[i];
+        if (r.aStart.Tab() != nTab)
+            continue;
+
+        itPos = aSpans.insert(itPos, r.aStart.Row(), r.aEnd.Row()+1, true).first;
     }
 
-    sc::SingleColumnSpanSet aMarkedRows;
-    for (SCCOL nCol = aMultiRange.aStart.Col(); nCol <= aMultiRange.aEnd.Col(); ++nCol)
-        aMarkedRows.scan(*this, nTab, nCol);
-
-    aMarkedRows.getSpans(rSpans);
+    return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
 }
 
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
