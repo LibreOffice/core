@@ -1292,7 +1292,7 @@ void makeRedline( SwPaM& rPaM,
         throw lang::IllegalArgumentException();
 }
 
-void makeTableRedline( SwTableLine& rTableLine,
+void makeTableRowRedline( SwTableLine& rTableLine,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
