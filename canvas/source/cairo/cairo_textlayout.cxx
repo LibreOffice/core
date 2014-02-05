@@ -333,7 +333,7 @@ namespace cairocanvas
            before we were depending on unmodified current point which I believed was preserved by save/restore */
         cairo_move_to( pCairo, 0, 0 );
         useFont( pCairo );
-        cairo_show_text( pCairo, aUTF8String );
+        cairo_show_text( pCairo, aUTF8String.getStr() );
         cairo_restore( pCairo );
 
         return true;
