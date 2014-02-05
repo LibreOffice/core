@@ -9,9 +9,7 @@
 
 $(eval $(call gb_Package_Package,chart2_opengl_shader,$(SRCDIR)/chart2/opengl))
 
-$(eval $(call gb_Package_set_outdir,chart2_opengl_shader,$(INSTROOT)/$(LIBO_BIN_FOLDER)))
-
-$(eval $(call gb_Package_add_files,chart2_opengl_shader,opengl,\
+$(eval $(call gb_Package_add_files,chart2_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
 	backgroundFragmentShader.glsl \
 	backgroundVertexShader.glsl \
 	commonFragmentShader.glsl \
