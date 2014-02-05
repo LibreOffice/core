@@ -3156,6 +3156,14 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     {
         m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableRowDelete );
     }
+    else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellIns)
+    {
+        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableCellInsert );
+    }
+    else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellDel)
+    {
+        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableCellDelete );
+    }
 
     resolveSprmProps(*this, rSprm );
     // now the properties author, date and id should be available
@@ -3168,6 +3176,8 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
         case ooxml::OOXML_ParagraphFormat :
         case ooxml::OOXML_tableRowInsert:
         case ooxml::OOXML_tableRowDelete:
+        case ooxml::OOXML_tableCellInsert:
+        case ooxml::OOXML_tableCellDelete:
             break;
         default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
     }
