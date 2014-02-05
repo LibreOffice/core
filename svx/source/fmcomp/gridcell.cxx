@@ -2145,8 +2145,6 @@ namespace
                 if ( !_rxField->wasNull() )
                 {
                     _rField.SetValue( fValue );
-                    BigInt aValue = _rField.GetCorrectedValue();
-                    sValue = aValue.GetString();
                     sValue = _rField.GetText();
                 }
             }
