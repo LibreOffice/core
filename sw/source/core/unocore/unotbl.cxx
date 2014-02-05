@@ -1366,8 +1366,8 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                 sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
                 if( sRedlineTypeValue >>= sRedlineType )
                 {
-                    // Create a 'Table Redline' object
-                    SwUnoCursorHelper::makeTableRedline( *pLn, sRedlineType, tableRowProperties);
+                    // Create a 'Table Row Redline' object
+                    SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
                 }
                 else
                 {
