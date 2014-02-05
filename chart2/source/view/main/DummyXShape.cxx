@@ -347,8 +347,10 @@ DummyPieSegment2D::DummyPieSegment2D(double fUnitCircleStartAngleDegree, double 
     maUnitCircleToScene(rUnitCircleToScene)
 {
 }
+
 void DummyPieSegment2D::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyPieSegment2D");
     DummyChart* pChart = getRootShape();
 
     while(mfUnitCircleWidthAngleDegree>360)
@@ -425,7 +427,6 @@ void DummyArea2D::render()
         pChart->m_GLRender.SetColor(nColor);
     }
 
-    //render the shape
     pChart->m_GLRender.RenderArea2DShape();
 }
 
@@ -470,8 +471,6 @@ void DummyCircle::render()
         SAL_WARN("chart2.opengl", "missing color");
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);
-    SAL_WARN("chart2.opengl", "Bubble Position: " << maPosition.X << "," << maPosition.Y);
-    SAL_WARN("chart2.opengl", "Bubble Size: " << maSize.Width << "," << maSize.Height);
     pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
 }
 
@@ -618,7 +617,6 @@ void DummyRectangle::render()
     std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("Invisible");
     if(itr != maProperties.end())
     {
-        SAL_WARN("chart2.opengl", "invisble");
         return;
     }
 
