@@ -34,6 +34,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
+#include <svx/srchdlg.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
@@ -1552,6 +1553,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord )
 sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         sal_Bool bAddUndo, sal_Bool bIsApi )
 {
+    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -1657,37 +1659,14 @@ sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 nCommand == SVX_SEARCHCMD_REPLACE) )
         {
             bFirst = false;
-            sal_uInt16 nRetVal;
             GetFrameWin()->LeaveWait();
-            if ( bIsApi )
-                nRetVal = RET_NO;
-            else
+            if (!bIsApi)
             {
-                //  search dialog as parent (if available)
-                Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
-                sal_uInt16 nStrId;
-                if ( pSearchItem->GetBackward() )
-                {
-                    if ( nStartTab == nEndTab )
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_1;
-                    else
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_4;
-                }
+                if ( nStartTab == nEndTab )
+                    SvxSearchDialogWrapper::SetSearchLabel(SL_EndSheet);
                 else
-                {
-                    if ( nStartTab == nEndTab )
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_2;
-                    else
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_5;
-                }
-                MessBox aBox( pParent, WinBits(WB_YES_NO | WB_DEF_YES),
-                                ScGlobal::GetRscString( STR_MSSG_SEARCHANDREPLACE_3 ),
-                                ScGlobal::GetRscString( nStrId ) );
-                nRetVal = aBox.Execute();
-            }
+                    SvxSearchDialogWrapper::SetSearchLabel(SL_End);
 
-            if ( nRetVal == RET_YES )
-            {
                 ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 if (pSearchItem->GetBackward())
                     nTab = nEndTab;
@@ -1708,13 +1687,7 @@ sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
-            {
-                //  search dialog as parent if available
-                Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
-                // "nothing found"
-                InfoBox aBox( pParent, ScGlobal::GetRscString( STR_MSSG_SEARCHANDREPLACE_0 ) );
-                aBox.Execute();
-            }
+                SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
 
             break;                      // break 'while (TRUE)'
         }

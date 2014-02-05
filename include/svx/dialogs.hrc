@@ -242,6 +242,7 @@
 #define RID_SVXSTR_LANGUAGE_ALL             (RID_SVX_START +  15)
 
 // Strings from the search dialog
+#define RID_SVXSTR_SEARCH_END_SHEET         (RID_SVX_START +  71)
 #define RID_SVXSTR_SEARCH_END               (RID_SVX_START +  79)
 #define RID_SVXSTR_SEARCH_STYLES            (RID_SVX_START +  80)
 #define RID_SVXSTR_SEARCH                   (RID_SVX_START +  81)

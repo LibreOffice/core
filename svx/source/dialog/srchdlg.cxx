@@ -2270,6 +2270,8 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
     OUString sStr;
     if (rSL == SL_End)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END);
+    else if (rSL == SL_EndSheet)
+        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END_SHEET);
     else if (rSL == SL_NotFound)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_NOT_FOUND);
 

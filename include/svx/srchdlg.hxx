@@ -82,8 +82,9 @@ public:
 enum SearchLabel
 {
     SL_Empty,
-    SL_NotFound,
-    SL_End
+    SL_End,
+    SL_EndSheet,
+    SL_NotFound
 };
 
 class SvxSearchDialog;

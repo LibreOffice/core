@@ -437,10 +437,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Ranges containing merged cells can only be sorted without formats." ;
     };
-    String STR_MSSG_SEARCHANDREPLACE_0
-    {
-        Text [ en-US ] = "Search key not found." ;
-    };
     String STR_MSSG_SOLVE_0
     {
         Text [ en-US ] = "Goal Seek succeeded. Result: " ;
@@ -1188,26 +1184,6 @@ Resource RID_GLOBSTR
     String STR_ERR_AUTOFILTER
     {
         Text [ en-US ] = "AutoFilter not possible" ;
-    };
-    String STR_MSSG_SEARCHANDREPLACE_1
-    {
-        Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the sheet. Do you want to continue at the end?" ;
-    };
-    String STR_MSSG_SEARCHANDREPLACE_2
-    {
-        Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the sheet. Do you want to continue at the beginning?" ;
-    };
-    String STR_MSSG_SEARCHANDREPLACE_3
-    {
-        Text [ en-US ] = "Find & Replace" ;
-    };
-    String STR_MSSG_SEARCHANDREPLACE_4
-    {
-        Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
-    };
-    String STR_MSSG_SEARCHANDREPLACE_5
-    {
-        Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
     };
     String STR_CREATENAME_REPLACE
     {
