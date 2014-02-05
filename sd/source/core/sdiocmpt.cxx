@@ -41,7 +41,7 @@ old_SdrDownCompat::~old_SdrDownCompat()
 
 void old_SdrDownCompat::Read()
 {
-    rStream >> nSubRecSiz;
+    rStream.ReadUInt32( nSubRecSiz );
 }
 
 void old_SdrDownCompat::Write()
@@ -113,7 +113,7 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode, sal_uInt16 nVe
     {
         DBG_ASSERT(nVer == SDIOCOMPAT_VERSIONDONTKNOW,
                    "referring to the version while reading is silly!");
-        rNewStream >> nVersion;
+        rNewStream.ReadUInt16( nVersion );
     }
 }
 

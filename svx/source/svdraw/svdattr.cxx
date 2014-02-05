@@ -650,8 +650,8 @@ SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
     SfxPoolItem(nId)
 {
     sal_Int32 nMul,nDiv;
-    rIn>>nMul;
-    rIn>>nDiv;
+    rIn.ReadInt32( nMul );
+    rIn.ReadInt32( nDiv );
     nValue=Fraction(nMul,nDiv);
 }
 
@@ -1396,7 +1396,7 @@ SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( SvStream & rStream, sal_
     if ( nVersion )
     {
         sal_Bool bValue;
-        rStream >> bValue;
+        rStream.ReadUChar( bValue );
         SetValue( bValue );
     }
 }
@@ -1462,10 +1462,10 @@ SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_u
     {
         SdrCustomShapeAdjustmentValue aVal;
         sal_uInt32 i, nCount;
-        rIn >> nCount;
+        rIn.ReadUInt32( nCount );
         for ( i = 0; i < nCount; i++ )
         {
-            rIn >> aVal.nValue;
+            rIn.ReadUInt32( aVal.nValue );
             SetValue( i, aVal );
         }
     }

@@ -296,8 +296,8 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
         {
             sal_Int16 iTmp;
 
-            rIn >> iTmp; // former XBitmapStyle
-            rIn >> iTmp; // former XBitmapType
+            rIn.ReadInt16( iTmp ); // former XBitmapStyle
+            rIn.ReadInt16( iTmp ); // former XBitmapType
 
             if(XBITMAP_IMPORT == iTmp)
             {
@@ -312,7 +312,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
 
                 for(sal_uInt16 i(0); i < 64; i++)
                 {
-                    rIn >> aArray[i];
+                    rIn.ReadUInt16( aArray[i] );
                 }
 
                 Color aColorPix;

@@ -29,7 +29,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
 {
     sal_uInt32 nFormat = 0;
     sal_Int32 nLen = 0;
-    rStm >> nLen;
+    rStm.ReadInt32( nLen );
     if( rStm.IsEof() )
         rStm.SetError( SVSTREAM_GENERALERROR );
     if( nLen > 0 )
@@ -47,10 +47,10 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     else if( nLen == -1L )
         // Windows clipboard format
         // SV und Win stimmen ueberein (bis einschl. FORMAT_GDIMETAFILE)
-        rStm >> nFormat;
+        rStm.ReadUInt32( nFormat );
     else if( nLen == -2L )
     {
-        rStm >> nFormat;
+        rStm.ReadUInt32( nFormat );
         // Mac clipboard format
         // ??? not implemented
         rStm.SetError( SVSTREAM_GENERALERROR );

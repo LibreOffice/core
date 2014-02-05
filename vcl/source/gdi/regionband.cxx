@@ -205,7 +205,7 @@ void RegionBand::load(SvStream& rIStrm)
 
     // get header from first element
     sal_uInt16 nTmp16(0);
-    rIStrm >> nTmp16;
+    rIStrm.ReadUInt16( nTmp16 );
 
     while(STREAMENTRY_END != (StreamEntryType)nTmp16)
     {
@@ -215,8 +215,8 @@ void RegionBand::load(SvStream& rIStrm)
             sal_Int32 nYTop(0);
             sal_Int32 nYBottom(0);
 
-            rIStrm >> nYTop;
-            rIStrm >> nYBottom;
+            rIStrm.ReadInt32( nYTop );
+            rIStrm.ReadInt32( nYBottom );
 
             // create band
             ImplRegionBand* pNewBand = new ImplRegionBand( nYTop, nYBottom );
@@ -239,8 +239,8 @@ void RegionBand::load(SvStream& rIStrm)
             sal_Int32 nXLeft(0);
             sal_Int32 nXRight(0);
 
-            rIStrm >> nXLeft;
-            rIStrm >> nXRight;
+            rIStrm.ReadInt32( nXLeft );
+            rIStrm.ReadInt32( nXRight );
 
             // add separation
             if ( pCurrBand )
@@ -257,7 +257,7 @@ void RegionBand::load(SvStream& rIStrm)
         }
 
         // get next header
-        rIStrm >> nTmp16;
+        rIStrm.ReadUInt16( nTmp16 );
     }
 
 }

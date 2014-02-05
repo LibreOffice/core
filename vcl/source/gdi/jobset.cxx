@@ -229,12 +229,12 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         sal_Size nFirstPos = rIStream.Tell();
 
         sal_uInt16 nLen = 0;
-        rIStream >> nLen;
+        rIStream.ReadUInt16( nLen );
         if ( !nLen )
             return rIStream;
 
         sal_uInt16 nSystem = 0;
-        rIStream >> nSystem;
+        rIStream.ReadUInt16( nSystem );
 
         char* pTempBuf = new char[nLen];
         rIStream.Read( pTempBuf,  nLen - sizeof( nLen ) - sizeof( nSystem ) );

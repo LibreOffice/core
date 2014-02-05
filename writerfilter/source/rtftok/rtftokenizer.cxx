@@ -76,7 +76,7 @@ int RTFTokenizer::resolveParse()
         m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
     }
 
-    while ((Strm() >> ch, !Strm().IsEof()))
+    while ((Strm().ReadChar( ch ), !Strm().IsEof()))
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
@@ -211,7 +211,7 @@ int RTFTokenizer::resolveKeyword()
     bool bParam = false;
     int nParam = 0;
 
-    Strm() >> ch;
+    Strm().ReadChar( ch );
     if (Strm().IsEof())
         return ERROR_EOF;
 
@@ -226,7 +226,7 @@ int RTFTokenizer::resolveKeyword()
     while(isalpha(ch))
     {
         aBuf.append(ch);
-        Strm() >> ch;
+        Strm().ReadChar( ch );
         if (Strm().IsEof())
         {
             ch = ' ';
@@ -242,7 +242,7 @@ int RTFTokenizer::resolveKeyword()
     {
         // in case we'll have a parameter, that will be negative
         bNeg = true;
-        Strm() >> ch;
+        Strm().ReadChar( ch );
         if (Strm().IsEof())
             return ERROR_EOF;
     }
@@ -255,7 +255,7 @@ int RTFTokenizer::resolveKeyword()
         while(isdigit(ch))
         {
             aParameter.append(ch);
-            Strm() >> ch;
+            Strm().ReadChar( ch );
             if (Strm().IsEof())
             {
                 ch = ' ';

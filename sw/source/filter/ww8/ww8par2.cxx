@@ -3623,7 +3623,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
             nLen = nLen - WW8SkipOdd( pStStrm );
 
         sal_Int16 cbUPX(0);
-        *pStStrm >> cbUPX;
+        pStStrm->ReadInt16( cbUPX );
 
         nLen-=2;
 
@@ -3635,7 +3635,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
             if( bPAP )
             {
                 sal_uInt16 id;
-                *pStStrm >> id;
+                pStStrm->ReadUInt16( id );
 
                 cbUPX-=  2;
                 nLen-=  2;
@@ -4077,7 +4077,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
     while (true)
     {
         sal_uInt8 nFlags8;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.fBold = nFlags8 & 0x01;
@@ -4090,7 +4090,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fVanish = (nFlags8 & 0x80) >> 7;
 
         if (nCount >= nSize) break;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.fRMark = nFlags8 & 0x01;
@@ -4103,7 +4103,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fDiacUSico = (nFlags8 & 0x80) >> 7;
 
         if (nCount >= nSize) break;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.fsIco = nFlags8 & 0x01;
@@ -4116,7 +4116,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fsIcoBi = (nFlags8 & 0x80) >> 7;
 
         if (nCount >= nSize) break;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.fsFtcBi = nFlags8 & 0x01;
@@ -4124,15 +4124,15 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fsLidBi = (nFlags8 & 0x04) >> 2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.ftc;
+        rSt.ReadUInt16( aChpx.ftc );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.hps;
+        rSt.ReadUInt16( aChpx.hps );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.qpsSpace = nFlags8 & 0x3F;
@@ -4140,38 +4140,38 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
         aChpx.fNumRun = (nFlags8 & 0x80) >> 7;
 
         if (nCount >= nSize) break;
-        rSt >> nFlags8;
+        rSt.ReadUChar( nFlags8 );
         nCount++;
 
         aChpx.ico = nFlags8 & 0x1F;
         aChpx.kul = (nFlags8 & 0xE0) >> 5;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.hpsPos;
+        rSt.ReadUChar( aChpx.hpsPos );
         nCount++;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.icoBi;
+        rSt.ReadUChar( aChpx.icoBi );
         nCount++;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.lid;
+        rSt.ReadUInt16( aChpx.lid );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.ftcBi;
+        rSt.ReadUInt16( aChpx.ftcBi );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.hpsBi;
+        rSt.ReadUInt16( aChpx.hpsBi );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.lidBi;
+        rSt.ReadUInt16( aChpx.lidBi );
         nCount+=2;
 
         if (nCount >= nSize) break;
-        rSt >> aChpx.fcPic;
+        rSt.ReadUInt32( aChpx.fcPic );
         nCount+=4;
 
         break;
@@ -4199,16 +4199,16 @@ void WW8RStyle::ImportOldFormatStyles()
         pIo->pWwFib->chseTables);
 
     sal_uInt16 cstcStd;
-    rSt >> cstcStd;
+    rSt.ReadUInt16( cstcStd );
 
     sal_uInt16 cbName;
-    rSt >> cbName;
+    rSt.ReadUInt16( cbName );
     sal_uInt16 nByteCount = 2;
     sal_uInt16 stcp=0;
     while (nByteCount < cbName)
     {
         sal_uInt8 nCount;
-        rSt >> nCount;
+        rSt.ReadUChar( nCount );
         nByteCount++;
 
         sal_uInt8 stc = static_cast< sal_uInt8 >((stcp - cstcStd) & 255);
@@ -4252,14 +4252,14 @@ void WW8RStyle::ImportOldFormatStyles()
 
     std::vector<pxoffset> aCHPXOffsets(stcp);
     sal_uInt16 cbChpx;
-    rSt >> cbChpx;
+    rSt.ReadUInt16( cbChpx );
     nByteCount = 2;
     stcp=0;
     std::vector< std::vector<sal_uInt8> > aConvertedChpx;
     while (nByteCount < cbChpx)
     {
         sal_uInt8 cb;
-        rSt >> cb;
+        rSt.ReadUChar( cb );
         nByteCount++;
 
         aCHPXOffsets[stcp].mnSize = 0;
@@ -4290,13 +4290,13 @@ void WW8RStyle::ImportOldFormatStyles()
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
     sal_uInt16 cbPapx;
-    rSt >> cbPapx;
+    rSt.ReadUInt16( cbPapx );
     nByteCount = 2;
     stcp=0;
     while (nByteCount < cbPapx)
     {
         sal_uInt8 cb;
-        rSt >> cb;
+        rSt.ReadUChar( cb );
         nByteCount++;
 
         aPAPXOffsets[stcp].mnSize = 0;
@@ -4304,7 +4304,7 @@ void WW8RStyle::ImportOldFormatStyles()
         if (cb != 0xFF)
         {
             sal_uInt8 stc2;
-            rSt >> stc2;
+            rSt.ReadUChar( stc2 );
             rSt.SeekRel(6);
             nByteCount+=7;
             sal_uInt8 nRemainder = cb-7;
@@ -4326,15 +4326,15 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     sal_uInt16 iMac;
-    rSt >> iMac;
+    rSt.ReadUInt16( iMac );
 
     if (iMac > nStyles) iMac = nStyles;
 
     for (stcp = 0; stcp < iMac; ++stcp)
     {
         sal_uInt8 stcNext, stcBase;
-        rSt >> stcNext;
-        rSt >> stcBase;
+        rSt.ReadUChar( stcNext );
+        rSt.ReadUChar( stcBase );
 
         sal_uInt8 stc = static_cast< sal_uInt8 >((stcp - cstcStd) & 255);
 

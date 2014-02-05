@@ -171,7 +171,7 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
 SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 {
     sal_uInt8 _nMinLead, _nMinTrail;
-    rStrm >> _nMinLead >> _nMinTrail;
+    rStrm.ReadUChar( _nMinLead ).ReadUChar( _nMinTrail );
     SfxHyphenRegionItem* pAttr = new SfxHyphenRegionItem( Which() );
     pAttr->GetMinLead() = _nMinLead;
     pAttr->GetMinTrail() = _nMinTrail;

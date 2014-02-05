@@ -88,7 +88,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
         return sal_False;
 
     m_rRAS.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    m_rRAS >> nMagicNumber;
+    m_rRAS.ReadUInt32( nMagicNumber );
     if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
         return sal_False;
 
@@ -120,9 +120,9 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
                 mpAcc->SetPaletteEntryCount( mnDstColors );
                 sal_uInt16  i;
                 sal_uInt8   nRed[256], nGreen[256], nBlue[256];
-                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nRed[ i ];
-                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nGreen[ i ];
-                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nBlue[ i ];
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nRed[ i ] );
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nGreen[ i ] );
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nBlue[ i ] );
                 for ( i = 0; i < mnDstColors; i++ )
                 {
                     mpAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
@@ -173,8 +173,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
 
 sal_Bool RASReader::ImplReadHeader()
 {
-    m_rRAS >> mnWidth >> mnHeight >> mnDepth >> mnImageDatSize >>
-        mnType >> mnColorMapType >> mnColorMapSize;
+    m_rRAS.ReadUInt32( mnWidth ).ReadUInt32( mnHeight ).ReadUInt32( mnDepth ).ReadUInt32( mnImageDatSize ).        ReadUInt32( mnType ).ReadUInt32( mnColorMapType ).ReadUInt32( mnColorMapSize );
 
     if ( mnWidth == 0 || mnHeight == 0 )
         mbStatus = sal_False;
@@ -310,7 +309,7 @@ sal_uInt8 RASReader::ImplGetByte()
     sal_uInt8 nRetVal;
     if ( mnType != RAS_TYPE_BYTE_ENCODED )
     {
-        m_rRAS >> nRetVal;
+        m_rRAS.ReadUChar( nRetVal );
         return nRetVal;
     }
     else
@@ -322,14 +321,14 @@ sal_uInt8 RASReader::ImplGetByte()
         }
         else
         {
-            m_rRAS >> nRetVal;
+            m_rRAS.ReadUChar( nRetVal );
             if ( nRetVal != 0x80 )
                 return nRetVal;
-            m_rRAS >> nRetVal;
+            m_rRAS.ReadUChar( nRetVal );
             if ( nRetVal == 0 )
                 return 0x80;
             mnRepCount = nRetVal    ;
-            m_rRAS >> mnRepVal;
+            m_rRAS.ReadUChar( mnRepVal );
             return mnRepVal;
         }
     }

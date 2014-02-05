@@ -67,18 +67,18 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     Color aColor;
     ReadColor( rStream, aColor );    aFont.SetColor( aColor );
     sal_uInt16 nTemp;
-    rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetFamily((FontFamily)nTemp);
 
-    rStream >> nTemp;
+    rStream.ReadUInt16( nTemp );
     nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp);
     aFont.SetCharSet((rtl_TextEncoding)nTemp);
 
-    rStream >> nTemp; aFont.SetPitch((FontPitch)nTemp);
-    rStream >> nTemp; aFont.SetAlign((FontAlign)nTemp);
-    rStream >> nTemp; aFont.SetWeight((FontWeight)nTemp);
-    rStream >> nTemp; aFont.SetUnderline((FontUnderline)nTemp);
-    rStream >> nTemp; aFont.SetStrikeout((FontStrikeout)nTemp);
-    rStream >> nTemp; aFont.SetItalic((FontItalic)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetPitch((FontPitch)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetAlign((FontAlign)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetWeight((FontWeight)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetUnderline((FontUnderline)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetStrikeout((FontStrikeout)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetItalic((FontItalic)nTemp);
 
     // UNICODE: rStream >> aName; aFont.SetName( aName );
     OUString aName = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
@@ -88,14 +88,14 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     {
         //#fdo39428 SvStream no longer supports operator>>(long&)
         sal_Int32 nHeight(0), nWidth(0);
-        rStream >> nHeight; rStream >> nWidth; Size aSize( nWidth, nHeight );
+        rStream.ReadInt32( nHeight ); rStream.ReadInt32( nWidth ); Size aSize( nWidth, nHeight );
         aFont.SetSize( aSize );
     }
 
     sal_Bool bTemp;
-    rStream >> bTemp; aFont.SetOutline( bTemp );
-    rStream >> bTemp; aFont.SetShadow( bTemp );
-    rStream >> bTemp; aFont.SetTransparent( bTemp );
+    rStream.ReadUChar( bTemp ); aFont.SetOutline( bTemp );
+    rStream.ReadUChar( bTemp ); aFont.SetShadow( bTemp );
+    rStream.ReadUChar( bTemp ); aFont.SetTransparent( bTemp );
     return aFont;
 }
 
@@ -115,7 +115,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
     pGraphicObject( NULL )
 {
-    rStrm >> nStyle;
+    rStrm.ReadUInt16( nStyle );
 
     if( nStyle != BS_BMP )
         aFont = CreateFont( rStrm, BULITEM_VERSION );
@@ -145,16 +145,16 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
 
     //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp(0);
-    rStrm >> nTmp; nWidth = nTmp;
-    rStrm >> nStart;
-    rStrm >> nJustify;
+    rStrm.ReadInt32( nTmp ); nWidth = nTmp;
+    rStrm.ReadUInt16( nStart );
+    rStrm.ReadUChar( nJustify );
 
     char cTmpSymbol;
-    rStrm >> cTmpSymbol;
+    rStrm.ReadChar( cTmpSymbol );
     //convert single byte to unicode
     cSymbol = OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
 
-    rStrm >> nScale;
+    rStrm.ReadUInt16( nScale );
 
     // UNICODE: rStrm >> aPrevText;
     aPrevText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());

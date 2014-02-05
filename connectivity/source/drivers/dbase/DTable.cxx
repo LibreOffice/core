@@ -85,7 +85,7 @@ sal_Int32 lcl_getFileSize(SvStream& _rStream)
     _rStream.Seek(STREAM_SEEK_TO_END);
     _rStream.SeekRel(-1);
     char cEOL;
-    _rStream >> cEOL;
+    _rStream.ReadChar( cEOL );
     nFileSize = _rStream.Tell();
     if ( cEOL == DBF_EOL )
         nFileSize -= 1;
@@ -200,20 +200,20 @@ void ODbaseTable::readHeader()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
     sal_uInt8 nType=0;
-    (*m_pFileStream) >> nType;
+    (*m_pFileStream).ReadUChar( nType );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
     m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
-    (*m_pFileStream) >> m_aHeader.db_anz;
+    (*m_pFileStream).ReadUInt32( m_aHeader.db_anz );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
-    (*m_pFileStream) >> m_aHeader.db_kopf;
+    (*m_pFileStream).ReadUInt16( m_aHeader.db_kopf );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
-    (*m_pFileStream) >> m_aHeader.db_slng;
+    (*m_pFileStream).ReadUInt16( m_aHeader.db_slng );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
     m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(sal_uInt8));
@@ -562,14 +562,14 @@ sal_Bool ODbaseTable::ReadMemoHeader()
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
     m_pMemoStream->Seek(0L);
 
-    (*m_pMemoStream) >> m_aMemoHeader.db_next;
+    (*m_pMemoStream).ReadUInt32( m_aMemoHeader.db_next );
     switch (m_aHeader.db_typ)
     {
         case dBaseIIIMemo:  // dBase III: fixed block size
         case dBaseIVMemo:
             // sometimes dBase3 is attached to dBase4 memo
             m_pMemoStream->Seek(20L);
-            (*m_pMemoStream) >> m_aMemoHeader.db_size;
+            (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size != 512)  // 1 is also for dBase 3
                 m_aMemoHeader.db_typ  = MemodBaseIV;
             else if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size == 512)
@@ -596,7 +596,7 @@ sal_Bool ODbaseTable::ReadMemoHeader()
             m_aMemoHeader.db_typ    = MemoFoxPro;
             m_pMemoStream->Seek(6L);
             m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
-            (*m_pMemoStream) >> m_aMemoHeader.db_size;
+            (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             break;
         default:
             SAL_WARN( "connectivity.drivers", "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
@@ -2716,7 +2716,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             }
 
             sal_uInt32 nLength(0);
-            (*m_pMemoStream) >> nLength;
+            (*m_pMemoStream).ReadUInt32( nLength );
 
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;

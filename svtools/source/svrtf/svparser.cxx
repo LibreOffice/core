@@ -148,13 +148,13 @@ sal_Unicode SvParser::GetNextChar()
         unsigned char c1, c2;
         sal_Bool bSeekBack = sal_True;
 
-        rInput >> c1;
+        rInput.ReadUChar( c1 );
         bErr = rInput.IsEof() || rInput.GetError();
         if( !bErr )
         {
             if( 0xff == c1 || 0xfe == c1 )
             {
-                rInput >> c2;
+                rInput.ReadUChar( c2 );
                 bErr = rInput.IsEof() || rInput.GetError();
                 if( !bErr )
                 {
@@ -186,12 +186,12 @@ sal_Unicode SvParser::GetNextChar()
         sal_Unicode cUC = USHRT_MAX;
         unsigned char c1, c2;
 
-        rInput >> c1 >> c2;
+        rInput.ReadUChar( c1 ).ReadUChar( c2 );
         if( 2 == rInput.Tell() &&
             !(rInput.IsEof() || rInput.GetError()) &&
             ( (bUCS2BSrcEnc && 0xfe == c1 && 0xff == c2) ||
               (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
-            rInput >> c1 >> c2;
+            rInput.ReadUChar( c1 ).ReadUChar( c2 );
 
         bErr = rInput.IsEof() || rInput.GetError();
         if( !bErr )
@@ -213,7 +213,7 @@ sal_Unicode SvParser::GetNextChar()
         do
         {
             sal_Char c1;    // signed, that's the text converter expects
-            rInput >> c1;
+            rInput.ReadChar( c1 );
             bErr = rInput.IsEof() || rInput.GetError();
             if( !bErr )
             {
@@ -249,7 +249,7 @@ sal_Unicode SvParser::GetNextChar()
                         {
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
                             {
-                                rInput >> c1;
+                                rInput.ReadChar( c1 );
                                 bErr = rInput.IsEof() || rInput.GetError();
                                 if( bErr )
                                     break;
@@ -291,7 +291,7 @@ sal_Unicode SvParser::GetNextChar()
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 &&
                                     nLen < 10 )
                             {
-                                rInput >> c1;
+                                rInput.ReadChar( c1 );
                                 bErr = rInput.IsEof() || rInput.GetError();
                                 if( bErr )
                                     break;

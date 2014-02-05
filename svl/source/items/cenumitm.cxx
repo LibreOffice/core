@@ -128,7 +128,7 @@ SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxEnumItemInterface(nWhich)
 {
     m_nValue = 0;
-    rStream >> m_nValue;
+    rStream.ReadUInt16( m_nValue );
 }
 
 TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
@@ -170,7 +170,7 @@ SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxPoolItem(nWhich)
 {
     sal_Bool tmp = false;
-    rStream >> tmp;
+    rStream.ReadUChar( tmp );
     m_bValue = tmp;
 }
 

@@ -908,7 +908,7 @@ int RTFDocumentImpl::resolveChars(char ch)
         m_pBinaryData->WriteChar( ch );
         for (int i = 0; i < m_aStates.top().nBinaryToRead - 1; ++i)
         {
-            Strm() >> ch;
+            Strm().ReadChar( ch );
             m_pBinaryData->WriteChar( ch );
         }
         m_aStates.top().nInternalState = INTERNAL_NORMAL;
@@ -944,7 +944,7 @@ int RTFDocumentImpl::resolveChars(char ch)
         // read a single char if we're in hex mode
         if (m_aStates.top().nInternalState == INTERNAL_HEX)
             break;
-        Strm() >> ch;
+        Strm().ReadChar( ch );
     }
     if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
@@ -1284,7 +1284,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 bool bInKeyword = false;
                 while (!bFoundCode && ch != '}')
                 {
-                    Strm() >> ch;
+                    Strm().ReadChar( ch );
                     if ('\\' == ch)
                         bInKeyword = true;
                     if (!bInKeyword  && isalnum(ch))
@@ -1411,7 +1411,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 char ch;
                 for (int i = 0; i < 7; ++i)
                 {
-                    Strm() >> ch;
+                    Strm().ReadChar( ch );
                     aBuf.append(ch);
                 }
                 OString aKeyword = aBuf.makeStringAndClear();
@@ -4231,15 +4231,15 @@ int RTFDocumentImpl::popState()
 
                     // Skip ObjectHeader
                     sal_uInt32 nData;
-                    *m_pObjectData >> nData; // OLEVersion
-                    *m_pObjectData >> nData; // FormatID
-                    *m_pObjectData >> nData; // ClassName
+                    m_pObjectData->ReadUInt32( nData ); // OLEVersion
+                    m_pObjectData->ReadUInt32( nData ); // FormatID
+                    m_pObjectData->ReadUInt32( nData ); // ClassName
                     m_pObjectData->SeekRel(nData);
-                    *m_pObjectData >> nData; // TopicName
+                    m_pObjectData->ReadUInt32( nData ); // TopicName
                     m_pObjectData->SeekRel(nData);
-                    *m_pObjectData >> nData; // ItemName
+                    m_pObjectData->ReadUInt32( nData ); // ItemName
                     m_pObjectData->SeekRel(nData);
-                    *m_pObjectData >> nData; // NativeDataSize
+                    m_pObjectData->ReadUInt32( nData ); // NativeDataSize
                 }
 
                 uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData.get()));

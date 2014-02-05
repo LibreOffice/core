@@ -450,8 +450,8 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
     WW8PicShadowToReal( &aPicS, pPic );
     for (int i=0;i<4;i++)
         pDataStream->Read( &pPic->rgbrc[i], bVer67 ? 2 : 4);
-    *pDataStream >> pPic->dxaOrigin;
-    *pDataStream >> pPic->dyaOrigin;
+    pDataStream->ReadInt16( pPic->dxaOrigin );
+    pDataStream->ReadInt16( pPic->dyaOrigin );
     if (!bVer67)
         pDataStream->SeekRel(2);  //cProps
 }
@@ -533,7 +533,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             {
                 //These ones have names prepended
                 sal_uInt8 nNameLen=0;
-                *pDataStream >> nNameLen;
+                pDataStream->ReadUChar( nNameLen );
                 pDataStream->SeekRel( nNameLen );
             }
 

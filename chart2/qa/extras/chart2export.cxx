@@ -146,7 +146,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
     char ch;
     for (sal_Size i = 0; i < nSize; ++i)
     {
-        *pStream >> ch;
+        pStream->ReadChar( ch );
         aDocument.append(ch);
     }
 

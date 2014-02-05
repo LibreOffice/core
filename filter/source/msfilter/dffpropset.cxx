@@ -1110,8 +1110,8 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
     {
         sal_uInt16 nTmp;
         sal_uInt32 nRecType, nContent;
-        rIn >> nTmp
-            >> nContent;
+        rIn.ReadUInt16( nTmp )
+           .ReadUInt32( nContent );
 
         nRecType = nTmp & 0x3fff;
 
@@ -1168,7 +1168,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                     sal_Int16   nNumElem, nNumElemReserved, nSize;
 
                     rIn.Seek( nComplexDataFilePos );
-                    rIn >>  nNumElem >> nNumElemReserved >> nSize;
+                    rIn. ReadInt16( nNumElem ).ReadInt16( nNumElemReserved ).ReadInt16( nSize );
                     if ( nNumElemReserved >= nNumElem )
                     {
                         // the size of these array elements is nowhere defined,
@@ -1306,7 +1306,7 @@ OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
         for( sal_Int32 nCharIdx = 0; nCharIdx < nStrLen; ++nCharIdx )
         {
             sal_uInt16 nChar = 0;
-            rStrm >> nChar;
+            rStrm.ReadUInt16( nChar );
             if( nChar > 0 )
                 aBuffer.append( static_cast< sal_Unicode >( nChar ) );
             else

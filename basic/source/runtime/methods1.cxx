@@ -1097,7 +1097,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     if( bIsVariant )
     {
         sal_uInt16 nTemp;
-        *pStrm >> nTemp;
+        pStrm->ReadUInt16( nTemp );
         eSrcType = (SbxDataType)nTemp;
     }
 
@@ -1108,7 +1108,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     case SbxBYTE:
         {
             sal_uInt8 aByte;
-            *pStrm >> aByte;
+            pStrm->ReadUChar( aByte );
 
             if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->IsEof() )
             {
@@ -1127,7 +1127,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     case SbxUINT:
         {
             sal_Int16 aInt;
-            *pStrm >> aInt;
+            pStrm->ReadInt16( aInt );
             rVar.PutInteger( aInt );
         }
         break;
@@ -1136,7 +1136,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     case SbxULONG:
         {
             sal_Int32 aInt;
-            *pStrm >> aInt;
+            pStrm->ReadInt32( aInt );
             rVar.PutLong( aInt );
         }
         break;
@@ -1144,14 +1144,14 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     case SbxSALUINT64:
         {
             sal_uInt32 aInt;
-            *pStrm >> aInt;
+            pStrm->ReadUInt32( aInt );
             rVar.PutInt64( (sal_Int64)aInt );
         }
         break;
     case SbxSINGLE:
         {
             float nS;
-            *pStrm >> nS;
+            pStrm->ReadFloat( nS );
             rVar.PutSingle( nS );
         }
         break;
@@ -1159,14 +1159,14 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     case SbxDOUBLE:
     case SbxCURRENCY:
         {
-            *pStrm >> aDouble;
+            pStrm->ReadDouble( aDouble );
             rVar.PutDouble( aDouble );
         }
         break;
 
     case SbxDATE:
         {
-            *pStrm >> aDouble;
+            pStrm->ReadDouble( aDouble );
             rVar.PutDate( aDouble );
         }
         break;

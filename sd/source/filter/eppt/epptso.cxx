@@ -2565,20 +2565,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         xCompObj->Seek( 0 );
                         sal_Int16   nVersion, nByteOrder;
                         sal_Int32   nWinVersion, nVal, nStringLen;
-                        *xCompObj   >> nVersion
-                                    >> nByteOrder
-                                    >> nWinVersion
-                                    >> nVal;
+                        xCompObj->ReadInt16( nVersion )
+                                 .ReadInt16( nByteOrder )
+                                 .ReadInt32( nWinVersion )
+                                 .ReadInt32( nVal );
                         xCompObj->SeekRel( 16 );    // skipping clsid
-                        *xCompObj   >> nStringLen;
+                        xCompObj->ReadInt32( nStringLen );
                         if ( ( xCompObj->Tell() + nStringLen ) < nStreamLen )
                         {
                             xCompObj->SeekRel( nStringLen );        // now skipping the UserName;
-                            *xCompObj >> nStringLen;
+                            xCompObj->ReadInt32( nStringLen );
                             if ( ( xCompObj->Tell() + nStringLen ) < nStreamLen )
                             {
                                 xCompObj->SeekRel( nStringLen );    // now skipping the clipboard formatname
-                                *xCompObj   >> nStringLen;
+                                xCompObj->ReadInt32( nStringLen );
                                 if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
                                 {   // i think that the OleIdentifier will follow
                                     OString aTemp = read_uInt8s_ToOString(*xCompObj, nStringLen - 1);

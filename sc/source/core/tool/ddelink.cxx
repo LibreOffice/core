@@ -88,12 +88,12 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     aItem = rStream.ReadUniOrByteString( eCharSet );
 
     sal_Bool bHasValue;
-    rStream >> bHasValue;
+    rStream.ReadUChar( bHasValue );
     if ( bHasValue )
         pResult = new ScMatrix(0, 0);
 
     if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
-        rStream >> nMode;
+        rStream.ReadUChar( nMode );
     else
         nMode = SC_DDE_DEFAULT;
 

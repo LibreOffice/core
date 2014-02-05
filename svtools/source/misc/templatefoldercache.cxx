@@ -75,15 +75,15 @@ namespace svt
     SvStream& operator >> ( SvStream& _rStorage, util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds;
-        _rStorage >> hundredthSeconds;
+        _rStorage.ReadUInt16( hundredthSeconds );
         _rDate.NanoSeconds = static_cast< sal_uInt32 >( hundredthSeconds ) * Time::nanoPerCenti;
 
-        _rStorage >> _rDate.Seconds;
-        _rStorage >> _rDate.Minutes;
-        _rStorage >> _rDate.Hours;
-        _rStorage >> _rDate.Day;
-        _rStorage >> _rDate.Month;
-        _rStorage >> _rDate.Year;
+        _rStorage.ReadUInt16( _rDate.Seconds );
+        _rStorage.ReadUInt16( _rDate.Minutes );
+        _rStorage.ReadUInt16( _rDate.Hours );
+        _rStorage.ReadUInt16( _rDate.Day );
+        _rStorage.ReadUInt16( _rDate.Month );
+        _rStorage.ReadInt16( _rDate.Year );
 
         return _rStorage;
     }
@@ -407,7 +407,7 @@ namespace svt
             // store the info about the children
             // the number
             sal_Int32 nChildren = 0;
-            m_rStorage >> nChildren;
+            m_rStorage.ReadInt32( nChildren );
             TemplateFolderContent& rChildren = _rContent.getSubContents();
             rChildren.resize( 0 );
             rChildren.reserve( nChildren );
@@ -729,7 +729,7 @@ namespace svt
 
         // check the magic number
         sal_Int32 nMagic = 0;
-        *m_pCacheStream >> nMagic;
+        m_pCacheStream->ReadInt32( nMagic );
         DBG_ASSERT( getMagicNumber() == nMagic, "TemplateFolderCacheImpl::readPreviousState: invalid cache file!" );
         if ( getMagicNumber() != nMagic )
             return sal_False;
@@ -737,7 +737,7 @@ namespace svt
         // the root directories
         // their number
         sal_Int32 nRootDirectories = 0;
-        *m_pCacheStream >> nRootDirectories;
+        m_pCacheStream->ReadInt32( nRootDirectories );
         // init empty TemplateContens with the URLs
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )

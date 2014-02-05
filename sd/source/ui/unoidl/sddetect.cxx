@@ -390,7 +390,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                                     {
                                         sal_uInt8 n8;
                                         pStm->Seek( STREAM_SEEK_TO_BEGIN );
-                                        *pStm >> n8;
+                                        pStm->ReadUChar( n8 );
                                         if ( ( n8 & 0xf0 ) == 0 )       // we are supporting binary cgm format only, so
                                         {                               // this is a small test to exclude cgm text
                                             SfxFilterMatcher aMatch(OUString("simpress"));

@@ -436,7 +436,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     // TODO: is it possible to get rid of this seek to the end?
     // check if the stream's end is already available
     mrStream.Seek( STREAM_SEEK_TO_END );
-    mrStream >> cDummy;
+    mrStream.ReadUChar( cDummy );
     nEndPosition = mrStream.Tell();
 
     // else check if at least JPEG_MIN_READ bytes can be read

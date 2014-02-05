@@ -111,7 +111,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
     Clear();
     // Read Master-Record
-    r >> nSign >> nLen >> nCount;
+    r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
     sal_uIntPtr nLast = r.Tell() + nLen;
     sal_uInt32 nCharSet;               // System charset
     sal_uInt32 lDimBase;
@@ -121,8 +121,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     bool bBadVer = false;
     if( nSign == B_MODULE )
     {
-        r >> nVersion >> nCharSet >> lDimBase
-          >> nFlags >> nReserved1 >> nReserved2 >> nReserved3;
+        r.ReadUInt32( nVersion ).ReadUInt32( nCharSet ).ReadUInt32( lDimBase )
+         .ReadUInt16( nFlags ).ReadUInt16( nReserved1 ).ReadUInt32( nReserved2 ).ReadUInt32( nReserved3 );
         eCharSet = nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
         bBadVer  = ( nVersion > B_CURVERSION );
@@ -135,7 +135,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     while( ( nNext = r.Tell() ) < nLast )
     {
 
-        r >> nSign >> nLen >> nCount;
+        r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
         nNext += nLen + 8;
         if( r.GetError() == SVSTREAM_OK )
         {
@@ -196,10 +196,10 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 short i;
                 for( i = 0; i < nStrings && SbiGood( r ); i++ )
                 {
-                    r >> nOff;
+                    r.ReadUInt32( nOff );
                     pStringOff[ i ] = (sal_uInt16) nOff;
                 }
-                r >> nLen;
+                r.ReadUInt32( nLen );
                 if( SbiGood( r ) )
                 {
                     delete [] pStrings;

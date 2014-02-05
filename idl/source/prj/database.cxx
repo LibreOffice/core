@@ -87,7 +87,7 @@ sal_Bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
 {
     sal_uInt32  nSig = 0;
     sal_uLong   nPos = rStm.Tell();
-    rStm >> nSig;
+    rStm.ReadUInt32( nSig );
     rStm.Seek( nPos );
 
     return nSig == DATABASE_SIGNATURE;
@@ -101,8 +101,8 @@ void SvIdlDataBase::Load( SvStream & rStm )
     sal_uInt16  nVersion = 0;
     sal_uInt32  nSig = 0;
 
-    aPStm >> nSig;
-    aPStm >> nVersion;
+    aPStm.ReadUInt32( nSig );
+    aPStm.ReadUInt16( nVersion );
     if( nSig != DATABASE_SIGNATURE )
     {
         aPStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -117,7 +117,7 @@ void SvIdlDataBase::Load( SvStream & rStm )
     aPStm >> aTypeList;
     aPStm >> aAttrList;
     aPStm >> aModuleList;
-    aPStm >> nUniqueId;
+    aPStm.ReadUInt32( nUniqueId );
 
     if( aPStm.IsEof() )
         aPStm.SetError( SVSTREAM_GENERALERROR );

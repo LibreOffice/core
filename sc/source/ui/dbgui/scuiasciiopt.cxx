@@ -345,7 +345,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
             case 0:
                 {
                     sal_uInt16 n;
-                    *mpDatStream >> n;
+                    mpDatStream->ReadUInt16( n );
                     // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
                     // control characters except CR,LF,TAB
                     if ( (n & 0xff00) < 0x2000 )

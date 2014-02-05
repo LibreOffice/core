@@ -133,7 +133,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
 {
     int         rc = 0;
 
-    rStream >> nVersion;
+    rStream.ReadUInt16( nVersion );
 
     // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
     // #55402#
@@ -147,7 +147,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
         unsigned char bRule = sal_False;
         for(sal_uInt16 i = 0; i < nMaxRules; ++i)
         {
-            rStream >> bRule;
+            rStream.ReadUChar( bRule );
             if(bRule)
                 pNumRules[i] = new SwNumRulesWithName( rStream, nVersion );
         }
@@ -235,7 +235,7 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
         else if(nVersion < VERSION_40A && n > 5)
             c = 0;
         else
-            rStream >> c;
+            rStream.ReadChar( c );
 
         if( c )
             aFmts[ n ] = new _SwNumFmtGlobal( rStream, nVersion );
@@ -326,44 +326,44 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         sal_Bool bFlag;
         OUString sStr;
 
-        rStream >> nUS;             aFmt.SetNumberingType((sal_Int16)nUS );
+        rStream.ReadUInt16( nUS );             aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
         {
-            rStream >> cChar;       aFmt.SetBulletChar( cChar );
+            rStream.ReadChar( cChar );       aFmt.SetBulletChar( cChar );
         }
         else
         {
-            rStream >> nUS;         aFmt.SetBulletChar( nUS );
+            rStream.ReadUInt16( nUS );         aFmt.SetBulletChar( nUS );
         }
 
-        rStream >> bFlag;           aFmt.SetIncludeUpperLevels( bFlag );
+        rStream.ReadUChar( bFlag );           aFmt.SetIncludeUpperLevels( bFlag );
 
         if( VERSION_30B == nVersion )
         {
             sal_Int32 nL;
-            rStream >> cChar;       aFmt.SetStart( (sal_uInt16)cChar );
+            rStream.ReadChar( cChar );       aFmt.SetStart( (sal_uInt16)cChar );
 
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetPrefix( sStr );
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nL;          aFmt.SetLSpace( lNumIndent );
-            rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
+            rStream.ReadUInt16( nUS );         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream.ReadInt32( nL );          aFmt.SetLSpace( lNumIndent );
+            rStream.ReadInt32( nL );          aFmt.SetFirstLineOffset( (short)nL );
         }
         else                // old start-value was a Byte
         {
-            rStream >> nUS;         aFmt.SetStart( nUS );
+            rStream.ReadUInt16( nUS );         aFmt.SetStart( nUS );
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetPrefix( sStr );
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
-            rStream >> nShort;      aFmt.SetFirstLineOffset( nShort );
-            rStream >> nUS;         aFmt.SetCharTextDistance( nUS );
-            rStream >> nShort;      aFmt.SetLSpace( nShort );
-            rStream >> bFlag;
+            rStream.ReadUInt16( nUS );         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream.ReadUInt16( nUS );         aFmt.SetAbsLSpace( nUS );
+            rStream.ReadInt16( nShort );      aFmt.SetFirstLineOffset( nShort );
+            rStream.ReadUInt16( nUS );         aFmt.SetCharTextDistance( nUS );
+            rStream.ReadInt16( nShort );      aFmt.SetLSpace( nShort );
+            rStream.ReadUChar( bFlag );
         }
 
         sal_uInt16  nFamily;
@@ -374,7 +374,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         OUString aName;
 
         aName = rStream.ReadUniOrByteString(eEncoding);
-        rStream >> nFamily >> nCharSet >> nWidth >> nHeight >> nPitch;
+        rStream.ReadUInt16( nFamily ).ReadUInt16( nCharSet ).ReadInt16( nWidth ).ReadInt16( nHeight ).ReadUInt16( nPitch );
 
         if( !aName.isEmpty() )
         {
@@ -398,14 +398,14 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     if( VERSION_30B != nVersion )
     {
         sal_uInt16 nItemCount;
-        rStream >> nCharPoolId;
+        rStream.ReadUInt16( nCharPoolId );
         sCharFmtName = rStream.ReadUniOrByteString(eEncoding);
-        rStream >> nItemCount;
+        rStream.ReadUInt16( nItemCount );
 
         while( nItemCount-- )
         {
             sal_uInt16 nWhich, nVers;
-            rStream >> nWhich >> nVers;
+            rStream.ReadUInt16( nWhich ).ReadUInt16( nVers );
             aItems.push_back( GetDfltAttr( nWhich )->Create( rStream, nVers ) );
         }
     }
@@ -415,11 +415,11 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         sal_uInt8 cF;
         sal_Int32 nWidth(0), nHeight(0);
 
-        rStream >> nWidth >> nHeight;
+        rStream.ReadInt32( nWidth ).ReadInt32( nHeight );
 
         Size aSz(nWidth, nHeight);
 
-        rStream >> cF;
+        rStream.ReadUChar( cF );
         if( cF )
         {
             SvxBrushItem* pBrush = 0;
@@ -428,14 +428,14 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
             if( cF & 1 )
             {
-                rStream >> nVer;
+                rStream.ReadUInt16( nVer );
                 pBrush = (SvxBrushItem*)GetDfltAttr( RES_BACKGROUND )
                                         ->Create( rStream, nVer );
             }
 
             if( cF & 2 )
             {
-                rStream >> nVer;
+                rStream.ReadUInt16( nVer );
                 pVOrient = (SwFmtVertOrient*)GetDfltAttr( RES_VERT_ORIENT )
                                         ->Create( rStream, nVer );
             }

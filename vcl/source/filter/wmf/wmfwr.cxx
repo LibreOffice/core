@@ -1880,7 +1880,7 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 
         while( nPos + 1 < nTotalSize )
         {
-            aStream >> nWord;
+            aStream.ReadUInt16( nWord );
             nCheckSum ^= nWord;
             nPos += 2;
         }

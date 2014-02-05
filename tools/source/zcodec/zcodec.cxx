@@ -347,12 +347,12 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
                 sal_uInt8 n1, n2, j, nMethod, nFlags;
                 for ( int i = 0; i < 2; i++ )   // gz - magic number
                 {
-                    *mpIStm >> j;
+                    mpIStm->ReadUChar( j );
                     if ( j != gz_magic[ i ] )
                         mbStatus = false;
                 }
-                *mpIStm >> nMethod;
-                *mpIStm >> nFlags;
+                mpIStm->ReadUChar( nMethod );
+                mpIStm->ReadUChar( nFlags );
                 if ( nMethod != Z_DEFLATED )
                     mbStatus = false;
                 if ( ( nFlags & GZ_RESERVED ) != 0 )
@@ -362,7 +362,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
                 /* skip the extra field */
                 if ( nFlags & GZ_EXTRA_FIELD )
                 {
-                    *mpIStm >> n1 >> n2;
+                    mpIStm->ReadUChar( n1 ).ReadUChar( n2 );
                     mpIStm->SeekRel( n1 + ( n2 << 8 ) );
                 }
                 /* skip the original file name */
@@ -370,7 +370,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
                 {
                     do
                     {
-                        *mpIStm >> j;
+                        mpIStm->ReadUChar( j );
                     }
                     while ( j && !mpIStm->IsEof() );
                 }
@@ -379,7 +379,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
                 {
                     do
                     {
-                        *mpIStm >> j;
+                        mpIStm->ReadUChar( j );
                     }
                     while ( j && !mpIStm->IsEof() );
                 }

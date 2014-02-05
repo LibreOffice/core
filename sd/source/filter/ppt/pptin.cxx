@@ -275,12 +275,12 @@ sal_Bool ImplSdPPTImport::Import()
         {
             if ( pSection->GetProperty( PID_SLIDECOUNT, aPropItem ) )
             {
-                aPropItem >> nType;
+                aPropItem.ReadUInt32( nType );
                 if ( ( nType == VT_I4 ) || ( nType == VT_UI4 ) )
                 {
                     // examine PID_HEADINGPAIR to get the correct entry for PID_DOCPARTS
                     sal_uInt32 nSlideCount, nVecCount;
-                    aPropItem >> nSlideCount;
+                    aPropItem.ReadUInt32( nSlideCount );
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
                         sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
@@ -288,8 +288,8 @@ sal_Bool ImplSdPPTImport::Import()
 
                         OUString aUString;
 
-                        aPropItem >> nType
-                                  >> nVecCount;
+                        aPropItem.ReadUInt32( nType )
+                                 .ReadUInt32( nVecCount );
 
                         if ( ( nType == ( VT_VARIANT | VT_VECTOR ) ) && ( nVecCount ^ 1 ) )
                         {
@@ -299,10 +299,10 @@ sal_Bool ImplSdPPTImport::Import()
                             {
                                 if ( !aPropItem.Read( aUString, VT_EMPTY, sal_False ) )
                                     break;
-                                aPropItem >> nType;
+                                aPropItem.ReadUInt32( nType );
                                 if ( ( nType != VT_I4 ) && ( nType != VT_UI4 ) )
                                     break;
-                                aPropItem >> nTemp;
+                                aPropItem.ReadUInt32( nTemp );
                                 if ( aUString == "Slide Titles" || aUString == "Folientitel" )
                                 {
                                     nSlideTitleCount = nTemp;
@@ -313,15 +313,15 @@ sal_Bool ImplSdPPTImport::Import()
                         }
                         if ( ( nSlideCount == nSlideTitleCount ) && pSection->GetProperty( PID_DOCPARTS, aPropItem ) )
                         {
-                            aPropItem >> nType
-                                      >> nVecCount;
+                            aPropItem.ReadUInt32( nType )
+                                     .ReadUInt32( nVecCount );
 
                             if ( ( nVecCount >= ( nSlideTitleIndex + nSlideTitleCount ) )
                                     && ( nType == ( VT_LPSTR | VT_VECTOR ) ) )
                             {
                                 for ( i = 0; i != nSlideTitleIndex; i++ )
                                 {
-                                    aPropItem >> nTemp;
+                                    aPropItem.ReadUInt32( nTemp );
                                     aPropItem.SeekRel( nTemp );
                                 }
                                 for ( i = 0; i < nSlideTitleCount; i++ )
@@ -365,11 +365,11 @@ sal_Bool ImplSdPPTImport::Import()
                         if ( pSection->GetProperty( iter->second, aPropItem ) )
                         {
                             aPropItem.Seek( STREAM_SEEK_TO_BEGIN );
-                            aPropItem >> nType;
+                            aPropItem.ReadUInt32( nType );
                             if ( nType == VT_BLOB )
                             {
-                                aPropItem >> nPropSize
-                                          >> nPropCount;
+                                aPropItem.ReadUInt32( nPropSize )
+                                         .ReadUInt32( nPropCount );
 
                                 if ( ! ( nPropCount % 6 ) )
                                 {
@@ -382,22 +382,22 @@ sal_Bool ImplSdPPTImport::Import()
                                     {
                                         pHyperlink = new SdHyperlinkEntry;
                                         pHyperlink->nIndex = 0;
-                                        aPropItem >> nType;
+                                        aPropItem.ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem >> pHyperlink->nPrivate1
-                                                  >> nType;
+                                        aPropItem.ReadInt32( pHyperlink->nPrivate1 )
+                                                 .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem >> pHyperlink->nPrivate2
-                                                  >> nType;
+                                        aPropItem.ReadInt32( pHyperlink->nPrivate2 )
+                                                 .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem >> pHyperlink->nPrivate3
-                                                  >> nType;
+                                        aPropItem.ReadInt32( pHyperlink->nPrivate3 )
+                                                 .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem >> pHyperlink->nInfo;
+                                        aPropItem.ReadInt32( pHyperlink->nInfo );
                                         if ( !aPropItem.Read( pHyperlink->aTarget, VT_EMPTY ) )
                                             break;
 
@@ -524,7 +524,7 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen, NULL, 0 ) )
                     break;
                 rStCtrl.SeekRel( 8 );
-                rStCtrl >> pPtr->nIndex;
+                rStCtrl.ReadUInt32( pPtr->nIndex );
                 aHyperE.SeekToEndOfRecord( rStCtrl );
             }
         }
@@ -1282,7 +1282,7 @@ sal_Bool ImplSdPPTImport::Import()
                                         for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )
                                         {
                                             sal_uInt32 nPageNumber;
-                                            rStCtrl >> nPageNumber;
+                                            rStCtrl.ReadUInt32( nPageNumber );
                                             sal_uInt16 nPage = pPageList->FindPage( nPageNumber );
                                             if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                             {
@@ -1318,15 +1318,15 @@ sal_Bool ImplSdPPTImport::Import()
             sal_uInt32  nPenColor = 0x1000000;
             sal_Int32   nRestartTime = 0x7fffffff;
             sal_Int16   nEndSlide = 0;
-            rStCtrl >> nPenColor
-                    >> nRestartTime
-                    >> nStartSlide
-                    >> nEndSlide;
+            rStCtrl.ReadUInt32( nPenColor )
+                   .ReadInt32( nRestartTime )
+                   .ReadUInt16( nStartSlide )
+                   .ReadInt16( nEndSlide );
 
             sal_Unicode nChar;
             for ( sal_uInt32 i2 = 0; i2 < 32; i2++ )
             {
-                rStCtrl >> nChar;
+                rStCtrl.ReadUInt16( nChar );
                 if ( nChar )
                     aCustomShow.append( nChar );
                 else
@@ -1335,7 +1335,7 @@ sal_Bool ImplSdPPTImport::Import()
                     break;
                 }
             }
-            rStCtrl >> nFlags;
+            rStCtrl.ReadUInt32( nFlags );
         }
         // set the current custom show
         if ( !aCustomShow.isEmpty() )
@@ -1533,13 +1533,13 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 sal_Int8    nDirection, nTransitionType, nByteDummy, nSpeed;
                                 sal_Int16   nBuildFlags;
                                 sal_Int32   nSlideTime, nSoundRef;
-                                rStCtrl >> nSlideTime           // time to show (in Ticks)
-                                        >> nSoundRef            // Index of SoundCollection
-                                        >> nDirection           // direction of fade effect
-                                        >> nTransitionType      // fade effect
-                                        >> nBuildFlags          // Buildflags (s.u.)
-                                        >> nSpeed               // speed (slow, medium, fast)
-                                        >> nByteDummy >> nByteDummy >> nByteDummy;
+                                rStCtrl.ReadInt32( nSlideTime )           // time to show (in Ticks)
+                                       .ReadInt32( nSoundRef )            // Index of SoundCollection
+                                       .ReadSChar( nDirection )           // direction of fade effect
+                                       .ReadSChar( nTransitionType )      // fade effect
+                                       .ReadInt16( nBuildFlags )          // Buildflags (s.u.)
+                                       .ReadSChar( nSpeed )               // speed (slow, medium, fast)
+                                       .ReadSChar( nByteDummy ).ReadSChar( nByteDummy ).ReadSChar( nByteDummy );
 
                                 switch ( nTransitionType )
                                 {
@@ -1993,7 +1993,7 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                         if ( SeekToRec( rStCtrl, PPT_PST_ExMediaAtom, aExVideoHd.GetRecEndFilePos(), &aExMediaAtomHd ) )
                         {
                             sal_uInt32 nRef;
-                            rStCtrl >> nRef;
+                            rStCtrl.ReadUInt32( nRef );
                             if ( nRef == nMediaRef )
                             {
                                 aExVideoHd.SeekToContent( rStCtrl );
@@ -2651,7 +2651,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     if ( SeekToRec( rSt, PPT_PST_ExObjRefAtom, nHdRecEnd, &aObjRefAtomHd ) )
                                     {
                                         sal_uInt32 nRef;
-                                        rSt >> nRef;
+                                        rSt.ReadUInt32( nRef );
                                         OUString aMediaURL( ReadMedia( nRef ) );
                                         if ( aMediaURL.isEmpty() )
                                             aMediaURL = ReadSound( nRef );

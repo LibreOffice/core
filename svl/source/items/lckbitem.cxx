@@ -41,7 +41,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
     _xVal = new SvLockBytes( new SvMemoryStream(), true );
 
     SvStream aLockBytesStream( _xVal );
-    rStream >> aLockBytesStream;
+    rStream.ReadStream( aLockBytesStream );
 }
 
 // -----------------------------------------------------------------------
@@ -82,7 +82,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
     sal_uLong nActRead = 0;
     sal_Char cTmpBuf[MAX_BUF];
     SvMemoryStream aNewStream;
-    rStream >> nSize;
+    rStream.ReadUInt32( nSize );
 
     do {
         sal_uLong nToRead;

@@ -3504,7 +3504,7 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
         XclObjAnchor aAnchor;
         rHeader.SeekToContent( rDffStrm );
         sal_uInt8 nFlags(0);
-        rDffStrm >> nFlags;
+        rDffStrm.ReadUChar( nFlags );
         rDffStrm.SeekRel( 1 );  // flags
         rDffStrm >> aAnchor;    // anchor format equal to BIFF5 OBJ records
 

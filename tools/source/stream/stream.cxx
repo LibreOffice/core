@@ -813,7 +813,7 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     bool bTryUtf8 = false;
     sal_uInt16 nFlag;
     sal_sSize nBack = sizeof(nFlag);
-    *this >> nFlag;
+    this->ReadUInt16( nFlag );
     switch ( nFlag )
     {
         case 0xfeff :
@@ -850,7 +850,7 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     {
         unsigned char nChar;
         nBack += sizeof(nChar);
-        *this >> nChar;
+        this->ReadUChar( nChar );
         if (nChar == 0xbf)
             nBack = 0;      // it is UTF-8
     }
@@ -879,7 +879,7 @@ sal_Size SvStream::SeekRel( sal_sSize nPos )
     return Seek( nActualPos );
 }
 
-SvStream& SvStream::operator>>(sal_uInt16& r)
+SvStream& SvStream::ReadUInt16(sal_uInt16& r)
 {
     sal_uInt16 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
@@ -892,7 +892,7 @@ SvStream& SvStream::operator>>(sal_uInt16& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(sal_uInt32& r)
+SvStream& SvStream::ReadUInt32(sal_uInt32& r)
 {
     sal_uInt32 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_uInt32, n)
@@ -905,7 +905,7 @@ SvStream& SvStream::operator>>(sal_uInt32& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(sal_uInt64& r)
+SvStream& SvStream::ReadUInt64(sal_uInt64& r)
 {
     sal_uInt64 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_uInt64, n)
@@ -918,7 +918,7 @@ SvStream& SvStream::operator>>(sal_uInt64& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(sal_Int16& r)
+SvStream& SvStream::ReadInt16(sal_Int16& r)
 {
     sal_Int16 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_Int16, n)
@@ -931,7 +931,7 @@ SvStream& SvStream::operator>>(sal_Int16& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(sal_Int32& r)
+SvStream& SvStream::ReadInt32(sal_Int32& r)
 {
     sal_Int32 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_Int32, n)
@@ -957,7 +957,7 @@ SvStream& SvStream::ReadInt64(sal_Int64& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>( signed char& r )
+SvStream& SvStream::ReadSChar( signed char& r )
 {
     if( (bIoRead || !bIsConsistent) &&
         sizeof(signed char) <= nBufFree )
@@ -974,7 +974,7 @@ SvStream& SvStream::operator>>( signed char& r )
 
 // Special treatment for Chars due to PutBack
 
-SvStream& SvStream::operator>>( char& r )
+SvStream& SvStream::ReadChar( char& r )
 {
     if( (bIoRead || !bIsConsistent) &&
         sizeof(char) <= nBufFree )
@@ -989,7 +989,7 @@ SvStream& SvStream::operator>>( char& r )
     return *this;
 }
 
-SvStream& SvStream::operator>>( unsigned char& r )
+SvStream& SvStream::ReadUChar( unsigned char& r )
 {
     if( (bIoRead || !bIsConsistent) &&
         sizeof(char) <= nBufFree )
@@ -1004,7 +1004,7 @@ SvStream& SvStream::operator>>( unsigned char& r )
     return *this;
 }
 
-SvStream& SvStream::operator>>(float& r)
+SvStream& SvStream::ReadFloat(float& r)
 {
     float n = 0;
     READNUMBER_WITHOUT_SWAP(float, n)
@@ -1019,7 +1019,7 @@ SvStream& SvStream::operator>>(float& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(double& r)
+SvStream& SvStream::ReadDouble(double& r)
 {
     double n = 0;
     READNUMBER_WITHOUT_SWAP(double, n)
@@ -1034,7 +1034,7 @@ SvStream& SvStream::operator>>(double& r)
     return *this;
 }
 
-SvStream& SvStream::operator>> ( SvStream& rStream )
+SvStream& SvStream::ReadStream( SvStream& rStream )
 {
     const sal_uInt32 cBufLen = 0x8000;
     char* pBuf = new char[ cBufLen ];

@@ -561,7 +561,7 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly )
     sal_uInt16   nPolyCount;
 
     // read number of polygons
-    rIStream >> nPolyCount;
+    rIStream.ReadUInt16( nPolyCount );
 
     if( nPolyCount )
     {
@@ -610,7 +610,7 @@ void PolyPolygon::Read( SvStream& rIStream )
     sal_uInt16   nPolyCount;
 
     // Read number of polygons
-    rIStream >> nPolyCount;
+    rIStream.ReadUInt16( nPolyCount );
 
     if( nPolyCount )
     {
