@@ -184,7 +184,7 @@ SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     return new SvxHorJustifyItem( (SvxCellHorJustify)nVal, Which() );
 }
 
@@ -330,7 +330,7 @@ SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     return new SvxVerJustifyItem( (SvxCellVerJustify)nVal, Which() );
 }
 
@@ -422,7 +422,7 @@ SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     return new SvxJustifyMethodItem( (SvxCellJustifyMethod)nVal, Which() );
 }
 

@@ -34,7 +34,7 @@ TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
     short nValue = 0;
-    rStream >> nValue;
+    rStream.ReadInt16( nValue );
     return new SfxByteItem(Which(), sal_uInt8(nValue));
 }
 
@@ -51,7 +51,7 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
 {
     DBG_CTOR(SfxInt16Item, 0);
     short nTheValue = 0;
-    rStream >> nTheValue;
+    rStream.ReadInt16( nTheValue );
     m_nValue = nTheValue;
 }
 

@@ -1509,7 +1509,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
     sal_uInt16          nPoints;
 
     // read all points and create array
-    rIStream >> nPoints;
+    rIStream.ReadUInt16( nPoints );
     if ( rPoly.mpImplPolygon->mnRefCount != 1 )
     {
         if ( rPoly.mpImplPolygon->mnRefCount )
@@ -1535,7 +1535,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
             {
                 //fdo#39428 SvStream no longer supports operator>>(long&)
                 sal_Int32 nTmpX(0), nTmpY(0);
-                rIStream >> nTmpX >> nTmpY;
+                rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
                 rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;
                 rPoly.mpImplPolygon->mpPointAry[i].Y() = nTmpY;
             }
@@ -1591,7 +1591,7 @@ void Polygon::ImplRead( SvStream& rIStream )
     sal_uInt8   bHasPolyFlags;
 
     ReadPolygon( rIStream, *this );
-    rIStream >> bHasPolyFlags;
+    rIStream.ReadUChar( bHasPolyFlags );
 
     if ( bHasPolyFlags )
     {

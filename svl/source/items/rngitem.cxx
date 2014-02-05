@@ -98,8 +98,8 @@ SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
 SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
 {
     sal_uInt16 nVon(0), nBis(0);
-    rStream >> nVon;
-    rStream >> nBis;
+    rStream.ReadUInt16( nVon );
+    rStream.ReadUInt16( nBis );
     return new SfxRangeItem( Which(), nVon, nBis );
 }
 
@@ -123,10 +123,10 @@ SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )
 :   SfxPoolItem( nWID )
 {
     sal_uInt16 nCount(0);
-    rStream >> nCount;
+    rStream.ReadUInt16( nCount );
     _pRanges = new sal_uInt16[nCount + 1];
     for ( sal_uInt16 n = 0; n < nCount; ++n )
-        rStream >> _pRanges[n];
+        rStream.ReadUInt16( _pRanges[n] );
     _pRanges[nCount] = 0;
 }
 
@@ -189,9 +189,9 @@ SfxPoolItem* SfxUShortRangesItem::Create( SvStream &rStream, sal_uInt16 ) const
 SvStream& SfxUShortRangesItem::Store( SvStream &rStream, sal_uInt16 ) const
 {
     sal_uInt16 nCount = Count_Impl( _pRanges );
-    rStream >> nCount;
+    rStream.ReadUInt16( nCount );
     for ( sal_uInt16 n = 0; _pRanges[n]; ++n )
-        rStream >> _pRanges[n];
+        rStream.ReadUInt16( _pRanges[n] );
     return rStream;
 }
 

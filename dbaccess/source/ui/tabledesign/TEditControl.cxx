@@ -812,7 +812,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             OUString aFieldName;
              ::boost::shared_ptr<OTableRow>  pRow;
             sal_Int32 nSize = 0;
-            (*aStreamRef) >> nSize;
+            (*aStreamRef).ReadInt32( nSize );
             vInsertedUndoRedoRows.reserve(nSize);
             for(sal_Int32 i=0;i < nSize;++i)
             {

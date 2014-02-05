@@ -200,7 +200,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     sal_uInt32      nTmp32;
     sal_uInt16      nTmp16;
 
-    rIn >> nTmp32 >> nTmp16 >> rReadVersion >> nTmp16 >> bIsThumbBmp;
+    rIn.ReadUInt32( nTmp32 ).ReadUInt16( nTmp16 ).ReadUInt16( rReadVersion ).ReadUInt16( nTmp16 ).ReadUChar( bIsThumbBmp );
 
     if( bIsThumbBmp )
     {
@@ -382,7 +382,7 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     {
         sal_uInt16      nTmp16;
 
-        rIn >> nTmp16; eSoundType = (GalSoundType) nTmp16;
+        rIn.ReadUInt16( nTmp16 ); eSoundType = (GalSoundType) nTmp16;
 
         if( rReadVersion >= 6 )
             aTitle = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);

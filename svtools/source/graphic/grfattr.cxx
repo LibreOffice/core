@@ -79,16 +79,16 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
     sal_uInt32      nTmp32;
     sal_uInt16          nTmp16;
 
-    rIStm >> nTmp32 >> nTmp32 >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
-    rIStm >> rAttr.mnContPercent >> rAttr.mnLumPercent >> rAttr.mnRPercent >> rAttr.mnGPercent >> rAttr.mnBPercent;
-    rIStm >> rAttr.mbInvert >> rAttr.mcTransparency >> nTmp16;
+    rIStm.ReadUInt32( nTmp32 ).ReadUInt32( nTmp32 ).ReadDouble( rAttr.mfGamma ).ReadUInt32( rAttr.mnMirrFlags ).ReadUInt16( rAttr.mnRotate10 );
+    rIStm.ReadInt16( rAttr.mnContPercent ).ReadInt16( rAttr.mnLumPercent ).ReadInt16( rAttr.mnRPercent ).ReadInt16( rAttr.mnGPercent ).ReadInt16( rAttr.mnBPercent );
+    rIStm.ReadUChar( rAttr.mbInvert ).ReadUChar( rAttr.mcTransparency ).ReadUInt16( nTmp16 );
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
 
     if( aCompat.GetVersion() >= 2 )
     {
         //#fdo39428 SvStream no longer supports operator>>(long&)
         sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
-        rIStm >> nTmpL >> nTmpT >> nTmpR >> nTmpB;
+        rIStm.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
         rAttr.mnLeftCrop = nTmpL;
         rAttr.mnTopCrop = nTmpT;
         rAttr.mnRightCrop = nTmpR;

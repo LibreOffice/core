@@ -1368,7 +1368,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                     OUString          aTmpName = aTempFile.GetURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
-                    *pStream >> aTmpStream;
+                    pStream->ReadStream( aTmpStream );
                     aTmpStream.Close();
 
                     // Open data as Storage

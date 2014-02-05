@@ -109,7 +109,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
     while (!rIStm.IsEof())
     {
         // read first character of filepath; c==0 > reach end of stream
-        rIStm >> c;
+        rIStm.ReadUInt16( c );
         if (!c)
             break;
 
@@ -117,7 +117,7 @@ SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
         while (c && !rIStm.IsEof())
         {
             sBuf.append((sal_Unicode)c);
-            rIStm >> c;
+            rIStm.ReadUInt16( c );
         }
 
         // append the filepath

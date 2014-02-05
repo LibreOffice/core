@@ -348,7 +348,7 @@ using namespace OpenStormBento;
 
     sal_uInt32 nTag;
     pStream->Seek(0x10);
-    *pStream >> nTag;
+    pStream->ReadUInt32( nTag );
     if (nTag != 0x3750574c) // "LWP7"
     {
         // small file, needs decompression

@@ -41,20 +41,20 @@ using namespace ::com::sun::star;
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
-    rIn >> nDimColor;
-    rIn >> nFlags;
-    rIn >> nSoundRef;
-    rIn >> nDelayTime;
-    rIn >> nOrderID;
-    rIn >> nSlideCount;
-    rIn >> nBuildType;
-    rIn >> nFlyMethod;
-    rIn >> nFlyDirection;
-    rIn >> nAfterEffect;
-    rIn >> nSubEffect;
-    rIn >> nOLEVerb;
-    rIn >> nUnknown1;
-    rIn >> nUnknown2;
+    rIn.ReadUInt32( nDimColor );
+    rIn.ReadUInt32( nFlags );
+    rIn.ReadUInt32( nSoundRef );
+    rIn.ReadInt32( nDelayTime );
+    rIn.ReadUInt16( nOrderID );
+    rIn.ReadUInt16( nSlideCount );
+    rIn.ReadUChar( nBuildType );
+    rIn.ReadUChar( nFlyMethod );
+    rIn.ReadUChar( nFlyDirection );
+    rIn.ReadUChar( nAfterEffect );
+    rIn.ReadUChar( nSubEffect );
+    rIn.ReadUChar( nOLEVerb );
+    rIn.ReadUChar( nUnknown1 );
+    rIn.ReadUChar( nUnknown2 );
 }
 
 //---------------------------------------------------------------------------------------

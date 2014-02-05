@@ -34,7 +34,7 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     sal_uInt16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
     rStreamWMF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStreamWMF.Seek( 0x28 );
-    rStreamWMF >> nMetaType;
+    rStreamWMF.ReadUInt32( nMetaType );
     rStreamWMF.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
@@ -71,7 +71,7 @@ sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigI
           nOrigNumberFormat));
 
     rStream.Seek( 0x28 );
-    rStream >> nMetaType;
+    rStream.ReadUInt32( nMetaType );
     rStream.Seek( nOrgPos );
 
     if (!rStream.good())

@@ -144,18 +144,18 @@ private:
 
         while( !m_InputStream.IsEof())
         {
-            m_InputStream >> nDelim;
+            m_InputStream.ReadUChar( nDelim );
             if( nDelim == 0x40 )
             {
-                m_InputStream >> nDummy >> nOpcode;
+                m_InputStream.ReadUChar( nDummy ).ReadUInt16( nOpcode );
                 switch( nOpcode )
                 {
                     case 0xC00B:  // Dictionary Word
-                        m_InputStream >> nLen >> nDummy;
+                        m_InputStream.ReadUChar( nLen ).ReadUChar( nDummy );
                         while( nLen > 0 && !m_InputStream.IsEof() )
                         {
                             sal_uInt8 nChar;
-                            m_InputStream >> nChar;
+                            m_InputStream.ReadUChar( nChar );
                             if( CheckValidData( nChar ) )
                             {
                                 sBuf.appendAscii( (sal_Char*)(&nChar),1 );
@@ -170,13 +170,13 @@ private:
                         break;
 
                     case 0x0242:  // Non Dictionary word
-                        m_InputStream >> nData;
+                        m_InputStream.ReadUChar( nData );
                         if( nData == 0x02 )
                         {
-                            m_InputStream >> nLen >> nDummy;
+                            m_InputStream.ReadUChar( nLen ).ReadUChar( nDummy );
                             while( nLen > 0 && !m_InputStream.IsEof() )
                             {
-                                m_InputStream >> nData;
+                                m_InputStream.ReadUChar( nData );
                                 if( CheckValidData( nData ) )
                                 {
                                     sBuf.appendAscii( (sal_Char*)(&nData),1 );

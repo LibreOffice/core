@@ -104,20 +104,20 @@ int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 {
     if( SVX_MACROTBL_VERSION40 <= nVersion )
-        rStrm >> nVersion;
+        rStrm.ReadUInt16( nVersion );
     short nMacro;
-    rStrm >> nMacro;
+    rStrm.ReadInt16( nMacro );
 
     for( short i = 0; i < nMacro; ++i )
     {
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;
-        rStrm >> nCurKey;
+        rStrm.ReadUInt16( nCurKey );
         aLibName = SfxPoolItem::readByteString(rStrm);
         aMacName = SfxPoolItem::readByteString(rStrm);
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
-            rStrm >> eType;
+            rStrm.ReadUInt16( eType );
 
         aSvxMacroTable.insert( SvxMacroTable::value_type(nCurKey, SvxMacro( aMacName, aLibName, (ScriptType)eType ) ));
     }

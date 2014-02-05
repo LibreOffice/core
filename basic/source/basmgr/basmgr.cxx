@@ -545,16 +545,16 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     sal_uInt16 nId;
     sal_uInt16 nVer;
 
-    rSStream >> nEndPos;
-    rSStream >> nId;
-    rSStream >> nVer;
+    rSStream.ReadUInt32( nEndPos );
+    rSStream.ReadUInt16( nId );
+    rSStream.ReadUInt16( nVer );
 
     DBG_ASSERT( nId == LIBINFO_ID, "No BasicLibInfo?!" );
     if( nId == LIBINFO_ID )
     {
         // Reload?
         sal_Bool bDoLoad;
-        rSStream >> bDoLoad;
+        rSStream.ReadUChar( bDoLoad );
         pInfo->bDoLoad = bDoLoad;
 
         // The name of the lib...
@@ -572,7 +572,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
         if ( nVer >= 2 )
         {
             sal_Bool bReferenz;
-            rSStream >> bReferenz;
+            rSStream.ReadUChar( bReferenz );
             pInfo->IsReference() = bReferenz;
         }
 
@@ -637,7 +637,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
-        *static_cast<SvStream*>(&xManagerStream) >> *mpImpl->mpManagerStream;
+        static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
 
         SotStorageRef xBasicStorage = rStorage.OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, sal_False );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
@@ -650,7 +650,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
                 DBG_ASSERT( pInfo, "pInfo?!" );
                 SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( pInfo->GetLibName(), eStreamReadMode );
                 mpImpl->mppLibStreams[nL] = new SvMemoryStream();
-                *static_cast<SvStream*>(&xBasicStream) >> *( mpImpl->mppLibStreams[nL] );
+                static_cast<SvStream*>(&xBasicStream)->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
             }
         }
     }
@@ -858,10 +858,10 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_uInt32 nEndPos;
-    *xManagerStream >> nEndPos;
+    xManagerStream->ReadUInt32( nEndPos );
 
     sal_uInt16 nLibs;
-    *xManagerStream >> nLibs;
+    xManagerStream->ReadUInt16( nLibs );
     // Plausibility!
     if( nLibs & 0xF000 )
     {
@@ -930,8 +930,8 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->SetBufferSize( 1024 );
     xManagerStream->Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt32 nBasicStartOff, nBasicEndOff;
-    *xManagerStream >> nBasicStartOff;
-    *xManagerStream >> nBasicEndOff;
+    xManagerStream->ReadUInt32( nBasicStartOff );
+    xManagerStream->ReadUInt32( nBasicEndOff );
 
     DBG_ASSERT( !xManagerStream->GetError(), "Invalid Manager-Stream!" );
 
@@ -1139,7 +1139,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
                 xBasicStream->SetCryptMaskKey(szCryptingKey);
                 xBasicStream->RefreshBuffer();
                 sal_uInt32 nPasswordMarker = 0;
-                *xBasicStream >> nPasswordMarker;
+                xBasicStream->ReadUInt32( nPasswordMarker );
                 if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->IsEof() )
                 {
                     OUString aPassword = xBasicStream->ReadUniOrByteString(
@@ -1159,7 +1159,7 @@ sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
 {
     sal_uIntPtr nPos = rStrm.Tell();
     sal_uInt32 nCreator;
-    rStrm >> nCreator;
+    rStrm.ReadUInt32( nCreator );
     rStrm.Seek( nPos );
     sal_Bool bProtected = sal_False;
     if ( nCreator != SBXCR_SBX )

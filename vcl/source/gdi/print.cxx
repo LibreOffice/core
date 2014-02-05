@@ -278,8 +278,8 @@ SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
     rInfo.maDriver = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
     rInfo.maLocation = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
     rInfo.maComment = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-    rIStream >> rInfo.mnStatus;
-    rIStream >> rInfo.mnJobs;
+    rIStream.ReadUInt32( rInfo.mnStatus );
+    rIStream.ReadUInt32( rInfo.mnJobs );
 
     return rIStream;
 }

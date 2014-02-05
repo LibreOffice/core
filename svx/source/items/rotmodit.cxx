@@ -62,7 +62,7 @@ SvxRotateModeItem::~SvxRotateModeItem()
 SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    rStream >> nVal;
+    rStream.ReadUInt16( nVal );
     return new SvxRotateModeItem( (SvxRotateMode) nVal,Which() );
 }
 

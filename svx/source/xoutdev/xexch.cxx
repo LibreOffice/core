@@ -96,7 +96,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
     sal_uInt32      nItemCount = 0;
     sal_uInt16          nWhich, nItemVersion;
 
-    rIStm >> nItemCount;
+    rIStm.ReadUInt32( nItemCount );
 
     if( nItemCount > ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 ) )
         nItemCount = ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 );
@@ -105,7 +105,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
     {
         VersionCompat aCompat( rIStm, STREAM_READ );
 
-        rIStm >> nWhich >> nItemVersion;
+        rIStm.ReadUInt16( nWhich ).ReadUInt16( nItemVersion );
 
         if( nWhich )
         {

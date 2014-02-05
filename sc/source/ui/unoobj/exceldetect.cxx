@@ -89,7 +89,7 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
         return false;
 
     sal_uInt16 nBofId, nBofSize;
-    *pStream >> nBofId >> nBofSize;
+    pStream->ReadUInt16( nBofId ).ReadUInt16( nBofSize );
 
     switch (nBofId)
     {

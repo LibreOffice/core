@@ -417,9 +417,9 @@ void SvxDateField::Load( SvPersistStream & rStm )
 {
     sal_uInt16 nType, nFormat;
 
-    rStm >> nFixDate;
-    rStm >> nType;
-    rStm >> nFormat;
+    rStm.ReadUInt32( nFixDate );
+    rStm.ReadUInt16( nType );
+    rStm.ReadUInt16( nFormat );
 
     eType = (SvxDateType)nType;
     eFormat= (SvxDateFormat)nFormat;
@@ -564,7 +564,7 @@ static OUString read_unicode( SvPersistStream & rStm )
 {
     rtl_uString *pStr = NULL;
     sal_uInt16 nL = 0;
-    rStm >> nL;
+    rStm.ReadUInt16( nL );
     if ( nL )
     {
         pStr = rtl_uString_alloc(nL);
@@ -579,7 +579,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
 {
     sal_uInt16 nFormat = 0;
 
-    rStm >> nFormat;
+    rStm.ReadUInt16( nFormat );
     eFormat= (SvxURLFormat)nFormat;
 
     aURL = read_unicode( rStm );
@@ -798,8 +798,8 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
     sal_uInt16 nType, nFormat;
 
     rStm.ReadInt64(m_nFixTime);
-    rStm >> nType;
-    rStm >> nFormat;
+    rStm.ReadUInt16( nType );
+    rStm.ReadUInt16( nFormat );
 
     eType = (SvxTimeType) nType;
     eFormat= (SvxTimeFormat) nFormat;
@@ -944,8 +944,8 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
     // UNICODE: rStm >> aFile;
     aFile = rStm.ReadUniOrByteString(rStm.GetStreamCharSet());
 
-    rStm >> nType;
-    rStm >> nFormat;
+    rStm.ReadUInt16( nType );
+    rStm.ReadUInt16( nFormat );
 
     eType = (SvxFileType) nType;
     eFormat= (SvxFileFormat) nFormat;
@@ -1099,8 +1099,8 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
     aFirstName = read_unicode( rStm );
     aShortName = read_unicode( rStm );
 
-    rStm >> nType;
-    rStm >> nFormat;
+    rStm.ReadUInt16( nType );
+    rStm.ReadUInt16( nFormat );
 
     eType = (SvxAuthorType) nType;
     eFormat= (SvxAuthorFormat) nFormat;

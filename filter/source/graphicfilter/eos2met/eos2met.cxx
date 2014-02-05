@@ -566,11 +566,11 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     // read header of the Windows-BMP file:
     aTemp.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     aTemp.Seek(18);
-    aTemp >> nWidth >> nHeight;
+    aTemp.ReadUInt32( nWidth ).ReadUInt32( nHeight );
     aTemp.SeekRel(2);
-    aTemp >> nBitsPerPixel;
+    aTemp.ReadUInt16( nBitsPerPixel );
     aTemp.SeekRel(8);
-    aTemp >> nResX >> nResY;
+    aTemp.ReadUInt32( nResX ).ReadUInt32( nResY );
     aTemp.SeekRel(8);
 
     nNumColors=1<<nBitsPerPixel;
@@ -584,7 +584,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 
         for (i=0; i<nNumColors; i++)
         {
-            aTemp >> nb >> ng >> nr; aTemp.SeekRel(1);
+            aTemp.ReadUChar( nb ).ReadUChar( ng ).ReadUChar( nr ); aTemp.SeekRel(1);
             aPal[ (sal_uInt16) i ] = BitmapColor( nr, ng, nb );
         }
 

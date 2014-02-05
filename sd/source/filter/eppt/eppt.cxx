@@ -1430,8 +1430,8 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
             sal_uInt32 n1, n2;
 
             mpVBA->Seek( 0 );
-            *mpVBA >> n1
-                   >> n2;
+            mpVBA->ReadUInt32( n1 )
+                  .ReadUInt32( n2 );
 
             mpStrm->WriteUInt32( mnVBAOleOfs );
             sal_uInt32 nOldPos = mpStrm->Tell();

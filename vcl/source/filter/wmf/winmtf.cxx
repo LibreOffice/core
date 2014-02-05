@@ -307,7 +307,7 @@ void WinMtf::Callback( sal_uInt16 nPercent )
 Color WinMtf::ReadColor()
 {
     sal_uInt32 nColor;
-    *pWMF >> nColor;
+    pWMF->ReadUInt32( nColor );
     return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
 };
 

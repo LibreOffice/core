@@ -308,7 +308,7 @@ void SdVectorizeDlg::LoadSettings()
     if( xIStm.Is() )
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
-        *xIStm >> nLayers >> nReduce >> nFillHoles >> bFillHoles;
+        xIStm->ReadUInt16( nLayers ).ReadUInt16( nReduce ).ReadUInt16( nFillHoles ).ReadUChar( bFillHoles );
     }
     else
     {

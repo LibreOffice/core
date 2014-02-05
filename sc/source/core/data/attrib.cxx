@@ -158,8 +158,8 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) con
 {
     sal_Int16   nCol;
     sal_Int16   nRow;
-    rStream >> nCol;
-    rStream >> nRow;
+    rStream.ReadInt16( nCol );
+    rStream.ReadInt16( nRow );
     return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
 }
 
@@ -402,10 +402,10 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) c
     sal_Bool bHCell;
     sal_Bool bHPrint;
 
-    rStream >> bProtect;
-    rStream >> bHFormula;
-    rStream >> bHCell;
-    rStream >> bHPrint;
+    rStream.ReadUChar( bProtect );
+    rStream.ReadUChar( bHFormula );
+    rStream.ReadUChar( bHCell );
+    rStream.ReadUChar( bHPrint );
 
     return new ScProtectionAttr(bProtect,bHFormula,bHCell,bHPrint);
 }
@@ -1038,7 +1038,7 @@ SfxPoolItem* ScViewObjectModeItem::Create(
     else
     {
         sal_uInt16 nVal;
-        rStream >> nVal;
+        rStream.ReadUInt16( nVal );
 
         //#i80528# adapt to new range eventually
         if((sal_uInt16)VOBJ_MODE_HIDE < nVal) nVal = (sal_uInt16)VOBJ_MODE_SHOW;
@@ -1093,7 +1093,7 @@ SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
 SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
 {
     double nTmp=0;
-    rStream >> nTmp;
+    rStream.ReadDouble( nTmp );
 
     ScDoubleItem* pItem = new ScDoubleItem( Which(), nTmp );
 

@@ -49,7 +49,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
 
     sal_uInt16 nVer;
 
-    rStm >> nVer; // version
+    rStm.ReadUInt16( nVer ); // version
     DBG_ASSERT( (nVer & ~IDL_WRITE_MASK) == MODULE_VER, "false version" );
 
     rStm >> aClassList;
@@ -63,7 +63,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
 
     // read compiler data
     sal_uInt16 nCmpLen;
-    rStm >> nCmpLen;
+    rStm.ReadUInt16( nCmpLen );
     DBG_ASSERT( (nVer & IDL_WRITE_MASK) == IDL_WRITE_COMPILER,
                 "no idl compiler format" );
     rStm >> aBeginName;

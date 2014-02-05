@@ -88,9 +88,9 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
     DBG_CHKTHIS(SvxB3DVectorItem, 0);
     basegfx::B3DVector aStr;
     double fValue;
-    rStream >> fValue; aStr.setX(fValue);
-    rStream >> fValue; aStr.setY(fValue);
-    rStream >> fValue; aStr.setZ(fValue);
+    rStream.ReadDouble( fValue ); aStr.setX(fValue);
+    rStream.ReadDouble( fValue ); aStr.setY(fValue);
+    rStream.ReadDouble( fValue ); aStr.setZ(fValue);
     return new SvxB3DVectorItem(Which(), aStr);
 }
 

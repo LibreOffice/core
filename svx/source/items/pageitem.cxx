@@ -245,9 +245,9 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     // UNICODE: rStream >> sStr;
     OUString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
-    rStream >> eType;
-    rStream >> bLand;
-    rStream >> nUse;
+    rStream.ReadUChar( eType );
+    rStream.ReadUChar( bLand );
+    rStream.ReadUInt16( nUse );
 
     SvxPageItem* pPage = new SvxPageItem( Which() );
     pPage->SetDescName( sStr );

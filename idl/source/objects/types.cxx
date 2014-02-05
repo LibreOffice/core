@@ -54,7 +54,7 @@ void SvMetaAttribute::Load( SvPersistStream & rStm )
     SvMetaReference::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask & 0x01 )
     {
         SvMetaType * pType;
@@ -789,7 +789,7 @@ void SvMetaType::Load( SvPersistStream & rStm )
     SvMetaExtern::Load( rStm );
 
     sal_uInt16 nMask;
-    rStm >> nMask;
+    rStm.ReadUInt16( nMask );
     if( nMask & 0x0001 ) rStm >> aIn;
     if( nMask & 0x0002 ) rStm >> aOut;
     if( nMask & 0x0004 ) rStm >> aCall0;
@@ -804,10 +804,10 @@ void SvMetaType::Load( SvPersistStream & rStm )
     if( nMask & 0x0800 )
     {
         sal_uInt16 nT;
-        rStm >> nT;
+        rStm.ReadUInt16( nT );
         nType = nT;
     }
-    if( nMask & 0x1000 ) rStm >> cParserChar;
+    if( nMask & 0x1000 ) rStm.ReadChar( cParserChar );
     if( nMask & 0x2000 ) rStm >> aCName;
     if( nMask & 0x4000 ) rStm >> aBasicName;
     if( nMask & 0x8000 ) rStm >> aBasicPostfix;
@@ -1765,7 +1765,7 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
     SvMetaName::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x02 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -1821,7 +1821,7 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
     SvMetaType::Load( rStm );
 
     sal_uInt8 nMask;
-    rStm >> nMask;
+    rStm.ReadUChar( nMask );
     if( nMask >= 0x04 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );

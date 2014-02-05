@@ -1515,14 +1515,14 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     while( true ) // Zaehle Zahl der Grpprls
     {
         sal_uInt8 clxt(2);
-        *pStr >> clxt;
+        pStr->ReadUChar( clxt );
         nLeft--;
         if( 2 == clxt )                         // PLCFfpcd ?
             break;                              // PLCFfpcd gefunden
         if( 1 == clxt )                         // clxtGrpprl ?
             nGrpprl++;
         sal_uInt16 nLen(0);
-        *pStr >> nLen;
+        pStr->ReadUInt16( nLen );
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
             return NULL;                        // gone wrong
@@ -1540,12 +1540,12 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     while( true )
     {
         sal_uInt8 clxt(2);
-        *pStr >> clxt;
+        pStr->ReadUChar( clxt );
         nLeft--;
         if( 2 == clxt)                          // PLCFfpcd ?
             break;                              // PLCFfpcd found
         sal_uInt16 nLen(0);
-        *pStr >> nLen;
+        pStr->ReadUInt16( nLen );
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
             return NULL;                        // gone wrong
@@ -1568,11 +1568,11 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     if (pWwF->GetFIBVersion() <= ww::eWW2)
     {
         sal_Int16 nWordTwoLen(0);
-        *pStr >> nWordTwoLen;
+        pStr->ReadInt16( nWordTwoLen );
         nPLCFfLen = nWordTwoLen;
     }
     else
-        *pStr >> nPLCFfLen;
+        pStr->ReadInt32( nPLCFfLen );
     OSL_ENSURE( 65536 > nPLCFfLen, "PLCFfpcd above 64 k" );
     return new WW8PLCFpcd( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
@@ -2169,7 +2169,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             if (checkSeek(rSt, ( nPN + i ) << 9 ))
                 continue;
             WW8_CP nFc(0);
-            rSt >> nFc;
+            rSt.ReadInt32( nFc );
             pPLCF_PosArray[i] = nFc;
             failure = rSt.GetError();
         }
@@ -2187,13 +2187,13 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
                 break;
 
             sal_uInt8 nb(0);
-            rSt >> nb;
+            rSt.ReadUChar( nb );
             // letzer FC-Eintrag des letzten Fkp
             if (!checkSeek(rSt, nLastFkpPos + nb * 4))
                 break;
 
             WW8_CP nFc(0);
-            rSt >> nFc;
+            rSt.ReadInt32( nFc );
             pPLCF_PosArray[nIMax] = nFc;        // end of the last Fkp
 
             failure = rSt.GetError();
@@ -2549,7 +2549,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                                 sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
                                 sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
 
-                                *pDataSt >> aEntry.mnLen;
+                                pDataSt->ReadUInt16( aEntry.mnLen );
                                 aEntry.mpData =
                                     new sal_uInt8[aEntry.mnLen + nOrigLen];
                                 aEntry.mbMustDelete = true;
@@ -3423,11 +3423,11 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
             if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
             {
                 sal_uInt8 nSiz(0);
-                *pStrm >> nSiz;
+                pStrm->ReadUChar( nSiz );
                 nSprmSiz = nSiz;
             }
             else
-                *pStrm >> nSprmSiz;
+                pStrm->ReadUInt16( nSprmSiz );
 
             if( nSprmSiz > nArrMax )
             {               // does not fit
@@ -3801,7 +3801,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
     if (checkSeek(rStrm, nStart))
     {
         sal_uInt16 nLen2(0);
-        rStrm >> nLen2; // bVer67: total length of structure
+        rStrm.ReadUInt16( nLen2 ); // bVer67: total length of structure
                         // bVer8 : count of strings
 
         if( bVer8 )
@@ -3809,11 +3809,11 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             sal_uInt16 nStrings(0);
             bool bUnicode = (0xFFFF == nLen2);
             if (bUnicode)
-                rStrm >> nStrings;
+                rStrm.ReadUInt16( nStrings );
             else
                 nStrings = nLen2;
 
-            rStrm >> nExtraLen;
+            rStrm.ReadUInt16( nExtraLen );
 
             for (sal_uInt16 i=0; i < nStrings; ++i)
             {
@@ -3834,7 +3834,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                         for (sal_uInt16 j = 0; j < nExtraLen; ++j)
                         {
                             sal_uInt8 iTmp(0);
-                            rStrm >> iTmp;
+                            rStrm.ReadUChar( iTmp );
                             extraData.push_back(iTmp);
                         }
                         pExtraArray->push_back(extraData);
@@ -3874,7 +3874,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             for( nLen2 -= 2; nRead < nLen2;  )
             {
                 sal_uInt8 nBChar(0);
-                rStrm >> nBChar;
+                rStrm.ReadUChar( nBChar );
                 ++nRead;
                 if (nBChar)
                 {
@@ -3895,7 +3895,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                         for (sal_uInt16 i=0;i < nExtraLen;++i)
                         {
                             sal_uInt8 iTmp(0);
-                            rStrm >> iTmp;
+                            rStrm.ReadUChar( iTmp );
                             extraData.push_back(iTmp);
                         }
                         pExtraArray->push_back(extraData);
@@ -5026,13 +5026,13 @@ namespace
         if (eVer <= ww::eWW2)
         {
             sal_uInt16 nShort;
-            rSt >> nShort;
+            rSt.ReadUInt16( nShort );
             return nShort;
         }
         else
         {
             sal_uInt32 nLong;
-            rSt >> nLong;
+            rSt.ReadUInt32( nLong );
             return nLong;
         }
     }
@@ -5132,9 +5132,9 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         und gegen Wunsch-Nr. checken !
     */
     nVersion = nWantedVersion;
-    rSt >> wIdent;
-    rSt >> nFib;
-    rSt >> nProduct;
+    rSt.ReadUInt16( wIdent );
+    rSt.ReadUInt16( nFib );
+    rSt.ReadUInt16( nProduct );
     if( 0 != rSt.GetError() )
     {
         sal_Int16 nFibMin;
@@ -5180,15 +5180,15 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     sal_Int16 cpnBtePap_Ver67=0;
 
     // und auf gehts: FIB einlesen
-    rSt >> lid;
-    rSt >> pnNext;
-    rSt >> aBits1;
-    rSt >> aBits2;
-    rSt >> nFibBack;
-    rSt >> nHash;
-    rSt >> nKey;
-    rSt >> envr;
-    rSt >> aVer8Bits1;      // unter Ver67  nur leeres Reservefeld
+    rSt.ReadInt16( lid );
+    rSt.ReadInt16( pnNext );
+    rSt.ReadUChar( aBits1 );
+    rSt.ReadUChar( aBits2 );
+    rSt.ReadUInt16( nFibBack );
+    rSt.ReadUInt16( nHash );
+    rSt.ReadUInt16( nKey );
+    rSt.ReadUChar( envr );
+    rSt.ReadUChar( aVer8Bits1 );      // unter Ver67  nur leeres Reservefeld
                             // Inhalt von aVer8Bits1
                             //
                             // sal_uInt8 fMac              :1;
@@ -5197,21 +5197,21 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                             // sal_uInt8 fFuturesavedUndo  :1;
                             // sal_uInt8 fWord97Saved      :1;
                             // sal_uInt8 :3;
-    rSt >> chse;
-    rSt >> chseTables;
-    rSt >> fcMin;
-    rSt >> fcMac;
+    rSt.ReadUInt16( chse );
+    rSt.ReadUInt16( chseTables );
+    rSt.ReadInt32( fcMin );
+    rSt.ReadInt32( fcMac );
 
 // Einschub fuer WW8 *****************************************************
     if (IsEightPlus(eVer))
     {
-        rSt >> csw;
+        rSt.ReadUInt16( csw );
 
         // Marke: "rgsw"  Beginning of the array of shorts
-        rSt >> wMagicCreated;
-        rSt >> wMagicRevised;
-        rSt >> wMagicCreatedPrivate;
-        rSt >> wMagicRevisedPrivate;
+        rSt.ReadUInt16( wMagicCreated );
+        rSt.ReadUInt16( wMagicRevised );
+        rSt.ReadUInt16( wMagicCreatedPrivate );
+        rSt.ReadUInt16( wMagicRevisedPrivate );
         rSt.SeekRel( 9 * sizeof( sal_Int16 ) );
 
         /*
@@ -5226,14 +5226,14 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         && (bVer67 || WW8ReadINT16(  rSt, pnLvcFirst_W6                 ))  // 8
         && (bVer67 || WW8ReadINT16(  rSt, cpnBteLvc_W6                  ))  // 9
         */
-        rSt >> lidFE;
-        rSt >> clw;
+        rSt.ReadInt16( lidFE );
+        rSt.ReadUInt16( clw );
     }
 
 // Ende des Einschubs fuer WW8 *******************************************
 
         // Marke: "rglw"  Beginning of the array of longs
-    rSt >> cbMac;
+    rSt.ReadInt32( cbMac );
 
         // 2 Longs uebergehen, da unwichtiger Quatsch
     rSt.SeekRel( 2 * sizeof( sal_Int32) );
@@ -5242,14 +5242,14 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     if (IsSevenMinus(eVer))
         rSt.SeekRel( 2 * sizeof( sal_Int32) );
 
-    rSt >> ccpText;
-    rSt >> ccpFtn;
-    rSt >> ccpHdr;
-    rSt >> ccpMcr;
-    rSt >> ccpAtn;
-    rSt >> ccpEdn;
-    rSt >> ccpTxbx;
-    rSt >> ccpHdrTxbx;
+    rSt.ReadInt32( ccpText );
+    rSt.ReadInt32( ccpFtn );
+    rSt.ReadInt32( ccpHdr );
+    rSt.ReadInt32( ccpMcr );
+    rSt.ReadInt32( ccpAtn );
+    rSt.ReadInt32( ccpEdn );
+    rSt.ReadInt32( ccpTxbx );
+    rSt.ReadInt32( ccpHdrTxbx );
 
         // weiteres Long nur bei Ver67 ueberspringen
     if (IsSevenMinus(eVer))
@@ -5257,98 +5257,98 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     else
     {
 // Einschub fuer WW8 *****************************************************
-        rSt >> pnFbpChpFirst;
-        rSt >> pnChpFirst;
-        rSt >> cpnBteChp;
-        rSt >> pnFbpPapFirst;
-        rSt >> pnPapFirst;
-        rSt >> cpnBtePap;
-        rSt >> pnFbpLvcFirst;
-        rSt >> pnLvcFirst;
-        rSt >> cpnBteLvc;
-        rSt >> fcIslandFirst;
-        rSt >> fcIslandLim;
-        rSt >> cfclcb;
+        rSt.ReadInt32( pnFbpChpFirst );
+        rSt.ReadInt32( pnChpFirst );
+        rSt.ReadInt32( cpnBteChp );
+        rSt.ReadInt32( pnFbpPapFirst );
+        rSt.ReadInt32( pnPapFirst );
+        rSt.ReadInt32( cpnBtePap );
+        rSt.ReadInt32( pnFbpLvcFirst );
+        rSt.ReadInt32( pnLvcFirst );
+        rSt.ReadInt32( cpnBteLvc );
+        rSt.ReadInt32( fcIslandFirst );
+        rSt.ReadInt32( fcIslandLim );
+        rSt.ReadUInt16( cfclcb );
     }
 
 // Ende des Einschubs fuer WW8 *******************************************
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
-    rSt >> fcStshfOrig;
+    rSt.ReadInt32( fcStshfOrig );
     lcbStshfOrig = Readcb(rSt, eVer);
-    rSt >> fcStshf;
+    rSt.ReadInt32( fcStshf );
     lcbStshf = Readcb(rSt, eVer);
-    rSt >> fcPlcffndRef;
+    rSt.ReadInt32( fcPlcffndRef );
     lcbPlcffndRef = Readcb(rSt, eVer);
-    rSt >> fcPlcffndTxt;
+    rSt.ReadInt32( fcPlcffndTxt );
     lcbPlcffndTxt = Readcb(rSt, eVer);
-    rSt >> fcPlcfandRef;
+    rSt.ReadInt32( fcPlcfandRef );
     lcbPlcfandRef = Readcb(rSt, eVer);
-    rSt >> fcPlcfandTxt;
+    rSt.ReadInt32( fcPlcfandTxt );
     lcbPlcfandTxt = Readcb(rSt, eVer);
-    rSt >> fcPlcfsed;
+    rSt.ReadInt32( fcPlcfsed );
     lcbPlcfsed = Readcb(rSt, eVer);
-    rSt >> fcPlcfpad;
+    rSt.ReadInt32( fcPlcfpad );
     lcbPlcfpad = Readcb(rSt, eVer);
-    rSt >> fcPlcfphe;
+    rSt.ReadInt32( fcPlcfphe );
     lcbPlcfphe = Readcb(rSt, eVer);
-    rSt >> fcSttbfglsy;
+    rSt.ReadInt32( fcSttbfglsy );
     lcbSttbfglsy = Readcb(rSt, eVer);
-    rSt >> fcPlcfglsy;
+    rSt.ReadInt32( fcPlcfglsy );
     lcbPlcfglsy = Readcb(rSt, eVer);
-    rSt >> fcPlcfhdd;
+    rSt.ReadInt32( fcPlcfhdd );
     lcbPlcfhdd = Readcb(rSt, eVer);
-    rSt >> fcPlcfbteChpx;
+    rSt.ReadInt32( fcPlcfbteChpx );
     lcbPlcfbteChpx = Readcb(rSt, eVer);
-    rSt >> fcPlcfbtePapx;
+    rSt.ReadInt32( fcPlcfbtePapx );
     lcbPlcfbtePapx = Readcb(rSt, eVer);
-    rSt >> fcPlcfsea;
+    rSt.ReadInt32( fcPlcfsea );
     lcbPlcfsea = Readcb(rSt, eVer);
-    rSt >> fcSttbfffn;
+    rSt.ReadInt32( fcSttbfffn );
     lcbSttbfffn = Readcb(rSt, eVer);
-    rSt >> fcPlcffldMom;
+    rSt.ReadInt32( fcPlcffldMom );
     lcbPlcffldMom = Readcb(rSt, eVer);
-    rSt >> fcPlcffldHdr;
+    rSt.ReadInt32( fcPlcffldHdr );
     lcbPlcffldHdr = Readcb(rSt, eVer);
-    rSt >> fcPlcffldFtn;
+    rSt.ReadInt32( fcPlcffldFtn );
     lcbPlcffldFtn = Readcb(rSt, eVer);
-    rSt >> fcPlcffldAtn;
+    rSt.ReadInt32( fcPlcffldAtn );
     lcbPlcffldAtn = Readcb(rSt, eVer);
-    rSt >> fcPlcffldMcr;
+    rSt.ReadInt32( fcPlcffldMcr );
     lcbPlcffldMcr = Readcb(rSt, eVer);
-    rSt >> fcSttbfbkmk;
+    rSt.ReadInt32( fcSttbfbkmk );
     lcbSttbfbkmk = Readcb(rSt, eVer);
-    rSt >> fcPlcfbkf;
+    rSt.ReadInt32( fcPlcfbkf );
     lcbPlcfbkf = Readcb(rSt, eVer);
-    rSt >> fcPlcfbkl;
+    rSt.ReadInt32( fcPlcfbkl );
     lcbPlcfbkl = Readcb(rSt, eVer);
-    rSt >> fcCmds;
+    rSt.ReadInt32( fcCmds );
     lcbCmds = Readcb(rSt, eVer);
-    rSt >> fcPlcfmcr;
+    rSt.ReadInt32( fcPlcfmcr );
     lcbPlcfmcr = Readcb(rSt, eVer);
-    rSt >> fcSttbfmcr;
+    rSt.ReadInt32( fcSttbfmcr );
     lcbSttbfmcr = Readcb(rSt, eVer);
-    rSt >> fcPrDrvr;
+    rSt.ReadInt32( fcPrDrvr );
     lcbPrDrvr = Readcb(rSt, eVer);
-    rSt >> fcPrEnvPort;
+    rSt.ReadInt32( fcPrEnvPort );
     lcbPrEnvPort = Readcb(rSt, eVer);
-    rSt >> fcPrEnvLand;
+    rSt.ReadInt32( fcPrEnvLand );
     lcbPrEnvLand = Readcb(rSt, eVer);
-    rSt >> fcWss;
+    rSt.ReadInt32( fcWss );
     lcbWss = Readcb(rSt, eVer);
-    rSt >> fcDop;
+    rSt.ReadInt32( fcDop );
     lcbDop = Readcb(rSt, eVer);
-    rSt >> fcSttbfAssoc;
+    rSt.ReadInt32( fcSttbfAssoc );
     lcbSttbfAssoc = Readcb(rSt, eVer);
-    rSt >> fcClx;
+    rSt.ReadInt32( fcClx );
     lcbClx = Readcb(rSt, eVer);
-    rSt >> fcPlcfpgdFtn;
+    rSt.ReadInt32( fcPlcfpgdFtn );
     lcbPlcfpgdFtn = Readcb(rSt, eVer);
-    rSt >> fcAutosaveSource;
+    rSt.ReadInt32( fcAutosaveSource );
     lcbAutosaveSource = Readcb(rSt, eVer);
-    rSt >> fcGrpStAtnOwners;
+    rSt.ReadInt32( fcGrpStAtnOwners );
     lcbGrpStAtnOwners = Readcb(rSt, eVer);
-    rSt >> fcSttbfAtnbkmk;
+    rSt.ReadInt32( fcSttbfAtnbkmk );
     lcbSttbfAtnbkmk = Readcb(rSt, eVer);
 
     // weiteres short nur bei Ver67 ueberspringen
@@ -5357,63 +5357,63 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.SeekRel( 1*sizeof( sal_Int16) );
 
         // folgende 4 Shorts existieren nur bei Ver67;
-        rSt >> pnChpFirst_Ver67;
-        rSt >> pnPapFirst_Ver67;
-        rSt >> cpnBteChp_Ver67;
-        rSt >> cpnBtePap_Ver67;
+        rSt.ReadInt16( pnChpFirst_Ver67 );
+        rSt.ReadInt16( pnPapFirst_Ver67 );
+        rSt.ReadInt16( cpnBteChp_Ver67 );
+        rSt.ReadInt16( cpnBtePap_Ver67 );
     }
 
     if (eVer > ww::eWW2)
     {
-        rSt >> fcPlcfdoaMom;
-        rSt >> lcbPlcfdoaMom;
-        rSt >> fcPlcfdoaHdr;
-        rSt >> lcbPlcfdoaHdr;
-        rSt >> fcPlcfspaMom;
-        rSt >> lcbPlcfspaMom;
-        rSt >> fcPlcfspaHdr;
-        rSt >> lcbPlcfspaHdr;
+        rSt.ReadInt32( fcPlcfdoaMom );
+        rSt.ReadInt32( lcbPlcfdoaMom );
+        rSt.ReadInt32( fcPlcfdoaHdr );
+        rSt.ReadInt32( lcbPlcfdoaHdr );
+        rSt.ReadInt32( fcPlcfspaMom );
+        rSt.ReadInt32( lcbPlcfspaMom );
+        rSt.ReadInt32( fcPlcfspaHdr );
+        rSt.ReadInt32( lcbPlcfspaHdr );
 
-        rSt >> fcPlcfAtnbkf;
-        rSt >> lcbPlcfAtnbkf;
-        rSt >> fcPlcfAtnbkl;
-        rSt >> lcbPlcfAtnbkl;
-        rSt >> fcPms;
-        rSt >> lcbPMS;
-        rSt >> fcFormFldSttbf;
-        rSt >> lcbFormFldSttbf;
-        rSt >> fcPlcfendRef;
-        rSt >> lcbPlcfendRef;
-        rSt >> fcPlcfendTxt;
-        rSt >> lcbPlcfendTxt;
-        rSt >> fcPlcffldEdn;
-        rSt >> lcbPlcffldEdn;
-        rSt >> fcPlcfpgdEdn;
-        rSt >> lcbPlcfpgdEdn;
-        rSt >> fcDggInfo;
-        rSt >> lcbDggInfo;
-        rSt >> fcSttbfRMark;
-        rSt >> lcbSttbfRMark;
-        rSt >> fcSttbfCaption;
-        rSt >> lcbSttbfCaption;
-        rSt >> fcSttbAutoCaption;
-        rSt >> lcbSttbAutoCaption;
-        rSt >> fcPlcfwkb;
-        rSt >> lcbPlcfwkb;
-        rSt >> fcPlcfspl;
-        rSt >> lcbPlcfspl;
-        rSt >> fcPlcftxbxTxt;
-        rSt >> lcbPlcftxbxTxt;
-        rSt >> fcPlcffldTxbx;
-        rSt >> lcbPlcffldTxbx;
-        rSt >> fcPlcfHdrtxbxTxt;
-        rSt >> lcbPlcfHdrtxbxTxt;
-        rSt >> fcPlcffldHdrTxbx;
-        rSt >> lcbPlcffldHdrTxbx;
-        rSt >> fcStwUser;
-        rSt >> lcbStwUser;
-        rSt >> fcSttbttmbd;
-        rSt >> lcbSttbttmbd;
+        rSt.ReadInt32( fcPlcfAtnbkf );
+        rSt.ReadInt32( lcbPlcfAtnbkf );
+        rSt.ReadInt32( fcPlcfAtnbkl );
+        rSt.ReadInt32( lcbPlcfAtnbkl );
+        rSt.ReadInt32( fcPms );
+        rSt.ReadInt32( lcbPMS );
+        rSt.ReadInt32( fcFormFldSttbf );
+        rSt.ReadInt32( lcbFormFldSttbf );
+        rSt.ReadInt32( fcPlcfendRef );
+        rSt.ReadInt32( lcbPlcfendRef );
+        rSt.ReadInt32( fcPlcfendTxt );
+        rSt.ReadInt32( lcbPlcfendTxt );
+        rSt.ReadInt32( fcPlcffldEdn );
+        rSt.ReadInt32( lcbPlcffldEdn );
+        rSt.ReadInt32( fcPlcfpgdEdn );
+        rSt.ReadInt32( lcbPlcfpgdEdn );
+        rSt.ReadInt32( fcDggInfo );
+        rSt.ReadInt32( lcbDggInfo );
+        rSt.ReadInt32( fcSttbfRMark );
+        rSt.ReadInt32( lcbSttbfRMark );
+        rSt.ReadInt32( fcSttbfCaption );
+        rSt.ReadInt32( lcbSttbfCaption );
+        rSt.ReadInt32( fcSttbAutoCaption );
+        rSt.ReadInt32( lcbSttbAutoCaption );
+        rSt.ReadInt32( fcPlcfwkb );
+        rSt.ReadInt32( lcbPlcfwkb );
+        rSt.ReadInt32( fcPlcfspl );
+        rSt.ReadInt32( lcbPlcfspl );
+        rSt.ReadInt32( fcPlcftxbxTxt );
+        rSt.ReadInt32( lcbPlcftxbxTxt );
+        rSt.ReadInt32( fcPlcffldTxbx );
+        rSt.ReadInt32( lcbPlcffldTxbx );
+        rSt.ReadInt32( fcPlcfHdrtxbxTxt );
+        rSt.ReadInt32( lcbPlcfHdrtxbxTxt );
+        rSt.ReadInt32( fcPlcffldHdrTxbx );
+        rSt.ReadInt32( lcbPlcffldHdrTxbx );
+        rSt.ReadInt32( fcStwUser );
+        rSt.ReadUInt32( lcbStwUser );
+        rSt.ReadInt32( fcSttbttmbd );
+        rSt.ReadUInt32( lcbSttbttmbd );
     }
 
     if( 0 == rSt.GetError() )
@@ -5461,44 +5461,44 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
             long nOldPos = rSt.Tell();
 
             rSt.Seek( 0x02da );
-            rSt >> fcSttbFnm;
-            rSt >> lcbSttbFnm;
-            rSt >> fcPlcfLst;
-            rSt >> lcbPlcfLst;
-            rSt >> fcPlfLfo;
-            rSt >> lcbPlfLfo;
-            rSt >> fcPlcftxbxBkd;
-            rSt >> lcbPlcftxbxBkd;
-            rSt >> fcPlcfHdrtxbxBkd;
-            rSt >> lcbPlcfHdrtxbxBkd;
+            rSt.ReadInt32( fcSttbFnm );
+            rSt.ReadInt32( lcbSttbFnm );
+            rSt.ReadInt32( fcPlcfLst );
+            rSt.ReadInt32( lcbPlcfLst );
+            rSt.ReadInt32( fcPlfLfo );
+            rSt.ReadInt32( lcbPlfLfo );
+            rSt.ReadInt32( fcPlcftxbxBkd );
+            rSt.ReadInt32( lcbPlcftxbxBkd );
+            rSt.ReadInt32( fcPlcfHdrtxbxBkd );
+            rSt.ReadInt32( lcbPlcfHdrtxbxBkd );
             if( 0 != rSt.GetError() )
             {
                 nFibError = ERR_SWG_READ_ERROR;
             }
 
             rSt.Seek( 0x372 );          // fcSttbListNames
-            rSt >> fcSttbListNames;
-            rSt >> lcbSttbListNames;
+            rSt.ReadInt32( fcSttbListNames );
+            rSt.ReadInt32( lcbSttbListNames );
 
             if (cfclcb > 93)
             {
                 rSt.Seek( 0x382 );          // MagicTables
-                rSt >> fcPlcfTch;
-                rSt >> lcbPlcfTch;
+                rSt.ReadInt32( fcPlcfTch );
+                rSt.ReadInt32( lcbPlcfTch );
             }
 
             if (cfclcb > 113)
             {
                 rSt.Seek( 0x41A );          // new ATRD
-                rSt >> fcAtrdExtra;
-                rSt >> lcbAtrdExtra;
+                rSt.ReadInt32( fcAtrdExtra );
+                rSt.ReadUInt32( lcbAtrdExtra );
             }
 
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
 
             rSt.Seek( 0x5bc );          // Actual nFib introduced in Word 2003
-            rSt >> nFib_actual;
+            rSt.ReadUInt16( nFib_actual );
 
             rSt.Seek( nOldPos );
         }
@@ -5917,7 +5917,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
             if (nRemaining < sizeof(cbStshi))
                 return;
             // lies die Laenge der in der Datei gespeicherten Struktur
-            rSt >> cbStshi;
+            rSt.ReadUInt16( cbStshi );
             nRemaining-=2;
         }
     }
@@ -5931,36 +5931,36 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     {
         sal_uInt16 a16Bit;
 
-        rSt >> cstd;
+        rSt.ReadUInt16( cstd );
 
-        rSt >> cbSTDBaseInFile;
+        rSt.ReadUInt16( cbSTDBaseInFile );
 
         if(  6 > nRead ) break;
-        rSt >> a16Bit;
+        rSt.ReadUInt16( a16Bit );
         fStdStylenamesWritten = a16Bit & 0x0001;
 
         if(  8 > nRead ) break;
-        rSt >> stiMaxWhenSaved;
+        rSt.ReadUInt16( stiMaxWhenSaved );
 
         if( 10 > nRead ) break;
-        rSt >> istdMaxFixedWhenSaved;
+        rSt.ReadUInt16( istdMaxFixedWhenSaved );
 
         if( 12 > nRead ) break;
-        rSt >> nVerBuiltInNamesWhenSaved;
+        rSt.ReadUInt16( nVerBuiltInNamesWhenSaved );
 
         if( 14 > nRead ) break;
-        rSt >> ftcAsci;
+        rSt.ReadUInt16( ftcAsci );
 
         if( 16 > nRead ) break;
-        rSt >> ftcFE;
+        rSt.ReadUInt16( ftcFE );
 
         if ( 18 > nRead ) break;
-        rSt >> ftcOther;
+        rSt.ReadUInt16( ftcOther );
 
         ftcBi = ftcOther;
 
         if ( 20 > nRead ) break;
-        rSt >> ftcBi;
+        rSt.ReadUInt16( ftcBi );
 
         // ggfs. den Rest ueberlesen
         if( 20 < nRead )
@@ -5990,7 +5990,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
     WW8_STD* pStd = 0;
 
     sal_uInt16 cbStd(0);
-    rSt >> cbStd;   // lies Laenge
+    rSt.ReadUInt16( cbStd );   // lies Laenge
 
     sal_uInt16 nRead = cbSTDBaseInFile;
     if( cbStd >= cbSTDBaseInFile )
@@ -6007,7 +6007,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 
             if( 2 > nRead ) break;
             a16Bit = 0;
-            rSt >> a16Bit;
+            rSt.ReadUInt16( a16Bit );
             pStd->sti          =        a16Bit & 0x0fff  ;
             pStd->fScratch     = sal_uInt16(0 != ( a16Bit & 0x1000 ));
             pStd->fInvalHeight = sal_uInt16(0 != ( a16Bit & 0x2000 ));
@@ -6016,24 +6016,24 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 
             if( 4 > nRead ) break;
             a16Bit = 0;
-            rSt >> a16Bit;
+            rSt.ReadUInt16( a16Bit );
             pStd->sgc      =   a16Bit & 0x000f       ;
             pStd->istdBase = ( a16Bit & 0xfff0 ) >> 4;
 
             if( 6 > nRead ) break;
             a16Bit = 0;
-            rSt >> a16Bit;
+            rSt.ReadUInt16( a16Bit );
             pStd->cupx     =   a16Bit & 0x000f       ;
             pStd->istdNext = ( a16Bit & 0xfff0 ) >> 4;
 
             if( 8 > nRead ) break;
             a16Bit = 0;
-            rSt >> pStd->bchUpe;
+            rSt.ReadUInt16( pStd->bchUpe );
 
             // ab Ver8 sollten diese beiden Felder dazukommen:
             if(10 > nRead ) break;
             a16Bit = 0;
-            rSt >> a16Bit;
+            rSt.ReadUInt16( a16Bit );
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
 
@@ -6231,7 +6231,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     if( eVersion >= ww::eWW8 )
     {
         // bVer8: read the count of strings in nMax
-        rSt >> nMax;
+        rSt.ReadUInt16( nMax );
     }
 
     // Ver8:  skip undefined uint16

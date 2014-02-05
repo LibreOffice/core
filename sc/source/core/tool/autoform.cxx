@@ -87,7 +87,7 @@ namespace
         blob.Reset();
 
         sal_uInt64 endOfBlob = 0;
-        stream >> endOfBlob;
+        stream.ReadUInt64( endOfBlob );
 
         const sal_uInt64 currentPosition = stream.Tell();
         const sal_uInt64 blobSize = endOfBlob - currentPosition;
@@ -143,35 +143,35 @@ ScAfVersions::ScAfVersions() :
 
 void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 {
-    rStream >> nFontVersion;
-    rStream >> nFontHeightVersion;
-    rStream >> nWeightVersion;
-    rStream >> nPostureVersion;
-    rStream >> nUnderlineVersion;
+    rStream.ReadUInt16( nFontVersion );
+    rStream.ReadUInt16( nFontHeightVersion );
+    rStream.ReadUInt16( nWeightVersion );
+    rStream.ReadUInt16( nPostureVersion );
+    rStream.ReadUInt16( nUnderlineVersion );
     if ( nVer >= AUTOFORMAT_ID_300OVRLN )
-        rStream >> nOverlineVersion;
-    rStream >> nCrossedOutVersion;
-    rStream >> nContourVersion;
-    rStream >> nShadowedVersion;
-    rStream >> nColorVersion;
-    rStream >> nBoxVersion;
+        rStream.ReadUInt16( nOverlineVersion );
+    rStream.ReadUInt16( nCrossedOutVersion );
+    rStream.ReadUInt16( nContourVersion );
+    rStream.ReadUInt16( nShadowedVersion );
+    rStream.ReadUInt16( nColorVersion );
+    rStream.ReadUInt16( nBoxVersion );
     if ( nVer >= AUTOFORMAT_ID_680DR14 )
-        rStream >> nLineVersion;
-    rStream >> nBrushVersion;
-    rStream >> nAdjustVersion;
+        rStream.ReadUInt16( nLineVersion );
+    rStream.ReadUInt16( nBrushVersion );
+    rStream.ReadUInt16( nAdjustVersion );
     if (nVer >= AUTOFORMAT_ID_31005)
         rStream >> swVersions;
-    rStream >> nHorJustifyVersion;
-    rStream >> nVerJustifyVersion;
-    rStream >> nOrientationVersion;
-    rStream >> nMarginVersion;
-    rStream >> nBoolVersion;
+    rStream.ReadUInt16( nHorJustifyVersion );
+    rStream.ReadUInt16( nVerJustifyVersion );
+    rStream.ReadUInt16( nOrientationVersion );
+    rStream.ReadUInt16( nMarginVersion );
+    rStream.ReadUInt16( nBoolVersion );
     if ( nVer >= AUTOFORMAT_ID_504 )
     {
-        rStream >> nInt32Version;
-        rStream >> nRotateModeVersion;
+        rStream.ReadUInt16( nInt32Version );
+        rStream.ReadUInt16( nRotateModeVersion );
     }
-    rStream >> nNumFmtVersion;
+    rStream.ReadUInt16( nNumFmtVersion );
 }
 
 void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
@@ -741,7 +741,7 @@ void ScAutoFormatData::GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rIte
 bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
     sal_uInt16  nVer = 0;
-    rStream >> nVer;
+    rStream.ReadUInt16( nVer );
     bool bRet = 0 == rStream.GetError();
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
@@ -757,7 +757,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
-            rStream >> nStrResId;
+            rStream.ReadUInt16( nStrResId );
             sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
             if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
                 nId < RID_SVXSTR_TBLAFMT_END )
@@ -769,12 +769,12 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         }
 
         sal_Bool b;
-        rStream >> b; bIncludeFont = b;
-        rStream >> b; bIncludeJustify = b;
-        rStream >> b; bIncludeFrame = b;
-        rStream >> b; bIncludeBackground = b;
-        rStream >> b; bIncludeValueFormat = b;
-        rStream >> b; bIncludeWidthHeight = b;
+        rStream.ReadUChar( b ); bIncludeFont = b;
+        rStream.ReadUChar( b ); bIncludeJustify = b;
+        rStream.ReadUChar( b ); bIncludeFrame = b;
+        rStream.ReadUChar( b ); bIncludeBackground = b;
+        rStream.ReadUChar( b ); bIncludeValueFormat = b;
+        rStream.ReadUChar( b ); bIncludeWidthHeight = b;
 
         if (nVer >= AUTOFORMAT_DATA_ID_31005)
             rStream >> m_swFields;
@@ -1020,7 +1020,7 @@ bool ScAutoFormat::Load()
         SvStream& rStream = *pStream;
         // Attention: A common header has to be read
         sal_uInt16 nVal = 0;
-        rStream >> nVal;
+        rStream.ReadUInt16( nVal );
         bRet = 0 == rStream.GetError();
 
         if (bRet)
@@ -1031,7 +1031,7 @@ bool ScAutoFormat::Load()
                 sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_40;
                 sal_uInt8 nChrSet, nCnt;
                 long nPos = rStream.Tell();
-                rStream >> nCnt >> nChrSet;
+                rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
                     OSL_FAIL( "header contains more/newer data" );
@@ -1048,7 +1048,7 @@ bool ScAutoFormat::Load()
 
                 ScAutoFormatData* pData;
                 sal_uInt16 nAnz = 0;
-                rStream >> nAnz;
+                rStream.ReadUInt16( nAnz );
                 bRet = (rStream.GetError() == 0);
                 for (sal_uInt16 i=0; bRet && (i < nAnz); i++)
                 {
