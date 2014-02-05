@@ -1087,6 +1087,25 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             SvxFrameDirectionItem aItem( eDir, RES_FRAMEDIR);
             pBox->GetFrmFmt()->SetFmtAttr(aItem);
         }
+        else if  ( rPropertyName == "TableRedlineParams" )
+        {
+            // Get the table row properties
+            uno::Sequence< beans::PropertyValue > tableCellProperties;
+            tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+            comphelper::SequenceAsHashMap aPropMap( tableCellProperties );
+            OUString sRedlineType;
+            uno::Any sRedlineTypeValue;
+            sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
+            if( sRedlineTypeValue >>= sRedlineType )
+            {
+                // Create a 'Table Cell Redline' object
+                SwUnoCursorHelper::makeTableCellRedline( *pBox, sRedlineType, tableCellProperties);
+            }
+            else
+            {
+                throw beans::UnknownPropertyException(OUString( "No redline type property: " ), static_cast < cppu::OWeakObject * > ( this ) );
+            }
+        }
         else
         {
             const SfxItemPropertySimpleEntry* pEntry =
