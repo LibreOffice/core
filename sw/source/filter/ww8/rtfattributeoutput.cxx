@@ -742,6 +742,10 @@ void RtfAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t 
 {
 }
 
+void RtfAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+{
+}
+
 void RtfAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
