@@ -95,7 +95,14 @@ struct TabInfo
     long        nStartPosX;
     long        nTabPos;
 
-    TabInfo() { bValid = false; }
+    TabInfo()
+        : bValid(false)
+        , nCharPos(0)
+        , nTabPortion(0)
+        , nStartPosX(0)
+        , nTabPos(0)
+        { }
+
 };
 
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
