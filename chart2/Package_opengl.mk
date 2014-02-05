@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,chart2_opengl_shader,$(SRCDIR)/chart2/opengl))
 
-$(eval $(call gb_Package_set_outdir,chart2_opengl_shader,$(INSTDIR)/program))
+$(eval $(call gb_Package_set_outdir,chart2_opengl_shader,$(INSTROOT)/program))
 
 $(eval $(call gb_Package_add_files,chart2_opengl_shader,opengl,\
 	backgroundFragmentShader.glsl \
