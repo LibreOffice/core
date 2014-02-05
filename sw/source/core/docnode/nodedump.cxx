@@ -618,8 +618,11 @@ void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
         writer.startElement( "swextraredline" );
         {
             const SwTableRowRedline*           pTableRowRedline           = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
+            const SwTableCellRedline*          pTableCellRedline          = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
             if (pTableRowRedline)
                 writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "table row" ) );
+            else if (pTableCellRedline)
+                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "table cell" ) );
             else
                 writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "UNKNOWN" ) );
         }
