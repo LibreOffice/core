@@ -155,6 +155,8 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TABLE_BORDER         :    sName = "TableBorder";break;
             case PROP_TABLE_ROW_DELETE      :    sName = "TableRowDelete"; break;
             case PROP_TABLE_ROW_INSERT      :    sName = "TableRowInsert"; break;
+            case PROP_TABLE_CELL_DELETE     :    sName = "TableCellDelete"; break;
+            case PROP_TABLE_CELL_INSERT     :    sName = "TableCellInsert"; break;
             case PROP_LEFT_BORDER_DISTANCE  :    sName = "LeftBorderDistance"; break;
             case PROP_RIGHT_BORDER_DISTANCE :    sName = "RightBorderDistance"; break;
             case PROP_TOP_BORDER_DISTANCE   :    sName = "TopBorderDistance";break;
