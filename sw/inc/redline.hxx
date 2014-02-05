@@ -333,6 +333,29 @@ public:
         { return *pRedlineData; }
 };
 
+/// Redline that holds information about a table-cell that had some change
+class SW_DLLPUBLIC SwTableCellRedline : public SwExtraRedline
+{
+private:
+    SwRedlineData* pRedlineData;
+    const SwTableBox* pTableBox;
+
+public:
+    SwTableCellRedline( const SwRedlineData& rData, SwTableBox& aTableBox );
+    SwTableCellRedline( const SwTableCellRedline& );
+    virtual ~SwTableCellRedline();
+
+    /** ExtraData gets copied, the pointer is therefor not taken over by
+     *  the RedLineObject.*/
+    void SetExtraData( const SwRedlineExtraData* pData )
+        { pRedlineData->SetExtraData( pData ); }
+    const SwRedlineExtraData* GetExtraData() const
+        { return pRedlineData->GetExtraData(); }
+    const SwTableBox* GetTableBox() const
+        { return pTableBox; }
+    const SwRedlineData& GetRedlineData() const
+        { return *pRedlineData; }
+};
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
