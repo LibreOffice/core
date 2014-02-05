@@ -278,31 +278,37 @@ long SvxAutoCorrect::GetDefaultFlags()
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
-    : sShareAutoCorrFile( rShareAutocorrFile ),
-    sUserAutoCorrFile( rUserAutocorrFile ),
-    pLangTable( new boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists> ),
-    pCharClass( 0 ), bRunNext( false ), eCharClassLang( LANGUAGE_DONTKNOW ),
-    cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
+    : sShareAutoCorrFile( rShareAutocorrFile )
+    , sUserAutoCorrFile( rUserAutocorrFile )
+    , pLangTable( new boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists> )
+    , pCharClass( 0 )
+    , bRunNext( false )
+    , eCharClassLang( LANGUAGE_DONTKNOW )
+    , nFlags(SvxAutoCorrect::GetDefaultFlags())
+    , cStartDQuote( 0 )
+    , cEndDQuote( 0 )
+    , cStartSQuote( 0 )
+    , cEndSQuote( 0 )
+    , cEmDash( 0x2014 )
+    , cEnDash( 0x2013)
 {
-    nFlags = SvxAutoCorrect::GetDefaultFlags();
-
-    cEmDash = 0x2014;
-    cEnDash = 0x2013;
 }
 
 SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
-:   sShareAutoCorrFile( rCpy.sShareAutoCorrFile ),
-    sUserAutoCorrFile( rCpy.sUserAutoCorrFile ),
-
-    aSwFlags( rCpy.aSwFlags ),
-
-    pLangTable( new boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists> ),
-    pCharClass( 0 ), bRunNext( false ),
-
-    nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
-    cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
-    cStartSQuote( rCpy.cStartSQuote ), cEndSQuote( rCpy.cEndSQuote ),
-    cEmDash( rCpy.cEmDash ), cEnDash( rCpy.cEnDash )
+    : sShareAutoCorrFile( rCpy.sShareAutoCorrFile )
+    , sUserAutoCorrFile( rCpy.sUserAutoCorrFile )
+    , aSwFlags( rCpy.aSwFlags )
+    , pLangTable( new boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists> )
+    , pCharClass( 0 )
+    , bRunNext( false )
+    , eCharClassLang(rCpy.eCharClassLang)
+    , nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad))
+    , cStartDQuote( rCpy.cStartDQuote )
+    , cEndDQuote( rCpy.cEndDQuote )
+    , cStartSQuote( rCpy.cStartSQuote )
+    , cEndSQuote( rCpy.cEndSQuote )
+    , cEmDash( rCpy.cEmDash )
+    , cEnDash( rCpy.cEnDash )
 {
 }
 
