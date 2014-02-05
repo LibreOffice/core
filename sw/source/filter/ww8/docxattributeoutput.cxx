@@ -2050,6 +2050,9 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
+    // Output any table cell redlines if there are any attached to this specific cell
+    TableCellRedline( pTableTextNodeInfoInner );
+
     // Cell preferred width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
     if ( pTableTextNodeInfoInner->getCell() )
@@ -2439,6 +2442,51 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
                             FSEND );
                     else if (nRedlineType == nsRedlineType_t::REDLINE_TABLE_ROW_DELETE)
                         m_pSerializer->singleElementNS( XML_w, XML_del,
+                            FSNS( XML_w, XML_id ), aId.getStr(),
+                            FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                            FSNS( XML_w, XML_date ), aDate.getStr(),
+                            FSEND );
+                }
+                break;
+            };
+        }
+    }
+}
+
+void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+{
+    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+
+    // search next Redline
+    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->GetExtraRedlineTbl();
+    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTbl.GetSize(); ++nCurRedlinePos )
+    {
+        SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);
+        const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
+        if (pTableCellRedline && pTableCellRedline->GetTableBox() == pTabBox)
+        {
+            // Redline for this table cell
+            const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
+            sal_uInt16 nRedlineType = aRedlineData.GetType();
+            switch (nRedlineType)
+            {
+                case nsRedlineType_t::REDLINE_TABLE_CELL_INSERT:
+                case nsRedlineType_t::REDLINE_TABLE_CELL_DELETE:
+                {
+                    OString aId( OString::number( m_nRedlineId++ ) );
+                    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( aRedlineData.GetAuthor() ) );
+                    OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+
+                    OString aDate( DateTimeToOString( aRedlineData.GetTimeStamp() ) );
+
+                    if (nRedlineType == nsRedlineType_t::REDLINE_TABLE_CELL_INSERT)
+                        m_pSerializer->singleElementNS( XML_w, XML_cellIns,
+                            FSNS( XML_w, XML_id ), aId.getStr(),
+                            FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                            FSNS( XML_w, XML_date ), aDate.getStr(),
+                            FSEND );
+                    else if (nRedlineType == nsRedlineType_t::REDLINE_TABLE_CELL_DELETE)
+                        m_pSerializer->singleElementNS( XML_w, XML_cellDel,
                             FSNS( XML_w, XML_id ), aId.getStr(),
                             FSNS( XML_w, XML_author ), aAuthor.getStr(),
                             FSNS( XML_w, XML_date ), aDate.getStr(),

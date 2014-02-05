@@ -2092,6 +2092,10 @@ void WW8AttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t 
 {
 }
 
+void WW8AttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+{
+}
+
 void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
