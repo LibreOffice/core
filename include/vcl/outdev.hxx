@@ -359,7 +359,7 @@ public:
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
     SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
-    SAL_DLLPRIVATE sal_Bool         ImplHasMirroredGraphics();
+    SAL_DLLPRIVATE bool         ImplHasMirroredGraphics() const;
     SAL_DLLPRIVATE void         ImplReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ImplReMirror( Rectangle &rRect ) const;
     SAL_DLLPRIVATE void         ImplReMirror( Region &rRegion ) const;

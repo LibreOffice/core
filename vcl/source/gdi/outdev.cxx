@@ -496,7 +496,7 @@ void OutputDevice::EnableRTL( sal_Bool bEnable )
         mpAlphaVDev->EnableRTL( bEnable );
 }
 
-sal_Bool OutputDevice::ImplHasMirroredGraphics()
+bool OutputDevice::ImplHasMirroredGraphics() const
 {
    // HOTFIX for #i55719#
    if( meOutDevType == OUTDEV_PRINTER )
