@@ -571,6 +571,26 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans( SCTAB nTab ) const
     return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
 }
 
+std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans( SCTAB nTab ) const
+{
+    typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
+
+    ScRangeList aRanges = GetMarkedRanges();
+    SpansType aSpans(0, MAXCOL+1, false);
+    SpansType::const_iterator itPos = aSpans.begin();
+
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        const ScRange& r = *aRanges[i];
+        if (r.aStart.Tab() != nTab)
+            continue;
+
+        itPos = aSpans.insert(itPos, r.aStart.Col(), r.aEnd.Col()+1, true).first;
+    }
+
+    return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
+}
+
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
 {
     if ( !bMultiMarked )
