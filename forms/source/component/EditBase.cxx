@@ -26,10 +26,15 @@
 #include <cppuhelper/queryinterface.hxx>
 #include "frm_resource.hxx"
 #include "frm_resource.hrc"
+#include <tools/time.hxx>
+#include <tools/date.hxx>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 //.........................................................................
 namespace frm
 {
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -42,9 +47,14 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-const sal_uInt16 DEFAULT_LONG    =  0x0001;
-const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
-const sal_uInt16 FILTERPROPOSAL  =  0x0004;
+namespace
+{
+    const sal_uInt16 DEFAULT_LONG    =  0x0001;
+    const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
+    const sal_uInt16 FILTERPROPOSAL  =  0x0004;
+    const sal_uInt16 DEFAULT_TIME    =  0x0008;
+    const sal_uInt16 DEFAULT_DATE    =  0x0010;
+}
 
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
@@ -84,7 +94,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     OBoundControlModel::write(_rxOutStream);
 
     // Version
-    sal_uInt16 nVersionId = 0x0005;
+    sal_uInt16 nVersionId = 0x0006;
     DBG_ASSERT((getPersistenceFlags() & ~PF_SPECIAL_FLAGS) == 0,
         "OEditBaseModel::write : invalid special version flags !");
         // please don't use other flags, older versions can't interpret them !
@@ -102,6 +112,10 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
         nAnyMask |= DEFAULT_LONG;
     else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
+    else if (m_aDefault.getValueType() == ::getCppuType((const util::Time*)0))
+        nAnyMask |= DEFAULT_TIME;
+    else if (m_aDefault.getValueType() == ::getCppuType((const util::Date*)0))
+        nAnyMask |= DEFAULT_DATE;
 
     if (m_bFilterProposal)  // Don't save a value, because it's boolean
         nAnyMask |= FILTERPROPOSAL;
@@ -113,6 +127,18 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
         _rxOutStream->writeLong(getINT32(m_aDefault));
     else if ((nAnyMask & DEFAULT_DOUBLE) == DEFAULT_DOUBLE)
         _rxOutStream->writeDouble(getDouble(m_aDefault));
+    else if ((nAnyMask & DEFAULT_TIME) == DEFAULT_TIME)
+    {
+        util::Time aTime;
+        OSL_VERIFY(m_aDefault >>= aTime);
+        _rxOutStream->writeHyper(::Time(aTime).GetTime());
+    }
+    else if ((nAnyMask & DEFAULT_DATE) == DEFAULT_DATE)
+    {
+        util::Date aDate;
+        OSL_VERIFY(m_aDefault >>= aDate);
+        _rxOutStream->writeLong(::Date(aDate).GetDate());
+    }
 
     // since version 5 we write the help text
     writeHelpTextCompatibly(_rxOutStream);
@@ -168,6 +194,14 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
         {
             double fValue = _rxInStream->readDouble();
             m_aDefault <<= (double)fValue;
+        }
+        else if ((nAnyMask & DEFAULT_TIME) == DEFAULT_TIME)
+        {
+            m_aDefault <<= ::Time(_rxInStream->readHyper()).GetUNOTime();
+        }
+        else if ((nAnyMask & DEFAULT_DATE) == DEFAULT_DATE)
+        {
+            m_aDefault <<= ::Date(_rxInStream->readLong()).GetUNODate();
         }
 
         if ((nAnyMask & FILTERPROPOSAL) == FILTERPROPOSAL)
@@ -281,8 +315,10 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const double*)0));
             break;
         case PROPERTY_ID_DEFAULT_DATE:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const util::Date*)0));
+            break;
         case PROPERTY_ID_DEFAULT_TIME:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const sal_Int32*)0));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const util::Time*)0));
             break;
         default:
             bModified = OBoundControlModel::convertFastPropertyValue(
