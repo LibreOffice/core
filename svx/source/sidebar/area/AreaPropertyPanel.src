@@ -178,7 +178,7 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
         Border = TRUE ;
         Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
         HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_BORDER ;
-        QuickHelpText [ en-US ] = "Specify the border value of gradient transparence." ;
+        QuickHelpText [ en-US ] = "Specify the border value of gradient transparency." ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;

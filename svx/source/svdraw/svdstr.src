@@ -2301,7 +2301,7 @@ String SIP_SA_MEASUREDECIMALPLACES
 
 String SIP_SA_MEASURERESERVE05
 {
-    Text [ en-US ] = "Dimensioning reserved 5";
+    Text [ en-US ] = "Dimensioning reserved for 5";
 };
 
 String SIP_SA_MEASURERESERVE06
