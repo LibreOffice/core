@@ -97,21 +97,21 @@ End
 File gid_File_Basic_User
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "wizards_basicusr.filelist";
 End
 
 File gid_File_Basic_Share
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "wizards_basicshare.filelist";
 End
 
 File gid_File_Basic_User_Standard
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "wizards_basicsrvstandard.filelist";
 End
 
@@ -342,7 +342,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
+    Styles = (PACKED);
 End
 
 #endif
@@ -400,7 +400,7 @@ End
 File gid_File_Share_Fingerprint
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     Name = "libexttextcat_fingerprint.filelist";
 End
 

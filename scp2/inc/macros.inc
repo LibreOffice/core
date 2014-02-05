@@ -226,7 +226,7 @@ End
         TXT_FILE_BODY; \
         Name     = STRING(CONCAT2(name,.jar)); \
         Dir      = gid_Dir_Classes; \
-        Styles   = (PACKED,DONT_OVERWRITE); \
+        Styles   = (PACKED); \
     End
 
 #define URE_JAR_FILE(id,name) \
@@ -549,13 +549,13 @@ End
 File gid_File_Extra_Gall##id \
     Dir = FILELIST_DIR; \
     TXT_FILE_BODY; \
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE); \
+    Styles = (FILELIST, WORKSTATION); \
     Name = STRING(CONCAT3(Gallery/,id,.filelist)); \
 End \
 File gid_File_Extra_GallFiles##id \
     Dir = FILELIST_DIR; \
     TXT_FILE_BODY; \
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE); \
+    Styles = (FILELIST, WORKSTATION); \
     Name = STRING(CONCAT3(Gallery/Files/,id,.filelist)); \
 End
 

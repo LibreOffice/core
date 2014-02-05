@@ -28,14 +28,14 @@ End
 File gid_File_Extra_Autotextshare_Lang
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(autotextshare,filelist);
 End
 
 File gid_File_Extra_Autotextuser
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DOCLANG, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION, DOCLANG);
     Name = "extras_autotextuser.filelist";
 End
 
@@ -53,7 +53,7 @@ End
 File gid_File_Extra_Cfgusr
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "extras_cfgusr.filelist";
 End
 
@@ -74,14 +74,14 @@ End
 File gid_File_Extra_Database
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "extras_database.filelist";
 End
 
 File gid_File_Extra_Databasebiblio
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "extras_databasebiblio.filelist";
 End
 
@@ -112,7 +112,7 @@ End
 File gid_File_Extra_Fontunxpsprint
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE, CONFIGFILE);
+    Styles = (FILELIST, CONFIGFILE);
     Name = "psprint_config_fontunxpsprint.filelist";
 End
 
@@ -158,7 +158,7 @@ GALLERY_FILELIST(txtshapes)
 File gid_File_Extra_Gallmytheme
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "extras_gallmytheme.filelist";
 End
 
@@ -186,7 +186,7 @@ End
 File gid_File_Extra_Palettes
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Styles = (FILELIST, WORKSTATION);
     Name = "extras_palettes.filelist";
 End
 
@@ -207,7 +207,7 @@ End
 File gid_File_Extra_Tplwizdesktop
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     Name = "extras_tplwizdesktop.filelist";
 End
 

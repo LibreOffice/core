@@ -17,21 +17,21 @@
 File gid_File_Extra_Samples_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamples,filelist);
 End
 
 File gid_File_Extra_Samples_Documentations_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamplesdocumentation,filelist);
 End
 
 File gid_File_Extra_Samples_Advertisement_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamplesadvertisement,filelist);
 End
 
@@ -40,21 +40,21 @@ End
 File gid_File_Extra_Samples_NONFREE_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamplesnonfree,filelist);
 End
 
 File gid_File_Extra_Samples_NONFREE_Documentations_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamplesnonfreedocumentation,filelist);
 End
 
 File gid_File_Extra_Samples_NONFREE_Advertisement_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (FILELIST, DONT_OVERWRITE);
+    Styles = (FILELIST);
     EXTRA_ALL_LANG(accessoriessamplesnonfreeadvertisement,filelist);
 End
 
