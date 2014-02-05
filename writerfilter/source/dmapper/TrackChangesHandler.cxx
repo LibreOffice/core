@@ -87,6 +87,12 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
         case ooxml::OOXML_tableRowDelete:
             sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_DELETE );
             break;
+        case ooxml::OOXML_tableCellInsert:
+            sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_INSERT );
+            break;
+        case ooxml::OOXML_tableCellDelete:
+            sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_DELETE );
+            break;
     }
 
     pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_TYPE );
