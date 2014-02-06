@@ -211,7 +211,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
         ReadGDIMetaFile( rIn, aThumbMtf );
     }
 
-    OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    OUString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
     aURL = INetURLObject(aTmpStr);
 }
 
@@ -308,10 +308,10 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 
     SgaObject::ReadData( rIn, rReadVersion );
     rIn.SeekRel( 10 ); // 16, 16, 32, 16
-    read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIn); //dummy
+    read_uInt16_lenPrefixed_uInt8s_ToOString(rIn); //dummy
 
     if( rReadVersion >= 5 )
-        aTitle = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+        aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
 }
 
 DBG_NAME(SgaObjectSound)
@@ -385,7 +385,7 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
         rIn.ReadUInt16( nTmp16 ); eSoundType = (GalSoundType) nTmp16;
 
         if( rReadVersion >= 6 )
-            aTitle = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+            aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
     }
 }
 
@@ -538,7 +538,7 @@ void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     SgaObject::ReadData( rIn, rReadVersion );
 
     if( rReadVersion >= 5 )
-        aTitle = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+        aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

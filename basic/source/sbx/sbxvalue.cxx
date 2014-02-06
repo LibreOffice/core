@@ -1420,7 +1420,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxSINGLE:
         {
             // Floats as ASCII
-            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
@@ -1436,7 +1436,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxDOUBLE:
         {
             // Floats as ASCII
-            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
             if( ImpScan( aVal, aData.nDouble, t, NULL ) != SbxERR_OK )
@@ -1464,7 +1464,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         }
         case SbxSTRING:
         {
-            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             if( !aVal.isEmpty() )
                     aData.pOUString = new OUString( aVal );

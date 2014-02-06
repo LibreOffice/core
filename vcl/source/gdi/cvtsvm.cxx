@@ -1304,7 +1304,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_uInt8*      pData;
                     sal_Int32       nFollowingActionCount;
 
-                    OString aComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
+                    OString aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
                     rIStm.ReadInt32( nValue ).ReadUInt32( nDataSize );
 
                     if( nDataSize )

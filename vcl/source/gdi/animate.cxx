@@ -792,7 +792,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             rIStm.ReadUInt32( nTmp32 ); // Unused
             rIStm.ReadUInt32( nTmp32 ); // Unused
             rIStm.ReadUInt32( nTmp32 ); // Unused
-            read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Unused
+            read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Unused
             rIStm.ReadUInt16( nTmp16 ); // The rest to read
 
             rAnimation.Insert( aAnimBmp );

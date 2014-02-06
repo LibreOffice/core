@@ -173,7 +173,7 @@ namespace
         char foo[] = "\3foobar";
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
-        OString aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
+        OString aFoo = read_uInt8_lenPrefixed_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aFoo == "foo");
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -181,7 +181,7 @@ namespace
 
         aMemStream.Seek(0);
         foo[0] = 10;
-        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
+        aFoo = read_uInt8_lenPrefixed_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aFoo == "foobar");
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -191,7 +191,7 @@ namespace
         aMemStream.Seek(0);
         foo[0] = 0;
         foo[1] = 3;
-        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(aMemStream);
+        aFoo = read_uInt16_lenPrefixed_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aFoo == "oob");
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -203,7 +203,7 @@ namespace
         foo[1] = 0;
         foo[2] = 0;
         foo[3] = 0;
-        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt32>(aMemStream);
+        aFoo = read_uInt32_lenPrefixed_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aFoo == "bar");
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
