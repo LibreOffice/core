@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hash_map>
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>

@@ -21,7 +21,7 @@
 #ifndef INCLUDED_SERFURI_HXX
 #define INCLUDED_SERFURI_HXX
 
-#include <apr-util/apr_uri.h>
+#include <apr_uri.h>
 #include <rtl/ustring.hxx>
 #include "DAVException.hxx"
 
