@@ -212,6 +212,7 @@ endef
 # ExternalProject class
 
 gb_ExternalProject_use_autoconf :=
+gb_ExternalProject_use_nmake :=
 
 # StaticLibrary class
 
