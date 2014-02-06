@@ -57,9 +57,9 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> aAttrList;
     // browser
     aIdlFileName = rStm.ReadUniOrByteString( rStm.GetStreamCharSet() );
-    aHelpFileName.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
-    aSlotIdFile.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
-    aModulePrefix.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
+    aHelpFileName.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
+    aSlotIdFile.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
+    aModulePrefix.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
 
     // read compiler data
     sal_uInt16 nCmpLen;

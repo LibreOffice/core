@@ -274,10 +274,10 @@ SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
 
-    rInfo.maPrinterName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maDriver = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maLocation = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maComment = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maPrinterName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maDriver = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maLocation = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maComment = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
     rIStream.ReadUInt32( rInfo.mnStatus );
     rIStream.ReadUInt32( rInfo.mnJobs );
 

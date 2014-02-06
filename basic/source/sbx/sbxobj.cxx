@@ -635,8 +635,8 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     }
     sal_uInt32 nSize;
     OUString aDfltProp;
-    aClassName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_ASCII_US);
-    aDfltProp = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_ASCII_US);
+    aClassName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
+    aDfltProp = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
     if( !LoadPrivateData( rStrm, nVer ) )

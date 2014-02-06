@@ -302,7 +302,7 @@ sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Bool bRes = SbxCollection::LoadData( rStrm, nVer );
     if( bRes )
     {
-        aElemClass = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        aElemClass = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.ReadUChar( bAddRemoveOk );
     }
