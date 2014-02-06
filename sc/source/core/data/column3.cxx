@@ -737,7 +737,6 @@ public:
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
-
         SCROW nSrcRow1 = node.position + nOffset;
         bool bCopyCellNotes = mrCxt.isCloneNotes();
 
@@ -745,7 +744,7 @@ public:
 
         if (node.type == sc::element_type_empty)
         {
-            if (bCopyCellNotes)
+            if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
             {
                 bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );

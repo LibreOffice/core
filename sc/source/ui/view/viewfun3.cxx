@@ -1188,8 +1188,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         //
 
     ScDocument* pMixDoc = NULL;
-    if ( bSkipEmpty || nFunction )
+    if (nFunction)
     {
+        bSkipEmpty = false;
         if ( nFlags & IDF_CONTENTS )
         {
             pMixDoc = new ScDocument( SCDOCMODE_UNDO );
