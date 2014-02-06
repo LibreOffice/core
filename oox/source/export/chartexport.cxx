@@ -3061,8 +3061,8 @@ void ChartExport::exportView3D()
         sal_Int32 nRotationX = 0;
         mAny >>= nRotationX;
         // X rotation (map Chart2 [-179,180] to OOXML [0..359])
-        if( nRotationX < 0 )
-            nRotationX += 360;
+        if( nRotationX   < 0 )
+            nRotationX += 90;
         pFS->singleElement( FSNS( XML_c, XML_rotX ),
             XML_val, I32S( nRotationX ),
             FSEND );
