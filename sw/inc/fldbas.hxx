@@ -200,7 +200,7 @@ namespace nsSwExtendedSubType
 {
     const SwExtendedSubType SUB_CMD         = 0x0100;   ///< Show command.
     const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
-    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formating from database.
+    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formatting from database.
 }
 
 enum SwInputFieldSubType

@@ -64,7 +64,7 @@ struct LineInfo
     hunit         sx;                             /* internal */
     hunit         psx;                            /* internal */
     hunit         pex;                            /* internal */
-// for formating
+// for formatting
     hunit         height_sp;
     unsigned short    softbreak;                  // column, page, section
 

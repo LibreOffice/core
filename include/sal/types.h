@@ -30,8 +30,8 @@ extern "C" {
 #endif
 
 #if defined ( __MINGW32__ ) && !defined ( __USE_MINGW_ANSI_STDIO )
-/* Define to use the C99 formating string for coherence reasons.
- * In mingw-w64 some functions are ported to the ms formating string
+/* Define to use the C99 formatting string for coherence reasons.
+ * In mingw-w64 some functions are ported to the ms formatting string
  * some are not yet. This is the only way to make the formatting
  * strings work all the time
  */

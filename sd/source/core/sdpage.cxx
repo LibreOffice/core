@@ -2534,7 +2534,7 @@ const OUString& SdPage::GetName() const
             aCreatedPageName += " ";
             if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
             {
-                // if the document has number none as a formating
+                // if the document has number none as a formatting
                 // for page numbers we still default to arabic numbering
                 // to keep the default page names unique
                 aCreatedPageName += OUString::number( (sal_Int32)nNum );

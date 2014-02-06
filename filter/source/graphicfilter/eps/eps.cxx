@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 
 #define PS_LINESIZE         70      // maximum number of characters a line in the output
 
-#define PS_NONE             0       // formating mode: action which is inserted behind the output
+#define PS_NONE             0       // formatting mode: action which is inserted behind the output
 #define PS_SPACE            1
 #define PS_RET              2
 #define PS_WRAP             4

@@ -384,7 +384,7 @@ public:
           SwFrmFmt* GetFlyFrmFmt();
 
     /** OLE. Server requires new size. Desired values are adjusted as frame attributes.
-     If the values are not allowed, the formating clips and determines scaling.
+     If the values are not allowed, the formatting clips and determines scaling.
      See CalcAndSetScale().
      The @return value is the applied size. */
     Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );

@@ -258,7 +258,7 @@ enum PrepareHint
     PREP_WIDOWS_ORPHANS,    // Only check for widows and orphans and split in case of need.
     PREP_FIXSIZE_CHG,       // FixSize has changed.
     PREP_FOLLOW_FOLLOWS,    // Follow is now possibly adjacent.
-    PREP_ADJUST_FRM,        // Adjust size via grow/shrink without formating.
+    PREP_ADJUST_FRM,        // Adjust size via grow/shrink without formatting.
     PREP_FLY_CHGD,          // A FlyFrm has changed its size.
     PREP_FLY_ATTR_CHG,      // A FlyFrm hat has changed its attributes
                             // (e. g. wrap).
@@ -289,7 +289,7 @@ enum PrepareHint
     PREP_REGISTER,          // Invalidate frames with registers.
     PREP_FTN_GONE,          // A Follow loses its footnote, possibly its first line can move up.
     PREP_MOVEFTN,           // A footnote changes its page. Its contents receives at first a
-                            // height of zero in order to avoid too much noise. At formating
+                            // height of zero in order to avoid too much noise. At formatting
                             // it checks whether it fits and if necessary changes its page again.
     PREP_ERGOSUM,           // Needed because of movement in FtnFrms. Check QuoVadis/ErgoSum.
     PREP_END                // END.

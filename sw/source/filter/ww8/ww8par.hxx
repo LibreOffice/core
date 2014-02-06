@@ -1767,7 +1767,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_CFRMark(sal_uInt16 , const sal_uInt8* pData, short nLen);
     // delete old content
     void Read_CFRMarkDel(sal_uInt16 , const sal_uInt8* pData, short nLen);
-    // change properties of content (e.g. char formating)
+    // change properties of content (e.g. char formatting)
     void Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short nLen); // complex!
 
 

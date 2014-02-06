@@ -326,7 +326,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             if (IsFldEdit())
             {
                 // GetFormula leads to problems with date formats because
-                // only the numeric value without formating is returned.
+                // only the numeric value without formatting is returned.
                 // It must be used though because otherwise in GetPar2 only
                 // the value calculated by Kalkulator would be displayed
                 // (instead of test2 = test + 1)

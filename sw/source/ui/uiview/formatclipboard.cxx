@@ -532,7 +532,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             rWrtShell.SetAttrSet(*pTemplateItemSet);
 
             // store the attributes in aItemVector in order not to apply them as
-            // text automatic formating attributes later in the code
+            // text automatic formatting attributes later in the code
             lcl_AppendSetItems( aItemVector, *pTemplateItemSet);
 
             delete pTemplateItemSet;

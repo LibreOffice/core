@@ -34,7 +34,7 @@ class IntlWrapper;
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)
 
 /** If SwFmtDrop is a Client, it is the CharFmt that describes the font for the
-   DropCaps. If it is not a Client, formating uses the CharFmt of the paragraph.
+   DropCaps. If it is not a Client, formatting uses the CharFmt of the paragraph.
    If the CharFmt is modified, this change is propagated to the paragraphs
    via the Modify of SwFmtDrop. */
 class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient

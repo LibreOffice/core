@@ -182,7 +182,7 @@ class SwImplProtocol
     sal_uInt16 nLineCount;          // printed lines
     sal_uInt16 nMaxLines;           // max lines to be printed
     sal_uInt8 nInitFile;            // range (FrmId,FrmType,Record) during reading of the INI file
-    sal_uInt8 nTestMode;            // special for test formating, logging may only be done in test formating.
+    sal_uInt8 nTestMode;            // special for test formatting, logging may only be done in test formatting.
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
@@ -374,7 +374,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         else if (aTmp == "[test")// section functions
         {
             nInitFile = 4; // default:
-            nTestMode = 0; // log outside of test formating
+            nTestMode = 0; // log outside of test formatting
         }
         else if (aTmp == "[max")// Max number of lines
         {
@@ -593,7 +593,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         return; // the type is unwanted
 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
-        return; // we may only log inside a test formating
+        return; // we may only log inside a test formatting
     sal_Bool bTmp = sal_False;
     OStringBuffer aOut(aLayer);
     aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));

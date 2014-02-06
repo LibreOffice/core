@@ -10,7 +10,7 @@
 
 // Include this before stdio.h for the __MINGW32__ sake.
 // This header contails a define that modifies the way
-// formating strings work for the mingw platforms.
+// formatting strings work for the mingw platforms.
 #include <sal/types.h>
 
 #include <stdio.h>

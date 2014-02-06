@@ -1503,7 +1503,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         pLow = pLow->GetNext();
     }
     // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
-    // area has been already added and after formating its lowers the frame area
+    // area has been already added and after formatting its lowers the frame area
     // is enlarged.
     SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect() : pLay->Frm() );
 

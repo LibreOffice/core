@@ -43,7 +43,7 @@ published service DocumentSettings
 
 
     /** This is the default logical measure unit that is used for string
-        formating inside the document, f.e. the measure text
+        formatting inside the document, f.e. the measure text
      */
     [optional, property] short MeasureUnit;
 

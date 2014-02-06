@@ -535,7 +535,7 @@ void SwWW8ImplReader::Read_CFRMarkDel(sal_uInt16 , const sal_uInt8* pData, short
     Read_CRevisionMark( nsRedlineType_t::REDLINE_DELETE, pData, nLen );
 }
 
-// change properties of content ( == char formating)
+// change properties of content ( == char formatting)
 void SwWW8ImplReader::Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
     // complex (len is always 7)

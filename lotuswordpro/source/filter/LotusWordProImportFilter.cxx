@@ -63,7 +63,7 @@ static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
 const sal_Int32 MAXCHARS = 65534;
 
  // Simple xml importer, currently the importer is very very simple
- // it only extracts pure text from the wordpro file. Absolutely no formating
+ // it only extracts pure text from the wordpro file. Absolutely no formatting
  // information is currently imported.
  // To reflect the current state of this importer the sax events sent
  // to the document handler are also the simplest possible. In addition to

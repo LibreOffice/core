@@ -387,7 +387,7 @@ protected:
     void MakePos();
     // Format next frame of table frame to assure keeping attributes.
     // In case of nested tables method <SwFrm::MakeAll()> is called to
-    // avoid formating of superior table frame.
+    // avoid formatting of superior table frame.
     friend SwFrm* sw_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
 
     virtual void MakeAll() = 0;

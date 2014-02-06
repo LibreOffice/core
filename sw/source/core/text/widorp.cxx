@@ -85,7 +85,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
 
 /* BP 18.6.93: Widows.
  * In contrast to the first implementation the Widows are not calculated
- * in advance but detected when formating the split Follow.
+ * in advance but detected when formatting the split Follow.
  * In Master the Widows-calculation is dropped completely
  * (nWidows is manipulated). If the Follow detects that the
  * Widows rule applies it sends a Prepare to its predecessor.

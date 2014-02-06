@@ -103,14 +103,14 @@ public:
     inline OUString             GetExpStr() const;
     inline void                 ChgExpStr(const OUString& rExpand);
 
-    /// Called by formating.
+    /// Called by formatting.
     inline bool                 IsInBodyTxt() const;
 
     /// Set by UpdateExpFlds where node position is known.
     inline void                 ChgBodyTxtFlag( bool bIsInBody );
 
     /** For fields in header/footer/footnotes/flys:
-     Only called by formating!! */
+     Only called by formatting!! */
     void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
     virtual OUString    GetFieldName() const;
@@ -135,7 +135,7 @@ inline void SwGetExpField::ChgExpStr(const OUString& rExpand)
 inline OUString SwGetExpField::GetExpStr() const
     { return sExpand;   }
 
- /// Called by formating.
+ /// Called by formatting.
 inline bool SwGetExpField::IsInBodyTxt() const
     { return bIsInBodyTxt; }
 

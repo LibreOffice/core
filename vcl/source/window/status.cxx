@@ -779,7 +779,7 @@ void StatusBar::Resize()
     mnItemY = STATUSBAR_OFFSET_Y;
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
 
-    // provoke re-formating
+    // provoke re-formatting
     mbFormat = sal_True;
 
     if ( mbProgressMode )

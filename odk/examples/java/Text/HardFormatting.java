@@ -80,7 +80,7 @@ public class HardFormatting {
             com.sun.star.text.XTextRange xTextRange = null;
             com.sun.star.beans.XPropertySet xPropertySet = null;
 
-            // BEGIN: 'Hard formating'
+            // BEGIN: 'Hard formatting'
             // the text range not the cursor contains the 'parastyle' property
             xTextRange = xText.getEnd();
             xPropertySet = UnoRuntime.queryInterface(
@@ -152,7 +152,7 @@ public class HardFormatting {
             xPropertyStateValue = xPropertyState.getPropertyState("CharWeight");
             checkPropertyState(xWordCursor, xPropertyStateValue);
 
-            // END: 'Hard formating' Section from the Cookbook
+            // END: 'Hard formatting' Section from the Cookbook
         }
         catch( Exception e) {
             e.printStackTrace(System.err);

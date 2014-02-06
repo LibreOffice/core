@@ -1292,7 +1292,7 @@ public:
     SwGrfFmtColl* FindGrfFmtCollByName( const OUString& rName ) const
         {   return (SwGrfFmtColl*)FindFmtByName( (SwFmtsBase&)*mpGrfFmtCollTbl, rName ); }
 
-    /// Table formating
+    /// Table formatting
     const SwFrmFmts* GetTblFrmFmts() const  { return mpTblFrmFmtTbl; }
           SwFrmFmts* GetTblFrmFmts()        { return mpTblFrmFmtTbl; }
     sal_uInt16 GetTblFrmFmtCount( bool bUsed ) const;
