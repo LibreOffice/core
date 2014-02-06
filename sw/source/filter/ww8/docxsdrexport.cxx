@@ -812,13 +812,16 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
                          FSEND);
 
     uno::Any aRotation ;
+    uno::Reference< drawing::XShape > xShape;
     const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
-    uno::Reference< drawing::XShape > xShape(((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    if (pSdrObj)
+        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
     sal_Int32 nRotation = 0;
-
-    if (xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
@@ -858,7 +861,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
                          FSEND);
     pFS->endElementNS(XML_a, XML_xfrm);
     OUString shapeType = "rect";
-    if (xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
