@@ -33,9 +33,9 @@ public:
 
     virtual void setUp();
 
-    virtual bool load(const OUString &,
-        const OUString &rURL, const OUString &,
-        unsigned int, unsigned int, unsigned int);
+    virtual bool load(const OUString&,
+                      const OUString& rURL, const OUString&,
+                      unsigned int, unsigned int, unsigned int);
 
     void test();
 
@@ -53,9 +53,9 @@ void RtfTest::setUp()
     m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 }
 
-bool RtfTest::load(const OUString &,
-    const OUString &rURL, const OUString &,
-    unsigned int, unsigned int, unsigned int)
+bool RtfTest::load(const OUString&,
+                   const OUString& rURL, const OUString&,
+                   unsigned int, unsigned int, unsigned int)
 {
     uno::Sequence< beans::PropertyValue > aDescriptor(1);
     aDescriptor[0].Name = "URL";
@@ -78,8 +78,8 @@ bool RtfTest::load(const OUString &,
 void RtfTest::test()
 {
     testDir(OUString(),
-        getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"),
-        OUString());
+            getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"),
+            OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfTest);
