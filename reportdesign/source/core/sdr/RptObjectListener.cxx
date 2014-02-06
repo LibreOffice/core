@@ -63,8 +63,9 @@ TYPEINIT1( DlgEdHint, SfxHint );
 
 //----------------------------------------------------------------------------
 
-DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
-    :eHintKind( eHint )
+DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
+    : eHintKind(eHint)
+    , pDlgEdObj(NULL)
 {
 }
 
