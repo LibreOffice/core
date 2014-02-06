@@ -131,12 +131,12 @@ int DAVAuthListener_Impl::authenticate(
 
 //=========================================================================
 DAVResourceAccess::DAVResourceAccess(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
+    const uno::Reference< uno::XComponentContext > & rContext,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
     const OUString & rURL )
 : m_aURL( rURL ),
   m_xSessionFactory( rSessionFactory ),
-  m_xSMgr( rSMgr )
+  m_xContext( rContext )
 {
 }
 
@@ -146,7 +146,7 @@ DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
   m_aPath( rOther.m_aPath ),
   m_xSession( rOther.m_xSession ),
   m_xSessionFactory( rOther.m_xSessionFactory ),
-  m_xSMgr( rOther.m_xSMgr ),
+  m_xContext( rOther.m_xContext ),
   m_aRedirectURIs( rOther.m_aRedirectURIs )
 {
 }
@@ -159,7 +159,7 @@ DAVResourceAccess & DAVResourceAccess::operator=(
     m_aPath           = rOther.m_aPath;
     m_xSession        = rOther.m_xSession;
     m_xSessionFactory = rOther.m_xSessionFactory;
-    m_xSMgr           = rOther.m_xSMgr;
+    m_xContext           = rOther.m_xContext;
     m_aRedirectURIs   = rOther.m_aRedirectURIs;
 
     return *this;
@@ -592,7 +592,7 @@ void DAVResourceAccess::PUT(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rStream, m_xSMgr );
+            rStream, m_xContext );
 
     int errorCount = 0;
     bool bRetry = false;
@@ -641,7 +641,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rInputStream, m_xSMgr );
+            rInputStream, m_xContext );
 
     uno::Reference< io::XInputStream > xStream;
     int errorCount = 0;
@@ -705,7 +705,7 @@ void DAVResourceAccess::POST(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rInputStream, m_xSMgr );
+            rInputStream, m_xContext );
 
     int errorCount = 0;
     bool bRetry  = false;
@@ -1068,7 +1068,7 @@ void DAVResourceAccess::initialize()
 
             // create new webdav session
             m_xSession
-                = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
+                = m_xSessionFactory->createDAVSession( m_aURL, m_xContext );
 
             if ( !m_xSession.is() )
                 return;

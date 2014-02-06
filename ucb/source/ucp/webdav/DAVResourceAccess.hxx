@@ -51,13 +51,13 @@ class DAVResourceAccess
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+        com::sun::star::uno::XComponentContext > m_xContext;
     std::vector< SerfUri > m_aRedirectURIs;
 
 public:
     DAVResourceAccess() : m_xSessionFactory( 0 ) {}
     DAVResourceAccess( const com::sun::star::uno::Reference<
-                           com::sun::star::lang::XMultiServiceFactory > & rSMgr,
+                           com::sun::star::uno::XComponentContext > & rContext,
                        rtl::Reference<
                        DAVSessionFactory > const & rSessionFactory,
                        const OUString & rURL );

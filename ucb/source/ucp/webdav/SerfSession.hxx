@@ -29,7 +29,6 @@
 #include "SerfTypes.hxx"
 //#include "SerfLockStore.hxx"
 #include "SerfUri.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace ucbhelper { class ProxyDecider; }
 
@@ -250,9 +249,6 @@ public:
 
     const OUString & getHostName() const { return m_aUri.GetHost(); }
     int getPort() const { return m_aUri.GetPort(); }
-
-    const ::uno::Reference< ::lang::XMultiServiceFactory > getMSF()
-    { return m_xFactory->getServiceFactory(); }
 
     sal_Bool isDomainMatch( OUString certHostName );
 
