@@ -83,7 +83,7 @@ public class _XObjectInspector extends MultiMethodTest {
     }
 
     /**
-     * Inspects a new collection of one or more objects given by object realtion
+     * Inspects a new collection of one or more objects given by object relation
      * <CODE>XObjectInspector.toInspect</CODE><br>
      * Has <b>OK</b> status if no runtime exceptions occurred.
      */

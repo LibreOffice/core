@@ -355,7 +355,7 @@ public class SbaXGridControl extends TestCase {
         });
 
 
-        //Realtion for XContainer
+        //Relation for XContainer
         tEnv.addObjRelation("XContainer.Container", aContainer);
         tEnv.addObjRelation("INSTANCE", aControl3);
         tEnv.addObjRelation("INSTANCE2", aControl4);

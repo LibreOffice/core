@@ -66,7 +66,7 @@ public class OInteractionHandler extends TestCase {
     *     Object relations created :
     * <ul>
     *  <li> <code>'XInteractionHandler.Request'</code> for
-    *      {@link ifc.task._XInteractionHandler} : this realtion
+    *      {@link ifc.task._XInteractionHandler} : this relation
     *    is <code>com.sun.star.task.XInteractionRequest</code>
     *    interface implementation which depends on the component
     *    tested. In this case it emulates SQL error by returning
