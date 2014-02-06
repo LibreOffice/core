@@ -61,7 +61,9 @@ public:
                     const css::uno::Any& aRefersToLocal,
                     const css::uno::Any& aCategoryLocal,
                     const css::uno::Any& aRefersToR1C1,
-                    const css::uno::Any& aRefersToR1C1Local ) throw (css::uno::RuntimeException);
+                    const css::uno::Any& aRefersToR1C1Local )
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 

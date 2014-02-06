@@ -96,7 +96,8 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                         const css::uno::Any& /*RefersToLocal*/,
                                         const css::uno::Any& /*CategoryLocal*/,
                                         const css::uno::Any& RefersToR1C1,
-                                        const css::uno::Any& RefersToR1C1Local ) throw (css::uno::RuntimeException)
+                                        const css::uno::Any& RefersToR1C1Local )
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName;
     uno::Reference< excel::XRange > xRange;
