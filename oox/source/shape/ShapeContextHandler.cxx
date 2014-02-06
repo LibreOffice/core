@@ -28,6 +28,7 @@
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include <boost/scoped_ptr.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace oox { namespace shape {
 
@@ -547,8 +548,7 @@ OUString SAL_CALL ShapeContextHandler::getRelationFragmentPath()
     return msRelationFragmentPath;
 }
 
-void SAL_CALL ShapeContextHandler::setRelationFragmentPath
-(const OUString & the_value)
+void SAL_CALL ShapeContextHandler::setRelationFragmentPath(const OUString & the_value)
     throw (uno::RuntimeException)
 {
     msRelationFragmentPath = the_value;
@@ -562,8 +562,6 @@ void SAL_CALL ShapeContextHandler::setRelationFragmentPath
 void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException)
 {
     mnStartToken = _starttoken;
-
-
 }
 
 awt::Point SAL_CALL ShapeContextHandler::getPosition() throw (uno::RuntimeException)
@@ -588,15 +586,10 @@ uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()
     return ShapeContextHandler_getSupportedServiceNames();
 }
 
-::sal_Bool SAL_CALL ShapeContextHandler::supportsService
-(const OUString & ServiceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceName)
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq = getSupportedServiceNames();
-
-    if (aSeq[0].equals(ServiceName))
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 }}

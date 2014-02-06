@@ -334,9 +334,9 @@ OUString SAL_CALL AquaClipboard::getImplementationName() throw( RuntimeException
     return clipboard_getImplementationName();
 }
 
-sal_Bool SAL_CALL AquaClipboard::supportsService( const OUString& /*ServiceName*/ ) throw( RuntimeException )
+sal_Bool SAL_CALL AquaClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL AquaClipboard::getSupportedServiceNames() throw( RuntimeException )

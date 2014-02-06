@@ -21,7 +21,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shape.hxx"
@@ -29,6 +29,7 @@
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "ShapeFilterBase.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace oox { namespace shape {
 
@@ -45,8 +46,8 @@ public:
 };
 
 class ShapeContextHandler:
-    public ::cppu::WeakImplHelper1<
-        css::xml::sax::XFastShapeContextHandler>
+    public ::cppu::WeakImplHelper2< css::xml::sax::XFastShapeContextHandler,
+                                    css::lang::XServiceInfo >
 {
 public:
     explicit ShapeContextHandler
