@@ -796,7 +796,7 @@ i12626
     /* the encryption key, formed with the user password according to algorithm 3.2, maximum length is 16 bytes + 3 + 2
     for 128 bit security   */
     sal_Int32                               m_nKeyLength; // key length, 16 or 5
-    sal_Int32                               m_nRC4KeyLength; // key length, 16 or 10, to be input to the algorith 3.1
+    sal_Int32                               m_nRC4KeyLength; // key length, 16 or 10, to be input to the algorithm 3.1
 
     /* set to true if the following stream must be encrypted, used inside writeBuffer() */
     bool                                    m_bEncryptThisStream;

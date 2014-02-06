@@ -1173,7 +1173,7 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
 
                 //choose most bottom positions
-                if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefere left-right algnments
+                if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefere left-right alignments
                 {
                     if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
                         m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_RIGHT;

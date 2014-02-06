@@ -160,7 +160,7 @@ namespace oox { namespace ppt {
                         // this was ppt_ without an interesting thing after that
                         // just copy it verbatim
                         sRes.append("ppt_");
-                        // we are going to ajust for ppt_@ after the swtich
+                        // we are going to adjust for ppt_@ after the swtich
                         // so compensate for the fact we did not really process
                         // an extra character after ppt_
                         nIndex -= 1;

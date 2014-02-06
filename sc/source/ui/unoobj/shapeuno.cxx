@@ -1363,7 +1363,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
         if( xAggShape.is() )
         {
             const OUString aShapeType( xAggShape->getShapeType() );
-            // did we already compute an implementation id for the agregated shape type?
+            // did we already compute an implementation id for the aggregated shape type?
             ScShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
             if( aIter == aImplementationIdMap.end() )
             {

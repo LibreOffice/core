@@ -224,7 +224,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         String[] MasterLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOMASTERINDEX);
         int SOSLAVEINDEX = 0;
         String[] SlaveLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOSLAVEINDEX);
-        String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames); // add '-undefiened-'
+        String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames); // add '-undefined-'
         String[] ViewSlaveFieldNames = addNoneFieldItemToList(_AllSlaveFieldNames);
         for (int i = 0; i < super.rowcount; i++)
         {
@@ -249,7 +249,7 @@ public class FieldLinker extends DBLimitedFieldSelection
     /**
      * @return the LinkFieldnames of the joins. When no LinkFieldNames were selected the returned Array is empty.
      * When Joins were assigned duplicate a null value is returned
-     * 
+     *
      */
     public String[][] getLinkFieldNames()
     {
@@ -274,7 +274,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             return null;
         }
             return LinkFieldNames;
-        
+
     }
 
     public void enable(boolean _bdoenable)

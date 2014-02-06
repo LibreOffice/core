@@ -106,7 +106,7 @@ class AgendaDocument(TextDocument):
     def calcTemplateName(self, url):
         return FileAccess.connectURLs(
             FileAccess.getParentDir(url), FileAccess.getFilename(url)[3:])
-        
+
     '''synchronize the document to the model.<br/>
     this method rewrites all titles, item tables , and the topics table-
     thus synchronizing the document to the data model (CGAgenda).
@@ -142,7 +142,7 @@ class AgendaDocument(TextDocument):
         except Exception:
             traceback.print_exc()
         self.xTextDocument.unlockControllers()
-        
+
     '''
     checks the data model if the
     item corresponding to the given string should be shown
@@ -199,7 +199,7 @@ class AgendaDocument(TextDocument):
                     self.resources.resPlaceHolderHint, self.xTextDocument))
         self.itemsCache[
                 self.templateConsts.FILLIN_READ] = \
-            AgendaItem (self.templateConsts.FILLIN_READ, 
+            AgendaItem (self.templateConsts.FILLIN_READ,
                 self.resources.itemRead,
                 PlaceholderElement (
                     self.resources.reschkRead_value,
@@ -630,7 +630,7 @@ class ItemsTable(object):
         self.agenda.textSectionHandler.breakLinkOfTextSection(
             self.section)
         # we need to get a instance after linking
-        
+
         ItemsTable.table = self.agenda.getTable(name)
         self.section = self.agenda.getSection(name)
         cursor = ItemsTable.table.createCursorByCellName("A1")
@@ -640,8 +640,8 @@ class ItemsTable(object):
         cellName = ""
         '''
         now go through all items that belong to this
-        table. Check each one agains the model. If it should
-        be display, call it's write method.
+        table. Check each one against the model. If it should
+        be displayed, call its write method.
         All items are of type AgendaItem which means they write
         two cells to the table: a title (text) and a placeholder.
         see AgendaItem class below.
@@ -813,11 +813,11 @@ class Topics(object):
 
             # move the cursor to the needed cell...
             cursor.goRight(column, False)
-            
+
         xc = Topics.table.getCellByName(cursor.RangeName)
         # and write it !
         te = TextElement(xc, data[column].Value)
-        te.write()                       
+        te.write()
 
     '''removes obsolete rows, reducing the
     topics table to the given number of topics.

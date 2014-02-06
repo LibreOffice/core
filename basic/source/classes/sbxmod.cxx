@@ -2640,7 +2640,7 @@ void SbUserFormModule::Unload()
 
     aParams[0] >>= nCancel;
     // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
-    // test agains 0 ( false ) and assume anything else is true
+    // test against 0 ( false ) and assume anything else is true
     // ( Note: ) this used to work ( something changes somewhere )
     if (nCancel != 0)
     {

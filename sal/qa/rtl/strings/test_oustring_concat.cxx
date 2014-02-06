@@ -59,7 +59,7 @@ CPPUNIT_TEST_SUITE_END();
 #endif
 void test::oustring::StringConcat::checkConcat()
 {
-// All the extra () are to protect commas againsts being treated as separators of macro arguments.
+// All the extra () are to protect commas against being treated as separators of macro arguments.
     CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + OUString( "bar" )));
     TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));

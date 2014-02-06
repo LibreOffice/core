@@ -102,7 +102,7 @@ public: // TODO: create matching interface class
     bool               IsSubsettable() const     { return mbSubsettable; }
 
 public: // TODO: hide members behind accessor methods
-    OUString           maMapNames;       // List of family name aliass separated with ';'
+    OUString           maMapNames;       // List of family name aliases separated with ';'
     int                mnQuality;        // Quality (used when similar fonts compete)
     bool               mbOrientation;    // true: physical font can be rotated
     bool               mbDevice;         // true: built in font

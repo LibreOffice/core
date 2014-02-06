@@ -670,7 +670,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
 {
-    // visit all children, one of them need to be the layout algoritm
+    // visit all children, one of them needs to be the layout algorithm
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
                    boost::bind( &LayoutAtom::accept,

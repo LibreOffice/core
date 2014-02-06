@@ -581,7 +581,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
             mbSuppressed = false;
         }
 
-        // To not run in a depth loop, use a coloring algorythm on
+        // To not run in a depth loop, use a coloring algorithm on
         // SdrEdgeObj BoundRect calculations
         mbBoundRectCalculationRunning = true;
 

@@ -36,7 +36,7 @@ namespace basegfx
         of these can be asked to get a modified version of a color. This
         can be as easy as to return a fixed color, but may also do any
         other computation based on the given source color and the local
-        algorythm to apply.
+        algorithm to apply.
 
         This base implementation defines the abstract base class. Every
         derivation offers another color blending effect, when needed with

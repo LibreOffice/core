@@ -1454,7 +1454,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         bRet = ImplCallWheelCommand( pMouseWindow, aRelMousePos, &aWheelData );
     }
 
-    // if the commad was not handled try the focus window
+    // if the command was not handled try the focus window
     if ( bRet )
     {
         Window* pFocusWindow = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;

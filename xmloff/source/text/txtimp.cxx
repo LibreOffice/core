@@ -1405,7 +1405,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         sal_Bool bPara,
         sal_Bool bOutlineLevelAttrFound,
         sal_Int8 nOutlineLevel,
-        // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
+        // Numberings/Bullets in table not visible after save/reload (#i80724#)
         sal_Bool bSetListAttrs )
 {
     static OUString s_ParaStyleName( "ParaStyleName");
@@ -1462,7 +1462,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
        is not inside a list and if it by default applies the outline style. (#i70748#)
     */
     bool bApplyOutlineLevelAsListLevel( false );
-    // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
+    // Numberings/Bullets in table not visible after save/reload (#i80724#)
     if (bSetListAttrs && bPara
         && xPropSetInfo->hasPropertyByName( s_NumberingRules))
     {

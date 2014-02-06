@@ -169,7 +169,7 @@ public:
         ,m_sDSName( _rDataSourceName )
         ,m_sTableName( _rTableName )
     {
-        // fill our aliaes structure
+        // fill our aliases structure
         // first collect all known programmatic names
         StringBag aKnownNames;
 
@@ -182,7 +182,7 @@ public:
         }
         while ( nIndex >= 0);
 
-        // loop throuzh the given names
+        // loop through the given names
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
         const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
         for (;pFields != pFieldsEnd; ++pFields)

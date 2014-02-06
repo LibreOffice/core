@@ -285,7 +285,7 @@ public class WikiEditSettingDialog extends WikiDialog
                     {
                         if ( sURL.length() > 0 && !sURL.endsWith( "index.php" ) && bAllowIndex )
                         {
-                            // the used MainURL is not alwais directly accessible
+                            // the used MainURL is not always directly accessible
                             // add the suffix as workaround, but only once
                             sRedirectURL = sURL + "/index.php";
                             bAllowIndex = false;

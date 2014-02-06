@@ -1100,7 +1100,7 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        // early exit if match aleady found
+        // early exit if match already found
         if (mnResult != ResultNotSet)
             return;
 

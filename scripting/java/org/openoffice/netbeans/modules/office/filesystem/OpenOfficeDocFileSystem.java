@@ -1014,7 +1014,7 @@ System.out.println("    exception: " + ioe.getMessage());
 
         public long getTime()
         {
-            // ajust last modified time to the java.io.File
+            // adjust last modified time to the java.io.File
             return (time >= 0)? time: 0;
         }
 

@@ -55,10 +55,10 @@ using ::rtl::OString;
 #endif
 
 /**
- * The double member determin the alignment.
- * Under Os2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
- * The aligment of a strukture is min( 8, sizeof( max basic type ) ), the greatest basic type
- * determine the aligment.
+ * The double member determines the alignment.
+ * Under OS2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
+ * The alignment of a structure is min( 8, sizeof( max basic type ) ), the greatest basic type
+ * determines the alignment.
  */
 struct AlignSize_Impl
 {
@@ -89,7 +89,7 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 }
 
 /**
- * Calculate the new size of the struktur.
+ * Calculate the new size of the structure.
  */
 static inline sal_Int32 newAlignedSize(
     sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )

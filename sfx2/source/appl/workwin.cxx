@@ -2022,7 +2022,7 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
 }
 
 //--------------------------------------------------------------------
-// The on/of-Status of a ChildWindows is switched
+// The on/off status of a ChildWindow is switched
 
 void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
 {
@@ -2034,7 +2034,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
 
     if ( n<nCount )
     {
-        // The Window is aleady known
+        // The Window is already known
         SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChild = pCW->pWin;
 

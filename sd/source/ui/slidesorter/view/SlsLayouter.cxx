@@ -107,7 +107,7 @@ public:
         GapMembership eGapMembership = GM_NONE) const;
 
     /** Calculate the column that the point with the given horizontal
-        coordinate is over.  The verical component is ignored.
+        coordinate is over.  The vertical component is ignored.
         @param nXPosition
             Horizontal position in model coordinates.
         @param bIncludeBordersAndGaps

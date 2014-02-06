@@ -329,7 +329,7 @@ namespace frm
             OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
 
             if (!bFoundIt)
-            {   // somebody gave us an format which we can't translate
+            {   // somebody gave us a format which we can't translate
                 OUString sMessage ("This control supports only a very limited number of formats.");
                 throw IllegalArgumentException(sMessage, NULL, 2);
             }
@@ -347,8 +347,8 @@ namespace frm
 
         if (m_xAggregate.is())
         {   // this is to be called after convertFormatKeyPropertyValue, where
-            // we translated the format key into a enum value.
-            // So now we can simply forward this enum value to our aggreate
+            // we translated the format key into an enum value.
+            // So now we can simply forward this enum value to our aggregate
             m_xAggregate->setFastPropertyValue(m_nFormatEnumPropertyHandle, _rNewValue);
         }
     }

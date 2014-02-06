@@ -26,7 +26,7 @@
 #define CCI_OPTION_2D               1       // 2D compression (instead of 1D)
 #define CCI_OPTION_EOL              2       // There are EOL-Codes at the end of each line.
 #define CCI_OPTION_BYTEALIGNEOL     4       // Filling bits before each EOL-Code, so that
-                                            // the end of EOL is bytes aligend
+                                            // the end of EOL is bytes aligned
 #define CCI_OPTION_BYTEALIGNROW     8       // Rows always start byte aligned
 #define CCI_OPTION_INVERSEBITORDER  16
 

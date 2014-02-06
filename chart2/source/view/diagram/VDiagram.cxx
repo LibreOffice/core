@@ -570,8 +570,8 @@ void VDiagram::createShapes_3d()
 
         //perspective
         {
-            //ignore distance and focal length from file format and model comcpletely
-            //use vrp only to indicate the distance of the camera and thus influence the perspecitve
+            //ignore distance and focal length from file format and model completely
+            //use vrp only to indicate the distance of the camera and thus influence the perspective
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::makeAny(
                                         static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
@@ -591,9 +591,9 @@ void VDiagram::createShapes_3d()
 
         //rotation
         {
-            //set diagrams rotation is set exclusively vie the transformation matrix
+            //set diagrams rotation is set exclusively via the transformation matrix
             //don't set a camera at all!
-            //the cameras rotation is incorporated into this matrix
+            //the camera's rotation is incorporated into this matrix
 
             ::basegfx::B3DHomMatrix aEffectiveTranformation;
             aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);

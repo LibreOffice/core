@@ -1407,7 +1407,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
     // so the old one must be declared DEFUNC)
     DisposeAccessibleContext(xAccessibleComp);
 
-    // ajust the visibility of our window
+    // adjust the visibility of our window
     if ( xWindow.is() )
         xWindow->setVisible( !bOn );
 

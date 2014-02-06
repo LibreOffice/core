@@ -1044,7 +1044,7 @@ uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeEx
         if( xAggShape.is() )
         {
             const OUString aShapeType( xAggShape->getShapeType() );
-            // did we already compute an implementation id for the agregated shape type?
+            // did we already compute an implementation id for the aggregated shape type?
             SwShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
             if( aIter == aImplementationIdMap.end() )
             {

@@ -428,7 +428,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
         bSuccess = implLoadPasswordLibrary( pImplLib, Name, sal_True );
         if( bSuccess )
         {
-            // The library gets modified by verifiying the password, because other-
+            // The library gets modified by verifying the password, because other-
             // wise for saving the storage would be copied and that doesn't work
             // with mtg's storages when the password is verified
             pImplLib->implSetModified( sal_True );

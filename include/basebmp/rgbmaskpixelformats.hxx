@@ -113,7 +113,7 @@ template< typename     PixelType,
         const typename base_type::unsigned_pixel_type green(v & GreenMask);
         const typename base_type::unsigned_pixel_type blue (v & BlueMask);
 
-        // shift color nibbles to right-aligend position. ORing it
+        // shift color nibbles to right-aligned position. ORing it
         // channel value shifted twice the number of channel bits, to
         // spread the value into the component_type range
         ColorType res( (shiftRight(red,

@@ -781,7 +781,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
            && aDefFiltPropsHM.size()
            && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
     {
-        // the default filter is acceptable and the old filter is alian one
+        // the default filter is acceptable and the old filter is alien one
         // so ask to make a saveAs operation
         OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault("UIName",
                                                                                 OUString() );

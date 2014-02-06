@@ -711,7 +711,7 @@ void EscherPropertyContainer::CreateTextProperties(
     sal_uInt32 nTextAttr = 0x40004;     // rotate text with shape
 
     if ( eWM == text::WritingMode_TB_RL )
-    {   // verical writing
+    {   // vertical writing
         switch ( eHA )
         {
             case drawing::TextHorizontalAdjust_LEFT :

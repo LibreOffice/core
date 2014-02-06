@@ -3504,7 +3504,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         }
     }
     else if ( ( nUpper & 4 ) && ( ( nColorCode & 0xfffff8 ) == 0 ) )
-    {   // case of nUpper == 4 powerpoint takes this as agrument for a colorschemecolor
+    {   // case of nUpper == 4 powerpoint takes this as argument for a colorschemecolor
         GetColorFromPalette( nUpper, aColor );
     }
     else    // attributed hard, maybe with hint to SYSTEMRGB

@@ -244,7 +244,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
             }
 
-            // init text position when vertica caption object is created
+            // init text position when vertical caption object is created
             if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
             {
                 // draw text object, needs to be initialized when vertical text is used
@@ -255,7 +255,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
                 // Correct the value of SDRATTR_TEXTDIRECTION to avoid SetItemSet
                 // calling SetVerticalWriting() again since this item may not yet
-                // be set at the object and thus may differ from verical state of
+                // be set at the object and thus may differ from vertical state of
                 // the object.
                 aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION));
                 pObj->SetMergedItemSet(aSet);

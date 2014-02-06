@@ -162,7 +162,7 @@ public class java_remote_bridge
     protected IProtocol         _iProtocol;
     protected IEnvironment      _java_environment;
     protected MessageDispatcher _messageDispatcher;
-    protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
+    protected int               _life_count = 0;    // determines if this bridge is alive, which is controlled by acquire and release calls
 
     private final ArrayList<XEventListener> _listeners = new ArrayList<XEventListener>();
 

@@ -115,7 +115,7 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
             // with locked SOLAR_MUTEX but we also need SOLAR_MUTEX in
             // WinFileOpenDialog::onInitDone ... but we cannot dismiss the
             // assertion dialog because at this point the FileOpen Dialog
-            // has aleady the focus but is not yet visible :-(
+            // has already the focus but is not yet visible :-(
             // The real cure is to remove the VCL/SOLAR_MUTEX dependency
             // cause by the use of our resource manager and not being able to
             // generate native windows resources

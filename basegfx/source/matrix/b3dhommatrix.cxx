@@ -235,7 +235,7 @@ namespace basegfx
 
     void B3DHomMatrix::shearXY(double fSx, double fSy)
     {
-        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSy))
         {
             Impl3DHomMatrix aShearXYMat;
@@ -249,7 +249,7 @@ namespace basegfx
 
     void B3DHomMatrix::shearXZ(double fSx, double fSz)
     {
-        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearXZMat;

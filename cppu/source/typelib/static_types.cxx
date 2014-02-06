@@ -63,10 +63,10 @@ void SAL_CALL typelib_typedescriptionreference_getByName(
 #endif
 
 /**
- * The double member determin the alignment.
- * Under Os2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
- * The aligment of a strukture is min( 8, sizeof( max basic type ) ), the greatest basic type
- * determine the aligment.
+ * The double member determines the alignment.
+ * Under OS2 and MS-Windows the Alignment is min( 8, sizeof( type ) ).
+ * The alignment of a structure is min( 8, sizeof( max basic type ) ), the greatest basic type
+ * determines the alignment.
  */
 struct AlignSize_Impl
 {

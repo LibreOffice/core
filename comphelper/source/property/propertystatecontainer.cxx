@@ -94,7 +94,7 @@ namespace comphelper
             return aStates;
 
 #ifdef _DEBUG
-        // precondition: property sequence is sorted (the algorythm below relies on this)
+        // precondition: property sequence is sorted (the algorithm below relies on this)
         {
             const OUString* pNames = _rPropertyNames.getConstArray();
             const OUString* pNamesCompare = pNames + 1;

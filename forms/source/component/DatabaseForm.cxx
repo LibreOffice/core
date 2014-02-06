@@ -266,7 +266,7 @@ Any SAL_CALL ODatabaseForm::queryAggregation(const Type& _rType) throw(RuntimeEx
 
                 // aggregate interfaces
                 // (ask the aggregated object _after_ the OComponentHelper (base of OFormComponents),
-                // so calls to the XComponent interface reach us and not the aggreagtion)
+                // so calls to the XComponent interface reach us and not the aggregation)
                 if (!aReturn.hasValue() && m_xAggregate.is())
                     aReturn = m_xAggregate->queryAggregation(_rType);
             }
@@ -2740,7 +2740,7 @@ void ODatabaseForm::doShareConnection( const Reference< XPropertySet >& _rxParen
         OSL_ENSURE( xParentConnComp.is(), "ODatabaseForm::doShareConnection: invalid connection!" );
         xParentConnComp->addEventListener( static_cast< XLoadListener* >( this ) );
 
-        // forward the connection to our own aggreagte
+        // forward the connection to our own aggregate
         m_bForwardingConnection = sal_True;
         m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xParentConn ) );
         m_bForwardingConnection = sal_False;

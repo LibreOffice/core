@@ -325,9 +325,8 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 {
     if (m_bPositioning)
         return;
-    // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition, so protect agains this
-    // recursion
-    // 68167 - 13.08.99 - FS
+    // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition,
+    // so protect against this recursion
     m_bPositioning = sal_True;
     ((DbGridControl*)GetParent())->MoveToPosition(nRecord - 1);
     m_bPositioning = sal_False;
