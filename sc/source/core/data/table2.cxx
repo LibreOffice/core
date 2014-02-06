@@ -1494,6 +1494,14 @@ ScPostIt* ScTable::GetNote(const SCCOL nCol, const SCROW nRow)
     return pDocument->GetNote(nCol, nRow, nTab);
 }
 
+ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidCol(nCol))
+        return NULL;
+
+    return aCol[nCol].ReleaseNote(nRow);
+}
+
 size_t ScTable::GetNoteCount( SCCOL nCol ) const
 {
     if (!ValidCol(nCol))
@@ -1514,6 +1522,15 @@ void ScTable::CreateAllNoteCaptions()
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
         aCol[i].CreateAllNoteCaptions();
+}
+
+void ScTable::ForgetNoteCaptions( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    for (SCCOL i = nCol1; i <= nCol2; ++i)
+        aCol[i].ForgetNoteCaptions(nRow1, nRow2);
 }
 
 void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const

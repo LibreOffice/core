@@ -6141,16 +6141,11 @@ bool ScDocument::HasTabNotes(SCTAB nTab)
 
 ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)
 {
-        return ReleaseNote(rPos.Col(), rPos.Row(), rPos.Tab());
-}
-ScPostIt* ScDocument::ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
-{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return NULL;
 
-    ScPostIt* pPostIt = GetNote(nCol, nRow, nTab);
-    if (pPostIt != NULL)
-        maTabs[nTab]->aCol[nCol].DeleteCellNote(nRow);
-
-    return pPostIt;
+    return pTab->ReleaseNote(rPos.Col(), rPos.Row());
 }
 
 ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
@@ -6196,6 +6191,24 @@ void ScDocument::CreateAllNoteCaptions()
         ScTable* p = *it;
         if (p)
             p->CreateAllNoteCaptions();
+    }
+}
+
+void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges )
+{
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = rRanges[i];
+        const ScAddress& s = p->aStart;
+        const ScAddress& e = p->aEnd;
+        for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
+        {
+            ScTable* pTab = FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            pTab->ForgetNoteCaptions(s.Col(), s.Row(), e.Col(), e.Row());
+        }
     }
 }
 
