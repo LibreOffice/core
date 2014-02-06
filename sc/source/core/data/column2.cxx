@@ -1214,6 +1214,16 @@ bool ScColumn::IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     return nEndRow < nNextRow;
 }
 
+ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
+{
+    if (!ValidRow(nRow))
+        return NULL;
+
+    ScPostIt* p = NULL;
+    maCellNotes.release(nRow, p);
+    return p;
+}
+
 size_t ScColumn::GetNoteCount() const
 {
     size_t nCount = 0;
@@ -1244,12 +1254,30 @@ public:
     }
 };
 
+struct NoteCaptionCleaner
+{
+    void operator() ( size_t /*nRow*/, ScPostIt* p )
+    {
+        p->ForgetCaption();
+    }
+};
+
 }
 
 void ScColumn::CreateAllNoteCaptions()
 {
     NoteCaptionCreator aFunc(nTab, nCol);
     sc::ProcessNote(maCellNotes, aFunc);
+}
+
+void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2))
+        return;
+
+    NoteCaptionCleaner aFunc;
+    sc::CellNoteStoreType::iterator it = maCellNotes.begin();
+    sc::ProcessNote(it, maCellNotes, nRow1, nRow2, aFunc);
 }
 
 SCROW ScColumn::GetNotePosition( size_t nIndex ) const

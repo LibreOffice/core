@@ -166,6 +166,16 @@ void ProcessNote(CellNoteStoreType& rStore, _Func& rFunc)
     ProcessElements1<CellNoteStoreType, cellnote_block, _Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
 }
 
+template<typename _FuncElem>
+typename CellNoteStoreType::iterator
+ProcessNote(
+    const CellNoteStoreType::iterator& it, CellNoteStoreType& rStore, SCROW nRow1, SCROW nRow2, _FuncElem& rFuncElem)
+{
+    FuncElseNoOp<size_t> aElse;
+    return ProcessElements1<
+        CellNoteStoreType, cellnote_block, _FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
+}
+
 }
 
 #endif

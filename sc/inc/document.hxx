@@ -906,7 +906,6 @@ public:
     SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab);
     SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab);
     SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
-    SC_DLLPUBLIC ScPostIt*       ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
     size_t CountNotes() const;
@@ -917,6 +916,7 @@ public:
      * code uses sdr objects to export note data.
      */
     void CreateAllNoteCaptions();
+    void ForgetNoteCaptions( const ScRangeList& rRanges );
 
     ScAddress GetNotePosition( size_t nIndex ) const;
     SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;

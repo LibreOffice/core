@@ -501,8 +501,10 @@ public:
     void SetCellNote( SCROW nRow, ScPostIt* pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
 
+    ScPostIt* ReleaseNote( SCROW nRow );
     size_t GetNoteCount() const;
     void CreateAllNoteCaptions();
+    void ForgetNoteCaptions( SCROW nRow1, SCROW nRow2 );
     SCROW GetNotePosition( size_t nIndex ) const;
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     void GetNotesInRange( SCROW nStartRow, SCROW nEndRow, std::vector<sc::NoteEntry>& rNotes ) const;
