@@ -573,7 +573,7 @@ inline void Rectangle::SetPos( const Point& rPoint )
 inline long Rectangle::GetWidth() const
 {
     long n;
-    if ( nRight == RECT_EMPTY )
+    if ( nRight == RECT_EMPTY || nRight < 0 )
         n = 0;
     else
     {

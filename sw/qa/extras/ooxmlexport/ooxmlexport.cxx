@@ -2820,6 +2820,15 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod",
             "val", "160000");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent","cx","0");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
