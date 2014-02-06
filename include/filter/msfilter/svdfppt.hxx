@@ -366,12 +366,14 @@ struct PPTOleEntry
     sal_uInt16          nType;                      // maybe PPT_PST_ExEmbed or PPT_PST_ExControl
     sal_uInt32          nAspect;                    // the aspect of the OLE object
 
-    PPTOleEntry( sal_uInt32 nid, sal_uInt32 nOfs, SfxObjectShell* pSh, sal_uInt16 nT, sal_uInt32 nAsp ) :
-        nId             ( nid ),
-        nRecHdOfs       ( nOfs ),
-        pShell          ( pSh ),
-        nType           ( nT ),
-        nAspect         ( nAsp ) {}
+    PPTOleEntry( sal_uInt32 nid, sal_uInt32 nOfs, SfxObjectShell* pSh, sal_uInt16 nT, sal_uInt32 nAsp )
+        : nId(nid)
+        , nPersistPtr(0)
+        , nRecHdOfs(nOfs)
+        , pShell(pSh)
+        , nType(nT)
+        , nAspect(nAsp)
+    {}
 };
 
 struct PptExOleObjAtom
