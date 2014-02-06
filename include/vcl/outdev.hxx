@@ -269,9 +269,9 @@ class VCL_DLLPUBLIC OutputDevice
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
-    mutable SalGraphics*        mpGraphics;
-    mutable OutputDevice*       mpPrevGraphics;
-    mutable OutputDevice*       mpNextGraphics;
+    mutable SalGraphics*        mpGraphics;         ///< Graphics context to draw on
+    mutable OutputDevice*       mpPrevGraphics;     ///< Previous output device in list
+    mutable OutputDevice*       mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;
@@ -358,16 +358,46 @@ public:
     /** @name Initialization and accessor functions
      */
     ///@{
+
+    /** Get the graphic context that the output device uses to draw on.
+
+     @returns SalGraphics instance.
+     */
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
+
+    /** Release the graphics device, and remove it from the graphics device
+     list.
+
+     @param         bRelease    Determines whether to release the fonts of the
+                                physically released graphics device.
+     */
     SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
+
+    /** Initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplInitOutDevData();
+
+    /** De-initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplDeInitOutDevData();
     ///@}
+
+
 
     /** @name Helper functions
      */
     ///@{
+
+    /** Get the output device's DPI x-axis value.
+
+     @returns x-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
+
+    /** Get the output device's DPI y-axis value.
+
+     @returns y-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
     SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
     SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
