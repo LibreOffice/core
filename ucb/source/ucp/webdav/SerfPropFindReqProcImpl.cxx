@@ -113,14 +113,14 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    thePropName );
 
                 /* <*propname* xmlns="*propns*" /> */
-                aBodyText += "<";
-                aBodyText += OUString::createFromAscii( thePropName.name );
-                aBodyText += " xmlnx=\"";
-                aBodyText += OUString::createFromAscii( thePropName.nspace );
-                aBodyText += "\"/>";
+                aBuffer.append( "<" );
+                aBuffer.append( thePropName.name );
+                aBuffer.append( " xmlnx=\"" );
+                aBuffer.append( thePropName.nspace );
+                aBuffer.append( "\"/>" );
             }
 
-            aBodyText = "<prop>" + aBodyText + "</prop>";
+            aBuffer.append( "</prop>" );
         }
         else
         {
