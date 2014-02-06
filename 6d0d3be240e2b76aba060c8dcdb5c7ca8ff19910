@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_1d31b6ec",
+        "filename": "vcl/unx/kde4/KDE4FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T20:28:38Z",
+      "side": 1,
+      "message": "trivial nitpick: OSL_TRACE is deprecated, use SAL_INFO instead",
+      "revId": "6d0d3be240e2b76aba060c8dcdb5c7ca8ff19910",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
