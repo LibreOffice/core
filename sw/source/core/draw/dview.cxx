@@ -722,7 +722,7 @@ const SwFrm* SwDrawView::CalcAnchor()
 
     if ( aPt != aMyPt )
     {
-        if ( pAnch->IsCntntFrm() )
+        if ( pAnch && pAnch->IsCntntFrm() )
         {
             // allow drawing objects in header/footer,
             // but exclude control objects.
