@@ -14,7 +14,10 @@ namespace sc {
 
 OpenclDeviceInfo::OpenclDeviceInfo() {}
 
-OpenclPlatformInfo::OpenclPlatformInfo() {}
+OpenclPlatformInfo::OpenclPlatformInfo()
+    : platform(NULL)
+{
+}
 
 }
 
