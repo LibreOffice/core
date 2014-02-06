@@ -331,7 +331,7 @@ void MSCodec_Std97::InitKey (
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
 #endif
-    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPassData, uno::Sequence< sal_Int8 >( (sal_Int8*)pDocId, 16 ) );
+    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
     // Fill raw digest of above updates into DigestValue.
 
     if ( aKey.getLength() == sizeof(m_pDigestValue) )

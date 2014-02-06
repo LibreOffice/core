@@ -220,6 +220,14 @@ public:
                 const sal_uInt16 pPassData[16],
                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aDocId );
 
+    /** This helper function generates a byte sequence representing the
+        key digest value used by MSCodec_Std97 codec.
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GenerateStd97Key(
+                const sal_uInt16 pPassData[16],
+                const sal_uInt8 pDocId[16] );
+
     // ------------------------------------------------------------------------
 
     /** This helper function tries to request and verify a password to load a

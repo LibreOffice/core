@@ -284,7 +284,18 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
-    if ( pPassData[0] && aDocId.getLength() == 16 )
+
+    if ( aDocId.getLength() == 16 )
+        aResultKey = GenerateStd97Key(pPassData, (const sal_uInt8*)aDocId.getConstArray());
+
+    return aResultKey;
+}
+
+// ============================================================================
+/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const sal_uInt8 pDocId[16] )
+{
+    uno::Sequence< sal_Int8 > aResultKey;
+    if ( pPassData[0] )
     {
         sal_uInt8 pKeyData[64];
         memset( pKeyData, 0, sizeof(pKeyData) );
@@ -312,7 +323,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         for ( nInd = 0; nInd < 16; nInd++ )
         {
             rtl_digest_updateMD5( hDigest, pKeyData, 5 );
-            rtl_digest_updateMD5( hDigest, (const sal_uInt8*)aDocId.getConstArray(), aDocId.getLength() );
+            rtl_digest_updateMD5( hDigest, pDocId, 16 );
         }
 
         // Update digest with padding.
@@ -333,6 +344,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
     return aResultKey;
 }
+
 
 // ============================================================================
 
