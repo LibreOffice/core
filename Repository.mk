@@ -451,9 +451,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(ENABLE_JAVA),java_uno) \
-	$(if $(ENABLE_JAVA),juh) \
-	$(if $(ENABLE_JAVA),juhx) \
+	$(if $(filter MSC,$(COM)),cli_uno) \
+	$(if $(ENABLE_JAVA), \
+		java_uno \
+		jpipe \
+		$(if $(filter $(OS),WNT),jpipx) \
+	    juh \
+		juhx \
+	) \
 	log_uno_uno \
 	unsafe_uno_uno \
 	$(if $(URELIBS),urelibs) \
@@ -490,11 +495,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 # this is NONE even though it is actually in URE because it is CliNativeLibrary
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
-))
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-	$(if $(filter MSC,$(COM)),cli_uno) \
-	jpipe \
-	$(if $(filter WNT,$(OS)),jpipx) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
@@ -704,6 +704,12 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		jvmfwk_jreproperties \
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	$(if $(SYSTEM_CURL),,curl) \
+	$(if $(SYSTEM_LCMS2),,lcms2) \
+	$(if $(SYSTEM_LIBXSLT),,xslt) \
 ))
 
 # External executables
