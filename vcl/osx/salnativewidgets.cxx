@@ -534,7 +534,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_TOOLBAR:
         {
-            if (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT)
+            if (rControlRegion.Top() == 0 && nPart == PART_DRAW_BACKGROUND_HORZ)
             {
                 BOOL isMain = [mpFrame->getNSWindow() isMainWindow];
                 CGFloat unifiedHeight = rControlRegion.GetHeight();
