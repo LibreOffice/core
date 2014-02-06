@@ -519,8 +519,9 @@ void FlashFont::write( SvStream& out )
 
 /** this c'tor creates a solid fill style */
 FillStyle::FillStyle( const Color& rSolidColor )
-:   meType( solid ),
-    maColor( rSolidColor )
+    : meType(solid )
+    , mnBitmapId(0)
+    , maColor(rSolidColor)
 {
 }
 
