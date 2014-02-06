@@ -239,6 +239,7 @@ public:
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
+    void testCopyPasteSkipEmpty();
     void testUndoCut();
     void testMoveBlock();
     void testCopyPasteRelativeFormula();
@@ -400,6 +401,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
+    CPPUNIT_TEST(testCopyPasteSkipEmpty);
     CPPUNIT_TEST(testUndoCut);
     CPPUNIT_TEST(testMoveBlock);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);

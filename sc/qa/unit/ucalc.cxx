@@ -3594,6 +3594,81 @@ void Test::testCopyPasteTranspose()
 
 }
 
+void Test::testCopyPasteSkipEmpty()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScRange aSrcRange(0,0,0,0,4,0);
+    ScRange aDestRange(1,0,0,1,4,0);
+
+    ScMarkData aMark;
+    aMark.SetMarkArea(aDestRange);
+
+    // Put some texts in A1:A5.
+    m_pDoc->SetString(ScAddress(1,0,0), "A");
+    m_pDoc->SetString(ScAddress(1,1,0), "B");
+    m_pDoc->SetString(ScAddress(1,2,0), "C");
+    m_pDoc->SetString(ScAddress(1,3,0), "D");
+    m_pDoc->SetString(ScAddress(1,4,0), "E");
+
+    // Prepare a clipboard content interleaved with empty cells.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    aClipDoc.SetClipParam(ScClipParam(aSrcRange, false));
+    aClipDoc.SetString(ScAddress(0,0,0), "Clip1");
+    aClipDoc.SetString(ScAddress(0,2,0), "Clip2");
+    aClipDoc.SetString(ScAddress(0,4,0), "Clip3");
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE,   aClipDoc.GetCellType(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE,   aClipDoc.GetCellType(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,4,0)));
+
+    // Create undo document.
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+
+    // Paste clipboard content onto A1:A5 but skip empty cells.
+    bool bSkipEmpty = true;
+    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+
+    // Create redo document.
+    ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pRedoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+
+    // Create an undo object for this.
+    ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
+    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+
+    // Check the content after the paste.
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip1"), m_pDoc->GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("B"),     m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip2"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("D"),     m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip3"), m_pDoc->GetString(ScAddress(1,4,0)));
+
+    // Undo, and check the content.
+    aUndo.Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("D"), m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("E"), m_pDoc->GetString(ScAddress(1,4,0)));
+
+    // Redo, and check the content again.
+    aUndo.Redo();
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip1"), m_pDoc->GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("B"),     m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip2"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("D"),     m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Clip3"), m_pDoc->GetString(ScAddress(1,4,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testUndoCut()
 {
     m_pDoc->InsertTab(0, "Test");
