@@ -573,7 +573,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment, sal_False );
     }
-    else if ( aCommand.Name "open" )
+    else if ( aCommand.Name == "open" )
     {
         //////////////////////////////////////////////////////////////////
         // open

@@ -194,7 +194,7 @@ static OUString encodeValue( const OUString & rValue )
         else
             aResult.append( c );
     }
-    return OUString( aResult );
+    return aResult.makeStringAndClear();
 }
 
 /*

@@ -424,7 +424,7 @@ void ContentProperties::addProperty( const OUString & rName,
                                      const com::sun::star::uno::Any & rValue,
                                      bool bIsCaseSensitive )
 {
-    if ( rName == DAVProperties::CREATIONDATE ) )
+    if ( rName == DAVProperties::CREATIONDATE )
     {
         // Map DAV:creationdate to UCP:DateCreated
         OUString aValue;
@@ -441,7 +441,7 @@ void ContentProperties::addProperty( const OUString & rName,
     //  else if ( rName.equals( DAVProperties::GETCONTENTLANGUAGE ) )
     //  {
     //  }
-    else if ( rName == DAVProperties::GETCONTENTLENGTH ) )
+    else if ( rName == DAVProperties::GETCONTENTLENGTH )
     {
         // Map DAV:getcontentlength to UCP:Size
         OUString aValue;
@@ -462,7 +462,7 @@ void ContentProperties::addProperty( const OUString & rName,
         (*m_xProps)[ OUString( "Size" ) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
-    else if ( rName == DAVProperties::GETCONTENTTYPE ) )
+    else if ( rName == DAVProperties::GETCONTENTTYPE )
     {
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
         (*m_xProps)[ OUString( "MediaType" ) ]
@@ -508,7 +508,7 @@ void ContentProperties::addProperty( const OUString & rName,
     //  else if ( rName.equals( DAVProperties::LOCKDISCOVERY ) )
     //  {
     //  }
-    else if ( rName == DAVProperties::RESOURCETYPE ) )
+    else if ( rName == DAVProperties::RESOURCETYPE )
     {
         OUString aValue;
         rValue >>= aValue;

@@ -74,15 +74,15 @@ struct DataSupplier_Impl
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext > m_xContext;
     sal_Int32                                    m_nOpenMode;
-    sal_Bool                                     m_bCountFinal;
-    sal_Bool                                     m_bThrowException;
+    bool                                     m_bCountFinal;
+    bool                                     m_bThrowException;
 
     DataSupplier_Impl(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent,
                 sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
-      m_bCountFinal( sal_False ), m_bThrowException( sal_False ) {}
+      m_bCountFinal( false ), m_bThrowException( false ) {}
     ~DataSupplier_Impl();
 };
 
@@ -229,14 +229,14 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_aResults.size() > nIndex )
     {
         // Result already present.
-        return sal_True;
+        return true;
     }
 
     // Obtain values...
@@ -245,11 +245,11 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
         if ( m_pImpl->m_aResults.size() > nIndex )
         {
             // Result already present.
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 //=========================================================================
@@ -271,7 +271,7 @@ sal_uInt32 DataSupplier::currentCount()
 
 //=========================================================================
 // virtual
-sal_Bool DataSupplier::isCountFinal()
+bool DataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
@@ -336,7 +336,7 @@ void DataSupplier::validate()
 }
 
 //=========================================================================
-sal_Bool DataSupplier::getData()
+bool DataSupplier::getData()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -379,8 +379,8 @@ sal_Bool DataSupplier::getData()
         }
         catch ( DAVException & )
         {
-//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
-            m_pImpl->m_bThrowException = sal_True;
+//          OSL_ENSURE( false, "PROPFIND : DAVException" );
+            m_pImpl->m_bThrowException = true;
         }
 
         if ( !m_pImpl->m_bThrowException )
@@ -436,7 +436,7 @@ sal_Bool DataSupplier::getData()
                     {
                     case ucb::OpenMode::FOLDERS:
                         {
-                            sal_Bool bFolder = sal_False;
+                            bool bFolder = false;
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
@@ -452,7 +452,7 @@ sal_Bool DataSupplier::getData()
 
                     case ucb::OpenMode::DOCUMENTS:
                         {
-                            sal_Bool bDocument = sal_False;
+                            bool bDocument = false;
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
@@ -480,7 +480,7 @@ sal_Bool DataSupplier::getData()
             }
         }
 
-        m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = true;
 
         // Callback possible, because listeners may be informed!
         aGuard.clear();
