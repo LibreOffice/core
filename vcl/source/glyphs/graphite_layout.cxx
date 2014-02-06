@@ -1284,7 +1284,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
 
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"GetNextGlyphs g%d gid%d c%d x%ld,%ld adv%ld, pos %ld,%ld\n",
-            glyph_slot - 1, glyph_itr->mnGlyphIndex,
+            glyph_slot - 1, glyph_itr->maGlyphId,
             mvGlyph2Char[glyph_slot-1], glyph_itr->maLinearPos.X(), glyph_itr->maLinearPos.Y(), nGlyphAdvance,
             aPosOut.X(), aPosOut.Y());
 #endif
