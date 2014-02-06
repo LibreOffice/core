@@ -201,6 +201,7 @@ endef
 define gb_ExternalProject_run
 $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
 	$(if $(WRAPPERS),export $(WRAPPERS) &&) \
+	$(if $(NMAKE),INCLUDE="$(gb_ExternalProject_INCLUDE)" LIB="$(ILIB)" MAKEFLAGS=) \
 	$(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
 endef
 

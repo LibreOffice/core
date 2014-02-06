@@ -827,6 +827,57 @@ gb_LinkTarget__use_liblangtag :=
 
 endif # ENABLE_LIBLANGTAG
 
+ifneq ($(DISABLE_NEON),)
+
+define gb_LinkTarget__use_apr
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(APR_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(APR_LIBS) \
+)
+
+ifeq ($(SYSTEM_APR),NO)
+$(call gb_LinkTarget_use_system_win32_libs,$(1),\
+	mswsock \
+	rpcrt4 \
+	shell32 \
+)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DAPR_DECLARE_STATIC \
+	-DAPU_DECLARE_STATIC \
+)
+$(call gb_LinkTarget_use_external_project,$(1),apr_util)
+endif
+
+endef
+
+define gb_ExternalProject__use_apr
+ifeq ($(SYSTEM_APR),NO)
+$(call gb_ExternalProject_use_external_project,$(1),apr_util)
+endif
+
+endef
+
+define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_set_include,$(1),\
+	$(SERF_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(SERF_LIBS) \
+)
+
+ifeq ($(SYSTEM_SERF),NO)
+$(call gb_LinkTarget_use_external_project,$(1),serf)
+endif
+
+endef
+
+else
+
+gb_ExternalProject__use_apr :=
 
 ifeq ($(SYSTEM_NEON),YES)
 
@@ -864,6 +915,7 @@ endef
 
 endif # SYSTEM_NEON
 
+endif # DISABLE_NEON
 
 ifeq ($(SYSTEM_REDLAND),YES)
 

@@ -1,3 +1,7 @@
+APR_MD5SUM := eff9d741b0999a9bbab96862dd2a2a3d
+export APR_TARBALL := apr-1.4.8.tar.gz
+APR_UTIL_MD5SUM := 71a11d037240b292f824ba1eb537b4e3
+export APR_UTIL_TARBALL := apr-util-1.5.3.tar.gz
 CDR_MD5SUM := d88f9b94df880d2c05be943b000ca112
 export CDR_TARBALL := libcdr-0.0.14.tar.bz2
 COINMP_MD5SUM := 1cce53bf4b40ae29790d2c5c9f8b1129
@@ -8,6 +12,8 @@ MWAW_MD5SUM := 828dd03510791fbe037081a2b4a1a8ff
 export MWAW_TARBALL := libmwaw-0.1.11.tar.bz2
 VISIO_MD5SUM := 82628333418f101a20cd21f980cf9f40
 export VISIO_TARBALL := libvisio-0.0.31.tar.bz2
+SERF_MD5SUM := 4f8e76c9c6567aee1d66aba49f76a58b
+export SERF_TARBALL := serf-1.2.1.tar.bz2
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz

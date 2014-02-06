@@ -263,5 +263,6 @@ endif
 # ExternalProject class
 
 gb_ExternalProject_use_autoconf :=
+gb_ExternalProject_use_nmake :=
 
 # vim: set noet sw=4 ts=4:

@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
+	$(call gb_Helper_optional,APR,apr) \
 	autodoc \
 	avmedia \
 	basctl \
@@ -163,6 +164,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	scripting \
 	sd \
 	sdext \
+	$(call gb_Helper_optional,SERF,serf) \
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
