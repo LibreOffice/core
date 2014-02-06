@@ -761,7 +761,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x9410, 2, L_FIX}, // undocumented
         {0x6815, 4, L_FIX}, // undocumented
         {0x6816, 4, L_FIX}, // undocumented
-        {0x6870, 4, L_FIX}, // undocumented, text colour
+        {NS_sprm::LN_CCv, 4, L_FIX}, // text colour
         {0xC64D, 0, L_VAR}, // undocumented, para back colour
         {0x6467, 4, L_FIX}, // undocumented
         {0x646B, 4, L_FIX}, // undocumented

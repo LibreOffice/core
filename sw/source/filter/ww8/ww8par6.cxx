@@ -3286,7 +3286,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 void SwWW8ImplReader::Read_TxtColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour varient, ignore this old varient
-    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0x6870))
+    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::LN_CCv))
         return;
 
     if( nLen < 0 )
@@ -6108,7 +6108,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      // subtable "sprmPFTtp"
         {0x6815, 0},                                 //undocumented
         {0x6816, 0},                                 //undocumented
-        {0x6870, &SwWW8ImplReader::Read_TxtForeColor},
+        {NS_sprm::LN_CCv, &SwWW8ImplReader::Read_TxtForeColor},
         {0x6877, &SwWW8ImplReader::Read_UnderlineColor},
         {0xC64D, &SwWW8ImplReader::Read_ParaBackColor},
         {0x6467, 0},                                 //undocumented

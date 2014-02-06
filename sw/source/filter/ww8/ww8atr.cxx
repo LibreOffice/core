@@ -1604,7 +1604,7 @@ void WW8AttributeOutput::CharColor( const SvxColorItem& rColor )
 
     if ( m_rWW8Export.bWrtWW8 && nColor )
     {
-        m_rWW8Export.InsUInt16( 0x6870 );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CCv );
         m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( rColor.GetValue().GetColor() ) );
     }
 }
