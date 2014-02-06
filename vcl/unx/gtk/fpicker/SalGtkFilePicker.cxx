@@ -892,8 +892,11 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                 GtkFileFilter *filter = gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(m_pDialog));
                 if (m_pPseudoFilter != filter)
                 {
-                    const gchar* filtername = gtk_file_filter_get_name( filter );
-                    sFilterName = OUString( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
+                    const gchar* filtername = filter ? gtk_file_filter_get_name(filter) : NULL;
+                    if (filtername)
+                        sFilterName = OUString(filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8);
+                    else
+                        sFilterName = OUString();
                 }
                 else
                     sFilterName = m_aInitialFilter;
