@@ -447,86 +447,39 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16 nControlA
         return Q_EMIT setValueSignal( controlId, nControlAction, value );
     }
 
-    QWidget* widget = _customWidgets[controlId];
-
-    if (widget)
-    {
-        switch (controlId)
-        {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
-            // we actually rely on KFileDialog and ignore CHECKBOX_AUTOEXTENSION completely,
-            // otherwise the checkbox would be duplicated
-                break;
-            case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
-            case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
-            case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
-            case ExtendedFilePickerElementIds::CHECKBOX_LINK:
-            case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
-            {
-                QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
-                cb->setChecked(value.get<bool>());
-                break;
-            }
-            case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
-                break;
-        }
+    if (_customWidgets.contains( controlId )) {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>( _customWidgets.value( controlId ));
+        if (cb)
+            cb->setChecked(value.get<bool>());
     }
+    else
+        OSL_TRACE( "set label on unknown control %d", controlId );
 }
 
 uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nControlAction )
     throw( uno::RuntimeException )
 {
+    if (CHECKBOX_AUTOEXTENSION == controlId)
+        // We ignore this one and rely on KFileDialog to provide the function.
+        // Always return false, to pretend we do not support this, otherwise
+        // LO core would try to be smart and cut the extension in some places,
+        // interfering with KFileDialog's handling of it. KFileDialog also
+        // saves the value of the setting, so LO core is not needed for that either.
+        return uno::Any( false );
+
     if( qApp->thread() != QThread::currentThread() ) {
         SalYieldMutexReleaser release;
         return Q_EMIT getValueSignal( controlId, nControlAction );
     }
 
     uno::Any res(false);
-
-    QWidget* widget = _customWidgets[controlId];
-
-    if (widget)
-    {
-        switch (controlId)
-        {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
-            // We ignore this one and rely on KFileDialog to provide the function.
-            // Always return false, to pretend we do not support this, otherwise
-            // LO core would try to be smart and cut the extension in some places,
-            // interfering with KFileDialog's handling of it. KFileDialog also
-            // saves the value of the setting, so LO core is not needed for that either.
-                res = uno::Any( false );
-                break;
-            case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
-            case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
-            case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
-            case ExtendedFilePickerElementIds::CHECKBOX_LINK:
-            case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
-            {
-                QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
-                res = uno::Any(cb->isChecked());
-                break;
-            }
-            case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
-                break;
-        }
+    if (_customWidgets.contains( controlId )) {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>( _customWidgets.value( controlId ));
+        if (cb)
+            res = uno::Any(cb->isChecked());
     }
+    else
+        OSL_TRACE( "get value on unknown control %d", controlId );
 
     return res;
 }
@@ -539,12 +492,10 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
         return Q_EMIT enableControlSignal( controlId, enable );
     }
 
-    QWidget* widget = _customWidgets[controlId];
-
-    if (widget)
-    {
-        widget->setEnabled(enable);
-    }
+    if (_customWidgets.contains( controlId ))
+        _customWidgets.value( controlId )->setEnabled( enable );
+    else
+        OSL_TRACE("enable unknown control %d", controlId );
 }
 
 void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &label )
@@ -555,35 +506,13 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &lab
         return Q_EMIT setLabelSignal( controlId, label );
     }
 
-    QWidget* widget = _customWidgets[controlId];
-
-    if (widget)
-    {
-        switch (controlId)
-        {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
-            case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
-            case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
-            case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
-            case ExtendedFilePickerElementIds::CHECKBOX_LINK:
-            case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
-            {
-                QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
-                cb->setText(toQString(label));
-                break;
-            }
-            case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
-                break;
-        }
+    if (_customWidgets.contains( controlId )) {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>( _customWidgets.value( controlId ));
+        if (cb)
+            cb->setText( toQString(label) );
     }
+    else
+        OSL_TRACE( "set label on unknown control %d", controlId );
 }
 
 OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
@@ -594,36 +523,15 @@ OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
         return Q_EMIT getLabelSignal( controlId );
     }
 
-    QWidget* widget = _customWidgets[controlId];
     QString label;
-
-    if (widget)
-    {
-        switch (controlId)
-        {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
-            case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
-            case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
-            case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
-            case ExtendedFilePickerElementIds::CHECKBOX_LINK:
-            case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
-            {
-                QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
-                label = cb->text();
-                break;
-            }
-            case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
-            case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-            case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
-                break;
-        }
+    if (_customWidgets.contains( controlId )) {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>( _customWidgets.value( controlId ));
+        if (cb)
+            label = cb->text();
     }
+    else
+        OSL_TRACE( "get label on unknown control %d", controlId );
+
     return toOUString(label);
 }
 
@@ -634,55 +542,55 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 
     switch (controlId)
     {
-        case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+        case CHECKBOX_AUTOEXTENSION:
             resId = STR_SVT_FILEPICKER_AUTO_EXTENSION;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
+        case CHECKBOX_PASSWORD:
             resId = STR_SVT_FILEPICKER_PASSWORD;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
+        case CHECKBOX_FILTEROPTIONS:
             resId = STR_SVT_FILEPICKER_FILTER_OPTIONS;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
+        case CHECKBOX_READONLY:
             resId = STR_SVT_FILEPICKER_READONLY;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_LINK:
+        case CHECKBOX_LINK:
             resId = STR_SVT_FILEPICKER_INSERT_AS_LINK;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
+        case CHECKBOX_PREVIEW:
             resId = STR_SVT_FILEPICKER_SHOW_PREVIEW;
             break;
-        case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
+        case CHECKBOX_SELECTION:
             resId = STR_SVT_FILEPICKER_SELECTION;
             break;
-        case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
+        case PUSHBUTTON_PLAY:
             resId = STR_SVT_FILEPICKER_PLAY;
             break;
-        case ExtendedFilePickerElementIds::LISTBOX_VERSION:
+        case LISTBOX_VERSION:
             resId = STR_SVT_FILEPICKER_VERSION;
             break;
-        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
+        case LISTBOX_TEMPLATE:
             resId = STR_SVT_FILEPICKER_TEMPLATES;
             break;
-        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
+        case LISTBOX_IMAGE_TEMPLATE:
             resId = STR_SVT_FILEPICKER_IMAGE_TEMPLATE;
             break;
-        case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
+        case LISTBOX_VERSION_LABEL:
+        case LISTBOX_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_FILTER_SELECTOR:
             break;
     }
 
     switch (controlId)
     {
-        case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
-        case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
-        case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
-        case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
-        case ExtendedFilePickerElementIds::CHECKBOX_LINK:
-        case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-        case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
+        case CHECKBOX_AUTOEXTENSION:
+        case CHECKBOX_PASSWORD:
+        case CHECKBOX_FILTEROPTIONS:
+        case CHECKBOX_READONLY:
+        case CHECKBOX_LINK:
+        case CHECKBOX_PREVIEW:
+        case CHECKBOX_SELECTION:
         {
             QString label;
 
@@ -694,21 +602,22 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
             }
 
             widget = new QCheckBox(label, _extraControls);
+
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
-            if( controlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION )
+            if( controlId == CHECKBOX_AUTOEXTENSION )
                 widget->hide();
 
             break;
         }
-        case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-        case ExtendedFilePickerElementIds::LISTBOX_VERSION:
-        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
-        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
-        case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL:
-        case ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR:
+        case PUSHBUTTON_PLAY:
+        case LISTBOX_VERSION:
+        case LISTBOX_TEMPLATE:
+        case LISTBOX_IMAGE_TEMPLATE:
+        case LISTBOX_VERSION_LABEL:
+        case LISTBOX_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_FILTER_SELECTOR:
             break;
     }
 
@@ -765,53 +674,53 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION:
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
+            addCustomControl( CHECKBOX_AUTOEXTENSION );
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD:
         {
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
+            addCustomControl( CHECKBOX_PASSWORD );
             break;
         }
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         {
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS );
+            addCustomControl( CHECKBOX_AUTOEXTENSION );
+            addCustomControl( CHECKBOX_PASSWORD );
+            addCustomControl( CHECKBOX_FILTEROPTIONS );
             break;
         }
         case FILESAVE_AUTOEXTENSION_SELECTION:
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION );
+            addCustomControl( CHECKBOX_AUTOEXTENSION );
+            addCustomControl( CHECKBOX_SELECTION );
             break;
 
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
-            addCustomControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE );
+            addCustomControl( CHECKBOX_AUTOEXTENSION );
+            addCustomControl( LISTBOX_TEMPLATE );
             break;
 
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_LINK );
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW );
-            addCustomControl( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE );
+            addCustomControl( CHECKBOX_LINK );
+            addCustomControl( CHECKBOX_PREVIEW );
+            addCustomControl( LISTBOX_IMAGE_TEMPLATE );
             break;
 
         case FILEOPEN_PLAY:
-            addCustomControl( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY );
+            addCustomControl( PUSHBUTTON_PLAY );
             break;
 
         case FILEOPEN_READONLY_VERSION:
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_READONLY );
-            addCustomControl( ExtendedFilePickerElementIds::LISTBOX_VERSION );
+            addCustomControl( CHECKBOX_READONLY );
+            addCustomControl( LISTBOX_VERSION );
             break;
 
         case FILEOPEN_LINK_PREVIEW:
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_LINK );
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW );
+            addCustomControl( CHECKBOX_LINK );
+            addCustomControl( CHECKBOX_PREVIEW );
             break;
 
         default:
