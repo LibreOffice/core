@@ -323,7 +323,7 @@ private:
     sal_Int16 mnColorSpace;
     sal_Bool mbDirection;
 
-    // atributes for XAnimateMotion
+    // attributes for XAnimateMotion
     Any maPath, maOrigin;
 
     // attributes for XAnimateTransform
@@ -480,7 +480,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     mnColorSpace( rNode.mnColorSpace ),
     mbDirection( rNode.mbDirection ),
 
-    // atributes for XAnimateMotion
+    // attributes for XAnimateMotion
     maPath( rNode.maPath ),
     maOrigin( rNode.maOrigin ),
 

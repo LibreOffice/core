@@ -1837,7 +1837,7 @@ void SwTabFrm::MakeAll()
     LockJoin(); //I don't want to be destroyed on the way.
     SwLayNotify aNotify( this );    //does the notification in the DTor
     // If pos is invalid, we have to call a SetInvaKeep at aNotify.
-    // Otherwise the keep atribute would not work in front of a table.
+    // Otherwise the keep attribute would not work in front of a table.
     const sal_Bool bOldValidPos = GetValidPosFlag();
 
     //If my neighbour is my Follow at the same time, I'll swallow it up.

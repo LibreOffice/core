@@ -222,7 +222,7 @@ interface I1 {
 };
 
 
-EXPECT SUCCESS "atribute.tests 28":
+EXPECT SUCCESS "attribute.tests 28":
 exception E1 {};
 interface I1 {
     [attribute, bound] long a {
