@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_ba0b502a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "bug id should be 60924 ?",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1a037c10",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "that was a package before (\".filelist\" in scp\")\nso should be moved to gb_Helper_register_packages_for_install\n(not ...libraries_for_install)\n\nsecondly, \"ure\" is wrong module - should be \"ooo\" i guess?",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_3dff5a03",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "same for lcms2/cairo",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_5d041e15",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_9d0e8633",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "looks like this is now empty - you can remove it :)",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_7d09e22b",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 1,
+      "message": "cli_uno is not a Package but a library",
+      "revId": "72511c0cf3efcdcc9006d8ffedf096974450f013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

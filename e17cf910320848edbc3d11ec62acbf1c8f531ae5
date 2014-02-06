@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_bd126a56",
+        "filename": "scp2/source/ooo/file_library_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 0,
+      "message": "there must be a reference to gid_File_Lib_Lcms2 somewhere that can also be removed",
+      "revId": "e17cf910320848edbc3d11ec62acbf1c8f531ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_dd0f2e2d",
+        "filename": "scp2/source/ooo/file_library_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-06T16:23:55Z",
+      "side": 0,
+      "message": "there must be a reference to gid_File_Lib_Cairo somewhere that can also be removed",
+      "revId": "e17cf910320848edbc3d11ec62acbf1c8f531ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
