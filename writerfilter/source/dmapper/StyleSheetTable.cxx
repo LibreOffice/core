@@ -644,12 +644,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 
                 if (nSprmId == NS_ooxml::LN_CT_Style_tblPr)
                 {
-                    pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblPr"));
+                    if (pTableEntry != NULL)
+                        pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblPr"));
                 }
                 else if (nSprmId == NS_ooxml::LN_CT_Style_tblStylePr)
                 {
                     pTblStylePrHandler->appendInteropGrabBag("type", pTblStylePrHandler->getTypeString());
-                    pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblStylePr"));
+                    if (pTableEntry != NULL)
+                        pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblStylePr"));
                 }
             }
             break;
