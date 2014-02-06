@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <rtl/strbuf.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -800,11 +801,10 @@ public:
 private:
     void test_insert_at_end(const char* numElements)
     {
-        char buff[100] = { 0 };
-        strcat(buff, "test_insert_at_end ");
-        strcat(buff, numElements);
+        OStringBuffer buff("test_insert_at_end ");
+        buff.append(numElements);
         int n = atoi(numElements);
-        PerformanceTracer tracer(buff);
+        PerformanceTracer tracer(buff.getStr());
         BigPtrArray bparr;
         for (int i = 0; i < n; i++)
             bparr.Insert(new BigPtrEntryMock(i), bparr.Count());
@@ -814,11 +814,10 @@ private:
 
     void test_insert_at_front(const char* numElements)
     {
-        char buff[100] = { 0 };
-        strcat(buff, "test_insert_at_front ");
-        strcat(buff, numElements);
+        OStringBuffer buff("test_insert_at_front ");
+        buff.append(numElements);
         int n = atoi(numElements);
-        PerformanceTracer tracer(buff);
+        PerformanceTracer tracer(buff.getStr());
         BigPtrArray bparr;
         for (int i = 0; i < n; i++)
             bparr.Insert(new BigPtrEntryMock(i), 0);
