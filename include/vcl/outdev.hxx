@@ -269,9 +269,9 @@ class VCL_DLLPUBLIC OutputDevice
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
-    mutable SalGraphics*        mpGraphics;
-    mutable OutputDevice*       mpPrevGraphics;
-    mutable OutputDevice*       mpNextGraphics;
+    mutable SalGraphics*        mpGraphics;         ///< Graphics context to draw on
+    mutable OutputDevice*       mpPrevGraphics;     ///< Previous output device in list
+    mutable OutputDevice*       mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;
@@ -358,20 +358,95 @@ public:
     /** @name Initialization and accessor functions
      */
     ///@{
+
+    /** Get the graphic context that the output device uses to draw on.
+
+     @returns SalGraphics instance.
+     */
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
+
+    /** Release the graphics device, and remove it from the graphics device
+     list.
+
+     @param         bRelease    Determines whether to release the fonts of the
+                                physically released graphics device.
+     */
     SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
+
+    /** Initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplInitOutDevData();
+
+    /** De-initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplDeInitOutDevData();
     ///@}
+
 
     /** @name Helper functions
      */
     ///@{
+
+    /** Get the output device's DPI x-axis value.
+
+     @returns x-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
+
+    /** Get the output device's DPI y-axis value.
+
+     @returns y-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
+
+    /** Convert a logical X coordinate to a device pixel's X coordinate.
+
+     To get the logical X coordinate, it must calculate the mapping offset
+     coordinate X position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical X coordinate), the X-DPI of
+     the device and the mapping's X scaling factor.
+
+     @param nX      Logical X coordinate
+
+     @returns Device's X pixel coordinate
+     */
     SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
+
+    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
+
+     To get the logical Y coordinate, it must calculate the mapping offset
+     coordinate Y position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
+     the device and the mapping's Y scaling factor.
+
+     @param nY      Logical Y coordinate
+
+     @returns Device's Y pixel coordinate
+     */
     SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
+
+    /** Convert a logical width to a width in units of device pixels.
+
+     To get the logical width, it must calculate the X-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     width as nothing more needs to be done.
+
+     @param nWidth  Logical width
+
+     @returns Width in units of device pixels.
+     */
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
+
+    /** Convert a logical height to a height in units of device pixels.
+
+     To get the logical height, it must calculate the Y-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     height as nothing more needs to be done.
+
+     @param nWidth  Logical height
+
+     @returns Height in units of device pixels.
+     */
     SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
@@ -390,9 +465,15 @@ public:
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
     ///@}
 
+    /** @name Clipping functions
+     */
+    ///@{
+
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+
+    ///@}
 
     /** @name Text and font functions
      */
