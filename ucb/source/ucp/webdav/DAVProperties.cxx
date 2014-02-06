@@ -199,7 +199,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
         return false;
 
     // TODO skip whitespaces?
-    if ( !rFullName.startsWith( RTL_CONSTASCII_STRINGPARAM( "xmlns:prop=\"" ), ++nEnd ) )
+    if ( !rFullName.match( "xmlns:prop=\"", ++nEnd ) )
         return false;
 
     nStart = nEnd + RTL_CONSTASCII_LENGTH( "xmlns:prop=\"" );
