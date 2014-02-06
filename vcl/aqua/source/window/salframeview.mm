@@ -1717,7 +1717,7 @@ private:
 }
 
 -(NSWindow*)windowForParent
- {
+{
     return mpFrame->getNSWindow();
 }
 
