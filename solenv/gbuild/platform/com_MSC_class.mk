@@ -492,6 +492,13 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Executable_ge
 $(call gb_ExternalProject_get_state_target,$(1),$(2)): WRAPPERS := $(gb_AUTOCONF_WRAPPERS)
 endef
 
+# Set INCLUDE and LIB variables and unset MAKEFLAGS when using nmake
+#
+# gb_ExternalProject_use_nmake project state_target
+define gb_ExternalProject_use_nmake
+$(call gb_ExternalProject_get_state_target,$(1),$(2)): NMAKE := $(true)
+endef
+
 # if ccache is enabled, then split it and use lastword as REAL_FOO
 # /opt/lo/bin/ccache /cygdrive/c/PROGRA~2/MICROS~2.0/VC/bin/cl.exe
 
@@ -501,6 +508,9 @@ gb_AUTOCONF_WRAPPERS = \
 	REAL_CXX="$(shell cygpath -w  $(CXX))" \
 	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
+
+gb_ExternalProject_INCLUDE := \
+	$(subst -I,,$(subst $(WHITESPACE),;,$(subst -I. , ,$(SOLARINC))))
 
 # InstallScript class
 
