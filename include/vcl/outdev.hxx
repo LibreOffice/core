@@ -525,7 +525,7 @@ public:
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
 
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void                        impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
@@ -674,13 +674,13 @@ public:
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
-                                    com::sun::star::drawing::LineCap = com::sun::star::drawing::LineCap_BUTT);
+                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
     bool                        TryDrawPolyLineDirect(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
 
     /** Render the given polygon as a line stroke
 
@@ -932,7 +932,7 @@ public:
     const AllSettings&          GetSettings() const { return maSettings; }
 
     SystemGraphicsData          GetSystemGfxData() const;
-    ::com::sun::star::uno::Any  GetSystemGfxDataAny() const;
+    css::uno::Any               GetSystemGfxDataAny() const;
 
     virtual void                SetMapMode();
     virtual void                SetMapMode( const MapMode& rNewMapMode );
@@ -1130,10 +1130,11 @@ public:
     sal_Bool                    HasAlpha();
 
     /// request XCanvas render interface for this OutputDevice
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::rendering::XCanvas > GetCanvas() const;
+    css::uno::Reference< css::rendering::XCanvas >
+                                GetCanvas() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    CreateUnoGraphics();
+    css::uno::Reference< css::awt::XGraphics >
+                                CreateUnoGraphics();
     VCLXGraphicsList_impl*      GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     VCLXGraphicsList_impl*      CreateUnoGraphicsList()
                                     {
