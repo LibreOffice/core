@@ -158,6 +158,8 @@ public:
 
     void testColumnStyleXLSX();
 
+    void testSharedFormulaHorizontalXLS();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -231,6 +233,7 @@ public:
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
+    CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2443,6 +2446,48 @@ void ScFiltersTest::testColumnStyleXLSX()
 
     const ScProtectionAttr& rAttrNew = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
     CPPUNIT_ASSERT(!rAttrNew.GetProtection());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaHorizontalXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/horizontal.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Make sure K2:S2 on the 2nd sheet are all formula cells.
+    ScAddress aPos(0, 1, 1);
+    for (SCCOL nCol = 10; nCol <= 18; ++nCol)
+    {
+        aPos.SetCol(nCol);
+        CPPUNIT_ASSERT_MESSAGE("Formula cell is expected here.", pDoc->GetCellType(aPos) == CELLTYPE_FORMULA);
+    }
+
+    // Likewise, B3:J9 all should be formula cells.
+    for (SCCOL nCol = 1; nCol <= 9; ++nCol)
+    {
+        aPos.SetCol(nCol);
+        for (SCROW nRow = 2; nRow <= 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_MESSAGE("Formula cell is expected here.", pDoc->GetCellType(aPos) == CELLTYPE_FORMULA);
+        }
+    }
+
+    // B2:I2 too.
+    aPos.SetRow(1);
+    for (SCCOL nCol = 1; nCol <= 8; ++nCol)
+    {
+        aPos.SetCol(nCol);
+        CPPUNIT_ASSERT_MESSAGE("Formula cell is expected here.", pDoc->GetCellType(aPos) == CELLTYPE_FORMULA);
+    }
+
+    // J2 has a string of "MW".
+    aPos.SetCol(9);
+    CPPUNIT_ASSERT_EQUAL(OUString("MW"), pDoc->GetString(aPos));
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
