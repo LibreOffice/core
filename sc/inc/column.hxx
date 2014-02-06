@@ -222,6 +222,9 @@ public:
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
+
+    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol );
+
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
@@ -569,6 +572,9 @@ private:
     // cell notes
     void SwapCellNotes( SCROW nRow1, SCROW nRow2 );
 
+    void DeleteCells(
+        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
+        std::vector<SCROW>& rDeleted );
 };
 
 #endif

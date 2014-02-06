@@ -2662,14 +2662,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         nDelFlag |= IDF_NOTE;
     else if ( nInsFlag & IDF_CONTENTS )
         nDelFlag |= IDF_CONTENTS;
-    //  With bSkipAttrForEmpty, don't remove attributes, copy
-    //  on top of existing attributes instead.
-    if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
+
+    if (nInsFlag & IDF_ATTRIB)
         nDelFlag |= IDF_ATTRIB;
 
     sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
+    aCxt.setDeleteFlag(nDelFlag);
 
     ScRangeList aLocalRangeList;
     if (!pDestRanges)
@@ -2691,7 +2691,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         SCCOL nCol2 = pRange->aEnd.Col();
         SCROW nRow2 = pRange->aEnd.Row();
 
-        DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+        if (bSkipAttrForEmpty)
+        {
+            // Delete cells in the destination only if their corresponding clip cells are not empty.
+            aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
+            DeleteBeforeCopyFromClip(aCxt, rMark);
+        }
+        else
+            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
 
         SCCOL nC1 = nCol1;
         SCROW nR1 = nRow1;

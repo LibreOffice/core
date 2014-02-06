@@ -18,6 +18,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
+class ScConditionalFormatList;
 
 namespace sc {
 
@@ -39,18 +40,34 @@ public:
 
 class CopyFromClipContext : public ClipContextBase
 {
+    SCCOL mnDestCol1;
+    SCCOL mnDestCol2;
+    SCROW mnDestRow1;
+    SCROW mnDestRow2;
     SCTAB mnTabStart;
     SCTAB mnTabEnd;
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
-    sal_uInt16  mnInsertFlag;
-    bool        mbAsLink:1;
-    bool        mbSkipAttrForEmptyCells:1;
-    bool        mbCloneNotes;
+    sal_uInt16 mnInsertFlag;
+    sal_uInt16 mnDeleteFlag;
+    ScConditionalFormatList* mpCondFormatList;
+    bool mbAsLink:1;
+    bool mbSkipAttrForEmptyCells:1;
+    bool mbCloneNotes;
+    bool mbTableProtected:1;
 
     CopyFromClipContext(); // disabled
 
 public:
+
+    struct Range
+    {
+        SCCOL mnCol1;
+        SCCOL mnCol2;
+        SCROW mnRow1;
+        SCROW mnRow2;
+    };
+
     CopyFromClipContext(ScDocument& rDoc,
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
@@ -62,12 +79,25 @@ public:
     SCTAB getTabStart() const;
     SCTAB getTabEnd() const;
 
+    void setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    Range getDestRange() const;
+
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();
     sal_uInt16 getInsertFlag() const;
+
+    void setDeleteFlag( sal_uInt16 nFlag );
+    sal_uInt16 getDeleteFlag() const;
+
+    void setCondFormatList( ScConditionalFormatList* pCondFormatList );
+    ScConditionalFormatList* getCondFormatList();
+
+    void setTableProtected( bool b );
+    bool isTableProtected() const;
+
     bool isAsLink() const;
     bool isSkipAttrForEmptyCells() const;
-    bool  isCloneNotes() const;
+    bool isCloneNotes() const;
 };
 
 class CopyToClipContext : public ClipContextBase

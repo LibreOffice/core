@@ -1202,6 +1202,8 @@ public:
 
     bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlokPos, SCTAB nTab, SCCOL nCol );
 
+    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScMarkData& rMark );
+
     void CopyBlockFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );
