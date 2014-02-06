@@ -1226,12 +1226,12 @@ private:
     WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&);
     std::set<const SwRedlineData*> maProcessedRedlines;
 
-    WW8_CP  m_nLastRangeStartPos;
+    std::map<const OUString, WW8_CP> m_aRangeStartPositions;
 public:
-    WW8_WrPlcAnnotations(): m_nLastRangeStartPos(-1){}
+    WW8_WrPlcAnnotations() {}
     ~WW8_WrPlcAnnotations();
 
-    void AddRangeStartPosition( WW8_CP nStartCp );
+    void AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp);
     void Append( WW8_CP nCp, const SwPostItField* pPostIt );
     void Append( WW8_CP nCp, const SwRedlineData* pRedLine );
     bool IsNewRedlineComment( const SwRedlineData* pRedLine );

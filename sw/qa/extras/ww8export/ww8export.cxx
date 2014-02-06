@@ -188,6 +188,15 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 }
 
+DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
+{
+    uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
+
+    uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
