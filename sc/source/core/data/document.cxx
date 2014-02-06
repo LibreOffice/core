@@ -6252,7 +6252,7 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges )
         const ScRange* p = rRanges[i];
         const ScAddress& s = p->aStart;
         const ScAddress& e = p->aEnd;
-        for (SCTAB nTab = s.Tab(); nTab <= s.Tab(); ++nTab)
+        for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
         {
             ScTable* pTab = FetchTable(nTab);
             if (!pTab)
