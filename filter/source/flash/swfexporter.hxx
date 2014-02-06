@@ -85,7 +85,7 @@ public:
     sal_Int32       mnBlueScreenColor;
 
     ShapeInfo() :
-        mnID(0), mnX(0), mnY(0),
+        mnID(0), mnX(0), mnY(0), mnWidth(0), mnHeight(0),
         meEffect( ::com::sun::star::presentation::AnimationEffect_NONE ),
         meTextEffect( ::com::sun::star::presentation::AnimationEffect_NONE ),
         meEffectSpeed( ::com::sun::star::presentation::AnimationSpeed_MEDIUM ),
