@@ -408,6 +408,15 @@ protected:
         return xShape;
     }
 
+    /// Get TextFrame by name
+    uno::Reference<drawing::XShape> getTextFrameByName(OUString aName)
+    {
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xNameAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xNameAccess->getByName(aName), uno::UNO_QUERY);
+        return xShape;
+    }
+
     void header()
     {
         std::cout << "File tested,Execution Time (ms)" << std::endl;

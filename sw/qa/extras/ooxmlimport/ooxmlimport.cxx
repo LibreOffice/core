@@ -1756,25 +1756,6 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testPageRelSize, "pagerelsize.docx")
-{
-    // First textframe: width is relative from page, but not height.
-    uno::Reference<drawing::XShape> xTextFrame = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
-
-    // Second textframe: height is relative from page, but not height.
-    xTextFrame = getShape(2);
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
-}
-
-DECLARE_OOXMLIMPORT_TEST(testRelSizeRound, "rel-size-round.docx")
-{
-    // This was 9: 9.8 was imported as 9 instead of being rounded to 10.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
-}
-
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")
 {
     // Capitalization inside a group shape was not imported

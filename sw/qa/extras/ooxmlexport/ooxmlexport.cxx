@@ -2524,6 +2524,26 @@ DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
     // This was 1828800.
     assertXPath(pXmlDocument, aXPath, "y", "0");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testPageRelSize, "pagerelsize.docx")
+{
+    // First textframe: width is relative from page, but not height.
+    uno::Reference<drawing::XShape> xTextFrame = getTextFrameByName("Frame1");
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+
+    // Second textframe: height is relative from page, but not height.
+    xTextFrame = getTextFrameByName("Text Box 2");
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
+{
+    // This was 9: 9.8 was imported as 9 instead of being rounded to 10.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");

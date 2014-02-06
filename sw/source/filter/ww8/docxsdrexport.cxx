@@ -907,6 +907,29 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->endElementNS(XML_wps, XML_wsp);
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
+
+    // Relative size of the Text Frame.
+    if (rSize.GetWidthPercent())
+    {
+        pFS->startElementNS(XML_wp14, XML_sizeRelH,
+                            XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+        pFS->writeEscaped(OUString::number(rSize.GetWidthPercent() * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctWidth);
+        pFS->endElementNS(XML_wp14, XML_sizeRelH);
+    }
+    if (rSize.GetHeightPercent())
+    {
+        pFS->startElementNS(XML_wp14, XML_sizeRelV,
+                            XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+        pFS->writeEscaped(OUString::number(rSize.GetHeightPercent() * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctHeight);
+        pFS->endElementNS(XML_wp14, XML_sizeRelV);
+    }
+
     endDMLAnchorInline(&rFrmFmt);
 }
 
