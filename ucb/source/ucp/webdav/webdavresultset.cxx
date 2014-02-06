@@ -63,9 +63,9 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
+        = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
+                                      new DataSupplier( m_xContext,
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
@@ -75,9 +75,9 @@ void DynamicResultSet::initStatic()
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
+        = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
+                                      new DataSupplier( m_xContext,
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
