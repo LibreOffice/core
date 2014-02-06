@@ -182,7 +182,7 @@
             }
         }
     }
-    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < VER_LEOPARD /* fixed in Leopard and above */ ) )
+    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < OSX_VER_LEOPARD /* fixed in Leopard and above */ ) )
     {
 
         NSWindow* pWin = [pEvent window];

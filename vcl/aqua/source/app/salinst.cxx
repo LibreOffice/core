@@ -178,13 +178,13 @@ static void initNSApp()
                                           object: nil ];
 
     // get System Version and store the value in GetSalData()->mnSystemVersion
-    OSErr err = noErr;
-    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
-    if( (err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr )
+    SInt32 systemVersion = OSX_VER_LION; // initialize with the minimal requirement
+    const OSErr err = Gestalt( gestaltSystemVersion, &systemVersion);
+    if( err == noErr )
     {
         GetSalData()->mnSystemVersion = systemVersion;
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
+        fprintf( stderr, "OSX System Version 0x%04x\n", (unsigned int)systemVersion);
 #endif
     }
     else

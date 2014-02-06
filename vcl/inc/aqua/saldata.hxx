@@ -58,8 +58,12 @@ class SystemFontList;
 
 #define SAL_CLIPRECT_COUNT 16
 
-#define VER_TIGER   0x1040
-#define VER_LEOPARD 0x1050
+#define OSX_VER_TIGER     0x1040
+#define OSX_VER_LEOPARD   0x1050
+#define OSX_VER_SNOW_LEO  0x1060
+#define OSX_VER_LION      0x1070
+#define OSX_VER_MOUNTLION 0x1080
+#define OSX_VER_MAVERICKS 0x1070
 
 // -----------
 // - SalData -
