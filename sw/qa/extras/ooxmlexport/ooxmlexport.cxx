@@ -2820,6 +2820,26 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod",
             "val", "160000");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testPageBreak,"fdo74566.docx")
+{
+    /*  Break to next page was written into wrong paragraph as <w:pageBreakBefore />.
+     *  LO was not preserving Page Break as <w:br w:type="page" />.
+     *  Now after fix , LO writes Page Break as the new paragraph and also
+     *  preserves the xml tag <w:br>.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);
+    uno::Reference<text::XTextRange> xParagraph4 = getParagraph(4);
+
+    getRun(xParagraph2, 1, "First Page Second Line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:br","type","page");
+    getRun(xParagraph4, 1, "Second Page First line after Page Break");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

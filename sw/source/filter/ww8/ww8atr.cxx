@@ -3637,10 +3637,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 // From now on(fix for #i77900#) we prefer to save a page break as
                 // paragraph attribute, this has to be done after the export of the
                 // paragraph ( => !GetExport().bBreakBefore )
-                if ( !GetExport().bBreakBefore )
-                    PageBreakBefore( true );
-                break;
-
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
                 nC = msword::PageBreak;
@@ -3657,7 +3653,8 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 break;
         }
 
-        if ( ( bBefore == GetExport().bBreakBefore ) && nC )
+        if ( (( bBefore != GetExport().bBreakBefore ) && ( nC == msword::PageBreak)) ||
+             (( bBefore == GetExport().bBreakBefore ) && ( nC == msword::ColumnBreak)) )
         {
             // #i76300#
             bool bFollowPageDescWritten = false;
