@@ -104,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/column \
     sc/source/core/data/column2 \
     sc/source/core/data/column3 \
+    sc/source/core/data/column4 \
     sc/source/core/data/columniterator \
     sc/source/core/data/columnset \
     sc/source/core/data/columnspanset \
@@ -123,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/documen8 \
     sc/source/core/data/documen9 \
     sc/source/core/data/document \
+    sc/source/core/data/document10 \
     sc/source/core/data/documentimport \
     sc/source/core/data/documentstreamaccess \
     sc/source/core/data/dpdimsave \
@@ -179,6 +181,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/table4 \
     sc/source/core/data/table5 \
     sc/source/core/data/table6 \
+    sc/source/core/data/table7 \
     sc/source/core/data/tabprotection \
     sc/source/core/data/types \
     sc/source/core/data/userdat \
