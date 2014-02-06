@@ -1551,6 +1551,15 @@ void ScTable::CreateAllNoteCaptions()
         aCol[i].CreateAllNoteCaptions();
 }
 
+void ScTable::ForgetNoteCaptions( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    for (SCCOL i = nCol1; i <= nCol2; ++i)
+        aCol[i].ForgetNoteCaptions(nRow1, nRow2);
+}
+
 void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
     for (SCCOL nCol = 0; nCol < MAXCOLCOUNT; ++nCol)

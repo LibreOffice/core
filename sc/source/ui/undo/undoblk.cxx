@@ -946,6 +946,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     sal_uInt16 nExtFlags = 0;
     pDocShell->UpdatePaintExt(nExtFlags, maBlockRanges.Combine());
 
+    pDoc->ForgetNoteCaptions(maBlockRanges);
     aMarkData.MarkToMulti();
     pDoc->DeleteSelection(nUndoFlags, aMarkData, false); // no broadcasting here
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)

@@ -6245,6 +6245,24 @@ void ScDocument::CreateAllNoteCaptions()
     }
 }
 
+void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges )
+{
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = rRanges[i];
+        const ScAddress& s = p->aStart;
+        const ScAddress& e = p->aEnd;
+        for (SCTAB nTab = s.Tab(); nTab <= s.Tab(); ++nTab)
+        {
+            ScTable* pTab = FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            pTab->ForgetNoteCaptions(s.Col(), s.Row(), e.Col(), e.Row());
+        }
+    }
+}
+
 ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
