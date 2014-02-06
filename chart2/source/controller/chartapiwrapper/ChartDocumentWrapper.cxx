@@ -1303,7 +1303,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     if( aTemplateWithService.first.is())
                         aTemplateWithService.first->resetStyles( xDiagram );//#i109371#
                     xTemplate->changeDiagram( xDiagram );
-                    if( Application::GetSettings().GetLayoutRTL() )
+                    if( Application::GetSettings().GetMathLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
                     ThreeDHelper::setScheme( xDiagram, e3DScheme );
                 }

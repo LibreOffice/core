@@ -329,7 +329,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         if( aTemplateWithService.first.is())
             aTemplateWithService.first->resetStyles( xDiagram );
         xTemplate->changeDiagram( xDiagram );
-        if( Application::GetSettings().GetLayoutRTL() )
+        if( Application::GetSettings().GetMathLayoutRTL() )
             AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
         if( rParameter.b3DLook )
             ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );

@@ -412,7 +412,7 @@ void SAL_CALL ChartModel::initNew()
 
                 setFirstDiagram( xDiagram );
 
-                bool bIsRTL = Application::GetSettings().GetLayoutRTL();
+                bool bIsRTL = Application::GetSettings().GetMathLayoutRTL();
                 //reverse x axis for rtl charts
                 if( bIsRTL )
                     AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

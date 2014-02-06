@@ -1591,47 +1591,63 @@ void AllSettings::SetUILanguageTag( const LanguageTag& )
 
 // -----------------------------------------------------------------------
 
-bool AllSettings::GetLayoutRTL() const
+namespace
 {
-    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
-    static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
-
-    // environment always overrides
-    if( pEnv )
-        return true;
-
-    bool bRTL = false;
-
-    if( nUIMirroring == -1 )
+    bool GetConfigLayoutRTL(bool bMath)
     {
-        nUIMirroring = 0; // ask configuration only once
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
-            comphelper::getProcessComponentContext(),
-            OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
-        if ( aNode.isValid() )
+        static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+        static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
+
+        // environment always overrides
+        if( pEnv )
+            return true;
+
+        bool bRTL = false;
+
+        if( nUIMirroring == -1 )
         {
-            sal_Bool bTmp = sal_Bool();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
-            if( aValue >>= bTmp )
+            nUIMirroring = 0; // ask configuration only once
+            utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
+                comphelper::getProcessComponentContext(),
+                OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
+            if ( aNode.isValid() )
             {
-                // found true or false; if it was nil, nothing is changed
-                nUIMirroring = bTmp ? 1 : 2;
+                sal_Bool bTmp = sal_Bool();
+                ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
+                if( aValue >>= bTmp )
+                {
+                    // found true or false; if it was nil, nothing is changed
+                    nUIMirroring = bTmp ? 1 : 2;
+                }
             }
         }
-    }
 
-    if( nUIMirroring == 0 )  // no config found (eg, setup) or default (nil) was set: check language
-    {
-        LanguageType aLang = LANGUAGE_DONTKNOW;
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( pSVData->maAppData.mpSettings )
-            aLang = pSVData->maAppData.mpSettings->GetUILanguageTag().getLanguageType();
-        bRTL = MsLangId::isRightToLeft( aLang );
-    }
-    else
-        bRTL = (nUIMirroring == 1);
+        if( nUIMirroring == 0 )  // no config found (eg, setup) or default (nil) was set: check language
+        {
+            LanguageType aLang = LANGUAGE_DONTKNOW;
+            ImplSVData* pSVData = ImplGetSVData();
+            if ( pSVData->maAppData.mpSettings )
+                aLang = pSVData->maAppData.mpSettings->GetUILanguageTag().getLanguageType();
+            if (bMath)
+                bRTL = MsLangId::isRightToLeftMath( aLang );
+            else
+                bRTL = MsLangId::isRightToLeft( aLang );
+        }
+        else
+            bRTL = (nUIMirroring == 1);
 
-    return bRTL;
+        return bRTL;
+    }
+}
+
+bool AllSettings::GetLayoutRTL() const
+{
+    return GetConfigLayoutRTL(false);
+}
+
+bool AllSettings::GetMathLayoutRTL() const
+{
+    return GetConfigLayoutRTL(true);
 }
 
 // -----------------------------------------------------------------------

@@ -233,6 +233,15 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
 }
 
 // static
+bool MsLangId::isRightToLeftMath( LanguageType nLang )
+{
+    //http://www.w3.org/TR/arabic-math/
+    if (nLang == LANGUAGE_FARSI || nLang == LANGUAGE_ARABIC_MOROCCO)
+        return false;
+    return isRightToLeft(nLang);
+}
+
+// static
 bool MsLangId::isSimplifiedChinese( LanguageType nLang )
 {
     return isChinese(nLang) && !isTraditionalChinese(nLang);

@@ -107,8 +107,11 @@ public:
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
 
 
-    /** Whether locale has a Right-To-Left orientation. */
+    /** Whether locale has a Right-To-Left orientation for text. */
     static bool isRightToLeft( LanguageType nLang );
+
+    /** Whether locale has a Right-To-Left orientation for math. */
+    static bool isRightToLeftMath( LanguageType nLang );
 
     /** Whether locale is a CJK locale */
     static bool isCJK( LanguageType nLang );

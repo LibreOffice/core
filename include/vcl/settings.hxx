@@ -1144,7 +1144,8 @@ public:
     const LanguageTag&                      GetLanguageTag() const;
     void                                    SetUILanguageTag( const LanguageTag& rLanguageTag );
     const LanguageTag&                      GetUILanguageTag() const;
-    bool                                    GetLayoutRTL() const;   // returns true if UI language requires right-to-left UI
+    bool                                    GetLayoutRTL() const;   // returns true if UI language requires right-to-left Text Layout
+    bool                                    GetMathLayoutRTL() const;   // returns true if UI language requires right-to-left Math Layout
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
