@@ -1698,12 +1698,9 @@ void TabControl::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-long TabControl::DeactivatePage()
+bool TabControl::DeactivatePage()
 {
-    if ( maDeactivateHdl.IsSet() )
-        return maDeactivateHdl.Call( this );
-    else
-        return sal_True;
+    return !maDeactivateHdl.IsSet() || maDeactivateHdl.Call( this );
 }
 
 // -----------------------------------------------------------------------

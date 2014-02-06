@@ -86,7 +86,7 @@ class DataSourceTabControl : public TabControl
 public:
     DataSourceTabControl(Window* pParent);
 
-    virtual long DeactivatePage();
+    virtual bool DeactivatePage() SAL_OVERRIDE;
 
     void DisableTabToggling();
     void EnableTabToggling();
@@ -101,14 +101,9 @@ DataSourceTabControl::DataSourceTabControl(Window* pParent)
 {
 }
 
-// Note that the result is long, but is intended to be a bool
-long DataSourceTabControl::DeactivatePage()
+bool DataSourceTabControl::DeactivatePage()
 {
-    bool bCanDeactivate( TabControl::DeactivatePage() != 0 );
-
-    bCanDeactivate = (bCanDeactivate && m_bTogglingEnabled);
-
-    return (bCanDeactivate ? 1 : 0 );
+    return TabControl::DeactivatePage() && m_bTogglingEnabled;
 }
 
 void DataSourceTabControl::DisableTabToggling()
