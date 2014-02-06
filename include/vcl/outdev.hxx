@@ -269,9 +269,9 @@ class VCL_DLLPUBLIC OutputDevice
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
-    mutable SalGraphics*        mpGraphics;
-    mutable OutputDevice*       mpPrevGraphics;
-    mutable OutputDevice*       mpNextGraphics;
+    mutable SalGraphics*        mpGraphics;         ///< Graphics context to draw on
+    mutable OutputDevice*       mpPrevGraphics;     ///< Previous output device in list
+    mutable OutputDevice*       mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;
@@ -358,41 +358,216 @@ public:
     /** @name Initialization and accessor functions
      */
     ///@{
+
+    /** Get the graphic context that the output device uses to draw on.
+
+     @returns SalGraphics instance.
+     */
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
+
+    /** Release the graphics device, and remove it from the graphics device
+     list.
+
+     @param         bRelease    Determines whether to release the fonts of the
+                                physically released graphics device.
+     */
     SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
+
+    /** Initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplInitOutDevData();
+
+    /** De-initialize the graphics device's data structures.
+     */
     SAL_DLLPRIVATE void         ImplDeInitOutDevData();
     ///@}
+
 
     /** @name Helper functions
      */
     ///@{
+
+    /** Get the output device's DPI x-axis value.
+
+     @returns x-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
+
+    /** Get the output device's DPI y-axis value.
+
+     @returns y-axis DPI value
+     */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
+
+    /** Convert a logical X coordinate to a device pixel's X coordinate.
+
+     To get the device's X coordinate, it must calculate the mapping offset
+     coordinate X position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical X coordinate), the X-DPI of
+     the device and the mapping's X scaling factor.
+
+     @param         nX          Logical X coordinate
+
+     @returns Device's X pixel coordinate
+     */
     SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
+
+    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
+
+     To get the device's Y coordinate, it must calculate the mapping offset
+     coordinate Y position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
+     the device and the mapping's Y scaling factor.
+
+     @param         nY          Logical Y coordinate
+
+     @returns Device's Y pixel coordinate
+     */
     SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
+
+    /** Convert a logical width to a width in units of device pixels.
+
+     To get the number of device pixels, it must calculate the X-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     width as nothing more needs to be done.
+
+     @param         nWidth      Logical width
+
+     @returns Width in units of device pixels.
+     */
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
+
+    /** Convert a logical height to a height in units of device pixels.
+
+     To get the number of device pixels, it must calculate the Y-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     height as nothing more needs to be done.
+
+     @param         nHeight     Logical height
+
+     @returns Height in units of device pixels.
+     */
     SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
+
+    /** Convert device pixels to a width in logical units.
+
+     To get the logical width, it must calculate the X-DPI of the device and the
+     map scaling factor.
+
+     @param         nWidth      Width in device pixels
+
+     @returns Width in logical units.
+     */
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
+
+    /** Convert device pixels to a height in logical units.
+
+     To get the logical height, it must calculate the Y-DPI of the device and the
+     map scaling factor.
+
+     @param         nHeight     Height in device pixels
+
+     @returns Height in logical units.
+     */
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
+
+    /** Convert logical height to device pixels, with exact sub-pixel value.
+
+     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
+     map scaling factor.
+
+     @param         nHeight     Exact height in logical units.
+
+     @returns Exact height in pixels - returns as a float to provide for subpixel value.
+     */
     SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
+
+    /** Convert a logical point to a physical point on the device.
+
+     @param         rLogicPt    Const reference to a point in logical units.
+
+     @returns Physical point on the device.
+     */
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
+
+    /** Convert a logical size to the size on the physical device.
+
+     @param         rLogicSize  Const reference to a size in logical units
+
+     @returns Physical size on the device.
+     */
     SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
+
+    /** Convert a logical rectangle to a rectangle in physical device pixel units.
+
+     @param         rLogicSize  Const reference to a rectangle in logical units
+
+     @returns Rectangle based on physical device pixel coordinates and units.
+     */
     SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
-    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon&  ) const;
-    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& ) const;
+
+    /** Convert a rectangle in physical pixel units to a rectangle in physical pixel units and coords.
+
+     @param         rPixelRect  Const reference to rectangle in logical units and coords.
+
+     @returns Rectangle based on logical coordinates and units.
+     */
+    SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const;
+
+    /** Convert a logical B2DPolygon to a B2DPolygon in physical device pixel units.
+
+     @param         rLogicSize  Const reference to a B2DPolygon in logical units
+
+     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon& rLogicPoly ) const;
+
+    /** Convert a logical B2DPolyPolygon to a B2DPolyPolygon in physical device pixel units.
+
+     @param         rLogicPolyPoly  Const reference to a B2DPolyPolygon in logical units
+
+     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
+
+    /** Convert a logical polygon to a polygon in physical device pixel units.
+
+     @param         rLogicPoly  Const reference to a polygon in logical units
+
+     @returns Polygon based on physical device pixel coordinates and units.
+     */
     SAL_DLLPRIVATE Polygon      ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const;
+
+    /** Convert a logical polypolygon to a polypolygon in physical device pixel units.
+
+     @param         rLogicPolyPoly  Const reference to a polypolygon in logical units
+
+     @returns Polypolygon based on physical device pixel coordinates and units.
+     */
     SAL_DLLPRIVATE PolyPolygon  ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const;
+
+    /** Convert a line in logical units to a line in physical device pixel units.
+
+     @param         rLineInfo   Const refernece to a line in logical units
+
+     @returns Line based on physical device pixel coordinates and units.
+     */
     SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
-    SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rLogicRect ) const;
+
     SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
     SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
     ///@}
 
+    /** @name Clipping functions
+     */
+    ///@{
+
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+
+    ///@}
 
     /** @name Text and font functions
      */
