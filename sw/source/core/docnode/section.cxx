@@ -752,7 +752,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     switch( nWhich )
     {
     case RES_ATTRSET_CHG:
-        if( GetDepends() )
+        if (GetDepends() && pOld && pNew)
         {
             SfxItemSet* pNewSet = ((SwAttrSetChg*)pNew)->GetChgSet();
             SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
@@ -820,7 +820,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return; // That's it!
 
     case RES_OBJECTDYING:
-        if( !GetDoc()->IsInDtor() &&
+        if( !GetDoc()->IsInDtor() && pOld &&
             ((SwPtrMsgPoolItem *)pOld)->pObject == (void*)GetRegisteredIn() )
         {
             // My Parents will be destroyed, so get the Parent's Parent
