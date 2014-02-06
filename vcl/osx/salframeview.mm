@@ -1740,11 +1740,9 @@ private:
     return [ super accessibleContext ];
 }
 
--(NSView*)viewElementForParent
+-(NSWindow*)windowForParent
 {
-    // Interestingly enough, despite being declared as returning a NSView*, what this method actually
-    // does return is a NSWindow*, and that is what the caller expects. Go figure.
-    return (NSView*) mpFrame->getNSWindow();
+    return mpFrame->getNSWindow();
 }
 
 -(void)registerMouseEventListener: (id)theListener

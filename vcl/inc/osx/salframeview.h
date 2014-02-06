@@ -174,7 +174,7 @@
 -(void)resetCursorRects;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
 -(id)parentAttribute;
--(NSView *)viewElementForParent;
+-(NSWindow*)windowForParent;
 /*
   Event hook for D&D service.
 
