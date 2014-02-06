@@ -983,12 +983,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 2:  // sprmPIstd
     case 0x4600:
         break;  // sprmPIstd - style code
-    case 3: // "sprmPIstdPermute
-    case NS_sprm::LN_PIstdPermute:
-        break;  // sprmPIstdPermute
-    case NS_sprm::LN_PIncLvl:
-        break;  // sprmPIncLvl
-    case NS_sprm::LN_PJcExtra: // sprmPJc Asian (undocumented)
     case NS_sprm::LN_PJc: // sprmPJc
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
@@ -1101,10 +1095,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
         //TODO: what happens to the right margins in numberings?
         break;
-    case 18: // sprmPNest
-    case NS_sprm::LN_PNest: // sprmPNest
-        //not handled in the old WW8 filter
-        break;
     case NS_sprm::LN_PDxaLeft1:    // sprmPDxaLeft1
     case 19:
     case NS_sprm::LN_PDxaLeft180:   // sprmPDxaLeft180
@@ -1170,8 +1160,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPDyaAbs
     case NS_sprm::LN_PDxaWidth:
         break;  // sprmPDxaWidth
-    case NS_sprm::LN_PPc:
-        break;  // sprmPPc
     case NS_sprm::LN_PBrcTop10:
         break;  // sprmPBrcTop10
     case NS_sprm::LN_PBrcLeft10:
@@ -1326,8 +1314,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert( PROP_PARA_ORPHANS, aVal );
     }
     break;  // sprmPFWidowControl
-    case NS_sprm::LN_PRuler:
-        break;  // sprmPRuler
     case NS_sprm::LN_PFKinsoku:
         break;  // sprmPFKinsoku
     case NS_sprm::LN_PFWordWrap:
@@ -1367,12 +1353,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPWAlignFont
     case NS_sprm::LN_PFrameTextFlow:
         break;  // sprmPFrameTextFlow
-    case NS_sprm::LN_PISnapBaseLine:
-        break;  // sprmPISnapBaseLine
     case NS_sprm::LN_PAnld:
         break;  // sprmPAnld
-    case NS_sprm::LN_PPropRMark:
-        break;  // sprmPPropRMark
     case NS_sprm::LN_POutLvl:
         {
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
@@ -1412,8 +1394,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPFNumRMIns
     case NS_sprm::LN_PCrLf:
         break;  // sprmPCrLf
-    case NS_sprm::LN_PNumRM:
-        break;  // sprmPNumRM
     case NS_sprm::LN_PHugePapx:
         break;  // sprmPHugePapx
     case NS_sprm::LN_PFUsePgsuSettings:
@@ -1866,42 +1846,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CIdctHint:   // sprmCIdctHint
         //list table - text offset???
         break;
-    case NS_sprm::LN_PicBrcl:
-        break;  // sprmPicBrcl
-    case NS_sprm::LN_PicScale:
-        break;  // sprmPicScale
-    case NS_sprm::LN_PicBrcTop:
-        break;  // sprmPicBrcTop
-    case NS_sprm::LN_PicBrcLeft:
-        break;  // sprmPicBrcLeft
-    case NS_sprm::LN_PicBrcBottom:
-        break;  // sprmPicBrcBoConversionHelper::convertTwipToMM100ttom
-    case NS_sprm::LN_PicBrcRight:
-        break;  // sprmPicBrcRight
-    case 136:
-    case NS_sprm::LN_SDxaColWidth: // sprmSDxaColWidth
-        // contains the twip width of the column as 3-byte-code
-        // the lowet byte contains the index
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->AppendColumnWidth( ConversionHelper::convertTwipToMM100( (nIntValue & 0xffff00) >> 8 ));
-        break;
-    case NS_sprm::LN_SDxaColSpacing: // sprmSDxaColSpacing
-        // the lowet byte contains the index
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->AppendColumnSpacing( ConversionHelper::convertTwipToMM100( (nIntValue & 0xffff00) >> 8 ));
-        break;
-    case NS_sprm::LN_SDmBinFirst: // sprmSDmBinFirst
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetFirstPaperBin(nIntValue);
-        break;
-    case NS_sprm::LN_SDmBinOther: // sprmSDmBinOther
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetPaperBin( nIntValue );
-        break;
     case NS_sprm::LN_SBkc: // sprmSBkc
         /* break type
           0 - No break
@@ -1934,38 +1878,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             pSectionContext->SetTitlePage( nIntValue > 0 ? true : false );//section has title page
     }
     break;
-    case 144:
-    case NS_sprm::LN_SCcolumns: // sprmSCcolumns
-        //no of columns - 1
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetColumnCount( (sal_Int16) nIntValue );
-    break;
-    case 145:
-    case NS_sprm::LN_SDxaColumns:           // sprmSDxaColumns
-        //column distance - default 708 twip
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetColumnDistance( ConversionHelper::convertTwipToMM100( nIntValue ) );
-        break;
-    case NS_sprm::LN_SDxaPgn:
-        break;  // sprmSDxaPgn
-    case 155:
-    case NS_sprm::LN_SDxaLnn: // sprmSDxaLnn
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if( pSectionContext )
-            pSectionContext->SetdxaLnn( nIntValue );
-    break;
-    case 162:
-    case NS_sprm::LN_SBOrientation:
-        //todo: the old filter assumed that a value of 2 points to double-pages layout
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->SetLandscape( nIntValue > 0 );
-        rContext->Insert( PROP_IS_LANDSCAPE , uno::makeAny( nIntValue > 0 ));
-    break;  // sprmSBOrientation
-    case NS_sprm::LN_SBCustomize:
-        break;  // sprmSBCustomize
     case 165:
     {
         //page height, rounded to default values, default: 0x3dc0 twip
@@ -1973,86 +1885,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert( PROP_HEIGHT, uno::makeAny( PaperInfo::sloppyFitPageDimension( nHeight ) ) );
     }
     break;
-    case 166:
-    case NS_sprm::LN_SDxaLeft:  // sprmSDxaLeft
-    {
-        //left page margin default 0x708 twip
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        sal_Int32 nConverted = ConversionHelper::convertTwipToMM100( nIntValue );
-        if(pSectionContext)
-            pSectionContext->SetLeftMargin( nConverted );
-        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( nConverted ));
-    }
-    break;
-    case 167:
-    case NS_sprm::LN_SDxaRight: // sprmSDxaRight
-    {
-        //right page margin default 0x708 twip
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        sal_Int32 nConverted = ConversionHelper::convertTwipToMM100( nIntValue );
-        if(pSectionContext)
-            pSectionContext->SetRightMargin( nConverted );
-        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( nConverted ));
-    }
-    break;
-    case NS_sprm::LN_SDmPaperReq:   // sprmSDmPaperReq
-        //paper code - no handled in old filter
-        break;
-    case NS_sprm::LN_SBrcTop:   // sprmSBrcTop
-    case NS_sprm::LN_SBrcLeft:   // sprmSBrcLeft
-    case NS_sprm::LN_SBrcBottom:  // sprmSBrcBottom
-    case NS_sprm::LN_SBrcRight:  // sprmSBrcRight
-        {
-            table::BorderLine2 aBorderLine;
-            sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
-            OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-            if(pSectionContext)
-            {
-                static const BorderPosition aPositions[4] =
-                    {
-                        BORDER_TOP,
-                        BORDER_LEFT,
-                        BORDER_BOTTOM,
-                        BORDER_RIGHT
-                    };
-                pSectionContext->SetBorder( aPositions[nSprmId - NS_sprm::LN_SBrcTop], nLineDistance, aBorderLine, /*bShadow =*/ false );
-            }
-        }
-        break;
-
     case 0x703a: //undocumented, grid related?
         OSL_FAIL( "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
         break;
-    case NS_sprm::LN_SClm:
-    {
-        sal_Int16 nGridType = text::TextGridMode::NONE;
-        switch( nIntValue )
-        {
-            case 0:
-                nGridType = text::TextGridMode::NONE;
-            break;
-            case 3:
-                //Text snaps to char grid, this doesn't make a lot of sense to
-                //me. This is closer than LINES_CHARS
-                nGridType = text::TextGridMode::LINES;
-            break;
-            case 1:
-                nGridType = text::TextGridMode::LINES_AND_CHARS;
-            break;
-            case 2:
-                nGridType = text::TextGridMode::LINES;
-            break;
-            default:;
-        }
-        rContext->Insert( PROP_GRID_MODE, uno::makeAny( nGridType ) );
-
-    //Seems to force this behaviour in word ?
-    if(nGridType != text::TextGridMode::NONE)
-        m_pImpl->SetDocumentSettingsProperty(
-            PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_EXTERNAL_LEADING ),
-            uno::makeAny( true ) );
-    }
-    break;  // sprmSClm
     case NS_sprm::LN_STextFlow:
     case NS_ooxml::LN_EG_SectPrContents_textDirection:
     {
