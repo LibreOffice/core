@@ -32,6 +32,7 @@ namespace com { namespace sun { namespace star { namespace task {
 } } } }
 class JPEGReader;
 class JPEGWriter;
+class Size;
 
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 
@@ -42,7 +43,7 @@ long    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream, long nWidth, lo
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-                  int nPreviewWidth, int nPreviewHeight );
+                  Size const & previewSize );
 
 long    Transform( void* pInputStream, void* pOutputStream, long nAngle );
 

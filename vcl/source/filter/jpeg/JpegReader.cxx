@@ -453,10 +453,8 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     // seek back to the original position
     mrStream.Seek( mnLastPos );
 
-    Size aPreviewSize = GetPreviewSize();
-
     // read the (partial) image
-    ReadJPEG( this, &mrStream, &nLines, aPreviewSize.Width(), aPreviewSize.Height() );
+    ReadJPEG( this, &mrStream, &nLines, GetPreviewSize() );
 
     if( mpAcc )
     {

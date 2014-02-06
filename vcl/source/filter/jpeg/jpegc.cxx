@@ -56,7 +56,7 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 }
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               int thePreviewWidth, int thePreviewHeight )
+               Size const & previewSize )
 {
     jpeg_decompress_struct          cinfo;
     ErrorManagerStruct              jerr;
@@ -69,9 +69,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     JSAMPLE*                        aRangeLimit;
     unsigned char *                 pScanLineBuffer = NULL;
     long                            nScanLineBufferComponents = 0;
-
-    int nPreviewWidth = thePreviewWidth;
-    int nPreviewHeight = thePreviewHeight;
 
     if ( setjmp( jerr.setjmp_buffer ) )
     {
@@ -100,6 +97,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     OSL_ASSERT(cinfo.out_color_space == JCS_CMYK || cinfo.out_color_space == JCS_GRAYSCALE || cinfo.out_color_space == JCS_RGB);
 
     /* change scale for preview import */
+    long nPreviewWidth = previewSize.Width();
+    long nPreviewHeight = previewSize.Height();
     if( nPreviewWidth || nPreviewHeight )
     {
         if( nPreviewWidth == 0 )
