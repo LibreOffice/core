@@ -97,6 +97,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                : 0;
         if ( nPropCount > 0 )
         {
+            aBuffer.append( "<prop>" );
             SerfPropName thePropName;
             for ( int theIndex = 0; theIndex < nPropCount; theIndex ++ )
             {
@@ -105,16 +106,14 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    thePropName );
 
                 /* <*propname* xmlns="*propns*" /> */
-                aBodyText += OUString::createFromAscii( "<" );
-                aBodyText += OUString::createFromAscii( thePropName.name );
-                aBodyText += OUString::createFromAscii( " xmlnx=\"" );
-                aBodyText += OUString::createFromAscii( thePropName.nspace );
-                aBodyText += OUString::createFromAscii( "\"/>" );
+                aBuffer.append( "<" );
+                aBuffer.append( thePropName.name );
+                aBuffer.append( " xmlnx=\"" );
+                aBuffer.append( thePropName.nspace );
+                aBuffer.append( "\"/>" );
             }
 
-            aBodyText = OUString::createFromAscii( "<prop>" ) +
-                        aBodyText +
-                        OUString::createFromAscii( "</prop>" );
+            aBuffer.append( "</prop>" );
         }
         else
         {
