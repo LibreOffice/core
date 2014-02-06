@@ -779,7 +779,10 @@ namespace oox { namespace ppt {
                 }
 
                 OUString aStr = xAttribs->getOptionalValue( XML_path );
-                aStr = aStr.replace( 'E', ' ' );
+                // E can appear inside a number, so we only check for its presence at the end
+                aStr = aStr.trim();
+                if (aStr.endsWith("E"))
+                    aStr = aStr.copy(0, aStr.getLength() - 1);
                 aStr = aStr.trim();
                 pNode->getNodeProperties()[ NP_PATH ] = makeAny(aStr);
                 mnPathEditMode = xAttribs->getOptionalValueToken( XML_pathEditMode, 0 );
