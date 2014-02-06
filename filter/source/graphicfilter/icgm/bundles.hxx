@@ -55,10 +55,13 @@ public:
     LineType            eLineType;
     double              nLineWidth;
 
-                        LineBundle() {};
-    virtual Bundle*     Clone() { return new LineBundle( *this ); };
-            LineBundle& operator=( LineBundle& rLineBundle );
-    virtual             ~LineBundle() {};
+    LineBundle()
+        : eLineType(LT_SOLID)
+        , nLineWidth(0)
+    {}
+
+    virtual Bundle* Clone() { return new LineBundle( *this ); }
+    LineBundle& operator=( LineBundle& rLineBundle );
 };
 
 // ---------------------------------------------------------------
