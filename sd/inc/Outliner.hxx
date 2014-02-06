@@ -114,7 +114,7 @@ public:
     Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode );
     virtual ~Outliner();
 
-    /** Despite the name this method is called prior to spell cheking *and*
+    /** Despite the name this method is called prior to spell checking *and*
         searching and replacing.  The position of current view
         mode/page/object/caret position is remembered and, depending on the
         search mode, may be restored after finishing searching/spell
