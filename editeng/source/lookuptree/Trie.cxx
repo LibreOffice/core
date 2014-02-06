@@ -198,7 +198,7 @@ void Trie::findSuggestions(OUString sWordPart, vector<OUString>& rSuggesstionLis
 
 void Trie::getAllEntries(std::vector<OUString>& entries)
 {
-    if (mRoot != NULL)
+    if (mRoot)
     {
         mRoot->collectSuggestions(OUString(), entries);
     }
