@@ -604,7 +604,7 @@ int fd;
         size = &local_size;
     }
     *size = file_get_size(name, &rc);
-    if (!rc)
+    if (!rc && *size >= 0)
     {
         fd = open(name, FILE_O_RDONLY | FILE_O_BINARY);
         if (!(fd == -1))
