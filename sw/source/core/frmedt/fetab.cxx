@@ -1869,7 +1869,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
         }
 
         // no calculation of end frame if start frame has not been found.
-        if ( 1 == i || !ppPos[0] || !pEnd )
+        if ( 1 == i || !ppPos[0] || !pEnd || !pFrm )
             break;
 
         // find 'closest' table frame to pEnd:
