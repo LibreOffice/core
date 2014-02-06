@@ -545,7 +545,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                         @"regularwin", @"windowtype",
                         (isMain ? @"normal" : @"inactive"), @"state",
                         [NSNumber numberWithDouble:unifiedHeight], @"kCUIWindowFrameUnifiedTitleBarHeightKey",
-                        [NSNumber numberWithBool:YES], @"kCUIWindowFrameDrawTitleSeparatorKey",
+                        [NSNumber numberWithBool:NO], @"kCUIWindowFrameDrawTitleSeparatorKey",
                         [NSNumber numberWithBool:YES], @"is.flipped",
                         nil],
                         nil);;
