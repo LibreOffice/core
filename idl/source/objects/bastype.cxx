@@ -220,7 +220,7 @@ SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
 
 SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 {
-    r.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
+    r.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
     return rStm;
 }
 
@@ -333,7 +333,7 @@ SvStream& WriteSvString(SvStream & rStm, const SvString & r )
 
 SvStream& operator >> (SvStream & rStm, SvString & r )
 {
-    r.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
+    r.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
     return rStm;
 }
 

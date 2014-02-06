@@ -283,8 +283,8 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                     rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
                     while( rIStream.Tell() < nFirstPos + nLen )
                     {
-                        OUString aKey = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-                        OUString aValue = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
+                        OUString aKey = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+                        OUString aValue = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
                         if( aKey.equalsAscii( "COMPAT_DUPLEX_MODE" ) )
                         {
                             if( aValue.equalsAscii( "DUPLEX_UNKNOWN" ) )

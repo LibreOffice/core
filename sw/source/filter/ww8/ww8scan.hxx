@@ -122,12 +122,12 @@ public:
 //by string contents
 inline OUString read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    return read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
+    return read_uInt8_lenPrefixed_uInt8s_ToOUString(rStrm, eEnc);
 }
 
 inline OUString read_uInt16_PascalString(SvStream& rStrm)
 {
-    return read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rStrm);
+    return read_uInt16_lenPrefixed_uInt16s_ToOUString(rStrm);
 }
 
 //Belt and Braces strings, i.e. Pascal-style strings followed by

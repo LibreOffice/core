@@ -1160,7 +1160,7 @@ SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     if( bLink )
     {
-        OUString aLink = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_UTF8);
+        OUString aLink = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
         rGraphicObj.SetLink(aLink);
     }
     else
