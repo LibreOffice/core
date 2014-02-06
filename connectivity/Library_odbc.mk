@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,odbc))
 
-$(eval $(call gb_Library_set_warnings_not_errors,odbc))
-
 $(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc))
 
 $(eval $(call gb_Library_use_sdk_api,odbc))
