@@ -56,7 +56,7 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 }
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               int nPreviewWidth, int nPreviewHeight )
+               int thePreviewWidth, int thePreviewHeight )
 {
     jpeg_decompress_struct          cinfo;
     ErrorManagerStruct              jerr;
@@ -75,6 +75,9 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         jpeg_destroy_decompress( &cinfo );
         return;
     }
+
+    int nPreviewWidth = thePreviewWidth;
+    int nPreviewHeight = thePreviewHeight;
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = errorExit;
