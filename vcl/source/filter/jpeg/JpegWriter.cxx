@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-extern "C"
-{
-    #include "stdio.h"
-    #include "jpeg.h"
-    #include <jpeglib.h>
-    #include <jerror.h>
-}
+#include <sal/config.h>
+
+#include "stdio.h"
+#include "jpeg.h"
+#include <jpeglib.h>
+#include <jerror.h>
 
 #include "JpegWriter.hxx"
 #include <vcl/bmpacc.hxx>
@@ -32,38 +31,21 @@ extern "C"
 
 #define BUFFER_SIZE  4096
 
-extern "C" void* GetScanline( void* pJPEGWriter, long nY )
+void* GetScanline( void* pJPEGWriter, long nY )
 {
     return ( (JPEGWriter*) pJPEGWriter )->GetScanline( nY );
 }
 
-struct JPEGCallbackStruct
+struct DestinationManagerStruct
 {
-    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
-};
-
-extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
-{
-    JPEGCallbackStruct* pCallbackStruct = (JPEGCallbackStruct*)pCallbackData;
-    if ( pCallbackStruct && pCallbackStruct->xStatusIndicator.is() )
-    {
-        pCallbackStruct->xStatusIndicator->setValue( nPercent );
-    }
-    return 0L;
-}
-
-typedef struct
-{
-    struct jpeg_destination_mgr pub;  /* public fields */
+    jpeg_destination_mgr pub;         /* public fields */
     SvStream* stream;                 /* target stream */
     JOCTET * buffer;                  /* start of buffer */
-} DestinationManagerStruct;
-
-typedef DestinationManagerStruct* DestinationManagerStructPointer;
+};
 
 extern "C" void init_destination (j_compress_ptr cinfo)
 {
-    DestinationManagerStructPointer destination = (DestinationManagerStructPointer) cinfo->dest;
+    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
 
     /* Allocate the output buffer -- it will be released when done with image */
     destination->buffer = (JOCTET *)
@@ -75,7 +57,7 @@ extern "C" void init_destination (j_compress_ptr cinfo)
 
 extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 {
-    DestinationManagerStructPointer destination = (DestinationManagerStructPointer) cinfo->dest;
+    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
 
     if (destination->stream->Write(destination->buffer, BUFFER_SIZE) != (size_t) BUFFER_SIZE)
     {
@@ -90,7 +72,7 @@ extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 
 extern "C" void term_destination (j_compress_ptr cinfo)
 {
-    DestinationManagerStructPointer destination = (DestinationManagerStructPointer) cinfo->dest;
+    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
     size_t datacount = BUFFER_SIZE - destination->pub.free_in_buffer;
 
     /* Write any data remaining in the buffer */
@@ -103,10 +85,10 @@ extern "C" void term_destination (j_compress_ptr cinfo)
     }
 }
 
-extern "C" void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
+void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
 {
     SvStream* stream = (SvStream*) output;
-    DestinationManagerStructPointer destination;
+    DestinationManagerStruct * destination;
 
     /* The destination object is made permanent so that multiple JPEG images
      * can be written to the same file without re-executing jpeg_svstream_dest.
@@ -116,11 +98,11 @@ extern "C" void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
      */
     if (cinfo->dest == NULL)
     {    /* first time for this JPEG object? */
-        cinfo->dest = (struct jpeg_destination_mgr*)
+        cinfo->dest = (jpeg_destination_mgr*)
         (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, sizeof(DestinationManagerStruct));
     }
 
-    destination = (DestinationManagerStructPointer) cinfo->dest;
+    destination = (DestinationManagerStruct *) cinfo->dest;
     destination->pub.init_destination = init_destination;
     destination->pub.empty_output_buffer = empty_output_buffer;
     destination->pub.term_destination = term_destination;
@@ -254,9 +236,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
         if( !mbNative )
             mpBuffer = new sal_uInt8[ AlignedWidth4Bytes( mbGreys ? mpReadAccess->Width() * 8L : mpReadAccess->Width() * 24L ) ];
 
-        JPEGCallbackStruct aCallbackData;
-        aCallbackData.xStatusIndicator = mxStatusIndicator;
-        bRet = (sal_Bool) WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, &aCallbackData );
+        bRet = (sal_Bool) WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, mxStatusIndicator );
 
         delete[] mpBuffer;
         mpBuffer = NULL;

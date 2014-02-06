@@ -33,6 +33,19 @@ enum ReadState
     JPEGREAD_NEED_MORE
 };
 
+struct JPEGCreateBitmapParam
+{
+    unsigned long nWidth;
+    unsigned long nHeight;
+    unsigned long density_unit;
+    unsigned long X_density;
+    unsigned long Y_density;
+    long     bGray;
+
+    long     nAlignedWidth;  // these members will be filled by the
+    long     bTopDown;      // CreateBitmap method in svtools
+};
+
 class JPEGReader : public GraphicReader
 {
     SvStream&           mrStream;
@@ -40,7 +53,7 @@ class JPEGReader : public GraphicReader
     Bitmap              maBmp1;
     BitmapWriteAccess*  mpAcc;
     BitmapWriteAccess*  mpAcc1;
-    void*               mpBuffer;
+    unsigned char *     mpBuffer;
     long                mnLastPos;
     long                mnFormerPos;
     long                mnLastLines;
@@ -54,7 +67,7 @@ public:
     virtual ~JPEGReader();
 
     ReadState   Read( Graphic& rGraphic );
-    void*       CreateBitmap( void* JPEGCreateBitmapParam );
+    unsigned char * CreateBitmap( JPEGCreateBitmapParam* param );
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGREADER_HXX

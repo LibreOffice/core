@@ -20,40 +20,29 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
 
-#if defined (UNX) || defined(__MINGW32__)
-#include <sys/types.h>
-#endif
+#include <sal/config.h>
 
-struct JPEGCreateBitmapParam
-{
-    unsigned long nWidth;
-    unsigned long nHeight;
-    unsigned long density_unit;
-    unsigned long X_density;
-    unsigned long Y_density;
-    long     bGray;
+#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 
-    long     nAlignedWidth;  // these members will be filled by the
-    long     bTopDown;      // CreateBitmap method in svtools
-};
+#include <jpeglib.h>
 
-typedef struct ErrorManagerStruct* ErrorManagerPointer;
-typedef unsigned char* HPBYTE;
+namespace com { namespace sun { namespace star { namespace task {
+    class XStatusIndicator;
+} } } }
+class JPEGReader;
+class JPEGWriter;
 
-void*   JPEGMalloc( size_t size );
-void    JPEGFree( void *ptr );
-long    JPEGCallback( void* pCallbackData, long nPercent );
+void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 
-long    WriteJPEG( void* pJPEGWriter, void* pOutputStream, long nWidth, long nHeight, long bGreyScale,
-                   long nQualityPercent, long aChromaSubsampling, void* pCallbackData );
-void*   GetScanline( void* pJPEGWriter, long nY );
+void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
-void    ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines );
-void*   CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam );
+long    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream, long nWidth, long nHeight, long bGreyScale,
+                   long nQualityPercent, long aChromaSubsampling,
+                   css::uno::Reference<css::task::XStatusIndicator> const & status);
 
-/* TODO: when incompatible changes are possible again
-   the preview size hint should be redone */
-void    SetJpegPreviewSizeHint( int nWidth, int nHeight );
+void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+                  int nPreviewWidth, int nPreviewHeight );
 
 long    Transform( void* pInputStream, void* pOutputStream, long nAngle );
 

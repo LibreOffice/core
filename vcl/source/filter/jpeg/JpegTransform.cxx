@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-extern "C"
-{
-    #include "jpeg.h"
-}
+#include "jpeg.h"
 
 #include "JpegTransform.hxx"
 

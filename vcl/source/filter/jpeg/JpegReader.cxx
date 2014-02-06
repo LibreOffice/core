@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <tools/solar.h>
-
-extern "C"
-{
-    #include "stdio.h"
-    #include "jpeg.h"
-    #include <jpeglib.h>
-    #include <jerror.h>
-}
+#include "stdio.h"
+#include "jpeg.h"
+#include <jpeglib.h>
+#include <jerror.h>
 
 #include "JpegReader.hxx"
 #include <vcl/bmpacc.hxx>
@@ -43,21 +39,14 @@ namespace {
     static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(512 * 1024 * 1024);
 }
 
-extern "C" void* CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam )
-{
-    return ( (JPEGReader*) pJPEGReader )->CreateBitmap( pJPEGCreateBitmapParam );
-}
-
 /* Expanded data source object for stdio input */
 
-typedef struct {
-    struct      jpeg_source_mgr pub;    /* public fields */
+struct SourceManagerStruct {
+    jpeg_source_mgr pub;                /* public fields */
     SvStream*   stream;                 /* source stream */
     JOCTET*     buffer;                 /* start of buffer */
     boolean     start_of_file;          /* have we gotten any data yet? */
-} SourceManagerStruct;
-
-typedef SourceManagerStruct* SourceManagerStructPointer;
+};
 
 /*
  * Initialize source --- called by jpeg_read_header
@@ -65,7 +54,7 @@ typedef SourceManagerStruct* SourceManagerStructPointer;
  */
 extern "C" void init_source (j_decompress_ptr cinfo)
 {
-    SourceManagerStructPointer source = (SourceManagerStructPointer) cinfo->src;
+    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
 
     /* We reset the empty-input-file flag for each image,
      * but we don't clear the input buffer.
@@ -99,7 +88,7 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
 
 extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
-    SourceManagerStructPointer source = (SourceManagerStructPointer) cinfo->src;
+    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
     size_t nbytes;
 
     nbytes = StreamRead(source->stream, source->buffer, BUFFER_SIZE);
@@ -126,7 +115,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 
 extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
 {
-    SourceManagerStructPointer source = (SourceManagerStructPointer) cinfo->src;
+    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
 
     /* Just a dumb implementation for now.  Could use fseek() except
      * it doesn't work on pipes.  Not clear that being smart is worth
@@ -153,9 +142,9 @@ extern "C" void term_source (j_decompress_ptr)
     /* no work necessary here */
 }
 
-extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
+void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
 {
-    SourceManagerStructPointer source;
+    SourceManagerStruct * source;
     SvStream* stream = (SvStream*)input;
 
     /* The source object and input buffer are made permanent so that a series
@@ -168,14 +157,14 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
 
     if (cinfo->src == NULL)
     { /* first time for this JPEG object? */
-        cinfo->src = (struct jpeg_source_mgr *)
+        cinfo->src = (jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, sizeof(SourceManagerStruct));
-        source = (SourceManagerStructPointer) cinfo->src;
+        source = (SourceManagerStruct *) cinfo->src;
         source->buffer = (JOCTET *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET));
     }
 
-    source = (SourceManagerStructPointer) cinfo->src;
+    source = (SourceManagerStruct *) cinfo->src;
     source->pub.init_source = init_source;
     source->pub.fill_input_buffer = fill_input_buffer;
     source->pub.skip_input_data = skip_input_data;
@@ -202,7 +191,7 @@ JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize
 JPEGReader::~JPEGReader()
 {
     if( mpBuffer )
-        rtl_freeMemory( mpBuffer );
+        delete[] mpBuffer;
 
     if( mpAcc )
         maBmp.ReleaseAccess( mpAcc );
@@ -211,10 +200,8 @@ JPEGReader::~JPEGReader()
         maBmp1.ReleaseAccess( mpAcc1 );
 }
 
-void* JPEGReader::CreateBitmap( void* _pParam )
+unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
 {
-    JPEGCreateBitmapParam *pParam = (JPEGCreateBitmapParam *) _pParam;
-
     if (pParam->nWidth > SAL_MAX_INT32 / 8 || pParam->nHeight > SAL_MAX_INT32 / 8)
         return NULL; // avoid overflows later
 
@@ -224,7 +211,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
     Size        aSize( pParam->nWidth, pParam->nHeight );
     bool        bGray = pParam->bGray != 0;
 
-    void* pBmpBuf = NULL;
+    unsigned char * pBmpBuf = NULL;
 
     if( mpAcc )
     {
@@ -265,7 +252,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
 
     if ( mbSetLogSize )
     {
-        unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
+        unsigned long nUnit = pParam->density_unit;
 
         if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && pParam->X_density && pParam->Y_density )
         {
@@ -299,7 +286,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
         {
             pParam->nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
             pParam->bTopDown = sal_True;
-            pBmpBuf = mpBuffer = rtl_allocateMemory( pParam->nAlignedWidth * aSize.Height() );
+            pBmpBuf = mpBuffer = new unsigned char[pParam->nAlignedWidth * aSize.Height()];
         }
     }
 
@@ -318,7 +305,7 @@ void JPEGReader::FillBitmap()
 {
     if( mpBuffer && mpAcc )
     {
-        HPBYTE      pTmp;
+        unsigned char * pTmp;
         BitmapColor aColor;
         long        nAlignedWidth;
         long        nWidth = mpAcc->Width();
@@ -467,17 +454,16 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     mrStream.Seek( mnLastPos );
 
     Size aPreviewSize = GetPreviewSize();
-    SetJpegPreviewSizeHint( aPreviewSize.Width(), aPreviewSize.Height() );
 
     // read the (partial) image
-    ReadJPEG( this, &mrStream, &nLines );
+    ReadJPEG( this, &mrStream, &nLines, aPreviewSize.Width(), aPreviewSize.Height() );
 
     if( mpAcc )
     {
         if( mpBuffer )
         {
             FillBitmap();
-            rtl_freeMemory( mpBuffer );
+            delete[] mpBuffer;
             mpBuffer = NULL;
         }
 

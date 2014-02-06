@@ -173,6 +173,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/ixpm/xpmread \
     vcl/source/filter/jpeg/Exif \
     vcl/source/filter/jpeg/jpeg \
+    vcl/source/filter/jpeg/jpegc \
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
@@ -314,7 +315,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
-    vcl/source/filter/jpeg/jpegc \
     vcl/source/filter/jpeg/transupp \
 ))
 

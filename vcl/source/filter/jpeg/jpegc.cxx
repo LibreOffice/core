@@ -17,62 +17,57 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
 #include <jpeglib.h>
 #include <jerror.h>
 
-#include <rtl/alloc.h>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <osl/diagnose.h>
 
+extern "C" {
 #include "transupp.h"
+}
+
 #include "jpeg.h"
+#include <JpegReader.hxx>
+#include <JpegWriter.hxx>
 
 struct ErrorManagerStruct
 {
-    struct jpeg_error_mgr pub;
+    jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
 };
 
-void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
-void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
-
-METHODDEF( void ) errorExit (j_common_ptr cinfo)
+extern "C" void errorExit (j_common_ptr cinfo)
 {
-    ErrorManagerPointer error = (ErrorManagerPointer) cinfo->err;
+    ErrorManagerStruct * error = (ErrorManagerStruct *) cinfo->err;
     (*cinfo->err->output_message) (cinfo);
     longjmp(error->setjmp_buffer, 1);
 }
 
-METHODDEF( void ) outputMessage (j_common_ptr cinfo)
+extern "C" void outputMessage (j_common_ptr cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
 }
 
-/* TODO: when incompatible changes are possible again
-   the preview size hint should be redone */
-static int nPreviewWidth = 0;
-static int nPreviewHeight = 0;
-void SetJpegPreviewSizeHint( int nWidth, int nHeight )
+void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+               int nPreviewWidth, int nPreviewHeight )
 {
-    nPreviewWidth = nWidth;
-    nPreviewHeight = nHeight;
-}
-
-void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
-{
-    struct jpeg_decompress_struct   cinfo;
-    struct ErrorManagerStruct       jerr;
-    struct JPEGCreateBitmapParam    aCreateBitmapParam;
-    HPBYTE                          pDIB;
-    HPBYTE                          pTmp;
+    jpeg_decompress_struct          cinfo;
+    ErrorManagerStruct              jerr;
+    JPEGCreateBitmapParam           aCreateBitmapParam;
+    unsigned char *                 pDIB;
+    unsigned char *                 pTmp;
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
     JSAMPLE*                        aRangeLimit;
-    HPBYTE                          pScanLineBuffer = NULL;
+    unsigned char *                 pScanLineBuffer = NULL;
     long                            nScanLineBufferComponents = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
@@ -147,15 +142,15 @@ void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
     aCreateBitmapParam.density_unit = cinfo.density_unit;
     aCreateBitmapParam.X_density = cinfo.X_density;
     aCreateBitmapParam.Y_density = cinfo.Y_density;
-    aCreateBitmapParam.bGray = cinfo.output_components == 1;
-    pDIB = CreateBitmapFromJPEGReader( pJPEGReader, &aCreateBitmapParam );
+    aCreateBitmapParam.bGray = long(cinfo.output_components == 1);
+    pDIB = pJPEGReader->CreateBitmap( &aCreateBitmapParam );
     nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
     aRangeLimit = cinfo.sample_range_limit;
 
     if ( cinfo.out_color_space == JCS_CMYK )
     {
         nScanLineBufferComponents = cinfo.output_width * 4;
-        pScanLineBuffer = rtl_allocateMemory( nScanLineBufferComponents );
+        pScanLineBuffer = new unsigned char[nScanLineBufferComponents];
     }
 
     if( pDIB )
@@ -213,20 +208,20 @@ void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
 
     if (pScanLineBuffer != NULL)
     {
-        rtl_freeMemory( pScanLineBuffer );
+        delete[] pScanLineBuffer;
         pScanLineBuffer = NULL;
     }
 
     jpeg_destroy_decompress( &cinfo );
 }
 
-long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
+long WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                 long nWidth, long nHeight, long bGreys,
                 long nQualityPercent, long aChromaSubsampling,
-                void* pCallbackData )
+                css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
-    struct jpeg_compress_struct cinfo;
-    struct ErrorManagerStruct   jerr;
+    jpeg_compress_struct        cinfo;
+    ErrorManagerStruct          jerr;
     void*                       pScanline;
     long                        nY;
 
@@ -282,17 +277,16 @@ long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
 
     for( nY = 0; nY < nHeight; nY++ )
     {
-        pScanline = GetScanline( pJPEGWriter, nY );
+        pScanline = pJPEGWriter->GetScanline( nY );
 
         if( pScanline )
         {
             jpeg_write_scanlines( &cinfo, (JSAMPARRAY) &pScanline, 1 );
         }
 
-        if( JPEGCallback( pCallbackData, nY * 100L / nHeight ) )
+        if( status.is() )
         {
-            jpeg_destroy_compress( &cinfo );
-            return 0;
+            status->setValue( nY * 100L / nHeight );
         }
     }
 
@@ -307,10 +301,10 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     jpeg_transform_info aTransformOption;
     JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;
 
-    struct jpeg_decompress_struct   aSourceInfo;
-    struct jpeg_compress_struct     aDestinationInfo;
-    struct ErrorManagerStruct       aSourceError;
-    struct ErrorManagerStruct       aDestinationError;
+    jpeg_decompress_struct   aSourceInfo;
+    jpeg_compress_struct     aDestinationInfo;
+    ErrorManagerStruct       aSourceError;
+    ErrorManagerStruct       aDestinationError;
 
     jvirt_barray_ptr* aSourceCoefArrays      = 0;
     jvirt_barray_ptr* aDestinationCoefArrays = 0;
