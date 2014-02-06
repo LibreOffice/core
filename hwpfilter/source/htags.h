@@ -56,9 +56,9 @@ struct OlePicture
     int   size;
     ulong signature;
 #ifdef WIN32
-     IStorage *pis;
+    IStorage *pis;
 #else
-     char *pis;
+    char *pis;
 #endif
     OlePicture(int tsize);
     ~OlePicture(void);

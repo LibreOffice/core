@@ -78,18 +78,18 @@ bool EmPicture::Read(HWPFile & hwpf)
 
 
 OlePicture::OlePicture(int tsize)
+    : signature(0)
+    , pis(NULL)
 {
     size = tsize - 4;
     if (size <= 0)
         return;
-#ifdef WIN32
-     pis = 0L;
-#else
+#ifndef WIN32
      pis = new char[size];
 #endif
 };
 
-OlePicture::~OlePicture(void)
+OlePicture::~OlePicture()
 {
 #ifdef WIN32
      if( pis )
