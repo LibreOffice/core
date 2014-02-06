@@ -1827,8 +1827,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTabViewObj::getPropertySetInf
 void SAL_CALL ScTabViewObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                      lang::IllegalArgumentException, lang::WrappedTargetException,
+                      uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aPropertyName);
