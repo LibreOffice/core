@@ -566,14 +566,14 @@ void Test::testFormulaHashAndTag()
 
 void Test::testFormulaTokenEquality()
 {
-    struct Test
+    struct FormulaTokenEqualityTest
     {
         const char* mpFormula1;
         const char* mpFormula2;
         bool mbEqual;
     };
 
-    Test aTests[] = {
+    FormulaTokenEqualityTest aTests[] = {
         { "R1C2", "R1C2", true },
         { "R1C2", "R1C3", false },
         { "R1C2", "R2C2", false },
