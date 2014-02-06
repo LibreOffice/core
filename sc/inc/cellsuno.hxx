@@ -395,7 +395,8 @@ public:
                                       std::exception);
     virtual void SAL_CALL   setColumnDescriptions( const ::com::sun::star::uno::Sequence<
                                 OUString >& aColumnDescriptions )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             // XCellRangesQuery
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL

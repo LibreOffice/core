@@ -3269,8 +3269,8 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
 }
 
 void SAL_CALL ScCellRangesBase::setColumnDescriptions(
-                        const uno::Sequence<OUString>& aColumnDescriptions )
-                                                throw(uno::RuntimeException)
+    const uno::Sequence<OUString>& aColumnDescriptions )
+        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
