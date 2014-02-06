@@ -88,10 +88,12 @@ public:
     EdgeType            eEdgeType;
     double              nEdgeWidth;
 
-                        EdgeBundle() {};
-    virtual Bundle*     Clone() { return new EdgeBundle( *this ); } ;
-            EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
-    virtual             ~EdgeBundle() {};
+    EdgeBundle()
+        : eEdgeType(ET_NONE)
+        , nEdgeWidth(0)
+    {}
+    virtual Bundle*     Clone() { return new EdgeBundle( *this ); }
+    EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
 };
 
 // ---------------------------------------------------------------
@@ -121,13 +123,13 @@ public:
     long                nFillPatternIndex;
     long                nFillHatchIndex;
 
-    FillBundle(FIS_HOLLOW)
-        : eFillInteriorStyle()
+    FillBundle()
+        : eFillInteriorStyle(FIS_HOLLOW)
         , nFillPatternIndex(0)
         , nFillHatchIndex(0)
     {}
     virtual Bundle*     Clone() { return new FillBundle( *this ); }
-    FillBundle& operator=( FillBundle& rFillBundle )
+    FillBundle& operator=( FillBundle& rFillBundle );
 };
 
 
