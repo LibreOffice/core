@@ -21,7 +21,7 @@
 #ifndef INCLUDED_APRENV_HXX
 #define INCLUDED_APRENV_HXX
 
-#include <apr/apr_pools.h>
+#include <apr_pools.h>
 
 namespace apr_environment
 {
