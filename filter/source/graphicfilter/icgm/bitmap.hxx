@@ -53,10 +53,15 @@ class CGMBitmapDescriptor
             , mbStatus(sal_False)
             , mbVMirror(sal_False)
             , mbHMirror(sal_False)
+            , mnDstBitsPerPixel(0)
+            , mnScanSize(0)
             , mndx(0.0)
             , mndy(0.0)
             , mnOrientation(0.0)
+            , mnX(0)
+            , mnY(0)
             , mnLocalColorPrecision(0)
+            , mnCompressionMode(0)
             { };
         ~CGMBitmapDescriptor()
         {
