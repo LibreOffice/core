@@ -252,14 +252,10 @@ void SAL_CALL ConfigurationController::notifyEvent (
     mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
 }
 
-
-
-
-
 //----- XConfigurationController ----------------------------------------------
 
-void SAL_CALL ConfigurationController::lock (void)
-    throw (RuntimeException)
+void SAL_CALL ConfigurationController::lock()
+    throw (RuntimeException, std::exception)
 {
     OSL_ASSERT(mpImplementation.get()!=NULL);
     OSL_ASSERT(mpImplementation->mpConfigurationUpdater.get()!=NULL);

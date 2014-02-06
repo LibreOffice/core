@@ -86,8 +86,9 @@ public:
 
     // XConfigurationController
 
-    virtual void SAL_CALL lock (void)
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL lock()
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual void SAL_CALL unlock (void)
         throw (css::uno::RuntimeException);
