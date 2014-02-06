@@ -5670,6 +5670,7 @@ wrapTopAndBottom
 wrapTrailSpaces
 wrapcoords
 writeProtection
+wp14
 wpg
 wps
 wsp
