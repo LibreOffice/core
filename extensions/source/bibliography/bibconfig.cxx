@@ -55,12 +55,13 @@ Sequence<OUString> BibConfig::GetPropertyNames()
     return aNames;
 }
 
-BibConfig::BibConfig() :
-    ConfigItem("Office.DataAccess/Bibliography", CONFIG_MODE_DELAYED_UPDATE),
-    pMappingsArr(new MappingArray),
-    nBeamerSize(0),
-    nViewSize(0),
-    bShowColumnAssignmentWarning(sal_False)
+BibConfig::BibConfig()
+    : ConfigItem("Office.DataAccess/Bibliography", CONFIG_MODE_DELAYED_UPDATE)
+    , nTblOrQuery(0)
+    , pMappingsArr(new MappingArray)
+    , nBeamerSize(0)
+    , nViewSize(0)
+    , bShowColumnAssignmentWarning(false)
 {
     //Names of the default columns
     aColumnDefaults[0] = "Identifier";
