@@ -1078,7 +1078,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             sal_uInt16 i = 1;
 
-            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
                 const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(*pIter);
@@ -1265,6 +1265,11 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
+    // Store selected templates before calling a dialog/QueryBox
+    // which will result in a deselection of all ThumbnailViewItem.
+    // Also avoid invalid iterators
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;
+
     QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE).toString());
 
     if ( aQueryDlg.Execute() == RET_NO )
@@ -1274,8 +1279,6 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 
     if (mpSearchView->IsVisible())
     {
-        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Avoids invalid iterators
-
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
         for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
         {
@@ -1296,7 +1299,6 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     else
     {
         sal_uInt16 nRegionItemId = mpLocalView->getCurRegionItemId();
-        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;  //Avoid invalid iterators
 
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
         for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
@@ -1350,6 +1352,11 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
+    // Store selected folders before calling a dialog/QueryBox
+    // which will result in a deselection of all ThumbnailViewItem.
+    // Also copy to avoid invalidating an iterator
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders;
+
     QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
 
     if ( aQueryDlg.Execute() == RET_NO )
@@ -1358,7 +1365,6 @@ void SfxTemplateManagerDlg::OnFolderDelete()
     OUString aFolderList;
 
     std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders; //Copy to avoid invalidating an iterator
 
     for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
     {
@@ -1393,6 +1399,10 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
 
 void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
+    // Store selected folders before calling a dialog/QueryBox
+    // which will result in a deselection of all ThumbnailViewItem
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders;
+
     assert(m_xModel.is());
 
     if (!mpLocalView->isNonRootRegionVisible() && maSelFolders.empty())
@@ -1432,7 +1442,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             else
             {
                 std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
                 {
                     TemplateContainerItem *pItem = (TemplateContainerItem*)(*pIter);
 
