@@ -167,6 +167,10 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
 
     // Destructor proxy
     connect( this, SIGNAL( cleanupProxySignal() ), this, SLOT( cleanupProxy() ), Qt::BlockingQueuedConnection );
+
+    // XFilePickerListener notifications
+    connect( _dialog, SIGNAL( filterChanged(const QString&) ), this, SLOT( filterChanged(const QString&) ));
+    connect( _dialog, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ));
 }
 
 KDE4FilePicker::~KDE4FilePicker()
@@ -775,6 +779,23 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return FilePicker_getSupportedServiceNames();
+}
+
+void KDE4FilePicker::filterChanged(const QString &)
+{
+    FilePickerEvent aEvent;
+    aEvent.ElementId = LISTBOX_FILTER;
+    OSL_TRACE( "filter changed" );
+    if (m_xListener.is())
+        m_xListener->controlStateChanged( aEvent );
+}
+
+void KDE4FilePicker::selectionChanged()
+{
+    FilePickerEvent aEvent;
+    OSL_TRACE( "file selection changed" );
+    if (m_xListener.is())
+        m_xListener->fileSelectionChanged( aEvent );
 }
 
 #include "KDE4FilePicker.moc"

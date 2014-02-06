@@ -224,6 +224,10 @@ private:
 private Q_SLOTS:
     void cleanupProxy();
 
+    // emit XFilePickerListener controlStateChanged event
+    void filterChanged(const QString &filter);
+    // emit XFilePickerListener fileSelectionChanged event
+    void selectionChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
