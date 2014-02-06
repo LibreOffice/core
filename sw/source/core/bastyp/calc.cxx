@@ -512,8 +512,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     }
 
     // At this point the "real" case variable has to be used
-    OUString sTmpName( rStr );
-    ::ReplacePoint( sTmpName );
+    OUString const sTmpName( ::ReplacePoint(rStr) );
 
     if( !ins )
     {

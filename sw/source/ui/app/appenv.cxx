@@ -88,10 +88,11 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
             bool bField = false;
 
             sal_Int32 nPos = aLine.indexOf( '<' );
-            if ( nPos != -1)
+            if (0 != nPos)
             {
-                sTmpText = aLine.copy( 0, nPos );
-                aLine = aLine.copy( nPos );
+                sal_Int32 const nCopy((nPos != -1) ? nPos : aLine.getLength());
+                sTmpText = aLine.copy(0, nCopy);
+                aLine = aLine.copy(nCopy);
             }
             else
             {
@@ -111,7 +112,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
                     sal_uInt16 nCnt = comphelper::string::getTokenCount(sDBName, '.');
                     if (nCnt >= 3)
                     {
-                        ::ReplacePoint(sDBName, true);
+                        sDBName = ::ReplacePoint(sDBName, true);
                         SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
                         rFldMgr.InsertFld( aData );
                         sRet = sDBName;
