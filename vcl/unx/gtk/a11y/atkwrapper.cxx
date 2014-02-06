@@ -599,7 +599,7 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
 
 static void
 atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
-                         AtkObjectWrapperClass)
+                         AtkObjectWrapperClass*)
 {
    wrapper->mpAction = NULL;
    wrapper->mpComponent = NULL;
