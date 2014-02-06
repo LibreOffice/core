@@ -30,6 +30,7 @@
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::test;
 using namespace ::com::sun::star::uno;
@@ -252,10 +253,10 @@ OUString ServiceImpl::getImplementationName()
     return OUString( );
 }
 
-sal_Bool ServiceImpl::supportsService( const OUString & /* rServiceName */)
+sal_Bool ServiceImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > ServiceImpl::getSupportedServiceNames()
@@ -610,7 +611,6 @@ void testAllTypes( const Reference < XCallMe > & rRCallMe )
         OSL_ASSERT( types.Interface == retTypes.Interface );
         OSL_ASSERT( types.Any == retTypes.Any );
     }
-
 }
 
 void testRemote( const Reference< XInterface > &rRemote )
@@ -636,9 +636,7 @@ void testRemote( const Reference< XInterface > &rRemote )
     printf( "Testing exception remote ...\n" );
     testException( rRCallMe );
 
-      //--------------------
       // Test attributes
-      //----------------------
        OUString ow( "dum didel dum dideldei" );
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
@@ -646,15 +644,11 @@ void testRemote( const Reference< XInterface > &rRemote )
          rRCallMe->setsAttribute( ow );
          OSL_ASSERT( rRCallMe->getsAttribute() == ow );
 
-    //-------------------
     // Performance test
-    //-------------------
     testPerformance( rRCallMe , rLCallMe );
      testOnewayPerformanceOnTwoInterfaces( rRFact->createCallMe(), rRCallMe );
 
-     //----------------
      // Test sequence
-     //----------------
        testSequenceOfCalls( rRCallMe );
 
 
@@ -704,9 +698,7 @@ void testRemote( const Reference< XInterface > &rRemote )
      // test empty references
      rRTest->setIn( Reference < XCallMe > () );
 
-       //--------------------------------
        // test thread deadlocking
-       //--------------------------------
       rLCallMe->callAgain( rRCallMe, 20 );
 
 }

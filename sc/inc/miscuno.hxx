@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "scdllapi.h"
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
@@ -38,7 +39,7 @@ OUString SAL_CALL ClassName::getImplementationName()                      \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
-    return !ServiceName.compareToAscii(ServiceAscii);                                \
+    return cppu::supportsService(this, ServiceName);                                \
 }                                                                                    \
 ::com::sun::star::uno::Sequence< OUString >                                   \
     SAL_CALL ClassName::getSupportedServiceNames(void)                           \

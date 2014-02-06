@@ -707,15 +707,7 @@ OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
 sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    const Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    const sal_Int32 nCount = aSNL.getLength();
-    for( sal_Int32 i = 0; i < nCount; i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )

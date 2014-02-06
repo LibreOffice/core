@@ -22,12 +22,12 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/input/XAttributes.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -91,9 +91,10 @@ struct MGuard
 };
 
 class DocumentHandlerImpl :
-    public ::cppu::WeakImplHelper3< xml::sax::XDocumentHandler,
+    public ::cppu::WeakImplHelper4< xml::sax::XDocumentHandler,
                                     xml::input::XNamespaceMapping,
-                                    lang::XInitialization >
+                                    lang::XInitialization,
+                                    com::sun::star::lang::XServiceInfo >
 {
     friend class ExtendedAttributes;
 
@@ -413,17 +414,10 @@ OUString DocumentHandlerImpl::getImplementationName()
     return getImplementationName_DocumentHandlerImpl();
 }
 
-sal_Bool DocumentHandlerImpl::supportsService(
-    OUString const & servicename )
+sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
     throw (RuntimeException)
 {
-    Sequence< OUString > names( getSupportedServiceNames_DocumentHandlerImpl() );
-    for ( sal_Int32 nPos = names.getLength(); nPos--; )
-    {
-        if (names[ nPos ].equals( servicename ))
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, servicename);
 }
 
 Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
