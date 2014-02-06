@@ -124,7 +124,7 @@ void ImportExcel::Formula(
         SCROW nSharedRow;
         if (pFormConv->ReadSharedFormulaPosition(maStrm, nSharedCol, nSharedRow))
         {
-            ScAddress aRefPos(aScPos.Col(), nSharedRow, GetCurrScTab());
+            ScAddress aRefPos(nSharedCol, nSharedRow, GetCurrScTab());
             const ScTokenArray* pSharedCode = pFormConv->GetSharedFormula(aRefPos);
             if (pSharedCode)
             {
