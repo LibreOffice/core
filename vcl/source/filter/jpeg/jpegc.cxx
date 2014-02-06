@@ -70,14 +70,14 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     unsigned char *                 pScanLineBuffer = NULL;
     long                            nScanLineBufferComponents = 0;
 
+    int nPreviewWidth = thePreviewWidth;
+    int nPreviewHeight = thePreviewHeight;
+
     if ( setjmp( jerr.setjmp_buffer ) )
     {
         jpeg_destroy_decompress( &cinfo );
         return;
     }
-
-    int nPreviewWidth = thePreviewWidth;
-    int nPreviewHeight = thePreviewHeight;
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = errorExit;
