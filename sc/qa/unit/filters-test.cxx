@@ -348,7 +348,7 @@ void ScFiltersTest::testContentXLS_XML()
 
 void ScFiltersTest::testSharedFormulaXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula.", XLS);
+    ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     xDocSh->DoHardRecalc(true);
@@ -372,7 +372,7 @@ void ScFiltersTest::testSharedFormulaXLS()
     // Excel can easily mess up shared formula ranges, so we need to be able
     // to handle these wrong ranges that Excel stores.
 
-    xDocSh = loadDoc("shared-formula-gap.", XLS);
+    xDocSh = loadDoc("shared-formula/gap.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     pDoc = xDocSh->GetDocument();
     pDoc->CalcAll();
@@ -417,7 +417,7 @@ void ScFiltersTest::testSharedFormulaXLS()
 
 void ScFiltersTest::testSharedFormulaXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", XLSX);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
