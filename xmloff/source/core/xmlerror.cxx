@@ -127,7 +127,7 @@ void XMLErrors::AddRecord(
     if( (nFlags & XMLERROR_FLAG_WARNING) != 0 )
         sMessage.appendAscii( " WARNING" );
     if( (nFlags & XMLERROR_FLAG_ERROR) != 0 )
-        sMessage.appendAscii( " ERRROR" );
+        sMessage.appendAscii( " ERROR" );
     if( (nFlags & XMLERROR_FLAG_SEVERE) != 0 )
         sMessage.appendAscii( " SEVERE" );
     sMessage.appendAscii( "\n    Class: " );

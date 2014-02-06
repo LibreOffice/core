@@ -140,7 +140,7 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
     case EIDL_SIMILAR_CONSTRUCTORS:
         return "two constructors have identical lists of parameter types";
     }
-    return "unknown errror";
+    return "unknown error";
 }
 
 static const sal_Char* warningCodeToMessage(WarningCode wCode)
