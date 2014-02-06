@@ -2128,7 +2128,10 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                     OUString aStr;
                     if ( aPath >>= aStr )
                     {
-                        aStr = aStr.replace( 'E', ' ' );
+                        // E can appear inside a number, so we only check for its presence at the end
+                        aStr = aStr.trim();
+                        if (aStr.endsWith("E"))
+                            aStr = aStr.copy(0, aStr.getLength() - 1);
                         aStr = aStr.trim();
                         aPath <<= aStr;
                         xMotion->setPath( aPath );
