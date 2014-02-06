@@ -2427,7 +2427,8 @@ bool SwDoc::ConvertFieldsToText()
                     SwPaM aPam1(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
                     aPam1.Move();
                     //insert first to keep the field's attributes
-                    InsertString( aPam1, sText );
+                    if (!sText.isEmpty())
+                        InsertString( aPam1, sText );
                     SwPaM aPam2(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
                     aPam2.SetMark();
                     aPam2.Move();
