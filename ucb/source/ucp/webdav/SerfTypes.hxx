@@ -22,7 +22,7 @@
 #ifndef INCLUDED_SERFTYPES_HXX
 #define INCLUDED_SERFTYPES_HXX
 
-#include <serf/serf.h>
+#include <serf.h>
 
 typedef serf_connection_t SerfConnection;
 

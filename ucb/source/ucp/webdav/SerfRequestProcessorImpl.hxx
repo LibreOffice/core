@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SERFREQUESTPROCESSORIMPL_HXX
 #define INCLUDED_SERFREQUESTPROCESSORIMPL_HXX
 
-#include <serf/serf.h>
+#include <serf.h>
 
 #include <sal/types.h>
 #include "DAVRequestEnvironment.hxx"

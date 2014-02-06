@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hash_map>
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>
@@ -26,7 +25,7 @@
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
 #include "AprEnv.hxx"
-#include <apr/apr_strings.h>
+#include <apr_strings.h>
 
 #include "DAVAuthListener.hxx"
 #include "SerfTypes.hxx"

@@ -24,7 +24,7 @@
 #include <apr_errno.h>
 #include <apr_pools.h>
 
-#include <serf/serf.h>
+#include <serf.h>
 
 #include "DAVTypes.hxx"
 #include "DAVResource.hxx"
