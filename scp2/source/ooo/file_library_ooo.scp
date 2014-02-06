@@ -82,17 +82,6 @@ End
 
 #endif
 
-#ifndef SYSTEM_CURL
-
-File gid_File_Lib_Curl
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "curl.filelist";
-End
-
-#endif
-
 #if defined UNX && ! defined MACOSX
 #ifdef ENABLE_TDE
 File gid_File_Bin_TdeFilePicker
@@ -132,25 +121,7 @@ End
 #endif
 #endif
 
-#ifndef SYSTEM_LCMS2
-
-File gid_File_Lib_Lcms2
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "lcms2.filelist";
-End
-
-#endif
-
 #ifdef NEED_CAIRO
-
-File gid_File_Lib_Cairo
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "cairo.filelist";
-End
 
 #ifndef WNT
 
@@ -268,15 +239,6 @@ File gid_File_Lib_XSec_XmlSec
     #endif
 End
 
-#endif
-
-#ifndef SYSTEM_LIBXSLT
-File gid_File_Lib_Xslt
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "xslt.filelist";
-End
 #endif
 
 #ifdef WNT
