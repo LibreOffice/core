@@ -98,7 +98,7 @@ public:
 
     OUString   GetTableName();
 
-    sal_Int32   GetRowCount();
+    sal_uInt16  GetRowCount();
 
     XFRow*      GetRow(sal_Int32 row);
 
@@ -112,14 +112,17 @@ public:
 
     virtual void    ToXml(IXFStream *pStrm);
 
-    void        RemoveRow(sal_Int32 row);
+    void RemoveRow(sal_uInt16 row)
+    {
+        m_aRows.erase(row);
+    }
 
 private:
     OUString   m_strName;
     sal_Bool    m_bSubTable;
     XFCell      *m_pOwnerCell;
     XFContentContainer  m_aHeaderRows;
-    std::map<sal_Int32,XFRow*>  m_aRows;
+    std::map<sal_uInt16, XFRow*>  m_aRows;
     std::map<sal_Int32,OUString>   m_aColumns;
     OUString   m_strDefCellStyle;
     OUString   m_strDefRowStyle;
@@ -156,11 +159,6 @@ inline void XFTable::SetDefaultRowStyle(OUString style)
 inline void XFTable::SetDefaultColStyle(OUString style)
 {
     m_strDefColStyle = style;
-}
-
-inline void XFTable::RemoveRow(sal_Int32 row)
-{
-    m_aRows.erase(row);
 }
 
 #endif

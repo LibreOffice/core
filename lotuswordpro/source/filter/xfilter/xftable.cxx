@@ -115,12 +115,11 @@ XFTable& XFTable::operator =(const XFTable& other)
 
 XFTable::~XFTable()
 {
-    std::map<sal_Int32,XFRow*>::iterator it;
+    std::map<sal_uInt16, XFRow*>::iterator it;
     for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
     {
         XFRow *pRow = (*it).second;
-        if( pRow )
-            delete pRow;
+        delete pRow;
     }
     m_aRows.clear();
     m_aColumns.clear();
@@ -167,13 +166,13 @@ OUString XFTable::GetTableName()
         return m_strName;
 }
 
-sal_Int32   XFTable::GetRowCount()
+sal_uInt16 XFTable::GetRowCount()
 {
-    sal_Int32   rowMax = -1;
-    std::map<sal_Int32,XFRow*>::iterator it;
+    sal_uInt16 rowMax = 0;
+    std::map<sal_uInt16, XFRow*>::iterator it;
     for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
     {
-        if( it->first>rowMax )
+        if (it->first > rowMax)
             rowMax = it->first;
     }
 
@@ -219,9 +218,6 @@ void    XFTable::ToXml(IXFStream *pStrm)
     else
         pStrm->StartElement( A2OUSTR("table:table") );
 
-    //test code
-//  sal_Int32 rowMax = GetRowCount();
-//  sal_Int32 colMax = GetColumnCount();
     //output columns:
     {
         int lastCol = 0;
@@ -267,7 +263,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
         int     lastRow = 0;
         pAttrList = pStrm->GetAttrList();
 
-        std::map<sal_Int32,XFRow* >::iterator it = m_aRows.begin();
+        std::map<sal_uInt16, XFRow* >::iterator it = m_aRows.begin();
         for( ; it!=m_aRows.end(); ++it )
         {
             int row = (*it).first;

@@ -383,6 +383,11 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         pPipe->m_bIsInShutdown = sal_True;
         pPipe->m_Socket = -1;
         fd = socket(AF_UNIX, SOCK_STREAM, 0);
+        if ( fd < 0 )
+        {
+            OSL_TRACE("socket in osl_destroyPipe failed with error: %s", strerror(errno));
+            return;
+        }
         memset(&addr, 0, sizeof(addr));
 
         OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipe->m_Name);

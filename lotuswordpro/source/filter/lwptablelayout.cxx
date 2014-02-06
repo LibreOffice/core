@@ -845,7 +845,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 
     ConvertTable(pTmpTable,nStartHeadRow,nEndHeadRow,0,nCol);
 
-    sal_uInt16 nRowNum = static_cast<sal_uInt16>(pTmpTable->GetRowCount());
+    sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     sal_uInt8* CellMark = new sal_uInt8[nRowNum];
     sal_Bool bFindFlag = sal_False;
 
@@ -884,7 +884,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
 {
     sal_uInt16 i;
     sal_uInt8 j;
-    sal_uInt16 nRowNum = static_cast<sal_uInt16>(pTmpTable->GetRowCount());
+    sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
 
     XFRow* pXFRow = new XFRow;
@@ -981,7 +981,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
 sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,
             sal_uInt8& nMaxColSpan)
 {
-    sal_uInt16 nRowNum = static_cast<sal_uInt16>(pXFTable->GetRowCount());
+    sal_uInt16 nRowNum = pXFTable->GetRowCount();
     sal_uInt8 nColNum = static_cast<sal_uInt8>(pXFTable->GetColumnCount());
     sal_uInt8 nCellMark=0;
     sal_uInt8 nCount;
