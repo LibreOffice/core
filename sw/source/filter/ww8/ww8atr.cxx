@@ -398,7 +398,7 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 // Es duerfen nur Funktionen gerufen werden, die nicht in den
 // Ausgabebereich pO schreiben, da dieser nur einmal fuer CHP und PAP existiert
 // und damit im falschen landen wuerden.
-void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen)
+void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen, bool isTextNodeEmpty)
 {
     if ( bStyDef || bOutKF || bInWriteEscher || bOutPageDescs )
         return;
@@ -419,9 +419,11 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (pAktPageDesc != pPageDesc)
     {
-        if (isCellOpen && (pAktPageDesc->GetName() != pPageDesc->GetName()))
+        if ( (isCellOpen && (pAktPageDesc->GetName() != pPageDesc->GetName())) || isTextNodeEmpty )
         {
-           // Table cell is open and page header types are different,so do not output section break.
+           // Table cell is open and page header types are different,so do not output section break OR
+           // PageBreak is present but text node has no string - it is an empty node, do not prepare
+           // new page descriptor i.e. bNewPageDesc should be false.
         }
         else
         {
@@ -486,6 +488,8 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     {
                         bNewPageDesc |= SetAktPageDescFromNode( rNd );
                     }
+                    if( isTextNodeEmpty )
+                       bNewPageDesc = false;
                 }
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pItem );
@@ -3643,10 +3647,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 // From now on(fix for #i77900#) we prefer to save a page break as
                 // paragraph attribute, this has to be done after the export of the
                 // paragraph ( => !GetExport().bBreakBefore )
-                if ( !GetExport().bBreakBefore )
-                    PageBreakBefore( true );
-                break;
-
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
                 nC = msword::PageBreak;
@@ -3663,7 +3663,8 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 break;
         }
 
-        if ( ( bBefore == GetExport().bBreakBefore ) && nC )
+        if ( (( bBefore != GetExport().bBreakBefore ) && ( nC == msword::PageBreak)) ||
+             (( bBefore == GetExport().bBreakBefore ) && ( nC == msword::ColumnBreak)) )
         {
             // #i76300#
             bool bFollowPageDescWritten = false;
