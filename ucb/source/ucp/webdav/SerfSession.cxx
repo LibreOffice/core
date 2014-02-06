@@ -385,12 +385,14 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv;
     try
     {
+        css::uno::Reference< css::uno::XComponentContext > xContext =
+            ::comphelper::getProcessComponentContext();
         // Create a certificate container.
-        xCertificateContainer = security::CertificateContainer::create( comphelper::getComponentContext(getMSF()) );
+        xCertificateContainer = security::CertificateContainer::create( xContext );
 
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            getMSF()->createInstance(
-                OUString( "com.sun.star.xml.crypto.SEInitializer" ) ),
+            xContext->getServiceManager()->createInstanceWithContext(
+                OUString( "com.sun.star.xml.crypto.SEInitializer" ), xContext ),
             uno::UNO_QUERY_THROW);
 
         xSecurityContext = xSEInitializer->createSecurityContext( OUString() );

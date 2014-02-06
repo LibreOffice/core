@@ -21,7 +21,6 @@
 #include <osl/doublecheckedlocking.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
@@ -199,12 +198,12 @@ static void lcl_sendPartialGETRequest( bool &bError,
 //=========================================================================
 // ctr for content on an existing webdav resource
 Content::Content(
-          const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+          const uno::Reference< uno::XComponentContext >& rxContext,
           ContentProvider* pProvider,
           const uno::Reference< ucb::XContentIdentifier >& Identifier,
           rtl::Reference< DAVSessionFactory > const & rSessionFactory )
   throw ( ucb::ContentCreationException )
-: ContentImplHelper( rxSMgr, pProvider, Identifier ),
+: ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( false ),
@@ -214,7 +213,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-                rxSMgr,
+                rxContext,
                 rSessionFactory,
                 Identifier->getContentIdentifier() ) );
 
@@ -230,13 +229,13 @@ Content::Content(
 //=========================================================================
 // ctr for content on an non-existing webdav resource
 Content::Content(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
             sal_Bool isCollection )
   throw ( ucb::ContentCreationException )
-: ContentImplHelper( rxSMgr, pProvider, Identifier ),
+: ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( true ),
@@ -246,7 +245,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-            rxSMgr, rSessionFactory, Identifier->getContentIdentifier() ) );
+            rxContext, rSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {
@@ -298,7 +297,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         try
         {
             uno::Reference< beans::XPropertySet > const xProps(
-                m_xSMgr, uno::UNO_QUERY_THROW );
+                m_xContext, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xCtx;
             xCtx.set( xProps->getPropertyValue(
                 OUString( "DefaultContext" ) ),
@@ -1195,12 +1194,12 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
 
     uno::Reference< ucb::XContentIdentifier > xId(
-                    new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
+                    new ::ucbhelper::ContentIdentifier( aURL ) );
 
     // create the local content
     try
     {
-        return new ::http_dav_ucp::Content( m_xSMgr,
+        return new ::http_dav_ucp::Content( m_xContext,
                                           m_pProvider,
                                           xId,
                                           m_xResAccess->getSessionFactory(),
@@ -1343,7 +1342,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     std::auto_ptr< DAVResourceAccess > xResAccess;
     OUString aUnescapedTitle;
     bool bHasAll = false;
-    uno::Reference< lang::XMultiServiceFactory > xSMgr;
+    uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< ucb::XContentIdentifier > xIdentifier;
     rtl::Reference< ::ucbhelper::ContentProviderImplHelper > xProvider;
 
@@ -1351,7 +1350,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         aUnescapedTitle = SerfUri::unescape( m_aEscapedTitle );
-        xSMgr.set( m_xSMgr );
+        xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
         xProvider.set( m_xProvider.get() );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -1655,7 +1654,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 
     uno::Reference< sdbc::XRow > xResultRow
-        = getPropertyValues( comphelper::getComponentContext(xSMgr),
+        = getPropertyValues( xContext,
                              rProperties,
                              *xProps,
                              xProvider,
@@ -1682,7 +1681,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
-    uno::Reference< lang::XMultiServiceFactory > xSMgr;
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     rtl::Reference< ContentProvider >            xProvider;
     sal_Bool bTransient;
@@ -1695,7 +1693,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         xIdentifier.set( m_xIdentifier );
         bTransient = m_bTransient;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
-        xSMgr.set( m_xSMgr );
     }
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
@@ -2008,7 +2005,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aNewURL += SerfUri::escapeSegment( aNewTitle );
 
         uno::Reference< ucb::XContentIdentifier > xNewId
-            = new ::ucbhelper::ContentIdentifier( xSMgr, aNewURL );
+            = new ::ucbhelper::ContentIdentifier( aNewURL );
         uno::Reference< ucb::XContentIdentifier > xOldId = xIdentifier;
 
         try
@@ -2106,7 +2103,7 @@ uno::Any Content::open(
             // Open collection.
 
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg, xEnv );
+                = new DynamicResultSet( m_xContext, this, rArg, xEnv );
             aRet <<= xSet;
         }
         else
@@ -2598,7 +2595,7 @@ void Content::insert(
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xIdentifier
-                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
+                = new ::ucbhelper::ContentIdentifier( aURL );
         }
 
         inserted();
@@ -2644,7 +2641,7 @@ void Content::transfer(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
-    uno::Reference< lang::XMultiServiceFactory > xSMgr;
+    uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
     std::auto_ptr< DAVResourceAccess > xResAccess;
@@ -2652,7 +2649,7 @@ void Content::transfer(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        xSMgr.set( m_xSMgr );
+        xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
         xProvider.set( m_xProvider.get() );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -2742,16 +2739,16 @@ void Content::transfer(
         aTargetURL += aTitle;
 
         uno::Reference< ucb::XContentIdentifier > xTargetId
-            = new ::ucbhelper::ContentIdentifier( xSMgr, aTargetURL );
+            = new ::ucbhelper::ContentIdentifier( aTargetURL );
 
-        DAVResourceAccess aSourceAccess( xSMgr,
+        DAVResourceAccess aSourceAccess( xContext,
                                          xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
 
         if ( rArgs.MoveData == sal_True )
         {
             uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier( xSMgr, rArgs.SourceURL );
+                = new ::ucbhelper::ContentIdentifier( rArgs.SourceURL );
 
             // Note: The static cast is okay here, because its sure that
             //       xProvider is always the WebDAVContentProvider.
@@ -3045,8 +3042,7 @@ sal_Bool Content::exchangeIdentity(
                         aOldURL.getLength(),
                         xNewId->getContentIdentifier() );
                 uno::Reference< ucb::XContentIdentifier > xNewChildId
-                    = new ::ucbhelper::ContentIdentifier(
-                        m_xSMgr, aNewChildURL );
+                    = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                 if ( !xChild->exchangeIdentity( xNewChildId ) )
                     return sal_False;

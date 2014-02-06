@@ -52,11 +52,11 @@ public:
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
                           const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::lang::XMultiServiceFactory >&
-                                rxSMgr )
+                            ::com::sun::star::uno::XComponentContext >&
+                                rxContext )
             throw( DAVException );
 
-    ::uno::Reference< ::lang::XMultiServiceFactory > getServiceFactory() {  return m_xMSF; }
+    ::uno::Reference< ::uno::XComponentContext > getServiceFactory() {  return m_xMSF; }
 private:
     typedef std::map< OUString, DAVSession * > Map;
 
@@ -64,7 +64,7 @@ private:
     osl::Mutex m_aMutex;
     std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
 
-    ::uno::Reference< ::lang::XMultiServiceFactory > m_xMSF;
+    ::uno::Reference< ::uno::XComponentContext > m_xMSF;
 
     void releaseElement( DAVSession * pElement ) SAL_THROW(());
 

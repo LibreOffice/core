@@ -62,8 +62,8 @@ OUString &WebDAVUserAgent::operator()() const
 //=========================================================================
 
 ContentProvider::ContentProvider(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr ),
+                const uno::Reference< uno::XComponentContext >& rContext )
+: ::ucbhelper::ContentProviderImplHelper( rContext ),
   m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
@@ -73,11 +73,9 @@ ContentProvider::ContentProvider(
     bInit = true;
     try
     {
-        uno::Reference< uno::XComponentContext > xContext(
-            ::comphelper::getProcessComponentContext() );
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString("com.sun.star.configuration.ConfigurationProvider"), xContext),
+            rContext->getServiceManager()->createInstanceWithContext(
+                OUString("com.sun.star.configuration.ConfigurationProvider"), rContext),
             uno::UNO_QUERY_THROW );
 
         beans::NamedValue aNodePath;
@@ -151,7 +149,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.WebDAVContentProvider" ),
                      OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
@@ -238,7 +236,7 @@ ContentProvider::queryContent(
     }
 
     if ( bNewId )
-        xCanonicId = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( aURL );
     else
         xCanonicId = Identifier;
 
@@ -255,7 +253,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::http_dav_ucp::Content(
-                        m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
+                        m_xContext, this, xCanonicId, m_xDAVSessionFactory );
         registerNewContent( xContent );
     }
     catch ( ucb::ContentCreationException const & )

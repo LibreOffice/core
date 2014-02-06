@@ -72,16 +72,16 @@ struct DataSupplier_Impl
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Reference< uno::XComponentContext > m_xContext;
     sal_Int32                                    m_nOpenMode;
     sal_Bool                                     m_bCountFinal;
     sal_Bool                                     m_bThrowException;
 
     DataSupplier_Impl(
-                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent,
                 sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xSMgr( rxSMgr ), m_nOpenMode( nOpenMode ),
+    : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( sal_False ), m_bThrowException( sal_False ) {}
     ~DataSupplier_Impl();
 };
@@ -110,10 +110,10 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 DataSupplier::DataSupplier(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
+: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
 {
 }
 
@@ -297,7 +297,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     {
         uno::Reference< sdbc::XRow > xRow
             = Content::getPropertyValues(
-                m_pImpl->m_xSMgr,
+                m_pImpl->m_xContext,
                 getResultSet()->getProperties(),
                 *(m_pImpl->m_aResults[ nIndex ]->pData),
                 rtl::Reference< ::ucbhelper::ContentProviderImplHelper >(

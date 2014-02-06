@@ -42,7 +42,7 @@ private:
 
 public:
     DataSupplier( const com::sun::star::uno::Reference<
-              com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+              com::sun::star::uno::XComponentContext >& rxContext,
               const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode);
 
