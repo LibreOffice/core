@@ -92,12 +92,14 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 // -----------------------------------------------------------------------------
 
 FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
-:   mxContext( rxContext ),
-    mpWriter( NULL ),
-    mnJPEGcompressMode(nJPEGCompressMode),
-    mbExportOLEAsJPEG(bExportOLEAsJPEG),
-    mbPresentation(true),
-    mnPageNumber( - 1 )
+    : mxContext(rxContext)
+    , mpWriter(NULL)
+    , mnDocWidth(0)
+    , mnDocHeight(0)
+    , mnJPEGcompressMode(nJPEGCompressMode)
+    , mbExportOLEAsJPEG(bExportOLEAsJPEG)
+    , mbPresentation(true)
+    , mnPageNumber(-1)
 {
 }
 
