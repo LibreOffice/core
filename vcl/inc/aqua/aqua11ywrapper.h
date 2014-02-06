@@ -90,7 +90,7 @@ struct ReferenceWrapper
 // Wrapper-specific
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup;
 -(BOOL)actsAsRadioGroup;
--(NSView *)viewElementForParent;
+-(NSWindow*)windowForParent;
 -(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
 -(void) dealloc;

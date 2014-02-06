@@ -380,8 +380,8 @@ static BOOL isPopupMenuOpen = NO;
         [ aWrapper autorelease ];
     }
     // get associated NSWindow
-    NSView * theView = [ aWrapper viewElementForParent ];
-    return theView;
+    NSWindow* theWindow = [ aWrapper windowForParent ];
+    return theWindow;
 }
 
 -(id)topLevelUIElementAttribute {
@@ -1101,8 +1101,8 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     return mpReferenceWrapper -> rAccessibleMultiLineText.get();
 }
 
--(NSView *)viewElementForParent {
-    return self;
+-(NSWindow*)windowForParent {
+    return [self window];
 }
 
 // These four are for AXTextAreas only. They are needed, because bold and italic
