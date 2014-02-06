@@ -348,8 +348,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     OString aWidth(OString::number(TwipsToEMU(rSize.Width())));
     OString aHeight(OString::number(TwipsToEMU(rSize.Height())));
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_extent,
-                                            XML_cx, aWidth.getStr(),
-                                            XML_cy, aHeight.getStr(),
+                                            XML_cx, (rSize.Width() > 0 ? aWidth.getStr() : "0"),
+                                            XML_cy, (rSize.Height() > 0 ? aHeight.getStr() : "0"),
                                             FSEND);
 
     // effectExtent, extent including the effect (shadow only for now)

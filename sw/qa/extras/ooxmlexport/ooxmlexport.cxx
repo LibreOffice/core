@@ -3190,6 +3190,14 @@ DECLARE_OOXMLEXPORT_TEST(testOuterShdw,"testOuterShdw.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "57811035");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent","cx","0");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
