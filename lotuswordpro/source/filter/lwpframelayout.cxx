@@ -250,7 +250,7 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
         case LwpPlacableLayout::LAY_WRAP_IRREG_BIGGEST:
         {
             //In SODC, if Optimal wrap type is used and the distance between the frame object
-            //and page margins is less than 2cm, the text is not wraped. While there is no this feature in Word Pro
+            //and page margins is less than 2cm, the text is not wrapped. While there is no this feature in Word Pro
             //So the optimal wrap type is translated to left side or right side wrap type according to the distance
             //between the frame object and page margins
 
