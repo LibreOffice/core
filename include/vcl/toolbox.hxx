@@ -402,6 +402,9 @@ public:
     void                SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits );
     ToolBoxItemBits     GetItemBits( sal_uInt16 nItemId ) const;
 
+    void                SetItemExpand( sal_uInt16 nItemId, bool bExpand );
+    bool                GetItemExpand( sal_uInt16 nItemId ) const;
+
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );

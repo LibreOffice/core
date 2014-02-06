@@ -115,6 +115,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     mnImageAngle    = 0;
     mbMirrorMode    = false;
     mbVisibleText   = false;
+    mbExpand        = false;
 }
 
 ImplToolItem::ImplToolItem()
@@ -180,7 +181,8 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mbEmptyBtn              ( rItem.mbEmptyBtn ),
         mbShowWindow            ( rItem.mbShowWindow ),
         mbBreak                 ( rItem.mbBreak ),
-        mbVisibleText           ( rItem.mbVisibleText )
+        mbVisibleText           ( rItem.mbVisibleText ),
+        mbExpand                ( rItem.mbExpand )
 {
 }
 
@@ -213,6 +215,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     maMinimalItemSize       = rItem.maMinimalItemSize;
     maItemSize              = rItem.maItemSize;
     mbVisibleText           = rItem.mbVisibleText;
+    mbExpand                = rItem.mbExpand;
     meType                  = rItem.meType;
     mnBits                  = rItem.mnBits;
     meState                 = rItem.meState;
@@ -1316,6 +1319,29 @@ ToolBoxItemBits ToolBox::GetItemBits( sal_uInt16 nItemId ) const
         return pItem->mnBits;
     else
         return 0;
+}
+
+void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+    if (!pItem)
+        return;
+
+    if (pItem->mbExpand != bExpand)
+    {
+        pItem->mbExpand = bExpand;
+        ImplInvalidate(true, true);
+    }
+}
+
+// -----------------------------------------------------------------------
+
+bool ToolBox::GetItemExpand( sal_uInt16 nItemId ) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+    if (!pItem)
+        return false;
+    return pItem->mbExpand;
 }
 
 // -----------------------------------------------------------------------

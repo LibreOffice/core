@@ -69,13 +69,14 @@ struct ImplToolItem
     ToolBoxItemType     meType;
     ToolBoxItemBits     mnBits;
     TriState            meState;
-    sal_uInt16              mnId;
-    sal_Bool                mbEnabled:1,
+    sal_uInt16          mnId;
+    sal_Bool            mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
                         mbShowWindow:1,
                         mbBreak:1,
-                        mbVisibleText:1;    // indicates if text will definitely be drawn, influences dropdown pos
+                        mbVisibleText:1,    // indicates if text will definitely be drawn, influences dropdown pos
+                        mbExpand:1;
 
                         ImplToolItem();
                         ImplToolItem( sal_uInt16 nItemId, const Image& rImage,

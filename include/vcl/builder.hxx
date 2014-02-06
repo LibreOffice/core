@@ -216,6 +216,12 @@ private:
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
 
         std::vector<VclExpander*> m_aExpanderWidgets;
+
+        sal_uInt16 m_nLastToolbarId;
+
+        ParserState()
+            : m_nLastToolbarId(0)
+        {}
     };
 
     void loadTranslations(const LanguageTag &rLanguageTag, const OUString &rUri);
@@ -340,8 +346,8 @@ private:
 
     void handleChild(::Window *pParent, xmlreader::XmlReader &reader);
     ::Window* handleObject(::Window *pParent, xmlreader::XmlReader &reader);
-    void handlePacking(::Window *pCurrent, xmlreader::XmlReader &reader);
-    void applyPackingProperty(::Window *pCurrent, xmlreader::XmlReader &reader);
+    void handlePacking(::Window *pCurrent, ::Window *pParent, xmlreader::XmlReader &reader);
+    void applyPackingProperty(::Window *pCurrent, ::Window *pParent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);

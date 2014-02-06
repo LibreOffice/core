@@ -2254,7 +2254,6 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
 
 void ToolBox::ImplFormat( sal_Bool bResize )
 {
-
     // Has to re-formatted
     if ( !mbFormat )
         return;
@@ -4212,14 +4211,66 @@ void ToolBox::Resize()
     // invalidate everything to have gradient backgrounds properly drawn
     Invalidate();
 
-    // re-format or re-draw
-    if ( mbScroll )
+    // If we have any expandable entries, then force a reformat first using
+    // their optimal sizes, then share out the excess space evenly across those
+    // expandables and reformat again
+    std::vector<size_t> aExpandables;
+    for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
     {
-        if ( !mbFormat )
+        if (mpData->m_aItems[i].mbExpand)
+        {
+            Window *pWindow = mpData->m_aItems[i].mpWindow;
+            SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
+            if (!pWindow)
+                continue;
+            Size aWinSize(pWindow->GetSizePixel());
+            Size aPrefSize(pWindow->get_preferred_size());
+            aWinSize.Width() = aPrefSize.Width();
+            pWindow->SetSizePixel(aWinSize);
+            aExpandables.push_back(i);
+        }
+    }
+
+    // re-format or re-draw
+    if ( mbScroll || !aExpandables.empty() )
+    {
+        if ( !mbFormat || !aExpandables.empty() )
         {
             mbFormat = true;
-            if( IsReallyVisible() )
-                ImplFormat( sal_True );
+            if( IsReallyVisible() || !aExpandables.empty() )
+            {
+                ImplFormat(true);
+
+                if (!aExpandables.empty())
+                {
+                    //Get how big the optimal size is
+                    Rectangle aBounds;
+                    for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
+                    {
+                        aBounds.Union( mpData->m_aItems[i].maRect );
+                    }
+
+                    long nOptimalWidth = aBounds.GetWidth();
+                    long nDiff = aSize.Width() - nOptimalWidth;
+                    nDiff /= aExpandables.size();
+
+                    //share out the diff from optimal to real across
+                    //expandable entries
+                    for (size_t i = 0; i < aExpandables.size(); ++i)
+                    {
+                        size_t nIndex = aExpandables[i];
+                        Window *pWindow = mpData->m_aItems[nIndex].mpWindow;
+                        Size aWinSize(pWindow->GetSizePixel());
+                        Size aPrefSize(pWindow->get_preferred_size());
+                        aWinSize.Width() = aPrefSize.Width() + nDiff;
+                        pWindow->SetSizePixel(aWinSize);
+                    }
+
+                    //now reformat with final sizes
+                    mbFormat = true;
+                    ImplFormat(true);
+                }
+            }
         }
     }
 

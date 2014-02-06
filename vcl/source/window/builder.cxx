@@ -1525,6 +1525,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             if (!extractVisible(rMap))
                 pToolBox->HideItem(nItemId);
 
+            m_pParserState->m_nLastToolbarId = nItemId;
+
             return NULL; // no widget to be created
         }
     }
@@ -1917,7 +1919,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
             }
             else if (name.equals("packing"))
             {
-                handlePacking(pCurrentChild, reader);
+                handlePacking(pCurrentChild, pParent, reader);
             }
             else
                 ++nLevel;
@@ -2639,7 +2641,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     return pCurrentChild;
 }
 
-void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
+void VclBuilder::handlePacking(Window *pCurrent, Window *pParent, xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
@@ -2658,7 +2660,7 @@ void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
         {
             ++nLevel;
             if (name.equals("property"))
-                applyPackingProperty(pCurrent, reader);
+                applyPackingProperty(pCurrent, pParent, reader);
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -2672,15 +2674,20 @@ void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
 }
 
 void VclBuilder::applyPackingProperty(Window *pCurrent,
+    Window *pParent,
     xmlreader::XmlReader &reader)
 {
     if (!pCurrent)
         return;
 
+    ToolBox *pToolBox = NULL;
+    if (pCurrent == pParent)
+        pToolBox = dynamic_cast<ToolBox*>(pParent);
+
     xmlreader::Span name;
     int nsId;
 
-    if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
+    if (pCurrent && pCurrent->GetType() == WINDOW_SCROLLWINDOW)
     {
         std::map<Window*, Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
         if (aFind != m_pParserState->m_aRedundantParentWidgets.end())
@@ -2704,9 +2711,14 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             if (sKey == "expand")
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
-                pCurrent->set_expand(bTrue);
+                if (pCurrent)
+                    pCurrent->set_expand(bTrue);
+                if (pToolBox)
+                    pToolBox->SetItemExpand(m_pParserState->m_nLastToolbarId, bTrue);
+                continue;
             }
-            else if (sKey == "fill")
+
+            if (sKey == "fill")
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
                 pCurrent->set_fill(bTrue);
