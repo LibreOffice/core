@@ -47,6 +47,7 @@ public:
     void testFdo74115WallBitmapFill();
     void testBarChartRotation();
     void testShapeFollowedByChart();
+    void testPieChartDataLabels();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST(testShapeFollowedByChart);
+    CPPUNIT_TEST(testPieChartDataLabels);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -598,7 +600,14 @@ void Chart2ExportTest::testShapeFollowedByChart()
     OUString aValueOfFirstDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:drawing[1]/wp:inline[1]/wp:docPr[1]", "id");
     OUString aValueOfSecondDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:docPr[1]", "id");
     CPPUNIT_ASSERT( aValueOfFirstDocPR != aValueOfSecondDocPR );
+}
 
+void Chart2ExportTest::testPieChartDataLabels()
+{
+    load("/chart2/qa/extras/data/docx/", "PieChartDataLabels.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "bestFit");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
