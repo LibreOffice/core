@@ -1235,8 +1235,10 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
     aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
     uno::Reference< XStorable > xStorable;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates(
+            maSelTemplates); // Avoids invalid iterators from LoseFocus
     std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-    for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
+    for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
     {
         const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
 
