@@ -166,11 +166,12 @@ void  SwPreviewZoomDlg::Apply()
 
 // all for SwPagePreviewWin
 SwPagePreviewWin::SwPagePreviewWin( Window *pParent, SwPagePreview& rPView )
-    : Window( pParent, WinBits( WB_CLIPCHILDREN) ),
-    mpViewShell( 0 ),
-    mrView( rPView ),
-    mbCalcScaleForPreviewLayout( true ),
-    maPaintedPreviewDocRect( Rectangle(0,0,0,0) )
+    : Window(pParent, WinBits(WB_CLIPCHILDREN))
+    , mpViewShell(0)
+    , mrView(rPView)
+    , mbCalcScaleForPreviewLayout(true)
+    , maPaintedPreviewDocRect(Rectangle(0,0,0,0))
+    , mpPgPreviewLayout(NULL)
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW );
     SetHelpId(HID_PAGEPREVIEW);
