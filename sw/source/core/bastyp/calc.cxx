@@ -980,13 +980,13 @@ SwCalcOper SwCalc::GetToken()
                             bIgnore = true;
                         else if( bIgnore )
                             bIgnore = false;
-                        aStr += ch;
+                        aStr += OUString(ch);
                     }
 
                     if( !bIgnore )
                         break;
 
-                    aStr.SetChar( aStr.getLength() - 1, ch );
+                    aStr = aStr.replaceAt(aStr.getLength() - 1, 1, OUString(ch));
                 } while( ch );
 
                 aVarName = aStr;
