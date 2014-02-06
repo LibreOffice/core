@@ -357,6 +357,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
             eFilter = FILTER_APP_DRAW;
             break;
     }
+    // fdo#60586 show the root region of the applied filter
+    // so the breadcrumb updates by switching the applied filter
+    mpLocalView->showRootRegion();
     mpCurView->filterItems(ViewFilter_Application(eFilter));
 
     if (mpSearchView->IsVisible())
