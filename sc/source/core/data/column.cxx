@@ -1278,7 +1278,7 @@ class CopyToClipHandler
 
     void duplicateNotes(SCROW nStartRow, size_t nDataSize )
     {
-        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos);
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, false);
     }
 
 public:
