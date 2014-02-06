@@ -123,7 +123,8 @@ public:
     virtual void SAL_CALL restoreConfiguration (
         const css::uno::Reference<css::drawing::framework::XConfiguration>&
         rxConfiguration)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException,
+               std::exception);
 
 
     // XConfigurationControllerBroadcaster

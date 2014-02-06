@@ -500,7 +500,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfigurat
 */
 void SAL_CALL ConfigurationController::restoreConfiguration (
     const Reference<XConfiguration>& rxNewConfiguration)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
