@@ -273,9 +273,14 @@ namespace dbaui
     {                                                                                       \
         sal_Int32 nLen = 0;                                                                 \
         ::com::sun::star::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes();   \
-        const OUString* pContained = aContained.getConstArray();                     \
+        const OUString* pContained = aContained.getConstArray();                            \
         for (   sal_Int32 i=0; i<aContained.getLength(); ++i, ++pContained)                 \
-            nLen += m_aListeners.getContainer(*pContained)->getLength();                    \
+        {                                                                                   \
+            ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(*pContained);  \
+            if (!pListeners)                                                                \
+                continue;                                                                   \
+            nLen += pListeners->getLength();                                                \
+        }                                                                                   \
         return nLen;                                                                        \
     }                                                                                       \
                                                                                             \
