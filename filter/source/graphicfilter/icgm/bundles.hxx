@@ -121,10 +121,13 @@ public:
     long                nFillPatternIndex;
     long                nFillHatchIndex;
 
-                        FillBundle() {};
-    virtual Bundle*     Clone() { return new FillBundle( *this ); } ;
-            FillBundle& operator=( FillBundle& rFillBundle );
-    virtual             ~FillBundle() {};
+    FillBundle(FIS_HOLLOW)
+        : eFillInteriorStyle()
+        , nFillPatternIndex(0)
+        , nFillHatchIndex(0)
+    {}
+    virtual Bundle*     Clone() { return new FillBundle( *this ); }
+    FillBundle& operator=( FillBundle& rFillBundle )
 };
 
 
