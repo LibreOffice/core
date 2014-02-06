@@ -65,7 +65,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
     OSL_ENSURE( pHt && pFnt, "No attribute of font available for change");
     if( pRedln && pRedln->IsOn() )
-        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
+        pRedln->ChangeTxtAttr( pFnt, *pHt, true );
     else
         aAttrHandler.PushAndChg( *pHt, *pFnt );
     nChgCnt++;
@@ -80,7 +80,7 @@ void SwAttrIter::Rst( SwTxtAttr *pHt )
     OSL_ENSURE( pHt && pFnt, "No attribute of font available for reset");
     // get top from stack after removing pHt
     if( pRedln && pRedln->IsOn() )
-        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
+        pRedln->ChangeTxtAttr( pFnt, *pHt, false );
     else
         aAttrHandler.PopAndChg( *pHt, *pFnt );
     nChgCnt--;
@@ -120,14 +120,14 @@ SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
  *                        SwAttrIter::SeekAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
+bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
 {
-    sal_Bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
+    bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
     if ( pLastOut != pOut )
     {
         pLastOut = pOut;
-        pFnt->SetFntChg( sal_True );
-        bChg = sal_True;
+        pFnt->SetFntChg( true );
+        bChg = true;
     }
     if( bChg )
     {
@@ -142,7 +142,7 @@ sal_Bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* 
     return bChg;
 }
 
-sal_Bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
+bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
 {
     Seek( nNewPos );
     if ( !nChgCnt && !nPropFont )
@@ -155,7 +155,7 @@ sal_Bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
  *                        SwAttrIter::SeekStartAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont )
+bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
@@ -190,12 +190,12 @@ sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool
         }
     }
 
-    sal_Bool bChg = pFnt->IsFntChg();
+    bool bChg = pFnt->IsFntChg();
     if ( pLastOut != pOut )
     {
         pLastOut = pOut;
-        pFnt->SetFntChg( sal_True );
-        bChg = sal_True;
+        pFnt->SetFntChg( true );
+        bChg = true;
     }
     if( bChg )
     {
@@ -259,7 +259,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
  *                       SwAttrIter::Seek()
  *************************************************************************/
 
-sal_Bool SwAttrIter::Seek( const sal_Int32 nNewPos )
+bool SwAttrIter::Seek( const sal_Int32 nNewPos )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, nNewPos );
@@ -374,21 +374,21 @@ public:
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
-static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &rTxt,
+static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &rTxt,
     sal_Int32 nIdx, sal_Int32 nEnd )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while( nIdx < nEnd )
     {
         sal_Int32 nStop = nIdx;
-        sal_Bool bClear;
+        bool bClear = false;
         LanguageType eLang = pFnt->GetLanguage();
         if( g_pBreakIt->GetBreakIter().is() )
         {
             bClear = CH_BLANK == rTxt[ nStop ];
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              g_pBreakIt->GetLocale( eLang ),
-                             WordType::DICTIONARY_WORD, sal_True ) );
+                             WordType::DICTIONARY_WORD, true ) );
             nStop = aBndry.endPos;
             if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
                 rArg.NewWord();
@@ -421,7 +421,7 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUStri
             if( (long)rArg.rAbsMin < rArg.nWordWidth )
                 rArg.rAbsMin = rArg.nWordWidth;
             rArg.Minimum( rArg.nWordWidth + rArg.nWordAdd );
-            bRet = sal_True;
+            bRet = true;
         }
         nIdx = nStop;
     }
@@ -603,7 +603,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     rAbsMin = 0;
 
     const SvxLRSpaceItem &rSpace = GetSwAttrSet().GetLRSpace();
-    long nLROffset = rSpace.GetTxtLeft() + GetLeftMarginWithNum( sal_True );
+    long nLROffset = rSpace.GetTxtLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
     // Bei Numerierung ist ein neg. Erstzeileneinzug vermutlich
     // bereits gefuellt...
@@ -697,7 +697,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             {
                 OUString sTmp( cChar );
                 SwDrawTextInfo aDrawInf( const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
-                    *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                    *pOut, 0, sTmp, 0, 1, 0, false );
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -856,7 +856,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         Boundary aBound =
             g_pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), nStt,
             g_pBreakIt->GetLocale( aIter.GetFnt()->GetLanguage() ),
-            WordType::DICTIONARY_WORD, sal_True );
+            WordType::DICTIONARY_WORD, true );
 
         if ( nStt == aBound.startPos )
         {

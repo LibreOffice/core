@@ -99,19 +99,19 @@ public:
     // char position.
     sal_Int32 GetNextAttr( ) const;
     /// Enables the attributes used at char pos nPos in the logical font
-    sal_Bool Seek( const sal_Int32 nPos );
+    bool Seek( const sal_Int32 nPos );
     // Creates the font at the specified position via Seek() and checks
     // if it's a symbol font.
-    sal_Bool IsSymbol( const sal_Int32 nPos );
+    bool IsSymbol( const sal_Int32 nPos );
 
-    /** Executes ChgPhysFnt if Seek() returns sal_True
+    /** Executes ChgPhysFnt if Seek() returns true
      *  and change font to merge character border with neighbours.
     **/
-    sal_Bool SeekAndChgAttrIter( const sal_Int32 nPos, OutputDevice* pOut );
-    sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
+    bool SeekAndChgAttrIter( const sal_Int32 nPos, OutputDevice* pOut );
+    bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont = false );
 
     // Do we have an attribute change at all?
-    sal_Bool HasHints() const { return 0 != pHints; }
+    bool HasHints() const { return 0 != pHints; }
 
     // Returns the attribute for a position
     SwTxtAttr *GetAttr( const sal_Int32 nPos ) const;
