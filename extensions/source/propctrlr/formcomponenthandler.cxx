@@ -2987,7 +2987,8 @@ namespace pcr
         {
         protected:
             SQLCommandPropertyUI( const Reference< XPropertySet >& _rxObject )
-                :m_xObject( _rxObject )
+                : m_xObject(_rxObject)
+                , m_refCount(0)
             {
                 if ( !m_xObject.is() )
                     throw NullPointerException();
