@@ -410,7 +410,6 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
     sal_Unicode cCompareChar;
     sal_uInt16  nStart = rIndex;
     sal_uInt16  i = rIndex;
-    int     bSearch = sal_True;
     Window* pWindow;
 
     // MT: Where can we keep the CharClass?!
@@ -425,7 +424,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
         pWindow = ImplGetNextWindow( pParent, i, i, sal_True );
     else
         pWindow = ImplGetChildWindow( pParent, nFormStart, i, sal_True );
-    while( bSearch && pWindow )
+    while( pWindow )
     {
         const OUString aStr = pWindow->GetText();
         sal_Int32 nPos = aStr.indexOf( '~' );
