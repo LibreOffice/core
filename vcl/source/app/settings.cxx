@@ -669,7 +669,7 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
     else
         nRet = STYLE_SYMBOLS_TANGO;
 
-    // falback to any existing style
+    // fallback to any existing style
     if ( ! CheckSymbolStyle (nRet) )
     {
         for ( sal_uLong n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
