@@ -515,6 +515,7 @@ public:
     void SetCellNote( SCROW nRow, ScPostIt* pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
 
+    ScPostIt* ReleaseNote( SCROW nRow );
     size_t GetNoteCount() const;
     void CreateAllNoteCaptions();
     SCROW GetNotePosition( size_t nIndex ) const;

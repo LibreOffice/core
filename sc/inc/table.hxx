@@ -388,6 +388,8 @@ public:
 
     ScPostIt*   GetNote(const SCCOL nCol, const SCROW nRow);
 
+    ScPostIt* ReleaseNote( SCCOL nCol, SCROW nRow );
+
     size_t GetNoteCount( SCCOL nCol ) const;
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
     void CreateAllNoteCaptions();

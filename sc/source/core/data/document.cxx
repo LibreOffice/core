@@ -6192,16 +6192,11 @@ bool ScDocument::HasTabNotes(SCTAB nTab)
 
 ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)
 {
-        return ReleaseNote(rPos.Col(), rPos.Row(), rPos.Tab());
-}
-ScPostIt* ScDocument::ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
-{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return NULL;
 
-    ScPostIt* pPostIt = GetNote(nCol, nRow, nTab);
-    if (pPostIt != NULL)
-        maTabs[nTab]->aCol[nCol].DeleteCellNote(nRow);
-
-    return pPostIt;
+    return pTab->ReleaseNote(rPos.Col(), rPos.Row());
 }
 
 ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
