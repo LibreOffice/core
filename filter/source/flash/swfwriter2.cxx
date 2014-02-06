@@ -556,9 +556,10 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 
 /** this c'tor creates a linear or radial gradient fill style */
 FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
-:   meType( Impl_getFillStyleType( rGradient ) ),
-    maGradient( rGradient ),
-    maBoundRect( rBoundRect )
+    : meType(Impl_getFillStyleType(rGradient))
+    , mnBitmapId(0)
+    , maGradient(rGradient)
+    , maBoundRect(rBoundRect)
 {
 }
 
