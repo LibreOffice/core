@@ -53,14 +53,22 @@ void ScDrawDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 SfxItemPool* ScDrawDefaultsObj::getModelPool( sal_Bool bReadOnly ) throw()
 {
     SfxItemPool* pRet = NULL;
-    if ( pDocShell )
+
+    try
     {
-        ScDrawLayer* pModel = bReadOnly ?
-                        pDocShell->GetDocument()->GetDrawLayer() :
-                        pDocShell->MakeDrawLayer();
-        if ( pModel )
-            pRet = &pModel->GetItemPool();
+        if ( pDocShell )
+        {
+            ScDrawLayer* pModel = bReadOnly ?
+                            pDocShell->GetDocument()->GetDrawLayer() :
+                            pDocShell->MakeDrawLayer();
+            if ( pModel )
+                pRet = &pModel->GetItemPool();
+        }
     }
+    catch (...)
+    {
+    }
+
     if ( !pRet )
         pRet = SvxUnoDrawPool::getModelPool( bReadOnly );       // uses default pool
 
