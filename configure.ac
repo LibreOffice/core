@@ -9150,6 +9150,8 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
+# FIXME: THIS WILL BE REMOVED, IT'S HERE TO FOOL GERRIT BUILDBOTS
+enable_neon=no
 dnl ===================================================================
 dnl Check for building neon
 dnl ===================================================================
@@ -9158,21 +9160,27 @@ if test "$enable_neon" = "no"; then
     AC_MSG_RESULT([no])
     DISABLE_NEON=TRUE
     AC_SUBST(DISABLE_NEON)
+
+    # Check for system apr-util
+    libo_CHECK_SYSTEM_MODULE([apr],[APR],[apr-util-1],["-I${WORKDIR}/UnpackedTarball/apr/include -I${WORKDIR}/UnpackedTarball/apr_util/include"],["-lapr-1 -laprutil-1"])
+
+    # Check for system serf
+    libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.1.0],["-I${WORKDIR}/UnpackedTarball/serf"],["-lserf-1"])
 else
     AC_MSG_RESULT([yes])
-dnl ===================================================================
-dnl Check for system neon
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
-if test "$with_system_neon" = "yes"; then
-    NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-    libo_MINGW_CHECK_DLL([libneon])
-    libo_MINGW_TRY_DLL([libtasn1])
-    libo_MINGW_TRY_DLL([libgnutls])
-else
-    NEON_VERSION=0295
-fi
-AC_SUBST(NEON_VERSION)
+    dnl ===================================================================
+    dnl Check for system neon
+    dnl ===================================================================
+    libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
+    if test "$with_system_neon" = "yes"; then
+        NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
+        libo_MINGW_CHECK_DLL([libneon])
+        libo_MINGW_TRY_DLL([libtasn1])
+        libo_MINGW_TRY_DLL([libgnutls])
+    else
+        NEON_VERSION=0295
+    fi
+    AC_SUBST(NEON_VERSION)
 fi
 
 dnl ===================================================================

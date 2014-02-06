@@ -1,0 +1,22 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_ExternalPackage_ExternalPackage,serf,serf))
+
+$(eval $(call gb_ExternalPackage_use_external_project,serf,serf))
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,serf,$(LIBO_LIB_FOLDER)/libserf-1.0.0.0.dylib,.libs/libserf-1.0.0.0.dylib))
+else ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_file,serf,$(LIBO_LIB_FOLDER)/serf.dll,Release/serf.dll))
+else
+$(eval $(call gb_ExternalPackage_add_file,serf,$(LIBO_LIB_FOLDER)/libserf-1.so,.libs/libserf-1.so.0.0.0))
+endif
+
+# vim: set noet sw=4 ts=4:

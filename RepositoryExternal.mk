@@ -2066,6 +2066,47 @@ define gb_LinkTarget__use_pixbuf
 $(error gb_LinkTarget__use_pixbuf should not be used any more)
 endef
 
+ifneq ($(DISABLE_NEON),)
+
+define gb_LinkTarget__use_apr
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(APR_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(APR_LIBS) \
+)
+
+ifeq ($(SYSTEM_APR),)
+$(call gb_LinkTarget_use_package,$(1),apr_util)
+endif
+
+endef
+
+define gb_ExternalProject__use_apr
+ifeq ($(SYSTEM_APR),)
+$(call gb_ExternalProject_use_external_project,$(1),apr_util)
+endif
+
+endef
+
+define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_set_include,$(1),\
+	$(SERF_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(SERF_LIBS) \
+)
+
+ifeq ($(SYSTEM_SERF),)
+$(call gb_LinkTarget_use_package,$(1),serf)
+endif
+
+endef
+
+endif # DISABLE_NEON
+
 ifneq ($(SYSTEM_LIBPNG),)
 
 define gb_LinkTarget__use_png
