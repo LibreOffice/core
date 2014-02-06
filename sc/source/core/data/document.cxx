@@ -2691,7 +2691,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         SCCOL nCol2 = pRange->aEnd.Col();
         SCROW nRow2 = pRange->aEnd.Row();
 
-        DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+        if (!bSkipAttrForEmpty)
+            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
 
         SCCOL nC1 = nCol1;
         SCROW nR1 = nRow1;
