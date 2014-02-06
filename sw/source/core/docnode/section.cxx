@@ -416,6 +416,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_ATTRSET_CHG:
+        if (pNew && pOld)
         {
             SfxItemSet* pNewSet = ((SwAttrSetChg*)pNew)->GetChgSet();
             SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
