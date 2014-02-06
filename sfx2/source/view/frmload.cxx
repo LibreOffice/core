@@ -420,44 +420,50 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
 // --------------------------------------------------------------------------------------------------------------------
 bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedValueCollection& io_rDescriptor ) const
 {
-    const OUString sTemplateRegioName = io_rDescriptor.getOrDefault( "TemplateRegionName", OUString() );
-    const OUString sTemplateName      = io_rDescriptor.getOrDefault( "TemplateName",       OUString() );
-    const OUString sServiceName       = io_rDescriptor.getOrDefault( "DocumentService",    OUString() );
-    const OUString sURL               = io_rDescriptor.getOrDefault( "URL",                OUString() );
+    try
+    {
+        const OUString sTemplateRegioName = io_rDescriptor.getOrDefault( "TemplateRegionName", OUString() );
+        const OUString sTemplateName      = io_rDescriptor.getOrDefault( "TemplateName",       OUString() );
+        const OUString sServiceName       = io_rDescriptor.getOrDefault( "DocumentService",    OUString() );
+        const OUString sURL               = io_rDescriptor.getOrDefault( "URL",                OUString() );
 
-    // determine the full URL of the template to use, if any
-    OUString sTemplateURL;
-    if ( !sTemplateRegioName.isEmpty() && !sTemplateName.isEmpty() )
-    {
-        SfxDocumentTemplates aTmpFac;
-        aTmpFac.GetFull( sTemplateRegioName, sTemplateName, sTemplateURL );
-    }
-    else
-    {
-        if ( !sServiceName.isEmpty() )
-            sTemplateURL = SfxObjectFactory::GetStandardTemplate( sServiceName );
-        else
-            sTemplateURL = SfxObjectFactory::GetStandardTemplate( SfxObjectShell::GetServiceNameFromFactory( sURL ) );
-    }
-
-    if ( !sTemplateURL.isEmpty() )
-    {
-        // detect the filter for the template. Might still be NULL (if the template is broken, or does not
-        // exist, or some such), but this is handled by our caller the same way as if no template/URL was present.
-        const SfxFilter* pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SFX_APP()->GetFilterMatcher() );
-        if ( pTemplateFilter )
+        // determine the full URL of the template to use, if any
+        OUString sTemplateURL;
+        if ( !sTemplateRegioName.isEmpty() && !sTemplateName.isEmpty() )
         {
-            // load the template document, but, well, "as template"
-            io_rDescriptor.put( "FilterName", OUString( pTemplateFilter->GetName() ) );
-            io_rDescriptor.put( "FileName", OUString( sTemplateURL ) );
-            io_rDescriptor.put( "AsTemplate", sal_True );
-
-            // #i21583#
-            // the DocumentService property will finally be used to create the document. Thus, override any possibly
-            // present value with the document service of the template.
-            io_rDescriptor.put( "DocumentService", OUString( pTemplateFilter->GetServiceName() ) );
-            return true;
+            SfxDocumentTemplates aTmpFac;
+            aTmpFac.GetFull( sTemplateRegioName, sTemplateName, sTemplateURL );
         }
+        else
+        {
+            if ( !sServiceName.isEmpty() )
+                sTemplateURL = SfxObjectFactory::GetStandardTemplate( sServiceName );
+            else
+                sTemplateURL = SfxObjectFactory::GetStandardTemplate( SfxObjectShell::GetServiceNameFromFactory( sURL ) );
+        }
+
+        if ( !sTemplateURL.isEmpty() )
+        {
+            // detect the filter for the template. Might still be NULL (if the template is broken, or does not
+            // exist, or some such), but this is handled by our caller the same way as if no template/URL was present.
+            const SfxFilter* pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SFX_APP()->GetFilterMatcher() );
+            if ( pTemplateFilter )
+            {
+                // load the template document, but, well, "as template"
+                io_rDescriptor.put( "FilterName", OUString( pTemplateFilter->GetName() ) );
+                io_rDescriptor.put( "FileName", OUString( sTemplateURL ) );
+                io_rDescriptor.put( "AsTemplate", sal_True );
+
+                // #i21583#
+                // the DocumentService property will finally be used to create the document. Thus, override any possibly
+                // present value with the document service of the template.
+                io_rDescriptor.put( "DocumentService", OUString( pTemplateFilter->GetServiceName() ) );
+                return true;
+            }
+        }
+    }
+    catch (...)
+    {
     }
     return false;
 }
