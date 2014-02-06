@@ -128,7 +128,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
             // add PropPatch xml trailer at end
             aBodyText += OUString::createFromAscii( PROPPATCH_TRAILER );
 
-            body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
+            body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                   pSerfBucketAlloc );
             if ( useChunkedEncoding() )
             {

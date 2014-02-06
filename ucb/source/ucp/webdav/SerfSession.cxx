@@ -1557,7 +1557,7 @@ SerfSession::isDomainMatch( OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( OUString::createFromAscii( "*" ) ) &&
+    if ( certHostName.startsWith( "*" ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         OUString cmpStr = certHostName.copy( 1 );
