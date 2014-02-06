@@ -81,6 +81,11 @@ DiscoveryService::DiscoveryService()
 
     // Old implementation for backward compatibility matter
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+    if (mSocket == -1)
+    {
+        SAL_WARN("sd", "DiscoveryService: socket failed: " << errno);
+        return; // would be better to throw, but unsure if caller handles that
+    }
 
     sockaddr_in aAddr;
     memset(&aAddr, 0, sizeof(aAddr));
