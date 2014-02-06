@@ -3614,7 +3614,8 @@ void Test::testCopyPasteSkipEmpty()
     // Prepare a clipboard content interleaved with empty cells.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
-    aClipDoc.SetClipParam(ScClipParam(aSrcRange, false));
+    ScClipParam aParam(aSrcRange, false);
+    aClipDoc.SetClipParam(aParam);
     aClipDoc.SetString(ScAddress(0,0,0), "Clip1");
     aClipDoc.SetString(ScAddress(0,2,0), "Clip2");
     aClipDoc.SetString(ScAddress(0,4,0), "Clip3");
