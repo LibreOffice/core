@@ -113,7 +113,7 @@ typedef _LPOPENFILENAMEA _LPOPENFILENAME;
         #define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400A
     #endif // !UNICODE
 #else
-    #error _WIN32_WINNT seams not to be valid.
+    #error _WIN32_WINNT seems not to be valid.
 #endif // (_WIN32_WINNT >= 0x0500)
 
 

@@ -304,7 +304,7 @@ public:
 
             //-------------------------------
             /** For every user action, which modifies a document (e.g. key input) we get
-                a notification as XModifyListener. That seams to be a "performance issue" .-)
+                a notification as XModifyListener. That seems to be a "performance issue" .-)
                 So we decided to listen for such modify events only for the time in which the document
                 was stored as temp. file and was not modified again by the user.
             */
@@ -1185,8 +1185,8 @@ static const char OPERATION_UPDATE[] = "update";
 static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
 static const sal_Int32       RETRY_STORE_ON_FULL_DISC_FOREVER       = 300; // not forever ... but often enough .-)
-static const sal_Int32       RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL =   3; // in case FULL DISC does not seam the real problem
-static const sal_Int32       GIVE_UP_RETRY                          =   1; // in case FULL DISC does not seam the real problem
+static const sal_Int32       RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL =   3; // in case FULL DISC does not seem the real problem
+static const sal_Int32       GIVE_UP_RETRY                          =   1; // in case FULL DISC does not seem the real problem
 
 #define SAVE_IN_PROGRESS            sal_True
 #define SAVE_FINISHED               sal_False
@@ -2276,7 +2276,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         }
         catch(const css::uno::Exception&)
         {
-            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // a) FULL DISC seems to be the problem behind                              => show error and retry it forever (e.g. retry=300)
             // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
             // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
@@ -3001,7 +3001,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
                 catch(const css::uno::Exception&)
                 {
                     // At least it's only a try to close these documents before anybody else it does.
-                    // So it seams to be possible to ignore any error here .-)
+                    // So it seems to be possible to ignore any error here .-)
                 }
 
                 rInfo.Document.clear();
@@ -3288,7 +3288,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         {
             bError = sal_True;
 
-            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // a) FULL DISC seems to be the problem behind                              => show error and retry it forever (e.g. retry=300)
             // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
             // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 

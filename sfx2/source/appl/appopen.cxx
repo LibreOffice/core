@@ -771,7 +771,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );
     }
     // pass URL to OS by using ShellExecuter or open it internal
-    // if it seams to be an own format.
+    // if it seems to be an own format.
     /* Attention!
             There exist two possibilities to open hyperlinks:
             a) using SID_OPENHYPERLINK (new)

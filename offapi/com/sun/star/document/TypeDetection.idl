@@ -153,7 +153,7 @@ published service TypeDetection
 
         <p>
         Because the complexness of such configuration set can be very high,
-        it seams not very useful to update the underlying configuration layer
+        it seems not very useful to update the underlying configuration layer
         on every container change request immediately. Another strategy can be to
         make all changes (adding/changing/removing of items) and call flush at the end.
         That will validate the whole container and reject inconsistent data sets.

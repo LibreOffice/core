@@ -1549,7 +1549,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (eOldApp != eNewApp)
         return css::uno::Reference< css::frame::XFrame >();
 
-    // OK this task seams to be usable for recycling
+    // OK this task seems to be usable for recycling
     // But we should mark it as such - means set an action lock.
     // Otherwise it would be used more then ones or will be destroyed
     // by a close() or terminate() request.

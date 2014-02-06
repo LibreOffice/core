@@ -66,7 +66,7 @@ published service ProtocolHandler
         </p>
 
         <p>
-        Please note: if this mechanism is used it seams not useful (nor possible) to implement a ProtocolHandler
+        Please note: if this mechanism is used it seems not useful (nor possible) to implement a ProtocolHandler
         as a singleton. Otherwise the implementation can't distinguish between different environments
         and her corresponding dispatch requests.
         </p>

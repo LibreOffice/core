@@ -55,7 +55,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     public static final java.lang.String[] SERVICENAMES = {"com.sun.star.task.AsyncJob"};
 
     /** the const uno implementation name.
-     *  It must be an unique value! The best naming schema seams to use
+     *  It must be an unique value! The best naming schema seems to use
      *  a registered domain in reverse order ...
      */
     public static final java.lang.String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";
@@ -86,7 +86,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          callback to the executor of this job, which control our life time
      *
      *  @throws com.sun.star.lang.IllegalArgumentException
-     *          if given argument list seams to be wrong
+     *          if given argument list seems to be wrong
      */
     public synchronized void executeAsync(com.sun.star.beans.NamedValue[] lArgs    ,
                                           com.sun.star.task.XJobListener  xListener)

@@ -2208,7 +2208,7 @@ void FilterCache::impl_readOldFormat()
         xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
     }
     /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
-       but that seams to be acceptable.
+       but that seems to be acceptable.
        see #139088# for further information
     */
     catch(const css::uno::Exception&)

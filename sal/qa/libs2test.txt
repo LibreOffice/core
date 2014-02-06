@@ -89,7 +89,7 @@ rtl/oustringbuffer; rtl_OUStringBuffer2
 rtl/uri       ; rtl_Uri
 rtl/logfile   ; rtl_logfile
 
-# LLA: Due to the fact, that thread testing seams to be little bit error prone, now
+# LLA: Due to the fact, that thread testing seems to be little bit error prone, now
 # check this at the end.
 osl/process   ; osl_Thread
 

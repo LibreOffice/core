@@ -103,11 +103,11 @@ OUString SAL_CALL TitleHelper::getTitle()
         if (m_bExternalTitle)
             return m_sTitle;
 
-        // Title seams to be up-to-date. Return it directly.
+        // Title seems to be up-to-date. Return it directly.
         if (!m_sTitle.isEmpty())
             return m_sTitle;
 
-        // Title seams to be unused till now ... do bootstraping
+        // Title seems to be unused till now ... do bootstraping
         impl_updateTitle (true);
 
         return m_sTitle;

@@ -1153,7 +1153,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
             {
                 // If list of filters already exist ...
                 // ReadExternalFilters must work in update mode.
-                // Best way seams to mark all filters NOT_INSTALLED
+                // Best way seems to mark all filters NOT_INSTALLED
                 // and change it back for all valid filters afterwards.
                 if( !rList.empty() )
                 {

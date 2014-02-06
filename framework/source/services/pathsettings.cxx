@@ -420,7 +420,7 @@ private:
           PathSettings::PathInfo* impl_getPathAccess     (sal_Int32 nHandle);
     const PathSettings::PathInfo* impl_getPathAccessConst(sal_Int32 nHandle) const;
 
-    /** it checks, if the given path value seams to be a valid URL or system path. */
+    /** it checks, if the given path value seems to be a valid URL or system path. */
     sal_Bool impl_isValidPath(const OUString& sPath) const;
     sal_Bool impl_isValidPath(const OUStringList&    lPath) const;
 
@@ -1438,7 +1438,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
         // create the needed substitution service.
         // We must replace all used variables inside readed path values.
         // In case we can't do so ... the whole office can't work really.
-        // That's why it seams to be OK to throw a RuntimeException then.
+        // That's why it seems to be OK to throw a RuntimeException then.
         xSubst = css::util::PathSubstitution::create(m_xContext);
 
         { // SAFE ->

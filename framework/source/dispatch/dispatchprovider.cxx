@@ -354,7 +354,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             // Normaly if isTop() returned sal_False ... the parent frame MUST(!) exist ...
-            // But it seams to be better to check that here to prevent us against an access violation.
+            // But it seems to be better to check that here to prevent us against an access violation.
             if (xParent.is())
                 xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);
         }

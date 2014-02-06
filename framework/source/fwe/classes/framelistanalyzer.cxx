@@ -256,7 +256,7 @@ void FrameListAnalyzer::impl_analyze()
     }
     catch (const css::lang::IndexOutOfBoundsException&)
     {
-        // stop copying if index seams to be wrong.
+        // stop copying if index seems to be wrong.
         // This interface can't really guarantee its count for multithreaded
         // environments. So it can occur!
     }

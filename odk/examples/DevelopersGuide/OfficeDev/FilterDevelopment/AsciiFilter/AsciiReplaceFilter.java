@@ -248,7 +248,7 @@ public class AsciiReplaceFilter
         *          the document model for importing
         *
         * @throw IllegalArgumentException
-        *          if given document isn't the right one or seams to be corrupt
+        *          if given document isn't the right one or seems to be corrupt
         */
         public void setTargetDocument( com.sun.star.lang.XComponent xDocument ) throws com.sun.star.lang.IllegalArgumentException
         {
@@ -284,7 +284,7 @@ public class AsciiReplaceFilter
         *          the document model for exporting
         *
         * @throw IllegalArgumentException
-        *          if given document isn't the right one or seams to be corrupt
+        *          if given document isn't the right one or seems to be corrupt
         */
         public void setSourceDocument( com.sun.star.lang.XComponent xDocument ) throws com.sun.star.lang.IllegalArgumentException
         {
