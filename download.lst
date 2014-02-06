@@ -1,5 +1,9 @@
 ABW_MD5SUM := 40fa48e03b1e28ae0325cc34b35bc46d
 export ABW_TARBALL := libabw-0.0.2.tar.bz2
+APR_MD5SUM := eff9d741b0999a9bbab96862dd2a2a3d
+export APR_TARBALL := apr-1.4.8.tar.gz
+APR_UTIL_MD5SUM := 71a11d037240b292f824ba1eb537b4e3
+export APR_UTIL_TARBALL := apr-util-1.5.3.tar.gz
 CDR_MD5SUM := d88f9b94df880d2c05be943b000ca112
 export CDR_TARBALL := libcdr-0.0.14.tar.bz2
 COINMP_MD5SUM := 1cce53bf4b40ae29790d2c5c9f8b1129
@@ -30,6 +34,8 @@ LIBATOMIC_OPS_MD5SUM := c0b86562d5aa40761a87134f83e6adcf
 export LIBATOMIC_OPS_TARBALL := libatomic_ops-7_2d.zip
 LIBEOT_MD5SUM := aa24f5dd2a2992f4a116aa72af817548
 export LIBEOT_TARBALL := libeot-0.01.tar.bz2
+SERF_MD5SUM := 4f8e76c9c6567aee1d66aba49f76a58b
+export SERF_TARBALL := serf-1.2.1.tar.bz2
 
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
 export APACHE_COMMONS_HTTPCLIENT_TARBALL := 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz

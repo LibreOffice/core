@@ -76,6 +76,8 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	$(foreach item, \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,ABW,ABW_TARBALL) \
+		$(call fetch_Optional,APR,APR_TARBALL) \
+		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
 		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
@@ -88,6 +90,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
+		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
