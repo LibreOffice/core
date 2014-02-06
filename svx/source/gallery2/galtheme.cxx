@@ -706,7 +706,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
             {
                 sal_uInt32      nThemeId = 0;
 
-                OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(*pIStm);
+                OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
                 aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // execute a charakter conversion
@@ -1384,7 +1384,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     rtl_TextEncoding    nTextEncoding;
 
     rIStm.ReadUInt16( nVersion );
-    OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
+    OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadUInt32( nCount );
 
     if( nVersion >= 0x0004 )
@@ -1424,7 +1424,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             sal_uInt16  nTemp;
 
             rIStm.ReadUChar( bRel );
-            OString aTempFileName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
+            OString aTempFileName = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
             rIStm.ReadUInt32( pObj->nOffset );
             rIStm.ReadUInt16( nTemp ); pObj->eObjKind = (SgaObjKind) nTemp;
 

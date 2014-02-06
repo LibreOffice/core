@@ -1891,7 +1891,7 @@ Err:
 
 OUString read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
+    OUString aRet = read_uInt8_lenPrefixed_uInt8s_ToOUString(rStrm, eEnc);
     rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
@@ -3821,7 +3821,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rArray.push_back(read_uInt16_PascalString(rStrm));
                 else
                 {
-                    OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
+                    OString aTmp = read_uInt8_lenPrefixed_uInt8s_ToOString(rStrm);
                     rArray.push_back(OStringToOUString(aTmp, eCS));
                 }
 
@@ -3852,7 +3852,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                         pValueArray->push_back(read_uInt16_PascalString(rStrm));
                     else
                     {
-                        OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
+                        OString aTmp = read_uInt8_lenPrefixed_uInt8s_ToOString(rStrm);
                         pValueArray->push_back(OStringToOUString(aTmp, eCS));
                     }
                 }

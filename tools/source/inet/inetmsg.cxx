@@ -126,7 +126,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     // Copy.
     rStrm.ReadUInt32( nTemp );
     m_nDocSize = nTemp;
-    m_aDocName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_UTF8);
+    m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = 0;
     rStrm.ReadUInt32( nTemp );
@@ -1035,7 +1035,7 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
         m_nIndex[i] = nTemp;
     }
 
-    m_aBoundary = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
+    m_aBoundary = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
 
     rStrm.ReadUInt32( nTemp );
 

@@ -1312,7 +1312,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
+        OString aByteString = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStream);
         pC->SetText(OStringToOUString(aByteString, eSrcEncoding));
 
         // StyleName and Family...

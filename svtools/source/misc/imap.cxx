@@ -118,10 +118,10 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     rIStm.SeekRel( 2 );
     rIStm.ReadUInt16( nReadVersion );
     rIStm.ReadUInt16( nTextEncoding );
-    aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
-    aAltText = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
+    aURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
+    aAltText = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
     rIStm.ReadUChar( bActive );
-    aTarget = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
+    aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
     // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
@@ -136,7 +136,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 
         // from version 5 onwards an objectname could be available
         if ( nReadVersion >= 0x0005 )
-            aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
+            aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
     }
 
     delete pCompat;
@@ -991,10 +991,10 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
         // read on version
         rIStm.SeekRel( 2 );
 
-        aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, osl_getThreadTextEncoding());
-        read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
+        aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, osl_getThreadTextEncoding());
+        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
         rIStm.ReadUInt16( nCount );
-        read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
+        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
 
         pCompat = new IMapCompat( rIStm, STREAM_READ );
 

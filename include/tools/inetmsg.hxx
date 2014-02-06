@@ -73,8 +73,8 @@ public:
     friend SvStream& ReadINetMessageHeader (
         SvStream& rStrm, INetMessageHeader& rHdr)
     {
-        rHdr.m_aName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
-        rHdr.m_aValue = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
+        rHdr.m_aName = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
+        rHdr.m_aValue = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
         return rStrm;
     }
 };

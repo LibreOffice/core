@@ -749,7 +749,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         // --- from 680/dr25 on: store strings as UTF-8
         if (nVer >= AUTOFORMAT_ID_680DR25)
         {
-            aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStream,
+            aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStream,
                 RTL_TEXTENCODING_UTF8);
         }
         else

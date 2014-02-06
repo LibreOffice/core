@@ -3160,7 +3160,7 @@ OUString UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream.ReadUInt32( nBytes );
     if( nBytes == 0x04034b50 )
     {
-        OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+        OString aTmp = read_uInt16_lenPrefixed_uInt8s_ToOString(rStream);
         if (aTmp.match("ContentURL="))
         {
             aString = OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);

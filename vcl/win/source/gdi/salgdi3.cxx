@@ -134,10 +134,10 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
     ImplDevFontAttributes aDFA;
     for(;;)
     {
-        aFontFileURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aFontFileURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
         if( aFontFileURL.isEmpty() )
             break;
-        aDFA.SetFamilyName(read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8));
+        aDFA.SetFamilyName(read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8));
 
         short n;
         aCacheFile >> n; aDFA.SetWeight(static_cast<FontWeight>(n));

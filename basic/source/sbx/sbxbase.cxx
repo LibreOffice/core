@@ -368,16 +368,16 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     aParams.clear();
     sal_uInt16 nParam;
-    aComment = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+    aComment = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
         RTL_TEXTENCODING_ASCII_US);
-    aHelpFile = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+    aHelpFile = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
         RTL_TEXTENCODING_ASCII_US);
     rStrm.ReadUInt32( nHelpId ).ReadUInt16( nParam );
     while( nParam-- )
     {
         sal_uInt16 nType, nFlags;
         sal_uInt32 nUserData = 0;
-        OUString aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        OUString aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.ReadUInt16( nType ).ReadUInt16( nFlags );
         if( nVer > 1 )

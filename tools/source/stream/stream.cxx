@@ -1221,8 +1221,8 @@ OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
-        return read_lenPrefixed_uInt16s_ToOUString<sal_uInt32>(*this);
-    return read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
+        return read_uInt32_lenPrefixed_uInt16s_ToOUString(*this);
+    return read_uInt16_lenPrefixed_uInt8s_ToOUString(*this, eSrcCharSet);
 }
 
 SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding eDestCharSet )

@@ -1919,7 +1919,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 OUString SvNumberformat::LoadString( SvStream& rStream )
 {
     rtl_TextEncoding eStream = rStream.GetStreamCharSet();
-    OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+    OString aStr = read_uInt16_lenPrefixed_uInt8s_ToOString(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if (aStr.indexOf(cStream) < 0)
     {

@@ -1275,7 +1275,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm  .ReadInt32( mnLen );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
+        maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
 // ========================================================================
@@ -1455,7 +1455,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
-        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
+        maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 
         if ( mnIndex + mnLen > maStr.getLength() )
         {
@@ -1551,7 +1551,7 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm  .ReadInt32( mnLen );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
+        maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
 // ========================================================================
@@ -1630,7 +1630,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm  .ReadUInt16( mnStyle );
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
-        maStr = read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rIStm);
+        maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
 // ========================================================================
@@ -4224,7 +4224,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
+    maComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
     SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << maComment);

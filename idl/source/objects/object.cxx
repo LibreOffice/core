@@ -44,7 +44,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
         return;
     }
     if( nMask & 0x01 ) rStm >> aAutomation;
-    if( nMask & 0x02 ) aPrefix = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    if( nMask & 0x02 ) aPrefix = read_uInt16_lenPrefixed_uInt8s_ToOString(rStm);
     if( nMask & 0x04 )
     {
         SvMetaClass * p;

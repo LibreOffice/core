@@ -1771,7 +1771,7 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
         OSL_FAIL( "wrong format" );
         return;
     }
-    if( nMask & 0x01 ) aEnumValue = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    if( nMask & 0x01 ) aEnumValue = read_uInt16_lenPrefixed_uInt8s_ToOString(rStm);
 }
 
 void SvMetaEnumValue::Save( SvPersistStream & rStm )
@@ -1828,7 +1828,7 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
         return;
     }
     if( nMask & 0x01 ) rStm >> aEnumValueList;
-    if( nMask & 0x02 ) aPrefix = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    if( nMask & 0x02 ) aPrefix = read_uInt16_lenPrefixed_uInt8s_ToOString(rStm);
 }
 
 void SvMetaTypeEnum::Save( SvPersistStream & rStm )

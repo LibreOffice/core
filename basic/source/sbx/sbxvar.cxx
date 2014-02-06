@@ -512,7 +512,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         {
             return sal_False;
         }
-        maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        maName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm.ReadUInt32( nTemp );
@@ -522,7 +522,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         rStrm.SeekRel( -1L );
         rStrm.ReadUInt16( nType );
-        maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        maName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm.ReadUInt32( nTemp );
@@ -548,7 +548,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         case SbxSINGLE:
         {
             // Floats as ASCII
-            aTmpString = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(
+            aTmpString = read_uInt16_lenPrefixed_uInt8s_ToOUString(
                     rStrm, RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
@@ -564,7 +564,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         case SbxDOUBLE:
         {
             // Floats as ASCII
-            aTmpString = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+            aTmpString = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                         RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
             if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
@@ -575,7 +575,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             break;
         }
         case SbxSTRING:
-            aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+            aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                   RTL_TEXTENCODING_ASCII_US);
             break;
         case SbxEMPTY:
