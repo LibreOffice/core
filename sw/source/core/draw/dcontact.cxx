@@ -992,7 +992,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
             }
             // #i34640# - include spacing for wrapping
             SwRect aRect( pDrawVirtObj->GetAnchoredObj()->GetObjRectWithSpaces() );
-            if( aRect.HasArea() )
+            if (aRect.HasArea() && pPage)
             {
                 SwPageFrm* pPg = (SwPageFrm*)::FindPage( aRect, pPage );
                 if ( pPg )
