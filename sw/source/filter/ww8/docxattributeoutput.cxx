@@ -1231,7 +1231,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
     for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
          it != m_postponedGraphic->end();
          ++it )
-        FlyFrameGraphic( it->grfNode, it->size, 0, 0, it->pSdrObj );
+        FlyFrameGraphic( it->grfNode, it->size, it->mOLEFrmFmt, it->mOLENode, it->pSdrObj );
     delete m_postponedGraphic;
     m_postponedGraphic = NULL;
 }
@@ -3091,7 +3091,11 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
     if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
         return;
     // Then we fall back to just export the object as a graphic.
-    FlyFrameGraphic( 0, rSize, pFlyFrmFmt, &rOLENode );
+    if( m_postponedGraphic == NULL )
+        FlyFrameGraphic( 0, rSize, pFlyFrmFmt, &rOLENode );
+    else
+        // w:drawing should not be inside w:rPr, so write it out later
+        m_postponedGraphic->push_back( PostponedGraphic( 0, rSize, pFlyFrmFmt, &rOLENode, 0 ) );
 }
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
@@ -3272,7 +3276,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj);
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
-                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
+                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj));
                     }
                 }
             }

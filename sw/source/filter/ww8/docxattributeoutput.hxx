@@ -752,9 +752,13 @@ private:
 
     struct PostponedGraphic
     {
-        PostponedGraphic( const SwGrfNode* n, Size s,  const SdrObject* sObj ) : grfNode( n ), size( s ),  pSdrObj(sObj) {};
+        PostponedGraphic( const SwGrfNode* n, Size s, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* sObj )
+            : grfNode( n ), size( s ), mOLEFrmFmt( pOLEFrmFmt ), mOLENode( pOLENode ), pSdrObj(sObj) {};
+
         const SwGrfNode* grfNode;
         Size size;
+        const SwFlyFrmFmt* mOLEFrmFmt;
+        SwOLENode* mOLENode;
         const SdrObject* pSdrObj;
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
