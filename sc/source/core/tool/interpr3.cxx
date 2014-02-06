@@ -188,7 +188,7 @@ double ScInterpreter::integralPhi(double x)
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
 }
 
-double ScInterpreter::taylor(double* pPolynom, sal_uInt16 nMax, double x)
+double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
 {
     double nVal = pPolynom[nMax];
     for (short i = nMax-1; i >= 0; i--)
@@ -206,7 +206,7 @@ double ScInterpreter::gauss(double x)
     double nVal = 0.0;
     if (xShort == 0)
     {
-        double t0[] =
+        static const double t0[] =
         { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
          -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
           0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
@@ -215,7 +215,7 @@ double ScInterpreter::gauss(double x)
     }
     else if ((xShort >= 1) && (xShort <= 2))
     {
-        double t2[] =
+        static const double t2[] =
         { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
           0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
           0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
@@ -228,7 +228,7 @@ double ScInterpreter::gauss(double x)
     }
     else if ((xShort >= 3) && (xShort <= 4))
     {
-       double t4[] =
+        static const double t4[] =
        { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
          0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
         -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
@@ -240,7 +240,7 @@ double ScInterpreter::gauss(double x)
     }
     else
     {
-        double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
+        static const double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
         nVal = 0.5 + phi(xAbs) * taylor(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
     }
     if (x < 0.0)
@@ -478,7 +478,7 @@ double ScInterpreter::BinomKoeff(double n, double k)
     Uses a variant of the Lanczos sum with a rational function. */
 static double lcl_getLanczosSum(double fZ)
 {
-    const double fNum[13] ={
+    static const double fNum[13] ={
         23531376880.41075968857200767445163675473,
         42919803642.64909876895789904700198885093,
         35711959237.35566804944018545154716670596,
@@ -493,7 +493,7 @@ static double lcl_getLanczosSum(double fZ)
         210.8242777515793458725097339207133627117,
         2.506628274631000270164908177133837338626
         };
-    const double fDenom[13] = {
+    static const double fDenom[13] = {
         0,
         39916800,
         120543840,

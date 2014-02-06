@@ -2544,7 +2544,7 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         double          fRate;
         int             nDec;
     };
-    ConvertInfo aConvertTable[] = {
+    static const ConvertInfo aConvertTable[] = {
         { "EUR", 1.0,      2 },
         { "ATS", 13.7603,  2 },
         { "BEF", 40.3399,  0 },
@@ -2566,7 +2566,7 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         { "LVL", 0.702804, 2 }
     };
 
-    const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
+    static const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
     for ( size_t i = 0; i < nConversionCount; ++i )
         if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( aConvertTable[i].pCurrText ) )
         {

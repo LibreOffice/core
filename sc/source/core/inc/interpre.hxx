@@ -706,7 +706,7 @@ void ScBadName();
 // Statistics:
 double phi(double x);
 double integralPhi(double x);
-double taylor(double* pPolynom, sal_uInt16 nMax, double x);
+double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
 double gauss(double x);
 double gaussinv(double x);
 double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
