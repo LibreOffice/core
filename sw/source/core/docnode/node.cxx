@@ -975,7 +975,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
 //FEATURE::CONDCOLL
 
     case RES_ATTRSET_CHG:
-        if( GetNodes().IsDocNodes() && IsTxtNode() )
+        if (GetNodes().IsDocNodes() && IsTxtNode() && pOldValue)
         {
             if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
                 RES_CHRATR_HIDDEN, sal_False ) )
