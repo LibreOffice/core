@@ -234,10 +234,17 @@ throw( com::sun::star::uno::RuntimeException )
     if ( xContent.is() )
     {
         ucbhelper::Content aContent( xContent, Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        if ( aContent.isFolder() )
+        try
         {
-            input.reset( new writerperfect::DirectoryStream( xContent ) );
-            bIsPackage = true;
+            if ( aContent.isFolder() )
+            {
+                input.reset( new writerperfect::DirectoryStream( xContent ) );
+                bIsPackage = true;
+            }
+        }
+        catch (...)
+        {
+            return OUString();
         }
 
         libetonyek::KEYDocumentType type = libetonyek::KEY_DOCUMENT_TYPE_UNKNOWN;
