@@ -355,67 +355,20 @@ private:
     mutable bool                mbEnableRTL : 1;
 
 public:
-    SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
-    SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
+    /** @name Initialization and accessor functions
+     */
+    ///@{
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics() const;
     SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
-    SAL_DLLPRIVATE bool         ImplHasMirroredGraphics() const;
-    SAL_DLLPRIVATE void         ImplReMirror( Point &rPoint ) const;
-    SAL_DLLPRIVATE void         ImplReMirror( Rectangle &rRect ) const;
-    SAL_DLLPRIVATE void         ImplReMirror( Region &rRegion ) const;
     SAL_DLLPRIVATE void         ImplInitOutDevData();
     SAL_DLLPRIVATE void         ImplDeInitOutDevData();
-    SAL_DLLPRIVATE void         ImplInitLineColor();
-    SAL_DLLPRIVATE void         ImplInitFillColor();
-    SAL_DLLPRIVATE bool         ImplNewFont() const;
-    SAL_DLLPRIVATE void         ImplInitFont() const;
-    SAL_DLLPRIVATE void         ImplInitTextColor();
-    SAL_DLLPRIVATE void         ImplInitClipRegion();
-    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
-    SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+    ///@}
 
-    SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
-                                            const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const sal_Int32* pLogicDXArray=NULL, bool bFilter = false ) const;
-    SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                            long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
-    SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
-
-    static
-    SAL_DLLPRIVATE OUString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
-                                                       long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
-    static
-    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
-                                              const OUString& rOrigStr, sal_uInt16 nStyle,
-                                              MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
-    SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove );
-    SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, sal_Bool bTextLines );
-    SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawText( SalLayout& );
-    SAL_DLLPRIVATE Rectangle    ImplGetTextBoundRect( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
-
-    SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
-
-    SAL_DLLPRIVATE void         ImplInitTextLineSize();
-    SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
-    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
-    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bUnderlineAbove );
-    SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
-    static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
-    SAL_DLLPRIVATE void         ImplInitFontList() const;
-    SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
-    SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
-
+    /** @name Helper functions
+     */
+    ///@{
+    SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
+    SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
     SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
     SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
@@ -435,88 +388,68 @@ public:
     SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
     SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
+    ///@}
 
-    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
-    SAL_DLLPRIVATE void         ImplDrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         ImplDrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         ImplInitClipRegion();
+    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
+    SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
 
-    SAL_DLLPRIVATE void         ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, sal_Bool bMtf );
-    SAL_DLLPRIVATE void         ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, sal_Bool bMtf );
+    /** @name Text and font functions
+     */
+    ///@{
+    SAL_DLLPRIVATE bool         ImplNewFont() const;
+    SAL_DLLPRIVATE void         ImplInitFont() const;
+    SAL_DLLPRIVATE void         ImplInitTextColor();
 
-    SAL_DLLPRIVATE void         ImplDrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    static
+    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
+                                              const OUString& rOrigStr, sal_uInt16 nStyle,
+                                              MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove );
+    SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, sal_Bool bTextLines );
+    SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawText( SalLayout& );
+    SAL_DLLPRIVATE Rectangle    ImplGetTextBoundRect( const SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
+    static
+    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
+                                                       long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
 
-    SAL_DLLPRIVATE void         ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-    SAL_DLLPRIVATE void         ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                        const Bitmap& rBitmap, const sal_uLong nAction );
-    SAL_DLLPRIVATE void         ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                        const BitmapEx& rBitmapEx, const sal_uLong nAction );
-    SAL_DLLPRIVATE void         ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                        const Bitmap& rBitmap, const Color& rMaskColor,
-                                        const sal_uLong nAction );
-    SAL_DLLPRIVATE void         ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
-                                        const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-    SAL_DLLPRIVATE Bitmap       ImplBlend( Bitmap              aBmp,
-                                           BitmapReadAccess*   pP,
-                                           BitmapReadAccess*   pA,
-                                           const sal_Int32     nOffY,
-                                           const sal_Int32     nDstHeight,
-                                           const sal_Int32     nOffX,
-                                           const sal_Int32     nDstWidth,
-                                           const Rectangle&    aBmpRect,
-                                           const Size&         aOutSz,
-                                           const bool          bHMirr,
-                                           const bool          bVMirr,
-                                           const long*         pMapX,
-                                           const long*         pMapY );
-    SAL_DLLPRIVATE Bitmap       ImplBlendWithAlpha( Bitmap              aBmp,
-                                                    BitmapReadAccess*   pP,
-                                                    BitmapReadAccess*   pA,
-                                                    const Rectangle&    aDstRect,
-                                                    const sal_Int32     nOffY,
-                                                    const sal_Int32     nDstHeight,
-                                                    const sal_Int32     nOffX,
-                                                    const sal_Int32     nDstWidth,
-                                                    const long*         pMapX,
-                                                    const long*         pMapY );
-    SAL_DLLPRIVATE void         ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
-                                        const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-    SAL_DLLPRIVATE void         ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
-                                        const Point& rDestPt, const Size& rDestSize,
-                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-    SAL_DLLPRIVATE void         ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                        const OutputDevice& rOutDev, const Region& rRegion );
-    SAL_DLLPRIVATE void         ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                        OutputDevice& rOutDev );
+    SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
-
-    SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
+    SAL_DLLPRIVATE void         ImplInitTextLineSize();
+    SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
+    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
+    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bUnderlineAbove );
+    SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE static sal_Bool ImplIsUnderlineAbove( const Font& );
 
-    // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
-    SAL_DLLPRIVATE Color        ImplDrawModeToColor( const Color& rColor ) const;
+    SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
+    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE void         ImplInitFontList() const;
+    SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+    ///@}
+
+    /** @name Line functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplInitLineColor();
+    SAL_DLLPRIVATE void         ImplInitFillColor();
 
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when
     // switched on. Advantage is that line geometry is only temporarily used for paint
     SAL_DLLPRIVATE void         ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
-
-    // #i101491#
-    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
-    // without MetaFile processing
-    SAL_DLLPRIVATE void         ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
@@ -529,10 +462,126 @@ public:
 
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void                        impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
+    ///@}
 
+    /** @name Polygon functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void         ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+
+
+    ///@}
+
+    /** @name Gradient functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplDrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         ImplDrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
+    ///@}
+
+    /** @name Hatch functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, sal_Bool bMtf );
+    SAL_DLLPRIVATE void         ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE void         ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, sal_Bool bMtf );
+    ///@}
+
+    /** @name Wallpaper functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplDrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         ImplDrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         ImplDrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    ///@}
+
+    /** @name Bitmap functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
+    SAL_DLLPRIVATE void         ImplDrawBitmap       ( const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                                       const Bitmap& rBitmap, const sal_uLong nAction );
+    SAL_DLLPRIVATE void         ImplDrawBitmapEx     ( const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                                       const BitmapEx& rBitmapEx, const sal_uLong nAction );
+    SAL_DLLPRIVATE void         ImplDrawMask         ( const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                                       const Bitmap& rBitmap, const Color& rMaskColor,
+                                                       const sal_uLong nAction );
+    SAL_DLLPRIVATE void         ImplDrawAlpha        ( const Bitmap& rBmp, const AlphaMask& rAlpha,
+                                                       const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    SAL_DLLPRIVATE Bitmap       ImplBlend            ( Bitmap              aBmp,
+                                                       BitmapReadAccess*   pP,
+                                                       BitmapReadAccess*   pA,
+                                                       const sal_Int32     nOffY,
+                                                       const sal_Int32     nDstHeight,
+                                                       const sal_Int32     nOffX,
+                                                       const sal_Int32     nDstWidth,
+                                                       const Rectangle&    aBmpRect,
+                                                       const Size&         aOutSz,
+                                                       const bool          bHMirr,
+                                                       const bool          bVMirr,
+                                                       const long*         pMapX,
+                                                       const long*         pMapY );
+    SAL_DLLPRIVATE Bitmap       ImplBlendWithAlpha   ( Bitmap              aBmp,
+                                                       BitmapReadAccess*   pP,
+                                                       BitmapReadAccess*   pA,
+                                                       const Rectangle&    aDstRect,
+                                                       const sal_Int32     nOffY,
+                                                       const sal_Int32     nDstHeight,
+                                                       const sal_Int32     nOffX,
+                                                       const sal_Int32     nDstWidth,
+                                                       const long*         pMapX,
+                                                       const long*         pMapY );
+    SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
+                                                       const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    SAL_DLLPRIVATE void         ImplPrintMask        ( const Bitmap& rMask, const Color& rMaskColor,
+                                                       const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
+    ///@}
+
+    /** @name Frame functions
+     */
+    ///@{
+    SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                      OutputDevice& rOutDev );
+    SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                      const OutputDevice& rOutDev, const Region& rRegion );
+    ///@}
+
+    /** @name Layout functions
+     */
+    ///@{
+    SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
+    SAL_DLLPRIVATE bool         ImplHasMirroredGraphics() const;
+    SAL_DLLPRIVATE void         ImplReMirror( Point &rPoint ) const;
+    SAL_DLLPRIVATE void         ImplReMirror( Rectangle &rRect ) const;
+    SAL_DLLPRIVATE void         ImplReMirror( Region &rRegion ) const;
+    SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
+                                            const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
+                                            const sal_Int32* pLogicDXArray=NULL, bool bFilter = false ) const;
+    SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
+                                            long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
+    SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
+    // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
+    SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
+
+    ///@}
+
 protected:
                                 OutputDevice();
 
