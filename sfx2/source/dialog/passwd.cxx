@@ -120,7 +120,7 @@ SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText
     if (pGroupText)
         mpPassword1Box->set_label(*pGroupText);
 
-    //set the text to the pasword length
+    //set the text to the password length
     SetPasswdText();
 }
 

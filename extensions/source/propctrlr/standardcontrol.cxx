@@ -223,7 +223,7 @@ namespace pcr
     {
         OEditControl_Base::modified();
 
-        // for pasword controls, we fire a commit for every single change
+        // for password controls, we fire a commit for every single change
         if ( m_bIsPassword )
             m_aImplControl.notifyModifiedValue();
     }
