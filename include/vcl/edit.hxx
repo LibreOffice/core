@@ -177,7 +177,6 @@ public:
 
     virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
-    virtual sal_uLong       IsUpdateDataEnabled() const;
 
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
@@ -254,14 +253,6 @@ public:
     // global style settings (needed by sc's inputwin.cxx)
     static Size GetMinimumEditSize();
 };
-
-inline sal_uLong Edit::IsUpdateDataEnabled() const
-{
-    if ( mpUpdateDataTimer )
-        return mpUpdateDataTimer->GetTimeout();
-    else
-        return sal_False;
-}
 
 #endif // INCLUDED_VCL_EDIT_HXX
 

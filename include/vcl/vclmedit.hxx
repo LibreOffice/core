@@ -72,7 +72,6 @@ public:
 
     virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
-    virtual sal_uLong   IsUpdateDataEnabled() const;
 
     virtual void    SetReadOnly( sal_Bool bReadOnly = sal_True );
     virtual sal_Bool    IsReadOnly() const;
@@ -133,11 +132,6 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue);
 };
-
-inline sal_uLong VclMultiLineEdit::IsUpdateDataEnabled() const
-{
-    return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
-}
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX
 
