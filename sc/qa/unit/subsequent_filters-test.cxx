@@ -89,6 +89,7 @@ public:
     void testBasicCellContentODS();
     void testRangeNameXLS();
     void testRangeNameXLSX();
+    void testHyperlinksXLSX();
     void testHardRecalcODS();
     void testFunctionsODS();
     void testFunctionsExcel2010();
@@ -164,6 +165,7 @@ public:
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
+    CPPUNIT_TEST(testHyperlinksXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testFunctionsExcel2010);
@@ -338,6 +340,18 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testHyperlinksXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("hyperlinks.", XLSX);
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC10"), pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC11"), pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC12"), pDoc->GetString(ScAddress(0,3,0)));
 
     xDocSh->DoClose();
 }
