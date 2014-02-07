@@ -521,17 +521,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
 
             sal_Bool bLine = sal_False;
-            if ( (pBorderLine = aBox.GetTop()) != NULL)
+            if( aBox.GetTop() != NULL )
                 aBox.SetLine(&aBorderLine, BOX_LINE_TOP), bLine |= sal_True;
-            if ((pBorderLine = aBox.GetBottom()) != NULL)
+            if( aBox.GetBottom() != NULL )
                 aBox.SetLine(&aBorderLine, BOX_LINE_BOTTOM), bLine |= sal_True;
-            if ((pBorderLine = aBox.GetLeft()) != NULL)
+            if( aBox.GetLeft() != NULL )
                 aBox.SetLine(&aBorderLine, BOX_LINE_LEFT), bLine |= sal_True;
-            if ((pBorderLine = aBox.GetRight()) != NULL)
+            if( aBox.GetRight() != NULL )
                 aBox.SetLine(&aBorderLine, BOX_LINE_RIGHT), bLine |= sal_True;
-            if ((pBorderLine = aInfo.GetHori()) != NULL)
+            if( aInfo.GetHori() != NULL )
                 aInfo.SetLine(&aBorderLine, BOXINFO_LINE_HORI), bLine |= sal_True;
-            if ((pBorderLine = aInfo.GetVert()) != NULL)
+            if( aInfo.GetVert() != NULL )
                 aInfo.SetLine(&aBorderLine, BOXINFO_LINE_VERT), bLine |= sal_True;
 
             aCoreSet.Put( aBox  );
