@@ -147,7 +147,7 @@ public:
     virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
     virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const OUString& rURL );
 
-    virtual OUString    GetPrevPara( sal_Bool bAtNormalPos );
+    virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
 
     virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect, OUString* pPara );
