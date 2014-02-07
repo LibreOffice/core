@@ -129,7 +129,7 @@ class SwAutoFormat
         TST_NEG_IDENT,
         TST_TXT_BODY,
         HAS_FMTCOLL,
-        IS_ENDE
+        IS_END
     } eStat;
 
     bool bEnd : 1;
@@ -2176,7 +2176,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
         case READ_NEXT_PARA:
             {
                 GoNextPara();
-                eStat = bEnd ? IS_ENDE : TST_EMPTY_LINE;
+                eStat = bEnd ? IS_END : TST_EMPTY_LINE;
             }
             break;
 
@@ -2209,7 +2209,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     *pEdShell->GetCrsr() = aDelPam;
                     pEdShell->Push();
 
-                    eStat = IS_ENDE;
+                    eStat = IS_END;
                     break;
                 }
 
@@ -2520,7 +2520,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             }
             break;
 
-        case IS_ENDE:
+        case IS_END:
             bEnd = true;
             break;
         }
