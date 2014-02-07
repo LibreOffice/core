@@ -157,11 +157,11 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/toolbarmerger \
     framework/source/uielement/toolbarwrapper \
     framework/source/uielement/uicommanddescription \
-    framework/source/uifactory/addonstoolboxfactory \
+    framework/source/uifactory/addonstoolbarfactory \
     framework/source/uifactory/factoryconfiguration \
     framework/source/uifactory/menubarfactory \
     framework/source/uifactory/statusbarfactory \
-    framework/source/uifactory/toolboxfactory \
+    framework/source/uifactory/toolbarfactory \
     framework/source/uifactory/uicontrollerfactory \
     framework/source/uifactory/uielementfactorymanager \
     framework/source/uifactory/windowcontentfactorymanager \

@@ -35,10 +35,10 @@ using namespace framework;
 
 namespace {
 
-class ToolBoxFactory :  public MenuBarFactory
+class ToolBarFactory :  public MenuBarFactory
 {
 public:
-    ToolBoxFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
@@ -66,13 +66,13 @@ public:
         throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
 };
 
-ToolBoxFactory::ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+ToolBarFactory::ToolBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     MenuBarFactory( xContext )
 {
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL ToolBoxFactory::createUIElement(
+Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
@@ -93,7 +93,7 @@ com_sun_star_comp_framework_ToolBarFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ToolBoxFactory(context));
+    return cppu::acquire(new ToolBarFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

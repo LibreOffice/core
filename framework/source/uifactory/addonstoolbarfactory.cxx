@@ -52,13 +52,13 @@ using namespace framework;
 
 namespace {
 
-class AddonsToolBoxFactory :  protected ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class AddonsToolBarFactory :  protected ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                               public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
                                                               css::ui::XUIElementFactory >
 {
 public:
-    AddonsToolBoxFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~AddonsToolBoxFactory();
+    AddonsToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    virtual ~AddonsToolBarFactory();
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
@@ -91,7 +91,7 @@ private:
     css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 };
 
-AddonsToolBoxFactory::AddonsToolBoxFactory(
+AddonsToolBarFactory::AddonsToolBarFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xContext( xContext )
@@ -99,7 +99,7 @@ AddonsToolBoxFactory::AddonsToolBoxFactory(
 {
 }
 
-AddonsToolBoxFactory::~AddonsToolBoxFactory()
+AddonsToolBarFactory::~AddonsToolBarFactory()
 {
 }
 
@@ -117,7 +117,7 @@ static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUStr
     return sal_False;
 }
 
-sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
+sal_Bool AddonsToolBarFactory::hasButtonsInContext(
     const Sequence< Sequence< PropertyValue > >& rPropSeqSeq,
     const Reference< XFrame >& rFrame )
 {
@@ -172,7 +172,7 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL AddonsToolBoxFactory::createUIElement(
+Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException,
@@ -234,7 +234,7 @@ com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new AddonsToolBoxFactory(context));
+    return cppu::acquire(new AddonsToolBarFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
