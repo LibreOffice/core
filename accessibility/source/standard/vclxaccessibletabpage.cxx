@@ -35,9 +35,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#include <memory>
-
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -590,8 +587,8 @@ Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int
         Font aFont = m_pTabControl->GetFont();
         sal_Int32 nBackColor = getBackground();
         sal_Int32 nColor = getForeground();
-        ::std::auto_ptr< CharacterAttributesHelper > pHelper( new CharacterAttributesHelper( aFont, nBackColor, nColor ) );
-        aValues = pHelper->GetCharacterAttributes( aRequestedAttributes );
+        aValues = CharacterAttributesHelper( aFont, nBackColor, nColor )
+            .GetCharacterAttributes( aRequestedAttributes );
     }
 
     return aValues;

@@ -32,7 +32,6 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
 
-#include <memory>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -237,9 +236,8 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
         }
         */
 
-        ::std::auto_ptr< CharacterAttributesHelper > pHelper( new CharacterAttributesHelper( aFont, nBackColor, nColor ) );
-
-        aValues = pHelper->GetCharacterAttributes( aRequestedAttributes );
+        aValues = CharacterAttributesHelper( aFont, nBackColor, nColor )
+            .GetCharacterAttributes( aRequestedAttributes );
     }
 
     return aValues;

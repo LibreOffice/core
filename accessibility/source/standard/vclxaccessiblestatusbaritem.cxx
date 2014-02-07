@@ -35,9 +35,6 @@
 #include <vcl/status.hxx>
 #include <vcl/controllayout.hxx>
 
-#include <memory>
-
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -516,8 +513,8 @@ Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( s
         Font aFont = m_pStatusBar->GetFont();
         sal_Int32 nBackColor = getBackground();
         sal_Int32 nColor = getForeground();
-        ::std::auto_ptr< CharacterAttributesHelper > pHelper( new CharacterAttributesHelper( aFont, nBackColor, nColor ) );
-        aValues = pHelper->GetCharacterAttributes( aRequestedAttributes );
+        aValues = CharacterAttributesHelper( aFont, nBackColor, nColor )
+            .GetCharacterAttributes( aRequestedAttributes );
     }
 
     return aValues;

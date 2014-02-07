@@ -36,9 +36,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/unohelp2.hxx>
 
-#include <memory>
-
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -239,7 +236,6 @@ Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_In
 {
     OExternalLockGuard aGuard( this );
 
-    Sequence< PropertyValue > aValues;
     OUString sText( implGetText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
@@ -248,10 +244,8 @@ Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_In
     Font aFont = Application::GetSettings().GetStyleSettings().GetMenuFont();
     sal_Int32 nBackColor = getBackground();
     sal_Int32 nColor = getForeground();
-    ::std::auto_ptr< CharacterAttributesHelper > pHelper( new CharacterAttributesHelper( aFont, nBackColor, nColor ) );
-    aValues = pHelper->GetCharacterAttributes( aRequestedAttributes );
-
-    return aValues;
+    return CharacterAttributesHelper( aFont, nBackColor, nColor )
+        .GetCharacterAttributes( aRequestedAttributes );
 }
 
 // -----------------------------------------------------------------------------
