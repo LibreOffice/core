@@ -816,7 +816,7 @@ lcl_ExportHints(
                             break;
 
                         const SwTxtAnnotationFld* pTxtAnnotationFld = dynamic_cast<const SwTxtAnnotationFld*>( pAttr );
-                        ::sw::mark::IMark* pAnnotationMark = pTxtAnnotationFld->GetAnnotationMark();
+                        ::sw::mark::IMark* pAnnotationMark = pTxtAnnotationFld ? pTxtAnnotationFld->GetAnnotationMark() : NULL;
                         if ( pAnnotationMark != NULL )
                         {
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION_END );
