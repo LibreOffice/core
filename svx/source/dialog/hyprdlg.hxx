@@ -93,7 +93,6 @@ private:
     PopupMenu           aLinkPopup;
     PopupMenu           *pTargetMenu;
     sal_Bool                bNoDoc;
-    sal_Bool                bSend;
     sal_Bool                bHasOldName;
     long                nMaxWidth;
     long                nMinWidth;
