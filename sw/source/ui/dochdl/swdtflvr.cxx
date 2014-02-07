@@ -2356,7 +2356,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                         rSh.GetFlyFrmAttr( aSet );
                         SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                        aURL.SetURL( aBkmk.GetURL(), sal_False );
+                        aURL.SetURL( aBkmk.GetURL(), false );
                         aSet.Put( aURL );
                         rSh.SetFlyFrmAttr( aSet );
                     }
@@ -2380,7 +2380,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             default:
             {
-                nRet = 0;
+                nRet = false;
                 break;
             }
         }
