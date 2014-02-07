@@ -53,7 +53,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     static ColorData nArrowColor;
     static ColorData nErrorColor;
     static ColorData nCommentColor;
-    static sal_Bool      bColorsInitialized;
+    static bool      bColorsInitialized;
 
     ScDocument*     pDoc;
     SCTAB           nTab;
@@ -76,30 +76,30 @@ class SC_DLLPUBLIC ScDetectiveFunc
     /** @return the drawing layer rectangle for the passed cell address. */
     Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
 
-    sal_Bool        HasArrow( const ScAddress& rStart,
+    bool        HasArrow( const ScAddress& rStart,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
 
-    void        DeleteArrowsAt( SCCOL nCol, SCROW nRow, sal_Bool bDestPnt );
+    void        DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt );
     void        DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
-    sal_Bool        HasError( const ScRange& rRange, ScAddress& rErrPos );
+    bool        HasError( const ScRange& rRange, ScAddress& rErrPos );
 
     void        FillAttributes( ScDetectiveData& rData );
 
                 /// called from DrawEntry/DrawAlienEntry and InsertObject
-    sal_Bool        InsertArrow( SCCOL nCol, SCROW nRow,
+    bool        InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
-                                sal_Bool bFromOtherTab, sal_Bool bRed,
+                                bool bFromOtherTab, bool bRed,
                                 ScDetectiveData& rData );
-    sal_Bool        InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, sal_Bool bRed,
+    bool        InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, bool bRed,
                                 ScDetectiveData& rData );
 
                 /// DrawEntry / DrawAlienEntry check for existing arrows and errors
-    sal_Bool        DrawEntry( SCCOL nCol, SCROW nRow, const ScRange& rRef,
+    bool        DrawEntry( SCCOL nCol, SCROW nRow, const ScRange& rRef,
                                 ScDetectiveData& rData );
-    sal_Bool        DrawAlienEntry( const ScRange& rRef,
+    bool        DrawAlienEntry( const ScRange& rRef,
                                 ScDetectiveData& rData );
 
     void        DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData );
@@ -118,22 +118,22 @@ class SC_DLLPUBLIC ScDetectiveFunc
     sal_uInt16      FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
 
-    sal_Bool        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
+    bool        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
 
     void        Modified();
 
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}
 
-    sal_Bool        ShowSucc( SCCOL nCol, SCROW nRow );
-    sal_Bool        ShowPred( SCCOL nCol, SCROW nRow );
-    sal_Bool        ShowError( SCCOL nCol, SCROW nRow );
+    bool        ShowSucc( SCCOL nCol, SCROW nRow );
+    bool        ShowPred( SCCOL nCol, SCROW nRow );
+    bool        ShowError( SCCOL nCol, SCROW nRow );
 
-    sal_Bool        DeleteSucc( SCCOL nCol, SCROW nRow );
-    sal_Bool        DeletePred( SCCOL nCol, SCROW nRow );
-    sal_Bool        DeleteAll( ScDetectiveDelete eWhat );
+    bool        DeleteSucc( SCCOL nCol, SCROW nRow );
+    bool        DeletePred( SCCOL nCol, SCROW nRow );
+    bool        DeleteAll( ScDetectiveDelete eWhat );
 
-    sal_Bool        MarkInvalid(sal_Bool& rOverflow);
+    bool        MarkInvalid(bool& rOverflow);
 
     void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
     void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
@@ -141,18 +141,18 @@ public:
     static void UpdateAllComments( ScDocument& rDoc );        ///< on all tables
     void        UpdateAllArrowColors();     ///< on all tables
 
-    static sal_Bool IsNonAlienArrow( SdrObject* pObject );
+    static bool IsNonAlienArrow( SdrObject* pObject );
 
     ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
                                 ScAddress& rPosition, ScRange& rSource, bool& rRedLine );
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
-                                const ScRange& rSource, sal_Bool bRedLine );
+                                const ScRange& rSource, bool bRedLine );
 
     static ColorData GetArrowColor();
     static ColorData GetErrorColor();
     static ColorData GetCommentColor();
     static void InitializeColors();
-    static sal_Bool IsColorsInitialized();
+    static bool IsColorsInitialized();
     static void AppendChangTrackNoteSeparator(OUString &str);
 };
 

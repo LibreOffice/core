@@ -184,7 +184,7 @@ sal_Bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowPred( nCol, nRow );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowPred( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -225,7 +225,7 @@ sal_Bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeletePred( nCol, nRow );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).DeletePred( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -264,7 +264,7 @@ sal_Bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowSucc( nCol, nRow );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowSucc( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -305,7 +305,7 @@ sal_Bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteSucc( nCol, nRow );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteSucc( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -344,7 +344,7 @@ sal_Bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowError( nCol, nRow );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowError( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -383,8 +383,8 @@ sal_Bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         pWaitWin->EnterWait();
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bOverflow;
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).MarkInvalid( bOverflow );
+    bool bOverflow;
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).MarkInvalid( bOverflow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -423,7 +423,7 @@ sal_Bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
+    bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
