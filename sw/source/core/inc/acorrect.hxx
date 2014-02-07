@@ -72,7 +72,7 @@ public:
     //  - sal_True:  paragraph before "normal" insertion position
     //  - sal_False: paragraph in that the corrected word was inserted
     //               (does not need to be the same paragraph)
-    virtual OUString GetPrevPara( sal_Bool bAtNormalPos );
+    virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
 
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
