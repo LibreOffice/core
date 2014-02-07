@@ -395,7 +395,6 @@ public:
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testGraphicsOnSheetMove);
-    CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
@@ -431,6 +430,7 @@ public:
     CPPUNIT_TEST(testSortWithFormulaRefs);
     CPPUNIT_TEST(testSortWithStrings);
     CPPUNIT_TEST(testShiftCells);
+    CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testNoteDeleteRow);
     CPPUNIT_TEST(testNoteDeleteCol);
     CPPUNIT_TEST(testNoteLifeCycle);
