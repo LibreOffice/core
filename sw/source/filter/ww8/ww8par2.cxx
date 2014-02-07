@@ -1802,10 +1802,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         pPap->GetSprms( &aDesc );
         WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen, aSprmParser);
 
-        const sal_uInt8* pParams = aSprmIter.GetAktParams();
         for (int nLoop = 0; nLoop < 2; ++nLoop)
         {
             bool bRepeatedSprm = false;
+            const sal_uInt8* pParams;
             while (aSprmIter.GetSprms() && 0 != (pParams = aSprmIter.GetAktParams()))
             {
                 sal_uInt16 nId = aSprmIter.GetAktId();
@@ -1974,7 +1974,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         }
 
         //Are we still in a table cell
-        pParams = HasTabCellSprm(pPap, bOldVer);
+        const sal_uInt8* pParams = HasTabCellSprm(pPap, bOldVer);
         const sal_uInt8 *pLevel = pPap->HasSprm(0x6649);
         // InTable
         if (!pParams || (1 != *pParams) ||
