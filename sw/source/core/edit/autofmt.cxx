@@ -1995,6 +1995,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             case '?':
                 if( aFlags.bCptlSttSntnc )
                     bFirstSent = sal_True;
+                /* fallthrough */
             default:
                 if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
                         || '/' == cChar )) //  '/' should not be a word separator (e.g. '1/2' needs to be handled as one word for replacement)
