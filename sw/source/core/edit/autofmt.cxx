@@ -96,7 +96,7 @@ class SwAutoFormat
     SwDoc* m_pDoc;
     SwTxtNode* m_pCurTxtNd;     // the current TextNode
     SwTxtFrm* m_pCurTxtFrm;     // frame of the current TextNode
-    CharClass* m_pCharClass;    // Character classification
+    boost::scoped_ptr<CharClass> m_pCharClass; // Character classification
     sal_uLong m_nEndNdIdx;      // for the percentage-display
     LanguageType m_eCharClassLang;
 
@@ -228,9 +228,6 @@ class SwAutoFormat
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 SwNodeIndex* pSttNd = 0, SwNodeIndex* pEndNd = 0 );
-    ~SwAutoFormat() {
-        delete m_pCharClass;
-    }
 };
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
@@ -259,8 +256,7 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 
 void SwAutoFormat::_GetCharClass( LanguageType eLang )
 {
-    delete m_pCharClass;
-    m_pCharClass = new CharClass( LanguageTag( eLang ));
+    m_pCharClass.reset( new CharClass( LanguageTag( eLang ) ) );
     m_eCharClassLang = eLang;
 }
 
@@ -2099,7 +2095,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     m_pEditShell( pEdShell ),
     m_pDoc( pEdShell->GetDoc() ),
     m_pCurTxtNd( 0 ), m_pCurTxtFrm( 0 ),
-    m_pCharClass( 0 ),
     m_nRedlAutoFmtSeqId( 0 )
 {
     OSL_ENSURE( (pSttNd && pEndNd) || (!pSttNd && !pEndNd),
