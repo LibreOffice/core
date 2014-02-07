@@ -408,6 +408,7 @@ void SdFiltersTest::testFdo72998()
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     {
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>(pPage->GetObj(2));
+        CPPUNIT_ASSERT( pObj );
         const SdrCustomShapeGeometryItem& rGeometryItem = (const SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         CPPUNIT_ASSERT_MESSAGE( "not a custom shape", pObj );
         const ::com::sun::star::uno::Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( OUString( "ViewBox" ) );
