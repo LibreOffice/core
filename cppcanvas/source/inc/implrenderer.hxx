@@ -164,8 +164,8 @@ static float GetSwapFloat( SvStream& rSt )
                     rXForm.eDx = GetSwapFloat( rIn );
                     rXForm.eDy = GetSwapFloat( rIn );
 #else
-                    rIn >> rXForm.eM11 >> rXForm.eM12 >> rXForm.eM21 >> rXForm.eM22
-                        >> rXForm.eDx >> rXForm.eDy;
+                    rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
+                       .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
 #endif
                 }
                 return rIn;

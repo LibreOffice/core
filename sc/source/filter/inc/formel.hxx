@@ -146,37 +146,37 @@ inline void LotusConverterBase::Ignore( const long nSeekRel )
 
 inline void LotusConverterBase::Read( sal_Char& nByte )
 {
-    aIn >> nByte;
+    aIn.ReadChar( nByte );
     nBytesLeft--;
 }
 
 inline void LotusConverterBase::Read( sal_uInt8& nByte )
 {
-    aIn >> nByte;
+    aIn.ReadUChar( nByte );
     nBytesLeft--;
 }
 
 inline void LotusConverterBase::Read( sal_uInt16& nUINT16 )
 {
-    aIn >> nUINT16;
+    aIn.ReadUInt16( nUINT16 );
     nBytesLeft -= 2;
 }
 
 inline void LotusConverterBase::Read( sal_Int16& nINT16 )
 {
-    aIn >> nINT16;
+    aIn.ReadInt16( nINT16 );
     nBytesLeft -= 2;
 }
 
 inline void LotusConverterBase::Read( double& fDouble )
 {
-    aIn >> fDouble;
+    aIn.ReadDouble( fDouble );
     nBytesLeft -= 8;
 }
 
 inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 {
-    aIn >> nUINT32;
+    aIn.ReadUInt32( nUINT32 );
     nBytesLeft -= 4;
 }
 

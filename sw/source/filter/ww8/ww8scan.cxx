@@ -79,20 +79,20 @@ namespace
         documents) where in error 8bit strings are used instead of 16bits
         strings for style names.
     */
-    template<typename C> bool TestBeltAndBraces(SvStream& rStrm)
+    bool TestBeltAndBraces(SvStream& rStrm)
     {
         bool bRet = false;
         sal_uInt32 nOldPos = rStrm.Tell();
-        C nBelt(0);
-        rStrm >> nBelt;
-        nBelt *= sizeof(C);
-        if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(C))))
+        sal_Unicode nBelt(0);
+        rStrm.ReadUInt16( nBelt );
+        nBelt *= sizeof(sal_Unicode);
+        if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(sal_Unicode))))
         {
             rStrm.SeekRel(nBelt);
             if (rStrm.good())
             {
-                C cBraces(0);
-                rStrm >> cBraces;
+                sal_Unicode cBraces(0);
+                rStrm.ReadUInt16( cBraces );
                 if (rStrm.good() && cBraces == 0)
                     bRet = true;
             }
@@ -6085,7 +6085,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
                 case 8:
                     // handle Unicode-String with leading length short and
                     // trailing zero
-                    if (TestBeltAndBraces<sal_Unicode>(rSt))
+                    if (TestBeltAndBraces(rSt))
                     {
                         *pString = read_uInt16_BeltAndBracesString(rSt);
                         rSkip -= (pString->getLength() + 2) * 2;
