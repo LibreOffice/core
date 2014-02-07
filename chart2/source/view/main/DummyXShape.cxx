@@ -132,6 +132,7 @@ OUString DummyXShape::getShapeType()
 {
     return OUString("dummy shape");
 }
+
 uno::Reference< beans::XPropertySetInfo > DummyXShape::getPropertySetInfo()
     throw(uno::RuntimeException)
 {
@@ -896,9 +897,15 @@ DummyChart* DummyChart::getRootShape()
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
+#define QUERY_INTERFACE( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0 ) ) \
+        return uno::makeAny(uno::Reference<xint>(this));
+
 uno::Any DummyXShapes::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
 {
+    QUERY_INTERFACE( drawing::XShapes );
+    QUERY_INTERFACE( container::XIndexAccess );
     return DummyXShape::queryInterface(rType);
 }
 
