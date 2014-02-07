@@ -457,11 +457,11 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
-    if( pWindowOutDev->ImplHasMirroredGraphics()  )
+    if( pWindowOutDev->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             // --- RTL --- re-mirror back to get device coordiantes
-            pWindowOutDev->ImplReMirror( aAbsolute );
+            pWindowOutDev->ReMirror( aAbsolute );
 
         Rectangle aRect( pReference->ScreenToOutputPixel(aAbsolute), Size(1,1) ) ;
         aRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel( aRect );
@@ -690,11 +690,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pParentWinOutDev->ImplHasMirroredGraphics()  )
+    if( pParentWinOutDev->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             // --- RTL --- re-mirror back to get device coordiantes
-            pParentWinOutDev->ImplReMirror(maFloatRect);
+            pParentWinOutDev->ReMirror(maFloatRect);
 
         maFloatRect.SetPos(pReference->ScreenToOutputPixel(maFloatRect.TopLeft()));
         maFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(maFloatRect);

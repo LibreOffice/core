@@ -387,7 +387,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         {
             // - RTL - re-mirror frame pos at pChild
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
-            pChildWinOutDev->ImplReMirror( aMousePos );
+            pChildWinOutDev->ReMirror( aMousePos );
         }
         // no mouse messages to system object windows ?
         // !!!KA: Is it OK to comment this out? !!!
@@ -1027,7 +1027,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     // --- RTL --- mirror cursor keys
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
-      pChildOutDev->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
+      pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
         aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler

@@ -496,7 +496,7 @@ void OutputDevice::EnableRTL( sal_Bool bEnable )
         mpAlphaVDev->EnableRTL( bEnable );
 }
 
-bool OutputDevice::ImplHasMirroredGraphics() const
+bool OutputDevice::HasMirroredGraphics() const
 {
    // HOTFIX for #i55719#
    if( meOutDevType == OUTDEV_PRINTER )
@@ -507,11 +507,11 @@ bool OutputDevice::ImplHasMirroredGraphics() const
 
 // note: the coordiantes to be remirrored are in frame coordiantes !
 
-void    OutputDevice::ImplReMirror( Point &rPoint ) const
+void    OutputDevice::ReMirror( Point &rPoint ) const
 {
     rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
 }
-void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
+void    OutputDevice::ReMirror( Rectangle &rRect ) const
 {
     long nWidth = rRect.Right() - rRect.Left();
 
@@ -522,7 +522,7 @@ void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
     rRect.Left() = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX;
     rRect.Right() = rRect.Left() + nWidth;
 }
-void    OutputDevice::ImplReMirror( Region &rRegion ) const
+void    OutputDevice::ReMirror( Region &rRegion ) const
 {
     RectangleVector aRectangles;
     rRegion.GetRegionRectangles(aRectangles);
@@ -530,7 +530,7 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
 
     for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
-        ImplReMirror(*aRectIter);
+        ReMirror(*aRectIter);
         aMirroredRegion.Union(*aRectIter);
     }
 
@@ -938,7 +938,7 @@ void OutputDevice::ImplInitClipRegion()
             // --- RTL -- only this region is in frame coordinates, so re-mirror it
             // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
             if( ImplIsAntiparallel() )
-                ImplReMirror ( aRegion );
+                ReMirror ( aRegion );
         }
         if ( mbClipRegion )
             aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
