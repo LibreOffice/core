@@ -64,8 +64,7 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
     bool bIsSlideShowShowing = false;
 
     // Iterate over all view frames.
-    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-    for (pViewFrame = SfxViewFrame::GetFirst();
+    for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
          pViewFrame!=NULL && !bIsSlideShowShowing;
          pViewFrame = SfxViewFrame::GetNext(*pViewFrame))
     {
