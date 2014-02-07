@@ -859,7 +859,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
 
                     // take the changes made in the dialog
-                    pPrinter = SetPrinter_Impl( pDlgPrinter );
+                    SetPrinter_Impl( pDlgPrinter );
 
                     // forget new printer, it was taken over (as pPrinter) or deleted
                     pDlgPrinter = NULL;
