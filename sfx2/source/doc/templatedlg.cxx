@@ -369,6 +369,7 @@ FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
 {
     mpCurView->filterItems(ViewFilter_Application(getCurrentFilter()));
+    mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
 
     if (mpSearchView->IsVisible())
         SearchUpdateHdl(NULL);
