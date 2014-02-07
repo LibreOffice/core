@@ -755,7 +755,7 @@ public:
      */
     ///@{
     SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
-    SAL_DLLPRIVATE bool         HasMirroredGraphics() const;
+    virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
     SAL_DLLPRIVATE void         ReMirror( Region &rRegion ) const;
