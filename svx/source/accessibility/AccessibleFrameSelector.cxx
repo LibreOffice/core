@@ -475,8 +475,7 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
     Any aRet;
     SolarMutexGuard aGuard;
     IsValid();
-    utl::AccessibleRelationSetHelper* pHelper;
-    Reference< XAccessibleRelationSet > xRet = pHelper = new utl::AccessibleRelationSetHelper;
+    Reference< XAccessibleRelationSet > xRet = new utl::AccessibleRelationSetHelper;
     if(meBorder == FRAMEBORDER_NONE)
     {
         Window* pPrev = mpFrameSel->GetWindow( WINDOW_PREV );
