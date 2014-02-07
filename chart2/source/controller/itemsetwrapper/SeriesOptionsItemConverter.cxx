@@ -350,7 +350,8 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 if (bIncludeHiddenCells != m_bIncludeHiddenCells)
                 {
                     ChartModel* pModel = dynamic_cast<ChartModel*>(m_xChartModel.get());
-                    bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, *pModel );
+                    if (pModel)
+                        bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, *pModel );
                 }
             }
         }
