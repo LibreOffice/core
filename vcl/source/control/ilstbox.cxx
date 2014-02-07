@@ -3269,7 +3269,7 @@ void ImplListBoxFloatingWindow::StartFloat( sal_Bool bStartTracking )
         const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
 
         if( pGrandparent->ImplIsAntiparallel() )
-            pGrandparentOutDev->ImplReMirror( aRect );
+            pGrandparentOutDev->ReMirror( aRect );
 
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 

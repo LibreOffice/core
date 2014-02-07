@@ -622,7 +622,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
     {
         // - RTL - re-mirror frame pos at pChild
         const OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ImplReMirror( aMousePos );
+        pOutDev->ReMirror( aMousePos );
     }
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                            mpWindowImpl->mpFrameData->mnClickCount, 0,
@@ -693,7 +693,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
             {
                 // - RTL - re-mirror frame pos at pChild
                 const OutputDevice *pOutDev = GetOutDev();
-                pOutDev->ImplReMirror( aMousePos );
+                pOutDev->ReMirror( aMousePos );
             }
 
             MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),

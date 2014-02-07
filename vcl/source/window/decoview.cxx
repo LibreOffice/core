@@ -328,7 +328,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 nRect.Top() -= n3/2;
                 nRect.Bottom() -= n3/2;
                 // #106953# never mirror checkmarks
-                if ( pDev->ImplHasMirroredGraphics() && pDev->IsRTLEnabled() )
+                if ( pDev->HasMirroredGraphics() && pDev->IsRTLEnabled() )
                 {
                     // Draw a mirrored checkmark so that it looks "normal" in a
                     // mirrored graphics device (double mirroring!)

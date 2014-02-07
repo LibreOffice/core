@@ -755,10 +755,10 @@ public:
      */
     ///@{
     SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
-    SAL_DLLPRIVATE bool         ImplHasMirroredGraphics() const;
-    SAL_DLLPRIVATE void         ImplReMirror( Point &rPoint ) const;
-    SAL_DLLPRIVATE void         ImplReMirror( Rectangle &rRect ) const;
-    SAL_DLLPRIVATE void         ImplReMirror( Region &rRegion ) const;
+    SAL_DLLPRIVATE bool         HasMirroredGraphics() const;
+    SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
+    SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
+    SAL_DLLPRIVATE void         ReMirror( Region &rRegion ) const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const sal_Int32* pLogicDXArray=NULL, bool bFilter = false ) const;
