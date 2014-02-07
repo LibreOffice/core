@@ -16,6 +16,7 @@
 #include <cellvalues.hxx>
 #include <columnspanset.hxx>
 #include <listenercontext.hxx>
+#include <mtvcellfunc.hxx>
 
 #include <svl/sharedstring.hxx>
 
@@ -266,6 +267,160 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
     }
 
     CellStorageModified();
+}
+
+ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
+{
+    if (!ValidRow(nRow))
+        return NULL;
+
+    ScPostIt* p = NULL;
+    maCellNotes.release(nRow, p);
+    return p;
+}
+
+size_t ScColumn::GetNoteCount() const
+{
+    size_t nCount = 0;
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type != sc::element_type_cellnote)
+            continue;
+
+        nCount += it->size;
+    }
+
+    return nCount;
+}
+
+namespace {
+
+class NoteCaptionCreator
+{
+    ScAddress maPos;
+public:
+    NoteCaptionCreator( SCTAB nTab, SCCOL nCol ) : maPos(nCol,0,nTab) {}
+
+    void operator() ( size_t nRow, ScPostIt* p )
+    {
+        maPos.SetRow(nRow);
+        p->GetOrCreateCaption(maPos);
+    }
+};
+
+struct NoteCaptionCleaner
+{
+    void operator() ( size_t /*nRow*/, ScPostIt* p )
+    {
+        p->ForgetCaption();
+    }
+};
+
+}
+
+void ScColumn::CreateAllNoteCaptions()
+{
+    NoteCaptionCreator aFunc(nTab, nCol);
+    sc::ProcessNote(maCellNotes, aFunc);
+}
+
+void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2))
+        return;
+
+    NoteCaptionCleaner aFunc;
+    sc::CellNoteStoreType::iterator it = maCellNotes.begin();
+    sc::ProcessNote(it, maCellNotes, nRow1, nRow2, aFunc);
+}
+
+SCROW ScColumn::GetNotePosition( size_t nIndex ) const
+{
+    // Return the row position of the nth note in the column.
+
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+
+    size_t nCount = 0; // Number of notes encountered so far.
+    for (; it != itEnd; ++it)
+    {
+        if (it->type != sc::element_type_cellnote)
+            // Skip the empty blocks.
+            continue;
+
+        if (nIndex < nCount + it->size)
+        {
+            // Index falls within this block.
+            size_t nOffset = nIndex - nCount;
+            return it->position + nOffset;
+        }
+
+        nCount += it->size;
+    }
+
+    return -1;
+}
+
+namespace {
+
+class NoteEntryCollector
+{
+    std::vector<sc::NoteEntry>& mrNotes;
+    SCTAB mnTab;
+    SCCOL mnCol;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
+public:
+    NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol,
+            SCROW nStartRow = 0, SCROW nEndRow = MAXROW) :
+        mrNotes(rNotes), mnTab(nTab), mnCol(nCol),
+        mnStartRow(nStartRow), mnEndRow(nEndRow) {}
+
+    void operator() (const sc::CellNoteStoreType::value_type& node) const
+    {
+        if (node.type != sc::element_type_cellnote)
+            return;
+
+        size_t nTopRow = node.position;
+        sc::cellnote_block::const_iterator it = sc::cellnote_block::begin(*node.data);
+        sc::cellnote_block::const_iterator itEnd = sc::cellnote_block::end(*node.data);
+        size_t nOffset = 0;
+        if(nTopRow < size_t(mnStartRow))
+        {
+            std::advance(it, mnStartRow - nTopRow);
+            nOffset = mnStartRow - nTopRow;
+        }
+
+        for (; it != itEnd && nTopRow + nOffset <= size_t(mnEndRow);
+                ++it, ++nOffset)
+        {
+            ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
+            mrNotes.push_back(sc::NoteEntry(aPos, *it));
+        }
+    }
+};
+
+}
+
+void ScColumn::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
+{
+    std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol));
+}
+
+void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
+        std::vector<sc::NoteEntry>& rNotes ) const
+{
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
+    sc::CellNoteStoreType::const_iterator it = aPos.first;
+    if (it == maCellNotes.end())
+        // Invalid row number.
+        return;
+
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aEndPos =
+        maCellNotes.position(nEndRow);
+    sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
+
+    std::for_each(it, itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
