@@ -56,9 +56,9 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             return; // done, because by precondition everything is combined
     }
 
-    bool bEnde;
+    bool bEnd;
     do {
-        bEnde = true;
+        bEnd = true;
 
         // combine with predecessor?
         if( nPos > 0 )
@@ -68,7 +68,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 || rTmp.nEnd+1 == aRg.nStart )
             {
                 aRg.nStart = rTmp.nStart;
-                bEnde = false;
+                bEnd = false;
                 erase( begin() + --nPos ); // combine
             }
             // range contained in rTmp?
@@ -83,7 +83,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 rTmp.nStart == aRg.nEnd+1 )
             {
                 aRg.nEnd = rTmp.nEnd;
-                bEnde = false;
+                bEnd = false;
                 erase( begin() + nPos ); // combine
             }
 
@@ -91,7 +91,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
-    } while( !bEnde );
+    } while( !bEnd );
 
     _SwPamRanges::insert( aRg );
 }

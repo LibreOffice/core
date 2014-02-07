@@ -132,7 +132,7 @@ class SwAutoFormat
         IS_ENDE
     } eStat;
 
-    bool bEnde : 1;
+    bool bEnd : 1;
     bool bEmptyLine : 1;
     bool bMoreLines : 1;
 
@@ -205,7 +205,7 @@ class SwAutoFormat
 
     bool CanJoin( const SwTxtNode* pTxtNd ) const
     {
-        return !bEnde && pTxtNd &&
+        return !bEnd && pTxtNd &&
              !IsEmptyLine( *pTxtNd ) &&
              !IsNoAlphaLine( *pTxtNd) &&
              !IsEnumericChar( *pTxtNd ) &&
@@ -307,14 +307,14 @@ OUString SwAutoFormat::GoNextPara()
         // has to be checked twice before and after incrementation
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
-            bEnde = true;
+            bEnd = true;
             return OUString();
         }
 
         aNdIdx++;
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
-            bEnde = true;
+            bEnd = true;
             return OUString();
         }
         else
@@ -326,7 +326,7 @@ OUString SwAutoFormat::GoNextPara()
         //      EndNode     : at the end, terminate
         if( pNewNd->IsEndNode() )
         {
-            bEnde = true;
+            bEnd = true;
             return OUString();
         }
         else if( pNewNd->IsTableNode() )
@@ -1267,7 +1267,7 @@ void SwAutoFormat::BuildIndent()
     {
         SetRedlineTxt( STR_AUTOFMTREDL_DEL_MORELINES );
         const SwTxtNode* pNxtNd = GetNextNode();
-        if( pNxtNd && !bEnde )
+        if( pNxtNd && !bEnd )
         {
             do {
                 bBreak = !IsFastFullLine( *pNxtNd ) ||
@@ -2133,7 +2133,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     else
         bEmptyLine = true;      // at document beginning
 
-    bEnde = false;
+    bEnd = false;
 
     // set value for percentage display
     nEndNdIdx = aEndNdIdx.GetIndex();
@@ -2169,14 +2169,14 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
     // This is the automat for autoformatting
     eStat = READ_NEXT_PARA;
-    while( !bEnde )
+    while( !bEnd )
     {
         switch( eStat )
         {
         case READ_NEXT_PARA:
             {
                 GoNextPara();
-                eStat = bEnde ? IS_ENDE : TST_EMPTY_LINE;
+                eStat = bEnd ? IS_ENDE : TST_EMPTY_LINE;
             }
             break;
 
@@ -2422,7 +2422,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     BuildTextIndent();
                 eStat = READ_NEXT_PARA;
             }
-            else if( nLevel && pNxtNd && !bEnde &&
+            else if( nLevel && pNxtNd && !bEnd &&
                      !bNxtEmpty && !bNxtAlpha && !nNxtLevel &&
                      !IsEnumericChar( *pNxtNd ) )
             {
@@ -2448,7 +2448,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                         BuildText();
                     eStat = READ_NEXT_PARA;
                 }
-                else if( !nLevel && pNxtNd && !bEnde &&
+                else if( !nLevel && pNxtNd && !bEnd &&
                          !bNxtEmpty && !bNxtAlpha && nNxtLevel &&
                          !IsEnumericChar( *pNxtNd ) )
                 {
@@ -2521,7 +2521,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             break;
 
         case IS_ENDE:
-            bEnde = true;
+            bEnd = true;
             break;
         }
     }

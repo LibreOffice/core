@@ -766,7 +766,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 {
     ObjkType aObjk;
     sal_uInt16 nGrpCnt=0;
-    bool bEnde=false;
+    bool bEnd=false;
     do {
         ReadObjkType( rInp, aObjk );
         if (!rInp.GetError()) {
@@ -833,13 +833,13 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
         } // if rInp
         if (!rInp.GetError()) {
             if (aObjk.Next==0L) {
-                if (nGrpCnt==0) bEnde=true;
+                if (nGrpCnt==0) bEnd=true;
                 else nGrpCnt--;
             }
         } else {
-            bEnde=true;  // read error
+            bEnd=true;  // read error
         }
-    } while (!bEnde);
+    } while (!bEnd);
 }
 
 /*************************************************************************
