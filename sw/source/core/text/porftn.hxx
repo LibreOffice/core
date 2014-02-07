@@ -41,9 +41,9 @@ public:
     KSHORT& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
@@ -75,9 +75,9 @@ class SwQuoVadisPortion : public SwFldPortion
     OUString   aErgo;
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     void SetNumber( const OUString& rStr ) { aErgo = rStr; }
     const OUString GetQuoTxt() const { return aExpand; }
@@ -101,7 +101,7 @@ class SwErgoSumPortion : public SwFldPortion
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
     virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;

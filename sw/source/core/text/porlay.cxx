@@ -188,13 +188,13 @@ SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 
 // For special treatment of empty lines
 
-sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
+bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 {
     if( GetLen() )
         return SwTxtPortion::Format( rInf );
 
     Height( rInf.GetTxtHeight() );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

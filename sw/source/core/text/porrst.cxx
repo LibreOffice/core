@@ -102,7 +102,7 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                 virtual SwBreakPortion::Format()
  *************************************************************************/
 
-sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
+bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
 {
     const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
@@ -110,7 +110,7 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     SetAscent( pRoot->GetAscent() );
     if ( rInf.GetIdx()+1 == rInf.GetTxt().getLength() )
         rInf.SetNewLine( true );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -499,12 +499,12 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
  *              virtual SwHiddenTextPortion::Format()
  *************************************************************************/
 
-sal_Bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
+bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
 {
     Width( 0 );
     rInf.GetTxtFrm()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
 
-    return sal_False;
+    return false;
 };
 
 /*************************************************************************
@@ -559,14 +559,14 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwControlCharPortion::Format()
  *************************************************************************/
 
-sal_Bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
+bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
 {
     const SwLinePortion* pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************

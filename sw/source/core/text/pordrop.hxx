@@ -92,7 +92,7 @@ public:
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
             void PaintDrop( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
 

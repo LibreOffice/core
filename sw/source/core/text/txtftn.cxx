@@ -1415,17 +1415,17 @@ SwFtnPortion::SwFtnPortion( const OUString &rExpand,
  *                      SwFtnPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
+bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
  *                 virtual SwFtnPortion::Format()
  *************************************************************************/
 
-sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 {
     // #i98418#
 //    SwFtnSave aFtnSave( rInf, pFtn );
@@ -1434,7 +1434,7 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
     // this flag indicates, that a footnote is allowed to trigger
     // an underflow during SwTxtGuess::Guess
     rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
-    sal_Bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFldPortion::Format( rInf );
     rInf.SetFakeLineStart( false );
     SetAscent( rInf.GetAscent() );
     Height( rInf.GetTxtHeight() );
@@ -1496,11 +1496,11 @@ SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr
  *                 virtual SwQuoVadisPortion::Format()
  *************************************************************************/
 
-sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
+bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 {
     // erster Versuch, vielleicht passt der Text
     CheckScript( rInf );
-    sal_Bool bFull = SwFldPortion::Format( rInf );
+    bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
 
     if( bFull )
@@ -1527,14 +1527,14 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
  *               virtual SwQuoVadisPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
+bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
     // if this QuoVadisPortion has a follow, the follow is responsible for
     // the ergo text.
     if ( ! HasFollow() )
         rTxt += aErgo;
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -1594,9 +1594,9 @@ sal_Int32 SwErgoSumPortion::GetCrsrOfst( const KSHORT ) const
  *                 virtual SwErgoSumPortion::Format()
  *************************************************************************/
 
-sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
+bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_Bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
     rInf.SetErgoDone( true );
 
@@ -1609,7 +1609,7 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
 
     // We return false in order to get some text into the current line,
     // even if it's full (better than looping)
-    return sal_False;
+    return false;
 }
 
 

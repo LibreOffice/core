@@ -287,13 +287,13 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
  *                 virtual SwLinePortion::Format()
  *************************************************************************/
 
-sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
+bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() )
     {
         Truncate();
         rInf.SetUnderFlow( this );
-        return sal_True;
+        return true;
     }
 
     const SwLinePortion *pLast = rInf.GetLast();
@@ -308,9 +308,9 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
         if( nNewWidth > rInf.Width() )
             PrtWidth( nNewWidth - rInf.Width() );
         rInf.GetLast()->FormatEOL( rInf );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -376,9 +376,9 @@ long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
  *              virtual SwLinePortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
+bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************

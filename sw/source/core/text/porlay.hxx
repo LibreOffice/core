@@ -174,7 +174,7 @@ public:
         { return _GetHangingMargin(); }
 
     // For special treatment for empty lines
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     //
     // STUFF FOR JUSTIFIED ALIGNMENT

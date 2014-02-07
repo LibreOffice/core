@@ -459,7 +459,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
 
 
-sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
+bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() || (!GetLen() && !InExpGrp()) )
     {
@@ -468,7 +468,7 @@ sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
         SetAscent( 0 );
         SetPortion( NULL );  // ????
-        return sal_True;
+        return true;
     }
 
     OSL_ENSURE( rInf.RealWidth() || (rInf.X() == rInf.Width()),
@@ -599,9 +599,9 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 
-sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
+bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -711,14 +711,14 @@ SwTxtInputFldPortion::SwTxtInputFldPortion()
 }
 
 
-sal_Bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
+bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
 {
     mbContainsInputFieldStart =
         rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART;
     mbContainsInputFieldEnd =
         rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( rInf.GetLen() == 1
          && ( mbContainsInputFieldStart || mbContainsInputFieldEnd ) )
     {
@@ -777,7 +777,7 @@ void SwTxtInputFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-sal_Bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     sal_Int32 nIdx = rInf.GetIdx();
     sal_Int32 nLen = rInf.GetLen();
@@ -792,7 +792,7 @@ sal_Bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &r
     }
     rTxt = rInf.GetTxt().copy( nIdx, std::min( nLen, rInf.GetTxt().getLength() - nIdx ) );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -889,7 +889,7 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 
-sal_Bool SwHolePortion::Format( SwTxtFormatInfo &rInf )
+bool SwHolePortion::Format( SwTxtFormatInfo &rInf )
 {
     return rInf.IsFull() || rInf.X() >= rInf.Width();
 }
@@ -909,11 +909,10 @@ void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & /*rInf*/) const
     //SwTxtPortion::Paint(rInf);
 }
 
-sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
+bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
 {
-    sal_Bool ret=0;
     Width(0);
-    return ret;
+    return false;
 }
 
 namespace {
@@ -976,9 +975,8 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
     }
 }
 
-sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
+bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
 {
-    sal_Bool ret = 0;
     SwTxtNode *pNd = const_cast < SwTxtNode * >( rInf.GetTxtFrm(  )->GetTxtNode(  ) );
     const SwDoc *doc = pNd->GetDoc(  );
     SwIndex aIndex( pNd, rInf.GetIdx(  ) );
@@ -1007,7 +1005,7 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
             assert( false );        // unknown type...
         }
     }
-    return ret;
+    return false;
 }
 
 

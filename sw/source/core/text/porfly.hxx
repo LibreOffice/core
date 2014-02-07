@@ -41,7 +41,7 @@ public:
     inline KSHORT GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     OUTPUT_OPERATOR
 };
 
@@ -89,7 +89,7 @@ public:
                   objectpositioning::AsCharFlags nFlags );
     sal_Int32 GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCrsrMoveState* pCMS ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     OUTPUT_OPERATOR
 };

@@ -1021,9 +1021,9 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
  *                virtual Format()
  *************************************************************************/
 
-sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
+bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_Bool bFull = sal_False;
+    bool bFull = false;
     Fix( (sal_uInt16)rInf.X() );
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );

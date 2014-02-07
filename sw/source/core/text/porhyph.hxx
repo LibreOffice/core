@@ -32,8 +32,8 @@ public:
     {
         SetWhichPor( POR_HYPH );
     }
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -55,7 +55,7 @@ public:
         SetWhichPor( POR_HYPHSTR );
     }
 
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -75,10 +75,10 @@ class SwSoftHyphPortion : public SwHyphPortion
 
 public:
     SwSoftHyphPortion();
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual SwLinePortion *Compress();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     inline void SetExpand( const sal_Bool bNew ) { bExpand = bNew; }
     sal_Bool IsExpand() const { return bExpand; }

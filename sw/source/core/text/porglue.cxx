@@ -66,7 +66,7 @@ SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *              virtual SwGluePortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( GetLen() && rInf.OnWin() &&
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
@@ -74,9 +74,9 @@ sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) c
         OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, GetLen(), CH_BULLET);
         rTxt = aBuf.makeStringAndClear();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************

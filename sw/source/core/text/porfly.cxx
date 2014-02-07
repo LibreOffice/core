@@ -47,7 +47,7 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 {
 }
 
-sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
     // tabs must be expanded (Bug 8537)
@@ -87,14 +87,14 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
             PrtWidth( nNewWidth - rInf.Width() );
             SetFixWidth( PrtWidth() );
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_Bool bFull = rInf.Width() < rInf.X() + PrtWidth();
+    bool bFull = rInf.Width() < rInf.X() + PrtWidth();
 
     if( bFull )
     {
@@ -114,7 +114,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         if( nLeft == rInf.X() && ! rInf.GetFly() )
         {
             Width( rInf.Width() );
-            bFull = sal_False; // so that notes can still be placed in this line
+            bFull = false; // so that notes can still be placed in this line
         }
         else
         {

@@ -169,13 +169,13 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     // Is called for the line's last portion
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
             void Move( SwTxtPaintInfo &rInf );
 
     // For SwTxtSlot
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // For SwFldPortion, SwSoftHyphPortion
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;

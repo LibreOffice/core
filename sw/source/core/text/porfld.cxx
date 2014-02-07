@@ -287,11 +287,11 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     }
 }
 
-sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 {
     // Scope wegen aDiffTxt::DTOR!
     sal_Int32 nRest;
-    sal_Bool bFull;
+    bool bFull = false;
     bool bEOL = false;
     long nTxtRest = rInf.GetTxt().getLength() - rInf.GetIdx();
     {
@@ -377,7 +377,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // field portion. They are handled via the HookChar mechanism.
             switch( aNew[0] )
             {
-                case CH_BREAK  : bFull = sal_True;
+                case CH_BREAK  : bFull = true;
                             // no break
                 case ' ' :
                 case CH_TAB    :
@@ -435,7 +435,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     rTxt = aExpand;
     if( rTxt.isEmpty() && rInf.OnWin() &&
@@ -443,7 +443,7 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) co
             SwViewOption::IsFieldShadings() &&
             !HasFollow() )
         rTxt = OUString(' ');
-    return sal_True;
+    return true;
 }
 
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
@@ -486,7 +486,7 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     // Nicht auf IsHidden() abfragen !
     return SwFldPortion::GetExpTxt( rInf, rTxt );
@@ -532,10 +532,10 @@ SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 // eingibt, bis die Zeile ueberlaeuft.
 // Man muss die Fly-Ausweichmanoever beachten!
 
-sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
+bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( sal_False );
-    const sal_Bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
     // a numbering portion can be contained in a rotated portion!!!
     nFixWidth = rInf.IsMulti() ? Height() : Width();
@@ -809,7 +809,7 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
         ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( pOut, nId );
 }
 
-sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
+bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( sal_False );
 //    Width( nFixWidth );
@@ -821,7 +821,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
     }
     Width( nFixWidth + nFollowedByWidth );
-    const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
+    const bool bFull = rInf.Width() < rInf.X() + Width();
     const bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
     SetAscent( static_cast<sal_uInt16>(GetRelPos() > 0 ? GetRelPos() : 0) );
@@ -836,7 +836,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
             SetLen( 0 );
             SetNoPaint( sal_True );
             rInf.SetNumDone( false );
-            return sal_True;
+            return true;
         }
     }
     rInf.SetNumDone( true );
@@ -1132,13 +1132,13 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
+bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Int32 nCount = aExpand.getLength();
     if( !nCount )
     {
         Width( 0 );
-        return sal_False;
+        return false;
     }
 
     OSL_ENSURE( nCount < 7, "Too much combined characters" );
@@ -1276,7 +1276,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     // Does the combined portion fit the line?
-    const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
+    const bool bFull = rInf.Width() < rInf.X() + Width();
     if( bFull )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()

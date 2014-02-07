@@ -49,7 +49,7 @@ public:
     // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
     virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
 
@@ -137,7 +137,7 @@ public:
         { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 };
 
 /*************************************************************************
@@ -161,7 +161,7 @@ public:
     }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const;
 };
 

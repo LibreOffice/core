@@ -331,7 +331,7 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillCh
 
 
 
-sal_Bool SwTabPortion::Format( SwTxtFormatInfo &rInf )
+bool SwTabPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwTabPortion *pLastTab = rInf.GetLastTab();
     if( pLastTab == this )

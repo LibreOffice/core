@@ -72,10 +72,9 @@ KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
  *                 virtual SwIsoRefPortion::Format()
  *************************************************************************/
 
-sal_Bool SwIsoRefPortion::Format( SwTxtFormatInfo &rInf )
+bool SwIsoRefPortion::Format( SwTxtFormatInfo &rInf )
 {
-    const sal_Bool bFull = SwLinePortion::Format( rInf );
-    return bFull;
+    return SwLinePortion::Format( rInf );
 }
 
 /*************************************************************************

@@ -69,8 +69,8 @@ public:
     inline const SwFont *GetFont() const { return pFnt; }
 
     inline OUString GetExp() const { return aExpand; }
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 
     // Empty fields are also allowed
@@ -123,7 +123,7 @@ public:
          : SwFldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;
@@ -150,7 +150,7 @@ public:
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;
@@ -199,7 +199,7 @@ public:
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
 
     void SetBase( long nLnAscent, long nLnDescent,
         long nFlyAscent, long nFlyDescent );
@@ -242,7 +242,7 @@ class SwCombinedPortion : public SwFldPortion
 public:
     SwCombinedPortion( const OUString &rExpand );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
     OUTPUT_OPERATOR
 };

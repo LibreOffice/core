@@ -44,7 +44,7 @@ class SwIsoToxPortion : public SwToxPortion
 
 public:
             SwIsoToxPortion();
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual SwLinePortion *Compress();
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;

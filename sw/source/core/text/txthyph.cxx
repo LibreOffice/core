@@ -365,10 +365,10 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
  *              virtual SwHyphPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &/*rInf*/, OUString &rTxt ) const
+bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &/*rInf*/, OUString &rTxt ) const
 {
     rTxt = "-";
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -385,7 +385,7 @@ void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
  *                 virtual SwHyphPortion::Format()
  *************************************************************************/
 
-sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
+bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
@@ -393,10 +393,10 @@ sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
     OUString aTxt;
 
     if( !GetExpTxt( rInf, aTxt ) )
-        return sal_False;
+        return false;
 
     PrtWidth( rInf.GetTxtSize( aTxt ).Width() );
-    const sal_Bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
+    const bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
     if( bFull && !rInf.IsUnderFlow() ) {
         Truncate();
         rInf.SetUnderFlow( this );
@@ -409,10 +409,10 @@ sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
  *              virtual SwHyphStrPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
+bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -490,15 +490,15 @@ void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * 4) {Zuc} ruft Hyphenate => {Zuk}{-}{ker}
  */
 
-sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
+bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_Bool bFull = sal_True;
+    bool bFull = true;
 
     // special case for old german spelling
     if( rInf.IsUnderFlow()  )
     {
         if( rInf.GetSoftHyphPos() )
-            return sal_True;
+            return true;
 
         const bool bHyph = rInf.ChgHyph( true );
         if( rInf.IsHyphenate() )
@@ -529,7 +529,7 @@ sal_Bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
             Truncate();
             rInf.SetUnderFlow( this );
         }
-        return sal_True;
+        return true;
     }
 
     rInf.SetSoftHyphPos(0);
@@ -563,7 +563,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
         const sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
         rInf.SetIdx( rInf.GetIdx() - GetLen() );
-        const sal_Bool bFull = SwHyphPortion::Format( rInf );
+        const bool bFull = SwHyphPortion::Format( rInf );
         nHyphWidth = Width();
 
         // 6976: Eine truebe Sache: Wir werden erlaubterweise breiter,
@@ -586,7 +586,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
  * - wenn wir vor einem (echten/emuliertem) Zeilenumbruch stehen
  *************************************************************************/
 
-sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( IsExpand() || ( rInf.OnWin() && rInf.GetOpt().IsSoftHyph() ) ||
         ( GetPortion() && ( GetPortion()->InFixGrp() ||
@@ -595,7 +595,7 @@ sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt
     {
         return SwHyphPortion::GetExpTxt( rInf, rTxt );
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************

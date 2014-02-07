@@ -33,12 +33,12 @@ sal_Int32 SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
  *              virtual SwExpandPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
+bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
     rTxt = OUString();
     // Nicht etwa: return 0 != rTxt.Len();
     // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -67,7 +67,7 @@ SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
 // 5010: Exp und Tabs
 
-sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
+bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwTxtSlot aDiffTxt( &rInf, this, true, false );
     const sal_Int32 nFullLen = rInf.GetLen();
@@ -79,7 +79,7 @@ sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
     {
         // nicht Init(), weil wir Hoehe und Ascent brauchen
         Width(0);
-        return sal_False;
+        return false;
     }
     return SwTxtPortion::Format( rInf );
 }
@@ -211,9 +211,9 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
  *************************************************************************/
 
 // 7771: UnderFlows weiterreichen und selbst ausloesen!
-sal_Bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
+bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 {
-    const sal_Bool bFull = rInf.IsUnderFlow() || SwExpandPortion::Format( rInf );
+    const bool bFull = rInf.IsUnderFlow() || SwExpandPortion::Format( rInf );
     if( bFull && MayUnderFlow( rInf, rInf.GetIdx(), rInf.IsUnderFlow() ) )
     {
         Truncate();
@@ -239,10 +239,10 @@ void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwBlankPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
+bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
     rTxt = OUString(cChar);
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -283,9 +283,9 @@ KSHORT SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
  *                 virtual SwPostItsPortion::Format()
  *************************************************************************/
 
-sal_Bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
+bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_Bool bRet = SwLinePortion::Format( rInf );
+    const bool bRet = SwLinePortion::Format( rInf );
     // 32749: PostIts sollen keine Auswirkung auf Zeilenhoehe etc. haben
     SetAscent( 1 );
     Height( 1 );
@@ -296,13 +296,13 @@ sal_Bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
  *              virtual SwPostItsPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
         rTxt = OUString(' ');
     else
         rTxt = OUString();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

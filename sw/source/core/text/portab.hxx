@@ -36,7 +36,7 @@ class SwTabPortion : public SwFixPortion
 public:
     SwTabPortion( const KSHORT nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     sal_Bool PostFormat( SwTxtFormatInfo &rInf );
     inline  sal_Bool IsFilled() const { return 0 != cFill; }
