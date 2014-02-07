@@ -54,7 +54,6 @@
                         </child>
                         <child>
                           <object class="GtkToolButton" id="import">
-                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="action_name">import</property>
                             <property name="label" translatable="yes">Import</property>
@@ -68,7 +67,6 @@
                         </child>
                         <child>
                           <object class="GtkToolButton" id="delete">
-                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="action_name">delete</property>
                             <property name="label" translatable="yes">Delete</property>
@@ -82,7 +80,6 @@
                         </child>
                         <child>
                           <object class="GtkToolButton" id="save">
-                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="action_name">save</property>
                             <property name="label" translatable="yes">Save</property>
@@ -117,12 +114,10 @@
                     </child>
                     <child>
                       <object class="GtkToolbar" id="action_templates">
-                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <child>
                           <object class="GtkToolButton" id="template_save">
-                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="action_name">template_save</property>
                             <property name="label" translatable="yes">Save</property>
