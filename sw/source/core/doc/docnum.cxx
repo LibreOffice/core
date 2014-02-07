@@ -1420,8 +1420,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                             bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
 {
     const SwTxtNode* pNd = rPos.nNode.GetNode().GetTxtNode();
-    const SwNumRule* pRule;
-    if( !pNd || 0 == ( pRule = pNd->GetNumRule()))
+    if( !pNd || 0 == pNd->GetNumRule() )
         return false;
 
     sal_uInt8 nSrchNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
@@ -1436,7 +1435,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
             if( aIdx.GetNode().IsTxtNode() )
             {
                 pNd = aIdx.GetNode().GetTxtNode();
-                pRule = pNd->GetNumRule();
+                const SwNumRule* pRule = pNd->GetNumRule();
 
                 sal_uInt8 nTmpNum;
 
@@ -1473,7 +1472,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         if( aIdx.GetNode().IsTxtNode() )
         {
             pNd = aIdx.GetNode().GetTxtNode();
-            pRule = pNd->GetNumRule();
+            const SwNumRule* pRule = pNd->GetNumRule();
             if( pRule )
             {
                 if( ::lcl_IsNumOk( nSrchNum, nLower, nUpper, bOverUpper,
