@@ -316,33 +316,25 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     mpSearchView->setItemStateHdl(Link());
 }
 
-void SfxTemplateManagerDlg::setSaveMode(bool bMode)
+void SfxTemplateManagerDlg::setSaveMode()
 {
-    mbIsSaveMode = bMode;
+    mbIsSaveMode = true;
+
     mpTabControl->Clear();
     mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
-    if (bMode)
-    {
-        mpViewBar->ShowItem(VIEWBAR_SAVE);
-        mpViewBar->HideItem(VIEWBAR_IMPORT);
-        mpViewBar->HideItem(VIEWBAR_REPOSITORY);
+    mpViewBar->ShowItem(VIEWBAR_SAVE);
+    mpViewBar->HideItem(VIEWBAR_IMPORT);
+    mpViewBar->HideItem(VIEWBAR_REPOSITORY);
 
-        mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
-        mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
-        mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
-        mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
-        mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
-        mpTemplateBar->HideItem(TEMPLATEBAR_MOVE);
-        mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
-        mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
-    }
-    else
-    {
-        mpViewBar->HideItem(VIEWBAR_SAVE);
-        mpViewBar->ShowItem(VIEWBAR_IMPORT);
-        mpViewBar->ShowItem(VIEWBAR_REPOSITORY);
-    }
+    mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
+    mpTemplateBar->ShowItem(TEMPLATEBAR_PROPERTIES);
+    mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
+    mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
+    mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
+    mpTemplateBar->HideItem(TEMPLATEBAR_MOVE);
+    mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
+    mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
 }
 
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)

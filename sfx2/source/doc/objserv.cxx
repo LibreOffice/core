@@ -881,7 +881,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // save as document templates
             SfxTemplateManagerDlg aDlg;
             aDlg.setDocumentModel(GetModel());
-            aDlg.setSaveMode(true);
+            aDlg.setSaveMode();
             aDlg.Execute();
 
             break;

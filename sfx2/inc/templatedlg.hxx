@@ -49,7 +49,7 @@ public:
 
     ~SfxTemplateManagerDlg ();
 
-    void setSaveMode (bool bMode);
+    void setSaveMode();
 
     void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
 
