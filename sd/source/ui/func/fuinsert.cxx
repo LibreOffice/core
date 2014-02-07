@@ -142,8 +142,18 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
+                bool bSelectionReplaced(false);
+
                 if( pPickObj )
+                {
                     nAction = DND_ACTION_LINK;
+                }
+                else if(1 == mpView->GetMarkedObjectCount())
+                {
+                    pPickObj = mpView->GetMarkedObjectByIndex(0);
+                    nAction = DND_ACTION_MOVE;
+                    bSelectionReplaced = true;
+                }
 
                 Point aPos;
                 Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
@@ -157,6 +167,11 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                     String aFltName(aDlg.GetCurrentFilter());
                     String aPath(aDlg.GetPath());
                     pGrafObj->SetGraphicLink(aPath, aFltName);
+                }
+
+                if(bSelectionReplaced && pGrafObj)
+                {
+                    mpView->MarkObj(pGrafObj, mpView->GetSdrPageView());
                 }
             }
         }

@@ -372,6 +372,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SW_DLLPRIVATE virtual void  Move();
 
+public: // #123922# Needs to be called from a 2nd place now as a helper method
     SW_DLLPRIVATE sal_Bool          InsertGraphicDlg( SfxRequest& );
 
 protected:

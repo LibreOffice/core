@@ -158,6 +158,16 @@ public:
     SdrObject*  GetObjectByName(const String& rName);
     sal_Bool           GetObjectIsMarked(  SdrObject * pObject );
     sal_Bool           SelectCurrentViewObject( const String& rName );
+
+    // #123922# helper which checks if a Graphic may be appied to an existing
+    // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a
+    // fillable, non-OLE SdrObject, the FillStyle will be adapted
+    SdrObject* ApplyGraphicToObject(
+        SdrObject& rHitObject,
+        const Graphic& rGraphic,
+        const String& rBeginUndoText,
+        const String& rFile,
+        const String& rFilter);
 };
 
 

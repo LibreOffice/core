@@ -390,6 +390,38 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     MakeDrawLayer();
     ScDrawView* pScDrawView = GetScDrawView();
 
+    // #123922# check if the drop was over an existing object; if yes, evtl. replace
+    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
+    // style for other objects
+    if(pScDrawView)
+    {
+        SdrObject* pPickObj = 0;
+        SdrPageView* pPageView = pScDrawView->GetSdrPageView();
+
+        if(pPageView)
+        {
+            pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView);
+        }
+
+        if(pPickObj)
+        {
+            const String aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
+                *pPickObj,
+                rGraphic,
+                aBeginUndo,
+                rFile,
+                rFilter);
+
+            if(pResult)
+            {
+                // we are done; mark the modified/new object
+                pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
+                return sal_True;
+            }
+        }
+    }
+
     Point aPos( rPos );
     Window* pWin = GetActiveWin();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
@@ -411,7 +443,6 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
         aPos.X() -= aSize.Width();
 
     GetViewData()->GetViewShell()->SetDrawShell( sal_True );
-
     Rectangle aRect(aPos, aSize);
     SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
 
@@ -434,51 +465,4 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     return sal_True;
 }
-
-sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGraphic )
-{
-    sal_Bool bRet = sal_False;
-    SdrGrafObj* pNewGrafObj = NULL;
-
-    ScDrawView* pScDrawView = GetScDrawView();
-    if ( pScDrawView && pPickObj )
-    {
-        /**********************************************************************
-        * Objekt neu attributieren
-        **********************************************************************/
-        SdrPageView* pPV = pScDrawView->GetSdrPageView();
-        if (pPickObj->ISA(SdrGrafObj))
-        {
-            /******************************************************************
-            * Das Graphik-Objekt bekommt eine neue Graphik
-            ******************************************************************/
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
-            pNewGrafObj->SetGraphic(rGraphic);
-
-            pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            pScDrawView->ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj);
-            pScDrawView->EndUndo();
-
-            bRet = sal_True;
-        }
-        else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
-        {
-            /******************************************************************
-            * Das Objekt wird mit der Graphik gefuellt
-            ******************************************************************/
-            pScDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
-
-            SfxItemSet aSet( pScDrawView->GetModel()->GetItemPool(),
-                                XATTR_FILLSTYLE, XATTR_FILLBITMAP );
-            aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(String(), rGraphic));
-
-            pPickObj->SetMergedItemSetAndBroadcast(aSet);
-
-            bRet = sal_True;
-        }
-    }
-    return bRet;
-}
-
 

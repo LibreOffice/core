@@ -4283,8 +4283,8 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if ( pHitObj && bIsLink )
     {
         //  dropped on drawing object
-        //  PasteOnDrawObject checks for valid formats
-        if ( pViewData->GetView()->PasteOnDrawObject( rEvt.maDropEvent.Transferable, pHitObj, sal_True ) )
+        //  PasteOnDrawObjectLinked checks for valid formats
+        if ( pViewData->GetView()->PasteOnDrawObjectLinked( rEvt.maDropEvent.Transferable, *pHitObj ) )
             return rEvt.mnAction;
     }
 

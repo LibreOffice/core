@@ -1999,7 +1999,7 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
 
                 case SW_PASTESDR_SETATTR:
                     if( rSh.IsObjSelected() )
-                        rSh.Paste( aGrf );
+                        rSh.Paste( aGrf, String() );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
                         rSh.ReRead( sURL, aEmptyStr, &aGrf );
                     else
@@ -2272,7 +2272,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
 int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 /* nDropAction */, bool bNeedToSelectBeforePaste)
+                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
 {
     int nRet = 0;
 
@@ -2372,52 +2372,82 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     if( nRet )
     {
         String sURL;
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+
+        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
+            // #123922# if link action is noted, also take URL
+            || DND_ACTION_LINK == nDropAction)
+        {
             sURL = aBkmk.GetURL();
+        }
 
         switch( nAction )
         {
-        case SW_PASTESDR_INSERT:
-            SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-            rSh.Insert( sURL, aEmptyStr, aGrf );
-        break;
-
-        case SW_PASTESDR_REPLACE:
-            if( rSh.IsObjSelected() )
-            {
-                rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
-                Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
-                SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
-            }
-            else
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
-            break;
-
-        case SW_PASTESDR_SETATTR:
-            if( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK == nFmt )
-            {
-                if( rSh.IsFrmSelected() )
-                {
-                    SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-                    rSh.GetFlyFrmAttr( aSet );
-                    SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                    aURL.SetURL( aBkmk.GetURL(), sal_False );
-                    aSet.Put( aURL );
-                    rSh.SetFlyFrmAttr( aSet );
-                }
-            }
-            else if( rSh.IsObjSelected() )
-                rSh.Paste( aGrf );
-            else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
-            else
+            case SW_PASTESDR_INSERT:
             {
                 SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGrf );
+                rSh.Insert( sURL, aEmptyStr, aGrf );
+                break;
             }
-            break;
-        default:
-            nRet = 0;
+
+            case SW_PASTESDR_REPLACE:
+            {
+                if( rSh.IsObjSelected() )
+                {
+                    // #123922# for D&D on draw objects, do for now the same for
+                    // SW_PASTESDR_REPLACE (D&D) as for SW_PASTESDR_SETATTR (D&D and
+                    // CTRL+SHIFT). The code below replaces the draw object with
+                    // a writer graphic; maybe this is an option later again if wanted
+                    rSh.Paste( aGrf, sURL );
+
+                    // rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
+                    // Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
+                    // SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
+                }
+                else
+                {
+                    // set graphic at writer graphic without link
+                    rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                }
+
+                break;
+            }
+
+            case SW_PASTESDR_SETATTR:
+            {
+                if( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK == nFmt )
+                {
+                    if( rSh.IsFrmSelected() )
+                    {
+                        SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
+                        rSh.GetFlyFrmAttr( aSet );
+                        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                        aURL.SetURL( aBkmk.GetURL(), sal_False );
+                        aSet.Put( aURL );
+                        rSh.SetFlyFrmAttr( aSet );
+                    }
+                }
+                else if( rSh.IsObjSelected() )
+                {
+                    // set as attribute at DrawObject
+                    rSh.Paste( aGrf, sURL );
+                }
+                else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
+                {
+                    // set as linked graphic at writer graphic frame
+                    rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                }
+                else
+                {
+                    SwTransferable::SetSelInShell( rSh, sal_False, pPt );
+                    rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGrf );
+                }
+                break;
+            }
+            default:
+            {
+                nRet = 0;
+                break;
+            }
         }
     }
 

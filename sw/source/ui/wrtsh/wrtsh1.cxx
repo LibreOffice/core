@@ -182,17 +182,17 @@ sal_Bool SwWrtShell::IsEndWrd()
  Beschreibung:  Abfrage, ob Einfuegen moeglich ist; gfs. Beep
 ------------------------------------------------------------------------*/
 
-
-
-sal_Bool SwWrtShell::_CanInsert()
+bool SwWrtShell::_CanInsert()
 {
     if(!CanInsert())
     {
         Sound::Beep();
-        return sal_False;
+        return false;
     }
-    return sal_True;
+
+    return true;
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  String einfuegen
 ------------------------------------------------------------------------*/
@@ -1820,9 +1820,36 @@ sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-sal_Bool SwWrtShell::CanInsert()
+bool SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
+    // #123922# The original expression looks sleek, but it is not. Using the mathematical or ('|')
+    // instead of the logical one ('||') forces the compiler to evaluate all conditions to allow or-ing
+    // them together (yes, he could do better). Using the logical or allows to return on the first
+    // failing statement instead.
+    //
+    // return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
+
+    if(IsSelFrmMode())
+    {
+        return false;
+    }
+
+    if(IsObjSelected())
+    {
+        return false;
+    }
+
+    if(GetView().GetDrawFuncPtr())
+    {
+        return false;
+    }
+
+    if(GetView().GetPostItMgr()->GetActiveSidebarWin())
+    {
+        return false;
+    }
+
+    return true;
 }
 
 

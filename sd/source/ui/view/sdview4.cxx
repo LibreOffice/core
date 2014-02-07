@@ -107,67 +107,70 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
-    if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
+    const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
+
+    if(pPickObj && !bIsGraphic && pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
     {
-        const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
-
-        if(bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster)) // #121603# Do not use pObj, it may be NULL
+        // fill style change (fill object with graphic), independent of mnAction
+        // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
+        if( IsUndoEnabled() )
         {
-            if( IsUndoEnabled() )
-                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
-
-            SdPage* pPage = (SdPage*) pPickObj->GetPage();
-
-            if( bIsGraphic )
-            {
-                // Das Objekt wird mit der Bitmap gefuellt
-                pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
-                pNewGrafObj->SetGraphic(rGraphic);
-            }
-            else
-            {
-                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
-                pNewGrafObj->SetEmptyPresObj(sal_True);
-            }
-
-            if ( pNewGrafObj->IsEmptyPresObj() )
-            {
-                Rectangle aRect( pNewGrafObj->GetLogicRect() );
-                pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
-                pNewGrafObj->SetOutlinerParaObject(NULL);
-                pNewGrafObj->SetEmptyPresObj(sal_False);
-            }
-
-            if (pPage && pPage->IsPresObj(pPickObj))
-            {
-                // Neues PresObj in die Liste eintragen
-                pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
-                pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
-            }
-
-            if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
-
-            ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
-
-            if( IsUndoEnabled() )
-                EndUndo();
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+            EndUndo();
         }
-        else if(pPickObj->IsClosedObj())
+
+        SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
+        pPickObj->SetMergedItemSetAndBroadcast(aSet);
+    }
+    else if(DND_ACTION_LINK == mnAction
+        && pPickObj
+        && pPV
+        && (bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster))) // #121603# Do not use pObj, it may be NULL
+    {
+        // hit on SdrGrafObj with wanted new linked graphic (or PresObj placeholder hit)
+        if( IsUndoEnabled() )
+            BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
+
+        SdPage* pPage = (SdPage*) pPickObj->GetPage();
+
+        if( bIsGraphic )
         {
-            // fill object with graphic
-            if( IsUndoEnabled() )
-            {
-                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
-                EndUndo();
-            }
-
-            SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
-            aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
-            pPickObj->SetMergedItemSetAndBroadcast(aSet);
+            // Das Objekt wird mit der Bitmap gefuellt
+            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+            pNewGrafObj->SetGraphic(rGraphic);
         }
+        else
+        {
+            pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
+            pNewGrafObj->SetEmptyPresObj(sal_True);
+        }
+
+        if ( pNewGrafObj->IsEmptyPresObj() )
+        {
+            Rectangle aRect( pNewGrafObj->GetLogicRect() );
+            pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
+            pNewGrafObj->SetOutlinerParaObject(NULL);
+            pNewGrafObj->SetEmptyPresObj(sal_False);
+        }
+
+        if (pPage && pPage->IsPresObj(pPickObj))
+        {
+            // Neues PresObj in die Liste eintragen
+            pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
+            pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
+        }
+
+        if (pImageMap)
+            pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+
+        ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
+
+        if( IsUndoEnabled() )
+            EndUndo();
     }
     else if ( pPV )
     {

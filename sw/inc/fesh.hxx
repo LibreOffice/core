@@ -536,7 +536,7 @@ public:
     sal_Bool GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
-    sal_Bool Paste( const Graphic &rGrf );
+    bool Paste( const Graphic &rGrf, const String& rURL );
     sal_Bool Paste( SotDataObject& rObj, const Point& rPt );
 
     sal_Bool IsAlignPossible() const;
