@@ -132,15 +132,15 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         else
         {
             pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
-            pNewGrafObj->SetEmptyPresObj(sal_True);
+            pNewGrafObj->SetEmptyPresObj(true);
         }
 
         if ( pNewGrafObj->IsEmptyPresObj() )
         {
             Rectangle aRect( pNewGrafObj->GetLogicRect() );
-            pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
+            pNewGrafObj->AdjustToMaxRect( aRect, false );
             pNewGrafObj->SetOutlinerParaObject(NULL);
-            pNewGrafObj->SetEmptyPresObj(sal_False);
+            pNewGrafObj->SetEmptyPresObj(false);
         }
 
         if (pPage && pPage->IsPresObj(pPickObj))
