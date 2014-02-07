@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 #include <avmedia/mediawindow.hxx>
+#include <boost/scoped_ptr.hpp>
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
@@ -398,7 +399,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 {
     uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer ) );
     uno::Reference< graphic::XGraphic > xRet;
-    ::std::auto_ptr< Graphic >          apGraphic;
+    boost::scoped_ptr< Graphic > apGraphic;
 
     if( xPlayer.is() )
     {
