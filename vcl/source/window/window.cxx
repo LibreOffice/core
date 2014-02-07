@@ -9040,6 +9040,7 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
         OutputDevice *pOutDev = GetOutDev();
         pOutDev->ImplInitOutDevData();
     }
+    assert(mpOutDevData);
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;
     Paint( rRect );
