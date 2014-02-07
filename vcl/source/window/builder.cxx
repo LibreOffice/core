@@ -726,7 +726,6 @@ namespace
 
     bool extractVisible(VclBuilder::stringmap &rMap)
     {
-        OString sActionName;
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("visible"));
         if (aFind != rMap.end())
         {
