@@ -50,7 +50,7 @@ SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
     , mbHandleSerfResponseCalled( false )
 {
     mPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                            OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ) );
+                            OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 SerfRequestProcessor::~SerfRequestProcessor()
@@ -209,9 +209,9 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
-                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
-                                OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
@@ -233,9 +233,9 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
-                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
-                            OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
+                            OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
@@ -274,7 +274,7 @@ bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = createCopyReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
@@ -290,7 +290,7 @@ bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = createMoveReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
