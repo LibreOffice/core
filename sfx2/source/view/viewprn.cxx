@@ -871,8 +871,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     // so it will only be deleted here if dialog was cancelled
                     DELETEZ( pDlgPrinter );
                     rReq.Ignore();
-                    if ( SID_PRINTDOC == nId )
-                        rReq.SetReturnValue(SfxBoolItem(0,false));
                 }
             }
         }
