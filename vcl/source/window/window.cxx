@@ -353,6 +353,12 @@ const char* ImplDbgCheckWindow( const void* pObj )
 
 // =======================================================================
 
+bool Window::HasMirroredGraphics() const
+{
+    const OutputDevice* pOutDev = GetOutDev();
+    return pOutDev->OutputDevice::HasMirroredGraphics();
+}
+
 void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();

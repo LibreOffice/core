@@ -213,6 +213,12 @@ void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
     *mpPrinterOptions = i_rOptions;
 }
 
+bool Printer::HasMirroredGraphics() const
+{
+    // due to a "hotfix" for AOO bug i55719, this needs to return false
+    return false;
+}
+
 // QueueInfo
 QueueInfo::QueueInfo()
 {
