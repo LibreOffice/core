@@ -586,7 +586,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
                 break;
         }
         AquaSalFrame* pFrame = pSalData->maFrames.front();
-        Window * pWindow = pFrame->GetWindow() ? pSalData->maFrames.front()->GetWindow() : NULL;
+        Window* pWindow = pFrame ? pFrame->GetWindow() : NULL;
 
         if( pWindow )
         {
