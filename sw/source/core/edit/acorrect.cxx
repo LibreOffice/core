@@ -270,9 +270,9 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUStr
  *                     corrected word was inserted. (Doesn't need to be the same paragraph!)
  * @return text or 0, if previous paragraph does not exists or there are only blankness
  */
-OUString SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
+OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
 {
-    OUString aStr;
+    OUString const* pStr(0);
 
     if( bAtNormalPos || !pIdx )
         pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
@@ -286,11 +286,12 @@ OUString SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         pTNd = pIdx->GetNode().GetTxtNode();
     }
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )
-        aStr = pTNd->GetTxt();
+        pStr = & pTNd->GetTxt();
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return aStr;
+
+    return pStr;
 }
 
 bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,

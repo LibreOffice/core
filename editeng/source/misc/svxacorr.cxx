@@ -865,8 +865,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     {
         // Check out the previous paragraph, if it exists.
         // If so, then check to paragraph separator at the end.
-        OUString aPrevPara = rDoc.GetPrevPara( bNormalPos );
-        if( !aPrevPara.isEmpty() )
+        OUString const*const pPrevPara = rDoc.GetPrevPara(bNormalPos);
+        if (!pPrevPara)
         {
             // valid separator -> replace
             OUString sChar( *pWordStt );
@@ -875,7 +875,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                     rDoc.ReplaceRange( pWordStt - pStart, 1, sChar );
         }
 
-        aText = aPrevPara;
+        aText = *pPrevPara;
         bAtStart = sal_False;
         pStart = aText.getStr();
         pStr = pStart + aText.getLength();

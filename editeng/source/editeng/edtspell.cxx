@@ -696,7 +696,7 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
     return true;
 }
 
-OUString EdtAutoCorrDoc::GetPrevPara( sal_Bool )
+OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
 {
     // Return previous paragraph, so that it can be determined,
     // whether the current word is at the beginning of a sentence.
@@ -719,16 +719,16 @@ OUString EdtAutoCorrDoc::GetPrevPara( sal_Bool )
             bBullet = true;
     }
     if ( bBullet )
-        return OUString();
+        return 0;
 
     for ( sal_Int32 n = nPos; n; )
     {
         n--;
         ContentNode* pNode = rNodes[n];
         if ( pNode->Len() )
-            return pNode->GetString();
+            return & pNode->GetString();
     }
-    return OUString();
+    return 0;
 
 }
 

@@ -267,10 +267,10 @@ private:
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;
     }
-    virtual OUString GetPrevPara( sal_Bool )
+    virtual OUString const* GetPrevPara(bool)
     {
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
-        return OUString();
+        return 0;
     }
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
                 sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
