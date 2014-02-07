@@ -683,6 +683,7 @@ class CopyCellsFromClipHandler
     long mnRowOffset;
     sc::ColumnBlockPosition maDestBlockPos;
     sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
+    svl::SharedStringPool* mpSharedStringPool;
 
     bool isDateCell(SCROW nSrcRow) const
     {
@@ -713,7 +714,7 @@ class CopyCellsFromClipHandler
     }
 
 public:
-    CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, long nRowOffset) :
+    CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, long nRowOffset, svl::SharedStringPool* pSharedStringPool) :
         mrCxt(rCxt),
         mrSrcCol(rSrcCol),
         mrDestCol(rDestCol),
@@ -722,7 +723,8 @@ public:
         mnSrcTab(rSrcCol.GetTab()),
         mnSrcCol(rSrcCol.GetCol()),
         mnRowOffset(nRowOffset),
-        mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol))
+        mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol)),
+        mpSharedStringPool(pSharedStringPool)
     {
         if (mpDestBlockPos)
             maDestBlockPos = *mpDestBlockPos;
@@ -798,6 +800,12 @@ public:
                 {
                     if (bAsLink)
                         insertRefCell(nSrcRow, nSrcRow + mnRowOffset);
+                    else if (mpSharedStringPool)
+                    {
+                        // Re-intern the string if source is a different document.
+                        svl::SharedString aInterned = mpSharedStringPool->intern( (*it).getString());
+                        mrDestCol.SetRawString(maDestBlockPos, nSrcRow + mnRowOffset, aInterned);
+                    }
                     else
                         mrDestCol.SetRawString(maDestBlockPos, nSrcRow + mnRowOffset, *it);
                 }
@@ -906,8 +914,16 @@ public:
                                 rEngine.SetText(aStr.getString());
                                 mrDestCol.SetEditText(maDestBlockPos, nSrcRow + mnRowOffset, rEngine.CreateTextObject());
                             }
+                            else if (mpSharedStringPool)
+                            {
+                                // Re-intern the string if source is a different document.
+                                svl::SharedString aInterned = mpSharedStringPool->intern( aStr.getString());
+                                mrDestCol.SetRawString(maDestBlockPos, nSrcRow + mnRowOffset, aInterned);
+                            }
                             else
+                            {
                                 mrDestCol.SetRawString(maDestBlockPos, nSrcRow + mnRowOffset, aStr);
+                            }
                         }
                     }
                 }
@@ -978,10 +994,14 @@ void ScColumn::CopyFromClip(
         return;
     }
 
-    // nRow1 to nRow2 is for destination (this) column. Subtract nDy to get the source range.
+    // Compare the ScDocumentPool* to determine if we are copying within the
+    // same document. If not, re-intern shared strings.
+    svl::SharedStringPool* pSharedStringPool = (rColumn.pDocument->GetPool() != pDocument->GetPool()) ?
+        &pDocument->GetSharedStringPool() : NULL;
 
+    // nRow1 to nRow2 is for destination (this) column. Subtract nDy to get the source range.
     // Copy all cells in the source column (rColumn) from nRow1-nDy to nRow2-nDy to this column.
-    CopyCellsFromClipHandler aFunc(rCxt, rColumn, *this, nTab, nCol, nDy);
+    CopyCellsFromClipHandler aFunc(rCxt, rColumn, *this, nTab, nCol, nDy, pSharedStringPool);
     sc::ParseBlock(rColumn.maCells.begin(), rColumn.maCells, aFunc, nRow1-nDy, nRow2-nDy);
 }
 
