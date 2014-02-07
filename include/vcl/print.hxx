@@ -373,6 +373,8 @@ public:
                           const JobSetup& i_rInitSetup
                           );
 
+    virtual bool HasMirroredGraphics() const;
+
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
     static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
