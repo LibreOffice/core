@@ -223,6 +223,7 @@ void SdFiltersTest::testN828390()
         // Get the object
         SdrObject *pObj = pPage->GetObj(0);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT( pTxtObj );
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
         for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
