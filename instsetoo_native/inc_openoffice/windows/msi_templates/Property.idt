@@ -8,10 +8,10 @@ ApplicationUsers	AllUsers
 ALLUSERS	1
 ARPCOMMENTS	ARPCOMMENTSTEMPLATE
 ARPCONTACT	Collabora Productivity Ltd.
-ARPHELPLINK	https://support.libreoffice.collabora.co.uk
+ARPHELPLINK	https://libreoffice-from-collabora.com
 ARPHELPTELEPHONE	support@libreoffice.collabora.com
-ARPURLINFOABOUT	http://www.collabora.com/projects/libreoffice
-ARPURLUPDATEINFO	https://support.libreoffice.collabora.co.uk
+ARPURLINFOABOUT	http://libreoffice-from-collabora.com
+ARPURLUPDATEINFO	https://libreoffice-from-collabora.com
 DefaultUIFont	Tahoma8
 DialogCaption	Windows Installer
 DiskPrompt	[1]
