@@ -255,6 +255,7 @@ void SdFiltersTest::testN828390_2()
 
     SdrObject *pObj = pPage->GetObj(0);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    CPPUNIT_ASSERT( pTxtObj );
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT(aEdit.GetText(0) == OUString("Linux  "));
     CPPUNIT_ASSERT(aEdit.GetText(1) == OUString("Standard Platform"));
