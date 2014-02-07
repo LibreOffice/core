@@ -72,7 +72,8 @@ public:
                                     ::com::sun::star::beans::PropertyVetoException,
                                     ::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException,
+                                    std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
