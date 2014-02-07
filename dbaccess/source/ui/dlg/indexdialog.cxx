@@ -268,8 +268,8 @@ namespace dbaui
         }
         else
         {
-            m_aActions.EnableItem(ID_INDEX_SAVE, sal_False);
-            m_aActions.EnableItem(ID_INDEX_RESET, sal_False);
+            m_aActions.EnableItem(ID_INDEX_SAVE, false);
+            m_aActions.EnableItem(ID_INDEX_RESET, false);
         }
         m_aActions.EnableItem(ID_INDEX_DROP, bSelectedAnything);
         m_aActions.EnableItem(ID_INDEX_RENAME, bSelectedAnything);

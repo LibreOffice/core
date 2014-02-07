@@ -538,15 +538,15 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-        mpTBxVertAlign->EnableItem(nIdVertTop, sal_False);
-        mpTBxVertAlign->EnableItem(nIdVertCenter, sal_False);
-        mpTBxVertAlign->EnableItem(nIdVertBottom, sal_False);
+        mpTBxVertAlign->EnableItem(nIdVertTop, false);
+        mpTBxVertAlign->EnableItem(nIdVertCenter, false);
+        mpTBxVertAlign->EnableItem(nIdVertBottom, false);
     }
     else
     {
-        mpTBxVertAlign->EnableItem(nIdVertTop, sal_True);
-        mpTBxVertAlign->EnableItem(nIdVertCenter, sal_True);
-        mpTBxVertAlign->EnableItem(nIdVertBottom, sal_True);
+        mpTBxVertAlign->EnableItem(nIdVertTop, true);
+        mpTBxVertAlign->EnableItem(nIdVertCenter, true);
+        mpTBxVertAlign->EnableItem(nIdVertBottom, true);
         if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)))
         {
             const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
@@ -1163,16 +1163,16 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         const sal_uInt16 nIdIncrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
         const sal_uInt16 nIdDecrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
 
-        mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, sal_True);
+        mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, true);
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table) )
         {
-            mpTbxIndent_IncDec->EnableItem(nIdIncrIndent, sal_True);
-            mpTbxIndent_IncDec->EnableItem(nIdDecrIndent, sal_True);
+            mpTbxIndent_IncDec->EnableItem(nIdIncrIndent, true);
+            mpTbxIndent_IncDec->EnableItem(nIdDecrIndent, true);
         }
 
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, sal_True);
+        mpTbxProDemote->EnableItem(nIdHangingIndent2, true);
     }
     else if( eState == SFX_ITEM_DISABLED )
     {
@@ -1185,10 +1185,10 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
             mpTbxIndent_IncDec->Disable();
         else
-            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, sal_False);
+            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
 
         //      maTbxProDemote->Disable();
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, sal_False);
+        mpTbxProDemote->EnableItem(nIdHangingIndent2, false);
     }
     else
     {
@@ -1200,8 +1200,8 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
             mpTbxIndent_IncDec->Disable();
         else
-            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, sal_False);
-        mpTbxProDemote->EnableItem(nIdHangingIndent2, sal_False);
+            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
+        mpTbxProDemote->EnableItem(nIdHangingIndent2, false);
     }
 }
 
@@ -1276,15 +1276,15 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
 
     const sal_uInt16 nIdDemote = mpTbxProDemote->GetItemId(UNO_DEMOTE);
     if(mbOutLineLeft)
-        mpTbxProDemote->EnableItem(nIdDemote, sal_True);
+        mpTbxProDemote->EnableItem(nIdDemote, true);
     else
-        mpTbxProDemote->EnableItem(nIdDemote, sal_False);
+        mpTbxProDemote->EnableItem(nIdDemote, false);
 
     const sal_uInt16 nIdPromote = mpTbxProDemote->GetItemId(UNO_PROMOTE);
     if(mbOutLineRight)
-        mpTbxProDemote->EnableItem(nIdPromote, sal_True);
+        mpTbxProDemote->EnableItem(nIdPromote, true);
     else
-        mpTbxProDemote->EnableItem(nIdPromote, sal_False);
+        mpTbxProDemote->EnableItem(nIdPromote, false);
 
 }
 

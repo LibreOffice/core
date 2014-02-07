@@ -864,7 +864,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , IconClickHdl_Impl)
     {
         pFileWin->OpenRoot( aURL );
         pIconWin->InvalidateIconControl();
-        aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
+        aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, false );
     }
     return 0;
 }
@@ -901,7 +901,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
 IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
 {
     pFrameWin->OpenFile( "", sal_True, sal_False, sal_False );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, false );
 
     OUString sURL = pFileWin->GetFolderURL();
     sal_uLong nPos = pIconWin->GetRootPos( sURL );
@@ -1065,9 +1065,9 @@ void SvtTemplateWindow::InitToolBoxes()
         aFrameWinTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
     }
 
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, sal_False );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, sal_False );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, false );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, false );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, false );
 
     Link aLink = LINK( this, SvtTemplateWindow, ClickHdl_Impl );
     aFileViewTB.SetClickHdl( aLink );

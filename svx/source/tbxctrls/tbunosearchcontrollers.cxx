@@ -427,12 +427,12 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
             OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand == COMMAND_DOWNSEARCH )
             {
-                pToolBox->EnableItem(i, sal_False);
+                pToolBox->EnableItem(i, false);
                 m_nDownSearchId = i;
             }
             else if ( sItemCommand == COMMAND_UPSEARCH )
             {
-                pToolBox->EnableItem(i, sal_False);
+                pToolBox->EnableItem(i, false);
                 m_nUpSearchId = i;
             }
         }
@@ -486,16 +486,16 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
         if (!m_pFindTextFieldControl->GetText().isEmpty())
         {
             if ( !pToolBox->IsItemEnabled(m_nDownSearchId) )
-                pToolBox->EnableItem(m_nDownSearchId, sal_True);
+                pToolBox->EnableItem(m_nDownSearchId, true);
             if ( !pToolBox->IsItemEnabled(m_nUpSearchId) )
-                pToolBox->EnableItem(m_nUpSearchId, sal_True);
+                pToolBox->EnableItem(m_nUpSearchId, true);
         }
         else
         {
             if ( pToolBox->IsItemEnabled(m_nDownSearchId) )
-                pToolBox->EnableItem(m_nDownSearchId, sal_False);
+                pToolBox->EnableItem(m_nDownSearchId, false);
             if ( pToolBox->IsItemEnabled(m_nUpSearchId) )
-                pToolBox->EnableItem(m_nUpSearchId, sal_False);
+                pToolBox->EnableItem(m_nUpSearchId, false);
         }
     }
 

@@ -105,11 +105,11 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = nItemBits;
     meState         = STATE_NOCHECK;
-    mbEnabled       = sal_True;
-    mbVisible       = sal_True;
+    mbEnabled       = true;
+    mbVisible       = true;
     mbEmptyBtn      = bEmptyBtn;
-    mbShowWindow    = sal_False;
-    mbBreak         = sal_False;
+    mbShowWindow    = false;
+    mbBreak         = false;
     mnSepSize       = TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
@@ -248,7 +248,7 @@ Size ImplToolItem::GetSize( sal_Bool bHorz, sal_Bool bCheckMaxWidth, long maxWid
             {
                 aSize.Width()   = aWinSize.Width();
                 aSize.Height()  = aWinSize.Height();
-                mbShowWindow = sal_True;
+                mbShowWindow = true;
             }
             else
             {
@@ -831,7 +831,7 @@ void ToolBox::InsertSpace( sal_uInt16 nPos )
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
     aItem.meType     = TOOLBOXITEM_SPACE;
-    aItem.mbEnabled  = sal_False;
+    aItem.mbEnabled  = false;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
@@ -849,7 +849,7 @@ void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
     aItem.meType     = TOOLBOXITEM_SEPARATOR;
-    aItem.mbEnabled  = sal_False;
+    aItem.mbEnabled  = false;
     if ( nPixSize )
         aItem.mnSepSize = nPixSize;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
@@ -869,7 +869,7 @@ void ToolBox::InsertBreak( sal_uInt16 nPos )
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
     aItem.meType     = TOOLBOXITEM_BREAK;
-    aItem.mbEnabled  = sal_False;
+    aItem.mbEnabled  = false;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
@@ -931,7 +931,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
         ImplToolItem aNewItem = rToolBox.mpData->m_aItems[nPos];
         // Bestimme Daten zuruecksetzen
         aNewItem.mpWindow      = NULL;
-        aNewItem.mbShowWindow = sal_False;
+        aNewItem.mbShowWindow = false;
 
         mpData->m_aItems.insert( (nNewPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nNewPos : mpData->m_aItems.end(), aNewItem );
         mpData->ImplClearLayoutData();
@@ -1755,7 +1755,7 @@ TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
+void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1763,7 +1763,7 @@ void ToolBox::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         if ( bEnable )
-            bEnable = sal_True;
+            bEnable = true;
         if ( pItem->mbEnabled != bEnable )
         {
             pItem->mbEnabled = bEnable;
@@ -1799,7 +1799,7 @@ sal_Bool ToolBox::IsItemEnabled( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
+void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     mpData->ImplClearLayoutData();

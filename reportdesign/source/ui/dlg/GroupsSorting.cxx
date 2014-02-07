@@ -1379,19 +1379,19 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 
     if (bEnabled && _nRow > 0 )
     {
-        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_True);
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, true);
     }
     else
     {
-        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_False);
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, false);
     }
     if (bEnabled && _nRow < (nRowCount - 1) )
     {
-        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_True);
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, true);
     }
     else
     {
-        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_False);
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, false);
     }
 
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
@@ -1402,7 +1402,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     }
     else
     {
-        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, sal_False);
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, false);
     }
 }
 

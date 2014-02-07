@@ -1313,7 +1313,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     {
                         m_pToolBar->SetItemText( nId, aString );
                     }
-                    m_pToolBar->EnableItem( nId, sal_True );
+                    m_pToolBar->EnableItem( nId, true );
                     m_pToolBar->SetItemState( nId, STATE_NOCHECK );
 
                     // Fill command map. It stores all our commands and from what

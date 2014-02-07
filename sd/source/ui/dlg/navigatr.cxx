@@ -197,7 +197,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     // Disable the shape filter drop down menu when there is a running slide
     // show.
     if (pViewShell!=NULL && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ))
-        maToolbox.EnableItem(TBI_SHAPE_FILTER, sal_False);
+        maToolbox.EnableItem(TBI_SHAPE_FILTER, false);
     else
         maToolbox.EnableItem(TBI_SHAPE_FILTER);
 
@@ -904,7 +904,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
             pNavigatorWin->maToolbox.EnableItem( TBI_PEN );
         if( nState & NAVBTN_PEN_DISABLED &&
             pNavigatorWin->maToolbox.IsItemEnabled( TBI_PEN ) )
-            pNavigatorWin->maToolbox.EnableItem( TBI_PEN, sal_False );
+            pNavigatorWin->maToolbox.EnableItem( TBI_PEN, false );
         if( nState & NAVBTN_PEN_CHECKED &&
             !pNavigatorWin->maToolbox.IsItemChecked( TBI_PEN ) )
             pNavigatorWin->maToolbox.CheckItem( TBI_PEN );
@@ -922,7 +922,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                 pNavigatorWin->maToolbox.EnableItem( TBI_FIRST );
             if( nState & NAVBTN_FIRST_DISABLED &&
                 pNavigatorWin->maToolbox.IsItemEnabled( TBI_FIRST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_FIRST, sal_False );
+                pNavigatorWin->maToolbox.EnableItem( TBI_FIRST, false );
 
             // Prev
             if( nState & NAVBTN_PREV_ENABLED &&
@@ -930,7 +930,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                 pNavigatorWin->maToolbox.EnableItem( TBI_PREVIOUS );
             if( nState & NAVBTN_PREV_DISABLED &&
                 pNavigatorWin->maToolbox.IsItemEnabled( TBI_PREVIOUS ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_PREVIOUS, sal_False );
+                pNavigatorWin->maToolbox.EnableItem( TBI_PREVIOUS, false );
 
             // Last
             if( nState & NAVBTN_LAST_ENABLED &&
@@ -938,7 +938,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                 pNavigatorWin->maToolbox.EnableItem( TBI_LAST );
             if( nState & NAVBTN_LAST_DISABLED &&
                 pNavigatorWin->maToolbox.IsItemEnabled( TBI_LAST ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_LAST, sal_False );
+                pNavigatorWin->maToolbox.EnableItem( TBI_LAST, false );
 
             // Next
             if( nState & NAVBTN_NEXT_ENABLED &&
@@ -946,7 +946,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                 pNavigatorWin->maToolbox.EnableItem( TBI_NEXT );
             if( nState & NAVBTN_NEXT_DISABLED &&
                 pNavigatorWin->maToolbox.IsItemEnabled( TBI_NEXT ) )
-                pNavigatorWin->maToolbox.EnableItem( TBI_NEXT, sal_False );
+                pNavigatorWin->maToolbox.EnableItem( TBI_NEXT, false );
 
             if( nState & NAVTLB_UPDATE )
             {

@@ -70,7 +70,7 @@ struct ImplToolItem
     ToolBoxItemBits     mnBits;
     TriState            meState;
     sal_uInt16          mnId;
-    sal_Bool            mbEnabled:1,
+    bool                mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
                         mbShowWindow:1,

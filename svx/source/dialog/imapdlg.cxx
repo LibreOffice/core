@@ -180,9 +180,9 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     pOwnData->aTimer.SetTimeout( 100 );
     pOwnData->aTimer.SetTimeoutHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
-    aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_False );
-    aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_False );
-    aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_False );
+    aTbxIMapDlg1.EnableItem( TBI_ACTIVE, false );
+    aTbxIMapDlg1.EnableItem( TBI_MACRO, false );
+    aTbxIMapDlg1.EnableItem( TBI_PROPERTY, false );
 }
 
 SvxIMapDlg::~SvxIMapDlg()
@@ -599,9 +599,9 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     if ( !rInfo.bOneMarked )
     {
         aTbxIMapDlg1.CheckItem( TBI_ACTIVE, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_False );
+        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, false );
+        aTbxIMapDlg1.EnableItem( TBI_MACRO, false );
+        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, false );
         aStbStatus.SetItemText( 1, aStr );
 
         aFtURL.Disable();
@@ -616,10 +616,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     }
     else
     {
-        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_True );
+        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, true );
         aTbxIMapDlg1.CheckItem( TBI_ACTIVE, !rInfo.bActivated );
-        aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_True );
-        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_True );
+        aTbxIMapDlg1.EnableItem( TBI_MACRO, true );
+        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, true );
 
         aFtURL.Enable();
         maURLBox.Enable();

@@ -171,7 +171,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
     setToolBox(&m_aActions);
     m_aActions.CheckItem(SID_FM_SORTUP);
-    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, sal_False);
+    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, false);
 
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -310,7 +310,7 @@ void OAddFieldWindow::Update()
         const sal_uInt16 nItemCount = m_aActions.GetItemCount();
         for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
-            m_aActions.EnableItem(m_aActions.GetItemId(j),sal_False);
+            m_aActions.EnableItem(m_aActions.GetItemId(j),false);
         }
 
         OUString aTitle(ModuleRes(RID_STR_FIELDSELECTION));

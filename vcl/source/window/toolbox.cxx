@@ -1817,7 +1817,7 @@ sal_Bool ToolBox::ImplCalcItem()
             sal_Bool bImage;
             sal_Bool bText;
 
-            it->mbVisibleText = sal_False;  // indicates if text will definitely be drawn, influences dropdown pos
+            it->mbVisibleText = false;  // indicates if text will definitely be drawn, influences dropdown pos
 
             if ( it->meType == TOOLBOXITEM_BUTTON )
             {
@@ -1834,7 +1834,7 @@ sal_Bool ToolBox::ImplCalcItem()
                 if ( bImage || bText )
                 {
 
-                    it->mbEmptyBtn = sal_False;
+                    it->mbEmptyBtn = false;
 
                     if ( tmpButtonType == BUTTON_SYMBOL )
                     {
@@ -1847,7 +1847,7 @@ sal_Bool ToolBox::ImplCalcItem()
                         {
                             it->maItemSize = Size( GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET,
                                                    GetTextHeight() );
-                            it->mbVisibleText = sal_True;
+                            it->mbVisibleText = true;
                         }
                     }
                     else if ( tmpButtonType == BUTTON_TEXT )
@@ -1857,7 +1857,7 @@ sal_Bool ToolBox::ImplCalcItem()
                         {
                             it->maItemSize = Size( GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET,
                                                    GetTextHeight() );
-                            it->mbVisibleText = sal_True;
+                            it->mbVisibleText = true;
                         }
                         else
                         {
@@ -1885,7 +1885,7 @@ sal_Bool ToolBox::ImplCalcItem()
                 else
                 {   // no image and no text
                     it->maItemSize = Size( nDefWidth, nDefHeight );
-                    it->mbEmptyBtn = sal_True;
+                    it->mbEmptyBtn = true;
                 }
 
                 // save the content size
@@ -2099,7 +2099,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
                     nLineWidth = 0;
                     nLineStart = it - mpData->m_aItems.begin();
                     nGroupStart = nLineStart;
-                    it->mbBreak = sal_True;
+                    it->mbBreak = true;
                     bBreak = sal_False;
                 }
                 else
@@ -2229,7 +2229,7 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
     {
         if ( it->meType == TOOLBOXITEM_SEPARATOR )
         {
-            it->mbVisible = sal_False;
+            it->mbVisible = false;
             if ( !bLastSep )
             {
                 // check if any visible items have to appear behind it
@@ -2239,7 +2239,7 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
                     if ( ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
                           temp_it->mbVisible) )
                     {
-                        it->mbVisible = sal_True;
+                        it->mbVisible = true;
                         break;
                     }
                 }
@@ -2521,7 +2521,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
             it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
-                it->mbShowWindow = sal_False;
+                it->mbShowWindow = false;
 
                 // check for line break and advance nX/nY accordingly
                 if ( it->mbBreak )

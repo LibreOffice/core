@@ -777,8 +777,8 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     Resize();
     ImplUpdateViews( 1 );
 
-    maViewBox.EnableItem( TBX_ID_ICON, sal_True );
-    maViewBox.EnableItem( TBX_ID_LIST, sal_True );
+    maViewBox.EnableItem( TBX_ID_ICON, true );
+    maViewBox.EnableItem( TBX_ID_LIST, true );
     maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, sal_True );
 
     if(maInfoBar.GetText().isEmpty())
@@ -806,8 +806,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpIconView->Show();
 
-                maViewBox.EnableItem( TBX_ID_ICON, sal_True );
-                maViewBox.EnableItem( TBX_ID_LIST, sal_True );
+                maViewBox.EnableItem( TBX_ID_ICON, true );
+                maViewBox.EnableItem( TBX_ID_LIST, true );
 
                 maViewBox.CheckItem( TBX_ID_ICON, sal_True );
                 maViewBox.CheckItem( TBX_ID_LIST, sal_False );
@@ -824,8 +824,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpListView->Show();
 
-                maViewBox.EnableItem( TBX_ID_ICON, sal_True );
-                maViewBox.EnableItem( TBX_ID_LIST, sal_True );
+                maViewBox.EnableItem( TBX_ID_ICON, true );
+                maViewBox.EnableItem( TBX_ID_LIST, true );
 
                 maViewBox.CheckItem( TBX_ID_ICON, sal_False );
                 maViewBox.CheckItem( TBX_ID_LIST, sal_True );
@@ -854,8 +854,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
-                    maViewBox.EnableItem( TBX_ID_ICON, sal_False );
-                    maViewBox.EnableItem( TBX_ID_LIST, sal_False );
+                    maViewBox.EnableItem( TBX_ID_ICON, false );
+                    maViewBox.EnableItem( TBX_ID_LIST, false );
                 }
             }
             break;

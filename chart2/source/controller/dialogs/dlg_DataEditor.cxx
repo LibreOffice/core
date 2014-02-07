@@ -168,13 +168,13 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_bReadOnly = bReadOnly;
     if( m_bReadOnly )
     {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, sal_False );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, false );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, false );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, false );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, false );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, false );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, false );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, false );
     }
 
     m_apBrwData->SetReadOnly( m_bReadOnly );

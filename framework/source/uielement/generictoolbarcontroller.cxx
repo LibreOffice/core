@@ -202,7 +202,7 @@ throw ( RuntimeException )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, true );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -250,14 +250,14 @@ throw ( RuntimeException )
             }
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, true );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, true );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -265,7 +265,7 @@ throw ( RuntimeException )
             m_bMadeInvisible = !aItemVisibility.bVisible;
         }
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, sal_True );
+            m_pToolbar->ShowItem( m_nID, true );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );
