@@ -61,6 +61,7 @@
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -168,28 +169,8 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 // save CoreReflection statically
 Reference< XIdlReflection > getCoreReflection_Impl( void )
 {
-    static Reference< XIdlReflection > xCoreReflection;
-
-    // Do we have already CoreReflection; if not obtain it
-    if( !xCoreReflection.is() )
-    {
-        Reference< XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-        if( xContext.is() )
-        {
-            xContext->getValueByName(
-                OUString( "/singletons/com.sun.star.reflection.theCoreReflection" ) )
-                    >>= xCoreReflection;
-            OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
-        }
-        if( !xCoreReflection.is() )
-        {
-            throw DeploymentException(
-                OUString( "/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible" ),
-                Reference< XInterface >() );
-        }
-    }
-    return xCoreReflection;
+    return css::reflection::theCoreReflection::get(
+        comphelper::getProcessComponentContext());
 }
 
 // save CoreReflection statically

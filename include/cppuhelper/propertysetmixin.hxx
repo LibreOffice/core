@@ -429,9 +429,9 @@ protected:
        <code>std::bad_alloc</code>.
 
        @param context  the component context used by this class template; must
-       not be null, and must supply the service
-       <code>com.sun.star.reflection.CoreReflection</code> and the singleton
-       <code>com.sun.star.reflection.theTypeDescriptionManager</code>
+       not be null, and must supply the
+       <code>com.sun.star.reflection.theCoreReflection</code> and
+       <code>com.sun.star.reflection.theTypeDescriptionManager</code> singletons
 
        @param implements  a combination of zero or more flags specifying what
        UNO interface types shall be supported

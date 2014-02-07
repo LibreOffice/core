@@ -55,6 +55,7 @@
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/reflection/XIdlField.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 
 namespace basctl
@@ -2895,10 +2896,9 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
 
     try
     {
-        xFactory = Reference< lang::XMultiServiceFactory >( comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        xRefl = Reference< reflection::XIdlReflection >( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-        if( xRefl.is() )
-            xClass = xRefl->forName( sVarType );//get the base class for reflection
+        // Get the base class for reflection:
+        xClass = css::reflection::theCoreReflection::get(
+            comphelper::getProcessComponentContext())->forName(sVarType);
     }
     catch( const Exception& )
     {

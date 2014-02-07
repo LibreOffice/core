@@ -21,7 +21,7 @@
 #include "sbcomp.hxx"
 #include "sbunoobj.hxx"
 #include <svtools/miscopt.hxx>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -1335,19 +1335,8 @@ bool SbiParser::IsUnoInterface(const OUString& sTypeName)
 {
     try
     {
-        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-        //DBG_ASSERT(xRefl.Is(), "No reflection class!"); ???
-        if( !xRefl.is() )
-        {
-            return false;
-        }
-        Reference< reflection::XIdlClass > xClass = xRefl->forName(sTypeName);
-        if( xClass != NULL )
-        {
-            return true;
-        }
-        return false;
+        return css::reflection::theCoreReflection::get(
+            comphelper::getProcessComponentContext())->forName(sTypeName).is();
     }
     catch(const Exception&)
     {

@@ -26,12 +26,12 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1093,6 +1093,7 @@ private:
 InvocationService::InvocationService( const Reference<XComponentContext> & xCtx )
     : mxCtx( xCtx )
     , mxSMgr( xCtx->getServiceManager() )
+    , xCoreReflection( css::reflection::theCoreReflection::get(mxCtx) )
 {
     xTypeConverter = Reference<XTypeConverter>(
         mxSMgr->createInstanceWithContext(
@@ -1100,21 +1101,6 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
             xCtx ),
         UNO_QUERY );
     xIntrospection = Introspection::create(xCtx);
-    mxCtx->getValueByName(
-        OUString("/singletons/com.sun.star.reflection.theCoreReflection") )
-                >>= xCoreReflection;
-    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
-    if (! xCoreReflection.is())
-    {
-        throw DeploymentException(
-            OUString("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible"),
-            Reference< XInterface >() );
-    }
-//         xCoreReflection = Reference<XIdlReflection>(
-//      mxSMgr->createInstanceWithContext(
-//          OUString("com.sun.star.reflection.CoreReflection"),
-//          xCtx),
-//      UNO_QUERY);
 }
 
 InvocationService::~InvocationService() {}

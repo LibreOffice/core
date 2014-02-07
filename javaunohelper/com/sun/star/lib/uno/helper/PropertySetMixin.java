@@ -34,20 +34,18 @@ import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
-import com.sun.star.lang.XComponent;
 import com.sun.star.reflection.XCompoundTypeDescription;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlField2;
-import com.sun.star.reflection.XIdlReflection;
 import com.sun.star.reflection.XIndirectTypeDescription;
 import com.sun.star.reflection.XInterfaceAttributeTypeDescription2;
 import com.sun.star.reflection.XInterfaceMemberTypeDescription;
 import com.sun.star.reflection.XInterfaceTypeDescription2;
 import com.sun.star.reflection.XStructTypeDescription;
 import com.sun.star.reflection.XTypeDescription;
+import com.sun.star.reflection.theCoreReflection;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
@@ -79,9 +77,9 @@ public final class PropertySetMixin {
        The constructor.
 
        @param context the component context used by this instance; must not be
-       null, and must supply the service
-       <code>com.sun.star.reflection.CoreReflection</code> and the singleton
-       <code>com.sun.star.reflection.theTypeDescriptionManager</code>
+       null, and must supply the
+       <code>com.sun.star.reflection.theCoreReflection</code> and
+       <code>com.sun.star.reflection.theTypeDescriptionManager</code> singletons
 
        @param object the client UNO object into which this instance is mixed in;
        must not be null, and must support the given <code>type</code>
@@ -565,27 +563,7 @@ public final class PropertySetMixin {
     }
 
     private XIdlClass getReflection(String typeName) {
-        XIdlReflection refl;
-        try {
-            refl = UnoRuntime.queryInterface(
-                XIdlReflection.class,
-                context.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.reflection.CoreReflection", context));
-        } catch (com.sun.star.uno.Exception e) {
-            throw new DeploymentException(
-                ("component context fails to supply service"
-                 + " com.sun.star.reflection.CoreReflection: "
-                 + e.getMessage()),
-                context);
-        }
-        try {
-            return refl.forName(typeName);
-        } finally {
-            XComponent comp = UnoRuntime.queryInterface(XComponent.class, refl);
-            if (comp != null) {
-                comp.dispose();
-            }
-        }
+        return theCoreReflection.get(context).forName(typeName);
     }
 
     private void initProperties(

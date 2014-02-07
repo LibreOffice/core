@@ -41,6 +41,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1661,10 +1662,6 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
     mpCache = NULL;
     mpTypeProviderCache = NULL;
 
-    // Spezielle Klassen holen
-//     Reference< XInterface > xServiceIface = m_xSMgr->createInstance("com.sun.star.reflection.CoreReflection");
-//     if( xServiceIface.is() )
-//         mxCoreReflection = Reference< XIdlReflection >::query( xServiceIface );
     Reference< XPropertySet > xProps( rXSMgr, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     if (xProps.is())
@@ -1675,9 +1672,8 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
         OSL_ASSERT( xContext.is() );
         if (xContext.is())
         {
-            xContext->getValueByName(
-                OUString("/singletons/com.sun.star.reflection.theCoreReflection") ) >>= mxCoreReflection;
-            OSL_ENSURE( mxCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
+            mxCoreReflection = css::reflection::theCoreReflection::get(
+                xContext);
         }
     }
     if (! mxCoreReflection.is())
@@ -1871,10 +1867,8 @@ CheckedInterfacesMap;
 
 
 // TODO: Spaeter auslagern
-Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiServiceFactory > & xMgr )
+Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
 {
-    static Reference< XIdlReflection > xRefl;
-
     // void als Default-Klasse eintragen
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
@@ -1882,11 +1876,6 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
     if( pTD )
     {
         OUString sOWName( pTD->pTypeName );
-        if( !xRefl.is() )
-        {
-            xRefl = Reference< XIdlReflection >( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
-            OSL_ENSURE( xRefl.is(), "### no corereflection!" );
-        }
         xRetClass = xRefl->forName( sOWName );
     }
     return xRetClass;
@@ -1950,14 +1939,14 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                 const Type* pTypes = SupportedTypesSeq.getConstArray();
                 for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
                 {
-                    pClasses[ i ] = TypeToIdlClass( pTypes[ i ], m_xSMgr );
+                    pClasses[ i ] = TypeToIdlClass( pTypes[ i ], mxCoreReflection );
                 }
                 // TODO: Caching!
             }
         }
         else
         {
-            xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
+            xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), mxCoreReflection );
             SupportedClassSeq.realloc( 1 );
             SupportedClassSeq.getArray()[ 0 ] = xImplClass;
         }
@@ -1969,7 +1958,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
     }
     else
     {
-        xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
+        xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), mxCoreReflection );
     }
 
     if( xTypeProvider.is() )
@@ -2710,7 +2699,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
 
                             // void als Default-Klasse eintragen
-                            Reference<XIdlClass> xListenerClass = TypeToIdlClass( getCppuVoidType(), m_xSMgr );
+                            Reference<XIdlClass> xListenerClass = TypeToIdlClass( getCppuVoidType(), mxCoreReflection );
                             // ALT: Reference<XIdlClass> xListenerClass = Void_getReflection()->getIdlClass();
 
                             // 1. Moeglichkeit: Parameter nach einer Listener-Klasse durchsuchen
@@ -2718,7 +2707,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
                             const Reference<XIdlClass>* pParamArray2 = aParams.getConstArray();
 
-                            Reference<XIdlClass> xEventListenerClass = TypeToIdlClass( getCppuType( (Reference<XEventListener>*) NULL ), m_xSMgr );
+                            Reference<XIdlClass> xEventListenerClass = TypeToIdlClass( getCppuType( (Reference<XEventListener>*) NULL ), mxCoreReflection );
                             // ALT: Reference<XIdlClass> xEventListenerClass = XEventListener_getReflection()->getIdlClass();
                             sal_Int32 nParamCount = aParams.getLength();
                             sal_Int32 k;
@@ -2789,7 +2778,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
     {
         // Ist es ein Interface oder eine struct?
         //Reference<XIdlClass> xClassRef = aToInspectObj.getReflection()->getIdlClass();
-        Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
+        Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), mxCoreReflection );
         if( !xClassRef.is() )
         {
             SAL_WARN( "stoc", "Can't get XIdlClass from Reflection" );
