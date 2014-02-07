@@ -74,7 +74,7 @@ bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 
     // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
     // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
-    // sal_False returnen wegen SetFull ...
+    // false returnen wegen SetFull ...
     if( !nFullLen )
     {
         // nicht Init(), weil wir Hoehe und Ascent brauchen
@@ -137,7 +137,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
 // Komplikationen bei Flys...
 
 MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
-    sal_Int32 nIdx, sal_Bool bUnderFlow ) const
+    sal_Int32 nIdx, bool bUnderFlow ) const
 {
     if( rInf.StopUnderFlow() )
         return 0;
@@ -189,7 +189,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
 
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
-    MSHORT nMay = MayUnderFlow( rInf, rInf.GetIdx() - nLineLength, sal_True );
+    MSHORT nMay = MayUnderFlow( rInf, rInf.GetIdx() - nLineLength, true );
     if( nMay )
     {
         if( nMay > 1 )
@@ -259,7 +259,7 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
  *                      class SwPostItsPortion
  *************************************************************************/
 
-SwPostItsPortion::SwPostItsPortion( sal_Bool bScrpt )
+SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : bScript( bScrpt )
 {
     nLineLength = 1;

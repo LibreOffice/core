@@ -65,7 +65,7 @@ public:
     virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     MSHORT MayUnderFlow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
-        sal_Bool bUnderFlow ) const;
+        bool bUnderFlow ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -79,14 +79,14 @@ public:
 
 class SwPostItsPortion : public SwExpandPortion
 {
-    sal_Bool    bScript;
+    bool    bScript;
 public:
-            SwPostItsPortion( sal_Bool bScrpt );
+            SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    sal_Bool IsScript() const { return bScript; }
+    bool IsScript() const { return bScript; }
     OUTPUT_OPERATOR
 };
 

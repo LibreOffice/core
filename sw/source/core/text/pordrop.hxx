@@ -79,7 +79,7 @@ class SwDropPortion : public SwTxtPortion
     short nX;               // X PaintOffset
     short nY;               // Y Offset
 
-    sal_Bool FormatTxt( SwTxtFormatInfo &rInf );
+    bool FormatTxt( SwTxtFormatInfo &rInf );
     void PaintTxt( const SwTxtPaintInfo &rInf ) const;
 
     inline void Fix( const KSHORT nNew ) { nFix = nNew; }

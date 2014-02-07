@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
  *  the position is calculated from the values in rInf
  *************************************************************************/
 
-static sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
+static bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
                              sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
     const SwTxtFly *pTxtFly = rInf.GetTxtFly();
@@ -63,7 +63,7 @@ static sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
         return aRect.HasArea();
     }
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -168,7 +168,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 
         Boundary aBound =
             g_pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
-            g_pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
+            g_pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, true );
 
         nEnd = aBound.endPos;
     }
@@ -401,20 +401,19 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *************************************************************************/
 
 
-sal_Bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
+bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
 {
     const sal_Int32 nOldLen = GetLen();
     const sal_Int32 nOldInfLen = rInf.GetLen();
-    const sal_Bool bFull = SwTxtPortion::Format( rInf );
-    if( bFull )
-    {
-        // sieht zwar Scheisse aus, aber was soll man schon machen?
-        rInf.SetUnderFlow( 0 );
-        Truncate();
-        SetLen( nOldLen );
-        rInf.SetLen( nOldInfLen );
-    }
-    return bFull;
+    if (!SwTxtPortion::Format( rInf ))
+        return false;
+
+    // sieht zwar Scheisse aus, aber was soll man schon machen?
+    rInf.SetUnderFlow( 0 );
+    Truncate();
+    SetLen( nOldLen );
+    rInf.SetLen( nOldInfLen );
+    return true;
 }
 
 /*************************************************************************
