@@ -691,7 +691,6 @@ private:
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
-    int m_docPrID;
     boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
