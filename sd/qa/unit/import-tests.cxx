@@ -348,6 +348,7 @@ void SdFiltersTest::testN828390_5()
     {
         SdrObject *pObj = pPage->GetObj(0);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT( pTxtObj );
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetPool()->GetItem2(EE_PARA_NUMBULLET, 5));
         CPPUNIT_ASSERT( pNumFmt );
