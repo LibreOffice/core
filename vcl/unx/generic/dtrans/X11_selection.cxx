@@ -1194,12 +1194,15 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 
                 sal_Int32 nOutSize = 0;
                 sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
-                if( pBytes && nOutSize )
+                if( pBytes )
                 {
-                    rData = Sequence< sal_Int8 >( nOutSize );
-                    memcpy( rData.getArray(), pBytes, nOutSize );
+                    if( nOutSize )
+                    {
+                        rData = Sequence< sal_Int8 >( nOutSize );
+                        memcpy( rData.getArray(), pBytes, nOutSize );
+                        bSuccess = true;
+                    }
                     X11_freeBmp( pBytes );
-                    bSuccess = true;
                 }
             }
         }
