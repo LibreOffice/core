@@ -43,7 +43,6 @@
 
 #define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          OUString( "/doEmergencySave"         )
 #define RECOVERY_CMDPART_DO_RECOVERY                OUString( "/doAutoRecovery"          )
-#define RECOVERY_CMDPART_DO_CRASHREPORT             OUString( "/doCrashReport"           )
 
 #define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
 #define RECOVERY_CMD_DO_EMERGENCY_SAVE              OUString( "vnd.sun.star.autorecovery:/doEmergencySave"       )
@@ -612,9 +611,7 @@ class RecoveryDialog : public IExtendedTabPage
         FixedLine       m_aBottomFL;
         PushButton      m_aNextBtn;
         CancelButton    m_aCancelBtn;
-        OUString        m_aNextStr;
         OUString        m_aTitleRecoveryInProgress;
-        OUString        m_aTitleRecoveryReport;
         OUString        m_aRecoveryOnlyFinish;
         OUString        m_aRecoveryOnlyFinishDescr;
 
@@ -637,7 +634,6 @@ class RecoveryDialog : public IExtendedTabPage
         bool  m_bWaitForCore;
         bool  m_bUserDecideNext;
         bool  m_bWasRecoveryStarted;
-        bool  m_bRecoveryOnly;
 
     //-------------------------------------------
     // member
@@ -748,169 +744,6 @@ class BrokenRecoveryDialog : public ModalDialog
         /** @short TODO */
         void impl_askForSavePath();
 };
-
-
-
-        class ErrorRepWelcomeDialog : public IExtendedTabPage
-        {
-        private:
-            Window              maTitleWin;
-            FixedText           maTitleFT;
-            FixedLine           maTitleFL;
-            FixedText           maDescrFT;
-
-            FixedLine           maBottomFL;
-            PushButton          maPrevBtn;
-            OKButton            maNextBtn;
-            CancelButton        maCancelBtn;
-
-            DECL_LINK(          PrevBtnHdl, void* );
-            DECL_LINK(          NextBtnHdl, void* );
-            DECL_LINK(          CancelBtnHdl, void* );
-        public:
-                                ErrorRepWelcomeDialog( Window* _pParent, sal_Bool _bAllowBack = sal_True );
-            virtual             ~ErrorRepWelcomeDialog();
-        /** @short  TODO*/
-        virtual short execute();
-
-        //---------------------------------------
-        /** @short  TODO*/
-        virtual void    setDefButton();
-        };
-
-        struct ErrorRepParams
-        {
-            ErrorRepParams()
-#ifdef WNT
-                : miHTTPConnectionType( 0 )
-#else
-                : miHTTPConnectionType( 1 )
-#endif
-                , mbAllowContact( false )
-            {}
-
-            OUString            maHTTPProxyServer;
-            OUString            maHTTPProxyPort;
-            int                 miHTTPConnectionType;
-            bool                mbAllowContact;
-            OUString            maReturnAddress;
-            OUString            maSubject;
-            OUString            maBody;
-        };
-
-        class ErrorDescriptionEdit : public MultiLineEdit
-        {
-        private:
-                        DECL_LINK( ModifyHdl, void* );
-
-        public:
-                        ErrorDescriptionEdit( Window* pParent, const ResId& rResId );
-            virtual     ~ErrorDescriptionEdit();
-        };
-
-        class ErrorRepSendDialog : public IExtendedTabPage
-        {
-        private:
-            Window              maTitleWin;
-            FixedText           maTitleFT;
-            FixedLine           maTitleFL;
-            FixedText           maDescrFT;
-
-            FixedText           maDocTypeFT;
-            Edit                maDocTypeED;
-            FixedText           maUsingFT;
-            ErrorDescriptionEdit maUsingML;
-            PushButton          maShowRepBtn;
-            PushButton          maOptBtn;
-            CheckBox            maContactCB;
-            FixedText           maEMailAddrFT;
-            Edit                maEMailAddrED;
-
-            FixedLine           maBottomFL;
-            PushButton          maPrevBtn;
-            OKButton            maNextBtn;
-            CancelButton        maCancelBtn;
-
-            ErrorRepParams      maParams;
-
-            DECL_LINK(          ShowRepBtnHdl, void* );
-            DECL_LINK(          OptBtnHdl, void* );
-            DECL_LINK(          ContactCBHdl, void* );
-            DECL_LINK(          PrevBtnHdl, void* );
-            DECL_LINK(          SendBtnHdl, void* );
-            DECL_LINK(          CancelBtnHdl, void* );
-
-            void                initControls();
-
-        public:
-                                ErrorRepSendDialog( Window* _pParent );
-            virtual             ~ErrorRepSendDialog();
-
-            OUString            GetDocType( void ) const;
-            OUString            GetUsing( void ) const;
-            bool                IsContactAllowed( void ) const;
-            OUString            GetEMailAddress( void ) const;
-
-            bool                ReadParams();
-            bool                SaveParams();
-            bool                SendReport();
-
-            /** @short  TODO*/
-            virtual short execute();
-
-            //---------------------------------------
-            /** @short  TODO*/
-            virtual void    setDefButton();
-        };
-
-        class ErrorRepOptionsDialog : public ModalDialog
-        {
-        private:
-            FixedLine           maProxyFL;
-            RadioButton         maSystemBtn;
-            RadioButton         maDirectBtn;
-            RadioButton         maManualBtn;
-            FixedText           maProxyServerFT;
-            Edit                maProxyServerEd;
-            FixedText           maProxyPortFT;
-            Edit                maProxyPortEd;
-            FixedText           maDescriptionFT;
-            FixedLine           maButtonsFL;
-            OKButton            maOKBtn;
-            CancelButton        maCancelBtn;
-
-            ErrorRepParams&     mrParams;
-
-            DECL_LINK(          CancelBtnHdl, void* );
-            DECL_LINK(          OKBtnHdl, void * );
-            DECL_LINK(          ManualBtnHdl, void * );
-
-        public:
-                                ErrorRepOptionsDialog( Window* _pParent, ErrorRepParams& rParams );
-            virtual             ~ErrorRepOptionsDialog();
-        };
-
-        class ErrorRepEdit : public ExtMultiLineEdit
-        {
-        public:
-                        ErrorRepEdit( Window* pParent, const ResId& rResId );
-            virtual     ~ErrorRepEdit();
-        };
-
-        class ErrorRepPreviewDialog : public ModalDialog
-        {
-        private:
-            ErrorRepEdit        maContentML;
-            OKButton            maOKBtn;
-
-            long                mnMinHeight;
-
-        public:
-                                ErrorRepPreviewDialog( Window* _pParent );
-            virtual             ~ErrorRepPreviewDialog();
-
-            virtual void        Resize();
-        };
     }   // namespace DocRecovery
 }   // namespace svx
 

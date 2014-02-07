@@ -156,7 +156,6 @@ namespace desktop
 {
 
 static oslSignalHandler pSignalHandler = 0;
-static sal_Bool _bCrashReporterEnabled = sal_True;
 
 namespace {
 
@@ -1071,25 +1070,10 @@ void Desktop::HandleBootstrapErrors(
 }
 
 
-void Desktop::retrieveCrashReporterState()
-{
-    _bCrashReporterEnabled
-        = officecfg::Office::Recovery::CrashReporter::Enabled::get();
-}
-
 sal_Bool Desktop::isUIOnSessionShutdownAllowed()
 {
     return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
         ::get();
-}
-
-//-----------------------------------------------
-/** @short  check if crash reporter feature is enabled or
-            disabled.
-*/
-sal_Bool Desktop::isCrashReporterEnabled()
-{
-    return _bCrashReporterEnabled;
 }
 
 //-----------------------------------------------
@@ -1129,13 +1113,11 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
             differs between EMERGENCY_SAVE and RECOVERY
 */
 sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
-                             sal_Bool bCrashed           ,
                              sal_Bool bExistsRecoveryData)
 {
     static OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
     static OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
     static OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
-    static OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
@@ -1151,8 +1133,6 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
         aURL.Complete = COMMAND_EMERGENCYSAVE;
     else if (bExistsRecoveryData)
         aURL.Complete = COMMAND_RECOVERY;
-    else if (bCrashed && Desktop::isCrashReporterEnabled() )
-        aURL.Complete = COMMAND_CRASHREPORT;
     else
         return false;
 
@@ -1176,7 +1156,6 @@ sal_Bool Desktop::SaveTasks()
 {
     return impl_callRecoveryUI(
         sal_True , // sal_True => force emergency save
-        sal_False, // 2. and 3. param not used if 1. = true!
         sal_False);
 }
 
@@ -1475,10 +1454,8 @@ int Desktop::Main()
 
         SetSplashScreenProgress(30);
 
-        // set static variable to enabled/disable crash reporter
-        retrieveCrashReporterState();
-        const bool bCrashReporterEnabled = isCrashReporterEnabled();
-        osl_setErrorReporting( !bCrashReporterEnabled );
+        // set static variable to disable crash reporting
+        osl_setErrorReporting( false );
 
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
@@ -2369,7 +2346,6 @@ void Desktop::OpenClients()
             {
                 bRecovery = impl_callRecoveryUI(
                     sal_False          , // false => force recovery instead of emergency save
-                    bCrashed           ,
                     bExistsRecoveryData);
             }
             catch(const css::uno::Exception& e)

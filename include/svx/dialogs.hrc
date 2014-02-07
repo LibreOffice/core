@@ -1019,15 +1019,11 @@
 // recycling ids from DBMgr
 #define RID_SVX_MDLG_DOCRECOVERY_PROGR      ( RID_SVX_START +  11 )
 #define RID_SVX_MDLG_DOCRECOVERY_BROKEN     ( RID_SVX_START +  12 )
-#define RID_SVX_MDLG_ERR_REP_OPTIONS        ( RID_SVX_START +  13 )
-#define RID_SVX_MDLG_ERR_REP_PREVIEW        ( RID_SVX_START +  14 )
 
 #define RID_SVX_TABDLG_DOCRECOVERY          ( RID_SVX_START +   0 )
 
 #define RID_SVXPAGE_DOCRECOVERY_SAVE        ( RID_SVX_START +   8 )
 #define RID_SVXPAGE_DOCRECOVERY_RECOVER     ( RID_SVX_START +   9 )
-#define RID_SVXPAGE_ERR_REP_WELCOME         ( RID_SVX_START +  10 )
-#define RID_SVXPAGE_ERR_REP_SEND            ( RID_SVX_START +  11 )
 
 // ----------------------------------------------------------------------------
 

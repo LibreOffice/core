@@ -262,23 +262,10 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ))
 endif
 
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_add_exception_objects,svx,\
-    svx/source/dialog/sendreportunx \
-))
-else
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,svx,\
     advapi32 \
 ))
-$(eval $(call gb_Library_add_exception_objects,svx,\
-    svx/source/dialog/sendreportw32 \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,svx,\
-    svx/source/dialog/sendreportgen \
-))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

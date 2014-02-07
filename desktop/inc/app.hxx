@@ -169,7 +169,6 @@ class Desktop : public Application
 
         static sal_Bool         SaveTasks();
 
-        static void             retrieveCrashReporterState();
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors

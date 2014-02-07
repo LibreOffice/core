@@ -100,9 +100,7 @@
 #define STR_RECOVFAILED             22
 #define STR_RECOVINPROGR            23
 #define STR_NOTRECOVYET             24
-#define STR_RECOVERY_NEXT           25
 #define STR_RECOVERY_INPROGRESS     26
-#define STR_RECOVERY_REPORT         27
 #define STR_RECOVERYONLY_FINISH_DESCR 28
 #define STR_RECOVERYONLY_FINISH     29
 

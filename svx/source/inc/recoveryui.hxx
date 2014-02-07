@@ -127,9 +127,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         void impl_doRecovery();
 
         void impl_showAllRecoveredDocs();
-
-        void impl_doCrashReport();
-
 };
 
 } // namespace svx

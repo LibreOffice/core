@@ -57,7 +57,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
             E_JOB_UNKNOWN,
             E_DO_EMERGENCY_SAVE,
             E_DO_RECOVERY,
-            E_DO_CRASHREPORT
         };
 
     //-------------------------------------------
@@ -131,8 +130,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
         void impl_showAllRecoveredDocs();
 
-        void impl_doCrashReport();
-
 };
 
 RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
@@ -189,10 +186,6 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 
         case RecoveryUI::E_DO_RECOVERY :
             impl_doRecovery();
-            break;
-
-        case RecoveryUI::E_DO_CRASHREPORT :
-            impl_doCrashReport();
             break;
 
         default :
@@ -261,21 +254,6 @@ static OUString GetUnsentURL()
 
 //===============================================
 
-static bool new_crash_pending()
-{
-    OUString    aUnsentURL = GetUnsentURL();
-    File    aFile( aUnsentURL );
-
-    if ( FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
-    {
-        aFile.close();
-        return true;
-    }
-
-    return false;
-}
-//===============================================
-
 static bool delete_pending_crash()
 {
     OUString    aUnsentURL = GetUnsentURL();
@@ -289,12 +267,8 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
     {
         if (aURL.Path.equals(RECOVERY_CMDPART_DO_EMERGENCY_SAVE))
             m_eJob = RecoveryUI::E_DO_EMERGENCY_SAVE;
-        else
-        if (aURL.Path.equals(RECOVERY_CMDPART_DO_RECOVERY))
+        else if (aURL.Path.equals(RECOVERY_CMDPART_DO_RECOVERY))
             m_eJob = RecoveryUI::E_DO_RECOVERY;
-        else
-        if (aURL.Path.equals(RECOVERY_CMDPART_DO_CRASHREPORT))
-            m_eJob = RecoveryUI::E_DO_CRASHREPORT;
     }
 
     return m_eJob;
@@ -325,11 +299,6 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
 //===============================================
 void RecoveryUI::impl_doRecovery()
 {
-    bool bRecoveryOnly( false );
-
-    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get(m_xContext));
-    bRecoveryOnly = !bCrashRepEnabled;
-
     // create core service, which implements the real "emergency save" algorithm.
     svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, false);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
@@ -342,13 +311,6 @@ void RecoveryUI::impl_doRecovery()
     svxdr::IExtendedTabPage*   pPage3  = 0;
 
     xWizard->addTabPage(pPage1);
-    if ( !bRecoveryOnly && new_crash_pending() )
-    {
-        pPage2 = new svxdr::ErrorRepWelcomeDialog(xWizard.get());
-        pPage3 = new svxdr::ErrorRepSendDialog(xWizard.get());
-        xWizard->addTabPage(pPage2);
-        xWizard->addTabPage(pPage3);
-    }
 
     // start the wizard
     xWizard->Execute();
@@ -364,28 +326,6 @@ void RecoveryUI::impl_doRecovery()
 
 //===============================================
 
-void RecoveryUI::impl_doCrashReport()
-{
-    if ( new_crash_pending() )
-    {
-        svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery   (m_pParentWindow   );
-        svxdr::IExtendedTabPage*   pPage1  = new svxdr::ErrorRepWelcomeDialog(pWizard, sal_False);
-        svxdr::IExtendedTabPage*   pPage2  = new svxdr::ErrorRepSendDialog   (pWizard           );
-        pWizard->addTabPage(pPage1);
-        pWizard->addTabPage(pPage2);
-
-        // start the wizard
-        pWizard->Execute();
-
-        delete pPage2 ;
-        delete pPage1 ;
-        delete pWizard;
-
-        delete_pending_crash();
-    }
-}
-
-//===============================================
 void RecoveryUI::impl_showAllRecoveredDocs()
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
