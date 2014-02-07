@@ -320,7 +320,14 @@ void SfxTemplateManagerDlg::setSaveMode()
 {
     mbIsSaveMode = true;
 
-    mpTabControl->Clear();
+    // FIXME We used to call just mpTabControl->Clear() here; but that worked
+    // only with .src dialogs, as the tab pages could have existed even
+    // without TabControl containing them.  This is not possible with .ui
+    // definitions any more (and rightly so!), so leave just one tab here for
+    // now, until we do a bigger Template manager rework.
+    while (mpTabControl->GetPageCount() > 1)
+        mpTabControl->RemovePage(mpTabControl->GetPageId(1));
+
     mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
     mpViewBar->ShowItem(VIEWBAR_SAVE);
