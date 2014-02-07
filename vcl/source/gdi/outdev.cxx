@@ -61,8 +61,6 @@
 
 #include <numeric>
 
-using namespace ::com::sun::star;
-
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
 // exist in the tools library, so put them in the anonymous namespace
@@ -1395,7 +1393,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this))
+        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
         {
             return;
         }
@@ -1499,7 +1497,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 
             if(bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this);
+                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this);
             }
 
             if(!bDone)
@@ -1678,7 +1676,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this))
+        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
         {
             return;
         }
@@ -1853,7 +1851,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
                 0.0,
                 aB2DLineWidth,
                 basegfx::B2DLINEJOIN_NONE,
-                com::sun::star::drawing::LineCap_BUTT,
+                css::drawing::LineCap_BUTT,
                 this);
         }
 
@@ -1946,7 +1944,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
                     0.0,
                     aB2DLineWidth,
                     basegfx::B2DLINEJOIN_NONE,
-                    com::sun::star::drawing::LineCap_BUTT,
+                    css::drawing::LineCap_BUTT,
                     this);
             }
         }
@@ -2061,7 +2059,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
                     0.0,
                     aB2DLineWidth,
                     basegfx::B2DLINEJOIN_NONE,
-                    com::sun::star::drawing::LineCap_BUTT,
+                    css::drawing::LineCap_BUTT,
                     this);
             }
         }
@@ -2083,7 +2081,7 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     double fLineWidth,
     double fTransparency,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
     const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
     basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
@@ -2123,7 +2121,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
     double fLineWidth,
     double fTransparency,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())
@@ -2173,7 +2171,7 @@ void OutputDevice::DrawPolyLine(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
 
     if( mpMetaFile )
@@ -2516,10 +2514,10 @@ sal_Bool OutputDevice::HasAlpha()
     return mpAlphaVDev != NULL;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > OutputDevice::CreateUnoGraphics()
+css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    return pWrapper ? pWrapper->CreateGraphics( this ) : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >();
+    return pWrapper ? pWrapper->CreateGraphics( this ) : css::uno::Reference< css::awt::XGraphics >();
 }
 
 SystemGraphicsData OutputDevice::GetSystemGfxData() const
@@ -2533,34 +2531,34 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
-::com::sun::star::uno::Any OutputDevice::GetSystemGfxDataAny() const
+css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
-    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)&aSysData,
+    css::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)&aSysData,
                                                       aSysData.nSize );
 
-    return uno::makeAny(aSeq);
+    return css::uno::makeAny(aSeq);
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > OutputDevice::GetCanvas() const
+css::uno::Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
 {
-    uno::Sequence< uno::Any > aArg(6);
+    css::uno::Sequence< css::uno::Any > aArg(6);
 
-    aArg[ 0 ] = uno::makeAny( reinterpret_cast<sal_Int64>(this) );
-    aArg[ 2 ] = uno::makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
-    aArg[ 3 ] = uno::makeAny( sal_False );
+    aArg[ 0 ] = css::uno::makeAny( reinterpret_cast<sal_Int64>(this) );
+    aArg[ 2 ] = css::uno::makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
+    aArg[ 3 ] = css::uno::makeAny( sal_False );
     aArg[ 5 ] = GetSystemGfxDataAny();
 
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
-    static uno::Reference<lang::XMultiComponentFactory> xCanvasFactory( rendering::CanvasFactory::create( xContext ) );
+    static css::uno::Reference<css::lang::XMultiComponentFactory > xCanvasFactory( css::rendering::CanvasFactory::create( xContext ) );
 
-    uno::Reference<rendering::XCanvas> xCanvas;
+    css::uno::Reference<css::rendering::XCanvas> xCanvas;
     xCanvas.set(
         xCanvasFactory->createInstanceWithArgumentsAndContext(
             "com.sun.star.rendering.Canvas", aArg, xContext ),
-        uno::UNO_QUERY );
+        css::uno::UNO_QUERY );
 
     return xCanvas;
 }
