@@ -1493,14 +1493,20 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
     get(mpTBxBackColor, "backgroundcolor");
     //Paragraph spacing
     get(mpTopDist,      "aboveparaspacing");
+    mpTopDist->set_width_request(mpTopDist->get_preferred_size().Width());
     get(mpBottomDist,   "belowparaspacing");
+    mpBottomDist->set_width_request(mpBottomDist->get_preferred_size().Width());
+    get(mpLeftIndent,   "beforetextindent");
+    mpLeftIndent->set_width_request(mpLeftIndent->get_preferred_size().Width());
+    get(mpRightIndent,  "aftertextindent");
+    mpRightIndent->set_width_request(mpRightIndent->get_preferred_size().Width());
+    get(mpFLineIndent,  "firstlineindent");
+    mpFLineIndent->set_width_request(mpFLineIndent->get_preferred_size().Width());
+
     get(mpTbxIndent_IncDec, "indent");
     get(mpTbxProDemote, "promotedemote");
     get(mpLineSPTbx,    "linespacing");
     get(mpTbxUL_IncDec, "paraspacing");
-    get(mpLeftIndent,   "beforetextindent");
-    get(mpRightIndent,  "aftertextindent");
-    get(mpFLineIndent,  "firstlineindent");
 
     initial();
 }
