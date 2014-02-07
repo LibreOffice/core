@@ -184,8 +184,6 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
         //! dictionaries may have been added/removed elsewhere too.
         aDics = xDicList->getDictionaries();
     }
-    pDic = aDics.getConstArray();
-    nCount = (sal_uInt16) aDics.getLength();
 
 
     EndDialog( RET_OK );
