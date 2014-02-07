@@ -21,7 +21,6 @@
 
 #include <cassert>
 #include <exception>
-#include <memory>
 #include <vector>
 
 #include "boost/scoped_ptr.hpp"
@@ -36,6 +35,7 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
+#include "o3tl/heap_ptr.hxx"
 #include "rtl/byteseq.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -341,12 +341,10 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             }
             break;
         }
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< IncomingRequest > req(
+        o3tl::heap_ptr< IncomingRequest > req(
             new IncomingRequest(
                 bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
                 setter, inArgs, ccMode, cc));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (synchronous) {
             bridge_->incrementActiveCalls();
         }
@@ -457,10 +455,8 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     switch (req.kind) {
     case OutgoingRequest::KIND_NORMAL:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr< IncomingReply > resp(
+            o3tl::heap_ptr< IncomingReply > resp(
                 new IncomingReply(exc, ret, outArgs));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
             uno_threadpool_putJob(
                 bridge_->getThreadPool(), tid.getHandle(), resp.get(), 0,
                 false);
