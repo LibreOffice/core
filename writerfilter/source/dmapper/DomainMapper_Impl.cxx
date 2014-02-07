@@ -161,18 +161,15 @@ DomainMapper_Impl::DomainMapper_Impl(
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
-    getTableManager( ).setHandler(pTableHandler);
-
-    getTableManager( ).startLevel();
+    getTableManager().setHandler(pTableHandler);
 }
 /*-- 01.09.2006 10:22:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::~DomainMapper_Impl()
 {
-    RemoveLastParagraph( );
-    getTableManager( ).endLevel();
-    popTableManager( );
+    RemoveLastParagraph();
+    popTableManager();
 }
 /*-------------------------------------------------------------------------
 

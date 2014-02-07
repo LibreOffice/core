@@ -44,9 +44,12 @@ class WW8TableDataHandler : public TableDataHandler<string,
 {
 public:
     typedef boost::shared_ptr<WW8TableDataHandler> Pointer_t;
-    virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            TablePropsPointer_t pProps);
-    virtual void endTable();
+    virtual void startTable(
+        unsigned int nRows,
+        unsigned int nDepth,
+        TablePropsPointer_t pProps );
+    virtual void endTable(
+        const unsigned int nDepth );
     virtual void startRow(unsigned int nCols,
                           TablePropsPointer_t pProps);
     virtual void endRow();
@@ -70,7 +73,8 @@ void WW8TableDataHandler::startTable(unsigned int nRows, unsigned int nDepth,
     output.addItem(tmpStr);
 }
 
-void WW8TableDataHandler::endTable()
+void WW8TableDataHandler::endTable(
+    const unsigned int /*nTableDepth*/ )
 {
     output.addItem("</tabledata.table>");
 }

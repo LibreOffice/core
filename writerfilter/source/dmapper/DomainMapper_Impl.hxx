@@ -566,7 +566,7 @@ public:
         return *pMngr.get( );
     }
 
-    void appendTableManager( )
+    void appendTableManager()
     {
         boost::shared_ptr< DomainMapperTableManager > pMngr(
                 new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML ) );
