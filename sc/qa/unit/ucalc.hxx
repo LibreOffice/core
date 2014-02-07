@@ -137,6 +137,7 @@ public:
     void testVolatileFunc();
 
     void testHorizontalIterator();
+    void testValueIterator();
 
     /**
      * Basic test for formula dependency tracking.
@@ -361,6 +362,7 @@ public:
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testHorizontalIterator);
+    CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
     CPPUNIT_TEST(testCellBroadcaster);

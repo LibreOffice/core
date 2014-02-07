@@ -56,6 +56,7 @@
 #include <asciiopt.hxx>
 #include <impex.hxx>
 #include <columnspanset.hxx>
+#include <docoptio.hxx>
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -1185,6 +1186,42 @@ void Test::testHorizontalIterator()
         if (!bRes)
             CPPUNIT_FAIL("Failed on test in middle.");
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testValueIterator()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Turn on "precision as shown" option.
+    ScDocOptions aOpt = m_pDoc->GetDocOptions();
+    aOpt.SetCalcAsShown(true);
+    m_pDoc->SetDocOptions(aOpt);
+
+    // Purely horizontal data layout with numeric data.
+    for (SCCOL i = 1; i <= 3; ++i)
+        m_pDoc->SetValue(ScAddress(i,2,0), i);
+
+    double fVal;
+    sal_uInt16 nErr;
+
+    {
+        const double aChecks[] = { 1.0, 2.0, 3.0 };
+        size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
+
+        ScValueIterator aIter(m_pDoc, ScRange(1,2,0,3,2,0));
+        bool bHas = false;
+
+        size_t nCheckPos = 0;
+        for (bHas = aIter.GetFirst(fVal, nErr); bHas; bHas = aIter.GetNext(fVal, nErr), ++nCheckPos)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
+            CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos], fVal);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), nErr);
+        }
+    }
+
 
     m_pDoc->DeleteTab(0);
 }
