@@ -1980,7 +1980,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             case '/':
                 if ( aFlags.bAddNonBrkSpace )
                 {
-                    LanguageType eLang = (bGetLanguage && pAktTxtNd)
+                    LanguageType eLang = bGetLanguage
                                            ? pAktTxtNd->GetLang( nSttPos )
                                            : LANGUAGE_SYSTEM;
 
@@ -2037,7 +2037,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 continue;       // do not check further
             }
 
-            LanguageType eLang = (bGetLanguage && pAktTxtNd)
+            LanguageType eLang = bGetLanguage
                                            ? pAktTxtNd->GetLang( nSttPos )
                                            : LANGUAGE_SYSTEM;
 
