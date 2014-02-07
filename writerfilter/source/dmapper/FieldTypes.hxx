@@ -287,6 +287,13 @@ enum FieldId
     /* document statistic - number of pages
      */
     ,FIELD_NUMPAGES
+    /* Document alphabetical index
+     */
+    ,FIELD_INDEX
+    /* Document alphabetical index marks
+     */
+    ,FIELD_XE
+
 };
 
 }}
