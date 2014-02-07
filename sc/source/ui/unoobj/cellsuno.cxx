@@ -8814,8 +8814,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnObj::getPropertySe
     return aRef;
 }
 
-void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
+    throw(lang::IllegalArgumentException, uno::RuntimeException,
+          std::exception)
 {
     if ( pEntry )
     {
