@@ -68,17 +68,17 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
 void ScDetOpList::Append( ScDetOpData* pDetOpData )
 {
     if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
-        bHasAddError = sal_True;
+        bHasAddError = true;
 
     aDetOpDataVector.push_back( pDetOpData );
 }
 
-sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
+bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {
     // for Ref-Undo
 
     size_t nCount = Count();
-    sal_Bool bEqual = ( nCount == r.Count() );
+    bool bEqual = ( nCount == r.Count() );
     for (size_t i=0; i<nCount && bEqual; i++)       // order has to be the same
         if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    // entries are different ?
             bEqual = false;

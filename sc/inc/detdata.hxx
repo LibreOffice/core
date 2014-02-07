@@ -62,7 +62,7 @@ typedef boost::ptr_vector<ScDetOpData> ScDetOpDataVector;
 
 class ScDetOpList
 {
-    sal_Bool    bHasAddError;       // updated in append
+    bool              bHasAddError;       // updated in append
     ScDetOpDataVector aDetOpDataVector;
 
 public:
@@ -74,13 +74,13 @@ public:
     void    UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    sal_Bool    operator==( const ScDetOpList& r ) const;       // for ref-undo
+    bool        operator==( const ScDetOpList& r ) const;       // for ref-undo
 
-    void         Append( ScDetOpData* pData );
+    void        Append( ScDetOpData* pData );
     ScDetOpDataVector&  GetDataVector() { return aDetOpDataVector; }
     const ScDetOpData* GetObject( size_t nPos ) const;
 
-    sal_Bool    HasAddError() const     { return bHasAddError; }
+    bool        HasAddError() const     { return bHasAddError; }
     size_t      Count() const { return aDetOpDataVector.size(); }
 };
 
