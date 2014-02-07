@@ -1360,17 +1360,16 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         {
             if ( aTextObj.ParagraphCount() )
             {
-                ParagraphObj* pBulletPara = aTextObj.GetParagraph(0);
-                sal_uInt32  nBulletFlags = 0;
                 sal_uInt32  nNumberingType = 0, nPos2 = rExtBuStr.Tell();
 
                 rExtBuStr.WriteUInt32( (sal_uInt32)( EPP_PST_ExtendedParagraphAtom << 16 ) ).WriteUInt32( (sal_uInt32)0 );
 
                 for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
                 {
-                    pBulletPara = aTextObj.GetParagraph(i);
-                    nBulletFlags = 0;
+                    ParagraphObj* pBulletPara = aTextObj.GetParagraph(i);
+                    sal_uInt32  nBulletFlags = 0;
                     sal_uInt16 nBulletId = pBulletPara->nBulletId;
+
                     if ( pBulletPara->bExtendedBulletsUsed )
                     {
                         nBulletFlags = 0x800000;
