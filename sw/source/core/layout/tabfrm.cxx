@@ -1751,7 +1751,7 @@ static bool lcl_NoPrev( const SwFrm& rFrm )
     {
         const SwFrm* pSct = rFrm.GetUpper();
         if ( pSct && pSct->IsColBodyFrm() &&
-            (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
+             pSct->GetUpper()->GetUpper()->IsSctFrm() )
         {
             const SwFrm* pPrevCol = rFrm.GetUpper()->GetUpper()->GetPrev();
             if ( pPrevCol )
