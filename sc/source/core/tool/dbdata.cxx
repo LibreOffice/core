@@ -683,6 +683,7 @@ ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 
+// coverity[+free : arg-0]
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
