@@ -570,7 +570,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
                 if( aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE )
                     cap = "rnd";
 
-                DBG(printf("dash dots: %d dashes: %d dotlen: %d dashlen: %d distance: %d\n",
+                DBG(fprintf(stderr, "dash dots: %d dashes: %d dotlen: %d dashlen: %d distance: %d\n",
                             int( aLineDash.Dots ), int( aLineDash.Dashes ), int( aLineDash.DotLen ), int( aLineDash.DashLen ), int( aLineDash.Distance )));
             }
             /* fallthru intended */
@@ -670,7 +670,7 @@ OUString DrawingML::WriteImage( const OUString& rURL )
 
     if ( index != -1 )
     {
-        DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
+        DBG(fprintf (stderr, "begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
         Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
 
         return WriteImage( aGraphic );
@@ -821,7 +821,7 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
     if (GetProperty( rXPropSet, "FillBitmapMode" ) )
         mAny >>= eBitmapMode;
 
-    DBG(printf("fill bitmap mode: %d\n", eBitmapMode));
+    DBG(fprintf(stderr, "fill bitmap mode: %d\n", eBitmapMode));
 
     switch (eBitmapMode) {
     case BitmapMode_REPEAT:
@@ -848,7 +848,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
         OUString aURL;
         mAny >>= aURL;
 
-        DBG(printf ("URL: %s\n", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
+        DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
 
         if( aURL.isEmpty() )
             return;
@@ -924,7 +924,7 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
 
 void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Bool bSuppressRotation  )
 {
-    DBG(printf( "write shape transformation\n" ));
+    DBG(fprintf(stderr,  "write shape transformation\n" ));
 
     sal_Int32 nRotation=0;
     awt::Point aPos = rXShape->getPosition();
@@ -1076,7 +1076,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     // mso doesn't like text color to be placed after typeface
     if( GETAD( CharColor ) ) {
         sal_uInt32 color = *((sal_uInt32*) mAny.getValue());
-        DBG(printf("run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
+        DBG(fprintf(stderr, "run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
 
         if( color == COL_AUTO ) { // nCharColor depends to the background color
             sal_Bool bIsDark = sal_False;
@@ -1154,7 +1154,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
 
     if( GETA( TextPortionType ) ) {
         aFieldType = OUString( *(OUString*)mAny.getValue() );
-        DBG(printf ("field type: %s\n", USS(aFieldType) ));
+        DBG(fprintf (stderr, "field type: %s\n", USS(aFieldType) ));
     }
 
     if( aFieldType == "TextField" ) {
@@ -1165,7 +1165,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
                 OUString aFieldKind( rXTextField->getPresentation( sal_True ) );
-                DBG(printf ("field kind: %s\n", USS(aFieldKind) ));
+                DBG(fprintf (stderr, "field kind: %s\n", USS(aFieldKind) ));
                 if( aFieldKind == "Page" ) {
                     return "slidenum";
                 }
@@ -1308,7 +1308,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
 
         if ( ( mAny >>= rXIndexAccess ) && nLevel < rXIndexAccess->getCount() )
         {
-            DBG(printf ("numbering rules\n"));
+            DBG(fprintf (stderr, "numbering rules\n"));
 
             Sequence< PropertyValue > aPropertySequence;
             rXIndexAccess->getByIndex( nLevel ) >>= aPropertySequence;
@@ -1333,7 +1333,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                     const void* pValue = pPropValue[ i ].Value.getValue();
                     if ( pValue ) {
                         OUString aPropName( pPropValue[ i ].Name );
-                        DBG(printf ("pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
+                        DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
                         if ( aPropName == "NumberingType" )
                             nNumberingType = *( (sal_Int16*)pValue );
                         else if ( aPropName == "Prefix" ) {
@@ -1365,7 +1365,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                             nBulletRelSize = *( (sal_Int16*)pValue );
                         } else if ( aPropName == "GraphicURL" ) {
                             aGraphicURL = ( *(OUString*)pValue );
-                            DBG(printf ("graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
+                            DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
                         } else if ( aPropName == "GraphicSize" )
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (awt::Size*)0) )
@@ -1375,7 +1375,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                                 pPropValue[ i ].Value >>= aSize;
                                 //aBuGraSize.nA = aSize.Width;
                                 //aBuGraSize.nB = aSize.Height;
-                                DBG(printf("graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
+                                DBG(fprintf(stderr, "graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
                             }
                         }
                     }
@@ -1699,7 +1699,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
          && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
          && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
         ) {
-        DBG(printf("adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
+        DBG(fprintf(stderr, "adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 

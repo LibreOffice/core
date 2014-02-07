@@ -160,7 +160,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 sal_Bool bIsEmptyPresObj = sal_False;
                 if ( xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bIsEmptyPresObj )
                 {
-                    DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
+                    DBG(fprintf(stderr, "empty presentation object %d, props:\n", bIsEmptyPresObj));
                     if( bIsEmptyPresObj )
                        return sal_True;
                 }
@@ -171,7 +171,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 sal_Bool bIsPresObj = sal_False;
                 if ( xPropSet->getPropertyValue( "IsPresentationObject" ) >>= bIsPresObj )
                 {
-                    DBG(printf("presentation object %d, props:\n", bIsPresObj));
+                    DBG(fprintf(stderr, "presentation object %d, props:\n", bIsPresObj));
                     if( bIsPresObj )
                        return sal_True;
                 }
@@ -189,7 +189,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
 
 ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool bClosed )
 {
-    DBG(printf("write open bezier shape\n"));
+    DBG(fprintf(stderr, "write open bezier shape\n"));
 
     FSHelperPtr pFS = GetFS();
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
@@ -199,7 +199,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
 #if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
-    DBG(printf("poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
+    DBG(fprintf(stderr, "poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
 #endif
 
     // non visual shape properties
@@ -290,7 +290,7 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
 
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 {
-    DBG(printf("write custom shape\n"));
+    DBG(fprintf(stderr, "write custom shape\n"));
 
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     sal_Bool bPredefinedHandlesUsed = sal_True;
@@ -300,7 +300,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
     sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
     const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
-    DBG(printf("custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
+    DBG(fprintf(stderr, "custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
 
@@ -308,13 +308,13 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     sal_Bool bFlipV = false;
 
     if( GETA( CustomShapeGeometry ) ) {
-        DBG(printf("got custom shape geometry\n"));
+        DBG(fprintf(stderr, "got custom shape geometry\n"));
         if( mAny >>= aGeometrySeq ) {
 
-            DBG(printf("got custom shape geometry sequence\n"));
+            DBG(fprintf(stderr, "got custom shape geometry sequence\n"));
             for( int i = 0; i < aGeometrySeq.getLength(); i++ ) {
                 const PropertyValue& rProp = aGeometrySeq[ i ];
-                DBG(printf("geometry property: %s\n", USS( rProp.Name )));
+                DBG(fprintf(stderr, "geometry property: %s\n", USS( rProp.Name )));
 
                 if ( rProp.Name == "MirroredX" )
                     rProp.Value >>= bFlipH;
@@ -391,7 +391,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
 ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 {
-    DBG(printf("write ellipse shape\n"));
+    DBG(fprintf(stderr, "write ellipse shape\n"));
 
     FSHelperPtr pFS = GetFS();
 
@@ -443,7 +443,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
 void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const Graphic* pGraphic )
 {
-    DBG(printf("write graphic object shape\n"));
+    DBG(fprintf(stderr, "write graphic object shape\n"));
 
     if( NonEmptyText( xShape ) )
     {
@@ -452,7 +452,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
         if( xText.is() && xText->getString().getLength() )
         {
-            DBG(printf("graphicObject: wrote only text\n"));
+            DBG(fprintf(stderr, "graphicObject: wrote only text\n"));
 
             WriteTextShape( xShape );
 
@@ -461,13 +461,13 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
         }
     }
 
-    DBG(printf("graphicObject without text\n"));
+    DBG(fprintf(stderr, "graphicObject without text\n"));
 
     OUString sGraphicURL;
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( "GraphicURL" ) >>= sGraphicURL ) ) )
     {
-        DBG(printf("no graphic URL found\n"));
+        DBG(fprintf(stderr, "no graphic URL found\n"));
         return;
     }
 
@@ -538,7 +538,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
     sal_Bool bFlipH = false;
     sal_Bool bFlipV = false;
 
-    DBG(printf("write connector shape\n"));
+    DBG(fprintf(stderr, "write connector shape\n"));
 
     FSHelperPtr pFS = GetFS();
 
@@ -629,7 +629,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     sal_Bool bFlipH = false;
     sal_Bool bFlipV = false;
 
-    DBG(printf("write line shape\n"));
+    DBG(fprintf(stderr, "write line shape\n"));
 
     FSHelperPtr pFS = GetFS();
 
@@ -695,7 +695,7 @@ ShapeExport& ShapeExport::WriteNonVisualProperties( Reference< XShape > )
 
 ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 {
-    DBG(printf("write rectangle shape\n"));
+    DBG(fprintf(stderr, "write rectangle shape\n"));
 
     FSHelperPtr pFS = GetFS();
 
@@ -792,11 +792,11 @@ static const NameToConvertMapType& lcl_GetConverters(DrawingML::DocumentType eDo
 ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
 {
     OUString sShapeType = xShape->getShapeType();
-    DBG( printf( "write shape: %s\n", USS( sShapeType ) ) );
+    DBG( fprintf( stderr, "write shape: %s\n", USS( sShapeType ) ) );
     NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ) );
     if( aConverter == lcl_GetConverters(GetDocumentType()).end() )
     {
-        DBG( printf( "unknown shape\n" ) );
+        DBG( fprintf( stderr, "unknown shape\n" ) );
         return WriteUnknownShape( xShape );
     }
     (this->*(aConverter->second))( xShape );
