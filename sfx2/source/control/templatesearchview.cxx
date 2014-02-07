@@ -20,6 +20,16 @@ TemplateSearchView::~TemplateSearchView ()
 {
 }
 
+void TemplateSearchView::setOpenTemplateHdl(const Link &rLink)
+{
+    maOpenTemplateHdl = rLink;
+}
+
+void TemplateSearchView::OnItemDblClicked (ThumbnailViewItem *pItem)
+{
+    maOpenTemplateHdl.Call(pItem);
+}
+
 void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                                     const OUString &rTitle, const OUString &rSubtitle,
                                     const OUString &rPath,
