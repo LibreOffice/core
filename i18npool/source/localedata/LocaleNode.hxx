@@ -42,31 +42,30 @@ using namespace ::com::sun::star::io;
 class OFileWriter
 {
 public:
-
-OFileWriter(const char *pcFile, const char *locale );
-virtual ~OFileWriter();
-    virtual void  writeStringCharacters(const OUString& str) const;
-    virtual void  writeAsciiString(const char *str)const ;
-    virtual void  writeInt(sal_Int16 nb) const;
-    virtual void  writeFunction(const char *func, const char *count, const char *array) const;
-    virtual void  writeRefFunction(const char *func, const OUString& useLocale) const;
-    virtual void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
-    virtual void  writeRefFunction(const char *func, const OUString& useLocale, const char *to) const;
-    virtual void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
-    virtual void  writeRefFunction2(const char *func, const OUString& useLocale) const;
-    virtual void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
-    virtual void  writeRefFunction3(const char *func, const OUString& useLocale) const;
-    virtual void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
-    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const;
-    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
-    virtual void  flush(void) const ;
-    virtual void  closeOutput(void) const;
+    OFileWriter(const char *pcFile, const char *locale );
+    ~OFileWriter();
+    void  writeStringCharacters(const OUString& str) const;
+    void  writeAsciiString(const char *str)const ;
+    void  writeInt(sal_Int16 nb) const;
+    void  writeFunction(const char *func, const char *count, const char *array) const;
+    void  writeRefFunction(const char *func, const OUString& useLocale) const;
+    void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
+    void  writeRefFunction(const char *func, const OUString& useLocale, const char *to) const;
+    void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
+    void  writeRefFunction2(const char *func, const OUString& useLocale) const;
+    void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
+    void  writeRefFunction3(const char *func, const OUString& useLocale) const;
+    void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
+    bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const;
+    bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str) const;
+    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const;
+    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
+    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const;
+    void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars) const;
+    void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  flush(void) const ;
+    void  closeOutput(void) const;
     /// Return the locale string, something like en_US or de_DE
     const char * getLocale() const { return theLocale; }
 private:
