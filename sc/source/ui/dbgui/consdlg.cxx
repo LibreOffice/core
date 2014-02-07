@@ -38,8 +38,6 @@
 
 #define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
 
-//============================================================================
-//  class ScAreaData
 
 class ScAreaData
 {
@@ -60,17 +58,11 @@ public:
 };
 
 
-//============================================================================
-//  class ScConsolidateDialog
-
-
 ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                     const SfxItemSet&   rArgSet )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "ConsolidateDialog" , "modules/scalc/ui/consolidatedialog.ui" ),
-        //
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        //
         theConsData     ( ((const ScConsolidateItem&)
                            rArgSet.Get( rArgSet.GetPool()->
                                             GetWhich( SID_CONSOLIDATE ) )
@@ -110,17 +102,11 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     Init();
 }
 
-
-//----------------------------------------------------------------------------
-
 ScConsolidateDlg::~ScConsolidateDlg()
 {
     delete [] pAreaData;
     delete pRangeUtil;
 }
-
-
-//----------------------------------------------------------------------------
 
 void ScConsolidateDlg::Init()
 {
@@ -164,7 +150,7 @@ void ScConsolidateDlg::Init()
     pLbConsAreas->set_width_request(pLbConsAreas->approximate_char_width() * 16);
     pLbConsAreas->SetDropDownLineCount(5);
 
-    // Einlesen der Konsolidierungsbereiche
+    // read consolidation areas
     pLbConsAreas->Clear();
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
@@ -188,13 +174,9 @@ void ScConsolidateDlg::Init()
     else
         pEdDestArea->SetText(OUString());
 
-    //----------------------------------------------------------
 
-    /*
-     * Aus den RangeNames und Datenbankbereichen werden sich
-     * in der Hilfsklasse ScAreaData die Bereichsnamen gemerkt,
-     * die in den ListBoxen erscheinen.
-     */
+    // Use the ScAreaData helper class to save those range names from the
+    // RangeNames and database ranges that appear in the ListBoxes.
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
@@ -227,12 +209,10 @@ void ScConsolidateDlg::Init()
 
     //aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+    //@BugID 54702 enable/disable only in base class
     //SFX_APPWINDOW->Enable();
 }
 
-
-//----------------------------------------------------------------------------
 void ScConsolidateDlg::FillAreaLists()
 {
     pLbDataArea->Clear();
@@ -255,10 +235,8 @@ void ScConsolidateDlg::FillAreaLists()
 }
 
 
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-//  neue Selektion im Referenz-Fenster angezeigt wird.
-
+// Handover of a range within a table that has been selected by the mouse.
+// This range is then shown in the reference window as new selection.
 
 void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -268,7 +246,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         OUString      aStr;
-        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
+        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab is still missing
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
@@ -285,15 +263,11 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
-
 sal_Bool ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
 
-
-//----------------------------------------------------------------------------
 
 void ScConsolidateDlg::SetActive()
 {
@@ -314,15 +288,11 @@ void ScConsolidateDlg::SetActive()
 }
 
 
-//----------------------------------------------------------------------------
-
 void ScConsolidateDlg::Deactivate()
 {
     bDlgLostFocus = sal_True;
 }
 
-
-//----------------------------------------------------------------------------
 
 sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
@@ -356,9 +326,7 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 }
 
 
-//----------------------------------------------------------------------------
 // Handler:
-// ========
 
 IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 {
@@ -378,8 +346,6 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
     return 0;
 }
 
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 {
@@ -436,12 +402,10 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
         }
     }
     else
-        Close(); // keine Datenbereiche definiert -> Cancel
+        Close(); // no area defined -> Cancel
     return 0;
 }
 
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 {
@@ -458,9 +422,9 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 
             if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, sal_True, eConv ) )
             {
-                // IsAbsTabArea() legt ein Array von ScArea-Zeigern an,
-                // welche ebenfalls dynamisch erzeugt wurden.
-                // Diese Objekte muessen hier abgeraeumt werden.
+                // IsAbsTabArea() creates an array of ScArea pointers,
+                // which have been created dynamically as well.
+                // These objects need to be deleted here.
 
                 for ( sal_uInt16 i=0; i<nAreaCount; i++ )
                 {
@@ -509,8 +473,6 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 {
     if ( pLb == pLbConsAreas )
@@ -554,8 +516,6 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
     if ( pEd == pEdDataArea )
@@ -576,11 +536,9 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 }
 
 
-//----------------------------------------------------------------------------
-// Verallgemeinern!!! :
-// Resource der ListBox und diese beiden Umrechnungsmethoden gibt es
-// auch noch in tpsubt bzw. ueberall, wo StarCalc-Funktionen
-// auswaehlbar sind.
+// TODO: generalize!
+// Resource of the ListBox and these two conversion methods are also in
+// tpsubt and everywhere, where StarCalc functions are selectable.
 
 ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
 {
@@ -601,9 +559,6 @@ ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
             return SUBTOTAL_FUNC_SUM;
     }
 }
-
-
-//----------------------------------------------------------------------------
 
 sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
 {
