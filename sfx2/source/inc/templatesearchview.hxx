@@ -20,9 +20,17 @@ public:
 
     virtual ~TemplateSearchView();
 
+    void setOpenTemplateHdl (const Link &rLink);
+
     void AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                     const OUString &rTitle, const OUString &rSubtitle,
                     const OUString &rPath, const BitmapEx &rImage );
+
+protected:
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
+
+protected:
+    Link maOpenTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX
