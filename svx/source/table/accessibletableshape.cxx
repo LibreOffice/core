@@ -291,9 +291,10 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         }
         //notify bridge to update the acc cache.
         AccessibleTableShape *pAccTable = dynamic_cast <AccessibleTableShape *> (mxAccessible.get());
-        pAccTable->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
+        if (pAccTable)
+            pAccTable->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL("svx::AccessibleTableShape::modified(), exception caught!");
     }
