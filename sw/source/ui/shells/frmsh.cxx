@@ -1018,13 +1018,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     aBoxItem = aNewBox;
                     SvxBorderLine aDestBorderLine;
 
-                    if ((pBorderLine = aBoxItem.GetTop()) != NULL)
+                    if( aBoxItem.GetTop() != NULL )
                         aBoxItem.SetLine(&aBorderLine, BOX_LINE_TOP);
-                    if ((pBorderLine = aBoxItem.GetBottom()) != NULL)
+                    if( aBoxItem.GetBottom() != NULL )
                         aBoxItem.SetLine(&aBorderLine, BOX_LINE_BOTTOM);
-                    if ((pBorderLine = aBoxItem.GetLeft()) != NULL)
+                    if( aBoxItem.GetLeft() != NULL )
                         aBoxItem.SetLine(&aBorderLine, BOX_LINE_LEFT);
-                    if ((pBorderLine = aBoxItem.GetRight()) != NULL)
+                    if( aBoxItem.GetRight() != NULL )
                         aBoxItem.SetLine(&aBorderLine, BOX_LINE_RIGHT);
                 }
             }
