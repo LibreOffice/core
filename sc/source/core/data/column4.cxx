@@ -18,7 +18,7 @@
 #include <listenercontext.hxx>
 #include <mtvcellfunc.hxx>
 
-#include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <vector>
 #include <cassert>
@@ -68,7 +68,15 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             break;
             case CELLTYPE_STRING:
             {
-                std::vector<svl::SharedString> aStrs(nDestSize, *rSrcCell.mpString);
+                // Compare the ScDocumentPool* to determine if we are copying within the
+                // same document. If not, re-intern shared strings.
+                svl::SharedStringPool* pSharedStringPool = (rCxt.getClipDoc()->GetPool() != pDocument->GetPool()) ?
+                    &pDocument->GetSharedStringPool() : NULL;
+                svl::SharedString aStr = (pSharedStringPool ?
+                        pSharedStringPool->intern( rSrcCell.mpString->getString()) :
+                        *rSrcCell.mpString);
+
+                std::vector<svl::SharedString> aStrs(nDestSize, aStr);
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aStrs.begin(), aStrs.end());
                 pBlockPos->miCellTextAttrPos =
