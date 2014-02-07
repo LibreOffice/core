@@ -1,3 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
 <release
     name="snapshot"
     version="4.1.0">
@@ -161,7 +182,6 @@
         english-name="Vietnamese"
         local-name="Tiếng Việt"
         />
-
     <language
         id="kid"
         english-name="English (US) with support&lt;br&gt;for resource debugging"
@@ -171,88 +191,115 @@
     <platform
         id="wntmsci12.pro"
         display-name="Windows"
-        base-url="http://people.apache.org/~hdu/developer-snapshots/snapshot/win32"
         archive-platform="Win_x86"
         word-size="32"
-        package-types="exe"
+        package-types="msi"
+        extension="exe"
         />
     <platform
         id="unxlngi6.pro"
         display-name="Linux"
-        base-url="http://people.apache.org/~hdu/developer-snapshots/snapshot/linux_x86"
         archive-platform="Linux_x86"
         word-size="32"
         package-types="rpm;deb"
+        add-package-type-to-archive-name="true"
         extension="tar.gz"
         />
     <platform
         id="unxlngix6.pro"
         display-name="Linux"
-        base-url="http://people.apache.org/~hdu/developer-snapshots/snapshot/linux_x86-64"
         archive-platform="Linux_x86-64"
         word-size="64"
         package-types="rpm;deb"
+        add-package-type-to-archive-name="true"
         extension="tar.gz"
         />
     <platform
         id="unxmaccx.pro"
         display-name="OS X"
-        base-url="http://people.apache.org/~hdu/developer-snapshots/snapshot/osx_x86-64"
         archive-platform="unxmaccx_x86-64"
         word-size="64"
         package-types="dmg"
+        extension="dmg"
         />
 
-  <build
-      target="openoffice"
-      platform-list="all"
-      language-list="all">
-  </build>
+    <!--
+    <download
+        platform-id="wntmsci12.pro"
+        base-url="http://server/path/developer-snapshots/snapshot/Win_x86"
+        />
+    -->
 
-  <build
-      target="oolanguagepack"
-      platform-list="all"
-      language-list="all">
-  </build>
-
-  <wiki>
     <package
+        id="openoffice"
+        target="openoffice"
         display-name="Full Install"
-        archive-name1=""
-        archive-name2="install"
-        language-list="all"
-        platform-list="all"
-        table="main"
+        archive-name="Apache_OpenOffice_%V_%P_install%T_%L.%E"
         />
     <package
+        id="langpack"
+        target="ooolanguagepack"
         display-name="Langpack"
-        archive-name1=""
-        archive-name2="langpack"
-        language-list="all"
-        platform-list="all"
-        table="main"
+        archive-name="Apache_OpenOffice_%V_%P_langpack%T_%L.%E"
         />
-
     <package
+        id="patch"
+        target="patch-create"
         display-name="Patch"
-        archive-name1=""
-        archive-name2="patch"
-        language-list="all"
-        platform-list="wntmsci12.pro"
-        table="main"
+        archive-name="Apache_OpenOffice_%V_%P_patch%T_%L.%E"
         download-extension="msp"
         />
-
     <package
+        id="sdk"
+        target="sdkoo"
         display-name="SDK"
-        archive-name1="-SDK"
-        archive-name2="install"
+        archive-name="Apache_OpenOffice-SDK_%V_%P_install%T_%L.%E"
         link-tooltip="What is an SDK?"
         link-URL="http://www.openoffice.org/download/other.html#notes"
-        language-list="en-US"
-        platform-list="all"
-        table="secondary"
         />
 
-  </wiki>
+    <build
+        package-id="openoffice"
+        platform-list="all"
+        language-list="all"
+        />
+
+    <build
+        package-id="langpack"
+        platform-list="all"
+        language-list="all"
+        />
+
+    <build
+        package-id="patch"
+        platform-list="wntmsci12.pro"
+        language-list="all"
+        />
+
+    <wiki>
+      <package-ref
+          package-id="openoffice"
+          language-list="all"
+          platform-list="all"
+          table="main"
+          />
+      <package-ref
+          package-id="langpack"
+          language-list="all"
+          platform-list="all"
+          table="main"
+          />
+      <package-ref
+          package-id="patch"
+          language-list="all"
+          platform-list="wntmsci12.pro"
+          table="main"
+          />
+      <package-ref
+          package-id="sdk"
+          language-list="en-US"
+          platform-list="all"
+          table="secondary"
+          />
+    </wiki>
 </release>

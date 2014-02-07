@@ -27,6 +27,8 @@ use LWP::Simple;
 use Digest;
 use Digest::MD5;
 use Digest::SHA;
+use File::Temp;
+use File::Path;
 
 use Carp::always;
 
@@ -40,6 +42,8 @@ use Carp::always;
 
     comands:
         build      builds all install sets as requested by the XML file and supported by the platform.
+        build-missing
+                   build only those install sets that have not been built earlier.
         upload     upload install sets to a local or remote (via ssh with public/private key)
                    directory structure.  Uploads install sets that where build on other platforms.
         wiki       create a wiki (MediaWiki syntax) snippet that references all install sets at the upload
@@ -52,8 +56,24 @@ use Carp::always;
         -l            check links on wiki page, write broken links as plain text
         -ld           check links on wiki page, mark broken links
         -o <filename> filename of the output (wiki: wiki page, build: makefile)
+        -n <number>   maximal number of upload tries, defaults to 5.
+        -d            dry-run
+
+    Typical calls are:
+       build_release.pl build -j4 instsetoo_native/util/aoo-410-release.xml
+           for building the installation sets, language packs and patches for the 4.1 release.
+
+       build_release.pl upload -u me@server:path -n 3 instsetoo_native/util/aoo-410-release.xml
+           to upload the previously built installation sets etc.
+
+       build_release.pl wiki -o /tmp/wiki.txt instsetoo_native/util/aoo-410-release.xml
+           to create an updated wiki page with installation sets etc built at several
+           places and uploaded to several locations.
+
 
 =head1 XML file format
+
+The release description could look like this:
 
 <release
     name="snapshot"
@@ -69,28 +89,35 @@ use Carp::always;
     <platform
         id="wntmsci12.pro"
         display-name="Windows"
-        base-url="http://people.apache.org/~hdu/developer-snapshots/snapshot/win32"
         archive-platform="Win_x86"
         word-size="32"
-        package-types="exe"
+        package-types="msi"
+        extension="exe"
         />
     ... more platforms
 
-  <build
-      target="openoffice"
-      platform-list="all"
-      language-list="all">
-  </build>
-  ... more build entries
+    <download
+        platform-id="wntmsci12.pro"
+        base-url="http://people.apache.org/~somebody/developer-snapshots/snapshot/win32"
+        />
+
+    <package
+        id="openoffice"
+        target="openoffice"
+        display-name="Full Install"
+        archive-name="Apache_OpenOffice_%V_%P_install%T_%L.%E"
+        />
+
+    <build
+        package-id="openoffice"
+        platform-list="all"
+        language-list="all"
+        />
+    ... more build entries
 
   <wiki>
-
-    # Each wiki package will generate one row per language.
-    # For each language there will be one package block.
-    <package
-        display-name="Full Install"
-        archive-name1=""
-        archive-name2="install"
+    <package-ref
+        package-id="openoffice"
         language-list="all"
         platform-list="all"
         table="main"
@@ -100,51 +127,99 @@ use Carp::always;
 
 </release>
 
+A single <release> tag contains any number of
+
+<language>  id
+                The language id used internally by the build process, eg de, en-US
+            english-name
+                The english name of the language, eg german
+            local-name
+                The language name in that language, eg Deutsch
+
+    Each listed language is expected to have been passed to configure via --with-lang
+    The set of languages defines for which languages to
+          build installation sets, language packs etc. (build command)
+          upload installation sets, etc (upload command)
+          add rows in the wiki page (wiki command)
+
+<platform>  id
+                The platform id that is used internally by the build process, eg wntmsci12.pro
+                Note that <p>.pro and <p> are treated as two different platforms.
+            display-name
+                Name which is printed in the wiki table.
+            archive-platform
+                Platform name as used in the name of the installation set, eg Win_x86
+            word-size
+                Bit size of the installation sets, etc, typically either 32 or 64
+            package-types
+                Semicolon separated list of package types, eg "msi" or "deb;rpm"
+            add-package-type-to-archive-name
+                For deb and rpm archives it is necessary to add the package type to the archive name.
+            extension
+                Extension of the archive name, eg "exe" or "tar.gz"
+
+    For the build command only those <platform> elements are used that match the platform on which this
+    script is run.
+
+<download>
+            platform-id
+                Reference to one of the <platform> elements and has to match the id attribute of that platform.
+            base-url
+                URL head to which the name of the downloadable installation set etc. is appended.
+                Eg. http://people.apache.org/~somebody/developer-snapshots/snapshot/win32
+
+    Defines one download source that is referenced in the wiki page.  Multiple <download> elements
+    per platform are possible.  Earlier entires are preferred over later ones.
+
+<package>
+            id
+                Internal name that is used to reference the package.
+            target
+                Target name recognized by instsetoo_native/util/makefile.mk, eg openoffice or oolanguagepack.
+            display-name
+                Name of the package that is shown in the wiki page, eg "Full Install" or "Langpack".
+            archive-name
+                Template of the archive name.
+                %V version
+                %P archive package name
+                %T package type
+                %L language
+                %E extension.
+
+    Defines a downloadable and distributable package, eg openoffice for the binary OpenOffice installation set.
+
+<build>     target
+            platform-list
+                Semicolon separated list of platforms for which to build the target.
+                Ignores all platforms that don't match the  platform on which this script is executed.
+                The special value 'all' is a shortcut for all platforms listed by <platform> elements.
+            language-list
+                Semicolon separated list of languages for which the build the target.
+                The special value 'all' is a shortcut for all languages listed by <language> elements.
+
+    Defines the sets of targets, plaforms and languages which are to be built.
+
+<wiki>
+    <package-ref>
+            package-id
+                The id of the referenced package.
+            platform-list
+                See <build> tag for explanation.
+            language-list
+                See <build> tag for explanation.
+            table
+                Specifies the wiki table into which to add the package lines.  Can be "main" or "secondary".
+
 =cut
 
 
 
-my %PlatformDescriptors = (
-    "wntmsci12" => {
-        'name' => "windows",
-        'extension' => "exe",
-        'pack-platform' => "Win_x86",
-        'package-formats' => ["msi"]
-    },
-    "unxmaccxi" => {
-        'name' => "unxmaccx_x86-64",
-        'extension' => "dmg",
-        'pack-platform' => "MacOS_x86",
-        'package-formats' => ["dmg"]
-    },
-    "unxlngi6" => {
-        'name' => "Linux_x86",
-        'extension' => "tar.gz",
-        'pack-platform' => "Linux_x86",
-        'package-formats' => ["deb", "rpm"]
-    },
-    "unxlngx6" => {
-        'name' => "Linux_x86-64",
-        'extension' => "tar.gz",
-        'pack-platform' => "Linux_x86-64",
-        'package-formats' => ["deb", "rpm"]
-    }
-);
-my %ProductDescriptors = (
-    "openoffice" => {
-        'pack-name' => "install",
-        'product-name-tail' => ""
-    },
-    "oolanguagepack" => {
-        'pack-name' => "langpack",
-        'product-name-tail' => "_languagepack"
-    }
-);
 my %EnUSBasedLanguages = (
     'ast' => 1
     );
 
 
+sub GetInstallationPackageName ($$$$$);
 
 sub ProcessCommandline (@)
 {
@@ -158,6 +233,9 @@ sub ProcessCommandline (@)
     my $check_links = 0;
     my $mark_broken_links = 0;
     my $output_filename = undef;
+    my $max_upload_count = 5;
+    my $build_only_missing = 0;
+    my $dry_run = 0;
 
     my $error = 0;
     while (scalar @arguments > 0)
@@ -191,6 +269,14 @@ sub ProcessCommandline (@)
             {
                 $output_filename = shift @arguments;
             }
+            elsif ($argument eq "-n")
+            {
+                $max_upload_count = shift @arguments;
+            }
+            elsif ($argument eq "-d")
+            {
+                $dry_run = 1;
+            }
             else
             {
                 printf STDERR "unknown option $argument %s\n", $argument;
@@ -200,7 +286,12 @@ sub ProcessCommandline (@)
         elsif ( ! defined $command)
         {
             $command = $argument;
-            if ($command !~ /^(build|upload|wiki)$/)
+        if ($command eq "build-missing")
+        {
+            $command = "build";
+            $build_only_missing = 1;
+        }
+            elsif ($command !~ /^(build|build-missing|upload|wiki)$/)
             {
                 printf STDERR "unknown command '%s'\n", $command;
                 $error = 1;
@@ -221,7 +312,7 @@ sub ProcessCommandline (@)
     {
         $error = 1;
     }
-    if ($command =~ /^(build|wiki)$/)
+    if ($command =~ /^(wiki)$/)
     {
         if ( ! defined $output_filename)
         {
@@ -243,7 +334,10 @@ sub ProcessCommandline (@)
         'upload-destination' => $upload_destination,
         'check-links' => $check_links,
         'mark-broken-links' => $mark_broken_links,
-        'output-filename' => $output_filename
+        'output-filename' => $output_filename,
+        'max-upload-count' => $max_upload_count,
+        'build-only-missing' => $build_only_missing,
+        'dry-run' => $dry_run
     };
 }
 
@@ -255,6 +349,7 @@ sub PrintUsageAndExit ()
     print STDERR "usage: $0 <command> {option} <release-description.xml>\n";
     print STDERR "    comands:\n";
     print STDERR "        build\n";
+    print STDERR "        build-missing\n";
     print STDERR "        upload\n";
     print STDERR "        wiki     create a download page in MediaWiki syntax\n";
     print STDERR "    options:\n";
@@ -264,12 +359,19 @@ sub PrintUsageAndExit ()
     print STDERR "    -l            check links on wiki page, write broken links as plain text\n";
     print STDERR "    -ld           check links on wiki page, mark broken links\n";
     print STDERR "    -o <filename> filename of the output (wiki: wiki page, build: makefile)\n";
+    print STDERR "    -n <number>   maximal number of upload tries, defaults to 5.\n";
+    print STDERR "    -d            dry run\n";
     exit(1);
 }
 
 
 
 
+=head2 Trim ($text)
+
+    Remove leading and trailing space from the given string.
+
+=cut
 sub Trim ($)
 {
     my ($text) = @_;
@@ -280,6 +382,11 @@ sub Trim ($)
 
 
 
+=head2 ReadReleaseDescription ($$)
+
+    Read the release description from $filename.
+
+=cut
 sub ReadReleaseDescription ($$)
 {
     my ($filename, $context) = @_;
@@ -295,8 +402,10 @@ sub ReadReleaseDescription ($$)
         'languages' => {},
         'language-ids' => [],
         'platforms' => {},
+        'downloads' => [],
+        'packages' => {},
         'platform-ids' => [],
-        'wiki-packages' => [],
+        'wiki-packages' => []
     };
 
     # Process the language descriptions.
@@ -311,13 +420,27 @@ sub ReadReleaseDescription ($$)
     # Process the platform descriptions.
     for my $platform_element ($root->getChildrenByTagName("platform"))
     {
-        foreach my $platform_descriptor (ProcessPlatformDescription($platform_element, $context))
-        {
-            $release->{'platforms'}->{$platform_descriptor->{'id'}} = $platform_descriptor;
-            push @{$release->{'platform-ids'}}, $platform_descriptor->{'id'};
-        }
+        my $platform_descriptor = ProcessPlatformDescription($platform_element, $context);
+        $release->{'platforms'}->{$platform_descriptor->{'id'}} = $platform_descriptor;
+        push @{$release->{'platform-ids'}}, $platform_descriptor->{'id'};
     }
     printf "%d platforms\n", scalar keys %{$release->{'platforms'}};
+
+    # Process the package descriptions.
+    for my $package_element ($root->getChildrenByTagName("package"))
+    {
+        my $package_descriptor = ProcessPackageDescription($package_element, $context);
+        $release->{'packages'}->{$package_descriptor->{'id'}} = $package_descriptor;
+    }
+    printf "%d packages\n", scalar keys %{$release->{'packages'}};
+
+    # Process the download descriptions.
+    for my $download_element ($root->getChildrenByTagName("download"))
+    {
+        my $download_descriptor = ProcessDownloadDescription($download_element, $context);
+        push @{$release->{'downloads'}}, $download_descriptor;
+    }
+    printf "%d downloads\n", scalar @{$release->{'downloads'}};
 
     if ($context->{'command'} =~ /^(build|upload)$/)
     {
@@ -333,7 +456,7 @@ sub ReadReleaseDescription ($$)
     {
         for my $wiki_element ($root->getChildrenByTagName("wiki"))
         {
-            for my $wiki_package_element ($wiki_element->getChildrenByTagName("package"))
+            for my $wiki_package_element ($wiki_element->getChildrenByTagName("package-ref"))
             {
                 my $wiki_package = ProcessWikiPackageDescription(
                     $wiki_package_element,
@@ -351,11 +474,18 @@ sub ReadReleaseDescription ($$)
 
 
 
+=head ProcessBuildDescription ($build_element, $context, $release_descriptor)
+
+    Process one <build> element.
+
+    If its platform-list does not match the current platform then the <build> element is ignored.
+
+=cut
 sub ProcessBuildDescription ($$$)
 {
     my ($build_element, $context, $release_descriptor) = @_;
 
-    my $target_name = $build_element->getAttribute("target");
+    my $package_id = $build_element->getAttribute("package-id");
     my $languages = PostprocessLanguageList($build_element->getAttribute("language-list"), $release_descriptor);
     my $platforms = PostprocessPlatformList($build_element->getAttribute("platform-list"), $release_descriptor);
 
@@ -372,21 +502,22 @@ sub ProcessBuildDescription ($$$)
     }
     if ($is_platform_match)
     {
-        printf "including build %s\n", $target_name;
+        printf "including build %s\n", $package_id;
     }
     else
     {
-        printf "skipping build %s: no platform match\n", $target_name;
+        printf "skipping build %s: no platform match\n", $package_id;
         printf "none of the platforms %s matches %s\n",
-            join(", ", keys %{$release_descriptor->{'platforms'}}),
-            $current_platform;
+        join(", ", keys %{$release_descriptor->{'platforms'}}),
+        $current_platform;
         return;
     }
 
     my @languages = CheckLanguageSet($context, @$languages);
 
     return {
-        'target' => $target_name,
+        'package-id' => $package_id,
+        'platform-list' => $platforms,
         'language-list' => \@languages
     };
 }
@@ -394,51 +525,115 @@ sub ProcessBuildDescription ($$$)
 
 
 
+
+=head2 ProcessPlatformDescription ($element, $context)
+
+    Process one <platform> element.
+
+    The corresponding platform descriptor is returned as a hash.
+
+=cut
 sub ProcessPlatformDescription ($$)
 {
     my ($element, $context) = @_;
 
     my $descriptor = {};
     # Mandatory tags.
-    foreach my $id ("id", "display-name", "base-url", "archive-platform", "word-size", "package-types")
+    foreach my $id ("id", "display-name", "archive-platform", "word-size", "package-types")
     {
         $descriptor->{$id} = $element->getAttribute($id);
-        die "wiki/platform has no attribute $id" unless defined $descriptor->{$id};
+        die "release/platform has no attribute $id" unless defined $descriptor->{$id};
     }
-    $descriptor->{"extension"} = $element->getAttribute("extension");
-
-    # Split package-types at ';' into single package-type entries.
-    my @descriptors = ();
-    foreach my $package_type (split(/;/, $descriptor->{'package-types'}))
+    # Optional tags.
+    foreach my $id ("extension", "add-package-type-to-archive-name")
     {
-        push @descriptors, {
-            %$descriptor,
-            'package-type' => $package_type
-        };
+        $descriptor->{$id} = $element->getAttribute($id);
     }
 
-    return @descriptors;
+    $descriptor->{'package-types'} = [split(/;/, $descriptor->{'package-types'})];
+
+    return $descriptor;
 }
 
 
 
 
+=head2 ProcessDownloadDescription ($element, $context)
+
+    Process one <download> element.
+
+    The corresponding download descriptor is returned as a hash.
+
+=cut
+sub ProcessDownloadDescription ($$)
+{
+    my ($element, $context) = @_;
+
+    my $descriptor = {};
+
+    # Mandatory tags.
+    foreach my $id ("platform-id", "base-url")
+    {
+        $descriptor->{$id} = $element->getAttribute($id);
+        die "release/download has no attribute $id" unless defined $descriptor->{$id};
+    }
+
+    return $descriptor;
+}
+
+
+
+
+=head2 ProcessPackageDescription ($element, $context)
+
+    Process one <package> element.
+
+    The corresponding package descriptor is returned as a hash.
+
+=cut
+sub ProcessPackageDescription ($$$)
+{
+    my ($element, $context, $release_descriptor) = @_;
+
+    my $descriptor = {};
+
+    # Mandatory tags.
+    foreach my $id ("id", "target", "archive-name", "display-name")
+    {
+        $descriptor->{$id} = $element->getAttribute($id);
+        die "release/package has no attribute $id" unless defined $descriptor->{$id};
+        die "release/package attribute $id is empty" unless $descriptor->{$id} !~ /^\s*$/;
+    }
+    # Optional tags.
+    foreach my $id ("link-tooltip", "link-URL", "download-extension")
+    {
+        $descriptor->{$id} = $element->getAttribute($id);
+    }
+
+    return $descriptor;
+}
+
+
+
+
+=head2 ProcessWikiPackageDescription ($element, $context)
+
+    Process one <wiki><package-ref> element.
+
+    The corresponding descriptor is returned as a hash.
+
+=cut
 sub ProcessWikiPackageDescription ($$$)
 {
     my ($element, $context, $release_descriptor) = @_;
 
     my $descriptor = {};
     # Mandatory tags.
-    foreach my $id ("archive-name2", "display-name", "table")
+    foreach my $id ("package-id", "table")
     {
         $descriptor->{$id} = $element->getAttribute($id);
-        die "wiki/package has no attribute $id" unless defined $descriptor->{$id};
-        die "wiki/package attribute $id is empty" unless $descriptor->{$id} !~ /^\s*$/;
-    }
-    # Optional tags.
-    foreach my $id ("archive-name1", "link-tooltip", "link-URL", "download-extension")
-    {
-        $descriptor->{$id} = $element->getAttribute($id);
+        die "wiki/package-ref has no attribute $id" unless defined $descriptor->{$id};
+        die "wiki/package-ref attribute $id is empty" unless $descriptor->{$id} !~ /^\s*$/;
     }
 
     $descriptor->{'language-list'} = PostprocessLanguageList(
@@ -457,6 +652,13 @@ sub ProcessWikiPackageDescription ($$$)
 
 
 
+=head2 ProcessLanguageDescription ($element, $context)
+
+    Process one <language> element.
+
+    The corresponding language descriptor is returned as a hash.
+
+=cut
 sub ProcessLanguageDescription ($$)
 {
     my ($element, $context) = @_;
@@ -474,6 +676,14 @@ sub ProcessLanguageDescription ($$)
 
 
 
+=head2 PostprocessLanguageList ($language_list, $release_descriptor)
+
+    Process a language list that is given as 'language-list' attribute to some tags.
+
+    If the attribute is missing, ie $language_list is undef, or its value is "all",
+    then the returned list of languages is set to all languages defined via <language> elements.
+
+=cut
 sub PostprocessLanguageList ($$)
 {
     my ($language_list, $release_descriptor) = @_;
@@ -495,6 +705,14 @@ sub PostprocessLanguageList ($$)
 
 
 
+=head2 PostprocessPlatformList ($platform_list, $release_descriptor)
+
+    Process a platform list that is given as 'platform-list' attribute to some tags.
+
+    If the attribute is missing, ie $platform_list is undef, or its value is "all",
+    then the returned list of platforms is set to all platforms defined via <platform> elements.
+
+=cut
 sub PostprocessPlatformList ($$)
 {
     my ($platform_list, $release_descriptor) = @_;
@@ -516,6 +734,14 @@ sub PostprocessPlatformList ($$)
 
 
 
+=head2 CheckLanguageSet ($context, @languages)
+
+    Compare the given list of languages with the one defined by the 'WITH_LANG' environment variable.
+
+    This is to ensure that configure --with-lang was called with the same set of languages that are
+    listed by the <language> elements.
+
+=cut
 sub CheckLanguageSet ($@)
 {
     my ($context, @languages) = @_;
@@ -537,8 +763,9 @@ sub CheckLanguageSet ($@)
 
     if (scalar @missing_languages > 0)
     {
-        printf STDERR "    there are languages that where not configured via --with-lang:\n";
-        printf STDERR "        %s\n", join(", ", @missing_languages);
+        my $message_head = $context->{'keep-going'} ? "WARNING" : "ERROR";
+        printf STDERR "%s: there are languages that where not configured via --with-lang:\n", $message_head;
+        printf STDERR "%s:     %s\n", $message_head, join(", ", @missing_languages);
         if ($context->{'keep-going'})
         {
             printf "    available languages:\n";
@@ -546,7 +773,8 @@ sub CheckLanguageSet ($@)
         }
         else
         {
-            die;
+            printf STDERR "ERROR: please rerun configure with --with-lang=\"%s\"\n", join(" ", @languages);
+            exit(1);
         }
     }
 
@@ -556,35 +784,107 @@ sub CheckLanguageSet ($@)
 
 
 
+=head2 WriteMakefile ($release_description, $context)
+
+    Write a makefile with all targets that match the <build> elements.
+
+    The use of a makefile allows us to use make to handle concurrent building.
+
+    When an output file was specified on the command line (option -o) then the
+    makefile is written to that file but make is not run.
+
+    When no output file was specified then the makefile is written to a temporary
+    file.  Then make is run for this makefile.
+
+=cut
 sub WriteMakefile ($$)
 {
-    my ($release_description, $output_filename) = @_;
+    my ($release_description, $context) = @_;
 
-    my $path = $ENV{'SRC_ROOT'} . "/instsetoo_native/util";
-    open my $make, ">", $output_filename;
+    my $filename = $context->{'output-filename'};
+    if ( ! defined $filename)
+    {
+        $filename = File::Temp->new();
+    }
+
+    # Collect the targets to make.
+    my @targets = ();
+    foreach my $build (@{$release_description->{'builds'}})
+    {
+        my $platform_descriptor = GetCurrentPlatformDescriptor($release_description);
+        my $package_descriptor = $release_description->{'packages'}->{$build->{'package-id'}};
+        foreach my $language_id (@{$build->{'language-list'}})
+        {
+            foreach my $package_format (@{$platform_descriptor->{'package-types'}})
+            {
+                my $full_target = sprintf("%s_%s.%s",
+                    $package_descriptor->{'target'},
+                    $language_id,
+                    $package_format);
+                if ($context->{'build-only-missing'})
+                {
+                    my $source_path = GetInstallationPackagePath(
+                        $platform_descriptor,
+                        $package_format,
+                        $language_id);
+                    my $archive_name = GetInstallationPackageName(
+                        $release_description,
+                        $package_descriptor,
+                        $package_format,
+                        $platform_descriptor,
+                        $language_id);
+                    my $candidate = $source_path . "/" . $archive_name;
+                    if (-f $candidate)
+                    {
+                        printf "download set for %s already exists, skipping\n", $full_target;
+                        next;
+                    }
+                }
+                push @targets, $full_target;
+            }
+        }
+    }
+
+    # Write the makefile.
+    open my $make, ">", $filename;
 
     # Write dependencies of 'all' on the products in all languages.
-    print $make "all .PHONY : \\\n";
-    for my $build (@{$release_description->{'builds'}})
-    {
-        for my $language_id (@{$build->{'language-list'}})
-        {
-            printf $make "    %s_%s \\\n", $build->{'target'}, $language_id;
-        }
-    }
+    print $make "all .PHONY : \\\n    ";
+    printf $make "%s\n", join(" \\\n    ", @targets);
     printf $make "\n\n";
 
-    # Write rules that chain dmake in instsetoo_native/util.
-    for my $build (@{$release_description->{'builds'}})
+    if ($context->{'dry-run'})
     {
-        for my $language_id (@{$build->{'language-list'}})
-        {
-            printf $make "%s_%s :\n", $build->{'target'}, $language_id;
-            printf $make "\tdmake \$@ release=t\n";
-        }
+        printf ("adding make fules for\n    %s\n", join("\n    ", @targets));
     }
 
+    # Write rules that chain dmake in instsetoo_native/util.
+    foreach my $target (@targets)
+    {
+        printf $make "%s :\n", $target;
+        printf $make "\tdmake \$@ release=t\n";
+    }
     close $make;
+
+
+    if ( ! defined $context->{'output-filename'})
+    {
+        # Caller wants us to run make.
+        my $path = $ENV{'SRC_ROOT'} . "/instsetoo_native/util";
+        my $command = sprintf("make -f \"%s\" -C \"%s\" -j%d",
+            $filename,
+            $path,
+            $context->{'max-process-count'});
+        if ($context->{'dry-run'})
+        {
+            printf "would run %s\n", $command;
+        }
+        else
+        {
+            printf "running %s\n", $command;
+            system($command);
+        }
+    }
 }
 
 
@@ -601,61 +901,113 @@ sub Upload ($$)
     }
 
     my @download_sets = CollectDownloadSets($release_description);
-    my @actions = GetCopyActions($release_description, @download_sets);
-    foreach my $action (@actions)
+
+    ProvideChecksums($context, @download_sets);
+    my $source_path = PrepareUploadArea($context, @download_sets);
+    if ( ! defined $source_path)
     {
-        printf "uploading %s to %s/%s\n",
-            $action->{'basename'},
-            $context->{'upload-destination'},
-            $action->{'to'};
+        exit(1);
+    }
+    if ( ! UploadFilesViaRsync($context, $source_path, @download_sets))
+    {
+        exit(1);
+    }
+}
 
 
-        ProvideChecksums($action);
-        if ($context->{'upload-destination'} =~ /@/)
+
+
+=head2 PrepareUploadArea ($context, @download_sets)
+
+    Create a temporary directory with the same sub directory strcuture that is requested in the upload location.
+    The files that are to be uploaded are not copied but linked into this temporary directory tree.
+
+    Returns the name of the temporary directory.
+
+=cut
+sub PrepareUploadArea ($@)
+{
+    my ($context, @download_sets) = @_;
+
+    my $tmpdir = File::Temp->newdir();
+    foreach my $download_set (@download_sets)
+    {
+        foreach my $extension ("", ".md5", ".sha256", ".asc")
         {
-            my $destination = $action->{'to'};
-            my $server = $context->{'upload-destination'};
-            if ($server =~ /^(.*):(.*)$/)
+            my $basename = sprintf("%s%s", $download_set->{'archive-name'}, $extension);
+            my $source = sprintf("%s/%s", $download_set->{'source-path'}, $basename);
+            my $target_path = sprintf("%s/%s/%s", $tmpdir, $download_set->{'destination-path'});
+            my $target = sprintf("%s/%s", $target_path, $basename);
+            if ($context->{'dry-run'})
             {
-                $server = $1;
-                $destination = $2 . "/" . $destination;
+                printf "would create link for %s\n", $basename;
             }
-
-            my @path_parts = split(/\//, $destination);
-            my @paths = ();
-            my $path = undef;
-            foreach my $part (@path_parts)
+            else
             {
-                if (defined $path)
+                mkpath($target_path);
+                unlink $target if ( -f $target);
+                my $result = symlink($source, $target);
+                if ($result != 1)
                 {
-                    $path .= "/" . $part;
+                    printf "ERROR: can not created symbolic link to %s\n", $basename;
+                    printf "       %s\n", $source;
+                    printf "    -> %s\n", $target;
+                    return undef;
                 }
-                else
-                {
-                    $path = $part;
-                }
-                push @paths, $path;
             }
-            my $command = sprintf("ssh %s mkdir \"%s\"",
-                $server,
-                join("\" \"", @paths));
-            printf "running command '%s'\n", $command;
-            system($command);
-
-            my $command = sprintf("scp %s %s/%s/",
-                qx(cygpath -u \"$action->{'from'}\"),
-                $context->{'upload-destination'},
-                $action->{'to'});
-            printf "running command '%s'\n", $command;
-            system($command);
-
-            my $command = sprintf("ssh %s md5 \"%s/%s\"",
-                $server,
-                $destination,
-                $action->{'basename'});
-            printf "running command '%s'\n", $command;
-            system($command);
         }
+    }
+
+    return $tmpdir;
+}
+
+
+
+
+sub UploadFilesViaRsync ($$@)
+{
+    my ($context, $source_path, @download_sets) = @_;
+
+
+    # Collect the rsync flags.
+    my @rsync_options = (
+        "-L",         # Copy linked files
+        "-a",         # Transfer the local attributes and modification times.
+        "-c",         # Use checksums to compare source and destination files.
+        "--progress", # Show a progress indicator
+        "--partial",  # Try to resume a previously failed upload
+        );
+
+    # (Optional) Add flags for upload to ssh server
+    my $upload_destination = $context->{'upload-destination'};
+    if ($upload_destination =~ /@/)
+    {
+        push @rsync_options, ("-e", "ssh");
+    }
+
+    # Set up the rsync command.
+    my $command = sprintf("rsync %s \"%s/\" \"%s\"",
+        join(" ", @rsync_options),
+        $source_path,
+        $upload_destination);
+    printf "%s\n", $command;
+
+    if ($context->{'dry-run'})
+    {
+        printf "would run %s up to %d times\n", $command, $context->{'max-upload-count'};
+    }
+    else
+    {
+        # Run the command.  If it fails, repeat a number of times.
+        my $max_run_count = $context->{'max-upload-count'};
+        for (my $run_index=1; $run_index<=$max_run_count && scalar @download_sets>0; ++$run_index)
+        {
+            my $result = system($command);
+            printf "%d %d\n", $result, $?;
+            return 1 if $result == 0;
+        }
+        printf "ERROR: could not upload all files without error in %d runs\n", $max_run_count;
+        return 0;
     }
 }
 
@@ -667,40 +1019,51 @@ sub CollectDownloadSets ($)
     my ($release_description) = @_;
 
     my @download_sets = ();
-    my $platform_descriptor = GetPlatformDescriptor();
 
-    for my $build (@{$release_description->{'builds'}})
+    foreach my $platform_descriptor (values %{$release_description->{'platforms'}})
     {
-        my $product_descriptor = GetProductDescriptor($build->{'target'});
-        print $build->{'target'}."\n";
-        my @package_formats = @{$platform_descriptor->{'package-formats'}};
-        for my $package_format (@package_formats)
+        my $platform_path = sprintf("%s/instsetoo_native/%s",
+            $ENV{'SOLARSRC'},
+            $platform_descriptor->{'id'});
+        if ( ! -d $platform_path)
         {
-            for my $language (@{$build->{'language-list'}})
-            {
-                my $full_language = $language;
-                if ($EnUSBasedLanguages{$language})
-                {
-                    $full_language = "en-US_".$language;
-                }
-                my $archive_name = GetInstallationPackageName($build, $language);
+            printf "ignoring missing %s\n", $platform_path;
+            next;
+        }
+        for my $package_descriptor (values %{$release_description->{'packages'}})
+        {
 
-                my $source_path = sprintf("%s/instsetoo_native/%s/Apache_OpenOffice%s/%s/install/%s_download",
-                    $ENV{'SOLARSRC'},
-                    $ENV{'INPATH'},
-                    $product_descriptor->{'product-name-tail'},
-                    $package_format,
-                    $full_language);
-                if ( ! -f $source_path."/".$archive_name)
+            my @package_formats = @{$platform_descriptor->{'package-types'}};
+            for my $package_format (@package_formats)
+            {
+                for my $language_id (@{$release_description->{'language-ids'}})
                 {
-                    printf STDERR "ERROR: can not find download set '%s'\n", $source_path;
-                    next;
+                    my $source_path = GetInstallationPackagePath(
+                        $platform_descriptor,
+                        $package_format,
+                        $language_id);
+                    my $archive_name = GetInstallationPackageName(
+                        $release_description,
+                        $package_descriptor,
+                        $package_format,
+                        $platform_descriptor,
+                        $language_id);
+                    my $candidate = $source_path."/".$archive_name;
+                    if ( ! -f $candidate)
+                    {
+#                        printf STDERR "ERROR: can not find download set '%s'\n", $candidate;
+                        next;
+                    }
+                    printf "adding %s\n", $archive_name;
+                    push @download_sets, {
+                        'source-path' => $source_path,
+                        'archive-name' => $archive_name,
+                        'platform' => $platform_descriptor->{'pack-platform'},
+                        'destination-path' => sprintf("developer-snapshots/%s/%s",
+                            $release_description->{'name'},
+                            $platform_descriptor->{'pack-platform'})
+                    };
                 }
-                push @download_sets, {
-                    'source-path' => $source_path,
-                    'archive-name' => $archive_name,
-                    'platform' => $platform_descriptor->{'pack-platform'}
-                };
             }
         }
     }
@@ -711,103 +1074,176 @@ sub CollectDownloadSets ($)
 
 
 
-sub ProvideChecksums ($)
+=head2 ProvideChecksums ($context, @download_sets)
+
+    Create checksums in MD5 and SHA256 format and a gpg signature for the given download set.
+    The checksums are not created when they already exists and are not older than the download set.
+
+=cut
+sub ProvideChecksums ($@)
 {
-    my ($action) = @_;
+    my ($context, @download_sets) = @_;
 
-    printf "creating checksums for %s\n", $action->{'basename'};
-    my $full_archive_name = $action->{'from'} . "/" . $action->{'basename'};
+    my @asc_requests = ();
+    foreach my $download_set (@download_sets)
+    {
+        printf "%s\n", $download_set->{'archive-name'};
+        my $full_archive_name = $download_set->{'source-path'} . "/" . $download_set->{'archive-name'};
+        $full_archive_name = Trim(qx(cygpath -u "$full_archive_name"));
 
-    my $digest = Digest::MD5->new();
-    open my $in, $full_archive_name;
-    $digest->addfile($in);
-    $action->{"MD5"} = $digest->hexdigest();
-    close $in;
+        my $md5_filename = $full_archive_name . ".md5";
+        if ( ! -f $md5_filename || IsOlderThan($md5_filename, $full_archive_name))
+        {
+            if ($context->{'dry-run'})
+            {
+                printf "    would create MD5\n";
+            }
+            else
+            {
+                my $digest = Digest::MD5->new();
+                open my $in, $full_archive_name;
+                $digest->addfile($in);
+                my $checksum = $digest->hexdigest();
+                close $in;
 
-    my $digest = Digest::SHA->new("sha256");
-    open my $in, $full_archive_name;
-    $digest->addfile($in);
-    $action->{"SHA256"} = $digest->hexdigest();
-    close $in;
+                open my $out, ">", $md5_filename;
+                printf $out "%s *%s", $checksum, $download_set->{'archive-name'};
+                close $out;
+
+                printf "    created MD5\n";
+            }
+        }
+        else
+        {
+            printf "    MD5 already exists\n";
+        }
+
+        my $sha256_filename = $full_archive_name . ".sha256";
+        if ( ! -f $sha256_filename || IsOlderThan($sha256_filename, $full_archive_name))
+        {
+            if ($context->{'dry-run'})
+            {
+                printf "    would create SHA256\n";
+            }
+            else
+            {
+                my $digest = Digest::SHA->new("sha256");
+                open my $in, $full_archive_name;
+                $digest->addfile($in);
+                my $checksum = $digest->hexdigest();
+                close $in;
+
+                open my $out, ">", $sha256_filename;
+                printf $out "%s *%s", $checksum, $download_set->{'archive-name'};
+                close $out;
+
+                printf "    created SHA256\n";
+            }
+        }
+        else
+        {
+            printf "    SHA256 already exists\n";
+        }
+
+        my $asc_filename = $full_archive_name . ".asc";
+        if ( ! -f $asc_filename || IsOlderThan($asc_filename, $full_archive_name))
+        {
+            if ($context->{'dry-run'})
+            {
+                printf "    would create ASC\n";
+            }
+            else
+            {
+                # gpg seems not to be able to sign more than one file at a time.
+                # Password has to be provided every time.
+                my $command = sprintf("gpg --armor --detach-sig \"%s\"", $full_archive_name);
+                print $command;
+                my $result = system($command);
+                printf "    created ASC\n";
+            }
+        }
+        else
+        {
+            printf "    ASC already exists\n";
+        }
+    }
 }
 
 
 
 
-sub GetCopyActions ($@)
+=head2 IsOlderThan ($filename1, $filename2)
+
+    Return true (1) if the last modification date of $filename1 is older than (<) that of $filename2.
+
+=cut
+sub IsOlderThan ($$)
 {
-    my ($release_description, @download_sets) = @_;
+    my ($filename1, $filename2) = @_;
 
-    my $platform_descriptor = GetPlatformDescriptor();
+    my @stat1 = stat $filename1;
+    my @stat2 = stat $filename2;
 
-    my @actions = ();
+    return $stat1[9] < $stat2[9];
+}
 
-    for my $download_set (@download_sets)
+
+
+
+sub GetInstallationPackageName ($$$$$)
+{
+    my ($release_description, $package_descriptor, $package_format, $platform_descriptor, $language) = @_;
+
+    my $name = $package_descriptor->{'archive-name'};
+
+    my $archive_package_type = "";
+    if ($platform_descriptor->{'add-package-type-to-archive-name'} =~ /^(1|true|yes)$/i)
     {
-        my $destination_path = sprintf("developer-snapshots/%s/%s",
-            $release_description->{'name'},
-            $platform_descriptor->{'pack-platform'});
-
-        push @actions, {
-            'action'=>'copy',
-            'from' => $download_set->{'source-path'},
-            'to' => $destination_path,
-            'basename' => $download_set->{'archive-name'}
-        };
+        $archive_package_type = "-".$package_format;
     }
 
-    return @actions;
-}
-
-
-
-
-sub GetInstallationPackageName ($$)
-{
-    my ($build, $language) = @_;
-
-    my $platform_descriptor = GetPlatformDescriptor();
-    my $build_descriptor = GetProductDescriptor($build->{'target'});
-    my $name = sprintf ("Apache_OpenOffice_%s_%s_%s_%s.%s",
-        "4.1.0",
-        $platform_descriptor->{'pack-platform'},
-        $build_descriptor->{'pack-name'},
-        $language,
-        $platform_descriptor->{'extension'});
+    $name =~ s/%V/$release_description->{'version'}/g;
+    $name =~ s/%P/$platform_descriptor->{'archive-platform'}/g;
+    $name =~ s/%T/$archive_package_type/g;
+    $name =~ s/%L/$language/g;
+    $name =~ s/%E/$platform_descriptor->{'extension'}/g;
     return $name;
 }
 
 
 
 
-sub GetPlatformDescriptor ()
+sub GetInstallationPackagePath ($$$)
 {
-    if ( ! defined $ENV{'OUTPATH'})
+    my ($product_descriptor, $package_format, $language) = @_;
+
+    my $full_language = $language;
+    if ($EnUSBasedLanguages{$language})
     {
-        printf STDERR "ERROR: solar environment not loaded or broken (OUTPATH not defined)\n";
-        die;
+        $full_language = "en-US_".$language;
     }
-    my $descriptor = $PlatformDescriptors{$ENV{'OUTPATH'}};
-    if ( ! defined $descriptor)
-    {
-        printf STDERR "ERROR: platform '%s' is not yet supported\n", $ENV{'OUTPATH'};
-        die;
-    }
-    return $descriptor;
+
+    return sprintf("%s/instsetoo_native/%s/Apache_OpenOffice%s/%s/install/%s_download",
+        $ENV{'SOLARSRC'},
+        $ENV{'INPATH'},
+        $product_descriptor->{'product-name-tail'},
+        $package_format,
+        $full_language);
 }
 
 
 
 
-sub GetProductDescriptor ($)
+sub GetCurrentPlatformDescriptor ($)
 {
-    my ($product_name) = @_;
-    my $descriptor = $ProductDescriptors{$product_name};
-    if ( ! defined $descriptor)
+    my ($release_description) = @_;
+
+    my $platform_descriptor = $release_description->{'platforms'}->{$ENV{'INPATH'}};
+    if ( ! defined $platform_descriptor)
     {
-        printf STDERR "ERROR: product '%s' is not supported\n", $product_name;
+        printf STDERR "ERROR: platform '%s' is not supported\n", $ENV{'INPATH'};
     }
-    return $descriptor;
+    return $platform_descriptor;
 }
 
 
@@ -826,20 +1262,25 @@ sub Wiki ($$)
         my @table_languages = GetLanguagesForTable($release_descriptor, @table_packages);
         my @table_platforms = GetPlatformsForTable($release_descriptor, @table_packages);
 
-        printf "packages: %s\n", join(", ", map {$_->{'display-name'}} @table_packages);
+        printf "packages: %s\n", join(", ", map {$_->{'package'}->{'display-name'}} @table_packages);
         printf "languages: %s\n", join(", ", map {$_->{'english-name'}} @table_languages);
         printf "platforms: %s\n", join(", ", map {$_->{'id'}} @table_platforms);
 
         print $out "{| class=\"wikitable\"\n";
+
+        # Write the table head.
         print $out "|-\n";
         print $out "! colspan=\"2\" | Language<br>The names do not refer to countries\n";
         print $out "! Type\n";
         foreach my $platform_descriptor (@table_platforms)
         {
-            printf $out "! %s<br>%s bit<br>%s\n",
+            foreach my $package_type (@{$platform_descriptor->{'package-types'}})
+            {
+                printf $out "! %s<br>%s bit<br>%s\n",
                 $platform_descriptor->{'display-name'},
                 $platform_descriptor->{'word-size'},
-                uc($platform_descriptor->{'package-type'});
+                uc($package_type);
+            }
         }
 
         foreach my $language_descriptor (@table_languages)
@@ -847,7 +1288,7 @@ sub Wiki ($$)
             if ($context->{'check-links'})
             {
                 $| = 1;
-                printf "%s: ", $language_descriptor->{'id'};
+                printf "%-5%s: ", $language_descriptor->{'id'};
             }
 
             print $out "|-\n";
@@ -855,8 +1296,10 @@ sub Wiki ($$)
             printf $out "| rowspan=\"%d\" | %s\n", scalar @table_packages, $language_descriptor->{'local-name'};
 
             my $is_first = 1;
-            foreach my $package_descriptor (@table_packages)
+            foreach my $wiki_package_descriptor (@table_packages)
             {
+                my $package_descriptor = $wiki_package_descriptor->{'package'};
+
                 if ($is_first)
                 {
                     $is_first = 0;
@@ -880,13 +1323,18 @@ sub Wiki ($$)
 
                 foreach my $platform_descriptor (@table_platforms)
                 {
-                    WriteDownloadLinks(
-                        $out,
-                        $context,
-                        $release_descriptor,
-                        $language_descriptor,
-                        $package_descriptor,
-                        $platform_descriptor);
+                    foreach my $package_type (@{$platform_descriptor->{'package-types'}})
+                    {
+                        WriteDownloadLinks(
+                            $out,
+                            $release_descriptor,
+                            $context,
+                            $release_descriptor,
+                            $language_descriptor,
+                            $wiki_package_descriptor,
+                            $platform_descriptor,
+                            $package_type);
+                    }
                 }
             }
 
@@ -910,9 +1358,9 @@ sub GetTableList ($)
 
     my %seen_table_names = ();
     my @table_names = ();
-    foreach my $package_descriptor (@{$release_descriptor->{'wiki-packages'}})
+    foreach my $wiki_package_descriptor (@{$release_descriptor->{'wiki-packages'}})
     {
-        my $table_name = $package_descriptor->{'table'};
+        my $table_name = $wiki_package_descriptor->{'table'};
         if ( ! $seen_table_names{$table_name})
         {
             push @table_names, $table_name;
@@ -930,11 +1378,14 @@ sub GetPackagesForTable ($$)
     my ($release_descriptor, $table_name) = @_;
 
     my @packages = ();
-    foreach my $package_descriptor (@{$release_descriptor->{'wiki-packages'}})
+    foreach my $wiki_package_descriptor (@{$release_descriptor->{'wiki-packages'}})
     {
-        if ($package_descriptor->{'table'} eq $table_name)
+        if ($wiki_package_descriptor->{'table'} eq $table_name)
         {
-            push @packages, $package_descriptor;
+            my $package_descriptor = $release_descriptor->{'packages'}->{
+                $wiki_package_descriptor->{'package-id'}};
+            $wiki_package_descriptor->{'package'} = $package_descriptor;
+            push @packages, $wiki_package_descriptor;
         }
     }
     return @packages;
@@ -997,6 +1448,7 @@ sub GetPlatformsForTable ($@)
     {
         if ($matching_platform_ids{$platform_id})
         {
+        print $platform_id."\n";
             push @matching_platform_descriptors, $release_descriptor->{'platforms'}->{$platform_id};
         }
     }
@@ -1015,21 +1467,24 @@ my $broken_link_start = "<span style=\"color:#FF0000\">";
 my $broken_link_end = "</span>";
 
 
-sub WriteDownloadLinks ($$$$$)
+sub WriteDownloadLinks ($$$$$$$)
 {
     my ($out,
+        $release_descriptor,
         $context,
         $release_descriptor,
         $language_descriptor,
-        $package_descriptor,
-        $platform_descriptor) = @_;
+        $wiki_package_descriptor,
+        $platform_descriptor,
+        $package_type) = @_;
+
+    my $package_descriptor = $wiki_package_descriptor->{'package'};
 
     # Check if the current language and platform match the package.
-    if (defined $package_descriptor->{'platforms'}->{$platform_descriptor->{'id'}}
-        && defined $package_descriptor->{'languages'}->{$language_descriptor->{'id'}})
+    if (defined $wiki_package_descriptor->{'platforms'}->{$platform_descriptor->{'id'}}
+        && defined $wiki_package_descriptor->{'languages'}->{$language_descriptor->{'id'}})
     {
         my $archive_package_name = "";
-        my $package_type = $platform_descriptor->{'package-type'};
         my $extension = $package_type;
         if (defined $platform_descriptor->{'extension'})
         {
@@ -1040,18 +1495,25 @@ sub WriteDownloadLinks ($$$$$)
             $extension = $package_descriptor->{'download-extension'};
         }
         $archive_package_name = "-".$package_type if ($package_type =~ /deb|rpm/);
-        my $archive_name = sprintf("Apache_OpenOffice%s_%s_%s_%s%s_%s.%s",
-            $package_descriptor->{'archive-name1'},
-            $release_descriptor->{'version'},
-            $platform_descriptor->{'archive-platform'},
-            $package_descriptor->{'archive-name2'},
-            $archive_package_name,
-            $language_descriptor->{'id'},
-            $extension);
 
-        my $url = $platform_descriptor->{'base-url'} . "/". $archive_name;
-        printf $out
-            "| align=\"center\" | %s%s%s<br><br>%s%s %s<br>%s%s\n",
+        my $archive_name = GetInstallationPackageName(
+            $release_descriptor,
+            $package_descriptor,
+            $package_type,
+            $platform_descriptor,
+            $language_descriptor->{'id'});
+
+        printf $out "| align=\"center\" | ";
+        my $download = FindDownload(
+            $context,
+            $release_descriptor,
+            $platform_descriptor,
+            $package_type,
+            $archive_name);
+        if (defined $download)
+        {
+            my $url = $download->{'base-url'} . "/". $archive_name;
+            printf $out "%s%s%s<br><br>%s%s %s<br>%s%s",
             $bold_text_start,
             CreateLink($url, $extension, $context),
             $bold_text_end,
@@ -1060,11 +1522,62 @@ sub WriteDownloadLinks ($$$$$)
             CreateLink($url.".md5", "MD5", $context),
             CreateLink($url.".sha256", "SHA256", $context),
             $small_text_end;
+        }
+        printf $out "\n";
     }
     else
     {
         printf $out "|\n";
     }
+}
+
+
+
+
+sub FindDownload ($$$$$)
+{
+    my ($context,
+    $release_descriptor,
+    $platform_descriptor,
+    $package_type,
+        $archive_name) = @_;
+
+    foreach my $download (@{$release_descriptor->{'downloads'}})
+    {
+        if ($download->{'platform-id'} eq $platform_descriptor->{'id'})
+        {
+            my $url = $download->{'base-url'} . "/". $archive_name;
+            if ($context->{'check-links'})
+            {
+                if (CheckLink($url))
+                {
+                    # URL points to an existing file.
+                    printf "+";
+                    return $download;
+                }
+                else
+                {
+                    # URL is broken.
+                    # Try the next download area for the platform.
+                    next;
+                }
+            }
+            else
+            {
+                # Use the URL unchecked.  If there is more than one download area for the platform then only
+                # the first is ever used.
+                printf ".";
+                return $download;
+            }
+        }
+    }
+
+    if ($context->{'check-links'})
+    {
+        printf "-";
+    }
+
+    return undef;
 }
 
 
@@ -1077,8 +1590,19 @@ sub CreateLink ($$$)
     my $is_link_broken = 0;
     if ($context->{'check-links'})
     {
-        my $head = LWP::Simple::head($url);
-        $is_link_broken = ! $head;
+        if (CheckLink($url))
+        {
+            $is_link_broken = 0;
+            printf "+";
+        }
+        else
+        {
+            $is_link_broken = 1;
+            printf "-";
+        }
+    }
+    else
+    {
         printf ".";
     }
 
@@ -1099,12 +1623,49 @@ sub CreateLink ($$$)
 
 
 
+=head2 CheckLink ($url)
+
+    Check if the file referenced by $url can be downloaded.
+    This is determined by downloading only the header.
+
+=cut
+my $LastCheckedURL = undef;
+my $LastCheckedResult = undef;
+sub CheckLink ($)
+{
+    my ($url) = @_;
+
+    if ($url ne $LastCheckedURL)
+    {
+        my $head = LWP::Simple::head($url);
+        $LastCheckedURL = $url;
+        $LastCheckedResult = !!$head;
+    }
+
+    return $LastCheckedResult;
+}
+
+
+
+
+sub SignFile ($$)
+{
+    my ($signature, $filename) = @_;
+
+    my $command = sprintf(
+        "gpg --armor --output %s.asc --detach-sig %s",
+        $filename,
+        $filename);
+}
+
+
+
+
 my $context = ProcessCommandline(@ARGV);
 my $release_description = ReadReleaseDescription($context->{'filename'}, $context);
 if ($context->{'command'} eq "build")
 {
-    WriteMakefile($release_description, $context->{'output-filename'});
-#    open my $make, "|-", sprintf("make -C \"%s\" -j%d -f -", $path, $max_process_count);
+    WriteMakefile($release_description, $context);
 }
 elsif ($context->{'command'} eq "upload")
 {
