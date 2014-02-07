@@ -294,7 +294,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >       m_xUIElementFactoryManager;
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
-        css::uno::Reference< ::com::sun::star::awt::XToolkit2 >              m_xToolkit;
         css::uno::Reference< ::com::sun::star::container::XNameAccess >      m_xPersistentWindowState;
         ILayoutNotifications*                                                m_pParentLayouter;
 
@@ -317,12 +316,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool                                                                 m_bVisible;
         bool                                                                 m_bLayoutInProgress;
         bool                                                                 m_bToolbarCreation;
-
-        OUString                                                      m_aFullAddonTbxPrefix;
-        OUString                                                      m_aCustomTbxPrefix;
-        OUString                                                      m_aCustomizeCmd;
-        OUString                                                      m_aToolbarTypeString;
-        OUString                                                      m_aModuleIdentifier;
 };
 
 } // namespace framework

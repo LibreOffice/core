@@ -67,18 +67,11 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_bDockingInProgress( false ),
     m_bVisible( true ),
     m_bLayoutInProgress( false ),
-    m_bToolbarCreation( false ),
-    m_aFullAddonTbxPrefix( "private:resource/toolbar/addon_" ),
-    m_aCustomTbxPrefix( "custom_" ),
-    m_aCustomizeCmd( "ConfigureDialog" ),
-    m_aToolbarTypeString( UIRESOURCETYPE_TOOLBAR )
+    m_bToolbarCreation( false )
 {
     // initialize rectangles to zero values
     setZeroRectangle( m_aDockingAreaOffsets );
     setZeroRectangle( m_aDockingArea );
-
-    // create toolkit object
-    m_xToolkit = awt::Toolkit::create( m_xContext );
 }
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
@@ -433,7 +426,7 @@ bool ToolbarLayoutManager::requestToolbar( const OUString& rResourceURL )
     {
         bMustCallCreate = true;
         aRequestedToolbar.m_aName      = rResourceURL;
-        aRequestedToolbar.m_aType      = m_aToolbarTypeString;
+        aRequestedToolbar.m_aType      = UIRESOURCETYPE_TOOLBAR;
         aRequestedToolbar.m_xUIElement = xUIElement;
         implts_readWindowStateData( rResourceURL, aRequestedToolbar );
     }
@@ -465,15 +458,13 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
 
 bool ToolbarLayoutManager::destroyToolbar( const OUString& rResourceURL )
 {
-    const OUString aAddonTbResourceName( "private:resource/toolbar/addon_" );
-
     UIElementVector::iterator pIter;
     uno::Reference< lang::XComponent > xComponent;
 
     bool bNotify( false );
     bool bMustBeSorted( false );
     bool bMustLayouted( false );
-    bool bMustBeDestroyed( rResourceURL.indexOf( aAddonTbResourceName ) != 0 );
+    bool bMustBeDestroyed( !rResourceURL.startsWith("private:resource/toolbar/addon_") );
 
     WriteGuard aWriteLock( m_aLock );
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
@@ -992,7 +983,6 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     uno::Reference< ui::XUIElement >                       xUIElement;
 
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
-    OUString aAddonsToolBarStaticName( m_aFullAddonTbxPrefix );
     OUString aElementType( "toolbar" );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
@@ -1001,7 +991,8 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     aPropSeq[1].Name = "ConfigurationData";
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
+        OUString aAddonToolBarName( "private:resource/toolbar/addon_" +
+                m_pAddonOptions->GetAddonsToolbarResourceName(i) );
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
         aPropSeq[1].Value <<= aAddonToolBarData;
 
@@ -1161,7 +1152,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
                 // - Toolbars (the statusbar is also member of the persistent window state)
                 // - Not custom toolbars, there are created with their own method (implts_createCustomToolbars)
                 if ( aElementType.equalsIgnoreAsciiCase("toolbar") &&
-                     aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
+                     aElementName.indexOf( "custom_" ) == -1 )
                 {
                     UIElement aNewToolbar = implts_findToolbar( aName );
                     bool bFound = ( aNewToolbar.m_aName == aName );
@@ -1209,7 +1200,7 @@ void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno
         }
 
         // Only create custom toolbars. Their name have to start with "custom_"!
-        if ( !aTbxResName.isEmpty() && ( aTbxResName.indexOf( m_aCustomTbxPrefix ) != -1 ) )
+        if ( !aTbxResName.isEmpty() && ( aTbxResName.indexOf( "custom_" ) != -1 ) )
             implts_createCustomToolBar( aTbxResName, aTbxTitle );
     }
 }
@@ -1359,7 +1350,7 @@ void ToolbarLayoutManager::implts_createToolBar( const OUString& aName, bool& bN
             else
             {
                 // Create new UI element and try to read its state data
-                UIElement aNewToolbar( aName, m_aToolbarTypeString, xUIElement );
+                UIElement aNewToolbar( aName, UIRESOURCETYPE_TOOLBAR, xUIElement );
                 implts_readWindowStateData( aName, aNewToolbar );
                 implts_setElementData( aNewToolbar, xDockWindow );
                 implts_insertToolbar( aNewToolbar );
@@ -1378,7 +1369,7 @@ void ToolbarLayoutManager::implts_createToolBar( const OUString& aName, bool& bN
             {
                 ToolBox* pToolbar = (ToolBox *)pWindow;
                 sal_uInt16 nMenuType = pToolbar->GetMenuType();
-                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, m_aCustomizeCmd ))
+                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "ConfigureDialog" ))
                     pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
                 else
                     pToolbar->SetMenuType( nMenuType | TOOLBOX_MENUTYPE_CUSTOMIZE );
@@ -3872,7 +3863,7 @@ throw (uno::RuntimeException)
         OUString aElementType;
         OUString aElementName;
         parseResourceURL( rEvent.ResourceURL, aElementType, aElementName );
-        if ( aElementName.indexOf( m_aCustomTbxPrefix ) != -1 )
+        if ( aElementName.indexOf( "custom_" ) != -1 )
         {
             // custom toolbar must be directly created, shown and layouted!
             createToolbar( rEvent.ResourceURL );

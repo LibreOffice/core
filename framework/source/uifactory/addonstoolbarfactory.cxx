@@ -196,7 +196,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
             Args[n].Value >>= aResourceURL;
     }
 
-    if ( aResourceURL.indexOf( "private:resource/toolbar/addon_" ) != 0 )
+    if ( !aResourceURL.startsWith("private:resource/toolbar/addon_") )
         throw IllegalArgumentException();
 
     // Identify frame and determine module identifier to look for context based buttons
