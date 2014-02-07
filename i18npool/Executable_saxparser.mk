@@ -24,21 +24,4 @@ $(eval $(call gb_Executable_add_exception_objects,saxparser,\
 	i18npool/source/localedata/saxparser \
 ))
 
-ifeq ($(OS),SOLARIS)
-# the xmlparser build breaks in this header file
-#
-#      /opt/SUNWspro/WS6U1/include/CC/Cstd/./limits
-#
-# which defines a class with member functions called min() and max().
-# the build breaks because in solar.h, there is something like this
-#
-#      #define max(x,y) ((x) < (y) ? (y) : (x))
-#      #define min(x,y) ((x) < (y) ? (x) : (y))
-#
-# so the only choice is to prevent "CC/Cstd/./limits" from being included:
-$(eval $(call gb_Executable_add_defs,saxparser,\
-	-D__STD_LIMITS \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
