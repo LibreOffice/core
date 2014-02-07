@@ -160,8 +160,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
     OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
     OSL_ENSURE(pTOX, "no current listing");
-    const SwSectionNode* pSectNd;
-    if( pTOX && 0 != ( pSectNd = pTOX->GetFmt()->GetSectionNode() ) )
+    if( pTOX && 0 != pTOX->GetFmt()->GetSectionNode() )
     {
         SwDoc* pMyDoc = GetDoc();
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
