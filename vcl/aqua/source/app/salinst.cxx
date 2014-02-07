@@ -622,11 +622,10 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         bool bIsFullScreenMode = false;
 
         std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
-        while( (*it) &&  ( (it != pSalData->maFrames.end() ) || ( (*it)->mbFullScreen == false ) ) )
+        for(; it != pSalData->maFrames.end(); ++it )
         {
             if( (*it)->mbFullScreen )
                 bIsFullScreenMode = true;
-            it++;
         }
 
         switch ([pEvent data1])
@@ -663,7 +662,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
                 break;
         }
         AquaSalFrame* pFrame = pSalData->maFrames.front();
-        Window * pWindow = pFrame->GetWindow() ? pSalData->maFrames.front()->GetWindow() : NULL;
+        Window* pWindow = pFrame ? pFrame->GetWindow() : NULL;
 
         if( pWindow )
         {
