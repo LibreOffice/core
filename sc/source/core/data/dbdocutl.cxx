@@ -41,7 +41,7 @@ ScDatabaseDocUtil::StrData::StrData() :
 
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                                long nType, sal_Bool bCurrency, StrData* pStrData )
+                                long nType, bool bCurrency, StrData* pStrData )
 {
     OUString aString;
     double nVal = 0.0;

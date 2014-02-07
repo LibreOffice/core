@@ -47,7 +47,7 @@ public:
     static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::sdbc::XRow>& xRow, long nRowPos,
-                        long nType, sal_Bool bCurrency, StrData* pStrData = NULL );
+                        long nType, bool bCurrency, StrData* pStrData = NULL );
 };
 
 #endif
