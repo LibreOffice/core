@@ -291,10 +291,6 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maCellTextAttrs.erase(nStartRow, nEndRow);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
-    // Shift the cell notes array too (before the broadcast).
-    maCellNotes.erase(nStartRow, nEndRow);
-    maCellNotes.resize(MAXROWCOUNT);
-
     CellStorageModified();
 
     if (!bShiftCells)
