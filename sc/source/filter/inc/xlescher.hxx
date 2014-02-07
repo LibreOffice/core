@@ -304,16 +304,15 @@ struct XclObjAnchor : public XclRange
 };
 
 
-template< typename StreamType >
-StreamType& operator>>( StreamType& rStrm, XclObjAnchor& rAnchor )
+inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )
 {
     sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;
 
     rStrm
-        >> rAnchor.maFirst.mnCol >> rAnchor.mnLX
-        >> tmpFirstRow >> tmpTY
-        >> rAnchor.maLast.mnCol  >> rAnchor.mnRX
-        >> tmpLastRow  >> tmpBY;
+       .ReadUInt16( rAnchor.maFirst.mnCol ).ReadUInt16( rAnchor.mnLX )
+       .ReadUInt16( tmpFirstRow ).ReadUInt16( tmpTY )
+       .ReadUInt16( rAnchor.maLast.mnCol ).ReadUInt16( rAnchor.mnRX )
+       .ReadUInt16( tmpLastRow ).ReadUInt16( tmpBY );
 
     rAnchor.maFirst.mnRow = static_cast<sal_uInt32> (tmpFirstRow);
     rAnchor.mnTY = static_cast<sal_uInt32> (tmpTY);

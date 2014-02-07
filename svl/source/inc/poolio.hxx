@@ -150,7 +150,7 @@ struct SfxItemPool_Impl
 
 #define CHECK_FILEFORMAT( rStream, nTag ) \
     {   sal_uInt16 nFileTag; \
-        rStream >> nFileTag; \
+        rStream.ReadUInt16( nFileTag ); \
         if ( nTag != nFileTag ) \
         { \
             OSL_FAIL( #nTag ); /*! s.u. */ \
@@ -163,7 +163,7 @@ struct SfxItemPool_Impl
 
 #define CHECK_FILEFORMAT_RELEASE( rStream, nTag, pPointer ) \
    {   sal_uInt16 nFileTag; \
-       rStream >> nFileTag; \
+       rStream.ReadUInt16( nFileTag ); \
        if ( nTag != nFileTag ) \
         { \
            OSL_FAIL( #nTag ); /*! s.u. */ \
@@ -177,7 +177,7 @@ struct SfxItemPool_Impl
 
 #define CHECK_FILEFORMAT2( rStream, nTag1, nTag2 ) \
     {   sal_uInt16 nFileTag; \
-        rStream >> nFileTag; \
+        rStream.ReadUInt16( nFileTag ); \
         if ( nTag1 != nFileTag && nTag2 != nFileTag ) \
         { \
             OSL_FAIL( #nTag1 ); /*! s.u. */ \

@@ -310,7 +310,7 @@ public:
     sal_Int16 top;
     sal_Int16 right;
     sal_Int16 bottom;
-    bool Read( SvStream &rS ) { rS >> left >> top >> right >> bottom; return true; }
+    bool Read( SvStream &rS ) { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
     void Print( FILE* fo );
 };
 
