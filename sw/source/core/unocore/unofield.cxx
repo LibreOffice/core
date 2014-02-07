@@ -1966,7 +1966,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             {
                 UnoActionContext aCont( m_pImpl->m_pDoc );
                 // insert copy of annotation at new text range
-                SwPostItField* pPostItField = dynamic_cast< SwPostItField* >(m_pImpl->m_pFmtFld->GetField()->CopyField());
+                SwPostItField* pPostItField = static_cast< SwPostItField* >(m_pImpl->m_pFmtFld->GetField()->CopyField());
                 SwFmtFld aFmtFld( *pPostItField );
                 delete pPostItField;
                 SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
