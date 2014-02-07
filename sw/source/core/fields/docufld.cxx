@@ -2275,7 +2275,6 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
                                         const SwTxtFld* pFld )
 {
     // only fields in Footer, Header, FootNote, Flys
-    SwTxtNode* pTxtNode = (SwTxtNode*)&pFld->GetTxtNode();
     SwRefPageGetFieldType* pGetType = (SwRefPageGetFieldType*)GetTyp();
     SwDoc* pDoc = pGetType->GetDoc();
     if( pFld->GetTxtNode().StartOfSectionIndex() >
@@ -2293,7 +2292,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     //  create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
-    pTxtNode = (SwTxtNode*) GetBodyTxtNode( *pDoc, aPos, *pFrm );
+    SwTxtNode* pTxtNode = (SwTxtNode*) GetBodyTxtNode( *pDoc, aPos, *pFrm );
 
     // If no layout exists, ChangeExpansion is called for header and
     // footer lines via layout formatting without existing TxtNode.
