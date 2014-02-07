@@ -258,10 +258,9 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
             if( !pCNd )
                 pCNd = pMyDoc->GetNodes().GoNext( &aIdx );
 
-            const SwFrm* pFrm;
             Point aPt( m_pCurCrsr->GetPtPos() );
 
-            if( pCNd && 0 != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) ))
+            if( pCNd && 0 != pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) )
             {
                 // then we can set the cursor in here
                 SwCallLink aLk( *this ); // watch Crsr-Moves
