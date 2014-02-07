@@ -4135,7 +4135,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
 {
     long nBaseX = nX;
-    if( /*ImplHasMirroredGraphics() &&*/ IsRTLEnabled() )
+    if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
         // --- RTL ---
         // add some strange offset
@@ -4505,7 +4505,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, sal_Bool bTextLine
             return;
 
     long nOldX = rSalLayout.DrawBase().X();
-    if( ImplHasMirroredGraphics() )
+    if( HasMirroredGraphics() )
     {
         long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
         long x = rSalLayout.DrawBase().X();

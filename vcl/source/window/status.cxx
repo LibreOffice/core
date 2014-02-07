@@ -284,7 +284,7 @@ void StatusBar::ImplFormat()
         nX = STATUSBAR_OFFSET_X;
 
         const OutputDevice *pOutDev = GetOutDev();
-        if( pOutDev->ImplHasMirroredGraphics() && IsRTLEnabled() )
+        if( pOutDev->HasMirroredGraphics() && IsRTLEnabled() )
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
