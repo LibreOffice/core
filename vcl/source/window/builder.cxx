@@ -724,6 +724,17 @@ namespace
         return sActionName;
     }
 
+    bool extractVisible(VclBuilder::stringmap &rMap)
+    {
+        OString sActionName;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("visible"));
+        if (aFind != rMap.end())
+        {
+            return toBool(aFind->second);
+        }
+        return false;
+    }
+
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
     {
         OString sWidthRequest("0");
@@ -1511,6 +1522,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             OString sIconName(extractIconName(rMap));
             if (!sIconName.isEmpty())
                 pToolBox->SetItemImage(nItemId, FixedImage::loadThemeImage(sIconName));
+
+            if (!extractVisible(rMap))
+                pToolBox->HideItem(nItemId);
 
             return NULL; // no widget to be created
         }
