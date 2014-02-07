@@ -483,10 +483,6 @@ void OutputDevice::EnableRTL( sal_Bool bEnable )
 
 bool OutputDevice::HasMirroredGraphics() const
 {
-   // HOTFIX for #i55719#
-   if( meOutDevType == OUTDEV_PRINTER )
-       return false;
-
    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
 
