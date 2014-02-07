@@ -617,9 +617,14 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
     ::std::vector< OUString > theDateAcceptancePatterns;
 
+    OUString useLocale(getAttr().getValueByName("ref"));
+
     OUString str;
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
-    of.writeParameter("replaceFrom", strFrom, mnSection);
+    if (useLocale.isEmpty())
+    {
+        of.writeParameter("replaceFrom", strFrom, mnSection);
+    }
     str = getAttr().getValueByName("replaceTo");
     if (!strFrom.isEmpty() && str.isEmpty())
         incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
@@ -640,9 +645,14 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
     }
 
-    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty())
     {
+        if (!strFrom.isEmpty() && strFrom != "[CURRENCY]") //???
+        {
+            incErrorStrStr(
+                "non-empty replaceFrom=\"%s\" with non-empty ref=\"%s\".",
+                strFrom, useLocale);
+        }
         useLocale = useLocale.replace( '-', '_');
         switch (mnSection)
         {
