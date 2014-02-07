@@ -532,23 +532,6 @@ void    OutputDevice::ReMirror( Region &rRegion ) const
 
     rRegion = aMirroredRegion;
 
-//  long                nX;
-//  long                nY;
-//  long                nWidth;
-//  long                nHeight;
-//  ImplRegionInfo      aInfo;
-//  sal_Bool                bRegionRect;
-//    Region              aMirroredRegion;
-//
-//  bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-//  while ( bRegionRect )
-//  {
-//        Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
-//        ImplReMirror( aRect );
-//        aMirroredRegion.Union( aRect );
-//      bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-//  }
-//    rRegion = aMirroredRegion;
 }
 
 SalGraphics* OutputDevice::ImplGetGraphics() const
