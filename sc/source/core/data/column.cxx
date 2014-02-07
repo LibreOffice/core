@@ -1714,6 +1714,7 @@ class CopyByCloneHandler
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
+    svl::SharedStringPool* mpSharedStringPool;
     sal_uInt16 mnCopyFlags;
 
     void setDefaultAttrToDest(size_t nRow)
@@ -1827,8 +1828,10 @@ class CopyByCloneHandler
     }
 
 public:
-    CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, sal_uInt16 nCopyFlags) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
+    CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
+            sal_uInt16 nCopyFlags, svl::SharedStringPool* pSharedStringPool) :
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mpSharedStringPool(pSharedStringPool),
+        mnCopyFlags(nCopyFlags)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1896,8 +1899,18 @@ public:
                     }
                     else
                     {
-                        maDestPos.miCellPos =
-                            mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rStr);
+                        if (mpSharedStringPool)
+                        {
+                            // Re-intern the string if source is a different document.
+                            svl::SharedString aInterned = mpSharedStringPool->intern( rStr.getString());
+                            maDestPos.miCellPos =
+                                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aInterned);
+                        }
+                        else
+                        {
+                            maDestPos.miCellPos =
+                                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rStr);
+                        }
                         setDefaultAttrToDest(nRow);
                     }
                 }
@@ -1998,7 +2011,13 @@ void ScColumn::CopyToColumn(
         }
         else
         {
-            CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
+            // Compare the ScDocumentPool* to determine if we are copying
+            // within the same document. If not, re-intern shared strings.
+            svl::SharedStringPool* pSharedStringPool =
+                (pDocument->GetPool() != rColumn.pDocument->GetPool()) ?
+                &rColumn.pDocument->GetSharedStringPool() : NULL;
+            CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
+                    pSharedStringPool);
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
 
