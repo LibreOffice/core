@@ -2239,8 +2239,6 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
  */
 void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 {
-    SmNode *pTemp;
-
     sal_uInt8 nVariation=0xff;
     if (pNode->GetSubNode(LSUP+1))
     {
@@ -2248,9 +2246,10 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         if (pNode->GetSubNode(LSUB+1))
             nVariation=2;
     }
-    else if (NULL != (pTemp = pNode->GetSubNode(LSUB+1)))
+    else if ( NULL != pNode->GetSubNode(LSUB+1) )
         nVariation=1;
 
+    SmNode *pTemp;
     if (nVariation!=0xff)
     {
         pS->WriteUChar( sal_uInt8(TMPL) ); //Template
