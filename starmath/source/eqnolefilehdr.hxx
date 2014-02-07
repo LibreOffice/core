@@ -47,14 +47,14 @@ public:
 
     inline void Read(SvStorageStream *pS)
     {
-        *pS >> nCBHdr;
-        *pS >> nVersion;
-        *pS >> nCf;
-        *pS >> nCBObject;
-        *pS >> nReserved1;
-        *pS >> nReserved2;
-        *pS >> nReserved3;
-        *pS >> nReserved4;
+        pS->ReadUInt16( nCBHdr );
+        pS->ReadUInt32( nVersion );
+        pS->ReadUInt16( nCf );
+        pS->ReadUInt32( nCBObject );
+        pS->ReadUInt32( nReserved1 );
+        pS->ReadUInt32( nReserved2 );
+        pS->ReadUInt32( nReserved3 );
+        pS->ReadUInt32( nReserved4 );
     }
     inline void Write(SvStorageStream *pS)
     {

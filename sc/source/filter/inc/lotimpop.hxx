@@ -90,12 +90,12 @@ public:
 inline void ImportLotus::Read( ScAddress& rAddr )
 {
     sal_uInt16 nRow;
-    *pIn >> nRow;
+    pIn->ReadUInt16( nRow );
     rAddr.SetRow( static_cast<SCROW>(nRow) );
     sal_uInt8 nByte;
-    *pIn >> nByte;
+    pIn->ReadUChar( nByte );
     rAddr.SetTab( static_cast<SCTAB>(nByte) );
-    *pIn >> nByte;
+    pIn->ReadUChar( nByte );
     rAddr.SetCol( static_cast<SCCOL>(nByte) );
 }
 
@@ -109,31 +109,31 @@ inline void ImportLotus::Read( ScRange& rRange )
 
 inline void ImportLotus::Read( sal_Char& r )
 {
-    *pIn >> r;
+    pIn->ReadChar( r );
 }
 
 
 inline void ImportLotus::Read( sal_uInt8& r )
 {
-    *pIn >> r;
+    pIn->ReadUChar( r );
 }
 
 
 inline void ImportLotus::Read( sal_uInt16& r )
 {
-    *pIn >> r;
+    pIn->ReadUInt16( r );
 }
 
 
 inline void ImportLotus::Read( sal_Int16& r )
 {
-    *pIn >> r;
+    pIn->ReadInt16( r );
 }
 
 
 inline void ImportLotus::Read( sal_uInt32& r )
 {
-    *pIn >> r;
+    pIn->ReadUInt32( r );
 }
 
 
@@ -145,7 +145,7 @@ inline void ImportLotus::Read( double& r )
 
 inline void ImportLotus::Read( LotAttrWK3& r )
 {
-    *pIn >> r.nFont >> r.nFontCol >> r.nBack >> r.nLineStyle;
+    pIn->ReadUChar( r.nFont ).ReadUChar( r.nFontCol ).ReadUChar( r.nBack ).ReadUChar( r.nLineStyle );
 }
 
 

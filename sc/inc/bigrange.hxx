@@ -140,7 +140,7 @@ inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr 
 
 inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr )
 {
-    rStream >> rAdr.nCol >> rAdr.nRow >> rAdr.nTab;
+    rStream.ReadInt32( rAdr.nCol ).ReadInt32( rAdr.nRow ).ReadInt32( rAdr.nTab );
     return rStream;
 }
 

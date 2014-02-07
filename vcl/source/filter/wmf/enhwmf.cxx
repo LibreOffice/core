@@ -398,6 +398,18 @@ void EnhWMFReader::ReadAndDrawPolyLine()
     }
 }
 
+// these are referenced from inside the templates
+
+SvStream& operator>>(SvStream& rStream, sal_Int16 &n)
+{
+    return rStream.ReadInt16(n);
+}
+
+SvStream& operator>>(SvStream& rStream, sal_Int32 &n)
+{
+    return rStream.ReadInt32(n);
+}
+
 /**
  * Reads a poly polygon from the WMF file and draws it.
  * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
