@@ -4854,7 +4854,35 @@ void ToolBox::Resizing( Size& rSize )
 
 Size ToolBox::GetOptimalSize() const
 {
-    return ImplCalcSize( this, mnLines );
+    // If we have any expandable entries, then force them to their
+    // optimal sizes, then reset them afterwards
+    std::map<Window*, Size> aExpandables;
+    for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
+    {
+        if (mpData->m_aItems[i].mbExpand)
+        {
+            Window *pWindow = mpData->m_aItems[i].mpWindow;
+            SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
+            if (!pWindow)
+                continue;
+            Size aWinSize(pWindow->GetSizePixel());
+            aExpandables[pWindow] = aWinSize;
+            Size aPrefSize(pWindow->get_preferred_size());
+            aWinSize.Width() = aPrefSize.Width();
+            pWindow->SetSizePixel(aWinSize);
+        }
+    }
+
+    Size aSize(ImplCalcSize( this, mnLines ));
+
+    for (std::map<Window*, Size>::iterator aI = aExpandables.begin(); aI != aExpandables.end(); ++aI)
+    {
+        Window *pWindow = aI->first;
+        Size aWinSize = aI->second;
+        pWindow->SetSizePixel(aWinSize);
+    }
+
+    return aSize;
 }
 
 Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines ) const

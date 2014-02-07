@@ -805,7 +805,10 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
     m_xFrame (_xFrame),
     mbEndPreview(false)
 {
-    SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
+    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
+    SetSizePixel(aSize);
     EnableControls_Impl();
     GetSubEdit()->AddEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
 }
