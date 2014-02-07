@@ -57,6 +57,8 @@ namespace
             if ( IDocumentMarkAccess::GetType( *(ppMark->get()) ) == IDocumentMarkAccess::DDE_BOOKMARK)
             {
                 ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
+                if (!pBkmk)
+                    return NULL;
                 if (
                     (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
                     (!bCaseSensitive && GetAppCharClass().lowercase(pBkmk->GetName()) == sNameLc)
