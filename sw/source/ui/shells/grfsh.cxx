@@ -186,6 +186,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
 
         case SID_INSERT_GRAPHIC:
+        {
+            // #i123922# implement slot independent from the two below to
+            // bring up the insert graphic dialog and associated actions
+            SwView& rLclView = GetView();
+            rReq.SetReturnValue(SfxBoolItem(nSlot, rLclView.InsertGraphicDlg( rReq )));
+            break;
+        }
         case FN_FORMAT_GRAFIC_DLG:
         case FN_DRAW_WRAP_DLG:
         {

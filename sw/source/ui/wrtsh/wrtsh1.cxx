@@ -166,7 +166,6 @@ sal_Bool SwWrtShell::IsEndWrd()
 }
 
 // Insert string
-
 void SwWrtShell::InsertByWord( const OUString & rStr)
 {
     if( !rStr.isEmpty() )
@@ -1644,7 +1643,27 @@ sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
 
 bool SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() || IsObjSelected() || (GetView().GetDrawFuncPtr() != NULL) || (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
+    if(IsSelFrmMode())
+    {
+        return false;
+    }
+
+    if(IsObjSelected())
+    {
+        return false;
+    }
+
+    if(GetView().GetDrawFuncPtr())
+    {
+        return false;
+    }
+
+    if(GetView().GetPostItMgr()->GetActiveSidebarWin())
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void SwWrtShell::ChgDBData(const SwDBData& aDBData)

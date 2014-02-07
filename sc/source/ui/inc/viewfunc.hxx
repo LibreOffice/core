@@ -118,9 +118,9 @@ public:
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                                 sal_Bool bGroup = false, sal_Bool bSameDocClipboard = false );
 
-    sal_Bool            PasteOnDrawObject( const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                        SdrObject* pHitObj, sal_Bool bLink );
+    sal_Bool PasteOnDrawObjectLinked(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+        SdrObject& rHitObj);
 
     sal_Bool            PasteDataFormat( sal_uLong nFormatId,
                                         const ::com::sun::star::uno::Reference<
@@ -140,8 +140,6 @@ public:
                                 SCCOL nPosX, SCROW nPosY );
     bool            PasteLink( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
-
-    sal_Bool            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget = NULL,

@@ -238,28 +238,44 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         }
 
         SwFlyFrmAttrMgr aFrameManager( sal_True, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
-
         SwWrtShell& rShell = GetWrtShell();
-        rShell.StartAction();
-        if( bLink )
+
+        // #i123922# determine if we really want to insert or replace the graphic at a selected object
+        const bool bReplaceMode(rShell.HasSelection() && nsSelectionType::SEL_FRM == rShell.GetSelectionType());
+
+        if(bReplaceMode)
         {
-            SwDocShell* pDocSh = GetDocShell();
-            INetURLObject aTemp(
-                pDocSh->HasName() ?
-                    pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
-                    OUString());
-
-            OUString sURL = URIHelper::SmartRel2Abs( aTemp, rPath, URIHelper::GetMaybeFileHdl() );
-
-            rShell.Insert( sURL, rFilter, aGraphic, &aFrameManager, bRule );
+            // #i123922# Do same as in D&D, ReRead graphic and all is done
+            rShell.ReRead(
+                bLink ? rPath : OUString(),
+                bLink ? rFilter : OUString(),
+                &aGraphic);
         }
         else
         {
-            rShell.Insert( OUString(), OUString(), aGraphic, &aFrameManager );
-        }
+            rShell.StartAction();
+            if( bLink )
+            {
+                SwDocShell* pDocSh = GetDocShell();
+                INetURLObject aTemp(
+                    pDocSh->HasName() ?
+                        pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
+                        OUString());
 
-        // it is too late after "EndAction" because the Shell can already be destroyed.
-        rShell.EndAction();
+                OUString sURL = URIHelper::SmartRel2Abs(
+                    aTemp, rPath, URIHelper::GetMaybeFileHdl() );
+
+                rShell.Insert( sURL,
+                            rFilter, aGraphic, &aFrameManager, bRule );
+            }
+            else
+            {
+                rShell.Insert( OUString(), OUString(), aGraphic, &aFrameManager );
+            }
+
+            // it is too late after "EndAction" because the Shell can already be destroyed.
+            rShell.EndAction();
+        }
     }
     return aResult;
 }
@@ -427,6 +443,9 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_GRAPHIC_DEFNAME));
 
+        // #i123922# determine if we really want to insert or replace the graphic at a selected object
+        const bool bReplaceMode(rSh.HasSelection() && nsSelectionType::SEL_FRM == rSh.GetSelectionType());
+
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
         int nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
@@ -434,7 +453,10 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         // format not equal to current filter (with autodetection)
         if( nError == GRFILTER_FORMATERROR )
             nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter() );
-        if ( rSh.IsFrmSelected() )
+
+        // #i123922# no new FrameFormat for replace mode, only when new object was created,
+        // else this would reset the current setting for the frame holding the graphic
+        if ( !bReplaceMode && rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
             if(!pFmt)

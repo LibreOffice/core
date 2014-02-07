@@ -34,6 +34,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/sdrundomanager.hxx>
+#include <svx/xbtmpit.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -949,6 +950,43 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
 {
     return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : 0;
+}
+
+// #i123922# helper to apply a Graphic to an existing SdrObject
+SdrObject* ScDrawView::ApplyGraphicToObject(
+    SdrObject& rHitObject,
+    const Graphic& rGraphic,
+    const OUString& rBeginUndoText,
+    const OUString& rFile,
+    const OUString& rFilter)
+{
+    if(dynamic_cast< SdrGrafObj* >(&rHitObject))
+    {
+        SdrGrafObj* pNewGrafObj = (SdrGrafObj*)rHitObject.Clone();
+
+        pNewGrafObj->SetGraphic(rGraphic);
+        BegUndo(rBeginUndoText);
+        ReplaceObjectAtView(&rHitObject, *GetSdrPageView(), pNewGrafObj);
+
+        // set in all cases - the Clone() will have copied an existing link (!)
+        pNewGrafObj->SetGraphicLink( rFile, ""/*TODO?*/, rFilter );
+
+        EndUndo();
+        return pNewGrafObj;
+    }
+    else if(rHitObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rHitObject))
+    {
+        AddUndo(new SdrUndoAttrObj(rHitObject));
+
+        SfxItemSet aSet(GetModel()->GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillBitmapItem(OUString(), rGraphic));
+        rHitObject.SetMergedItemSetAndBroadcast(aSet);
+        return &rHitObject;
+    }
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,6 +40,7 @@
 #include "scresid.hxx"
 #include "progress.hxx"
 #include "sc.hrc"
+#include "globstr.hrc"
 
 
 using namespace ::com::sun::star;
@@ -97,11 +98,41 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
                         ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
 {
+    ScDrawView* pDrawView = pViewSh->GetScDrawView();
+
+    // #i123922# check if an existing object is selected; if yes, evtl. replace
+    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
+    // style for other objects
+    if(pDrawView && 1 == pDrawView->GetMarkedObjectCount())
+    {
+        SdrObject* pPickObj = pDrawView->GetMarkedObjectByIndex(0);
+
+        if(pPickObj)
+        {
+            //sal_Int8 nAction(DND_ACTION_MOVE);
+            //Point aPos;
+            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aEmpty;
+
+            SdrObject* pResult = pDrawView->ApplyGraphicToObject(
+                *pPickObj,
+                rGraphic,
+                aBeginUndo,
+                bAsLink ? rFileName : aEmpty,
+                bAsLink ? rFilterName : aEmpty);
+
+            if(pResult)
+            {
+                // we are done; mark the modified/new object
+                pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
+                return;
+            }
+        }
+    }
+
     //  set the size so the graphic has its original pixel size
     //  at 100% view scale (as in SetMarkedOriginalSize),
     //  instead of respecting the current view scale
-
-    ScDrawView* pDrawView = pViewSh->GetScDrawView();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
     MapMode aDestMap( MAP_100TH_MM );
     if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )

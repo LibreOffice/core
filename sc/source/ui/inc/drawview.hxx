@@ -150,6 +150,16 @@ public:
     sal_Bool    GetObjectIsMarked(  SdrObject * pObject );
     sal_Bool    SelectCurrentViewObject( const OUString& rName );
 
+    // #i123922# helper which checks if a Graphic may be appied to an existing
+    // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a
+    // fillable, non-OLE SdrObject, the FillStyle will be adapted
+    SdrObject* ApplyGraphicToObject(
+        SdrObject& rHitObject,
+        const Graphic& rGraphic,
+        const OUString& rBeginUndoText,
+        const OUString& rFile,
+        const OUString& rFilter);
+
     static void CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
     virtual void SyncForGrid( SdrObject* pObj );
 };

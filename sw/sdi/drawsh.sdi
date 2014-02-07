@@ -391,7 +391,9 @@ interface TextDraw : TextDrawBase
     ]
     SID_INSERT_GRAPHIC
     [
-        StateMethod = StateDisableItems ;
+        // #i123922# Add Exec and State methods for the case where Graphic DrawObjects are selected (SdrGrafObj)
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_TWAIN_SELECT
     [
