@@ -2423,19 +2423,25 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 
 void DomainMapper::lcl_startSectionGroup()
 {
-    m_pImpl->PushProperties(CONTEXT_SECTION);
+    if (!m_pImpl->isInIndexContext())
+    {
+        m_pImpl->PushProperties(CONTEXT_SECTION);
+    }
 }
 
 void DomainMapper::lcl_endSectionGroup()
 {
-    m_pImpl->CheckUnregisteredFrameConversion();
-    m_pImpl->ExecuteFrameConversion();
-    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-    if(pSectionContext)
-        pSectionContext->CloseSectionGroup( *m_pImpl );
-    m_pImpl->PopProperties(CONTEXT_SECTION);
+    if (!m_pImpl->isInIndexContext())
+    {
+        m_pImpl->CheckUnregisteredFrameConversion();
+        m_pImpl->ExecuteFrameConversion();
+        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+        SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->CloseSectionGroup( *m_pImpl );
+        m_pImpl->PopProperties(CONTEXT_SECTION);
+    }
 }
 
 void DomainMapper::lcl_startParagraphGroup()

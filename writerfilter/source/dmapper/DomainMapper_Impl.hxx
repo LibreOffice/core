@@ -315,6 +315,7 @@ private:
     bool                                                                            m_bStartTOC;
     /// If we got any text that is the pre-rendered result of the TOC field.
     bool                                                                            m_bStartedTOC;
+    bool                                                                            m_bStartIndex;
     bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
@@ -379,6 +380,7 @@ private:
     bool                            m_bIsFirstRun;
 
     uno::Reference< text::XTextCursor > xTOCMarkerCursor;
+    uno::Reference< text::XTextCursor > mxTOCTextCursor;
 
     //annotation import
     uno::Reference< beans::XPropertySet > m_xAnnotationField;
@@ -400,7 +402,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
 private:
     bool m_bIsNewDoc;
-
+    bool m_bIndexMarkerAdded;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
@@ -583,6 +585,12 @@ public:
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties,
         const OUString & sTOCServiceName);
+    void handleIndex
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        const OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
@@ -747,6 +755,7 @@ public:
 
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
+    bool isInIndexContext() { return m_bStartIndex;}
 };
 } //namespace dmapper
 } //namespace writerfilter
