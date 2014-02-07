@@ -4082,7 +4082,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // preferred icon style
     gchar* pIconThemeName = NULL;
     g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
-    aStyleSet.SetPreferredSymbolsStyleName( OUString::createFromAscii( pIconThemeName ) );
+    aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
     g_free( pIconThemeName );
 
     aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );

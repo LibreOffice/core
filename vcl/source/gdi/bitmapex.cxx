@@ -96,9 +96,9 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     pResMgr->ReadLong();
 
     const OUString aFileName( pResMgr->ReadString() );
-    OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
+    if( !aImageTree->loadImage( aFileName, aIconTheme, *this, true ) )
     {
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(

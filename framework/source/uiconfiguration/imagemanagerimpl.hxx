@@ -81,7 +81,7 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
             ::std::vector< OUString >                                                   m_aImageNameVector;
             ::std::vector< OUString >                                                   m_aImageCommandNameVector;
-            sal_Int16                                                                        m_nSymbolsStyle;
+            rtl::OUString                                                                        mSymbolsStyle;
     };
 
     class GlobalImageList : public CmdImageList, public rtl::IReference

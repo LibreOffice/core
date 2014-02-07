@@ -112,6 +112,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/salvtables \
     vcl/source/app/session \
     vcl/source/app/settings \
+    vcl/source/app/IconThemeScanner \
+    vcl/source/app/IconThemeSelector \
     vcl/source/app/solarmutex \
     vcl/source/app/sound \
     vcl/source/app/stdtext \

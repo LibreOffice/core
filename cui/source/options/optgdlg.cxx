@@ -538,7 +538,6 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", rSet)
     , nSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
-    , aIconStyleItemId(STYLE_SYMBOLS_THEMES_MAX, 0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
@@ -593,50 +592,22 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
         m_pSystemFont->Enable(false);
     }
 
+    // Set known icon themes
+    m_pIconStyleLB->Clear();
     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
+    // Start with the automatically chosen icon theme
+    rtl::OUString nameForAuto = rtl::OUString("Auto (") +
+                                aStyleSettings.GetAutomaticallyChosenIconTheme() +
+                                rtl::OUString(")");
 
-    // remove non-installed icon themes
-    if( m_pIconStyleLB->GetEntryCount() == STYLE_SYMBOLS_THEMES_MAX )
-    {
-        // do not check 0th item == auto; it is not a real theme
-        aIconStyleItemId.at(0)= 0;
-        sal_uLong nItem = 1;
-        for ( sal_uLong n=0; ++n < STYLE_SYMBOLS_THEMES_MAX; )
-        {
-            if ( aStyleSettings.CheckSymbolStyle( n ) )
-            {
-                // existing style => save the item id
-                aIconStyleItemId.at(n) = nItem++;
-            }
-            else
-            {
-                // non-existing style => remove item;
-                m_pIconStyleLB->RemoveEntry( nItem );
-                aIconStyleItemId.at(n) = 0;
-            }
-        }
+    std::vector<rtl::OUString> installedThemes = aStyleSettings.GetInstalledIconThemes();
+    for (const rtl::OUString& r : installedThemes) {
+        m_pIconStyleLB->InsertEntry(r);
     }
 
-    // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
-    if( m_pIconStyleLB->GetEntryCount() > 1 )
-    {
-        OUString aAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
-
-        aAutoStr += " (";
-
-        // prefer the icon style set by the desktop native widgets modules
-        sal_uLong nAutoStyle = aStyleSettings.GetPreferredSymbolsStyle();
-        // fallback to the statically defined values
-        if ( nAutoStyle == STYLE_SYMBOLS_AUTO || !aIconStyleItemId.at(nAutoStyle) )
-            nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
-        if ( aIconStyleItemId.at(nAutoStyle) )
-            aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId.at(nAutoStyle) );
-
-        m_pIconStyleLB->RemoveEntry( 0 );
-        m_pIconStyleLB->InsertEntry( aAutoStr += ")", 0 );
-        // separate auto and other icon themes
-        m_pIconStyleLB->SetSeparatorPos( 0 );
-    }
+    // separate auto and other icon themes
+    m_pIconStyleLB->SetSeparatorPos( 0 );
+    m_pIconStyleLB->SelectEntryPos(0);
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -703,16 +674,15 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     sal_uInt16 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
-        // find the style name in the aIconStyleItemId table
-        // items from the non-installed icon themes were removed
-        for ( sal_uLong n=0; n < STYLE_SYMBOLS_THEMES_MAX; n++ )
-        {
-            if ( aIconStyleItemId.at(n)== nStyleLB_NewSelection )
-            {
-                aMiscOptions.SetSymbolsStyle( n );
-                n = STYLE_SYMBOLS_THEMES_MAX;
-            }
+        // 0 means choose style automatically
+        if (nStyleLB_NewSelection == 0) {
+            aMiscOptions.SetIconThemeAutomatically();
         }
+        else {
+            rtl::OUString selectedIconTheme = m_pIconStyleLB->GetSelectEntry();
+            aMiscOptions.SetIconTheme(selectedIconTheme);
+        }
+        nStyleLB_InitialSelection = nStyleLB_NewSelection;
     }
 
     sal_Bool bAppearanceChanged = sal_False;
@@ -880,8 +850,13 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
     m_pIconSizeLB->SaveValue();
 
-    if( aMiscOptions.GetSymbolsStyle() != STYLE_SYMBOLS_AUTO )
-        nStyleLB_InitialSelection = aIconStyleItemId.at(aMiscOptions.GetCurrentSymbolsStyle());
+    if (aMiscOptions.IconThemeWasSetAutomatically()) {
+        nStyleLB_InitialSelection = 0;
+    }
+    else {
+        const rtl::OUString& selected = aMiscOptions.GetIconTheme();
+        nStyleLB_InitialSelection = m_pIconStyleLB->GetEntryPos(selected);
+    }
 
     m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
     m_pIconStyleLB->SaveValue();
