@@ -429,8 +429,17 @@ public:
     sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
     void                TriggerItem( sal_uInt16 nItemId, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False );
-    void                ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True );
-    void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, sal_False ); }
+
+    /// Shows or hides items.
+    void                ShowItem(sal_uInt16 nItemId, sal_Bool bVisible = sal_True);
+    /// Overload to provide ShowItem via command id.
+    void                ShowItem(const OUString& rCommand, bool bVisible = true) { ShowItem(GetItemId(rCommand), bVisible); }
+
+    /// Convenience method to hide items (via ShowItem).
+    void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, sal_False ); }
+    /// Overload to provide HideItem via command id.
+    void                HideItem(const OUString& rCommand) { ShowItem(rCommand, false); }
+
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
     sal_Bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
 

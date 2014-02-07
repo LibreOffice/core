@@ -8,7 +8,7 @@
  */
 
 #define NUM_TEMPLATE_NAMES      10
-#define TEMPL_LOC_OFFSET        2190
+#define TEMPL_LOC_OFFSET        2210
 
 #define STR_TEMPLATE_NAME1_DEF      (TEMPL_LOC_OFFSET + 1)
 #define STR_TEMPLATE_NAME2_DEF      (TEMPL_LOC_OFFSET + 2)

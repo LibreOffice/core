@@ -8,12 +8,18 @@
  */
 
 #include "templatesearchview.hxx"
-
 #include "templatesearchviewitem.hxx"
+
+#include <vcl/builder.hxx>
 
 TemplateSearchView::TemplateSearchView (Window *pParent, WinBits nWinStyle)
     : ThumbnailView(pParent,nWinStyle)
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTemplateSearchView(Window *pParent, VclBuilder::stringmap &)
+{
+    return new TemplateSearchView(pParent);
 }
 
 TemplateSearchView::~TemplateSearchView ()

@@ -13,6 +13,8 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/alienwarndialog \
 	sfx2/uiconfig/ui/bookmarkdialog \
 	sfx2/uiconfig/ui/checkin \
+	sfx2/uiconfig/ui/cmisinfopage \
+	sfx2/uiconfig/ui/cmisline \
 	sfx2/uiconfig/ui/custominfopage \
 	sfx2/uiconfig/ui/descriptioninfopage \
 	sfx2/uiconfig/ui/documentfontspage \
@@ -31,12 +33,11 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/searchdialog \
 	sfx2/uiconfig/ui/securityinfopage \
 	sfx2/uiconfig/ui/singletabdialog \
+	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
 	sfx2/uiconfig/ui/versionscmis \
-	sfx2/uiconfig/ui/startcenter \
-	sfx2/uiconfig/ui/cmisinfopage \
-	sfx2/uiconfig/ui/cmisline \
+	sfx2/uiconfig/ui/templatedlg \
 ))
 
 # vim: set noet sw=4 ts=4:

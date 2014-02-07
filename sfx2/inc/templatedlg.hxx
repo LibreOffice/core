@@ -18,6 +18,8 @@
 #include <vcl/tabpage.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
+#include <sfx2/templateabstractview.hxx>
+
 class Edit;
 class PopupMenu;
 class SfxTemplateInfoDlg;
@@ -58,8 +60,6 @@ private:
     void readSettings ();
 
     void writeSettings ();
-
-    virtual void Resize ();
 
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXActionHdl, void*);
@@ -134,10 +134,12 @@ private:
 
     void syncRepositories () const;
 
+    /// Return filter according to the currently selected tab page.
+    FILTER_APPLICATION getCurrentFilter();
+
 private:
 
-    TabControl maTabControl;
-    TabPage maTabPage;
+    TabControl *mpTabControl;
 
     Edit *mpSearchEdit;
     ToolBox *mpViewBar;
