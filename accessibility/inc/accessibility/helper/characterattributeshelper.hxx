@@ -34,7 +34,7 @@ class CharacterAttributesHelper
 {
 private:
 
-    typedef ::std::map< OUString, ::com::sun::star::uno::Any, ::std::less< OUString > > AttributeMap;
+    typedef ::std::map< OUString, ::com::sun::star::uno::Any > AttributeMap;
 
     AttributeMap    m_aAttributeMap;
 
