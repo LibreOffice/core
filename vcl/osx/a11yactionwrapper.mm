@@ -30,7 +30,7 @@
 +(NSString *)nativeActionNameFor:(NSString *)actionName {
     // TODO: Optimize ?
     //       Use NSAccessibilityActionDescription
-    if ( [ actionName isEqualToString: @"click" ] ) {
+    if ( [ actionName isEqualToString: @"press" ] ) {
         return NSAccessibilityPressAction;
     } else if ( [ actionName isEqualToString: @"togglePopup" ] ) {
         return NSAccessibilityShowMenuAction;
