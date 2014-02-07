@@ -1210,13 +1210,13 @@ const Image& FixedImage::GetModeImage( ) const
 Image FixedImage::loadThemeImage(const OString &rFileName)
 {
     static ImplImageTreeSingletonRef aImageTree;
-    OUString sCurrentSymbolsStyle =
-        Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    OUString sIconTheme =
+        Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     const OUString sFileName(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     BitmapEx aBitmap;
-    bool bSuccess = aImageTree->loadImage(sFileName, sCurrentSymbolsStyle, aBitmap, true);
+    bool bSuccess = aImageTree->loadImage(sFileName, sIconTheme, aBitmap, true);
     SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
-        << " from theme " << sCurrentSymbolsStyle);
+        << " from theme " << sIconTheme);
     return Image(aBitmap);
 }
 

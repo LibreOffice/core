@@ -104,9 +104,6 @@ private:
     sal_uInt16      nSizeLB_InitialSelection;
     sal_uInt16      nStyleLB_InitialSelection;
 
-    // item ID for the given icon theme
-    // might be zero when the theme is not installed and the item is removed
-    std::vector<unsigned> aIconStyleItemId;
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;
     SvtOptionsDrawinglayer* mpDrawinglayerOpt;

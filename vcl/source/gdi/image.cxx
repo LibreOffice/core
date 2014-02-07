@@ -382,7 +382,7 @@ void ImageAryData::Load(const OUString &rPrefix)
 {
     static ImplImageTreeSingletonRef aImageTree;
 
-    OUString aSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
     BitmapEx aBmpEx;
 
@@ -391,7 +391,7 @@ void ImageAryData::Load(const OUString &rPrefix)
 #if OSL_DEBUG_LEVEL > 0
     bool bSuccess =
 #endif
-        aImageTree->loadImage( aFileName, aSymbolsStyle, maBitmapEx, true );
+        aImageTree->loadImage( aFileName, aIconTheme, maBitmapEx, true );
 #if OSL_DEBUG_LEVEL > 0
     if ( !bSuccess )
     {
