@@ -165,7 +165,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                 bNextColumn = true;
         }
 
-        ScColumn* pCol = NULL;
+        ScColumn* pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
         if (bNextColumn)
         {
             // Find the next available column.
