@@ -156,7 +156,7 @@ bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream*
         }
     }
     // hint: new InternalStreamLock() adds the entry to the global list
-    pLock  = new InternalStreamLock( nStart, nEnd, pStream );
+    new InternalStreamLock( nStart, nEnd, pStream );
     return true;
 }
 
