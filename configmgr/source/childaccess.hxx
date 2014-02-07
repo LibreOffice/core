@@ -22,16 +22,16 @@
 
 #include "sal/config.h"
 
-#include <memory>
 #include <vector>
 
+#include "boost/scoped_ptr.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "boost/shared_ptr.hpp"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -134,7 +134,7 @@ private:
     rtl::Reference< Access > parent_; // null if free node
     OUString name_;
     rtl::Reference< Node > node_;
-    std::auto_ptr< com::sun::star::uno::Any > changedValue_;
+    boost::scoped_ptr< com::sun::star::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
     boost::shared_ptr<osl::Mutex> lock_;
