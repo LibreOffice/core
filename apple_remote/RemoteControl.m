@@ -97,7 +97,6 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 + (void) sendDistributedNotification: (NSString*) notificationName targetBundleIdentifier: (NSString*) targetIdentifier
 {
-    if ( (self = [super init]) ) {
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: [NSString stringWithCString:[self remoteControlDeviceName] encoding:NSASCIIStringEncoding],
                             kRemoteControlDeviceName /* key = RemoteControlDeviceName  -> OK */,
                             [[NSBundle mainBundle] bundleIdentifier] /* value = org.openoffice.script -> OK */,
@@ -123,7 +122,6 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 																   object:nil
 																 userInfo:userInfo
 													   deliverImmediately:YES];	
-    }
 }
 
 + (void) sendFinishedNotifcationForAppIdentifier: (NSString*) identifier {
