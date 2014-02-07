@@ -457,7 +457,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
-    if( pWindowOutDev->HasMirroredGraphics()  )
+    if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             // --- RTL --- re-mirror back to get device coordiantes
@@ -690,7 +690,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pParentWinOutDev->HasMirroredGraphics()  )
+    if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             // --- RTL --- re-mirror back to get device coordiantes
