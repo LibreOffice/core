@@ -42,9 +42,11 @@ using namespace osl;
 
 // InternalLock ----------------------------------------------------------------
 
-namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
+namespace {
 
-class InternalStreamLock
+struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
+
+struct InternalStreamLock
 {
     sal_Size           m_nStartPos;
     sal_Size           m_nEndPos;
@@ -53,14 +55,9 @@ class InternalStreamLock
 
     InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
-public:
-    static bool LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
-    static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
 
-typedef ::std::vector< InternalStreamLock* > InternalStreamLockList;
-
-namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
+struct LockList : public rtl::Static< std::vector<InternalStreamLock>, LockList > {};
 
 InternalStreamLock::InternalStreamLock(
     sal_Size nStart,
@@ -71,7 +68,6 @@ InternalStreamLock::InternalStreamLock(
         m_pStream( pStream )
 {
     osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
-    LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
     OString aFileName(OUStringToOString(m_pStream->GetFileName(),
                                                   osl_getThreadTextEncoding()));
@@ -84,15 +80,6 @@ InternalStreamLock::InternalStreamLock(
 
 InternalStreamLock::~InternalStreamLock()
 {
-    for ( InternalStreamLockList::iterator it = LockList::get().begin();
-          it != LockList::get().end();
-          ++it
-    ) {
-        if ( this == *it ) {
-            LockList::get().erase( it );
-            break;
-        }
-    }
 #if OSL_DEBUG_LEVEL > 1
     OString aFileName(OUStringToOString(m_pStream->GetFileName(),
                                                   osl_getThreadTextEncoding()));
@@ -103,9 +90,8 @@ InternalStreamLock::~InternalStreamLock()
 #endif
 }
 
-bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+bool lockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
-    osl::MutexGuard aGuard( LockMutex::get() );
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
     {
@@ -122,15 +108,15 @@ bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream*
     if( aStatus.getFileType() == osl::FileStatus::Directory )
         return true;
 
-    InternalStreamLock* pLock = NULL;
-    InternalStreamLockList &rLockList = LockList::get();
-    for( size_t i = 0; i < rLockList.size(); ++i )
+    osl::MutexGuard aGuard( LockMutex::get() );
+    std::vector<InternalStreamLock> &rLockList = LockList::get();
+    for( std::vector<InternalStreamLock>::const_iterator i = rLockList.begin();
+         i != rLockList.end(); )
     {
-        pLock = rLockList[ i ];
-        if( aItem.isIdenticalTo( pLock->m_aItem ) )
+        if( aItem.isIdenticalTo( i->m_aItem ) )
         {
             bool bDenyByOptions = false;
-            StreamMode nLockMode = pLock->m_pStream->GetStreamMode();
+            StreamMode nLockMode = i->m_pStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
 
             if( nLockMode & STREAM_SHARE_DENYALL )
@@ -144,52 +130,41 @@ bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream*
 
             if( bDenyByOptions )
             {
-                if( pLock->m_nStartPos == 0 && pLock->m_nEndPos == 0 ) // whole file is already locked
+                if( i->m_nStartPos == 0 && i->m_nEndPos == 0 ) // whole file is already locked
                     return false;
                 if( nStart == 0 && nEnd == 0) // cannot lock whole file
                     return false;
 
-                if( ( nStart < pLock->m_nStartPos && nEnd > pLock->m_nStartPos ) ||
-                    ( nStart < pLock->m_nEndPos && nEnd > pLock->m_nEndPos ) )
+                if( ( nStart < i->m_nStartPos && nEnd > i->m_nStartPos ) ||
+                    ( nStart < i->m_nEndPos && nEnd > i->m_nEndPos ) )
                     return false;
             }
         }
     }
-    // hint: new InternalStreamLock() adds the entry to the global list
-    new InternalStreamLock( nStart, nEnd, pStream );
+    rLockList.push_back( InternalStreamLock( nStart, nEnd, pStream ) );
     return true;
 }
 
-void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+void unlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
-    InternalStreamLock* pLock = NULL;
-    InternalStreamLockList &rLockList = LockList::get();
-    if( nStart == 0 && nEnd == 0 )
+    std::vector<InternalStreamLock> &rLockList = LockList::get();
+    for( std::vector<InternalStreamLock>::iterator i = rLockList.begin();
+         i != rLockList.end(); )
     {
-        // nStart & nEnd = 0, so delete all locks
-        for( size_t i = 0; i < rLockList.size(); ++i )
+        if ( i->m_pStream == pStream
+             && ( ( nStart == 0 && nEnd == 0 )
+                  || ( i->m_nStartPos == nStart && i->m_nEndPos == nEnd ) ) )
         {
-            if( ( pLock = rLockList[ i ] )->m_pStream == pStream )
-            {
-                // hint: delete will remove pLock from the global list
-                delete pLock;
-                i--;
-            }
+            i = rLockList.erase(i);
         }
-        return;
-    }
-    for( size_t i = 0; i < rLockList.size(); ++i )
-    {
-        if (  ( pLock = rLockList[ i ] )->m_pStream == pStream
-           && nStart == pLock->m_nStartPos
-           && nEnd == pLock->m_nEndPos
-        ) {
-            // hint: delete will remove pLock from the global list
-            delete pLock;
-            return;
+        else
+        {
+            ++i;
         }
     }
+}
+
 }
 
 // StreamData ------------------------------------------------------------------
@@ -325,7 +300,7 @@ SvFileStream::~SvFileStream()
 {
     Close();
 
-    InternalStreamLock::UnlockFile( 0, 0, this );
+    unlockFile( 0, 0, this );
 
     if (pInstanceData)
         delete pInstanceData;
@@ -451,7 +426,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     if (!nLockMode)
         return true;
 
-    if( ! InternalStreamLock::LockFile( nByteOffset, nByteOffset+nBytes, this ) )
+    if( !lockFile( nByteOffset, nByteOffset+nBytes, this ) )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
@@ -468,7 +443,7 @@ bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
     if ( ! IsOpen() )
         return false;
 
-    InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
+    unlockFile( nByteOffset, nByteOffset+nBytes, this );
 
     return true;
 }
