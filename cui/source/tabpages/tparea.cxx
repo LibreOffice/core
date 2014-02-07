@@ -1405,12 +1405,69 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 
 void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 {
+    bool isMissingHatching(false);
+    bool isMissingGradient(false);
+    bool isMissingBitmap(false);
     XFillStyle eXFS;
     if( rAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE )
     {
         eXFS = (XFillStyle) ( ( ( const XFillStyleItem& ) rAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
         m_pTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
+
+        if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLCOLOR))
+        {
+            XFillColorItem const& rColorItem(static_cast<const XFillColorItem&>(
+                                rAttrs.Get(XATTR_FILLCOLOR)) );
+            m_pLbColor->SelectEntry( rColorItem.GetColorValue() );
+            m_pLbHatchBckgrdColor->SelectEntry( rColorItem.GetColorValue() );
+        }
+
+        if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLGRADIENT))
+        {
+            XFillGradientItem const& rGradientItem(
+                static_cast<const XFillGradientItem&>(
+                                    rAttrs.Get(XATTR_FILLGRADIENT)) );
+            OUString  const aString( rGradientItem.GetName() );
+            XGradient const aGradient( rGradientItem.GetGradientValue() );
+
+            m_pLbGradient->SelectEntryByList(pGradientList, aString, aGradient);
+        }
+        if (!m_pLbGradient->GetSelectEntryCount())
+        {   // avoid relying on pool default - cannot export that
+            m_pLbGradient->SelectEntryPos(0); // anything better than nothing
+            isMissingGradient = true;
+        }
+
+        if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLHATCH))
+        {
+            m_pLbHatching->SelectEntry( static_cast<const XFillHatchItem&>(
+                            rAttrs.Get(XATTR_FILLHATCH)).GetName() );
+        }
+        if (!m_pLbHatching->GetSelectEntryCount())
+        {   // avoid relying on pool default - cannot export that
+            m_pLbHatching->SelectEntryPos(0); // anything better than nothing
+            isMissingHatching = true;
+        }
+        if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLBACKGROUND))
+        {
+            m_pCbxHatchBckgrd->Check( static_cast<const XFillBackgroundItem&>(
+                        rAttrs.Get(XATTR_FILLBACKGROUND)).GetValue() );
+        }
+
+        if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLBITMAP))
+        {
+            XFillBitmapItem const& rBitmapItem(
+                    static_cast<const XFillBitmapItem&>(
+                        rAttrs.Get(XATTR_FILLBITMAP)));
+            m_pLbBitmap->SelectEntry(rBitmapItem.GetName());
+        }
+        if (!m_pLbBitmap->GetSelectEntryCount())
+        {   // avoid relying on pool default - cannot export that
+            m_pLbBitmap->SelectEntryPos(0); // anything better than nothing
+            isMissingBitmap = true;
+        }
+
         switch( eXFS )
         {
             case XFILL_NONE:
@@ -1418,69 +1475,26 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
             break;
 
             case XFILL_SOLID:
-                if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLCOLOR ) )
-                {
-                    XFillColorItem aColorItem( ( const XFillColorItem& )
-                                        rAttrs.Get( XATTR_FILLCOLOR ) );
-
-                    m_pLbColor->SelectEntry( aColorItem.GetColorValue() );
-                    m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
-                }
                 ClickColorHdl_Impl();
-
             break;
 
             case XFILL_GRADIENT:
-                if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLGRADIENT ) )
-                {
-                    XFillGradientItem aGradientItem( ( ( const XFillGradientItem& )
-                                            rAttrs.Get( XATTR_FILLGRADIENT ) ) );
-                    OUString    aString( aGradientItem.GetName() );
-                    XGradient aGradient( aGradientItem.GetGradientValue() );
-
-                    m_pLbGradient->SelectEntryByList( pGradientList, aString, aGradient );
-                }
                 ClickGradientHdl_Impl();
             break;
 
             case XFILL_HATCH:
-                if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLHATCH ) )
-                {
-                    m_pLbHatching->SelectEntry( ( ( const XFillHatchItem& )
-                                    rAttrs.Get( XATTR_FILLHATCH ) ).GetName() );
-                }
                 ClickHatchingHdl_Impl();
-
-                if ( SFX_ITEM_DONTCARE != rAttrs.GetItemState ( XATTR_FILLBACKGROUND ) )
-                {
-                    m_pCbxHatchBckgrd->Check ( ( ( const XFillBackgroundItem& ) rAttrs.Get ( XATTR_FILLBACKGROUND ) ).GetValue() );
-                }
                 ToggleHatchBckgrdColorHdl_Impl( this );
-                if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLCOLOR ) )
-                {
-                    XFillColorItem aColorItem( ( const XFillColorItem& )
-                                        rAttrs.Get( XATTR_FILLCOLOR ) );
-
-                    m_pLbColor->SelectEntry( aColorItem.GetColorValue() );
-                    m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
-                }
             break;
 
             case XFILL_BITMAP:
             {
-                if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLBITMAP ) )
-                {
-                    XFillBitmapItem aBitmapItem( ( const XFillBitmapItem& )
-                                        rAttrs.Get( XATTR_FILLBITMAP ) );
-
-                    OUString aString( aBitmapItem.GetName() );
-                    m_pLbBitmap->SelectEntry( aString );
-                }
                 ClickBitmapHdl_Impl();
             }
             break;
 
             default:
+                assert(false);
             break;
         }
     }
@@ -1687,10 +1701,13 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
     m_pTypeLB->SaveValue();
     m_pLbColor->SaveValue();
-    m_pLbGradient->SaveValue();
-    m_pLbHatching->SaveValue();
+    if (!isMissingGradient)
+        m_pLbGradient->SaveValue();
+    if (!isMissingHatching)
+        m_pLbHatching->SaveValue();
     m_pLbHatchBckgrdColor->SaveValue();
-    m_pLbBitmap->SaveValue();
+    if (!isMissingBitmap)
+        m_pLbBitmap->SaveValue();
     m_pTsbStepCount->SaveValue();
     m_pNumFldStepCount->SaveValue();
     m_pTsbTile->SaveValue();
