@@ -21,6 +21,7 @@
 
 #include <cassert>
 
+#include <o3tl/heap_ptr.hxx>
 #include <sal/alloca.h>
 
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -29,8 +30,6 @@
 
 #include "jni_bridge.h"
 
-
-using namespace ::std;
 using namespace ::rtl;
 
 namespace
@@ -96,9 +95,7 @@ void Bridge::handle_java_exc(
             + jni.get_stack_trace( jo_exc.get() ) );
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    o3tl::heap_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
     jvalue val;
     val.l = jo_exc.get();
     map_to_uno(

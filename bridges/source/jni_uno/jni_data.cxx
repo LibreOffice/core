@@ -23,11 +23,10 @@
 
 #include "jni_bridge.h"
 
+#include "o3tl/heap_ptr.hxx"
 #include "rtl/strbuf.hxx"
 #include "uno/sequence2.h"
 
-
-using namespace ::std;
 using namespace ::rtl;
 
 namespace jni_uno
@@ -36,10 +35,8 @@ namespace jni_uno
 //------------------------------------------------------------------------------
 inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr< rtl_mem > seq(
+    o3tl::heap_ptr< rtl_mem > seq(
         rtl_mem::allocate( SAL_SEQUENCE_HEADER_SIZE + (nElements * nSize) ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     uno_Sequence * p = (uno_Sequence *)seq.get();
     p->nRefCount = 1;
     p->nElements = nElements;
@@ -130,9 +127,7 @@ void createDefaultUnoValue(
 
     case typelib_TypeClass_SEQUENCE:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            auto_ptr< rtl_mem > seq(seq_allocate(0, 0));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            o3tl::heap_ptr< rtl_mem > seq(seq_allocate(0, 0));
             if (assign) {
                 uno_type_destructData(uno_data, type, 0);
             }
@@ -566,10 +561,8 @@ void Bridge::map_to_uno(
                 }
                 else
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    auto_ptr< rtl_mem > mem(
+                    o3tl::heap_ptr< rtl_mem > mem(
                         rtl_mem::allocate( sizeof (sal_Int64) ) );
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     *(jlong *) mem.get() = jni->CallLongMethodA(
                         java_data.l, m_jni_info->m_method_Long_longValue, 0 );
                     jni.ensure_no_exception();
@@ -586,10 +579,8 @@ void Bridge::map_to_uno(
                 }
                 else
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    auto_ptr< rtl_mem > mem(
+                    o3tl::heap_ptr< rtl_mem > mem(
                         rtl_mem::allocate( sizeof (float) ) );
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     *(jfloat *) mem.get() = jni->CallFloatMethodA(
                         java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
                     jni.ensure_no_exception();
@@ -608,10 +599,8 @@ void Bridge::map_to_uno(
                 }
                 else
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    auto_ptr< rtl_mem > mem(
+                    o3tl::heap_ptr< rtl_mem > mem(
                         rtl_mem::allocate( sizeof (double) ) );
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     *(jdouble *) mem.get() =
                         jni->CallDoubleMethodA(
                             java_data.l,
@@ -641,10 +630,8 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                auto_ptr< rtl_mem > mem(
+                o3tl::heap_ptr< rtl_mem > mem(
                     rtl_mem::allocate( value_td.get()->nSize ) );
-                SAL_WNODEPRECATED_DECLARATIONS_POP
                 map_to_uno(
                     jni, mem.get(), java_data, value_td.get()->pWeakRef, 0,
                     false /* no assign */, false /* no out param */ );
@@ -985,9 +972,7 @@ void Bridge::map_to_uno(
         typelib_TypeDescriptionReference * element_type =
             ((typelib_IndirectTypeDescription *)td.get())->pType;
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr< rtl_mem > seq;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        o3tl::heap_ptr< rtl_mem > seq;
         sal_Int32 nElements = jni->GetArrayLength( (jarray) java_data.l );
 
         switch (element_type->eTypeClass)
