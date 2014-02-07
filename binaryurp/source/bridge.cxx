@@ -255,10 +255,18 @@ void Bridge::terminate(bool final) {
                         osl::MutexGuard g2(mutex_);
                         tp = threadPool_;
                         threadPool_ = 0;
-                        assert(!(reader_.is() && isThread(reader_.get())));
-                        std::swap(reader_, r);
-                        assert(!(writer_.is() && isThread(writer_.get())));
-                        std::swap(writer_, w);
+                        if (reader_.is()) {
+                            if (!isThread(reader_.get())) {
+                                r = reader_;
+                            }
+                            reader_.clear();
+                        }
+                        if (writer_.is()) {
+                            if (!isThread(writer_.get())) {
+                                w = writer_;
+                            }
+                            writer_.clear();
+                        }
                         state_ = STATE_FINAL;
                     }
                     assert(!(r.is() && w.is()));
