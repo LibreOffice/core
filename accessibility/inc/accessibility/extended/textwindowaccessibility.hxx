@@ -51,8 +51,8 @@
 #include "svtools/svtools.hrc"
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <memory>
 #include <queue>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 class TextEngine;
@@ -661,7 +661,7 @@ private:
 
     // All the following members have valid values only after calling init:
 
-    ::std::auto_ptr< Paragraphs > m_xParagraphs;
+    boost::scoped_ptr< Paragraphs > m_xParagraphs;
 
     // m_nViewOffset is from the start of the document (0) to the start of the
     // current view, and m_nViewHeight is the height of the view:

@@ -22,11 +22,9 @@
 #define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOX_HXX
 
 #include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletableprovider.hxx>
-
-
-#include <memory>
 
 // ============================================================================
 
@@ -191,7 +189,7 @@ protected:
 
 private:
     // members ----------------------------------------------------------------
-    ::std::auto_ptr< AccessibleBrowseBoxImpl > m_pImpl;
+    boost::scoped_ptr< AccessibleBrowseBoxImpl > m_pImpl;
 };
 
 // ============================================================================

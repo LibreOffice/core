@@ -1800,13 +1800,11 @@ void Document::init()
     if (m_xParagraphs.get() == 0)
     {
         ::sal_uLong nCount = m_rEngine.GetParagraphCount();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< Paragraphs > p(new Paragraphs);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        p->reserve(static_cast< Paragraphs::size_type >(nCount));
+        m_xParagraphs.reset(new Paragraphs);
+        m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
             // numeric overflow is harmless here
         for (::sal_uLong i = 0; i < nCount; ++i)
-            p->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
+            m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
                                            m_rEngine.GetTextHeight(i))));
                 // XXX  numeric overflow
         m_nViewOffset = static_cast< ::sal_Int32 >(
@@ -1814,7 +1812,6 @@ void Document::init()
         m_nViewHeight = static_cast< ::sal_Int32 >(
             m_rView.GetWindow()->GetOutputSizePixel().Height());
             // XXX  numeric overflow
-        m_xParagraphs = p;
         determineVisibleRange();
         m_nSelectionFirstPara = -1;
         m_nSelectionFirstPos = -1;

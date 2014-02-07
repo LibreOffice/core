@@ -22,10 +22,9 @@
 
 #include <accessibility/extended/AccessibleGridControlBase.hxx>
 #include <accessibility/extended/AccessibleGridControlTable.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletable.hxx>
-
-#include <memory>
 
 // ============================================================================
 
@@ -178,7 +177,7 @@ protected:
 
 private:
     // members ----------------------------------------------------------------
-    ::std::auto_ptr< AccessibleGridControl_Impl > m_pImpl;
+    boost::scoped_ptr< AccessibleGridControl_Impl > m_pImpl;
 };
 
 // ============================================================================
