@@ -1015,9 +1015,9 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen,
                             *mpSprmParser);
 
-                        const sal_uInt8* pParams = aSprmIter.GetAktParams();
                         for( int nLoop = 0; nLoop < 2; ++nLoop )
                         {
+                            const sal_uInt8* pParams;
                             while( aSprmIter.GetSprms()
                                 && (0 != (pParams = aSprmIter.GetAktParams())) )
                             {
