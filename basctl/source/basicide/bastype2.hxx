@@ -21,7 +21,7 @@
 
 #include "doceventnotifier.hxx"
 
-#include <memory>
+#include <o3tl/heap_ptr.hxx>
 #include <tools/solar.h>
 
 #include <svtools/treelistbox.hxx>
@@ -231,7 +231,7 @@ public:
     SvTreeListEntry*    AddEntry(
         const OUString& rText, const Image& rImage,
         SvTreeListEntry* pParent, bool bChildrenOnDemand,
-        std::auto_ptr<Entry> aUserData
+        o3tl::heap_ptr<Entry> * aUserData
     );
     void            RemoveEntry (SvTreeListEntry*);
     void            RemoveEntry (ScriptDocument const&);

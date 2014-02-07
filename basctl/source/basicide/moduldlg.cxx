@@ -855,14 +855,11 @@ void ObjectPage::NewDialog()
                         SvTreeListEntry* pEntry = m_pBasicBox->FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
                         if ( !pEntry )
                         {
-                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                            o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
                             pEntry = m_pBasicBox->AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
-                                pLibEntry, false,
-                                std::auto_ptr<Entry>(new Entry(OBJ_TYPE_DIALOG))
-                            );
-                            SAL_WNODEPRECATED_DECLARATIONS_POP
+                                pLibEntry, false, &e);
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                         }
                         m_pBasicBox->SetCurEntry( pEntry );
@@ -1013,14 +1010,11 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                     SvTreeListEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
-                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                        o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            pSubRootEntry, false,
-                            std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
-                        );
-                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                            pSubRootEntry, false, &e);
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                     }
                     rBasicBox.SetCurEntry( pEntry );

@@ -1597,26 +1597,20 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                    o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),
-                        pRootEntry, false,
-                        std::auto_ptr<Entry>(new Entry(OBJ_TYPE_LIBRARY))
-                    );
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                        pRootEntry, false, &e);
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
 
                     if( pNewLibEntry )
                     {
-                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                        o3tl::heap_ptr<Entry>(new Entry(OBJ_TYPE_MODULE));
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            pNewLibEntry, false,
-                            std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
-                        );
-                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                            pNewLibEntry, false, &e);
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
                         pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
