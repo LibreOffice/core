@@ -20,11 +20,11 @@
 #ifndef BASCTL_DOCUMENTENUMERATION_HXX
 #define BASCTL_DOCUMENTENUMERATION_HXX
 
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -92,7 +92,7 @@ namespace basctl { namespace docs {
         ) const;
 
     private:
-        ::std::auto_ptr< DocumentEnumeration_Data > m_pData;
+        boost::scoped_ptr< DocumentEnumeration_Data > m_pData;
     };
 
 //........................................................................

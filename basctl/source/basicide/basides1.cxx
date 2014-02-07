@@ -31,6 +31,7 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -560,7 +561,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_SHOWWINDOW:
         {
-            ::std::auto_ptr< ScriptDocument > pDocument;
+            boost::scoped_ptr< ScriptDocument > pDocument;
 
             SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, false );
             if ( pDocumentItem )

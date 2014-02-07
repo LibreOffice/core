@@ -25,6 +25,7 @@
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -201,8 +202,7 @@ namespace basctl
         Reference< XModel >             m_xDocument;
         Reference< XModifiable >        m_xDocModify;
         Reference< XEmbeddedScripts >   m_xScriptAccess;
-        ::std::auto_ptr< DocumentEventNotifier >
-                                        m_pDocListener;
+        boost::scoped_ptr< DocumentEventNotifier > m_pDocListener;
 
     public:
         Impl ();

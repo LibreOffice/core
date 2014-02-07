@@ -34,6 +34,7 @@
 
 #include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
@@ -41,7 +42,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <memory>
 #include <basic/basmgr.hxx>
 namespace basctl
 {
@@ -241,13 +241,13 @@ namespace
         (void)pThis;
         ENSURE_OR_RETURN( i_pData, "wrong MacroExecutionData", 0L );
         // take ownership of the data
-        ::std::auto_ptr< MacroExecutionData > pData( i_pData );
+        boost::scoped_ptr< MacroExecutionData > pData( i_pData );
 
         SAL_WARN_IF( !(pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH), "basctl.basicide","No EXTSEARCH!" );
 
         // in case this is a document-local macro, try to protect the document's Undo Manager from
         // flawed scripts
-        ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+        boost::scoped_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
         if ( pData->aDocument.isDocument() )
             pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
 
@@ -271,7 +271,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     bool bError = false;
     SbMethod* pMethod = NULL;
 
-    ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
+    boost::scoped_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode(MacroChooser::ChooseOnly);
 
