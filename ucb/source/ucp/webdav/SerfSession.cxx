@@ -163,7 +163,7 @@ void SerfSession::Init()
         {
             apr_sockaddr_t *proxy_address = NULL;
             const apr_status_t status = apr_sockaddr_info_get( &proxy_address,
-                                                               OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ),
+                                                               OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                                APR_UNSPEC,
                                                                static_cast<apr_port_t>(m_nProxyPort),
                                                                0, getAprPool() );
@@ -339,8 +339,8 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
 
     if ( theRetVal == 0 )
     {
-        *outUsername = apr_pstrdup( inAprPool, OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
-        *outPassword = apr_pstrdup( inAprPool, OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+        *outUsername = apr_pstrdup( inAprPool, OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        *outPassword = apr_pstrdup( inAprPool, OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     return theRetVal != 0 ? SERF_ERROR_AUTHN_FAILED : APR_SUCCESS;

@@ -58,7 +58,7 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
         rName.name
             = strdup( OUStringToOString(
                         rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
-                                        RTL_TEXTENCODING_UTF8 ) );
+                                        RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
     {
@@ -68,7 +68,7 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
-                            RTL_TEXTENCODING_UTF8 ) );
+                            RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
     {
@@ -78,7 +78,7 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
-                            RTL_TEXTENCODING_UTF8 ) );
+                            RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     else if ( rFullName.startsWith( "<prop:" ) )
     {
@@ -91,11 +91,11 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
 
         sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
         sal_Int32 nLen = aFullName.indexOf( ' ' ) - nStart;
-        rName.name = strdup( aFullName.copy( nStart, nLen ) );
+        rName.name = strdup( aFullName.copy( nStart, nLen ).getStr() );
 
         nStart = aFullName.indexOf( '=', nStart + nLen ) + 2; // after ="
         nLen = aFullName.getLength() - RTL_CONSTASCII_LENGTH( "\">" ) - nStart;
-        rName.nspace = strdup( aFullName.copy( nStart, nLen ) );
+        rName.nspace = strdup( aFullName.copy( nStart, nLen ).getStr() );
     }
     else
     {
@@ -103,7 +103,7 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
             = strdup( OUStringToOString( rFullName,
-                                              RTL_TEXTENCODING_UTF8 ) );
+                                              RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 
