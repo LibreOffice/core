@@ -828,9 +828,7 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
         mpFS->singleElementNS( XML_a, XML_tile, FSEND );
         break;
     case BitmapMode_STRETCH:
-        mpFS->startElementNS( XML_a, XML_stretch, FSEND );
-        mpFS->singleElementNS( XML_a, XML_fillRect, FSEND );
-        mpFS->endElementNS( XML_a, XML_stretch );
+        WriteStretch();
         break;
     default:
         ;
