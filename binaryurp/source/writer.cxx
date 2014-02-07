@@ -177,6 +177,7 @@ void Writer::execute() {
         OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
     }
     bridge_->terminate(false);
+    bridge_.clear();
 }
 
 void Writer::sendRequest(
