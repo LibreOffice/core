@@ -201,8 +201,7 @@ public: // module scope
     css::uno::Reference < XLocator >      rDocumentLocator;
 
 
-    css::uno::Reference < XAttributeList >    rAttrList;
-    sax_expatwrap::AttributeList   *pAttrList;
+    rtl::Reference < sax_expatwrap::AttributeList > rAttrList;
 
     // External entity stack
     vector<struct Entity>   vecEntity;
@@ -227,7 +226,6 @@ public:
     SaxExpatParser_Impl()
         : sCDATA("CDATA")
         , m_bEnableDoS(false)
-        , pAttrList(NULL)
         , bExceptionWasThrown(false)
         , bRTExceptionWasThrown(false)
     {
@@ -411,10 +409,9 @@ SaxExpatParser::SaxExpatParser(  )
     LocatorImpl *pLoc = new LocatorImpl( m_pImpl );
     m_pImpl->rDocumentLocator = css::uno::Reference< XLocator > ( pLoc );
 
-    // performance-improvement. Reference is needed when calling the startTag callback.
-    // Handing out the same object with every call is allowed (see sax-specification)
-    m_pImpl->pAttrList = new sax_expatwrap::AttributeList;
-    m_pImpl->rAttrList = css::uno::Reference< XAttributeList > ( m_pImpl->pAttrList );
+    // Performance-improvement; handing out the same object with every call of
+    // the startElement callback is allowed (see sax-specification):
+    m_pImpl->rAttrList = new sax_expatwrap::AttributeList;
 
     m_pImpl->bExceptionWasThrown = false;
     m_pImpl->bRTExceptionWasThrown = false;
@@ -775,11 +772,11 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
     if( pImpl->rDocumentHandler.is() ) {
 
         int i = 0;
-        pImpl->pAttrList->clear();
+        pImpl->rAttrList->clear();
 
         while( awAttributes[i] ) {
             assert(awAttributes[i+1]);
-            pImpl->pAttrList->addAttribute(
+            pImpl->rAttrList->addAttribute(
                 XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
                 pImpl->sCDATA,  // expat doesn't know types
                 XML_CHAR_TO_OUSTRING( awAttributes[i+1] ) );
@@ -789,7 +786,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
         CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
             pImpl ,
             rDocumentHandler->startElement( XML_CHAR_TO_OUSTRING( pwName ) ,
-                                            pImpl->rAttrList ) );
+                                            pImpl->rAttrList.get() ) );
     }
 }
 
