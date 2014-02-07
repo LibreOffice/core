@@ -1068,6 +1068,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
     {
         OUString aStr = aCell.getString(&rDoc.getDoc());
         ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
+        rEE.Clear();
 
         SvxURLField aURLField(rUrl, aStr, SVXURLFORMAT_REPR);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
