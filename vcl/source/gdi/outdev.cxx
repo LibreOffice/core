@@ -90,11 +90,7 @@ const char* ImplDbgCheckOutputDevice( const void* pObj )
 }
 #endif
 
-// =======================================================================
-
 #define OUTDEV_POLYPOLY_STACKBUF        32
-
-// =======================================================================
 
 struct ImplObjStack
 {
@@ -198,9 +194,6 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     return bClipRegion;
 }
 
-
-// =======================================================================
-
 Polygon ImplSubdivideBezier( const Polygon& rPoly )
 {
     Polygon aPoly;
@@ -211,8 +204,6 @@ Polygon ImplSubdivideBezier( const Polygon& rPoly )
     return aPoly;
 }
 
-// =======================================================================
-
 PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 {
     sal_uInt16 i, nPolys = rPolyPoly.Count();
@@ -222,8 +213,6 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 
     return aPolyPoly;
 }
-
-// =======================================================================
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
 void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly )
@@ -313,8 +302,6 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
         delete[] pFlagAryAry;
     }
 }
-
-// =======================================================================
 
 OutputDevice::OutputDevice() :
     maRegion(true),
@@ -2009,7 +1996,6 @@ void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
     }
 }
 
-// -----------------------------------------------------------------------
 // Caution: This method is nearly the same as
 // OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
 // so when changes are made here do not forget to make change sthere, too
@@ -2572,7 +2558,6 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
-    // =========================================
     static uno::Reference<lang::XMultiComponentFactory> xCanvasFactory( rendering::CanvasFactory::create( xContext ) );
 
     uno::Reference<rendering::XCanvas> xCanvas;
