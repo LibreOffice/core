@@ -701,43 +701,19 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
     css::uno::Reference<css::uno::XComponentContext> const & context,
     bool singletonRequest)
 {
-    if (info->singletons.empty()) {
-        assert(!singletonRequest);
-        if (constructor != 0) {
-            // the interface is already acquired, don't acquire here
-            return css::uno::Reference<css::uno::XInterface>(
-                (*constructor)(context.get(),
-                    css::uno::Sequence<css::uno::Any>()),
-                SAL_NO_ACQUIRE);
-        }
-        if (factory1.is()) {
-            return factory1->createInstanceWithContext(context);
-        }
-        assert(factory2.is());
-        return factory2->createInstance();
+    css::uno::Reference<css::uno::XInterface> inst;
+    if (constructor != 0) {
+        inst.set(
+            (*constructor)(context.get(), css::uno::Sequence<css::uno::Any>()),
+            SAL_NO_ACQUIRE);
+    } else if (factory1.is()) {
+            inst = factory1->createInstanceWithContext(context);
     } else {
-        osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
-        if (singleton.is()) {
-            if (singletonRequest) {
-                dispose = false;
-            }
-            return singleton;
-        }
-        if (constructor != 0) {
-            // the interface is already acquired, don't acquire here
-            singleton.set(
-                (*constructor)(context.get(),
-                    css::uno::Sequence<css::uno::Any>()),
-                SAL_NO_ACQUIRE);
-        } else if (factory1.is()) {
-            singleton = factory1->createInstanceWithContext(context);
-        } else {
-            assert(factory2.is());
-            singleton = factory2->createInstance();
-        }
-        dispose = singleton.is() && !singletonRequest;
-        return singleton;
+        assert(factory2.is());
+        inst = factory2->createInstance();
     }
+    updateDisposeSingleton(singletonRequest, inst);
+    return inst;
 }
 
 css::uno::Reference<css::uno::XInterface>
@@ -745,65 +721,54 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     css::uno::Reference<css::uno::XComponentContext> const & context,
     bool singletonRequest, css::uno::Sequence<css::uno::Any> const & arguments)
 {
-    if (info->singletons.empty()) {
-        assert(!singletonRequest);
-        if (constructor != 0) {
-            // the interface is already acquired, don't acquire here
-            css::uno::Reference<css::uno::XInterface> inst(
-                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
-
-            // HACK: The service can implement XInitialization too.
-            // It should be removed when converting to constructor-based
-            // initialization, but in case somebody forgets, be safe, and
-            // call it anyway for the moment.
-            css::uno::Reference<css::lang::XInitialization> xinit(
-                inst, css::uno::UNO_QUERY);
-            if (xinit.is()) {
-                xinit->initialize(arguments);
-            }
-            return inst;
+    css::uno::Reference<css::uno::XInterface> inst;
+    if (constructor != 0) {
+        inst.set((*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+        //HACK: The constructor will either observe arguments and return inst
+        // that does not implement XInitialization (or null), or ignore
+        // arguments and return inst that implements XInitialization; this
+        // should be removed again once XInitialization-based implementations
+        // have become rare:
+        css::uno::Reference<css::lang::XInitialization> init(
+            inst, css::uno::UNO_QUERY);
+        if (init.is()) {
+            init->initialize(arguments);
         }
-        if (factory1.is()) {
-            return factory1->createInstanceWithArgumentsAndContext(
-                arguments, context);
-        }
-        assert(factory2.is());
-        return factory2->createInstanceWithArguments(arguments);
+        return inst;
+    } else if (factory1.is()) {
+        inst = factory1->createInstanceWithArgumentsAndContext(
+            arguments, context);
     } else {
-        osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
-        if (singleton.is()) {
-            SAL_WARN(
-                "cppuhelper",
-                "createInstanceWithArguments request for already instantiated"
-                    " singleton implementation " << info->name);
-            if (singletonRequest) {
-                dispose = false;
-            }
-            return singleton;
-        }
-        if (constructor != 0) {
-            // the interface is already acquired, don't acquire here
-            singleton.set(
-                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+        assert(factory2.is());
+        inst = factory2->createInstanceWithArguments(arguments);
+    }
+    updateDisposeSingleton(singletonRequest, inst);
+    return inst;
+}
 
-            // HACK: The service can implement XInitialization too.
-            // It should be removed when converting to constructor-based
-            // initialization, but in case somebody forgets, be safe, and
-            // call it anyway for the moment.
-            css::uno::Reference<css::lang::XInitialization> xinit(
-                singleton, css::uno::UNO_QUERY);
-            if (xinit.is()) {
-                xinit->initialize(arguments);
+void cppuhelper::ServiceManager::Data::Implementation::updateDisposeSingleton(
+    bool singletonRequest,
+    css::uno::Reference<css::uno::XInterface> const & instance)
+{
+    // This is an optimization, to only call dispose once (from the component
+    // context) on a singleton that is obtained both via the component context
+    // and via the service manager; however, there is a harmless race here that
+    // may cause two calls to dispose nevertheless (also, this calls dispose on
+    // at most one of the instances obtained via the service manager, in case
+    // the implementation hands out different instances):
+    if (singletonRequest) {
+        osl::MutexGuard g(mutex);
+        disposeSingleton.clear();
+        dispose = false;
+    } else if (!info->singletons.empty()) {
+        css::uno::Reference<css::lang::XComponent> comp(
+            instance, css::uno::UNO_QUERY);
+        if (comp.is()) {
+            osl::MutexGuard g(mutex);
+            if (dispose) {
+                disposeSingleton = comp;
             }
-        } else if (factory1.is()) {
-            singleton = factory1->createInstanceWithArgumentsAndContext(
-                arguments, context);
-        } else {
-            assert(factory2.is());
-            singleton = factory2->createInstanceWithArguments(arguments);
         }
-        dispose = singleton.is() && !singletonRequest;
-        return singleton;
     }
 }
 
@@ -938,7 +903,7 @@ void cppuhelper::ServiceManager::loadImplementation(
 }
 
 void cppuhelper::ServiceManager::disposing() {
-    std::vector< css::uno::Reference<css::uno::XInterface> > sngls;
+    std::vector< css::uno::Reference<css::lang::XComponent> > sngls;
     std::vector< css::uno::Reference< css::lang::XComponent > > comps;
     Data clear;
     {
@@ -950,8 +915,8 @@ void cppuhelper::ServiceManager::disposing() {
             assert(i->second.get() != 0);
             if (!i->second->info->singletons.empty()) {
                 osl::MutexGuard g2(i->second->mutex);
-                if (i->second->dispose) {
-                    sngls.push_back(i->second->singleton);
+                if (i->second->disposeSingleton.is()) {
+                    sngls.push_back(i->second->disposeSingleton);
                 }
             }
         }
@@ -962,8 +927,8 @@ void cppuhelper::ServiceManager::disposing() {
             assert(i->second.get() != 0);
             if (!i->second->info->singletons.empty()) {
                 osl::MutexGuard g2(i->second->mutex);
-                if (i->second->dispose) {
-                    sngls.push_back(i->second->singleton);
+                if (i->second->disposeSingleton.is()) {
+                    sngls.push_back(i->second->disposeSingleton);
                 }
             }
             if (i->second->component.is()) {
@@ -976,21 +941,17 @@ void cppuhelper::ServiceManager::disposing() {
         data_.singletons.swap(clear.singletons);
     }
     for (std::vector<
-             css::uno::Reference<css::uno::XInterface> >::const_iterator i(
+             css::uno::Reference<css::lang::XComponent> >::const_iterator i(
                  sngls.begin());
          i != sngls.end(); ++i)
     {
-        css::uno::Reference<css::lang::XComponent> comp(
-            *i, css::uno::UNO_QUERY);
-        if (comp.is()) {
-            try {
-                comp->dispose();
-            } catch (css::uno::RuntimeException & e) {
-                SAL_WARN(
-                    "cppuhelper",
-                    "Ignoring RuntimeException \"" << e.Message
-                        << "\" while disposing singleton");
-            }
+        try {
+            (*i)->dispose();
+        } catch (css::uno::RuntimeException & e) {
+            SAL_WARN(
+                "cppuhelper",
+                "Ignoring RuntimeException \"" << e.Message
+                    << "\" while disposing singleton");
         }
     }
     for (std::vector<

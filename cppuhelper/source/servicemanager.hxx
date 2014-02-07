@@ -106,8 +106,7 @@ public:
                     new ImplementationInfo(
                         name, loader, uri, environment, constructorName, prefix,
                         alienContext, rdbFile)),
-                constructor(0), status(STATUS_NEW),
-                dispose(false)
+                constructor(0), status(STATUS_NEW), dispose(true)
             {}
 
             Implementation(
@@ -120,8 +119,7 @@ public:
                     theComponent):
                 info(new ImplementationInfo(name)), constructor(0),
                 factory1(theFactory1), factory2(theFactory2),
-                component(theComponent), status(STATUS_LOADED),
-                dispose(false)
+                component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
 
             css::uno::Reference<css::uno::XInterface> createInstance(
@@ -146,8 +144,13 @@ public:
             Status status;
 
             osl::Mutex mutex;
-            css::uno::Reference<css::uno::XInterface> singleton;
+            css::uno::Reference< css::lang::XComponent > disposeSingleton;
             bool dispose;
+
+        private:
+            void updateDisposeSingleton(
+                bool singletonRequest,
+                css::uno::Reference<css::uno::XInterface> const & instance);
         };
 
         typedef std::map< rtl::OUString, boost::shared_ptr< Implementation > >
