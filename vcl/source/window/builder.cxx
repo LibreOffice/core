@@ -2680,14 +2680,16 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
     if (!pCurrent)
         return;
 
-    ToolBox *pToolBox = NULL;
+    //ToolBoxItems are not true widgets just elements
+    //of the ToolBox itself
+    ToolBox *pToolBoxParent = NULL;
     if (pCurrent == pParent)
-        pToolBox = dynamic_cast<ToolBox*>(pParent);
+        pToolBoxParent = dynamic_cast<ToolBox*>(pParent);
 
     xmlreader::Span name;
     int nsId;
 
-    if (pCurrent && pCurrent->GetType() == WINDOW_SCROLLWINDOW)
+    if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
     {
         std::map<Window*, Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
         if (aFind != m_pParserState->m_aRedundantParentWidgets.end())
@@ -2711,12 +2713,14 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             if (sKey == "expand")
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
-                if (pCurrent)
+                if (pToolBoxParent)
+                    pToolBoxParent->SetItemExpand(m_pParserState->m_nLastToolbarId, bTrue);
+                else
                     pCurrent->set_expand(bTrue);
-                if (pToolBox)
-                    pToolBox->SetItemExpand(m_pParserState->m_nLastToolbarId, bTrue);
-                continue;
             }
+
+            if (pToolBoxParent)
+                continue;
 
             if (sKey == "fill")
             {
