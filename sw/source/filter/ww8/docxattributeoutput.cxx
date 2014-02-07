@@ -3155,8 +3155,13 @@ void DocxAttributeOutput::WritePostponedChart()
         if( xNamed.is() )
             sName = xNamed->getName();
 
+        /* If there is a scenario where a chart is followed by a shape
+           which is being exported as an alternate content then, the
+           docPr Id is being repeated, ECMA 20.4.2.5 says that the
+           docPr Id should be unique, ensuring the same here.
+        */
         m_pSerializer->singleElementNS( XML_wp, XML_docPr,
-            XML_id, I32S( ++m_docPrID ),
+            XML_id, I32S( m_anchorId++ ),
             XML_name, USS( sName ),
             FSEND );
 
@@ -6220,7 +6225,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
-      m_docPrID(0),
       m_pSectionInfo( NULL ),
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),

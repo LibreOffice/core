@@ -42,6 +42,7 @@ public:
     void testAreaChartLoad();
     void testUpDownBars();
     void testDoughnutChart();
+    void testShapeFollowedByChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
+    CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -160,6 +162,10 @@ xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& r
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     return pXmlXpathObj->nodesetval;
 }
@@ -533,6 +539,22 @@ void Chart2ExportTest::testDoughnutChart()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
 }
 
+void Chart2ExportTest::testShapeFollowedByChart()
+{
+    /* If there is a scenario where a chart is followed by a shape
+       which is being exported as an alternate content then, the
+       docPr Id is being repeated, ECMA 20.4.2.5 says that the
+       docPr Id should be unique, ensuring the same here.
+    */
+    load("/chart2/qa/extras/data/docx/", "FDO74430.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/document", "Office Open XML Text" );
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OUString aValueOfFirstDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:drawing[1]/wp:inline[1]/wp:docPr[1]", "id");
+    OUString aValueOfSecondDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:docPr[1]", "id");
+    CPPUNIT_ASSERT( aValueOfFirstDocPR != aValueOfSecondDocPR );
+
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
