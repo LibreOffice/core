@@ -959,17 +959,17 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         // relative ordnums for the objects on this page.
 
         // skip fly frames from pages before the current page
-        SwFlyCache* pFlyC;
-        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
-               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
+        while( nFlyIdx < nFlyCount &&
+               pImpl->GetFlyCache(nFlyIdx)->nPageNum < nPgNum )
             ++nFlyIdx;
 
         // sort cached objects on this page by ordnum
         std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
         sal_uInt16 nIdx = nFlyIdx;
 
-        while( nIdx < nFlyCount && ( pFlyC = pImpl->
-               GetFlyCache( nIdx ) )->nPageNum == nPgNum )
+        SwFlyCache* pFlyC;
+        while( nIdx < nFlyCount &&
+               ( pFlyC = pImpl->GetFlyCache( nIdx ) )->nPageNum == nPgNum )
         {
             aFlyCacheSet.insert( pFlyC );
             ++nIdx;
