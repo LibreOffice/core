@@ -191,7 +191,8 @@ public:
 
     // XDumper
     virtual OUString SAL_CALL dump()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException,
+                  std::exception);
 
     void setViewDirty();
 

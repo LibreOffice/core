@@ -3014,7 +3014,7 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
     return aServiceNames;
 }
 
-OUString ChartView::dump() throw (uno::RuntimeException)
+OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
 {
     impl_updateView();
     if(!mxRootShape.is())
