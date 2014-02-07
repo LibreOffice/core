@@ -793,6 +793,8 @@ void DataBrowserModel::updateFromModel()
     {
         Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+        if (!pModel)
+            return;
         ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), *pModel );
 
         const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
