@@ -229,15 +229,7 @@ ContextHandlerRef BlipFillContext::onCreateContext(
             return new BlipContext( *this, rAttribs, mrBlipProps );
 
         case A_TOKEN( srcRect ):
-            {
-                OUString aDefault( "0" );
-                ::com::sun::star::geometry::IntegerRectangle2D aClipRect;
-                aClipRect.X1 = GetPercent( rAttribs.getString( XML_l, aDefault ) );
-                aClipRect.Y1 = GetPercent( rAttribs.getString( XML_t, aDefault ) );
-                aClipRect.X2 = GetPercent( rAttribs.getString( XML_r, aDefault ) );
-                aClipRect.Y2 = GetPercent( rAttribs.getString( XML_b, aDefault ) );
-                mrBlipProps.moClipRect = aClipRect;
-            }
+            mrBlipProps.moClipRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
 
         case A_TOKEN( tile ):
