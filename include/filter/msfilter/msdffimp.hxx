@@ -176,8 +176,19 @@ struct SvxMSDffConnectorRule
     SdrObject*  pBObj;     ///< pPtr of object (corresponding to shape B)
     SdrObject*  pCObj;     ///< pPtr of connector object
 
-    SvxMSDffConnectorRule() : nSpFlagsA( 0 ), nSpFlagsB( 0 ), pAObj( NULL ),
-                              pBObj( NULL ), pCObj( NULL ) {};
+    SvxMSDffConnectorRule()
+        : nRuleId(0)
+        , nShapeA(0)
+        , nShapeB(0)
+        , nShapeC(0)
+        , ncptiA(0)
+        , ncptiB(0)
+        , nSpFlagsA( 0 )
+        , nSpFlagsB( 0 )
+        , pAObj( NULL )
+        , pBObj( NULL )
+        , pCObj( NULL )
+        {};
 
     friend SvStream& ReadSvxMSDffConnectorRule( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
