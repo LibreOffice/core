@@ -665,7 +665,7 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
-    {   // Bedingug OK -> aktuellen Set einstellen
+    {   // condition OK -> adjust current Set
         pMgr->ToRecordId(std::max((sal_uInt16)aPar2.toInt32(), sal_uInt16(1))-1);
     }
 }

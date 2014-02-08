@@ -135,7 +135,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             SwPaM aCpyPam( *pNd );
             aCpyPam.SetMark();
 
-            // dann bis zum Ende vom Nodes Array
+            // then until the end of the nodes array
             aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );

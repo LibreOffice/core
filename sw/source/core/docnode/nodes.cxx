@@ -1345,7 +1345,7 @@ sal_Bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& r
     if( TstIdx( nStt, nEnd, pEndOfRedlines->StartOfSectionIndex(),
                 pEndOfRedlines->GetIndex() )) return sal_True;
 
-    return sal_False;       // liegt irgendwo dazwischen, FEHLER
+    return sal_False;       // is somewhere in the middle, ERROR
 }
 
 /** Delete a number of nodes
@@ -2092,9 +2092,9 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
             // search forward or backward for a content node
             else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
-                    // nach vorne nie aus der Tabelle hinaus!
+                    // Never out of the table at the start
                     pFrmNd->FindTableNode() == pTableNd &&
-                    // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
+                    // Bug 37652: Never out of the table at the end
                     (!pFrmNd->FindTableNode() || pFrmNd->FindTableBoxStartNode()
                         == pSttNd->FindTableBoxStartNode() ) &&
                      (!pSectNd || pSttNd->IsSectionNode() ||

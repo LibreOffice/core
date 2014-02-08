@@ -387,11 +387,11 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 break;
             }
 
-            if( nStart != nEnd ) // ein Bereich?
+            if( nStart != nEnd ) // a section?
             {
                 sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart );
 
-                // alle Sonderzeichen entfernen (durch Blanks ersetzen):
+                // remove all special characters (replace them with blanks)
                 if( !sTxt.isEmpty() )
                 {
                     sTxt = comphelper::string::remove(sTxt, 0xad);
@@ -438,7 +438,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     case REF_CHAPTER:
         {
-            // ein bischen trickreich: suche irgend einen Frame
+            // a bit tricky: search any frame
             const SwFrm* pFrm = pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() );
             if( pFrm )
             {
@@ -461,8 +461,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             LanguageTag aLanguageTag( GetLanguage());
             LocaleDataWrapper aLocaleData( aLanguageTag );
 
-            // erstmal ein "Kurz" - Test - falls beide im selben
-            // Node stehen!
+            // first a "short" test - in case both are in the same node
             if( pFldTxtAttr->GetpTxtNode() == pTxtNd )
             {
                 sTxt = nNumStart < *pFldTxtAttr->GetStart()
@@ -1073,11 +1072,11 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 
             sal_uInt16 n = GetFirstUnusedId( aIds );
 
-            // die neue SeqNo eintragen, damit die "belegt" ist
+            // register the new SeqNo, so that it's "in use"
             AddId( n, nSeqNo );
             rFld.SetSeqNo( n );
 
-            // und noch die Fuss-/EndNote auf die neue Id umsetzen
+            // and move the footnotes/endnotes to the new ID
             if( !bField )
             {
                 SwTxtFtn* pFtnIdx;

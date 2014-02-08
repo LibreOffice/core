@@ -33,12 +33,12 @@ class SwWait;
 // #i28701#
 class SfxProgress;
 
-//Die Verwendung der LayAction laeuft immer gleich ab:
+// The usage of LayAction is always the same:
 //
-// 1. Erzeugen des LayAction-Objektes.
-// 2. Einstellen des gewuenschten Verhaltens mittels der Set-Methoden
-// 3. Aufruf von Action()
-// 4. Baldiges Zerstoeren des Objektes.
+// 1. Generation of the LayAction object.
+// 2. Specifying the wanted bahaviour via the Set-methods
+// 3. Calling Action()
+// 4. Soon after that the destruction of the object
 //
 // Das Objekt meldet sich im CTor beim SwViewImp an und erst im DTor
 // wieder ab! Es handelt sich mithin um ein typisches Stackobjekt.
@@ -47,13 +47,13 @@ class SfxProgress;
 class SwLayAction
 {
     SwRootFrm  *pRoot;
-    SwViewImp  *pImp;   //Hier Meldet sich die Action an und ab.
+    SwViewImp  *pImp;   // here the action logs in and off
 
-    //Zur Optimierung, damit die Tabellen etwas besser am Crsr kleben beim
-    //Return/Backspace davor.
-    //Wenn der erste TabFrm, der sich Paintet (pro Seite) traegt sich im
-    //Pointer ein. Die CntntFrms unterhalb der Seite brauchen sich
-    //dann nicht mehr bei der Shell zum Painten anmelden.
+    // for the sake of optimization, so that the tables stick a bit better to the Crsr
+    // when hitting return/backspace in front of one
+    // Wenn der erste TabFrm, der sich Paintet (pro Seite) traegt sich im
+    // Pointer ein. Die CntntFrms unterhalb der Seite brauchen sich
+    // dann nicht mehr bei der Shell zum Painten anmelden.
     const SwTabFrm *pOptTab;
 
     SwWait *pWait;
@@ -70,13 +70,13 @@ class SwLayAction
 
     sal_uInt16 nInputType;  //Bei welchem Input soll die Verarbeitung abgebrochen
                         //werden?
-    sal_uInt16 nEndPage;    //StatBar Steuerung.
-    sal_uInt16 nCheckPageNum; //CheckPageDesc() wurde verzoegert wenn != USHRT_MAX
-                          //ab dieser Seite Checken.
+    sal_uInt16 nEndPage;    //StatBar control
+    sal_uInt16 nCheckPageNum; //CheckPageDesc() was delayed if != USHRT_MAX
+                          // check from this page on
 
-    sal_Bool bPaint;        //Painten oder nur Formatieren?
+    sal_Bool bPaint;        // painting or only formatting?
     sal_Bool bComplete;     //Alles bis zum sichtbaren Bereich Formatieren oder
-                        //oder nur den sichtbaren Bereich?
+                        // or only the visible area?
     sal_Bool bCalcLayout;   //Vollstaendige Reformatierung?
     sal_Bool bAgain;        //Zur automatisch wiederholten Action wenn Seiten
                         //geloscht werden.
@@ -150,7 +150,7 @@ public:
     sal_uInt16 GetInputType()    const { return nInputType; }
 #endif
 
-    //Einstellen der Action auf das gewuenschte Verhalten.
+    // adjusting Action to the wanted behaviour
     void SetPaint       ( sal_Bool bNew )   { bPaint = bNew; }
     void SetComplete    ( sal_Bool bNew )   { bComplete = bNew; }
     void SetStatBar     ( sal_Bool bNew );
@@ -167,8 +167,8 @@ public:
     inline void SetCheckPageNum( sal_uInt16 nNew );
     inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { nCheckPageNum = nNew; }
 
-    void Action();  //Jetzt gehts loos...
-    void Reset();   //Zurueck auf CTor-Defaults.
+    void Action();  // here it begins
+    void Reset();   // back to CTor-defaults
 
     sal_Bool IsAgain()      const { return bAgain; }
     sal_Bool IsComplete()   const { return bComplete; }
@@ -180,7 +180,7 @@ public:
 
     sal_uInt16 GetCheckPageNum() const { return nCheckPageNum; }
 
-    //Auch andere sollen den Wartecrsr einschalten koennen.
+    // others should be able to activate the WaitCrsr, too
     void CheckWaitCrsr();
 
     // #i28701# - method is now public;

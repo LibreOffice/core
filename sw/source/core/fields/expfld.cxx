@@ -608,7 +608,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
             {
                 const SwNodeNum & aNum = *(pTxtNd->GetNum());
 
-                // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
+                // only get the number, without pre-/post-fixstrings
                 OUString sNumber( pRule->MakeNumString(aNum, sal_False ));
 
                 if( !sNumber.isEmpty() )
