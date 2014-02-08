@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -335,6 +336,20 @@ DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4896), parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "width").toInt32());
 }
 
+DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
+{
+    // Test import/export of new frame attribute called TextVerticalAdjust
+
+    // 1st frame's context is adjusted to the top
+    uno::Reference<beans::XPropertySet> xFrame(getTextFrameByName("Rectangle 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+    // 2nd frame's context is adjusted to the center
+    xFrame.set(getTextFrameByName("Rectangle 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+    // 3rd frame's context is adjusted to the bottom
+    xFrame.set(getTextFrameByName("Rectangle 3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

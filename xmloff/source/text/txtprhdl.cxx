@@ -45,6 +45,7 @@
 #include "txtprhdl.hxx"
 // OD 2004-05-05 #i28701#
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -211,7 +212,7 @@ static SvXMLEnumMapEntry const pXML_FontRelief_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_ParaVerticalAlign_Enum[] =
 {
     { XML_TOP,          ParagraphVertAlign::TOP     },
     { XML_MIDDLE,       ParagraphVertAlign::CENTER  },
@@ -228,6 +229,15 @@ static SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
     { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
     { XML_ONCE_CONCURRENT, WrapInfluenceOnPosition::ONCE_CONCURRENT },
     { XML_ITERATIVE,       WrapInfluenceOnPosition::ITERATIVE },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
+{
+    { XML_TOP,          drawing::TextVerticalAdjust_TOP },
+    { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
+    { XML_BOTTOM,       drawing::TextVerticalAdjust_BOTTOM },
+    { XML_JUSTIFY,      drawing::TextVerticalAdjust_BLOCK },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1347,7 +1357,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
                                             GetXMLToken( XML_LINE_HEIGHT ) );
         break;
     case XML_TYPE_TEXT_VERTICAL_ALIGN:
-        pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, XML_TOKEN_INVALID );
+        pHdl = new XMLConstantsPropertyHandler( pXML_ParaVerticalAlign_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_RUBY_POSITION:
         pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_ABOVE,
@@ -1382,6 +1392,9 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_FILLSTYLE:
         pHdl = new XMLConstantsPropertyHandler( pXML_FillStyle_Enum, XML_TOKEN_INVALID );
+        break;
+    case XML_TYPE_VERTICAL_ALIGN:
+        pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, XML_TOKEN_INVALID );
         break;
     }
 
