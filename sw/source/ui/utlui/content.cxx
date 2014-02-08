@@ -2809,7 +2809,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     case CONTENT_TYPE_GRAPHIC:
                         sEntry = ((SwGraphicContent*)pUserData)->GetLink();
 #if OSL_DEBUG_LEVEL > 1
-                        sEntry += ' ';
+                        sEntry += " ";
                         sEntry += OUString::number(
                                     ((SwGraphicContent*)pUserData)->GetYPos());
 #endif
