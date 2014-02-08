@@ -219,11 +219,15 @@ public:
 
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
                                 bool bNoCollections )
-    : aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
+    : nNdStt(0)
+    , nNdEnd(0)
+    , nFound(0)
+    , nStackCnt(0)
+    , aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
+    , bNoColls(bNoCollections)
+    , bForward(bFwd)
 {
     aCmpSet.Put( rSet, false );
-    bNoColls = bNoCollections;
-    bForward = bFwd;
 
     // determine area of Fnd/Stack array (Min/Max)
     SfxItemIter aIter( aCmpSet );
