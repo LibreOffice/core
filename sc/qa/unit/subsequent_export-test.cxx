@@ -70,6 +70,7 @@ public:
 
     void testCellValuesExportODS();
     void testCellNoteExportODS();
+    void testCellNoteExportXLS();
     void testFormatExportODS();
 
     void testInlineArrayXLS();
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
+    CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
@@ -771,6 +773,49 @@ void ScExportTest::testCellNoteExportODS()
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
     aPos.IncRow(); // Move to A2.
     CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
+
+    xNewDocSh->DoClose();
+}
+
+void ScExportTest::testCellNoteExportXLS()
+{
+    // Start with an empty document.s
+    ScDocShellRef xOrigDocSh = loadDoc("notes-on-3-sheets.", ODS);
+    ScDocument* pDoc = xOrigDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
+
+    // Check note's presence.
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
+
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,1)));
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,1,1)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,1)));
+
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,2)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,2)));
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,2,2)));
+
+    // save and reload as XLS.
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, XLS);
+    xOrigDocSh->DoClose();
+    CPPUNIT_ASSERT(xNewDocSh.Is());
+    pDoc = xNewDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
+
+    // Check note's presence again.
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
+
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,1)));
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,1,1)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,1)));
+
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,2)));
+    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,2)));
+    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,2,2)));
 
     xNewDocSh->DoClose();
 }
