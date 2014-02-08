@@ -3825,7 +3825,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
                 aClipRect.Right() = nMaxX;
         }
 
-        sal_Bool bClipRegion = pTarget->IsClipRegion();
+        bool bClipRegion = pTarget->IsClipRegion();
         Region aOldRegion = pTarget->GetClipRegion();
         pTarget->IntersectClipRegion( aClipRect );
 
