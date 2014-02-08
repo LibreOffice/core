@@ -168,7 +168,7 @@ PresenterPaneBorderManager::BorderElement
     // Translate bits in nCode into BorderElement value.
     switch (nCode)
     {
-        case mnOutside | mnOutside:
+        case mnOutside:
         case mnOutside | mnLeft:
         case mnOutside | mnRight:
         case mnOutside | mnHorizontalCenter:
