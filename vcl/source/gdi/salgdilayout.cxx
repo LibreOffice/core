@@ -103,7 +103,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
 
     if( w )
     {
-        if( pOutDev && pOutDev->ImplIsAntiparallel() )
+        if( pOutDev && pOutDev->IsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
             // mirror this window back
@@ -139,7 +139,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
 
     if( w )
     {
-        if( pOutDev && pOutDev->ImplIsAntiparallel() )
+        if( pOutDev && pOutDev->IsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
             // mirror this window back
@@ -178,7 +178,7 @@ sal_Bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoi
     {
         sal_uInt32 i, j;
 
-        if( pOutDev && pOutDev->ImplIsAntiparallel() )
+        if( pOutDev && pOutDev->IsAntiparallel() )
         {
             OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
             // mirror this window back
