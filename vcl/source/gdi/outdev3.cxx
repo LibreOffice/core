@@ -910,15 +910,16 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
 }
 
 ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
-:   maFontSelData( rFontSelData ),
-    maMetric( rFontSelData ),
-    mpConversion( NULL ),
-    mnRefCount( 1 ),
-    mnSetFontFlags( 0 ),
-    mnOwnOrientation( 0 ),
-    mnOrientation( 0 ),
-    mbInit( false ),
-    mpUnicodeFallbackList( NULL )
+    : maFontSelData( rFontSelData )
+    , maMetric( rFontSelData )
+    , mpConversion( NULL )
+    , mnLineHeight( 0 )
+    , mnRefCount( 1 )
+    , mnSetFontFlags( 0 )
+    , mnOwnOrientation( 0 )
+    , mnOrientation( 0 )
+    , mbInit( false )
+    , mpUnicodeFallbackList( NULL )
 {
     maFontSelData.mpFontEntry = this;
 }
