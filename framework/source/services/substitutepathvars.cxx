@@ -86,12 +86,19 @@ enum OperatingSystem
 
 struct SubstituteRule
 {
-    SubstituteRule() {}
+    SubstituteRule()
+        : aEnvType(ET_UNKNOWN)
+    {}
+
     SubstituteRule( const OUString& aVarName,
                     const OUString& aValue,
                     const com::sun::star::uno::Any& aVal,
-                    EnvironmentType aType ) :
-        aSubstVariable( aVarName ), aSubstValue( aValue ), aEnvValue( aVal ), aEnvType( aType ) {}
+                    EnvironmentType aType )
+        : aSubstVariable(aVarName)
+        , aSubstValue(aValue)
+        , aEnvValue(aVal)
+        , aEnvType(aType)
+    {}
 
     OUString            aSubstVariable;
     OUString            aSubstValue;
