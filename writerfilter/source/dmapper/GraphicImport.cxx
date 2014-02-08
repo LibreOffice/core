@@ -311,6 +311,7 @@ public:
         ,bVertFlip(false)
         ,bSizeProtected(false)
         ,bPositionProtected(false)
+        ,nShapeOptionType(0)
         ,m_rPositivePercentages(rPositivePercentages)
         {}
 
