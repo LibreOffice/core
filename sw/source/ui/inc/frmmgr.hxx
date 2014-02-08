@@ -49,15 +49,15 @@ const SwTwips   DFLT_HEIGHT     = MM50;
 
 class SW_DLLPUBLIC SwFlyFrmAttrMgr
 {
-    SfxItemSet  aSet;
-    Point       aAbsPos;
-    SwWrtShell  *pOwnSh;
+    SfxItemSet  m_aSet;
+    Point       m_aAbsPos;
+    SwWrtShell* m_pOwnSh;
 
-    sal_Bool        bAbsPos,
-                bNewFrm;
-    sal_Bool        bIsInVertical;
+    sal_Bool    m_bAbsPos,
+                m_bNewFrm;
+    sal_Bool    m_bIsInVertical;
     // --> OD 2009-09-01 #mongolianlayout#
-    sal_Bool        bIsInVerticalL2R;
+    sal_Bool    m_bIsInVerticalL2R;
 
     // internal calculation for borders
     SAL_DLLPRIVATE SwTwips           CalcTopSpace();
@@ -73,7 +73,7 @@ public:
     //CopyCtor for dialogs to check the metrics
     SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
-    inline SwWrtShell*  GetShell() { return pOwnSh; }
+    inline SwWrtShell*  GetShell() { return m_pOwnSh; }
 
     void                SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;
@@ -123,8 +123,8 @@ public:
     void                DelAttr(sal_uInt16 nId);
 
     // reach out the set
-    inline const SfxItemSet &GetAttrSet() const { return aSet; }
-    inline       SfxItemSet &GetAttrSet()       { return aSet; }
+    inline const SfxItemSet &GetAttrSet() const { return m_aSet; }
+    inline       SfxItemSet &GetAttrSet()       { return m_aSet; }
     void                     SetAttrSet(const SfxItemSet& rSet);
 
     inline const SwFmtVertOrient &GetVertOrient() const;
@@ -140,32 +140,32 @@ public:
 
 inline const Size& SwFlyFrmAttrMgr::GetSize() const
 {
-    return ((SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE)).GetSize();
+    return ((SwFmtFrmSize&)m_aSet.Get(RES_FRM_SIZE)).GetSize();
 }
 
 inline const SwFmtVertOrient &SwFlyFrmAttrMgr::GetVertOrient() const
 {
-    return ((SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT));
+    return ((SwFmtVertOrient&)m_aSet.Get(RES_VERT_ORIENT));
 }
 inline const SwFmtHoriOrient &SwFlyFrmAttrMgr::GetHoriOrient() const
 {
-    return ((SwFmtHoriOrient &)aSet.Get(RES_HORI_ORIENT));
+    return ((SwFmtHoriOrient &)m_aSet.Get(RES_HORI_ORIENT));
 }
 inline const SwFmtFrmSize& SwFlyFrmAttrMgr::GetFrmSize() const
 {
-    return ((SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE));
+    return ((SwFmtFrmSize&)m_aSet.Get(RES_FRM_SIZE));
 }
 inline const SvxShadowItem &SwFlyFrmAttrMgr::GetShadow() const
 {
-    return ((SvxShadowItem&)aSet.Get(RES_SHADOW));
+    return ((SvxShadowItem&)m_aSet.Get(RES_SHADOW));
 }
 inline const SvxBoxItem &SwFlyFrmAttrMgr::GetBox() const
 {
-    return ((SvxBoxItem&)aSet.Get(RES_BOX));
+    return ((SvxBoxItem&)m_aSet.Get(RES_BOX));
 }
 inline const SwFmtSurround &SwFlyFrmAttrMgr::GetSurround() const
 {
-    return ((SwFmtSurround&)aSet.Get(RES_SURROUND));
+    return ((SwFmtSurround&)m_aSet.Get(RES_SURROUND));
 }
 
 inline Point SwFlyFrmAttrMgr::GetPos() const
@@ -175,7 +175,7 @@ inline Point SwFlyFrmAttrMgr::GetPos() const
 
 inline RndStdIds SwFlyFrmAttrMgr::GetAnchor()  const
 {
-    return ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
+    return ((SwFmtAnchor&)m_aSet.Get(RES_ANCHOR)).GetAnchorId();
 }
 
 inline sal_uInt16 SwFlyFrmAttrMgr::GetHeightPercent() const
