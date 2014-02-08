@@ -69,7 +69,7 @@ public:
 
 class SwSoftHyphPortion : public SwHyphPortion
 {
-    sal_Bool    bExpand;
+    bool    bExpand;
     KSHORT  nViewWidth;
     KSHORT  nHyphWidth;
 
@@ -80,8 +80,8 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
-    inline void SetExpand( const sal_Bool bNew ) { bExpand = bNew; }
-    sal_Bool IsExpand() const { return bExpand; }
+    inline void SetExpand( const bool bNew ) { bExpand = bNew; }
+    bool IsExpand() const { return bExpand; }
 
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
 

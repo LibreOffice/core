@@ -65,7 +65,7 @@ bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     // resetting
     rInf.SetFly( 0 );
     rInf.Width( rInf.RealWidth() );
-    rInf.GetParaPortion()->SetFly( sal_True );
+    rInf.GetParaPortion()->SetFly( true );
 
     // trailing blank:
     if( rInf.GetIdx() < rInf.GetTxt().getLength() &&  1 < rInf.GetIdx()
@@ -130,7 +130,7 @@ bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
 
-    rInf.GetParaPortion()->SetFly( sal_True );
+    rInf.GetParaPortion()->SetFly( true );
     return bFull;
 }
 
@@ -262,8 +262,8 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   long nFlyAsc, long nFlyDesc,
                                   objectpositioning::AsCharFlags nFlags ) :
     pContact( pFly ),
-    bDraw( sal_False ),
-    bMax( sal_False ),
+    bDraw( false ),
+    bMax( false ),
     nAlign( 0 )
 {
     OSL_ENSURE( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
@@ -280,8 +280,8 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   long nFlyAsc, long nFlyDesc,
                                   objectpositioning::AsCharFlags nFlags ) :
     pContact( pDrawContact ),
-    bDraw( sal_True ),
-    bMax( sal_False ),
+    bDraw( true ),
+    bMax( false ),
     nAlign( 0 )
 {
     OSL_ENSURE( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );

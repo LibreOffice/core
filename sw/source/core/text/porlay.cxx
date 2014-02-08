@@ -450,7 +450,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         if( pPos->IsFlyCntPortion() &&
                             ((SwFlyCntPortion*)pPos)->GetAlign() )
                         {
-                            ((SwFlyCntPortion*)pPos)->SetMax( sal_False );
+                            ((SwFlyCntPortion*)pPos)->SetMax( false );
                             if( !pFlyCnt || pPos->Height() > pFlyCnt->Height() )
                                 pFlyCnt = (SwFlyCntPortion*)pPos;
                         }
@@ -490,7 +490,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             {
                 if( pFlyCnt->Height() == Height() )
                 {
-                    pFlyCnt->SetMax( sal_True );
+                    pFlyCnt->SetMax( true );
                     if( Height() > nMaxDescent + nAscent )
                     {
                         if( 3 == pFlyCnt->GetAlign() ) // Bottom

@@ -54,8 +54,8 @@ class SwFlyCntPortion : public SwLinePortion
 {
     void *pContact; // bDraw ? DrawContact : FlyInCntFrm
     Point aRef;     // Relatively to this point we calculate the AbsPos
-    sal_Bool bDraw : 1;  // DrawContact?
-    sal_Bool bMax : 1;   // Line adjustment and height == line height
+    bool bDraw : 1;  // DrawContact?
+    bool bMax : 1;   // Line adjustment and height == line height
     sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
     virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
 
@@ -77,11 +77,11 @@ public:
     inline SwDrawContact *GetDrawContact() { return (SwDrawContact*)pContact; }
     inline const SwDrawContact* GetDrawContact() const
         { return (SwDrawContact*)pContact; }
-    inline sal_Bool IsDraw() const { return bDraw; }
-    inline sal_Bool IsMax() const { return bMax; }
+    inline bool IsDraw() const { return bDraw; }
+    inline bool IsMax() const { return bMax; }
     inline sal_uInt8 GetAlign() const { return nAlign; }
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
-    inline void SetMax( sal_Bool bNew ) { bMax = bNew; }
+    inline void SetMax( bool bNew ) { bMax = bNew; }
     // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
     void SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                   long nLnAscent, long nLnDescent,

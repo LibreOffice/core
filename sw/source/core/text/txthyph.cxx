@@ -431,7 +431,7 @@ void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwLinePortion *SwSoftHyphPortion::Compress() { return this; }
 
 SwSoftHyphPortion::SwSoftHyphPortion() :
-    bExpand(sal_False), nViewWidth(0), nHyphWidth(0)
+    bExpand(false), nViewWidth(0), nHyphWidth(0)
 {
     SetLen(1);
     SetWhichPor( POR_SOFTHYPH );
@@ -533,9 +533,9 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     rInf.SetSoftHyphPos(0);
-    SetExpand( sal_True );
+    SetExpand( true );
     bFull = SwHyphPortion::Format( rInf );
-    SetExpand( sal_False );
+    SetExpand( false );
     if( !bFull )
     {
         // default-maessig besitzen wir keine Breite, aber eine Hoehe
@@ -554,7 +554,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     if( !IsExpand() )
     {
-        SetExpand( sal_True );
+        SetExpand( true );
         if( rInf.GetLast() == this )
             rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
 
