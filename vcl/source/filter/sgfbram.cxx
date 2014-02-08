@@ -57,6 +57,11 @@ bool SgfHeader::ChkMagic()
 sal_uInt32 SgfHeader::GetOffset()
 { return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
 
+SgfEntry::SgfEntry()
+{
+    memset( this, 0, sizeof( SgfEntry ) );
+}
+
 SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
 {
     rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);

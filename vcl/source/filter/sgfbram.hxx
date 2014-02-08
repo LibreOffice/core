@@ -73,6 +73,7 @@ public:
 
     sal_uInt32 GetOffset();
     friend SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr);
+    SgfEntry();
 };
 
 #define SgfVectorSize 10
