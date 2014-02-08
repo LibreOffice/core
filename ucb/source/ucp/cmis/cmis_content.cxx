@@ -1679,7 +1679,8 @@ namespace cmis
                 else
                 {
                     libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get() );
-                    folder->removeTree( );
+                    if (folder)
+                        folder->removeTree( );
                 }
             }
             catch ( const libcmis::Exception& e )
