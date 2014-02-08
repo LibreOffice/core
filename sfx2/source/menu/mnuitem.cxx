@@ -308,8 +308,8 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 {
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
+    m_sIconTheme         = rSettings.DetermineIconTheme();
+    m_bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
     ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
     Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
@@ -332,14 +332,14 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     if ( pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_uIntPtr nSymbolsStyle = rSettings.GetSymbolsStyle();
+        OUString sIconTheme = rSettings.DetermineIconTheme();
         sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
-        if (( nSymbolsStyle != m_nSymbolsStyle ) ||
+        if (( sIconTheme != m_sIconTheme ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
-            m_nSymbolsStyle         = nSymbolsStyle;
-            m_bShowMenuImages       = bShowMenuImages;
+            m_sIconTheme        = sIconTheme;
+            m_bShowMenuImages   = bShowMenuImages;
 
             sal_uInt16 nCount = pActMenu->GetItemCount();
             for ( sal_uInt16 nSVPos = 0; nSVPos < nCount; nSVPos++ )
@@ -350,7 +350,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                     if ( bShowMenuImages )
                     {
                         sal_Bool        bImageSet = sal_False;
-                        ::rtl::OUString aImageId;
+                        OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
 

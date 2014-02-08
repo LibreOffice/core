@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_TOOLBOXSTYLE             2
 #define PROPERTYNAME_USESYSTEMFILEDIALOG    "UseSystemFileDialog"
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG      3
-#define PROPERTYNAME_SYMBOLSTYLE            "SymbolStyle"
+#define PROPERTYNAME_ICONTHEME              "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              4
 #define PROPERTYNAME_USESYSTEMPRINTDIALOG   "UseSystemPrintDialog"
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG     5
@@ -89,6 +89,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bAlwaysAllowSave;
     sal_Bool    m_bExperimentalMode;
     sal_Bool    m_bMacroRecorderMode;
+    sal_Bool    m_bIconThemeWasSetAutomatically;
 
     public:
 
@@ -180,15 +181,32 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsGetSymbolsSizeReadOnly()
         { return m_bIsSymbolsSizeRO; }
 
-        sal_Int16 GetSymbolsStyle() const;
-        OUString GetSymbolsStyleName() const;
-        sal_Int16 GetCurrentSymbolsStyle() const;
+        OUString GetIconTheme() const;
 
-        inline void SetSymbolsStyle( sal_Int16 nSet )
-        { ImplSetSymbolsStyle( true, nSet, OUString() ); }
+        enum SetModifiedFlag { SET_MODIFIED, DONT_SET_MODIFIED };
 
-        inline void SetSymbolsStyleName( OUString &rName )
-        { ImplSetSymbolsStyle( false, 0, rName ); }
+        /** Set the icon theme
+         *
+         * @param theme
+         * The name of the icon theme to use.
+         *
+         * @param setModified
+         * Whether to call SetModified() and CallListeners().
+         *
+         * @internal
+         * The @p setModified flag was introduced because the unittests fail if we call SetModified()
+         * during initialization in the constructor.
+         */
+        void
+        SetIconTheme(const OUString &theme, SetModifiedFlag setModified = SET_MODIFIED );
+
+        bool IconThemeWasSetAutomatically()
+        {return m_bIconThemeWasSetAutomatically;}
+
+        /** Set the icon theme automatically by detecting the best theme for the desktop environment.
+         * The parameter setModified controls whether SetModified() will be called.
+         */
+        void SetIconThemeAutomatically(SetModifiedFlag = SET_MODIFIED);
 
         inline sal_Bool IsGetSymbolsStyleReadOnly()
         { return m_bIsSymbolsStyleRO; }
@@ -246,8 +264,9 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         static Sequence< OUString > GetPropertyNames();
 
-    protected:
-        void ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const OUString &rName );
+    private:
+        // The unittests fail if we call SetModified during initialization in the constructor.
+        void ImplSetSymbolsStyleWithoutSettingModifiedFlag( bool bValue, sal_Int16 nSet, const OUString &rName );
 };
 
 //*****************************************************************************************************************
@@ -273,7 +292,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bAlwaysAllowSave( sal_False )
     , m_bExperimentalMode( sal_False )
     , m_bMacroRecorderMode( sal_False )
-
+    , m_bIconThemeWasSetAutomatically( sal_False )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -356,9 +375,15 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
-                OUString aSymbolsStyle;
-                if( seqValues[nProperty] >>= aSymbolsStyle )
-                    SetSymbolsStyleName( aSymbolsStyle );
+                OUString aIconTheme;
+                if( seqValues[nProperty] >>= aIconTheme ) {
+                    if (aIconTheme == "auto") {
+                        SetIconThemeAutomatically(DONT_SET_MODIFIED);
+                    }
+                    else {
+                        SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
+                    }
+                }
                 else
                 {
                     OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
@@ -483,11 +508,16 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
-                                                            OUString aSymbolsStyle;
-                                                            if( seqValues[nProperty] >>= aSymbolsStyle )
-                                                                SetSymbolsStyleName( aSymbolsStyle );
-                                                            else
-                                                            {
+                                                            OUString aIconTheme;
+                                                            if( seqValues[nProperty] >>= aIconTheme ) {
+                                                                if (aIconTheme == "auto") {
+                                                                    SetIconThemeAutomatically(DONT_SET_MODIFIED);
+                                                                }
+                                                                else {
+                                                                    SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
+                                                                }
+                                                            }
+                                                            else {
                                                                 OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                             }
                                                         }
@@ -545,41 +575,27 @@ void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
     CallListeners();
 }
 
-sal_Int16 SvtMiscOptions_Impl::GetSymbolsStyle() const
+OUString SvtMiscOptions_Impl::GetIconTheme() const
 {
-    return (sal_Int16)Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    return Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 }
 
-OUString SvtMiscOptions_Impl::GetSymbolsStyleName() const
+void
+SvtMiscOptions_Impl::SetIconTheme(const OUString &rName, SetModifiedFlag setModified)
 {
-    return Application::GetSettings().GetStyleSettings().GetSymbolsStyleName();
-}
+    AllSettings aAllSettings = Application::GetSettings();
+    StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+    aStyleSettings.SetIconTheme( rName );
+    m_bIconThemeWasSetAutomatically = false;
 
-sal_Int16 SvtMiscOptions_Impl::GetCurrentSymbolsStyle() const
-{
-    return (sal_Int16)Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
-}
+    aAllSettings.SetStyleSettings(aStyleSettings);
+    Application::MergeSystemSettings( aAllSettings );
+    Application::SetSettings(aAllSettings);
 
-void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const OUString &rName )
-{
-    if ( ( bValue && ( nSet != GetSymbolsStyle() ) ) ||
-         ( !bValue && ( rName != GetSymbolsStyleName() ) ) )
-    {
-        AllSettings aAllSettings = Application::GetSettings();
-        StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-
-        if ( bValue )
-            aStyleSettings.SetSymbolsStyle( nSet );
-        else
-            aStyleSettings.SetSymbolsStyleName( rName );
-
-        aAllSettings.SetStyleSettings(aStyleSettings);
-        Application::MergeSystemSettings( aAllSettings );
-        Application::SetSettings(aAllSettings);
-
+    if (setModified == SET_MODIFIED) {
         SetModified();
-        CallListeners();
     }
+    CallListeners();
 }
 
 //*****************************************************************************************************************
@@ -634,8 +650,16 @@ void SvtMiscOptions_Impl::Commit()
 
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
-                if ( !m_bIsSymbolsStyleRO )
-                    seqValues[nProperty] <<= GetSymbolsStyleName();
+                if ( !m_bIsSymbolsStyleRO ) {
+                    OUString value;
+                    if (m_bIconThemeWasSetAutomatically) {
+                        value = "auto";
+                    }
+                    else {
+                        value = GetIconTheme();
+                    }
+                    seqValues[nProperty] <<= value;
+                }
                 break;
             }
 
@@ -691,7 +715,7 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_SYMBOLSET),
         OUString(PROPERTYNAME_TOOLBOXSTYLE),
         OUString(PROPERTYNAME_USESYSTEMFILEDIALOG),
-        OUString(PROPERTYNAME_SYMBOLSTYLE),
+        OUString(PROPERTYNAME_ICONTHEME),
         OUString(PROPERTYNAME_USESYSTEMPRINTDIALOG),
         OUString(PROPERTYNAME_SHOWLINKWARNINGDIALOG),
         OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
@@ -802,19 +826,14 @@ bool SvtMiscOptions::AreCurrentSymbolsLarge() const
     return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE );
 }
 
-sal_Int16 SvtMiscOptions::GetSymbolsStyle() const
+OUString SvtMiscOptions::GetIconTheme() const
 {
-    return m_pDataContainer->GetSymbolsStyle();
+    return m_pDataContainer->GetIconTheme();
 }
 
-sal_Int16 SvtMiscOptions::GetCurrentSymbolsStyle() const
+void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 {
-    return m_pDataContainer->GetCurrentSymbolsStyle();
-}
-
-void SvtMiscOptions::SetSymbolsStyle( sal_Int16 nSet )
-{
-    m_pDataContainer->SetSymbolsStyle( nSet );
+    m_pDataContainer->SetIconTheme(iconTheme);
 }
 
 sal_Bool SvtMiscOptions::DisableUICustomization() const
@@ -906,6 +925,26 @@ void SvtMiscOptions::AddListenerLink( const Link& rLink )
 void SvtMiscOptions::RemoveListenerLink( const Link& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
+}
+
+void
+SvtMiscOptions_Impl::SetIconThemeAutomatically(enum SetModifiedFlag setModified)
+{
+    OUString theme = Application::GetSettings().GetStyleSettings().GetAutomaticallyChosenIconTheme();
+    SetIconTheme(theme, setModified);
+    m_bIconThemeWasSetAutomatically = true;
+}
+
+void
+SvtMiscOptions::SetIconThemeAutomatically()
+{
+    m_pDataContainer->SetIconThemeAutomatically();
+}
+
+bool
+SvtMiscOptions::IconThemeWasSetAutomatically()
+{
+    return m_pDataContainer->IconThemeWasSetAutomatically();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

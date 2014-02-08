@@ -661,7 +661,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     {
         aStyleSettings = rSettings.GetStyleSettings();
         aStyleSettings.SetHighContrastMode( true );
-        aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
         rSettings.SetStyleSettings( aStyleSettings );
     }
 

@@ -25,11 +25,14 @@
 #include "comphelper/processfactory.hxx"
 #include <rtl/bootstrap.hxx>
 #include "tools/debug.hxx"
-#include <vcl/graphicfilter.hxx>
 
 #include "i18nlangtag/mslangid.hxx"
 #include "i18nlangtag/languagetag.hxx"
 
+#include <vcl/graphicfilter.hxx>
+#include <vcl/IconThemeScanner.hxx>
+#include <vcl/IconThemeSelector.hxx>
+#include <vcl/IconThemeInfo.hxx>
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
 #include "vcl/settings.hxx"
@@ -50,9 +53,6 @@ using namespace ::com::sun::star;
 #include "impimagetree.hxx"
 
 #include <boost/make_shared.hpp>
-
-// =======================================================================
-
 
 // =======================================================================
 
@@ -182,6 +182,8 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 // =======================================================================
 
 ImplStyleData::ImplStyleData() :
+    mIconThemeScanner(vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath())),
+    mIconThemeSelector(new vcl::IconThemeSelector()),
     maPersonaHeaderFooter(),
     maPersonaHeaderBitmap(),
     maPersonaFooterBitmap()
@@ -205,9 +207,7 @@ ImplStyleData::ImplStyleData() :
     mnOptions                   = 0;
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
-    mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
     mnUseImagesInMenus          = AUTO_STATE_AUTO;
-    mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
@@ -288,6 +288,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
     maGroupFont( rData.maGroupFont ),
+    mIconTheme(rData.mIconTheme),
     maWorkspaceGradient( rData.maWorkspaceGradient ),
     maDialogStyle( rData.maDialogStyle ),
     maFrameStyle( rData.maFrameStyle ),
@@ -317,20 +318,20 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
-    mnHighContrast              = rData.mnHighContrast;
-    mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
+    mbHighContrast              = rData.mbHighContrast;
+    mbUseSystemUIFonts          = rData.mbUseSystemUIFonts;
     mnUseFlatBorders            = rData.mnUseFlatBorders;
     mnUseFlatMenus              = rData.mnUseFlatMenus;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
-    mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
+    mbSkipDisabledInMenus       = rData.mbSkipDisabledInMenus;
     mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
     mbAcceleratorsInContextMenus = rData.mbAcceleratorsInContextMenus;
     mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
-    mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle     = rData.mnPreferredSymbolsStyle;
+    mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
+    mIconThemeSelector.reset(new vcl::IconThemeSelector(*rData.mIconThemeSelector));
     mpFontOptions               = rData.mpFontOptions;
     mnEdgeBlending              = rData.mnEdgeBlending;
     maEdgeBlendingTopLeftColor  = rData.maEdgeBlendingTopLeftColor;
@@ -422,12 +423,12 @@ void ImplStyleData::SetStandardStyles()
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
-    mnHighContrast              = false;
-    mnUseSystemUIFonts          = true;
+    mbHighContrast              = false;
+    mbUseSystemUIFonts          = true;
     mnUseFlatBorders            = false;
     mnUseFlatMenus              = false;
     mbPreferredUseImagesInMenus = true;
-    mnSkipDisabledInMenus       = false;
+    mbSkipDisabledInMenus       = false;
     mbHideDisabledMenuItems     = false;
     mbAcceleratorsInContextMenus = true;
     mbPrimaryButtonWarpsSlider = false;
@@ -500,75 +501,6 @@ void StyleSettings::Set3DColors( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
-
-OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
-{
-    switch ( nStyle )
-    {
-        case STYLE_SYMBOLS_DEFAULT:    return OUString("default");
-        case STYLE_SYMBOLS_HICONTRAST: return OUString("hicontrast");
-        case STYLE_SYMBOLS_INDUSTRIAL: return OUString("tango"); // industrial is dead
-        case STYLE_SYMBOLS_CRYSTAL:    return OUString("crystal");
-        case STYLE_SYMBOLS_TANGO:      return OUString("tango");
-        case STYLE_SYMBOLS_OXYGEN:     return OUString("oxygen");
-        case STYLE_SYMBOLS_CLASSIC:    return OUString("classic");
-        case STYLE_SYMBOLS_HUMAN:      return OUString("human");
-        case STYLE_SYMBOLS_SIFR:       return OUString("sifr");
-        case STYLE_SYMBOLS_TANGO_TESTING: return OUString("tango_testing");
-    }
-
-    return OUString("auto");
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong StyleSettings::ImplNameToSymbolsStyle( const OUString &rName ) const
-{
-    if ( rName == "default" )
-        return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == "hicontrast" )
-        return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == "industrial" )
-        return STYLE_SYMBOLS_TANGO; // industrial is dead
-    else if ( rName == "crystal" )
-        return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == "tango" )
-        return STYLE_SYMBOLS_TANGO;
-    else if ( rName == "oxygen" )
-        return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == "classic" )
-        return STYLE_SYMBOLS_CLASSIC;
-    else if ( rName == "human" )
-        return STYLE_SYMBOLS_HUMAN;
-    else if ( rName == "sifr" )
-        return STYLE_SYMBOLS_SIFR;
-    else if ( rName == "tango_testing" )
-        return STYLE_SYMBOLS_TANGO_TESTING;
-
-    return STYLE_SYMBOLS_AUTO;
-}
-
-// -----------------------------------------------------------------------
-
-/**
-    The preferred style name can be read from the desktop setting. We
-    need to find the closest theme name registered in OOo. Therefore
-    we check if any registered style name is a case-insensitive
-    substring of the preferred style name.
-*/
-void StyleSettings::SetPreferredSymbolsStyleName( const OUString &rName )
-{
-    if ( !rName.isEmpty() )
-    {
-        OUString rNameLowCase( rName.toAsciiLowerCase() );
-
-        for( sal_uInt32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
-            if ( rNameLowCase.indexOf( ImplSymbolsStyleToName( n ) ) != -1 )
-                SetPreferredSymbolsStyle( n );
-    }
-}
-
 void StyleSettings::SetCheckedColorSpecialCase( )
 {
     CopyData();
@@ -583,99 +515,6 @@ void StyleSettings::SetCheckedColorSpecialCase( )
         mpData->maCheckedColor = Color( nRed, nGreen, nBlue );
     }
 }
-
-// -----------------------------------------------------------------------
-
-sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
-{
-    // style selected in Tools -> Options... -> LibreOffice -> View
-    sal_uLong nStyle = GetSymbolsStyle();
-
-    if ( nStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nStyle) ) )
-    {
-        // the preferred style can be read from the desktop setting by the desktop native widgets modules
-        sal_uLong nPreferredStyle = GetPreferredSymbolsStyle();
-
-        if ( nPreferredStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nPreferredStyle) ) )
-        {
-
-            // use a hardcoded desktop-specific fallback if no preferred style has been detected
-            static bool sbFallbackDesktopChecked = false;
-            static sal_uLong snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
-
-            if ( !sbFallbackDesktopChecked )
-            {
-                snFallbackDesktopStyle = GetAutoSymbolsStyle();
-                sbFallbackDesktopChecked = true;
-            }
-
-            nPreferredStyle = snFallbackDesktopStyle;
-        }
-
-        if (GetHighContrastMode() && CheckSymbolStyle (STYLE_SYMBOLS_HICONTRAST) )
-            nStyle = STYLE_SYMBOLS_HICONTRAST;
-        else
-            nStyle = nPreferredStyle;
-    }
-
-    return nStyle;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong StyleSettings::GetAutoSymbolsStyle() const
-{
-    OUString const & env = Application::GetDesktopEnvironment();
-
-    sal_uLong nRet;
-    if ( env.equalsIgnoreAsciiCase("tde") ||
-         env.equalsIgnoreAsciiCase("kde") )
-        nRet = STYLE_SYMBOLS_CRYSTAL;
-    else if ( env.equalsIgnoreAsciiCase("kde4") )
-        nRet = STYLE_SYMBOLS_OXYGEN;
-    else
-        nRet = STYLE_SYMBOLS_TANGO;
-
-    // fallback to any existing style
-    if ( ! CheckSymbolStyle (nRet) )
-    {
-        for ( sal_uLong n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
-        {
-            sal_uLong nStyleToCheck = n;
-
-            // auto is not a real theme => can't be fallback
-            if ( nStyleToCheck == STYLE_SYMBOLS_AUTO )
-                continue;
-
-            // will check hicontrast in the end
-            if ( nStyleToCheck == STYLE_SYMBOLS_HICONTRAST )
-                continue;
-            if ( nStyleToCheck == STYLE_SYMBOLS_THEMES_MAX )
-                nStyleToCheck = STYLE_SYMBOLS_HICONTRAST;
-
-            if ( CheckSymbolStyle ( nStyleToCheck ) )
-            {
-                nRet = nStyleToCheck;
-                n = STYLE_SYMBOLS_THEMES_MAX;
-            }
-        }
-    }
-
-    return nRet;
-}
-
-// -----------------------------------------------------------------------
-
-bool StyleSettings::CheckSymbolStyle( sal_uLong nStyle ) const
-{
-    if ( nStyle == STYLE_SYMBOLS_INDUSTRIAL )
-        return false; // industrial is dead
-
-    static ImplImageTreeSingletonRef aImageTree;
-    return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
-}
-
-// -----------------------------------------------------------------------
 
 bool StyleSettings::GetUseImagesInMenus() const
 {
@@ -841,6 +680,14 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return true;
 
+    if (mpData->mIconTheme != rSet.mpData->mIconTheme) {
+        return sal_False;
+    }
+
+    if (*mpData->mIconThemeSelector != *rSet.mpData->mIconThemeSelector) {
+        return sal_False;
+    }
+
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
          (mpData->mnAutoMnemonic            == rSet.mpData->mnAutoMnemonic)             &&
          (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
@@ -864,12 +711,10 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
          (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
          (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
-         (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
-         (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mbHighContrast            == rSet.mpData->mbHighContrast)             &&
+         (mpData->mbUseSystemUIFonts        == rSet.mpData->mbUseSystemUIFonts)         &&
          (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
          (mpData->mnUseFlatMenus            == rSet.mpData->mnUseFlatMenus)             &&
-         (mpData->mnSymbolsStyle            == rSet.mpData->mnSymbolsStyle)             &&
-         (mpData->mnPreferredSymbolsStyle   == rSet.mpData->mnPreferredSymbolsStyle)    &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -931,7 +776,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
-         (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
+         (mpData->mbSkipDisabledInMenus     == rSet.mpData->mbSkipDisabledInMenus)      &&
          (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
          (mpData->mbAcceleratorsInContextMenus  == rSet.mpData->mbAcceleratorsInContextMenus)&&
          (mpData->mbPrimaryButtonWarpsSlider == rSet.mpData->mbPrimaryButtonWarpsSlider) &&
@@ -1633,6 +1478,64 @@ sal_uLong
 StyleSettings::GetOptions() const
 {
     return mpData->mnOptions;
+}
+
+std::vector<vcl::IconThemeInfo>
+StyleSettings::GetInstalledIconThemes() const
+{
+    return mpData->mIconThemeScanner->GetFoundIconThemes();
+}
+
+/*static*/ OUString
+StyleSettings::GetAutomaticallyChosenIconTheme() const
+{
+    OUString desktopEnvironment = Application::GetDesktopEnvironment();
+    OUString themeName = mpData->mIconThemeSelector->SelectIconThemeForDesktopEnvironment(
+            mpData->mIconThemeScanner->GetFoundIconThemes(),
+            desktopEnvironment
+            );
+    return themeName;
+}
+
+void
+StyleSettings::SetIconTheme(const OUString& theme)
+{
+    CopyData();
+    mpData->mIconTheme = theme;
+}
+
+OUString
+StyleSettings::DetermineIconTheme() const
+{
+    OUString r = mpData->mIconThemeSelector->SelectIconTheme(
+                        mpData->mIconThemeScanner->GetFoundIconThemes(),
+                        mpData->mIconTheme
+                        );
+    return r;
+}
+
+void
+StyleSettings::SetHighContrastMode(bool bHighContrast )
+{
+    if (mpData->mbHighContrast == bHighContrast) {
+        return;
+    }
+
+    CopyData();
+    mpData->mbHighContrast = bHighContrast;
+    mpData->mIconThemeSelector->SetUseHighContrastTheme(bHighContrast);
+}
+
+bool
+StyleSettings::GetHighContrastMode() const
+{
+    return mpData->mbHighContrast;
+}
+
+void
+StyleSettings::SetPreferredIconTheme(const OUString& theme)
+{
+    mpData->mIconThemeSelector->SetPreferredIconTheme(theme);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -153,7 +153,7 @@ CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxCo
     m_bVectorInit( sal_False ),
     m_aModuleIdentifier( aModuleIdentifier ),
     m_xContext( rxContext ),
-    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
         m_pImageList[n] = 0;
@@ -260,10 +260,10 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
 {
     SvtMiscOptions aMiscOptions;
 
-    sal_Int16 nSymbolsStyle = aMiscOptions.GetCurrentSymbolsStyle();
-    if ( nSymbolsStyle != m_nSymbolsStyle )
+    const OUString& rIconTheme = aMiscOptions.GetIconTheme();
+    if ( rIconTheme != m_sIconTheme )
     {
-        m_nSymbolsStyle = nSymbolsStyle;
+        m_sIconTheme = rIconTheme;
         for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
             delete m_pImageList[n], m_pImageList[n] = NULL;
     }
@@ -647,6 +647,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
     return sal_False;
 }
+
 const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImageList()
 {
     ResetableGuard aGuard( m_aLock );

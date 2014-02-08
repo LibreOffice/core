@@ -487,14 +487,15 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
     static vcl::DeleteOnDeinit< ImageList > xSmallImageList( NULL );
     static vcl::DeleteOnDeinit< ImageList > xBigImageList( NULL );
-    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    static OUString style = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
     // If the style has been changed, throw away our cache of the older images
-    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
+    OUString currentStyle = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    if ( style != currentStyle)
     {
         xSmallImageList.reset();
         xBigImageList.reset();
-        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+        style = currentStyle;
     }
 
     if ( bBig )
