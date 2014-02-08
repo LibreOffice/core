@@ -1522,9 +1522,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScStyleObj::getPropertySetInfo(
 
 void SAL_CALL ScStyleObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+          lang::IllegalArgumentException, lang::WrappedTargetException,
+          uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
