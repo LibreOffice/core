@@ -158,7 +158,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
         pPolyPoly = new PolyPolygon;
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
-    sal_Bool bClipRegion = pTarget->IsClipRegion();
+    bool bClipRegion = pTarget->IsClipRegion();
     Region aOldRegion = pTarget->GetClipRegion();
 
     if ( !pRegion )

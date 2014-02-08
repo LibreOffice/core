@@ -3266,10 +3266,9 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         // where the document is unmirrored
         // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
         Window *pGrandparent = GetParent()->GetParent();
-        const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
 
-        if( pGrandparent->ImplIsAntiparallel() )
-            pGrandparentOutDev->ReMirror( aRect );
+        if( pGrandparent->IsAntiparallel() )
+            pGrandparent->ReMirror( aRect );
 
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 

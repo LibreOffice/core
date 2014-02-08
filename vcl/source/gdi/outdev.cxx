@@ -162,7 +162,7 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
     delete pObjStack;
 }
 
-bool OutputDevice::ImplIsAntiparallel() const
+bool OutputDevice::IsAntiparallel() const
 {
     bool bRet = false;
     if( ImplGetGraphics() )
@@ -902,7 +902,7 @@ void OutputDevice::ImplInitClipRegion()
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
             // --- RTL -- only this region is in frame coordinates, so re-mirror it
             // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
-            if( ImplIsAntiparallel() )
+            if( IsAntiparallel() )
                 ReMirror ( aRegion );
         }
         if ( mbClipRegion )

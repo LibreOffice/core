@@ -52,7 +52,6 @@
 #include "vcl/popupmenuwindow.hxx"
 #include "vcl/lazydelete.hxx"
 #include "vcl/virdev.hxx"
-#include "vcl/settings.hxx"
 
 // declare system types in sysdata.hxx
 #include "svsys.h"
@@ -1478,11 +1477,22 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
 }
 
 // -----------------------------------------------------------------------
+bool Window::IsAntiparallel()
+{
+    OutputDevice *pOutDev = GetOutDev();
+    return pOutDev->OutputDevice::IsAntiparallel();
+}
+
+bool Window::IsAntiparallel() const
+{
+    const OutputDevice *pOutDev = GetOutDev();
+    return pOutDev->OutputDevice::IsAntiparallel();
+}
 
 sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
 {
     Point aFramePos( rFramePos );
-    if( ImplIsAntiparallel() )
+    if( IsAntiparallel() )
     {
         // - RTL - re-mirror frame pos at this window
         ReMirror( aFramePos );
@@ -1569,7 +1579,7 @@ int Window::ImplTestMousePointerSet()
 PointerStyle Window::ImplGetMousePointer() const
 {
     PointerStyle    ePointerStyle;
-    bool            bWait = false;
+    sal_Bool            bWait = sal_False;
 
     if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
         ePointerStyle = GetPointer().GetStyle();
@@ -2056,7 +2066,7 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
             while ( pWindow )
             {
                 if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-                    bUpdate = false;
+                    bUpdate = sal_False;
                 pWindow = pWindow->mpWindowImpl->mpNext;
             }
         }
@@ -2351,7 +2361,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
 // -----------------------------------------------------------------------
 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                    bool bChildren, bool bParent, bool bSiblings )
+                                    sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings )
 {
     Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
@@ -2494,7 +2504,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
             // - RTL - re-mirror paint rect and region at this window
-            if( ImplIsAntiparallel() )
+            if( IsAntiparallel() )
             {
                 ReMirror( aPaintRect );
                 ReMirror( aPaintRegion );
@@ -3013,7 +3023,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     OutputDevice *pOutDev = GetOutDev();
 
     // --- RTL --- check if this window requires special action
-    bool bReMirror = ( ImplIsAntiparallel() );
+    bool bReMirror = ( IsAntiparallel() );
 
     Rectangle aRectMirror( rRect );
     if( bReMirror )
@@ -3366,7 +3376,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
             // --- RTL --- check if parent is in different coordinates
-            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->IsAntiparallel() )
             {
                 // --- RTL --- (re-mirror at parent window)
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
@@ -3376,7 +3386,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             */
             if( bnXRecycled )
             {
-                if( ImplIsAntiparallel() )
+                if( IsAntiparallel() )
                 {
                     aPtDev.X() = mpWindowImpl->mnAbsScreenX;
                     nOrgX = mpWindowImpl->maPos.X();
@@ -3685,7 +3695,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = mpWindowImpl->mpPrev;
 
             // take AlwaysOnTop into account
-            bool    bOnTop = IsAlwaysOnTopEnabled();
+            sal_Bool    bOnTop = IsAlwaysOnTopEnabled();
             Window* pNextWin = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
             if ( !bOnTop )
             {
@@ -3812,7 +3822,7 @@ void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
             pFocusWindow = pFocusWindow->ImplGetParent();
         }
         if ( (pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS) &&
-             !pFocusWindow->HasChildPathFocus( true ) )
+             !pFocusWindow->HasChildPathFocus( sal_True ) )
             pFocusWindow->GrabFocus();
     }
 
@@ -5655,7 +5665,7 @@ long Window::GetCursorExtTextInputWidth() const
 
 // -----------------------------------------------------------------------
 
-void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical ) {
+void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical ) {
 
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
@@ -5982,7 +5992,7 @@ const Region& Window::GetWindowRegionPixel() const
 
 // -----------------------------------------------------------------------
 
-bool Window::IsWindowRegionPixel() const
+sal_Bool Window::IsWindowRegionPixel() const
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -6266,7 +6276,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
     ImplDelData aDogTag( this );
 
-    bool bRealVisibilityChanged = false;
+    sal_Bool bRealVisibilityChanged = sal_False;
     mpWindowImpl->mbVisible = bVisible;
 
     if ( !bVisible )
@@ -7646,7 +7656,7 @@ void Window::ReleaseMouse()
 
 // -----------------------------------------------------------------------
 
-bool Window::IsMouseCaptured() const
+sal_Bool Window::IsMouseCaptured() const
 {
 
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
@@ -7735,7 +7745,7 @@ Point Window::GetLastPointerPosPixel()
 
 // -----------------------------------------------------------------------
 
-void Window::ShowPointer( bool bVisible )
+void Window::ShowPointer( sal_Bool bVisible )
 {
 
     if ( mpWindowImpl->mbNoPtrVisible != !bVisible )
