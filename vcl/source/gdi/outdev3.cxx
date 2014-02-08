@@ -3225,13 +3225,41 @@ bool ImplFontAttributes::operator==(const ImplFontAttributes& rOther) const
 }
 
 ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
-:   ImplFontAttributes( rFontSelData )
+    : ImplFontAttributes( rFontSelData )
+    , mnWidth ( rFontSelData.mnWidth)
+    , mnOrientation( (short)(rFontSelData.mnOrientation))
+    , mnAscent( 0 )
+    , mnDescent( 0 )
+    , mnIntLeading( 0 )
+    , mnExtLeading( 0 )
+    , mnSlant( 0 )
+    , mnMinKashida( 0 )
+    , mnUnderlineSize( 0 )
+    , mnUnderlineOffset( 0 )
+    , mnBUnderlineSize( 0 )
+    , mnBUnderlineOffset( 0 )
+    , mnDUnderlineSize( 0 )
+    , mnDUnderlineOffset1( 0 )
+    , mnDUnderlineOffset2( 0 )
+    , mnWUnderlineSize( 0 )
+    , mnWUnderlineOffset( 0 )
+    , mnAboveUnderlineSize( 0 )
+    , mnAboveUnderlineOffset( 0 )
+    , mnAboveBUnderlineSize( 0 )
+    , mnAboveBUnderlineOffset( 0 )
+    , mnAboveDUnderlineSize( 0 )
+    , mnAboveDUnderlineOffset1( 0 )
+    , mnAboveDUnderlineOffset2( 0 )
+    , mnAboveWUnderlineSize( 0 )
+    , mnAboveWUnderlineOffset( 0 )
+    , mnStrikeoutSize( 0 )
+    , mnStrikeoutOffset( 0 )
+    , mnBStrikeoutSize( 0 )
+    , mnBStrikeoutOffset( 0 )
+    , mnDStrikeoutSize( 0 )
+    , mnDStrikeoutOffset1( 0 )
+    , mnDStrikeoutOffset2( 0 )
 {
-    // initialize the members provided by the font request
-    mnWidth        = rFontSelData.mnWidth;
-    mnSlant        = rFontSelData.GetSlant();
-    mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
-
     // intialize the used font name
     if( rFontSelData.mpFontData )
     {
@@ -3248,40 +3276,6 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
         mbDevice   = false;
         mbKernableFont = false;
     }
-
-    // reset metrics that are usually measured for the font instance
-    mnAscent       = 0;
-    mnDescent      = 0;
-    mnIntLeading   = 0;
-    mnExtLeading   = 0;
-    mnMinKashida   = 0;
-
-    // reset metrics that are usually derived from the measurements
-    mnUnderlineSize            = 0;
-    mnUnderlineOffset          = 0;
-    mnBUnderlineSize           = 0;
-    mnBUnderlineOffset         = 0;
-    mnDUnderlineSize           = 0;
-    mnDUnderlineOffset1        = 0;
-    mnDUnderlineOffset2        = 0;
-    mnWUnderlineSize           = 0;
-    mnWUnderlineOffset         = 0;
-    mnAboveUnderlineSize       = 0;
-    mnAboveUnderlineOffset     = 0;
-    mnAboveBUnderlineSize      = 0;
-    mnAboveBUnderlineOffset    = 0;
-    mnAboveDUnderlineSize      = 0;
-    mnAboveDUnderlineOffset1   = 0;
-    mnAboveDUnderlineOffset2   = 0;
-    mnAboveWUnderlineSize      = 0;
-    mnAboveWUnderlineOffset    = 0;
-    mnStrikeoutSize            = 0;
-    mnStrikeoutOffset          = 0;
-    mnBStrikeoutSize           = 0;
-    mnBStrikeoutOffset         = 0;
-    mnDStrikeoutSize           = 0;
-    mnDStrikeoutOffset1        = 0;
-    mnDStrikeoutOffset2        = 0;
 }
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
