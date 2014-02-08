@@ -35,15 +35,19 @@ class Bundle
 
 public:
     void                SetColor( sal_uInt32 nColor ) ;
-    sal_uInt32              GetColor() const;
+    sal_uInt32          GetColor() const;
     long                GetIndex() const { return mnBundleIndex; } ;
     void                SetIndex( long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
 
-                        Bundle() {};
+    Bundle()
+        : mnBundleIndex( 0 )
+        , mnColor( 0 )
+        {};
+
     virtual Bundle*     Clone() { return new Bundle( *this ); };
             Bundle&     operator=( Bundle& rBundle );
 
-    virtual             ~Bundle() {} ;
+    virtual            ~Bundle() {} ;
 };
 
 // ---------------------------------------------------------------
@@ -73,7 +77,11 @@ public:
     MarkerType          eMarkerType;
     double              nMarkerSize;
 
-                        MarkerBundle() {};
+    MarkerBundle()
+        : eMarkerType( MT_POINT )
+        , nMarkerSize( 0.0 )
+        {};
+
     virtual Bundle*     Clone() { return new MarkerBundle( *this ); } ;
             MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
     virtual             ~MarkerBundle() {};
@@ -102,12 +110,18 @@ class TextBundle : public Bundle
 {
 public:
 
-    sal_uInt32              nTextFontIndex;
+    sal_uInt32          nTextFontIndex;
     TextPrecision       eTextPrecision;
     double              nCharacterExpansion;
     double              nCharacterSpacing;
 
-                        TextBundle() {};
+    TextBundle()
+        : nTextFontIndex( 0 )
+        , eTextPrecision( TPR_UNDEFINED )
+        , nCharacterExpansion( 0.0 )
+        , nCharacterSpacing( 0.0 )
+        {};
+
     virtual Bundle*     Clone() { return new TextBundle( *this ); } ;
             TextBundle& operator=( TextBundle& rTextBundle );
     virtual             ~TextBundle() {};
