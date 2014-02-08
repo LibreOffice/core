@@ -52,13 +52,14 @@ using namespace ::com::sun::star::uno;
 static OUString aVndSunStarUNO( "vnd.sun.star.UNO:" );
 static OUString aVndSunStarScript( "vnd.sun.star.script:" );
 
-_SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
-    pAssignPB( NULL ),
-    pAssignComponentPB( NULL ),
-    pDeletePB( NULL ),
-    pEventLB( NULL ),
-    bReadOnly( sal_False ),
-    bIDEDialogMode( sal_False )
+_SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
+    : pAssignFT(NULL)
+    , pAssignPB(NULL)
+    , pAssignComponentPB(NULL)
+    , pDeletePB(NULL)
+    , pEventLB(NULL)
+    , bReadOnly(false)
+    , bIDEDialogMode(false)
 {
     const SfxPoolItem* pItem;
     if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, sal_False, &pItem ) )
