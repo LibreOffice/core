@@ -27,6 +27,11 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 
+SgfHeader::SgfHeader()
+{
+    memset( this, 0, sizeof( SgfHeader ) );
+}
+
 SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
 {
     rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);

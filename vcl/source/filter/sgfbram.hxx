@@ -58,6 +58,7 @@ public:
     sal_uInt32 GetOffset();
     friend SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead);
     bool   ChkMagic();
+    SgfHeader();
 };
 
 #define SgfEntrySize 22
