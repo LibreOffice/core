@@ -111,21 +111,44 @@ public:
 Reference< XInputStream > createStreamFromFile(
     const char *pcFile )
 {
-    FILE *f = fopen( pcFile , "rb" );
     Reference<  XInputStream >  r;
 
-    if( f ) {
-        fseek( f , 0 , SEEK_END );
-        size_t nLength = ftell( f );
-        fseek( f , 0 , SEEK_SET );
+    FILE *f = fopen( pcFile , "rb" );
 
-        Sequence<sal_Int8> seqIn(nLength);
-        if (fread( seqIn.getArray() , nLength , 1 , f ) == 1)
-            r = Reference< XInputStream > ( new OInputStream( seqIn ) );
-        else
-            fprintf(stderr, "failure reading %s\n", pcFile);
-        fclose( f );
+    if (!f)
+    {
+        fprintf(stderr, "failure opening %s\n", pcFile);
+        return r;
     }
+
+    if (fseek( f , 0 , SEEK_END ) == -1)
+    {
+        fprintf(stderr, "failure fseeking %s\n", pcFile);
+        fclose(f);
+        return r;
+    }
+
+    long nLength = ftell( f );
+    if (nLength == -1)
+    {
+        fprintf(stderr, "failure ftelling %s\n", pcFile);
+        fclose(f);
+        return r;
+    }
+
+    if (fseek( f , 0 , SEEK_SET ) == -1)
+    {
+        fprintf(stderr, "failure fseeking %s\n", pcFile);
+        fclose(f);
+        return r;
+    }
+
+    Sequence<sal_Int8> seqIn(nLength);
+    if (fread( seqIn.getArray(), nLength , 1 , f ) == 1)
+        r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+    else
+        fprintf(stderr, "failure reading %s\n", pcFile);
+    fclose( f );
     return r;
 }
 
