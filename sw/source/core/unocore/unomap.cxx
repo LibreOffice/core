@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -409,7 +410,8 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_DESCRIPTION), FN_UNO_DESCRIPTION, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
     { OUString(UNO_NAME_LAYOUT_SIZE), WID_LAYOUT_SIZE, cppu::UnoType<css::awt::Size>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 }, \
     { OUString(UNO_NAME_LINE_STYLE), RES_BOX, cppu::UnoType<css::drawing::LineStyle>::get(),  0, LINE_STYLE }, \
-    { OUString(UNO_NAME_LINE_WIDTH), RES_BOX, cppu::UnoType<sal_Int32>::get(),  0, LINE_WIDTH |CONVERT_TWIPS },
+    { OUString(UNO_NAME_LINE_WIDTH), RES_BOX, cppu::UnoType<sal_Int32>::get(),  0, LINE_WIDTH |CONVERT_TWIPS }, \
+    { OUString(UNO_NAME_TEXT_VERT_ADJUST), RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
 
 
 
@@ -874,6 +876,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE, MID_WRAP_INFLUENCE},
                     { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
+                    { OUString(UNO_NAME_TEXT_VERT_ADJUST), RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aFrameStyleMap;

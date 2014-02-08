@@ -37,6 +37,7 @@ class SVX_DLLPUBLIC SdrTextVertAdjustItem: public SfxEnumItem {
 public:
     TYPEINFO();
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST,(sal_uInt16)eAdj) {}
+    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich,(sal_uInt16)eAdj) {}
     SdrTextVertAdjustItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_TEXT_VERTADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;

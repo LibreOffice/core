@@ -232,47 +232,48 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_FILL_STYLE,                                 // 127
     RES_FILL_GRADIENT,                              // 128
     RES_FRMATR_GRABBAG,                             // 129
+    RES_TEXT_VERT_ADJUST,                           // 130
 RES_FRMATR_END
 };
 
 enum RES_GRFATR
 {
 RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 130
-    RES_GRFATR_CROPGRF,                             // 131
+    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 131
+    RES_GRFATR_CROPGRF,                             // 132
 
-    RES_GRFATR_ROTATION,                            // 132
-    RES_GRFATR_LUMINANCE,                           // 133
-    RES_GRFATR_CONTRAST,                            // 134
-    RES_GRFATR_CHANNELR,                            // 135
-    RES_GRFATR_CHANNELG,                            // 136
-    RES_GRFATR_CHANNELB,                            // 137
-    RES_GRFATR_GAMMA,                               // 138
-    RES_GRFATR_INVERT,                              // 139
-    RES_GRFATR_TRANSPARENCY,                        // 140
-    RES_GRFATR_DRAWMODE,                            // 141
+    RES_GRFATR_ROTATION,                            // 133
+    RES_GRFATR_LUMINANCE,                           // 134
+    RES_GRFATR_CONTRAST,                            // 135
+    RES_GRFATR_CHANNELR,                            // 136
+    RES_GRFATR_CHANNELG,                            // 137
+    RES_GRFATR_CHANNELB,                            // 138
+    RES_GRFATR_GAMMA,                               // 139
+    RES_GRFATR_INVERT,                              // 140
+    RES_GRFATR_TRANSPARENCY,                        // 141
+    RES_GRFATR_DRAWMODE,                            // 142
 
-    RES_GRFATR_DUMMY1,                              // 142
-    RES_GRFATR_DUMMY2,                              // 143
-    RES_GRFATR_DUMMY3,                              // 144
-    RES_GRFATR_DUMMY4,                              // 145
-    RES_GRFATR_DUMMY5,                              // 146
+    RES_GRFATR_DUMMY1,                              // 143
+    RES_GRFATR_DUMMY2,                              // 144
+    RES_GRFATR_DUMMY3,                              // 145
+    RES_GRFATR_DUMMY4,                              // 146
+    RES_GRFATR_DUMMY5,                              // 147
 RES_GRFATR_END
 };
 
 enum RES_BOXATR
 {
 RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 147
-    RES_BOXATR_FORMULA,                             // 148
-    RES_BOXATR_VALUE,                               // 149
+    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 148
+    RES_BOXATR_FORMULA,                             // 149
+    RES_BOXATR_VALUE,                               // 150
 RES_BOXATR_END
 };
 
 enum RES_UNKNOWNATR
 {
 RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 150
+    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 151
 RES_UNKNOWNATR_END
 };
 

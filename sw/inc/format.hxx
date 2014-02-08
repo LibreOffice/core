@@ -258,6 +258,7 @@ public:
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(sal_Bool = sal_True) const;
     // #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(sal_Bool = sal_True) const;
+    inline const SdrTextVertAdjustItem& GetTextVertAdjust(sal_Bool = sal_True) const;
 
     /// Graphics-attributes - implemented in grfatr.hxx
     inline const SwMirrorGrf          &GetMirrorGrf( sal_Bool = sal_True ) const;

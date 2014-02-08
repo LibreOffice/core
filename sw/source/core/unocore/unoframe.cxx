@@ -27,9 +27,11 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/sdtaitm.hxx>
 #include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>
@@ -585,6 +587,17 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         SwFmtWrapInfluenceOnObjPos aFmtWrapInfluenceOnObjPos;
         aFmtWrapInfluenceOnObjPos.PutValue( *pWrapInfluenceOnObjPos, MID_WRAP_INFLUENCE );
         rToSet.Put(aFmtWrapInfluenceOnObjPos);
+    }
+
+    {
+        const ::uno::Any* pTextVertAdjust = 0;
+        GetProperty(RES_TEXT_VERT_ADJUST, 0, pTextVertAdjust);
+        if ( pTextVertAdjust )
+        {
+            SdrTextVertAdjustItem aTextVertAdjust(static_cast <const :: SdrTextVertAdjustItem & > ( rFromSet.Get ( RES_TEXT_VERT_ADJUST ) ));
+            bRet &= ((SfxPoolItem&)aTextVertAdjust).PutValue(*pTextVertAdjust);
+            rToSet.Put(aTextVertAdjust);
+        }
     }
 
     return bRet;

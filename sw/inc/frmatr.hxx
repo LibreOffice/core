@@ -56,6 +56,8 @@ inline const SvxMacroItem &SwAttrSet::GetMacro(sal_Bool bInP) const
     { return (const SvxMacroItem&)Get( RES_FRMMACRO,bInP); }
 inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(sal_Bool bInP) const
     { return (const SvxFrameDirectionItem&)Get( RES_FRAMEDIR,bInP); }
+inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(sal_Bool bInP) const
+    { return (const SdrTextVertAdjustItem&)Get( RES_TEXT_VERT_ADJUST,bInP); }
 
 
 // Implementation of FrameAttribute methods of SwFmt.
@@ -85,6 +87,8 @@ inline const SvxMacroItem &SwFmt::GetMacro(sal_Bool bInP) const
     { return aSet.GetMacro(bInP); }
 inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(sal_Bool bInP) const
     { return aSet.GetFrmDir(bInP); }
+inline const SdrTextVertAdjustItem &SwFmt::GetTextVertAdjust(sal_Bool bInP) const
+    { return aSet.GetTextVertAdjust(bInP); }
 
 #endif // INCLUDED_SW_INC_FRMATR_HXX
 

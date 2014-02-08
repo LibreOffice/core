@@ -3369,6 +3369,8 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_FRMATR_CONDITIONAL_STYLE_NAME */ 0,
 /* RES_FILL_STYLE */                0,
 /* RES_FILL_GRADIENT */             0,
+/* RES_FRMATR_GRABBAG */            0,
+/* RES_TEXT_VERT_ADJUST */          0,
 
 /* RES_GRFATR_MIRRORGRF */          0,
 /* RES_GRFATR_CROPGRF   */          0,
