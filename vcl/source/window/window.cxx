@@ -718,6 +718,12 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSour
 
 void Window::ImplInitWindowData( WindowType nType )
 {
+    // We will eventually being removing the inheritance of OutputDevice from Window.
+    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
+    // it will not *be* an OutputDevice
+    mpOutputDevice = (OutputDevice*)this;
+
+
     mpWindowImpl = new WindowImpl( nType );
 
     meOutDevType        = OUTDEV_WINDOW;
@@ -731,11 +737,6 @@ void Window::ImplInitWindowData( WindowType nType )
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
-
-    // We will eventually being removing the inheritance of OutputDevice from Window.
-    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
-    // it will not *be* an OutputDevice
-    mpOutputDevice = (OutputDevice*)this;
 
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pRealParent = pParent;
