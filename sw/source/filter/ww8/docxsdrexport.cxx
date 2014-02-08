@@ -881,6 +881,12 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
                          FSEND);
     m_pImpl->m_bDMLTextFrameSyntax = true;
     m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    {
+        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("TextVerticalAdjust") )
+            xPropertySet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
+        m_pImpl->m_pBodyPrAttrList->add(XML_anchor, oox::drawingml::GetTextVerticalAdjust(eAdjust));
+    }
     m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
     m_pImpl->m_bDMLTextFrameSyntax = false;
     writeDMLEffectLst(rFrmFmt);

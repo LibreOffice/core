@@ -187,6 +187,45 @@ sal_Int16 GetParaAdjust( sal_Int32 nAlign )
     return nEnum;
 }
 
+TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken )
+{
+    TextVerticalAdjust aVertAdjust;
+    switch( nToken )
+    {
+    case XML_b:
+        aVertAdjust = TextVerticalAdjust_BOTTOM;
+        break;
+    case XML_dist:
+    case XML_just:
+    case XML_ctr:
+        aVertAdjust = TextVerticalAdjust_CENTER;
+        break;
+    case XML_t:
+    default:
+        aVertAdjust = TextVerticalAdjust_TOP;
+        break;
+    }
+    return aVertAdjust;
+}
+
+const char* GetTextVerticalAdjust( TextVerticalAdjust eAdjust )
+{
+    const char* sVerticalAdjust = 0;
+    switch( eAdjust )
+    {
+        case TextVerticalAdjust_BOTTOM:
+            sVerticalAdjust = "b";
+            break;
+        case TextVerticalAdjust_CENTER:
+            sVerticalAdjust = "ctr";
+            break;
+        case TextVerticalAdjust_TOP:
+        default:
+            sVerticalAdjust = "t";
+            break;
+    }
+    return sVerticalAdjust;
+}
 
 TabAlign GetTabAlign( sal_Int32 aToken )
 {

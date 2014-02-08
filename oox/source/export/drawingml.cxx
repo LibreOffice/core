@@ -1541,17 +1541,8 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     TextVerticalAdjust eVerticalAlignment( TextVerticalAdjust_TOP );
     const char* sVerticalAlignment = NULL;
     GET( eVerticalAlignment, TextVerticalAdjust );
-    switch( eVerticalAlignment ) {
-        case TextVerticalAdjust_BOTTOM:
-            sVerticalAlignment = "b";
-            break;
-        case TextVerticalAdjust_CENTER:
-            sVerticalAlignment = "ctr";
-            break;
-        case TextVerticalAdjust_TOP:
-        default:
-            ;
-    }
+    if( eVerticalAlignment != TextVerticalAdjust_TOP )
+        sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
     const char* sWritingMode = NULL;
     sal_Bool bVertical = sal_False;

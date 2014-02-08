@@ -11,6 +11,7 @@
 #include <oox/drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapestylecontext.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 using namespace com::sun::star;
 
@@ -86,6 +87,13 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
                 if (oInsets[i])
                     xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
+
+            // Handle text vertical adjustment inside a text frame
+            if( rAttribs.hasAttribute( XML_anchor ) )
+            {
+                drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
+                xPropertySet->setPropertyValue("TextVerticalAdjust", uno::makeAny(eAdjust));
+            }
             return this;
         }
         break;

@@ -126,6 +126,12 @@ sal_Int16 GetCaseMap( sal_Int32 nToken );
 /** converts a paragraph align to a ParaAdjust */
 sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 
+// Convert vertical adjust tokens to a TextVerticalAdjust item
+::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
+
+// Convert a TextVerticalAdjust item to string value appearing in ooxml
+SAL_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
+
 // ============================================================================
 
 // CT_IndexRange

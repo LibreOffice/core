@@ -96,16 +96,9 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
     }
 
     // ST_TextAnchoringType
-    if( rAttribs.hasAttribute( XML_anchor ) ) {
-        switch( rAttribs.getToken( XML_anchor, XML_t ) )
-        {
-            case XML_b :    mrTextBodyProp.meVA = drawing::TextVerticalAdjust_BOTTOM; break;
-            case XML_dist :
-            case XML_just :
-            case XML_ctr :  mrTextBodyProp.meVA = drawing::TextVerticalAdjust_CENTER; break;
-            default:
-            case XML_t :    mrTextBodyProp.meVA = drawing::TextVerticalAdjust_TOP; break;
-        }
+    if( rAttribs.hasAttribute( XML_anchor ) )
+    {
+        mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
         mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= mrTextBodyProp.meVA;
     }
 

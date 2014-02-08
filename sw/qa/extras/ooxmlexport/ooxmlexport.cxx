@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
@@ -2868,6 +2869,21 @@ DECLARE_OOXMLEXPORT_TEST(testSegFaultWhileSave, "test_segfault_while_save.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").match("6138"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.docx")
+{
+    // DOCX textboxes with text are imported as text frames but in Writer text frames did not have
+    // TextVerticalAdjust attribute so far.
+
+    // 1st frame's context is adjusted to the top
+    uno::Reference<beans::XPropertySet> xFrame(getTextFrameByName("Rectangle 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+    // 2nd frame's context is adjusted to the center
+    xFrame.set(getTextFrameByName("Rectangle 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+    // 3rd frame's context is adjusted to the bottom
+    xFrame.set(getTextFrameByName("Rectangle 3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
