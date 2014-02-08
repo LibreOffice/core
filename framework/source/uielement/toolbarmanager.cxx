@@ -201,7 +201,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_aListenerContainer( m_aLock.getShareableOslMutex() ),
     m_xContext( rxContext ),
-    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() ),
+    mIconTheme( SvtMiscOptions().GetIconTheme() ),
     m_bAcceleratorCfg( sal_False )
 {
     OSL_ASSERT( m_xContext.is() );
@@ -322,11 +322,11 @@ void ToolBarManager::CheckAndUpdateImages()
         m_bSmallSymbols = bCurrentSymbolsSmall;
     }
 
-    sal_Int16 nCurrentSymbolsStyle = aMiscOptions.GetCurrentSymbolsStyle();
-    if ( m_nSymbolsStyle != nCurrentSymbolsStyle )
+    const rtl::OUString& currentIconTheme = aMiscOptions.GetIconTheme();
+    if ( mIconTheme != currentIconTheme )
     {
         bRefreshImages = sal_True;
-        m_nSymbolsStyle = nCurrentSymbolsStyle;
+        mIconTheme = currentIconTheme;
     }
 
     // Refresh images if requested

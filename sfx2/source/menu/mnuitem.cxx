@@ -308,7 +308,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 {
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
+    mIconTheme         = rSettings.DetermineIconTheme();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
@@ -332,13 +332,13 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     if ( pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_uIntPtr nSymbolsStyle = rSettings.GetSymbolsStyle();
+        rtl::OUString iconTheme = rSettings.DetermineIconTheme();
         sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
-        if (( nSymbolsStyle != m_nSymbolsStyle ) ||
+        if (( iconTheme != mIconTheme ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
-            m_nSymbolsStyle         = nSymbolsStyle;
+            mIconTheme         = iconTheme;
             m_bShowMenuImages       = bShowMenuImages;
 
             sal_uInt16 nCount = pActMenu->GetItemCount();

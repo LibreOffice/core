@@ -34,13 +34,6 @@
 #define TB_MENUBUTTON_SIZE      12
 #define TB_MENUBUTTON_OFFSET    2
 
-#define TB_SMALLIMAGESIZE       16
-
-#define TB_LARGEIMAGESIZE            26
-#define TB_LARGEIMAGESIZE_INDUSTRIAL 24
-#define TB_LARGEIMAGESIZE_CRYSTAL    22
-#define TB_LARGEIMAGESIZE_OXYGEN     22
-
 class Window;
 
 struct ImplToolItem

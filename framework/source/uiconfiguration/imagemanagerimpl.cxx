@@ -153,7 +153,7 @@ CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxCo
     m_bVectorInit( sal_False ),
     m_aModuleIdentifier( aModuleIdentifier ),
     m_xContext( rxContext ),
-    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    m_iconTheme( SvtMiscOptions().GetIconTheme() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
         m_pImageList[n] = 0;
@@ -260,10 +260,10 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
 {
     SvtMiscOptions aMiscOptions;
 
-    sal_Int16 nSymbolsStyle = aMiscOptions.GetCurrentSymbolsStyle();
-    if ( nSymbolsStyle != m_nSymbolsStyle )
+    const rtl::OUString& iconTheme = aMiscOptions.GetIconTheme();
+    if ( iconTheme != m_iconTheme )
     {
-        m_nSymbolsStyle = nSymbolsStyle;
+        m_iconTheme = iconTheme;
         for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
             delete m_pImageList[n], m_pImageList[n] = NULL;
     }
