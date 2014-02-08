@@ -34,10 +34,8 @@ struct ScRangeFindData
     sal_Int32  nSelEnd;
 
     ScRangeFindData( const ScRange& rR, sal_uInt16 nF, sal_Int32 nS, sal_Int32 nE ) :
-    ColorData nColorData;
-
-    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
+    ColorData nColorData;
 };
 
 class ScRangeFindList
