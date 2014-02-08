@@ -684,7 +684,7 @@ void    SwZoomBox_Impl::Select()
 
 bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = true;
+    bool bHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -698,7 +698,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = true;
+                    bHandled = true;
                 Select();
                 break;
             }
@@ -716,7 +716,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText( GetSavedValue() );
     }
 
-    return nHandled || ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::Notify( rNEvt );
 }
 
 void SwZoomBox_Impl::ReleaseFocus()
