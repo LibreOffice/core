@@ -235,8 +235,27 @@ private:
 
 public:
 
-    METWriter() :
-        pMET(NULL), pGDIStack(NULL), nMETStrokeLineWidth(0), nMETChrAngle(0), pChrSetList(NULL), pCompDev(NULL)
+    METWriter()
+        : bStatus(sal_False)
+        , nLastPercent( 0 )
+        , pMET(NULL)
+        , nActualFieldStartPos( 0 )
+        , nNumberOfDataFields( 0 )
+        , eGDIRasterOp( ROP_OVERPAINT )
+        , pGDIStack(NULL)
+        , eMETMix( ROP_OVERPAINT )
+        , nMETStrokeLineWidth(0)
+        , nMETChrAngle(0)
+        , nMETChrSet( 0 )
+        , pChrSetList(NULL)
+        , nNextChrSetId( 0 )
+        , nActBitmapId( 0 )
+        , nNumberOfActions( 0 )
+        , nNumberOfBitmaps( 0 )
+        , nWrittenActions( 0 )
+        , nWrittenBitmaps( 0 )
+        , nActBitmapPercent( 0 )
+        , pCompDev(NULL)
     {
         pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
         if( !pCompDev )
