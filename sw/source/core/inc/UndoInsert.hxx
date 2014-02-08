@@ -45,7 +45,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
-    friend class SwDoc;     // eigentlich nur SwDoc::Insert( String )
+    friend class SwDoc;     // actually only SwDoc::Insert( String )
     sal_Bool CanGrouping( sal_Unicode cIns );
     sal_Bool CanGrouping( const SwPosition& rPos );
 

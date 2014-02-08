@@ -31,7 +31,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 {
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
 
-    //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
+    // does the special treatment for _Get[Next|Prev]Leaf()
     using SwFrm::GetLeaf;
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, sal_Bool bFwd );
 
@@ -103,18 +103,17 @@ protected:
     virtual void MakeAll();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-        //Aendert nur die Framesize, nicht die PrtArea-SSize
+        // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 
 public:
-    SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
-                            //Regist Flys rufen!
-    SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
+    SwTabFrm( SwTable &, SwFrm* );  // calling Regist Flys always after creation _and_pasting!
+    SwTabFrm( SwTabFrm & ); // _only_ for the creation of follows
     ~SwTabFrm();
 
-    void JoinAndDelFollows();   //Fuer DelFrms des TableNodes!
+    void JoinAndDelFollows();   // for DelFrms of the TableNodes!
 
-    //Ruft das RegistFlys der Zeilen.
+    // calls thr RegistFlys of the rows
     void RegistFlys();
 
     inline const SwTabFrm *GetFollow() const;
@@ -145,8 +144,8 @@ public:
     sal_Bool IsLowersFormatted() const      { return bLowersFormatted; }
     void SetLowersFormatted( sal_Bool b )   { bLowersFormatted = b;    }
 
-    void SetCalcLowers()        { bCalcLowers = sal_True;      } //Sparsam einsetzen!
-    void SetResizeHTMLTable()   { bResizeHTMLTable = sal_True; } //dito
+    void SetCalcLowers()        { bCalcLowers = sal_True;      } // use rarely
+    void SetResizeHTMLTable()   { bResizeHTMLTable = sal_True; } // same
     void SetONECalcLowers()     { bONECalcLowers = sal_True;   }
 
     //

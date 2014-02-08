@@ -172,7 +172,7 @@ public:
 // Flys that are bound to a character in Cntnt
 class SwFlyInCntFrm : public SwFlyFrm
 {
-    Point aRef;  //Relativ zu diesem Point wird die AbsPos berechnet.
+    Point aRef;  // relative to this point AbsPos is being calculated
 
     sal_Bool bInvalidLayout :1;
     sal_Bool bInvalidCntnt  :1;

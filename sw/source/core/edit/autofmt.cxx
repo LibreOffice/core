@@ -1238,7 +1238,7 @@ void SwAutoFormat::DelPrevPara()
     SwTxtNode* pTNd = m_aDelPam.GetNode()->GetTxtNode();
     if( pTNd )
     {
-        // erstmal den vorherigen Textnode benutzen.
+        // use the previous text node first
         m_aDelPam.GetPoint()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
         DeleteSel( m_aDelPam );
     }
