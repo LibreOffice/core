@@ -340,7 +340,8 @@ public:
     virtual void SAL_CALL   setPropertiesToDefault( const ::com::sun::star::uno::Sequence<
                                         OUString >& aPropertyNames )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
                             getPropertyDefaults( const ::com::sun::star::uno::Sequence<
                                         OUString >& aPropertyNames )

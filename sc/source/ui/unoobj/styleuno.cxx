@@ -1473,7 +1473,8 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
 }
 
 void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>& aPropertyNames )
-                                throw (beans::UnknownPropertyException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 
