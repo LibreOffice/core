@@ -28,17 +28,17 @@ namespace vcl
 {
     bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
     {
-        OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
         ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent, loadMissing );
+        return aImplImageTree->loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent, loadMissing );
     }
 
     bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
     {
-        OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
         ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadDefaultImage( sCurrentSymbolsStyle,_out_rImage);
+        return aImplImageTree->loadDefaultImage( sIconTheme,_out_rImage);
     }
 
 } // namespace vcl

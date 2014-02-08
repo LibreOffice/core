@@ -32,6 +32,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/ImageListProvider.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/IconThemeInfo.hxx>
 
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -995,42 +996,19 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 
 // -----------------------------------------------------------------------
 
-const Size& ToolBox::GetDefaultImageSize(bool bLarge)
+/*static*/ Size
+ToolBox::GetDefaultImageSize(bool bLarge)
 {
-    static Size aSmallButtonSize( TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE );
-
-    static sal_uLong s_nSymbolsStyle = STYLE_SYMBOLS_DEFAULT;
-    static Size aLargeButtonSize( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
-
-    sal_uLong nSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
-    if ( s_nSymbolsStyle != nSymbolsStyle )
-    {
-        s_nSymbolsStyle = nSymbolsStyle;
-        switch ( nSymbolsStyle )
-        {
-            case STYLE_SYMBOLS_TANGO:
-            case STYLE_SYMBOLS_TANGO_TESTING:
-            case STYLE_SYMBOLS_HUMAN:
-            case STYLE_SYMBOLS_INDUSTRIAL:
-                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_INDUSTRIAL, TB_LARGEIMAGESIZE_INDUSTRIAL );
-                break;
-            case STYLE_SYMBOLS_CRYSTAL:
-                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_CRYSTAL, TB_LARGEIMAGESIZE_CRYSTAL );
-                break;
-            case STYLE_SYMBOLS_OXYGEN:
-                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_OXYGEN, TB_LARGEIMAGESIZE_OXYGEN );
-                break;
-            case STYLE_SYMBOLS_DEFAULT: // galaxy
-            case STYLE_SYMBOLS_HICONTRAST:
-            default:
-                aLargeButtonSize = Size( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
-        }
+    const long TB_SMALLIMAGESIZE = 16;
+    if (!bLarge) {
+        return Size(TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE);
     }
 
-    return bLarge ? aLargeButtonSize : aSmallButtonSize;
+    OUString iconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    return vcl::IconThemeInfo::SizeByThemeName(iconTheme);
 }
 
-const Size& ToolBox::GetDefaultImageSize() const
+Size ToolBox::GetDefaultImageSize() const
 {
     return GetDefaultImageSize( GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE );
 }

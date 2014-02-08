@@ -37,6 +37,9 @@ class LocaleDataWrapper;
 
 namespace vcl {
     class I18nHelper;
+    class IconThemeScanner;
+    class IconThemeSelector;
+    class IconThemeInfo;
 }
 
 // -----------------
@@ -248,6 +251,7 @@ public:
 
 private:
     void                            SetStandardStyles();
+
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
     Color                           maActiveColor2;
@@ -330,21 +334,25 @@ private:
     sal_uLong                       mnDisplayOptions;
     sal_uLong                       mnToolbarIconSize;
     bool                       mnUseFlatMenus;
-    sal_uLong                       mnOptions;
-    sal_uInt16                      mnScreenZoom;
-    sal_uInt16                      mnScreenFontZoom;
-    bool                      mnHighContrast;
-    bool                      mnUseSystemUIFonts;
-    sal_uInt16                      mnAutoMnemonic;
-    AutoState                      mnUseImagesInMenus;
+    sal_uLong                  mnOptions;
+    sal_uInt16                 mnScreenZoom;
+    sal_uInt16                 mnScreenFontZoom;
+    bool                       mbHighContrast;
+    bool                       mbUseSystemUIFonts;
+    sal_uInt16                 mnAutoMnemonic;
+    AutoState                  mnUseImagesInMenus;
     bool                       mnUseFlatBorders;
-    bool                        mbPreferredUseImagesInMenus;
-    long                            mnMinThumbSize;
-    sal_uLong                       mnSymbolsStyle;
-    sal_uLong                       mnPreferredSymbolsStyle;
-    bool                      mnSkipDisabledInMenus;
-    bool                        mbHideDisabledMenuItems;
-    bool                        mbAcceleratorsInContextMenus;
+    bool                       mbPreferredUseImagesInMenus;
+    long                       mnMinThumbSize;
+    boost::shared_ptr<vcl::IconThemeScanner>
+                                    mIconThemeScanner;
+    boost::shared_ptr<vcl::IconThemeSelector>
+                                    mIconThemeSelector;
+
+    OUString                   mIconTheme;
+    bool                       mbSkipDisabledInMenus;
+    bool                       mbHideDisabledMenuItems;
+    bool                       mbAcceleratorsInContextMenus;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool                        mbPrimaryButtonWarpsSlider;
@@ -413,19 +421,6 @@ private:
 #define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((sal_uLong)0)
 #define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
 #define STYLE_TOOLBAR_ICONSIZE_LARGE        ((sal_uLong)2)
-
-#define STYLE_SYMBOLS_AUTO          ((sal_uLong)0)
-#define STYLE_SYMBOLS_DEFAULT       ((sal_uLong)1)
-#define STYLE_SYMBOLS_HICONTRAST    ((sal_uLong)2)
-#define STYLE_SYMBOLS_INDUSTRIAL    ((sal_uLong)3)
-#define STYLE_SYMBOLS_CRYSTAL       ((sal_uLong)4)
-#define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
-#define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
-#define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_HUMAN         ((sal_uLong)8)
-#define STYLE_SYMBOLS_SIFR          ((sal_uLong)9)
-#define STYLE_SYMBOLS_TANGO_TESTING ((sal_uLong)10)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)11)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
 
@@ -640,14 +635,13 @@ public:
     const Color&                    GetInactiveTabColor() const
                                         { return mpData->maInactiveTabColor; }
 
-    void                            SetHighContrastMode( bool bHighContrast )
-                                        { CopyData(); mpData->mnHighContrast = bHighContrast; }
-    bool                            GetHighContrastMode() const
-                                        { return mpData->mnHighContrast; }
+    void                            SetHighContrastMode(bool bHighContrast );
+    bool                            GetHighContrastMode() const;
+
     void                            SetUseSystemUIFonts( bool bUseSystemUIFonts )
-                                        { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
+                                        { CopyData(); mpData->mbUseSystemUIFonts = bUseSystemUIFonts; }
     bool                            GetUseSystemUIFonts() const
-                                        { return mpData->mnUseSystemUIFonts; }
+                                        { return mpData->mbUseSystemUIFonts; }
     void                            SetUseFlatBorders( bool bUseFlatBorders )
                                         { CopyData(); mpData->mnUseFlatBorders = bUseFlatBorders; }
     bool                            GetUseFlatBorders() const
@@ -664,9 +658,9 @@ public:
     bool                                                   GetPreferredUseImagesInMenus() const
                                         { return mpData->mbPreferredUseImagesInMenus; }
     void                                                       SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
-                                        { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
+                                        { CopyData(); mpData->mbSkipDisabledInMenus = bSkipDisabledInMenus; }
     bool                            GetSkipDisabledInMenus() const
-                                        { return mpData->mnSkipDisabledInMenus; }
+                                        { return mpData->mbSkipDisabledInMenus; }
     void                                                       SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
                                         { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
     bool                            GetHideDisabledMenuItems() const
@@ -850,28 +844,32 @@ public:
     sal_uLong                           GetToolbarIconSize() const
                                         { return mpData->mnToolbarIconSize; }
 
-    void                            SetSymbolsStyle( sal_uLong nStyle )
-                                        { CopyData(); mpData->mnSymbolsStyle = nStyle; }
-    sal_uLong                           GetSymbolsStyle() const
-                                        { return mpData->mnSymbolsStyle; }
+    /** Set the icon theme to use. */
+    void                            SetIconTheme(const OUString&);
 
-    void                            SetPreferredSymbolsStyle( sal_uLong nStyle )
-                                        { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
-    void                            SetPreferredSymbolsStyleName( const OUString &rName );
-    sal_uLong                           GetPreferredSymbolsStyle() const
-                                        { return mpData->mnPreferredSymbolsStyle; }
-    // check whether the symbols style is supported (icons are installed)
-    bool                            CheckSymbolStyle( sal_uLong nStyle ) const;
-    sal_uLong                           GetAutoSymbolsStyle() const;
+    /** Determine which icon theme should be used.
+     *
+     * This might not be the same as the one which has been set with SetIconTheme(),
+     * e.g., if high contrast mode is enabled.
+     *
+     * (for the detailed logic @see vcl::IconThemeSelector)
+     */
+    OUString                        DetermineIconTheme() const;
 
-    sal_uLong                           GetCurrentSymbolsStyle() const;
+    /** Obtain the list of icon themes which were found in the config folder
+     * @see vcl::IconThemeScanner for more details.
+     */
+    std::vector<vcl::IconThemeInfo> GetInstalledIconThemes() const;
 
-    void                            SetSymbolsStyleName( const OUString &rName )
-                                        { return SetSymbolsStyle( ImplNameToSymbolsStyle( rName ) ); }
-    OUString                 GetSymbolsStyleName() const
-                                        { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
-    OUString                 GetCurrentSymbolsStyleName() const
-                                        { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
+    /** Obtain the name of the icon theme which will be chosen automatically for the desktop environment.
+     * This method will only return icon themes which were actually found on the system.
+     */
+    OUString                        GetAutomaticallyChosenIconTheme() const;
+
+    /** Set a preferred icon theme.
+     * This theme will be preferred in GetAutomaticallyChosenIconTheme()
+     */
+    void                            SetPreferredIconTheme(const OUString&);
 
     const Wallpaper&                GetWorkspaceGradient() const
                                         { return mpData->maWorkspaceGradient; }
@@ -945,10 +943,6 @@ public:
     bool                            operator ==( const StyleSettings& rSet ) const;
     bool                            operator !=( const StyleSettings& rSet ) const
                                         { return !(*this == rSet); }
-
-protected:
-    OUString                 ImplSymbolsStyleToName( sal_uLong nStyle ) const;
-    sal_uLong                           ImplNameToSymbolsStyle( const OUString &rName ) const;
 };
 
 // ----------------

@@ -210,7 +210,7 @@ class ToolBarManager : public ToolbarManager_Base,
         CommandToInfoMap                                                                       m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
-        sal_Int16                                                                              m_nSymbolsStyle;
+        OUString                                                                               m_sIconTheme;
         MenuDescriptionMap m_aMenuMap;
         sal_Bool                                                                               m_bAcceleratorCfg;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;

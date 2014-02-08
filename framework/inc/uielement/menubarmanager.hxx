@@ -246,7 +246,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >           m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >            m_xURLTransformer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >          m_xDeferedItemContainer;
-        sal_Int16                                                                              m_nSymbolsStyle;
+        OUString                                                                               m_sIconTheme;
         Timer                                                                                  m_aAsyncSettingsTimer;
 };
 

@@ -178,7 +178,7 @@ MenuBarManager::MenuBarManager(
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
-    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(m_xContext);
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
@@ -200,7 +200,7 @@ MenuBarManager::MenuBarManager(
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
-    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     Init(rFrame,pAddonMenu,bDelete,bDeleteChildren);
 }
@@ -221,7 +221,7 @@ MenuBarManager::MenuBarManager(
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
-    , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     Init(rFrame,pAddonPopupMenu,bDelete,bDeleteChildren,true);
 }
@@ -821,15 +821,15 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
              MenuManager::UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
+        OUString sIconTheme = SvtMiscOptions().GetIconTheme();
 
         if ( m_bRetrieveImages ||
              bShowMenuImages != m_bShowMenuImages ||
-             nSymbolsStyle != m_nSymbolsStyle )
+             sIconTheme != m_sIconTheme )
         {
             m_bShowMenuImages   = bShowMenuImages;
             m_bRetrieveImages   = sal_False;
-            m_nSymbolsStyle     = nSymbolsStyle;
+            m_sIconTheme     = sIconTheme;
             MenuManager::FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
 

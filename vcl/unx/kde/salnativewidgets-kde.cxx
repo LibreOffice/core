@@ -1884,7 +1884,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
         pKey = "Theme";
         if ( pConfig->hasKey( pKey ) )
-            aStyleSettings.SetPreferredSymbolsStyleName( readEntryUntranslated( pConfig, pKey ) );
+            aStyleSettings.SetPreferredIconTheme( readEntryUntranslated( pConfig, pKey ) );
     }
 
     // General settings
