@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_fd4dd2c5",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:42:52Z",
+      "side": 1,
+      "message": "This does not make sense",
+      "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
