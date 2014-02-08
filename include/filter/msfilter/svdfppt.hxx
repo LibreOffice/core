@@ -891,8 +891,19 @@ struct ImplPPTParaPropSet
     sal_uInt32  nDontKnow2;
     sal_uInt16  nDontKnow2bit06;
 
-                ImplPPTParaPropSet()
-                { mnRefCount = 1; mnAttrSet = 0; mnExtParagraphMask = 0; mnDepth = 0; };
+    ImplPPTParaPropSet()
+        : mnRefCount( 1 )
+        , mnDepth( 0 )
+        , mnAttrSet( 0 )
+        , mnBulletColor( 0 )
+        , mnExtParagraphMask( 0 )
+        , mnAnmScheme( 0 )
+        , mnHasAnm( 0 )
+        , mnBuBlip( 0 )
+        , nDontKnow1( 0 )
+        , nDontKnow2( 0 )
+        , nDontKnow2bit06( 0 )
+        { }
 };
 
 struct PPTParaPropSet
