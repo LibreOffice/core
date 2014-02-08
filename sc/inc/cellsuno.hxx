@@ -1044,7 +1044,8 @@ protected:
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
