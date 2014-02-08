@@ -135,7 +135,7 @@ bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
-    if( (rValue >>= nValue) && awt::FontStrikeout::DOUBLE==nValue )
+    if (rValue >>= nValue)
     {
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, (sal_uInt16)nValue, pXML_CrossedoutType_Enum );
