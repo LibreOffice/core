@@ -4098,7 +4098,7 @@ ScVbaRange::setPageBreak( const uno::Any& _pagebreak) throw (uno::RuntimeExcepti
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getHeight() throw (uno::RuntimeException)
+ScVbaRange::getHeight() throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
