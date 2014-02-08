@@ -41,6 +41,7 @@
 #include "editeng/eeitem.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/section.hxx"
+#include <editeng/crossedoutitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -340,6 +341,45 @@ void ScExportTest::testMiscRowHeightExport()
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
 }
 
+namespace {
+
+void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nType )
+{
+    ESelection aSel;
+    aSel.nStartPara = aSel.nEndPara = nPara;
+    aSel.nStartPos = nStart;
+    aSel.nEndPos = nEnd;
+
+    SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+    switch (nType)
+    {
+        case EE_CHAR_WEIGHT:
+        {
+            SvxWeightItem aWeight(WEIGHT_BOLD, nType);
+            aItemSet.Put(aWeight);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
+        case EE_CHAR_ITALIC:
+        {
+            SvxPostureItem aItalic(ITALIC_NORMAL, nType);
+            aItemSet.Put(aItalic);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
+        case EE_CHAR_STRIKEOUT:
+        {
+            SvxCrossedOutItem aCrossOut(STRIKEOUT_SINGLE, nType);
+            aItemSet.Put(aCrossOut);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+}
 
 void ScExportTest::testNamedRangeBugfdo62729()
 {
@@ -402,6 +442,23 @@ void ScExportTest::testRichTextExportODS()
                     continue;
 
                 return static_cast<const SvxPostureItem*>(p)->GetPosture() == ITALIC_NORMAL;
+            }
+            return false;
+        }
+
+        static bool isStrikeOut(const editeng::Section& rAttr)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_STRIKEOUT)
+                    continue;
+
+                return static_cast<const SvxCrossedOutItem*>(p)->GetStrikeout() == STRIKEOUT_SINGLE;
             }
             return false;
         }
@@ -498,6 +555,38 @@ void ScExportTest::testRichTextExportODS()
             return true;
         }
 
+        bool checkB6(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 1)
+                return false;
+
+            if (pText->GetText(0) != "Strike Me")
+                return false;
+
+            std::vector<editeng::Section> aSecAttrs;
+            pText->GetAllSections(aSecAttrs);
+            if (aSecAttrs.size() != 2)
+                return false;
+
+            // Check the first strike-out section.
+            const editeng::Section* pAttr = &aSecAttrs[0];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 6)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isStrikeOut(*pAttr))
+                return false;
+
+            // The last section should be unformatted.
+            pAttr = &aSecAttrs[1];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 6 || pAttr->mnEnd != 9)
+                return false;
+
+            return true;
+        }
+
     } aCheckFunc;
 
     // Start with an empty document, put one edit text cell, and make sure it
@@ -508,31 +597,14 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
     // Insert an edit text cell.
-    OUString aCellText("Bold and Italic");
     ScFieldEditEngine& rEE = pDoc->GetEditEngine();
-    rEE.SetText(aCellText);
+    rEE.SetText("Bold and Italic");
+    // Set the 'Bold' part bold.
+    setAttribute(rEE, 0, 0, 4, EE_CHAR_WEIGHT);
+    // Set the 'Italic' part italic.
+    setAttribute(rEE, 0, 9, 15, EE_CHAR_ITALIC);
     ESelection aSel;
     aSel.nStartPara = aSel.nEndPara = 0;
-
-    {
-        // Set the 'Bold' part bold.
-        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-        aSel.nStartPos = 0;
-        aSel.nEndPos = 4;
-        SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
-        aItemSet.Put(aWeight);
-        rEE.QuickSetAttribs(aItemSet, aSel);
-    }
-
-    {
-        // Set the 'Italic' part italic.
-        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-        SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
-        aItemSet.Put(aItalic);
-        aSel.nStartPos = 9;
-        aSel.nEndPos = 15;
-        rEE.QuickSetAttribs(aItemSet, aSel);
-    }
 
     // Set this edit text to cell B2.
     pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
@@ -574,6 +646,15 @@ void ScExportTest::testRichTextExportODS()
     pEditText = pDoc->GetEditText(ScAddress(4,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
 
+    // Insert a text with strikethrough in B6.
+    rEE.Clear();
+    rEE.SetText("Strike Me");
+    // Set the 'Strike' part strikethrough.
+    setAttribute(rEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
+    pDoc->SetEditText(ScAddress(5,1,0), rEE.CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(5,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
+
     // Reload the doc again, and check the content of B2, B4 and B6.
     ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, ODS);
     pDoc = xNewDocSh3->GetDocument();
@@ -585,6 +666,8 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
     pEditText = pDoc->GetEditText(ScAddress(4,1,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(5,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
 
     xNewDocSh3->DoClose();
 }
