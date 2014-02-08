@@ -217,6 +217,26 @@ void Test::testFormulaParseReference()
     m_pDoc->GetName(4, aTabName);
     CPPUNIT_ASSERT_EQUAL(aTab4, aTabName);
 
+    // Make sure the formula input and output match.
+    {
+        const char* aChecks[] = {
+            "'90''s Music'.B12",
+            "'90''s and 70''s'.$AB$100",
+            "'All Others'.Z$100",
+            "NoQuote.$C111"
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            // Use the 'Dummy' sheet for this.
+            OUString aInput("=");
+            aInput += OUString::createFromAscii(aChecks[i]);
+            m_pDoc->SetString(ScAddress(0,0,0), aInput);
+            if (!checkFormula(*m_pDoc, ScAddress(0,0,0), aChecks[i]))
+                CPPUNIT_FAIL("Wrong formula");
+        }
+    }
+
     ScAddress aPos;
     ScAddress::ExternalInfo aExtInfo;
     sal_uInt16 nRes = aPos.Parse("'90''s Music'.D10", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
