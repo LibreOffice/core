@@ -600,6 +600,45 @@ void Test::testSharedFormulasRefUpdateMoveSheets()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateCopySheets()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    m_pDoc->SetValue(ScAddress(0,0,1), 1.0); // A1 on Sheet2
+    m_pDoc->SetValue(ScAddress(0,1,1), 2.0); // A2 on Sheet2
+
+    // Reference values on Sheet2, but use absolute sheet references.
+    m_pDoc->SetString(ScAddress(0,0,0), "=$Sheet2.A1");
+    m_pDoc->SetString(ScAddress(0,1,0), "=$Sheet2.A2");
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Copy Sheet1 and insert the copied sheet before the current Sheet1 position.
+    m_pDoc->CopyTab(0, 0);
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "$Sheet2.A1"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "$Sheet2.A2"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Check the values on the copied sheet.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Check the values on the original sheet.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,1)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,1)));
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");
