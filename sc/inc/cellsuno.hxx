@@ -1040,7 +1040,8 @@ protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,

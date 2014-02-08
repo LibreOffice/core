@@ -8508,7 +8508,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
 
 void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                             uno::Any& rAny )
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException,
+          std::exception)
 {
     if ( pEntry )
     {
