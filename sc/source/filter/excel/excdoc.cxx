@@ -421,7 +421,12 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     rDoc.GetAllNoteEntries(aNotes);
     std::vector<sc::NoteEntry>::const_iterator it = aNotes.begin(), itEnd = aNotes.end();
     for (; it != itEnd; ++it)
+    {
+        if (it->maPos.Tab() != mnScTab)
+            continue;
+
         mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), it->maPos, it->mpNote, OUString()));
+    }
 
     if( GetOutput() != EXC_OUTPUT_BINARY )
     {
