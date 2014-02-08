@@ -921,7 +921,17 @@ struct ImplPPTCharPropSet
     sal_uInt16  mnEscapement;
     sal_uInt16  mnSymbolFont;
 
-    ImplPPTCharPropSet(){ mnRefCount = 1; mnAttrSet = 0; };
+    ImplPPTCharPropSet()
+        : mnRefCount ( 1 )
+        , mnAttrSet( 0 )
+        , mnFlags( 0 )
+        , mnFont( 0 )
+        , mnAsianOrComplexFont( 0 )
+        , mnANSITypeface( 0 )
+        , mnFontHeight( 0 )
+        , mnEscapement( 0 )
+        , mnSymbolFont( 0)
+        { }
 };
 
 struct PPTCharPropSet
