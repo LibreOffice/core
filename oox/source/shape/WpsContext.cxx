@@ -89,9 +89,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
 
             // Handle text vertical adjustment inside a text frame
-            if( rAttribs.hasAttribute( XML_anchor ) )
+            if (rAttribs.hasAttribute(XML_anchor))
             {
-                drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
+                drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
                 xPropertySet->setPropertyValue("TextVerticalAdjust", uno::makeAny(eAdjust));
             }
             return this;
