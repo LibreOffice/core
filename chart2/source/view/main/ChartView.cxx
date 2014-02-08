@@ -2817,7 +2817,7 @@ void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< 
 }
 
 // ____ XUpdatable ____
-void SAL_CALL ChartView::update() throw (uno::RuntimeException)
+void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
 {
     impl_updateView();
 

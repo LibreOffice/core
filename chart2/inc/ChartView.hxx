@@ -165,7 +165,7 @@ public:
     virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::util::XUpdatable
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
