@@ -286,7 +286,15 @@ struct PptUserEditAtom
     sal_Int16           eLastViewType;           // enum view type
 
 public:
-    PptUserEditAtom() : nOffsetPersistDirectory( 0 ) {}
+    PptUserEditAtom()
+        : nLastSlideID( 0 )
+        , nVersion( 0 )
+        , nOffsetLastEdit( 0 )
+        , nOffsetPersistDirectory( 0 )
+        , nDocumentRef( 0 )
+        , nMaxPersistWritten( 0 )
+        , eLastViewType( 0 )
+        {}
 
     friend SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom );
 };
