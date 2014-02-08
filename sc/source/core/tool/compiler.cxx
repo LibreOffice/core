@@ -239,6 +239,14 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
         if (eMyGrammar != GetGrammar())
             SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
     }
+
+    if (pDoc && maTabNames.empty())
+    {
+        maTabNames = pDoc->GetAllTableNames();
+        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+        for (; it != itEnd; ++it)
+            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
+    }
 }
 
 void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
@@ -1562,16 +1570,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
-
-    if (pDoc)
-    {
-        maTabNames = pDoc->GetAllTableNames();
-        {
-            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
-            for (; it != itEnd; ++it)
-                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
-        }
-    }
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
@@ -1605,16 +1603,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
-
-    if (pDoc)
-    {
-        maTabNames = pDoc->GetAllTableNames();
-        {
-            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
-            for (; it != itEnd; ++it)
-                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
-        }
-    }
 }
 
 ScCompiler::~ScCompiler()
