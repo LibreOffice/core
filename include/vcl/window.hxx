@@ -577,7 +577,10 @@ protected:
     virtual OUString getDefaultAccessibleName() const;
 
 public:
-    bool HasMirroredGraphics() const;
+    bool         HasMirroredGraphics() const;
+    void         ReMirror( Point &rPoint ) const;
+    void         ReMirror( Rectangle &rRect ) const;
+    void         ReMirror( Region &rRegion ) const;
 
 public:
     // Single argument ctors shall be explicit.
