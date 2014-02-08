@@ -1928,7 +1928,7 @@ public:
 
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
-                for (; it != itEnd; ++it, ++nRow)
+                for (; it != itEnd; ++it)
                     aCloned.push_back(ScEditUtil::Clone(**it, mrDestCol.GetDoc()));
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
