@@ -766,7 +766,7 @@ public:
                                             long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
+    SAL_DLLPRIVATE bool         IsAntiparallel() const ;
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
@@ -1094,7 +1094,7 @@ public:
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
     Region                      GetClipRegion() const;
-    sal_Bool                    IsClipRegion() const { return mbClipRegion; }
+    bool                        IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );

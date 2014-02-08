@@ -264,7 +264,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
         aStartPos.Y() = aOutRect.Top() - rStartDocPos.X();
     }
 
-    sal_Bool bClipRegion = pOutDev->IsClipRegion();
+    bool bClipRegion = pOutDev->IsClipRegion();
     sal_Bool bMetafile = pOutDev->GetConnectMetaFile() ? sal_True : sal_False;
     Region aOldRegion = pOutDev->GetClipRegion();
 

@@ -383,7 +383,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     // execute a few tests and catch the message or implement the status
     if ( pChild )
     {
-        if( pChild->ImplIsAntiparallel() )
+        if( pChild->IsAntiparallel() )
         {
             // - RTL - re-mirror frame pos at pChild
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
