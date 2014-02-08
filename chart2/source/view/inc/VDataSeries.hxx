@@ -146,7 +146,7 @@ public:
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole );
 
-    //this is only tempohttps://www.google.de/search?q=minka+kelly&safe=off&tbm=isch&tbo=u&source=univ&sa=X&ei=x36_Uv6ZF9Kf7ga-rYGIAg&ved=0CK4BEIke&biw=1920&bih=1043#q=minka+kelly&safe=off&tbm=isch&tbs=isz:lrarily here for area chart:
+    //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;
     double m_fLogicMinX;

@@ -1062,6 +1062,24 @@ sal_Int32 VDataSeries::getMissingValueTreatment() const
 }
 
 VDataSeries::VDataSeries()
+    : m_nPolygonIndex(0)
+    , m_fLogicMinX(0)
+    , m_fLogicMaxX(0)
+    , m_fLogicZPos(0)
+    , m_nPointCount(0)
+    , m_fXMeanValue(0)
+    , m_fYMeanValue(0)
+    , m_eStackingDirection(chart2::StackingDirection_NO_STACKING)
+    , m_nAxisIndex(0)
+    , m_bConnectBars(false)
+    , m_bGroupBarsPerAxis(false)
+    , m_nStartingAngle(0)
+    , m_nGlobalSeriesIndex(0)
+    , m_nCurrentAttributedPoint(0)
+    , m_nMissingValueTreatment(0)
+    , m_bAllowPercentValueInDataLabel(false)
+    , mpOldSeries(NULL)
+    , mnPercent(0)
 {
 }
 
