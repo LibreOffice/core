@@ -1357,7 +1357,8 @@ FastSaxParser::~FastSaxParser()
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
-    throw (xml::sax::SAXException, io::IOException, uno::RuntimeException)
+    throw (xml::sax::SAXException, io::IOException,
+           uno::RuntimeException, std::exception)
 {
     mpImpl->parseStream(aInputSource);
 }
