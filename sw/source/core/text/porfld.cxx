@@ -70,15 +70,15 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
     OSL_ENSURE( pFld, "TakeNextOffset: Missing Source" );
     nNextOffset = pFld->GetNextOffset();
     aExpand = aExpand.replaceAt( 0, nNextOffset, "" );
-    bFollow = sal_True;
+    bFollow = true;
 }
 
 SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0)
-    , bFollow( sal_False ), bLeft( sal_False), bHide( sal_False)
-    , bCenter (sal_False), bHasFollow( sal_False )
-    , bAnimated( sal_False), bNoPaint( sal_False)
-    , bReplace( sal_False), bPlaceHolder( bPlaceHold )
+    , bFollow( false ), bLeft( false), bHide( false)
+    , bCenter (false), bHasFollow( false )
+    , bAnimated( false), bNoPaint( false)
+    , bReplace( false), bPlaceHolder( bPlaceHold )
     , m_bNoLength( false )
     , m_nAttrFldType(0)
 {
@@ -143,8 +143,8 @@ class SwFldSlot
     OUString aTxt;
     sal_Int32 nIdx;
     sal_Int32 nLen;
-    sal_Bool bOn;
     SwTxtFormatInfo *pInf;
+    bool bOn;
 public:
     SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor );
     ~SwFldSlot();
@@ -328,7 +328,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 
         // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
         // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
-        // sal_False returnen wegen SetFull ...
+        // false returnen wegen SetFull ...
         if( !nFullLen )
         {
             // nicht Init(), weil wir Hoehe und Ascent brauchen
@@ -405,8 +405,8 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
                 pFld->SetFont( pNewFnt );
             }
-            pFld->SetFollow( sal_True );
-            SetHasFollow( sal_True );
+            pFld->SetFollow( true );
+            SetHasFollow( true );
             // In nNextOffset steht bei einem neuangelegten Feld zunaechst
             // der Offset, an dem es selbst im Originalstring beginnt.
             // Wenn beim Formatieren ein FollowFeld angelegt wird, wird
@@ -497,8 +497,8 @@ bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) con
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   SwFont *pFont,
-                                  const sal_Bool bLft,
-                                  const sal_Bool bCntr,
+                                  const bool bLft,
+                                  const bool bCntr,
                                   const KSHORT nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
         : SwFldPortion( rExpand, pFont ),
@@ -508,7 +508,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
 {
     SetWhichPor( POR_NUMBER );
     SetLeft( bLft );
-    SetHide( sal_False );
+    SetHide( false );
     SetCenter( bCntr );
 }
 
@@ -534,7 +534,7 @@ SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 
 bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 {
-    SetHide( sal_False );
+    SetHide( false );
     const bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
     // a numbering portion can be contained in a rotated portion!!!
@@ -586,7 +586,7 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         {
             nDiff = rInf.Width();
             if ( bFly )
-                SetHide( sal_True );
+                SetHide( true );
         }
 
         // A numbering portion can be inside a SwRotatedPortion. Then the
@@ -613,7 +613,7 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
     // If one of these is numbered but does not fit to the line,
     // it calls this function, causing a loop because both the number
     // portion and the fly portion go to the next line
-//    SetHide( sal_True );
+//    SetHide( true );
 }
 
 void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -740,8 +740,8 @@ static sal_Char const sDoubleSpace[] = "  ";
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const OUString& rBulletFollowedBy,
                                   SwFont *pFont,
-                                  const sal_Bool bLft,
-                                  const sal_Bool bCntr,
+                                  const bool bLft,
+                                  const bool bCntr,
                                   const KSHORT nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwNumberPortion( OUString(cBullet) + rBulletFollowedBy,
@@ -761,15 +761,15 @@ SwGrfNumPortion::SwGrfNumPortion(
         const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
-        const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst,
+        const bool bLft, const bool bCntr, const KSHORT nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
     SetWhichPor( POR_GRFNUM );
-    SetAnimated( sal_False );
-    bReplace = sal_False;
+    SetAnimated( false );
+    bReplace = false;
     if( pGrfBrush )
     {
         *pBrush = *pGrfBrush;
@@ -777,7 +777,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );
         else
-            bReplace = sal_True;
+            bReplace = true;
     }
     if( pGrfOrient )
     {
@@ -793,7 +793,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( KSHORT(nGrfHeight) );
-    bNoPaint = sal_False;
+    bNoPaint = false;
 }
 
 SwGrfNumPortion::~SwGrfNumPortion()
@@ -811,7 +811,7 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 
 bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
-    SetHide( sal_False );
+    SetHide( false );
 //    Width( nFixWidth );
     KSHORT nFollowedByWidth( 0 );
     if ( mbLabelAlignmentPosAndSpaceModeActive )
@@ -834,7 +834,7 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         if( bFly )
         {
             SetLen( 0 );
-            SetNoPaint( sal_True );
+            SetNoPaint( true );
             rInf.SetNumDone( false );
             return true;
         }
@@ -861,7 +861,7 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     {
         nDiff = rInf.Width();
         if( bFly )
-            SetHide( sal_True );
+            SetHide( true );
     }
 
     if( Width() < nDiff )

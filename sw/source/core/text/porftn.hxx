@@ -60,7 +60,7 @@ class SwFtnNumPortion : public SwNumberPortion
 {
 public:
     SwFtnNumPortion( const OUString &rExpand, SwFont *pFntL )
-         : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0, false )
+         : SwNumberPortion( rExpand, pFntL, true, false, 0, false )
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR

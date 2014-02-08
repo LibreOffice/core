@@ -41,14 +41,14 @@ protected:
     sal_Int32 nNextOffset;         // Offset of the follow in the original string
     sal_Int32 nNextScriptChg;
     KSHORT  nViewWidth;             // Screen width for empty fields
-    sal_Bool bFollow : 1;           // 2nd or later part of a field
-    sal_Bool bLeft : 1;             // Used by SwNumberPortion
-    sal_Bool bHide : 1;             // Used by SwNumberPortion
-    sal_Bool bCenter : 1;           // Used by SwNumberPortion
-    sal_Bool bHasFollow : 1;        // Continues on the next line
-    sal_Bool bAnimated : 1;         // Used by SwGrfNumPortion
-    sal_Bool bNoPaint : 1;          // Used by SwGrfNumPortion
-    sal_Bool bReplace : 1;          // Used by SwGrfNumPortion
+    bool bFollow : 1;           // 2nd or later part of a field
+    bool bLeft : 1;             // Used by SwNumberPortion
+    bool bHide : 1;             // Used by SwNumberPortion
+    bool bCenter : 1;           // Used by SwNumberPortion
+    bool bHasFollow : 1;        // Continues on the next line
+    bool bAnimated : 1;         // Used by SwGrfNumPortion
+    bool bNoPaint : 1;          // Used by SwGrfNumPortion
+    bool bReplace : 1;          // Used by SwGrfNumPortion
     const bool bPlaceHolder : 1;
     bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
@@ -78,20 +78,20 @@ public:
 
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
 
-    inline sal_Bool IsFollow() const { return bFollow; }
-    inline void SetFollow( sal_Bool bNew ) { bFollow = bNew; }
+    inline bool IsFollow() const { return bFollow; }
+    inline void SetFollow( bool bNew ) { bFollow = bNew; }
 
-    inline sal_Bool IsLeft() const { return bLeft; }
-    inline void SetLeft( sal_Bool bNew ) { bLeft = bNew; }
+    inline bool IsLeft() const { return bLeft; }
+    inline void SetLeft( bool bNew ) { bLeft = bNew; }
 
-    inline sal_Bool IsHide() const { return bHide; }
-    inline void SetHide( sal_Bool bNew ) { bHide = bNew; }
+    inline bool IsHide() const { return bHide; }
+    inline void SetHide( bool bNew ) { bHide = bNew; }
 
-    inline sal_Bool IsCenter() const { return bCenter; }
-    inline void SetCenter( sal_Bool bNew ) { bCenter = bNew; }
+    inline bool IsCenter() const { return bCenter; }
+    inline void SetCenter( bool bNew ) { bCenter = bNew; }
 
-    inline sal_Bool HasFollow() const { return bHasFollow; }
-    inline void SetHasFollow( sal_Bool bNew ) { bHasFollow = bNew; }
+    inline bool HasFollow() const { return bHasFollow; }
+    inline void SetHasFollow( bool bNew ) { bHasFollow = bNew; }
 
     inline sal_Int32 GetNextOffset() const { return nNextOffset; }
     inline void SetNextOffset( sal_Int32 nNew ) { nNextOffset = nNew; }
@@ -144,8 +144,8 @@ protected:
 public:
     SwNumberPortion( const OUString &rExpand,
                      SwFont *pFnt,
-                     const sal_Bool bLeft,
-                     const sal_Bool bCenter,
+                     const bool bLeft,
+                     const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
@@ -169,8 +169,8 @@ public:
     SwBulletPortion( const sal_Unicode cCh,
                      const OUString& rBulletFollowedBy,
                      SwFont *pFnt,
-                     const sal_Bool bLeft,
-                     const sal_Bool bCenter,
+                     const bool bLeft,
+                     const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     OUTPUT_OPERATOR
@@ -193,8 +193,8 @@ public:
                      const SvxBrushItem* pGrfBrush,
                      const SwFmtVertOrient* pGrfOrient,
                      const Size& rGrfSize,
-                     const sal_Bool bLeft,
-                     const sal_Bool bCenter,
+                     const bool bLeft,
+                     const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     ~SwGrfNumPortion();
@@ -206,10 +206,10 @@ public:
 
     void StopAnimation( OutputDevice* pOut );
 
-    inline sal_Bool IsAnimated() const { return bAnimated; }
-    inline void SetAnimated( sal_Bool bNew ) { bAnimated = bNew; }
-    inline sal_Bool DontPaint() const { return bNoPaint; }
-    inline void SetNoPaint( sal_Bool bNew ) { bNoPaint = bNew; }
+    inline bool IsAnimated() const { return bAnimated; }
+    inline void SetAnimated( bool bNew ) { bAnimated = bNew; }
+    inline bool DontPaint() const { return bNoPaint; }
+    inline void SetNoPaint( bool bNew ) { bNoPaint = bNew; }
     inline void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
     inline void SetId( long nNew ) const
         { ((SwGrfNumPortion*)this)->nId = nNew; }
