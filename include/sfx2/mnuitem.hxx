@@ -122,7 +122,7 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
-    sal_uIntPtr m_nSymbolsStyle;
+    rtl::OUString mIconTheme;
     sal_Bool    m_bShowMenuImages;
 
 protected:

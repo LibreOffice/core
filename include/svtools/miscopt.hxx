@@ -86,9 +86,11 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         sal_Int16   GetCurrentSymbolsSize() const;
         bool        AreCurrentSymbolsLarge() const;
 
-        sal_Int16   GetSymbolsStyle() const;
-        void        SetSymbolsStyle( sal_Int16 eSet );
-        sal_Int16   GetCurrentSymbolsStyle() const;
+        rtl::OUString
+        GetIconTheme() const;
+        void        SetIconTheme(const rtl::OUString&);
+        void        SetIconThemeAutomatically();
+        bool        IconThemeWasSetAutomatically();
 
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );

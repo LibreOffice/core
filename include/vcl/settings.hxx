@@ -37,6 +37,9 @@ class LocaleDataWrapper;
 
 namespace vcl {
     class I18nHelper;
+    class IconThemeScanner;
+    class IconThemeSelector;
+    class IconThemeInfo;
 }
 
 // -----------------
@@ -246,6 +249,7 @@ public:
 
 private:
     void                            SetStandardStyles();
+
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
     Color                           maActiveColor2;
@@ -331,15 +335,17 @@ private:
     sal_uLong                       mnOptions;
     sal_uInt16                      mnScreenZoom;
     sal_uInt16                      mnScreenFontZoom;
-    sal_uInt16                      mnHighContrast;
+    bool                            mbHighContrast;
     sal_uInt16                      mnUseSystemUIFonts;
     sal_uInt16                      mnAutoMnemonic;
     sal_uInt16                      mnUseImagesInMenus;
     sal_uLong                       mnUseFlatBorders;
     sal_Bool                        mbPreferredUseImagesInMenus;
     long                            mnMinThumbSize;
-    sal_uLong                       mnSymbolsStyle;
-    sal_uLong                       mnPreferredSymbolsStyle;
+    std::unique_ptr<vcl::IconThemeScanner> mIconThemeScanner;
+    std::unique_ptr<vcl::IconThemeSelector> mIconThemeSelector;
+
+    rtl::OUString                   mIconTheme;
     sal_uInt16                      mnSkipDisabledInMenus;
     sal_Bool                        mbHideDisabledMenuItems;
     sal_Bool                        mbAcceleratorsInContextMenus;
@@ -411,19 +417,6 @@ private:
 #define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((sal_uLong)0)
 #define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
 #define STYLE_TOOLBAR_ICONSIZE_LARGE        ((sal_uLong)2)
-
-#define STYLE_SYMBOLS_AUTO          ((sal_uLong)0)
-#define STYLE_SYMBOLS_DEFAULT       ((sal_uLong)1)
-#define STYLE_SYMBOLS_HICONTRAST    ((sal_uLong)2)
-#define STYLE_SYMBOLS_INDUSTRIAL    ((sal_uLong)3)
-#define STYLE_SYMBOLS_CRYSTAL       ((sal_uLong)4)
-#define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
-#define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
-#define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_HUMAN         ((sal_uLong)8)
-#define STYLE_SYMBOLS_SIFR          ((sal_uLong)9)
-#define STYLE_SYMBOLS_TANGO_TESTING ((sal_uLong)10)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)11)
 
 #define STYLE_MENUIMAGES_OFF  ((sal_uInt16)0)
 #define STYLE_MENUIMAGES_ON   ((sal_uInt16)1)
@@ -642,10 +635,9 @@ public:
     const Color&                    GetInactiveTabColor() const
                                         { return mpData->maInactiveTabColor; }
 
-    void                            SetHighContrastMode( sal_Bool bHighContrast )
-                                        { CopyData(); mpData->mnHighContrast = bHighContrast; }
-    sal_Bool                            GetHighContrastMode() const
-                                        { return (sal_Bool) mpData->mnHighContrast; }
+    void                            SetHighContrastMode(bool bHighContrast );
+    bool                            GetHighContrastMode() const;
+
     void                            SetUseSystemUIFonts( sal_Bool bUseSystemUIFonts )
                                         { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
     sal_Bool                            GetUseSystemUIFonts() const
@@ -852,28 +844,32 @@ public:
     sal_uLong                           GetToolbarIconSize() const
                                         { return mpData->mnToolbarIconSize; }
 
-    void                            SetSymbolsStyle( sal_uLong nStyle )
-                                        { CopyData(); mpData->mnSymbolsStyle = nStyle; }
-    sal_uLong                           GetSymbolsStyle() const
-                                        { return mpData->mnSymbolsStyle; }
+    /** Set the icon theme to use. */
+    void                            SetIconTheme(const rtl::OUString&);
 
-    void                            SetPreferredSymbolsStyle( sal_uLong nStyle )
-                                        { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
-    void                            SetPreferredSymbolsStyleName( const OUString &rName );
-    sal_uLong                           GetPreferredSymbolsStyle() const
-                                        { return mpData->mnPreferredSymbolsStyle; }
-    // check whether the symbols style is supported (icons are installed)
-    bool                            CheckSymbolStyle( sal_uLong nStyle ) const;
-    sal_uLong                           GetAutoSymbolsStyle() const;
+    /** Determine which icon theme should be used.
+     *
+     * This might not be the same as the one which has been set with SetIconTheme(),
+     * e.g., if high contrast mode is enabled.
+     *
+     * (for the detailed logic @see vcl::IconThemeSelector)
+     */
+    rtl::OUString                   DetermineIconTheme() const;
 
-    sal_uLong                           GetCurrentSymbolsStyle() const;
+    /** Obtain the list of icon themes which were found in the config folder
+     * @see vcl::IconThemeScanner for more details.
+     */
+    std::vector<vcl::IconThemeInfo> GetInstalledIconThemes() const;
 
-    void                            SetSymbolsStyleName( const OUString &rName )
-                                        { return SetSymbolsStyle( ImplNameToSymbolsStyle( rName ) ); }
-    OUString                 GetSymbolsStyleName() const
-                                        { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
-    OUString                 GetCurrentSymbolsStyleName() const
-                                        { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
+    /** Obtain the name of the icon theme which will be chosen automatically for the desktop environment.
+     * This method will only return icon themes which were actually found on the system.
+     */
+    rtl::OUString                   GetAutomaticallyChosenIconTheme() const;
+
+    /** Set a preferred icon theme.
+     * This theme will be preferred in GetAutomaticallyChosenIconTheme()
+     */
+    void                            SetPreferredIconTheme(const rtl::OUString&);
 
     const Wallpaper&                GetWorkspaceGradient() const
                                         { return mpData->maWorkspaceGradient; }
@@ -947,10 +943,6 @@ public:
     sal_Bool                            operator ==( const StyleSettings& rSet ) const;
     sal_Bool                            operator !=( const StyleSettings& rSet ) const
                                         { return !(*this == rSet); }
-
-protected:
-    OUString                 ImplSymbolsStyleToName( sal_uLong nStyle ) const;
-    sal_uLong                           ImplNameToSymbolsStyle( const OUString &rName ) const;
 };
 
 // ----------------

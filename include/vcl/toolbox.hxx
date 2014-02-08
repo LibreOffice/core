@@ -569,8 +569,8 @@ public:
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
 
-    static const Size&  GetDefaultImageSize(bool bLarge);
-    const Size&         GetDefaultImageSize() const;
+    static Size         GetDefaultImageSize(bool bLarge);
+    Size                GetDefaultImageSize() const;
     void                ChangeHighlight( sal_uInt16 nPos );
 
     void SetImageListProvider(vcl::IImageListProvider* _pProvider);
