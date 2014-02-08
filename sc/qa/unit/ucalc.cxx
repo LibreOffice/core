@@ -2042,15 +2042,27 @@ void Test::testCellCopy()
 void Test::testSheetCopy()
 {
     m_pDoc->InsertTab(0, "TestTab");
-    m_pDoc->SetString(ScAddress(0,0,0), "copy me");
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+
+    // Insert text in A1.
+    m_pDoc->SetString(ScAddress(0,0,0), "copy me");
+
+    // Insert edit cells in B1:B3.
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    rEE.SetText("Edit 1");
+    m_pDoc->SetEditText(ScAddress(1,0,0), rEE.CreateTextObject());
+    rEE.SetText("Edit 2");
+    m_pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
+    rEE.SetText("Edit 3");
+    m_pDoc->SetEditText(ScAddress(1,2,0), rEE.CreateTextObject());
+
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     // insert a note
-    ScAddress aAdrA1 (0, 0, 0); // empty cell content
-    OUString aHelloA1("Hello world in A1");
+    ScAddress aAdrA1 (0,2,0); // empty cell content.
+    OUString aHelloA1("Hello world in A3");
     ScPostIt *pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
     pNoteA1->SetText(aAdrA1, aHelloA1);
 
@@ -2059,7 +2071,20 @@ void Test::testSheetCopy()
     CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
-    CPPUNIT_ASSERT_MESSAGE("There should be note on A1 in new sheet", m_pDoc->HasNote(ScAddress (0, 0, 1)));
+    CPPUNIT_ASSERT_MESSAGE("There should be note on A3 in new sheet", m_pDoc->HasNote(ScAddress(0,2,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("copy me"), m_pDoc->GetString(ScAddress(0,0,1)));
+
+    // Check the copied edit cells.
+    const EditTextObject* pEditObj = m_pDoc->GetEditText(ScAddress(1,0,1));
+    CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in B1.", pEditObj);
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit 1"), pEditObj->GetText(0));
+    pEditObj = m_pDoc->GetEditText(ScAddress(1,1,1));
+    CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in B2.", pEditObj);
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit 2"), pEditObj->GetText(0));
+    pEditObj = m_pDoc->GetEditText(ScAddress(1,2,1));
+    CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in B3.", pEditObj);
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit 3"), pEditObj->GetText(0));
+
     m_pDoc->DeleteTab(1);
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
