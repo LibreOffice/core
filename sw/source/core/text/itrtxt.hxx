@@ -289,10 +289,13 @@ class SwTxtCursor : public SwTxtAdjuster
     void _GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* );
 protected:
     void CtorInitTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    inline SwTxtCursor(SwTxtNode* pTxtNode) : SwTxtAdjuster(pTxtNode) { }
+    SwTxtCursor(SwTxtNode* pTxtNode) : SwTxtAdjuster(pTxtNode) { }
 public:
-    inline SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtAdjuster(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
-           { CtorInitTxtCursor( pTxtFrm, pTxtSizeInf ); }
+    SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+        : SwTxtAdjuster(pTxtFrm->GetTxtNode())
+    {
+        CtorInitTxtCursor(pTxtFrm, pTxtSizeInf);
+    }
     bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
         const long nMax = 0 );
     bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
