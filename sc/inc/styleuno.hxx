@@ -292,9 +292,10 @@ public:
     virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
                                 throw (::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::lang::IllegalArgumentException,
+                                       ::com::sun::star::lang::WrappedTargetException,
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
                             getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
                                 throw (::com::sun::star::uno::RuntimeException);

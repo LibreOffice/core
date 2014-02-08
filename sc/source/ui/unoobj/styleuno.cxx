@@ -1358,8 +1358,9 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
 
 void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
                                                 const uno::Sequence< uno::Any >& aValues )
-                                throw (beans::PropertyVetoException, lang::IllegalArgumentException,
-                                        lang::WrappedTargetException, uno::RuntimeException)
+throw (beans::PropertyVetoException, lang::IllegalArgumentException,
+       lang::WrappedTargetException, uno::RuntimeException,
+       std::exception)
 {
     SolarMutexGuard aGuard;
 
