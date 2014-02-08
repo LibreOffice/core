@@ -3024,6 +3024,10 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
     if (pDocument->IsClipOrUndo())
         return;
 
+    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
+    if (!bAdjustCode)
+        return;
+
     pCode->Reset();
     ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     while (p)
@@ -3044,6 +3048,10 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
 bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
 {
     if (pDocument->IsClipOrUndo())
+        return false;
+
+    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
+    if (!bAdjustCode)
         return false;
 
     bool bRet = false;
