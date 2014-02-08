@@ -359,6 +359,24 @@ bool Window::HasMirroredGraphics() const
     return pOutDev->HasMirroredGraphics();
 }
 
+void Window::ReMirror( Point &rPoint ) const
+{
+    const OutputDevice* pOutDev = GetOutDev();
+    pOutDev->ReMirror( rPoint );
+}
+
+void Window::ReMirror( Rectangle &rRect ) const
+{
+    const OutputDevice* pOutDev = GetOutDev();
+    pOutDev->ReMirror( rRect );
+}
+
+void Window::ReMirror( Region &rRegion ) const
+{
+    const OutputDevice* pOutDev = GetOutDev();
+    pOutDev->ReMirror( rRegion );
+}
+
 void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1467,8 +1485,7 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
     if( ImplIsAntiparallel() )
     {
         // - RTL - re-mirror frame pos at this window
-        const OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ReMirror( aFramePos );
+        ReMirror( aFramePos );
     }
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     if ( !aRect.IsInside( aFramePos ) )
@@ -2479,9 +2496,8 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             // - RTL - re-mirror paint rect and region at this window
             if( ImplIsAntiparallel() )
             {
-                const OutputDevice *pOutDev = GetOutDev();
-                pOutDev->ReMirror( aPaintRect );
-                pOutDev->ReMirror( aPaintRegion );
+                ReMirror( aPaintRect );
+                ReMirror( aPaintRegion );
             }
             aPaintRect = ImplDevicePixelToLogic( aPaintRect);
             mpWindowImpl->mpPaintRegion = &aPaintRegion;
@@ -2778,10 +2794,8 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             // --- RTL --- remirror region before intersecting it
             if ( ImplIsAntiparallel() )
             {
-                const OutputDevice *pOutDev = GetOutDev();
-
                 Region aRgn( *pRegion );
-                pOutDev->ReMirror( aRgn );
+                ReMirror( aRgn );
                 aRegion.Intersect( aRgn );
             }
             else
@@ -3006,7 +3020,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     {
         // --- RTL --- make sure the invalidate region of this window is
         // computed in the same coordinate space as the one from the overlap windows
-        pOutDev->ReMirror( aRectMirror );
+        ReMirror( aRectMirror );
     }
 
     // adapt paint areas
@@ -3072,7 +3086,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             if( bReMirror )
             {
                 // --- RTL --- frame coordinates require re-mirroring
-                pOutDev->ReMirror( aRegion );
+                ReMirror( aRegion );
             }
 
             pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
@@ -3345,8 +3359,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         long nOrgX = nX;
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
-        OutputDevice *pOutDev = GetOutDev();
-        if( pOutDev->HasMirroredGraphics() )
+        if( HasMirroredGraphics() )
         {
             mpGraphics->mirror( aPtDev.X(), this );
 
@@ -5998,8 +6011,7 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
         // --- RTL --- remirror clip region before passing it to somebody
         if( ImplIsAntiparallel() )
         {
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aWinClipRegion );
+            ReMirror( aWinClipRegion );
         }
     }
 
@@ -6048,8 +6060,7 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
         // --- RTL -- only this region is in frame coordinates, so re-mirror it
         if( ImplIsAntiparallel() )
         {
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aWinChildRegion );
+            ReMirror( aWinChildRegion );
         }
 
         aDevPixRegion.Intersect( aWinChildRegion );
@@ -7089,8 +7100,7 @@ void Window::setPosSizePixel( long nX, long nY,
             {
                 // --- RTL --- (re-mirror at parent window)
                 Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
-                const OutputDevice *pParentOutDev = pParent->GetOutDev();
-                pParentOutDev->ReMirror( aRect );
+                pParent->ReMirror( aRect );
                 nX = aRect.Left();
             }
         }
@@ -7677,20 +7687,19 @@ void Window::EnableChildPointerOverwrite( bool bOverwrite )
 void Window::SetPointerPosPixel( const Point& rPos )
 {
     Point aPos = ImplOutputToFrame( rPos );
-    const OutputDevice *pOutDev = GetOutDev();
-    if( pOutDev->HasMirroredGraphics() )
+    if( HasMirroredGraphics() )
     {
         if( !IsRTLEnabled() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
-            pOutDev->ReMirror( aPos );
+            ReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
         mpGraphics->mirror( aPos.X(), this );
     }
     else if( ImplIsAntiparallel() )
     {
-        pOutDev->ReMirror( aPos );
+        ReMirror( aPos );
     }
     mpWindowImpl->mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
 }
@@ -7719,8 +7728,7 @@ Point Window::GetLastPointerPosPixel()
     if( ImplIsAntiparallel() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
-        const OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ReMirror( aPos );
+        ReMirror( aPos );
     }
     return ImplFrameToOutput( aPos );
 }
@@ -7755,8 +7763,7 @@ Window::PointerState Window::GetPointerState()
         if( ImplIsAntiparallel() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aSalPointerState.maPos );
+            ReMirror( aSalPointerState.maPos );
         }
         aState.maPos = ImplFrameToOutput( aSalPointerState.maPos );
         aState.mnState = aSalPointerState.mnState;
