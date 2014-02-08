@@ -872,7 +872,6 @@ bool TableManager<T, PropertiesPointer>::sprm(Sprm & rSprm)
     case NS_sprm::LN_PCell:
         endCell();
         break;
-    case NS_sprm::LN_PFTtp:
     case NS_sprm::LN_PRow:
         endRow();
         break;

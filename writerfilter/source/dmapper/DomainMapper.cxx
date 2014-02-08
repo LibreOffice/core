@@ -986,9 +986,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PJc: // sprmPJc
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
-    case NS_sprm::LN_PFSideBySide:
-        break;  // sprmPFSideBySide
-
     case NS_sprm::LN_PFKeep:   // sprmPFKeep
         rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue ? false : true));
         break;
@@ -998,10 +995,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFPageBreakBefore:
         rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
     break;  // sprmPFPageBreakBefore
-    case NS_sprm::LN_PBrcl:
-        break;  // sprmPBrcl
-    case NS_sprm::LN_PBrcp:
-        break;  // sprmPBrcp
     case NS_sprm::LN_PIlvl: // sprmPIlvl
             if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
             {
@@ -1060,22 +1053,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFNoLineNumb:   // sprmPFNoLineNumb
         rContext->Insert(PROP_PARA_LINE_NUMBER_COUNT, uno::makeAny( nIntValue ? false : true) );
         break;
-    case NS_sprm::LN_PChgTabsPapx:   // sprmPChgTabsPapx
-        {
-            // Initialize tab stop vector from style sheet
-            uno::Any aValue = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TAB_STOPS);
-            uno::Sequence< style::TabStop > aStyleTabStops;
-            if(aValue >>= aStyleTabStops)
-            {
-                m_pImpl->InitTabStopFromStyle( aStyleTabStops );
-            }
-
-            //create a new tab stop property - this is done with the contained properties
-            resolveSprmProps(*this, rSprm);
-            //add this property
-            rContext->Insert(PROP_PARA_TAB_STOPS, uno::makeAny( m_pImpl->GetCurrentTabStopAndClear()));
-        }
-        break;
     case 0x845d:    //right margin Asian - undocumented
     case 0x845e:    //left margin Asian - undocumented
     case 16:      // sprmPDxaRight - right margin
@@ -1096,52 +1073,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         //TODO: what happens to the right margins in numberings?
         break;
     case NS_sprm::LN_PDxaLeft1:    // sprmPDxaLeft1
-    case 19:
-    case NS_sprm::LN_PDxaLeft180:   // sprmPDxaLeft180
         rContext->Insert(
                          eSprmType == SPRM_DEFAULT ? PROP_PARA_FIRST_LINE_INDENT : PROP_FIRST_LINE_OFFSET,
                          uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
-        break;
-    case 20 : // sprmPDyaLine
-    case NS_sprm::LN_PDyaLine:   // sprmPDyaLine
-        {
-            style::LineSpacing aSpacing;
-            sal_Int16 nDistance = sal_Int16(nIntValue & 0xffff);
-            if(nIntValue & 0xffff0000)
-            {
-                // single line in Writer is 100, in Word it is 240
-                aSpacing.Mode = style::LineSpacingMode::PROP;
-                aSpacing.Height = sal_Int16(sal_Int32(nDistance) * 100 /240);
-            }
-            else
-            {
-                if(nDistance < 0)
-                {
-                    aSpacing.Mode = style::LineSpacingMode::FIX;
-                    aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100(-nDistance));
-                }
-                else if(nDistance >0)
-                {
-                    aSpacing.Mode = style::LineSpacingMode::MINIMUM;
-                    aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100(nDistance));
-                }
-            }
-            rContext->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
-        }
-        break;
-    case 21 : // legacy version
-    case NS_sprm::LN_PDyaBefore:   // sprmPDyaBefore
-        rContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
-        break;
-    case 22 :
-    case NS_sprm::LN_PDyaAfter:   // sprmPDyaAfter
-        rContext->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
-        break;
-
-    case  23: //sprmPChgTabs
-    case NS_sprm::LN_PChgTabs: // sprmPChgTabs
-        OSL_FAIL( "unhandled");
-        //tabs of list level?
         break;
     case 24: // "sprmPFInTable"
     case NS_sprm::LN_PFInTable:
@@ -1149,31 +1083,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PTableDepth: //sprmPTableDepth
         //not handled via sprm but via text( 0x07 )
     break;
-    case 25: // "sprmPTtp" pap.fTtp
-    case NS_sprm::LN_PFTtp:   // sprmPFTtp  was: Read_TabRowEnd
-        break;
-    case 26:  // "sprmPDxaAbs
-    case NS_sprm::LN_PDxaAbs:
-        break;  // sprmPDxaAbs
-    case 27: //sprmPDyaAbs
-    case NS_sprm::LN_PDyaAbs:
-        break;  // sprmPDyaAbs
     case NS_sprm::LN_PDxaWidth:
         break;  // sprmPDxaWidth
-    case NS_sprm::LN_PBrcTop10:
-        break;  // sprmPBrcTop10
-    case NS_sprm::LN_PBrcLeft10:
-        break;  // sprmPBrcLeft10
-    case NS_sprm::LN_PBrcBottom10:
-        break;  // sprmPBrcBottom10
-    case NS_sprm::LN_PBrcRight10:
-        break;  // sprmPBrcRight10
-    case NS_sprm::LN_PBrcBetween10:
-        break;  // sprmPBrcBetween10
-    case NS_sprm::LN_PBrcBar10:
-        break;  // sprmPBrcBar10
-    case NS_sprm::LN_PDxaFromText10:
-        break;  // sprmPDxaFromText10
     case NS_sprm::LN_PWr:
         break;  // sprmPWr
 
@@ -1263,12 +1174,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
     break;
-    case NS_sprm::LN_PBorderTop:
-    case NS_sprm::LN_PBorderLeft:
-    case NS_sprm::LN_PBorderBottom:
-    case NS_sprm::LN_PBorderRight:
-        OSL_FAIL( "TODO: border color definition");
-        break;
     case NS_sprm::LN_PBrcBar:
         break;  // sprmPBrcBar
     case NS_sprm::LN_PFNoAutoHyph:   // sprmPFNoAutoHyph
@@ -1276,9 +1181,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case NS_sprm::LN_PWHeightAbs:
         break;  // sprmPWHeightAbs
-    case NS_sprm::LN_PDcs:
-        break;  // sprmPDcs
-
     case NS_sprm::LN_PShd: // sprmPShd
     {
         //contains fore color, back color and shadow percentage, results in a brush
@@ -1314,10 +1216,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert( PROP_PARA_ORPHANS, aVal );
     }
     break;  // sprmPFWidowControl
-    case NS_sprm::LN_PFKinsoku:
-        break;  // sprmPFKinsoku
-    case NS_sprm::LN_PFWordWrap:
-        break;  // sprmPFWordWrap
     case NS_sprm::LN_PFOverflowPunct: ;  // sprmPFOverflowPunct - hanging punctuation
         rContext->Insert(PROP_PARA_IS_HANGING_PUNCTUATION, uno::makeAny( nIntValue ? false : true ));
         break;
@@ -1390,16 +1288,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if (pSectionContext != NULL)
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
         break;
-    case NS_sprm::LN_PFNumRMIns:
-        break;  // sprmPFNumRMIns
-    case NS_sprm::LN_PCrLf:
-        break;  // sprmPCrLf
-    case NS_sprm::LN_PHugePapx:
-        break;  // sprmPHugePapx
-    case NS_sprm::LN_PFUsePgsuSettings:
-        break;  // sprmPFUsePgsuSettings
-    case NS_sprm::LN_PFAdjustRight:
-        break;  // sprmPFAdjustRight
     case NS_sprm::LN_CFRMarkDel:
         break;  // sprmCFRMarkDel
     case NS_sprm::LN_CFRMark:
