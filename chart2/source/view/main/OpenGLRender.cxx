@@ -1423,9 +1423,12 @@ int OpenGLRender::RenderTextShape()
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
         glUseProgram(m_TextProID);
 
+        CHECK_GL_ERROR();
         glUniformMatrix4fv(m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(m_TextVertexID);
@@ -1439,6 +1442,7 @@ int OpenGLRender::RenderTextShape()
             (void*)0            // array buffer offset
             );
         //tex coord
+        CHECK_GL_ERROR();
         glEnableVertexAttribArray(m_TextTexCoordID);
         glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
         glVertexAttribPointer(
@@ -1450,15 +1454,22 @@ int OpenGLRender::RenderTextShape()
             (void*)0            // array buffer offset
             );
         //texture
+        CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, textInfo.texture);
+        CHECK_GL_ERROR();
         glUniform1i(m_TextTexID, 0);
+        CHECK_GL_ERROR();
         //TODO: moggi: get rid fo GL_QUADS
-        glDrawArrays(GL_QUADS, 0, 4);
+        glDrawArrays(GL_QUADS, 0, 3);
+        CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_TextTexCoordID);
+        CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_TextVertexID);
+        CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, 0);
         glUseProgram(0);
         glDeleteTextures(1, &textInfo.texture);
+        CHECK_GL_ERROR();
         m_TextInfoList.pop_front();
     }
     CHECK_GL_ERROR();
