@@ -27,7 +27,7 @@ $(eval $(call gb_Module_add_targets,sdext,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,sdext,\
-    CppunitTest_pdfimport \
+    CppunitTest_sdext_pdfimport \
     Executable_pdf2xml \
     Executable_pdfunzip \
 ))
