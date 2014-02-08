@@ -67,6 +67,7 @@ public:
     sal_uInt8        LnAnzV;
     UCHAR            PgName[32];  // page name
     friend SvStream& ReadPageType(SvStream& rIStream, PageType& rPage);
+    PageType();
 };
 
 enum ObjArtType {ObjStrk,ObjRect,ObjPoly,ObjCirc,ObjSpln,

@@ -157,6 +157,10 @@ void DtHdOverSeek(SvStream& rInp)
     rInp.Seek(FPos);
 }
 
+PageType::PageType()
+{
+    memset( this, 0, sizeof( PageType ) );
+}
 
 SvStream& ReadPageType(SvStream& rIStream, PageType& rPage)
 {
