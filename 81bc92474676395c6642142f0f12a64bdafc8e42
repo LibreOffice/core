@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_5d7edee5",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Please use bool instead of sal_Bool and use \u003d false as default value to avoid all the noise in this patch.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_7d83a2cc",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "See earlier comment.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_9d8846e9",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Please use bool instead of sal_Bool",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_bd6c2a38",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "See earlier comment.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_dd69ee26",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "This looks wrong.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_fd76b205",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "This is wrong.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_fd1f92b5",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "This does not look correct. We need to move the WriteFill out of the swtich and use breaks inside of it.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_dd22ce00",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Variables should be defined as close to their use as possible.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_bd250a0c",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Please remove debug code.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_3d791afd",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Don\u0027t use sal_Bool outside of UNO methods.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1d1d36be",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "We don\u0027t use std::string. Please use OString or OUString.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1d7456fc",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Use default value.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_3d603a35",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Use default value.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_5d65fe43",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2907,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Use default value.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_7d5ac284",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6275,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-08T18:09:24Z",
+      "side": 1,
+      "message": "Use default value.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
