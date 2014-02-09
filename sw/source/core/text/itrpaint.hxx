@@ -36,17 +36,18 @@ class SwTxtPainter : public SwTxtCursor
                                 long nAdjustBaseLine = 0 );
 protected:
     void CtorInitTxtPainter( SwTxtFrm *pFrm, SwTxtPaintInfo *pInf );
-    inline SwTxtPainter(SwTxtNode* pTxtNode)
+    SwTxtPainter(SwTxtNode* pTxtNode)
         : SwTxtCursor(pTxtNode)
         , bPaintDrop(false)
-        { }
+    {
+    }
 
 public:
-    inline SwTxtPainter( SwTxtFrm *pTxtFrm, SwTxtPaintInfo *pTxtPaintInf )
-        : SwTxtCursor( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
-        {
-            CtorInitTxtPainter( pTxtFrm, pTxtPaintInf );
-        }
+    SwTxtPainter(SwTxtFrm *pTxtFrm, SwTxtPaintInfo *pTxtPaintInf)
+        : SwTxtCursor(pTxtFrm->GetTxtNode())
+    {
+        CtorInitTxtPainter( pTxtFrm, pTxtPaintInf );
+    }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const bool bUnderSz );
     void PaintDropPortion();
