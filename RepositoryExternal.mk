@@ -126,40 +126,6 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_GLEW),YES)
-
-define gb_LinkTarget__use_glew
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-    $(GLEW_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
-
-endef
-
-else
-
-define gb_LinkTarget__use_glew
-$(call gb_LinkTarget_use_external_project,$(1),glew)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
-	$$(INCLUDE) \
-)
-
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,glew)/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/Win32/glew32d.lib,Release/Win32/glew32.lib) \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
-)
-endif
-
-endef
-
-endif
-
 ifeq ($(SYSTEM_GLM),YES)
 
 gb_LinkTarget__use_glm_headers :=
@@ -242,6 +208,40 @@ $(call gb_LinkTarget_add_libs,$(1),\
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,cppunit)/src/cppunit/.libs -lcppunit \
+)
+endif
+
+endef
+
+endif
+
+ifeq ($(SYSTEM_GLEW),YES)
+
+define gb_LinkTarget__use_glew
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(GLEW_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
+
+endef
+
+else
+
+define gb_LinkTarget__use_glew
+$(call gb_LinkTarget_use_external_project,$(1),glew)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
+	$$(INCLUDE) \
+)
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,glew)/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/Win32/glew32d.lib,Release/Win32/glew32.lib) \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
 )
 endif
 
