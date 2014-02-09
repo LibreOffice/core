@@ -57,7 +57,7 @@ import com.sun.star.uno.UnoRuntime;
  * internal holded dispatch object automaticly.
  *
  * Another reason for such extra class for listening:
- * Most listener callbacks are asynchronoues [oneay] requests.
+ * Most listener callbacks are asynchronous [oneay] requests.
  * And it's not allowed to call back synchronously there.
  * So we must start threads for updating something internally.
  *

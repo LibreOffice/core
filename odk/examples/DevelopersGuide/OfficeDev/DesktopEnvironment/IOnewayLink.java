@@ -39,9 +39,9 @@ import java.util.ArrayList;
 /**
  * We need a generic interface to forward any oneway uno interface method
  * by using threads to the original object. Reason:
- * It's not allowed to call synchronoues back to the office if a java object
+ * It's not allowed to call synchronous back to the office if a java object
  * was called in a oneway declared interface method. Then it must be
- * executed asynchronoues. To do so - a thread can be created which use this
+ * executed asynchronous. To do so - a thread can be created which use this
  * interface. It get the object, which whis to be called back and the type and
  * parameter of the original request.
  *
