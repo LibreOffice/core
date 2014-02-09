@@ -764,7 +764,7 @@ void ParaPortionList::Append(ParaPortion* p)
 
 sal_Int32 ParaPortionList::Count() const
 {
-    sal_Int32 nSize = maPortions.size();
+    size_t nSize = maPortions.size();
     if (nSize > SAL_MAX_INT32)
     {
         SAL_WARN( "editeng", "ParaPortionList::Count - overflow " << nSize);
