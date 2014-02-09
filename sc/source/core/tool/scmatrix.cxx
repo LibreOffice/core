@@ -1612,7 +1612,16 @@ public:
             }
             break;
             case mdds::mtm::element_empty:
-                std::advance(miPos, node.size);
+            {
+                // Empty element is equivalent of having a numeric value of 0.0.
+                for (size_t i = 0; i < node.size; ++i, ++miPos)
+                {
+                    if (rtl::math::isNan(*miPos))
+                        continue;
+
+                    *miPos = op(*miPos, 0.0);
+                }
+            }
             default:
                 ;
         }
