@@ -34,7 +34,7 @@ namespace dmapper
     - ID
     (This class is based on work done in 'MeasureHandler')
  */
-class WRITERFILTER_DLLPRIVATE TrackChangesHandler : public LoggedProperties
+class TrackChangesHandler : public LoggedProperties
 {
     RedlineParamsPtr     m_pRedlineParams;
 

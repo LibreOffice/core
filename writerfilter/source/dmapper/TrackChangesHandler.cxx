@@ -18,7 +18,6 @@
  */
 #include <TrackChangesHandler.hxx>
 #include <PropertyMap.hxx>
-#include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
