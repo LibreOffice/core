@@ -264,7 +264,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     if ( pResMgr->IsAvailable( aResId ))
     {
         ImageList aImageList( aResId );
-      for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
+        for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
         {
             // das entsprechende Image dran
             if ( m_bShowMenuImages )
@@ -411,9 +411,11 @@ void ControlMenuController::impl_setPopupMenu()
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
             aResId.SetRT( RSC_MENU );
             if ( pResMgr->IsAvailable( aResId ))
+            {
                 m_pResPopupMenu = new PopupMenu( aResId );
+                updateImagesPopupMenu( m_pResPopupMenu );
+            }
 
-            updateImagesPopupMenu( m_pResPopupMenu );
             delete pResMgr;
         }
     } // if ( m_pResPopupMenu == 0 )
