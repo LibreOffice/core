@@ -36,6 +36,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -1058,9 +1059,12 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
                     rUserElementType.bModified = false;
                 }
-                catch ( const Exception& )
+                catch (const Exception& e)
                 {
-                    throw IOException();
+                    css::uno::Any a(e);
+                    throw css::lang::WrappedTargetRuntimeException(
+                            OUString("ModuleUIConfigurationManager::reset exception"),
+                            css::uno::Reference<css::uno::XInterface>(*this), a);
                 }
             }
 
