@@ -1007,10 +1007,10 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
 {
     EditTextObject* pTxtObj = new EditTextObject(pPool);
     pTxtObj->SetVertical( IsVertical() );
-    MapUnit eMapUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
+    SfxMapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
     pTxtObj->mpImpl->SetMetric( (sal_uInt16) eMapUnit );
     if ( pTxtObj->mpImpl->IsOwnerOfPool() )
-        pTxtObj->mpImpl->GetPool()->SetDefaultMetric( (SfxMapUnit) eMapUnit );
+        pTxtObj->mpImpl->GetPool()->SetDefaultMetric( eMapUnit );
 
     sal_Int32 nStartNode, nEndNode;
     sal_Int32 nTextPortions = 0;
