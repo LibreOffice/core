@@ -315,6 +315,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     mpRemoteView->setOpenTemplateHdl(Link());
 
     mpSearchView->setItemStateHdl(Link());
+    mpSearchView->setOpenTemplateHdl(Link());
 }
 
 void SfxTemplateManagerDlg::setSaveMode()
