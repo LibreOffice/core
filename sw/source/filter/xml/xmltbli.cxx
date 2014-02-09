@@ -2757,7 +2757,7 @@ void SwXMLTableContext::MakeTable()
         {
         case text::HoriOrientation::FULL:
         case text::HoriOrientation::NONE:
-            // For text::HoriOrientation::NONE we would prefere to use the sum
+            // For text::HoriOrientation::NONE we would prefer to use the sum
             // of the relative column widths as reference width.
             // Unfortunately this works only if this sum interpreted as
             // twip value is larger than the space that is available.
