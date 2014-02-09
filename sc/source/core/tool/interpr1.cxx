@@ -1222,7 +1222,7 @@ void ScInterpreter::ScAnd()
                             double fVal;
                             sal_uInt16 nErr = 0;
                             ScValueIterator aValIter( pDok, aRange );
-                            if ( aValIter.GetFirst( fVal, nErr ) )
+                            if ( aValIter.GetFirst( fVal, nErr ) && nErr == 0 )
                             {
                                 bHaveValue = true;
                                 do
