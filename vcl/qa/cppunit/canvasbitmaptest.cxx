@@ -257,8 +257,11 @@ private:
 
     // XIntegerReadOnlyBitmap
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                          const geometry::IntegerRectangle2D& rect ) throw (lang::IndexOutOfBoundsException,
-                                                                                                            rendering::VolatileContentDestroyedException, uno::RuntimeException)
+                                                          const geometry::IntegerRectangle2D& rect )
+        throw (lang::IndexOutOfBoundsException,
+               rendering::VolatileContentDestroyedException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE( "X1 out of bounds", rect.X1 >= 0 );
         CPPUNIT_ASSERT_MESSAGE( "Y1 out of bounds", rect.Y1 >= 0 );
