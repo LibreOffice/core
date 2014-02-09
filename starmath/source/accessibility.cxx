@@ -1364,7 +1364,10 @@ sal_Int32 SmTextForwarder::GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const
 void SmTextForwarder::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nPara, sal_Int32 nLine ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
+    if (pEditEngine)
+        pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
+    else
+        rStart = rEnd = 0;
 }
 
 sal_Int32 SmTextForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const
