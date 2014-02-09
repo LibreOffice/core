@@ -948,14 +948,15 @@ void DummyXShapes::remove( const uno::Reference< drawing::XShape>& xShape )
     throw(uno::RuntimeException)
 {
     std::vector< uno::Reference<drawing::XShape> >::iterator itr = std::find(maUNOShapes.begin(), maUNOShapes.end(), xShape);
-
-    DummyXShape* pChild = dynamic_cast<DummyXShape*>((*itr).get());
-    std::vector< DummyXShape* >::iterator itrShape = std::find(maShapes.begin(), maShapes.end(), pChild);
-    if(itrShape != maShapes.end())
-        maShapes.erase(itrShape);
-
     if(itr != maUNOShapes.end())
+    {
+        DummyXShape* pChild = dynamic_cast<DummyXShape*>((*itr).get());
+        std::vector< DummyXShape* >::iterator itrShape = std::find(maShapes.begin(), maShapes.end(), pChild);
+        if(itrShape != maShapes.end())
+            maShapes.erase(itrShape);
+
         maUNOShapes.erase(itr);
+    }
 }
 
 uno::Type DummyXShapes::getElementType()
