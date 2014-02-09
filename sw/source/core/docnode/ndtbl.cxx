@@ -4438,7 +4438,7 @@ sal_Bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                 else
                 {
                     SwTableBoxFmt *const pNewBoxFmt(
-                        dynamic_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt()));
+                        static_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt()));
                     pNewBoxFmt->ResetFmtAttr( RES_PROTECT );
                     aFmtsMap.insert(std::make_pair(pBoxFmt, pNewBoxFmt));
                 }
