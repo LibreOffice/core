@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/attrlist.hxx>
 
-
 class SvxBrushItem;
 class SwXMLExport;
 
@@ -42,7 +41,6 @@ public:
     // core API
     void exportXML( const SvxBrushItem& rItem );
 };
-
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
 

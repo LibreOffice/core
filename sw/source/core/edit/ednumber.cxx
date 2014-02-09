@@ -271,7 +271,7 @@ sal_Bool SwEditShell::HasBullet() const
 }
 // <- #i29560#
 
-/// delete, split list
+// delete, split list
 void SwEditShell::DelNumRules()
 {
     StartAllAction();

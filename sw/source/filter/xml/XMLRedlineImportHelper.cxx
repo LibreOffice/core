@@ -32,8 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
@@ -49,11 +47,7 @@ using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using util::DateTime;
 
-
-//
 // a few helper functions
-//
-
 static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
@@ -71,12 +65,10 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
     SwXTextRange *const pXRange =
         ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
     // #i115174#: this may be a SvxUnoTextRange
-//    OSL_ENSURE( pXRange, "SwXTextRange missing" );
+    // OSL_ENSURE( pXRange, "SwXTextRange missing" );
     return (pXRange) ? pXRange->GetDoc() : 0;
 }
 
-
-//
 // XTextRangeOrNodeIndexPosition: store a position into the text
 // *either* as an XTextRange or as an SwNodeIndex. The reason is that
 // we must store either pointers to StartNodes (because redlines may
@@ -84,12 +76,11 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 // be no existing type that could do both. Things are complicated by
 // the matter that (e.g in section import) we delete a few characters,
 // which may cause bookmarks (as used by XTextRange) to be deleted.
-//
 
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
-    SwNodeIndex* pIndex;    /// pIndex will point to the *previous* node
+    SwNodeIndex* pIndex;    // pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -197,25 +188,21 @@ bool XTextRangeOrNodeIndexPosition::IsValid()
     return ( xRange.is() || (pIndex != NULL) );
 }
 
-
-//
 // RedlineInfo: temporary storage for redline data
-//
-
 class RedlineInfo
 {
 public:
     RedlineInfo();
     ~RedlineInfo();
 
-    /// redline type (insert, delete, ...)
+    // redline type (insert, delete, ...)
     RedlineType_t eType;
 
     // info fields:
-    OUString sAuthor;               /// change author string
-    OUString sComment;              /// change comment string
-    util::DateTime aDateTime;       /// change DateTime
-    sal_Bool bMergeLastParagraph;   /// the SwRangeRedline::IsDelLastPara flag
+    OUString sAuthor;               // change author string
+    OUString sComment;              // change comment string
+    util::DateTime aDateTime;       // change DateTime
+    sal_Bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -225,13 +212,13 @@ public:
     // end pos of anchor (may be empty)
     XTextRangeOrNodeIndexPosition aAnchorEnd;
 
-    /// index of content node (maybe NULL)
+    // index of content node (maybe NULL)
     SwNodeIndex* pContentIndex;
 
-    /// next redline info (for hierarchical redlines)
+    // next redline info (for hierarchical redlines)
     RedlineInfo* pNextRedline;
 
-    /// store whether we expect an adjustment for this redline
+    // store whether we expect an adjustment for this redline
     bool bNeedsAdjustment;
 };
 
@@ -255,11 +242,7 @@ RedlineInfo::~RedlineInfo()
     delete pNextRedline;
 }
 
-
-//
 // XMLRedlineImportHelper
-//
-
 XMLRedlineImportHelper::XMLRedlineImportHelper(
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
@@ -751,7 +734,6 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 
     return pData;
 }
-
 
 void XMLRedlineImportHelper::SetShowChanges( sal_Bool bShow )
 {

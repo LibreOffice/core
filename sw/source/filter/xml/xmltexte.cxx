@@ -64,8 +64,6 @@ enum SvEmbeddedObjectTypes
     SV_EMBEDDED_FRAME
 };
 
-// ---------------------------------------------------------------------
-
 SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     const Reference < XPropertySet >& rPropSet ) const
 {

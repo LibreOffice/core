@@ -51,11 +51,10 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-/////////////////////////////////////////////////////////////// Ww1Sprm
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-        for(short i=Count()-1;i>=0;i--){    // rueckwaerts
+        for(short i=Count()-1;i>=0;i--){    // backwards
             sal_uInt8 nId;
             sal_uInt16 nSize;
             sal_uInt8* pSprm;
@@ -82,7 +81,6 @@ void Ww1Sprm::Start(
             Start(rOut, rMan, i);
 }
 
-//////////////////////////////////////////////////////////// SingleSprm
 void Ww1SingleSprm::Start(
     Ww1Shell&, sal_uInt8 /*nId*/, sal_uInt8*, sal_uInt16, Ww1Manager&)
 {
@@ -94,12 +92,10 @@ void Ww1SingleSprm::Stop(
 // OSL_ENSURE(FALSE, "Unknown Sprm");
 }
 
-////////////////////////////////////////////////////////////////// STOP
-//
+// STOP
 // The following defines are used for implementing the SingleSprm
 // classes' Stop() members, because they normally merely put
 // EndItem(s) into the shell.
-//
 #define STOP1(Class, Code) \
     void Class::Stop( \
      Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
@@ -109,14 +105,12 @@ void Ww1SingleSprm::Stop(
      Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
         rOut.EndItem(Code1).EndItem(Code2); }
 
-/////////////////////////////////////////////////////// SingleSprmXxxxx
-//
+// SingleSprmXxxxx
 // This starts the evaluation of the actual sprms. Each sprmtyp has
 // its own class implementing the virtual methods start and stop. The
 // classes are referenced from the sprm table, a static member of
 // Ww1Sprm. When an sprm is encountered in the document, the virtual
 // methods will be called at the formatting boundaries.
-//
 void Ww1SingleSprmPDxaLeft::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
@@ -636,6 +630,5 @@ void Ww1SingleSprmPFromText::Start(
 
 #undef STOP1
 #undef STOP2
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

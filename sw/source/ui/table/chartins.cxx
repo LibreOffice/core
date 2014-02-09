@@ -60,12 +60,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-
 Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
 {
-    // !! positioning code according to spepc; similar to Calc fuins2.cxx
-
+    // positioning code according to spepc; similar to Calc fuins2.cxx
     Point aRet;
 
     OSL_ENSURE( pParentWin, "Window not found" );
@@ -247,15 +244,11 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     }
 }
 
-
 void AutoEdit::KeyInput( const KeyEvent& rEvt )
 {
     sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
     if( nCode != KEY_SPACE )
         Edit::KeyInput( rEvt );
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

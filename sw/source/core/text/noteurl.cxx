@@ -67,7 +67,4 @@ void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     }
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

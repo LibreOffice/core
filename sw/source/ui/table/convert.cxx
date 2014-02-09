@@ -78,7 +78,6 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
         }
     }
 
-
     sal_uInt16 nInsMode = 0;
     if (mpBorderCB->IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;
@@ -96,7 +95,6 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 
     rInsTblOpts.mnInsMode = nInsMode;
 }
-
 
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )

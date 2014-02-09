@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -66,7 +65,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -78,8 +76,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
-
-//----------------------------------------------------------------------------
 
 enum SwXMLDocTokens
 {
@@ -108,8 +104,6 @@ static SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
     XML_TOKEN_MAP_END
 };
-
-// ----------------------------------------------------------------------------
 
 class SwXMLBodyContext_Impl : public SvXMLImportContext
 {
@@ -151,8 +145,6 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
 {
     return GetSwImport().CreateBodyContentContext( rLocalName );
 }
-
-// ----------------------------------------------------------------------------
 
 // #i69629#
 // enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
@@ -357,7 +349,6 @@ void SwXMLDocStylesContext_Impl::EndElement()
     GetImport().GetTextImport()->SetOutlineStyles(
             (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) ? sal_True : sal_False);
 }
-//----------------------------------------------------------------------------
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
 {
@@ -924,7 +915,6 @@ void SwXMLImport::endDocument( void )
     ClearTextImport();
 }
 
-
 // Locally derive XMLTextShapeImportHelper, so we can take care of the
 // form import This is Writer, but not text specific, so it should go
 // here!
@@ -942,7 +932,6 @@ class SvTextShapeImportHelper : public XMLTextShapeImportHelper
     Reference<drawing::XDrawPage> xPage;
 
 public:
-
     SvTextShapeImportHelper(SvXMLImport& rImp);
     virtual ~SvTextShapeImportHelper();
 };
@@ -975,7 +964,6 @@ SvTextShapeImportHelper::~SvTextShapeImportHelper()
         XMLShapeImportHelper::endPage(xShapes);
     }
 }
-
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
@@ -1518,11 +1506,7 @@ void SwXMLImport::initialize(
     }
 }
 
-
-//
 // UNO component registration helper functions
-//
-
 OUString SAL_CALL SwXMLImport_getImplementationName() throw()
 {
     return OUString(
@@ -1647,7 +1631,6 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
     OSL_ENSURE( pDoc, "Where is my document?" );
     return pDoc;
 }
-
 
 void SwXMLImport::initXForms()
 {
