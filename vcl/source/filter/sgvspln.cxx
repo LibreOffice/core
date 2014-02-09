@@ -26,58 +26,59 @@
 extern "C" {
 
 /*.pn 277 */
-/*.hlAnhang: C - Programme*/
-/*.hrKonstanten- und Macro-Definitionen*/
-/*.fe Die Include-Datei u_const.h ist in das Verzeichnis zu stellen,  */
-/*.fe wo der Compiler nach Include-Dateien sucht.                     */
+/*.hlAppendix: C - programs*/
+/*.hrConstants- and macrodefinitions*/
+/*.fe The include file u_const.h should be stored in the directory,   */
+/*.fe where the compiler searches for include files.                  */
 
 
 /*-----------------------  FILE u_const.h  ---------------------------*/
 
 #define IEEE
 
-/* IEEE - Norm fuer die Darstellung von Gleitkommazahlen:
+/* IEEE - standard for representation of floating-point numbers:
 
-      8 Byte lange Gleitkommazahlen, mit
+     8 byte long floating point numbers with
 
-     53 Bit Mantisse  ==> Mantissenbereich:    2 hoch 52 versch. Zahlen
-                                               mit 0.1 <= Zahl < 1.0,
-                                               1 Vorzeichen-Bit
-     11 Bit Exponent  ==> Exponentenbereich:  -1024...+1023
+    53 bit mantissa  ==> mantissa range:     2^52 different numbers
+                                              with 0.1 <= number < 1.0,
+                                              1 sign-bit
+    11 bit exponent  ==> exponent range:  -1024...+1023
 
-   Die 1. Zeile ( #define IEEE ) ist zu loeschen, falls die Maschine
-   bzw. der Compiler keine Gleitpunktzahlen gemaess der IEEE-Norm
-   benutzt. Zusaetzlich muessen die Zahlen  MAXEXPON, MINEXPON
-   (s.u.) angepasst werden.
-   */
+  The first line (#define IEEE) should be deleted if the machine
+  or the compiler does not use floating-point numbers according
+  to the IEEE standard. In which case also MAXEXPON, MINEXPON (see
+  below) should be adapted.
+*/
 
-#ifdef IEEE         /*----------- Falls IEEE Norm --------------------*/
+#ifdef IEEE         /*-------------- if IEEE norm --------------------*/
 
-#define MACH_EPS  2.220446049250313e-016   /* Maschinengenauigkeit    */
-                                           /* IBM-AT:  = 2 hoch -52   */
-/* MACH_EPS ist die kleinste positive, auf der Maschine darstellbare
-   Zahl x, die der Bedingung genuegt: 1.0 + x > 1.0                   */
+#define MACH_EPS  2.220446049250313e-016      /* machine precision    */
+                                              /* IBM-AT:  = 2^-52    */
+/* MACH_EPS is the smallest positive,  by the machine representable
+   number x, which fulfills the equation: 1.0 + x > 1.0               */
 
 #define MAXROOT   9.48075190810918e+153
 
-#else               /*------------------ sonst -----------------------*/
+#else               /*------------------ otherwise--------------------*/
 
 double exp  (double);
 double atan (double);
 double pow  (double,double);
 double sqrt (double);
 
-double masch()            /* MACH_EPS maschinenunabhaengig bestimmen  */
+double masch()            /* calculate MACH_EPS machine independence   */
 {
   double eps = 1.0, x = 2.0, y = 1.0;
   while ( y < x )
     { eps *= 0.5;
       x = 1.0 + eps;
     }
-  eps *= 2.0; return (eps);
+  eps *= 2.0;
+  return (eps);
 }
 
-short basis()             /* BASIS maschinenunabhaengig bestimmen     */
+short basis()              /* calculate BASE machine independence     */
 {
   double x = 1.0, one = 1.0, b = 1.0;
 
@@ -87,15 +88,14 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
   return ( (short) ((x + b) - x) );
 }
 
-#define BASIS     basis()                  /* Basis der Zahlendarst.  */
+#define BASIS     basis()           /* base of number representation  */
 
-/* Falls die Maschine (der Compiler) keine IEEE-Darstellung fuer
-   Gleitkommazahlen nutzt, muessen die folgenden 2 Konstanten an-
-   gepasst werden.
+/* If the machine (the compiler) does not use the IEEE-representation
+   for floating-point numbers, the next 2 constants should be adapted.
    */
 
-#define MAXEXPON  1023.0                   /* groesster Exponent      */
-#define MINEXPON -1024.0                   /* kleinster Exponent      */
+#define MAXEXPON  1023.0                    /* largest exponent       */
+#define MINEXPON -1024.0                    /* smallest exponent      */
 
 
 #define MACH_EPS  masch()
@@ -103,45 +103,40 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 #define POSMAX    pow ((double) BASIS, MAXEXPON)
 #define MAXROOT   sqrt(POSMAX)
 
-#endif              /*-------------- ENDE ifdef ----------------------*/
+#endif              /*-------------- END of ifdef --------------------*/
 
-/* Definition von Funktionsmakros:
-   */
+/* defines for function macros:                                        */
 
-#define abs(X) ((X) >= 0  ?  (X) : -(X))       /* Absolutbetrag von X */
-#define sign(X, Y) (Y < 0 ? -abs(X) : abs(X))  /* Vorzeichen von      */
-                                               /* Y mal abs(X)        */
+#define abs(X) ((X) >= 0  ?  (X) : -(X))        /* absolute number  X */
+#define sign(X, Y) (Y < 0 ? -abs(X) : abs(X))   /* sign of Y times    */
+                                                /* abs(X)             */
 
-/*-------------------  ENDE FILE u_const.h  --------------------------*/
-
+/*--------------------  END of FILE u_const.h  -----------------------*/
 
 
 
 
 
+/*.HL appendix: C - programs*/
+/*.HR Systems of equations for tridiagonal matrices*/
+
+/*.FE  P 3.7 tridiagonal systems of equations */
 
 
-
-/*.HL Anhang: C - Programme*/
-/*.HRGleichungssysteme fuer Tridiagonalmatrizen*/
-
-/*.FE  P 3.7 TRIDIAGONALE GLEICHUNGSSYSTEME*/
-
-
-/*----------------------   MODUL TRIDIAGONAL  ------------------------*/
+/*----------------------   MODULE tridiagonal  -----------------------*/
 
 sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
                  double* diag, double* upper, double* b)
-                                              /************************/
-                                              /* GAUSS-Verfahren fuer */
-                                              /* Tridiagonalmatrizen  */
-                                              /************************/
+                                             /*************************/
+                                             /* Gaussian methods for  */
+                                             /* tridiagonal matrices  */
+                                             /*************************/
 
 /*====================================================================*/
 /*                                                                    */
-/*  trdiag bestimmt die Loesung x des linearen Gleichungssystems      */
-/*  A * x = b mit tridiagonaler n x n Koeffizientenmatrix A, die in   */
-/*  den 3 Vektoren lower, upper und diag wie folgt abgespeichert ist: */
+/*  trdiag determines solution x of the system of linear equations    */
+/*  A * x = b with tridiagonal n x n coefficient matrix A, which is   */
+/*  stored in 3 vectors lower, upper and diag as per below:           */
 /*                                                                    */
 /*       ( diag[0]  upper[0]    0        0  .   .     .   0      )    */
 /*       ( lower[1] diag[1]   upper[1]   0      .     .   .      )    */
@@ -154,58 +149,58 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Anwendung:                                                       */
-/*   =========                                                        */
-/*      Vorwiegend fuer diagonaldominante Tridiagonalmatrizen, wie    */
-/*      sie bei der Spline-Interpolation auftreten.                   */
-/*      Fuer diagonaldominante Matrizen existiert immer eine LU-      */
-/*      Zerlegung; fuer nicht diagonaldominante Tridiagonalmatrizen   */
-/*      sollte die Funktion band vorgezogen werden, da diese mit      */
-/*      Spaltenpivotsuche arbeitet und daher numerisch stabiler ist.  */
+/*   Usage:                                                           */
+/*   ======                                                           */
+/*      Mainly for diagonal determinant triangular matrix, as they    */
+/*      occur in Spline-interpolations.                               */
+/*      For diagonal dominant matrices always a left-upper row        */
+/*      reduction exists; for non diagonal dominant triangular        */
+/*      matrices we should pull forward the function band, as this    */
+/*      works with row pivot searches, which is numerical more stable.*/
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Eingabeparameter:                                                */
+/*   Input parameters:                                                */
 /*   ================                                                 */
-/*      n        Dimension der Matrix ( > 1 )  sal_uInt16 n               */
+/*      n        dimension of the matrix ( > 1 )  sal_uInt16 n        */
 /*                                                                    */
-/*      lower    untere Nebendiagonale         double lower[n]        */
-/*      diag     Hauptdiagonale                double diag[n]         */
-/*      upper    obere Nebendiagonale          double upper[n]        */
+/*      lower    lower antidiagonal               double lower[n]     */
+/*      diag     main diagonal                    double diag[n]      */
+/*      upper    upper antidiagonal               double upper[n]     */
 /*                                                                    */
-/*               bei rep = true enthalten lower, diag und upper die   */
-/*               Dreieckzerlegung der Ausgangsmatrix.                 */
+/*               for rep = true lower, diag and upper contain the     */
+/*               triangulation of the start matrix.                   */
 /*                                                                    */
-/*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = false  erstmaliger Aufruf   bool rep               */
-/*               = true  wiederholter Aufruf                          */
-/*                    fuer gleiche Matrix,                            */
-/*                    aber verschiedenes b.                           */
+/*      b        right side of equation     double b[n]               */
+/*      rep      = false first call         bool rep                  */
+/*               = true  next call                                    */
+/*                    for the same matrix,                            */
+/*                    but different b.                                */
 /*                                                                    */
-/*   Ausgabeparameter:                                                */
-/*   ================                                                 */
-/*      b        Loesungsvektor des Systems;   double b[n]            */
-/*               die urspruengliche rechte Seite wird ueberspeichert  */
+/*   Output parameters:                                               */
+/*   =================                                                */
+/*      b        solution vector of the system;   double b[n]         */
+/*               the original right side is overwritten               */
 /*                                                                    */
-/*      lower    ) enthalten bei rep = false die Zerlegung der Matrix;*/
-/*      diag     ) die urspruenglichen Werte von lower u. diag werden */
-/*      upper    ) ueberschrieben                                     */
+/*      lower    ) contain for rep = false the decomposition of the   */
+/*      diag     ) matrix; the original values of the lower and       */
+/*      upper    ) diagonals are overwritten                          */
 /*                                                                    */
-/*   Die Determinante der Matrix ist bei rep = false durch            */
-/*      det A = diag[0] * ... * diag[n-1] bestimmt.                   */
+/*   The determinant of the matrix is for rep = false defined by      */
+/*      determinant A = diag[0] * ... * diag[n-1]                     */
 /*                                                                    */
-/*   Rueckgabewert:                                                   */
+/*   Return value:                                                    */
 /*   =============                                                    */
-/*      = 0      alles ok                                             */
-/*      = 1      n < 2 gewaehlt                                       */
-/*      = 2      Die Dreieckzerlegung der Matrix existiert nicht      */
+/*      = 0      all ok                                               */
+/*      = 1      n < 2 chosen                                         */
+/*      = 2      triangular decomposition of matrix does not exist    */
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Benutzte Funktionen:                                             */
-/*   ===================                                              */
+/*   Functions used:                                                  */
+/*   ===============                                                  */
 /*                                                                    */
-/*   Aus der C Bibliothek: fabs()                                     */
+/*   From the C library: fabs()                                       */
 /*                                                                    */
 /*====================================================================*/
 
@@ -216,26 +211,28 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
 // double fabs(double);
 
- if ( n < 2 ) return(1);                    /*  n mindestens 2        */
+ if ( n < 2 ) return(1);                    /*  n at least 2          */
 
-                                            /*  Wenn rep = false ist, */
-                                            /*  Dreieckzerlegung der  */
- if (!rep)                                  /*  Matrix u. det be-     */
-   {                                        /*  stimmen               */
+                                            /*  if rep = false,       */
+                                            /*  determine the         */
+                                            /*  triangular            */
+                                            /*  decomposition of      */
+ if (!rep)                                  /*  matrix and determinant*/
+   {
      for (i = 1; i < n; i++)
-       { if ( fabs(diag[i-1]) < MACH_EPS )  /*  Wenn ein diag[i] = 0  */
-           return(2);                       /*  ist, ex. keine Zerle- */
-         lower[i] /= diag[i-1];             /*  gung.                 */
+       { if ( fabs(diag[i-1]) < MACH_EPS )  /*  do not decompose      */
+           return(2);                       /*  if one diag[i] = 0    */
+         lower[i] /= diag[i-1];
          diag[i] -= lower[i] * upper[i-1];
        }
     }
 
  if ( fabs(diag[n-1]) < MACH_EPS ) return(2);
 
- for (i = 1; i < n; i++)                   /*  Vorwaertselimination  */
+ for (i = 1; i < n; i++)                    /* forward elimination    */
     b[i] -= lower[i] * b[i-1];
 
- b[n-1] /= diag[n-1];                      /* Rueckwaertselimination */
+ b[n-1] /= diag[n-1];                       /* reverse elimination    */
  for (j = n-2; j >= 0; j--) {
     i=j;
     b[i] = ( b[i] - upper[i] * b[i+1] ) / diag[i];
@@ -243,7 +240,7 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
  return(0);
 }
 
-/*-----------------------  ENDE TRIDIAGONAL  -------------------------*/
+/*-----------------------  END OF TRIDIAGONAL  ------------------------*/
 
 
 
@@ -253,28 +250,28 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
 
 
-/*.HL Anhang: C - Programme*/
-/*.HRGleichungssysteme mit zyklisch tridiagonalen Matrizen*/
+/*.HL Appendix: C - Programs*/
+/*.HRSystems of equations with cyclic tridiagonal matrices*/
 
-/*.FE  P 3.8  SYSTEME MIT ZYKLISCHEN TRIDIAGONALMATRIZEN */
+/*.FE  P 3.8  Systems with cyclic tridiagonal matrices    */
 
 
-/*----------------  MODUL ZYKLISCH TRIDIAGONAL  ----------------------*/
+/*----------------  Module cyclic tridiagonal  -----------------------*/
 
 
 sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
                      double* upper, double* lowrow, double* ricol, double* b)
                                         /******************************/
-                                        /* Systeme mit zyklisch tri-  */
-                                        /* diagonalen Matrizen        */
+                                        /* Systems with cyclic        */
+                                        /* tridiagonal matrices       */
                                         /******************************/
 
 /*====================================================================*/
 /*                                                                    */
-/*  tzdiag bestimmt die Loesung x des linearen Gleichungssystems      */
-/*  A * x = b mit zyklisch tridiagonaler n x n Koeffizienten-         */
-/*  matrix A, die in den 5 Vektoren lower, upper, diag, lowrow und    */
-/*  ricol wie folgt abgespeichert ist:                                */
+/*  tzdiag determines the solution x of the linear equation system    */
+/*  A * x = b with cyclic tridiagonal  n x n coefficient-             */
+/*  matrix A, which is stored in the 5 vectors: lower, upper, diag,   */
+/*  lowrow and ricol as per below:                                    */
 /*                                                                    */
 /*       ( diag[0]  upper[0]    0        0  .   . 0   ricol[0]   )    */
 /*       ( lower[1] diag[1]   upper[1]   0      .     .   0      )    */
@@ -285,60 +282,59 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 /*       (   0               .             .        . upper[n-2] )    */
 /*       ( lowrow[0]  0 .  .    0        lower[n-1]   diag[n-1]  )    */
 /*                                                                    */
-/*  Speicherplatz fuer lowrow[1],..,lowrow[n-3] und ricol[1],...,     */
-/*  ricol[n-3] muss zusaetzlich bereitgestellt werden, da dieser      */
-/*  fuer die Aufnahme der Zerlegungsmatrix verfuegbar sein muss, die  */
-/*  auf die 5 genannten Vektoren ueberspeichert wird.                 */
+/*  Memory for lowrow[1],..,lowrow[n-3] und ricol[1],...,ricol[n-3]   */
+/*  should be provided separately, as this should be available to     */
+/*  store the decomposition matrix, which is overwritting             */
+/*  the 5 vectors mentioned.                                          */
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Anwendung:                                                       */
-/*   =========                                                        */
-/*      Vorwiegend fuer diagonaldominante zyklische Tridiagonalmatri- */
-/*      zen wie sie bei der Spline-Interpolation auftreten.           */
-/*      Fuer diagonaldominante Matrizen existiert immer eine LU-      */
-/*      Zerlegung.                                                    */
+/*   Usage:                                                           */
+/*   ======                                                           */
+/*      Predominantly for diagonal dominant cyclic tridiagonal-       */
+/*      matrices as they occur in spline-interpolations.              */
+/*      For diagonal dominant matices only a LU-decomposition exists. */
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Eingabeparameter:                                                */
-/*   ================                                                 */
-/*      n        Dimension der Matrix ( > 2 )  sal_uInt16 n               */
-/*      lower    untere Nebendiagonale         double lower[n]        */
-/*      diag     Hauptdiagonale                double diag[n]         */
-/*      upper    obere Nebendiagonale          double upper[n]        */
-/*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = false  erstmaliger Aufruf   bool rep               */
-/*               = true  wiederholter Aufruf                          */
-/*                    fuer gleiche Matrix,                            */
-/*                    aber verschiedenes b.                           */
+/*   Input parameters:                                                */
+/*   =================                                                */
+/*      n        Dimension of the matrix ( > 2 )  sal_uInt16 n        */
+/*      lower    lower antidiagonal               double lower[n]     */
+/*      diag     main diagonal                    double diag[n]      */
+/*      upper    upper antidiagonal               double upper[n]     */
+/*      b        right side of the system         double b[n]         */
+/*      rep      = FALSE first call               bool rep            */
+/*               = TRUE  repeated call                                */
+/*                    for equal matrix,                               */
+/*                    but different b.                                */
 /*                                                                    */
-/*   Ausgabeparameter:                                                */
-/*   ================                                                 */
-/*      b        Loesungsvektor des Systems,   double b[n]            */
-/*               die urspruengliche rechte Seite wird ueberspeichert  */
+/*   Output parameters:                                               */
+/*   ==================                                               */
+/*      b        solution vector of the system,   double b[n]         */
+/*               the original right side is overwritten               */
 /*                                                                    */
-/*      lower    ) enthalten bei rep = false die Zerlegung der Matrix;*/
-/*      diag     ) die urspruenglichen Werte von lower u. diag werden */
-/*      upper    ) ueberschrieben                                     */
+/*      lower    ) contain for rep = false the solution of the matrix;*/
+/*      diag     ) the original values of lower and diagonal will be  */
+/*      upper    ) overwritten                                        */
 /*      lowrow   )                             double lowrow[n-2]     */
 /*      ricol    )                             double ricol[n-2]      */
 /*                                                                    */
-/*   Die Determinante der Matrix ist bei rep = false durch            */
-/*      det A = diag[0] * ... * diag[n-1]     bestimmt.               */
+/*   The determinant of the matrix is for rep = false                 */
+/*      det A = diag[0] * ... * diag[n-1]     defined .               */
 /*                                                                    */
-/*   Rueckgabewert:                                                   */
+/*   Return value:                                                    */
 /*   =============                                                    */
-/*      = 0      alles ok                                             */
-/*      = 1      n < 3 gewaehlt                                       */
-/*      = 2      Die Zerlegungsmatrix existiert nicht                 */
+/*      = 0      all ok                                               */
+/*      = 1      n < 3 chosen                                         */
+/*      = 2      Decomposition matrix does not exist                  */
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
-/*   Benutzte Funktionen:                                             */
-/*   ===================                                              */
+/*   Used functions:                                                  */
+/*   ===============                                                  */
 /*                                                                    */
-/*   Aus der C Bibliothek: fabs()                                     */
+/*   from the C library: fabs()                                       */
 /*                                                                    */
 /*====================================================================*/
 
@@ -350,15 +346,15 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
  if ( n < 3 ) return(1);
 
- if (!rep)                                  /*  Wenn rep = false ist, */
-   {                                        /*  Zerlegung der         */
-     lower[0] = upper[n-1] = 0.0;           /*  Matrix berechnen.     */
+ if (!rep)                               /*  If rep = false,          */
+   {                                     /*  calculate decomposition  */
+     lower[0] = upper[n-1] = 0.0;        /*  of the matrix.           */
 
      if ( fabs (diag[0]) < MACH_EPS ) return(2);
-                                          /* Ist ein Diagonalelement  */
-     temp = 1.0 / diag[0];                /* betragsmaessig kleiner   */
-     upper[0] *= temp;                    /* MACH_EPS, so ex. keine   */
-     ricol[0] *= temp;                    /* Zerlegung.               */
+                                         /* Do not decompose if the   */
+     temp = 1.0 / diag[0];               /* value of a diagonal       */
+     upper[0] *= temp;                   /* element is smaller then   */
+     ricol[0] *= temp;                   /* MACH_EPS                  */
 
      for (i = 1; i < n-2; i++)
        { diag[i] -= lower[i] * upper[i-1];
@@ -384,7 +380,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
      if ( fabs(diag[n-1]) < MACH_EPS ) return(2);
    }
 
- b[0] /= diag[0];                          /* Vorwaertselemination    */
+ b[0] /= diag[0];                          /* forward elimination    */
  for (i = 1; i < n-1; i++)
    b[i] = ( b[i] - b[i-1] * lower[i] ) / diag[i];
 
@@ -393,7 +389,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
  b[n-1] = ( b[n-1] + temp - lower[n-1] * b[n-2] ) / diag[n-1];
 
- b[n-2] -= b[n-1] * upper[n-2];            /* Rueckwaertselimination  */
+ b[n-2] -= b[n-1] * upper[n-2];            /* backward elimination   */
  for (j = n-3; j >= 0; j--) {
    i=j;
    b[i] -= upper[i] * b[i+1] + ricol[i] * b[n-1];
@@ -401,7 +397,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
  return(0);
 }
 
-/*------------------  ENDE ZYKLISCH TRIDIAGONAL  ---------------------*/
+/*------------------  END of CYCLIC TRIDIAGONAL  ---------------------*/
 
 
 } // extern "C"
@@ -411,8 +407,8 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 |*
 |*    NaturalSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines natuerlichen
-|*                      kubischen Polynomsplines mit n Stuetzstellen.
+|*    Description       calculates the coefficients of natural
+|*                      cubic splines with n intervals.
 |*
 *************************************************************************/
 
@@ -517,15 +513,15 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
 |*
 |*    PeriodicSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines periodischen
-|*                      kubischen Polynomsplines mit n Stuetzstellen.
+|*    Description       calculates the coefficients of periodical
+|*                      cubic splines with n intervals.
 |*
 *************************************************************************/
 
 
 sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
                       double* b, double* c, double* d)
-{                     // Arrays muessen von [0..n] dimensioniert sein!
+{                     // array dimensions should range from [0..n]!
     sal_uInt16  Error;
     sal_uInt16  i,im1,nm1; //integer
     double  hr,hl;
@@ -535,8 +531,8 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
 
     if (n<2) return 4;
     nm1=n-1;
-    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // muss streng nonoton fallend sein!
-    if (y[n]!=y[0]) return 3; // Anfang muss gleich Ende sein!
+    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // should be strictly monotonically decreasing!
+    if (y[n]!=y[0]) return 3; // begin and end should be equal!
 
     a     =new double[n+1];
     lowrow=new double[n+1];
@@ -593,9 +589,8 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
 |*
 |*    ParaSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
-|*                      natuerlichen oder periodischen kubischen
-|*                      Polynomsplines mit n Stuetzstellen.
+|*    Description       calculate the coefficients of parametric
+|*                      natural of periodical cubic splines with n intervals
 |*
 *************************************************************************/
 
@@ -613,13 +608,13 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
            betX = 0,betY = 0;
 
     if (n<2) return 1;
-    if ((MargCond & ~3) && (MargCond != 4)) return 2; // ungueltige Randbedingung
+    if ((MargCond & ~3) && (MargCond != 4)) return 2; // invalid boundary condition
     if (!CondT) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
             deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
             delt =deltX*deltX+deltY*deltY;
-            if (delt<=0.0) return 3;            // zwei identische Punkte nacheinander!
+            if (delt<=0.0) return 3;            // two identical adjacent points!
             T[i+1]=T[i]+sqrt(delt);
         }
     }
@@ -670,17 +665,14 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
 |*
 |*    CalcSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
-|*                      natuerlichen oder periodischen kubischen
-|*                      Polynomsplines. Die Eckpunkte des uebergebenen
-|*                      Polygons werden als Stuetzstellen angenommen.
-|*                      n liefert die Anzahl der Teilpolynome.
-|*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion true. Nur in diesem Fall
-|*                      ist Speicher fuer die Koeffizientenarrays
-|*                      allokiert, der dann spaeter vom Aufrufer mittels
-|*                      delete freizugeben ist.
-|*
+|*    Description       Calculates the coefficients of parametrised
+|*                      natural or periodic cubic polynom-splines.
+|*                      The corner points of the polygon passed are used
+|*                      as support points. n returns the number of partial polynoms.
+|*                      This function returns TRUE if no error occured.
+|*                      Only in this case memory for the coefficient array
+|*                      has been allocated, which can be freed by the caller
+|*                      using a delete.
 *************************************************************************/
 
 bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
@@ -729,7 +721,7 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
     Marg01=0.0;
     MargN1=0.0;
     MargN2=0.0;
-    if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
+    if (n>0) n--; // correct n (number of partial polynoms)
 
     bool bRet = false;
     if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
@@ -757,23 +749,23 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
 |*
 |*    Spline2Poly()
 |*
-|*    Beschreibung      Konvertiert einen parametrichen kubischen
-|*                      Polynomspline Spline (natuerlich oder periodisch)
-|*                      in ein angenaehertes Polygon.
-|*                      Die Funktion liefert false, wenn ein Fehler bei
-|*                      der Koeffizientenberechnung aufgetreten ist oder
-|*                      das Polygon zu gross wird (>PolyMax=16380). Im 1.
-|*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
-|*                      Um Koordinatenueberlaeufe zu vermeiden werden diese
-|*                      auf +/-32000 begrenzt.
+|*    Description       converts a parametrised cubic spline (natural
+|*                      or periodic) to an approximate polygon.
+|*                      The function returns false, if an error occured
+|*                      during the calculation of the coefficients or
+|*                      the polygon became too large (>PolyMax=16380).
+|*                      In the first case the polygon has 0, in the
+|*                      second case PolyMax points.
+|*                      To prevent coordinate overflows we limit
+|*                      them to +/-32000.
 |*
 *************************************************************************/
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
 {
-    short  MinKoord=-32000; // zur Vermeidung
-    short  MaxKoord=32000;  // von Ueberlaeufen
+    short  MinKoord=-32000;    // to prevent
+    short  MaxKoord=32000;     // overflows
 
-    double* ax;          // Koeffizienten der Polynome
+    double* ax;                // coefficients of the polynoms
     double* ay;
     double* bx;
     double* by;
@@ -783,27 +775,27 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
     double* dy;
     double* tv;
 
-    double  Step;        // Schrittweite fuer t
-    double  dt1,dt2,dt3; // Delta t, y, ^3
-    double  t;
-    bool    bEnde;       // Teilpolynom zu Ende?
-    sal_uInt16  n;           // Anzahl der zu zeichnenden Teilpolynome
-    sal_uInt16  i;           // aktuelles Teilpolynom
-    bool    bOk;         // noch alles ok?
-    sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
-    long    x,y;
+    double      Step;          // stepsize for t
+    double      dt1,dt2,dt3;   // delta t, y, ^3
+    double      t;
+    bool        bEnde;         // partial polynom ended?
+    sal_uInt16  n;             // number of partial polynoms to draw
+    sal_uInt16  i;             // actual partial polynom
+    bool        bOk;           // all still ok?
+    sal_uInt16  PolyMax=16380; // max number of polygon points
+    long        x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
     if (bOk) {
         Step =10;
 
         rPoly.SetSize(1);
-        rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // erster Punkt
+        rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // first point
         i=0;
-        while (i<n) {       // n Teilpolynome malen
+        while (i<n) {       // draw n partial polynoms
             t=tv[i]+Step;
             bEnde=false;
-            while (!bEnde) {  // ein Teilpolynom interpolieren
+            while (!bEnde) {  // extrapolate one partial polynom
                 bEnde=t>=tv[i+1];
                 if (bEnde) t=tv[i+1];
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
@@ -815,11 +807,11 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
                 } else {
-                    bOk=false; // Fehler: Polygon wird zu gross
+                    bOk=false; // error: polygon becomes to large
                 }
                 t=t+Step;
-            } // Ende von Teilpolynom
-            i++; // naechstes Teilpolynom
+            } // end of partial polynom
+            i++; // next partial polynom
         }
         delete[] ax;
         delete[] ay;
@@ -831,7 +823,7 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
         delete[] dy;
         delete[] tv;
         return bOk;
-    } // Ende von if (bOk)
+    } // end of if (bOk)
     rPoly.SetSize(0);
     return false;
 }
