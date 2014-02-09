@@ -39,7 +39,6 @@
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 
-
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
 #include "itrpaint.hxx"
@@ -75,9 +74,6 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
 }
 
-/*************************************************************************
- *                  SwTxtPainter::CtorInitTxtPainter()
- *************************************************************************/
 void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewInf )
 {
     CtorInitTxtCursor( pNewFrm, pNewInf );
@@ -95,10 +91,6 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
     bPaintDrop = false;
 }
 
-
-/*************************************************************************
- *                    SwTxtPainter::CalcPaintOfst()
- *************************************************************************/
 SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 {
     SwLinePortion *pPor = pCurr->GetFirstPortion();
@@ -166,7 +158,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     GetInfo().ResetSpaceIdx();
     GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
-    // Die Groesse des Frames
+    // The size of the frame
     GetInfo().SetIdx( GetStart() );
     GetInfo().SetPos( GetTopLeft() );
 
@@ -177,18 +169,18 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     SwLinePortion *pPor = bEndPor ? pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
-    // Optimierung!
+    // Optimization!
     const SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
     if( !bEndPor && nTmpLeft >= nMaxRight )
         return;
 
     // DropCaps!
-    // 7538: natuerlich auch auf dem Drucker
+    // 7538: of course for the printer, too
     if( !bPaintDrop )
     {
-        // 8084: Optimierung, weniger Painten.
-        // AMA: Durch 8084 wurde 7538 wiederbelebt!
+        // 8084: Optimization, less painting
+        // AMA: By 8084 7538 has been revived
         // bDrawInWindow entfernt, damit DropCaps auch gedruckt werden
         bPaintDrop = pPor == pCurr->GetFirstPortion()
                      && GetDropLines() >= GetLineNr();
@@ -197,7 +189,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     KSHORT nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
 
-    // bClip entscheidet darueber, ob geclippt werden muss.
+    // bClip decides if there's a need to clip
     // Das Ganze muss vor der Retusche stehen
 
     bool bClip = ( bDrawInWindow || bUnderSz ) && !rClip.IsChg();
@@ -223,7 +215,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #endif
     }
 
-    // Alignment:
+    // Alignment
     OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
@@ -259,7 +251,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if ( ! bAdjustBaseLine )
         GetInfo().Y( nLineBaseLine );
 
-    // 7529: PostIts prepainten
+    // 7529: Pre-paint post-its
     if( GetInfo().OnWin() && pPor && !pPor->Width() )
     {
         SeekAndChg( GetInfo() );
@@ -280,7 +272,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pPor->PrePaint( GetInfo(), pPor );
     }
 
-    // 7923: EndPortions geben auch Zeichen aus, deswegen den Fnt wechseln!
+    // 7923: EndPortions output chars, too, that's why we change the font
     if( bEndPor )
         SeekStartAndChg( GetInfo() );
 
@@ -327,8 +319,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChg( GetInfo() );
         else if ( !bFirst && pPor->IsBreakPortion() && GetInfo().GetOpt().IsParagraph() )
         {
-            // Paragraphzeichen sollten den gleichen Font wie das Zeichen vor
-            // haben, es sei denn, es gibt Redlining in dem Absatz.
+            // Paragraph symbols should have the same fon as the paragraph in fron of them,
+            // except for the case that there's redlining in the paragraph
             if( GetRedln() )
                 SeekAndChg( GetInfo() );
             else
@@ -337,7 +329,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else
             bSeeked = false;
 
-//      bRest = false;
+        // bRest = false;
 
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
@@ -349,13 +341,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
         }
 
-        // Portions, die "unter" dem Text liegen wie PostIts
+        // Portions, which lay "below" the text like post-its
         SwLinePortion *pNext = pPor->GetPortion();
         if( GetInfo().OnWin() && pNext && !pNext->Width() )
         {
-            // Fix 11289: Felder waren hier ausgeklammert wg. Last!=Owner beim
-            // Laden von Brief.sdw. Jetzt sind die Felder wieder zugelassen,
-            // durch bSeeked wird Last!=Owner vermieden.
+            // Fix 11289: Fields were omitted here because of Last!=Owner during
+            // loading Brief.sdw. Now the fields are allowed again,
+            // by bSeeked Last!=Owner is being avoided.
             if ( !bSeeked )
                 SeekAndChg( GetInfo() );
             pNext->PrePaint( GetInfo(), pPor );
@@ -461,7 +453,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 if( pArrow )
                     GetInfo().DrawRedArrow( *pArrow );
 
-                // GetInfo().Y() must be current baseline.
+                // GetInfo().Y() must be current baseline
                 SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTxtFrm()->Frm().Bottom();
                 if( ( nDiff > 0 &&
                       ( GetEnd() < GetInfo().GetTxt().getLength() ||
@@ -485,7 +477,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                                           long nAdjustBaseLine )
 {
-    // Check if common underline should not be continued.
+    // Check if common underline should not be continued
     if ( IsUnderlineBreak( *pPor, *pFnt ) )
     {
         // delete underline font
@@ -496,7 +488,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
-    //Bug 120769:Color of underline display wrongly
+    // Bug 120769:Color of underline display wrongly
     if ( GetInfo().GetUnderFnt() &&
         GetInfo().GetUnderFnt()->GetFont().GetUnderline() == GetFnt()->GetUnderline() &&
         GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != Color(COL_AUTO) )
@@ -566,9 +558,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     // check, if underlining is not isolated
     if ( nIndx + GetInfo().GetLen() < nUnderEnd + 1 )
     {
-        //
         // here starts the algorithm for calculating the underline font
-        //
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
         SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
                           rScriptInfo );

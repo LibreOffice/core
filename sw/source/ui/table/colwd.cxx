@@ -31,7 +31,6 @@
 #include <cmdid.h>
 #include <table.hrc>
 
-
 IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
 {
     sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
@@ -41,8 +40,6 @@ IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwTableWidthDlg, LoseFocusHdl)
-
-
 
 SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc )
     : SvxStandardDialog( pParent, "ColumnWidthDialog", "modules/swriter/ui/columnwidth.ui" )
@@ -70,8 +67,6 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc )
     LoseFocusHdl();
 }
 
-
-
 void SwTableWidthDlg::Apply()
 {
     rFnc.InitTabCols();
@@ -79,8 +74,5 @@ void SwTableWidthDlg::Apply()
             static_cast< sal_uInt16 >(m_pColNF->GetValue() - 1),
             static_cast< sal_uInt16 >(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP))));
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

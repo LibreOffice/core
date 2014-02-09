@@ -269,7 +269,7 @@ sal_Int32 ReadThroughComponent(
     return 0;
 }
 
-/// read a component (storage version)
+// read a component (storage version)
 sal_Int32 ReadThroughComponent(
     uno::Reference<embed::XStorage> xStorage,
     uno::Reference<XComponent> xModelComponent,
@@ -616,8 +616,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    // ---- get BuildId from parent container if available
-
+    // get BuildId from parent container if available
     uno::Reference< container::XChild > xChild( xModelComp, uno::UNO_QUERY );
     if( xChild.is() )
     {

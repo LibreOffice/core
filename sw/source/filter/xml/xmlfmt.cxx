@@ -187,8 +187,6 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     }
 }
 
-// ---------------------------------------------------------------------
-
 class SwXMLConditionContext_Impl : public SvXMLImportContext
 {
     sal_uInt32 nCondition;
@@ -258,8 +256,6 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 }
 
 TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
-
-// ---------------------------------------------------------------------
 
 typedef std::vector<SwXMLConditionContext_Impl*> SwXMLConditions_Impl;
 
@@ -422,8 +418,6 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         }
     }
 }
-
-// ---------------------------------------------------------------------
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
@@ -717,8 +711,6 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
     }
 }
 
-// ---------------------------------------------------------------------
-//
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
     SwXMLItemSetStyleContext_Impl *GetSwStyle( sal_uInt16 i ) const;
@@ -927,8 +919,6 @@ void SwXMLStylesContext_Impl::EndElement()
     GetSwImport().InsertStyles( IsAutomaticStyle() );
 }
 
-// ---------------------------------------------------------------------
-//
 class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 {
 protected:
@@ -983,7 +973,6 @@ void SwXMLMasterStylesContext_Impl::EndElement()
     FinishStyles( !GetSwImport().IsInsertMode() );
     GetSwImport().FinishStyles();
 }
-// ---------------------------------------------------------------------
 
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
         const OUString& rLocalName,

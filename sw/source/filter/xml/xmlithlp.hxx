@@ -31,11 +31,8 @@ struct SvXMLEnumMapEntry;
 class SvXMLUnitConverter;
 class Color;
 
-
-
 /** Define various helper variables and functions for xmlimpit.cxx and
  * xmlexpit.cxx.  */
-
 bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       bool& rHasStyle, sal_uInt16& rStyle,
@@ -68,7 +65,6 @@ extern const struct SvXMLEnumMapEntry psXML_BreakType[];
 extern const struct SvXMLEnumMapEntry aXMLTableAlignMap[];
 extern const struct SvXMLEnumMapEntry aXMLTableVAlignMap[];
 extern const struct SvXMLEnumMapEntry aXML_KeepTogetherType[];
-
 
 #endif
 

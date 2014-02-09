@@ -36,25 +36,23 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
-SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
-{
-    sal_Char aBuf[28];
-
-    int i = SAL_N_ELEMENTS(aBuf);
-    aBuf[--i] = 0;
-    do
+    SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
     {
-        aBuf[--i] = '0' + static_cast<sal_Char>(nVal % 10);
-        nVal /= 10;
-    } while (nVal);
+        sal_Char aBuf[28];
 
-    if (bNeg)
-        aBuf[--i] = '-';
+        int i = SAL_N_ELEMENTS(aBuf);
+        aBuf[--i] = 0;
+        do
+        {
+            aBuf[--i] = '0' + static_cast<sal_Char>(nVal % 10);
+            nVal /= 10;
+        } while (nVal);
 
-    return rStrm.WriteCharPtr( &aBuf[i] );
-}
+        if (bNeg)
+            aBuf[--i] = '-';
 
+        return rStrm.WriteCharPtr( &aBuf[i] );
+    }
 }
 
 typedef std::multimap<sal_uLong, const ::sw::mark::IMark*> SwBookmarkNodeTable;
@@ -93,7 +91,6 @@ void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 
 void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
-
     sal_uLong nNd = rBkmk.GetMarkPos().nNode.GetIndex();
 
     aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ) );
@@ -167,7 +164,7 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
     if( (*ppPam)->GetNext() == pOrigPam )
     {
         *ppPam = pOrigPam;          // set back to the beginning pam
-        return sal_False;               // end of the ring
+        return sal_False;           // end of the ring
     }
 
     // otherwise copy the next value from the next Pam
@@ -219,8 +216,6 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     pNew->GetPoint()->nNode = aStt;
     return pNew;
 }
-
-/////////////////////////////////////////////////////////////////////////////
 
 // Stream-specific
 SvStream& Writer::Strm()
@@ -432,10 +427,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
     return rArr.size();
 }
 
-////////////////////////////////////////////////////////////////////////////
-
 // Storage-specific
-
 sal_uLong StgWriter::WriteStream()
 {
     OSL_ENSURE( !this, "Write in Storages on a stream?" );

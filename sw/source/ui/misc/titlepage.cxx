@@ -59,7 +59,7 @@ namespace
         sal_uInt16 nDontCare;
         lcl_GetPageDesc(pSh, nDontCare, &pPageFmtDesc);
 
-        //If we want a new number then set it, otherwise reuse the existing one
+        // If we want a new number then set it, otherwise reuse the existing one
         sal_uInt16 nPgNo;
         if (nNewNumber)
         {
@@ -85,7 +85,7 @@ namespace
             }
         }
 
-        //If we want a new descriptior then set it, otherwise reuse the existing one
+        // If we want a new descriptior then set it, otherwise reuse the existing one
         if (!pNewDesc)
         {
             SwFmtPageDesc aPageFmtDesc(pPageFmtDesc ? *pPageFmtDesc : &rCurrentDesc);

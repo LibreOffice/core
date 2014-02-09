@@ -62,7 +62,6 @@
 #include <svtools/embedhlp.hxx>
 #include <svl/urihelper.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -70,7 +69,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace xml::sax;
-
 
 struct XMLServiceMapEntry_Impl
 {
@@ -955,7 +953,6 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
 
 // redlining helper methods
 // (override to provide the real implementation)
-
 void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rType,
     const OUString& rId,
@@ -1029,7 +1026,5 @@ void SwXMLTextImportHelper::SetChangesProtectionKey(
     if ( NULL != pRedlineHelper )
         pRedlineHelper->SetProtectionKey( rKey );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

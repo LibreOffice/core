@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
 } } }
 
-
 typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper
@@ -51,11 +50,11 @@ class XMLRedlineImportHelper
 
     RedlineMapType aRedlineMap;
 
-    /// if sal_True, no redlines should be inserted into document
-    /// (This typically happen when a document is loaded in 'insert'-mode.)
+    // if sal_True, no redlines should be inserted into document
+    // (This typically happen when a document is loaded in 'insert'-mode.)
     bool bIgnoreRedlines;
 
-    /// save information for saving and reconstruction of the redline mode
+    // save information for saving and reconstruction of the redline mode
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> xModelPropertySet;
     ::com::sun::star::uno::Reference<
@@ -67,7 +66,7 @@ class XMLRedlineImportHelper
 public:
 
     XMLRedlineImportHelper(
-        bool bIgnoreRedlines,       /// ignore redlines mode
+        bool bIgnoreRedlines,       // ignore redlines mode
 
         // property sets of model + import info for saving + restoring the
         // redline mode
@@ -77,34 +76,34 @@ public:
             ::com::sun::star::beans::XPropertySet> & rImportInfoSet );
     virtual ~XMLRedlineImportHelper();
 
-    /// create a redline object
-    /// (The redline will be inserted into the document after both start
-    ///  and end cursor has been set.)
+    // create a redline object
+    // (The redline will be inserted into the document after both start
+    //  and end cursor has been set.)
     void Add(
-        const OUString& rType,       /// redline type (insert, del,... )
-        const OUString& rId,         /// use to identify this redline
-        const OUString& rAuthor,     /// name of the author
-        const OUString& rComment,    /// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime, /// date+time
-        sal_Bool bMergeLastParagraph);      /// merge last paragraph?
+        const OUString& rType,       // redline type (insert, del,... )
+        const OUString& rId,         // use to identify this redline
+        const OUString& rAuthor,     // name of the author
+        const OUString& rComment,    // redline comment
+        const ::com::sun::star::util::DateTime& rDateTime, // date+time
+        sal_Bool bMergeLastParagraph);      // merge last paragraph?
 
-    /// create a text section for the redline, and return an
-    /// XText/XTextCursor that may be used to write into it.
+    // create a text section for the redline, and return an
+    // XText/XTextCursor that may be used to write into it.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> CreateRedlineTextSection(
-            ::com::sun::star::uno::Reference<   /// needed to get the document
+            ::com::sun::star::uno::Reference<   // needed to get the document
                     ::com::sun::star::text::XTextCursor> xOldCursor,
-            const OUString& rId);    /// ID used to RedlineAdd() call
+            const OUString& rId);    // ID used to RedlineAdd() call
 
-    /// Set start or end position for a redline in the text body.
-    /// Accepts XTextRange objects.
+    // Set start or end position for a redline in the text body.
+    // Accepts XTextRange objects.
     void SetCursor(
-        const OUString& rId,     /// ID used in RedlineAdd() call
-        sal_Bool bStart,                /// start or end Range
-        ::com::sun::star::uno::Reference<   /// the actual XTextRange
+        const OUString& rId,     // ID used in RedlineAdd() call
+        sal_Bool bStart,                // start or end Range
+        ::com::sun::star::uno::Reference<   // the actual XTextRange
             ::com::sun::star::text::XTextRange> & rRange,
-        /// text range is (from an XML view) outside of a paragraph
-        /// (i.e. before a table)
+        // text range is (from an XML view) outside of a paragraph
+        // (i.e. before a table)
         sal_Bool bIsOusideOfParagraph);
 
     /**
@@ -116,19 +115,19 @@ public:
      * only be considered valid if it points to the next text node
      * after the position given in a previous SetCursor */
     void AdjustStartNodeCursor(
-         const OUString& rId,        /// ID used in RedlineAdd() call
+         const OUString& rId,        // ID used in RedlineAdd() call
         sal_Bool bStart,
-        /// XTextRange _inside_ a table/section
+        // XTextRange _inside_ a table/section
         ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextRange> & rRange);
 
-    /// set redline mode: show changes
+    // set redline mode: show changes
     void SetShowChanges( sal_Bool bShowChanges );
 
-    /// set redline mode: record changes
+    // set redline mode: record changes
     void SetRecordChanges( sal_Bool bRecordChanges );
 
-    /// set redline protection key
+    // set redline protection key
     void SetProtectionKey(
         const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 
@@ -139,15 +138,15 @@ private:
     void InsertIntoDocument(RedlineInfo* pRedline);
 
     SwRedlineData* ConvertRedline(
-        RedlineInfo* pRedline,  /// RedlineInfo to be converted
-        SwDoc* pDoc);           /// document needed for Author-ID conversion
+        RedlineInfo* pRedline,  // RedlineInfo to be converted
+        SwDoc* pDoc);           // document needed for Author-ID conversion
 
-    /** save the redline mode (if rPropertySet is non-null) */
+    // save the redline mode (if rPropertySet is non-null)
     void SaveRedlineMode(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & rPropertySet);
 
-    /** don't restore the saved redline mode */
+    // don't restore the saved redline mode
      void DontRestoreRedlineMode();
 
 };

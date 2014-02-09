@@ -35,10 +35,6 @@ class SwRedlineItr;
 class SwViewShell;
 class SwTxtFrm;
 
-/*************************************************************************
- *                      class SwAttrIter
- *************************************************************************/
-
 class SwAttrIter
 {
     friend class SwFontSave;

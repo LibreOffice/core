@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
@@ -52,7 +51,6 @@
 #include <cmdid.h>
 #include <table.hrc>
 #include "swtablerep.hxx"
-
 
 SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     :
@@ -172,7 +170,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         }
     }
 
-// intercept rounding errors
+    // intercept rounding errors
     if(std::abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
         rTabCols.SetLeft(nOldLeft);
 

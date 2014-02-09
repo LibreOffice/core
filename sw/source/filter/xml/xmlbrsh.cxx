@@ -239,5 +239,4 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
     }
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

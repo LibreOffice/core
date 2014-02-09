@@ -50,13 +50,12 @@
 
 #include "fmtrowsplt.hxx"
 
-
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
 
-/** fills the given attribute list with the items in the given set */
+// fills the given attribute list with the items in the given set
 void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                 SvXMLAttributeList& rAttrList,
                                 const SfxItemSet& rSet,

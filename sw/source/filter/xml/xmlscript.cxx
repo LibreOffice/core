@@ -26,8 +26,6 @@
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------------
-
 SvXMLImportContext *SwXMLImport::CreateScriptContext(
                                        const OUString& rLocalName )
 {

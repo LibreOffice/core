@@ -90,7 +90,6 @@ public:
 };
 
 // TabPage Format/Table/Columns
-
 #define MET_FIELDS 6 //Number of the used MetricFields
 
 class SwTableColumnPage : public SfxTabPage
@@ -109,8 +108,8 @@ class SwTableColumnPage : public SfxTabPage
     SwTwips         nMinWidth;
     sal_uInt16          nNoOfCols;
     sal_uInt16          nNoOfVisibleCols;
-    //Remember the width, when switching to autoalign
-    sal_uInt16          aValueTbl[MET_FIELDS];//primary assignment of the MetricFields
+    // Remember the width, when switching to autoalign
+    sal_uInt16          aValueTbl[MET_FIELDS];// primary assignment of the MetricFields
     sal_Bool            bModified:1;
     sal_Bool            bModifyTbl:1;
     sal_Bool            bPercentMode:1;
