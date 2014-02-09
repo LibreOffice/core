@@ -1,0 +1,283 @@
+diff -ur glm.org/glm/gtc/half_float.inl glm/glm/gtc/half_float.inl
+--- glm.org/glm/gtc/half_float.inl	2014-02-09 13:49:08.003856255 +0100
++++ glm/glm/gtc/half_float.inl	2014-02-09 13:58:59.187670698 +0100
+@@ -112,20 +112,20 @@
+ 	template <typename U> 
+ 	GLM_FUNC_QUALIFIER tvec2<half>::tvec2
+ 	(
+-		U const & x
++		U const & x_
+ 	) :
+-		x(half(x)),
+-		y(half(x))
++		x(half(x_)),
++		y(half(x_))
+ 	{}
+ 
+ 	template <typename U, typename V> 
+ 	GLM_FUNC_QUALIFIER tvec2<half>::tvec2
+ 	(
+-		U const & x, 
+-		V const & y
++		U const & x_, 
++		V const & y_
+ 	) :
+-		x(half(x)),
+-		y(half(y))
++		x(half(x_)),
++		y(half(y_))
+ 	{}
+ 
+ 	//////////////////////////////////////
+@@ -268,40 +268,40 @@
+ 	//////////////////////////////////////
+ 	// Swizzle operators
+ 
+-	GLM_FUNC_QUALIFIER half tvec2<half>::swizzle(comp x) const
++	GLM_FUNC_QUALIFIER half tvec2<half>::swizzle(comp x_) const
+ 	{
+-		return (*this)[x];
++		return (*this)[x_];
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec2<half> tvec2<half>::swizzle(comp x, comp y) const
++	GLM_FUNC_QUALIFIER tvec2<half> tvec2<half>::swizzle(comp x_, comp y_) const
+ 	{
+ 		return tvec2<half>(
+-			(*this)[x],
+-			(*this)[y]);
++			(*this)[x_],
++			(*this)[y_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec3<half> tvec2<half>::swizzle(comp x, comp y, comp z) const
++	GLM_FUNC_QUALIFIER tvec3<half> tvec2<half>::swizzle(comp x_, comp y_, comp z) const
+ 	{
+ 		return tvec3<half>(
+-			(*this)[x],
+-			(*this)[y],
++			(*this)[x_],
++			(*this)[y_],
+ 			(*this)[z]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec4<half> tvec2<half>::swizzle(comp x, comp y, comp z, comp w) const
++	GLM_FUNC_QUALIFIER tvec4<half> tvec2<half>::swizzle(comp x_, comp y_, comp z, comp w) const
+ 	{
+ 		return tvec4<half>(
+-			(*this)[x],
+-			(*this)[y],
++			(*this)[x_],
++			(*this)[y_],
+ 			(*this)[z],
+ 			(*this)[w]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tref2<half> tvec2<half>::swizzle(comp x, comp y)
++	GLM_FUNC_QUALIFIER tref2<half> tvec2<half>::swizzle(comp x_, comp y_)
+ 	{
+ 		return tref2<half>(
+-			(*this)[x],
+-			(*this)[y]);
++			(*this)[x_],
++			(*this)[y_]);
+ 	}
+ 
+ 	//////////////////////////////////////
+@@ -399,23 +399,23 @@
+ 	template <typename U> 
+ 	GLM_FUNC_QUALIFIER tvec3<half>::tvec3
+ 	(
+-		U const & x
++		U const & x_
+ 	) :
+-		x(half(x)),
+-		y(half(x)),
+-		z(half(x))
++		x(half(x_)),
++		y(half(x_)),
++		z(half(x_))
+ 	{}
+ 
+ 	template <typename A, typename B, typename C> 
+ 	GLM_FUNC_QUALIFIER tvec3<half>::tvec3
+ 	(
+-		A const & x, 
+-		B const & y, 
+-		C const & z
+-	) :
+-		x(half(x)),
+-		y(half(y)),
+-		z(half(z))
++		A const & x_, 
++		B const & y_, 
++		C const & z_
++	) :
++		x(half(x_)),
++		y(half(y_)),
++		z(half(z_))
+ 	{}
+ 
+ 	//////////////////////////////////////
+@@ -584,41 +584,41 @@
+ 	//////////////////////////////////////
+ 	// Swizzle operators
+ 
+-	GLM_FUNC_QUALIFIER half tvec3<half>::swizzle(comp x) const
++	GLM_FUNC_QUALIFIER half tvec3<half>::swizzle(comp x_) const
+ 	{
+-		return (*this)[x];
++		return (*this)[x_];
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec2<half> tvec3<half>::swizzle(comp x, comp y) const
++	GLM_FUNC_QUALIFIER tvec2<half> tvec3<half>::swizzle(comp x_, comp y_) const
+ 	{
+ 		return tvec2<half>(
+-			(*this)[x],
+-			(*this)[y]);
++			(*this)[x_],
++			(*this)[y_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec3<half> tvec3<half>::swizzle(comp x, comp y, comp z) const
++	GLM_FUNC_QUALIFIER tvec3<half> tvec3<half>::swizzle(comp x_, comp y_, comp z_) const
+ 	{
+ 		return tvec3<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z]);
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec4<half> tvec3<half>::swizzle(comp x, comp y, comp z, comp w) const
++	GLM_FUNC_QUALIFIER tvec4<half> tvec3<half>::swizzle(comp x_, comp y_, comp z_, comp w) const
+ 	{
+ 		return tvec4<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z],
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_],
+ 			(*this)[w]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tref3<half> tvec3<half>::swizzle(comp x, comp y, comp z)
++	GLM_FUNC_QUALIFIER tref3<half> tvec3<half>::swizzle(comp x_, comp y_, comp z_)
+ 	{
+ 		return tref3<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z]);
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_]);
+ 	}
+ 
+ 	//////////////////////////////////////
+@@ -722,26 +722,26 @@
+ 	template <typename U> 
+ 	GLM_FUNC_QUALIFIER tvec4<half>::tvec4
+ 	(
+-		U const & x
++		U const & x_
+ 	) :
+-		x(half(x)),
+-		y(half(x)),
+-		z(half(x)),
+-		w(half(x))
++		x(half(x_)),
++		y(half(x_)),
++		z(half(x_)),
++		w(half(x_))
+ 	{}
+ 
+ 	template <typename A, typename B, typename C, typename D> 
+ 	GLM_FUNC_QUALIFIER tvec4<half>::tvec4
+ 	(
+-		A const & x, 
+-		B const & y, 
+-		C const & z, 
+-		D const & w
+-	) :
+-		x(half(x)),
+-		y(half(y)),
+-		z(half(z)),
+-		w(half(w))
++		A const & x_, 
++		B const & y_, 
++		C const & z_, 
++		D const & w_
++	) :
++		x(half(x_)),
++		y(half(y_)),
++		z(half(z_)),
++		w(half(w_))
+ 	{}
+ 
+ 	//////////////////////////////////////
+@@ -965,42 +965,42 @@
+ 	//////////////////////////////////////
+ 	// Swizzle operators
+ 
+-	GLM_FUNC_QUALIFIER half tvec4<half>::swizzle(comp x) const
++	GLM_FUNC_QUALIFIER half tvec4<half>::swizzle(comp x_) const
+ 	{
+-		return (*this)[x];
++		return (*this)[x_];
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec2<half> tvec4<half>::swizzle(comp x, comp y) const
++	GLM_FUNC_QUALIFIER tvec2<half> tvec4<half>::swizzle(comp x_, comp y_) const
+ 	{
+ 		return tvec2<half>(
+-			(*this)[x],
+-			(*this)[y]);
++			(*this)[x_],
++			(*this)[y_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec3<half> tvec4<half>::swizzle(comp x, comp y, comp z) const
++	GLM_FUNC_QUALIFIER tvec3<half> tvec4<half>::swizzle(comp x_, comp y_, comp z_) const
+ 	{
+ 		return tvec3<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z]);
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tvec4<half> tvec4<half>::swizzle(comp x, comp y, comp z, comp w) const
++	GLM_FUNC_QUALIFIER tvec4<half> tvec4<half>::swizzle(comp x_, comp y_, comp z_, comp w_) const
+ 	{
+ 		return tvec4<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z],
+-			(*this)[w]);
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_],
++			(*this)[w_]);
+ 	}
+ 
+-	GLM_FUNC_QUALIFIER tref4<half> tvec4<half>::swizzle(comp x, comp y, comp z, comp w)
++	GLM_FUNC_QUALIFIER tref4<half> tvec4<half>::swizzle(comp x_, comp y_, comp z_, comp w_)
+ 	{
+ 		return tref4<half>(
+-			(*this)[x],
+-			(*this)[y],
+-			(*this)[z],
+-			(*this)[w]);
++			(*this)[x_],
++			(*this)[y_],
++			(*this)[z_],
++			(*this)[w_]);
+ 	}
+ 
+ #endif//(GLM_COMPONENT == GLM_COMPONENT_CXX98)
