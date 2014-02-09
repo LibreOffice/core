@@ -1052,7 +1052,7 @@ sal_Int32 XMLShapeImportHelper::findGluePointMapping(
                     return (*aShapeIdIter).first;
                 }
 
-                aShapeIdIter++;
+                ++aShapeIdIter;
             }
         }
     }
