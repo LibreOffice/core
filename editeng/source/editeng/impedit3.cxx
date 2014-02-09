@@ -2254,6 +2254,10 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
     }
 
     DBG_ASSERT( pTextPortion, "Position outside the area!" );
+
+    if (!pTextPortion)
+        return 0;
+
     DBG_ASSERT( pTextPortion->GetKind() == PORTIONKIND_TEXT, "SplitTextPortion: No TextPortion!" );
 
     sal_Int32 nOverlapp = nTmpPos - nPos;
