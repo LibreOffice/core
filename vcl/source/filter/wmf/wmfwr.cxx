@@ -130,7 +130,7 @@
 
 #define PRIVATE_ESCAPE_UNICODE          2
 
-//========================== Methoden von WMFWriter ==========================
+//========================== methods of WMFWriter ==========================
 
 void WMFWriter::MayCallback()
 {
@@ -138,9 +138,9 @@ void WMFWriter::MayCallback()
     {
         sal_uLong nPercent;
 
-        // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
-        // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
-        // keine Actions enthalten. Dann ist das Verhaeltnis ziemlich unwichtig)
+        // we simply assume that 16386 actions match to a bitmap
+        // (normally a metafile either contains only actions or some bitmaps and
+        // almost no actions. In which case the ratio is less important)
 
         nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
                 *100
@@ -772,25 +772,25 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 
     WriteRecordHeader(0x00000000,W_META_STRETCHDIB);
 
-    // Die Reihenfolge im Metafile soll jetzt sein:
-    // einige Parameter (laenge 22), dann die Bitmap ohne FILEHEADER.
-    // Da aber *pWMF << rBitmap einen FILEHEADER der Laenge 14
-    // erzeugt, schreiben wir zuerst die Bitmap an die richtige Position
-    // Und ueberschreiben hinterher den FILEHEADER mit den Parametern.
-    nPosAnf=pWMF->Tell(); // Position merken, wo Parameter hin sollen
-    pWMF->WriteInt32( (sal_Int32)0 ).WriteInt32( (sal_Int32)0 ); // 8 bytes auffuellen (diese 8 bytes +
-                                           // 14 bytes ueberfluessigen FILEHEADER
-                                           // = 22 bytes Parameter)
+    // The sequence in the metafile should be:
+    // some parameters (length 22), then the bitmap without FILEHEADER.
+    // As *pWMF << rBitmap generates a FILEHEADER of size 14,
+    // we first write the bitmap at the right position
+    // and overwrite later the FILEHEADER with the parameters.
+    nPosAnf=pWMF->Tell(); // remember position, where parameters should be stored
+    pWMF->WriteInt32( (sal_Int32)0 ).WriteInt32( (sal_Int32)0 ); // replenish 8 bytes (these 8 bytes +
+                                           // 14 bytes superfluous FILEHEADER
+                                           // = 22 bytes parameter)
 
     // write bitmap
     WriteDIB(rBitmap, *pWMF, false, true);
 
 
-    // Parameter schreiben:
+    // write the parameters:
     nPosEnd=pWMF->Tell();
     pWMF->Seek(nPosAnf);
 
-    // Raster-Op bestimmen, falls nichts uebergeben wurde
+    // determine raster-op, if nothing was passed
     if( !nROP )
     {
         switch( eSrcRasterOp )
@@ -1676,13 +1676,13 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
     }
 
     nMetafileHeaderPos=pWMF->Tell();
-    pWMF->WriteUInt16( (sal_uInt16)0x0001 )           // Typ: Datei
-         .WriteUInt16( (sal_uInt16)0x0009 )           // Headerlaenge in Worten
-         .WriteUInt16( (sal_uInt16)0x0300 )           // Version als BCD-Zahl
-         .WriteUInt32( (sal_uInt32) 0x00000000 )      // Dateilaenge (ohne 1. Header), wird spaeter durch UpdateHeader() berichtigt
-         .WriteUInt16( (sal_uInt16)MAXOBJECTHANDLES ) // Maximalezahl der gleichzeitigen Objekte
-         .WriteUInt32( (sal_uInt32) 0x00000000 )      // Maximale Record-laenge, wird spaeter durch UpdateHeader() berichtigt
-         .WriteUInt16( (sal_uInt16)0x0000 );          // Reserved
+    pWMF->WriteUInt16( (sal_uInt16)0x0001 )           // type: file
+         .WriteUInt16( (sal_uInt16)0x0009 )           // header length in words
+         .WriteUInt16( (sal_uInt16)0x0300 )           // Version as BCD number
+         .WriteUInt32( (sal_uInt32) 0x00000000 )      // file length (without 1st header), is later corrected by UpdateHeader()
+         .WriteUInt16( (sal_uInt16)MAXOBJECTHANDLES ) // maxmimum number of simultaneous objects
+         .WriteUInt32( (sal_uInt32) 0x00000000 )      // maximum record length, is later corrected by UpdateHeader()
+         .WriteUInt16( (sal_uInt16)0x0000 );          // reserved
 }
 
 // ------------------------------------------------------------------------
@@ -1692,18 +1692,18 @@ void WMFWriter::UpdateHeader()
     sal_uLong nPos;
     sal_uInt32 nFileSize;
 
-    nPos=pWMF->Tell();                 // Endposition = Gesammtgroesse der Datei
-    nFileSize=nPos-nMetafileHeaderPos; // Groesse des 1. Headers abziehen
-    if ((nFileSize&1)!=0) {            // ggf. auf ganze Worte aufrunden
+    nPos=pWMF->Tell();                 // endposition = total size of file
+    nFileSize=nPos-nMetafileHeaderPos; // subtract size of 1st header
+    if ((nFileSize&1)!=0) {            // if needed round to words
         pWMF->WriteUChar( (sal_uInt8)0 );
         nPos++;
         nFileSize++;
     }
-    nFileSize>>=1;                    // In Anzahl Worte umrechnen
-    pWMF->Seek(nMetafileHeaderPos+6); // Zum Dateigroessen-Eintrag im zweiten Header
-    pWMF->WriteUInt32( nFileSize );               // Dateigroesse berichtigen
-    pWMF->SeekRel(2);                 // Zum Max-Record-Laenge-Eintrag im zweiten Header
-    pWMF->WriteUInt32( nMaxRecordSize );          // und berichtigen
+    nFileSize>>=1;                    // convert to number of words
+    pWMF->Seek(nMetafileHeaderPos+6); // to filesize entry in second header
+    pWMF->WriteUInt32( nFileSize );               // rectify file size
+    pWMF->SeekRel(2);                 // to max-recond-length-entry in second header
+    pWMF->WriteUInt32( nMaxRecordSize );          // and rectify
     pWMF->Seek(nPos);
 }
 

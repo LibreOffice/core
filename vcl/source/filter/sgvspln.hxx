@@ -24,16 +24,14 @@
 |*
 |*    CalcSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
-|*                      natrlichen oder periodischen kubischen
-|*                      Polynomsplines. Die Eckpunkte des šbergebenen
-|*                      Polygons werden als Sttzstellen angenommen.
-|*                      n liefert die Anzahl der Teilpolynome.
-|*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion true. Nur in diesem Fall
-|*                      ist Speicher fr die Koeffizientenarrays
-|*                      allokiert, der dann sp„ter vom Aufrufer mittels
-|*                      delete freizugeben ist.
+|*    Description       Calculates the coefficients of parametrised
+|*                      natural or periodic cubic polynom-splines.
+|*                      The corner points of the polygon passed are used
+|*                      as support points. n returns the number of partial polynoms.
+|*                      This function returns TRUE if no error occured.
+|*                      Only in this case memory for the coefficient array
+|*                      has been allocated, which can be freed by the caller
+|*                      using a delete.
 |*
 *************************************************************************/
 
@@ -43,17 +41,17 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
 
 /*************************************************************************
 |*
-|*    Poly2Spline()
+|*    Spline2Poly()
 |*
-|*    Beschreibung      Konvertiert einen parametrichen kubischen
-|*                      Polynomspline Spline (natrlich oder periodisch)
-|*                      in ein angen„hertes Polygon.
-|*                      Die Funktion liefert false, wenn ein Fehler bei
-|*                      der Koeffizientenberechnung aufgetreten ist oder
-|*                      das Polygon zu gro?wird (>PolyMax=16380). Im 1.
-|*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
-|*                      Um Koordinatenberl„ufe zu vermeiden werden diese
-|*                      auf +/-32000 begrenzt.
+|*    Description       converts a parametrised cubic spline (natural
+|*                      or periodic) to an approximate polygon.
+|*                      The function returns false, if an error occured
+|*                      during the calculation of the coefficients or
+|*                      the polygon became too large (>PolyMax=16380).
+|*                      In the first case the polygon has 0, in the
+|*                      second case PolyMax points.
+|*                      To prevent coordinate overflows we limit
+|*                      them to +/-32000.
 |*
 *************************************************************************/
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly);
