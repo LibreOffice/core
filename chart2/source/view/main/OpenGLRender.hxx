@@ -123,6 +123,20 @@ struct GLWindow
     const GLubyte*          GLExtensions;
 
     bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
+
+    GLWindow()
+        :
+#if defined( _WIN32 )
+#elif defined( MACOSX )
+#elif defined( UNX )
+        GLXExtensions(NULL),
+#endif
+        bpp(0),
+        Width(0),
+        Height(0),
+        GLExtensions(NULL)
+    {
+    }
 };
 
 class OpenGLRender

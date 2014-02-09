@@ -756,22 +756,42 @@ void OpenGLRender::Release()
 #endif
 }
 
-OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
-    m_Model(glm::mat4(1.0f)),
-    m_TextureObj(0),
-    m_FboID(0),
-    m_RboID(0),
-    m_iWidth(0),
-    m_iHeight(0),
-    mxRenderTarget(xTarget),
-    mbArbMultisampleSupported(false),
+OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
+    : m_Model(glm::mat4(1.0f))
+    , m_TextureObj(0)
+    , m_FboID(0)
+    , m_RboID(0)
+    , m_iWidth(0)
+    , m_iHeight(0)
+    , m_fLineWidth(0)
+    , mxRenderTarget(xTarget)
+    , mbArbMultisampleSupported(false)
 #if defined( _WIN32 )
-    m_iArbMultisampleFormat(0),
+    , m_iArbMultisampleFormat(0)
 #endif
-    m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
-    m_frameBufferMS(0),
-    m_TextVertexID(0),
-    m_TextTexCoordID(1)
+    , m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0))
+    , m_frameBufferMS(0)
+    , m_renderBufferColorMS(0)
+    , m_renderBufferDepthMS(0)
+    , m_CommonProID(0)
+    , m_2DVertexID(0)
+    , m_2DColorID(0)
+    , m_fZStep(0)
+    , m_TextProID(0)
+    , m_TextMatrixID(0)
+    , m_TextVertexID(0)
+    , m_TextTexCoordID(1)
+    , m_TextTexCoordBuf(0)
+    , m_TextTexID(0)
+    , m_BackgroundProID(0)
+    , m_BackgroundMatrixID(0)
+    , m_BackgroundVertexID(0)
+    , m_BackgroundColorID(0)
+    , m_SymbolProID(0)
+    , m_SymbolVertexID(0)
+    , m_SymbolMatrixID(0)
+    , m_SymbolColorID(0)
+    , m_SymbolShapeID(0)
 {
     //TODO: moggi: use STL
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
