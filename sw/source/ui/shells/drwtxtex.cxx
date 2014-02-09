@@ -562,17 +562,23 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             aSetItem.GetItemSet().Put( aEditAttr, false );
 
             sal_uInt16 nScriptTypes = pOLV->GetSelectedScriptType();
-            SvxFontHeightItem aSize( *static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
-            sal_uInt32 nSize = aSize.GetHeight();
+            const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
 
-            if( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
-                nSize = nFontMaxSz;
-            else if( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
-                nSize = nFontInc;
+            if (pSize)
+            {
+                SvxFontHeightItem aSize(*pSize);
 
-            aSize.SetHeight( nSize );
-            aSetItem.PutItemForScriptType( nScriptTypes, aSize );
-            aNewAttr.Put( aSetItem.GetItemSet() );
+                sal_uInt32 nSize = aSize.GetHeight();
+
+                if( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
+                    nSize = nFontMaxSz;
+                else if( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
+                    nSize = nFontInc;
+
+                aSize.SetHeight( nSize );
+                aSetItem.PutItemForScriptType( nScriptTypes, aSize );
+                aNewAttr.Put( aSetItem.GetItemSet() );
+            }
         }
         break;
 
@@ -925,13 +931,13 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pEditPool );
                 aSetItem.GetItemSet().Put( aEditAttr, false );
-                const SvxFontHeightItem* aSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptType ) ) );
+                const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptType ) ) );
 
-                if( !aSize )
+                if( !pSize )
                     rSet.DisableItem( nSlotId );
                 else
                 {
-                    sal_uInt32 nSize = aSize->GetHeight();
+                    sal_uInt32 nSize = pSize->GetHeight();
                     if( nSize == nFontMaxSz )
                         rSet.DisableItem( FN_GROW_FONT_SIZE );
                     else if( nSize == nFontInc )
