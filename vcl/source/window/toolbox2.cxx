@@ -1379,19 +1379,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     {
         Image aImage(rImage);
 
-        if ( GetDPIScaleFactor() > 1)
-        {
-            BitmapEx aBitmap(aImage.GetBitmapEx());
-
-            // Some code calls this twice, so add a sanity check
-            // FIXME find out what that code is & fix accordingly
-            if (aBitmap.GetSizePixel().Width() < 32)
-            {
-                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
-                aImage = Image(aBitmap);
-            }
-        }
-
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         // Nur wenn alles berechnet ist, mehr Aufwand treiben
         if ( !mbCalc )
