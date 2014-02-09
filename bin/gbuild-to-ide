@@ -14,6 +14,8 @@ import os.path
 import shutil
 import re
 import sys
+import uuid
+import xml.etree.ElementTree as ET
 
 
 class GbuildParserState:
@@ -32,6 +34,9 @@ class GbuildLinkTarget:
     def short_name(self):
         return self.name
 
+    def is_empty(self):
+        return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
+
     def __str__(self):
         return '%s at %s with include path: %s, defines %s, objects: %s and linked libs: %s' % (
         self.short_name(), self.location, self.include, self.defs, self.cxxobjects, self.linked_libs)
@@ -44,6 +49,9 @@ class GbuildLib(GbuildLinkTarget):
     def short_name(self):
         return 'Library %s' % self.name
 
+    def target(self):
+        return 'Library_%s' % self.name
+
 
 class GbuildExe(GbuildLinkTarget):
     def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
@@ -52,12 +60,16 @@ class GbuildExe(GbuildLinkTarget):
     def short_name(self):
         return 'Executable %s' % self.name
 
+    def target(self):
+        return 'Executable_%s' % self.name
+
 
 class GbuildParser:
     makecmdpattern = re.compile('^MAKE_COMMAND := (.*)')
     srcdirpattern = re.compile('^SRCDIR = (.*)')
     builddirpattern = re.compile('^BUILDDIR = (.*)')
     instdirpattern = re.compile('^INSTDIR = (.*)')
+    binpathpattern = re.compile('LS = (.*)ls(.exe)?')
     libpattern = re.compile('#  [a-z]+ to execute \(from `(.*)/Library_(.*)\.mk\', line [0-9]*\):')
     exepattern = re.compile('#  [a-z]+ to execute \(from `(.*)/Executable_(.*)\.mk\', line [0-9]*\):')
     includepattern = re.compile('# INCLUDE := (.*)')
@@ -90,6 +102,10 @@ class GbuildParser:
                 instdirmatch = GbuildParser.instdirpattern.match(line)
                 if instdirmatch:
                     self.instdir = instdirmatch.group(1)
+                    continue
+                binpathmatch = GbuildParser.binpathpattern.match(line)
+                if binpathmatch:
+                    self.binpath = binpathmatch.group(1)
                     continue
                 state = GbuildParserState()
                 continue
@@ -508,6 +524,220 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             self.write_xcodeproj(location, modulename)
 
 
+class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
+    def __init__(self, gbuildparser):
+        IdeIntegrationGenerator.__init__(self, gbuildparser)
+        self.solution_directory = './'
+        self.configurations = {
+            'Build' : {
+                'build': self.module_make_command('%(target)s'),
+                'clean': self.module_make_command('%(target)s.clean'),
+                'rebuild': self.module_make_command('%(target)s.clean %(target)s')
+            },
+            'Unit Tests': {
+                'build': self.module_make_command('unitcheck'),
+                'clean': self.module_make_command('clean'),
+                'rebuild': self.module_make_command('clean unitcheck'),
+            },
+            'Integration tests': {
+                'build': self.module_make_command('unitcheck slowcheck subsequentcheck'),
+                'clean': self.module_make_command('clean'),
+                'rebuild': self.module_make_command('clean unitcheck slowcheck subsequentcheck')
+            }
+        }
+        self.target_by_location = {}
+        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+            if target.is_empty():
+                continue
+            if not target.location in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+
+    def module_make_command(self, targets):
+        return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"';
+
+    def emit(self):
+        for location in self.target_by_location:
+            projects = dict()
+            module = location.split('/')[-1]
+            project_directory = os.path.join(self.solution_directory, module)
+            for target in self.target_by_location[location]:
+                project_guid = self.write_project(project_directory, target)
+                projects[project_guid] = target
+            self.write_solution(os.path.join(project_directory, '%s.sln' % module), module, projects)
+
+    nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
+
+    def write_solution(self, solution_path, name, projects):
+        print('Solution %s:' % name, end='')
+        with open(solution_path, 'w') as f:
+            f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
+            for guid, target in projects.items():
+                print(' %s' % target.name, end='')
+                f.write('Project("{%s}") = "%s", "%s.vcxproj", "{%s}"\n' %
+                        (VisualStudioIntegrationGenerator.nmake_project_guid,
+                        target.short_name(), target.name, guid))
+                f.write('EndProject\n')
+            f.write('Global\n')
+            platform = 'Win32'
+            f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
+            for cfg in self.configurations:
+                f.write('\t\t%(cfg)s|%(platform)s = %(cfg)s|%(platform)s\n' % {'cfg': cfg, 'platform': platform})
+            f.write('\tEndGlobalSection\n')
+            f.write('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\n')
+            # Specifies project configurations for solution configuration
+            for proj_guid in projects:
+                for cfg in self.configurations:
+                    params = {'guid': proj_guid, 'sol_cfg': cfg, 'proj_cfg': cfg, 'platform': platform}
+                    f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.ActiveCfg = %(proj_cfg)s|%(platform)s\n' % params)
+                    # Build.0 is basically 'Build checkbox' in configuration manager
+                    f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n'  % params)
+            f.write('\tEndGlobalSection\n')
+            f.write('EndGlobal\n')
+        print('')
+
+    def write_project(self, project_dir, target):
+        # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
+        project_path = os.path.join(project_dir, '%s.vcxproj' % target.name)
+        os.makedirs(project_dir, exist_ok = True)
+        project_guid = str(uuid.uuid4()).upper()
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0' );
+        proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns, Label='ProjectConfigurations')
+        platform = 'Win32'
+        for configuration in self.configurations:
+            proj_conf_node = ET.SubElement(proj_confs_node,
+                                           '{%s}ProjectConfiguration' % ns,
+                                           Include='%s|%s' % (configuration, platform))
+            conf_node = ET.SubElement(proj_conf_node, '{%s}Configuration' % ns)
+            conf_node.text = configuration
+            platform_node = ET.SubElement(proj_conf_node, '{%s}Platform' % ns)
+            platform_node.text = platform
+
+        globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
+        proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
+        proj_guid_node.text = '{%s}' % project_guid
+        proj_keyword_node = ET.SubElement(globals_node, '{%s}Keyword' % ns)
+        proj_keyword_node.text = 'MakeFileProj'
+        proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
+        proj_name_node.text = target.short_name()
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+        for configuration in self.configurations:
+            conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label="Configuration",
+                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
+            # Type of project used by the MSBuild to determine build process, see Microsoft.Makefile.targets
+            conf_type_node = ET.SubElement(conf_node, '{%s}ConfigurationType' % ns)
+            conf_type_node.text = 'Makefile'
+            # VS2012: I need to have this otherwise the names of projects will contain text Visual Studio 2010 in the Solution Explorer
+            platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
+            platform_toolset_node.text = 'v110'
+
+        import_node = ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
+        for configuration in self.configurations:
+            prop_sheets_node = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='Configuration',
+                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
+            import_node = ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
+                Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
+                Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                Label='LocalAppDataPlatform')
+
+        ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for cfg_name, cfg_targets  in self.configurations.items():
+            conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns,
+                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
+            nmake_params = {
+                'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
+                'location': target.location,
+                'makecmd': self.gbuildparser.makecmd,
+                'target': target.target()}
+            nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
+            nmake_build_node.text = cfg_targets['build'] % nmake_params
+            nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
+            nmake_clean_node.text =  cfg_targets['clean'] % nmake_params
+            nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
+            nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
+            nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
+            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program' , 'soffice.exe')
+            nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
+            nmake_defs_node.text = ';'.join(list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
+            include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
+            include_path_node.text = ';'.join(target.include + ['$(IncludePath)'])
+
+        ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
+
+        cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for cxxobject in target.cxxobjects:
+            cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            cxxfile = cxxabspath + '.cxx'
+            if os.path.isfile(cxxfile):
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
+            else:
+                print('Source %s in project %s does not exist' % (cxxfile, target.name))
+
+        includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for cxxobject in target.cxxobjects:
+            include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            hxxfile = include_abs_path + '.hxx'
+            if os.path.isfile(hxxfile):
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hxxfile)
+            # Few files have corresponding .h files
+            hfile = include_abs_path + '.h'
+            if os.path.isfile(hfile):
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
+        msbuild_tree = ET.ElementTree(proj_node)
+        msbuild_tree.write(project_path, encoding='unicode', xml_declaration=True)
+        self.write_filters(project_path + '.filters',
+            os.path.join(self.gbuildparser.srcdir, os.path.basename(target.location)),
+            [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns) ],
+            [include_node.get('Include') for include_node in includes_node.findall('{%s}ClInclude' % ns) ])
+        return project_guid
+
+    def get_filter(self, module_dir, proj_file):
+        return '\\'.join(os.path.relpath(proj_file, module_dir).split('/')[:-1])
+
+    def get_subfilters(self, proj_filter):
+        parts = proj_filter.split('\\')
+        subfilters = set([proj_filter])
+        for i in range(1, len(parts)):
+            subfilters.add('\\'.join(parts[:i]))
+        return subfilters
+
+    def add_nodes(self, files_node, module_dir, tag, project_files):
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        filters = set()
+        for project_file in project_files:
+            file_node = ET.SubElement(files_node, tag, Include=project_file)
+            if os.path.commonprefix([module_dir, project_file]) == module_dir:
+                project_filter = self.get_filter(module_dir, project_file)
+                filter_node = ET.SubElement(file_node, '{%s}Filter' % ns)
+                filter_node.text = project_filter
+                filters |= self.get_subfilters(project_filter)
+        return filters
+
+    def write_filters(self, filters_path, module_dir, compile_files, include_files):
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0' );
+        filters = set()
+        compiles_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        filters |= self.add_nodes(compiles_node, module_dir, '{%s}ClCompile' % ns, compile_files)
+        include_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        filters |= self.add_nodes(include_node, module_dir, '{%s}ClInclude' % ns, include_files)
+
+        filters_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for proj_filter in filters:
+            filter_node = ET.SubElement(filters_node, '{%s}Filter' % ns, Include=proj_filter)
+            filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
+            filter_id_node.text = '{%s}' % str(uuid.uuid4())
+        filters_tree = ET.ElementTree(proj_node)
+        filters_tree.write(filters_path, encoding='unicode', xml_declaration=True)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
@@ -526,6 +756,8 @@ if __name__ == '__main__':
         KdevelopIntegrationGenerator(gbuildparser).emit()
     elif args.ide == 'xcode':
         XcodeIntegrationGenerator(gbuildparser).emit()
+    elif args.ide == 'vs2012':
+        VisualStudioIntegrationGenerator(gbuildparser).emit()
     else:
         parser.print_help()
         sys.exit(1)
