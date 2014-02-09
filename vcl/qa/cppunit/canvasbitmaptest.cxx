@@ -603,8 +603,10 @@ private:
         return uno::Sequence< sal_Int8 >();
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
-                                                                                                                                uno::RuntimeException)
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& )
+        throw (lang::IllegalArgumentException,
+        uno::RuntimeException,
+        std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromPARGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
