@@ -177,5 +177,4 @@ void SwBlink::FrmDelete( const SwRootFrm* pRoot )
     }
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

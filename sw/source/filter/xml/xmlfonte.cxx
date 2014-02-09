@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/XMLFontAutoStylePool.hxx>
@@ -27,7 +26,6 @@
 #include <xmlexp.hxx>
 #include <xmlimp.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
@@ -35,9 +33,7 @@ using namespace ::com::sun::star::text;
 class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
     public:
-
     SwXMLFontAutoStylePool_Impl( SwXMLExport& rExport, bool blockFontEmbedding );
-
 };
 
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
@@ -72,7 +68,6 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
         }
     }
 }
-
 
 XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
 {

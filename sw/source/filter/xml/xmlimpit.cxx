@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmlimpit.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -30,7 +29,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/memberids.hrc>
-
 
 #include "hintids.hxx"
 #include "unomid.h"
@@ -75,7 +73,7 @@ SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
     mrMapEntries = rMapEntries;
 }
 
-/** fills the given itemset with the attributes in the given list */
+// fills the given itemset with the attributes in the given list
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                       uno::Reference< xml::sax::XAttributeList > xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
@@ -439,7 +437,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
             OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
-            /** copy SvxBorderLines */
+            // copy SvxBorderLines
             BoxHolder aBoxes(pBox);
 
             sal_Int32 nTemp;
@@ -987,6 +985,5 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
     return bOk;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

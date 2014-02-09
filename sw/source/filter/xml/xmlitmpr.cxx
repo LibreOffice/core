@@ -24,7 +24,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
 // TODO: optimize this!
-
 class SvXMLItemMapEntries_impl
 {
 public:

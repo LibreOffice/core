@@ -24,9 +24,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
-// ---------------------------------------------------------------------
-
-
 class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 {
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }

@@ -41,8 +41,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-// ---------------------------------------------------------------------
-
 uno::Reference<document::XDocumentProperties>
 SwXMLImport::GetDocumentProperties() const
 {
@@ -75,8 +73,6 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
 
 enum SvXMLTokenMapAttrs
 {
@@ -160,8 +156,6 @@ void SwXMLImport::SetStatistics(
     pProgress->SetReference( nProgressReference + 3*PROGRESS_BAR_STEP );
     pProgress->SetValue( 0 );
 }
-
-// ---------------------------------------------------------------------
 
 void SwXMLExport::_ExportMeta()
 {

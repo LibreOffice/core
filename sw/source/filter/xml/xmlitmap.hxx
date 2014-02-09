@@ -24,11 +24,9 @@
 #include <tools/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
 #define MID_SW_FLAG_MASK                    0x0000ffff
 
 // this flags are used in the item mapper for import and export
-
 #define MID_SW_FLAG_SPECIAL_ITEM_IMPORT 0x80000000
 #define MID_SW_FLAG_NO_ITEM_IMPORT          0x40000000
 #define MID_SW_FLAG_SPECIAL_ITEM_EXPORT 0x20000000
@@ -38,8 +36,6 @@
 #define MID_SW_FLAG_ELEMENT_ITEM_IMPORT 0x08000000
 #define MID_SW_FLAG_ELEMENT_ITEM_EXPORT 0x04000000
 #define MID_SW_FLAG_ELEMENT_ITEM            0x0c000000  // both import and export
-
-// ---
 
 struct SvXMLItemMapEntry
 {
@@ -55,8 +51,6 @@ struct SvXMLItemMapEntry
                                 // exported with this Namespace
                                 // and localName
 };
-
-// ---
 
 class SvXMLItemMapEntries_impl;
 
@@ -82,7 +76,6 @@ public:
 
 SV_DECL_REF( SvXMLItemMapEntries )
 SV_IMPL_REF( SvXMLItemMapEntries )
-
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
 

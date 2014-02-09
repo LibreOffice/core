@@ -63,11 +63,9 @@ SwXMLWriter::SwXMLWriter( const OUString& rBaseURL )
     SetBaseURL( rBaseURL );
 }
 
-
 SwXMLWriter::~SwXMLWriter()
 {
 }
-
 
 sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
                                 const OUString& aDocHierarchicalName )
@@ -587,14 +585,9 @@ bool SwXMLWriter::WriteThroughComponent(
     return xFilter->filter( rMediaDesc );
 }
 
-
-// -----------------------------------------------------------------------
-
 void GetXMLWriter( const OUString& /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwXMLWriter( rBaseURL );
 }
-
-// -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

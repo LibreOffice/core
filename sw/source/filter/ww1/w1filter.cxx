@@ -67,9 +67,6 @@
 using namespace css;
 using namespace nsSwDocInfoSubType;
 
-
-///////////////////////////////////////////////////////////////////////
-//
 // hier stehen die methoden operator<<, Out, Start und Stop mit
 // folgender Bedeutung: wenn moeglich wird die information aus dem
 // dokument per
@@ -85,45 +82,46 @@ using namespace nsSwDocInfoSubType;
 // ausnahme haben: hier stehen auch methoden, die aus anderen gruenden
 // fuer den dumper sinnlos sind, zB wenn sie auf sv-strukturen beruhen
 // wie zB GetFont() auf SvxFontItem.
-//
 
-/////////////////////////////////////////////////////////////// Manager
+// Manager
 Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
 {
     // verhindern, das bei rekusivem aufruf dies mehrfach passiert:
     if (!This.Pushed())
     {
-        { // der wird nur temporaer gebraucht:
+        {
+            // is only needed temporarily
             This.SetInStyle( true );
             Ww1StyleSheet(This.aFib).Out(rOut, This);
             This.SetInStyle( false );
         }
-        { // dieser auch:
+        {
+            // this one, too
             Ww1Assoc(This.aFib).Out(rOut);
         }
-          // dieser nicht, der ist bereits member:
+        // dieser nicht, der ist bereits member:
         This.aDop.Out(rOut);
-          // Jetzt entscheiden, wie Seitenvorlagen erzeugt werden
+        // Jetzt entscheiden, wie Seitenvorlagen erzeugt werden
         if (This.GetSep().Count() <= 1)
             rOut.SetUseStdPageDesc();
     }
-    // und jetzt das eigentliche dok:
+    // and now the actual dok
     sal_Unicode cUnknown = ' ';
     while (*This.pSeek < This.pDoc->Count())
     {
-    // ausgabe des ProgressState nur, wenn im haupttext, da sonst
-    // nicht bestimmt werden kann, wie weit wir sind:
+        // ausgabe des ProgressState nur, wenn im haupttext, da sonst
+        // nicht bestimmt werden kann, wie weit wir sind:
         if (!This.Pushed())
             ::SetProgressState(This.Where() * 100 / This.pDoc->Count(),
              rOut.GetDoc().GetDocShell());
-    // hier werden abwechselnd die attribute und die zeichen in die
-    // shell gepumpt.  die positionen werden durch das lesen der
-    // zeichen aus dem manager hoch- gezaehlt.  erst alle attribute:
+        // hier werden abwechselnd die attribute und die zeichen in die
+        // shell gepumpt.  die positionen werden durch das lesen der
+        // zeichen aus dem manager hoch- gezaehlt.  erst alle attribute:
         This.Out(rOut, cUnknown);
-    // das textdocument pDoc ist ein Ww1PlainText, dessen Out()
-    // methode solange ausgibt, bis entweder ein sonderzeichen
-    // auftaucht oder die anzahl der auszugebenden zeichen erreicht
-    // ist:
+        // das textdocument pDoc ist ein Ww1PlainText, dessen Out()
+        // methode solange ausgibt, bis entweder ein sonderzeichen
+        // auftaucht oder die anzahl der auszugebenden zeichen erreicht
+        // ist:
         cUnknown = This.pDoc->Out(rOut, *This.pSeek);
     }
     This.SetStopAll(true);
@@ -134,7 +132,7 @@ Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
 
 void Ww1Manager::OutStop(Ww1Shell& rOut, sal_Unicode cUnknown)
 {
-                        // Bookmarks brauchen nicht beendet werden ???
+    // bookmarks don't need to be ended?
     if (pFld)
         pFld->Stop(rOut, *this, cUnknown);
     if (!Pushed())
@@ -149,7 +147,7 @@ void Ww1Manager::OutStop(Ww1Shell& rOut, sal_Unicode cUnknown)
 
 void Ww1Manager::OutStart( Ww1Shell& rOut )
 {
-// alle attribute, die's brauchen beginnen
+    // alle attribute, die's brauchen beginnen
     if (!Pushed())
         aSep.Start(rOut, *this);
     if (true)
@@ -162,27 +160,27 @@ void Ww1Manager::OutStart( Ww1Shell& rOut )
         pFld->Start(rOut, *this);
     if (!Pushed())
         aBooks.Start(rOut, *this);
-// bestimmen, wo das naechste Ereigniss ist:
+    // bestimmen, wo das naechste Ereigniss ist:
     sal_uLong ulEnd = pDoc->Count(); // spaetestens am textende
     if (!Pushed())
-        if (ulEnd > aSep.Where()) // naechster Sep vorher?
+        if (ulEnd > aSep.Where()) // next Sep prior?
             ulEnd = aSep.Where();
     if (true)
-        if (ulEnd > aPap.Where()) // naechster Pap vorher?
+        if (ulEnd > aPap.Where()) // next Pap prior?
             ulEnd = aPap.Where();
     if (true)
-        if (ulEnd > aChp.Where()) // naechster Chp vorher?
+        if (ulEnd > aChp.Where()) // next Chp prior?
             ulEnd = aChp.Where();
     if (!Pushed())
-        if (ulEnd > aFtn.Where()) // naechster Ftn vorher?
+        if (ulEnd > aFtn.Where()) // next Ftn prior?
             ulEnd = aFtn.Where();
     if (pFld)
-        if (ulEnd > pFld->Where()) // naechster Fld vorher?
+        if (ulEnd > pFld->Where()) // next Fld prior?
             ulEnd = pFld->Where();
     if (!Pushed())
-        if (ulEnd > aBooks.Where()) // naechster Bookmark vorher?
+        if (ulEnd > aBooks.Where()) // next Bookmark prior?
             ulEnd = aBooks.Where();
-    *pSeek = Where(); // momentane position
+    *pSeek = Where(); // current position
     if (*pSeek < ulEnd) // sind wir bereits weiter?
         *pSeek = ulEnd;
 }
@@ -197,7 +195,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 // unbehandelte sonderzeichen augegeben. das werden genauso alle
 // start-methoden gerufen und danach per where festgestellt, an
 // welcher stelle die naechste aktion zu erwarten ist.
-//
+
 // ist der manager in einem ge'push'ten mode, werden bestimmte
 // elemente ausgeklammert. felder werden wiederum nur in besonderen
 // faellen augeklammert, wenn naemlich bereiche ausgegeben werden, die
@@ -221,7 +219,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 
     OutStop( rOut, cUnknown );      // Attrs ggfs. beenden
 
-// meta-zeichen interpretieren:
+    // meta-zeichen interpretieren:
     if (!Ww1PlainText::IsChar(cUnknown))
         switch (cUnknown)
         {
@@ -306,8 +304,6 @@ void Ww1Manager::Pop()
     pFld = &aFld;
 }
 
-///////////////////////////////////////////////////////////// Bookmarks
-
 void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
 {
     if (GetIsEnd())
@@ -317,7 +313,7 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
     }
 
     const OUString & rName = GetName();
-    if( rName.startsWith( "_Toc" ) ) // "_Toc*" ist ueberfluessig
+    if( rName.startsWith( "_Toc" ) ) // "_Toc*" is superfluous
         return;
 
     if( rOut.IsFlagSet( SwFltControlStack::HYPO )
@@ -329,11 +325,11 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
     if( nLen > MAX_FIELDLEN )
         nLen = MAX_FIELDLEN;
 
-    // Lese Inhalt des Bookmark
+    // read content of the bookmark
     // geht vermulich auch ueber Ww1PlainText
     OUString aVal( rMan.GetText().GetText( Where(), nLen ) );
 
-    // in 2 Schritten, da OS/2 zu doof ist
+    // in 2 steps, since OS/2 is too stupid
     SwFltBookmark aBook( rName, aVal, GetHandle() );
     rOut << aBook;
 }
@@ -347,7 +343,6 @@ void Ww1Bookmarks::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-///////////////////////////////////////////////////////////// Footnotes
 void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
@@ -393,7 +388,6 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
     }
 }
 
-//////////////////////////////////////////////////////////////// Fields
 void Ww1Fields::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where()){
@@ -449,7 +443,7 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
         if( pTime )
             *pTime = TF_SSMM_12;
     }
-    else                                    // keine Zeit
+    else                                    // no time
     {
         eDT = (WWDateTime)( eDT & ~(sal_uInt16)WW_TIME );
     }
@@ -457,7 +451,7 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
     sal_Int32 nDPos = 0;
     while (true)
     {
-        nDPos = rForm.indexOf('M', nDPos);     // M    -> Datum
+        nDPos = rForm.indexOf('M', nDPos);     // M    -> date
         if (nDPos == 0 || nDPos == -1)
             break;
         sal_Unicode cPrev = rForm[nDPos - 1];
@@ -468,7 +462,7 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
         ++nDPos;
     }
 
-    if (nDPos != -1)                  // Monat -> Datum ?
+    if (nDPos != -1)                  // month -> date ?
     {
         static SwDateFormat const aDateA[32] =
         {
@@ -536,10 +530,10 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
 
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {
-    OUString sType; // der typ als string
-    OUString sFormel; // die formel
+    OUString sType; // the type as string
+    OUString sFormel; // the formula
     OUString sFormat;
-    OUString sDTFormat;   // Datum / Zeit-Format
+    OUString sDTFormat;   // date/time format
     W1_FLD* pData = GetData(); // die an den plc gebunden daten
     OSL_ENSURE(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
 
@@ -655,12 +649,12 @@ oncemore:
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr);
             ((SwSetExpField*)pField)->SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
-// Invisible macht in 378 AErger, soll aber demnaechst gehen
+            // Invisible macht in 378 AErger, soll aber demnaechst gehen
 
             // das Ignorieren des Bookmarks ist nicht implementiert
         }
         break;
-        case 14: // info var
+        case 14: // info variable
         {
             OUString aSubType;
             pos = aStr.indexOf(' ');
@@ -678,16 +672,16 @@ oncemore:
             aSubType = rOut.ConvertUStr(aSubType);
 
 
-            // ganz grosze schiete: der typ 'info' kann einem der
-            // typen 15..31 entsprechen. er enthaelt als formel
-            // das eingentliche feld der doc-info.
-            // kein ';' benutzen mit folgendem macro:
+            // huge pile of shit: the type 'info' can represent one of
+            // types 15 to 31. it contains as formula the actual field
+            // of the doc info.
+            // Don't use ';' with the following macro
 #define IS(sd, se, t) \
     if (aSubType == sd || aSubType == se) \
         rbType = t; \
     else
 
-            // deutsche bez.     englische bez.    typ-code
+            // german name       english name    type-code
             IS("titel",          "title",          15)
             IS("thema",          "subject",        16)
             IS("autor",          "author",         17)
@@ -756,7 +750,7 @@ oncemore:
                         case WW_BOTH: nReg = DI_SUB_DATE; break;
                         default:
                             break;
-                        // WW_DONTKNOW -> Default bereits gesetzt
+                        // WW_DONTKNOW -> Default already set
                     }
                     pField = new SwDocInfoField((SwDocInfoFieldType*)
                         rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg, OUString());
@@ -792,8 +786,8 @@ oncemore:
                     SwTimeFormat aTime = TF_SYSTEM;
 
                     WWDateTime eDT = GetTimeDatePara(sDTFormat, &aTime, &aDate);
-                    if( eDT == WW_DONTKNOW )        // kein D/T-Formatstring
-                        eDT = ( rbType == 32 ) ? WW_TIME : WW_DATE;    // benutze ID
+                    if( eDT == WW_DONTKNOW )        // no D/T-format string
+                        eDT = ( rbType == 32 ) ? WW_TIME : WW_DATE;    // use ID
 
                     if( eDT & WW_DATE )
                     {
@@ -807,7 +801,7 @@ oncemore:
 
                         if( eDT == WW_BOTH )
                             rOut << * pField << ' ';
-                                // Mogel: direkt einfuegen und Space dahinter
+                                // Cheat: insert directly and a space afterwards
                     }
                     if( eDT & WW_TIME )
                     {
@@ -913,7 +907,7 @@ oncemore:
             ((SwSetExpField*)pField)->SetInputFlag( sal_True );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
         }
-        case 39: // fillin command
+        case 39: // filling command
             pField = new SwInputField(
                 static_cast<SwInputFieldType*>(rOut.GetSysFldType( RES_INPUTFLD )),
                 OUString(), sFormel,
@@ -949,11 +943,11 @@ oncemore:
             OUString sName;
             while (*pFormel != '\0' && *pFormel != ' ')
             {
-                // ab hier koennte eine extension kommen
+                // from here on a extension could appear
                 if (*pFormel == '.')
                     pDot = pFormel;
                 else
-                    // aha: wir waren bislang noch in dirs
+                    // so far we were in directories
                     if (*pFormel == '\\')
                     {
                         pDot = 0;
@@ -1032,16 +1026,15 @@ oncemore:
 
 sal_uLong Ww1Fields::GetLength()
 {
-// berechnet die laenge eines feldteiles. nicht mitgerechnet werden
-// die terminierenden zeichen im text (19, 20, 21) die beginn, trenner
-// und ende bedeuten.
+    // berechnet die laenge eines feldteiles. nicht mitgerechnet werden
+    // die terminierenden zeichen im text (19, 20, 21) die beginn, trenner
+    // und ende bedeuten.
     sal_uLong ulBeg = Where();
     sal_uLong ulEnd = Where(nPlcIndex+1);
     OSL_ENSURE(ulBeg<ulEnd, "Ww1Fields");
     return (ulEnd - ulBeg) - 1;
 }
 
-/////////////////////////////////////////////////////////////////// Sep
 void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
@@ -1059,10 +1052,10 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         rFmt.SetFmtAttr(aLR);
         SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
         rFmt.SetFmtAttr(aUL);
-    // sobald wir mit dem lesen der zeichen soweit sind, wo sep's
-    // momentanes attribut beginnt, wird dieses attribut eingefuegt.
-    // diese methode ist bei den meisten start/stop methoden der
-    // memberklassen des managers identisch.
+        // sobald wir mit dem lesen der zeichen soweit sind, wo sep's
+        // momentanes attribut beginnt, wird dieses attribut eingefuegt.
+        // diese methode ist bei den meisten start/stop methoden der
+        // memberklassen des managers identisch.
         sal_uInt8* pByte = GetData();
         Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(pByte + 2));
         aSprm.Start(rOut, rMan);
@@ -1072,18 +1065,17 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-/////////////////////////////////////////////////////////////////// Pap
 void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
     {
         sal_uInt8* pByte;
         sal_uInt16 cb;
-    // bereitstellen der zu startenden attribute
+        // bereitstellen der zu startenden attribute
         if (FillStart(pByte, cb))
         {
             Ww1SprmPapx aSprm(pByte, cb);
-        // und ausgeben:
+            // and give the following output
             aSprm.Start(rOut, rMan);
         }
         ++(*this);
@@ -1105,11 +1097,8 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
     }
 }
 
-//////////////////////////////////////////////////////////////// W1_CHP
-//
 // momentan laesst sich die ausgabe von W1CHPxen nicht nur per define
-// loesen....
-//
+// loesen...
 void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (fBoldGet())
@@ -1190,7 +1179,6 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-/////////////////////////////////////////////////////////////////// Chp
 void Ww1Chp::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
@@ -1218,7 +1206,7 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
         W1_CHP aChpx;
         if (FillStop(aChpx))
         {
-        // zuerst alle toggle-flags
+            // zuerst alle toggle-flags
             if (aChpx.fBoldGet())
                 rOut.EndItem(RES_CHRATR_WEIGHT);
             if (aChpx.fItalicGet())
@@ -1229,8 +1217,8 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
                 rOut.EndItem(RES_CHRATR_CONTOUR);
             if (aChpx.fSmallCapsGet() || aChpx.fCapsGet())
                 rOut.EndItem(RES_CHRATR_CASEMAP);
-        // dann alle zahl-werte, diese haben flags, wenn sie gesetzt
-        // sind..................
+            // dann alle zahl-werte, diese haben flags, wenn sie gesetzt
+            // sind...
             if (aChpx.fsHpsGet())
                 rOut.EndItem(RES_CHRATR_FONTSIZE);
             if (aChpx.fsKulGet())
@@ -1250,23 +1238,20 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
     }
 }
 
-///////////////////////////////////////////////////////////////// Style
 void Ww1Style::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-// Zuerst Basis, damit Attribute des Basis-Styles erkannt werden
-// first: Base................................................
+    // Zuerst Basis, damit Attribute des Basis-Styles erkannt werden
+    // first: Base
     if(pParent->GetStyle(stcBase).IsUsed() )    // Basis gueltig ?
         rOut.BaseStyle(stcBase);
 
-// next of all: CHP...............................................
+    // next of all: CHP
     aChpx.Out(rOut, rMan);
-// Last: PAP.......................................................
+    // Last: PAP
     if (pPapx)
         pPapx->Start(rOut, rMan);
 }
 
-////////////////////////////////////////////////////////// Ww1PlainText
-//
 // die Out() methoden von plaintext fuer den filter geben eine anzahl
 // zeichen aus auf die shell, einen string oder einen char, wieviel
 // zeichen ausgegeben werden, bestimmt ulEnd, das das ende bestimmt,
@@ -1280,11 +1265,10 @@ void Ww1Style::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 // also beachten, dasz wenn !IsChar(Out(...)) gilt, ulEnd unter
 // umstaenden nicht erreicht wurde. dann wurde das kontrollzeichen
 // zwar (weg-)gelesen, jedoch noch nicht ausgegeben.
-//
 sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
 {
-// gibt die zeichen bis ulEnd aus, es sei den es kommen sonderzeichen
-// die eine bedeutung haben wie absatzende oder seitenumbruch.
+    // gibt die zeichen bis ulEnd aus, es sei den es kommen sonderzeichen
+    // die eine bedeutung haben wie absatzende oder seitenumbruch.
     if (ulEnd > Count())
         ulEnd = Count();
     while (ulSeek < ulEnd)
@@ -1301,7 +1285,7 @@ sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
 
 sal_Unicode Ww1PlainText::Out(OUString& rStr, sal_uLong ulEnd)
 {
-// wie Out(Shell..., jedoch ausgabe auf einen string
+    // wie Out(Shell..., jedoch ausgabe auf einen string
     rStr = "";
     if (ulEnd > Count())
         ulEnd = Count();
@@ -1317,17 +1301,13 @@ sal_Unicode Ww1PlainText::Out(OUString& rStr, sal_uLong ulEnd)
     return Ww1PlainText::MinChar;
 }
 
-//
 // hier eruebrigt sich ulEnd...oder?
-//
 sal_Unicode Ww1PlainText::Out( sal_Unicode& rRead )
 {
     rRead = (*this)[ulSeek];
     ++(*this);
     return rRead;
 }
-
-/////////////////////////////////////////////////////////// Ww1SprmPapx
 
 void Ww1SprmPapx::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
@@ -1364,19 +1344,18 @@ void Ww1SprmPapx::Stop(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-///////////////////////////////////////////////////////////////// Fonts
 SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
 {
-// erzeugen eine fonts im sw-sinne aus den word-strukturen
+    // erzeugen eine fonts im sw-sinne aus den word-strukturen
     FontFamily eFamily = FAMILY_DONTKNOW;
     OUString aName;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     switch (nFCode)
     {
-// In the Winword 1.x format, the names of the first three fonts were
-// omitted from the table and assumed to be "Tms Rmn" (for ftc = 0),
-// "Symbol", and "Helv"
+    // In the Winword 1.x format, the names of the first three fonts were
+    // omitted from the table and assumed to be "Tms Rmn" (for ftc = 0),
+    // "Symbol", and "Helv"
     case 0:
          eFamily = FAMILY_ROMAN;
          aName = "Tms Rmn";
@@ -1399,23 +1378,23 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         W1_FFN* pF = GetFFN(nFCode - 3);
         if (pF != 0)
         {
-        // Fontname .........................................
+            // Fontname
             aName = OUString( (sal_Char*)pF->szFfnGet(), strlen( (sal_Char*)pF->szFfnGet() ),
                             RTL_TEXTENCODING_MS_1252 );
-        // Pitch .............................................
+            // Pitch
             static const FontPitch ePitchA[] =
             {
                 PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, PITCH_DONTKNOW
             };
             ePitch = ePitchA[pF->prgGet()];
-        // CharSet ...........................................
+            // CharSet
             eCharSet = RTL_TEXTENCODING_MS_1252;
             if (aName.equalsIgnoreAsciiCase("Symbol")
              || aName.equalsIgnoreAsciiCase("Symbol Set")
              || aName.equalsIgnoreAsciiCase("Wingdings")
              || aName.equalsIgnoreAsciiCase("ITC Zapf Dingbats") )
                 eCharSet = RTL_TEXTENCODING_SYMBOL;
-        // FontFamily ........................................
+            // FontFamily
             sal_uInt16 b = pF->ffGet();
             static const FontFamily eFamilyA[] =
             {
@@ -1436,7 +1415,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
     }
     break;
     }
-            // Extrawurst Hypo
+    // Extrawurst Hypo
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO )
          && ( aName.equalsIgnoreAsciiCase("Helv")
             || aName.equalsIgnoreAsciiCase("Helvetica") ) )
@@ -1447,12 +1426,12 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
     }
     else
     {
-            // VCL matcht die Fonts selber
-            // allerdings passiert bei Helv, Tms Rmn und System Monospaced
-            // Scheisse, so dass diese ersetzt werden muessen.
-            // Nach TH sollen diese durch feste Werte ersetzt werden,
-            // also nicht ueber System::GetStandardFont, damit keine
-            // Namenslisten auftauchen ( Dieses koennte den User verwirren )
+        // VCL matcht die Fonts selber
+        // allerdings passiert bei Helv, Tms Rmn und System Monospaced
+        // Scheisse, so dass diese ersetzt werden muessen.
+        // Nach TH sollen diese durch feste Werte ersetzt werden,
+        // also nicht ueber System::GetStandardFont, damit keine
+        // Namenslisten auftauchen ( Dieses koennte den User verwirren )
         if( aName.equalsIgnoreAsciiCase("Helv"))
         {
             aName  = "Helvetica";
@@ -1471,11 +1450,10 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
             ePitch = PITCH_FIXED;
         }
     }
-// nun koennen wir den font basteln: .........................
+    // nun koennen wir den font basteln
     return SvxFontItem(eFamily, aName, OUString(), ePitch, eCharSet, RES_CHRATR_FONT);
 }
 
-/////////////////////////////////////////////////////////////////// Dop
 void Ww1Dop::Out(Ww1Shell& rOut)
 {
     //~ mdt: fehlt
@@ -1521,11 +1499,10 @@ void Ww1Dop::Out(Ww1Shell& rOut)
 
 }
 
-///////////////////////////////////////////////////////////////// Assoc
 void Ww1Assoc::Out(Ww1Shell& rOut)
 {
-//~ mdt: fehlen: FileNext, Dot, DataDoc, HeaderDoc, Criteria1,
-// Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7
+    //~ mdt: fehlen: FileNext, Dot, DataDoc, HeaderDoc, Criteria1,
+    // Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7
     SwDocShell *pDocShell(rOut.GetDoc().GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
@@ -1546,7 +1523,6 @@ void Ww1Assoc::Out(Ww1Shell& rOut)
     }
 }
 
-//////////////////////////////////////////////////////////// StyleSheet
 void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
 {
     switch (stc){
@@ -1787,7 +1763,7 @@ void Ww1StyleSheet::Out(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-////////////////////////////////////////////////////////////// Picture
+// Picture
 static sal_uLong GuessPicSize(W1_PIC* pPic)
 {
     sal_uInt16 maxx = pPic->mfp.xExtGet();
@@ -1796,11 +1772,9 @@ static sal_uLong GuessPicSize(W1_PIC* pPic)
     return 120L + (sal_uLong)padx * maxy;
 }
 
-//
 // folgende methode schreibt eine windows-.BMP-datei aus einem
 // embeddeten bild in ww-1 dateien
 // gelesen wird 4-bit format, geschrieben jedoch 8-bit.
-//
 void Ww1Picture::WriteBmp(SvStream& rOut)
 {
     long nSize = pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb));
@@ -1971,11 +1945,10 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         rOut << *pGraphic;
 }
 
-////////////////////////////////////////////////////////// HeaderFooter
 void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-// wird sowieso nur bei SEPs aufgerufen, keine weitere pruefung
-// noetig:
+    // wird sowieso nur bei SEPs aufgerufen, keine weitere pruefung
+    // noetig:
     if (!rMan.Pushed())
     {
         while (++(*this))
@@ -2044,6 +2017,5 @@ void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
         Start(rOut, rMan);
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
