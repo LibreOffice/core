@@ -10,6 +10,10 @@
 .PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck packageinfo
 
 MAKECMDGOALS?=all
+build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
+ $(if $(filter build-nocheck,$(MAKECMDGOALS)),build)\
+ $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)\
+ $(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check packageinfo,$(MAKECMDGOALS))
 
 SHELL=/usr/bin/env bash
 SRCDIR := @SRC_ROOT@
@@ -217,11 +221,7 @@ build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
 	mkdir -p $(INSTDIR) && install-gdb-printers -a $(INSTDIR) -c
 endif
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild \
-		$(if $(filter build check,$(MAKECMDGOALS)),all) \
-		$(if $(filter build-nocheck,$(MAKECMDGOALS)),build) \
-		$(if $(filter check,$(MAKECMDGOALS)),subsequentcheck) \
-		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check packageinfo,$(MAKECMDGOALS))
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
