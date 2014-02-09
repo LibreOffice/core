@@ -488,8 +488,10 @@ private:
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
-                                                                             const uno::Reference< rendering::XIntegerBitmapColorSpace >& ) throw (lang::IllegalArgumentException,
-                                                                                                                                                   uno::RuntimeException)
+                                                                             const uno::Reference< rendering::XIntegerBitmapColorSpace >& )
+        throw (lang::IllegalArgumentException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertToIntegerColorSpace: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
