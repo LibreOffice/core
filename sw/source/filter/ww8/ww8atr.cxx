@@ -432,11 +432,11 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     if ( pSet && pSet->Count() )
     {
         if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
-             dynamic_cast<const SwFmtPageDesc*>(pItem)->GetRegisteredIn() != NULL)
+             static_cast<const SwFmtPageDesc*>(pItem)->GetRegisteredIn() != NULL)
         {
             bBreakSet = true;
             bNewPageDesc = true;
-            pPgDesc = (const SwFmtPageDesc*)pItem;
+            pPgDesc = static_cast<const SwFmtPageDesc*>(pItem);
             pAktPageDesc = pPgDesc->GetPageDesc();
         }
         else if ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
