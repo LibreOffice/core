@@ -329,10 +329,7 @@ SwDigitModeModifier::~SwDigitModeModifier()
     ((OutputDevice&)rOut).SetDigitLanguage( nOldLanguageType );
 }
 
-/*************************************************************************
- *                      SwTxtFrm::Init()
- *************************************************************************/
-
+// SwTxtFrm::Init()
 void SwTxtFrm::Init()
 {
     OSL_ENSURE( !IsLocked(), "+SwTxtFrm::Init: this is locked." );
@@ -347,9 +344,7 @@ void SwTxtFrm::Init()
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::SwTxtFrm()
- *************************************************************************/
+// SwTxtFrm::SwTxtFrm()
 SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     : SwCntntFrm( pNode, pSib )
     , nAllLines( 0 )
@@ -378,9 +373,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     mnType = FRMC_TXT;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::~SwTxtFrm()
- *************************************************************************/
+// SwTxtFrm::~SwTxtFrm()
 SwTxtFrm::~SwTxtFrm()
 {
     // Remove associated SwParaPortion from pTxtCache
@@ -402,9 +395,7 @@ void SwTxtFrm::ResetPreps()
     }
 }
 
-/*************************************************************************
- *                        SwTxtFrm::IsHiddenNow()
- *************************************************************************/
+//SwTxtFrm::IsHiddenNow()
 sal_Bool SwTxtFrm::IsHiddenNow() const
 {
     SwFrmSwapper aSwapper( this, sal_True );
@@ -437,9 +428,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 }
 
 
-/*************************************************************************
- *                        SwTxtFrm::HideHidden()
- *************************************************************************/
+// SwTxtFrm::HideHidden()
 // removes Textfrm's attachments, when it's hidden
 
 void SwTxtFrm::HideHidden()
@@ -456,9 +445,7 @@ void SwTxtFrm::HideHidden()
     ClearPara();
 }
 
-/*************************************************************************
- *                        SwTxtFrm::HideFootnotes()
- *************************************************************************/
+// SwTxtFrm::HideFootnotes()
 void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
 {
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
@@ -542,9 +529,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
 
     return bRet;
 }
-/*************************************************************************
- *                        SwTxtFrm::HideAndShowObjects()
- *************************************************************************/
+// SwTxtFrm::HideAndShowObjects()
 /** method to hide/show objects
 
     OD 2004-01-15 #110582#
@@ -655,10 +640,10 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
          nFound++;
     }
 
-    // Eine knifflige Sache mit den TxtAttr-Dummy-Zeichen (hier "$"):
-    // "Dr.$Meyer" am Anfang der zweiten Zeile. Dahinter ein Blank eingegeben
-    // und das Wort rutscht nicht in die erste Zeile, obwohl es ginge.
-    // Aus diesem Grund nehmen wir das Dummy-Zeichen noch mit.
+    // A tricky situation with the TxtAttr-Dummy-character (in this case "$"):
+    // "Dr.$Meyer" at the beginning of the second line. Typing a blank after that
+    // doesn't result in the word moving into first line, even though that would work.
+    // For this reason we don't skip the dummy char.
     while( nFound <= nEndLine && ' ' != rTxt[nFound] )
     {
         nFound++;
@@ -666,10 +651,6 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
 
     return nFound;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::IsIdxInside()
- *************************************************************************/
 
 sal_Bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
@@ -690,18 +671,11 @@ sal_Bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) con
     return pPara && ( nPos <= nMax + pPara->GetLen() );
 }
 
-/*************************************************************************
- *                      SwTxtFrm::InvalidateRange()
- *************************************************************************/
 inline void SwTxtFrm::InvalidateRange(const SwCharRange &aRange, const long nD)
 {
     if ( IsIdxInside( aRange.Start(), aRange.Len() ) )
         _InvalidateRange( aRange, nD );
 }
-
-/*************************************************************************
- *                      SwTxtFrm::_InvalidateRange()
- *************************************************************************/
 
 void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 {
@@ -716,10 +690,10 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     bool bInv = false;
     if( 0 != nD )
     {
-        //Auf nDelta werden die Differenzen zwischen alter und
-        //neuer Zeilenlaenge aufaddiert, deshalb ist es negativ,
-        //wenn Zeichen eingefuegt wurden, positiv, wenn Zeichen
-        //geloescht wurden.
+        //In nDelta the differences betwen old and new
+        //linelengths are being added, that's why it's negative
+        //if chars have been added and positive, if chars have
+        //deleted
         *(pPara->GetDelta()) += nD;
         bInv = true;
     }
@@ -736,10 +710,6 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
         InvalidateSize();
     }
 }
-
-/*************************************************************************
- *                      SwTxtFrm::CalcLineSpace()
- *************************************************************************/
 
 void SwTxtFrm::CalcLineSpace()
 {
@@ -898,10 +868,6 @@ static bool isA11yRelevantAttribute(MSHORT nWhich)
 {
     return nWhich != RES_CHRATR_RSID;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::Modify()
- *************************************************************************/
 
 void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
@@ -1363,10 +1329,6 @@ bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
     return true;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::PrepWidows()
- *************************************************************************/
-
 void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
 {
     OSL_ENSURE(GetFollow() && nNeed, "+SwTxtFrm::Prepare: lost all friends");
@@ -1422,10 +1384,6 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
 
     UNDO_SWAP( this )
 }
-
-/*************************************************************************
- *                      SwTxtFrm::Prepare
- *************************************************************************/
 
 static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint ePrep )
 {
@@ -1903,11 +1861,6 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
     return SwTxtFrm::WouldFit( rMaxHeight, bSplit, sal_True );
 }
 
-
-/*************************************************************************
- *                      SwTxtFrm::WouldFit()
- *************************************************************************/
-
 /* SwTxtFrm::WouldFit()
  * sal_True: wenn ich aufspalten kann.
  * Es soll und braucht nicht neu formatiert werden.
@@ -2019,11 +1972,6 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     return bRet;
 }
 
-
-/*************************************************************************
- *                      SwTxtFrm::GetParHeight()
- *************************************************************************/
-
 KSHORT SwTxtFrm::GetParHeight() const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
@@ -2058,11 +2006,6 @@ KSHORT SwTxtFrm::GetParHeight() const
     return nHeight;
 }
 
-
-/*************************************************************************
- *                      SwTxtFrm::GetFormatted()
- *************************************************************************/
-
 // returns this _always_ in the formated state!
 SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 {
@@ -2088,10 +2031,6 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 
     return this;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::CalcFitToContent()
- *************************************************************************/
 
 SwTwips SwTxtFrm::CalcFitToContent()
 {
@@ -2360,9 +2299,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::GetLineSpace()
- *************************************************************************/
 // OD 07.01.2004 #i11859# - change return data type
 //      add default parameter <_bNoPropLineSpacing> to control, if the
 //      value of a proportional line spacing is returned or not
@@ -2414,10 +2350,6 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
     return nRet;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::FirstLineHeight()
- *************************************************************************/
-
 KSHORT SwTxtFrm::FirstLineHeight() const
 {
     if ( !HasPara() )
@@ -2457,7 +2389,6 @@ MSHORT SwTxtFrm::GetLineCount( sal_Int32 nPos )
 void SwTxtFrm::ChgThisLines()
 {
     //not necessary to format here (GerFormatted etc.), because we have to come from there!
-
     sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( !GetTxt().isEmpty() && HasPara() )
@@ -2594,22 +2525,13 @@ void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
     rPH.Finish();
 }
 
-
-/*************************************************************************
- *                      SwTxtFrm::GetScriptInfo()
- *************************************************************************/
-
 const SwScriptInfo* SwTxtFrm::GetScriptInfo() const
 {
     const SwParaPortion* pPara = GetPara();
     return pPara ? &pPara->GetScriptInfo() : 0;
 }
 
-/*************************************************************************
- *                      lcl_CalcFlyBasePos()
- * Helper function for SwTxtFrm::CalcBasePosForFly()
- *************************************************************************/
-
+// Helper function for SwTxtFrm::CalcBasePosForFly()
 static SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
                             SwTxtFly& rTxtFly )
 {
@@ -2655,10 +2577,6 @@ static SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
 
     return nRet;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::CalcBasePosForFly()
- *************************************************************************/
 
 void SwTxtFrm::CalcBaseOfstForFly()
 {

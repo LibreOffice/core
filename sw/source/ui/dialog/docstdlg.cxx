@@ -76,11 +76,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 {
 }
 
-/*--------------------------------------------------------------------
-    Description:    fill ItemSet when changed
- --------------------------------------------------------------------*/
-
-
+// Description: fill ItemSet when changed
 sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
     return sal_False;
@@ -89,11 +85,8 @@ sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
-/*------------------------------------------------------------------------
- Description:   update / set data
-------------------------------------------------------------------------*/
 
-
+// Description: update / set data
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
     m_pTableNo->SetText(OUString::number( rStat.nTbl ));
@@ -106,11 +99,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
     m_pCharExclSpacesNo->SetText(OUString::number( rStat.nCharExcludingSpaces ));
 }
 
-/*------------------------------------------------------------------------
- Description:   update statistics
-------------------------------------------------------------------------*/
-
-
+// Description: update statistics
 void SwDocStatPage::Update()
 {
     SfxViewShell *pVSh = SfxViewShell::Current();
