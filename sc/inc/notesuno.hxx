@@ -96,7 +96,8 @@ public:
                             /// XSheetAnnotationShapeSupplier
     virtual ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > SAL_CALL
                             getAnnotationShape()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

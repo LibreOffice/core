@@ -227,7 +227,8 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
 
 // XSheetAnnotationShapeSupplier
 uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape()
-                                throw(::com::sun::star::uno::RuntimeException)
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference < drawing::XShape > xShape;
