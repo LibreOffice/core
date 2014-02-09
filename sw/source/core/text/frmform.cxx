@@ -103,7 +103,7 @@ void SwTxtFrm::ValidateFrm()
     // We at least have to save the MustFit flag!
     OSL_ENSURE( HasPara(), "ResetPreps(), missing ParaPortion." );
     SwParaPortion *pPara = GetPara();
-    const sal_Bool bMustFit = pPara->IsPrepMustFit();
+    const bool bMustFit = pPara->IsPrepMustFit();
     ResetPreps();
     pPara->SetPrepMustFit( bMustFit );
 
@@ -197,7 +197,7 @@ sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
     SwTxtFrm* pMyFollow = GetFollow();
 
     SwParaPortion *pPara = GetPara();
-    sal_Bool bFollowFld = pPara ? pPara->IsFollowField() : sal_False;
+    const bool bFollowFld = pPara && pPara->IsFollowField();
 
     if( !pMyFollow->GetOfst() || pMyFollow->GetOfst() != nTxtOfst ||
         bFollowFld || pMyFollow->IsFieldFollow() ||
@@ -787,10 +787,10 @@ sal_Bool SwTxtFrm::CalcPreps()
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
         return sal_False;
-    sal_Bool bPrep = pPara->IsPrep();
-    sal_Bool bPrepWidows = pPara->IsPrepWidows();
-    sal_Bool bPrepAdjust = pPara->IsPrepAdjust();
-    sal_Bool bPrepMustFit = pPara->IsPrepMustFit();
+    const bool bPrep = pPara->IsPrep();
+    const bool bPrepWidows = pPara->IsPrepWidows();
+    const bool bPrepAdjust = pPara->IsPrepAdjust();
+    const bool bPrepMustFit = pPara->IsPrepMustFit();
     ResetPreps();
 
     sal_Bool bRet = sal_False;
@@ -872,7 +872,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                     if( bPrepMustFit )
                     {
                         SwTxtLineAccess aAccess( this );
-                        aAccess.GetPara()->SetPrepMustFit( sal_True );
+                        aAccess.GetPara()->SetPrepMustFit();
                     }
                     return sal_False;
                 }
@@ -983,7 +983,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     sal_Int32 nEnd = rLine.GetStart();
 
-    sal_Bool bHasToFit = pPara->IsPrepMustFit();
+    const bool bHasToFit = pPara->IsPrepMustFit();
 
     // The StopFlag is set by footnotes which want to go onto the next page
     // Call base class method <SwTxtFrmBreak::IsBreakNow(..)>
@@ -1130,7 +1130,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
 
-    pPara->SetPrepMustFit( sal_False );
+    pPara->SetPrepMustFit( false );
 
     UNDO_SWAP( this )
 }
@@ -1151,7 +1151,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     const KSHORT nOldAscent = pOldCur->GetAscent();
     const KSHORT nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
-    const sal_Bool bOldHyph = pOldCur->IsEndHyph();
+    const bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
     SwTwips nOldBottom = 0;
     if( rLine.GetCurr()->IsClipping() )
@@ -1239,7 +1239,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 
         // Finally we enlarge the repaint rectangle if we found an underscore
         // within our line. 40 Twips should be enough
-        const sal_Bool bHasUnderscore =
+        const bool bHasUnderscore =
                 ( rLine.GetInfo().GetUnderScorePos() < nNewStart );
         if ( bHasUnderscore || rLine.GetCurr()->HasUnderscore() )
             rRepaint.Bottom( rRepaint.Bottom() + 40 );
@@ -1517,8 +1517,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         }
         if( bFormat )
         {
-            sal_Bool bOldEndHyph = rLine.GetCurr()->IsEndHyph();
-            sal_Bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
+            const bool bOldEndHyph = rLine.GetCurr()->IsEndHyph();
+            const bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
             bFormat = FormatLine( rLine, bPrev );
             // There can only be one bPrev ... (???)
             bPrev = false;
@@ -1670,7 +1670,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
         // Empty lines do not get tortured for very long:
         // pPara is cleared, which is the same as:
         // *pPara = SwParaPortion;
-        sal_Bool bMustFit = pPara->IsPrepMustFit();
+        const bool bMustFit = pPara->IsPrepMustFit();
         pPara->Truncate();
         pPara->FormatReset();
         if( pBlink && pPara->IsBlinking() )
@@ -1810,8 +1810,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         {
             if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
             {
-                aAccess.GetPara()->SetPrepAdjust( sal_True );
-                aAccess.GetPara()->SetPrep( sal_True );
+                aAccess.GetPara()->SetPrepAdjust();
+                aAccess.GetPara()->SetPrep();
                 CalcPreps();
             }
             SetWidow( sal_False );
@@ -1883,7 +1883,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     // the PrepMustFit should not survive a Format operation
     SwParaPortion *pPara = GetPara();
     if ( pPara )
-           pPara->SetPrepMustFit( sal_False );
+           pPara->SetPrepMustFit( false );
 
     CalcBaseOfstForFly();
     _CalcHeightOfLastLine(); // #i11860#

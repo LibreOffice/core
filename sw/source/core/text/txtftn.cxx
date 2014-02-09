@@ -1642,7 +1642,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
  * Wird im SwTxtFrm::Prepare() gerufen
  *************************************************************************/
 
-sal_Bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
+bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
 {
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
@@ -1659,7 +1659,7 @@ sal_Bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
     }
 
     if( !pQuo )
-        return sal_False;
+        return false;
 
     return pQuo->GetQuoTxt() == rQuo;
 }

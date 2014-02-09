@@ -699,7 +699,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
     OSL_ENSURE( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
 
-    pCurrent->SetFormatAdj(sal_False);
+    pCurrent->SetFormatAdj(false);
 
     SwParaPortion* pPara = GetInfo().GetParaPortion();
 
@@ -765,7 +765,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
         KSHORT nLocalWidth = KSHORT( aLocal.Left() + aLocal.Width() );
         if( nRealWidth < long( nLocalWidth ) )
             aLocal.Width( nRealWidth - aLocal.Left() );
-        GetInfo().GetParaPortion()->SetFly( sal_True );
+        GetInfo().GetParaPortion()->SetFly( true );
         pFlyPortion = new SwFlyPortion( aLocal );
         pFlyPortion->Height( KSHORT( rCurrRect.Height() ) );
         // The Width could be smaller than the FixWidth, thus:

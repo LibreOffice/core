@@ -519,9 +519,9 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
             rInf.SetSoftHyphPos(0);
             FormatEOL( rInf );
             if ( rInf.GetFly() )
-                rInf.GetRoot()->SetMidHyph( sal_True );
+                rInf.GetRoot()->SetMidHyph( true );
             else
-                rInf.GetRoot()->SetEndHyph( sal_True );
+                rInf.GetRoot()->SetEndHyph( true );
         }
         else
         {

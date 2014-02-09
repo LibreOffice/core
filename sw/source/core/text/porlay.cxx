@@ -162,7 +162,7 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
             pPortion = new SwTxtPortion( *(SwLinePortion*)this );
             if( IsBlinking() && pBlink )
             {
-                SetBlinking( sal_False );
+                SetBlinking( false );
                 pBlink->Replace( this, pPortion );
             }
         }
@@ -291,7 +291,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     KSHORT nFlyHeight = 0;
     KSHORT nFlyDescent = 0;
     bool bOnlyPostIts = true;
-    SetHanging( sal_False );
+    SetHanging( false );
 
     sal_Bool bTmpDummy = ( 0 == GetLen() );
     SwFlyCntPortion* pFlyCnt = 0;
@@ -311,7 +311,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
     if( pPortion )
     {
-        SetCntnt( sal_False );
+        SetCntnt( false );
         if( pPortion->IsBreakPortion() )
         {
             SetLen( pPortion->GetLen() );
@@ -389,8 +389,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
                 if( pPos->IsHangingPortion() )
                 {
-                    SetHanging( sal_True );
-                    rInf.GetParaPortion()->SetMargin( sal_True );
+                    SetHanging();
+                    rInf.GetParaPortion()->SetMargin();
                 }
 
                 // To prevent that a paragraph-end-character does not change
@@ -472,11 +472,11 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     {
                         OUString aTxt;
                         if( pPos->GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() )
-                            SetCntnt( sal_True );
+                            SetCntnt();
                     }
                     else if( ( pPos->InTxtGrp() || pPos->IsMultiPortion() ) &&
                              pPos->GetLen() )
-                        SetCntnt( sal_True );
+                        SetCntnt();
                 }
 
                 bTmpDummy = bTmpDummy && !HasCntnt() &&
@@ -2078,7 +2078,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
 SwParaPortion::SwParaPortion()
 {
     FormatReset();
-    bFlys = bFtnNum = bMargin = sal_False;
+    bFlys = bFtnNum = bMargin = false;
     SetWhichPor( POR_PARA );
 }
 
@@ -2152,7 +2152,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
         pPor = pPor->GetPortion();
     }
     if( !bFound ) // update the hanging-flag
-        ((SwLineLayout*)this)->SetHanging( sal_False );
+        ((SwLineLayout*)this)->SetHanging( false );
     return nDiff;
 }
 
@@ -2171,7 +2171,7 @@ SwTwips SwTxtFrm::HangingMargin() const
         pLine = pLine->GetNext();
     } while ( pLine );
     if( !nRet ) // update the margin-flag
-        ((SwParaPortion*)GetPara())->SetMargin( sal_False );
+        ((SwParaPortion*)GetPara())->SetMargin( false );
     return nRet;
 }
 

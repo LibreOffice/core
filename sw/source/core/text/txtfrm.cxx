@@ -1374,7 +1374,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
         return;
-    pPara->SetPrepWidows( sal_True );
+    pPara->SetPrepWidows();
 
     MSHORT nHave = nNeed;
 
@@ -1530,7 +1530,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 _InvalidatePrt();
                                 _InvalidateSize();
             /* no break here */
-        case PREP_ADJUST_FRM :  pPara->SetPrepAdjust( sal_True );
+        case PREP_ADJUST_FRM :  pPara->SetPrepAdjust();
                                 if( IsFtnNumFrm() != pPara->IsFtnNum() ||
                                     IsUndersized() )
                                 {
@@ -1539,9 +1539,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                         _SetOfst( 0 );
                                 }
                                 break;
-        case PREP_MUST_FIT :        pPara->SetPrepMustFit( sal_True );
+        case PREP_MUST_FIT :        pPara->SetPrepMustFit();
             /* no break here */
-        case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust( sal_True );
+        case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust();
                                     break;
 
         case PREP_WIDOWS :
@@ -1661,7 +1661,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
             // if we don't overlap with anybody:
             // did any free-flying frame overlapped _before_ the position change?
-            sal_Bool bFormat = pPara->HasFly();
+            bool bFormat = pPara->HasFly();
             if( !bFormat )
             {
                 if( IsInFly() )
@@ -1669,7 +1669,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     SwTwips nTmpBottom = GetUpper()->Frm().Top() +
                         GetUpper()->Prt().Bottom();
                     if( nTmpBottom < Frm().Bottom() )
-                        bFormat = sal_True;
+                        bFormat = true;
                 }
                 if( !bFormat )
                 {
@@ -1684,7 +1684,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
                                     == FLY_AT_CHAR )
                             {
-                                bFormat = sal_True;
+                                bFormat = true;
                                 break;
                             }
                         }
@@ -1733,7 +1733,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         case PREP_REGISTER:
             if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
             {
-                pPara->SetPrepAdjust( sal_True );
+                pPara->SetPrepAdjust();
                 CalcLineSpace();
                 InvalidateSize();
                 _InvalidatePrt();
@@ -1810,7 +1810,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
     }
     if( pPara )
-        pPara->SetPrep( sal_True );
+        pPara->SetPrep();
 }
 
 /* --------------------------------------------------

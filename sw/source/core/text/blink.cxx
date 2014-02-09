@@ -137,7 +137,7 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
         aList.insert( pBlinkPor );
         pTxtFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
-            ((SwLineLayout*)pPor)->SetBlinking( sal_True );
+            ((SwLineLayout*)pPor)->SetBlinking();
 
         if( !aTimer.IsActive() )
             aTimer.Start();

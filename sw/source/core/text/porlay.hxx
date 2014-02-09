@@ -92,21 +92,21 @@ private:
     std::vector<long>* pLLSpaceAdd;     // Used for justified alignment.
     std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression.
     KSHORT nRealHeight;                 // The height resulting from line spacing and register
-    sal_Bool bFormatAdj : 1;
-    sal_Bool bDummy     : 1;
-    sal_Bool bFntChg    : 1;
-    sal_Bool bEndHyph   : 1;
-    sal_Bool bMidHyph   : 1;
-    sal_Bool bTab       : 1;
-    sal_Bool bFly       : 1;
-    sal_Bool bRest      : 1;
-    sal_Bool bBlinking  : 1;
-    sal_Bool bClipping  : 1; // Clipping needed for exact line height
-    sal_Bool bContent   : 1; // Text for line numbering
-    sal_Bool bRedline   : 1; // The Redlining
-    sal_Bool bForcedLeftMargin : 1; // Left adjustment moved by the Fly
-    sal_Bool bHanging : 1; // Contains a hanging portion in the margin
-    sal_Bool bUnderscore : 1;
+    bool bFormatAdj : 1;
+    bool bDummy     : 1;
+    bool bFntChg    : 1;
+    bool bEndHyph   : 1;
+    bool bMidHyph   : 1;
+    bool bTab       : 1;
+    bool bFly       : 1;
+    bool bRest      : 1;
+    bool bBlinking  : 1;
+    bool bClipping  : 1; // Clipping needed for exact line height
+    bool bContent   : 1; // Text for line numbering
+    bool bRedline   : 1; // The Redlining
+    bool bForcedLeftMargin : 1; // Left adjustment moved by the Fly
+    bool bHanging : 1; // Contains a hanging portion in the margin
+    bool bUnderscore : 1;
 
     SwTwips _GetHangingMargin() const;
 
@@ -118,39 +118,39 @@ public:
 
     // Flags
     inline void ResetFlags();
-    inline void SetFormatAdj( const sal_Bool bNew ) { bFormatAdj = bNew; }
-    inline sal_Bool IsFormatAdj() const { return bFormatAdj; }
-    inline void SetFntChg( const sal_Bool bNew ) { bFntChg = bNew; }
-    inline sal_Bool IsFntChg() const { return bFntChg; }
-    inline void SetEndHyph( const sal_Bool bNew ) { bEndHyph = bNew; }
-    inline sal_Bool IsEndHyph() const { return bEndHyph; }
-    inline void SetMidHyph( const sal_Bool bNew ) { bMidHyph = bNew; }
-    inline sal_Bool IsMidHyph() const { return bMidHyph; }
-    inline void SetTab( const sal_Bool bNew ) { bTab = bNew; }
-    inline sal_Bool IsTab() const { return bTab; }
-    inline void SetFly( const sal_Bool bNew ) { bFly = bNew; }
-    inline sal_Bool IsFly() const { return bFly; }
-    inline void SetRest( const sal_Bool bNew ) { bRest = bNew; }
-    inline sal_Bool IsRest() const { return bRest; }
-    inline void SetBlinking( const sal_Bool bNew = sal_True ) { bBlinking = bNew; }
-    inline sal_Bool IsBlinking() const { return bBlinking; }
-    inline void SetCntnt( const sal_Bool bNew = sal_True ) { bContent = bNew; }
-    inline sal_Bool HasCntnt() const { return bContent; }
-    inline void SetRedline( const sal_Bool bNew = sal_True ) { bRedline = bNew; }
-    inline sal_Bool HasRedline() const { return bRedline; }
-    inline void SetForcedLeftMargin( const sal_Bool bNew = sal_True ) { bForcedLeftMargin = bNew; }
-    inline sal_Bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
-    inline void SetHanging( const sal_Bool bNew = sal_True ) { bHanging = bNew; }
-    inline sal_Bool IsHanging() const { return bHanging; }
-    inline void SetUnderscore( const sal_Bool bNew = sal_True ) { bUnderscore = bNew; }
-    inline sal_Bool HasUnderscore() const { return bUnderscore; }
+    inline void SetFormatAdj( const bool bNew ) { bFormatAdj = bNew; }
+    inline bool IsFormatAdj() const { return bFormatAdj; }
+    inline void SetFntChg( const bool bNew ) { bFntChg = bNew; }
+    inline bool IsFntChg() const { return bFntChg; }
+    inline void SetEndHyph( const bool bNew ) { bEndHyph = bNew; }
+    inline bool IsEndHyph() const { return bEndHyph; }
+    inline void SetMidHyph( const bool bNew ) { bMidHyph = bNew; }
+    inline bool IsMidHyph() const { return bMidHyph; }
+    inline void SetTab( const bool bNew ) { bTab = bNew; }
+    inline bool IsTab() const { return bTab; }
+    inline void SetFly( const bool bNew ) { bFly = bNew; }
+    inline bool IsFly() const { return bFly; }
+    inline void SetRest( const bool bNew ) { bRest = bNew; }
+    inline bool IsRest() const { return bRest; }
+    inline void SetBlinking( const bool bNew = true ) { bBlinking = bNew; }
+    inline bool IsBlinking() const { return bBlinking; }
+    inline void SetCntnt( const bool bNew = true ) { bContent = bNew; }
+    inline bool HasCntnt() const { return bContent; }
+    inline void SetRedline( const bool bNew = true ) { bRedline = bNew; }
+    inline bool HasRedline() const { return bRedline; }
+    inline void SetForcedLeftMargin( const bool bNew = true ) { bForcedLeftMargin = bNew; }
+    inline bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
+    inline void SetHanging( const bool bNew = true ) { bHanging = bNew; }
+    inline bool IsHanging() const { return bHanging; }
+    inline void SetUnderscore( const bool bNew = true ) { bUnderscore = bNew; }
+    inline bool HasUnderscore() const { return bUnderscore; }
 
     // Respecting empty dummy lines
-    inline void SetDummy( const sal_Bool bNew ) { bDummy = bNew; }
-    inline sal_Bool IsDummy() const { return bDummy; }
+    inline void SetDummy( const bool bNew ) { bDummy = bNew; }
+    inline bool IsDummy() const { return bDummy; }
 
-    inline void SetClipping( const sal_Bool bNew ) { bClipping = bNew; }
-    inline sal_Bool IsClipping() const { return bClipping; }
+    inline void SetClipping( const bool bNew ) { bClipping = bNew; }
+    inline bool IsClipping() const { return bClipping; }
 
     inline SwLineLayout();
     virtual ~SwLineLayout();
@@ -259,24 +259,24 @@ class SwParaPortion : public SwLineLayout
 
     // If a SwTxtFrm is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
-    sal_Bool bFlys          : 1; // Overlapping Flys?
-    sal_Bool bPrep          : 1; // PREP_*
-    sal_Bool bPrepWidows    : 1; // PREP_WIDOWS
-    sal_Bool bPrepAdjust    : 1; // PREP_ADJUST_FRM
-    sal_Bool bPrepMustFit   : 1; // PREP_MUST_FIT
-    sal_Bool bFollowField   : 1; // We have a bit of field left for the Follow
+    bool bFlys          : 1; // Overlapping Flys?
+    bool bPrep          : 1; // PREP_*
+    bool bPrepWidows    : 1; // PREP_WIDOWS
+    bool bPrepAdjust    : 1; // PREP_ADJUST_FRM
+    bool bPrepMustFit   : 1; // PREP_MUST_FIT
+    bool bFollowField   : 1; // We have a bit of field left for the Follow
 
-    sal_Bool bFixLineHeight : 1; // Fixed line height
-    sal_Bool bFtnNum    : 1; // contains a footnotenumberportion
-    sal_Bool bMargin    : 1; // contains a hanging punctuation in the margin
+    bool bFixLineHeight : 1; // Fixed line height
+    bool bFtnNum    : 1; // contains a footnotenumberportion
+    bool bMargin    : 1; // contains a hanging punctuation in the margin
 
-    sal_Bool bFlag00    : 1;
-    sal_Bool bFlag11    : 1;
-    sal_Bool bFlag12    : 1;
-    sal_Bool bFlag13    : 1;
-    sal_Bool bFlag14    : 1;
-    sal_Bool bFlag15    : 1;
-    sal_Bool bFlag16    : 1;
+    bool bFlag00    : 1;
+    bool bFlag11    : 1;
+    bool bFlag12    : 1;
+    bool bFlag13    : 1;
+    bool bFlag14    : 1;
+    bool bFlag15    : 1;
+    bool bFlag16    : 1;
 
 public:
     SwParaPortion();
@@ -302,44 +302,44 @@ public:
     sal_Int32 GetParLen() const;
 
     // For Prepare()
-    sal_Bool UpdateQuoVadis( const OUString &rQuo );
+    bool UpdateQuoVadis( const OUString &rQuo );
 
     // Flags
-    inline void SetFly( const sal_Bool bNew = sal_True ) { bFlys = bNew; }
-    inline sal_Bool HasFly() const { return bFlys; }
+    inline void SetFly( const bool bNew = true ) { bFlys = bNew; }
+    inline bool HasFly() const { return bFlys; }
 
     // Preps
-    inline void SetPrep( const sal_Bool bNew = sal_True ) { bPrep = bNew; }
-    inline sal_Bool IsPrep() const { return bPrep; }
-    inline void SetPrepWidows( const sal_Bool bNew = sal_True ) { bPrepWidows = bNew; }
-    inline sal_Bool IsPrepWidows() const { return bPrepWidows; }
-    inline void SetPrepMustFit( const sal_Bool bNew = sal_True ) { bPrepMustFit = bNew; }
-    inline sal_Bool IsPrepMustFit() const { return bPrepMustFit; }
-    inline void SetPrepAdjust( const sal_Bool bNew = sal_True ) { bPrepAdjust = bNew; }
-    inline sal_Bool IsPrepAdjust() const { return bPrepAdjust; }
-    inline void SetFollowField( const sal_Bool bNew = sal_True ) { bFollowField = bNew; }
-    inline sal_Bool IsFollowField() const { return bFollowField; }
-    inline void SetFixLineHeight( const sal_Bool bNew = sal_True ) { bFixLineHeight = bNew; }
-    inline sal_Bool  IsFixLineHeight() const { return bFixLineHeight; }
+    inline void SetPrep( const bool bNew = true ) { bPrep = bNew; }
+    inline bool IsPrep() const { return bPrep; }
+    inline void SetPrepWidows( const bool bNew = true ) { bPrepWidows = bNew; }
+    inline bool IsPrepWidows() const { return bPrepWidows; }
+    inline void SetPrepMustFit( const bool bNew = true ) { bPrepMustFit = bNew; }
+    inline bool IsPrepMustFit() const { return bPrepMustFit; }
+    inline void SetPrepAdjust( const bool bNew = true ) { bPrepAdjust = bNew; }
+    inline bool IsPrepAdjust() const { return bPrepAdjust; }
+    inline void SetFollowField( const bool bNew = true ) { bFollowField = bNew; }
+    inline bool IsFollowField() const { return bFollowField; }
+    inline void SetFixLineHeight( const bool bNew = true ) { bFixLineHeight = bNew; }
+    inline bool IsFixLineHeight() const { return bFixLineHeight; }
 
-    inline void SetFtnNum( const sal_Bool bNew = sal_True ) { bFtnNum = bNew; }
-    inline sal_Bool  IsFtnNum() const { return bFtnNum; }
-    inline void SetMargin( const sal_Bool bNew = sal_True ) { bMargin = bNew; }
-    inline sal_Bool  IsMargin() const { return bMargin; }
-    inline void SetFlag00( const sal_Bool bNew = sal_True ) { bFlag00 = bNew; }
-    inline sal_Bool  IsFlag00() const { return bFlag00; }
-    inline void SetFlag11( const sal_Bool bNew = sal_True ) { bFlag11 = bNew; }
-    inline sal_Bool  IsFlag11() const { return bFlag11; }
-    inline void SetFlag12( const sal_Bool bNew = sal_True ) { bFlag12 = bNew; }
-    inline sal_Bool  IsFlag12() const { return bFlag12; }
-    inline void SetFlag13( const sal_Bool bNew = sal_True ) { bFlag13 = bNew; }
-    inline sal_Bool  IsFlag13() const { return bFlag13; }
-    inline void SetFlag14( const sal_Bool bNew = sal_True ) { bFlag14 = bNew; }
-    inline sal_Bool  IsFlag14() const { return bFlag14; }
-    inline void SetFlag15( const sal_Bool bNew = sal_True ) { bFlag15 = bNew; }
-    inline sal_Bool  IsFlag15() const { return bFlag15; }
-    inline void SetFlag16( const sal_Bool bNew = sal_True ) { bFlag16 = bNew; }
-    inline sal_Bool  IsFlag16() const { return bFlag16; }
+    inline void SetFtnNum( const bool bNew = true ) { bFtnNum = bNew; }
+    inline bool IsFtnNum() const { return bFtnNum; }
+    inline void SetMargin( const bool bNew = true ) { bMargin = bNew; }
+    inline bool IsMargin() const { return bMargin; }
+    inline void SetFlag00( const bool bNew = true ) { bFlag00 = bNew; }
+    inline bool IsFlag00() const { return bFlag00; }
+    inline void SetFlag11( const bool bNew = true ) { bFlag11 = bNew; }
+    inline bool IsFlag11() const { return bFlag11; }
+    inline void SetFlag12( const bool bNew = true ) { bFlag12 = bNew; }
+    inline bool IsFlag12() const { return bFlag12; }
+    inline void SetFlag13( const bool bNew = true ) { bFlag13 = bNew; }
+    inline bool IsFlag13() const { return bFlag13; }
+    inline void SetFlag14( const bool bNew = true ) { bFlag14 = bNew; }
+    inline bool IsFlag14() const { return bFlag14; }
+    inline void SetFlag15( const bool bNew = true ) { bFlag15 = bNew; }
+    inline bool IsFlag15() const { return bFlag15; }
+    inline void SetFlag16( const bool bNew = true ) { bFlag16 = bNew; }
+    inline bool IsFlag16() const { return bFlag16; }
 
     // Read/Write methods for the SWG filter
     SvStream &ReadSwg ( SvStream& rStream ); //$ istream
@@ -366,12 +366,12 @@ inline void SwLineLayout::ResetFlags()
 {
     bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly
     = bRest = bBlinking = bClipping = bContent = bRedline
-    = bForcedLeftMargin = bHanging = sal_False;
+    = bForcedLeftMargin = bHanging = false;
 }
 
 inline SwLineLayout::SwLineLayout()
     : pNext( 0 ), pLLSpaceAdd( 0 ), pKanaComp( 0 ), nRealHeight( 0 ),
-      bUnderscore( sal_False )
+      bUnderscore( false )
 {
     ResetFlags();
     SetWhichPor( POR_LAY );
@@ -379,7 +379,7 @@ inline SwLineLayout::SwLineLayout()
 
 inline void SwParaPortion::ResetPreps()
 {
-    bPrep = bPrepWidows = bPrepAdjust = bPrepMustFit = sal_False;
+    bPrep = bPrepWidows = bPrepAdjust = bPrepMustFit = false;
 }
 
 inline void SwParaPortion::FormatReset()
@@ -389,9 +389,9 @@ inline void SwParaPortion::FormatReset()
     // bFlys needs to be retained in SwTxtFrm::_Format() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area
-    // bFlys = sal_False;
+    // bFlys = false;
     ResetPreps();
-    bFollowField = bFixLineHeight = bMargin = sal_False;
+    bFollowField = bFixLineHeight = bMargin = false;
 }
 
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
