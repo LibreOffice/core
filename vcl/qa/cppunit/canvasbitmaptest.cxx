@@ -478,8 +478,10 @@ private:
     }
 
     virtual uno::Sequence< double > SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
-                                                                           const uno::Reference< rendering::XColorSpace >& ) throw (lang::IllegalArgumentException,
-                                                                                                                                    uno::RuntimeException)
+                                                                           const uno::Reference< rendering::XColorSpace >& )
+        throw (lang::IllegalArgumentException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromIntegerColorSpace: method not implemented", false);
         return uno::Sequence< double >();
