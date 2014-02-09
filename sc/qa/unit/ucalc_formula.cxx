@@ -1790,6 +1790,31 @@ void Test::testFuncPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSUMPRODUCT()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
+
+    ScAddress aPos(0,0,0);
+    m_pDoc->SetString(aPos, "=SUMPRODUCT(B1:B3;C1:C3)");
+    CPPUNIT_ASSERT_EQUAL(0.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,0,0),  1.0); // C1
+    CPPUNIT_ASSERT_EQUAL(0.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,0,0),  1.0); // B1
+    CPPUNIT_ASSERT_EQUAL(1.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,1,0),  2.0); // B2
+    CPPUNIT_ASSERT_EQUAL(1.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,1,0),  3.0); // C2
+    CPPUNIT_ASSERT_EQUAL(7.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,2,0), -2.0); // C3
+    CPPUNIT_ASSERT_EQUAL(7.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,2,0),  5.0); // B3
+    CPPUNIT_ASSERT_EQUAL(-3.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncN()
 {
     OUString aTabName("foo");

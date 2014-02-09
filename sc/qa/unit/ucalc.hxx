@@ -115,6 +115,7 @@ public:
     void testFuncROW();
     void testFuncSUM();
     void testFuncPRODUCT();
+    void testFuncSUMPRODUCT();
     void testFuncN();
     void testFuncCOUNTIF();
     void testFuncNUMBERVALUE();
@@ -347,6 +348,7 @@ public:
     CPPUNIT_TEST(testFuncROW);
     CPPUNIT_TEST(testFuncSUM);
     CPPUNIT_TEST(testFuncPRODUCT);
+    CPPUNIT_TEST(testFuncSUMPRODUCT);
     CPPUNIT_TEST(testFuncN);
     CPPUNIT_TEST(testFuncCOUNTIF);
     CPPUNIT_TEST(testFuncNUMBERVALUE);
