@@ -1344,7 +1344,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
         while(true)
         {
             sal_Int32 nStart = sPara.indexOf( '<', nIndex );
-            sal_Int32 nEnd = sPara.indexOf( '>', nStart );
+            sal_Int32 nEnd = nStart == -1 ? -1 : sPara.indexOf( '>', nStart );
             nIndex = nEnd;
             if(nStart != -1 && nEnd != -1)
                 pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, sal_False );
