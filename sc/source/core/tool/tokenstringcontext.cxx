@@ -108,9 +108,6 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
 CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc ) :
     mpDoc(pDoc), meGram(pDoc->GetGrammar())
 {
-    if (!pDoc)
-        return;
-
     updateTabNames();
 }
 
