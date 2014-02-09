@@ -886,26 +886,26 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     OUString aTitle( CreateQualifiedName() );
 
-    sal_uInt16 nLineHeight = (sal_uInt16) pPrinter->GetTextHeight();
+    sal_Int32 nLineHeight = pPrinter->GetTextHeight();
     if(nLineHeight == 0)
     {
         nLineHeight = 1;
     }
-    sal_uInt16 nParaSpace = 10;
+    sal_Int32 nParaSpace = 10;
 
     Size aPaperSz = pPrinter->GetOutputSize();
     aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
     aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
 
     // nLinepPage is not correct if there's a line break
-    sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height()/nLineHeight);
-    long nXTextWidth = pPrinter->GetTextWidth( "X" );
+    sal_Int32 nLinespPage = aPaperSz.Height()/nLineHeight;
+    long nXTextWidth = pPrinter->approximate_char_width();
 
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / nXTextWidth > 1 ? nXTextWidth : 1);
+    sal_Int32 nCharspLine = aPaperSz.Width() / (nXTextWidth > 1 ? nXTextWidth : 1);
     sal_uLong nParas = GetEditEngine()->GetParagraphCount();
 
-    sal_uInt16 nPages = (sal_uInt16) (nParas/nLinespPage+1 );
-    sal_uInt16 nCurPage = 1;
+    sal_Int32 nPages = nParas/nLinespPage+1;
+    sal_Int32 nCurPage = 1;
 
     lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nPrintPage == 0 );
     Point aPos( Print::nLeftMargin, Print::nTopMargin );
@@ -913,8 +913,8 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     {
         OUString aLine( GetEditEngine()->GetText( nPara ) );
         lcl_ConvertTabsToSpaces( aLine );
-        sal_uInt16 nLines = aLine.getLength()/nCharspLine+1;
-        for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
+        sal_Int32 nLines = aLine.getLength()/nCharspLine+1;
+        for (sal_Int32 nLine = 0; nLine < nLines; ++nLine)
         {
             sal_Int32 nBeginIndex = nLine*nCharspLine;
             sal_Int32 nCopyCount = std::min<sal_Int32>(nCharspLine, aLine.getLength()-nBeginIndex);
@@ -935,7 +935,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     pPrinter->SetFont( aOldFont );
     pPrinter->SetMapMode( eOldMapMode );
 
-    return sal_Int32(nCurPage);
+    return nCurPage;
 }
 
 
