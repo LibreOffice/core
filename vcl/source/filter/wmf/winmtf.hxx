@@ -89,7 +89,7 @@
 #define R2_MERGEPEN             15
 #define R2_WHITE                16
 
-/* Mapping Modes */
+/* Mapping modes */
 #define MM_TEXT                 1
 #define MM_LOMETRIC             2
 #define MM_HIMETRIC             3
@@ -100,12 +100,12 @@
 #define MM_ANISOTROPIC          8
 
 
-/* Graphics Modes */
+/* Graphics modes */
 #define GM_COMPATIBLE           1
 #define GM_ADVANCED             2
 #define GM_LAST                 2
 
-/* StretchBlt() Modes */
+/* StretchBlt() modes */
 #define BLACKONWHITE            1
 #define WHITEONBLACK            2
 #define COLORONCOLOR            3
@@ -615,8 +615,8 @@ class WinMtfOutput
     XForm               maXForm;
     sal_Int32           mnDevOrgX, mnDevOrgY;
     sal_Int32           mnDevWidth, mnDevHeight;
-    sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
-    sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
+    sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuel window origin
+    sal_Int32           mnWinExtX, mnWinExtY;       // aktuel window extend
     sal_Bool            mbIsMapWinSet;
     sal_Bool            mbIsMapDevSet;
 
@@ -766,7 +766,7 @@ class WinMtf
 protected:
 
     WinMtfOutput*           pOut;
-    SvStream*               pWMF;               // Die einzulesende WMF/EMF-Datei
+    SvStream*               pWMF;               // the WMF/EMF file to be read
 
     sal_uInt32              nStartPos, nEndPos;
     BSaveStructList_impl    aBmpSaveList;
@@ -775,7 +775,7 @@ protected:
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    // Sorgt dafuer, das aSampledBrush der aktuelle Brush des GDIMetaFiles ist.
+    // assures aSampledBrush is the actual brush of the GDIMetaFile
 
     Color               ReadColor();
     void                Callback( sal_uInt16 nPercent );
@@ -798,7 +798,7 @@ class EnhWMFReader : public WinMtf
 
 
     sal_Bool        ReadHeader();
-                    // Liesst und konvertiert ein Rechteck
+                    // reads and converts the rectangle
     Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
@@ -851,15 +851,15 @@ private:
 
     WMF_EXTERNALHEADER* pExternalHeader;
 
-    // Liesst den Kopf der WMF-Datei
+    // reads header of the WMF-Datei
     sal_Bool        ReadHeader();
 
-    // Liesst die Parameter des Rocords mit der Funktionsnummer nFunction.
+    // reads parameters of the record with the functionnumber nFunction.
     void            ReadRecordParams( sal_uInt16 nFunction );
 
-    Point           ReadPoint();                // Liesst und konvertiert einen Punkt (erst X dann Y)
-    Point           ReadYX();                   // Liesst und konvertiert einen Punkt (erst Y dann X)
-    Rectangle       ReadRectangle();            // Liesst und konvertiert ein Rechteck
+    Point           ReadPoint();                // reads and converts a point (first X then Y)
+    Point           ReadYX();                   // reads and converts a point (first Y then X)
+    Rectangle       ReadRectangle();            // reads and converts a rectangle
     Size            ReadYXExt();
     sal_Bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
 
@@ -878,7 +878,7 @@ public:
 
                     ~WMFReader();
 
-    // Liesst aus dem Stream eine WMF-Datei und fuellt das GDIMetaFile
+    // read WMF file from stream and fill the GDIMetaFile
     void            ReadWMF();
 };
 

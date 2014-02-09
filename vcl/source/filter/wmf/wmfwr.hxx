@@ -61,7 +61,7 @@ private:
 
     bool            bStatus;
 
-    sal_uLong                   nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    sal_uLong                   nLastPercent; // with which number pCallback was called last time.
     FilterConfigItem*       pFilterConfigItem;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -74,10 +74,10 @@ private:
     sal_uInt16                  nTargetDivisor;
 
     sal_uLong nMetafileHeaderPos;
-    sal_uInt32 nMaxRecordSize; // in Worten
+    sal_uInt32 nMaxRecordSize; // in words
     sal_uLong nActRecordPos;
 
-    // Aktuelle Attribute im Quell-Metafile:
+    // actual attribute in source metafile:
     Color     aSrcLineColor;
     Color     aSrcFillColor;
     Color     aSrcTextColor;
@@ -92,7 +92,7 @@ private:
 
     sal_uInt32    eSrcHorTextAlign;
 
-    // Aktuelle Attribute im Ziel-Metafile:
+    // actual attribute in destination metafile:
     Color     aDstLineColor;
     Color     aDstFillColor;
     Color     aDstTextColor;
@@ -103,31 +103,31 @@ private:
 
     sal_uInt32    eDstHorTextAlign;
 
-    bool      bDstIsClipping; // ???: derzeit unberuecksichtigt
-    Region    aDstClipRegion; // ???: derzeit unberuecksichtigt
-    bool bHandleAllocated[MAXOBJECTHANDLES];             // Welche Handles vergeben sind
-    sal_uInt16 nDstPenHandle,nDstFontHandle,nDstBrushHandle; // Welche Handles die jeweiligen
-                                                         // Selected-Objects besitzen
-                                                         // 0xffff = keines:
+    bool      bDstIsClipping; // ???: not taken into account at the moment
+    Region    aDstClipRegion; // ???: not taken into account at the moment
+    bool bHandleAllocated[MAXOBJECTHANDLES];             // which handles have been assigned
+    sal_uInt16 nDstPenHandle,nDstFontHandle,nDstBrushHandle; // which handles are owned by
+                                                         // Selected-Objects
+                                                         // 0xFFFF = none:
 
-    // Damit nicht bei jeder Operation alle Attribute verglichen werden muessen:
+    // to prevent we have to compare all attributes at each operation:
 
-    sal_uLong nNumberOfActions; // Anzahl der Actions im GDIMetafile
-    sal_uLong nNumberOfBitmaps; // Anzahl der Bitmaps
-    sal_uLong nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
-    sal_uLong nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
-    sal_uLong nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+    sal_uLong nNumberOfActions; // number of actions in the GDIMetafile
+    sal_uLong nNumberOfBitmaps; // number of bitmaps
+    sal_uLong nWrittenActions;  // number of processed actions while writing the directory
+    sal_uLong nWrittenBitmaps;  // number of bitmaps written
+    sal_uLong nActBitmapPercent; // percentage of next bitmap written.
 
     bool bEmbedEMF; // optionally embedd EMF data into WMF
 
     void MayCallback();
-        // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
-        // und macht dann ggf. einen Callback. Setzt bStatus auf FALSE wenn User abbrechen
-        // moechte.
+        // this functions calculates percentage using the above 5 parameters
+        // and triggers a callback if needed. Puts bStatus to FALSE if the
+        // users wants to abort.
 
     void CountActionsAndBitmaps(const GDIMetaFile & rMTF);
-        // Zaehlt die Bitmaps und Actions (nNumberOfActions und nNumberOfBitmaps muessen
-        // zu Anfang auf 0 gesetzt werden, weil diese Methode rekursiv ist)
+        // Counts bitmaps and actions (nNumberOfActions and nNumberOfBitmaps should
+        // be initialised to 0 at start, as this method is recursive)
 
     void WritePointXY(const Point & rPoint);
     void WritePointYX(const Point & rPoint);
@@ -138,13 +138,13 @@ private:
     void WriteColor(const Color & rColor);
 
     void WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType);
-        // nSizeWords ist die Groesse des gesammten Records in Anzahl Worte.
-        // Wenn nSizeWords unbekannt ist, dann 0 einsetzen (siehe UpdateRecordHeader()).
+        // nSizeWords is the size of the all records in number of words.
+        // If nSizeWords is unknown, then use 0 (see UpdateRecordHeader())
 
     void UpdateRecordHeader();
-        // berichtig die Groesse des Records nach dem Schreiben der Parameter, wenn
-        // nSizeWords bei Aufruf von WriteRecordHeader(..) unbekannt war.
-        // fuegt ggf. noch ein BYTE 0 ein damit Anzahl Bytes immer gerade.
+        // returns the size of the record after writing the parameters, if
+        // nSizeWords was unknown upon calling WriteRecordHeader(..)
+        // if needed it inserts a BYTE 0 to make number of bytes even
 
     void WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
     void WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);

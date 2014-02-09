@@ -483,7 +483,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pOut->SetTextLayoutMode( nTextLayoutMode );
             DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
-            // Nur wenn der Text auch Zeichen enthaelt, macht die Ausgabe Sinn
+            // output only makes sense if the text contains characters
             if( nLen )
             {
                 nOriginalTextLen = nLen;
@@ -1096,7 +1096,7 @@ sal_Bool WMFReader::ReadHeader()
     sal_Size nStrmPos = pWMF->Tell();
 
     sal_uInt32 nPlaceableMetaKey(0);
-    // Einlesen des METAFILEHEADER, falls vorhanden
+    // if available read the METAFILEHEADER
     *pWMF >> nPlaceableMetaKey;
     if (!pWMF->good())
         return false;
@@ -1161,9 +1161,9 @@ sal_Bool WMFReader::ReadHeader()
     }
     pOut->SetDevExt( aDevExt );
 
-    // Einlesen des METAHEADER
+    // read the METAHEADER
     sal_uInt32 nMetaKey(0);
-    *pWMF >> nMetaKey; // Typ und Headergroesse
+    *pWMF >> nMetaKey; // type and headersize
     if (!pWMF->good())
         return false;
     if (nMetaKey != 0x00090001)
@@ -1177,10 +1177,10 @@ sal_Bool WMFReader::ReadHeader()
         }
     }
 
-    pWMF->SeekRel( 2 ); // Version (von Windows)
-    pWMF->SeekRel( 4 ); // Size (der Datei in Words)
-    pWMF->SeekRel( 2 ); // NoObjects (Maximale Anzahl der gleichzeitigen Objekte)
-    pWMF->SeekRel( 4 ); // MaxRecord (Groesse des groessten Records in Words)
+    pWMF->SeekRel( 2 ); // Version (of Windows)
+    pWMF->SeekRel( 4 ); // Size (of file in words)
+    pWMF->SeekRel( 2 ); // NoObjects (maximum number of simultaneous objects)
+    pWMF->SeekRel( 4 ); // MaxRecord (size of largets record in words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
     return pWMF->good();

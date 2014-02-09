@@ -160,7 +160,7 @@ static float GetSwapFloat( SvStream& rSt )
 {
     float   fTmp;
     sal_Int8* pPtr = (sal_Int8*)&fTmp;
-    rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];    // Little Endian <-> Big Endian switch
+    rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];    // little endian <-> big endian switch
     return fTmp;
 }
 #endif

@@ -38,7 +38,7 @@ extern SgfFontLst* pSgfFonts;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  Einschraenkungen: Schatten nur grau, 2D und mit fixem Abstand.
+//  Limitations:  only grey shadows, 2D and with fixed distance.
 //
 //
 //
@@ -50,66 +50,66 @@ extern SgfFontLst* pSgfFonts;
 /////////////////////////////////////////////////////////////////////////////////
 // AbsBase.Pas
 
-// vvv Sonderzeichen im TextBuffer vvv
-#define  TextEnd        0 /* ^@ Ende der Zeichenkette                           */
-#define  HardSpace      6 /* ^F Hartspace (wird nicht umbrochen) ,' '           */
-#define  SoftTrennK    11 /* ^K Zeichen fuer k-c-Austausch bei Trennung, 'k'    */
-#define  AbsatzEnd     13 /* ^M Neuer Absatz =CR                                */
-#define  HardTrenn     16 /* ^P Hartes Trennzeichen (wird nicht umbrochen), '-' */
-#define  SoftTrennAdd  19 /* ^S Zusatz-Zeichen Trennung von z.b."Schiff-fahrt"  */
-#define  Escape        27 /* ^[ Escapesequenz einleiten                         */
-#define  SoftTrenn     31 /* ^_ Weiches Trennzeichen, '-' nur Zeilenende        */
+// vvv special characters in text buffer vvv
+#define  TextEnd        0 /* ^@ end of character sequence                       */
+#define  HardSpace      6 /* ^F non-breaking space,' '                          */
+#define  SoftTrennK    11 /* ^K character for k-c-switch for separation, 'k'    */
+#define  AbsatzEnd     13 /* ^M new paragraph=CR                                */
+#define  HardTrenn     16 /* ^P hard separator (not wrapped), '-'               */
+#define  SoftTrennAdd  19 /* ^S extra-character, separates e.g. "schiff-fahrt"  */
+#define  Escape        27 /* ^[ start of escape sequence                        */
+#define  SoftTrenn     31 /* ^_ soft separator, '-' only end of line            */
 #define  MaxEscValLen  8
 #define  MaxEscLen     (MaxEscValLen+3)
 
 //==============================================================================
-// Escapesequenzen: [Esc]<Ident><Value>[Esc]  also mind. 4 Char
-// Max. Laenge von Value soll sein: 8 Char (7+Vorzeichen). Demnach max. Laenge
-// einer Escapesequenz: 11 Char.
+// Escape sequences: [Esc]<Ident><Value>[Esc]  at least 4 characters
+// Max length of value should be: 8 chars (7+sign). Therefore max. length
+// of a escape sequence: 11 chars.
 // Identifer:
 
-#define  EscFont   'F' /* FontID, z.B. 92500 fuer CG Times                          */
-#define  EscGrad   'G' /* Schriftgrad 1..255 fuer <<Pt-127<<Pt                      */
-#define  EscBreit  'B' /* Breite 1..255% des Schriftgrades                          */
-#define  EscKaptS  'K' /* Kapitaelchengroesse 1..255% des Schriftgrades             */
-#define  EscLFeed  'L' /* Zeilenabstand 1..32767% vom max. Schriftgrad der Zeile    */
-                        // oder 1..32767 fuer 1..16383<<Pt absolut (Wenn Bit 15=1)
-#define  EscSlant  'S' /* Kursiv(Winkel) 1..8999 fuer 0.01deg..89.99deg             */
-#define  EscVPos   'V' /* Zeichen Vertikal-Position  1..255 fuer <<Pt..127<<Pt      */
-#define  EscZAbst  'Z' /* Zeichenabstand -128..127%                                 */
-#define  EscHJust  'A' /* H-Justify    Absatz: Links, Zentr, Rechts, Block, Austreibend, Gesperrt (0..5)*/
+#define  EscFont   'F' /* fontID, e.g. 92500 for CG Times                           */
+#define  EscGrad   'G' /* font angle 1..255 for <<Pt-127<<Pt                        */
+#define  EscBreit  'B' /* width 1..255% of the font angle                           */
+#define  EscKaptS  'K' /* uppercase size 1..255% of the text angle                  */
+#define  EscLFeed  'L' /* character spacing 1..32767% of max. text angle of the line*/
+                        // or 1..32767 for 1..16383<<Pt absolute (if bit 15=1)
+#define  EscSlant  'S' /* italic (angle) 1..8999 for 0.01deg..89.99deg              */
+#define  EscVPos   'V' /* character vercial position 1..255 for <<Pt..127<<Pt       */
+#define  EscZAbst  'Z' /* character spacing -128..127%                              */
+#define  EscHJust  'A' /* H-justify  paragraph: left, cent, right, block, aligned, fixed (0..5)*/
 
-#define  EscFarbe  'C' /* Farbe 0..7                                                */
-#define  EscBFarb  'U' /* BackFarbe 0..7                                            */
-#define  EscInts   'I' /* Farbintensitaet 0..100%                                   */
-#define  EscMustr  'M' /* Muster 0..? inkl. Transp...                               */
-#define  EscMFarb  'O' /* Musterfarbe 0..7                                          */
-#define  EscMBFrb  'P' /* 2. Musterfarbe 0..7                                       */
-#define  EscMInts  'W' /* Musterintensitaet 0..7                                    */
+#define  EscFarbe  'C' /* colour 0..7                                               */
+#define  EscBFarb  'U' /* background colour 0..7                                    */
+#define  EscInts   'I' /* colour intensity 0..100%                                  */
+#define  EscMustr  'M' /* pattern 0..? incl. transp...                              */
+#define  EscMFarb  'O' /* pattern colour 0..7                                       */
+#define  EscMBFrb  'P' /* 2nd pattern colour 0..7                                   */
+#define  EscMInts  'W' /* pattern intensity 0..7                                    */
 
-#define  EscSMstr  'E' /* Schattenmuster 0..? inkl. Transp...                       */
-#define  EscSFarb  'R' /* Schattenfarbe 0..7                                        */
-#define  EscSBFrb  'T' /* 2. Schattenfarbe 0..7                                     */
-#define  EscSInts  'Q' /* Schattenintensitaet 0..7                                  */
+#define  EscSMstr  'E' /* shadow pattern 0..? inkl. Transp...                       */
+#define  EscSFarb  'R' /* shadow colour 0..7                                        */
+#define  EscSBFrb  'T' /* 2nd shadow colour 0..7                                    */
+#define  EscSInts  'Q' /* shadow intensity 0..7                                     */
 
-#define  EscSXDst  'X' /* Schattenversatz X 0..100%                                 */
-#define  EscSYDst  'Y' /* Schattenversatz Y 0..100%                                 */
-#define  EscSDist  'D' /* Schattenversatz X-Y 0..100%                               */
+#define  EscSXDst  'X' /* shadow offset X 0..100%                                   */
+#define  EscSYDst  'Y' /* shadow offset Y 0..100%                                   */
+#define  EscSDist  'D' /* shadow offset X-Y 0..100%                                 */
 
-#define  EscBold   'f' /* Fett                                                      */
-#define  EscLSlnt  'l' /* LKursiv                                                   */
-#define  EscRSlnt  'r' /* RKursiv                                                   */
-#define  EscUndln  'u' /* Unterstrichen                                             */
-#define  EscDbUnd  'p' /* doppelt Unterstrichen                                     */
-#define  EscKaptF  'k' /* Kapitaelchenflag                                          */
-#define  EscStrik  'd' /* Durchgestrichen                                           */
-#define  EscDbStk  'e' /* doppelt Durchgestrichen                                   */
-#define  EscSupSc  'h' /* Hochgestellt                                              */
-#define  EscSubSc  't' /* Tiefgestellt                                              */
-#define  Esc2DShd  's' /* 2D-Schatten                                               */
-#define  Esc3DShd  'j' /* 3D-Schatten                                               */
-#define  Esc4DShd  'i' /* 4D-Schatten                                               */
-#define  EscEbShd  'b' /* Embossed                                                  */
+#define  EscBold   'f' /* bold                                                      */
+#define  EscLSlnt  'l' /* L italic                                                  */
+#define  EscRSlnt  'r' /* R italic                                                  */
+#define  EscUndln  'u' /* underlined                                                */
+#define  EscDbUnd  'p' /* double underlined                                         */
+#define  EscKaptF  'k' /* uppercase flag                                            */
+#define  EscStrik  'd' /* strikethrough                                             */
+#define  EscDbStk  'e' /* double strikethrough                                      */
+#define  EscSupSc  'h' /* superscript                                               */
+#define  EscSubSc  't' /* subscript                                                 */
+#define  Esc2DShd  's' /* 2D-shadow                                                 */
+#define  Esc3DShd  'j' /* 3D-shadow                                                 */
+#define  Esc4DShd  'i' /* 4D-shadow                                                 */
+#define  EscEbShd  'b' /* embossed                                                  */
 
 //  AllEscIdent =[EscFont, EscGrad, EscBreit,EscKaptS,EscLFeed,EscSlant,EscVPos, EscZAbst,EscHJust,
 //                EscFarbe,EscBFarb,EscInts, EscMustr,EscMFarb,EscMBFrb,EscMInts,
@@ -117,19 +117,19 @@ extern SgfFontLst* pSgfFonts;
 //                EscBold, EscLSlnt,EscRSlnt,EscUndln,EscDbUnd,EscKaptF,EscStrik,EscDbStk,
 //                EscSupSc,EscSubSc,Esc2DShd,Esc3DShd,Esc4DShd];
 // Justify muss spaetestens am Anfang des Absatzes stehen
-#define  EscSet    '\x1e' /* Flag setzen                                               */
-#define  EscReset  '\x1f' /* Flag loeschen                                             */
-#define  EscDeflt  '\x11' /* Flag auf default setzen                                */
-#define  EscToggl  '\x1d' /* Flag Toggeln                                              */
+#define  EscSet    '\x1e' /* set flag                                               */
+#define  EscReset  '\x1f' /* reset flag                                             */
+#define  EscDeflt  '\x11' /* set flag to default                                    */
+#define  EscToggl  '\x1d' /* toggle flag                                            */
 #define  EscNoFlg  0
 #define  EscNoVal  -2147483647 /* -MaxLongInt */
 //==============================================================================
-#define  NoTrenn 0xFFFF   /* Wert fuer Parameter 'Rest' von GetTextChar(), wenn auf keinen Fall getrennt werden soll */
-#define  DoTrenn 0xFFFE   /* Wert fuer Parameter 'Rest' von GetTextChar(), wenn getrennt werden soll                 */
+#define  NoTrenn 0xFFFF   /* parameter value for 'Rest' of GetTextChar(), if separation should not occur */
+#define  DoTrenn 0xFFFE   /* parameter value for 'Rest' of GetTextChar(), if separtion should occur      */
 
 #define  MaxLineChars 1024
 
-#define  ChrXPosArrSize (MaxLineChars+1+1)           /* 2k - Beginnt mit 0 im gegensatz zu StarDraw */
+#define  ChrXPosArrSize (MaxLineChars+1+1)           /* 2k - start with 0 opposite to StarDraw */
 #define  CharLineSize   (MaxLineChars+1+1)
 
 #define  MinChar 32
@@ -138,9 +138,9 @@ extern SgfFontLst* pSgfFonts;
 
 //==============================================================================
 
-#define  CharTopToBase     100 /* wegen Apostrophe und Umlaute mehr als 75% */
-#define  CharTopToBtm      120 /* Zeilenhoehe ist groesser als Schriftgrad  */
-                               // bei Avanti-Bold 'ue' eigentlich sogar 130%
+#define  CharTopToBase     100 /* due to quotes more as 75%         */
+#define  CharTopToBtm      120 /* line height larger as text angle  */
+                               // for Avanti-Bold 'ue' actually even 130%
 
 // end of AbsBase.Pas
 /////////////////////////////////////////////////////////////////////////////////
@@ -154,29 +154,29 @@ extern SgfFontLst* pSgfFonts;
 /////////////////////////////////////////////////////////////////////////////////
 // DefBase.Pas
 
-#define  TextBoldBit  0x0001   /* Fett                    */
-#define  TextRSlnBit  0x0002   /* Kursiv                  */
-#define  TextUndlBit  0x0004   /* Unterstrichen           */
-#define  TextStrkBit  0x0008   /* Durchgesteichen         */
-#define  TextSupSBit  0x0010   /* Hocgestellt             */
-#define  TextSubSBit  0x0020   /* Tiefgestellt            */
-#define  TextKaptBit  0x0040   /* Kapitaelchen            */
-#define  TextLSlnBit  0x0080   /* Linkskursiv             */
-#define  TextDbUnBit  0x0100   /* Doppelt unterstrichen   */
-#define  TextDbStBit  0x0200   /* Doppelt durchgestrichen */
-#define  TextSh2DBit  0x0400   /* 2D-Schatten         2.0 */
-#define  TextSh3DBit  0x0800   /* 3D-Schatten         2.0 */
-#define  TextSh4DBit  0x1000   /* 4D-Schatten         2.0 */
-#define  TextShEbBit  0x2000   /* Embossed-Schatten   2.0 */
+#define  TextBoldBit  0x0001   /* bold                   */
+#define  TextRSlnBit  0x0002   /* italic                 */
+#define  TextUndlBit  0x0004   /* underline              */
+#define  TextStrkBit  0x0008   /* strikethrough          */
+#define  TextSupSBit  0x0010   /* superscript            */
+#define  TextSubSBit  0x0020   /* subscript              */
+#define  TextKaptBit  0x0040   /* capital                */
+#define  TextLSlnBit  0x0080   /* left italic            */
+#define  TextDbUnBit  0x0100   /* double underline       */
+#define  TextDbStBit  0x0200   /* double strikethrough   */
+#define  TextSh2DBit  0x0400   /* 2D-shadow         2.0  */
+#define  TextSh3DBit  0x0800   /* 3D-shadow         2.0  */
+#define  TextSh4DBit  0x1000   /* 4D-shadow         2.0  */
+#define  TextShEbBit  0x2000   /* embossed-shadow   2.0  */
 
-#define  THJustLeft    0x00
-#define  THJustCenter  0x01
-#define  THJustRight   0x02
-#define  THJustBlock   0x03
-#define  THJustDrvOut  0x04 /* Austreibend          Formatiert */
-#define  THJustLocked  0x05 /* A l s   S p e r r s c h r i f t */
+#define  THJustLeft     0x00
+#define  THJustCenter   0x01
+#define  THJustRight    0x02
+#define  THJustBlock    0x03
+#define  THJustDrvOut   0x04   /* Justified         formated */
+#define  THJustLocked   0x05   /* J u s t   l  o  c  k  e  d */
 
-#define  MaxCharSlant  4200 /* Maximal 42deg kursiv ! */
+#define  MaxCharSlant   4200   /* maximum 42deg italic ! */
 
 // end of DefBase.Pas
 /////////////////////////////////////////////////////////////////////////////////
@@ -210,8 +210,8 @@ short hPoint2Sgf(short a)
 // ======================================================================
 // Function GetTopToBaseLine()  Function GetBaseLineToBtm()
 //
-// Abstand von Zeilenoberkante bis BaseLine bzw. von BaseLine bis
-// Unterkante berechnen. Alles in SGF-Units.
+// Calculate distance from ascender of line to baseline or from baseline to
+// descender. All in SGF-units.
 // ======================================================================
 
 sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
@@ -224,20 +224,19 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 // ======================================================================
 // Function GetTextChar()   Function GetTextCharConv()
 //
-// Liest ein Zeichen aus dem Textbuffer, wertet dabei eventuell
-// auftretende Escapesequenzen aus und setzt dementsprechend den
-// Ein-/Ausgabeparameter AktAtr. Index wird entsprechend erhoeht.
-// Der Parameter Rest muss immer die Anzahl der Zeichen beinhalten,
-// den angeforderten Zeichen in der aktuellen Zeile noch folgen.
-// Ansonsten funktioniert die Silbentrennung nicht richtig. Gibt man
-// stattdessen die Konstante NoTrenn an, wird in keinem Fall
-// getrennt, die Konstante DoTrenn bewirkt dagegen, dass ueberall dort
-// getrennt wird, wo ein SoftTrenner vorkommt.
+// Reads a character from textbuffer, in doing so escape sequences
+// are evaluated and accordingly the input/output parameter AktAtr is set.
+// Index is incremented accordingly.
+// Parameter Rest should always contain the number of characters,
+// the number of remaining characters in that line.
+// Otherwise the hyphenation does not work. If the constand NoTrenn
+// is used instaed, no hyphenation is done. To the contrary then
+// constant DoTrenn triggers hyphenation where a soft-break is present.
 //
-// SoftTrenner werden immer in ein Minuszeichen konvertiert.
-// GetTextCharConv() konvertiert zusaetzlich HardSpace und AbsatzEnde
-// in Spaces sowie HardTrenner in Minuszeichen. TextEnde wird immer
-// als Char(0) geliefert.
+// Soft separators are converted to a minus sign.
+// On top GetTextCharConv() converts HardSpace and AbsatzEnde
+// in spaces, including HardTrenner in minus signs. TextEnde is
+// always returned as Char(0).
 // ======================================================================
 
 
@@ -262,9 +261,9 @@ long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
     long r=0;
 
     if (FlgVal==EscDeflt) {
-        r=Def;                          // zurueck auf Default
+        r=Def;                          // return to default
     } else {
-        if (NumVal!=EscNoVal) r=NumVal; // Hart setzen
+        if (NumVal!=EscNoVal) r=NumVal; // set non-breaking
     }
 
     if (Min!=0 || Max!=0) {
@@ -328,10 +327,10 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
         Ende=(c!=Escape);
         if (!Ende) {
             c=TBuf[Index]; Index++;
-            Ident=c;                          // Identifer merken
+            Ident=c;                          // remember identifier
             FlgVal=EscNoFlg;
             NumVal=EscNoVal;
-            c=TBuf[Index]; Index++;            // Hier faengt der Wert an
+            c=TBuf[Index]; Index++;            // value starts here
             if (c==EscSet || c==EscReset || c==EscDeflt || c==EscToggl) FlgVal=c; else {
                 if (c=='-') Sgn=-1; else Sgn=1;
                 if (c=='+' || c=='-') { c=TBuf[Index]; Index++; }
@@ -389,7 +388,7 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
                 case Esc4DShd: ChgSchnittBit(TextSh4DBit,TextSh2DBit,TextSh3DBit,TextShEbBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
                 case EscEbShd: ChgSchnittBit(TextShEbBit,TextSh2DBit,TextSh3DBit,TextSh4DBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
             } //endcase
-            if (TBuf[Index]==Escape) Index++;         // zweites Esc weglesen }
+            if (TBuf[Index]==Escape) Index++;         // read 2nd escape }
         }
     } while (!Ende && !ScanEsc);
     if (!Ende) c=Escape;
@@ -409,9 +408,9 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
             if (Rest==0 || Rest==DoTrenn ||
                 nc==' ' || nc==AbsatzEnd || nc==TextEnd) c='-';
             else {
-                c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // den Trenner ueberspringen
+                c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // skip separator
                 if (c0==SoftTrennAdd) {
-                    if (c>=32) c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // und hier noch 'nen Buchstaben ueberspringen
+                    if (c>=32) c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // skip another letter
                 }
             }
         }
@@ -423,13 +422,12 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
     return c;
 }
 
-  // HardSpace und HardTrenn muessen explizit konvertiert werden ! }
+  // HardSpace and HardTrenn should be converted explicitely ! }
   // if AktAtr.Schnitt and TextKaptBit =TextKaptBit then c:=UpCase(c);(explizit) }
 
-  // Bei der Trennmethode SoftTrennAdd wird davon ausgegangen, dass der zu }
-  // trennende Konsonant bereits 3x mal im TextBuf vorhanden ist, z.b.:   }
-  // "Schiff-fahrt". Wenn nicht getrennt, dann wird "-f" entfernt.        }
-
+  // The separationmethod SoftTrennAdd assumes, the separating consonant }
+  // is 3x present in TextBuf, e.g.: "schiff-fahrt".   }
+  // If not separated then, "-f" is removed.        }
 
 
 UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
@@ -453,7 +451,7 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
 // ======================================================================
 // Function GetLineFeed()
 //
-// Benoetigter Zeilenabstand in SGF-Units. ChrVPos wird beruecksichtigt.
+// Required line spacing in SGF-Units. ChrVPos is taken into account.
 // ======================================================================
 sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
                    sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
@@ -488,7 +486,7 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
         if (!AbsEnd && c!=' ') r=i;
     }
     MaxGrad=hPoint2Sgf(MaxGrad);
-    if (MaxLF100<=4000) {  // sonst Overflowgefahr
+    if (MaxLF100<=4000) {  // otherwise overflow could occur
         LF=sal_uInt16(hPoint2Sgf(short(MaxLF100)) /100);
     } else {
         LF=sal_uInt16(hPoint2Sgf(short(MaxLF100) /100));
@@ -509,19 +507,19 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 /////////////////////////////////////////////////////////////////////////////////
 // iFont.Pas
 
-#define SuperSubFact 60     /* SuperScript/SubScript: 60% vom Schriftgrad */
-#define DefaultSpace 40     /* Default: Space ist 40% vom SchriftGrad     */
+#define SuperSubFact 60     /* superscript/subscript: 60% of text angle */
+#define DefaultSpace 40     /* Default: space is 40% of text angle      */
 
 sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_uInt16 Dreh,
                       sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
-    SgfFontOne* pSgfFont; // Font aus dem IniFile
+    SgfFontOne* pSgfFont; // Font from the IniFile
     Font   aFont;
     Color  aColor;
     sal_uLong  Grad;
     sal_uLong  Brei;
     OUString FNam;
-    sal_uInt16 StdBrei=50;    // Durchschnittliche Zeichenbreite in % von Schriftgrad
+    sal_uInt16 StdBrei=50;    // average line width in in % of text angle
     bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
 
     pSgfFont = pSgfFonts->GetFontDesc(Atr.GetFont());
@@ -536,33 +534,33 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
         aFont.SetName(FNam);
     }
     else
-    {  // Falls nich im Inifile, sind hier einige Fonts hart kodiert
+    {  // if not in Inifile, some fonts are hard coded here
         aFont.SetPitch(PITCH_VARIABLE);
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
 #if defined(WNT)
-              FNam = "Times New Roman";  // CG Times ist unter Windows Times New Roman
+              FNam = "Times New Roman";  // CG Times is Times New Roman in Windows
 #else
-              FNam = "Times";            // ansonsten ist das einfach Times
+              FNam = "Times";            // otherwise just Times
 #endif
               StdBrei=40;
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
 #if defined(WNT)
-              FNam = "Arial";            // Univers ist unter Windows Arial
+              FNam = "Arial";            // Univers is Arial in Windows
 #else
-              FNam = "Helvetica";        // und ansonsten Helvetica
+              FNam = "Helvetica";        // otherwise Helvetica
 #endif
               aFont.SetFamily(FAMILY_SWISS);
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
 #if defined(WNT)
-              FNam = "Courier New";      // Der Vector-Courierfont unter Windows heisst Courier New
+              FNam = "Courier New";      // The vector-Courierfont is called Courier New in Windows
 #else
-              FNam = "Courier";          // ansonsten ist und bleibt Courier immer Courier
+              FNam = "Courier";          // otherwise Courier remains Courier
 #endif
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);
@@ -689,16 +687,16 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
                   sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
-    sal_uInt16       KernDist=0;       // Wert fuer Kerning
+    sal_uInt16       KernDist=0;       // value for kerning
     sal_uInt16       ChrWidth;
     UCHAR        c;
     bool         AbsEnd;
 
-    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,false); // versucht evtl. zu trennen, wenn Rest entsprechenden Wert besitzt
+    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,false); // tries to separate, if Rest contains appropriate value
 
     AbsEnd=(c==AbsatzEnd || c==TextEnd);
     if (!AbsEnd) {
-        R.OutCh=ConvertTextChar(c); // von HardTrenn nach '-', ...
+        R.OutCh=ConvertTextChar(c); // from HardTrenn to '-', ...
         R.Kapt=(R.Attrib.Schnitt & TextKaptBit) !=0 && UpcasePossible(R.OutCh);
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);
         SetTextContext(rOut,R.Attrib,R.Kapt,0,1,1,1,1);
@@ -706,7 +704,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         UCHAR c1 = (R.Kapt)?Upcase(c):c;
         ChrWidth=GetCharWidth(rOut,c1);
 
-        if (R.Attrib.ZAbst!=100) { // Spezial-Zeichenabstand ?
+        if (R.Attrib.ZAbst!=100) { // special line distance ?
             sal_uLong Temp;
             Temp=sal_uLong(ChrWidth)*sal_uLong(R.Attrib.ZAbst)/100;
             ChrWidth=sal_uInt16(Temp);
@@ -715,7 +713,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         if (R.ChrXP>32000) R.ChrXP=32000;
         Line[nChars]=R.ChrXP-KernDist;
         cLine[nChars]=c;
-        R.ChrXP+=ChrWidth-KernDist; // Position fuer den naechsten Character
+        R.ChrXP+=ChrWidth-KernDist; // position of next character
     }
     return c;
 }
@@ -729,11 +727,11 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     VirtualDevice vOut;
     UCHAR        c,c0;
     UCHAR        ct;
-    bool         First;               // erster Char ?
-    sal_uInt8         Just = 0;                // Absatzformatierung
-    bool         Border;              // Rand der Box erreicht ?
+    bool         First;               // first char ?
+    sal_uInt8    Just = 0;            // paragraph format
+    bool         Border;              // border of box reached ?
     bool         Border0;
-    bool         AbsEnd;              // Ende des Absatzes erreicht ?
+    bool         AbsEnd;              // end of paragraph reached ?
     ProcChrSta*  R=new ProcChrSta;
     ProcChrSta*  R0=new ProcChrSta;
     ProcChrSta*  WErec=new ProcChrSta;
@@ -743,11 +741,11 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     ProcChrSta*  TRrec=new ProcChrSta;
     sal_uInt16       TRnChar;
 
-    sal_uInt16       WordEndCnt;          // Justieren und Trennen
+    sal_uInt16       WordEndCnt;          // justify and separate
     bool         WordEnd;
     bool         Trenn;
 
-    short        BoxRest;             // zum Quetschen und formatieren
+    short        BoxRest;             // to crush and format
     sal_uInt16       i,j,k,h;
     sal_uInt16       re,li;
 
@@ -760,14 +758,14 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     Border=false; First=true;
     WordEndCnt=0;
 
-    do {               // mal schauen, wieviele Worte so in die Zeile passen
+    do {               // check how many words to on that line
         if (Border) c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,DoTrenn,Line,cLine);
         else        c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
         AbsEnd=(c==AbsatzEnd || c==TextEnd);
         //if not AbsEnd then
         {
             if (First) {
-                Just=R->Attrib.Justify & 0x0F; // Absatzformat steht wenn, dann am Anfang
+                Just=R->Attrib.Justify & 0x0F; // paragraph format remains, then at start
             }
             Border=R->ChrXP>UmbWdt;
             WordEnd=(AbsEnd || (c==' ')) && (c0!=' ') && (c0!=0);
@@ -789,13 +787,13 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         AbsEnd=AbsEnd || (nChars>=MaxLineChars);
     } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
-    if (Border) { // Trennen und Quetschen
+    if (Border) { // separate and crush
         (*WErec0)=(*WErec); WEnChar0=WEnChar;
         AbsEnd=false; c0=0;
         (*R)=(*WErec); nChars=WEnChar;
         (*TRrec)=(*R); TRnChar=nChars;
         Border0=false; Border=false;
-        do {                // erst mal gucken wieviele Silben noch reinpassen
+        do {                // first check how many syllables fit
             ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
             c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
             AbsEnd=(ct==AbsatzEnd) || (ct==TextEnd) || (nChars>=MaxLineChars);
@@ -807,20 +805,20 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
                 WordEndCnt++;
                 (*WErec)=(*R0);
                 if (AbsEnd) WEnChar=nChars; else WEnChar=nChars-1;
-                (*TRrec)=(*R); TRnChar=nChars;                       // zum weitersuchen
+                (*TRrec)=(*R); TRnChar=nChars;                       // to continue searching
             }
             if (Trenn && (!Border || (WordEndCnt==0))) {
-                WordEndCnt++;                 // merken, dass man hier trennen kann
+                WordEndCnt++;                       // remember we can separate here
                 (*WErec)=(*TRrec);
                 WEnChar=TRnChar;
-                (*TRrec)=(*R); TRnChar=nChars;                       // zum weitersuchen
+                (*TRrec)=(*R); TRnChar=nChars;      // continue searching
             }
             (*R0)=(*R); c0=c;
             Border0=Border;
             Border=R->ChrXP>UmbWdt;
         } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
-        while (WErec0->Index<WErec->Index) { // damit Line[] auch garantiert stimmt }
+        while (WErec0->Index<WErec->Index) { // to assure Line[] matches }
             c=ProcessChar(vOut,TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
         }
 
@@ -828,9 +826,9 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 
         if (UmbWdt>=R->ChrXP) {
             BoxRest=UmbWdt-R->ChrXP;
-        } else {                                       // Zusammenquetschen
-            BoxRest=R->ChrXP-UmbWdt;                     // um soviel muss gequetscht werden
-            for (i=2;i<=nChars;i++) {                  // 1. CharPosition bleibt !
+        } else {                                       // crush together
+            BoxRest=R->ChrXP-UmbWdt;                   // so much should be crushed
+            for (i=2;i<=nChars;i++) {                  // first character position remains!
                 Line[i]-=(i-1)*(BoxRest) /(nChars-1);
             }
             R->ChrXP=UmbWdt;
@@ -839,7 +837,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     }
 
     if (!AbsEnd) {
-        do {                                         // Leerzeichen weglesen
+        do {                                         // read empty characters
             (*WErec)=(*R);
             c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false);
             nChars++;
@@ -852,12 +850,12 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         }
     }
 
-    if (AbsEnd && nChars<MaxLineChars) { // Ausrichten, statt Blocksatz aber linksbuendig
+    if (AbsEnd && nChars<MaxLineChars) { // align, left aligned instead of block
         if (Just==3) Just=0;
-        nChars++; Line[nChars]=R->ChrXP; // Damit AbsatzEnde auch weggelesen wird
-        Line[nChars+1]=R->ChrXP;         // denn die Breite von CR oder #0 ist nun mal sehr klein
+        nChars++; Line[nChars]=R->ChrXP; // to assure AbsatzEnde is read
+        Line[nChars+1]=R->ChrXP;         // as the width of CR or #0 is very small
         if (TBuf[R->Index-1]!=AbsatzEnd &&  TBuf[R->Index-1]!=TextEnd) {
-            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); // Kleine Korrektur. Notig, wenn nur 1 Wort in
+            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); // small correction needed, if 1st word read
         }
     }
 
@@ -865,16 +863,16 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     if (TextFit) Just=THJustLeft;
 
     switch (Just) {
-        case THJustLeft: break;                                // Links
+        case THJustLeft: break;                                // left
         case THJustCenter: {
-            BoxRest=BoxRest /2;                                // Mitte
+            BoxRest=BoxRest /2;                                // middel
             for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
-        case THJustRight: {                                    // Rechts
+        case THJustRight: {                                    // right
             for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
         case THJustDrvOut:
-        case THJustBlock: {                                    // Block und Austreibend
+        case THJustBlock: {                                    // block and justified
             re=nChars;
             if (Just==THJustDrvOut) re--;
             while (re>=1 && (cLine[re]==' ' || cLine[re]==TextEnd || cLine[re]==AbsatzEnd)) re--;
@@ -882,40 +880,40 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             if (Just==THJustDrvOut) BoxRest=AdjWdt-Line[re+1];
 
-            j=0;                        // Anzahl der Spaces ermitteln
+            j=0;                        // get number of spaces
             for (i=li;i<=re;i++) {
                 if (cLine[i]==' ') {
                     j++;
                 }
             }
 
-            if (j==0) {                        // nur 1 Wort ?  -> Strecken !
-                for (i=li+1;i<=re;i++) {       // von links nach rechts
+            if (j==0) {                        // only one word ?  -> strech !
+                for (i=li+1;i<=re;i++) {       // from left to right
                   Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
                 }
             } else {
                 k=0; h=0;
-                for (i=li;i<=re;i++) {          // j Spaces aufbohren !
-                    if (cLine[i]==' ') {        // Space gefunden !
+                for (i=li;i<=re;i++) {          // j drill spaces !
+                    if (cLine[i]==' ') {        // space found !
                         k++;
                         h=MulDiv(k,BoxRest,j);
                     }
                     Line[i]=Line[i]+h;
                 }
             }
-            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // und den Rest anpassen
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // adapt the rest
             Line[nChars+1]=AdjWdt;
         } break;
-        case THJustLocked: {                                    //Gesperrt
+        case THJustLocked: {                                    // locked out
             re=nChars-1;
             while (re>=1 && (cLine[re]==' ' || cLine[re]==TextEnd || cLine[re]==AbsatzEnd)) re--;
             li=1;
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             BoxRest=AdjWdt-Line[re+1];
-            for (i=li+1;i<=re;i++) {         // Strecken von links nach rechts
+            for (i=li+1;i<=re;i++) {         // strech from left to right
                 Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
             }
-            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // und den Rest anpassen
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // adapt the rest
             Line[nChars+1]=AdjWdt;
         } break;
     }
@@ -958,13 +956,13 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
 *************************************************************************/
 void TextType::Draw(OutputDevice& rOut)
 {
-    if ((Flags & TextOutlBit)!=0) return;   // Sourcetext fuer Outliner !!
+    if ((Flags & TextOutlBit)!=0) return;   // source text for Outliner !!
 
     ObjTextType T1,T2;
     sal_uInt16 Index1;
     sal_uInt16 Index2;
     UCHAR  c = TextEnd;
-    sal_uInt16 l;                // Anzahl der Zeichen in der Zeile
+    sal_uInt16 l;                // number of characters on the line
     sal_uInt16 i;
     short  yPos0;
     short  xPos;
@@ -980,20 +978,20 @@ void TextType::Draw(OutputDevice& rOut)
     sal_uInt16 lc;
     bool   TextFit;
     short* xLine;
-    UCHAR* cLine;   // Buffer fuer FormatLine
+    UCHAR* cLine;   // Buffer for FormatLine
     sal_uInt16 FitXMul;
     sal_uInt16 FitXDiv;
     sal_uInt16 FitYMul;
     sal_uInt16 FitYDiv;
     bool   Fehler;
-    UCHAR* Buf=Buffer; // Zeiger auf die Buchstaben
+    UCHAR* Buf=Buffer; // pointer to the letters
 
     pSgfFonts->ReadList();
     xLine=new short[ChrXPosArrSize];
     cLine=new UCHAR[CharLineSize];
 
     TextFit=(Flags & TextFitBits)!=0;
-    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? oder Flags -> jede Zeile stretchen
+    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> strech each line
     if (TextFit && FitSize.x==0) LineFit=true;
 
     if (DrehWink==0) {
@@ -1007,8 +1005,8 @@ void TextType::Draw(OutputDevice& rOut)
     T1=T; Index1=0; yPos=0; xPos=0;
     if (TextFit) {
         ySize=Pos2.y-Pos1.y;
-        xSize=32000 /2;      // Umbruch
-        xSAdj=Pos2.x-Pos1.x; // zum Ausrichten bei Zentriert/Blocksatz
+        xSize=32000 /2;      // break
+        xSAdj=Pos2.x-Pos1.x; // to align for center/block
         //if (xSize<=0) { xSize=32000 /2; LineFit=true; }
         FitXMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
         FitYMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
@@ -1039,7 +1037,7 @@ void TextType::Draw(OutputDevice& rOut)
                     LF=MulDiv(LF,FitYMul,FitYDiv);
                     MaxGrad=MulDiv(MaxGrad,FitYMul,FitYDiv);
                 } else {
-                    FitXDiv=1; // 0 gibts nicht
+                    FitXDiv=1; // 0 does not exist
                 }
             }
             yPos0=yPos;
@@ -1051,7 +1049,7 @@ void TextType::Draw(OutputDevice& rOut)
                 i=1;
                 while (i<=l) {
                     c=GetTextCharConv(Buf,Index2,T,T2,l-i,false);
-                    long xp1,yp1;       // wegen Overflowgefahr
+                    long xp1,yp1;       // due to overflow danger
                     PointType Pos;
                     xp1=long(Pos1.x)+xPos+long(xLine[i]);
                     yp1=long(Pos1.y)+yPos;
@@ -1065,7 +1063,7 @@ void TextType::Draw(OutputDevice& rOut)
                     i++;
                 } // while i<=l
                 yPos=yPos0+LF;
-                T1=T2; Index1=Index2; // Fuer die naechste Zeile
+                T1=T2; Index1=Index2; // for next line
             } // if ObjMin.y+yPos<=Obj_Max.y
         } // if !Fehler
     } while (c!=TextEnd && !Ende && !Fehler);
@@ -1077,22 +1075,6 @@ void TextType::Draw(OutputDevice& rOut)
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-
-// nicht mehr benoetigt, da der Pointer nun extra gefuehrt wird
-// (DEC Alpha hat naemlich 64Bit-Pointer!)
-//UCHAR* TextType::GetBufPtr()
-//{
-//    sal_uLong Temp;
-//    Temp=sal_uLong(BufLo)+0x00010000*sal_uLong(BufHi);
-//    return (UCHAR*)Temp;
-//}
-//
-//void TextType::SetBufPtr(UCHAR* Ptr)
-//{
-//    sal_uLong Temp=(sal_uLong)Ptr;
-//    BufLo=sal_uInt16(Temp & 0x0000FFFF);
-//    BufHi=sal_uInt16((Temp & 0xFFFF0000)>>16);
-//}
 
 sal_uInt32 ObjTextType::GetFont()
 {
@@ -1127,21 +1109,21 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
 {
     if ( Dsc.getLength() < 4 || ( Dsc[0] != '(' ) )
         return;
-    sal_Int32 i=1;   // Erster Buchstabe des IF-Fontnamen. Davor ist eine '('
+    sal_Int32 i=1;   // first letter of  IF fontname. In front is a '('
     while ( i < Dsc.getLength() && ( Dsc[i] !=')' ) )
         i++;
-    Dsc = Dsc.copy(i+1);                                // IF-Fontname loeschen inkl. ()
+    Dsc = Dsc.copy(i+1);                                // delete IF fontname incl. ()
 
     if ( Dsc.getLength() < 2 || ( Dsc[Dsc.getLength() - 1] !=')' ) )
         return;
-    i = Dsc.getLength()-2;                                // hier ist die ')' des SV-Fontnames
+    i = Dsc.getLength()-2;                                // here is the ')' of the SV fontname
     sal_Int32 j=0;
     while ( i > 0 && ( Dsc[i] != '(' ) )
     {
         i--;
         j++;
     }
-    SVFName = OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // SV-Fontname rausholen
+    SVFName = OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // retrieve SV fontname
     Dsc = OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
 
     IFID = (sal_uInt32)rID.toInt32();
@@ -1229,9 +1211,9 @@ void SgfFontLst::ReadList()
             Dsc = aCfg.ReadKey( i );
             if (comphelper::string::isdigitAsciiString(FID))
             {
-                P=new SgfFontOne;                                   // neuer Eintrag
-                if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // einklinken
-                P->ReadOne(FID,Dsc);                                // und Zeile interpretieren
+                P=new SgfFontOne;                                   // new entry
+                if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // link it
+                P->ReadOne(FID,Dsc);                                // interpret line
             }
         }
     }
