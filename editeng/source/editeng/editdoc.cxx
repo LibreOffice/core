@@ -2062,7 +2062,7 @@ void EditDoc::Release(sal_Int32 nPos)
 
 sal_Int32 EditDoc::Count() const
 {
-    sal_Int32 nSize = maContents.size();
+    size_t nSize = maContents.size();
     if (nSize > SAL_MAX_INT32)
     {
         SAL_WARN( "editeng", "EditDoc::Count - overflow " << nSize);
