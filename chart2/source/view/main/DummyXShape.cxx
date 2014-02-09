@@ -1119,26 +1119,23 @@ bool DummyChart::initWindow()
         winData.pVisual = (void*)(vi->visual);
         pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
         pChildSysData = pWindow->GetSystemData();
-
-        if( !pChildSysData )
-            return false;
     }
 
+    if (!pWindow || !pChildSysData)
+        return false;
 
-    if( pWindow )
-    {
-        pWindow->SetMouseTransparent( sal_True );
-        pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( sal_False );
-        pWindow->SetControlForeground();
-        pWindow->SetControlBackground();
+    pWindow->SetMouseTransparent( sal_True );
+    pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    pWindow->EnableEraseBackground( sal_False );
+    pWindow->SetControlForeground();
+    pWindow->SetControlBackground();
 
-        GLWin.dpy = reinterpret_cast<Display*>(pChildSysData->pDisplay);
-        GLWin.win = pChildSysData->aWindow;
-        GLWin.vi = vi;
-        GLWin.GLXExtensions = glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
-        OSL_TRACE("available GLX extensions: %s", GLWin.GLXExtensions);
-    }
+    GLWin.dpy = reinterpret_cast<Display*>(pChildSysData->pDisplay);
+    GLWin.win = pChildSysData->aWindow;
+    GLWin.vi = vi;
+    GLWin.GLXExtensions = glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
+    OSL_TRACE("available GLX extensions: %s", GLWin.GLXExtensions);
+
     return true;
 }
 
