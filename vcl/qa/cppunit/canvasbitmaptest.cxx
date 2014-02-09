@@ -362,7 +362,8 @@ private:
                                           ::sal_Bool,
                                           ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException,
                                                                       lang::IllegalArgumentException,
-                                                                      uno::RuntimeException)
+                                                                      uno::RuntimeException,
+                                                                      std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette setIndex interface call without handing out palette",
                                 getPalette().is());
