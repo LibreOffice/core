@@ -186,7 +186,7 @@ class AsyncRequests : private ::cppu::BaseMutex
 
         //---------------------------------------------------------------------
         /** our STA .-)
-         *  Will run between start() & finish(). Internaly it runs a loop ...
+         *  Will run between start() & finish(). Internally it runs a loop ...
          *  waiting for requests. Every request will be executed synchronously
          *  in blocked mode.
          */

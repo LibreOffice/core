@@ -263,7 +263,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         /** @short  returns a reference to one of our internal cache members.
 
         @descr  We implement the copy-on-write pattern. Doing so
-        we know two caches internaly. The second one is used
+        we know two caches internally. The second one is used
         only, if the container was changed.
 
         This method here returns access to one of these

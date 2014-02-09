@@ -546,7 +546,7 @@ class FilterCache : public BaseLock
 
             @attention  These properties are not part of the normal CacheItem
                         returned by the method getItem(). Because getItem() is
-                        used internaly too but these specialized properties
+                        used internally too but these specialized properties
                         are needed at our container services only. So these
                         function sets are different to allow different handling.
 

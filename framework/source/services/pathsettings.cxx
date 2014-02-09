@@ -119,7 +119,7 @@ class PathSettings : private osl::Mutex
             /// an internal name describing this path
             OUString sPathName;
 
-            /// contains all paths, which are used internaly - but are not visible for the user.
+            /// contains all paths, which are used internally - but are not visible for the user.
             OUStringList lInternalPaths;
 
             /// contains all paths configured by the user

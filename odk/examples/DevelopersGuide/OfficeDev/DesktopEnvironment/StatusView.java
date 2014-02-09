@@ -207,7 +207,7 @@ public class StatusView extends    JPanel
      * Set new frame for this view and start listening for events imedatly.
      * We create one status listener for every control we wish to update.
      * And because the environment of the frame can be changed - these
-     * listener refresh himself internaly for frame action events too.
+     * listener refresh himself internally for frame action events too.
      * So we register it as such frame action listener only here.
      * Rest is done automaticly ...
      *

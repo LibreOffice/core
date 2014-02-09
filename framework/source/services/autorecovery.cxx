@@ -444,7 +444,7 @@ private:
 
     /** @descr  This member is used to prevent us against re-entrance problems.
                 A mutex cant help to prevent us from concurrent using of members
-                inside the same thread. But e.g. our internaly used stl structures
+                inside the same thread. But e.g. our internally used stl structures
                 are not threadsafe ... and furthermore they cant be used at the same time
                 for iteration and add/remove requests!
                 So we have to detect such states and ... show a warning.
@@ -539,7 +539,7 @@ public:
     // css.document.XEventListener
     /** @short  informs about created/opened documents.
 
-        @descr  Every new opened/created document will be saved internaly
+        @descr  Every new opened/created document will be saved internally
                 so it can be checked if its modified. This modified state
                 is used later to decide, if it must be saved or not.
 
@@ -1457,7 +1457,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     // This can be done immediately ... must not been done asynchronous.
     if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
-        // it's important to set a flag internaly, so AutoRecovery will be supressed - even if it's requested.
+        // it's important to set a flag internally, so AutoRecovery will be supressed - even if it's requested.
         m_eJob |= eNewJob;
         implts_stopTimer();
         implts_stopListening();
@@ -1821,7 +1821,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     } /* SAFE */
 
     // Note: This call stops the timer and starts it again.
-    // But it checks the different timer states internaly and
+    // But it checks the different timer states internally and
     // may be supress the restart!
     implts_updateTimer();
 }

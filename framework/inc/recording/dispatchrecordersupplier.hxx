@@ -62,7 +62,7 @@ class DispatchRecorderSupplier  :   // baseclasses
         /** provided dispatch recorder of this supplier instance
 
             @life   Is controled from outside. Because this variable is setted
-                    from there and not created internaly. But we release our
+                    from there and not created internally. But we release our
                     reference to it if we die.
          */
         css::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;

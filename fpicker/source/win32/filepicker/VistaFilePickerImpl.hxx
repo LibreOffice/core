@@ -97,7 +97,7 @@ static const OUString STRING_SEPARATOR("----------------------------------------
 
 //-----------------------------------------------------------------------------
 /** native implementation of the file picker on Vista and upcoming windows versions.
- *  This dialog uses COM internaly. Further it marshall every request so it will
+ *  This dialog uses COM internally. Further it marshall every request so it will
  *  be executed within it's own STA thread !
  */
 //-----------------------------------------------------------------------------
@@ -266,10 +266,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_Int32 nTemplate);
 
         //---------------------------------------------------------------------
-        /** returns an interface, which can be used to customize the internaly used
+        /** returns an interface, which can be used to customize the internally used
          *  COM dialog.
          *
-         *  Because we use two member (open/save dialog) internaly, this method
+         *  Because we use two member (open/save dialog) internally, this method
          *  ask the current active one for it's customization interface.
          *
          *  @return the customization interface for the current used dialog.
@@ -305,7 +305,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         //---------------------------------------------------------------------
         /** cache last selected list of files
          *  Because those list must be retrieved directly after closing the dialog
-         *  (and only in case it was finished successfully) we cache it internaly.
+         *  (and only in case it was finished successfully) we cache it internally.
          *  Because the outside provided UNO API decouple showing the dialog
          *  and asking for results .-)
          */

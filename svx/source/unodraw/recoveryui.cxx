@@ -167,7 +167,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
                                                    const css::uno::Sequence< css::beans::PropertyValue >& )
     throw(css::uno::RuntimeException)
 {
-    // Internaly we use VCL ... every call into vcl based code must
+    // Internally we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.
     ::SolarMutexGuard aSolarLock;
 

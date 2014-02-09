@@ -96,7 +96,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
 
         //---------------------------------------
         /** @short  used for asynchronous callbacks within the main thread.
-            @descr  Internaly we work asynchronous. Because our callis
+            @descr  Internally we work asynchronous. Because our callis
                     are not aware, that her request can kill its own environment ... */
         ::vcl::EventPoster m_aAsyncCallback;
 
@@ -114,7 +114,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         ListenerHash m_lStatusListener;
 
         //---------------------------------------
-        /** @short  holded alive for internaly asynchronous operations! */
+        /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         SystemWindow* m_pSysWindow;
@@ -132,7 +132,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
 
             @param  rxContext
                     an un oservice manager, which is needed to create uno resource
-                    internaly.
+                    internally.
 
             @param  xFrame
                     the frame where the corresponding dispatch was started.
@@ -181,7 +181,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         //---------------------------------------
         /** @short  a callback for asynchronous started operations.
 
-            @descr  As already mentione, we make internaly all operations
+            @descr  As already mentione, we make internally all operations
                     asynchronous. Otherwise our callis kill its own environment
                     during they call us ...
         */

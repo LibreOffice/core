@@ -529,7 +529,7 @@ void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& )
 
     @see    attachFrame()
 
-    @return The internaly saved frame reference.
+    @return The internally saved frame reference.
             Can be null, if attachFrame() was not called before.
  */
 

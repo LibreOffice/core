@@ -89,7 +89,7 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
 
             @param  xContext
                     an UNO service manager, which is needed to create UNO resource
-                    internaly.
+                    internally.
 
             @param  xFrame
                     the frame where the corresponding dispatch was started.

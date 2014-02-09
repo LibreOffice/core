@@ -2667,7 +2667,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     /* #i62088#
-        Some interceptor objects intercept our "internaly asynchronoues implemented" dispatch call.
+        Some interceptor objects intercept our "internally asynchronoues implemented" dispatch call.
         And they close this frame directly (means synchronous then).
         Means: Frame::windowClosing()->Frame::close()
         In such situation its not a good idea to hold this transaction count alive .-)

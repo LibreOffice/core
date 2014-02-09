@@ -157,7 +157,7 @@ public:
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
                 const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
-    /** This is called internaly when text conversion is started.
+    /** This is called internally when text conversion is started.
         The position of current view mode/page/object/caret position
         is remembered and will be restored after conversion.
     */

@@ -201,7 +201,7 @@ public:
     /** @short  initialize a new instance of this load environment.
 
         @param  xContext
-                reference to an uno service manager, which can be used internaly
+                reference to an uno service manager, which can be used internally
                 to create on needed services on demand.
 
         @throw  Currently there is no reason to throw such exception!
@@ -429,7 +429,7 @@ private:
         @return [string]
                 the type selected by the user.
 
-        @attention  Internaly we update the member m_lMediaDescriptor!
+        @attention  Internally we update the member m_lMediaDescriptor!
      */
     OUString impl_askUserForTypeAndFilterIfAllowed()
         throw(LoadEnvException, css::uno::RuntimeException);

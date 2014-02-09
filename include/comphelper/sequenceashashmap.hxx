@@ -255,7 +255,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  aValue
                     the new (unpacked!) value.
                     Note: This value will be transformed to an Any
-                    internaly, because only Any values can be
+                    internally, because only Any values can be
                     part of a PropertyValue or NamedValue structure.
 
             @return TRUE if this property was added as new item;

@@ -184,7 +184,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @param  xSMGR
                     reference to the uno service manager, which require
                     this new instance. It should be passed to the new object
-                    so it can be used internaly to create own needed uno resources.
+                    so it can be used internally to create own needed uno resources.
 
             @return The new instance of this service as an uno reference.
          */

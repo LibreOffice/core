@@ -159,7 +159,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                         generic UI interaction handler for later internal using.
 
             @param      xSMGR
-                            uno service manager for creating services internaly
+                            uno service manager for creating services internally
 
             @threadsafe not necessary
         */
@@ -173,7 +173,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
         //_________________________________
         /**
-            @short      set the outside interaction handler, which must be used internaly
+            @short      set the outside interaction handler, which must be used internally
                         if the interaction will not be blocked by the set list of rules.
 
             @note       This overwrites the settings of e.g. useDefaultUUIHandler()!

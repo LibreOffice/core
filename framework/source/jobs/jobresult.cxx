@@ -147,7 +147,7 @@ JobResult::JobResult( const JobResult& rCopy )
 //________________________________
 /**
     @short      standard dtor
-    @descr      Free all internaly used resources at the end of living.
+    @descr      Free all internally used resources at the end of living.
 */
 JobResult::~JobResult()
 {
@@ -184,7 +184,7 @@ void JobResult::operator=( const JobResult& rCopy )
                 by using our other members!
 
     @param      eParts
-                    a flag mask too, which will be compared with our internaly set one.
+                    a flag mask too, which will be compared with our internally set one.
 
     @return     We return true only, if any set flag of the given mask match.
 */

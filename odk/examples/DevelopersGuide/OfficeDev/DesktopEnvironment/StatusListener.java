@@ -59,7 +59,7 @@ import com.sun.star.uno.UnoRuntime;
  * Another reason for such extra class for listening:
  * Most listener callbacks are asynchronoues [oneay] requests.
  * And it's not allowed to call back synchronously there.
- * So we must start threads for updating something internaly.
+ * So we must start threads for updating something internally.
  *
  */
 class StatusListener implements com.sun.star.frame.XStatusListener,

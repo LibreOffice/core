@@ -89,7 +89,7 @@ class QuietInteraction : private ThreadHelpBase
 
         /**
             @short      return the handled interaction request
-            @descr      We saved any getted interaction request internaly.
+            @descr      We saved any getted interaction request internally.
                         May the outside user of this class is interessted
                         on that. Especialy we gotted an unknown interaction
                         and aborted it hard.

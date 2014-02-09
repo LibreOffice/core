@@ -130,7 +130,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         //------------------------------------------------------------------------------------
         /** start listening for file picker events on the given file open dialog COM object.
          *
-         *  The broadcaster will be cached internaly so deregistration will be easy.
+         *  The broadcaster will be cached internally so deregistration will be easy.
          *  Further all needed information are capsulated within this class (e.g. the listener handler).
          *  Nobody outside must know such information.
          *
@@ -143,10 +143,10 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         void startListening( const TFileDialog& pBroadcaster );
 
         //------------------------------------------------------------------------------------
-        /** stop listening for file picker events on the internaly cached dialog COM object.
+        /** stop listening for file picker events on the internally cached dialog COM object.
          *
-         *  The  COM dialog provided on the startListeneing() call was cached internaly.
-         *  And now its used to deregister this listener. Doing so the also internaly cached
+         *  The  COM dialog provided on the startListeneing() call was cached internally.
+         *  And now its used to deregister this listener. Doing so the also internally cached
          *  listener handle is used. If listener was not already registered - nothing will happen.
          */
         void stopListening();

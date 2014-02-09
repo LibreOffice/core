@@ -424,7 +424,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         xParentWindow->setVisible(sal_True);
         xHelpWindow->setVisible(sal_True);
 
-        // This sub frame is created internaly (if we called new SfxHelpWindow_Impl() ...)
+        // This sub frame is created internally (if we called new SfxHelpWindow_Impl() ...)
         // It should exist :-)
         xHelpContent = xHelpTask->findFrame(OUString("OFFICE_HELP"), FrameSearchFlag::CHILDREN);
     }

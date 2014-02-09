@@ -76,7 +76,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         NumberedCollection();
 
         //---------------------------------------
-        /** @short  free all internaly used resources.
+        /** @short  free all internally used resources.
          */
         virtual ~NumberedCollection();
 
