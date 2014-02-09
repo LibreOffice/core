@@ -860,10 +860,16 @@ awt::Size DummyGroup2D::getSize()
     return awt::Size(nRight - nLeft, nBottom - nTop);
 }
 
-void DummyGroup2D::setPosition( const awt::Point& )
+void DummyGroup2D::setPosition( const awt::Point& rPos )
     throw(uno::RuntimeException)
 {
-    SAL_WARN("chart2.opengl", "set position on group shape");
+    for(std::vector<DummyXShape*>::const_iterator itr = maShapes.begin(),
+            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    {
+        awt::Point aPos = (*itr)->getPosition();
+        awt::Point aNewPos( rPos.X + aPos.X, rPos.Y + aPos.Y);
+        (*itr)->setPosition(aNewPos);
+    }
 }
 
 void DummyGroup2D::setSize( const awt::Size& )
