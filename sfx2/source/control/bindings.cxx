@@ -1917,7 +1917,7 @@ void SfxBindings::ClearCache_Impl( sal_uInt16 nSlotId )
 {
     SfxStateCache* pCache = GetStateCache(nSlotId);
     if (!pCache)
-        return
+        return;
     pCache->ClearCache();
 }
 
