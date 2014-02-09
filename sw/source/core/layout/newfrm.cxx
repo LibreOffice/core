@@ -486,6 +486,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     pLastPage( 0 ),
     pCurrShell( pSh ),
     pWaitingCurrShell( 0 ),
+    pCurrShells(NULL),
     pDrawPage( 0 ),
     pDestroy( 0 ),
     nPhyPageNums( 0 ),
