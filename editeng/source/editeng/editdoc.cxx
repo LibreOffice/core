@@ -795,7 +795,7 @@ long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
 sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 {
     long nY = 0;
-    for (sal_Int32 i = 0, n = maPortions.size(); i < n; ++i)
+    for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
         nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
