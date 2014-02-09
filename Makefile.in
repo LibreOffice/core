@@ -336,6 +336,7 @@ endef
 
 $(foreach ide,\
 	kdevelop \
+	vs2012 \
 	xcode, \
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
