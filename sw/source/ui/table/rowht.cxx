@@ -22,7 +22,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/dlgutil.hxx>
 
-
 #include <fmtfsize.hxx>
 #include <swtypes.hxx>
 #include <rowht.hxx>
@@ -50,7 +49,6 @@ void SwTableHeightDlg::Apply()
     rSh.SetRowHeight( aSz );
 }
 
-
 SwTableHeightDlg::SwTableHeightDlg(Window *pParent, SwWrtShell &rS)
     : SvxStandardDialog(pParent, "RowHeightDialog", "modules/swriter/ui/rowheight.ui")
     , rSh( rS )
@@ -76,7 +74,5 @@ SwTableHeightDlg::SwTableHeightDlg(Window *pParent, SwWrtShell &rS)
         delete pSz;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

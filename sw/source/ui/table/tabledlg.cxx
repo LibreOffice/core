@@ -61,7 +61,6 @@
 
 using namespace ::com::sun::star;
 
-
 SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", rSet)
     , pTblData(0)
@@ -103,13 +102,12 @@ SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
     Init();
 }
 
-
 void  SwFormatTablePage::Init()
 {
     m_aLeftMF.SetMetricFieldMin(-999999);
     m_aRightMF.SetMetricFieldMin(-999999);
 
-    // handler
+    //handler
     Link aLk = LINK( this, SwFormatTablePage, AutoClickHdl );
     m_pFullBtn->SetClickHdl( aLk );
     m_pFreeBtn->SetClickHdl( aLk );
@@ -155,15 +153,15 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         m_aWidthMF.SetRefValue(pTblData->GetSpace());
         m_aLeftMF.SetRefValue(pTblData->GetSpace());
         m_aRightMF.SetRefValue(pTblData->GetSpace());
-        m_aLeftMF.SetMetricFieldMin(0); // will be overwritten by the Percentfield
-        m_aRightMF.SetMetricFieldMin(0); //                 -""-
-        m_aLeftMF.SetMetricFieldMax(99); //
-        m_aRightMF.SetMetricFieldMax(99); //
+        m_aLeftMF.SetMetricFieldMin(0); //will be overwritten by the Percentfield
+        m_aRightMF.SetMetricFieldMin(0); //dito
+        m_aLeftMF.SetMetricFieldMax(99);
+        m_aRightMF.SetMetricFieldMax(99);
         m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
         m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
     }
     else
-        ModifyHdl(m_aLeftMF.get());    // correct values again
+        ModifyHdl(m_aLeftMF.get());    //correct values again
 
     if(m_pFreeBtn->IsChecked())
     {
@@ -175,7 +173,6 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 
     return 0;
 }
-
 
 IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 {
@@ -232,8 +229,8 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 
     if(bFull && bRestore)
     {
-        // After being switched on automatic, the width was pinned
-        // in order to restore the width while switching back to.
+        //After being switched on automatic, the width was pinned
+        //in order to restore the width while switching back to.
         bFull = sal_False;
         m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
     }
@@ -258,7 +255,6 @@ void SwFormatTablePage::RightModify()
         m_pRightFT->Enable(!bEnable);
     }
 }
-
 
 IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
@@ -371,17 +367,15 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     bModified = sal_True;
 }
 
-
 SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
                                    const SfxItemSet& rAttrSet)
 {
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-
 sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    // Test if one of the controls still has the focus.
+    //Test if one of the controls still has the focus
     if (m_aWidthMF.HasFocus())
         ModifyHdl(m_aWidthMF.get());
     else if (m_aLeftMF.HasFocus())
@@ -425,7 +419,6 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
     return bModified;
 }
-
 
 void  SwFormatTablePage::Reset( const SfxItemSet& )
 {
@@ -558,7 +551,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         m_pBottomMF->SaveValue();
     }
 
-    //text direction
+    //Text direction
     if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
@@ -603,10 +596,10 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 
 int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
-    // os: VCL sorgt nicht dafuer, dass das aktive Control im
-    // dialog bei OK den focus verliert
+    //os: VCL doesn't take care of making the active widget
+    //in the dialog lose the focus
     m_pNameED->GrabFocus();
-    // Test the table name for spaces
+    //test the table name for spaces
     OUString sTblName = m_pNameED->GetText();
     if(sTblName.indexOf(' ') != -1)
     {
@@ -716,6 +709,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     }
     return sal_True;
 }
+
 //Description: Page column configuration
 SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
@@ -815,7 +809,6 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
 
 };
 
-
 void  SwTableColumnPage::Init(sal_Bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
@@ -840,7 +833,6 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
     m_pModifyTableCB->SetClickHdl( aLk );
     m_pProportionalCB->SetClickHdl( aLk );
 };
-
 
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
@@ -880,7 +872,6 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     return 0;
 };
 
-
 IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 {
     bModified = sal_True;
@@ -889,7 +880,6 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 
-
 IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 {
     bModified = sal_True;
@@ -897,7 +887,6 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
     return 0;
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, MetricField*, pEdit )
-
 
 IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 {
@@ -909,7 +898,6 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
     return 0;
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
-
 
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {
@@ -942,7 +930,6 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
     return bModified;
 };
 
-
 void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
         PercentField *pEdit = NULL;
@@ -970,7 +957,6 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
         UpdateCols( nAktPos );
 };
 
-
 void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 {
     SwTwips nSum = 0;
@@ -987,7 +973,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
     if(!bModifyTable && !bProp )
     {
-//      the table width is constant, the difference is balanced with the other columns
+        //The table width is constant, the difference is balanced with the other columns
         sal_uInt16 nLoopCount = 0;
         while( nDiff )
         {
@@ -1027,8 +1013,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable && !bProp)
     {
-//      Difference is balanced by the width of the table,
-//      other columns remain unchanged.
+        //Difference is balanced by the width of the table,
+        //other columns remain unchanged.
         OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
@@ -1043,8 +1029,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable & bProp)
     {
-//      All columns will be changed proportionally with,
-//      the table width is adjusted accordingly.
+        //All columns will be changed proportionally with,
+        //the table width is adjusted accordingly.
         OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
@@ -1128,7 +1114,6 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 
 }
 
-
 int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1191,7 +1176,6 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
     return sal_True;
 }
 
-
 SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 {
     sal_uInt16 i=0;
@@ -1209,7 +1193,6 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 
     return nReturn;
 }
-
 
 void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 {
@@ -1351,7 +1334,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bModified = false;
 
-    // Repeat Heading
+    //Repeat Heading
     if(TriState(m_pHeadLineCB->IsChecked()) != m_pHeadLineCB->GetSavedValue() ||
         OUString::number( static_cast< sal_Int32 >(m_pRepeatHeaderNF->GetValue()) ) != m_pRepeatHeaderNF->GetSavedValue() )
     {
@@ -1374,7 +1357,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
     sal_Bool bState = m_pPageCollCB->IsChecked();
 
-    // If we have a page style, then there's no break
+    //If we have a page style, then there's no break
     sal_Bool bPageItemPut = sal_False;
     if ( bState != m_pPageCollCB->GetSavedValue() ||
          ( bState &&
@@ -1470,7 +1453,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
-        // Inserting of the existing page templates in the list box.
+        //Inserting of the existing page templates in the list box
         const sal_uInt16 nCount = pShell->GetPageDescCnt();
         sal_uInt16 i;
 
@@ -1803,7 +1786,5 @@ void SwTextFlowPage::DisablePageBreak()
     m_pPageNoFT->Disable();
     m_pPageNoNF->Disable();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

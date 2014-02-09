@@ -37,7 +37,7 @@ Ww1SingleSprm* Ww1Sprm::pSingleSprm = 0;
 
 
 
-/////////////////////////////////////////////////////////////////// Fib
+// Fib
 Ww1Fib::Ww1Fib( SvStream& _rStream )
     : rStream(_rStream)
 {
@@ -45,8 +45,7 @@ Ww1Fib::Ww1Fib( SvStream& _rStream )
           rStream.Read( &aFib, sizeof( aFib )) == sizeof( aFib );
 }
 
-///////////////////////////////////////////////////////////// PlainText
-
+// PlainText
 Ww1PlainText::Ww1PlainText(Ww1Fib& rWwFib, sal_uLong nFilePos, sal_uLong nCountBytes)
     : rFib(rWwFib), ulFilePos(nFilePos), ulCountBytes(nCountBytes),
     ulSeek(0), bOK(true)
@@ -80,7 +79,7 @@ OUString Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
         OUString();
 }
 
-///////////////////////////////////////////////////////////////// Style
+// Style
 Ww1Style::Ww1Style()
     : pPapx(0), pParent(0), stcBase(0), stcNext(0), bUsed(false)
 {
@@ -213,7 +212,7 @@ sal_uInt16 Ww1Style::ReadEstcp(sal_uInt8*&p, sal_uInt16& rnCountBytes)
     return 0;
 }
 
-//////////////////////////////////////////////////////////// StyleSheet
+// StyleSheet
 Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& _rFib)
     : cstcStd(0),
     rFib(_rFib),
@@ -315,33 +314,32 @@ sal_uInt16 Ww1StyleSheet::ReadEstcp(sal_uInt8*& p, sal_uInt16& rnCountBytes)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////// Fonts
-
+// Fonts
 Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
     : pFontA(0), rFib(rInFib), nFieldFlags(nFieldFlgs), nMax(0), bOK(false)
 {
-    if(rFib.GetFIB().cbSttbfffnGet() > 2 ) // ueberhaupt fonts?
+    if(rFib.GetFIB().cbSttbfffnGet() > 2 ) // any fonts at all?
     {
         SVBT16 nCountBytes;
         OSL_ENSURE(rFib.GetFIB().cbSttbfffnGet() > sizeof(nCountBytes), "Ww1Fonts");
         if (rFib.GetStream().Seek(rFib.GetFIB().fcSttbfffnGet())
          == (sal_uLong)rFib.GetFIB().fcSttbfffnGet())
             if (rFib.GetStream().Read(nCountBytes, sizeof(nCountBytes))
-             == sizeof(nCountBytes)) // Laenge steht hier nochmal
+             == sizeof(nCountBytes)) // length is repeated here
             {
                 OSL_ENSURE(SVBT16ToShort(nCountBytes)
                  == rFib.GetFIB().cbSttbfffnGet(), "redundant-size missmatch");
-                 // hoffentlich sind sie immer gleich
+                 // hopefully they're always equal
                 W1_FFN* pA = (W1_FFN*)new char[rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes)]; // Alloziere Font-Array
+                 - sizeof(nCountBytes)]; // allocate Font-Array
                 //~ Ww1: new-NULL
                 if (rFib.GetStream().Read(pA, rFib.GetFIB().cbSttbfffnGet()
                  - sizeof(nCountBytes)) == (sal_uLong)rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes)) // lese alle Fonts
-                {} //nothing
+                 - sizeof(nCountBytes)) // read all Fonts
+                {} // nothing
 
                 long nLeft = rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes); // Zaehle, wieviele Fonts enthalten
+                 - sizeof(nCountBytes); // count how many contain fonts
                 W1_FFN* p = pA;
                 while (true)
                 {
@@ -357,9 +355,9 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                 }
                 if (nMax)
                 {
-                    pFontA = new W1_FFN*[nMax];         // alloziere Index-Array
+                    pFontA = new W1_FFN*[nMax];         // allocate Index-Array
                     //~ Ww1: new-NULL
-                    pFontA[0] = pA;                     // fuelle Index-Array
+                    pFontA[0] = pA;                     // fill Index-Array
                     sal_uInt16 i;
                     for(i=1, p=pA; i<nMax; i++)
                     {
@@ -368,7 +366,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                     }
                 }
                 else
-                    pFontA = 0; // Keine Eintraege -> kein Array
+                    pFontA = 0; // no entries -> no Array
             }
     }
     bOK = sal_True;
@@ -383,7 +381,7 @@ W1_FFN* Ww1Fonts::GetFFN(sal_uInt16 nNum)
     return pRet;
 }
 
-/////////////////////////////////////////////////////////////////// DOP
+// DOP
 Ww1Dop::Ww1Dop(Ww1Fib& _rFib)
     : rFib(_rFib)
 {
@@ -398,7 +396,7 @@ Ww1Dop::Ww1Dop(Ww1Fib& _rFib)
             rFib.GetStream().Read(&aDop, nRead) == (sal_uLong)nRead;
 }
 
-/////////////////////////////////////////////////////////////// Picture
+// Picture
 Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
     : bOK(false), pPic(0)
 {
@@ -416,7 +414,7 @@ Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
                         }
 }
 
-////////////////////////////////////////////////////////////////// Sprm
+// Sprm
 Ww1Sprm::Ww1Sprm(sal_uInt8* x, sal_uInt16 _nCountBytes)
     : p(NULL),
     nCountBytes(_nCountBytes),
@@ -699,7 +697,7 @@ void Ww1Sprm::InitTab()
     aTab[163] = new Ww1SingleSprm(5, DUMPNAME("sprmTSetBrc10")); // 163 tap.rgtc[].rgbrc complex (see below) 5 bytes
 }
 
-////////////////////////////////////////////////////////////// SprmPapx
+// SprmPapx
 Ww1SprmPapx::Ww1SprmPapx(sal_uInt8* pByte, sal_uInt16 nSize) :
     Ww1Sprm(Sprm(pByte, nSize), SprmSize(pByte, nSize))
 {
@@ -724,7 +722,7 @@ sal_uInt8* Ww1SprmPapx::Sprm(sal_uInt8* pByte, sal_uInt16 nSize)
     return pRet;
 }
 
-/////////////////////////////////////////////////////////////////// Plc
+// Plc
 Ww1Plc::Ww1Plc(Ww1Fib& rInFib, sal_uLong ulFilePos, sal_uInt16 nInCountBytes,
     sal_uInt16 nInItemSize)
     : p(0), nCountBytes(nInCountBytes), iMac(0), nItemSize(nInItemSize),
@@ -778,11 +776,11 @@ sal_uInt8* Ww1Plc::GetData(sal_uInt16 nIndex)
     OSL_ENSURE(nIndex < iMac, "index out of bounds");
     if (nIndex < iMac)
         pRet = p + (iMac + 1) * sizeof(SVBT32) +
-         nIndex * nItemSize; // Pointer auf Inhalts-Array
+         nIndex * nItemSize; // Pointer to content array
     return pRet;
 }
 
-///////////////////////////////////////////////////////////// PlcBookmarks
+// PlcBookmarks
 // class Ww1StringList liest im Ctor eine Anzahl von P-Strings aus dem Stream
 // in den Speicher und patcht sie zu C-Strings um.
 // Die Anzahl wird in nMax zurueckgeliefert.
@@ -791,7 +789,7 @@ sal_uInt8* Ww1Plc::GetData(sal_uInt16 nIndex)
 Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
     : pIdxA(0), nMax(0)
 {
-    if( nCb > 2 )            // ueberhaupt Eintraege ?
+    if( nCb > 2 )            // any entries at all?
     {
         SVBT16 nCountBytes;
         OSL_ENSURE(nCb > sizeof(nCountBytes), "Ww1StringList");
@@ -929,7 +927,7 @@ const OUString Ww1Bookmarks::GetName() const
     return aNames.GetStr( nPlcIdx[0] );
 }
 
-/////////////////////////////////////////////////////////////////// Fkp
+// Fkp
 Ww1Fkp::Ww1Fkp(SvStream& rStream, sal_uLong ulFilePos, sal_uInt16 _nItemSize) :
     nItemSize(_nItemSize),
     bOK(sal_False)
@@ -954,11 +952,11 @@ sal_uInt8* Ww1Fkp::GetData(sal_uInt16 nIndex)
     OSL_ENSURE(nIndex<=Count(), "index out of bounds");
     if (nIndex<=Count())
         pRet = aFkp + (Count()+1) * sizeof(SVBT32) +
-         nIndex * nItemSize; // beginn der strukturen
+         nIndex * nItemSize; // start of the structures
     return pRet;
 }
 
-//////////////////////////////////////////////////////////////// FkpPap
+// FkpPap
 sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBytes)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpPap::Fill() Index out of Range" );
@@ -985,7 +983,7 @@ sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBy
     return sal_True;
 }
 
-//////////////////////////////////////////////////////////////// FkpChp
+// FkpChp
 sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
@@ -1003,7 +1001,7 @@ sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
     return sal_True;
 }
 
-///////////////////////////////////////////////////////////////// Assoc
+// Assoc
 Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
     : rFib(_rFib), pBuffer(NULL), bOK(sal_False)
 {
@@ -1039,7 +1037,7 @@ OUString Ww1Assoc::GetStr(sal_uInt16 code)
         RTL_TEXTENCODING_MS_1252);
 }
 
-/////////////////////////////////////////////////////////////////// Pap
+// Pap
 Ww1Pap::Ww1Pap(Ww1Fib& _rFib)
     : Ww1PlcPap(_rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
     nPushedFkpIndex(0xffff), ulOffset(0), pPap(0)
@@ -1137,7 +1135,7 @@ sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////// Chp
+// Chp
 Ww1Chp::Ww1Chp(Ww1Fib& _rFib)
     : Ww1PlcChp(_rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
     nPushedFkpIndex(0xffff), ulOffset(0), pChp(0)
@@ -1183,7 +1181,7 @@ void Ww1Chp::operator++()
         }
 }
 
-////////////////////////////////////////////////////////////// Manager
+// Manager
 Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
     : bOK(sal_False), bInTtp(false), bInStyle(false), bStopAll(false), aFib(rStrm),
     aDop(aFib), aFonts(aFib, nFieldFlgs), aDoc(aFib), pDoc(&aDoc),

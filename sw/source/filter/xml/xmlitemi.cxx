@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -243,8 +242,6 @@ void SwXMLImportTableItemMapper_Impl::finished(
     }
 }
 
-// ---------------------------------------------------------------------
-
 class SwXMLItemSetContext_Impl : public SvXMLItemSetContext
 {
     SvXMLImportContextRef xBackground;
@@ -330,8 +327,6 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
 
 void SwXMLImport::_InitItemImport()
 {

@@ -46,10 +46,7 @@ static bool bDidSwitch = false;
 
 // -----------------------------------------------------------------------
 
-//
-//                  View (Gridwin / keyboard)
-//
-
+// View (Gridwin / keyboard)
 ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
         pViewData( pNewViewData ),
         pEngine( NULL ),
@@ -149,8 +146,7 @@ void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
     pEngine = pSelEngine;
 }
 
-//      Drag & Drop
-
+// Drag & Drop
 void ScViewFunctionSet::BeginDrag()
 {
     SCTAB nTab = pViewData->GetTabNo();
@@ -223,8 +219,7 @@ void ScViewFunctionSet::BeginDrag()
 
 }
 
-//      Selection
-
+// Selection
 void ScViewFunctionSet::CreateAnchor()
 {
     if (bAnchor) return;
@@ -257,10 +252,10 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
     }
     else
     {
-        // nicht weg und gleich wieder hin
+        // don't go there and back again
         if ( bStarted && pView->IsMarking( nPosX, nPosY, nTab ) )
         {
-            // nix
+            // don't do anything
         }
         else
         {
@@ -318,7 +313,6 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* 
         aEffPos.Y() = -1;
 
     //  Scrolling
-
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
     bool bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
     bool bLeftScroll  = ( aEffPos.X() < 0 );
@@ -354,7 +348,6 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* 
     }
 
     // moved out of fix limit?
-
     ScSplitPos eWhich = GetWhich();
     if ( eWhich == pViewData->GetActivePart() )
     {
@@ -737,8 +730,6 @@ void ScViewFunctionSet::DeselectAll()
     bAnchor = false;
 }
 
-//------------------------------------------------------------------------
-
 ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
                                                 ScSplitPos eSplitPos ) :
         SelectionEngine( pWindow, pView->GetFunctionSet() ),
@@ -748,13 +739,7 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
     EnableDrag( true );
 }
 
-
-//------------------------------------------------------------------------
-
-//
-//                  column and row headers
-//
-
+// column and row headers
 ScHeaderFunctionSet::ScHeaderFunctionSet( ScViewData* pNewViewData ) :
         pViewData( pNewViewData ),
         bColumn( false ),
@@ -818,7 +803,6 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /
     }
 
     //  Scrolling
-
     Size aWinSize = pViewData->GetActiveWin()->GetOutputSizePixel();
     bool bScroll;
     if (bColumn)
@@ -827,7 +811,6 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /
         bScroll = ( rPointPixel.Y() < 0 || rPointPixel.Y() >= aWinSize.Height() );
 
     // moved out of fix limit?
-
     bool bSwitched = false;
     if ( bColumn )
     {
@@ -930,8 +913,6 @@ void ScHeaderFunctionSet::DeselectAll()
     pViewData->GetView()->DoneBlockMode( false );
     bAnchor = false;
 }
-
-//------------------------------------------------------------------------
 
 ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
         SelectionEngine( pWindow, pFuncSet )

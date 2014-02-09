@@ -155,8 +155,6 @@ const SvXMLTokenMap& SwXMLImport::GetTableCellAttrTokenMap()
     return *pTableCellAttrTokenMap;
 }
 
-// ---------------------------------------------------------------------
-
 class SwXMLTableCell_Impl
 {
     OUString aStyleName;
@@ -283,8 +281,6 @@ inline void SwXMLTableCell_Impl::Dispose()
         xSubTable = 0;
 }
 
-// ---------------------------------------------------------------------
-
 typedef boost::ptr_vector<SwXMLTableCell_Impl> SwXMLTableCells_Impl;
 
 class SwXMLTableRow_Impl
@@ -397,8 +393,6 @@ void SwXMLTableRow_Impl::Dispose()
     for( sal_uInt16 i=0; i < aCells.size(); i++ )
         aCells[i].Dispose();
 }
-
-// ---------------------------------------------------------------------
 
 class SwXMLTableCellContext_Impl : public SvXMLImportContext
 {
@@ -650,7 +644,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
             {
                 sXmlId = xAttrList->getValueByIndex( i );
             }
-//FIXME: RDFa
+        //FIXME: RDFa
         }
     }
 
@@ -747,8 +741,6 @@ void SwXMLTableCellContext_Impl::EndElement()
     GetImport().GetTextImport()->SetCellParaStyleDefault(sSaveParaDefault);
 }
 
-// ---------------------------------------------------------------------
-
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
@@ -800,7 +792,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
                  IsXMLToken( aLocalName, XML_ID ) )
         {
             (void) rValue;
-//FIXME where to put this??? columns do not actually exist in writer...
+        //FIXME where to put this??? columns do not actually exist in writer...
         }
     }
 
@@ -833,8 +825,6 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
 SwXMLTableColContext_Impl::~SwXMLTableColContext_Impl()
 {
 }
-
-// ---------------------------------------------------------------------
 
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
@@ -891,8 +881,6 @@ SvXMLImportContext *SwXMLTableColsContext_Impl::CreateChildContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
 
 class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
@@ -1014,8 +1002,6 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
     return pContext;
 }
 
-// ---------------------------------------------------------------------
-
 class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
@@ -1077,8 +1063,6 @@ SvXMLImportContext *SwXMLTableRowsContext_Impl::CreateChildContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
 
 class SwXMLDDETableContext_Impl : public SvXMLImportContext
 {
@@ -1260,9 +1244,6 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     return pType;
 }
 
-
-// ---------------------------------------------------------------------
-
 class TableBoxIndex
 {
 public:
@@ -1415,7 +1396,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
     if( xTable.is() )
     {
-//FIXME
+        //FIXME
         // xml:id for RDF metadata
         GetImport().SetXmlId(xTable, sXmlId);
 
@@ -1954,7 +1935,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                                              sal_uInt32 nBottomRow,
                                              sal_uInt32 nRightCol )
 {
-//FIXME: here would be a great place to handle XmlId for cell
+    //FIXME: here would be a great place to handle XmlId for cell
     SwTableBox *pBox = new SwTableBox( pBoxFmt, 0, pUpper );
 
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
@@ -2051,7 +2032,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         sal_uInt32 /*nTopRow*/, sal_uInt32 nLeftCol, sal_uInt32 /*nBottomRow*/,
         sal_uInt32 nRightCol )
 {
-//FIXME: here would be a great place to handle XmlId for cell
+    //FIXME: here would be a great place to handle XmlId for cell
     SwTableBox *pBox;
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
     sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
@@ -2225,7 +2206,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                                                sal_uInt32 nBottomRow,
                                                sal_uInt32 nRightCol )
 {
-//FIXME: here would be a great place to handle XmlId for row
+    //FIXME: here would be a great place to handle XmlId for row
     SwTableLine *pLine;
     if( !pUpper && 0UL==nTopRow )
     {
@@ -2507,7 +2488,6 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             // In this case, the columns get the correct width even if the
             // the sum of the relative withs is smaller than the available
             // width in TWIP. Therfore, we can use the relative width.
-            //
             nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
         }
         if( nRelWidth != nWidth && nRelWidth && nCols )
@@ -2861,7 +2841,7 @@ void SwXMLTableContext::MakeTable()
 
 void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 {
-//FIXME: here would be a great place to handle XmlId for subtable
+    //FIXME: here would be a great place to handle XmlId for subtable
     pLineFmt = GetParentTable()->pLineFmt;
     pBoxFmt = GetParentTable()->pBoxFmt;
     nWidth = nW;

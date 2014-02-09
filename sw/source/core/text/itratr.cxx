@@ -57,10 +57,6 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-/*************************************************************************
- *                      SwAttrIter::Chg()
- *************************************************************************/
-
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
     OSL_ENSURE( pHt && pFnt, "No attribute of font available for change");
@@ -70,10 +66,6 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
         aAttrHandler.PushAndChg( *pHt, *pFnt );
     nChgCnt++;
 }
-
-/*************************************************************************
- *                      SwAttrIter::Rst()
- *************************************************************************/
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
@@ -85,10 +77,6 @@ void SwAttrIter::Rst( SwTxtAttr *pHt )
         aAttrHandler.PopAndChg( *pHt, *pFnt );
     nChgCnt--;
 }
-
-/*************************************************************************
- *              virtual SwAttrIter::~SwAttrIter()
- *************************************************************************/
 
 SwAttrIter::~SwAttrIter()
 {
@@ -116,10 +104,6 @@ SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
     return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
 }
 
-/*************************************************************************
- *                        SwAttrIter::SeekAndChg()
- *************************************************************************/
-
 bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
 {
     bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
@@ -131,8 +115,7 @@ bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut
     }
     if( bChg )
     {
-        // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
-        // des gewuenschten Fonts ...
+        // if the change counter is zero, we know the MagicNo of the wanted font
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
@@ -150,10 +133,6 @@ bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
             aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
     return pFnt->IsSymbol( pShell );
 }
-
-/*************************************************************************
- *                        SwAttrIter::SeekStartAndChg()
- *************************************************************************/
 
 bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
@@ -179,12 +158,11 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     if ( pHints && !bParaFont )
     {
         SwTxtAttr *pTxtAttr;
-        // Solange wir noch nicht am Ende des StartArrays angekommen sind &&
-        // das TextAttribut an Position 0 beginnt ...
+        // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
         while ( ( nStartIndex < pHints->GetStartCount() ) &&
                 !(*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()) )
         {
-            // oeffne die TextAttribute
+            // open the TextAttributes
             Chg( pTxtAttr );
             nStartIndex++;
         }
@@ -199,8 +177,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     }
     if( bChg )
     {
-        // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
-        // des gewuenschten Fonts ...
+        // if the application counter is zero, we know the MagicNo of the wanted font
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
@@ -209,12 +186,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     return bChg;
 }
 
-/*************************************************************************
- *                       SwAttrIter::SeekFwd()
- *************************************************************************/
-
-// AMA: Neuer AttrIter Nov 94
-
+// AMA: New AttrIter Nov 94
 void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 {
     SwTxtAttr *pTxtAttr;
@@ -234,7 +206,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
             nEndIndex++;
         }
     }
-    else // ueberlies die nicht geoeffneten Enden
+    else // skip the not opended ends
     {
         while ( (nEndIndex < pHints->GetEndCount()) &&
                 (*pHints->GetEnd(nEndIndex)->GetAnyEnd() <= nNewPos) )
@@ -248,16 +220,12 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
            (*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos))
     {
 
-        // oeffne die TextAttribute, deren Ende hinter der neuen Position liegt
+        // open the TextAttributes, whose ends lie behind the new position
         if ( *pTxtAttr->GetAnyEnd() > nNewPos )  Chg( pTxtAttr );
         nStartIndex++;
     }
 
 }
-
-/*************************************************************************
- *                       SwAttrIter::Seek()
- *************************************************************************/
 
 bool SwAttrIter::Seek( const sal_Int32 nNewPos )
 {
@@ -280,7 +248,7 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
             nStartIndex = nEndIndex = nPos = 0;
             nChgCnt = 0;
 
-            // Achtung!
+            // Attention!
             // resetting the font here makes it necessary to apply any
             // changes for extended input directly to the font
             if ( pRedln && pRedln->ExtOn() )
@@ -303,10 +271,6 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
 
     return pFnt->IsFntChg();
 }
-
-/*************************************************************************
- *                      SwAttrIter::GetNextAttr()
- *************************************************************************/
 
 sal_Int32 SwAttrIter::GetNextAttr( ) const
 {
@@ -336,7 +300,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
         }
     }
     if (m_pTxtNode!=NULL) {
-        //TODO maybe use hints like FieldHints for this instead of looking at the text...
+        // TODO maybe use hints like FieldHints for this instead of looking at the text...
         const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
         sal_Int32 p=nPos;
         while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
@@ -440,13 +404,13 @@ bool SwTxtNode::IsSymbol( const sal_Int32 nBegin ) const
 class SwMinMaxNodeArgs
 {
 public:
-    sal_uLong nMaxWidth;    // Summe aller Rahmenbreite
-    long nMinWidth;     // Breitester Rahmen
-    long nLeftRest;     // noch nicht von Rahmen ueberdeckter Platz im l. Rand
-    long nRightRest;    // noch nicht von Rahmen ueberdeckter Platz im r. Rand
-    long nLeftDiff;     // Min/Max-Differenz des Rahmens im linken Rand
-    long nRightDiff;    // Min/Max-Differenz des Rahmens im rechten Rand
-    sal_uLong nIndx;        // Indexnummer des Nodes
+    sal_uLong nMaxWidth;    // sum of all frame widths
+    long nMinWidth;         // biggest frame
+    long nLeftRest;         // space not already covered by frames in the left margin
+    long nRightRest;        // space not already covered by frames in the right margin
+    long nLeftDiff;         // Min/Max-difference of the frame in the left margin
+    long nRightDiff;        // Min/Max-difference of the frame in the right margin
+    sal_uLong nIndx;        // index of the node
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
@@ -476,7 +440,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
         MSHORT nWhich = pNd->Which();
         if( RES_DRAWFRMFMT != nWhich )
         {
-            // Enthaelt der Rahmen zu Beginn oder am Ende eine Tabelle?
+            // Does the frame contain a table at the start or the end?
             const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
             const SwFmtCntnt& rFlyCntnt = pNd->GetCntnt();
             sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
@@ -535,10 +499,9 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
             return;
         }
 
-        // Rahmen, die recht bzw. links ausgerichtet sind, gehen nur
-        // teilweise in die Max-Berechnung ein, da der Rand schon berueck-
-        // sichtigt wird. Nur wenn die Rahmen in den Textkoerper ragen,
-        // wird dieser Teil hinzuaddiert.
+        // Frames, which are left- or right-aligned are only party considered
+        // when calculating the maximum, since the border is already being considered.
+        // Only if the frame extends into the text body, this part is being added
         switch( eHoriOri )
         {
             case text::HoriOrientation::RIGHT:
@@ -605,8 +568,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     const SvxLRSpaceItem &rSpace = GetSwAttrSet().GetLRSpace();
     long nLROffset = rSpace.GetTxtLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
-    // Bei Numerierung ist ein neg. Erstzeileneinzug vermutlich
-    // bereits gefuellt...
+    // For enumerations a negative first line indentation is probably filled already
     if( !GetFirstLineOfsWithNum( nFLOffs ) || nFLOffs > nLROffset )
         nLROffset = nFLOffs;
 
@@ -737,13 +699,13 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                                 && rTmpSize.GetWidthPercent() )
                             {
 /*-----------------------------------------------------------------------------
- * Hier ein HACK fuer folgende Situation: In dem Absatz befindet sich
- * ein Textrahmen mit relativer Groesse. Dann nehmen wir mal als minimale
- * Breite 0,5 cm und als maximale KSHRT_MAX.
- * Sauberer und vielleicht spaeter notwendig waere es, ueber den Inhalt
- * des Textrahmens zu iterieren und GetMinMaxSize rekursiv zu rufen.
+ * This is a hack for the wollowing situation: In the paragraph there's a
+ * text frame with relative size. Then let's take 0.5 cm as minimum width
+ * and KSHRT_MAX as maximum width
+ * It were cleaner and maybe neccessary later on to iterate over the content
+ * of the text frame and call GetMinMaxSize recursively
  * --------------------------------------------------------------------------*/
-                                nAktWidth = FLYINCNT_MIN_WIDTH; // 0,5 cm
+                                nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
                                 if( (long)rMax < KSHRT_MAX )
                                     rMax = KSHRT_MAX;
                             }
@@ -832,7 +794,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         pOut = &pSh->GetRefDev();
     else
     {
-        //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
+        // Access via StarONE, there's no need for an existing or active shell
         if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else

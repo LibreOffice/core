@@ -27,13 +27,10 @@
 #include <swerror.h>
 #include <statstr.hrc>
 
-//----------------------------------------
-//    Initialisieren der Feld-FilterFlags
-//----------------------------------------
-
+// Initialisieren der Feld-FilterFlags
 static sal_uLong WW1_Read_FieldIniFlags()
 {
-//  sal_uInt16 i;
+    // sal_uInt16 i;
     static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
     sal_uInt32 aVal[ 1 ];
     SwFilterOptions aOpt( 1, aNames, aVal );
@@ -49,21 +46,18 @@ static sal_uLong WW1_Read_FieldIniFlags()
     return nFieldFlags;
 }
 
-////////////////////////////////////////////////// StarWriter-Interface
-//
+// StarWriter-Interface
 // Eine Methode liefern die call-Schnittstelle fuer den Writer.
 // Read() liest eine Datei. hierzu werden zwei Objekte erzeugt, die Shell,
 // die die Informationen aufnimmt und der Manager der sie aus der Datei liest.
 // Diese werden dann einfach per Pipe 'uebertragen'.
-//
-
 sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        sal_Bool bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
+        sal_Bool bNew = !bInsertMode;           // New Doc ( kein Einfuegen )
 
         // erstmal eine shell konstruieren: die ist schnittstelle
         // zum writer-dokument
@@ -91,12 +85,12 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
                 else
                 {
                     if( pMan->GetFib().GetFIB().fComplexGet() )
-                        //!!! ACHTUNG: hier muss eigentlich ein Error
+                        // Attention: hier muss eigentlich ein Error
                         // wegen Fastsave kommen, das der PMW-Filter
                         // das nicht unterstuetzt. Stattdessen temporaer
                         // nur eine Warnung, bis die entsprechende
                         // Meldung und Behandlung weiter oben eingebaut ist.
-//                      nRet = WARN_WW6_FASTSAVE_ERR;
+                        // nRet = WARN_WW6_FASTSAVE_ERR;
                         // Zum Einchecken mit neuem String:
                         nRet = ERR_WW6_FASTSAVE_ERR;
                 }
@@ -109,18 +103,14 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
     return nRet;
 }
 
-///////////////////////////////////////////////////////////////// Shell
-//
 // Die Shell ist die Schnittstelle vom Filter zum Writer. Sie ist
 // abgeleitet von der mit ww-filter gemeinsam benutzten Shell
 // SwFltShell und enthaelt alle fuer ww1 noetigen Erweiterungen. Wie
 // in einen Stream werden alle Informationen, die aus der Datei
 // gelesen werden, in die shell ge'piped'.
-//
 Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

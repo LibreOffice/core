@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 
@@ -93,8 +92,6 @@ struct SwXMLTableColumnCmpWidth_Impl
         return n < 0;
     }
 };
-
-// ---------------------------------------------------------------------
 
 class SwXMLTableColumns_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, o3tl::less_ptr_to<SwXMLTableColumn_Impl> > {
 public:
@@ -179,8 +176,6 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         }
     }
 }
-
-// ---------------------------------------------------------------------
 
 typedef vector< SwFrmFmt* > SwXMLFrmFmts_Impl;
 
@@ -746,7 +741,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
             nAbsWidth = pTblFmt->FindLayoutRect(sal_True).Width();
             if( !nAbsWidth )
             {
-                // TODO???
+                // TODO?
             }
         }
         ExportTableFmt( *pTblFmt, nAbsWidth );
@@ -761,8 +756,6 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
                                     aTblInfo, sal_True);
     }
 }
-
-// ---------------------------------------------------------------------
 
 void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                                   sal_uInt16 nColSpan,
@@ -803,7 +796,6 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         if( pBoxSttNd )
         {
             // start node -> normal cell
-
             // get cell range for table
             Reference<XCell> xCell = SwXCell::CreateXCell( (SwFrmFmt *)rTblInfo.GetTblFmt(),
                                                             (SwTableBox *)&rBox,

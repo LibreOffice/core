@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 #include <hintids.hxx>
@@ -50,7 +49,6 @@ using namespace ::xmloff::token;
 extern SvXMLItemMapEntry aXMLTableItemMap[];
 extern SvXMLItemMapEntry aXMLTableRowItemMap[];
 extern SvXMLItemMapEntry aXMLTableCellItemMap[];
-
 
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
@@ -216,8 +214,6 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 {
     nAbsWidth = nAbs;
 }
-
-// ----------------------------------------------------------------------------
 
 void SwXMLExport::_InitItemExport()
 {

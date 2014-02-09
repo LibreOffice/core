@@ -58,25 +58,25 @@ private:
 
     // helper methods to write XML streams
 
-    /// write a single XML stream into the package
+    // write a single XML stream into the package
     bool WriteThroughComponent(
-        /// the component we export
+        // the component we export
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent> & xComponent,
-        const sal_Char* pStreamName,        /// the stream name
-        /// service factory for pServiceName
+        const sal_Char* pStreamName,        // the stream name
+        // service factory for pServiceName
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext> & rFactory,
-        const sal_Char* pServiceName,       /// service name of the component
-        /// the argument (XInitialization)
+        const sal_Char* pServiceName,       // service name of the component
+        // the argument (XInitialization)
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Any> & rArguments,
-        /// output descriptor
+        // output descriptor
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rMediaDesc );
 
-    /// write a single output stream
-    /// (to be called either directly or by WriteThroughComponent(...))
+    // write a single output stream
+    // (to be called either directly or by WriteThroughComponent(...))
     bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XOutputStream> & xOutputStream,

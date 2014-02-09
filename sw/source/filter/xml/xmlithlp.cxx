@@ -40,7 +40,6 @@ using ::editeng::SvxBorderLine;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
-
 #define API_LINE_NONE 0x7FFF
 #define API_LINE_SOLID 0
 #define API_LINE_DOTTED 1
@@ -54,7 +53,6 @@ using namespace ::com::sun::star;
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
-
 
 const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
 {
@@ -352,6 +350,5 @@ const struct SvXMLEnumMapEntry aXML_KeepTogetherType[] =
         { XML_AUTO,         1 },
         { XML_TOKEN_INVALID, 0}
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

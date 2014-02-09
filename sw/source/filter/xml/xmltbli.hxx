@@ -46,8 +46,6 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
 } } }
 
-
-
 class SwXMLTableContext : public XMLTextTableContext
 {
     OUString     aStyleName;

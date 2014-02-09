@@ -42,12 +42,9 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
- *                      SwAttrIter::CtorInitAttrIter()
- *************************************************************************/
 void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
-    // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
+    // during HTML-Import it can happen, that no layout exists
     SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetCurrentLayout();
     pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;
 
@@ -155,20 +152,19 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
 }
 
 /*************************************************************************
- * SwRedlineItr - Der Redline-Iterator
+ * SwRedlineItr - The Redline-Iterator
  *
- * Folgende Informationen/Zustaende gibt es im RedlineIterator:
+ * The foolowing information/states exist in RedlineIterator:
  *
- * nFirst ist der erste Index der RedlineTbl, der mit dem Absatz ueberlappt.
+ * nFirst is the first index of RedlineTbl, which overlaps with the paragraph.
  *
- * nAct ist der zur Zeit aktive ( wenn bOn gesetzt ist ) oder der naechste
- * in Frage kommende Index.
- * nStart und nEnd geben die Grenzen des Objekts innerhalb des Absatzes an.
+ * nAct is the currently active (if bOn is set) or the next possible index.
+ * nStart and nEnd give you the borders of the object within the paragraph.
  *
- * Wenn bOn gesetzt ist, ist der Font entsprechend manipuliert worden.
+ * If bOn is set, the font has been manipulated according to it.
  *
- * Wenn nAct auf COMPLETE_STRING gesetzt wurde ( durch Reset() ), so ist zur Zeit
- * kein Redline aktiv, nStart und nEnd sind invalid.
+ * If nAct is set to COMPLETE_STRING (via Reset()), then currently no
+ * Redline is active, nStart and nEnd are invalid.
  *************************************************************************/
 
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
@@ -193,15 +189,14 @@ SwRedlineItr::~SwRedlineItr()
     delete pExt;
 }
 
-// Der Return-Wert von SwRedlineItr::Seek gibt an, ob der aktuelle Font
-// veraendert wurde durch Verlassen (-1) oder Betreten eines Bereichs (+1)
-
+// The return value of SwRedlineItr::Seek tells you if the current font
+// has been manipulated by leaving (-1) or accessing (+1) of a section
 short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 {
     short nRet = 0;
     if( ExtOn() )
-        return 0; // Abkuerzung: wenn wir innerhalb eines ExtendTextInputs sind
-            // kann es keine anderen Attributwechsel (auch nicht durch Redlining) geben
+        return 0; // Abbreviation: if we're within an ExtendTextInputs
+                  // there can't be other changes of attributes (not even by redlining)
     if( bShow )
     {
         if( bOn )
@@ -209,20 +204,20 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             if( nNew >= nEnd )
             {
                 --nRet;
-                _Clear( &rFnt );    // Wir gehen hinter den aktuellen Bereich
-                ++nAct;             // und pruefen gleich den naechsten
+                _Clear( &rFnt );    // We go behind the current section
+                ++nAct;             // and check the next one
             }
             else if( nNew < nStart )
             {
                 --nRet;
-                _Clear( &rFnt );    // Wir gehen vor den aktuellen Bereich
+                _Clear( &rFnt );    // We go in front of the current section
                 if( nAct > nFirst )
-                    nAct = nFirst;  // Die Pruefung muss von vorne beginnen
+                    nAct = nFirst;  // the test has to run from the beginning
                 else
-                    return nRet + EnterExtend( rFnt, nNew ); // Es gibt keinen vor uns.
+                    return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
             }
             else
-                return nRet + EnterExtend( rFnt, nNew ); // Wir sind im gleichen Bereich geblieben.
+                return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
         }
         if( COMPLETE_STRING == nAct || nOld > nNew )
             nAct = nFirst;
@@ -365,9 +360,9 @@ sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
 
 bool SwRedlineItr::_ChkSpecialUnderline() const
 {
-    // Wenn die Unterstreichung oder das Escapement vom Redling kommt,
-    // wenden wir immer das SpecialUnderlining, d.h. die Unterstreichung
-    // unter der Grundlinie an.
+    // If the underlining or the escapement is caused by redlining,
+    // we always apply the SpecialUnderlining, i.e. the underlining
+    // below the base line
     for (size_t i = 0; i < m_Hints.size(); ++i)
     {
         MSHORT nWhich = m_Hints[i]->Which();
@@ -382,7 +377,7 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
     if( nFirst == COMPLETE_STRING )
         return false;
-    if( nChkEnd == nChkStart ) // Leerzeilen gucken ein Zeichen weiter.
+    if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = nStart;
     sal_Int32 nOldEnd = nEnd;
@@ -451,9 +446,9 @@ bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
     MSHORT nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
-    {   // Wir sind innerhalb des ExtendText-Bereichs geblieben
+    {   // We stayed within the ExtendText-section
         MSHORT nAttr = rArr[ nPos - nStart ];
-        if( nOldAttr != nAttr ) // Gibt es einen (inneren) Attributwechsel?
+        if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
         {
             rFnt = *pFnt;
             ActualizeFont( rFnt, nAttr );

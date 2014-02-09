@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -48,7 +47,6 @@
 using namespace ::com::sun::star;
 
 // Adjust line height (dialogue)
-
 void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
@@ -62,8 +60,6 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
 }
 
 // Determine the width
-
-
 SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 {
     SwTwips nWidth = 0;
@@ -94,8 +90,6 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
     return nWidth;
 }
 
-
-
 SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 {
     OSL_ENSURE(nNum <= aCols.Count(), "Index out of Area");
@@ -115,8 +109,6 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
     else
         return GetColWidth(nNum);
 }
-
-
 
 void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
 {
@@ -155,8 +147,6 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
     pSh->EndAllAction();
 }
 
-
-
 void SwTableFUNC::InitTabCols()
 {
     OSL_ENSURE(pSh, "no Shell");
@@ -165,19 +155,15 @@ void SwTableFUNC::InitTabCols()
         pSh->GetTabCols( aCols );
 }
 
-
-
 SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt)
     : pFmt(pShell->GetTableFmt()),
       pSh(pShell),
       bCopy(bCopyFmt)
 {
-        // if applicable copy the format for edit
+    // if applicable copy the format for edit
     if( pFmt && bCopy )
         pFmt = new SwFrmFmt( *pFmt );
 }
-
-
 
 SwTableFUNC::~SwTableFUNC()
 {
@@ -338,9 +324,6 @@ sal_uInt16  SwTableFUNC::GetCurColNum() const
     return nPos - nCount;
 }
 
-
-
-
 sal_uInt16  SwTableFUNC::GetColCount() const
 {
     sal_uInt16 nCount = 0;
@@ -349,8 +332,6 @@ sal_uInt16  SwTableFUNC::GetColCount() const
             nCount ++;
     return aCols.Count() - nCount;
 }
-
-
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
 {
@@ -364,7 +345,5 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
     }
     return i - 1;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

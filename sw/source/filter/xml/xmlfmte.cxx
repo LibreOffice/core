@@ -251,7 +251,6 @@ void SwXMLExport::_ExportMasterStyles()
     GetPageExport()->exportMasterStyles( sal_False );
 }
 
-// ---------------------------------------------------------------------
 class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     SvXMLExport& rExport;
@@ -337,7 +336,6 @@ SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     sCDATA( GetXMLToken( XML_CDATA ) )
 {
 }
-
 
 SwXMLAutoStylePoolP::~SwXMLAutoStylePoolP()
 {

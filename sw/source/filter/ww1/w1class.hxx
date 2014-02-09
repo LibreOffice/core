@@ -65,8 +65,6 @@ class Ww1SprmSep;
 class Ww1Style;
 class Ww1StyleSheet;
 
-///////////////////////////////////////////////////////////////////////
-//
 // nach moeglichkeit wurden in diesem modul methoden aehnlicher
 // funktionalitaet gleich benannt. Die namen wurden wenn moeglich vom
 // ww-filter uebernommen.
@@ -86,14 +84,10 @@ class Ww1StyleSheet;
 // GetError() gibt zurueck, ob fehler aufgetreten ist
 // Start(), Stop(), Out(), op<< siehe modul w1filter
 // Dump() siehe modul w1dump
-//
 
-/////////////////////////////////////////////////////////////////// Fib
-//
-// file information block: wurzel des uebels: steht am beginn der
-// datei (seek(0)) und enthaelt alle positionen der strukturen der
-// datei
-//
+// file information block: root of the evil: it's at the start of the
+// file (seek(0)) and contains all positions of the structures of the
+// file.
 class Ww1Fib
 {
     W1_FIB aFib;
@@ -107,10 +101,7 @@ public:
     SvStream& GetStream()   { return rStream; }
 };
 
-/////////////////////////////////////////////////////////////////// Dop
-//
-// document property: eigenschaften des gesamten dokuments
-//
+// document property: properties of the entire document
 class Ww1Dop
 {
     W1_DOP aDop;
@@ -126,11 +117,8 @@ public:
     void Out(Ww1Shell&);
 };
 
-///////////////////////////////////////////////////////////// PlainText
-//
-// ww-dateien koennen mehrere textbloecke enthalten (main-text,
-// fusznoten etc). PlainText vereinigt die gemeinsamkeiten
-//
+// ww-files can contain several blocks of text (main-text,
+// footnotes etc). PlainText vereinigt die gemeinsamkeiten
 class Ww1PlainText
 {
 protected:
@@ -141,7 +129,7 @@ protected:
     sal_Bool bOK;
 public:
     Ww1PlainText(Ww1Fib& rWwFib, sal_uLong nFilePos, sal_uLong nCountBytes);
-    // innerhalb des textes
+    // within the text
     sal_uLong Where() const                 { return ulSeek; }
     void Seek( sal_uLong ulNew )
         {
@@ -175,7 +163,6 @@ public:
     static bool IsChar( sal_Unicode c )     { return c >= MinChar; }
 };
 
-/////////////////////////////////////////////////////////////// DocText
 class Ww1DocText : public Ww1PlainText
 {
 public:
@@ -185,7 +172,6 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////// FtnText
 class Ww1FtnText : public Ww1PlainText
 {
 public:
@@ -197,7 +183,6 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////// HddText
 class Ww1HddText : public Ww1PlainText
 {
 public:
@@ -209,7 +194,6 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////// McrText
 class Ww1McrText : public Ww1PlainText
 {
 public:
@@ -222,7 +206,6 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////// AtnText
 class Ww1AtnText : public Ww1PlainText
 {
 public:
@@ -235,10 +218,7 @@ public:
         }
 };
 
-///////////////////////////////////////////////////////////////// Style
-//
-// ein einzelner style oder vorlage
-//
+// a single style or template
 class Ww1Style
 {
     OUString aName;
@@ -267,10 +247,7 @@ public:
     void Out(Ww1Shell&, Ww1Manager&);
 };
 
-//////////////////////////////////////////////////////////// StyleSheet
-//
-// die sammlung aller vorlagen (max. 256)
-//
+// collection of all templates (max. 256)
 class Ww1StyleSheet
 {
     Ww1Style aStyles[256];
@@ -299,19 +276,16 @@ public:
         return !bOK; }
 };
 
-///////////////////////////////////////////////////////////////// Fonts
-//
 // ww kennt nur font-nummern beim formatieren. nebenher gibts ein
 // array von fonts, damit man aus der nummer einen konkreten font
 // machen kann.
-//
 class Ww1Fonts
 {
 protected:
     W1_FFN** pFontA; // Array of Pointers to Font Description
     Ww1Fib& rFib;
     sal_uLong nFieldFlags;
-    sal_uInt16 nMax; // Array-Groesse
+    sal_uInt16 nMax; // Array size
     sal_Bool bOK;
 public:
     Ww1Fonts(Ww1Fib&, sal_uLong nFieldFlgs);
@@ -328,8 +302,7 @@ public:
     SvxFontItem GetFont(sal_uInt16);
 };
 
-//////////////////////////////////////////////////////////// SingleSprm
-//
+// SingleSprm
 // diese klassen ersetzen die aSprmTab etc des ww6-filters. die
 // funktionspointer sind hier virtuale methoden, fuer die typen (byte,
 // word, var-sized etc) gibt es abgeleitete klassen. diese haben
@@ -341,20 +314,17 @@ public:
 // wohlgemerkt: SingleSprms sind die _beschreibung_ und _funktion_ der
 // Sprms, nicht deren inhalt. dieser musz uebergeben werden an die
 // einzelnen methoden wie Size, Dump und Start/Stop.
-//
 class Ww1SingleSprm
 {
 public:
 #ifdef DUMP
-//
-// allein die virtuellen methoden stehen in der vtab, also je nachdem,
-// ob fuer dumper oder filter uebersetzt wird ausblenden: das spart
-// platz. ausserdem stehen die methoden fuer dumper bzw filter in
-// verschiedenen modulen, die im jeweils anderen projekt nicht
-// uebersetzt werden. das diese dann beim linken nicht zur verfuegung
-// stehen faellt dann auch nicht auf. Der Namensstring ist nur im
-// Dumper noetig: weg damit im Filter.
-//
+    // allein die virtuellen methoden stehen in der vtab, also je nachdem,
+    // ob fuer dumper oder filter uebersetzt wird ausblenden: das spart
+    // platz. ausserdem stehen die methoden fuer dumper bzw filter in
+    // verschiedenen modulen, die im jeweils anderen projekt nicht
+    // uebersetzt werden. das diese dann beim linken nicht zur verfuegung
+    // stehen faellt dann auch nicht auf. Der Namensstring ist nur im
+    // Dumper noetig: weg damit im Filter.
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     virtual std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
@@ -523,7 +493,7 @@ public:
         Ww1SingleSprmWord(sName) {
         }
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    // SetBorder() wird auch fuer Tabellen gebraucht, deshalb public
+    // SetBorder() is needed for tables, too. That's why it's public
     static editeng::SvxBorderLine* SetBorder(editeng::SvxBorderLine*, W1_BRC10*);
 };
 
@@ -586,7 +556,7 @@ public:
     Ww1SingleSprmPChgTabsPapx(sal_Char* sName) :
         Ww1SingleSprmByteSized(0, sName) {
         }
-  // Size() ist noch nicht aktiviert !!
+  // Size() is not yet activated!
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
@@ -700,10 +670,7 @@ public:
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
-////////////////////////////////////////////////////////////////// Sprm
-//
 // der tatsaechlich in der datei auftretende datentyp Sprm
-//
 class Ww1Sprm
 {
     sal_Bool ReCalc();
@@ -723,17 +690,17 @@ protected:
     sal_Bool bOK;
     sal_uInt16* pArr;
     sal_uInt16 count;
-// ohne Token, mit laengen-byte/word
+    // ohne Token, mit laengen-byte/word
     sal_uInt16 GetSize(sal_uInt8 nId, sal_uInt8* pSprm);
-// mit Token und LaengenByte
+    // mit Token und LaengenByte
     sal_uInt16 GetSizeBrutto(sal_uInt8* pSprm) {
         sal_uInt8 nId = *pSprm++;
         return GetSize(nId, pSprm) + 1; }
-// gibt fuer nTh element id, size & zeiger auf daten:
-//  sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
+    // returns for the n-th element id, size & pointer to data:
+    // sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
 public:
-// SH: brauche ich public
-// gibt fuer nTh element id, size & zeiger auf daten:
+    // SH: I need it to be public
+    // returns for the n-th element id, size & pointer to data:
     sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
 
     Ww1Sprm(sal_uInt8*, sal_uInt16);
@@ -752,11 +719,8 @@ public:
     static void DeinitTab();
 };
 
-/////////////////////////////////////////////////////////////// Picture
-//
-// der wrapper um den datentyp PIC, eine struktur, die am beginn eines
-// bild-dateinamens oder eines eingebetteten bildes steht.
-//
+// the wrapper around the type PIC, a structure, which stands at the beginning
+// of a picture filename or an embedded picture
 class Ww1Picture
 {
     sal_Bool bOK;
@@ -772,12 +736,9 @@ public:
     void WriteBmp(SvStream&);
 };
 
-/////////////////////////////////////////////////////////////////// Plc
-//
 // eine der wichtigen array-strukturen der ww-dateien. sie beinhalten
 // n+1 dateipositionen und n attribute, die zwischen den
 // dateipositionen gelten.
-//
 class Ww1Plc
 {
     sal_uInt8* p;
@@ -792,7 +753,7 @@ public:
     Ww1Plc(Ww1Fib&, sal_uLong, sal_uInt16, sal_uInt16);
     ~Ww1Plc();
     friend std::ostream& operator <<(std::ostream&, Ww1Plc&);
-    sal_uLong Where(sal_uInt16); // wie im jeweiligen plc
+    sal_uLong Where(sal_uInt16); // like in each plc
     void Seek(sal_uLong, sal_uInt16&);
     void Fill(sal_uInt16 nIndex, sal_uLong& begin, sal_uLong& end) {
         begin = Where(nIndex);
@@ -808,7 +769,6 @@ public:
 //Plc 2,   2,   6,   0,   2,   0
 //Fkp 1,   1,   0,   0,   0,   0
 
-/////////////////////////////////////////////////////////// PlcGlossary
 class Ww1PlcGlossary : public Ww1Plc
 {
 public:
@@ -818,7 +778,6 @@ public:
         }
 };
 
-////////////////////////////////////////////////////// PlcAnnotationRef
 class Ww1PlcAnnotationRef : public Ww1Plc
 {
 public:
@@ -828,7 +787,6 @@ public:
         }
 };
 
-////////////////////////////////////////////////////// PlcAnnotationTxt
 class Ww1PlcAnnotationTxt : public Ww1Plc
 {
 public:
@@ -838,7 +796,7 @@ public:
         }
 };
 
-///////////////////////////////////////////////////////// PlcAnnotation
+// PlcAnnotation
 class Ww1Annotation {
     Ww1PlcAnnotationRef aRef;
     Ww1PlcAnnotationTxt aTxt;
@@ -850,7 +808,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1Annotation&);
 };
 
-//////////////////////////////////////////////////////////////// PlcSep
 class Ww1PlcSep : public Ww1Plc
 {
 public:
@@ -861,7 +818,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1PlcSep&);
 };
 
-//////////////////////////////////////////////////////////////// PlcChp
 class Ww1PlcChp : public Ww1Plc
 {
 public:
@@ -872,7 +828,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1PlcChp&);
 };
 
-//////////////////////////////////////////////////////////////// PlcPap
 class Ww1PlcPap : public Ww1Plc
 {
 public:
@@ -883,7 +838,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1PlcPap&);
 };
 
-//////////////////////////////////////////////////////// PlcFootnoteRef
 class Ww1PlcFootnoteRef : public Ww1Plc
 {
 public:
@@ -894,7 +848,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1PlcFootnoteRef&);
 };
 
-//////////////////////////////////////////////////////// PlcFootnoteTxt
 class Ww1PlcFootnoteTxt : public Ww1Plc
 {
 public:
@@ -905,7 +858,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1PlcFootnoteTxt&);
 };
 
-///////////////////////////////////////////////////////////// PlcFields
 class Ww1PlcFields : public Ww1Plc
 {
 public:
@@ -914,12 +866,12 @@ public:
     {}
     W1_FLD* GetData(sal_uInt16 nIndex)
         { return (W1_FLD*)Ww1Plc::GetData(nIndex); }
-    sal_uLong Where(sal_uInt16 nIndex)  // absolut im file
+    sal_uLong Where(sal_uInt16 nIndex)  // absolute within the file
         { return Ww1Plc::Where(nIndex) + rFib.GetFIB().fcMinGet(); }
     friend std::ostream& operator <<(std::ostream&, Ww1PlcFields&);
 };
 
-///////////////////////////////////////////////////////////// PlcBookmarks
+// PlcBookmarks
 class Ww1StringList
 {
     sal_Char** pIdxA;
@@ -950,9 +902,9 @@ public:
     {}
 
     sal_uInt8* GetData(sal_uInt16 nIndex)   {   return Ww1Plc::GetData(nIndex); }
-    // Position als CP
+    // Position as CP
     sal_uLong WhereCP(sal_uInt16 nIndex)    { return Ww1Plc::Where(nIndex); }
-    // absolut im file
+    // absolute within the file
     sal_uLong Where(sal_uInt16 nIndex)
     {
         return ( nIndex < Count() )
@@ -961,7 +913,6 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////// PlcHdd
 class Ww1PlcHdd : public Ww1Plc
 {
 public:
@@ -971,11 +922,8 @@ public:
     {}
 };
 
-/////////////////////////////////////////////////////////////////// Fkp
-//
 // aehnlich den plcs aufgebaute arrays, die sich auf eine groesze von
-// 512 byte beschraenken.
-//
+// 512 byte beschraenken
 class Ww1Fkp
 {
 protected:
@@ -990,7 +938,6 @@ public:
     sal_uLong Where(sal_uInt16); // wie im entsprechenden fkp
 };
 
-//////////////////////////////////////////////////////////////// FkpPap
 class Ww1FkpPap : public Ww1Fkp
 {
 public:
@@ -1001,7 +948,6 @@ public:
     sal_Bool Fill(sal_uInt16,  sal_uInt8*&, sal_uInt16&);
 };
 
-//////////////////////////////////////////////////////////////// FkpChp
 class Ww1FkpChp : public Ww1Fkp
 {
 #ifdef DUMP
@@ -1020,7 +966,6 @@ public:
     sal_Bool Fill(sal_uInt16, W1_CHP&);
 };
 
-////////////////////////////////////////////////////////////// SprmPapx
 class Ww1SprmPapx : public Ww1Sprm
 {
     W1_PAPX aPapx;
@@ -1033,7 +978,6 @@ public:
     void Stop(Ww1Shell&, Ww1Manager&);
 };
 
-/////////////////////////////////////////////////////////////// SprmSep
 class Ww1SprmSep : public Ww1Sprm
 {
 public:
@@ -1043,7 +987,6 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1SprmSep&);
 };
 
-///////////////////////////////////////////////////////////////// Assoc
 class Ww1Assoc
 {
     enum fields { FileNext, Dot, Title, Subject, KeyWords, Comments,
@@ -1065,8 +1008,6 @@ public:
     void Out(Ww1Shell&);
 };
 
-////////////////////////////////////////////////////////// HeaderFooter
-//
 // Header/Footer/Footnoteseparators sind einer nach dem naechsten in
 // einem eigenen text gespeichert. ein plc trennt diesen text in
 // einzelne teile.  diese werden durchnummeriert als ihdd. nun gibt es
@@ -1080,19 +1021,18 @@ public:
 // HeaderFooter merkt sich fuer jede der 9 die momentane einstellung
 // (jedoch nicht die alten) und den naechstvergebbaren ihdd.  ist ein
 // teil nicht vorhanden bekommt er den wert 0xffff.
-//
 class Ww1HeaderFooter : public Ww1PlcHdd
 {
-    sal_uInt16 nextIhdd; // naechster textteil im HddText
-    sal_uInt16 nFtnSep; // fusznoten trenner
-    sal_uInt16 nFtnFollowSep; // folge fusznoten trenner
-    sal_uInt16 nFtnNote; // folgefunsznotennotiz
-    sal_uInt16 nEvenHeadL; // kopfzeilen grader seiten
-    sal_uInt16 nOddHeadL; // kopfzeilen ungrader seiten
-    sal_uInt16 nEvenFootL; // fuszzeilen grader seiten
-    sal_uInt16 nOddFootL; // fuszzeilen ungerader seiten
-    sal_uInt16 nFirstHeadL; // kopfzeilen der ersten seite
-    sal_uInt16 nFirstFootL; // fuszzeilen der ersten seite
+    sal_uInt16 nextIhdd;        // naechster textteil im HddText
+    sal_uInt16 nFtnSep;         // fusznoten trenner
+    sal_uInt16 nFtnFollowSep;   // folge fusznoten trenner
+    sal_uInt16 nFtnNote;        // folgefunsznotennotiz
+    sal_uInt16 nEvenHeadL;      // kopfzeilen grader seiten
+    sal_uInt16 nOddHeadL;       // kopfzeilen ungrader seiten
+    sal_uInt16 nEvenFootL;      // fuszzeilen grader seiten
+    sal_uInt16 nOddFootL;       // fuszzeilen ungerader seiten
+    sal_uInt16 nFirstHeadL;     // kopfzeilen der ersten seite
+    sal_uInt16 nFirstFootL;     // fuszzeilen der ersten seite
     enum HeaderFooterMode {
         None, FtnSep, FtnFollowSep, FtnNote, EvenHeadL, OddHeadL,
         EvenFootL, OddFootL, FirstHeadL, MaxHeaderFooterMode
@@ -1205,20 +1145,19 @@ public:
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
 };
 
-//////////////////////////////////////////////////////////////// Fields
 class Ww1Fields : public Ww1PlcFields
 {
     sal_uInt16 nPlcIndex;
     OUString sErgebnis; // das von word errechnete ergebniss
     SwField* pField;
-    sal_uLong Where(sal_uInt16 nIndex)  // innerhalb des textes
+    sal_uLong Where(sal_uInt16 nIndex)  // within the text
         { return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
 
 public:
     Ww1Fields(Ww1Fib& rFibL, sal_uLong ulFilePos, sal_uInt16 nBytes)
         : Ww1PlcFields(rFibL, ulFilePos, nBytes), nPlcIndex(0), pField(0)
     {}
-    // innerhalb des textes
+    // within the text
     sal_uLong Where()       { return Where(nPlcIndex); }
     void operator++()
     {
@@ -1274,7 +1213,6 @@ public:
     {}
 };
 
-//////////////////////////////////////////////////////////////// Bookmarks
 class Ww1Bookmarks
 {
     Ww1PlcBookmarkTxt aNames;
@@ -1304,7 +1242,6 @@ public:
     void Out(Ww1Shell&, Ww1Manager&, sal_uInt16=0);
 };
 
-///////////////////////////////////////////////////////////// Footnotes
 class Ww1Footnotes : public Ww1PlcFootnoteRef
 {
     sal_uInt16 nPlcIndex;
@@ -1314,7 +1251,7 @@ public:
     Ww1Footnotes(Ww1Fib& rFibL)
         : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(sal_False)
     {}
-    // innerhalb des textes
+    // within the text
     sal_uLong Where()
     {
         sal_uLong ulRet = 0xffffffff;
@@ -1331,7 +1268,6 @@ public:
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
 };
 
-/////////////////////////////////////////////////////////////////// Sep
 class Ww1Sep : public Ww1PlcSep
 {
     Ww1HeaderFooter aHdd;
@@ -1343,7 +1279,7 @@ public:
     Ww1HeaderFooter& GetHdd()   { return aHdd; }
     void operator++()        { nPlcIndex++; }
     sal_uInt8* GetData()            { return Ww1PlcSep::GetData(nPlcIndex); }
-    // innerhalb des textes
+    // within the text
     sal_uLong Where()               { return Ww1PlcSep::Where(nPlcIndex); }
     void SetGrpfIhdt(sal_uInt8 grpfIhdt)
     {
@@ -1354,7 +1290,6 @@ public:
         { aHdd.Stop(rOut, rMan, c); }
 };
 
-/////////////////////////////////////////////////////////////////// Pap
 class Ww1Pap : public Ww1PlcPap
 {
     sal_uInt16 nPlcIndex;
@@ -1381,7 +1316,7 @@ class Ww1Pap : public Ww1PlcPap
 public:
     Ww1Pap(Ww1Fib& rFib);
     ~Ww1Pap()   { delete pPap; }
-    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
+    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // within the text
     void operator++();
     sal_Bool FillStart(sal_uInt8*& pB, sal_uInt16& nSize)
     {
@@ -1424,7 +1359,6 @@ public:
     sal_Bool HasId(sal_uInt16 nId);
 };
 
-/////////////////////////////////////////////////////////////////// Chp
 class Ww1Chp : public Ww1PlcChp
 {
     sal_uInt16 nPlcIndex;
@@ -1448,7 +1382,7 @@ class Ww1Chp : public Ww1PlcChp
 public:
     Ww1Chp( Ww1Fib& rFib );
     ~Ww1Chp()   { delete pChp; }
-    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
+    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // within the text
     void operator++();
     sal_Bool FillStart(W1_CHP& rChp)
     {
@@ -1485,12 +1419,9 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////// Manager
-//
 // zentraler aufhaenger der ww-seite des filters, konstruiert aus dem
 // inputstream (ww-datei) enthaelt er alles, was noetig ist, um in die
 // shell (pm-seite) gepiped zu werden.
-//
 class Ww1Manager
 {
     sal_Bool bOK;
@@ -1500,17 +1431,17 @@ class Ww1Manager
     Ww1Fib aFib;
     Ww1Dop aDop;
     Ww1Fonts aFonts;
-// ab jetzt alles paarig, fuer 'pushed':
+    // ab jetzt alles paarig, fuer 'pushed':
     Ww1DocText aDoc;
     Ww1PlainText* pDoc;
     sal_uLong ulDocSeek;
     sal_uLong* pSeek;
     Ww1TextFields aFld;
     Ww1Fields* pFld;
-// selbst 'push'bar:
+    // selbst 'push'bar:
     Ww1Chp aChp;
     Ww1Pap aPap;
-// nicht in textbereichen vorhanden, wenn ge'pushed'
+    // nicht in textbereichen vorhanden, wenn ge'pushed'
     Ww1Footnotes aFtn;
     Ww1Bookmarks aBooks;
     Ww1Sep aSep;
@@ -1523,7 +1454,7 @@ public:
     Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs);
     sal_Bool GetError() const       { return !bOK; }
 
-// Fuer Tabellen
+    // for tables
     void SetInTtp(bool bSet = true)     { bInTtp = bSet; }
     bool IsInTtp() const                { return bInTtp; }
     void SetInStyle(bool bSet = true)   { bInStyle = bSet; }
@@ -1534,7 +1465,7 @@ public:
     sal_Bool HasTtp();
     sal_Bool LastHasTtp();
 
-// Fuer Flys
+    // for flys
     sal_Bool HasPPc();
     sal_Bool HasPDxaAbs();
 
@@ -1542,7 +1473,7 @@ public:
     Ww1PlainText& GetText()             { return *pDoc; }
     Ww1Dop& GetDop()                    { return aDop; }
     Ww1Sep& GetSep()                    { return aSep; }
-    // innerhalb des textes
+    // within the text
     sal_uLong Where()                       { return pDoc->Where(); }
     void Fill( sal_Unicode& rChr )      { pDoc->Out( rChr ); }
     sal_uInt8 Fill( OUString& rStr, sal_uLong ulLen)

@@ -153,7 +153,6 @@ inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const
     return *pTwipUnitConv;
 }
 
-
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,10 +34,6 @@ class SwDropPortion;
 class SvStream;
 class SwTxtFormatter;
 
-/*************************************************************************
- * class SwCharRange
- *************************************************************************/
-
 class SwCharRange
 {
     sal_Int32 nStart, nLen;
@@ -61,10 +57,6 @@ public:
     SwCharRange &operator+=(const SwCharRange &rRange);
 };
 
-/*************************************************************************
- * class SwRepaint
- *************************************************************************/
-
 // SwRepaint is a document-global SwRect
 // nOfst states from where in the first line should be painted
 // nRightOfst gives the right margin
@@ -84,13 +76,13 @@ public:
 };
 
 
-/// Collection of SwLinePortion instances, representing one line of text.
+/// Collection of SwLinePortion instances, representing one line of text
 class SwLineLayout : public SwTxtPortion
 {
 private:
     SwLineLayout *pNext;                // The next Line
-    std::vector<long>* pLLSpaceAdd;     // Used for justified alignment.
-    std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression.
+    std::vector<long>* pLLSpaceAdd;     // Used for justified alignment
+    std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression
     KSHORT nRealHeight;                 // The height resulting from line spacing and register
     bool bFormatAdj : 1;
     bool bDummy     : 1;
@@ -176,9 +168,7 @@ public:
     // For special treatment for empty lines
     virtual bool Format( SwTxtFormatInfo &rInf );
 
-    //
-    // STUFF FOR JUSTIFIED ALIGNMENT
-    //
+    // Stuff for justified alignment
     inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
@@ -195,9 +185,7 @@ public:
     inline void RemoveFirstLLSpaceAdd() { pLLSpaceAdd->erase( pLLSpaceAdd->begin() ); }
     inline std::vector<long>* GetpLLSpaceAdd() const { return pLLSpaceAdd; }
 
-    //
-    // STUFF FOR KANA COMPRESSION
-    //
+    // Stuff for Kana compression
     inline void SetKanaComp( std::deque<sal_uInt16>* pNew ){ pKanaComp = pNew; }
     inline void FinishKanaComp() { delete pKanaComp; pKanaComp = NULL; }
     inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }

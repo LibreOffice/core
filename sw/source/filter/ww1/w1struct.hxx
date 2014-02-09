@@ -27,7 +27,7 @@
 class Ww1Shell;
 class Ww1Manager;
 
-struct W1_FIB /////////////////////////////////////////////////////////
+struct W1_FIB
 {
     SVBT16 wIdent;// 0x0 int magic number
     sal_uInt16 wIdentGet() {
@@ -371,7 +371,7 @@ struct W1_FIB /////////////////////////////////////////////////////////
                             // entries in the plcfbtePapx is less than this, the plcfbtePapx is incomplete.
 };
 
-struct W1_DOP ///////////////////////////////////// Document Properties
+struct W1_DOP //Document Properties
 {
     SVBT16 fFlags;
     sal_uInt16 fFlagsGet() {
@@ -497,7 +497,7 @@ struct W1_DOP ///////////////////////////////////// Document Properties
 };
 // cbDOP is 66.
 
-struct W1_CHP /////////////////////////////////////////////////////////
+struct W1_CHP
 {
     SVBT16  fChar;
     SVBT16  ftc;// Font Code
@@ -604,7 +604,7 @@ struct W1_FFN ///////////////////////////////////////// Font Descriptor
     sal_uInt8* szFfnGet() { return szFfn; }
 };
 
-struct W1_PHE /////////////////////////////////////// Paragraph Height
+struct W1_PHE // Paragraph Height
 {
     SVBT16 fFlags;
     sal_uInt16 fFlagsGet() {
@@ -629,7 +629,7 @@ struct W1_PHE /////////////////////////////////////// Paragraph Height
         return SVBT16ToShort(xxx); }
 };
 
-struct W1_PAPX ///////////////////////// Paragraph Property Difference
+struct W1_PAPX // Paragraph Property Difference
 {
     sal_uInt8 stc;
     sal_uInt8 stcGet() { return stc; }
@@ -639,7 +639,7 @@ struct W1_PAPX ///////////////////////// Paragraph Property Difference
         return grpprl; }
 };
 
-struct W1_BRC //////////////////////////////////////////// Border Code
+struct W1_BRC // Border Code
 {
     SVBT16 aBits;
     sal_uInt16 aBitsGet() {
@@ -668,7 +668,7 @@ struct W1_BRC //////////////////////////////////////////// Border Code
         return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 11) & 0x001f); }
 };
 
-struct W1_BRC10 ///////////////////////////////// Border Code Word 1.0
+struct W1_BRC10 // Border Code Word 1.0
 {
     SVBT16 aBits;
     sal_uInt16 aBitsGet() {
@@ -687,7 +687,7 @@ struct W1_BRC10 ///////////////////////////////// Border Code Word 1.0
         return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 15) & 0x0001); }
 };
 
-struct W1_FLD //////////////////////////////////////// FieldDescriptor
+struct W1_FLD // FieldDescriptor
 {
     sal_uInt8 ch; // boundary-type (begin(19), separator (20), end (21))
     sal_uInt8 chGet() { return ch; }
@@ -708,7 +708,7 @@ struct W1_FLD //////////////////////////////////////// FieldDescriptor
         return (fltGet() >> 6) & 1; }
 };
 
-struct W1_PIC /////////////////////////////////////// PictureStructure
+struct W1_PIC // PictureStructure
 {
     SVBT32 lcb;// 0x0 number of bytes in the PIC structure plus size of following picture data which may be a Window's metafile, a bitmap, or the filename of a TIFF file.
     sal_uLong lcbGet() {
@@ -797,7 +797,7 @@ struct W1_PIC /////////////////////////////////////// PictureStructure
     sal_uInt8* rgbGet() { return &rgb; }
 };
 
-struct W1_TBD /////////////////////////////////////////////////////////
+struct W1_TBD
 {
     sal_uInt8 aBits1;
     sal_uInt8 aBits1Get() { return aBits1; }
@@ -811,7 +811,7 @@ struct W1_TBD /////////////////////////////////////////////////////////
 // *    int :2  C0  reserved
 };
 
-struct W1_TC //////////////////////////////////////////////////////////
+struct W1_TC
 {
     sal_uInt8 aBits1;
     sal_uInt8 aBits1Get() { return aBits1; }

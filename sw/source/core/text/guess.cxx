@@ -526,13 +526,8 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     return false;
 }
 
-/*************************************************************************
- *                      SwTxtGuess::AlternativeSpelling
- *************************************************************************/
-
 // returns true if word at position nPos has a diffenrent spelling
 // if hyphenated at this position (old german spelling)
-
 bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     const sal_Int32 nPos )
 {

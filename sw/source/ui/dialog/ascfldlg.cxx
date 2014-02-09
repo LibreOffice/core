@@ -134,7 +134,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
         SwDoc* pDoc = rDocSh.GetDoc();
 
-        // initialise language
+        // initialize language
         {
             if( !aOpt.GetLanguage() )
             {
@@ -189,7 +189,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aFontNames.insert( aInf.GetName() );
             }
 
-            // insert to listbox
+            // insert into listbox
             for( std::set< OUString >::const_iterator it = aFontNames.begin();
                  it != aFontNames.end(); ++it )
             {
@@ -220,7 +220,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         m_pLanguageLB->Hide();
     }
 
-    // initialise character set
+    // initialize character set
     m_pCharSetLB->FillFromTextEncodingTable( pStream != NULL );
     m_pCharSetLB->SelectTextEncoding( aOpt.GetCharSet()  );
 

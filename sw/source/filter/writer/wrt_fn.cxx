@@ -90,7 +90,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
 
 Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 {
-    // It must be a CntntNode !!
+    // It must be a CntntNode!
     SwCntntNode * pCNd = rNode.GetCntntNode();
     if( !pCNd )
         return rWrt;
@@ -116,6 +116,5 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
         (*pOut)( rWrt, *pCNd );
     return rWrt;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
