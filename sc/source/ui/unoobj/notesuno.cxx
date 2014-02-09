@@ -210,7 +210,7 @@ OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
     return pNote ? pNote->GetDate() : OUString();
 }
 
-sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();

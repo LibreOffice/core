@@ -89,7 +89,9 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getAuthor() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getDate() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getIsVisible() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getIsVisible()
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
     virtual void SAL_CALL setIsVisible( sal_Bool bIsVisible )
                                     throw(::com::sun::star::uno::RuntimeException);
 
