@@ -597,7 +597,8 @@ private:
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
-                                                                                                                               uno::RuntimeException)
+                                                                                                                               uno::RuntimeException,
+                                  std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromARGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
