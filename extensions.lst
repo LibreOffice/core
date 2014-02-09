@@ -70,6 +70,10 @@
     b38cba04b6513dd42b031199d617cce6 http://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "DanskeSynonymer.oxt"
     6ee1e24fb17e44577d8e3200f3e44adc http://sourceforge.net/projects/aoo-extensions/files/1429/6/dict-da-current.oxt/download "dict-da-current.oxt"
 
+# Lithuanian dictionary.
+[ language=lt ]
+    d8d4a3d5c6abfde1b4c81cc1ddd1afa0 http://sourceforge.net/projects/aoo-extensions/files/17703/0/openoffice-spellcheck-lt-1.3.oxt/download "openoffice-spellcheck-lt-1.3.oxt"
+
 # Romanian dictionary.
 [ language=ro ]
     b05941b975afc0321df0cd48a4d295c8 http://sourceforge.net/projects/aoo-extensions/files/1392/8/dict-ro.1.5.oxt/download "dict-ro.1.5.oxt"
