@@ -906,10 +906,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
     rDoc.SetNote(rPos, pNote);
 
-    if(pNote)
-        return pNote;
-    else
-        return NULL;
+    return pNote;
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromString(

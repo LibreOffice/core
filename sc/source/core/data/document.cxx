@@ -6165,7 +6165,7 @@ void ScDocument::SetNote(const ScAddress& rPos, ScPostIt* pNote)
 
 void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote)
 {
-        return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, pNote);
+    return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, pNote);
 }
 
 bool ScDocument::HasNote(const ScAddress& rPos)
