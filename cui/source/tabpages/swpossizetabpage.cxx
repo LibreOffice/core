@@ -1274,8 +1274,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
         m_pVertByFT->Enable( bEnable );
     }
 
-    if (pLB)    // only if the hanlder has been called by a change of the controller
-        RangeModifyHdl( 0 );
+    RangeModifyHdl( 0 );
 
     short nRel = 0;
     if (pLB->GetSelectEntryCount())
