@@ -130,7 +130,7 @@ public:
     void UpdateAllRowHeights();
 
     void                    BeforeXMLLoading();
-    void                    AfterXMLLoading(sal_Bool bRet);
+    void                    AfterXMLLoading(bool bRet);
     ScSheetSaveData*        GetSheetSaveData();
 
     void                    RepaintRange( const ScRange& rRange );
@@ -842,7 +842,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    sal_Bool                    GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex );
+    bool                    GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScTableSheetObj*        GetObjectByName_Impl(const OUString& aName);
 

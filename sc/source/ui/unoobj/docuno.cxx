@@ -424,7 +424,7 @@ void ScModelObj::BeforeXMLLoading()
         pDocShell->BeforeXMLLoading();
 }
 
-void ScModelObj::AfterXMLLoading(sal_Bool bRet)
+void ScModelObj::AfterXMLLoading(bool bRet)
 {
     if (pDocShell)
         pDocShell->AfterXMLLoading(bRet);
@@ -3670,7 +3670,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XScenarios
 
-sal_Bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex )
+bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex )
 {
     //! Case-insensitiv ????
 
@@ -3684,7 +3684,7 @@ sal_Bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rI
                 if (aTabName.equals(rName))
                 {
                     rIndex = i;
-                    return sal_True;
+                    return true;
                 }
     }
 
