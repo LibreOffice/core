@@ -2098,6 +2098,10 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     // check the font theme values in style definitions
     assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
 
+    // check the color theme values in style definitions
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color", "themeColor", "accent1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color", "themeTint", "99");
+
     // check direct format font theme values have been preserved
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
@@ -2109,6 +2113,8 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeColor", "accent3");
     OUString sThemeShade = getXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeShade");
     CPPUNIT_ASSERT_EQUAL(sThemeShade.toInt32(16), sal_Int32(0xbf));
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[7]/w:r[1]/w:rPr/w:color", "themeColor", "accent1");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[7]/w:r[1]/w:rPr/w:color", "themeTint", "99");
 
     // check the themeFontLang values in settings file
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
