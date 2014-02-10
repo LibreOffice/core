@@ -621,7 +621,7 @@ void StyleSettings::SetCheckedColorSpecialCase( )
 
 sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 {
-    // style selected in Tools -> Options... -> OpenOffice.org -> View
+    // style selected in Tools -> Options... -> LibreOffice -> View
     sal_uLong nStyle = GetSymbolsStyle();
 
     if ( nStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nStyle) ) )
