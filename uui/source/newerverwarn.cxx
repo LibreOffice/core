@@ -102,10 +102,11 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
         }
         else
         {
-            // TODO: do we need to respect the
-            // /org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments
-            // configuration flag? Finally, its meaning is "are automatic
-            // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
+            // TODO: do we need to respect the /org.openoffice.Office.Jobs/Jobs/
+            // UpdateCheck/Arguments/AutoCheckEnabled configuration flag?
+            // Finally, its meaning is "are automatic updates enabled", but this
+            // here is not an automatic update, but one triggered explicitly by
+            // the user.
             css::uno::Reference< css::container::XHierarchicalNameAccess > xOfficeHelp(officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext), css::uno::UNO_QUERY_THROW);
 
             util::URL aURL;
