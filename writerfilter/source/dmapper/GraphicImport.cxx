@@ -955,9 +955,12 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
                 sal_Int16 nPositivePercentage = rtl::math::round(m_pImpl->m_rPositivePercentages.front().toDouble() / oox::drawingml::PER_PERCENT);
                 m_pImpl->m_rPositivePercentages.pop();
 
-                uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
-                xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
+                if (nPositivePercentage)
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                    xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
+                }
             }
             break;
         case 0x271b:
