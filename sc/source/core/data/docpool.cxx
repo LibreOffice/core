@@ -187,11 +187,11 @@ static SfxItemInfo const  aItemInfos[] =
 
 // -----------------------------------------------------------------------
 
-ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
+ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
     :   SfxItemPool ( OUString("ScDocumentPool"),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
-                        aItemInfos, NULL, bLoadRefCounts ),
+                        aItemInfos, NULL, false/*bLoadRefCounts*/ ),
         pSecondary  ( pSecPool )
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
