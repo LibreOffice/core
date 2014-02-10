@@ -679,7 +679,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
             if ( pObject->GetLayer()==SC_LAYER_INTERN &&
                     pObject->IsPolyObj() && pObject->GetPointCount()==2 )
             {
-                if (aRect.IsInside(pObject->GetPoint(bDestPnt)))            // Start/Zielpunkt
+                if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // Start/Zielpunkt
                     ppObj[nDelCount++] = pObject;
             }
 
@@ -1485,9 +1485,9 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         ScAddress aErrPos;
                         if ( HasError( aSource, aErrPos ) )
-                            bError = sal_True;
+                            bError = true;
                         else
-                            bArrow = sal_True;
+                            bArrow = true;
                     }
                     else if ( eType == SC_DETOBJ_FROMOTHERTAB )
                     {
@@ -1497,15 +1497,15 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         ScAddress aErrPos;
                         if ( HasError( ScRange( aPos), aErrPos ) )
-                            bError = sal_True;
+                            bError = true;
                         else
-                            bArrow = sal_True;
+                            bArrow = true;
                     }
                     else if ( eType == SC_DETOBJ_CIRCLE )
                     {
                         //  circles (error marks) are always red
 
-                        bError = sal_True;
+                        bError = true;
                     }
                     else if ( eType == SC_DETOBJ_NONE )
                     {
@@ -1513,7 +1513,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         if ( pObject->ISA( SdrRectObj ) && !pObject->ISA( SdrCaptionObj ) )
                         {
-                            bArrow = sal_True;
+                            bArrow = true;
                         }
                     }
 
