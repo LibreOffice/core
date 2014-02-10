@@ -281,7 +281,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                     context where its dispatched. Sometimes the start frame of the dispatch
                     has to be closed itself (target=_self) ... sometimes it's parent frame
                     has to be closed - BUT(!) it means a parent frame containing a top level
-                    window. _top cant be used then for dispatch - because it adress TopFrames
+                    window. _top cant be used then for dispatch - because it address TopFrames
                     not frames containg top level windows. So normaly _magic (which btw does not
                     exists at the moment .-) ) should be used. So we interpret target=<empty>
                     as _magic !

@@ -375,7 +375,7 @@ OString MSWordStyles::GetStyleId(sal_uInt16 nId) const
 static void impl_SkipOdd( ww::bytes* pO, sal_Size nTableStrmTell )
 {
     if ( ( nTableStrmTell + pO->size() ) & 1 )     // Start auf gerader
-        pO->push_back( (sal_uInt8)0 );         // Adress
+        pO->push_back( (sal_uInt8)0 );         // Address
 }
 
 void WW8AttributeOutput::EndStyle()
@@ -664,7 +664,7 @@ void WW8AttributeOutput::StartStyles()
     sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // Start auf gerader
     {
-        m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Adress
+        m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Address
         ++nCurPos;
     }
     rFib.fcStshfOrig = rFib.fcStshf = nCurPos;

@@ -1261,7 +1261,7 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
 
     if ( !bIsUnicode )
     {
-        nStartFc <<= 1;                 // Adress * 2
+        nStartFc <<= 1;                 // Address * 2
         nStartFc |= 0x40000000;         // second last bit for non-Unicode
     }
 
