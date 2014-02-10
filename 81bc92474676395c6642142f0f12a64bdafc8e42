@@ -139,6 +139,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_30ff8103",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-10T08:18:54Z",
+      "side": 1,
+      "message": "I was talking about the missing break. I think FillStyle_GRADIENT and FillStyle_BITMAP are exclusive. Before your change it made sense to fall through as WriteFill should be included always.",
+      "parentUuid": "da9df570_9d176651",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_dd22ce00",
         "filename": "oox/source/export/chartexport.cxx",
         "patchSetId": 1
