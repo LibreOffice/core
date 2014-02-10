@@ -886,6 +886,9 @@ void OutputDevice::ImplInitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 
+    bool bLogicalCoords = false;    // we want the clipping region in device pixels
+    Region aClipRegion = GetClipRegion( bLogicalCoords );
+
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         Window* pWindow = (Window*)this;
@@ -904,8 +907,10 @@ void OutputDevice::ImplInitClipRegion()
             if( IsAntiparallel() )
                 ReMirror ( aRegion );
         }
-        if ( mbClipRegion )
-            aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
+        if ( IsClipRegion() )
+        {
+            aRegion.Intersect( ImplPixelToDevicePixel( aClipRegion ) );
+        }
         if ( aRegion.IsEmpty() )
             mbOutputClipped = true;
         else
@@ -919,14 +924,14 @@ void OutputDevice::ImplInitClipRegion()
     {
         if ( mbClipRegion )
         {
-            if ( maRegion.IsEmpty() )
+            if ( maClipRegion.IsEmpty() )
                 mbOutputClipped = true;
             else
             {
                 mbOutputClipped = false;
 
                 // #102532# Respect output offset also for clip region
-                Region aRegion( ImplPixelToDevicePixel( maRegion ) );
+                Region aRegion( ImplPixelToDevicePixel( aClipRegion ) );
                 const bool bClipDeviceBounds( ! GetPDFWriter()
                                               && GetOutDevType() != OUTDEV_PRINTER );
                 if( bClipDeviceBounds )
