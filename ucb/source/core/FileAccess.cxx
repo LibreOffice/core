@@ -588,7 +588,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     }
     catch ( InteractiveIOException const & e )
     {
-        if ( xIH.is() )
+        if ( xIH.is() && mpEnvironment )
             mpEnvironment->setHandler( xIH );
 
         if ( e.Code == IOErrorCode_NOT_EXISTING )
@@ -611,7 +611,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
         throw;
     }
 
-    if ( xIH.is() )
+    if ( xIH.is() && mpEnvironment )
         mpEnvironment->setHandler( xIH );
 
     Reference< XStream > xRet = xSink->getStream();
