@@ -809,7 +809,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     ::com::sun::star::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
-    SfxItemState eState = pDispatcher->QueryState( GetId(), aState );
+    SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SFX_ITEM_DONTCARE;
 
     if ( eState == SFX_ITEM_DONTCARE )
     {
