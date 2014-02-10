@@ -299,7 +299,7 @@ bool StgEntry::SetName( const OUString& rName )
     }
 
     int i;
-    for( i = 0; i < aName.getLength() && i < 32; i++ )
+    for( i = 0; i < rName.getLength() && i < 32; i++ )
     {
         nName[ i ] = rName[ i ];
     }
@@ -307,7 +307,7 @@ bool StgEntry::SetName( const OUString& rName )
     {
         nName[ i++ ] = 0;
     }
-    nNameLen = ( aName.getLength() + 1 ) << 1;
+    nNameLen = ( rName.getLength() + 1 ) << 1;
     return true;
 }
 
