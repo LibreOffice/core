@@ -401,10 +401,10 @@ sub create_package
         }
         else
         {
-            if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
+            if (($volume_name_classic_app eq 'LibreOffice from Collabora' || $volume_name_classic_app eq 'LibreOfficeDev') &&
                 defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
-                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
+                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle \"$localtempdir/$folder/$volume_name_classic_app.app\"";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
