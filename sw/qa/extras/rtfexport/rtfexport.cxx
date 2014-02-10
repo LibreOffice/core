@@ -579,6 +579,13 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo74709, "fdo74709.rtf")
+{
+    uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(1), "B1");
+    // This was 0, as top/bottom/left/right padding wasn't imported.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(360)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -3683,6 +3683,34 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_TS:
             m_aStates.top().bHasTableStyle = true;
             break;
+        case RTF_CLPADB:
+        case RTF_CLPADL:
+        case RTF_CLPADR:
+        case RTF_CLPADT:
+            {
+                RTFSprms aAttributes;
+                aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+                aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, RTFValue::Pointer_t(new RTFValue(nParam)));
+                switch (nKeyword)
+                {
+                case RTF_CLPADB:
+                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+                    break;
+                case RTF_CLPADL:
+                    nSprm = NS_ooxml::LN_CT_TcMar_left;
+                    break;
+                case RTF_CLPADR:
+                    nSprm = NS_ooxml::LN_CT_TcMar_right;
+                    break;
+                case RTF_CLPADT:
+                    nSprm = NS_ooxml::LN_CT_TcMar_top;
+                    break;
+                default:
+                    break;
+                }
+                lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, RTFValue::Pointer_t(new RTFValue(aAttributes)));
+            }
+            break;
         default:
             {
                 SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
