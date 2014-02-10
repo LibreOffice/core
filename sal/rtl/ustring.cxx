@@ -493,9 +493,9 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
             pCharStr++;
         }
         while ( *pCharStr );
-    }
 
-    RTL_LOG_STRING_NEW( *ppThis );
+        RTL_LOG_STRING_NEW( *ppThis );
+    }
 }
 
 void SAL_CALL rtl_uString_newFromCodePoints(
