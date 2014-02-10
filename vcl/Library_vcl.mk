@@ -79,7 +79,8 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_libs,vcl,\
-    -lIOKit \
+    -framework IOKit \
+    -framework ApplicationServices \
     -lobjc \
 ))
 endif
