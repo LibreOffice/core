@@ -106,7 +106,7 @@ class ScDispatch : public cppu::WeakImplHelper2<
     ScTabViewShell*         pViewShell;
     XStatusListenerArr_Impl aDataSourceListeners;
     ScImportParam           aLastImport;
-    sal_Bool                bListeningToView;
+    bool                    bListeningToView;
 
 public:
 

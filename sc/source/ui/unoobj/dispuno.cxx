@@ -301,7 +301,7 @@ void SAL_CALL ScDispatch::addStatusListener(
             uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
                 xSupplier->addSelectionChangeListener(this);
-            bListeningToView = sal_True;
+            bListeningToView = true;
         }
 
         ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
