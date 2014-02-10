@@ -1327,7 +1327,7 @@ SwXText::Impl::finishOrAppendParagraph(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    catch (const beans::UnknownPropertyException& rEx)
+    catch (const uno::Exception& rEx)
     {
         sMessage = rEx.Message;
         bRuntimeException = true;
