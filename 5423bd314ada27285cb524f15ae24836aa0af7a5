@@ -34,6 +34,24 @@
       "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_fd05d214",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-10T08:14:03Z",
+      "side": 1,
+      "message": "This means there is something else going horribly wrong. Adding a hack just to avoid fixing the real problem is not a good idea.",
+      "parentUuid": "da9df570_7d3ba2eb",
+      "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
