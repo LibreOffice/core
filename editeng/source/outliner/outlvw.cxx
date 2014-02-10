@@ -29,6 +29,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <svl/style.hxx>
+#include <svl/languageoptions.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/outliner.hxx>
@@ -1552,6 +1553,27 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 // ===== some code for thesaurus sub menu within context menu
 // ======================================================================
 
+namespace {
+
+bool isSingleScriptType( sal_uInt16 nScriptType )
+{
+    sal_uInt8 nScriptCount = 0;
+
+    if (nScriptType & SCRIPTTYPE_LATIN)
+        ++nScriptCount;
+    if (nScriptType & SCRIPTTYPE_ASIAN)
+        ++nScriptCount;
+    if (nScriptType & SCRIPTTYPE_COMPLEX)
+        ++nScriptCount;
+
+    if (!nScriptCount || nScriptCount > 1)
+        return false;
+
+    return true;
+}
+
+}
+
 // returns: true if a word for thesaurus look-up was found at the current cursor position.
 // The status string will be word + iso language string (e.g. "light#en-US")
 bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
@@ -1567,6 +1589,10 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
         aTextSel = pEditEngine->GetWord( aTextSel, i18n::WordType::DICTIONARY_WORD );
     aText = pEditEngine->GetText( aTextSel );
     aTextSel.Adjust();
+
+    if (!isSingleScriptType(pEditEngine->GetScriptType(aTextSel)))
+        return false;
+
     LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
