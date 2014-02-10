@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -398,7 +399,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 }
 
 void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-throw ( css::uno::RuntimeException )
+    throw ( css::uno::RuntimeException )
 {
     if ( rEvent.IsEnabled )
     {
@@ -593,3 +594,5 @@ org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
 {
     return cppu::acquire(new NewToolbarController(context));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
