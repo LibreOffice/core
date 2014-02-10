@@ -161,7 +161,7 @@ void SwFmtFld::SetField(SwField * _pField)
     mpField = _pField;
     if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
     {
-        dynamic_cast<SwInputField* >(GetField())->SetFmtFld( *this );
+        static_cast<SwInputField* >(GetField())->SetFmtFld( *this );
     }
     Broadcast( SwFmtFldHint( this, SWFMTFLD_CHANGED ) );
 }
@@ -238,8 +238,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
                 {
                     // #i81002#
-//                    ((SwGetRefField*)GetFld())->UpdateField();
-                    dynamic_cast<SwGetRefField*>(GetField())->UpdateField( mpTxtFld );
+                    static_cast<SwGetRefField*>(GetField())->UpdateField( mpTxtFld );
                 }
                 break;
         case RES_DOCPOS_UPDATE:
