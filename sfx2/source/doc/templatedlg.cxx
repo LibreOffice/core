@@ -749,6 +749,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
     }
     else
     {
+        mpSearchView->deselectItems();
         mpSearchView->Hide();
         mpCurView->Show();
     }
@@ -1056,11 +1057,14 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     mpActionBar->SetItemState(mpActionBar->GetItemId(ACTIONBAR_SEARCH),
             bVisible? STATE_NOCHECK: STATE_CHECK);
 
+    // fdo#74782 We are switching views. No matter to which state,
+    // deselect and hide our current SearchView items.
+    mpSearchView->deselectItems();
+    mpSearchView->Hide();
+
     // Hide search view
     if (bVisible)
     {
-        mpSearchView->deselectItems();
-        mpSearchView->Hide();
         mpCurView->Show();
     }
 
