@@ -2625,6 +2625,22 @@ void Dxf::writeToPropertySet( PropertySet& rPropSet ) const
     rPropSet.setProperties( aPropMap );
 }
 
+void Dxf::fillToItemSet( SfxItemSet& rSet ) const
+{
+    if (mxFont)
+        mxFont->fillToItemSet(rSet, FONT_PROPTYPE_CELL);
+    if (mxNumFmt)
+        mxNumFmt->fillToItemSet(rSet);
+    if (mxAlignment)
+        mxAlignment->fillToItemSet(rSet);
+    if (mxProtection)
+        mxProtection->fillToItemSet(rSet);
+    if (mxBorder)
+        mxBorder->fillToItemSet(rSet);
+    if (mxFill)
+        mxFill->fillToItemSet(rSet);
+}
+
 // ============================================================================
 
 namespace {
@@ -3261,21 +3277,26 @@ OUString StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
 OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
 {
     OUString& rStyleName = maDxfStyles[ nDxfId ];
-    if( rStyleName.isEmpty() )
+    if (!rStyleName.isEmpty())
+        return rStyleName;
+
+    if (Dxf* pDxf = maDxfs.get(nDxfId).get())
     {
-        if( Dxf* pDxf = maDxfs.get( nDxfId ).get() )
-        {
-            rStyleName = OUStringBuffer( "ConditionalStyle_" ).append( nDxfId + 1 ).makeStringAndClear();
-            // create the style sheet (this may change rStyleName if such a style already exists)
-            Reference< XStyle > xStyle = createStyleObject( rStyleName, false );
-            // write style formatting properties
-            PropertySet aPropSet( xStyle );
-            pDxf->writeToPropertySet( aPropSet );
-        }
-        // on error: fallback to default style
-        if( rStyleName.isEmpty() )
-            rStyleName = maCellStyles.getDefaultStyleName();
+        rStyleName = OUStringBuffer("ConditionalStyle_").append(nDxfId + 1).makeStringAndClear();
+
+        // Create a cell style. This may overwrite an existing style if
+        // one with the same name exists.
+        SfxItemSet& rStyleItemSet =
+            ScfTools::MakeCellStyleSheet(
+                *getScDocument().GetStyleSheetPool(), rStyleName, true).GetItemSet();
+
+        pDxf->fillToItemSet(rStyleItemSet);
     }
+
+    // on error: fallback to default style
+    if (rStyleName.isEmpty())
+        rStyleName = maCellStyles.getDefaultStyleName();
+
     return rStyleName;
 }
 
