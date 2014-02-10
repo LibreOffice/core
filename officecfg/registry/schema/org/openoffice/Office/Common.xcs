@@ -2154,6 +2154,15 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="GenerateThumbnail" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
+          <info>
+            <desc>Specifies whether to generate a thumbnail image and place it inside the 
+	      the odf archive file, which makes it possible to see a preview of the document.</desc>
+            <label>Store a preview of this document</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="CreateBackup" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->
           <!-- OldLocation: soffice.cfg -->

@@ -99,6 +99,7 @@
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
 #include <basic/modsizeexceeded.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 
 #include <sfx2/signaturestate.hxx>
@@ -1450,8 +1451,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
 
-
-        if ( bOk && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
+        //fdo#61320: only store thumbnail image if the corresponding option is not disabled in the configuration
+        if ( bOk && officecfg::Office::Common::Save::Document::GenerateThumbnail::get()
+                && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
         {
             // store the thumbnail representation image
             // the thumbnail is not stored in case of encrypted document
