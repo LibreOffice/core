@@ -84,9 +84,9 @@ private:
     OUString        aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
-    sal_Bool            bRecording;
-    sal_Bool            bAdjustEnabled;
-    sal_Bool            bHyphenatorSet;
+    bool            bRecording;
+    bool            bAdjustEnabled;
+    bool            bHyphenatorSet;
 
 private:
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
@@ -105,35 +105,34 @@ public:
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
-    sal_Bool            HasObjects() const;
+    bool            HasObjects() const;
 
-    sal_Bool            ScAddPage( SCTAB nTab );
+    bool            ScAddPage( SCTAB nTab );
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const OUString& rNewName );
     void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-                    // incl. content, bAlloc=FALSE -> only content
-    void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc );
+    void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos);
     void            ResetTab( SCTAB nStart, SCTAB nEnd );
 
     ScDocument*     GetDocument() const { return pDoc; }
 
     void            UseHyphenator();
 
-    sal_Bool            GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
+    bool            GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const;
 
                     //      automatic adjustments
 
-    void            EnableAdjust( sal_Bool bSet = sal_True )    { bAdjustEnabled = bSet; }
+    void            EnableAdjust( bool bSet = true )    { bAdjustEnabled = bSet; }
 
     void            BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager);
     SdrUndoGroup*   GetCalcUndo();
-    sal_Bool            IsRecording() const         { return bRecording; }
+    bool            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos = true );
+                                SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos = true );
 
-    sal_Bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
+    bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
@@ -175,8 +174,8 @@ public:
     static ScAnchorType     GetAnchorType( const SdrObject& );
 
     // positions for detektive lines
-    static ScDrawObjData* GetObjData( SdrObject* pObj, sal_Bool bCreate=false );
-    static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, sal_Bool bCreate=false );
+    static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
+    static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
@@ -195,7 +194,7 @@ public:
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
                             const Point& rWinPoint, const Window& rCmpWnd );
 
-    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = false );
+    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
 
     virtual ImageMap* GetImageMapForObject(SdrObject* pObj);
     virtual sal_Int32 GetHyperlinkCount(SdrObject* pObj);

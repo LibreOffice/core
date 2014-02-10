@@ -557,7 +557,7 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     // removed oracle/sun check for mbSimpleMacro ( no idea what its for )
     if (!maMacroName.isEmpty() || !maHyperlink.isEmpty())
     {
-        if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, sal_True ) )
+        if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, true ) )
         {
             pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
             pInfo->SetHlink( maHyperlink );

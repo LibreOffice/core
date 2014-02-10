@@ -320,7 +320,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 {
     SvxMacroItem aItem ( SFX_APP()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
-    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
+    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
     if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
@@ -360,7 +360,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
                 sal_uLong nObj = pOL->GetObjCount();
                 for ( sal_uLong index=0; index<nObj; ++index )
                 {
-                    pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), sal_True );
+                    pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), true );
                     pInfo->SetMacro( sMacro );
                 }
             }
@@ -476,7 +476,7 @@ void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk )
 {
     if ( pObj )
     {
-        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
         pInfo->SetHlink( rHlnk );
         lcl_setModified( GetObjectShell() );
     }

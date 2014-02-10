@@ -475,7 +475,7 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, true );
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
         pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
@@ -548,7 +548,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, true );
         pData->maStart.Set( nStartCol, nStartRow, nTab);
         pData->maEnd.Set( nEndCol, nEndRow, nTab);
     }
@@ -582,7 +582,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, true );
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
@@ -648,7 +648,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pPage->InsertObject( pCircle );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pCircle ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, sal_True );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, true );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
     pData->meType = ScDrawObjData::ValidationCircle;

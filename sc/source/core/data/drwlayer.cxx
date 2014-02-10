@@ -200,7 +200,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     pDoc( pDocument ),
     pUndoGroup( NULL ),
     bRecording( false ),
-    bAdjustEnabled( sal_True ),
+    bAdjustEnabled( true ),
     bHyphenatorSet( false )
 {
     pGlobalDrawPersist = NULL;          // nur einmal benutzen
@@ -310,7 +310,7 @@ void ScDrawLayer::UseHyphenator()
         GetDrawOutliner().SetHyphenator( xHyphenator );
         GetHitTestOutliner().SetHyphenator( xHyphenator );
 
-        bHyphenatorSet = sal_True;
+        bHyphenatorSet = true;
     }
 }
 
@@ -319,14 +319,14 @@ SdrPage* ScDrawLayer::AllocPage(bool bMasterPage)
     return new ScDrawPage(*this, bMasterPage);
 }
 
-sal_Bool ScDrawLayer::HasObjects() const
+bool ScDrawLayer::HasObjects() const
 {
-    sal_Bool bFound = false;
+    bool bFound = false;
 
     sal_uInt16 nCount = GetPageCount();
     for (sal_uInt16 i=0; i<nCount && !bFound; i++)
         if (GetPage(i)->GetObjCount())
-            bFound = sal_True;
+            bFound = true;
 
     return bFound;
 }
@@ -339,7 +339,7 @@ SdrModel* ScDrawLayer::AllocModel() const
     return new ScDrawLayer( NULL, aName );
 }
 
-sal_Bool ScDrawLayer::ScAddPage( SCTAB nTab )
+bool ScDrawLayer::ScAddPage( SCTAB nTab )
 {
     if (bDrawIsInUndo)
         return false;   // not inserted
@@ -385,15 +385,13 @@ void ScDrawLayer::ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
     ResetTab(nMinPos, pDoc->GetTableCount()-1);
 }
 
-void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc )
+void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos)
 {
-    //! remove argument bAlloc (always sal_False)
-
     if (bDrawIsInUndo)
         return;
 
     SdrPage* pOldPage = GetPage(nOldPos);
-    SdrPage* pNewPage = bAlloc ? AllocPage(false) : GetPage(nNewPos);
+    SdrPage* pNewPage = GetPage(nNewPos);
 
     // kopieren
 
@@ -431,9 +429,6 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
             pOldObject = aIter.Next();
         }
     }
-
-    if (bAlloc)
-        InsertPage(pNewPage, nNewPos);
 
     ResetTab(static_cast<SCTAB>(nNewPos), pDoc->GetTableCount()-1);
 }
@@ -876,7 +871,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     }
 }
 
-sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const
+bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::GetPrintArea without document" );
     if ( !pDoc )
@@ -887,7 +882,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
 
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
 
-    sal_Bool bAny = false;
+    bool bAny = false;
     long nEndX = 0;
     long nEndY = 0;
     long nStartX = LONG_MAX;
@@ -954,7 +949,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
                     if (aObjRect.Top()  < nStartY) nStartY = aObjRect.Top();
                     if (aObjRect.Bottom() > nEndY) nEndY = aObjRect.Bottom();
                 }
-                bAny = sal_True;
+                bAny = true;
             }
 
             pObject = aIter.Next();
@@ -1034,7 +1029,7 @@ void ScDrawLayer::BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager)
 {
     SetDisableTextEditUsesCommonUndoManager(bDisableTextEditUsesCommonUndoManager);
     DELETEZ(pUndoGroup);
-    bRecording = sal_True;
+    bRecording = true;
 }
 
 SdrUndoGroup* ScDrawLayer::GetCalcUndo()
@@ -1047,7 +1042,7 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
 }
 
 void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                            SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos )
+                            SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos )
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::MoveArea without document" );
     if ( !pDoc )
@@ -1094,7 +1089,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
 
-sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
+bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
     if ( !pDoc )
@@ -1103,11 +1098,11 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     OSL_ENSURE(pPage,"Page not found");
     if (!pPage)
-        return sal_False;
+        return false;
 
     // for an empty page, there's no need to calculate the row heights
     if (!pPage->GetObjCount())
-        return sal_False;
+        return false;
 
     Rectangle aTestRect;
 
@@ -1131,7 +1126,7 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     if ( bNegativePage )
         MirrorRectRTL( aTestRect );
 
-    sal_Bool bFound = false;
+    bool bFound = false;
 
     Rectangle aObjRect;
     SdrObjListIter aIter( *pPage );
@@ -1893,7 +1888,7 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
 }
 
-ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, sal_Bool bCreate )
+ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate )
 {
     sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
     sal_uInt16 nFound = 0;
@@ -1912,7 +1907,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, sal_Bool bCre
     return 0;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, sal_Bool bCreate )
+ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
 {
     if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_OBJDATA))
         return (ScDrawObjData*) pData;
@@ -2021,7 +2016,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     return pIMapObj;
 }
 
-ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )
+ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
 {
     if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_MACRODATA))
         return (ScMacroInfo*) pData;
@@ -2048,7 +2043,7 @@ ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
 sal_Int32 ScDrawLayer::GetHyperlinkCount(SdrObject* pObj)
 {
     sal_Int32 nHLCount = 0;
-    ScMacroInfo* pMacroInfo = GetMacroInfo(pObj, sal_False);
+    ScMacroInfo* pMacroInfo = GetMacroInfo(pObj, false);
     if (pMacroInfo)
         // MT IA2: GetHlink*( doesn|t exist in DEV300 anymore...
         nHLCount = 0; // pMacroInfo->GetHlink().getLength() > 0 ? 1 : 0;
