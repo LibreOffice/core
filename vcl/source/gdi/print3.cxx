@@ -985,7 +985,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
 
-    mpImplData->mpPrinter->EnableOutput( sal_False );
+    mpImplData->mpPrinter->DisableOutput();
 
     o_rMtf.Record( mpImplData->mpPrinter.get() );
 
@@ -1298,7 +1298,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     GDIMetaFile aCleanedFile;
     sal_uLong nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
-    mpImplData->mpPrinter->EnableOutput( sal_True );
+    mpImplData->mpPrinter->EnableOutput();
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();
