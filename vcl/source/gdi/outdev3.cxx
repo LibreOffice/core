@@ -41,7 +41,6 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/edit.hxx"
-#include <vcl/settings.hxx>
 // declare system types in sysdata.hxx
 #include <svsys.h>
 #include "vcl/sysdata.hxx"
@@ -334,7 +333,7 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
 void OutputDevice::BeginFontSubstitution()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maGDIData.mbFontSubChanged = false;
+    pSVData->maGDIData.mbFontSubChanged = sal_False;
 }
 
 void OutputDevice::EndFontSubstitution()
@@ -348,7 +347,7 @@ void OutputDevice::EndFontSubstitution()
         DataChangedEvent aDCEvt( DATACHANGED_FONTSUBSTITUTION );
         pApp->DataChanged( aDCEvt );
         pApp->NotifyAllWindows( aDCEvt );
-        pSVData->maGDIData.mbFontSubChanged = false;
+        pSVData->maGDIData.mbFontSubChanged = sal_False;
     }
 }
 
@@ -360,7 +359,7 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
     if( !rpSubst )
         rpSubst = new ImplDirectFontSubstitution();
     rpSubst->AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
-    ImplGetSVData()->maGDIData.mbFontSubChanged = true;
+    ImplGetSVData()->maGDIData.mbFontSubChanged = sal_True;
 }
 
 void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
@@ -2837,17 +2836,17 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
     return nEmphasisMark;
 }
 
-bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
+sal_Bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
 {
     if ( !rFont.IsVertical() )
-        return false;
+        return sal_False;
 
     if( (LANGUAGE_JAPANESE == rFont.GetLanguage())
     ||  (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage()) )
         // the underline is right for Japanese only
-        return true;
+        return sal_True;
 
-    return false;
+    return sal_False;
 }
 
 void OutputDevice::ImplInitFontList() const
@@ -3563,7 +3562,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                                          long nDistX, long nDistY, long nWidth,
                                          FontUnderline eTextLine,
                                          Color aColor,
-                                         bool bIsAbove )
+                                         sal_Bool bIsAbove )
 {
     ImplFontEntry*  pFontEntry = mpFontEntry;
     long            nLineHeight;
@@ -3625,7 +3624,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                                              long nDistX, long nDistY, long nWidth,
                                              FontUnderline eTextLine,
                                              Color aColor,
-                                             bool bIsAbove )
+                                             sal_Bool bIsAbove )
 {
     ImplFontEntry*  pFontEntry = mpFontEntry;
     long            nLineHeight = 0;
@@ -4006,7 +4005,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
                                      FontStrikeout eStrikeout,
                                      FontUnderline eUnderline,
                                      FontUnderline eOverline,
-                                     bool bUnderlineAbove )
+                                     sal_Bool bUnderlineAbove )
 {
     if ( !nWidth )
         return;
@@ -4046,7 +4045,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
          (eOverline == UNDERLINE_DOUBLEWAVE) ||
          (eOverline == UNDERLINE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, sal_True );
         bOverlineDone = true;
     }
 
@@ -4061,14 +4060,14 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
         ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
 
     if ( !bOverlineDone )
-        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
+        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, sal_True );
 
     if ( !bStrikeoutDone )
         ImplDrawStrikeoutLine( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
 }
 
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
-    FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove )
+    FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove )
 {
     if( bWordLine )
     {
@@ -4140,10 +4139,10 @@ void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
     }
 
-    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false );
+    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, sal_False );
 }
 
-void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
+void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyLine,
                                         Rectangle& rRect1, Rectangle& rRect2,
                                         long& rYOff, long& rWidth,
                                         FontEmphasisMark eEmphasis,
@@ -4184,7 +4183,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
 
     rWidth      = 0;
     rYOff       = 0;
-    rPolyLine   = false;
+    rPolyLine   = sal_False;
 
     if ( !nHeight )
         return;
@@ -4225,7 +4224,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
                 // BorderWidth is 15%
                 long nBorder = (nDotSize*150)/1000;
                 if ( nBorder <= 1 )
-                    rPolyLine = true;
+                    rPolyLine = sal_True;
                 else
                 {
                     Polygon aPoly2( Point( nRad, nRad ),
@@ -4297,7 +4296,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
 }
 
 void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
-                                         const PolyPolygon& rPolyPoly, bool bPolyLine,
+                                         const PolyPolygon& rPolyPoly, sal_Bool bPolyLine,
                                          const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     if( IsRTLEnabled() )
@@ -4343,10 +4342,10 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
     Color               aOldLineColor   = GetLineColor();
     Color               aOldFillColor   = GetFillColor();
-    bool                bOldMap         = mbMap;
+    sal_Bool                bOldMap         = mbMap;
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = NULL;
-    EnableMapMode( false );
+    EnableMapMode( sal_False );
 
     FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
     PolyPolygon         aPolyPoly;
@@ -4355,7 +4354,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     long                nEmphasisYOff;
     long                nEmphasisWidth;
     long                nEmphasisHeight;
-    bool                bPolyLine;
+    sal_Bool                bPolyLine;
 
     if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
         nEmphasisHeight = mnEmphasisDescent;
@@ -4477,12 +4476,12 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     long nOldOffX = mnOutOffX;
     long nOldOffY = mnOutOffY;
-    bool bOldMap = mbMap;
+    sal_Bool bOldMap = mbMap;
 
     mnOutOffX   = 0L;
     mnOutOffY   = 0L;
     mpMetaFile  = NULL;
-    EnableMapMode( false );
+    EnableMapMode( sal_False );
 
     DrawMask( aPoint, aBmp, GetTextColor() );
 
@@ -4494,7 +4493,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     return true;
 }
 
-void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, bool bTextLines )
+void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, sal_Bool bTextLines )
 {
     if( mpFontEntry->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
@@ -4758,7 +4757,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                     xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
                                 if (xHyphWord.is())
                                 {
-                                    bool bAlternate = xHyphWord->isAlternativeSpelling();
+                                    sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
                                     sal_Int32 _nWordLen = 1 + xHyphWord->getHyphenPos();
 
                                     if ( ( _nWordLen >= 2 ) && ( (nWordStart+_nWordLen) >= ( 2 ) ) )
@@ -4930,7 +4929,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
         aFont.SetColor( aTextColor );
 
-        bool bTransFill = aFont.IsTransparent();
+        sal_Bool bTransFill = aFont.IsTransparent();
         if ( !bTransFill )
         {
             Color aTextFillColor( aFont.GetFillColor() );
@@ -4949,7 +4948,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
             else if ( mnDrawMode & DRAWMODE_NOFILL )
             {
                 aTextFillColor = Color( COL_TRANSPARENT );
-                bTransFill = true;
+                bTransFill = sal_True;
             }
 
             if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
@@ -5073,12 +5072,12 @@ void OutputDevice::SetTextFillColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
+        mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), sal_False ) );
 
     if ( maFont.GetColor() != Color( COL_TRANSPARENT ) )
         maFont.SetFillColor( Color( COL_TRANSPARENT ) );
     if ( !maFont.IsTransparent() )
-        maFont.SetTransparent( true );
+        maFont.SetTransparent( sal_True );
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetTextFillColor();
@@ -5088,7 +5087,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 {
 
     Color aColor( rColor );
-    bool bTransFill = ImplIsColorTransparent( aColor ) ? sal_True : sal_False;
+    sal_Bool bTransFill = ImplIsColorTransparent( aColor ) ? sal_True : sal_False;
 
     if ( !bTransFill )
     {
@@ -5110,7 +5109,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
             else if ( mnDrawMode & DRAWMODE_NOFILL )
             {
                 aColor = Color( COL_TRANSPARENT );
-                bTransFill = true;
+                bTransFill = sal_True;
             }
 
             if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
@@ -5123,7 +5122,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
     }
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextFillColorAction( aColor, true ) );
+        mpMetaFile->AddAction( new MetaTextFillColorAction( aColor, sal_True ) );
 
     if ( maFont.GetFillColor() != aColor )
         maFont.SetFillColor( aColor );
@@ -5146,7 +5145,7 @@ void OutputDevice::SetTextLineColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), false ) );
+        mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), sal_False ) );
 
     maTextLineColor = Color( COL_TRANSPARENT );
 
@@ -5185,7 +5184,7 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
     }
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, true ) );
+        mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, sal_True ) );
 
     maTextLineColor = aColor;
 
@@ -5197,7 +5196,7 @@ void OutputDevice::SetOverlineColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaOverlineColorAction( Color(), false ) );
+        mpMetaFile->AddAction( new MetaOverlineColorAction( Color(), sal_False ) );
 
     maOverlineColor = Color( COL_TRANSPARENT );
 
@@ -5236,7 +5235,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
     }
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaOverlineColorAction( aColor, true ) );
+        mpMetaFile->AddAction( new MetaOverlineColorAction( aColor, sal_True ) );
 
     maOverlineColor = aColor;
 
@@ -5264,7 +5263,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontStrikeout eStrikeout,
                                  FontUnderline eUnderline,
                                  FontUnderline eOverline,
-                                 bool bUnderlineAbove )
+                                 sal_Bool bUnderlineAbove )
 {
 
     if ( mpMetaFile )
@@ -5594,7 +5593,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
 bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
     sal_Int32 nIndex, sal_Int32 nLen,
     sal_Int32* pDXAry, long nLayoutWidth,
-    bool bCellBreaking ) const
+    sal_Bool bCellBreaking ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -6013,7 +6012,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     return pSalLayout;
 }
 
-bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
+sal_Bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     OUString aStr( rString );
     ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
@@ -6120,8 +6119,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     bool  bRestoreFillColor = false;
     if ( (nStyle & TEXT_DRAW_DISABLE) && ! pVector )
     {
-        bool  bHighContrastBlack = false;
-        bool  bHighContrastWhite = false;
+        sal_Bool  bHighContrastBlack = sal_False;
+        sal_Bool  bHighContrastWhite = sal_False;
         const StyleSettings& rStyleSettings( rTargetDevice.GetSettings().GetStyleSettings() );
         if( rStyleSettings.GetHighContrastMode() )
         {
@@ -6396,7 +6395,9 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     GDIMetaFile* pMtf = mpMetaFile;
 
     mpMetaFile = &rMtf;
-    EnableOutput( false );
+
+    if (bOutputEnabled)
+        DisableOutput();
 
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
@@ -6404,7 +6405,8 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     ImplDrawText( *this, rRect, rOrigStr, nStyle, NULL, NULL, aLayout );
 
     // and restore again
-    EnableOutput( bOutputEnabled );
+    if (bOutputEnabled)
+        EnableOutput();
     mpMetaFile = pMtf;
 }
 
@@ -6495,7 +6497,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
             else
             {
                 if ( pInfo )
-                    pInfo->mbEllipsis = true;
+                    pInfo->mbEllipsis = sal_True;
                 nMaxWidth = nWidth;
             }
         }
@@ -6536,7 +6538,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         if ( (nMaxWidth > nWidth) && (nStyle & TEXT_DRAW_ELLIPSIS) )
         {
             if ( pInfo )
-                pInfo->mbEllipsis = true;
+                pInfo->mbEllipsis = sal_True;
             nMaxWidth = nWidth;
         }
     }
@@ -6803,8 +6805,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         Color aOldTextColor;
         Color aOldTextFillColor;
         bool  bRestoreFillColor;
-        bool  bHighContrastBlack = false;
-        bool  bHighContrastWhite = false;
+        sal_Bool  bHighContrastBlack = sal_False;
+        sal_Bool  bHighContrastWhite = sal_False;
         const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
         if( rStyleSettings.GetHighContrastMode() )
         {
@@ -6960,23 +6962,23 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
     return aFontInfo;
 }
 
-bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
+sal_Bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
 
     ImplInitFontList();
 
     if( !mpGraphics && !ImplGetGraphics() )
-        return false;
+        return sal_False;
 
     bool bRC = mpGraphics->AddTempDevFont( mpFontList, rFileURL, rFontName );
     if( !bRC )
-        return false;
+        return sal_False;
 
     if( mpAlphaVDev )
         mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
 
     mpFontCache->Invalidate();
-    return true;
+    return sal_True;
 }
 
 int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
@@ -7020,7 +7022,7 @@ Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
     return aSize;
 }
 
-bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
+sal_Bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 {
 
     ImplDevFontListData* pFound = mpFontList->FindFontFamily( rFontName );
@@ -7215,7 +7217,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
     return nDropped;
 }
 
-bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
+sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
                                            int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
 
@@ -7247,7 +7249,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     return (nLen == (int)rVector.size());
 }
 
-bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
+sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
@@ -7258,7 +7260,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
                  "GetTextBoundRect Suspicious arguments nLen:" << nLen);
     }
 
-    bool bRet = false;
+    sal_Bool bRet = sal_False;
     rRect.SetEmpty();
 
     SalLayout* pSalLayout = NULL;
@@ -7322,8 +7324,8 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     // so we need a monochrome virtual device with matching font
     VirtualDevice aVDev( 1 );
     Font aFont( GetFont() );
-    aFont.SetShadow( false );
-    aFont.SetOutline( false );
+    aFont.SetShadow( sal_False );
+    aFont.SetOutline( sal_False );
     aFont.SetRelief( RELIEF_NONE );
     aFont.SetOrientation( 0 );
     aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
@@ -7356,7 +7358,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     Bitmap aBmp = aVDev.GetBitmap( Point(), aOutSize );
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
     if( !pAcc )
-        return false;
+        return sal_False;
     const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
     const long nW = pAcc->Width();
     const long nH = pAcc->Height();
@@ -7421,16 +7423,16 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         aTopLeft.X() = ImplDevicePixelToLogicWidth( aTopLeft.X() );
         aTopLeft.Y() = ImplDevicePixelToLogicHeight( aTopLeft.Y() );
         rRect = Rectangle( aTopLeft, aSize );
-        return true;
+        return sal_True;
     }
 
-    return false;
+    return sal_False;
 }
 
-bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
+sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        bool bOptimize, sal_uLong nLayoutWidth, const sal_Int32* pDXArray ) const
+                                        sal_Bool bOptimize, sal_uLong nLayoutWidth, const sal_Int32* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -7443,9 +7445,9 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     if( mbInitFont )
         ImplInitFont();
     if( !mpFontEntry )
-        return false;
+        return sal_False;
 
-    bool bRet = false;
+    sal_Bool bRet = sal_False;
     rVector.clear();
     if( nLen < 0 )
     {
@@ -7455,7 +7457,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 
     // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
-    bool bOldMap = mbMap;
+    sal_Bool bOldMap = mbMap;
     if( bOldMap )
     {
         const_cast<OutputDevice&>(*this).mbMap = false;
@@ -7564,7 +7566,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     pSalLayout->Release();
 
     if( !nWidth || !nHeight )
-        return true;
+        return sal_True;
     double fScaleX = static_cast< double >(nOrgWidth) / nWidth;
     double fScaleY = static_cast< double >(nOrgHeight) / nHeight;
 
@@ -7662,9 +7664,9 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     return bRet;
 }
 
-bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
+sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
-                                        sal_Int32 nIndex, sal_Int32 nLen, bool bOptimize,
+                                        sal_Int32 nIndex, sal_Int32 nLen, sal_Bool bOptimize,
                                         sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
@@ -7679,7 +7681,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
-        return false;
+        return sal_False;
 
     // convert to a tool polypolygon vector
     rResultVector.reserve( aB2DPolyPolyVector.size() );
@@ -7687,12 +7689,12 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
         rResultVector.push_back(PolyPolygon(*aIt)); // #i76339#
 
-    return true;
+    return sal_True;
 }
 
-bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
+sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
                                        sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
-                                       bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                       sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -7705,7 +7707,7 @@ bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
     ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
-        return false;
+        return sal_False;
 
     // convert and merge into a tool polypolygon
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
@@ -7713,7 +7715,7 @@ bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
         for( unsigned int i = 0; i < aIt->count(); ++i )
             rPolyPoly.Insert(Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
 
-    return true;
+    return sal_True;
 }
 
 bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
@@ -7732,20 +7734,20 @@ bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) co
     return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
+sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
 {
     rFontCharMap.Reset();
 
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
-        return false;
+        return sal_False;
 
     if( mbNewFont )
         ImplNewFont();
     if( mbInitFont )
         ImplInitFont();
     if( !mpFontEntry )
-        return false;
+        return sal_False;
 
 #ifdef ENABLE_IFC_CACHE // a little font charmap cache helps considerably
     static const int NMAXITEMS = 16;
@@ -7785,8 +7787,8 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     }
 
     if( rFontCharMap.IsDefaultMap() )
-        return false;
-    return true;
+        return sal_False;
+    return sal_True;
 }
 
 sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
@@ -7807,11 +7809,11 @@ sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
     const Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
     FontCharMap aFontCharMap;
-    bool bRet = GetFontCharMap( aFontCharMap );
+    sal_Bool bRet = GetFontCharMap( aFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 
     // if fontmap is unknown assume it doesn't have the glyphs
-    if( !bRet )
+    if( bRet == sal_False )
         return nIndex;
 
     for( sal_Int32 i = nIndex; nIndex < nEnd; ++i, ++nIndex )

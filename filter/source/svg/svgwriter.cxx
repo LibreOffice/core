@@ -23,8 +23,6 @@
 
 #include <rtl/crc.h>
 #include <vcl/unohelp.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/settings.hxx>
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
@@ -426,8 +424,6 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport )
         mnTextWidth(0),
         mbPositioningNeeded( sal_False ),
         mbIsNewListItem( sal_False ),
-        meNumberingType(0),
-        mcBulletChar(0),
         maBulletListItemMap(),
         mbIsListLevelStyleImage( sal_False ),
         mbLineBreak( sal_False ),
@@ -1644,7 +1640,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mbClipAttrChanged( sal_False )
 {
     mpVDev = new VirtualDevice;
-    mpVDev->EnableOutput( false );
+    mpVDev->DisableOutput();
     maTargetMapMode = MAP_100TH_MM;
     maTextWriter.setVirtualDevice( mpVDev, maTargetMapMode );
 }

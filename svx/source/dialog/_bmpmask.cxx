@@ -20,7 +20,6 @@
 #include <vcl/wrkwin.hxx>
 #include <tools/shl.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/settings.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -239,7 +238,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
         pSet->SelectItem( 1 );
         pSet->Select();
 
-        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, true );
+        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, sal_True );
         PipetteHdl( &( pMask->aTbxPipette ) );
     }
 
@@ -567,7 +566,7 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 
 //-------------------------------------------------------------------------
 
-bool SvxBmpMask::Close()
+sal_Bool SvxBmpMask::Close()
 {
     SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, false );
     GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );
@@ -627,30 +626,30 @@ void SvxBmpMask::PipetteClicked()
 {
     if( pQSet1->GetSelectItemId() == 1 )
     {
-        aCbx1.Check( true );
+        aCbx1.Check( sal_True );
         pData->CbxHdl( &aCbx1 );
         pQSet1->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet2->GetSelectItemId() == 1 )
     {
-        aCbx2.Check( true );
+        aCbx2.Check( sal_True );
         pData->CbxHdl( &aCbx2 );
         pQSet2->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet3->GetSelectItemId() == 1 )
     {
-        aCbx3.Check( true );
+        aCbx3.Check( sal_True );
         pData->CbxHdl( &aCbx3 );
         pQSet3->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet4->GetSelectItemId() == 1 )
     {
-        aCbx4.Check( true );
+        aCbx4.Check( sal_True );
         pData->CbxHdl( &aCbx4 );
         pQSet4->SetItemColor( 1, aPipetteColor );
     }
 
-    aTbxPipette.CheckItem( TBI_PIPETTE, false );
+    aTbxPipette.CheckItem( TBI_PIPETTE, sal_False );
     pData->PipetteHdl( &aTbxPipette );
 }
 
@@ -1067,7 +1066,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     const Size&     rPrefSize = rMtf.GetPrefSize();
     const size_t    nActionCount = rMtf.GetActionSize();
 
-    aVDev.EnableOutput( false );
+    aVDev.DisableOutput();
     aMtf.Record( &aVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );

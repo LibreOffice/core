@@ -26,7 +26,6 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/settings.hxx>
 
 static const sal_Int32 nFontEM = 2048;
 
@@ -81,7 +80,7 @@ void SVGFontExport::implCollectGlyphs()
     VirtualDevice                   aVDev;
     ObjectVector::const_iterator    aIter( maObjects.begin() );
 
-    aVDev.EnableOutput( false );
+    aVDev.DisableOutput();
 
     while( aIter != maObjects.end() )
     {

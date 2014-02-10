@@ -26,7 +26,6 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/settings.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdorect.hxx>
@@ -227,7 +226,7 @@ void SdDocPreviewWin::updateViewSettings()
             aVDev.SetMapMode( aMap );
 
             // Disable output, as we only want to record a metafile
-            aVDev.EnableOutput( false );
+            aVDev.DisableOutput();
 
             pMtf->Record( &aVDev );
 

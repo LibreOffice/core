@@ -150,7 +150,7 @@ void CompressGraphicsDialog::Update()
     sal_Unicode cSeparator = rLocaleWrapper.getNumDecimalSep()[0];
 
     VirtualDevice* pDummyVDev = new VirtualDevice();
-    pDummyVDev->EnableOutput( false );
+    pDummyVDev->DisableOutput();
     pDummyVDev->SetMapMode( m_aGraphic.GetPrefMapMode() );
 
     Size aPixelSize = m_aGraphic.GetSizePixel();

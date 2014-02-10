@@ -49,7 +49,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/oldprintadaptor.hxx>
-#include <vcl/settings.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -127,7 +126,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     ::boost::shared_ptr<GDIMetaFile> pFile(new GDIMetaFile);
 
     VirtualDevice aDevice;
-    aDevice.EnableOutput( false );
+    aDevice.DisableOutput();
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );

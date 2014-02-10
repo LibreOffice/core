@@ -2889,7 +2889,7 @@ namespace cppcanvas
             VectorOfOutDevStates    aStateStack;
 
             VirtualDevice aVDev;
-            aVDev.EnableOutput( false );
+            aVDev.DisableOutput();
 
             // Setup VDev for state tracking and mapping
             // =========================================

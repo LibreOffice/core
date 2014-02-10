@@ -1395,7 +1395,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     GDIMetaFile aMtf;
 
     aOut.SetOutputSizePixel(Size(2, 2));
-    aOut.EnableOutput(false);
+    aOut.DisableOutput();
     aOut.SetMapMode(MapMode(MAP_100TH_MM));
     aMtf.Clear();
     aMtf.Record(&aOut);
