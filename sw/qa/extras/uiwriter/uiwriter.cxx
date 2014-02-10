@@ -49,6 +49,7 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
     load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     return pTxtDoc->GetDocShell()->GetDoc();
 }
 
