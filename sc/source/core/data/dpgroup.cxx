@@ -610,7 +610,7 @@ bool ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
     return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
 }
 
-sal_Bool ScDPGroupTableData::IsDateDimension(long nDim)
+bool ScDPGroupTableData::IsDateDimension(long nDim)
 {
     if ( nDim >= nSourceCount )
     {

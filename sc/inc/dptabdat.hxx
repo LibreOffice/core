@@ -112,7 +112,7 @@ public:
     virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     virtual OUString                getDimensionName(long nColumn) = 0;
     virtual bool                    getIsDataLayoutDimension(long nColumn) = 0;
-    virtual sal_Bool                IsDateDimension(long nDim) = 0;
+    virtual bool                    IsDateDimension(long nDim) = 0;
     virtual sal_uLong               GetNumberFormat(long nDim);
     virtual sal_uInt32              GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;

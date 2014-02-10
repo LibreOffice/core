@@ -104,7 +104,7 @@ bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
     return ( nColumn == GetCacheTable().getColSize());
 }
 
-sal_Bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
+bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
     //! later...
     return false;

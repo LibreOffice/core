@@ -101,7 +101,7 @@ OUString ScSheetDPData::getDimensionName(long nColumn)
     }
 }
 
-sal_Bool ScSheetDPData::IsDateDimension(long nDim)
+bool ScSheetDPData::IsDateDimension(long nDim)
 {
     CreateCacheTable();
     long nColCount = aCacheTable.getColSize();
