@@ -204,7 +204,8 @@ OUString SAL_CALL ScAnnotationObj::getAuthor()
     return pNote ? pNote->GetAuthor() : OUString();
 }
 
-OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
+OUString SAL_CALL ScAnnotationObj::getDate()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
