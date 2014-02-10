@@ -391,6 +391,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
