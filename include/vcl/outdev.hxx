@@ -593,7 +593,7 @@ public:
 
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
-    Region                      GetClipRegion() const;
+    Region                      GetClipRegion( bool bLogicalRegion=true ) const;
     bool                        IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
