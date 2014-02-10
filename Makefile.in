@@ -330,7 +330,7 @@ dump-deps-png:
 
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration:
-	cd $(SRCDIR) && ($(GNUMAKE) cmd="$(GNUMAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
+	cd $(SRCDIR) && (LC_MESSAGES=C $(GNUMAKE) cmd="$(GNUMAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
 
 endef
 
