@@ -426,7 +426,8 @@ public:
                                       std::exception);
     virtual void SAL_CALL   copyByName( const OUString& aName,
                                 const OUString& aCopy, sal_Int16 nDestination )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             /// XSpreadsheets2
     virtual sal_Int32 SAL_CALL importSheet(

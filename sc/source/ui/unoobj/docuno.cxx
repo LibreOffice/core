@@ -2572,8 +2572,8 @@ void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDe
 }
 
 void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
-                                const OUString& aCopy, sal_Int16 nDestination )
-                                                throw(uno::RuntimeException)
+    const OUString& aCopy, sal_Int16 nDestination )
+        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
