@@ -182,7 +182,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                    RecentFunctionsChanged();
 
     static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
-                                        sal_Bool& rAutoSpell );
+                                        bool& rAutoSpell );
     static void         SetAutoSpellProperty( sal_Bool bSet );
     static sal_Bool         HasThesaurusLanguage( sal_uInt16 nLang );
 

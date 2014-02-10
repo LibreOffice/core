@@ -148,7 +148,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pD->GetFormatTable()->ChangeNullDate( 30, 12, 1899 );
 
     ScDocOptions aDocOpt( pD->GetDocOptions() );
-    aDocOpt.SetIgnoreCase( sal_True );              // always in Excel
+    aDocOpt.SetIgnoreCase( true );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( false );    // regular expressions? what's that?
     aDocOpt.SetLookUpColRowNames( false );      // default: no natural language refs
     pD->SetDocOptions( aDocOpt );

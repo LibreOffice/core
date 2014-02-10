@@ -979,7 +979,7 @@ sal_uInt16 ScModule::GetOptDigitLanguage()
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
     sal_uInt16 nOldSpellLang, nOldCjkLang, nOldCtlLang;
-    sal_Bool bOldAutoSpell;
+    bool bOldAutoSpell;
     GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
 
     if (!pAppCfg)
@@ -1206,7 +1206,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( rOptSet.HasItem(SID_AUTOSPELL_CHECK,&pItem) )              // an Doc-Options
     {
-        sal_Bool bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
+        bool bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
 
         if (pDoc)
         {

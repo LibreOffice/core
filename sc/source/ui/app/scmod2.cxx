@@ -36,7 +36,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------
 
 void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
-                                    sal_Bool& rAutoSpell )
+                                    bool& rAutoSpell )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
     //  loading the linguistic component

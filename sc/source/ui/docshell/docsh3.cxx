@@ -410,7 +410,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
     sal_uInt16 nDefLang, nCjkLang, nCtlLang;
-    sal_Bool bAutoSpell;
+    bool bAutoSpell;
     ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
     ScModule* pScMod = SC_MOD();
 
