@@ -1151,7 +1151,7 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
 {
     const PathSettings::PathInfo* pPath = impl_getPathAccessConst(nID);
     if (! pPath)
-        throw css::container::NoSuchElementException();
+        throw css::lang::IllegalArgumentException();
 
     css::uno::Any aVal;
     switch(impl_getPropGroup(nID))
