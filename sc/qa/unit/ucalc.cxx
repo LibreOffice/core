@@ -80,6 +80,8 @@
 #include <sstream>
 #include <vector>
 
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+
 struct TestImpl
 {
     ScDocShellRef m_xDocShell;
@@ -5461,6 +5463,29 @@ void Test::testImportStream()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
 
     pUndoMgr->Clear();
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTransliterateText()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set texts to A1:A3.
+    m_pDoc->SetString(ScAddress(0,0,0), "Mike");
+    m_pDoc->SetString(ScAddress(0,1,0), "Noah");
+    m_pDoc->SetString(ScAddress(0,2,0), "Oscar");
+
+    // Change them to uppercase.
+    ScMarkData aMark;
+    aMark.SetMarkArea(ScRange(0,0,0,0,2,0));
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.TransliterateText(
+        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true, true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("OSCAR"), m_pDoc->GetString(ScAddress(0,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
