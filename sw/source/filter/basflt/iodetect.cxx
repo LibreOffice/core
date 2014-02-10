@@ -280,9 +280,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
-    if( !pFCntnr )
-        return 0;
-
     SfxFilterMatcher aMatcher( pFCntnr->GetName() );
     SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFilter = aIter.First();
