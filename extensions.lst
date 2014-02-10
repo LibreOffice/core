@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    043e3c42b1b2a20517f8069afb9cba24 http://sourceforge.net/projects/aoo-extensions/files/17102/2/dict-en-marcoagpinto-20140107.oxt/download "dict-en.oxt"
+    21000528c50707539220e05df554172f http://sourceforge.net/projects/aoo-extensions/files/17102/3/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
