@@ -63,8 +63,15 @@ sal_Bool SwFtnFrm::operator<( const SwTxtFtn* pTxtFtn ) const
            lcl_FindFtnPos( pDoc, pTxtFtn );
 }
 
-/// Set pBoss to the next SwFtnBossFrm, this might be a column or a page (w/o columns).
-/// If this includes a page change, pPage contains the new page and returns TRUE.
+/*
+|*
+|*  sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* pBoss, SwPageFrm* pPage)
+|*  sets pBoss on the next SwFtnBossFrm, which can either be a column
+|*  or a page (without columns). If the page changes meanwhile,
+|*  pPage contains the new page and this function returns sal_True.
+|*
+|*/
+
 static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
     sal_Bool bDontLeave )
 {
@@ -72,7 +79,7 @@ static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
     {
         if( rpBoss->GetNext() )
         {
-            rpBoss = (SwFtnBossFrm*)rpBoss->GetNext(); //naechste Spalte
+            rpBoss = (SwFtnBossFrm*)rpBoss->GetNext(); //next column
             return sal_False;
         }
         if( rpBoss->IsInSct() )
@@ -95,13 +102,13 @@ static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
             }
         }
     }
-    rpPage = (SwPageFrm*)rpPage->GetNext(); // naechste Seite
+    rpPage = (SwPageFrm*)rpPage->GetNext(); // next page
     rpBoss = rpPage;
     if( rpPage )
     {
         SwLayoutFrm* pBody = rpPage->FindBodyCont();
         if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
-            rpBoss = (SwFtnBossFrm*)pBody->Lower(); // erste Spalte
+            rpBoss = (SwFtnBossFrm*)pBody->Lower(); // first column
     }
     return sal_True;
 }
@@ -141,8 +148,10 @@ SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     mnType = FRMC_FTNCONT;
 }
 
-/// Visits pFrm and its content and returns the sum of all TxtFrm resize requests
-/// E.g. for column sections when those do not yet have the max. size.
+
+// lcl_Undersize(..) walks over a SwFrm and its contents
+// and returns the sum of all requested TxtFrm magnifications.
+
 static long lcl_Undersize( const SwFrm* pFrm )
 {
     long nRet = 0;
@@ -206,7 +215,10 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             SwTwips nRemaining = 0;
             SwFrm *pFrm = pLower;
             while ( pFrm )
-            {
+            {   // lcl_Undersize(..) respects (recursively) TxtFrms, which
+                // would like to be bigger. They are created especially in
+                // columnized borders, if these do not have their maximum
+                // size yet.
                 nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)() + lcl_Undersize( pFrm );
                 pFrm = pFrm->GetNext();
             }
@@ -232,8 +244,9 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             else if ( nDiff < 0 )
             {
                 Grow( -nDiff );
-                // It might happen that there is less space available than the border
-                // requires. In those cases the size of PrtArea will be negative.
+                // It may happen that there is less space available,
+                // than what the border needs - the size of the PrtArea
+                // will then be negative.
                 SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                 if( nPrtHeight < 0 )
                 {
@@ -361,6 +374,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
         if ( nReal != nDist )
         {
             nDist -= nReal;
+            // We can only respect the boundless wish so much
             Frm().SSize().Height() -= nDist;
 
             if( IsVertical() && !IsVertLR() && !IsReverse() )
@@ -499,7 +513,7 @@ void SwFtnFrm::Cut()
 
     if ( pUp )
     {
-        // the last footnote takes the container along
+        // The last footnote takes its container along
         if ( !pUp->Lower() )
         {
             SwPageFrm *pPage = pUp->FindPageFrm();
@@ -586,6 +600,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
 }
 
 /// Return the next layout leaf in that the frame can be moved.
+/// New pages will only be created if the parameter is sal_True.
 SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
 {
     SwFtnBossFrm *pOldBoss = FindFtnBossFrm();
@@ -878,12 +893,11 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, sal_Bool bPageOnly, sal_Bool bEndN
         pPage = (SwPageFrm*)Lower();
 
     do
-    {
-        // if the page has columns, cleanup all of them
+    {   // On columned pages we have to clean up in all columns
         SwFtnBossFrm* pBoss;
         SwLayoutFrm* pBody = pPage->FindBodyCont();
         if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
-            pBoss = (SwFtnBossFrm*)pBody->Lower(); // first column
+            pBoss = (SwFtnBossFrm*)pBody->Lower(); // the first column
         else
             pBoss = pPage; // no columns
         sw_RemoveFtns( pBoss, bPageOnly, bEndNotes );
@@ -906,6 +920,7 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, sal_Bool bPageOnly, sal_Bool bEndN
     } while ( pPage );
 }
 
+/// Change the page template of the footnote pages
 void SwRootFrm::CheckFtnPageDescs( sal_Bool bEndNote )
 {
     SwPageFrm *pPage = (SwPageFrm*)Lower();
@@ -931,6 +946,10 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
 #if OSL_DEBUG_LEVEL > 1
     if ( FindFtnCont() )
     {   OSL_ENSURE( !this, "footnote container exists already." );
+    // Insert a footnote container which always sits right after
+    // the body text.
+    // FrmFmt is always the DefaultFrmFmt.
+
         return 0;
     }
 #endif
@@ -963,6 +982,7 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
     return (SwFtnContFrm*)pFrm;
 }
 
+/// Search the next available footnote container.
 SwFtnContFrm *SwFtnBossFrm::FindNearestFtnCont( sal_Bool bDontLeave )
 {
     SwFtnContFrm *pCont = 0;
@@ -1055,10 +1075,10 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
                     pRet = 0; // at least one column too far
             }
             else if ( nPgNum > nRefNum )
-                pRet = 0;   // at least one column too far
+                pRet = 0;   // at least a page too far
         }
         else
-            pRet = 0; // There is no match.
+            pRet = 0;   // there is none
     } while( pRet );
     return pRet;
 }
@@ -1099,6 +1119,8 @@ const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
 
 void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
 {
+    // Destroy the incarnations of footnotes to an attribute, if they don't
+    // belong to pAssumed
     OSL_ENSURE( !pCheck->GetMaster(), "given master is not a Master." );
 
     SwNodeIndex aIdx( *pCheck->GetAttr()->GetStartNode(), 1 );
@@ -1235,7 +1257,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             // index is after the index of the newly inserted, to place the new one correctly
             pSibling = (SwFtnFrm*)pParent->Lower();
             if ( !pSibling )
-            { OSL_ENSURE( !this, "No place for a footnote.");
+            { OSL_ENSURE( !this, "Could not find space for footnote.");
                 return;
             }
             nCmpPos  = ::lcl_FindFtnPos( pDoc, pSibling->GetAttr() );
@@ -1393,9 +1415,11 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
     if ( FindFtn( pRef, pAttr ) )
         return;
 
-    // If footnotes are placed at the document ending, search from the corresponding page.
-    // If there is no, create one.
-    // If the given one is a endnote, search/create an endnote page.
+    // If footnotes are inserted at the end of the document,
+    // we only need to search from the relevant page on.
+    // If there is none yet, we need to create one.
+    // If it is an Endnote, we need to search for or create an
+    // Endnote page.
     SwDoc *pDoc = GetFmt()->GetDoc();
     SwFtnBossFrm *pBoss = this;
     SwPageFrm *pPage = FindPageFrm();
@@ -1433,8 +1457,9 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             }
             else
             {
-                // Search roughly for the right page to ensure finishing in
-                // finite time even if there are hundereds of footnotes.
+                // At least we can search the approximately correct page.
+                // To ensure to be finished in finite time even if hundreds
+                // of footnotes exist
                 SwPageFrm *pNxt = (SwPageFrm*)pPage->GetNext();
                 const sal_uLong nStPos = ::lcl_FindFtnPos( pDoc, pAttr );
                 while ( pNxt && pNxt->IsEndNotePage() )
@@ -1475,8 +1500,9 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         }
         else
         {
-            // Search roughly for the right page to ensure finishing in
-            // finite time even if there are hundereds of footnotes.
+            // We can at least search the approximately correct page
+            // to ensure that we will finish in finite time even if
+            // hundreds of footnotes exist.
             SwPageFrm *pNxt = (SwPageFrm*)pPage->GetNext();
             const sal_uLong nStPos = ::lcl_FindFtnPos( pDoc, pAttr );
             while ( pNxt && pNxt->IsFtnPage() && !pNxt->IsEndNotePage() )
@@ -1530,7 +1556,8 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
         ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
     }
-    // If the page was changed (or newly created), go to the first column
+    // If the page was changed or newly created,
+    // we need to place ourselves in the first column
     if( bChgPage )
     {
         SwLayoutFrm* pBody = pPage->FindBodyCont();
@@ -1808,7 +1835,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
         }
         if ( pNxtFtn == _pFtn )
         {
-            OSL_FAIL(   "_CollectFtn: Devil's circle" );
+            OSL_FAIL(   "_CollectFtn: Vicious circle" );
             pNxtFtn = 0;
         }
 
@@ -2138,7 +2165,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
     if ( pCnt )
     {
         bool bMore = true;
-        bool bStart = pAttr == 0; // if no attribute given, take all
+        bool bStart = pAttr == 0; // If no attribute is given, process all
         // #i49383# - disable unlock of position of
         // lower objects during format of footnote and footnote content.
         SwFtnFrm* pLastFtnFrm( 0L );
@@ -2374,7 +2401,7 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     pBody->Calc();
 
     SwFrm *pCont = FindFtnCont();
-    const SwTwips nMax = nMaxFtnHeight; // not bigger then current MaxHeight
+    const SwTwips nMax = nMaxFtnHeight;// current should exceed MaxHeight
     SWRECTFN( this )
     if ( pCont )
     {
@@ -2658,7 +2685,7 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
     {
         bool bSameBoss = true;
         SwFtnBossFrm * const pNewBoss = pNewUpper->FindFtnBossFrm();
-        // column/page change?
+        // Are we changing the column/page?
         if ( !( bSameBoss = (pNewBoss == pOldBoss) ) )
         {
             bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // page change?
@@ -2674,7 +2701,7 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
         SwFtnFrm* pTmpFtn = pNewUpper->IsFtnFrm() ? ((SwFtnFrm*)pNewUpper) : 0;
         if( !pTmpFtn )
         {
-            OSL_ENSURE( pNewUpper->IsFtnContFrm(), "Neuer Upper kein FtnCont.");
+            OSL_ENSURE( pNewUpper->IsFtnContFrm(), "New Upper not a FtnCont.");
             SwFtnContFrm *pCont = (SwFtnContFrm*)pNewUpper;
 
             // create footnote
@@ -2755,7 +2782,7 @@ SwSaveFtnHeight::SwSaveFtnHeight( SwFtnBossFrm *pBs, const SwTwips nDeadLine ) :
 
 SwSaveFtnHeight::~SwSaveFtnHeight()
 {
-    // If someone changed the deadline...
+    // If somebody tweaked the dealine meanwhile, we let it happen
     if ( nNewHeight == pBoss->GetMaxFtnHeight() )
         pBoss->nMaxFtnHeight = nOldHeight;
 }
