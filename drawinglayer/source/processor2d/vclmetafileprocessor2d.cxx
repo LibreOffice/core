@@ -269,7 +269,7 @@ namespace drawinglayer
 
             mpOutputDevice = &aContentVDev;
             mpMetaFile = &o_rContentMetafile;
-            aContentVDev.EnableOutput(false);
+            aContentVDev.DisableOutput();
             aContentVDev.SetMapMode(pLastOutputDevice->GetMapMode());
             o_rContentMetafile.Record(&aContentVDev);
             aContentVDev.SetLineColor(pLastOutputDevice->GetLineColor());

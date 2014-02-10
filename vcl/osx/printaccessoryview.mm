@@ -305,7 +305,7 @@ class ControllerProperties
                                                          DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
             aDev.SetReferenceDevice( 720, 720 );
-            aDev.EnableOutput( TRUE );
+            aDev.EnableOutput();
             Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());

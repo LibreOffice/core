@@ -730,7 +730,7 @@ namespace oglcanvas
         if( mpDevice )
         {
             VirtualDevice aVDev;
-            aVDev.EnableOutput(false);
+            aVDev.DisableOutput();
 
             CanvasFont* pFont=dynamic_cast<CanvasFont*>(xLayoutetText->getFont().get());
             const rendering::StringContext& rTxt=xLayoutetText->getText();

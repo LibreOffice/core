@@ -160,7 +160,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
 
     // determine sprite size (in pixel):
     VirtualDevice blackHole;
-    blackHole.EnableOutput(false);
+    blackHole.DisableOutput();
     blackHole.SetFont( maFont );
     blackHole.SetMapMode( MAP_PIXEL );
     Rectangle rect;
@@ -447,7 +447,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     VirtualDevice blackHole;
     metaFile.Record( &blackHole );
     metaFile.SetPrefSize( Size( 1, 1 ) );
-    blackHole.EnableOutput(false);
+    blackHole.DisableOutput();
     blackHole.SetMapMode( MAP_PIXEL );
     blackHole.SetFont( maFont );
     Rectangle rect = Rectangle( 0,0,

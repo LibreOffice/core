@@ -219,7 +219,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev.EnableOutput( true );
+    maPageVDev.EnableOutput();
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );

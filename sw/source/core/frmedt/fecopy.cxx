@@ -196,7 +196,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
                     pClpDoc->CloneSdrObj( *pObj, false, true );
 
                 SwPaM aTemp(aPos);
-                pClpDoc->InsertDrawObj(aTemp, *pNew, aSet );
+                pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
             }
             else
             {
@@ -380,7 +380,8 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     aSet.Put( aAnchor );
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                                 GetDoc() == pDestDoc, true );
-                    pFmt = pDestDoc->InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
+                    pFmt = pDestDoc->Insert( *pDestShell->GetCrsr(),
+                                            *pNew, &aSet, NULL );
                 }
                 else
                     pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
@@ -1237,7 +1238,7 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                             GetGrfSize( aSz );
 
                             VirtualDevice aVirtDev;
-                            aVirtDev.EnableOutput( false );
+                            aVirtDev.DisableOutput();
 
                             MapMode aTmp( GetWin()->GetMapMode() );
                             aTmp.SetOrigin( aPt );
@@ -1439,7 +1440,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     DelSelectedObj();
 
-                    pFmt = GetDoc()->InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
+                    pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet, NULL );
                 }
                 else
                 {

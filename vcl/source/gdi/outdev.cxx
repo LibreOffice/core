@@ -30,7 +30,6 @@
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
-#include <vcl/settings.hxx>
 #include <svsys.h>
 #include <vcl/sysdata.hxx>
 
@@ -306,7 +305,7 @@ OutputDevice::OutputDevice() :
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
-    mxSettings( new AllSettings(Application::GetSettings()) )
+    maSettings( Application::GetSettings() )
 {
 
     mpGraphics          = NULL;
@@ -392,7 +391,7 @@ OutputDevice::~OutputDevice()
 
     if ( GetUnoGraphicsList() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_False );
         if ( pWrapper )
             pWrapper->ReleaseAllGraphics( this );
         delete mpUnoGraphicsList;
@@ -457,9 +456,9 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
     return bHasSupport;
 }
 
-void OutputDevice::EnableRTL( bool bEnable )
+void OutputDevice::EnableRTL( sal_Bool bEnable )
 {
-    mbEnableRTL = bEnable;
+    mbEnableRTL = (bEnable != 0);
     if( meOutDevType == OUTDEV_VIRDEV )
     {
         // virdevs default to not mirroring, they will only be set to mirroring
@@ -555,7 +554,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
             {
                 // steal the wingraphics from the other outdev
                 mpGraphics = pReleaseOutDev->mpGraphics;
-                pReleaseOutDev->ImplReleaseGraphics( false );
+                pReleaseOutDev->ImplReleaseGraphics( sal_False );
             }
             else
             {
@@ -670,7 +669,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     return mpGraphics;
 }
 
-void OutputDevice::ImplReleaseGraphics( bool bRelease )
+void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -820,7 +819,7 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-bool OutputDevice::ImplIsRecordLayout() const
+sal_Bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
@@ -925,7 +924,7 @@ void OutputDevice::ImplInitClipRegion()
     {
         if ( mbClipRegion )
         {
-            if ( maClipRegion.IsEmpty() )
+            if ( aClipRegion.IsEmpty() )
                 mbOutputClipped = true;
             else
             {
@@ -1226,7 +1225,7 @@ void OutputDevice::SetFillColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color(), sal_False ) );
 
     if ( mbFillColor )
     {
@@ -2466,12 +2465,20 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::EnableOutput( bool bEnable )
+void OutputDevice::EnableOutput()
 {
-    mbOutput = bEnable;
+    mbOutput = true;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
+        mpAlphaVDev->EnableOutput();
+}
+
+void OutputDevice::DisableOutput()
+{
+    mbOutput = false;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DisableOutput();
 }
 
 void OutputDevice::SetSettings( const AllSettings& rSettings )

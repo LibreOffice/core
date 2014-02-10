@@ -31,7 +31,6 @@
 #include <vcl/wmf.hxx>
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
-#include <vcl/settings.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -649,7 +648,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             MapMode aNewMapMode( MAP_100TH_MM );
             aNewMapMode.SetScaleX( static_cast< double >( aLogicalSize.Width ) / static_cast< double >( aMtfSize.Width() ) );
             aNewMapMode.SetScaleY( static_cast< double >( aLogicalSize.Height ) / static_cast< double >( aMtfSize.Height() ) );
-            aDummyVDev.EnableOutput( false );
+            aDummyVDev.DisableOutput();
             aDummyVDev.SetMapMode( aNewMapMode );
 
             for( size_t i = 0, nObjCount = aMtf.GetActionSize(); i < nObjCount; i++ )

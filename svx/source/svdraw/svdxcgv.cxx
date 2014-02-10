@@ -201,7 +201,7 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
-    if(pObj->GetModel() && pObj->GetOutlinerParaObject())
+    if(pObj && pObj->GetModel() && pObj->GetOutlinerParaObject())
     {
         SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
@@ -555,7 +555,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
             const Size aDummySize(2, 2);
 
             aOut.SetOutputSizePixel(aDummySize);
-            aOut.EnableOutput(false);
+            aOut.DisableOutput();
             aOut.SetMapMode(aMap);
             aMtf.Clear();
             aMtf.Record(&aOut);
@@ -646,7 +646,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
                                   pModel->GetScaleFraction(),
                                   pModel->GetScaleFraction() );
 
-            aOut.EnableOutput( false );
+            aOut.DisableOutput();
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
             pObj->SingleObjectPainter( aOut );

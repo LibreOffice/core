@@ -148,10 +148,10 @@ public:
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     ChoiceDisableMap                                            maChoiceDisableMap;
-    bool                                                    mbFirstPage;
-    bool                                                    mbLastPage;
-    bool                                                    mbReversePageOrder;
-    bool                                                    mbPapersizeFromSetup;
+    sal_Bool                                                    mbFirstPage;
+    sal_Bool                                                    mbLastPage;
+    sal_Bool                                                    mbReversePageOrder;
+    sal_Bool                                                    mbPapersizeFromSetup;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -182,10 +182,10 @@ public:
     // history suggests this is intentional...
 
     ImplPrinterControllerData() :
-        mbFirstPage( true ),
-        mbLastPage( false ),
-        mbReversePageOrder( false ),
-        mbPapersizeFromSetup( false ),
+        mbFirstPage( sal_True ),
+        mbLastPage( sal_False ),
+        mbReversePageOrder( sal_False ),
+        mbPapersizeFromSetup( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
         mnDefaultPaperBin( -1 ),
@@ -285,7 +285,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
                         const JobSetup& i_rInitSetup
                         )
 {
-    bool bSynchronous = false;
+    sal_Bool bSynchronous = sal_False;
     PropertyValue* pVal = i_pController->getValue( OUString( "Wait" ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
@@ -333,7 +333,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     // reset last page property
-    i_pController->setLastPage( false );
+    i_pController->setLastPage( sal_False );
 
     // update "PageRange" property inferring from other properties:
     // case 1: "Pages" set from UNO API ->
@@ -402,7 +402,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
     if( pReverseVal )
     {
-        bool bReverse = false;
+        sal_Bool bReverse = sal_False;
         pReverseVal->Value >>= bReverse;
         pController->setReversePrint( bReverse );
     }
@@ -410,7 +410,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
     if( pPapersizeFromSetupVal )
     {
-        bool bPapersizeFromSetup = false;
+        sal_Bool bPapersizeFromSetup = sal_False;
         pPapersizeFromSetupVal->Value >>= bPapersizeFromSetup;
         pController->setPapersizeFromSetup( bPapersizeFromSetup );
     }
@@ -985,7 +985,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
 
-    mpImplData->mpPrinter->EnableOutput( false );
+    mpImplData->mpPrinter->DisableOutput();
 
     o_rMtf.Record( mpImplData->mpPrinter.get() );
 
@@ -1298,7 +1298,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     GDIMetaFile aCleanedFile;
     sal_uLong nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
-    mpImplData->mpPrinter->EnableOutput( true );
+    mpImplData->mpPrinter->EnableOutput();
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();

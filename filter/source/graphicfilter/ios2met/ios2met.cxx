@@ -219,6 +219,7 @@ struct OSArea {
     RasterOp    eMix;
     RasterOp    eBgMix;
     sal_Bool    bFill;
+    OSArea(){} ~OSArea(){}
 };
 
 struct OSPath
@@ -226,32 +227,37 @@ struct OSPath
     OSPath*     pSucc;
     sal_uInt32  nID;
     PolyPolygon aPPoly;
-    sal_Bool    bClosed;
-    sal_Bool    bStroke;
+    sal_Bool        bClosed;
+    sal_Bool        bStroke;
+
+                OSPath(){}
+                ~OSPath(){}
 };
 
 struct OSFont {
-    OSFont *  pSucc;
+    OSFont * pSucc;
     sal_uLong nID;
-    Font     aFont;
+    Font aFont;
+    OSFont(){} ~OSFont(){}
 };
 
 struct OSBitmap {
     OSBitmap * pSucc;
-    sal_uLong  nID;
-    Bitmap     aBitmap;
+    sal_uLong nID;
+    Bitmap aBitmap;
 
     // required during reading of the bitmap:
     SvStream * pBMP; // pointer to temporary Windows-BMP file or NULL
     sal_uInt32 nWidth, nHeight;
     sal_uInt16 nBitsPerPixel;
-    sal_uLong  nMapPos;
+    sal_uLong nMapPos;
+    OSBitmap(){} ~OSBitmap(){}
 };
 
 struct OSAttr {
-    OSAttr *   pSucc;
+    OSAttr * pSucc;
     sal_uInt16 nPushOrder;
-    sal_uInt8  nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
+    sal_uInt8 nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
 
     Color    aLinCol;
     Color    aLinBgCol;
@@ -302,6 +308,7 @@ struct OSAttr {
 //  sal_uInt8     nTxtAlignHor,nTxtAlignVer;
 //  //...    aViewTransform;
 //  //...    aViewWindow;
+    OSAttr(){} ~OSAttr(){}
 };
 
 class OS2METReader {
@@ -310,7 +317,7 @@ private:
 
     long ErrorCode;
 
-    SvStream      * pOS2MET;             // the OS2MET file to be read
+    SvStream    * pOS2MET;               // the OS2MET file to be read
     VirtualDevice * pVirDev;             // here the drawing methods are being called
                                          // While doing this a recording in the GDIMetaFile
                                          // will take place.
@@ -406,26 +413,6 @@ sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 }
 
 OS2METReader::OS2METReader()
-    : ErrorCode(0)
-    , pOS2MET(NULL)
-    , pVirDev(NULL)
-    , nOrigPos(0)
-    , nOrigNumberFormat(0)
-    , aBoundingRect()
-    , aCalcBndRect()
-    , aGlobMapMode()
-    , bCoord32(sal_False)
-    , pPaletteStack(NULL)
-    , aLineInfo()
-    , pAreaStack(NULL)
-    , pPathStack(NULL)
-    , pPathList(NULL)
-    , pFontList(NULL)
-    , pBitmapList(NULL)
-    , aDefAttr()
-    , aAttr()
-    , pAttrStack(NULL)
-    , pOrdFile(NULL)
 {
 }
 
@@ -2229,7 +2216,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
     pF->nID=0;
-    pF->aFont.SetTransparent(true);
+    pF->aFont.SetTransparent(sal_True);
     pF->aFont.SetAlign(ALIGN_BASELINE);
 
     nPos=pOS2MET->Tell();
@@ -2584,7 +2571,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pOrdFile=NULL;
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(false);
+    pVirDev->DisableOutput();
     rGDIMetaFile.Record(pVirDev);
 
     pOS2MET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);

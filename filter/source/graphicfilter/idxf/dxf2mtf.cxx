@@ -805,7 +805,7 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
         aParentLayerDXFLineInfo.fDistance = 0;
     }
 
-    pVirDev->EnableOutput(false);
+    pVirDev->DisableOutput();
     rMTF.Record(pVirDev);
 
     aActLineColor = pVirDev->GetLineColor();

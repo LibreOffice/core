@@ -9613,7 +9613,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     Pop();
 
     SetConnectMetaFile( pOldMtf );
-    EnableOutput( bOutput );
+    if (bOutput)
+        EnableOutput();
+    else
+        DisableOutput();
+
     mpWindowImpl->mbReallyVisible = bRVisible;
 
     // paint metafile to VDev
@@ -9647,7 +9651,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // restore graphics state
     Pop();
 
-    EnableOutput( bOutput );
+    if (bOutput)
+        EnableOutput();
+    else
+        DisableOutput();
+
     mpWindowImpl->mbReallyVisible = bRVisible;
     mbDevOutput = bDevOutput;
     mnDPIX = nOldDPIX;
