@@ -91,6 +91,8 @@ core_constructor_list = [
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# uui/util/uui.component
+    "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     ]
 
 extended_core_factory_list = core_factory_list + [
