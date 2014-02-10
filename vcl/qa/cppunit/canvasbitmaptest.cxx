@@ -441,8 +441,10 @@ private:
         return uno::Sequence< rendering::ARGBColor >();
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& ) throw (lang::IllegalArgumentException,
-                                                                                                                   uno::RuntimeException)
+    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& )
+        throw (lang::IllegalArgumentException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertToPARGB: method not implemented", false);
         return uno::Sequence< rendering::ARGBColor >();
