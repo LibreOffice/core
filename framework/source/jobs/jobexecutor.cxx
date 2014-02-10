@@ -132,7 +132,7 @@ public:
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : Base                (*static_cast<Mutex *>(this))
     , m_xContext          (xContext                                                        )
-    , m_aConfig           (xContext, OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
+    , m_aConfig           (xContext, "/org.openoffice.Office.Jobs/Events")
 {
 }
 

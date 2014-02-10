@@ -49,46 +49,6 @@ class JobData : private ThreadHelpBase
 {
     public:
 
-        /// specifies the root package and key to find registered jobs
-        static const sal_Char* JOBCFG_ROOT;
-        /// define the cfg key "Arguments" of a job relativ to JOBCFG_ROOT/<job alias>
-        static const sal_Char* JOBCFG_PROP_ARGUMENTS;
-        /// define the cfg key "Service" of a job relativ to JOBCFG_ROOT/<job alias>
-        static const sal_Char* JOBCFG_PROP_SERVICE;
-        /// define the cfg key "Context" of a job relativ to JOBCFG_ROOT/<job alias>
-        static const sal_Char* JOBCFG_PROP_CONTEXT;
-
-        /// specifies the root package and key to find event registrations
-        static const sal_Char* EVENTCFG_ROOT;
-        /// define the cfg key "JobList" of an event relativ to EVENTCFG_ROOT/<event>
-        static const sal_Char* EVENTCFG_PATH_JOBLIST;
-        /// define the cfg key "AdminTime" of a job registration relativ to EVENTCFG_ROOT/<event>/EVENTCFG_PROP_JOBLIST/<job alias>
-        static const sal_Char* EVENTCFG_PROP_ADMINTIME;
-        /// define the cfg key "UserTime" of a job registration relativ to EVENTCFG_ROOT/<event>/EVENTCFG_PROP_JOBLIST/<job alias>
-        static const sal_Char* EVENTCFG_PROP_USERTIME;
-
-        /// mark the starting point of static job data inside argument list of job execution
-        static const sal_Char* PROPSET_CONFIG;
-        /// mark the starting point of job specific data inside argument list of job execution
-        static const sal_Char* PROPSET_OWNCONFIG;
-        /// mark the starting point of environment data inside argument list of job execution
-        static const sal_Char* PROPSET_ENVIRONMENT;
-        /// mark the starting point of any other dynamic generated data inside argument list of job execution (e.g. from a dispatch() request)
-        static const sal_Char* PROPSET_DYNAMICDATA;
-
-        static const sal_Char* PROP_ALIAS;
-        static const sal_Char* PROP_EVENTNAME;
-        static const sal_Char* PROP_ENVTYPE;
-        static const sal_Char* PROP_FRAME;
-        static const sal_Char* PROP_MODEL;
-        static const sal_Char* PROP_SERVICE;
-        static const sal_Char* PROP_CONTEXT;
-
-    //___________________________________
-    // structs
-
-    public:
-
         /** These values can be used to differe between jobs with and jobs without
             a configuration. Of course an "unknown state" should be available too,
             to detect a missing initialization.

@@ -31,39 +31,11 @@
 
 #include <tools/wldcrd.hxx>
 #include <unotools/configpaths.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 
 namespace framework{
 
-
-const sal_Char* JobData::JOBCFG_ROOT              = "/org.openoffice.Office.Jobs/Jobs/"   ;
-const sal_Char* JobData::JOBCFG_PROP_SERVICE      = "Service"                             ;
-const sal_Char* JobData::JOBCFG_PROP_CONTEXT      = "Context"                             ;
-const sal_Char* JobData::JOBCFG_PROP_ARGUMENTS    = "Arguments"                           ;
-
-const sal_Char* JobData::EVENTCFG_ROOT            = "/org.openoffice.Office.Jobs/Events/" ;
-const sal_Char* JobData::EVENTCFG_PATH_JOBLIST    = "/JobList"                            ;
-const sal_Char* JobData::EVENTCFG_PROP_ADMINTIME  = "AdminTime"                           ;
-const sal_Char* JobData::EVENTCFG_PROP_USERTIME   = "UserTime"                            ;
-
-const sal_Char* JobData::PROPSET_CONFIG           = "Config"                              ;
-const sal_Char* JobData::PROPSET_OWNCONFIG        = "JobConfig"                           ;
-const sal_Char* JobData::PROPSET_ENVIRONMENT      = "Environment"                         ;
-const sal_Char* JobData::PROPSET_DYNAMICDATA      = "DynamicData"                         ;
-
-const sal_Char* JobData::PROP_ALIAS               = "Alias"                               ;
-const sal_Char* JobData::PROP_EVENTNAME           = "EventName"                           ;
-const sal_Char* JobData::PROP_ENVTYPE             = "EnvType"                             ;
-const sal_Char* JobData::PROP_FRAME               = "Frame"                               ;
-const sal_Char* JobData::PROP_MODEL               = "Model"                               ;
-const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
-const sal_Char* JobData::PROP_CONTEXT             = "Context"                             ;
-
-
-
-//________________________________
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
@@ -158,10 +130,10 @@ void JobData::setAlias( const OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    OUString sKey(OUString::createFromAscii(JOBCFG_ROOT));
-    sKey += ::utl::wrapConfigurationElementName(m_sAlias);
-
-    ConfigAccess aConfig(m_xContext, sKey);
+    ConfigAccess aConfig(
+        m_xContext,
+        ("/org.openoffice.Office.Jobs/Jobs/"
+         + utl::wrapConfigurationElementName(m_sAlias)));
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
     {
@@ -175,15 +147,15 @@ void JobData::setAlias( const OUString& sAlias )
         css::uno::Any aValue;
 
         // read uno implementation name
-        aValue   = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_SERVICE));
+        aValue   = xJobProperties->getPropertyValue("Service");
         aValue >>= m_sService;
 
         // read module context list
-        aValue   = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_CONTEXT));
+        aValue   = xJobProperties->getPropertyValue("Context");
         aValue >>= m_sContext;
 
         // read whole argument list
-        aValue = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_ARGUMENTS));
+        aValue = xJobProperties->getPropertyValue("Arguments");
         css::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
@@ -292,10 +264,10 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        OUString sKey(OUString::createFromAscii(JOBCFG_ROOT));
-        sKey += ::utl::wrapConfigurationElementName(m_sAlias);
-
-        ConfigAccess aConfig(m_xContext, sKey);
+        ConfigAccess aConfig(
+            m_xContext,
+            ("/org.openoffice.Office.Jobs/Jobs/"
+             + utl::wrapConfigurationElementName(m_sAlias)));
         aConfig.open(ConfigAccess::E_READWRITE);
         if (aConfig.getMode()==ConfigAccess::E_CLOSED)
             return;
@@ -460,15 +432,15 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
         lConfig.realloc(3);
         sal_Int32 i = 0;
 
-        lConfig[i].Name = OUString::createFromAscii(PROP_ALIAS);
+        lConfig[i].Name = "Alias";
         lConfig[i].Value <<= m_sAlias;
         ++i;
 
-        lConfig[i].Name = OUString::createFromAscii(PROP_SERVICE);
+        lConfig[i].Name = "Service";
         lConfig[i].Value <<= m_sService;
         ++i;
 
-        lConfig[i].Name = OUString::createFromAscii(PROP_CONTEXT);
+        lConfig[i].Name = "Context";
         lConfig[i].Value <<= m_sContext;
         ++i;
     }
@@ -521,14 +493,11 @@ void JobData::disableJob()
     // It doesn't matter if this config object was already opened before.
     // It doesn nothing here then ... or it change the mode automaticly, if
     // it was opened using another one before.
-    OUStringBuffer sKey(256);
-    sKey.appendAscii(JobData::EVENTCFG_ROOT                       );
-    sKey.append     (::utl::wrapConfigurationElementName(m_sEvent));
-    sKey.appendAscii(JobData::EVENTCFG_PATH_JOBLIST               );
-    sKey.appendAscii("/"                                          );
-    sKey.append     (::utl::wrapConfigurationElementName(m_sAlias));
-
-    ConfigAccess aConfig(m_xContext, sKey.makeStringAndClear());
+    ConfigAccess aConfig(
+        m_xContext,
+        ("/org.openoffice.Office.Jobs/Events/"
+         + utl::wrapConfigurationElementName(m_sEvent) + "/JobList/"
+         + utl::wrapConfigurationElementName(m_sAlias)));
     aConfig.open(ConfigAccess::E_READWRITE);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return;
@@ -539,7 +508,7 @@ void JobData::disableJob()
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
         aValue <<= Converter::convert_DateTime2ISO8601(DateTime( DateTime::SYSTEM));
-        xPropSet->setPropertyValue(OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
+        xPropSet->setPropertyValue("UserTime", aValue);
     }
 
     aConfig.close();
@@ -622,14 +591,8 @@ sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                        const OUString&                                    sEvent )
 {
-    // these static values may perform following loop for reading time stamp values ...
-    static OUString ADMINTIME = OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
-    static OUString USERTIME  = OUString::createFromAscii(JobData::EVENTCFG_PROP_USERTIME );
-    static OUString ROOT      = OUString::createFromAscii(JobData::EVENTCFG_ROOT          );
-    static OUString JOBLIST   = OUString::createFromAscii(JobData::EVENTCFG_PATH_JOBLIST  );
-
     // create a config access to "/org.openoffice.Office.Jobs/Events"
-    ConfigAccess aConfig(rxContext,ROOT);
+    ConfigAccess aConfig(rxContext, "/org.openoffice.Office.Jobs/Events");
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return css::uno::Sequence< OUString >();
@@ -639,8 +602,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
         return css::uno::Sequence< OUString >();
 
     // check if the given event exist inside list of registered ones
-    OUString sPath(sEvent);
-    sPath += JOBLIST;
+    OUString sPath(sEvent + "/JobList");
     if (!xEventRegistry->hasByHierarchicalName(sPath))
         return css::uno::Sequence< OUString >();
 
@@ -676,10 +638,10 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
         }
 
         OUString sAdminTime;
-        xJob->getPropertyValue(ADMINTIME) >>= sAdminTime;
+        xJob->getPropertyValue("AdminTime") >>= sAdminTime;
 
         OUString sUserTime;
-        xJob->getPropertyValue(USERTIME) >>= sUserTime;
+        xJob->getPropertyValue("UserTime") >>= sUserTime;
 
         if (!isEnabled(sAdminTime, sUserTime))
             continue;

@@ -44,31 +44,6 @@
 
 namespace framework{
 
-
-// path to module config
-static OUString CFG_PACKAGE_MODULES     ("/org.openoffice.Setup/Office/Factories");
-static OUString CFG_PACKAGE_SETUP       ("/org.openoffice.Setup");
-static OUString CFG_PACKAGE_COMMON      ("/org.openoffice.Office.Common");
-static OUString CFG_PATH_L10N           ("L10N");
-static OUString CFG_PATH_HELP           ("Help");
-static OUString CFG_KEY_LOCALE          ("ooLocale");
-static OUString CFG_KEY_HELPSYSTEM      ("System");
-
-// props of job environment
-static OUString PROP_ENVIRONMENT        ("Environment");
-static OUString PROP_JOBCONFIG          ("JobConfig");
-static OUString PROP_ENVTYPE            ("EnvType");
-static OUString PROP_MODEL              ("Model");
-
-// props of module config
-static OUString PROP_HELP_BASEURL       ("ooSetupFactoryHelpBaseURL");
-static OUString PROP_AUTOMATIC_HELP     ("ooSetupFactoryHelpOnOpen");
-
-// special value of job environment
-static OUString ENVTYPE_DOCUMENTEVENT   ("DOCUMENTEVENT");
-
-//-----------------------------------------------
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2(HelpOnStartup                   ,
                                       ::cppu::OWeakObject             ,
                                       SERVICENAME_JOB                 ,
@@ -89,24 +64,24 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                         m_xConfig = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
                                 m_xContext,
-                                CFG_PACKAGE_MODULES,
+                                "/org.openoffice.Setup/Office/Factories",
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
 
                         // ask for office locale
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
-                            CFG_PACKAGE_SETUP,
-                            CFG_PATH_L10N,
-                            CFG_KEY_LOCALE,
+                            "/org.openoffice.Setup",
+                            "L10N",
+                            "ooLocale",
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sLocale;
 
                         // detect system
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
-                            CFG_PACKAGE_COMMON,
-                            CFG_PATH_HELP,
-                            CFG_KEY_HELPSYSTEM,
+                            "/org.openoffice.Office.Common",
+                            "Help",
+                            "System",
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sSystem;
 
                         // Start listening for disposing events of these services,
@@ -206,17 +181,17 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
-    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault(PROP_ENVIRONMENT, css::uno::Sequence< css::beans::NamedValue >());
-    ::comphelper::SequenceAsHashMap lJobConfig   = lArgs.getUnpackedValueOrDefault(PROP_JOBCONFIG  , css::uno::Sequence< css::beans::NamedValue >());
+    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault("Environment", css::uno::Sequence< css::beans::NamedValue >());
+    ::comphelper::SequenceAsHashMap lJobConfig   = lArgs.getUnpackedValueOrDefault("JobConfig", css::uno::Sequence< css::beans::NamedValue >());
 
     // check for right environment.
     // If its not a DocumentEvent, which triggered this job,
     // we cant work correctly! => return immediately and do nothing
-    OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(PROP_ENVTYPE, OUString());
-    if (!sEnvType.equals(ENVTYPE_DOCUMENTEVENT))
+    OUString sEnvType = lEnvironment.getUnpackedValueOrDefault("EnvType", OUString());
+    if (sEnvType != "DOCUMENTEVENT")
         return OUString();
 
-    css::uno::Reference< css::frame::XModel > xDoc = lEnvironment.getUnpackedValueOrDefault(PROP_MODEL, css::uno::Reference< css::frame::XModel >());
+    css::uno::Reference< css::frame::XModel > xDoc = lEnvironment.getUnpackedValueOrDefault("Model", css::uno::Reference< css::frame::XModel >());
     if (!xDoc.is())
         return OUString();
 
@@ -329,7 +304,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
                 continue;
 
             OUString sHelpBaseURL;
-            xModuleConfig->getByName(PROP_HELP_BASEURL) >>= sHelpBaseURL;
+            xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
             OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
             if (sHelpURL.equals(sHelpURLForModule))
                 return sal_True;
@@ -364,12 +339,12 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 
         sal_Bool bHelpEnabled = sal_False;
         if (xModuleConfig.is())
-            xModuleConfig->getByName(PROP_AUTOMATIC_HELP) >>= bHelpEnabled;
+            xModuleConfig->getByName("ooSetupFactoryHelpOnOpen") >>= bHelpEnabled;
 
         if (bHelpEnabled)
         {
             OUString sHelpBaseURL;
-            xModuleConfig->getByName(PROP_HELP_BASEURL) >>= sHelpBaseURL;
+            xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
             sHelpURL = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
         }
     }
