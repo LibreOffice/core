@@ -863,15 +863,10 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
     pNote->AutoStamp();
 
-    // if pNote still points to the note after TakeNote(), insertion was successful
     rDoc.SetNote(rPos, pNote);
-    if( pNote )
-    {
-        // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
-        ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
-    }
-    else
-        return NULL;
+
+    // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
+    ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
 
     return pNote;
 }
