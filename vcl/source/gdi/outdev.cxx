@@ -891,7 +891,7 @@ void OutputDevice::ImplInitClipRegion()
         Window* pWindow = (Window*)this;
         Region  aRegion;
 
-        // Hintergrund-Sicherung zuruecksetzen
+        // Put back backed up background
         if ( pWindow->mpWindowImpl->mpFrameData->mpFirstBackWin )
             pWindow->ImplInvalidateAllOverlapBackgrounds();
         if ( pWindow->mpWindowImpl->mbInPaint )
