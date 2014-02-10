@@ -1746,8 +1746,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                           const ImplControlValue& aValue,
                                           const OUString& )
 {
-    OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
-    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+    assert(aValue.getType() == CTRL_SCROLLBAR);
+    const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(aValue);
     GdkPixmap*      pixmap = NULL;
     Rectangle        pixmapRect, scrollbarRect;
     GtkStateType    stateType;
@@ -1756,11 +1756,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     GtkStyle *    style;
     GtkAdjustment* scrollbarValues = NULL;
     GtkOrientation    scrollbarOrientation;
-    Rectangle        thumbRect = pScrollbarVal->maThumbRect;
-    Rectangle        button11BoundRect = pScrollbarVal->maButton1Rect;   // backward
-    Rectangle        button22BoundRect = pScrollbarVal->maButton2Rect;   // forward
-    Rectangle        button12BoundRect = pScrollbarVal->maButton1Rect;   // secondary forward
-    Rectangle        button21BoundRect = pScrollbarVal->maButton2Rect;   // secondary backward
+    Rectangle        thumbRect = rScrollbarVal.maThumbRect;
+    Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
+    Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
+    Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
+    Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
     GtkArrowType    button1Type;                                        // backward
     GtkArrowType    button2Type;                                        // forward
     gchar *        scrollbarTagH = (gchar *) "hscrollbar";
@@ -1912,16 +1912,16 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         scrollbarValues = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 0, 0, 0, 0) );
     if ( nPart == PART_DRAW_BACKGROUND_HORZ )
     {
-        scrollbarValues->lower = pScrollbarVal->mnMin;
-        scrollbarValues->upper = pScrollbarVal->mnMax;
-        scrollbarValues->value = pScrollbarVal->mnCur;
+        scrollbarValues->lower = rScrollbarVal.mnMin;
+        scrollbarValues->upper = rScrollbarVal.mnMax;
+        scrollbarValues->value = rScrollbarVal.mnCur;
         scrollbarValues->page_size = scrollbarRect.GetWidth() / 2;
     }
     else
     {
-        scrollbarValues->lower = pScrollbarVal->mnMin;
-        scrollbarValues->upper = pScrollbarVal->mnMax;
-        scrollbarValues->value = pScrollbarVal->mnCur;
+        scrollbarValues->lower = rScrollbarVal.mnMin;
+        scrollbarValues->upper = rScrollbarVal.mnMax;
+        scrollbarValues->value = rScrollbarVal.mnCur;
         scrollbarValues->page_size = scrollbarRect.GetHeight() / 2;
     }
     gtk_adjustment_changed( scrollbarValues );
@@ -1970,7 +1970,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     // ----------------- THUMB
     if ( has_slider )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateType, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnThumbState, &stateType, &shadowType );
         gtk_paint_slider( style, gdkDrawable, stateType, GTK_SHADOW_OUT,
                         gdkRect, GTK_WIDGET(scrollbarWidget), "slider",
                         x+hShim+thumbRect.Left(), y+vShim+thumbRect.Top(),
@@ -1986,14 +1986,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     GTK_WIDGET(scrollbarWidget)->allocation.height = h;
 
     bool backwardButtonInsensitive =
-        pScrollbarVal->mnCur == pScrollbarVal->mnMin;
-    bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
-        pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
+        rScrollbarVal.mnCur == rScrollbarVal.mnMin;
+    bool forwardButtonInsensitive = rScrollbarVal.mnMax == 0 ||
+        rScrollbarVal.mnCur + rScrollbarVal.mnVisibleSize >= rScrollbarVal.mnMax;
 
     // ----------------- BUTTON 1 //
     if ( has_backward )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton1State, &stateType, &shadowType );
         if ( backwardButtonInsensitive )
             stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
@@ -2009,7 +2009,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     }
     if ( has_forward2 )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton2State, &stateType, &shadowType );
         if ( forwardButtonInsensitive )
             stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
@@ -2026,7 +2026,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     // ----------------- BUTTON 2
     if ( has_backward2 )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton1State, &stateType, &shadowType );
         if ( backwardButtonInsensitive )
             stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
@@ -2042,7 +2042,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     }
     if ( has_forward )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton2State, &stateType, &shadowType );
         if ( forwardButtonInsensitive )
             stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
