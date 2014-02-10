@@ -647,7 +647,7 @@ void ScDPGroupTableData::DisposeData()
     pSourceData->DisposeData();
 }
 
-void ScDPGroupTableData::SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty )
+void ScDPGroupTableData::SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
 {
     pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }

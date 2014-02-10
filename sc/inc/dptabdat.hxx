@@ -116,7 +116,7 @@ public:
     virtual sal_uLong               GetNumberFormat(long nDim);
     virtual sal_uInt32              GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
-    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty ) = 0;
+    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) = 0;
 
     virtual bool                    IsRepeatIfEmpty();
 

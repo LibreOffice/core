@@ -69,7 +69,7 @@ public:
     virtual bool                    getIsDataLayoutDimension(long nColumn);
     virtual bool                    IsDateDimension(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
     virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);

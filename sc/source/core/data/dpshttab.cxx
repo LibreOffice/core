@@ -154,7 +154,7 @@ bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
     return (nColumn ==(long)( aCacheTable.getColSize()));
 }
 
-void ScSheetDPData::SetEmptyFlags( sal_Bool bIgnoreEmptyRowsP, sal_Bool bRepeatIfEmptyP )
+void ScSheetDPData::SetEmptyFlags( bool bIgnoreEmptyRowsP, bool bRepeatIfEmptyP )
 {
     bIgnoreEmptyRows = bIgnoreEmptyRowsP;
     bRepeatIfEmpty   = bRepeatIfEmptyP;

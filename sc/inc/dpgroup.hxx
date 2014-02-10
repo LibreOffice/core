@@ -162,7 +162,7 @@ public:
     virtual bool                    IsDateDimension(long nDim);
     virtual sal_uLong               GetNumberFormat(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 

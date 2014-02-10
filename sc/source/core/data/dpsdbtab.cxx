@@ -110,7 +110,7 @@ bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
     return false;
 }
 
-void ScDatabaseDPData::SetEmptyFlags( sal_Bool /* bIgnoreEmptyRows */, sal_Bool /* bRepeatIfEmpty */ )
+void ScDatabaseDPData::SetEmptyFlags( bool /* bIgnoreEmptyRows */, bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
     //! disable flags
