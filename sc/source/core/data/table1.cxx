@@ -1428,7 +1428,7 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
                     }
                 }
 
-                if (nTestRow < nEnd)
+                if (nTestRow <= nEnd)
                 {
                     // Cell found.
                     rRow = nTestRow;
