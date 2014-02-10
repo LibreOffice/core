@@ -26,6 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -100,6 +101,8 @@ Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() 
 sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     sal_Int32 nCount = 0;
     if ( m_pHeadBar )
         nCount = m_pHeadBar->GetItemCount();
@@ -109,6 +112,8 @@ sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
         VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if ( i < 0 || i >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
@@ -130,8 +135,10 @@ sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  ) throw (::com::
     return com::sun::star::accessibility::AccessibleRole::LIST;
 }
 
-void SAL_CALL VCLXAccessibleHeaderBar::disposing (void)
+void SAL_CALL VCLXAccessibleHeaderBar::disposing()
 {
+    SolarMutexGuard g;
+
     ListItems().swap(m_aAccessibleChildren);
     VCLXAccessibleComponent::disposing();
 }

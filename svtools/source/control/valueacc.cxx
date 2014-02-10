@@ -307,6 +307,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
+    SolarMutexGuard g;
     uno::Reference< accessibility::XAccessibleRelationSet > xRelSet;
     Window* pWindow = (Window*)mpParent;
     if ( pWindow )
