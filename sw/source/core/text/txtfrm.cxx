@@ -673,7 +673,7 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
 
 sal_Bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
-    if( GetOfst() > nPos + nLen ) // the range preceded us
+    if( nPos + nLen < 0 || GetOfst() > nPos + nLen ) // the range preceded us
         return sal_False;
 
     if( !GetFollow() )            // the range doesn't precede us,
