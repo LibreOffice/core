@@ -419,7 +419,9 @@ private:
     }
 
     virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >&,
-                                                                const uno::Reference< rendering::XColorSpace >& ) throw (uno::RuntimeException)
+                                                                const uno::Reference< rendering::XColorSpace >& )
+        throw (uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertColorSpace: method not implemented", false);
         return uno::Sequence< double >();
