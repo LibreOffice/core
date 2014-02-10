@@ -581,9 +581,25 @@ public:
      */
     ///@{
 
+    void                        EnableOutput( sal_Bool bEnable = sal_True );
+    sal_Bool                    IsOutputEnabled() const { return mbOutput; }
+    sal_Bool                    IsDeviceOutput() const { return mbDevOutput; }
+    sal_Bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    sal_Bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+
+    void                        SetClipRegion();
+    void                        SetClipRegion( const Region& rRegion );
+    Region                      GetClipRegion() const;
+    bool                        IsClipRegion() const { return mbClipRegion; }
+    Region                      GetActiveClipRegion() const;
+
+    void                        MoveClipRegion( long nHorzMove, long nVertMove );
+    void                        IntersectClipRegion( const Rectangle& rRect );
+    void                        IntersectClipRegion( const Region& rRegion );
 
     ///@}
 
@@ -756,7 +772,7 @@ public:
     /** @name Layout functions
      */
     ///@{
-    SAL_DLLPRIVATE bool     ImplIsRecordLayout() const;
+    SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
