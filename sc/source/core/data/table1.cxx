@@ -966,13 +966,10 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
             if (rStartRow < rEndRow)
             {
-                bool bFound = false;
-                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
-                    if (aCol[i].HasDataAt( rEndRow))
-                        bFound = true;
-                if (!bFound)
+                SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow);
+                if (0 <= nLastDataRow && nLastDataRow < rEndRow)
                 {
-                    --rEndRow;
+                    rEndRow = std::max( rStartRow, nLastDataRow);
                     bChanged = true;
                 }
             }
