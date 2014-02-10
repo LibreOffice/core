@@ -87,14 +87,16 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  export DYLD_LIBRARY_PATH
  
  MACOSX_DEPLOYMENT_TARGET=10.6
-@@ -27,8 +27,8 @@
+@@ -27,9 +27,9 @@
  
  OS_ServerFiles=inet_server.cpp
  
 -PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -mmacosx-version-min=10.6
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -mmacosx-version-min=10.6
+-CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
 +PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
+ 	fbtracemgr
