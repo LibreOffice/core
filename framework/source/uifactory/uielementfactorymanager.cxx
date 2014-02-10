@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -503,10 +504,17 @@ throw ( RuntimeException )
     aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
     } // SAFE
 
-    if ( !aServiceSpecifier.isEmpty() )
-        return Reference< XUIElementFactory >( m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier, m_xContext), UNO_QUERY );
-    else
-        return Reference< XUIElementFactory >();
+    if ( !aServiceSpecifier.isEmpty() ) try
+    {
+        return Reference< XUIElementFactory >(m_xContext->getServiceManager()->
+                createInstanceWithContext(aServiceSpecifier, m_xContext), UNO_QUERY);
+    }
+    catch ( const css::loader::CannotActivateFactoryException& )
+    {
+        SAL_WARN("fwk.uielement", aServiceSpecifier <<
+                " not available. This should happen only on mobile platforms.");
+    }
+    return Reference< XUIElementFactory >();
 }
 
 void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
