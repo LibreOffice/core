@@ -359,6 +359,12 @@ SbiToken SbiTokenizer::Next()
     {
         return eCurTok = FIXSTRING;
     }
+    else if( aSym.isEmpty() )
+    {
+        //something went wrong
+        bEof = bEos = true;
+        return eCurTok = EOLN;
+    }
     // Special cases of characters that are between "Z" and "a". ICompare()
     // evaluates the position of these characters in different ways.
     else if( aSym[0] == '^' )
