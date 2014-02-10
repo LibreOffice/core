@@ -923,8 +923,6 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         pNote->AutoStamp();
         //insert takes ownership
         rDoc.SetNote(rPos, pNote);
-        if(!pNote)
-            pNote = NULL;
     }
     return pNote;
 }
