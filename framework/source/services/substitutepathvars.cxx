@@ -1017,7 +1017,7 @@ throw ( NoSuchElementException, RuntimeException )
             else
             {
                 // Variable not known
-                bVarNotSubstituted = false;
+                bVarNotSubstituted = true;
                 nPosition += nLength;
             }
 
