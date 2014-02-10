@@ -425,6 +425,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     OUString aParaText;
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
