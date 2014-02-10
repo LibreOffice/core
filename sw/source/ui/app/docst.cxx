@@ -637,7 +637,7 @@ sal_uInt16 SwDocShell::Edit(
                         assigned" paragraph style, the outline level attribute and the list
                         style attribute of the new paragraph style have to be set to 0
                         respectively "".*/
-                    if( pColl->IsAssignedToListLevelOfOutlineStyle())
+                    if (pColl && pColl->IsAssignedToListLevelOfOutlineStyle())
                     {
                         SwNumRuleItem aItem(aEmptyOUStr);
                         pDStyle->GetCollection()->SetFmtAttr( aItem );
