@@ -49,7 +49,7 @@ const char* AppleRemoteDeviceName = "AppleIRController";
     
     // TODO : avoid such magics 
 #ifdef DEBUG
-    NSLog( @"setting 10.6 cookies" );
+    NSLog( @"Apple Remote: setting 10.6 cookies" );
 #endif
     // 10.6.x Snow Leopard
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlus]		forKey:@"33_31_30_21_20_2_"];

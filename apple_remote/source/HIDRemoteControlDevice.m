@@ -279,7 +279,7 @@ cleanup:
 	/*
 	if (previousRemainingCookieString) {
 		cookieString = [previousRemainingCookieString stringByAppendingString: cookieString];
-		NSLog(@"New cookie string is %@", cookieString);
+		NSLog( @"Apple Remote: New cookie string is %@", cookieString);
 		[previousRemainingCookieString release], previousRemainingCookieString=nil;
 	}*/
 	if (cookieString == nil || [cookieString length] == 0) return;
@@ -315,7 +315,7 @@ cleanup:
 			[self handleEventWithCookieString: lastSubCookieString sumOfValues:0];
 		}
 		if ([cookieString length] > 0) {
-			NSLog(@"Unknown button for cookiestring %@", cookieString);
+		        NSLog( @"Apple Remote: Unknown button for cookiestring %@", cookieString);
 		}
 	}
 }
@@ -339,7 +339,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
     (void)refcon;
     (void)sender;
 	if ((intptr_t)target < 0) {
-		NSLog(@"QueueCallbackFunction called with invalid target!");
+		NSLog( @"Apple Remote: QueueCallbackFunction called with invalid target!");
 		return;
 	}
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -381,7 +381,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 	ioReturnValue = IOObjectGetClass(hidDevice, className);
 
 	if (ioReturnValue != kIOReturnSuccess) {
-		NSLog(@"Error: Failed to get class name.");
+		NSLog( @"Apple Remote: Error: Failed to get RemoteControlDevice class name.");
 		return NULL;
 	}
 
@@ -396,7 +396,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 		plugInResult = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID), (LPVOID) &hidDeviceInterface);
 
 		if (plugInResult != S_OK) {
-			NSLog(@"Error: Couldn't create HID class device interface");
+			NSLog( @"Apple Remote: Error: Couldn't create HID class device interface");
 		}
 		// Release
 		if (plugInInterface) (*plugInInterface)->Release(plugInInterface);
@@ -489,13 +489,13 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 					(*queue)->start(queue);
 					return YES;
 				} else {
-					NSLog(@"Error when setting event callback");
+					NSLog( @"Apple Remote: Error when setting event callback");
 				}
 			} else {
-				NSLog(@"Error when creating async event source");
+				NSLog( @"Apple Remote: Error when creating async event source");
 			}
 		} else {
-			NSLog(@"Error when opening device");
+			NSLog( @"Apple Remote: Error when opening device");
 		}
 	} else if (ioReturnValue == kIOReturnExclusiveAccess) {
 		// the device is used exclusive by another application
