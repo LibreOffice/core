@@ -132,7 +132,10 @@ namespace framework
             // XUIConfigurationPersistence
             void reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
             void store() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-            void storeToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+            void storeToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage )
+                throw (::com::sun::star::uno::Exception,
+                       ::com::sun::star::uno::RuntimeException,
+                       std::exception);
             sal_Bool isModified() throw (::com::sun::star::uno::RuntimeException);
             sal_Bool isReadOnly() throw (::com::sun::star::uno::RuntimeException);
 

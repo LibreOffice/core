@@ -1323,7 +1323,9 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 }
 
 void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage )
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::Exception,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     ResetableGuard aGuard( m_aLock );
 
