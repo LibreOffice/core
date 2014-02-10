@@ -741,8 +741,11 @@ void SwGrfNode::ReleaseLink()
 {
     if( refLink.Is() )
     {
-        // erst die Grafik reinswappen!
-//      if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
+        // #15508# remember some stuff from the linked graphic
+        const String aFileName(maGrfObj.GetLink());
+        const Graphic aLocalGraphic(maGrfObj.GetGraphic());
+        const bool bHasOriginalData(aLocalGraphic.IsLink());
+
         {
             bInSwapIn = sal_True;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
@@ -750,9 +753,42 @@ void SwGrfNode::ReleaseLink()
             pLink->SwapIn( sal_True, sal_True );
             bInSwapIn = sal_False;
         }
+
         getIDocumentLinksAdministration()->GetLinkManager().Remove( refLink );
         refLink.Clear();
         maGrfObj.SetLink();
+
+        // #15508# added extra processing after getting rid of the link. Use whatever is
+        // known from the formally linked graphic to get to a state as close to a directly
+        // unlinked insterted graphic as possible. Goal is to have a valid GfxLink at the
+        // ImplGraphic (see there) that holds temporary data to the original data and type
+        // information about the original data. Only when this is given will
+        // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type
+        // and use the original graphic at export for the ODF, without evtl. recoding
+        // of trhe bitmap graphic data to something without loss (e.g. PNG) but bigger
+        if(bHasOriginalData)
+        {
+            // #15508# if we have the original data at the Graphic, let it survive
+            // by using that Graphic again, this time at a GraphicObject without link.
+            // This happens e.g. when inserting a linked graphic and breaking the link
+            maGrfObj.SetGraphic(aLocalGraphic);
+        }
+        else if(aFileName.Len())
+        {
+            // #15508# we have no original data, but a file name. This happens e.g.
+            // when inserting a linked graphic and save, reload document. Try to access
+            // that data from the original file; if this works, use it. Else use the
+            // data we have (but without knowing the original format)
+            int nRes = GRFILTER_OK;
+            GraphicFilter* pFlt = GraphicFilter::GetGraphicFilter();
+            Graphic aNew;
+            nRes = GraphicFilter::LoadGraphic( aFileName, String(), aNew, pFlt);
+
+            if(GRFILTER_OK == nRes)
+            {
+                maGrfObj.SetGraphic(aNew);
+            }
+        }
     }
 }
 
