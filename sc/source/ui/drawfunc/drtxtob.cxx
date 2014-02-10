@@ -668,16 +668,113 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
     SdrView*            pView = pViewData->GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
-    sal_uInt16              nSlot = rReq.GetSlot();
+    sal_uInt16          nSlot = rReq.GetSlot();
 
-    sal_Bool bArgsInReq = ( pArgs != NULL );
+    SfxItemSet aEditAttr( pView->GetModel()->GetItemPool() );
+    pView->GetAttributes( aEditAttr );
+    SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
+
+    bool bSet = true;
+    switch ( nSlot )
+    {
+        case SID_ALIGNLEFT:
+        case SID_ALIGN_ANY_LEFT:
+        case SID_ATTR_PARA_ADJUST_LEFT:
+            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            break;
+
+        case SID_ALIGNCENTERHOR:
+        case SID_ALIGN_ANY_HCENTER:
+        case SID_ATTR_PARA_ADJUST_CENTER:
+            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+            break;
+
+        case SID_ALIGNRIGHT:
+        case SID_ALIGN_ANY_RIGHT:
+        case SID_ATTR_PARA_ADJUST_RIGHT:
+            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            break;
+
+        case SID_ALIGNBLOCK:
+        case SID_ALIGN_ANY_JUSTIFIED:
+        case SID_ATTR_PARA_ADJUST_BLOCK:
+            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_10:
+            {
+                SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_LINE, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 100 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_15:
+            {
+                SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_POINT_FIVE_LINES, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 150 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_20:
+            {
+                SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 200 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_SET_SUPER_SCRIPT:
+            {
+                SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
+                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+
+                if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                else
+                    aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_SET_SUB_SCRIPT:
+            {
+                SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
+                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+
+                if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                else
+                    aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_TABLE_VERT_NONE:
+        case SID_TABLE_VERT_CENTER:
+        case SID_TABLE_VERT_BOTTOM:
+            {
+                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
+                if (nSlot == SID_TABLE_VERT_CENTER)
+                    eTVA = SDRTEXTVERTADJUST_CENTER;
+                else if (nSlot == SID_TABLE_VERT_BOTTOM)
+                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                aNewAttr.Put(SdrTextVertAdjustItem(eTVA));
+            }
+            break;
+
+        default:
+            bSet = false;
+    }
+
+    bool bDone = true;
+    bool bArgsInReq = ( pArgs != NULL );
+
     if ( !bArgsInReq )
     {
-        SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
-        pView->GetAttributes(aEditAttr);
-        SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-        sal_Bool        bDone = sal_True;
-
         switch ( nSlot )
         {
             case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
@@ -741,77 +838,6 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 aNewAttr.Put( (const SvxCrossedOutItem&)aEditAttr.Get( EE_CHAR_STRIKEOUT ) );
                 break;
 
-            case SID_ALIGNLEFT:
-            case SID_ALIGN_ANY_LEFT:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
-                break;
-
-            case SID_ALIGNCENTERHOR:
-            case SID_ALIGN_ANY_HCENTER:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-                break;
-
-            case SID_ALIGNRIGHT:
-            case SID_ALIGN_ANY_RIGHT:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-                break;
-
-            case SID_ALIGNBLOCK:
-            case SID_ALIGN_ANY_JUSTIFIED:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
-                break;
-
-            case SID_ATTR_PARA_LINESPACE_10:
-                {
-                    SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_LINE, EE_PARA_SBL );
-                    aItem.SetPropLineSpace( 100 );
-                    aNewAttr.Put( aItem );
-                }
-                break;
-
-            case SID_ATTR_PARA_LINESPACE_15:
-                {
-                    SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_POINT_FIVE_LINES, EE_PARA_SBL );
-                    aItem.SetPropLineSpace( 150 );
-                    aNewAttr.Put( aItem );
-                }
-                break;
-
-            case SID_ATTR_PARA_LINESPACE_20:
-                {
-                    SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
-                    aItem.SetPropLineSpace( 200 );
-                    aNewAttr.Put( aItem );
-                }
-                break;
-
-            case SID_SET_SUPER_SCRIPT:
-                {
-                    SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                    SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
-                                    aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-
-                    if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                        aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
-                    else
-                        aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
-                    aNewAttr.Put( aItem );
-                }
-                break;
-            case SID_SET_SUB_SCRIPT:
-                {
-                    SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                    SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
-                                    aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-
-                    if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                        aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
-                    else
-                        aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
-                    aNewAttr.Put( aItem );
-                }
-                break;
-
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -831,12 +857,12 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 }
                 break;
         }
+    }
 
-        if ( bDone ) // wurden Attribute geaendert?
-        {
-            rReq.Done( aNewAttr );
-            pArgs = rReq.GetArgs();
-        }
+    if ( bSet || bDone )
+    {
+        rReq.Done( aNewAttr );
+        pArgs = rReq.GetArgs();
     }
 
     if ( pArgs )
@@ -864,119 +890,34 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
             const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                 pArgs->Get( nId );
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            SfxItemSet aAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
             nId = EE_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                 rItem.GetRight(), rItem.GetTxtLeft(),
                 rItem.GetTxtFirstLineOfst(), nId );
-            aEditAttr.Put( aLRSpaceItem );
-//          rReq.Done( aEditAttr );
-//          pArgs = rReq.GetArgs();
-//          pView->SetAttributes( *pArgs );
-            pView->SetAttributes( aEditAttr );
-//          Invalidate(SID_ATTR_PARA_LRSPACE);
+            aAttr.Put( aLRSpaceItem );
+            pView->SetAttributes( aAttr );
         }
         else if( nSlot == SID_ATTR_PARA_LINESPACE )
         {
             SvxLineSpacingItem aLineSpaceItem = (const SvxLineSpacingItem&)pArgs->Get(
                                                                 GetPool().GetWhich(nSlot));
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
-            aEditAttr.Put( aLineSpaceItem );
-//          rReq.Done( aEditAttr );
-//          pArgs = rReq.GetArgs();
-//          pView->SetAttributes( *pArgs );
-            pView->SetAttributes( aEditAttr );
-//          Invalidate(SID_ATTR_PARA_LINESPACE);
+            SfxItemSet aAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
+            aAttr.Put( aLineSpaceItem );
+            pView->SetAttributes( aAttr );
         }
         else if( nSlot == SID_ATTR_PARA_ULSPACE )
         {
             SvxULSpaceItem aULSpaceItem = (const SvxULSpaceItem&)pArgs->Get(
                                                                 GetPool().GetWhich(nSlot));
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
+            SfxItemSet aAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
             aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
-            aEditAttr.Put( aULSpaceItem );
-//          rReq.Done( aEditAttr );
-//          pArgs = rReq.GetArgs();
-//          pView->SetAttributes( *pArgs );
-            pView->SetAttributes( aEditAttr );
-//          Invalidate(SID_ATTR_PARA_ULSPACE);
-        }
-        else if(nSlot ==  SID_SET_SUPER_SCRIPT )
-        {
-            SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
-            pView->GetAttributes(aEditAttr);
-            SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-
-            SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
-                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-
-            if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
-            else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
-            aNewAttr.Put( aItem );
-            pView->SetAttributes( aNewAttr );
-        }
-        else if( nSlot ==  SID_SET_SUB_SCRIPT )
-        {
-            SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
-            pView->GetAttributes(aEditAttr);
-            SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-
-            SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
-                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-
-            if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
-            else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
-            aNewAttr.Put( aItem );
-            pView->SetAttributes( aNewAttr );
-        }
-
-        else if (bArgsInReq &&
-            ( nSlot == SID_TABLE_VERT_NONE || nSlot == SID_TABLE_VERT_CENTER ||
-              nSlot == SID_TABLE_VERT_BOTTOM ) )
-        {
-            SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
-            if (nSlot == SID_TABLE_VERT_CENTER)
-                eTVA = SDRTEXTVERTADJUST_CENTER;
-            else if (nSlot == SID_TABLE_VERT_BOTTOM)
-                eTVA = SDRTEXTVERTADJUST_BOTTOM;
-
-            SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
-            SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-            aNewAttr.Put(SdrTextVertAdjustItem(eTVA));
-            pView->SetAttributes(aNewAttr);
-        }
-        else if (bArgsInReq &&
-            (nSlot == SID_ATTR_PARA_ADJUST_LEFT || nSlot == SID_ATTR_PARA_ADJUST_CENTER || nSlot == SID_ATTR_PARA_ADJUST_RIGHT || nSlot == SID_ATTR_PARA_ADJUST_BLOCK ))
-        {
-            SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
-            SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-            switch ( nSlot )
-            {
-            case SID_ATTR_PARA_ADJUST_LEFT:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
-                break;
-            case SID_ATTR_PARA_ADJUST_CENTER:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-                break;
-            case SID_ATTR_PARA_ADJUST_RIGHT:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-                break;
-            case SID_ATTR_PARA_ADJUST_BLOCK:
-                aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
-                break;
-            }
-            pView->SetAttributes(aNewAttr);
+            aAttr.Put( aULSpaceItem );
+            pView->SetAttributes( aAttr );
         }
         else
         {
             // use args directly
-
             pView->SetAttributes( *pArgs );
         }
         pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
