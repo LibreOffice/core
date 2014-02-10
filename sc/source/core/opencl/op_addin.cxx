@@ -49,7 +49,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurSVR0 =
-                dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+                static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
 #ifdef  ISNAN
             ss << "    if (gid0 < " << tmpCurSVR0->GetArrayLength() << ")\n";
             ss << "    {\n";
@@ -85,7 +85,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         if(tmpCur1->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurSVR1 =
-                dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
+                static_cast<const formula::SingleVectorRefToken *>(tmpCur1);
 #ifdef  ISNAN
             ss << "    if (gid0 < " << tmpCurSVR1->GetArrayLength() << ")\n";
             ss << "    {\n";

@@ -72,8 +72,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     size_t szHostBuffer = 0;
     if (ref->GetType() == formula::svSingleVectorRef) {
         const formula::SingleVectorRefToken* pSVR =
-            dynamic_cast< const formula::SingleVectorRefToken* >(ref);
-        assert(pSVR);
+            static_cast< const formula::SingleVectorRefToken* >(ref);
         pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
 #if 0
@@ -82,8 +81,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 #endif
     } else if (ref->GetType() == formula::svDoubleVectorRef) {
         const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
-        assert(pDVR);
+            static_cast< const formula::DoubleVectorRefToken* >(ref);
         pHostBuffer = const_cast<double*>(
                 pDVR->GetArrays()[mnIndex].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
@@ -371,14 +369,12 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
     size_t nStrings = 0;
     if (ref->GetType() == formula::svSingleVectorRef) {
         const formula::SingleVectorRefToken* pSVR =
-            dynamic_cast< const formula::SingleVectorRefToken* >(ref);
-        assert(pSVR);
+            static_cast< const formula::SingleVectorRefToken* >(ref);
         nStrings = pSVR->GetArrayLength();
         vRef = pSVR->GetArray();
     } else if (ref->GetType() == formula::svDoubleVectorRef) {
         const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
-        assert(pDVR);
+            static_cast< const formula::DoubleVectorRefToken* >(ref);
         nStrings = pDVR->GetArrayLength();
         vRef = pDVR->GetArrays()[mnIndex];
     }
@@ -495,8 +491,7 @@ public:
         FormulaToken *t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
             throw Unhandled();
-        mpDVR = dynamic_cast<const formula::DoubleVectorRefToken *>(t);
-        assert(mpDVR);
+        mpDVR = static_cast<const formula::DoubleVectorRefToken *>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
@@ -816,8 +811,7 @@ public:
         FormulaToken *t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
             throw Unhandled();
-        mpDVR = dynamic_cast<const formula::DoubleVectorRefToken *>(t);
-        assert(mpDVR);
+        mpDVR = static_cast<const formula::DoubleVectorRefToken *>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
@@ -1261,7 +1255,7 @@ public:
                 {
 #ifdef  ISNAN
                     const formula::SingleVectorRefToken* pSVR =
-                        dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+                        static_cast< const formula::SingleVectorRefToken* >(pCur);
                     ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
 #else
                     nItems += 1;
@@ -1373,7 +1367,7 @@ public:
             if (  ocPush==tmpCur->GetOpCode() )
             {
 
-                pCurDVR = dynamic_cast<
+                pCurDVR = static_cast<
                     const formula::DoubleVectorRefToken*>(tmpCur);
                 if ( !
                     ( (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
@@ -1394,7 +1388,7 @@ public:
             tmpCur = vSubArguments[i]->GetFormulaToken();
             if(ocPush==tmpCur->GetOpCode())
             {
-                pCurDVR= dynamic_cast<
+                pCurDVR= static_cast<
                     const formula::DoubleVectorRefToken *>(tmpCur);
                 if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                 {
@@ -1426,7 +1420,7 @@ public:
                      formula::svSingleVectorRef)
                 {
                     const formula::SingleVectorRefToken* pSVR =
-                    dynamic_cast< const formula::SingleVectorRefToken*>
+                    static_cast< const formula::SingleVectorRefToken*>
                          (vSubArguments[i]->GetFormulaToken());
                     ss<<pSVR->GetArrayLength();
                 }
@@ -1434,7 +1428,7 @@ public:
                           formula::svDoubleVectorRef)
                 {
                     const formula::DoubleVectorRefToken* pSVR =
-                    dynamic_cast< const formula::DoubleVectorRefToken*>
+                    static_cast< const formula::DoubleVectorRefToken*>
                           (vSubArguments[i]->GetFormulaToken());
                     ss<<pSVR->GetArrayLength();
                 }
@@ -1471,7 +1465,7 @@ public:
                         tmpCur = vSubArguments[i]->GetFormulaToken();
                         if(ocPush==tmpCur->GetOpCode())
                         {
-                            pCurDVR= dynamic_cast<
+                            pCurDVR= static_cast<
                                 const formula::DoubleVectorRefToken *>(tmpCur);
                             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                             {
@@ -1500,14 +1494,14 @@ public:
                             if(vSubArguments[i]->GetFormulaToken()->GetType() ==
                                     formula::svSingleVectorRef){
                                 const formula::SingleVectorRefToken* pSVR =
-                                    dynamic_cast< const formula::SingleVectorRefToken*>
+                                    static_cast< const formula::SingleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3<<pSVR->GetArrayLength();
                             }
                             else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
                                     formula::svDoubleVectorRef){
                                 const formula::DoubleVectorRefToken* pSVR =
-                                    dynamic_cast< const formula::DoubleVectorRefToken*>
+                                    static_cast< const formula::DoubleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3<<pSVR->GetArrayLength();
                             }
@@ -1537,7 +1531,7 @@ public:
                     tmpCur = vSubArguments[i]->GetFormulaToken();
                     if(ocPush==tmpCur->GetOpCode())
                     {
-                        pCurDVR= dynamic_cast<
+                        pCurDVR= static_cast<
                             const formula::DoubleVectorRefToken *>(tmpCur);
                         if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                         {
@@ -1569,7 +1563,7 @@ public:
                                 formula::svSingleVectorRef)
                         {
                             const formula::SingleVectorRefToken* pSVR =
-                                dynamic_cast< const formula::SingleVectorRefToken*>
+                                static_cast< const formula::SingleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4<<pSVR->GetArrayLength();
                         }
@@ -1577,7 +1571,7 @@ public:
                                 formula::svDoubleVectorRef)
                         {
                             const formula::DoubleVectorRefToken* pSVR =
-                                dynamic_cast< const formula::DoubleVectorRefToken*>
+                                static_cast< const formula::DoubleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4<<pSVR->GetArrayLength();
                         }
@@ -1782,14 +1776,10 @@ public:
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
             cl_int err;
-            DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
-                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *>
-                (mvSubArguments[0].get());
             cl_mem pClmem2;
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
-                assert(slidingArgPtr); (void) slidingArgPtr;
                 std::vector<cl_mem> vclmem;
                 for (SubArgumentsType::iterator it = mvSubArguments.begin(),
                         e= mvSubArguments.end(); it!=e; ++it)
@@ -1845,12 +1835,11 @@ public:
             cl_int err;
             DynamicKernelArgument *Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
-                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *> (Arg);
+                static_cast< DynamicKernelSlidingArgument<VectorRef> *> (Arg);
             mpClmem2 = NULL;
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
-                assert(slidingArgPtr);
                 size_t nInput = slidingArgPtr -> GetArrayLength();
                 size_t nCurWindowSize = slidingArgPtr -> GetWindowSize();
                 std::vector<SumIfsArgs> vclmem;
@@ -2060,7 +2049,7 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
     }
 
     const formula::DoubleVectorRefToken* pDVR =
-        dynamic_cast< const formula::DoubleVectorRefToken* >(
+        static_cast< const formula::DoubleVectorRefToken* >(
                 ft->GetFormulaToken());
     // Window being too small to justify a parallel reduction
     if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
@@ -2092,8 +2081,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 if (pChild->GetType() == formula::svDoubleVectorRef)
                 {
                     const formula::DoubleVectorRefToken* pDVR =
-                        dynamic_cast< const formula::DoubleVectorRefToken* >(pChild);
-                    assert(pDVR);
+                        static_cast< const formula::DoubleVectorRefToken* >(pChild);
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
                         if (pDVR->GetArrays()[j].mpNumericArray ||
@@ -2125,8 +2113,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     }
                 } else if (pChild->GetType() == formula::svSingleVectorRef) {
                     const formula::SingleVectorRefToken* pSVR =
-                        dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
-                    assert(pSVR);
+                        static_cast< const formula::SingleVectorRefToken* >(pChild);
                     if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric() &&
                         pSVR->GetArray().mpStringArray &&

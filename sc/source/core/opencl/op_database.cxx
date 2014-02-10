@@ -43,7 +43,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -53,7 +53,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -71,7 +71,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -86,9 +86,9 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -173,7 +173,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -183,7 +183,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -201,7 +201,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -216,9 +216,9 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -304,7 +304,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -314,7 +314,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -332,7 +332,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -347,9 +347,9 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -434,7 +434,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -444,7 +444,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -462,7 +462,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -477,9 +477,9 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -569,7 +569,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -579,7 +579,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -597,7 +597,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -612,9 +612,9 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -754,7 +754,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -764,7 +764,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -782,7 +782,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -797,9 +797,9 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -937,7 +937,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -947,7 +947,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -965,7 +965,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -980,9 +980,9 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -1069,7 +1069,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -1079,7 +1079,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -1097,7 +1097,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -1112,9 +1112,9 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -1254,7 +1254,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -1264,7 +1264,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[dataCol]->
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -1282,7 +1282,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -1297,9 +1297,9 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -1437,7 +1437,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -1447,7 +1447,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-        const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+        const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
             formula::SingleVectorRefToken *>(vSubArguments[dataCol]
             ->GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -1465,7 +1465,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]
             ->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -1480,9 +1480,9 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]
             ->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&
@@ -1568,7 +1568,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         formula::FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         dataCol = pCurDVR1->GetArrays().size();
         dataRow = pCurDVR1->GetArrayLength();
@@ -1578,7 +1578,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-        const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+        const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
             formula::SingleVectorRefToken *>(vSubArguments[dataCol]
             ->GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
@@ -1596,7 +1596,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     {
         formula::FormulaToken *tmpCur = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         conditionCol = pCurDVR2->GetArrays().size();
         conditionRow = pCurDVR2->GetArrayLength();
@@ -1611,9 +1611,9 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
         formula::FormulaToken *tmpCur2 = vSubArguments[dataCol + 1]->
             GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR1= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur1);
-        const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur2);
 
         if(pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed() &&

@@ -41,7 +41,7 @@ void OpSumX2MY2::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
@@ -98,7 +98,7 @@ void OpSumX2PY2::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
@@ -154,7 +154,7 @@ void OpSumXMY2::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():

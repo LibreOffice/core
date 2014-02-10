@@ -47,7 +47,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         secondParaWidth = pCurDVR->GetArrays().size();
     }
@@ -68,7 +68,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
-        const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
             formula::DoubleVectorRefToken *>(tmpCur);
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():

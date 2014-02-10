@@ -136,7 +136,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
      if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
-         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         const formula::SingleVectorRefToken*pTmpDVR1= static_cast<const
          formula::SingleVectorRefToken *>(vSubArguments[i]->GetFormulaToken());
          ss<< "    if(singleIndex>=";
          ss<< pTmpDVR1->GetArrayLength();
@@ -145,7 +145,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
      if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svDoubleVectorRef)
      {
-         const formula::DoubleVectorRefToken*pTmpDVR2= dynamic_cast<const
+         const formula::DoubleVectorRefToken*pTmpDVR2= static_cast<const
          formula::DoubleVectorRefToken *>(vSubArguments[i]->GetFormulaToken());
          ss<< "    if(doubleIndex>=";
          ss<< pTmpDVR2->GetArrayLength();
