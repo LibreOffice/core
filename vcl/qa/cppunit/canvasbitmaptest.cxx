@@ -412,7 +412,9 @@ private:
         return rendering::RenderingIntent::PERCEPTUAL;
     }
 
-    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties()
+        throw (uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("getProperties: method not implemented", false );
         return uno::Sequence< ::beans::PropertyValue >();
