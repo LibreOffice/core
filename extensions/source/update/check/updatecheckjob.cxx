@@ -68,7 +68,11 @@ class UpdateCheckJob :
 
 public:
 
-    UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext);
+    UpdateCheckJob(
+        css::uno::Reference<css::uno::XComponentContext> const & context,
+        css::uno::Reference<css::frame::XDesktop2> const & desktop):
+        m_xContext(context), m_xDesktop(desktop)
+    {}
 
     static uno::Sequence< OUString > getServiceNames();
     static OUString getImplName();
@@ -149,19 +153,6 @@ void InitUpdateCheckJobThread::setTerminating() {
     m_bTerminating = true;
     m_aCondition.set();
 }
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) :
-    m_xContext(xContext)
-{
-    m_xDesktop.set( frame::Desktop::create(xContext) );
-    m_xDesktop->addTerminateListener( this );
-}
-
-//------------------------------------------------------------------------------
 
 UpdateCheckJob::~UpdateCheckJob()
 {
@@ -330,7 +321,11 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
 static uno::Reference<uno::XInterface> SAL_CALL
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
-    return *new UpdateCheckJob(xContext);
+    css::uno::Reference<css::frame::XDesktop2> desktop(
+        css::frame::Desktop::create(xContext));
+    rtl::Reference<UpdateCheckJob> job(new UpdateCheckJob(xContext, desktop));
+    desktop->addTerminateListener(job.get());
+    return static_cast<cppu::OWeakObject *>(job.get());
 }
 
 //------------------------------------------------------------------------------
