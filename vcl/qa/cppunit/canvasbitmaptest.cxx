@@ -455,8 +455,10 @@ private:
         return uno::Sequence< double >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
-                                                                                                                    uno::RuntimeException)
+    virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& )
+        throw (lang::IllegalArgumentException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromARGB: this method is not expected to be called!", false);
         return uno::Sequence< double >();
