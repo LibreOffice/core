@@ -2229,10 +2229,15 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
                 }
             }
 
-            if ( !xGlobalAccelCfg.is() )
+            if ( !xGlobalAccelCfg.is() ) try
             {
                 xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
+            }
+            catch ( const css::uno::DeploymentException& )
+            {
+                SAL_WARN("fwk.uielement", "GlobalAcceleratorConfiguration"
+                        " not available. This should happen only on mobile platforms.");
             }
         }
 

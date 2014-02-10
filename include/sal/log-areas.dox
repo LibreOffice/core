@@ -197,6 +197,7 @@ certain functionality.
 @li @c fwk.joburl
 @li @c fwk.loadenv
 @li @c fwk.session
+@li @c fwk.uiconfiguration
 @li @c fwk.uielement
 
 @section i18nlangtag

@@ -1178,9 +1178,16 @@ Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShort
     // SAFE ->
     ResetableGuard aGuard( m_aLock );
 
-    if (!m_xAccConfig.is())
+    if (!m_xAccConfig.is()) try
+    {
         m_xAccConfig = DocumentAcceleratorConfiguration::
             createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
+    }
+    catch ( const css::uno::DeploymentException& )
+    {
+        SAL_WARN("fwk.uiconfiguration", "DocumentAcceleratorConfiguration"
+                " not available. This should happen only on mobile platforms.");
+    }
 
     return m_xAccConfig;
 }
