@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_ShapeParagraph \
     chart2/source/controller/dialogs/dlg_View3D \
     chart2/source/controller/dialogs/ObjectNameProvider \
-    chart2/source/controller/dialogs/RangeSelectionButton \
     chart2/source/controller/dialogs/RangeSelectionHelper \
     chart2/source/controller/dialogs/RangeSelectionListener \
     chart2/source/controller/dialogs/res_BarGeometry \

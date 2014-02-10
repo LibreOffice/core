@@ -179,16 +179,6 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId( void ) throw( ::com::sun::star::uno::RuntimeException );
 
-
-
-
-public:
-
-    /// Sets the name
-    void setName( const ::rtl::OUString& rName );
-
-    /// Sets the description
-    void setDescription( const ::rtl::OUString& rDescr );
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:

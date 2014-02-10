@@ -804,20 +804,6 @@ public:
 };
 
 /*************************************************************************
- * class SwDefFontSave
- *************************************************************************/
-
-class SwDefFontSave
-{
-    SwTxtSizeInfo *pInf;
-    SwFont        *pFnt;
-    SwFont        *pNewFnt;
-public:
-    SwDefFontSave( const SwTxtSizeInfo &rInf );
-   ~SwDefFontSave();
-};
-
-/*************************************************************************
  * Inline implementations of SwTxtSizeInfo
  *************************************************************************/
 inline KSHORT SwTxtSizeInfo::GetAscent() const

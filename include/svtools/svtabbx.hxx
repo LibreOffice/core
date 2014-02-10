@@ -140,7 +140,6 @@ private:
 
 public:
     SvHeaderTabListBox( Window* pParent, WinBits nBits );
-    SvHeaderTabListBox( Window* pParent, const ResId& );
     ~SvHeaderTabListBox();
 
     virtual void    Paint( const Rectangle& );

@@ -242,14 +242,6 @@ void LegendPositionResources::SetChangeHdl( const Link& rLink )
     m_aChangeLink = rLink;
 }
 
-void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
-{
-    m_pRbtLeft->SetAccessibleRelationMemberOf(pMemberOf);
-    m_pRbtRight->SetAccessibleRelationMemberOf(pMemberOf);
-    m_pRbtTop->SetAccessibleRelationMemberOf(pMemberOf);
-    m_pRbtBottom->SetAccessibleRelationMemberOf(pMemberOf);
-}
-
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

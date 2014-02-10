@@ -164,26 +164,6 @@ SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUStri
 
 // -----------------------------------------------------------------------
 
-SfxModalDialog::SfxModalDialog(Window* pParent,
-                               sal_uInt32 nUniqueId,
-                               WinBits nWinStyle) :
-/*  [Description]
-
-    Constructor of the general base class for modal Dialoge;
-    The ID for the ini-file wird explicilty handed over.
-    The saved position from there is set.
-*/
-
-    ModalDialog(pParent, nWinStyle),
-    nUniqId(nUniqueId),
-    pInputSet(0),
-    pOutputSet(0)
-{
-    init();
-}
-
-// -----------------------------------------------------------------------
-
 SfxModalDialog::~SfxModalDialog()
 
 /*  [Description]

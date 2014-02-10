@@ -66,24 +66,6 @@ Bitmap& SvxRectCtl::GetRectBitmap( void )
     return *pBitmap;
 }
 
-SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
-                        sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle ) :
-
-    Control( pParent, rResId ),
-
-    pAccContext ( NULL ),
-    nBorderWidth( nBorder ),
-    nRadius     ( nCircle),
-    eDefRP      ( eRpt ),
-    eCS         ( eStyle ),
-    pBitmap     ( NULL ),
-    m_nState    ( 0 ),
-    mbCompleteDisable(sal_False)
-{
-    SetMapMode( MAP_100TH_MM );
-    Resize_Impl();
-}
-
 SvxRectCtl::SvxRectCtl(Window* pParent, RECT_POINT eRpt,
     sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)

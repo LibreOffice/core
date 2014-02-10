@@ -22,11 +22,6 @@
 
 namespace svx {
 
-WrapField::WrapField( Window* pParent, const ResId& rResId ) :
-    NumericField( pParent, rResId )
-{
-}
-
 WrapField::WrapField( Window* pParent, WinBits nBits ) :
     NumericField( pParent, nBits )
 {

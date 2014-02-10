@@ -59,11 +59,6 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
     }
 }
 
-void CellLineStyleValueSet::SetImage(Image img)
-{
-    imgCus = img;
-}
-
 void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();

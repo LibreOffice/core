@@ -595,14 +595,5 @@ Image BMP_REGRESSION_MOVING_AVERAGE
         File = "regavg.png" ;
     };
 };
-//---------------------
-Image IMG_SELECTRANGE
-{
-    ImageBitmap = Bitmap
-    {
-        File = "selectrange.png";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -15,7 +15,6 @@
 #include <vcl/layout.hxx>
 #include "svtools/treelistbox.hxx"
 
-#include "expftext.hxx"
 #include "anyrefdg.hxx"
 #include "orcusxml.hxx"
 

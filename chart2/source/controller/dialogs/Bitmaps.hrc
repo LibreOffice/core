@@ -218,9 +218,6 @@
 #define BMP_REGRESSION_POLYNOMIAL       (RID_APP_START + 110)
 #define BMP_REGRESSION_MOVING_AVERAGE   (RID_APP_START + 111)
 
-// hide-button for range-choosing
-#define IMG_SELECTRANGE (RID_APP_START + 100)
-
 // CHART_BITMAPS_HRC
 #endif
 

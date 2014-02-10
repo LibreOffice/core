@@ -52,11 +52,6 @@ using namespace ::com::sun::star::resource;
 // ==============
 //
 
-ExtTreeListBox::ExtTreeListBox(Window* pParent, ResId const& rRes)
-    : TreeListBox(pParent, rRes)
-{
-}
-
 ExtTreeListBox::ExtTreeListBox(Window* pParent, WinBits nStyle)
     : TreeListBox(pParent, nStyle)
 {

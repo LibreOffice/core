@@ -332,18 +332,6 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
     }
 }
 
-FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
-    :SpinField(pParent, rResId)
-    ,INIT_MEMBERS()
-{
-    DBG_CTOR(FormattedField, NULL);
-
-    if (pInitialFormatter)
-    {
-        m_pFormatter = pInitialFormatter;
-        m_nFormatKey = nFormatKey;
-    }
-}
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormattedField(Window *pParent, VclBuilder::stringmap &)
 {
     WinBits nWinBits = WB_BORDER;

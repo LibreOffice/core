@@ -32,14 +32,12 @@ private:
     VirtualDevice*  pVDev;
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
-    Image           imgCus;
 public:
     CellLineStyleValueSet( Window* pParent, const ResId& rResId);
     virtual ~CellLineStyleValueSet();
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
-    void SetImage(Image img);
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 };
 

@@ -29,7 +29,6 @@
 #include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
 #include "dbdata.hxx"
-#include "expftext.hxx"
 
 class ScViewData;
 class ScDocument;

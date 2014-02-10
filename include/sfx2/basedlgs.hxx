@@ -70,7 +70,6 @@ private:
 protected:
     SfxModalDialog(Window *pParent, const ResId& );
     SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
-    SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
     OUString&           GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }

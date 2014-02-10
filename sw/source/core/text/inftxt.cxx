@@ -1796,56 +1796,6 @@ SwFontSave::~SwFontSave()
     }
 }
 
-SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
-        : pFnt( ((SwTxtSizeInfo&)rInf).GetFont()  )
-{
-    const bool bTmpAlter = pFnt->GetFixKerning() ||
-         ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
-        ;
-
-    const bool bFamily = bTmpAlter &&
-          pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
-    const bool bRotation = pFnt->GetOrientation() &&
-                                ! rInf.GetTxtFrm()->IsVertical();
-
-    if( bFamily || bRotation )
-    {
-        pNewFnt = new SwFont( *pFnt );
-
-        if ( bFamily )
-        {
-            pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-            pNewFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
-            pNewFnt->SetStyleName( aEmptyOUStr, pFnt->GetActual() );
-            pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
-            pNewFnt->SetFixKerning( 0 );
-        }
-
-        if ( bRotation )
-            pNewFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
-
-        pInf = &((SwTxtSizeInfo&)rInf);
-        pNewFnt->Invalidate();
-        pInf->SetFont( pNewFnt );
-    }
-    else
-    {
-        pFnt = 0;
-        pNewFnt = 0;
-    }
-}
-
-SwDefFontSave::~SwDefFontSave()
-{
-    if( pFnt )
-    {
-        delete pNewFnt;
-        // Reset SwFont
-        pFnt->Invalidate();
-        pInf->SetFont( pFnt );
-    }
-}
-
 bool SwTxtFormatInfo::ChgHyph( const bool bNew )
 {
     const bool bOld = bAutoHyph;
@@ -1859,6 +1809,5 @@ bool SwTxtFormatInfo::ChgHyph( const bool bNew )
     }
     return bOld;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

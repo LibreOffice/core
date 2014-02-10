@@ -27,7 +27,6 @@
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include "chartview/ChartSfxItemIds.hxx"
-#include "RangeSelectionButton.hxx"
 #include "RangeSelectionListener.hxx"
 
 
@@ -128,7 +127,7 @@ private:
     DECL_LINK( SynchronizePosAndNeg, void * );
     DECL_LINK( PosValueChanged, void * );
     DECL_LINK( IndicatorChanged, void * );
-    DECL_LINK( ChooseRange, RangeSelectionButton * );
+    DECL_LINK( ChooseRange, PushButton * );
     DECL_LINK( RangeChanged, Edit * );
 
     void UpdateControlStates();

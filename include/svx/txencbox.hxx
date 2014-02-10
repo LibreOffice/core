@@ -33,9 +33,8 @@ private:
     SVX_DLLPRIVATE sal_uInt16               EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
-                        SvxTextEncodingBox( Window* pParent, const ResId& rResId );
-                        SvxTextEncodingBox( Window* pParent, WinBits nBits );
-                        ~SvxTextEncodingBox();
+    SvxTextEncodingBox( Window* pParent, WinBits nBits );
+    ~SvxTextEncodingBox();
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h

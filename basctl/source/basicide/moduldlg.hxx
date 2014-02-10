@@ -111,7 +111,6 @@ protected:
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
-    ExtTreeListBox(Window* pParent, const ResId& rRes);
     ExtTreeListBox(Window* pParent, WinBits nStyle);
     ~ExtTreeListBox();
 };

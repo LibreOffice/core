@@ -289,9 +289,6 @@ public:
     virtual void setDocAccTitle( const OUString& rTitle );
     virtual const OUString getDocAccTitle() const;
 
-    void setDocReadOnly( bool bReadOnly);
-    bool getDocReadOnly() const;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 

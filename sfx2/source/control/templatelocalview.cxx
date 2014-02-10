@@ -32,12 +32,6 @@ using namespace ::com::sun::star::frame;
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem);
 
-TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
-    : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
-      mpDocTemplates(new SfxDocumentTemplates)
-{
-}
-
 TemplateLocalView::TemplateLocalView ( Window* pParent)
     : TemplateAbstractView(pParent),
       mpDocTemplates(new SfxDocumentTemplates)

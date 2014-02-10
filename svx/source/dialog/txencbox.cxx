@@ -35,13 +35,6 @@
 //  class SvxTextEncodingBox
 //========================================================================
 
-SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, const ResId& rResId )
-    :
-    ListBox( pParent, rResId )
-{
-    m_pEncTable = new SvxTextEncodingTable;
-}
-
 SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )
 {

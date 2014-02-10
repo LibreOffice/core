@@ -70,7 +70,6 @@
 
 #define STR_BAR_GEOMETRY                     (RID_APP_START + 127)
 #define STR_NUMBER_OF_LINES                  (RID_APP_START + 128)
-#define STR_TIP_SELECT_RANGE                 (RID_APP_START + 196)
 
 #define STR_3DSCHEME_SIMPLE                  (RID_APP_START + 231)
 #define STR_3DSCHEME_REALISTIC               (RID_APP_START + 232)

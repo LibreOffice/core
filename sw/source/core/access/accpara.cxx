@@ -781,44 +781,6 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
         // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
         const sal_uInt16 nWordType = i18n::WordType::ANY_WORD;
 
-/*
-        // get word boundary, as the Break-Iterator sees fit.
-        sal_Unicode SpaceChar(' ');
-        if (rText.getCodePointAt(nPos) == SpaceChar)
-        {
-            int nStartPos = nPos;
-            int nEndPos = nPos+1;
-            while (nStartPos >= 0 && rText.getCodePointAt(nStartPos) == SpaceChar)
-                --nStartPos;
-            while (nEndPos < rText.getLength() && rText.getCodePointAt(nEndPos) == SpaceChar)
-                ++nEndPos;
-            //Get the previous word boundary + the followed space characters
-            if (nStartPos >= 0)
-            {
-                rBound = pBreakIt->xBreak->getWordBoundary( rText, nStartPos, aLocale, nWordType, sal_True );
-                rBound.endPos += (nEndPos-nStartPos - 1);
-            }
-            //When the frontal characters are whitespace, return the all space characters directly.
-            else
-            {
-                rBound.startPos = 0;
-                rBound.endPos = nEndPos;
-            }
-        }
-        // add the " " into the word boundry
-        else
-        {
-            rBound = pBreakIt->xBreak->getWordBoundary(rText, nPos, aLocale, nWordType, sal_True );
-            sal_Int32 nEndPos = rBound.endPos, nLength = rText.getLength();
-            while ( nEndPos < nLength && rText.getCodePointAt(nEndPos) == SpaceChar )
-                nEndPos++;
-            rBound.endPos = nEndPos;
-        }
-        tabCharInWord( nPos, rBound);
-        if( GetPortionData().FillBoundaryIFDateField( rBound,  rBound.startPos) )
-            return sal_True;
-        return sal_True; // MT: So why do we need the return TRUE above???
-*/
         // get word boundary, as the Break-Iterator sees fit.
         rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
             rText, nPos, aLocale, nWordType, sal_True );
@@ -4144,28 +4106,6 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
     Ret <<= strHeading;
 
     return Ret;
-}
-
-//Tab will be return when call WORDTYPE
-sal_Bool SwAccessibleParagraph::tabCharInWord( sal_Int32 nIndex, i18n::Boundary& aBound)
-{
-    sal_Bool bFind =  sal_False;
-    if( aBound.startPos != nIndex)
-    {
-        OUString tabStr;
-        if(aBound.startPos>nIndex)
-            tabStr = GetString().copy(nIndex,(aBound.startPos - nIndex) );
-
-        sal_Unicode tabChar('\t');
-        sal_Int32 tabIndex = tabStr.indexOf(tabChar);
-        if( tabIndex > -1 )
-        {
-            aBound.startPos = nIndex + tabIndex ;
-            aBound.endPos = aBound.startPos + 1;
-            bFind = sal_True;
-        }
-    }
-    return bFind;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -439,7 +439,6 @@ public:
     sal_Int32 GetRealHeadingLevel();
     // XAccessibleComponent
     sal_Bool m_bLastHasSelection;
-    sal_Bool tabCharInWord(sal_Int32 nIndex, com::sun::star::i18n::Boundary&  aBound);
 
     // #i89175#
     // XAccessibleMultiLineText

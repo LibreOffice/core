@@ -430,7 +430,7 @@ IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged)
     return 0;
 }
 
-IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
+IMPL_LINK( ErrorBarResources, ChooseRange, PushButton*, pButton )
 {
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())

@@ -528,18 +528,6 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, const ResId& rResId ) :
-
-    SvTabListBox( pParent, rResId ),
-
-    m_bFirstPaint   ( sal_True ),
-    m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
-{
-}
-
-// -----------------------------------------------------------------------
-
 SvHeaderTabListBox::~SvHeaderTabListBox()
 {
     delete m_pImpl;

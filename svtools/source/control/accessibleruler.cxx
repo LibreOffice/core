@@ -385,22 +385,6 @@ Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId( void ) th
     return getUniqueId();
 }
 
-//=====  internals ========================================================
-void SvtRulerAccessible::setName( const OUString& rName )
-{
-        msName = rName;
-
-}
-
-void SvtRulerAccessible::setDescription( const OUString& rDescr )
-{
-
-        msDescription = rDescr;
-
-}
-
-
-
 void SAL_CALL SvtRulerAccessible::disposing()
 {
     if( !rBHelper.bDisposed )

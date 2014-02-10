@@ -505,21 +505,7 @@ void VCLXAccessibleList::UpdateSelection (OUString sTextOfSelectedItem)
         }
     }
 }
-// -----------------------------------------------------------------------------
 
-void VCLXAccessibleList::adjustEntriesIndexInParent(ListItems::iterator& _aBegin,::std::mem_fun_t<bool,VCLXAccessibleListItem>& _rMemFun)
-{
-    ListItems::iterator aIter = _aBegin;
-    ListItems::iterator aEnd = m_aAccessibleChildren.end();
-    // adjust the index inside the VCLXAccessibleListItem
-    for (;aIter != aEnd ; ++aIter)
-    {
-        Reference< XAccessible > xHold = *aIter;
-        VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xHold.get());
-        if ( pItem )
-            _rMemFun(pItem);
-    }
-}
 // -----------------------------------------------------------------------------
 
 Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)

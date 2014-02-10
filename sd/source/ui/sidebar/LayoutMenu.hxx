@@ -85,10 +85,6 @@ public:
     */
     AutoLayout GetSelectedAutoLayout (void);
 
-    Size GetPreferredSize (void);
-    sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
-    sal_Int32 GetMinimumWidth (void);
-
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
 

@@ -27,21 +27,6 @@
 namespace chart
 {
 
-TextDirectionListBox::TextDirectionListBox( Window* pParent, const ResId& rResId, Window* pWindow1, Window* pWindow2 ) :
-    svx::FrameDirectionListBox( pParent, rResId )
-{
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), FRMDIR_HORI_LEFT_TOP );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_RTL ), FRMDIR_HORI_RIGHT_TOP );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_SUPER ), FRMDIR_ENVIRONMENT );
-
-    if( !SvtLanguageOptions().IsCTLFontEnabled() )
-    {
-        Hide();
-        if( pWindow1 ) pWindow1->Hide();
-        if( pWindow2 ) pWindow2->Hide();
-    }
-}
-
 TextDirectionListBox::TextDirectionListBox( Window* pParent, Window* pWindow1, Window* pWindow2 ) :
     svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
 {

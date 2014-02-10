@@ -265,13 +265,6 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 
 // ============================================================================
 
-DialControl::DialControl( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    mpImpl( new DialControl_Impl( *this ) )
-{
-    Init( GetOutputSizePixel() );
-}
-
 DialControl::DialControl( Window* pParent, WinBits nBits ) :
     Control( pParent, nBits ),
      mpImpl( new DialControl_Impl( *this ) )

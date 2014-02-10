@@ -251,48 +251,6 @@ AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
     return aResult;
 }
 
-
-
-
-/** The preferred size depends on the preferred number of columns, the
-    number of items, and the size of the items.
-*/
-Size LayoutMenu::GetPreferredSize (void)
-{
-    Size aItemSize = CalcItemSizePixel (Size());
-    Size aPreferredWindowSize = CalcWindowSizePixel (
-        aItemSize,
-         (sal_uInt16)mnPreferredColumnCount,
-        (sal_uInt16)CalculateRowCount (aItemSize,mnPreferredColumnCount));
-    return aPreferredWindowSize;
-}
-
-
-
-
-sal_Int32 LayoutMenu::GetPreferredWidth (sal_Int32 nHeight)
-{
-    sal_Int32 nPreferredWidth = 100;
-    if (GetItemCount() > 0)
-    {
-        Image aImage = GetItemImage(GetItemId(0));
-        Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());
-        if (nHeight>0 && aItemSize.Height()>0)
-        {
-            int nRowCount = nHeight / aItemSize.Height();
-            if (nRowCount <= 0)
-                nRowCount = 1;
-            int nColumnCount = (GetItemCount() + nRowCount-1) / nRowCount;
-            nPreferredWidth = nColumnCount * aItemSize.Width();
-        }
-    }
-
-    return nPreferredWidth;
-}
-
-
-
-
 ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
 {
     sal_Int32 nPreferredHeight = 200;
@@ -314,21 +272,6 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
         }
     }
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
-}
-
-
-
-
-sal_Int32 LayoutMenu::GetMinimumWidth (void)
-{
-    sal_Int32 nMinimumWidth = 0;
-    if (GetItemCount()>0)
-    {
-        Image aImage = GetItemImage(GetItemId(0));
-        Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());
-        nMinimumWidth = aItemSize.Width();
-    }
-    return nMinimumWidth;
 }
 
 

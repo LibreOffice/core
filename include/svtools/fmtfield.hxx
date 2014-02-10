@@ -95,7 +95,6 @@ protected:
 
 public:
     FormattedField(Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
-    FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
     virtual ~FormattedField();
 
     // Min-/Max-Verwaltung
@@ -274,12 +273,6 @@ public:
         ResetConformanceTester();
     }
 
-    DoubleNumericField(Window* pParent, const ResId& rResId)
-        :FormattedField(pParent, rResId)
-        ,m_pNumberValidator( NULL )
-    {
-        ResetConformanceTester();
-    }
     virtual ~DoubleNumericField();
 
 protected:

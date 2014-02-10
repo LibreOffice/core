@@ -1224,24 +1224,6 @@ const OUString SwDocShell::getDocAccTitle() const
     return sRet;
 }
 
-void SwDocShell::setDocReadOnly(bool bReadOnly)
-{
-    if (pDoc)
-    {
-        pDoc->setDocReadOnly( bReadOnly );
-    }
-}
-
-bool SwDocShell::getDocReadOnly() const
-{
-    if (pDoc)
-    {
-        return pDoc->getDocReadOnly();
-    }
-
-    return false;
-}
-
 static const char* s_EventNames[] =
 {
     "OnPageCountChange",

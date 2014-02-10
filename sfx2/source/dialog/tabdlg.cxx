@@ -388,16 +388,6 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
     return dynamic_cast<SfxTabDialog*>(GetParentDialog());
 }
 
-#define INI_LIST(ItemSetPtr) \
-      pSet(ItemSetPtr) \
-    , pOutSet(0) \
-    , pRanges(0) \
-    , nResId(rResId.GetId()) \
-    , nAppPageId(USHRT_MAX) \
-    , bItemsReset(sal_False) \
-    , bFmt(bEditFmt)\
-    , pExampleSet(0)
-
 // -----------------------------------------------------------------------
 
 SfxTabDialog::SfxTabDialog
@@ -425,31 +415,6 @@ SfxTabDialog::SfxTabDialog
 }
 
 // -----------------------------------------------------------------------
-
-SfxTabDialog::SfxTabDialog
-
-/*  [Description]
-
-    Constructor, temporary without Frame
-*/
-
-(
-    Window* pParent,              // Parent Window
-    const ResId& rResId,            // ResourceId
-    const SfxItemSet* pItemSet,   // Itemset with the data;
-                                  // can be NULL, when Pages are onDemand
-    sal_Bool bEditFmt,                // Flag: templates are processed
-                                  // when yes -> additional Button for standard
-    const OUString* pUserButtonText // Text for UserButton;
-                                  // if != 0, the UserButton is created
-)
-    : TabDialog(pParent, rResId)
-    , pFrame(0)
-    , INI_LIST(pItemSet)
-{
-    Init_Impl( bFmt, pUserButtonText, &rResId );
-    DBG_WARNING( "Please use the Construtor with the ViewFrame" );
-}
 
 SfxTabDialog::SfxTabDialog
 
@@ -745,11 +710,6 @@ void SfxTabDialog::Start_Impl()
 
     m_pTabCtrl->SetCurPageId( nActPage );
     ActivatePageHdl( m_pTabCtrl );
-}
-
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, sal_Bool bItemsOnDemand )
-{
-    AddTabPage( nId, 0, 0, bItemsOnDemand );
 }
 
 void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, sal_Bool bItemsOnDemand, sal_uInt16 nPos )

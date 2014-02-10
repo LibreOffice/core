@@ -31,7 +31,6 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/field.hxx>
-#include "expftext.hxx"
 
 class ScViewData;
 class ScDocument;

@@ -99,8 +99,6 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt = RP_MM,
-                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     SvxRectCtl( Window* pParent, RECT_POINT eRpt = RP_MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,

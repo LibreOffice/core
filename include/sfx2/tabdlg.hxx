@@ -135,10 +135,6 @@ public:
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
                   const OString& rID, const OUString& rUIXMLDescription,
                   const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
-
-
-    SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
-                  sal_Bool bEditFmt = sal_False, const OUString *pUserButtonText = 0 );
     ~SfxTabDialog();
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
@@ -168,8 +164,6 @@ public:
                                     sal_Bool bItemsOnDemand = sal_False,
                                     sal_uInt16 nPos = TAB_APPEND);
 
-    void                AddTabPage( sal_uInt16 nId,
-                                    sal_Bool bItemsOnDemand = sal_False);
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
                                     sal_Bool bItemsOnDemand = sal_False,

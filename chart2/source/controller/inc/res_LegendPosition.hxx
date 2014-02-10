@@ -53,8 +53,6 @@ public:
     DECL_LINK( PositionEnableHdl, void* );
     DECL_LINK( PositionChangeHdl, RadioButton* );
 
-    void SetAccessibleRelationMemberOf(Window* pMemberOf);
-
 private:
     void impl_setRadioButtonToggleHdl();
 
