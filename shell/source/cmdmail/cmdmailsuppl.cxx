@@ -301,7 +301,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
     OString cmd = aBuffer.makeStringAndClear();
-    if ( 0 != pclose(popen(cmd.getStr(), "w")) )
+    FILE * f = popen(cmd.getStr(), "w");
+    if (f == 0 || pclose(f) != 0)
     {
         throw ::com::sun::star::uno::Exception("No mail client configured",
             static_cast < XSimpleMailClient * > (this) );
