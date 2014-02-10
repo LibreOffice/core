@@ -1700,6 +1700,8 @@ ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
 OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
 throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
     ScDocument* pScDoc = mpViewShell->GetDocument();
     if (!pScDoc)

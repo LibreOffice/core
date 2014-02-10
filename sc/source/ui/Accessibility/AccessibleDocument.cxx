@@ -1868,6 +1868,8 @@ OUString SAL_CALL
     ScAccessibleDocument::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
     ScDocument* pScDoc = GetDocument();
     if (!pScDoc)
@@ -2389,6 +2391,7 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
 uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
 
     uno::Any anyAtrribute;
 
@@ -2465,6 +2468,8 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
         SAL_CALL ScAccessibleDocument::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     const sal_Int32 SPELLCHECKFLOWTO = 1;
     const sal_Int32 FINDREPLACEFLOWTO = 2;
     if ( nType == SPELLCHECKFLOWTO )
