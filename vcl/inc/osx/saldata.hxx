@@ -89,7 +89,7 @@ public:
 
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    MainController*                               mpMainController;         // Apple Remote
+    AppleRemoteMainController*                    mpAppleRemoteMainController;
 #endif
     NSObject*                                     mpDockIconClickHandler;
     long                                          mnDPIX;           // #i100617# read DPI only once per office life

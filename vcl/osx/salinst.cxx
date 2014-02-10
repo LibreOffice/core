@@ -170,7 +170,7 @@ static void initNSApp()
                                           object: nil ];
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     // Initialize Apple Remote
-    GetSalData()->mpMainController = [[MainController alloc] init];
+    GetSalData()->mpAppleRemoteMainController = [[AppleRemoteMainController alloc] init];
 
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
                                            selector: @selector(applicationWillBecomeActive:)

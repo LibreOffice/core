@@ -42,7 +42,7 @@
 
 //static void sendTheEvent( unichar, int );
 
-SAL_DLLPUBLIC_EXPORT @interface MainController : NSObject {
+SAL_DLLPUBLIC_EXPORT @interface AppleRemoteMainController : NSObject {
 @public // else remoteControl is not reachable from GetSalData()->mpMainController
     RemoteControl* remoteControl;
 @private

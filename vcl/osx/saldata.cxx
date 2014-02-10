@@ -47,7 +47,7 @@ SalData::SalData()
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    mpMainController( NULL ),
+    mpAppleRemoteMainController( NULL ),
 #endif
     mpDockIconClickHandler( nil ),
     mnDPIX( 0 ),
@@ -82,8 +82,8 @@ SalData::~SalData()
         s_aAutoReleaseKey = 0;
     }
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    if ( mpMainController )
-        [mpMainController release];
+    if ( mpAppleRemoteMainController )
+        [mpAppleRemoteMainController release];
 #endif
 }
 
