@@ -297,7 +297,7 @@ public:
       *         - com::sun::star::lang::IllegalArgumentException indicates,
       *           that the property value is not acceptable. For instance,
       *           setting an empty title may be illegal.
-      *         - Any other execption derived from
+      *         - Any other exception derived from
       *           com::sun::star::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
       *           com::sun:star::ucb::InteractiveAugmentedIOException
@@ -360,7 +360,7 @@ public:
       *         - com::sun::star::lang::IllegalArgumentException indicates,
       *           that the property value is not acceptable. For instance,
       *           setting an empty title may be illegal.
-      *         - Any other execption derived from
+      *         - Any other exception derived from
       *           com::sun::star::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
       *           com::sun:star::ucb::InteractiveAugmentedIOException

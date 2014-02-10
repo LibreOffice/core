@@ -193,7 +193,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
                 throw SQLException();
             }
         }
-        catch(Exception& e) // a execption is thrown when no file exists
+        catch(Exception& e) // a exception is thrown when no file exists
         {
             throwUrlNotValid(getURL(),e.Message);
         }

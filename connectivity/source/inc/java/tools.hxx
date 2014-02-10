@@ -68,7 +68,7 @@ namespace connectivity
         @param  pEnv
             The native java env
         @param  _bClear
-            <TRUE/> if the execption should be cleared
+            <TRUE/> if the exception should be cleared
         @return
             <TRUE/> if an exception is occurred
     */

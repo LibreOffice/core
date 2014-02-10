@@ -399,7 +399,7 @@ interface XBridgeTest : XBridgeTestBase
     /**
      * Throws runtime exception.
      * check remote bridges handle exceptions during oneway calls properly.
-     * Note that on client side the execption may fly or not. When it flies, it should
+     * Note that on client side the exception may fly or not. When it flies, it should
      * have the proper message and context.
      ***/
     void raiseRuntimeExceptionOneway(  [in] string Message,

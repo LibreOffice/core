@@ -150,7 +150,7 @@ published service Content
                             <li>com::sun::star::lang::IllegalArgumentException
                             indicates, that the property value is not acceptable. For instance,
                             setting an empty title may be illegal.</li>
-                            <li>Any other execption derived from com::sun::star::uno::Exception
+                            <li>Any other exception derived from com::sun::star::uno::Exception
                             indicates, that the value was not set successfully. For example,
                             this can be a InteractiveAugmentedIOException
                             transporting the error code IOErrorCode::ACCESS_DENIED.</li>

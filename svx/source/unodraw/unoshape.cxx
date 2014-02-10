@@ -1875,7 +1875,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     const uno::Any* pValues = aValues.getConstArray();
 
     // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
-    // reseted even when an execption is thrown
+    // reseted even when an exception is thrown
     const ::comphelper::ScopeGuard aGuard( boost::bind( &SvxShape::endSetPropertyValues, this ) );
 
     mbIsMultiPropertyCall = true;
