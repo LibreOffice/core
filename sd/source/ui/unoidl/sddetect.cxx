@@ -372,6 +372,10 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                                 else
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
                             }
+                            else
+                            {
+                                pFilter = 0;
+                            }
                         }
                         else
                         {
@@ -423,6 +427,10 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         }
                     }
                 }
+            }
+            else
+            {
+                pFilter = 0;
             }
         }
     }
