@@ -421,6 +421,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     case FLY_AS_CHAR:
     case FLY_AT_CHAR:
         nCntnt = rAnchor.GetCntntAnchor()->nContent.GetIndex();
+        // fallthrough
     case FLY_AT_PARA:
     case FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetCntntAnchor()->nNode.GetIndex();
