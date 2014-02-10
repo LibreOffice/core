@@ -352,16 +352,11 @@ void StgEntry::GetName( OUString& rName ) const
 
 short StgEntry::Compare( const StgEntry& r ) const
 {
-    /*
-    short nRes = r.nNameLen - nNameLen;
-    if( !nRes ) return strcmp( r.aName, aName );
-    else return nRes;
-    */
     sal_Int32 nRes = r.nNameLen - nNameLen;
     if( !nRes )
         nRes = r.aName.compareTo( aName );
+
     return (short)nRes;
-    //return aName.CompareTo( r.aName );
 }
 
 // These load/store operations are a bit more complicated,
