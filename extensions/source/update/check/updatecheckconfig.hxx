@@ -28,17 +28,8 @@
 #include "updatecheckconfiglistener.hxx"
 #include "updateinfo.hxx"
 
-/* Interface to acess configuration data read-only */
-struct IByNameAccess
-{
-    virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName) = 0;
-
-protected:
-    ~IByNameAccess() {}
-};
-
 /* This helper class provides by name access to a sequence of named values */
-class NamedValueByNameAccess : public IByNameAccess
+class NamedValueByNameAccess
 {
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& m_rValues;
 
@@ -47,9 +38,9 @@ public:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rValues) :
         m_rValues(rValues) {} ;
 
-    virtual ~NamedValueByNameAccess();
+    ~NamedValueByNameAccess();
 
-    virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName);
+    ::com::sun::star::uno::Any getValue(const sal_Char * pName);
 };
 
 
@@ -59,7 +50,7 @@ public:
 class UpdateCheckROModel
 {
 public:
-    UpdateCheckROModel(IByNameAccess& aNameAccess) : m_aNameAccess(aNameAccess) {};
+    UpdateCheckROModel(NamedValueByNameAccess& aNameAccess) : m_aNameAccess(aNameAccess) {};
 
     bool isAutoCheckEnabled() const;
     bool isDownloadPaused() const;
@@ -73,7 +64,7 @@ private:
 
     OUString getStringValue(const sal_Char *) const;
 
-    IByNameAccess& m_aNameAccess;
+    NamedValueByNameAccess& m_aNameAccess;
 };
 
 
