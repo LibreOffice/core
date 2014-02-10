@@ -1178,24 +1178,11 @@ Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShort
     // SAFE ->
     ResetableGuard aGuard( m_aLock );
 
-    if (m_xAccConfig.is())
-        return m_xAccConfig;
+    if (!m_xAccConfig.is())
+        m_xAccConfig = DocumentAcceleratorConfiguration::
+            createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
 
-    Reference< XComponentContext >    xContext = m_xContext;
-    Reference< XStorage >             xDocumentRoot = m_xDocConfigStorage;
-
-    aGuard.unlock();
-    // <- SAFE
-
-    Reference< XAcceleratorConfiguration >      xAccConfig = DocumentAcceleratorConfiguration::createWithDocumentRoot(xContext, xDocumentRoot);
-
-    // SAFE ->
-    aGuard.lock();
-    m_xAccConfig = xAccConfig;
-    aGuard.unlock();
-    // <- SAFE
-
-    return xAccConfig;
+    return m_xAccConfig;
 }
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager() throw (::com::sun::star::uno::RuntimeException)

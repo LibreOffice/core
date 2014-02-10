@@ -1483,14 +1483,9 @@ Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager
     if ( m_bDisposed )
         throw DisposedException();
 
-    Reference< XComponentContext > xContext   = m_xContext;
-    OUString                   aModule = m_aModuleIdentifier;
-
     if ( !m_xModuleAcceleratorManager.is() )
-    {
-        Reference< ui::XAcceleratorConfiguration >  xManager = ui::ModuleAcceleratorConfiguration::createWithModuleIdentifier(xContext, aModule);
-        m_xModuleAcceleratorManager = xManager;
-    }
+        m_xModuleAcceleratorManager = ui::ModuleAcceleratorConfiguration::
+            createWithModuleIdentifier(m_xContext, m_aModuleIdentifier);
 
     return m_xModuleAcceleratorManager;
 }
