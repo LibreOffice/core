@@ -579,9 +579,25 @@ public:
      */
     ///@{
 
+    void                        EnableOutput( sal_Bool bEnable = sal_True );
+    sal_Bool                    IsOutputEnabled() const { return mbOutput; }
+    sal_Bool                    IsDeviceOutput() const { return mbDevOutput; }
+    sal_Bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    sal_Bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+
+    void                        SetClipRegion();
+    void                        SetClipRegion( const Region& rRegion );
+    Region                      GetClipRegion() const;
+    bool                        IsClipRegion() const { return mbClipRegion; }
+    Region                      GetActiveClipRegion() const;
+
+    void                        MoveClipRegion( long nHorzMove, long nVertMove );
+    void                        IntersectClipRegion( const Rectangle& rRect );
+    void                        IntersectClipRegion( const Region& rRegion );
 
     ///@}
 
@@ -1084,22 +1100,6 @@ public:
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
-
-    void                        EnableOutput( sal_Bool bEnable = sal_True );
-    sal_Bool                    IsOutputEnabled() const { return mbOutput; }
-    sal_Bool                    IsDeviceOutput() const { return mbDevOutput; }
-    sal_Bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    sal_Bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
-
-    void                        SetClipRegion();
-    void                        SetClipRegion( const Region& rRegion );
-    Region                      GetClipRegion() const;
-    bool                        IsClipRegion() const { return mbClipRegion; }
-    Region                      GetActiveClipRegion() const;
-
-    void                        MoveClipRegion( long nHorzMove, long nVertMove );
-    void                        IntersectClipRegion( const Rectangle& rRect );
-    void                        IntersectClipRegion( const Region& rRegion );
 
     void                        SetAntialiasing( sal_uInt16 nMode =  0 );
     sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
