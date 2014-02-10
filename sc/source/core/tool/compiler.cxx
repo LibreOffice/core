@@ -1553,7 +1553,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mbCloseBrackets( true ),
         mbRewind( false )
 {
-    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
+    nMaxTab = pDoc->GetTableCount() - 1;
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
