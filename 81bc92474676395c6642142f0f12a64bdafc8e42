@@ -121,6 +121,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_9d176651",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-10T08:10:57Z",
+      "side": 1,
+      "message": "DrawingML::WriteFill gets the awt::Gradient and \"FillBitmapURL\" from XPropertySet... but ChartWall does not have these properties ... Instead only FillBitpamName and FillGradientName is maintained in properties...",
+      "parentUuid": "da9df570_fd1f92b5",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_dd22ce00",
         "filename": "oox/source/export/chartexport.cxx",
         "patchSetId": 1
