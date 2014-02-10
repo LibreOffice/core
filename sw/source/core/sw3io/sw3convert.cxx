@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-
-#include <stdio.h>
 #include "hintids.hxx"
 #include <tools/resid.hxx>
 #include <svl/macitem.hxx>
