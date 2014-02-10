@@ -721,7 +721,7 @@ void GDIMetaFile::Move( long nX, long nY )
     Size            aOffset( aBaseOffset );
     VirtualDevice   aMapVDev;
 
-    aMapVDev.EnableOutput( sal_False );
+    aMapVDev.DisableOutput();
     aMapVDev.SetMapMode( GetPrefMapMode() );
 
     for( MetaAction* pAct = FirstAction(); pAct; pAct = NextAction() )
@@ -755,7 +755,7 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
     Size            aOffset( aBaseOffset );
     VirtualDevice   aMapVDev;
 
-    aMapVDev.EnableOutput( sal_False );
+    aMapVDev.DisableOutput();
     aMapVDev.SetReferenceDevice( nDPIX, nDPIY );
     aMapVDev.SetMapMode( GetPrefMapMode() );
 
@@ -823,7 +823,7 @@ void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
     Rectangle aCurRect( i_rClipRect );
     VirtualDevice   aMapVDev;
 
-    aMapVDev.EnableOutput( sal_False );
+    aMapVDev.DisableOutput();
     aMapVDev.SetMapMode( GetPrefMapMode() );
 
     for( MetaAction* pAct = FirstAction(); pAct; pAct = NextAction() )
@@ -889,7 +889,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
 {
     // Generate comment, GradientEx and Gradient actions (within DrawGradient)
     VirtualDevice aVDev( rMapDev, 0 );
-    aVDev.EnableOutput( sal_False );
+    aVDev.DisableOutput();
     GDIMetaFile aGradMtf;
 
     aGradMtf.Record( &aVDev );
@@ -922,7 +922,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
 
         aPoly.Rotate( Point(), fSin, fCos );
 
-        aMapVDev.EnableOutput( sal_False );
+        aMapVDev.DisableOutput();
         aMapVDev.SetMapMode( GetPrefMapMode() );
 
         const Rectangle aNewBound( aPoly.GetBoundRect() );
@@ -1398,7 +1398,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
     GDIMetaFile     aMtf;
     VirtualDevice   aMapVDev( i_rReference );
 
-    aMapVDev.EnableOutput( sal_False );
+    aMapVDev.DisableOutput();
     aMapVDev.SetMapMode( GetPrefMapMode() );
 
     std::vector<Rectangle> aClipStack( 1, Rectangle() );

@@ -1066,7 +1066,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     const Size&     rPrefSize = rMtf.GetPrefSize();
     const size_t    nActionCount = rMtf.GetActionSize();
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.DisableOutput();
     aMtf.Record( &aVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );

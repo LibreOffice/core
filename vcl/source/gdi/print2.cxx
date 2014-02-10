@@ -727,7 +727,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         VirtualDevice aMapModeVDev;
         aMapModeVDev.mnDPIX = mnDPIX;
         aMapModeVDev.mnDPIY = mnDPIY;
-        aMapModeVDev.EnableOutput(sal_False);
+        aMapModeVDev.DisableOutput();
 
         int nLastBgAction, nActionNum;
 
@@ -1172,7 +1172,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         Size            aDstSzPix;
 
                         VirtualDevice   aMapVDev;   // here, we record only mapmode information
-                        aMapVDev.EnableOutput(sal_False);
+                        aMapVDev.DisableOutput();
 
                         VirtualDevice   aPaintVDev; // into this one, we render.
                         aPaintVDev.SetBackground( aBackgroundComponent.aBgColor );
@@ -1204,7 +1204,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
                                     aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
 
-                                    aPaintVDev.EnableOutput(sal_False);
+                                    aPaintVDev.DisableOutput();
 
                                     // iterate over all actions
                                     for( pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction(), nActionNum=0;
@@ -1216,7 +1216,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         // the current aCCList element
                                         // (aCurr)
                                         if( aCCList_MemberMap[nActionNum] == &(*aCurr) )
-                                            aPaintVDev.EnableOutput(sal_True);
+                                            aPaintVDev.EnableOutput();
 
                                         // but process every action
                                         const sal_uInt16 nType( pCurrAct->GetType() );

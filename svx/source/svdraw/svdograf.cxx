@@ -1048,7 +1048,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
         const Rectangle aBoundRect(GetCurrentBoundRect());
         const MapMode aMap(GetModel()->GetScaleUnit(), Point(), GetModel()->GetScaleFraction(), GetModel()->GetScaleFraction());
 
-        aOut.EnableOutput(false);
+        aOut.DisableOutput();
         aOut.SetMapMode(aMap);
         aRetval.Record(&aOut);
         SingleObjectPainter(aOut);
