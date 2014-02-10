@@ -782,7 +782,7 @@ void ImportExcel::ReadUsesElfs()
     if( maStrm.ReaduInt16() != 0 )
     {
         ScDocOptions aDocOpt = GetDoc().GetDocOptions();
-        aDocOpt.SetLookUpColRowNames( sal_True );
+        aDocOpt.SetLookUpColRowNames( true );
         GetDoc().SetDocOptions( aDocOpt );
     }
 }

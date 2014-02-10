@@ -31,7 +31,7 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;                    // epsilon value dazu
+    double     fIterEps;                // epsilon value dazu
     sal_uInt16 nIterCount;              ///< number
     sal_uInt16 nPrecStandardFormat;     ///< precision for standard format
     sal_uInt16 nDay;                    ///< Null date:
@@ -39,32 +39,32 @@ class SC_DLLPUBLIC ScDocOptions
     sal_uInt16 nYear;
     sal_uInt16 nYear2000;               ///< earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
     sal_uInt16 nTabDistance;            ///< distance of standard tabs
-    sal_Bool   bIsIgnoreCase;           ///< ignore case for comparisons?
-    sal_Bool   bIsIter;                 ///< iterations for circular refs
-    sal_Bool   bCalcAsShown;            ///< calculate as shown (wrt precision)
-    sal_Bool   bMatchWholeCell;         ///< search criteria must match the whole cell
-    sal_Bool   bDoAutoSpell;            ///< auto-spelling
-    sal_Bool   bLookUpColRowNames;      ///< determine column-/row titles automagically
-    sal_Bool   bFormulaRegexEnabled;    ///< regular expressions in formulas enabled
+    bool       bIsIgnoreCase;           ///< ignore case for comparisons?
+    bool       bIsIter;                 ///< iterations for circular refs
+    bool       bCalcAsShown;            ///< calculate as shown (wrt precision)
+    bool       bMatchWholeCell;         ///< search criteria must match the whole cell
+    bool       bDoAutoSpell;            ///< auto-spelling
+    bool       bLookUpColRowNames;      ///< determine column-/row titles automagically
+    bool       bFormulaRegexEnabled;    ///< regular expressions in formulas enabled
 public:
                 ScDocOptions();
                 ScDocOptions( const ScDocOptions& rCpy );
                 ~ScDocOptions();
 
-    sal_Bool   IsLookUpColRowNames() const  { return bLookUpColRowNames; }
-    void   SetLookUpColRowNames( sal_Bool bVal ) { bLookUpColRowNames = bVal; }
-    sal_Bool   IsAutoSpell() const          { return bDoAutoSpell; }
-    void   SetAutoSpell( sal_Bool bVal )    { bDoAutoSpell = bVal; }
-    sal_Bool   IsMatchWholeCell() const     { return bMatchWholeCell; }
-    void   SetMatchWholeCell( sal_Bool bVal ){ bMatchWholeCell = bVal; }
-    sal_Bool   IsIgnoreCase() const         { return bIsIgnoreCase; }
-    void   SetIgnoreCase( sal_Bool bVal )   { bIsIgnoreCase = bVal; }
-    sal_Bool   IsIter() const               { return bIsIter; }
-    void   SetIter( sal_Bool bVal )         { bIsIter = bVal; }
+    bool   IsLookUpColRowNames() const       { return bLookUpColRowNames; }
+    void   SetLookUpColRowNames( bool bVal ) { bLookUpColRowNames = bVal; }
+    bool   IsAutoSpell() const              { return bDoAutoSpell; }
+    void   SetAutoSpell( bool bVal )        { bDoAutoSpell = bVal; }
+    bool   IsMatchWholeCell() const         { return bMatchWholeCell; }
+    void   SetMatchWholeCell( bool bVal )   { bMatchWholeCell = bVal; }
+    bool   IsIgnoreCase() const             { return bIsIgnoreCase; }
+    void   SetIgnoreCase( bool bVal )       { bIsIgnoreCase = bVal; }
+    bool   IsIter() const                   { return bIsIter; }
+    void   SetIter( bool bVal )             { bIsIter = bVal; }
     sal_uInt16 GetIterCount() const         { return nIterCount; }
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
-    double GetIterEps() const           { return fIterEps; }
-    void   SetIterEps( double fEps )    { fIterEps = fEps; }
+    double GetIterEps() const               { return fIterEps; }
+    void   SetIterEps( double fEps )        { fIterEps = fEps; }
 
     void   GetDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY ) const
                                         { rD = nDay; rM = nMonth; rY = nYear;}
@@ -79,17 +79,17 @@ public:
     inline bool                 operator==( const ScDocOptions& rOpt ) const;
     inline bool                 operator!=( const ScDocOptions& rOpt ) const;
 
-    sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
+    sal_uInt16  GetStdPrecision() const         { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
-    sal_Bool    IsCalcAsShown() const       { return bCalcAsShown; }
-    void    SetCalcAsShown( sal_Bool bVal ) { bCalcAsShown = bVal; }
+    bool    IsCalcAsShown() const           { return bCalcAsShown; }
+    void    SetCalcAsShown( bool bVal )     { bCalcAsShown = bVal; }
 
     void    SetYear2000( sal_uInt16 nVal )  { nYear2000 = nVal; }
     sal_uInt16  GetYear2000() const         { return nYear2000; }
 
-    void    SetFormulaRegexEnabled( sal_Bool bVal ) { bFormulaRegexEnabled = bVal; }
-    sal_Bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
+    void    SetFormulaRegexEnabled( bool bVal ) { bFormulaRegexEnabled = bVal; }
+    bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 
 };
 

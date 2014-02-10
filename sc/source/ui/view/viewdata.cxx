@@ -2989,7 +2989,7 @@ sal_Bool ScViewData::UpdateFixY( SCTAB nTab )               // sal_True = Wert g
 void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 {
     ScDocument* pLocalDoc = GetDocument();
-    sal_Bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
+    bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
 
     sal_uLong nCntrl = rOutl.GetControlWord();
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
