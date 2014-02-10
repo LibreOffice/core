@@ -731,6 +731,11 @@ public:
     void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue);
     void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, std::vector<beans::PropertyValue>& rValue);
 
+    /// Enable, disable an check status of grabbags
+    void enableInteropGrabBag(OUString aName);
+    void disableInteropGrabBag();
+    bool isInteropGrabBagEnabled();
+
     /// Name of m_aInteropGrabBag.
     OUString m_aInteropGrabBagName;
 

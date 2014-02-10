@@ -1911,11 +1911,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_Style_rPr:
     case NS_ooxml::LN_CT_PPr_rPr:
     case NS_ooxml::LN_CT_PPrBase_numPr:
+    {
+        bool bTempGrabBag = !m_pImpl->isInteropGrabBagEnabled();
         if (nSprmId == NS_ooxml::LN_CT_PPr_sectPr)
             m_pImpl->SetParaSectpr(true);
-        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color && m_pImpl->m_aInteropGrabBagName.isEmpty())
-            // if DomainMapper grab bag is not enabled, enable it temporarilly
-            m_pImpl->m_aInteropGrabBagName = OUString ("TempColorPropsGrabBag");
+        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color && bTempGrabBag)
+            // if DomainMapper grab bag is not enabled, enable it temporarily
+            m_pImpl->enableInteropGrabBag("TempColorPropsGrabBag");
         resolveSprmProps(*this, rSprm);
         if (nSprmId == NS_ooxml::LN_CT_PPrBase_spacing)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", m_pImpl->m_aSubInteropGrabBag);
@@ -1937,16 +1939,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 else if (aIter->Name == "themeTint")
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_TINT, aIter->Value, true, CHAR_GRAB_BAG);
             }
-            if (m_pImpl->m_aInteropGrabBagName == "TempColorPropsGrabBag")
-            {
+            if (bTempGrabBag)
                 //disable and clear DomainMapper grab bag if it wasn't enabled before
-                m_pImpl->m_aInteropGrabBagName = OUString();
-                m_pImpl->m_aSubInteropGrabBag.clear();
-            }
+                m_pImpl->disableInteropGrabBag();
+
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "color", m_pImpl->m_aSubInteropGrabBag);
         }
         else if (nSprmId == NS_ooxml::LN_CT_PPrBase_ind)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ind", m_pImpl->m_aSubInteropGrabBag);
+    }
     break;
     case NS_ooxml::LN_CT_PPrBase_wordWrap:
         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "wordWrap", "");

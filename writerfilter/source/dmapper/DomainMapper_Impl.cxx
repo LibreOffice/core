@@ -4194,6 +4194,23 @@ bool DomainMapper_Impl::IsNewDoc()
     return m_bIsNewDoc;
 }
 
+void DomainMapper_Impl::enableInteropGrabBag(OUString aName)
+{
+    m_aInteropGrabBagName = aName;
+}
+
+void DomainMapper_Impl::disableInteropGrabBag()
+{
+    m_aInteropGrabBagName = "";
+    m_aInteropGrabBag.clear();
+    m_aSubInteropGrabBag.clear();
+}
+
+bool DomainMapper_Impl::isInteropGrabBagEnabled()
+{
+    return !(m_aInteropGrabBagName.isEmpty());
+}
+
 void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue)
 {
     if (m_aInteropGrabBagName.isEmpty())
