@@ -450,8 +450,10 @@ private:
         return uno::Sequence< rendering::ARGBColor >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
-                                                                                                                  uno::RuntimeException)
+    virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& )
+        throw (lang::IllegalArgumentException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromRGB: method not implemented", false);
         return uno::Sequence< double >();
