@@ -834,18 +834,14 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 }
 // -----------------------------------------------------------------------
 
-uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker() const
+uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker()
 {
-    //!! since we don't want to become incompatible in the next minor update
-    //!! where this code will get integrated into, xISC will be a local
-    //!! variable instead of a class member!
-    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
-//    if ( !xISC.is() )
+    if ( !mxISC.is() )
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        xISC = i18n::InputSequenceChecker::create(xContext);
+        mxISC = i18n::InputSequenceChecker::create(
+                ::comphelper::getProcessComponentContext() );
     }
-    return xISC;
+    return mxISC;
 }
 
 // -----------------------------------------------------------------------

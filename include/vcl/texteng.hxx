@@ -104,6 +104,7 @@ private:
 
     ::com::sun::star::lang::Locale maLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIterator;
+    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
     Rectangle           maInvalidRect;
     Range               maInvalidRange;
@@ -159,7 +160,7 @@ protected:
     // gets not exported. First and seconf parameter swapped to have a different signatur.
     SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, sal_Bool bOverwrite = sal_False, sal_Bool bIsUserInput = sal_False );
     // some other new functions needed that must not be exported to remain compatible
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker();
     SAL_DLLPRIVATE sal_Bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // broadcast or adjust selections

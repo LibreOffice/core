@@ -628,15 +628,14 @@ void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
     ImpParagraphRemoved( nPara );
 }
 
-uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSequenceChecker() const
+uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSequenceChecker()
 {
-    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
-//    if ( !xISC.is() )
+    if ( !mxISC.is() )
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        xISC = i18n::InputSequenceChecker::create(xContext);
+        mxISC = i18n::InputSequenceChecker::create(
+                ::comphelper::getProcessComponentContext() );
     }
-    return xISC;
+    return mxISC;
 }
 
 sal_Bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const
