@@ -2346,7 +2346,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     nDelta--;
                 }
 
-                if( nDelta )
+                if( nDelta && pNewCursor )
                 {
                     DBG_ASSERT(pNewCursor&&(sal_uLong)pNewCursor!=(sal_uLong)pCursor,"Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
