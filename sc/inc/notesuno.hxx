@@ -87,7 +87,9 @@ public:
                             /// XSheetAnnotation
     virtual ::com::sun::star::table::CellAddress SAL_CALL getPosition()
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getAuthor() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getAuthor()
+        throw(::com::sun::star::uno::RuntimeException,
+              std::exception);
     virtual OUString SAL_CALL getDate() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getIsVisible()
                                     throw(::com::sun::star::uno::RuntimeException,

@@ -196,7 +196,8 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
     return aAdr;
 }
 
-OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
+OUString SAL_CALL ScAnnotationObj::getAuthor()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
