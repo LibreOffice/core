@@ -28,11 +28,9 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
@@ -104,13 +102,9 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
         }
         else
         {
-            uno::Reference < container::XNameReplace > xUpdateConfig =
-                setup::UpdateCheckConfig::create(xContext);
-
-            sal_Bool bUpdateCheckEnabled = sal_False;
-            OSL_VERIFY( xUpdateConfig->getByName("AutoCheckEnabled") >>= bUpdateCheckEnabled );
-
-            // TODO: do we need to respect the bUpdateCheckEnabled flag? Finally, its meaning is "are automatic
+            // TODO: do we need to respect the
+            // /org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments
+            // configuration flag? Finally, its meaning is "are automatic
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
             css::uno::Reference< css::container::XHierarchicalNameAccess > xOfficeHelp(officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext), css::uno::UNO_QUERY_THROW);
 
