@@ -16,6 +16,24 @@
       "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_7d3ba2eb",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-10T05:39:36Z",
+      "side": 1,
+      "message": "Changed the nPropId to PROP_FillGradientName as nPropId was 158 (for SHAPEPROP_Gradient) and while setting the property it was setting \"FillBitMapName\" instead of \"FillGradientName... Hence Chart Wall was not importing the gradient fill correctly ...",
+      "parentUuid": "da9df570_fd4dd2c5",
+      "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
