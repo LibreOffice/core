@@ -144,12 +144,10 @@ void SvxXConnectionPreview::Construct()
     if( nMarkCount >= 1 )
     {
         bool bFound = false;
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
 
         for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
         {
-            pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
+            const SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             sal_uInt32 nInv = pObj->GetObjInventor();
             sal_uInt16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
