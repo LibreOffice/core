@@ -595,6 +595,13 @@ DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo74709, "fdo74709.rtf")
+{
+    uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(1), "B1");
+    // This was 0, as top/bottom/left/right padding wasn't imported.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(360)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
