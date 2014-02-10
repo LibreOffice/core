@@ -51,8 +51,9 @@ EncryptionStandardHeader::EncryptionStandardHeader()
 }
 
 EncryptionVerifierAES::EncryptionVerifierAES()
+    : saltSize(SALT_LENGTH)
+    , encryptedVerifierHashSize(RTL_DIGEST_LENGTH_SHA1)
 {
-    saltSize = SALT_LENGTH;
     memset(salt, 0, sizeof(salt));
     memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
     memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
