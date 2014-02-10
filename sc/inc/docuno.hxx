@@ -422,7 +422,8 @@ public:
     virtual void SAL_CALL   insertNewByName( const OUString& aName, sal_Int16 nPosition )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   moveByName( const OUString& aName, sal_Int16 nDestination )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   copyByName( const OUString& aName,
                                 const OUString& aCopy, sal_Int16 nDestination )
                                     throw(::com::sun::star::uno::RuntimeException);
