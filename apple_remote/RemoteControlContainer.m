@@ -36,10 +36,10 @@
 	if ( (self = [super initWithDelegate:_remoteControlDelegate]) ) {
 		remoteControls = [[NSMutableArray alloc] init];
 #ifdef DEBUG
-        NSLog(@"RemoteControlContainer initWithDelegate ok");
+        NSLog( @"Apple Remote: ControlContainer initWithDelegate ok");
 	}
     else {
-        NSLog(@"RemoteControlContainer initWithDelegate failed");
+        NSLog( @"Apple Remote: RemoteControlContainer initWithDelegate failed");
 #endif
     }
 
@@ -62,7 +62,7 @@
     }
 #ifdef DEBUG
     else {
-        NSLog(@"RemoteControlContainer instantiateAndAddRemoteControlDeviceWithClass failed");
+        NSLog( @"Apple Remote: ControlContainer instantiateAndAddRemoteControlDeviceWithClass failed");
         toReturn = NO;	
     }
 #endif
@@ -78,7 +78,7 @@
 	[self didChangeValueForKey:@"listeningToRemote"];
 #ifdef DEBUG
 	// debug purpose
-    NSLog(@"reset... (after listening to remote)");
+    NSLog( @"Apple Remote: reset... (after listening)");
 #endif
 }
 
@@ -105,7 +105,7 @@
 
 - (void) startListening: (id) sender {
 #ifdef DEBUG
-	NSLog(@"startListening to events... ");
+	NSLog(@"Apple Remote: start listening to events... ");
 #endif
 	int i;
 	for(i=0; i < [remoteControls count]; i++) {
@@ -114,7 +114,7 @@
 }
 - (void) stopListening: (id) sender {
 #ifdef DEBUG
-	NSLog(@"stopListening to events... ");
+	NSLog(@"Apple Remote: stopListening to events... ");
 #endif
 	int i;
 	for(i=0; i < [remoteControls count]; i++) {

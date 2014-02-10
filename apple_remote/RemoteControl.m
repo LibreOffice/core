@@ -51,7 +51,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 	if ( (self = [super init]) ) {
 		delegate = [_remoteControlDelegate retain];
 #ifdef DEBUG
-        NSLog(@"RemoteControl initWithDelegate ok");
+        NSLog( @"Apple RemoteControl initWithDelegate ok");
 #endif
     }
 	return self;
@@ -64,7 +64,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 - (void) setListeningToRemote: (BOOL) value {
 #ifdef DEBUG
-        NSLog(@"setListeningToRemote ok");
+        NSLog( @"Apple RemoteControl setListeningToRemote ok");
 #endif
 }
 - (BOOL) isListeningToRemote {
@@ -73,12 +73,12 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 - (void) startListening: (id) sender {
 #ifdef DEBUG
-            NSLog(@"startListening ok");
+            NSLog( @"Apple RemoteControl startListening ok");
 #endif
 }
 - (void) stopListening: (id) sender {
 #ifdef DEBUG
-            NSLog(@"stopListening ok");
+            NSLog( @"Apple RemoteControl stopListening ok");
 #endif
 }
 
@@ -90,7 +90,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 - (BOOL) sendsEventForButtonIdentifier: (RemoteControlEventIdentifier) identifier {
 #ifdef DEBUG
-   NSLog(@"sending event for button identifier \n");
+   NSLog( @"Apple RemoteControl: sending event for button identifier\n");
 #endif
 	return YES;
 }
@@ -105,17 +105,19 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
                             kTargetApplicationIdentifier /*targetBundleIdentifier -> does not appear, since the peer is nil*/,
                             nil];
 #ifdef DEBUG
+    NSLog( @"Apple Remote: sendDistributedNotification ...");
     // Debug purpose: returns all the existing dictionary keys. 
-    NSString *s;
-    NSEnumerator *e = [userInfo keyEnumerator];
-    while ( (s = [e nextObject]) ) {
-        NSLog(@"key = %@ ",s);
+    NSEnumerator* itKey = [userInfo keyEnumerator];
+    NSEnumerator* itVal = [userInfo objectEnumerator];
+    for(;;) {
+        NSString* sKey = [itKey nextObject];
+        NSString* sVal = [itVal nextObject];
+        if( !sKey && !sVal)
+            break;
+        if( !sKey) sKey = @"nil";
+	if( !sVal) sVal = @"nil";
+        NSLog( @"\tARdict[\"%@\"] = \"%@\"",sKey,sVal);
     }
-    NSEnumerator *f = [userInfo objectEnumerator ];
-    while ( (s = [f nextObject]) ) {
-        NSLog(@"value = %@ ",s);
-    }
-    NSLog(@"sendDistributedNotification ...");
 #endif
 
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:notificationName
@@ -127,13 +129,13 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 + (void) sendFinishedNotifcationForAppIdentifier: (NSString*) identifier {
     [self sendDistributedNotification:FINISHED_USING_REMOTE_CONTROL_NOTIFICATION targetBundleIdentifier:identifier];
 #ifdef DEBUG
-    NSLog(@"sendFinishedNotifcationForAppIdentifier ...");
+    NSLog( @"Apple RemoteControl: sendFinishedNotifcationForAppIdentifier ...");
 #endif
 }
 + (void) sendRequestForRemoteControlNotification {
     [self sendDistributedNotification:REQUEST_FOR_REMOTE_CONTROL_NOTIFCATION targetBundleIdentifier:nil];
 #ifdef DEBUG
-    NSLog(@"sendRequestForRemoteControlNotification ...");
+    NSLog( @"Apple RemoteControl: sendRequestForRemoteControlNotification ...");
 #endif
 }
 

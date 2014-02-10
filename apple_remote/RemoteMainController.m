@@ -105,7 +105,7 @@
 #endif
     if (pressedDown)
     {
-        pressed = @"(pressed)";
+        pressed = @"(AppleRemoteMainController: button pressed)";
 
 #ifdef DEBUG
         switch(buttonIdentifier) 
@@ -124,14 +124,14 @@
             case kRemoteButtonMenu_Hold:    buttonName = @"Menu (long)";            break;  // MEDIA_COMMAND_MENU_HOLD
             case kRemoteControl_Switched:   buttonName = @"Remote Control Switched";break;
 
-            default:    NSLog(@"Unmapped event for button %d", buttonIdentifier);   break;
+            default:    NSLog( @"AppleRemoteMainController: Unmapped event for button %d", buttonIdentifier);   break;
         }
 #endif
         [ self postTheEvent:buttonIdentifier modifierFlags: 0 ];
     }
     else // not pressed
     {
-        pressed = @"(released)";
+        pressed = @"(AppleRemoteMainController: button released)";
     }
 
 #ifdef DEBUG
