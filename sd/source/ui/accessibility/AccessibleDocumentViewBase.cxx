@@ -837,6 +837,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
            ::com::sun::star::uno::RuntimeException,
            std::exception)
 {
+    ::osl::MutexGuard aGuard (maMutex);
+
     uno::Any anyAtrribute;
     OUString sValue;
     if (mpViewShell && mpViewShell->ISA(::sd::DrawViewShell))

@@ -146,6 +146,8 @@ OUString SAL_CALL
     AccessibleOutlineView::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString sName = SdResId(SID_SD_A11Y_D_PRESENTATION);
     ::sd::View* pSdView = static_cast< ::sd::View* >( maShapeTreeInfo.GetSdrView() );
     if ( pSdView )

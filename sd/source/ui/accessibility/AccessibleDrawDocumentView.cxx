@@ -262,6 +262,8 @@ OUString SAL_CALL
     AccessibleDrawDocumentView::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString sName = SdResId(SID_SD_A11Y_D_PRESENTATION);
     ::sd::View* pSdView = static_cast< ::sd::View* >( maShapeTreeInfo.GetSdrView() );
     if ( pSdView )
@@ -477,6 +479,8 @@ uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
     throw (uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     // we will return the:
     // [0] group level(always be 0 now)
     // [1] similar items counts in the group
@@ -549,6 +553,8 @@ uno::Sequence< sal_Int32 > SAL_CALL
 OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
     throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     OUString aRet;
     //get the xShape of the current selected drawing object
     uno::Reference<XAccessibleContext> xAccContent;
@@ -890,6 +896,8 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
         SAL_CALL AccessibleDrawDocumentView::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     const sal_Int32 SPELLCHECKFLOWTO = 1;
     const sal_Int32 FINDREPLACEFLOWTO = 2;
     if ( nType == SPELLCHECKFLOWTO )
