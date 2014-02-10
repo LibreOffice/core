@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <memory>
+#include <sal/config.h>
 
 #include "updatecheck.hxx"
 #include "updatecheckconfig.hxx"
 #include "updatehdl.hxx"
 #include "updateprotocol.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -102,7 +102,7 @@ public:
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;
     uno::Reference< frame::XDesktop2 >      m_xDesktop;
-    std::auto_ptr< InitUpdateCheckJobThread > m_pInitThread;
+    boost::scoped_ptr< InitUpdateCheckJobThread > m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
 };
