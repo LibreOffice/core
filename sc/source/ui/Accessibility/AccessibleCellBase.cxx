@@ -225,8 +225,8 @@ OUString SAL_CALL
     //=====  XAccessibleValue  ================================================
 
 uno::Any SAL_CALL
-    ScAccessibleCellBase::getCurrentValue(  )
-    throw (uno::RuntimeException)
+    ScAccessibleCellBase::getCurrentValue()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

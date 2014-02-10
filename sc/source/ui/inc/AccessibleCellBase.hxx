@@ -89,8 +89,9 @@ public:
     ///=====  XAccessibleValue  ================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL
-        getCurrentValue(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        getCurrentValue()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     virtual sal_Bool SAL_CALL
         setCurrentValue( const ::com::sun::star::uno::Any& aNumber )
