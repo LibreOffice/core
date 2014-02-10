@@ -204,10 +204,11 @@ void DrawingML::WriteColorTransformations( Sequence< PropertyValue > aTransforma
     for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
     {
         sal_Int32 nToken = Color::getColorTransformationToken( aTransformations[i].Name );
-        sal_Int32 nValue; aTransformations[i].Value >>= nValue;
-
-        if( nToken != XML_TOKEN_INVALID )
+        if( nToken != XML_TOKEN_INVALID && aTransformations[i].Value.hasValue() )
+        {
+            sal_Int32 nValue = aTransformations[i].Value.get<sal_Int32>();
             mpFS->singleElementNS( XML_a, nToken, XML_val, I32S( nValue ), FSEND );
+        }
     }
 }
 
@@ -239,10 +240,9 @@ void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
 void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
 {
     // get fill color
-    sal_uInt32 nFillColor;
     if ( !GetProperty( rXPropSet, "FillColor" ) )
         return;
-    mAny >>= nFillColor;
+    sal_uInt32 nFillColor = mAny.get<sal_uInt32>();
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
