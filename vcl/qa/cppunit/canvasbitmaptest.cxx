@@ -306,8 +306,11 @@ private:
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( rendering::IntegerBitmapLayout&,
-                                                           const geometry::IntegerPoint2D&  ) throw (lang::IndexOutOfBoundsException,
-                                                                                                     rendering::VolatileContentDestroyedException, uno::RuntimeException)
+                                                           const geometry::IntegerPoint2D&  )
+        throw (lang::IndexOutOfBoundsException,
+               rendering::VolatileContentDestroyedException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("getPixel: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
