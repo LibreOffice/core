@@ -11,10 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libabw))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libabw,$(ABW_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libabw,\
-	external/libabw/libabw-0.0.1-inttypes.patch.1 \
-	external/libabw/libabw-0.0.1-stdstringfromnull.patch.1 \
-	external/libabw/libabw-0.0.1-badtable.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
