@@ -349,8 +349,10 @@ private:
     }
 
     virtual ::sal_Bool SAL_CALL getIndex( uno::Sequence< double >& entry,
-                                          ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException,
-                                                                      uno::RuntimeException)
+                                          ::sal_Int32 nIndex )
+        throw (lang::IndexOutOfBoundsException,
+               uno::RuntimeException,
+               std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette getIndex interface call without handing out palette",
                                 getPalette().is() );
