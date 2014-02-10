@@ -1178,8 +1178,10 @@ public:
 
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL endDocument()
+        throw(::com::sun::star::xml::sax::SAXException,
+              ::com::sun::star::uno::RuntimeException,
+              std::exception);
 
     virtual void DisposingModel();
 

@@ -3177,8 +3177,10 @@ void ScXMLImport::SetSheetNamedRanges()
     }
 }
 
-void SAL_CALL ScXMLImport::endDocument(void)
-throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+void SAL_CALL ScXMLImport::endDocument()
+    throw(::com::sun::star::xml::sax::SAXException,
+          ::com::sun::star::uno::RuntimeException,
+          std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
     if (getImportFlags() & IMPORT_CONTENT)

@@ -502,8 +502,10 @@ void SAL_CALL SvXMLImport::startDocument( void )
     }
 }
 
-void SAL_CALL SvXMLImport::endDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL SvXMLImport::endDocument()
+    throw(xml::sax::SAXException,
+          uno::RuntimeException,
+          std::exception)
 {
     SAL_INFO( "xmloff.core", "} SvXMLImport::startDocument" );
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,

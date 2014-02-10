@@ -197,8 +197,10 @@ public:
     // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL endDocument()
+        throw(::com::sun::star::xml::sax::SAXException,
+              ::com::sun::star::uno::RuntimeException,
+              std::exception);
     virtual void SAL_CALL startElement(const OUString& aName,
                                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
