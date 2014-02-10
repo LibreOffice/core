@@ -3200,6 +3200,21 @@ DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
 
 #endif
 
+DECLARE_OOXMLEXPORT_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
+{
+    /* Number of children required by cubicBexTo is 3 of type "pt".
+       While exporting, sometimes the child nodes are less than 3.
+       The test case ensures that there are 3 child nodes of type "pt"
+       for cubicBexTo
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath( pXmlDoc,
+        "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 
