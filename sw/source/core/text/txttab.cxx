@@ -359,7 +359,7 @@ void SwTabPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 
 
-sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
+bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
@@ -462,14 +462,14 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             SetAscent( 0 );
             SetPortion( NULL ); //?????
         }
-        return sal_True;
+        return true;
     }
     else
     {
         // A trick with impact: The new Tabportions now behave like
         // FlyFrms, located in the line - including adjustment !
         SetFixWidth( PrtWidth() );
-        return sal_False;
+        return false;
     }
 }
 
@@ -479,7 +479,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
 
 
-sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
+bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 {
     const bool bTabOverMargin = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
     // If the tab position is larger than the right margin, it gets scaled down by default.

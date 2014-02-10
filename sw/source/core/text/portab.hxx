@@ -32,14 +32,14 @@ class SwTabPortion : public SwFixPortion
     const bool bAutoTabStop;
 
     // Format() branches either into PreFormat() or PostFormat()
-    sal_Bool PreFormat( SwTxtFormatInfo &rInf );
+    bool PreFormat( SwTxtFormatInfo &rInf );
 public:
     SwTabPortion( const KSHORT nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
-    sal_Bool PostFormat( SwTxtFormatInfo &rInf );
-    inline  sal_Bool IsFilled() const { return 0 != cFill; }
+    bool PostFormat( SwTxtFormatInfo &rInf );
+    inline  bool IsFilled() const { return 0 != cFill; }
     inline  KSHORT GetTabPos() const { return nTabPos; }
     inline  bool IsAutoTabStop() const { return bAutoTabStop; }
 
