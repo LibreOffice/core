@@ -520,7 +520,7 @@ public:
     /** Returns the converted API border data struct. */
     inline const ApiBorderData& getApiData() const { return maApiData; }
 
-    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const;
+    void fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
     /** Writes all border attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
@@ -771,6 +771,8 @@ public:
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     /** Writes all formatting attributes to the passed property set. */
     void                writeToPropertySet( PropertySet& rPropSet ) const;
+
+    void fillToItemSet( SfxItemSet& rSet ) const;
 
 private:
     FontRef             mxFont;             /// Font data.
