@@ -390,7 +390,7 @@ namespace accessibility
         return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
     }
     // -----------------------------------------------------------------------------
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getRoleType()
+    sal_Int32 AccessibleListBoxEntry::GetRoleType()
     {
         sal_Int32 nCase = 0;
         SvTreeListEntry* pEntry = getListBox()->GetEntry(0);
@@ -421,6 +421,9 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  ) throw (RuntimeException)
     {
+        SolarMutexGuard aSolarGuard;
+        ::osl::MutexGuard aGuard( m_aMutex );
+
         SvTreeListBox* pBox = getListBox();
         if(pBox)
         {
@@ -445,7 +448,7 @@ namespace accessibility
                     return AccessibleRole::LABEL;
                 }
             }
-            if(getRoleType() == 0)
+            if (GetRoleType() == 0)
                 return AccessibleRole::LIST_ITEM;
             else
                 //o is: return AccessibleRole::LABEL;
@@ -456,6 +459,9 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  ) throw (RuntimeException)
     {
+        SolarMutexGuard aSolarGuard;
+        ::osl::MutexGuard aGuard( m_aMutex );
+
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
         {

@@ -400,7 +400,7 @@ namespace accessibility
         return m_xParent;
     }
     // -----------------------------------------------------------------------------
-    sal_Int32 SAL_CALL AccessibleListBox::getRoleType()
+    sal_Int32 AccessibleListBox::GetRoleType()
     {
         sal_Int32 nCase = 0;
         SvTreeListEntry* pEntry = getListBox()->GetEntry(0);
@@ -428,8 +428,12 @@ namespace accessibility
         }
         return nCase;
     }
-    sal_Int16 SAL_CALL AccessibleListBox::getAccessibleRole(  ) throw (RuntimeException)
+
+    sal_Int16 SAL_CALL AccessibleListBox::getAccessibleRole()
+        throw (RuntimeException)
     {
+        ::comphelper::OExternalLockGuard aGuard( this );
+
         if(getListBox())
         {
             short nType = getListBox()->GetAllEntriesAccessibleRoleType();
@@ -444,7 +448,7 @@ namespace accessibility
         if(!bHasButtons && (getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN))
             return AccessibleRole::LIST;
         else
-            if(getRoleType() == 0)
+            if (GetRoleType() == 0)
                 return AccessibleRole::LIST;
             else
             return AccessibleRole::TREE;
