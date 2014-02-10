@@ -408,6 +408,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 {
     // The test doc is special in that it starts with a table and it also has a header.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
