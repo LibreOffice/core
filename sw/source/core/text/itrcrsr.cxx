@@ -625,7 +625,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                 // For common portions (including BidiPortions) we want to add
                 // the portion width to nX. For MultiPortions, nExtra = 0,
                 // therefore we go to the 'else' branch and start a recursion.
-                const sal_uInt8 nExtra = pPor->IsMultiPortion() &&
+                const sal_Int32 nExtra = pPor->IsMultiPortion() &&
                                     ! ((SwMultiPortion*)pPor)->IsBidi() &&
                                     ! bWidth ? 0 : 1;
                 if ( aInf.GetIdx() + pPor->GetLen() < nOfst + nExtra )
