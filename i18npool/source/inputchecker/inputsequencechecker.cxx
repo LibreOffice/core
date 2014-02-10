@@ -22,17 +22,15 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/unicode.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
-    serviceName = "com.sun.star.i18n.InputSequenceCheckerImpl";
+    serviceName = "com.sun.star.i18n.InputSequenceChecker";
     cachedItem = NULL;
 }
 
@@ -156,5 +154,13 @@ InputSequenceCheckerImpl::getSupportedServiceNames(void) throw( RuntimeException
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_InputSequenceChecker_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::InputSequenceCheckerImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

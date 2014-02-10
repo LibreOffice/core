@@ -114,7 +114,8 @@
   <implementation name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)">
     <service name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.InputSequenceChecker">
+  <implementation name="com.sun.star.i18n.InputSequenceChecker"
+      constructor="com_sun_star_i18n_InputSequenceChecker_get_implementation">
     <service name="com.sun.star.i18n.InputSequenceChecker"/>
   </implementation>
   <implementation name="com.sun.star.i18n.InputSequenceChecker_hi">

@@ -55,7 +55,6 @@
 #include <chaptercollator.hxx>
 #include <collator_unicode.hxx>
 
-#include <inputsequencechecker.hxx>
 #include <inputsequencechecker_th.hxx>
 #include <inputsequencechecker_hi.hxx>
 
@@ -122,7 +121,6 @@ IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE_CTX( ChapterCollator )
 IMPL_CREATEINSTANCE( Collator_Unicode )
 
-IMPL_CREATEINSTANCE_CTX( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
 IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
 
@@ -323,9 +321,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.InputSequenceChecker",
-        "com.sun.star.i18n.InputSequenceChecker",
-        &InputSequenceCheckerImpl_CreateInstance },
     {   "com.sun.star.i18n.InputSequenceChecker_th",
         "com.sun.star.i18n.InputSequenceChecker_th",
         &InputSequenceChecker_th_CreateInstance },
