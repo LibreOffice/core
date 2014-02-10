@@ -1071,7 +1071,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
         nMemberStep = 1;
         while ( nPos < ppDim.size() )
         {
-            if (  ppDim[nPos] ->getIsDataLayoutDimension() )
+            if (  ppDim[nPos]->getIsDataLayoutDimension() )
             {
                  if ( !pChildDimension )
                         pChildDimension = new ScDPResultDimension( pResultData );
@@ -1115,7 +1115,7 @@ void ScDPResultMember::LateInitFrom(
         nMemberStep = 1;
         while ( !rParams.IsEnd( nPos ) )
         {
-            if (  rParams.GetDim( nPos ) ->getIsDataLayoutDimension() )
+            if (  rParams.GetDim( nPos )->getIsDataLayoutDimension() )
             {
                 if ( !pChildDimension )
                     pChildDimension = new ScDPResultDimension( pResultData );

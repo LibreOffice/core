@@ -102,10 +102,10 @@ public:
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
-    virtual OUString           getDimensionName(long nColumn);
-    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
-    virtual sal_Bool                    IsDateDimension(long nDim);
-    virtual sal_uLong                   GetNumberFormat(long nDim);
+    virtual OUString                getDimensionName(long nColumn);
+    virtual bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                IsDateDimension(long nDim);
+    virtual sal_uLong               GetNumberFormat(long nDim);
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 

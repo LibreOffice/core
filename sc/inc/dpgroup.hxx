@@ -152,15 +152,15 @@ public:
     ScDocument* GetDocument()   { return pDoc; }
 
     virtual long                    GetColumnCount();
-    virtual   long                                          GetMembersCount( long nDim );
-    virtual    const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
+    virtual long                    GetMembersCount( long nDim );
+    virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
-    virtual OUString           getDimensionName(long nColumn);
-    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
-    virtual sal_Bool                    IsDateDimension(long nDim);
-    virtual sal_uLong                  GetNumberFormat(long nDim);
+    virtual OUString                getDimensionName(long nColumn);
+    virtual bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                IsDateDimension(long nDim);
+    virtual sal_uLong               GetNumberFormat(long nDim);
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 

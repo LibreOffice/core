@@ -99,7 +99,7 @@ OUString ScDatabaseDPData::getDimensionName(long nColumn)
     return aCacheTable.getFieldName(static_cast<SCCOL>(nColumn));
 }
 
-sal_Bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
+bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 {
     return ( nColumn == GetCacheTable().getColSize());
 }

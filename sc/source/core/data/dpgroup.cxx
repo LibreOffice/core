@@ -604,7 +604,7 @@ OUString ScDPGroupTableData::getDimensionName(long nColumn)
     return pSourceData->getDimensionName( nColumn );
 }
 
-sal_Bool ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
+bool ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
 {
     // position of data layout dimension is moved from source data
     return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?

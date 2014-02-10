@@ -148,7 +148,7 @@ sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
     return 0;
 }
 
-sal_Bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
+bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
 {
     CreateCacheTable();
     return (nColumn ==(long)( aCacheTable.getColSize()));

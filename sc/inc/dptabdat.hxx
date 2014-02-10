@@ -109,12 +109,12 @@ public:
                 //! or separate Str and ValueCollection
 
     virtual long                    GetColumnCount() = 0;
-    virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    virtual OUString           getDimensionName(long nColumn) = 0;
-    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn) = 0;
-    virtual sal_Bool                    IsDateDimension(long nDim) = 0;
-    virtual sal_uLong                   GetNumberFormat(long nDim);
-    virtual sal_uInt32                  GetNumberFormatByIdx( NfIndexTableOffset );
+    virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
+    virtual OUString                getDimensionName(long nColumn) = 0;
+    virtual bool                    getIsDataLayoutDimension(long nColumn) = 0;
+    virtual sal_Bool                IsDateDimension(long nDim) = 0;
+    virtual sal_uLong               GetNumberFormat(long nDim);
+    virtual sal_uInt32              GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
     virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty ) = 0;
 
