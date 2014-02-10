@@ -483,11 +483,13 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
     {
         case SFX_STYLE_FAMILY_CHAR:
             pFmt = rDoc.FindCharFmtByName(aName);
-            pFmt->GetGrabBagItem(rVal);
+            if (pFmt)
+                pFmt->GetGrabBagItem(rVal);
             break;
         case SFX_STYLE_FAMILY_PARA:
             pFmt = rDoc.FindTxtFmtCollByName(aName);
-            pFmt->GetGrabBagItem(rVal);
+            if (pFmt)
+                pFmt->GetGrabBagItem(rVal);
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
             {
