@@ -3043,7 +3043,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     sal_uInt16 nCTLLang = 0;
     const SfxPoolItem * pItem = GetFmtAttr(RES_CHRATR_CTL_LANGUAGE);
     if (pItem != NULL)
-        nCTLLang = dynamic_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
+        nCTLLang = static_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
 
     sal_Int32 nL2;
     for( nL2 = 0; nL2 < nStrLen; ++nL2, ++pWork )
