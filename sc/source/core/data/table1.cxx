@@ -899,8 +899,8 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
         if ( !bBottom && rEndRow > 0 && rStartRow < rEndRow )
         {
             SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow);
-            if (nLastDataRow >= 0 && rStartRow <= nLastDataRow && nLastDataRow < rEndRow)
-                rEndRow = nLastDataRow;
+            if (nLastDataRow < rEndRow)
+                rEndRow = std::max( rStartRow, nLastDataRow);
         }
     }
 }
