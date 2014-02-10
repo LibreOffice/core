@@ -1792,7 +1792,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aHRes = aVRes = Fraction( 1, 1 );
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(sal_False);
+    pVirDev->DisableOutput();
     rGDIMetaFile.Record(pVirDev);
 
     pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);

@@ -135,7 +135,7 @@ static void MakeAsMeta(Graphic &rGraphic)
         aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.DisableOutput();
     aMtf.Record( &aVDev );
     aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
@@ -395,7 +395,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     VirtualDevice   aVDev;
     Font            aFont;
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.DisableOutput();
     aMtf.Record( &aVDev );
     aVDev.SetLineColor( Color( COL_RED ) );
     aVDev.SetFillColor();
@@ -633,7 +633,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                     VirtualDevice   aVDev;
                                     GDIMetaFile     aMtf;
                                     Size            aSize;
-                                    aVDev.EnableOutput( sal_False );
+                                    aVDev.DisableOutput();
                                     aMtf.Record( &aVDev );
                                     aSize = aBitmap.GetPrefSize();
                                     if( !aSize.Width() || !aSize.Height() )

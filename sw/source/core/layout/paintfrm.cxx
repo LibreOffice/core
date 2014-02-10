@@ -7471,7 +7471,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         OutputDevice *pOld = pSh->GetOut();
         VirtualDevice aDev( *pOld );
-        aDev.EnableOutput( sal_False );
+        aDev.DisableOutput();
 
         GDIMetaFile aMet;
         MapMode aMap( pOld->GetMapMode().GetMapUnit() );

@@ -287,7 +287,7 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
 {
     const sal_uLong nHeaderPos = m_rStm.Tell();
 
-    maVDev.EnableOutput( sal_False );
+    maVDev.DisableOutput();
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
