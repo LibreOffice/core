@@ -120,7 +120,7 @@ sal_uLong ScDPTableData::GetNumberFormat(long)
     return 0;           // default format
 }
 
-sal_Bool ScDPTableData::IsBaseForGroup(long) const
+bool ScDPTableData::IsBaseForGroup(long) const
 {
     return false;       // always false
 }

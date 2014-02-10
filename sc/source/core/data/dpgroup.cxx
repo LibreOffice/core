@@ -920,13 +920,13 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
     }
 }
 
-sal_Bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
+bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
 {
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetSourceDim() == nDim )
-            return sal_True;
+            return true;
     }
 
     return false;
