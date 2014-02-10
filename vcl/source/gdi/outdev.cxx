@@ -1021,10 +1021,12 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
         mpAlphaVDev->SetClipRegion( rRegion );
 }
 
-Region OutputDevice::GetClipRegion() const
+Region OutputDevice::GetClipRegion( const bool bLogicalRegion ) const
 {
-
-    return PixelToLogic( maRegion );
+    if ( bLogicalRegion == true )
+        return PixelToLogic( maRegion );
+    else
+        return maRegion;
 }
 
 Region OutputDevice::GetActiveClipRegion() const
