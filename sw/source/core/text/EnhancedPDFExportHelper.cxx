@@ -1586,8 +1586,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     SwDoc* pDoc = mrSh.GetDoc();
     mrSh.SwCrsrShell::Push();
     mrSh.SwCrsrShell::ClearMark();
-    const sal_Bool bOldLockView = mrSh.IsViewLocked();
-    mrSh.LockView( sal_True );
+    const bool bOldLockView = mrSh.IsViewLocked();
+    mrSh.LockView( true );
 
     if ( !mbEditEngineOnly )
     {
@@ -1673,7 +1673,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 // Select the hyperlink:
                 mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
-                if ( mrSh.SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, sal_True ) )
+                if ( mrSh.SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, true ) )
                 {
                     // First, we create the destination, because there may be more
                     // than one link to this destination:
@@ -1767,7 +1767,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             const SwFrmFmt* pFrmFmt = (*pTbl)[n];
             const SfxPoolItem* pItem;
             if ( RES_DRAWFRMFMT != pFrmFmt->Which() &&
-                 SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, sal_True, &pItem ) )
+                 SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
             {
                 OUString aURL( static_cast<const SwFmtURL*>(pItem)->GetURL() );
                 const bool bIntern = '#' == aURL[0];
@@ -1794,7 +1794,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 if ( !bIntern || -1 != nDestId )
                 {
                     Point aNullPt;
-                    const SwRect aLinkRect = pFrmFmt->FindLayoutRect( sal_False, &aNullPt );
+                    const SwRect aLinkRect = pFrmFmt->FindLayoutRect( false, &aNullPt );
 
                     // Link PageNums
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
@@ -2126,7 +2126,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // Restore view, cursor, and outdev:
     mrSh.LockView( bOldLockView );
-    mrSh.SwCrsrShell::Pop( sal_False );
+    mrSh.SwCrsrShell::Pop( false );
     mrOut.Pop();
 }
 

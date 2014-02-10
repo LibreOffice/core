@@ -50,7 +50,7 @@ public:
     // Counts the spaces for justified paragraph
     sal_Int32 GetSpaceCnt( const SwTxtSizeInfo &rInf, sal_Int32& rCnt ) const;
 
-    sal_Bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
+    bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;

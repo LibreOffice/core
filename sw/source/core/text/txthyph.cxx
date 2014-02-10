@@ -263,7 +263,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
  *                      SwTxtPortion::CreateHyphen()
  *************************************************************************/
 
-sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
+bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
     Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
 
@@ -275,7 +275,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         !xHyphWord.is() || // more robust
         // Mehrzeilige Felder duerfen nicht interaktiv getrennt werden.
         ( rInf.IsInterHyph() && InFldGrp() ) )
-        return sal_False;
+        return false;
 
     SwHyphPortion *pHyphPor;
     sal_Int32 nPorEnd;
@@ -351,13 +351,13 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         if( nKern )
             new SwKernPortion( *this, nKern );
 
-        return sal_True;
+        return true;
     }
 
     // last exit for the lost
     delete pHyphPor;
     BreakCut( rInf, rGuess );
-    return sal_False;
+    return false;
 }
 
 
