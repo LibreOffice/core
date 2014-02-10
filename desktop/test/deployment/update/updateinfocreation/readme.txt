@@ -32,7 +32,7 @@ See also the Wiki entry at:
 http://wiki.openoffice.org/wiki/Creating_update_information_for_extensions
 This generated update information file can then be used by the webserver, when it 
 sends back the requested update information. The update information file will be 
-generated in the misc diretory of the output directory.
+generated in the misc directory of the output directory.
 
 The update information file needs to be copied into common.pro/pus.mxyz directory. 
 The project mwsfinish will process the files in the pus directory.
