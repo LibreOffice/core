@@ -1460,10 +1460,7 @@ bool isSingleScriptType( sal_uInt16 nScriptType )
     if (nScriptType & SCRIPTTYPE_COMPLEX)
         ++nScriptCount;
 
-    if (!nScriptCount || nScriptCount > 1)
-        return false;
-
-    return true;
+    return nScriptCount == 1;
 }
 
 }
