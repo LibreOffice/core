@@ -745,7 +745,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             {
                 const sal_Bool  bOldOutput = IsOutputEnabled();
 
-                EnableOutput( sal_False );
+                DisableOutput();
                 Push( PUSH_RASTEROP );
                 SetRasterOp( ROP_XOR );
                 DrawGradient( aRect, rGradient );
@@ -755,7 +755,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 SetRasterOp( ROP_XOR );
                 DrawGradient( aRect, rGradient );
                 Pop();
-                EnableOutput( bOldOutput );
+                if (bOldOutput)
+                    EnableOutput();
+                else
+                    DisableOutput();
             }
 
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );

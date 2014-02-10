@@ -369,7 +369,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
             Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
 
-            aVDev.EnableOutput( false );
+            aVDev.DisableOutput();
             aVDev.SetMapMode( aMapMode );
             aMtf.SetPrefSize( aVisArea.GetSize() );
             aMtf.SetPrefMapMode( aMapMode );

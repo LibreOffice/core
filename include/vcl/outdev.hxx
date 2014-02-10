@@ -579,7 +579,8 @@ public:
      */
     ///@{
 
-    void                        EnableOutput( sal_Bool bEnable = sal_True );
+    void                        EnableOutput();
+    void                        DisableOutput();
     sal_Bool                    IsOutputEnabled() const { return mbOutput; }
     sal_Bool                    IsDeviceOutput() const { return mbDevOutput; }
     sal_Bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }

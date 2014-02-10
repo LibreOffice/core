@@ -2571,7 +2571,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pOrdFile=NULL;
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(sal_False);
+    pVirDev->DisableOutput();
     rGDIMetaFile.Record(pVirDev);
 
     pOS2MET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);

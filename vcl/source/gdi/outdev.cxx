@@ -924,7 +924,7 @@ void OutputDevice::ImplInitClipRegion()
     {
         if ( mbClipRegion )
         {
-            if ( maClipRegion.IsEmpty() )
+            if ( aClipRegion.IsEmpty() )
                 mbOutputClipped = true;
             else
             {
@@ -2465,12 +2465,20 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::EnableOutput( sal_Bool bEnable )
+void OutputDevice::EnableOutput()
 {
-    mbOutput = (bEnable != 0);
+    mbOutput = true;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
+        mpAlphaVDev->EnableOutput();
+}
+
+void OutputDevice::DisableOutput()
+{
+    mbOutput = false;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DisableOutput();
 }
 
 void OutputDevice::SetSettings( const AllSettings& rSettings )

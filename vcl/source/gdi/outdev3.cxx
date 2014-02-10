@@ -6391,11 +6391,13 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 
     // temporarily swap in passed mtf for action generation, and
     // disable output generation.
-    const sal_Bool bOutputEnabled( IsOutputEnabled() );
+    const bool bOutputEnabled = IsOutputEnabled();
     GDIMetaFile* pMtf = mpMetaFile;
 
     mpMetaFile = &rMtf;
-    EnableOutput( sal_False );
+
+    if (bOutputEnabled)
+        DisableOutput();
 
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
@@ -6403,7 +6405,8 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     ImplDrawText( *this, rRect, rOrigStr, nStyle, NULL, NULL, aLayout );
 
     // and restore again
-    EnableOutput( bOutputEnabled );
+    if (bOutputEnabled)
+        EnableOutput();
     mpMetaFile = pMtf;
 }
 
