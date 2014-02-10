@@ -1251,8 +1251,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPWAlignFont
     case NS_sprm::LN_PFrameTextFlow:
         break;  // sprmPFrameTextFlow
-    case NS_sprm::LN_PAnld:
-        break;  // sprmPAnld
     case NS_sprm::LN_POutLvl:
         {
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
@@ -1294,28 +1292,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmCFRMark
     case NS_sprm::LN_CFFldVanish:
         break;  // sprmCFFldVanish
-    case NS_sprm::LN_CFSpec:   // sprmCFSpec
-        break;
-    case NS_sprm::LN_CPicLocation:   // sprmCPicLocation
-            //is being resolved on the tokenizer side
-        break;
-    case NS_sprm::LN_CIbstRMark:
-        break;  // sprmCIbstRMark
     case NS_sprm::LN_CDttmRMark:
         break;  // sprmCDttmRMark
     case NS_sprm::LN_CFData:
         break;  // sprmCFData
-    case NS_sprm::LN_CIdslRMark:
-        break;  // sprmCIdslRMark
     case NS_sprm::LN_CChs:
         break;  // sprmCChs
-    case NS_sprm::LN_CSymbol: // sprmCSymbol
-        resolveSprmProps(*this, rSprm); //resolves LN_FONT and LN_CHAR
-    break;
     case NS_sprm::LN_CFOle2:
         break;  // sprmCFOle2
-    case NS_sprm::LN_CIdCharType:
-        break;  // sprmCIdCharType
     case NS_sprm::LN_CHighlight:
         {
             sal_Int32 nColor = 0;
@@ -1325,18 +1309,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }
         break;  // sprmCHighlight
-    case NS_sprm::LN_CObjLocation:
-        break;  // sprmCObjLocation
     case NS_sprm::LN_CFFtcAsciSymb:
         break;  // sprmCFFtcAsciSymb
-    case NS_sprm::LN_CIstd:
-        break;  // sprmCIstd
-    case NS_sprm::LN_CIstdPermute:
-        break;  // sprmCIstdPermute
     case NS_sprm::LN_CDefault:
         break;  // sprmCDefault
-    case NS_sprm::LN_CPlain:
-        break;  // sprmCPlain
     case NS_sprm::LN_CKcd:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
@@ -1488,8 +1464,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
         break;
-    case NS_sprm::LN_CFtcDefault:
-        break;  // sprmCFtcDefault
     case NS_sprm::LN_CKul: // sprmCKul
         {
             // Parameter:  0 = none,    1 = single,  2 = by Word,
@@ -1499,8 +1473,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             handleUnderlineType(nIntValue, rContext);
         }
         break;
-    case NS_sprm::LN_CSizePos:
-        break;  // sprmCSizePos
     case NS_sprm::LN_CLid:
         break;  // sprmCLid
     case NS_sprm::LN_CIco:
@@ -1547,40 +1519,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_sprm::LN_CHps ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
         break;
-    case NS_sprm::LN_CHpsInc:
-        break;  // sprmCHpsInc
     case NS_sprm::LN_CHpsPos:
         // The spec says 0 is the same as the lack of the value, so don't parse that.
         if (nIntValue)
             m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         break;  // sprmCHpsPos
-    case NS_sprm::LN_CHpsPosAdj:
-        break;  // sprmCHpsPosAdj
-    case NS_sprm::LN_CMajority:
-        break;  // sprmCMajority
-    case NS_sprm::LN_CIss:   // sprmCIss
-        {
-            //sub/super script 1: super, 2: sub, 0: normal
-            sal_Int16 nEscapement = 0;
-            sal_Int8 nProp  = 58;
-            switch(nIntValue)
-            {
-            case 1: //super
-                nEscapement = 101;
-                break;
-            case 2: //sub
-                nEscapement = -101;
-                break;
-            case 0: nProp = 0;break; //none
-            }
-            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
-            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
-        }
-        break;
-    case NS_sprm::LN_CHpsNew50:
-        break;  // sprmCHpsNew50
-    case NS_sprm::LN_CHpsInc1:
-        break;  // sprmCHpsInc1
     case 71 : //"sprmCDxaSpace"
     case 96 : //"sprmCDxaSpace"
     case NS_sprm::LN_CDxaSpace:  // sprmCDxaSpace
@@ -1600,16 +1543,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( sal_Bool(nIntValue) ) );
         break;
-    case NS_sprm::LN_CMajority50:
-        break;  // sprmCMajority50
-    case NS_sprm::LN_CHpsMul:
-        break;  // sprmCHpsMul
-    case NS_sprm::LN_CYsri:
-        break;  // sprmCYsri
     case NS_sprm::LN_CRgFtc0:  // sprmCRgFtc0     //ascii font index
     case NS_sprm::LN_CRgFtc1:  // sprmCRgFtc1     //Asian font index
     case NS_sprm::LN_CRgFtc2:  // sprmCRgFtc2     //CTL font index
-    case NS_sprm::LN_CFtcBi: // sprmCFtcBi      //font index of a CTL font
         {
             FontTablePtr pFontTable = m_pImpl->GetFontTable();
             if(nIntValue >= 0 && pFontTable->size() > sal_uInt32(nIntValue))
@@ -1632,7 +1568,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     eFontPitch =    PROP_CHAR_FONT_PITCH_ASIAN;
                     break;
                 case NS_sprm::LN_CRgFtc2:
-                case NS_sprm::LN_CFtcBi:
                     eFontName =     PROP_CHAR_FONT_NAME_COMPLEX;
                     eFontStyle =    PROP_CHAR_FONT_STYLE_COMPLEX;
                     eFontFamily =   PROP_CHAR_FONT_FAMILY_COMPLEX;
@@ -1660,8 +1595,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case NS_sprm::LN_CFObj:
         break;  // sprmCFObj
-    case NS_sprm::LN_CPropRMark:
-        break;  // sprmCPropRMark
     case NS_sprm::LN_CSfxText:
         // The file-format has many character animations. We have only
         // one, so we use it always. Suboptimal solution though.
@@ -1674,12 +1607,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmCFBiDi
     case NS_sprm::LN_CFDiacColor:
         break;  // sprmCFDiacColor
-    case NS_sprm::LN_CIcoBi:
-        break;  // sprmCIcoBi
     case NS_sprm::LN_CDispFldRMark:
         break;  // sprmCDispFldRMark
-    case NS_sprm::LN_CIbstRMarkDel:
-        break;  // sprmCIbstRMarkDel
     case NS_sprm::LN_CDttmRMarkDel:
         break;  // sprmCDttmRMarkDel
     case NS_sprm::LN_CBrc:
@@ -1697,17 +1626,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
             break;
         }
-    case NS_sprm::LN_CIdslRMarkDel:
-        break;  // sprmCIdslRMarkDel
-    case NS_sprm::LN_CFUsePgsuSettings:
-        break;  // sprmCFUsePgsuSettings
     case NS_sprm::LN_CCpg:
         break;  // sprmCCpg
     case NS_sprm::LN_CLidBi:     // sprmCLidBi     language complex
-    case NS_sprm::LN_CRgLid0_80: // sprmCRgLid0_80 older language Western
     case NS_sprm::LN_CRgLid0:    // sprmCRgLid0    language Western
     case NS_sprm::LN_CRgLid1:    // sprmCRgLid1    language Asian
-    case NS_sprm::LN_CRgLid1_80: // sprmCRgLid1_80 older language Asian
         {
             lang::Locale aLocale( LanguageTag( (LanguageType)nIntValue).getLocale());
 
@@ -1715,11 +1638,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             switch (nSprmId)
             {
                 case NS_sprm::LN_CRgLid0:
-                case NS_sprm::LN_CRgLid0_80:
                     aPropId = PROP_CHAR_LOCALE;
                     break;
                 case NS_sprm::LN_CRgLid1:
-                case NS_sprm::LN_CRgLid1_80:
                     aPropId = PROP_CHAR_LOCALE_ASIAN;
                     break;
                 default:
@@ -1731,9 +1652,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         break;
 
-    case NS_sprm::LN_CIdctHint:   // sprmCIdctHint
-        //list table - text offset???
-        break;
     case NS_sprm::LN_SBkc: // sprmSBkc
         /* break type
           0 - No break
