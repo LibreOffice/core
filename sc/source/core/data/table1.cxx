@@ -882,15 +882,15 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 
         if ( !bTop && rStartRow < MAXROW && rStartRow < rEndRow )
         {
-            bool shrink = true;
+            bool bShrink = true;
             do
             {
-                for ( SCCOL i = rStartCol; i<=rEndCol && shrink; i++)
+                for ( SCCOL i = rStartCol; i<=rEndCol && bShrink; i++)
                     if (aCol[i].HasDataAt(rStartRow))
-                        shrink = false;
-                if (shrink)
+                        bShrink = false;
+                if (bShrink)
                     ++rStartRow;
-            }while( shrink && rStartRow < MAXROW && rStartRow < rEndRow);
+            } while (bShrink && rStartRow < MAXROW && rStartRow < rEndRow);
         }
     }
 
