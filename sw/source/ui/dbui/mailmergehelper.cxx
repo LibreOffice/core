@@ -182,7 +182,7 @@ SwBoldFixedInfo::~SwBoldFixedInfo()
 
 struct  SwAddressPreview_Impl
 {
-    ::std::vector< OUString >    aAdresses;
+    ::std::vector< OUString >    aAddresses;
     sal_uInt16                          nRows;
     sal_uInt16                          nColumns;
     sal_uInt16                          nSelectedAddress;
@@ -249,27 +249,27 @@ IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl)
 
 void SwAddressPreview::AddAddress(const OUString& rAddress)
 {
-    pImpl->aAdresses.push_back(rAddress);
+    pImpl->aAddresses.push_back(rAddress);
     UpdateScrollBar();
 }
 
 void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
-    pImpl->aAdresses.clear();
-    pImpl->aAdresses.push_back(rAddress);
+    pImpl->aAddresses.clear();
+    pImpl->aAddresses.push_back(rAddress);
     aVScrollBar.Show(false);
     Invalidate();
 }
 
 sal_uInt16   SwAddressPreview::GetSelectedAddress()const
 {
-    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     return pImpl->nSelectedAddress;
 }
 
 void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
-    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
@@ -280,20 +280,20 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 
 void SwAddressPreview::Clear()
 {
-    pImpl->aAdresses.clear();
+    pImpl->aAddresses.clear();
     pImpl->nSelectedAddress = 0;
     UpdateScrollBar();
 }
 
 void SwAddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
-    pImpl->aAdresses[pImpl->nSelectedAddress] = rNew;
+    pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
     Invalidate();
 }
 
 void SwAddressPreview::RemoveSelectedAddress()
 {
-    pImpl->aAdresses.erase(pImpl->aAdresses.begin() + pImpl->nSelectedAddress);
+    pImpl->aAddresses.erase(pImpl->aAddresses.begin() + pImpl->nSelectedAddress);
     if(pImpl->nSelectedAddress)
         --pImpl->nSelectedAddress;
     UpdateScrollBar();
@@ -317,7 +317,7 @@ void SwAddressPreview::UpdateScrollBar()
     if(pImpl->nColumns)
     {
         aVScrollBar.SetVisibleSize(pImpl->nRows);
-        sal_uInt16 nResultingRows = (sal_uInt16)(pImpl->aAdresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        sal_uInt16 nResultingRows = (sal_uInt16)(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
         ++nResultingRows;
         aVScrollBar.Show(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows);
         aVScrollBar.SetRange(Range(0, nResultingRows));
@@ -350,7 +350,7 @@ void SwAddressPreview::Paint(const Rectangle&)
     aPartSize.Height() -= 2;
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
-    const sal_uInt16 nNumAddresses = static_cast< sal_uInt16 >(pImpl->aAdresses.size());
+    const sal_uInt16 nNumAddresses = static_cast< sal_uInt16 >(pImpl->aAddresses.size());
     for(sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
     {
         for(sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
@@ -362,7 +362,7 @@ void SwAddressPreview::Paint(const Rectangle&)
             bool bIsSelected = nAddress == pImpl->nSelectedAddress;
             if((pImpl->nColumns * pImpl->nRows) == 1)
                 bIsSelected = false;
-            OUString adr(pImpl->aAdresses[nAddress]);
+            OUString adr(pImpl->aAddresses[nAddress]);
             DrawText_Impl(adr,aPos,aPartSize,bIsSelected);
             ++nAddress;
         }
@@ -387,7 +387,7 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
         sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
 
-        if( nSelect < pImpl->aAdresses.size() &&
+        if( nSelect < pImpl->aAddresses.size() &&
                 pImpl->nSelectedAddress != (sal_uInt16)nSelect)
         {
             pImpl->nSelectedAddress = (sal_uInt16)nSelect;
@@ -411,7 +411,7 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                     --nSelectedRow;
             break;
             case KEY_DOWN:
-                if(pImpl->aAdresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
+                if(pImpl->aAddresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
                     ++nSelectedRow;
             break;
             case KEY_LEFT:
@@ -420,12 +420,12 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
             break;
             case KEY_RIGHT:
                 if(nSelectedColumn < sal_uInt32(pImpl->nColumns - 1) &&
-                       pImpl->aAdresses.size() - 1 > pImpl->nSelectedAddress )
+                       pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
                     ++nSelectedColumn;
             break;
         }
         sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
-        if( nSelect < pImpl->aAdresses.size() &&
+        if( nSelect < pImpl->aAddresses.size() &&
                 pImpl->nSelectedAddress != (sal_uInt16)nSelect)
         {
             pImpl->nSelectedAddress = (sal_uInt16)nSelect;
