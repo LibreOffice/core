@@ -642,7 +642,7 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
 const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
     // Resize objects with relative width or height
-    if ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) )
+    if ( GetPageFrm( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
     {
         Rectangle aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
         Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();

@@ -44,6 +44,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include <ooxml/resourceids.hxx>
@@ -951,16 +952,12 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_SizeRelV_pctHeight:
             if (m_xShape.is() && !m_pImpl->m_rPositivePercentages.empty())
             {
-                sal_Int16 nPositivePercentage = rtl::math::round(m_pImpl->m_rPositivePercentages.front().toDouble() / 1000);
+                sal_Int16 nPositivePercentage = rtl::math::round(m_pImpl->m_rPositivePercentages.front().toDouble() / oox::drawingml::PER_PERCENT);
                 m_pImpl->m_rPositivePercentages.pop();
 
-                uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-                {
-                    uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
-                    xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
-                }
+                uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
             }
             break;
         case 0x271b:

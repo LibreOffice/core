@@ -2808,6 +2808,13 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDmlRectangleRelsize, "dml-rectangle-relsize.docx")
+{
+    // This was around 19560, as we did not read wp14:pctHeight for
+    // drawinglayer shapes and the fallback data was invalid.
+    CPPUNIT_ASSERT(21000 < getShape(1)->getSize().Height);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
