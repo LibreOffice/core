@@ -88,12 +88,9 @@
 #define HID_DSADMIN_PAGE_ADO                              "DBACCESS_HID_DSADMIN_PAGE_ADO"
 
 
-#define HID_JOINSH_ADDTAB_CLOSE                           "DBACCESS_HID_JOINSH_ADDTAB_CLOSE"
-#define HID_JOINSH_ADDTAB_TABLELIST                       "DBACCESS_HID_JOINSH_ADDTAB_TABLELIST"
 #define HID_CTL_QRYDGNTAB                                 "DBACCESS_HID_CTL_QRYDGNTAB"
 #define HID_DLG_QRY_JOIN                                  "DBACCESS_HID_DLG_QRY_JOIN"
 #define HID_DLG_QRY_JOINTYPE                              "DBACCESS_HID_DLG_QRY_JOINTYPE"
-#define HID_JOINSH_ADDTAB_QUERYLIST                       "DBACCESS_HID_JOINSH_ADDTAB_QUERYLIST"
 #define HID_DLG_QRY_HELPTEXT                              "DBACCESS_HID_DLG_QRY_HELPTEXT"
 
 #define HID_CTL_QRYDGNCRIT                                "DBACCESS_HID_CTL_QRYDGNCRIT"
@@ -375,11 +372,6 @@
 #define HID_EXTENSION_NOT_PRESENT_DLG                     "DBACCESS_HID_EXTENSION_NOT_PRESENT_DLG"
 #define HID_DLG_QRY_JOIN_CONTROL                          "DBACCESS_HID_DLG_QRY_JOIN_CONTROL"
 #define HID_MACRO_MIGRATION_BACKUP_LOCATION               "DBACCESS_HID_MACRO_MIGRATION_BACKUP_LOCATION"
-
-// this one below have hid in number space HID_SBA_START
-
-#define HID_DLG_JOIN_TABADD                               "DBACCESS_HID_DLG_JOIN_TABADD"
-
 
 #endif // _DBA_DBACCESS_HELPID_HRC_
 

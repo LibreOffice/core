@@ -37,7 +37,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/control/tabletree.src \
     dbaccess/source/ui/control/undosqledit.src \
     dbaccess/source/ui/dlg/admincontrols.src \
-    dbaccess/source/ui/dlg/adtabdlg.src \
     dbaccess/source/ui/dlg/AutoControls.src \
     dbaccess/source/ui/dlg/CollectionView.src \
     dbaccess/source/ui/dlg/ConnectionPage.src \

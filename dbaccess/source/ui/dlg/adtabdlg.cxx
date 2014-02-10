@@ -18,7 +18,6 @@
  */
 
 #include "adtabdlg.hxx"
-#include "adtabdlg.hrc"
 #include "sqlmessage.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -316,60 +315,48 @@ bool QueryListFacade::isLeafSelected() const
 }
 
 OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
-             :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
-             ,m_aCaseTables( this, ModuleRes( RB_CASE_TABLES ) )
-             ,m_aCaseQueries( this, ModuleRes( RB_CASE_QUERIES ) )
-             ,m_aTableList( this, ModuleRes( LB_TABLE_OR_QUERY ), sal_False )
-             ,m_aQueryList( this, ModuleRes( LB_TABLE_OR_QUERY ) )
-             ,aAddButton( this, ModuleRes( PB_ADDTABLE ) )
-             ,aCloseButton( this, ModuleRes( PB_CLOSE ) )
-             ,aHelpButton( this, ModuleRes( PB_HELP ) )
-             ,m_rContext( _rContext )
+   : ModelessDialog(pParent, "TablesJoinDialog", "dbaccess/ui/tablesjoindialog.ui")
+   , m_rContext(_rContext)
 {
-    // the Close-Button already has a standard help text which should not
-    // occur here. Therefore, resetting the text and giving a new ID
-    aCloseButton.SetHelpText(OUString());
-    aCloseButton.SetHelpId(HID_JOINSH_ADDTAB_CLOSE);
+    get(m_pCaseTables, "tables");
+    get(m_pCaseQueries, "queries");
 
-    m_aTableList.SetHelpId( HID_JOINSH_ADDTAB_TABLELIST );
-    m_aQueryList.SetHelpId( HID_JOINSH_ADDTAB_QUERYLIST );
+    get(m_pTableList, "tablelist");
+    get(m_pQueryList, "querylist");
+    Size aSize(LogicToPixel(Size(106 , 122), MAP_APPFONT));
+    m_pTableList->set_height_request(aSize.Height());
+    m_pTableList->set_width_request(aSize.Width());
+    get(m_pQueryList, "querylist");
+    m_pQueryList->set_height_request(aSize.Height());
+    m_pQueryList->set_width_request(aSize.Width());
 
-    m_aCaseTables.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
-    m_aCaseQueries.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
-    aAddButton.SetClickHdl( LINK( this, OAddTableDlg, AddClickHdl ) );
-    aCloseButton.SetClickHdl( LINK( this, OAddTableDlg, CloseClickHdl ) );
-    m_aTableList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    m_aTableList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
-    m_aQueryList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    get(m_pAddButton, "add");
+    get(m_pCloseButton, "close");
 
-    m_aTableList.EnableInplaceEditing( false );
-    m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
-    m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
-    m_aTableList.SetSelectionMode( SINGLE_SELECTION );
-    m_aTableList.notifyHiContrastChanged();
-    m_aTableList.suppressEmptyFolders();
+    m_pCaseTables->SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_pCaseQueries->SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_pAddButton->SetClickHdl( LINK( this, OAddTableDlg, AddClickHdl ) );
+    m_pCloseButton->SetClickHdl( LINK( this, OAddTableDlg, CloseClickHdl ) );
+    m_pTableList->SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    m_pTableList->SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    m_pQueryList->SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    m_pQueryList->SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
-    m_aQueryList.EnableInplaceEditing( false );
-    m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
+    m_pTableList->EnableInplaceEditing( false );
+    m_pTableList->SetStyle(m_pTableList->GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
+    m_pTableList->EnableCheckButton( NULL ); // do not show any buttons
+    m_pTableList->SetSelectionMode( SINGLE_SELECTION );
+    m_pTableList->notifyHiContrastChanged();
+    m_pTableList->suppressEmptyFolders();
+
+    m_pQueryList->EnableInplaceEditing( false );
+    m_pQueryList->SetSelectionMode( SINGLE_SELECTION );
 
     if ( !m_rContext.allowQueries() )
     {
-        m_aCaseTables.Hide();
-        m_aCaseQueries.Hide();
-
-        long nPixelDiff = m_aTableList.GetPosPixel().Y() - m_aCaseTables.GetPosPixel().Y();
-
-        Point aListPos( m_aTableList.GetPosPixel() );
-        aListPos.Y() -= nPixelDiff;
-
-        Size aListSize( m_aTableList.GetSizePixel() );
-        aListSize.Height() += nPixelDiff;
-
-        m_aTableList.SetPosSizePixel( aListPos, aListSize );
+        m_pCaseTables->Hide();
+        m_pCaseQueries->Hide();
     }
-
-    FreeResource();
 
     SetText( getDialogTitleForContext( m_rContext ) );
 }
@@ -384,36 +371,36 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_aTableList.Show( true );  m_aCaseTables.Check( sal_True );
-        m_aQueryList.Show( false ); m_aCaseQueries.Check( sal_False );
-        m_pCurrentList.reset( new TableListFacade( m_aTableList, m_rContext.getConnection() ) );
-        m_aTableList.GrabFocus();
+        m_pTableList->Show( true );  m_pCaseTables->Check( sal_True );
+        m_pQueryList->Show( false ); m_pCaseQueries->Check( sal_False );
+        m_xCurrentList.reset( new TableListFacade( *m_pTableList, m_rContext.getConnection() ) );
+        m_pTableList->GrabFocus();
         break;
 
     case Queries:
-        m_aTableList.Show( false ); m_aCaseTables.Check( sal_False );
-        m_aQueryList.Show( true );  m_aCaseQueries.Check( sal_True );
-        m_pCurrentList.reset( new QueryListFacade( m_aQueryList, m_rContext.getConnection() ) );
-        m_aQueryList.GrabFocus();
+        m_pTableList->Show( false ); m_pCaseTables->Check( sal_False );
+        m_pQueryList->Show( true );  m_pCaseQueries->Check( sal_True );
+        m_xCurrentList.reset( new QueryListFacade( *m_pQueryList, m_rContext.getConnection() ) );
+        m_pQueryList->GrabFocus();
         break;
     }
-    m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
+    m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
 void OAddTableDlg::Update()
 {
-    if ( !m_pCurrentList.get() )
+    if ( !m_xCurrentList.get() )
         impl_switchTo( Tables );
     else
-        m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
+        m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
 void OAddTableDlg::impl_addTable()
 {
-    if ( m_pCurrentList->isLeafSelected() )
+    if ( m_xCurrentList->isLeafSelected() )
     {
         OUString sSelectedName, sAliasName;
-        sSelectedName = m_pCurrentList->getSelectedName( sAliasName );
+        sSelectedName = m_xCurrentList->getSelectedName( sAliasName );
 
         m_rContext.addTableWindow( sSelectedName, sAliasName );
     }
@@ -440,7 +427,7 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
 
 IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )
 {
-    aAddButton.Enable( m_pCurrentList->isLeafSelected() );
+    m_pAddButton->Enable( m_xCurrentList->isLeafSelected() );
     return 0;
 }
 
@@ -451,7 +438,7 @@ IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 
 IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
 {
-    if ( m_aCaseTables.IsChecked() )
+    if ( m_pCaseTables->IsChecked() )
         impl_switchTo( Tables );
     else
         impl_switchTo( Queries );
@@ -473,7 +460,6 @@ OUString OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rConte
 {
     OUString sTitle;
 
-    ::svt::OLocalResourceAccess aLocalRes( ModuleRes( DLG_JOIN_TABADD ), RSC_MODELESSDIALOG );
     if ( _rContext.allowQueries() )
         sTitle = ModuleRes( STR_ADD_TABLE_OR_QUERY );
     else

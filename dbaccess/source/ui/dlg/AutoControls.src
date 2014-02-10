@@ -79,6 +79,17 @@ String STR_THUNDERBIRD_PROFILE_NAME
     Text[ en-US ] = "~Thunderbird profile name";
 };
 
+String STR_ADD_TABLES
+{
+    Text [ en-US ] = "Add Tables";
+};
+
+String STR_ADD_TABLE_OR_QUERY
+{
+    Text [ en-US ] = "Add Table or Query" ;
+};
+
+
 // -------------------------------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

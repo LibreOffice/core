@@ -19,19 +19,13 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/button.hxx>
-
-#include <vcl/fixed.hxx>
-
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-
 #include "tabletree.hxx"
-
-#include <memory>
 
 namespace dbaui
 {
@@ -64,20 +58,17 @@ namespace dbaui
 
     class OAddTableDlg : public ModelessDialog
     {
-        RadioButton         m_aCaseTables;
-        RadioButton         m_aCaseQueries;
+        RadioButton*        m_pCaseTables;
+        RadioButton*        m_pCaseQueries;
 
-        OTableTreeListBox   m_aTableList;
-        SvTreeListBox       m_aQueryList;
-        ::std::auto_ptr< TableObjectListFacade >
-                            m_pCurrentList;
+        OTableTreeListBox*  m_pTableList;
+        SvTreeListBox*      m_pQueryList;
+        boost::scoped_ptr< TableObjectListFacade > m_xCurrentList;
 
-        PushButton          aAddButton;
-        CancelButton        aCloseButton;
-        HelpButton          aHelpButton;
+        PushButton*         m_pAddButton;
+        PushButton*         m_pCloseButton;
 
-        IAddTableDialogContext&
-                            m_rContext;
+        IAddTableDialogContext& m_rContext;
 
         DECL_LINK( AddClickHdl, Button* );
         DECL_LINK( CloseClickHdl, Button* );
@@ -91,7 +82,7 @@ namespace dbaui
             IAddTableDialogContext& _rContext );
         virtual ~OAddTableDlg();
 
-        void DetermineAddTable() { aAddButton.Enable( impl_isAddAllowed() ); }
+        void DetermineAddTable() { m_pAddButton->Enable( impl_isAddAllowed() ); }
         void Update();
 
         static  OUString  getDialogTitleForContext(

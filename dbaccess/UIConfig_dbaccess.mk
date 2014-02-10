@@ -27,6 +27,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
+    dbaccess/uiconfig/ui/tablesjoindialog \
     dbaccess/uiconfig/ui/useradmindialog \
 ))
 
