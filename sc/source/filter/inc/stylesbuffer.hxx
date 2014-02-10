@@ -766,11 +766,6 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Writes all formatting attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
-    /** Writes all formatting attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
-
     void fillToItemSet( SfxItemSet& rSet ) const;
 
 private:

@@ -2475,29 +2475,6 @@ void Dxf::finalizeImport()
         mxFill->finalizeImport();
 }
 
-void Dxf::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    if( mxFont.get() )
-        mxFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
-    if( mxNumFmt.get() )
-        mxNumFmt->writeToPropertyMap( rPropMap );
-    if( mxAlignment.get() )
-        mxAlignment->writeToPropertyMap( rPropMap );
-    if( mxProtection.get() )
-        mxProtection->writeToPropertyMap( rPropMap );
-    if( mxBorder.get() )
-        mxBorder->writeToPropertyMap( rPropMap );
-    if( mxFill.get() )
-        mxFill->writeToPropertyMap( rPropMap );
-}
-
-void Dxf::writeToPropertySet( PropertySet& rPropSet ) const
-{
-    PropertyMap aPropMap;
-    writeToPropertyMap( aPropMap );
-    rPropSet.setProperties( aPropMap );
-}
-
 void Dxf::fillToItemSet( SfxItemSet& rSet ) const
 {
     if (mxFont)
