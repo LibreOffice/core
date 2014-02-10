@@ -204,23 +204,25 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
             referer = it->GetValue();
         }
         const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic(referer);
-        if( pGrf ) {
+        if( pGrf )
+        {
             aOrigSize = GetGrfOrigSize( *pGrf );
-            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() && aOrigSize.Height()) {
+            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() && aOrigSize.Height())
+            {
                 Bitmap aBitmap = pGrf->GetBitmap();
                 aOrigPixelSize = aBitmap.GetSizePixel();
             }
-        }
 
-        if( aOrigSize.Width() && aOrigSize.Height() )
-        {
-            CalcMinMaxBorder();
-            m_pExampleWN->SetGraphic( *pGrf );
-            m_pExampleWN->SetFrameSize( aOrigSize );
+            if( aOrigSize.Width() && aOrigSize.Height() )
+            {
+                CalcMinMaxBorder();
+                m_pExampleWN->SetGraphic( *pGrf );
+                m_pExampleWN->SetFrameSize( aOrigSize );
 
-            bFound = sal_True;
-            if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
-                aGraphicName = ((SvxBrushItem*)pItem)->GetGraphicLink();
+                bFound = sal_True;
+                if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
+                    aGraphicName = ((SvxBrushItem*)pItem)->GetGraphicLink();
+            }
         }
     }
 
