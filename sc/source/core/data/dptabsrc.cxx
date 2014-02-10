@@ -255,7 +255,7 @@ void removeDim( long nRemove, std::vector<long>& rDims )
 
 }
 
-sal_Bool ScDPSource::SubTotalAllowed(long nColumn)
+bool ScDPSource::SubTotalAllowed(long nColumn)
 {
     //! cache this at ScDPResultData
     bool bAllowed = true;
@@ -300,7 +300,7 @@ void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
     }
 }
 
-sal_Bool ScDPSource::IsDataLayoutDimension(long nDim)
+bool ScDPSource::IsDataLayoutDimension(long nDim)
 {
     return nDim == pData->GetColumnCount();
 }
@@ -310,7 +310,7 @@ sal_uInt16 ScDPSource::GetDataLayoutOrientation()
     return GetOrientation(pData->GetColumnCount());
 }
 
-sal_Bool ScDPSource::IsDateDimension(long nDim)
+bool ScDPSource::IsDateDimension(long nDim)
 {
     return pData->IsDateDimension(nDim);
 }

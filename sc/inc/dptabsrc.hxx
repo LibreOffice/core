@@ -170,15 +170,15 @@ public:
     ScDPDimension*          GetDataDimension(long nIndex);
     OUString GetDataDimName(long nIndex);
     const ScDPCache* GetCache();
-    const ScDPItemData*            GetItemDataById( long nDim, long nId );
-    long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
-    SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
-    sal_Bool                    IsDataLayoutDimension(long nDim);
+    const ScDPItemData*         GetItemDataById( long nDim, long nId );
+    long                        GetDataLayoutDim(){ return pData->GetColumnCount(); }
+    SCROW                       GetMemberId(  long  nDim, const ScDPItemData& rData );
+    bool                        IsDataLayoutDimension(long nDim);
     sal_uInt16                  GetDataLayoutOrientation();
 
-    sal_Bool                    IsDateDimension(long nDim);
+    bool                        IsDateDimension(long nDim);
 
-    sal_Bool                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
+    bool                        SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
     ScDPDimension* AddDuplicated(long nSource, const OUString& rNewName);
     long                    GetDupCount() const { return nDupCount; }
