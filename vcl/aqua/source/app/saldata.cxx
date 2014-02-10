@@ -54,7 +54,7 @@ SalData::SalData()
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
     mnSystemVersion( OSX_VER_LION ),
-    mpMainController( NULL ),
+    mpAppleRemoteMainController( NULL ),
     mpDockIconClickHandler( nil ),
     mnDPIX( 0 ),
     mnDPIY( 0 )
@@ -89,8 +89,8 @@ SalData::~SalData()
         osl_destroyThreadKey( s_aAutoReleaseKey );
         s_aAutoReleaseKey = 0;
     }
-    if ( mpMainController )
-        [mpMainController release];
+    if ( mpAppleRemoteMainController )
+        [mpAppleRemoteMainController release];
 }
 
 void SalData::ensureThreadAutoreleasePool()

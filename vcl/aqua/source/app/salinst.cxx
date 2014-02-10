@@ -190,8 +190,7 @@ static void initNSApp()
     else
         NSLog(@"Unable to obtain system version: %ld", (long)err);
 
-    // Initialize Apple Remote
-    GetSalData()->mpMainController = [[MainController alloc] init]; // TODO: rename MainController to AppleRemoteController
+    GetSalData()->mpAppleRemoteMainController = [[AppleRemoteMainController alloc] init];
 
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
                                            selector: @selector(applicationWillBecomeActive:)

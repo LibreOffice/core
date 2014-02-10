@@ -37,7 +37,7 @@
 // Sample Code 3: Multi Click Behavior and Hold Event Simulation
 // -------------------------------------------------------------------------------------------
 
-@implementation MainController
+@implementation AppleRemoteMainController
 
 - (id) init {
     self = [super init];  // because we redefined our own init instead of use the fu..nny awakeFromNib 
@@ -73,11 +73,11 @@
         // to give the binding mechanism a chance to see the change of the attribute
         [self setValue: container forKey: @"remoteControl"];	
 #ifdef DEBUG
-            NSLog(@"MainController init done");
+            NSLog(@"AppleRemoteMainController init done");
 #endif
     }
     else 
-        NSLog(@"MainController init failed");
+        NSLog(@"AppleRemoteMainController init failed");
     return self;
 }
 

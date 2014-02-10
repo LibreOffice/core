@@ -450,15 +450,16 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
+    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
+    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
     {
         // [remoteControl startListening: self];
         // does crash because the right thing to do is 
-        // [GetSalData()->mpMainController->remoteControl startListening: self];
+        // [pAppleRemoteCtrl->remoteControl startListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [pSalData->mpMainController->remoteControl startListening: self];
+        [pAppleRemoteCtrl->remoteControl startListening: self];
 #ifdef DEBUG
         NSLog(@"Apple Remote will become active - Using remote controls");
 #endif
@@ -477,15 +478,16 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
+    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
+    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
     {
         // [remoteControl stopListening: self];
         // does crash because the right thing to do is 
-        // [GetSalData()->mpMainController->remoteControl stopListening: self];
+        // [pAppleRemoteCtrl->remoteControl stopListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [pSalData->mpMainController->remoteControl stopListening: self]; 
+        [pAppleRemoteCtrl->remoteControl stopListening: self]; 
 #ifdef DEBUG
         NSLog(@"Apple Remote will resign active - Releasing remote controls");
 #endif

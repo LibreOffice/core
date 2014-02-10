@@ -37,7 +37,7 @@
 
 //static void sendTheEvent( unichar, int );
 
-@interface MainController : NSObject {
+@interface AppleRemoteMainController : NSObject {
 @public // else remoteControl is not reachable from GetSalData()->mpMainController
     RemoteControl* remoteControl;
 @private
