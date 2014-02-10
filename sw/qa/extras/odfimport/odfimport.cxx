@@ -327,6 +327,7 @@ DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
 DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
