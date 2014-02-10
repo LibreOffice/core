@@ -1168,19 +1168,23 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
 
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            pCurrWrtShell->StartAllAction();
+            const SwNumRule* pCurRule = pCurrWrtShell->GetCurNumRule();
 
-            SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
-            OUString sOrigRule( aRule.GetName() );
-            // #i91400#
-            aRule.SetName( pStyle->GetNumRule()->GetName(),
-                           *(pCurrWrtShell->GetDoc()) );
-            pCurrWrtShell->ChgNumRuleFmts( aRule );
+            if (pCurRule)
+            {
+                pCurrWrtShell->StartAllAction();
 
-            pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
+                SwNumRule aRule( *pCurRule );
+                OUString sOrigRule( aRule.GetName() );
+                // #i91400#
+                aRule.SetName( pStyle->GetNumRule()->GetName(),
+                               *(pCurrWrtShell->GetDoc()) );
+                pCurrWrtShell->ChgNumRuleFmts( aRule );
 
+                pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
 
-            pCurrWrtShell->EndAllAction();
+                pCurrWrtShell->EndAllAction();
+            }
         }
         break;
     }
