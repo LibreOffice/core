@@ -178,7 +178,7 @@ public:
     virtual bool                    IsBaseForGroup(long nDim) const;
     virtual long                    GetGroupBase(long nGroupDim) const;
     virtual bool                    IsNumOrDateGroup(long nDim) const;
-    virtual sal_Bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual sal_Bool                HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;

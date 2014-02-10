@@ -964,7 +964,7 @@ bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
     return false;
 }
 
-sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )

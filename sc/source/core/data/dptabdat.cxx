@@ -135,7 +135,7 @@ bool ScDPTableData::IsNumOrDateGroup(long) const
     return false;       // always false
 }
 
-sal_Bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
+bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
                                const ScDPItemData&, long ) const
 {
     OSL_FAIL("IsInGroup shouldn't be called for non-group data");
