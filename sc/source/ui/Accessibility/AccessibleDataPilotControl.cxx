@@ -721,6 +721,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet >
     SAL_CALL ScAccessibleDataPilotButton::getAccessibleRelationSet( ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     uno::Reference< com::sun::star::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
     if(mxParent.is())
@@ -759,7 +761,9 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationI
 OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-     if (mpFieldWindow)
+    SolarMutexGuard g;
+
+    if (mpFieldWindow)
         return mpFieldWindow->GetHelpText();
     return OUString();
 }
@@ -822,6 +826,8 @@ OUString ScAccessibleDataPilotButton::getAccessibleActionDescription ( sal_Int32
 
 ::com::sun::star::uno::Reference< XAccessibleKeyBinding > ScAccessibleDataPilotButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw lang::IndexOutOfBoundsException();
       comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper = new comphelper::OAccessibleKeyBindingHelper();
