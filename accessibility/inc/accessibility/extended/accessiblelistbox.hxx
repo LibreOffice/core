@@ -66,6 +66,8 @@ namespace accessibility
 
         void            RemoveChildEntries(SvTreeListEntry*);
 
+        sal_Int32 GetRoleType();
+
     public:
         /** OAccessibleBase needs a valid view
             @param  _rListBox
@@ -111,9 +113,6 @@ namespace accessibility
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
-        // IA2 CWS
-        sal_Int32 SAL_CALL getRoleType();
 
 private:
 

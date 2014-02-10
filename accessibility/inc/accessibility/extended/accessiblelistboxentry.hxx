@@ -225,8 +225,7 @@ namespace accessibility
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > implGetParentAccessible( ) const;
         SvTreeListEntry* GetRealChild(sal_Int32 nIndex);
-    public:
-        sal_Int32 SAL_CALL getRoleType();
+        sal_Int32 GetRoleType();
     };
 
 //........................................................................
