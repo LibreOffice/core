@@ -79,9 +79,12 @@ void SvxInsertStatusBarControl::Click()
     SfxBoolItem aIns( GetSlotId(), bInsert );
 
     ::com::sun::star::uno::Any a;
+    bool bHasValue = aIns.QueryValue( a );
+    if (!bHasValue)
+        return;
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = "InsertMode";
-    aIns.QueryValue( a );
     aArgs[0].Value = a;
 
     execute( aArgs );
