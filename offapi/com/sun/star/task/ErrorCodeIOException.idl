@@ -25,12 +25,11 @@
  module com {  module sun {  module star {  module task {
 
 
-/** IOException that can carry error codes ( not only io related ).
-    It can be used to transport the error code information.
+/** IOException that carries a legacy error code (not only I/O related).
  */
 exception ErrorCodeIOException : com::sun::star::io::IOException
 {
-    /** specifies the error code.
+    /** specifies the error code; see tools/errcode.hxx for details.
      */
 
     long ErrCode;
