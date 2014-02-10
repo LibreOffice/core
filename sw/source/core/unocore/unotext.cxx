@@ -1267,7 +1267,7 @@ SwXText::Impl::finishOrAppendParagraph(
         const bool bFinish,
         const uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (!m_bIsValid)
     {
@@ -1325,6 +1325,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     catch (const uno::RuntimeException& rRuntime)
     {
         sMessage = rRuntime.Message;
+        bRuntimeException = true;
+    }
+    catch (const beans::UnknownPropertyException& rEx)
+    {
+        sMessage = rEx.Message;
         bRuntimeException = true;
     }
 
