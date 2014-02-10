@@ -3440,7 +3440,7 @@ void Frame::impl_checkMenuCloser()
     ReadGuard aReadLock(m_aLock);
 
     // only top frames, which are part of our desktop hierarchy, can
-    // do so! By the way - we need the desktop instance to have acess
+    // do so! By the way - we need the desktop instance to have access
     // to all other top level frames too.
     css::uno::Reference< css::frame::XDesktop >        xDesktop     (m_xParent, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XFramesSupplier > xTaskSupplier(xDesktop , css::uno::UNO_QUERY);
