@@ -978,7 +978,9 @@ void ScDPObject::BuildAllDimensionMembers()
     if (pServDesc)
         return;
 
-    pSaveData->BuildAllDimensionMembers(GetTableData());
+    ScDPTableData* pTableData = GetTableData();
+    if(pTableData)
+        pSaveData->BuildAllDimensionMembers(pTableData);
 }
 
 bool ScDPObject::SyncAllDimensionMembers()
