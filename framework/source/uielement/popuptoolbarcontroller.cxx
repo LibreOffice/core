@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
 
@@ -405,9 +406,15 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
     {
         OUString aState;
         rEvent.State >>= aState;
-        // set the image even if the state is not a string
-        // this will set the image of the default module
-        setItemImage( aState );
+        try
+        {
+            // set the image even if the state is not a string
+            // this will set the image of the default module
+            setItemImage( aState );
+        }
+        catch (const css::ucb::CommandFailedException&)
+        {
+        }
     }
 
     enable( rEvent.IsEnabled );
