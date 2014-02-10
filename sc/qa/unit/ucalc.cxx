@@ -5486,6 +5486,20 @@ void Test::testTransliterateText()
     CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("OSCAR"), m_pDoc->GetString(ScAddress(0,2,0)));
 
+    // Test the undo and redo.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get undo manager.", pUndoMgr);
+
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("Mike"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Noah"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Oscar"), m_pDoc->GetString(ScAddress(0,2,0)));
+
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("OSCAR"), m_pDoc->GetString(ScAddress(0,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
