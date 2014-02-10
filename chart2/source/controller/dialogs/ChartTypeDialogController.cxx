@@ -295,7 +295,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
     uno::Reference< XChartTypeTemplate > xTemplate(0);
 
     rtl::OUString aServiceName( this->getServiceNameForParameter( rParameter ) );
-    if(aServiceName.getLength())
+    if( !aServiceName.isEmpty() )
     {
         xTemplate.set( xTemplateManager->createInstance( aServiceName ), uno::UNO_QUERY );
         if(xTemplate.is())

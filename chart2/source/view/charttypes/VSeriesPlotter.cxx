@@ -520,7 +520,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             {
                 OUString aNumber( this->getLabelTextForValue( rDataSeries
                     , nPointIndex, fValue, false /*bAsPercentage*/ ) );
-                if( aNumber.getLength() )
+                if( !aNumber.isEmpty() )
                 {
                     if(aText.getLength())
                         aText.append(aSeparator);
@@ -539,7 +539,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
                 OUString aPercentage( this->getLabelTextForValue( rDataSeries
                     , nPointIndex, fValue, true /*bAsPercentage*/ ) );
-                if( aPercentage.getLength() )
+                if( !aPercentage.isEmpty() )
                 {
                     if(aText.getLength())
                         aText.append(aSeparator);
@@ -2152,7 +2152,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                 // label
                 aLabelText = aCategoryNames[nIdx];
-                if( xShape.is() || aLabelText.getLength() )
+                if( xShape.is() || !aLabelText.isEmpty() )
                 {
                     aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aLabelText, xTextProperties );
                     aResult.push_back(aEntry);

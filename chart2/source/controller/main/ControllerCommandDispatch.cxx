@@ -705,14 +705,14 @@ void ControllerCommandDispatch::fireStatusEvent(
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
     bool bIsChartSelectorURL = rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:ChartElementSelector") );
-    if( rURL.getLength() == 0 || bIsChartSelectorURL )
+    if( rURL.isEmpty() || bIsChartSelectorURL )
     {
         uno::Any aArg;
         aArg <<= m_xController;
         fireStatusEventForURL( C2U(".uno:ChartElementSelector"), aArg, true, xSingleListener );
     }
 
-    if( rURL.getLength() == 0 )
+    if( rURL.isEmpty() )
         for( ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
              aIt != m_aCommandAvailability.end(); ++aIt )
             fireStatusEventForURLImpl( aIt->first, xSingleListener );
@@ -721,7 +721,7 @@ void ControllerCommandDispatch::fireStatusEvent(
 
     // statusbar. Should be handled by base implementation
     // @todo: remove if Issue 68864 is fixed
-    if( rURL.getLength() == 0 ||
+    if( rURL.isEmpty() ||
         rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:StatusBarVisible")))
     {
         bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xController ));

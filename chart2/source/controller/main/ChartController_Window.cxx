@@ -942,7 +942,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
     if ( m_aSelection.hasSelection() )
     {
         ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
-        if ( aCID.getLength() )
+        if ( !aCID.isEmpty() )
         {
             ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
             if ( OBJECTTYPE_TITLE == eObjectType )
@@ -1232,7 +1232,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         bool bHasTitle = false;
                         uno::Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
                         if( xTitled.is())
-                            bHasTitle = TitleHelper::getCompleteString( xTitled->getTitleObject() ).getLength()>0;
+                            bHasTitle = ( TitleHelper::getCompleteString( xTitled->getTitleObject() ).isEmpty() == false );
 
                         if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, C2U(".uno:FormatAxis") );
@@ -1508,7 +1508,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                             fShiftAmountX = 0.0;
                             break;
                     }
-                    if( m_aSelection.getSelectedCID().getLength() )
+                    if( !m_aSelection.getSelectedCID().isEmpty() )
                     {
                         //move chart objects
                         bReturn = impl_moveOrResizeObject(
@@ -1622,7 +1622,7 @@ bool ChartController::requestQuickHelp(
         aCID = SelectionHelper::getHitObjectCID(
             aAtLogicPosition, *m_pDrawViewWrapper );
     }
-    bool bResult( aCID.getLength());
+    bool bResult( !aCID.isEmpty() );
 
     if( bResult )
     {
@@ -1702,7 +1702,7 @@ bool ChartController::requestQuickHelp(
     if ( m_aSelection.hasSelection() )
     {
         ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
-        if ( aCID.getLength() )
+        if ( !aCID.isEmpty() )
         {
             aReturn = uno::makeAny( aCID );
         }
@@ -2027,7 +2027,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 }
             }
 
-            if( !aHitObjectCID.getLength() )
+            if( aHitObjectCID.isEmpty() )
             {
                 //additional shape was hit
                 m_pChartWindow->SetPointer( POINTER_MOVE );

@@ -158,7 +158,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
         OUString aMediaType;
         if ( ! xProp.is() ||
              ! ( xProp->getPropertyValue( C2U("MediaType")) >>= aMediaType ) ||
-             ( aMediaType.getLength() == 0 ))
+             aMediaType.isEmpty() )
         {
             xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( _sMediaType ));
         }
@@ -433,10 +433,10 @@ sal_Int32 XMLFilter::impl_Import(
             }
         }
 
-        if( aBaseUri.getLength() )
+        if( !aBaseUri.isEmpty() )
             xImportInfo->setPropertyValue( C2U("BaseURI"), uno::makeAny( aBaseUri ) );
 
-        if( aHierarchName.getLength() )
+        if( !aHierarchName.isEmpty() )
             xImportInfo->setPropertyValue( C2U("StreamRelPath"), uno::makeAny( aHierarchName ) );
 
         // import meta information
@@ -544,7 +544,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
                 Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
                 xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_QUERY_THROW ));
 
-                if ( m_sDocumentHandler.getLength() )
+                if ( !m_sDocumentHandler.isEmpty() )
                 {
                     try
                     {
@@ -642,7 +642,7 @@ sal_Int32 XMLFilter::impl_Export(
 
         uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xSaxWriter, uno::UNO_QUERY );
 
-        if ( m_sDocumentHandler.getLength() )
+        if ( !m_sDocumentHandler.isEmpty() )
         {
             try
             {

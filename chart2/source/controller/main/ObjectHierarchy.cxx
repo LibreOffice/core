@@ -93,7 +93,7 @@ void lcl_getChildOIDs(
                 if( xInfo.is() &&
                     xInfo->hasPropertyByName( C2U("Name")) &&
                     (xShapeProp->getPropertyValue( C2U("Name")) >>= aName ) &&
-                    aName.getLength() > 0 &&
+                    !aName.isEmpty() &&
                     ::chart::ObjectIdentifier::isCID( aName ))
                 {
                     rOutChildren.push_back( ::chart::ObjectIdentifier( aName ) );

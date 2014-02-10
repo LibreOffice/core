@@ -348,7 +348,7 @@ bool DataSourceHelper::detectRangeSegmentation(
         DataSourceHelper::readArguments(
             xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument ) ),
             rOutRangeString, rSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
-        bSomethingDetected = (rOutRangeString.getLength() > 0);
+        bSomethingDetected = !rOutRangeString.isEmpty();
 
         uno::Reference< chart2::data::XLabeledDataSequence > xCategories(
                     DiagramHelper::getCategoriesFromDiagram( xChartDocument->getFirstDiagram() ));
@@ -403,7 +403,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             {
                 ::rtl::OUString aRange;
                 bHasCellRangeRepresentation =
-                    (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && aRange.getLength() > 0);
+                    (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && !aRange.isEmpty());
             }
 //         else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SequenceMapping" ) ))
 //         {

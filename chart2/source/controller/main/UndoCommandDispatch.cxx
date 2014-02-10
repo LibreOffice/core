@@ -74,7 +74,7 @@ void UndoCommandDispatch::fireStatusEvent(
 {
     if( m_xUndoManager.is() )
     {
-        bool bFireAll = (rURL.getLength() == 0);
+        const bool bFireAll = rURL.isEmpty();
         uno::Any aUndoState, aRedoState;
         if( m_xUndoManager->isUndoPossible())
         {

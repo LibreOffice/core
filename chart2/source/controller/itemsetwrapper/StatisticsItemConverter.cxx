@@ -477,7 +477,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 bool bIsPositiveValue( nWhichId == SCHATTR_STAT_RANGE_POS );
                 if( xChartDoc->hasInternalDataProvider())
                 {
-                    if( aNewRange.getLength())
+                    if( !aNewRange.isEmpty() )
                     {
                         uno::Reference< chart2::data::XDataSequence > xSeq(
                             StatisticsHelper::getErrorDataSequenceFromDataSource(

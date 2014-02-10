@@ -84,7 +84,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
                 uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
 
                 OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
-                if( xDataProvider.is() && aCatgoriesRange.getLength() )
+                if( xDataProvider.is() && !aCatgoriesRange.isEmpty() )
                 {
                     const bool bFirstCellAsLabel = false;
                     const bool bHasCategories = false;
@@ -299,7 +299,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
         }
         else
         {
-            if( aCurrent.getLength() && aPrevious != aCurrent )
+            if( !aCurrent.isEmpty() && aPrevious != aCurrent )
             {
                 aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
                 nCurrentCount=1;
@@ -399,9 +399,9 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
                 if(!aOuterIt->empty()) // #121277# Caution, aOuterIt may be empty (!)
                 {
                     aAddText = (*aOuterIt)[nN].Text;
-                    if( aAddText.getLength() )
+                    if( !aAddText.isEmpty() )
                     {
-                        if(aText.getLength())
+                        if( !aText.isEmpty() )
                             aText += aSpace;
                         aText += aAddText;
                     }
@@ -483,7 +483,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             {
                 OUString aTest;
                 double fTest = 0;
-                if( (aAny>>=aTest) && !aTest.getLength() ) //empty String
+                if( (aAny>>=aTest) && aTest.isEmpty() ) //empty String
                     bContainsEmptyString = true;
                 else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )
                     bContainsNan = true;

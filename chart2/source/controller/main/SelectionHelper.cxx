@@ -372,7 +372,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
 
     if(!pObj)
         return false;
-    if(!aName.getLength())
+    if( aName.isEmpty() )
         return false;
 
     pInOutObject = pObj;
@@ -397,7 +397,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
                     , const rtl::OUString& rNameOfSelectedObject
                     , const DrawViewWrapper& rDrawViewWrapper )
 {
-    if(!rNameOfSelectedObject.getLength())
+    if( rNameOfSelectedObject.isEmpty() )
         return false;
     if( !ObjectIdentifier::isDragableObject(rNameOfSelectedObject) )
         return false;
@@ -436,13 +436,13 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
 
     rtl::OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) );//@todo read CID from model
     //get page when nothing was hit
-    if( aRet.getLength() == 0  && !pNewObj )
+    if( aRet.isEmpty()  && !pNewObj )
     {
         aRet = aPageCID;
     }
 
     //get diagram instead wall or page if hit inside diagram
-    if( aRet.getLength() != 0  )
+    if( !aRet.isEmpty()  )
     {
         if( aRet.equals( aPageCID ) )
         {
@@ -511,7 +511,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
     rtl::OUString aName( lcl_getObjectName( pObj ) );
     if( aName.match(C2U("MarkHandles")) || aName.match(C2U("HandlesOnly")) )
         return pObj;
-    if( aName.getLength() )//dont't get the markhandles of a different object
+    if( !aName.isEmpty() )//dont't get the markhandles of a different object
         return 0;
 
     //search for a child with name "MarkHandles" or "HandlesOnly"

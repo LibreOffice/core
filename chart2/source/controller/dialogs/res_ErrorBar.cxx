@@ -760,7 +760,7 @@ void ErrorBarResources::disposingRangeSelection()
 bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
 {
     ::rtl::OUString aRange( rEdit.GetText());
-    bool bIsValid = ( aRange.getLength() == 0 ) ||
+    bool bIsValid = aRange.isEmpty() ||
         ( m_apRangeSelectionHelper.get() &&
           m_apRangeSelectionHelper->verifyCellRange( aRange ));
 

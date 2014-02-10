@@ -145,7 +145,7 @@ void lcl_ConvertRangeFromXML(
     ::rtl::OUString & rInOutRange,
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    if( rInOutRange.getLength())
+    if( !rInOutRange.isEmpty() )
     {
         uno::Reference< chart2::data::XRangeXMLConversion > xConverter(
             lcl_getDataProviderFromContact( spChart2ModelContact ), uno::UNO_QUERY );
@@ -161,7 +161,7 @@ void lcl_ConvertRangeToXML(
     ::rtl::OUString & rInOutRange,
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    if( rInOutRange.getLength())
+    if( !rInOutRange.isEmpty() )
     {
         uno::Reference< chart2::data::XRangeXMLConversion > xConverter(
             lcl_getDataProviderFromContact( spChart2ModelContact ), uno::UNO_QUERY );

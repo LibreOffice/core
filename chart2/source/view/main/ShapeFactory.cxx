@@ -1929,7 +1929,7 @@ uno::Reference< drawing::XShapes >
         xTarget->add(xShape);
 
         //set name
-        if(aName.getLength())
+        if( !aName.isEmpty() )
             setShapeName( xShape , aName );
 
         {//workaround
@@ -1987,7 +1987,7 @@ uno::Reference< drawing::XShapes >
         }
 
         //set name
-        if(aName.getLength())
+        if( !aName.isEmpty() )
             setShapeName( xShape , aName );
 
         //return
@@ -2244,7 +2244,7 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return 0;
 
-    if(!rText.getLength())
+    if( rText.isEmpty() )
         return 0;
 
     //create shape and add to page

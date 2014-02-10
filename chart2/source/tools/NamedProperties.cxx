@@ -46,7 +46,7 @@ void NamedProperties::AddPropertiesToVector(
 OUString NamedProperties::GetPropertyNameForHandle( sal_Int32 nHandle )
 {
     OUString aName = NamedFillProperties::GetPropertyNameForHandle( nHandle );
-    if( !aName.getLength() )
+    if( aName.isEmpty() )
         aName = NamedLineProperties::GetPropertyNameForHandle( nHandle );
     return aName;
 }

@@ -284,7 +284,7 @@ bool RangeChooserTabPage::isValid()
         || ( m_aCB_FirstRowAsLabel.IsChecked()    && !m_aRB_Rows.IsChecked() );
     sal_Bool bHasCategories = ( m_aCB_FirstColumnAsLabel.IsChecked() && m_aRB_Columns.IsChecked() )
         || ( m_aCB_FirstRowAsLabel.IsChecked()    && m_aRB_Rows.IsChecked() );
-    bool bIsValid = ( aRange.getLength() == 0 ) ||
+    bool bIsValid = aRange.isEmpty() ||
         m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
             DataSourceHelper::createArguments(
                 aRange, Sequence< sal_Int32 >(), m_aRB_Columns.IsChecked(), bFirstCellAsLabel, bHasCategories ));

@@ -96,7 +96,7 @@ Reference< drawing::XShape > createSingleLabel(
           , const tAnySequence& rPropValues
           )
 {
-    if(!rLabel.getLength())
+    if( rLabel.isEmpty() )
         return 0;
 
     // #i78696# use mathematically correct rotation now

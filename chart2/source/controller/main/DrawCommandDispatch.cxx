@@ -592,7 +592,7 @@ bool DrawCommandDispatch::parseCommandURL( const ::rtl::OUString& rCommandURL, s
 
     sal_Int32 nIndex = 1;
     ::rtl::OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
-    if ( nIndex == -1 || !aToken.getLength() )
+    if ( nIndex == -1 || aToken.isEmpty() )
     {
         aBaseCommand = rCommandURL;
         SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( aBaseCommand );

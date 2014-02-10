@@ -63,7 +63,7 @@ bool FeatureCommandDispatchBase::isFeatureSupported( const ::rtl::OUString& rCom
 void FeatureCommandDispatchBase::fireStatusEvent( const ::rtl::OUString& rURL,
     const Reference< frame::XStatusListener >& xSingleListener /* = 0 */ )
 {
-    if ( rURL.getLength() == 0 )
+    if ( rURL.isEmpty() )
     {
         SupportedFeatures::const_iterator aEnd( m_aSupportedFeatures.end() );
         for ( SupportedFeatures::const_iterator aIter( m_aSupportedFeatures.begin() ); aIter != aEnd; ++aIter )

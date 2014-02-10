@@ -637,7 +637,7 @@ bool ChartController::executeDispatch_Delete()
     // remove the selected object
     //
     rtl::OUString aCID( m_aSelection.getSelectedCID() );
-    if( aCID.getLength() )
+    if( !aCID.isEmpty() )
     {
         if( !isObjectDeleteable( uno::Any( aCID ) ) )
             return false;

@@ -90,9 +90,9 @@ OUString lcl_getFullSeriesName( const rtl::OUString& rObjectCID, const Reference
 
 void lcl_addText( OUString& rOut, const OUString& rSeparator, const OUString& rNext )
 {
-    if( rOut.getLength() && rNext.getLength() )
+    if( !rOut.isEmpty() && !rNext.isEmpty() )
         rOut+=rSeparator;
-    if( rNext.getLength() )
+    if( !rNext.isEmpty() )
         rOut+=rNext;
 }
 
@@ -185,7 +185,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
         }
     }
 
-    if( aX.getLength() == 0 )
+    if( aX.isEmpty() )
     {
         aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex );
     }
@@ -394,7 +394,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
             break;
     }
 
-    if( !aRet.getLength() )
+    if( aRet.isEmpty() )
         aRet=String(SchResId(STR_OBJECT_TITLE));
 
     return aRet;
@@ -413,7 +413,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
         if( TitleHelper::getTitleType( eType, xTitle, xChartModel ) )
             aRet = ObjectNameProvider::getTitleNameByType( eType );
     }
-    if( !aRet.getLength() )
+    if( aRet.isEmpty() )
         aRet=String(SchResId(STR_OBJECT_TITLE));
 
     return aRet;
@@ -737,7 +737,7 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
         // use the verbose text including the formula for trend lines
         const bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType || OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType );
         const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
-        if( aHelpText.getLength())
+        if( !aHelpText.isEmpty() )
         {
             aRet = String( SchResId( STR_STATUS_OBJECT_MARKED ));
             replaceParamterInString( aRet, C2U("%OBJECTNAME"), aHelpText );
