@@ -421,8 +421,6 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
         }
         else
         {
-            RscFile         * pFNTmp;
-            RscDepend       * pDep;
             RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
             pFName->bScanned = true;
@@ -432,14 +430,14 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             // Include-Pfad durchsuchen
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
-                pDep = pFName->aDepLst[ i ];
-                pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
+                RscDepend       * pDep = pFName->aDepLst[ i ];
+                pTC->aFileTab.GetFile( pDep->GetFileKey() );
             }
 
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
-                pDep = pFName->aDepLst[ i ];
-                pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
+                RscDepend       * pDep = pFName->aDepLst[ i ];
+                RscFile         * pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
                 {
