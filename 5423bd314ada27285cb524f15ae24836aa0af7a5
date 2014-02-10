@@ -52,6 +52,24 @@
       "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_90aaedd2",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-10T11:21:16Z",
+      "side": 1,
+      "message": "Done; The order of properties in spnCommonPropIds for charts was wrong\nhttp://opengrok.libreoffice.org/xref/core/oox/source/drawingml/chart/objectformatter.cxx#466",
+      "parentUuid": "da9df570_fd05d214",
+      "revId": "5423bd314ada27285cb524f15ae24836aa0af7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
