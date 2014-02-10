@@ -130,7 +130,7 @@ long ScDPTableData::GetGroupBase(long) const
     return -1;          // always none
 }
 
-sal_Bool ScDPTableData::IsNumOrDateGroup(long) const
+bool ScDPTableData::IsNumOrDateGroup(long) const
 {
     return false;       // always false
 }

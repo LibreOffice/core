@@ -944,7 +944,7 @@ long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
     return -1;      // none
 }
 
-sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
+bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 {
     // Virtual method from ScDPTableData, used in result data to force text labels.
 
