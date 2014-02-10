@@ -142,7 +142,7 @@ bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
     return false;
 }
 
-sal_Bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
+bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
                                       const ScDPItemData&, long ) const
 {
     OSL_FAIL("HasCommonElement shouldn't be called for non-group data");

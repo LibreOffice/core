@@ -992,7 +992,7 @@ bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
     return true;
 }
 
-sal_Bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                          const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
     const ScDPGroupDimension* pFirstDim = NULL;

@@ -180,7 +180,7 @@ public:
     virtual bool                    IsNumOrDateGroup(long nDim) const;
     virtual bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    virtual sal_Bool                HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
 #if DEBUG_PIVOT_TABLE
