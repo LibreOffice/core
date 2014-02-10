@@ -838,7 +838,6 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 if (nAnz==0) return true;
                 if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
                 if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;
-                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return true;
             }
         } break;
 
