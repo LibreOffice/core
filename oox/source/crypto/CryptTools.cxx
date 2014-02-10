@@ -61,7 +61,10 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
 
     SECItem ivItem;
     ivItem.type = siBuffer;
-    ivItem.data = &iv[0];
+    if(iv.empty())
+        ivItem.data = NULL;
+    else
+        ivItem.data = &iv[0];
     ivItem.len = iv.size();
 
     SECItem* pIvItem = NULL;
