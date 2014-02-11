@@ -90,13 +90,14 @@ namespace dbaui
 
 
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
-        :OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
-        ,m_aFT_Connection   ( this, ResId( FT_AUTOBROWSEURL, *_rId.GetResMgr() ) )
-           ,m_aConnectionURL   ( this, ResId( ET_AUTOBROWSEURL, *_rId.GetResMgr() ) )
-        ,m_aPB_Connection   ( this, ResId( PB_AUTOBROWSEURL, *_rId.GetResMgr() ) )
-        ,m_aPB_CreateDB     ( this, ResId( PB_CREATEDB, *_rId.GetResMgr() ) )
+        : OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
+        , m_bUserGrabFocus(false)
+        , m_aFT_Connection(this, ResId(FT_AUTOBROWSEURL, *_rId.GetResMgr()))
+        , m_aConnectionURL(this, ResId(ET_AUTOBROWSEURL, *_rId.GetResMgr()))
+        , m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL, *_rId.GetResMgr()))
+        , m_aPB_CreateDB(this, ResId(PB_CREATEDB, *_rId.GetResMgr()))
+        , m_pCollection(NULL)
     {
-
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
