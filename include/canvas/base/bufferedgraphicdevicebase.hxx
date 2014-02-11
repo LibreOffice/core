@@ -117,7 +117,9 @@ namespace canvas
             BaseType::maDeviceHelper.destroyBuffers();
         }
 
-        virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll )
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception)
         {
             MutexType aGuard( BaseType::m_aMutex );
 
