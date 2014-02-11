@@ -295,6 +295,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     }
                 }
                 break;
+
                 case MID_FIRST_LINE_INDENT:
                 {
                     sal_Int32 nProp = 100;
@@ -308,6 +309,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     pLRSpace->SetTxtFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
                 }
+                break;
 
                 case MID_FIRST_AUTO:
                 {
