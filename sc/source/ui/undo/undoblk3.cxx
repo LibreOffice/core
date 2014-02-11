@@ -142,6 +142,7 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
         aCopyRange.aEnd.SetTab(nTabCount-1);
 
         pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, bMulti, pDoc, &aMarkData );
+        BroadcastChanges(aCopyRange);
 
         DoSdrUndoAction( pDrawUndo, pDoc );
 
