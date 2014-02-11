@@ -40,6 +40,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define SCRIPT_HANGUL   2
 
 TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xContext )
+    : TextConversion("com.sun.star.i18n.TextConversion_ko")
 {
     Reference < XInterface > xI;
 
@@ -76,8 +77,6 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
         maxLeftLength = xCD->getMaxCharCount(ConversionDirection_FROM_LEFT);
         maxRightLength = xCD->getMaxCharCount(ConversionDirection_FROM_RIGHT);
     }
-
-    implementationName = "com.sun.star.i18n.TextConversion_ko";
 }
 
 sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)

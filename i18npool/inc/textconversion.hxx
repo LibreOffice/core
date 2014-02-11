@@ -40,7 +40,7 @@ class TextConversion: public cppu::WeakImplHelper2
 >
 {
 public:
-        TextConversion();
+        TextConversion(const char* pImplName);
         ~TextConversion();
         // Methods
         virtual com::sun::star::i18n::TextConversionResult SAL_CALL
@@ -81,8 +81,9 @@ public:
     com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
-protected :
+private:
     const sal_Char* implementationName;
+protected :
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;
     oslGenericFunction SAL_CALL getFunctionBySymbol(const sal_Char* func);

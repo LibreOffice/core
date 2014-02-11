@@ -36,10 +36,9 @@ using namespace com::sun::star::uno;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xContext )
+    : TextConversion("com.sun.star.i18n.TextConversion_zh")
 {
     xCDL = ConversionDictionaryList::create(xContext);
-
-    implementationName = "com.sun.star.i18n.TextConversion_zh";
 }
 
 sal_Unicode SAL_CALL getOneCharConversion(sal_Unicode ch, const sal_Unicode* Data, const sal_uInt16* Index)

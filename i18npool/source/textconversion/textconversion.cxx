@@ -31,7 +31,8 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #endif
 
-TextConversion::TextConversion()
+TextConversion::TextConversion(const char *pImplName)
+    : implementationName(pImplName)
 {
 #ifndef DISABLE_DYNLOADING
 #ifdef SAL_DLLPREFIX
