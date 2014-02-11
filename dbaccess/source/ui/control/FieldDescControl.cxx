@@ -524,6 +524,7 @@ OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
         case FIELD_PROPERTY_COLUMNNAME:
             if(m_pColumnName)
                 return m_pColumnName->GetText();
+            break;
         case FIELD_PROPERTY_TYPE:
             if(m_pType)
                 return m_pType->GetSelectEntry();
