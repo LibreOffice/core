@@ -377,7 +377,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 {
     if ( pEngine->GetParagraphCount() > 1 )
     {
-        bNeedsObject = sal_True;            //! Zellatribute finden ?
+        bNeedsObject = true;            //! Zellatribute finden ?
     }
     else
     {
@@ -390,7 +390,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
         {
             SfxItemState eState = pEditAttrs->GetItemState( nId, false, &pItem );
             if (eState == SFX_ITEM_DONTCARE)
-                bNeedsObject = sal_True;
+                bNeedsObject = true;
             else if (eState == SFX_ITEM_SET)
             {
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
@@ -402,12 +402,12 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
                     //  from "user attributes applied to the cell".
 
                     if ( *pItem != rEditDefaults.Get(nId) )
-                        bNeedsObject = sal_True;
+                        bNeedsObject = true;
                 }
                 else
                     if (!bNeedsCellAttr)
                         if ( *pItem != rEditDefaults.Get(nId) )
-                            bNeedsCellAttr = sal_True;
+                            bNeedsCellAttr = true;
                 //  rEditDefaults contains the defaults from the cell format
             }
         }
@@ -416,13 +416,13 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 
         SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-            bNeedsObject = sal_True;
+            bNeedsObject = true;
 
         //  not converted characters?
 
         SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, false );
         if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
-            bNeedsObject = sal_True;
+            bNeedsObject = true;
     }
 }
 

@@ -97,15 +97,15 @@ class ScEditAttrTester
 {
     ScEditEngineDefaulter* pEngine;
     SfxItemSet* pEditAttrs;
-    sal_Bool        bNeedsObject;
-    sal_Bool        bNeedsCellAttr;
+    bool        bNeedsObject;
+    bool        bNeedsCellAttr;
 
 public:
                 ScEditAttrTester( ScEditEngineDefaulter* pEng );
                 ~ScEditAttrTester();
 
-    sal_Bool                NeedsObject() const     { return bNeedsObject; }
-    sal_Bool                NeedsCellAttr() const   { return bNeedsCellAttr; }
+    bool                NeedsObject() const     { return bNeedsObject; }
+    bool                NeedsCellAttr() const   { return bNeedsCellAttr; }
     const SfxItemSet&   GetAttribs() const      { return *pEditAttrs; }
 };
 

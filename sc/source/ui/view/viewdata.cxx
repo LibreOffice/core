@@ -941,7 +941,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
-                                            GetEditArea( pPattern, sal_True );
+                                            GetEditArea( pPattern, true );
 
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
