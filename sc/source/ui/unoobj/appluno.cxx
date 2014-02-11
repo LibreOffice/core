@@ -92,7 +92,8 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Content_createI
 extern uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_Settings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOOoExport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Settings_createInstance(
-            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                throw( uno::Exception, std::exception );
 
 // Calc XML Oasis export
 extern uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_getSupportedServiceNames() throw();
