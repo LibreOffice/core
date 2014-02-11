@@ -8379,7 +8379,7 @@ HSQLDB_USE_JDBC_4_1=
 AC_MSG_CHECKING([which hsqldb to use])
 if test "$with_system_hsqldb" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_HSQLDB=YES
+    SYSTEM_HSQLDB=TRUE
     if test -z $HSQLDB_JAR; then
         HSQLDB_JAR=/usr/share/java/hsqldb.jar
     fi
@@ -8414,7 +8414,7 @@ if test "$with_system_hsqldb" = "yes"; then
     fi
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_HSQLDB=NO
+    SYSTEM_HSQLDB=
     BUILD_TYPE="$BUILD_TYPE HSQLDB"
     AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
     javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
@@ -8446,7 +8446,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
-        SYSTEM_POSTGRESQL=YES
+        SYSTEM_POSTGRESQL=TRUE
         if test "$_os" = Darwin; then
             supp_path=''
             for d in /Library/PostgreSQL/9.*/bin /sw/opt/postgresql/9.*/bin /opt/local/lib/postgresql9*/bin; do
@@ -8539,19 +8539,19 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         esac
 
         if test -n "$with_libpq_path"; then
-            SYSTEM_POSTGRESQL=YES
+            SYSTEM_POSTGRESQL=TRUE
             AC_MSG_RESULT([external libpq])
             POSTGRESQL_LIB="-L${with_libpq_path}/lib/"
             POSTGRESQL_INC=-I"${with_libpq_path}/include/"
         else
-            SYSTEM_POSTGRESQL=NO
+            SYSTEM_POSTGRESQL=
             AC_MSG_RESULT([internal])
             POSTGRESQL_LIB=""
             POSTGRESQL_INC="%OVERRIDE_ME%"
             BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
         fi
     fi
-    if test "${SYSTEM_POSTGRESQL}" = "YES"; then
+    if test "${SYSTEM_POSTGRESQL}" = "TRUE"; then
         AC_MSG_NOTICE([checking system PostgreSQL prerequisites])
         save_CFLAGS=$CFLAGS
         save_CPPFLAGS=$CPPFLAGS

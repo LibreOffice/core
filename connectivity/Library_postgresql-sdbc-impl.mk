@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	) \
 ))
 
-ifneq ($(SYSTEM_POSTGRESQL),YES)
+ifeq ($(SYSTEM_POSTGRESQL),)
 ifneq ($(OS)$(COM),WNTMSC)
 
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\

@@ -2235,7 +2235,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 endef
 
-ifeq ($(SYSTEM_HSQLDB),YES)
+ifneq ($(SYSTEM_HSQLDB),)
 
 define gb_LinkTarget__use_hsqldb
 
@@ -2356,7 +2356,7 @@ gb_LinkTarget__use_firebird :=
 endif # ENABLE_FIREBIRD_SDBC
 
 
-ifeq ($(SYSTEM_POSTGRESQL),YES)
+ifneq ($(SYSTEM_POSTGRESQL),)
 
 define gb_LinkTarget__use_postgresql
 
@@ -2906,7 +2906,7 @@ endif # DESKTOP
 
 ### Jars ############################################################
 
-ifeq ($(SYSTEM_HSQLDB),YES)
+ifneq ($(SYSTEM_HSQLDB),)
 
 define gb_Jar__use_hsqldb
 $(call gb_Jar_use_system_jar,$(1),$(HSQLDB_JAR))

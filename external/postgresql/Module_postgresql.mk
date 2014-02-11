@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,postgresql))
 
-ifeq ($(SYSTEM_POSTGRESQL),NO)
+ifeq ($(SYSTEM_POSTGRESQL),)
 
 $(eval $(call gb_Module_add_targets,postgresql,\
 	ExternalProject_postgresql \
