@@ -239,7 +239,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         }
 
         int nFound = str.indexOf( " encoding" );
-        if( nFound < str.getLength() ) {
+        if( nFound >= 0 ) {
             int nStop;
             int nStart = str.indexOf( "\"" , nFound );
             if( nStart < 0 || str.indexOf( "'" , nFound ) < nStart )
