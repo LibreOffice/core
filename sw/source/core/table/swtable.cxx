@@ -411,16 +411,8 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     else
         CheckRegistration( pOld, pNew );
 
-    if( pOldSize || pNewSize )
-    {
-        if ( !IsModifyLocked() )
-        {
-            OSL_ENSURE( pOldSize && pOldSize->Which() == RES_FRM_SIZE &&
-                    pNewSize && pNewSize->Which() == RES_FRM_SIZE,
-                    "No Old or New for FmtFrmSize-Modify of the SwTable." );
-            AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
-        }
-    }
+    if (pOldSize && pNewSize && !IsModifyLocked())
+        AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
 }
 
 void SwTable::AdjustWidths( const long nOld, const long nNew )
