@@ -2299,7 +2299,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t");
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[2]/w:t");
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match("15"));
@@ -2861,19 +2861,6 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod",
             "val", "160000");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
-{
-    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
-    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:hyperlink/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match("PAGEREF _Toc355095261 \\h"));
 }
 
 /* FIXME this still crashes
