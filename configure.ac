@@ -7877,7 +7877,7 @@ if test  "$test_freetype" = "yes"; then
     # 9.9.3 is 2.2.0
     PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
     FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    SYSTEM_FREETYPE=YES
+    SYSTEM_FREETYPE=TRUE
     _save_libs="$LIBS"
     _save_cflags="$CFLAGS"
     LIBS="$LIBS $FREETYPE_LIBS"
@@ -7980,7 +7980,7 @@ AC_SUBST(XSLTPROC)
 AC_MSG_CHECKING([which libxml to use])
 if test "$with_system_libxml" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_LIBXML=YES
+    SYSTEM_LIBXML=TRUE
     if test "$_os" = "Darwin"; then
         dnl make sure to use SDK path
         LIBXML_CFLAGS="-I$MACOSX_SDK_PATH/usr/include/libxml2"
@@ -8006,7 +8006,7 @@ if test "$with_system_libxml" = "yes"; then
     libo_MINGW_TRY_DLL([zlib1])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_LIBXML=NO
+    SYSTEM_LIBXML=
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
 AC_SUBST(SYSTEM_LIBXML)
@@ -8262,7 +8262,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_MSG_CHECKING([which MariaDB to use])
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_MARIADB=YES
+        SYSTEM_MARIADB=TRUE
         #AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
         if test -z "$MARIADBCONFIG"; then
             AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
@@ -8314,7 +8314,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     else
         AC_MSG_RESULT([internal])
         AC_MSG_ERROR([libmariadb is known to be broken as of 2013-10; use libmysqlclient])
-        SYSTEM_MARIADB=NO
+        SYSTEM_MARIADB=
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
         MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
         BUILD_TYPE="$BUILD_TYPE MARIADB"

@@ -254,7 +254,7 @@ $(call gb_LinkTarget_add_libs,$(1),-liconv)
 
 endef
 
-ifeq ($(SYSTEM_MARIADB),YES)
+ifneq ($(SYSTEM_MARIADB),)
 
 define gb_LinkTarget__use_mariadb
 $(call gb_LinkTarget_set_include,$(1),\
@@ -286,7 +286,7 @@ endef
 endif # SYSTEM_MARIADB
 
 
-ifeq ($(SYSTEM_MARIADB),YES)
+ifneq ($(SYSTEM_MARIADB),)
 
 define gb_LinkTarget__use_mysql
 
@@ -805,7 +805,7 @@ endef
 endif # SYSTEM_LIBEXTTEXTCAT
 
 
-ifeq ($(SYSTEM_LIBXML),YES)
+ifneq ($(SYSTEM_LIBXML),)
 
 define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -1107,7 +1107,7 @@ endef
 
 endif # SYSTEM_CAIRO
 
-ifeq ($(SYSTEM_FREETYPE),YES)
+ifneq ($(SYSTEM_FREETYPE),)
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -3261,7 +3261,7 @@ endef
 
 # External executables
 
-ifneq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
+ifneq ($(SYSTEM_LIBXML_FOR_BUILD),)
 
 gb_ExternalExecutable__register_xmllint :=
 

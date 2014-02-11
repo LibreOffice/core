@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 			$(if $(filter IOS,$(OS)),LIBS="-liconv") \
 			--disable-shared,--disable-static) \
-			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-libxml-src=$(call gb_UnpackedTarball_get_dir,xml2)) \
+			$(if $(SYSTEM_LIBXML),,--with-libxml-src=$(call gb_UnpackedTarball_get_dir,xml2)) \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \
 	)

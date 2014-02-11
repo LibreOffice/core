@@ -36,7 +36,7 @@ $(eval $(call gb_Library_use_custom_headers,swui,\
 
 $(eval $(call gb_Library_use_sdk_api,swui))
 
-ifeq ($(SYSTEM_LIBXML),YES)
+ifneq ($(SYSTEM_LIBXML),)
 $(eval $(call gb_Library_add_cxxflags,swui,\
 	$(LIBXML_CFLAGS) \
 ))
