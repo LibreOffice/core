@@ -10193,29 +10193,29 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                     AC_MSG_RESULT([external])
                     AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
                         [AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
-                    SYSTEM_BLUEZ=YES
+                    SYSTEM_BLUEZ=TRUE
                 else
                     AC_MSG_RESULT([internal])
-                    SYSTEM_BLUEZ=NO
+                    SYSTEM_BLUEZ=
                 fi
             else
                 AC_MSG_RESULT([no, dbus disabled])
                 ENABLE_SDREMOTE_BLUETOOTH=
-                SYSTEM_BLUEZ=NO 
+                SYSTEM_BLUEZ=
             fi
         else
             AC_MSG_RESULT([yes])
             ENABLE_SDREMOTE_BLUETOOTH=TRUE
-            SYSTEM_BLUEZ=NO
+            SYSTEM_BLUEZ=
         fi
     else
         AC_MSG_RESULT([no])
         ENABLE_SDREMOTE_BLUETOOTH=
-        SYSTEM_BLUEZ=NO
+        SYSTEM_BLUEZ=
     fi
 else
     ENABLE_SDREMOTE=
-    SYSTEM_BLUEZ=NO
+    SYSTEM_BLUEZ=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE)
@@ -10437,14 +10437,14 @@ elif test "$_os" = "Darwin"; then
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=
     add_warning "openGL canvas not adapted for Mac yet - disabling"
-    SYSTEM_MESA_HEADERS=YES
+    SYSTEM_MESA_HEADERS=TRUE
     AC_MSG_RESULT([yes])
 elif test $_os = WINNT; then
     # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=TRUE
     # We need the internal "Mesa" headers.
-    SYSTEM_MESA_HEADERS=NO
+    SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
     AC_MSG_RESULT([yes])
 else
@@ -10469,7 +10469,7 @@ else
     AC_MSG_CHECKING([which Mesa headers to use])
     if test "$with_system_mesa_headers" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_MESA_HEADERS=YES
+        SYSTEM_MESA_HEADERS=TRUE
         AC_LANG_PUSH(C)
         AC_CHECK_HEADER(GL/glxext.h, [],
            [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
@@ -10478,7 +10478,7 @@ else
         AC_LANG_POP(C)
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_MESA_HEADERS=NO
+        SYSTEM_MESA_HEADERS=
         BUILD_TYPE="$BUILD_TYPE MESA"
     fi
 fi

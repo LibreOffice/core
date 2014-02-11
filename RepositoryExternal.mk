@@ -29,11 +29,11 @@
 
 # External headers
 
-ifeq ($(SYSTEM_MESA_HEADERS),YES)
+ifneq ($(SYSTEM_MESA_HEADERS),)
 
 gb_LinkTarget__use_mesa_headers :=
 
-else
+else # !SYSTEM_MESA_HEADERS
 
 define gb_LinkTarget__use_mesa_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -43,7 +43,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-endif
+endif # SYSTEM_MESA_HEADERS
 
 ifneq ($(SYSTEM_NPAPI_HEADERS),)
 
@@ -159,7 +159,7 @@ gb_LinkTarget__use_sane_headers :=
 
 endif
 
-ifeq ($(SYSTEM_BLUEZ),YES)
+ifneq ($(SYSTEM_BLUEZ),)
 
 gb_LinkTarget__use_bluez_bluetooth_headers :=
 
