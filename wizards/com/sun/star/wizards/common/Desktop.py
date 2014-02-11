@@ -45,11 +45,6 @@ class Desktop(object):
         return xDesktop.getActiveFrame()
 
     @classmethod
-    def getActiveComponent(self, _xMSF):
-        xFrame = self.getActiveFrame(_xMSF)
-        return xFrame.getController().getModel()
-
-    @classmethod
     def getDispatcher(self, xMSF, xFrame, _stargetframe, oURL):
         try:
             xDispatch = xFrame.queryDispatch(oURL, _stargetframe, ALL)

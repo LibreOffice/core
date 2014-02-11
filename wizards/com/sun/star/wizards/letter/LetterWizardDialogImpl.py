@@ -43,10 +43,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     RM_TYPESTYLE = 1
     RM_BUSINESSPAPER = 2
-    RM_ELEMENTS = 3
     RM_SENDERRECEIVER = 4
     RM_FOOTER = 5
-    RM_FINALSETTINGS = 6
 
     def enterStep(self, OldStep, NewStep):
         pass

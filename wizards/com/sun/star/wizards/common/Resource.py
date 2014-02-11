@@ -50,12 +50,10 @@ class Resource(object):
 
     def getResArray(self, nID, iCount):
         try:
-            ResArray = list(range(iCount))
-            i = 0
-            while i < iCount:
-                ResArray[i] = getResText(nID + i)
-                i += 1
-            return ResArray
+            resArray = []
+            for i in range(iCount):
+                resArray.append(self.getResText(nID + i))
+            return resArray
         except Exception:
             traceback.print_exc()
             raise ValueError("Resource with ID not" + str(nID) + " not found")

@@ -48,11 +48,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def enterStep(self, nOldStep, nNewStep):
         pass
 
-    RM_TYPESTYLE = 1
-    RM_ELEMENTS = 2
     RM_SENDERRECEIVER = 3
     RM_FOOTER = 4
-    RM_FINALSETTINGS = 5
 
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)

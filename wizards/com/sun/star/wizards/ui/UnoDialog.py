@@ -1,4 +1,5 @@
 #
+#
 # This file is part of the LibreOffice project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -321,10 +322,7 @@ class UnoDialog(object):
             return "SelectedItems"
         else:
             return ""
-
-    def addResourceHandler(self, _Unit, _Module):
-        self.m_oResource = Resource(self.xMSF, _Unit, _Module)
-
+        
     def isHighContrastModeActivated(self):
         if (self.xVclWindowPeer is not None):
             if (self.BisHighContrastModeActivated is None):

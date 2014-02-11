@@ -41,11 +41,10 @@ from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 
 class AgendaWizardDialogImpl(AgendaWizardDialog):
 
-    pageDesign = None
-
     def __init__(self, xmsf):
         super(AgendaWizardDialogImpl, self).__init__(xmsf)
         self.filenameChanged = False
+        self.pageDesign = -1
 
     def enterStep(self, OldStep, NewStep):
         pass
@@ -141,6 +140,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             tuple(self.agendaTemplates[0])
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
+        self.pageDesign = self.agenda.cp_AgendaType
         UnoDataAware.attachCheckBox(
             self.agenda, "cp_IncludeMinutes", self.chkMinutes, True).updateUI()
         UnoDataAware.attachEditControl(
@@ -187,7 +187,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         RadioDataAware.attachRadioButtons(
             self.agenda, "cp_ProceedMethod",
                 (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
-
+                
     def insertRoadmap(self):
         self.addRoadmap()
 
@@ -223,8 +223,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         try:
             SelectedItemPos = self.listPageDesign.SelectedItemPos
             #avoid to load the same item again
-            if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
-                AgendaWizardDialogImpl.pageDesign = SelectedItemPos
+            if self.pageDesign is not SelectedItemPos:
+                self.pageDesign = SelectedItemPos
                 self.myAgendaDoc.load(
                     self.agendaTemplates[1][SelectedItemPos])
                 self.drawConstants()

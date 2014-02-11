@@ -26,6 +26,7 @@ from ..common.HelpIds import HelpIds
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
+from com.sun.star.awt.FontWeight import BOLD
 
 class WizardDialog(UnoDialog2):
 
@@ -53,12 +54,12 @@ class WizardDialog(UnoDialog2):
     def __init__(self, xMSF, hid_):
         super(WizardDialog,self).__init__(xMSF)
         self.__hid = hid_
-        self.__iButtonWidth = 50
+        self.iButtonWidth = 50
         self.nNewStep = 1
         self.nOldStep = 1
         self.nMaxStep = 1
-        self.__bTerminateListenermustberemoved = True
-        self.__oWizardResource = Resource(xMSF, "dbw")
+        self.bTerminateListenermustberemoved = True
+        self.oWizardResource = Resource(xMSF, "dbw")
         self.oRoadmap = None
         self.terminateListener = None
 
@@ -138,15 +139,11 @@ class WizardDialog(UnoDialog2):
                 ItemListenerProcAdapter(method))
 
             self.oRoadmap.Text = \
-                self.__oWizardResource.getResText(UIConsts.RID_COMMON + 16)
+                self.oWizardResource.getResText(UIConsts.RID_COMMON + 16)
         except NoSuchMethodException:
             Resource.showCommonResourceError(xMSF)
         except Exception:
             traceback.print_exc()
-
-    def setRMItemLabels(self, _oResource, StartResID):
-        self.sRMItemLabels = _oResource.getResArray(
-            StartResID, self.nMaxStep)
 
     def insertRoadmapItem(self, Index, _bEnabled, _sLabel, _CurItemID):
         try:
@@ -211,17 +208,17 @@ class WizardDialog(UnoDialog2):
     def drawNaviBar(self):
         try:
             curtabindex = UIConsts.SOFIRSTWIZARDNAVITABINDEX
-            iButtonWidth = self.__iButtonWidth
+            iButtonWidth = self.iButtonWidth
             iButtonHeight = 14
             iCurStep = 0
             iDialogHeight = self.xDialogModel.Height
             iDialogWidth = self.xDialogModel.Width
             iHelpPosX = 8
             iBtnPosY = iDialogHeight - iButtonHeight - 6
-            iCancelPosX = iDialogWidth - self.__iButtonWidth - 6
-            iFinishPosX = iCancelPosX - 6 - self.__iButtonWidth
-            iNextPosX = iFinishPosX - 6 - self.__iButtonWidth
-            iBackPosX = iNextPosX - 3 - self.__iButtonWidth
+            iCancelPosX = iDialogWidth - self.iButtonWidth - 6
+            iFinishPosX = iCancelPosX - 6 - self.iButtonWidth
+            iNextPosX = iFinishPosX - 6 - self.iButtonWidth
+            iBackPosX = iNextPosX - 3 - self.iButtonWidth
             self.insertControlModel(
                 "com.sun.star.awt.UnoControlFixedLineModel",
                 "lnNaviSep",
@@ -264,26 +261,26 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_TABINDEX,
                     PropertyNames.PROPERTY_WIDTH),
                 (True, iButtonHeight,
-                    self.__oWizardResource.getResText(UIConsts.RID_COMMON + 15),
+                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 15),
                     iHelpPosX, iBtnPosY,
                     uno.Any("short",HELP), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardBack",
                 WizardDialog.__BACK_ACTION_PERFORMED, propNames,
                 (False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2),
-                    self.__oWizardResource.getResText(UIConsts.RID_COMMON + 13),
+                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 13),
                     iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardNext",
                 WizardDialog.__NEXT_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3),
-                    self.__oWizardResource.getResText(UIConsts.RID_COMMON + 14),
+                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 14),
                     iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardFinish",
                 WizardDialog.__FINISH_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4),
-                    self.__oWizardResource.getResText(UIConsts.RID_COMMON + 12),
+                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 12),
                         iFinishPosX, iBtnPosY, uno.Any("short",STANDARD),
                         iCurStep,
                         uno.Any("short",(curtabindex + 1)),
@@ -291,7 +288,7 @@ class WizardDialog(UnoDialog2):
             self.insertButton("btnWizardCancel",
                 WizardDialog.__CANCEL_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5),
-                    self.__oWizardResource.getResText(UIConsts.RID_COMMON + 11),
+                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 11),
                     iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)
@@ -418,18 +415,14 @@ class WizardDialog(UnoDialog2):
         self.nNewStep = _nNewstep
         changeToStep(self.nNewStep)
 
-    def setRightPaneHeaders(self, _oResource, StartResID, _nMaxStep):
-        self.sRightPaneHeaders = _oResource.getResArray(StartResID, _nMaxStep)
-        setRightPaneHeaders(self.sRightPaneHeaders)
-
     def setRightPaneHeaders(self, _sRightPaneHeaders):
-        self.nMaxStep = _sRightPaneHeaders.length
+        self.nMaxStep = len(_sRightPaneHeaders)
         self.sRightPaneHeaders = _sRightPaneHeaders
-        oFontDesc = FontDescriptor.FontDescriptor()
-        oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD
-        i = 0
-        while i < self.sRightPaneHeaders.length:
-            insertLabel("lblQueryTitle" + String.valueOf(i),("FontDescriptor",
+        oFontDesc = uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
+        oFontDesc.Weight = BOLD
+        for i in range(self.nMaxStep):
+            self.insertLabel("lblQueryTitle" + str(i),
+                ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -438,18 +431,17 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),(
-                    oFontDesc, 16, self.sRightPaneHeaders(i),
+                    oFontDesc, 16, _sRightPaneHeaders[i],
                     True, 91, 8, i + 1, 12, 212))
-            i += 1
 
     def cancelWizard(self):
         #can be overwritten by extending class
         self.xUnoDialog.endExecute()
 
     def removeTerminateListener(self):
-        if self.__bTerminateListenermustberemoved:
+        if self.bTerminateListenermustberemoved:
             Desktop.getDesktop(self.xMSF).removeTerminateListener(self.terminateListener)
-            self.__bTerminateListenermustberemoved = False
+            self.bTerminateListenermustberemoved = False
 
     '''
     called by the cancel button and

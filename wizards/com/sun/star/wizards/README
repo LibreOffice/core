@@ -13,6 +13,6 @@ To call a wizard remotely you need to:
     soffice --"accept=socket,host=localhost,port=2002;urp;"
       
 -> Launch the wizard from wizards parent folder:
-    python
-    from wizards.[Wizard's folder].CallWizard import CallWizard
+    python3.3
+    from wizards.[Wizard's folder].CallWizard import CallWizard  
     CallWizard.callRemote()
