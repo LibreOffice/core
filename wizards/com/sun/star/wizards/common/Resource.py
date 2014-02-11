@@ -22,7 +22,6 @@ from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class Resource(object):
 
-    @classmethod
     def __init__(self, _xMSF, _Module):
         self.xMSF = _xMSF
         self.Module = _Module

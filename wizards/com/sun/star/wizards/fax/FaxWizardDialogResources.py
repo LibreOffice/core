@@ -29,10 +29,6 @@ class FaxWizardDialogResources(Resource):
     def __init__(self, xmsf):
         super(FaxWizardDialogResources,self).__init__(xmsf,
             FaxWizardDialogResources.MODULE_NAME)
-        self.RoadmapLabels = []
-        self.SalutationLabels = []
-        self.GreetingLabels = []
-        self.CommunicationLabels = []
 
         self.resFaxWizardDialog_title = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
@@ -157,32 +153,12 @@ class FaxWizardDialogResources(Resource):
             FaxWizardDialogResources.RID_RID_COMMON_START + 19)
         self.resTemplateDescription = self.getResText(
             FaxWizardDialogResources.RID_RID_COMMON_START + 20)
-        
-        self.loadRoadmapResources()
-        self.loadSalutationResources()
-        self.loadGreetingResources()
-        self.loadCommunicationResources()
 
-    def loadRoadmapResources(self):
-        for i in range(5):
-            self.RoadmapLabels.append(self.getResText(
-                FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + \
-                + i + 1))
-
-    def loadSalutationResources(self):
-        for i in range(4):
-            self.SalutationLabels.append(self.getResText(
-                FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + \
-                i + 1))
-
-    def loadGreetingResources(self):
-        for i in range(4):
-            self.GreetingLabels.append(self.getResText(
-                FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + \
-                i + 1))
-
-    def loadCommunicationResources(self):
-        for i in range(3):
-            self.CommunicationLabels.append(self.getResText(
-                FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + \
-                i + 1))
+        self.RoadmapLabels = self.getResArray(
+            FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 1 , 5)
+        self.SalutationLabels = self.getResArray(
+            FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 1 , 4)
+        self.GreetingLabels = self.getResArray(
+            FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 1 , 4)
+        self.CommunicationLabels = self.getResArray(
+            FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 1 , 3)

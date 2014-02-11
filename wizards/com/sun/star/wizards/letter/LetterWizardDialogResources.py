@@ -30,9 +30,6 @@ class LetterWizardDialogResources(Resource):
     def __init__(self, xmsf):
         super(LetterWizardDialogResources,self).__init__(
             xmsf, LetterWizardDialogResources.MODULE_NAME)
-        self.RoadmapLabels = []
-        self.SalutationLabels = []
-        self.GreetingLabels = []
 
         self.resLetterWizardDialog_title = \
             self.getResText(
@@ -248,24 +245,9 @@ class LetterWizardDialogResources(Resource):
             self.getResText(
                 LetterWizardDialogResources.RID_RID_COMMON_START + 20)
         
-        self.loadRoadmapResources()
-        self.loadSalutationResources()
-        self.loadGreetingResources()
-
-    def loadRoadmapResources(self):       
-        for i in range(6):
-            self.RoadmapLabels.append(self.getResText(
-                LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + \
-                i + 1))
-
-    def loadSalutationResources(self):
-        for i in range(3):
-            self.SalutationLabels.append(self.getResText(
-                LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + \
-                i + 1))
-
-    def loadGreetingResources(self):
-        for i in range(3):
-            self.GreetingLabels.append(self.getResText(
-                LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + \
-                i + 1))
+        self.RoadmapLabels = self.getResArray(
+            LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 1, 6)
+        self.SalutationLabels = self.getResArray(
+            LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + 1, 3)
+        self.GreetingLabels = self.getResArray(
+            LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + 1, 3)
