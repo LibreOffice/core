@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,zlib))
 
-ifeq ($(SYSTEM_ZLIB),NO)
+ifeq ($(SYSTEM_ZLIB),)
 
 $(eval $(call gb_Module_add_targets,zlib,\
 	StaticLibrary_zlib \

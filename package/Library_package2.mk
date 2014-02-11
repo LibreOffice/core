@@ -65,7 +65,7 @@ $(eval $(call gb_Library_add_exception_objects,package2,\
 	package/source/zippackage/ZipPackageStream \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
+ifneq ($(SYSTEM_ZLIB),)
 $(eval $(call gb_Library_add_defs,package2,\
 	-DSYSTEM_ZLIB \
 ))

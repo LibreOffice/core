@@ -231,7 +231,7 @@ $(eval $(call gb_Library_use_externals,scfilt,\
 	zlib \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
+ifneq ($(SYSTEM_ZLIB),)
 $(eval $(call gb_Library_add_defs,scfilt,\
 	-DSYSTEM_ZLIB \
 ))

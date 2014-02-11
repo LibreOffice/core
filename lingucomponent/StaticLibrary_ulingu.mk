@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_use_api,ulingu,\
 	offapi \
 ))
 
-ifeq ($(SYSTEM_DICTS),YES)
+ifneq ($(SYSTEM_DICTS),)
 $(eval $(call gb_StaticLibrary_add_defs,ulingu,\
 	-DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\" \
 ))

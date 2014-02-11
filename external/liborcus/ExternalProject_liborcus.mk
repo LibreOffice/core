@@ -32,7 +32,7 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 #$(if $(filter MSC,$(COM)),CPPFLAGS+="-DBOOST_ALL_NO_LIB") CXXFLAGS+="$(BOOST_CXXFLAGS))
 
 liborcus_LIBS=
-ifeq ($(SYSTEM_ZLIB),YES)
+ifneq ($(SYSTEM_ZLIB),)
 liborcus_LIBS+=-lz
 endif
 ifeq ($(SYSTEM_BOOST),YES)
@@ -48,7 +48,7 @@ liborcus_CPPCLAGS=$(CPPFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CPPFLAGS+=-DBOOST_ALL_NO_LIB
 endif
-ifeq ($(SYSTEM_ZLIB),NO)
+ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
 # patched boost needs to find config_global.h

@@ -48,7 +48,7 @@
  endif
  endif
  
-+ifeq ($(SYSTEM_ZLIB),YES)  
++ifneq ($(SYSTEM_ZLIB),)
 +# Currently (3.12.4) only the tools modutil and signtool are linked with libz
 +# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
 +# is also build in nss.

@@ -353,7 +353,7 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_ZLIB),YES)
+ifneq ($(SYSTEM_ZLIB),)
 
 define gb_LinkTarget__use_zlib
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -1148,7 +1148,7 @@ endef
 
 endif # SYSTEM_FREETYPE
 
-ifeq ($(SYSTEM_FONTCONFIG),YES)
+ifneq ($(SYSTEM_FONTCONFIG),)
 
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_set_include,$(1),\

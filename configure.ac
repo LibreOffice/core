@@ -4720,7 +4720,7 @@ AC_SUBST(ENABLE_CUPS)
 # fontconfig checks
 if test "$test_fontconfig" = "yes"; then
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
-    SYSTEM_FONTCONFIG=YES
+    SYSTEM_FONTCONFIG=TRUE
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
@@ -4794,7 +4794,7 @@ fi
 AC_MSG_CHECKING([whether to use dicts from external paths])
 if test -z "$with_system_dicts" -o "$with_system_dicts" != "no"; then
     AC_MSG_RESULT([yes])
-    SYSTEM_DICTS=YES
+    SYSTEM_DICTS=TRUE
     AC_MSG_CHECKING([for spelling dictionary directory])
     if test -n "$with_external_dict_dir"; then
         DICT_SYSTEM_DIR=file://$with_external_dict_dir
@@ -4821,7 +4821,7 @@ if test -z "$with_system_dicts" -o "$with_system_dicts" != "no"; then
     AC_MSG_RESULT([$THES_SYSTEM_DIR])
 else
     AC_MSG_RESULT([no])
-    SYSTEM_DICTS=NO
+    SYSTEM_DICTS=
 fi
 AC_SUBST(SYSTEM_DICTS)
 AC_SUBST(DICT_SYSTEM_DIR)
@@ -7667,14 +7667,14 @@ dnl libo_CHECK_SYSTEM_MODULE([zlib],[ZLIB],[zlib])
 AC_MSG_CHECKING([which zlib to use])
 if test "$with_system_zlib" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_ZLIB=YES
+    SYSTEM_ZLIB=TRUE
     AC_CHECK_HEADER(zlib.h, [],
         [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
     AC_CHECK_LIB(z, deflate, [ ZLIB=-lz ],
         [AC_MSG_ERROR(zlib not found or functional)], [])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_ZLIB=NO
+    SYSTEM_ZLIB=
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
     ZLIB_LIBS="-lzlib"
