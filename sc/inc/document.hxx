@@ -2023,7 +2023,7 @@ public:
     formula::FormulaGrammar::Grammar  GetStorageGrammar() const
                             { return eStorageGrammar; }
 
-    SfxUndoManager*     GetUndoManager();
+    SC_DLLPUBLIC SfxUndoManager* GetUndoManager();
     bool IsInVBAMode() const;
     ScRowBreakIterator* GetRowBreakIterator(SCTAB nTab) const;
 

@@ -96,6 +96,7 @@ public:
     void testCachedFormulaResultsODS();
     void testCachedMatrixFormulaResultsODS();
     void testFormulaDepAcrossSheetsODS();
+    void testFormulaDepDeleteContentsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
     void testDatabaseRangesXLSX();
@@ -171,6 +172,7 @@ public:
     CPPUNIT_TEST(testFunctionsExcel2010);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
     CPPUNIT_TEST(testFormulaDepAcrossSheetsODS);
+    CPPUNIT_TEST(testFormulaDepDeleteContentsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
@@ -637,6 +639,40 @@ void ScFiltersTest::testFormulaDepAcrossSheetsODS()
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fA4 != pDoc->GetValue(ScAddress(0,3,2)));
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fB4 != pDoc->GetValue(ScAddress(1,3,2)));
     CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fC4 != pDoc->GetValue(ScAddress(2,3,2)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testFormulaDepDeleteContentsODS()
+{
+    ScDocShellRef xDocSh = loadDoc("formula-delete-contents.", ODS, true);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    sc::UndoSwitch aUndoSwitch(*pDoc, true); // Enable undo.
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // Make sure auto calc is turned on.
+
+    CPPUNIT_ASSERT_EQUAL(195.0, pDoc->GetValue(ScAddress(3,15,0))); // formula in D16
+
+    // Delete D2:D5.
+    ScDocFunc& rFunc = xDocSh->GetDocFunc();
+    ScRange aRange(3,1,0,3,4,0);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    aMark.MarkToMulti();
+    bool bGood = rFunc.DeleteContents(aMark, IDF_ALL, true, true);
+    CPPUNIT_ASSERT(bGood);
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3,3,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3,4,0)));
+
+    CPPUNIT_ASSERT_EQUAL(94.0, pDoc->GetValue(ScAddress(3,15,0))); // formula in D16
+
+    SfxUndoManager* pUndoMgr = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(195.0, pDoc->GetValue(ScAddress(3,15,0))); // formula in D16
 
     xDocSh->DoClose();
 }
