@@ -641,7 +641,8 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
             aFtMSShowContent        ( this, CUI_RES( FT_MS_SHOW_CONTENT ) ),
             aFlMSGeneralSecond      ( this, CUI_RES( FL_MS_GENERAL_SECOND ) ),
             aFtMSChangeDate         ( this, CUI_RES( FT_MS_CHANGEDATE ) ),
-            aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) )
+            aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) ),
+            pData(NULL)
 {
     FreeResource();
 
