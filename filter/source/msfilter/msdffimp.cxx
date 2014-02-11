@@ -2868,11 +2868,6 @@ DffRecordManager::DffRecordManager( SvStream& rIn ) :
     Consume( rIn );
 }
 
-DffRecordManager::~DffRecordManager()
-{
-};
-
-
 void DffRecordManager::Consume( SvStream& rIn, sal_Bool bAppend, sal_uInt32 nStOfs )
 {
     if ( !bAppend )

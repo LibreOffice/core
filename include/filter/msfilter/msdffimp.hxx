@@ -390,7 +390,6 @@ public :
 
         DffRecordManager();
         explicit DffRecordManager( SvStream& rIn );
-        ~DffRecordManager();
 
         DffRecordHeader* Current();
         DffRecordHeader* First();
