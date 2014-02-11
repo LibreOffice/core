@@ -944,6 +944,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                         aWindowStateInfo.nStyle = sal_uInt16( nValue );
                     }
                 }
+                break;
 
                 default:
                     DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
