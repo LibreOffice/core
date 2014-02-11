@@ -1473,6 +1473,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
                     ((FormattedField*)m_pPainter)->SetDefaultText(sDefault);
                 }
             }
+            break;
             default:
                 OSL_FAIL( "DbFormattedField::Init: unexpected value type!" );
                 break;
