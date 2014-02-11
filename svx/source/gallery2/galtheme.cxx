@@ -472,8 +472,8 @@ bool GalleryTheme::RemoveObject( size_t nPos )
             aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-        delete pEntry;
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        delete pEntry;
 
         ImplSetModified( sal_True );
         ImplBroadcast( nPos );
@@ -1410,8 +1410,8 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         {
             pObj = aObjectList[ i ];
             Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
-            delete pObj;
             Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
+            delete pObj;
         }
         aObjectList.clear();
 
