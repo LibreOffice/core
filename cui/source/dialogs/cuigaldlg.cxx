@@ -450,6 +450,7 @@ ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
     aFtActualizeFile        ( this, CUI_RES( FT_ACTUALIZE_FILE ) ),
     aFLActualizeProgress   ( this, CUI_RES( FL_ACTUALIZE_PROGRESS ) ),
     aBtnCancel              ( this, CUI_RES( BTN_CANCEL ) ),
+    pTimer(NULL),
     pTheme                  ( pThm )
 {
     FreeResource();
