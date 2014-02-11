@@ -1286,20 +1286,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if (pSectionContext != NULL)
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
         break;
-    case NS_sprm::LN_CFRMarkDel:
-        break;  // sprmCFRMarkDel
-    case NS_sprm::LN_CFRMark:
-        break;  // sprmCFRMark
-    case NS_sprm::LN_CFFldVanish:
-        break;  // sprmCFFldVanish
-    case NS_sprm::LN_CDttmRMark:
-        break;  // sprmCDttmRMark
-    case NS_sprm::LN_CFData:
-        break;  // sprmCFData
-    case NS_sprm::LN_CChs:
-        break;  // sprmCChs
-    case NS_sprm::LN_CFOle2:
-        break;  // sprmCFOle2
     case NS_sprm::LN_CHighlight:
         {
             sal_Int32 nColor = 0;
@@ -1309,10 +1295,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }
         break;  // sprmCHighlight
-    case NS_sprm::LN_CFFtcAsciSymb:
-        break;  // sprmCFFtcAsciSymb
-    case NS_sprm::LN_CDefault:
-        break;  // sprmCDefault
     case NS_sprm::LN_CKcd:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
@@ -1593,8 +1575,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_RELIEF,
                          uno::makeAny( nIntValue ? awt::FontRelief::ENGRAVED : awt::FontRelief::NONE ));
         break;
-    case NS_sprm::LN_CFObj:
-        break;  // sprmCFObj
     case NS_sprm::LN_CSfxText:
         // The file-format has many character animations. We have only
         // one, so we use it always. Suboptimal solution though.
@@ -1605,14 +1585,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmCSfxText
     case NS_sprm::LN_CFBiDi:
         break;  // sprmCFBiDi
-    case NS_sprm::LN_CFDiacColor:
-        break;  // sprmCFDiacColor
-    case NS_sprm::LN_CDispFldRMark:
-        break;  // sprmCDispFldRMark
-    case NS_sprm::LN_CDttmRMarkDel:
-        break;  // sprmCDttmRMarkDel
-    case NS_sprm::LN_CBrc:
-        break;  // sprmCBrc
     case NS_sprm::LN_CShd:
         {
             //contains fore color, back color and shadow percentage, results in a brush
@@ -1626,8 +1598,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
             break;
         }
-    case NS_sprm::LN_CCpg:
-        break;  // sprmCCpg
     case NS_sprm::LN_CLidBi:     // sprmCLidBi     language complex
     case NS_sprm::LN_CRgLid0:    // sprmCRgLid0    language Western
     case NS_sprm::LN_CRgLid1:    // sprmCRgLid1    language Asian
@@ -1760,9 +1730,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 0xd236:
     case 0xd237:
         break;//undocumented section properties
-    case NS_sprm::LN_CEastAsianLayout:
-        resolveSprmProps(*this, rSprm);
-        break;
     case NS_ooxml::LN_CT_Tabs_tab:
         resolveSprmProps(*this, rSprm);
         m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
