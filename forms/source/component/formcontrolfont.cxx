@@ -536,6 +536,7 @@ namespace frm
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
             aReturn <<= OUString();
+            break;
 
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:
