@@ -57,7 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/drawfunc/drformsh.src \
     sc/source/ui/drawfunc/objdraw.src \
     sc/source/ui/miscdlgs/retypepassdlg.src \
-    sc/source/ui/miscdlgs/highred.src \
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
     sc/source/ui/formdlg/dwfunctr.src \

@@ -23,7 +23,6 @@
 #include "docsh.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "highred.hrc"
 
 #include "highred.hxx"
 #include <vcl/msgbox.hxx>
@@ -43,50 +42,37 @@
 //----------------------------------------------------------------------------
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData)
-
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
-        //
-        aHighlightBox   ( this, ScResId( CB_HIGHLIGHT)),
-        aFlFilter       ( this, ScResId( FL_FILTER)),
-        aFilterCtr      ( this),
-        aCbAccept       ( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
-        aCbReject       ( this, ScResId( CB_HIGHLIGHT_REJECT)),
-        aOkButton       ( this, ScResId( BTN_OK ) ),
-        aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-        aHelpButton     ( this, ScResId( BTN_HELP ) ),
-        aEdAssign       ( this, this, NULL, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
-        //
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
-        aLocalRangeName ( *(pDoc->GetRangeName()) )
+    : ScAnyRefDlg(pB, pCW, pParent, "ShowChangesDialog",
+        "modules/scalc/ui/showchangesdialog.ui")
+    , pViewData(ptrViewData)
+    , pDoc(ptrViewData->GetDocument())
+    , aLocalRangeName(*(pDoc->GetRangeName()))
 {
-    FreeResource();
+    m_pFilterCtr = new SvxTPFilter(get<VclContainer>("box"));
+    get(m_pHighlightBox, "showchanges");
+    get(m_pCbAccept, "showaccepted");
+    get(m_pCbReject, "showrejected");
+    get(m_pEdAssign, "range");
+    m_pEdAssign->SetReferences(this, m_pFilterCtr->get<Window>("range"));
+    m_pEdAssign->SetSizePixel(m_pEdAssign->get_preferred_size());
+    get(m_pRbAssign, "rangeref");
+    m_pRbAssign->SetReferences(this, m_pEdAssign);
+    get(m_pOkButton, "ok");
 
-    aFilterCtr.HideRange(false);
-    Size aCtrSize(LogicToPixel(Size(261 , 86), MAP_APPFONT));
-    aFilterCtr.SetSizePixel(aCtrSize);
-
-    Point aFlFilterPt( aFlFilter.GetPosPixel() );
-    aFlFilterPt.Y() += aFlFilter.GetSizePixel().Height();
-    aFilterCtr.SetPosPixel( aFlFilterPt );
-    MinSize=aFilterCtr.GetSizePixel();
-    MinSize.Height()+=2;
-    MinSize.Width()+=2;
-    aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
-    aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighlightHandle ));
-    aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
-    aFilterCtr.Show();
+    m_pOkButton->SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
+    m_pHighlightBox->SetClickHdl(LINK( this, ScHighlightChgDlg, HighlightHandle ));
+    m_pFilterCtr->SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
+    m_pFilterCtr->HideRange(false);
+    m_pFilterCtr->Show();
     SetDispatcherLock( true );
 
     Init();
-
-    aFilterCtr.SetAccessibleRelationMemberOf(&aFlFilter);
 }
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
     SetDispatcherLock( false );
+    delete m_pFilterCtr;
 }
 
 void ScHighlightChgDlg::Init()
@@ -99,11 +85,11 @@ void ScHighlightChgDlg::Init()
     if(pChanges!=NULL)
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
-        aFilterCtr.ClearAuthors();
+        m_pFilterCtr->ClearAuthors();
         const std::set<OUString>& rUserColl = pChanges->GetUserCollection();
         std::set<OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
         for (; it != itEnd; ++it)
-            aFilterCtr.InsertAuthor(*it);
+            m_pFilterCtr->InsertAuthor(*it);
     }
 
 
@@ -111,40 +97,40 @@ void ScHighlightChgDlg::Init()
 
     if(pViewSettings!=NULL)
         aChangeViewSet=*pViewSettings;
-    aHighlightBox.Check(aChangeViewSet.ShowChanges());
-    aFilterCtr.CheckDate(aChangeViewSet.HasDate());
-    aFilterCtr.SetFirstDate(aChangeViewSet.GetTheFirstDateTime());
-    aFilterCtr.SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
-    aFilterCtr.SetLastDate(aChangeViewSet.GetTheLastDateTime());
-    aFilterCtr.SetLastTime(aChangeViewSet.GetTheLastDateTime());
-    aFilterCtr.SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
-    aFilterCtr.CheckAuthor(aChangeViewSet.HasAuthor());
-    aFilterCtr.CheckComment(aChangeViewSet.HasComment());
-    aFilterCtr.SetComment(aChangeViewSet.GetTheComment());
+    m_pHighlightBox->Check(aChangeViewSet.ShowChanges());
+    m_pFilterCtr->CheckDate(aChangeViewSet.HasDate());
+    m_pFilterCtr->SetFirstDate(aChangeViewSet.GetTheFirstDateTime());
+    m_pFilterCtr->SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
+    m_pFilterCtr->SetLastDate(aChangeViewSet.GetTheLastDateTime());
+    m_pFilterCtr->SetLastTime(aChangeViewSet.GetTheLastDateTime());
+    m_pFilterCtr->SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
+    m_pFilterCtr->CheckAuthor(aChangeViewSet.HasAuthor());
+    m_pFilterCtr->CheckComment(aChangeViewSet.HasComment());
+    m_pFilterCtr->SetComment(aChangeViewSet.GetTheComment());
 
-    aCbAccept.Check(aChangeViewSet.IsShowAccepted());
-    aCbReject.Check(aChangeViewSet.IsShowRejected());
+    m_pCbAccept->Check(aChangeViewSet.IsShowAccepted());
+    m_pCbReject->Check(aChangeViewSet.IsShowRejected());
 
     OUString aString=aChangeViewSet.GetTheAuthorToShow();
     if(!aString.isEmpty())
     {
-        aFilterCtr.SelectAuthor(aString);
+        m_pFilterCtr->SelectAuthor(aString);
     }
     else
     {
-        aFilterCtr.SelectedAuthorPos(0);
+        m_pFilterCtr->SelectedAuthorPos(0);
     }
 
-    aFilterCtr.CheckRange(aChangeViewSet.HasRange());
+    m_pFilterCtr->CheckRange(aChangeViewSet.HasRange());
 
     if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
-        aFilterCtr.SetRange(aRefStr);
+        m_pFilterCtr->SetRange(aRefStr);
     }
-    aFilterCtr.Enable(true,true);
-    HighlightHandle(&aHighlightBox);
+    m_pFilterCtr->Enable(true,true);
+    HighlightHandle(m_pHighlightBox);
 }
 
 //----------------------------------------------------------------------------
@@ -153,13 +139,13 @@ void ScHighlightChgDlg::Init()
 
 void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( aEdAssign.IsVisible() )
+    if ( m_pEdAssign->IsVisible() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(&aEdAssign);
+            RefInputStart(m_pEdAssign);
         OUString aRefStr(rRef.Format(ABS_DREF3D, pDocP, pDocP->GetAddressConvention()));
-        aEdAssign.SetRefString( aRefStr );
-        aFilterCtr.SetRange(aRefStr);
+        m_pEdAssign->SetRefString( aRefStr );
+        m_pFilterCtr->SetRange(aRefStr);
     }
 }
 
@@ -172,12 +158,12 @@ sal_Bool ScHighlightChgDlg::Close()
 void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    if(bForced || !aRbAssign.IsVisible())
+    if(bForced || !m_pRbAssign->IsVisible())
     {
-        aFilterCtr.SetRange(aEdAssign.GetText());
-        aFilterCtr.SetFocusToRange();
-        aEdAssign.Hide();
-        aRbAssign.Hide();
+        m_pFilterCtr->SetRange(m_pEdAssign->GetText());
+        m_pFilterCtr->SetFocusToRange();
+        m_pEdAssign->Hide();
+        m_pRbAssign->Hide();
     }
 }
 
@@ -187,24 +173,24 @@ void ScHighlightChgDlg::SetActive()
 
 sal_Bool ScHighlightChgDlg::IsRefInputMode() const
 {
-    return aEdAssign.IsVisible();
+    return m_pEdAssign->IsVisible();
 }
 
 IMPL_LINK( ScHighlightChgDlg, HighlightHandle, CheckBox*, pCb )
 {
     if(pCb!=NULL)
     {
-        if(aHighlightBox.IsChecked())
+        if(m_pHighlightBox->IsChecked())
         {
-            aFilterCtr.Enable(true,true);
-            aCbAccept.Enable();
-            aCbReject.Enable();
+            m_pFilterCtr->Enable(true,true);
+            m_pCbAccept->Enable();
+            m_pCbReject->Enable();
         }
         else
         {
-            aFilterCtr.Disable(true);
-            aCbAccept.Disable();
-            aCbReject.Disable();
+            m_pFilterCtr->Disable(true);
+            m_pCbAccept->Disable();
+            m_pCbReject->Disable();
         }
     }
     return 0;
@@ -215,38 +201,38 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
     if(pRef!=NULL)
     {
         SetDispatcherLock( true );
-        aEdAssign.Show();
-        aRbAssign.Show();
-        aEdAssign.SetText(aFilterCtr.GetRange());
-        aEdAssign.GrabFocus();
-        ScAnyRefDlg::RefInputStart(&aEdAssign,&aRbAssign);
+        m_pEdAssign->Show();
+        m_pRbAssign->Show();
+        m_pEdAssign->SetText(m_pFilterCtr->GetRange());
+        m_pEdAssign->GrabFocus();
+        ScAnyRefDlg::RefInputStart(m_pEdAssign, m_pRbAssign);
     }
     return 0;
 }
 
 IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
 {
-    if ( pOKBtn == &aOkButton)
+    if (pOKBtn == m_pOkButton)
     {
-        aChangeViewSet.SetShowChanges(aHighlightBox.IsChecked());
-        aChangeViewSet.SetHasDate(aFilterCtr.IsDate());
-        ScChgsDateMode eMode = (ScChgsDateMode) aFilterCtr.GetDateMode();
+        aChangeViewSet.SetShowChanges(m_pHighlightBox->IsChecked());
+        aChangeViewSet.SetHasDate(m_pFilterCtr->IsDate());
+        ScChgsDateMode eMode = (ScChgsDateMode) m_pFilterCtr->GetDateMode();
         aChangeViewSet.SetTheDateMode( eMode );
-        Date aFirstDate( aFilterCtr.GetFirstDate() );
-        Time aFirstTime( aFilterCtr.GetFirstTime() );
-        Date aLastDate( aFilterCtr.GetLastDate() );
-        Time aLastTime( aFilterCtr.GetLastTime() );
+        Date aFirstDate( m_pFilterCtr->GetFirstDate() );
+        Time aFirstTime( m_pFilterCtr->GetFirstTime() );
+        Date aLastDate( m_pFilterCtr->GetLastDate() );
+        Time aLastTime( m_pFilterCtr->GetLastTime() );
         aChangeViewSet.SetTheFirstDateTime( DateTime( aFirstDate, aFirstTime ) );
         aChangeViewSet.SetTheLastDateTime( DateTime( aLastDate, aLastTime ) );
-        aChangeViewSet.SetHasAuthor(aFilterCtr.IsAuthor());
-        aChangeViewSet.SetTheAuthorToShow(aFilterCtr.GetSelectedAuthor());
-        aChangeViewSet.SetHasRange(aFilterCtr.IsRange());
-        aChangeViewSet.SetShowAccepted(aCbAccept.IsChecked());
-        aChangeViewSet.SetShowRejected(aCbReject.IsChecked());
-        aChangeViewSet.SetHasComment(aFilterCtr.IsComment());
-        aChangeViewSet.SetTheComment(aFilterCtr.GetComment());
+        aChangeViewSet.SetHasAuthor(m_pFilterCtr->IsAuthor());
+        aChangeViewSet.SetTheAuthorToShow(m_pFilterCtr->GetSelectedAuthor());
+        aChangeViewSet.SetHasRange(m_pFilterCtr->IsRange());
+        aChangeViewSet.SetShowAccepted(m_pCbAccept->IsChecked());
+        aChangeViewSet.SetShowRejected(m_pCbReject->IsChecked());
+        aChangeViewSet.SetHasComment(m_pFilterCtr->IsComment());
+        aChangeViewSet.SetTheComment(m_pFilterCtr->GetComment());
         ScRangeList aLocalRangeList;
-        aLocalRangeList.Parse(aFilterCtr.GetRange(), pDoc);
+        aLocalRangeList.Parse(m_pFilterCtr->GetRange(), pDoc);
         aChangeViewSet.SetTheRangeList(aLocalRangeList);
         aChangeViewSet.AdjustDateMode( *pDoc );
         pDoc->SetChangeViewSettings(aChangeViewSet);

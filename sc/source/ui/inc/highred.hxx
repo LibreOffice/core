@@ -53,25 +53,19 @@ class ScDocument;
 class ScHighlightChgDlg : public ScAnyRefDlg
 {
 private:
+    CheckBox*               m_pHighlightBox;
+    SvxTPFilter*            m_pFilterCtr;
+    CheckBox*               m_pCbAccept;
+    CheckBox*               m_pCbReject;
+    OKButton*               m_pOkButton;
 
-    CheckBox                aHighlightBox;
-    FixedLine               aFlFilter;
-    SvxTPFilter             aFilterCtr;
-    CheckBox                aCbAccept;
-    CheckBox                aCbReject;
-
-    OKButton                aOkButton;
-    CancelButton            aCancelButton;
-    HelpButton              aHelpButton;
-
-    formula::RefEdit                aEdAssign;
-    formula::RefButton              aRbAssign;
+    formula::RefEdit*       m_pEdAssign;
+    formula::RefButton*     m_pRbAssign;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScRangeName             aLocalRangeName;
     Selection               theCurSel;
-    Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
 
