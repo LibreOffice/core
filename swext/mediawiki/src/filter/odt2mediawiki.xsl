@@ -296,14 +296,14 @@
 		Function generating a wiki heading prefix.
 		
 		@param level
-			The heading level. The value must be between 1 and 5.
+			The heading level. The value must be between 1 and 6.
 	-->
 	<template name="mk-heading-prefix">
 		<param name="level"/>
 		<choose>
-			<when test="$level &gt; 5">
+			<when test="$level &gt; 6">
 				<call-template name="mk-heading-prefix">
-					<with-param name="level" select="5"/>
+					<with-param name="level" select="6"/>
 				</call-template>
 			</when>
 			<when test="$level &gt; 0">
