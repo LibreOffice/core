@@ -209,7 +209,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, sal_True );
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, true );
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
@@ -349,7 +349,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
-        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), sal_True );
+        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), true );
 
         ScHeaderFieldData aData;
         FillDummyFieldData( aData );

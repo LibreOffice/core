@@ -352,7 +352,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
     if( !mrData.mxHFEditEngine.get() )
     {
-        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True ) );
+        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), true ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
         rEE.SetUpdateMode( false );

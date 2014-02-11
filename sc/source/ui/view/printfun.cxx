@@ -1663,7 +1663,7 @@ void ScPrintFunc::MakeEditEngine()
     {
         //  can't use document's edit engine pool here,
         //  because pool must have twips as default metric
-        pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
+        pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), true );
 
         pEditEngine->EnableUndo(false);
         //fdo#45869 we want text to be positioned as it would be for the the

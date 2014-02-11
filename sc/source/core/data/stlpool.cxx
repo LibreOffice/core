@@ -246,7 +246,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
     SvxSetItem*     pHFSetItem      = NULL;
-    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), sal_True );
+    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
     pEdEngine->SetUpdateMode( false );
     EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
     EditTextObject* pTxtObj         = NULL;

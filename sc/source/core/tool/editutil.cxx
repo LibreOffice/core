@@ -794,7 +794,7 @@ ScHeaderFieldData::ScHeaderFieldData()
     eNumType = SVX_ARABIC;
 }
 
-ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, sal_Bool bDeleteEnginePoolP )
+ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, bool bDeleteEnginePoolP )
         : ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
 }
