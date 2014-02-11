@@ -2744,6 +2744,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             bMirror = ((SdrGrafObj*)mpObj.get())->IsMirrored();
 
         rValue <<= bMirror;
+        break;
     }
 
     case OWN_ATTR_EDGE_START_OBJ:
