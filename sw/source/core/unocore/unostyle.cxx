@@ -1588,7 +1588,7 @@ struct SwStyleBase_Impl
     rtl::Reference< SwDocStyleSheet > mxNewBase;
     SfxItemSet*         pItemSet;
 
-    const String&       rStyleName;
+    String       rStyleName;
 
     SwStyleBase_Impl(SwDoc& rSwDoc, const String& rName) :
         rDoc(rSwDoc),
