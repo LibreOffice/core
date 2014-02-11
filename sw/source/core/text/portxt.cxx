@@ -957,8 +957,8 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
     {
         if ( pBM->GetFieldname( ) == ODF_FORMCHECKBOX )
         { // a checkbox...
-            ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
-            bool checked = pCheckboxFm->IsChecked();
+            const ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+            bool checked = pCheckboxFm && pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
         else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
