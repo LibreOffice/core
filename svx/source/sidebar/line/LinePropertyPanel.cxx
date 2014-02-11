@@ -529,7 +529,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    mpEndItem.reset(pItem ? (XLineEndItem*)pItem->Clone() : 0);
+                    mpEndItem.reset((XLineEndItem*)pItem->Clone());
                     SelectEndStyle(false);
                     break;
                 }
