@@ -553,8 +553,10 @@ SwDoc* SwTextBlocks::GetDoc()
 void SwTextBlocks::ClearDoc()
 {
     if( pImp )
+    {
         pImp->ClearDoc();
-    pImp->nCur = (sal_uInt16) -1;
+        pImp->nCur = (sal_uInt16) -1;
+    }
 }
 
 
