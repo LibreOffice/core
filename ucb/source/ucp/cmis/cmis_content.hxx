@@ -121,7 +121,8 @@ private:
 
     com::sun::star::uno::Sequence< com::sun::star::document::CmisVersion >
         getAllVersions( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+            throw(com::sun::star::uno::Exception,
+                  std::exception);
 
     sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );

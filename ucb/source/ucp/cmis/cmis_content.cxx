@@ -1071,7 +1071,7 @@ namespace cmis
     }
 
     uno::Sequence< document::CmisVersion> Content::getAllVersions( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
+            throw( uno::Exception, std::exception )
     {
         try
         {
