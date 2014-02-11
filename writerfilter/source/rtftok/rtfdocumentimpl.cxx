@@ -3856,7 +3856,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_DELETED:
         case RTF_REVISED:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_DELETED ? ooxml::OOXML_del : ooxml::OOXML_ins));
+                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_DELETED ? OOXML_del : OOXML_ins));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
                         NS_ooxml::LN_trackchange, NS_ooxml::LN_token, pValue);
             }

@@ -69,16 +69,16 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
     OUString sType;
     switch ( m_pRedlineParams->m_nToken & 0xffff )
     {
-        case ooxml::OOXML_tableRowInsert:
+        case OOXML_tableRowInsert:
             sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_INSERT );
             break;
-        case ooxml::OOXML_tableRowDelete:
+        case OOXML_tableRowDelete:
             sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_DELETE );
             break;
-        case ooxml::OOXML_tableCellInsert:
+        case OOXML_tableCellInsert:
             sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_INSERT );
             break;
-        case ooxml::OOXML_tableCellDelete:
+        case OOXML_tableCellDelete:
             sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_DELETE );
             break;
     }

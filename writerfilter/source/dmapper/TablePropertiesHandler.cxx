@@ -117,10 +117,10 @@ namespace dmapper {
                     switch( nSprmId )
                     {
                         case NS_ooxml::LN_CT_TrPr_ins:
-                            nToken = ooxml::OOXML_tableRowInsert;
+                            nToken = OOXML_tableRowInsert;
                             break;
                         case NS_ooxml::LN_CT_TrPr_del:
-                            nToken = ooxml::OOXML_tableRowDelete;
+                            nToken = OOXML_tableRowDelete;
                             break;
                         default:
                             throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
@@ -148,10 +148,10 @@ namespace dmapper {
                     switch( nSprmId )
                     {
                         case NS_ooxml::LN_CT_TcPrBase_cellIns:
-                            nToken = ooxml::OOXML_tableCellInsert;
+                            nToken = OOXML_tableCellInsert;
                             break;
                         case NS_ooxml::LN_CT_TcPrBase_cellDel:
-                            nToken = ooxml::OOXML_tableCellDelete;
+                            nToken = OOXML_tableCellDelete;
                             break;
                         default:
                             throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);

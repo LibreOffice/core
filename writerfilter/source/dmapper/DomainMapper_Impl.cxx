@@ -1508,16 +1508,16 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
             PropertyNameSupplier & rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier(  );
             switch ( pRedline->m_nToken & 0xffff )
             {
-            case ooxml::OOXML_mod:
+            case OOXML_mod:
                 sType = rPropNameSupplier.GetName( PROP_FORMAT );
                 break;
-            case ooxml::OOXML_ins:
+            case OOXML_ins:
                 sType = rPropNameSupplier.GetName( PROP_INSERT );
                 break;
-            case ooxml::OOXML_del:
+            case OOXML_del:
                 sType = rPropNameSupplier.GetName( PROP_DELETE );
                 break;
-            case ooxml::OOXML_ParagraphFormat:
+            case OOXML_ParagraphFormat:
                 sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
                 break;
             default:
@@ -1561,8 +1561,8 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange 
         // Adding the non-mod redlines to the temporary vector
         if ( pIt->get( ) )
         {
-            if ( ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_mod && ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_ParagraphFormat)
-            aCleaned.push_back( *pIt );
+            if (((*pIt)->m_nToken & 0xffff) != OOXML_mod && ((*pIt)->m_nToken & 0xffff) != OOXML_ParagraphFormat)
+                aCleaned.push_back(*pIt);
         }
     }
 
@@ -3949,7 +3949,7 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
 void DomainMapper_Impl::AddNewRedline(  )
 {
     RedlineParamsPtr pNew( new RedlineParams );
-    pNew->m_nToken = ooxml::OOXML_mod;
+    pNew->m_nToken = OOXML_mod;
     if ( !m_bIsParaMarkerChange )
     {
         m_aRedlines.top().push_back( pNew );

@@ -3152,23 +3152,23 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
 
     if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
     {
-        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_ParagraphFormat );
+        m_pImpl->SetCurrentRedlineToken(OOXML_ParagraphFormat);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TrPr_ins)
     {
-        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableRowInsert );
+        m_pImpl->SetCurrentRedlineToken(OOXML_tableRowInsert);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TrPr_del)
     {
-        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableRowDelete );
+        m_pImpl->SetCurrentRedlineToken(OOXML_tableRowDelete);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellIns)
     {
-        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableCellInsert );
+        m_pImpl->SetCurrentRedlineToken(OOXML_tableCellInsert);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellDel)
     {
-        m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_tableCellDelete );
+        m_pImpl->SetCurrentRedlineToken(OOXML_tableCellDelete);
     }
 
     resolveSprmProps(*this, rSprm );
@@ -3176,14 +3176,14 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
     switch( nToken & 0xffff )
     {
-        case ooxml::OOXML_mod :
-        case ooxml::OOXML_ins :
-        case ooxml::OOXML_del :
-        case ooxml::OOXML_ParagraphFormat :
-        case ooxml::OOXML_tableRowInsert:
-        case ooxml::OOXML_tableRowDelete:
-        case ooxml::OOXML_tableCellInsert:
-        case ooxml::OOXML_tableCellDelete:
+        case OOXML_mod:
+        case OOXML_ins:
+        case OOXML_del:
+        case OOXML_ParagraphFormat:
+        case OOXML_tableRowInsert:
+        case OOXML_tableRowDelete:
+        case OOXML_tableCellInsert:
+        case OOXML_tableCellDelete:
             break;
         default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
     }

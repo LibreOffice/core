@@ -83,18 +83,20 @@ const Token_t OOXML_FAST_TOKENS_END =</xsl:text>
 
 #include &lt;resourcemodel/WW8ResourceModel.hxx&gt;
 
-namespace writerfilter {
-namespace ooxml {
 using namespace ::std;
 using namespace ::com::sun::star;
 </xsl:text>
 <xsl:call-template name="fasttokens"/>
 <xsl:text>
+namespace writerfilter {
+namespace ooxml {
+
 string fastTokenToId(sal_uInt32 nToken);
+
+}}
 
 static const sal_uInt32 F_Attribute = 1U &lt;&lt; 31;
 
-}}
 #endif //INCLUDED_OOXML_FAST_TOKENS_HXX&#xa;</xsl:text></out></xsl:template>
 
   <xsl:template match="*"/>
