@@ -2730,7 +2730,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     if (pColArray)
     {
         const double* pNum = NULL;
-        if (pColArray->mpNumArray && hasNonEmpty(*pColArray->mpNumArray, nRow1, nRow2))
+        if (pColArray->mpNumArray)
             pNum = &(*pColArray->mpNumArray)[nRow1];
 
         rtl_uString** pStr = NULL;
@@ -2871,7 +2871,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
                 return formula::VectorRefArray();
 
-            if (pColArray->mpStrArray)
+            if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
             else
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1]);

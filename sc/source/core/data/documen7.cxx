@@ -106,7 +106,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 
 void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
 {
-    CellContentModified();
+    ClearFormulaContext();
 
     ScBulkBroadcast aBulkBroadcast(pBASM);
 

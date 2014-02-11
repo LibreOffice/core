@@ -2316,7 +2316,7 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
     mpDoc->pFormatExchangeList = NULL;
 }
 
-void ScDocument::CellContentModified()
+void ScDocument::ClearFormulaContext()
 {
     mpFormulaGroupCxt.reset();
 }
@@ -3629,6 +3629,7 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 
 void ScDocument::CalcAll()
 {
+    ClearFormulaContext();
     ClearLookupCaches();    // Ensure we don't deliver zombie data.
     sc::AutoCalcSwitch aSwitch(*this, true);
     TableContainer::iterator it = maTabs.begin();
@@ -3639,7 +3640,6 @@ void ScDocument::CalcAll()
         if (*it)
             (*it)->CalcAll();
     ClearFormulaTree();
-    mpFormulaGroupCxt.reset();
 }
 
 
