@@ -2984,20 +2984,20 @@ public:
         return const_cast<ScFormulaCell*>(p)->IsMultilineResult();
     }
 
-    std::pair<size_t,bool> operator() (const sc::CellStoreType::value_type& node, size_t nOffset)
+    std::pair<size_t,bool> operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
         typedef std::pair<size_t,bool> RetType;
 
         if (node.type == sc::element_type_empty)
             return RetType(0, false);
 
-        for (size_t i = nOffset; i < node.size; ++i)
+        for (size_t i = 0; i < nDataSize; ++i)
         {
-            SCROW nRow = node.position + i;
+            SCROW nRow = node.position + i + nOffset;
             sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
             if (IsAmbiguousScriptNonZero(nScriptType))
                 // Return the offset from the first row.
-                return RetType(i, true);
+                return RetType(i+nOffset, true);
         }
 
         return RetType(0, false);
