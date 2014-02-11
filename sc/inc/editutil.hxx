@@ -89,7 +89,7 @@ public:
                     aScrPos(rScrPosPixel),pDev(pDevice),
                     nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}
 
-    Rectangle   GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop );
+    Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
 };
 
 

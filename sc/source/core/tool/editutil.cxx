@@ -278,7 +278,7 @@ OUString ScEditUtil::GetCellFieldValue(
     return aRet;
 }
 
-Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
+Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop )
 {
     // bForceToTop = always align to top, for editing
     // (sal_False for querying URLs etc.)
