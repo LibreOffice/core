@@ -86,7 +86,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		printf '[Bootstrap]\n' && \
-		$(if $(filter YES,$(SYSTEM_PYTHON)),, \
+		$(if $(SYSTEM_PYTHON),, \
 			printf 'PYUNO_LOADER_PYTHONHOME=%s\n' \
 				$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE), \
 					'$$ORIGIN/../Frameworks/LibreOfficePython.framework', \
@@ -94,7 +94,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 					'$$ORIGIN/LibreOfficePython.framework', \
 					'$$ORIGIN/python-core-$(PYTHON_VERSION)')) &&) \
 		printf 'PYUNO_LOADER_PYTHONPATH=%s$$ORIGIN\n' \
-			$(if $(filter YES,$(SYSTEM_PYTHON)), \
+			$(if $(SYSTEM_PYTHON), \
 				'', \
 			$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE), \
 				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \

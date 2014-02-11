@@ -8170,7 +8170,7 @@ fi
 dnl By now enable_python should be "system", "internal" or "no"
 case $enable_python in
 system)
-    SYSTEM_PYTHON=YES
+    SYSTEM_PYTHON=TRUE
 
     if test "$CROSS_COMPILING" != YES; then
         dnl Check if the headers really work
@@ -8201,7 +8201,7 @@ int main(int argc, char **argv) {
     ;;
 
 internal)
-    SYSTEM_PYTHON=NO
+    SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=3
     PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.3
@@ -8220,7 +8220,7 @@ internal)
     ;;
 no)
     DISABLE_PYTHON=TRUE
-    SYSTEM_PYTHON=NO
+    SYSTEM_PYTHON=
     ;;
 *)
     AC_MSG_ERROR([Internal configure script error, invalid enable_python value "$enable_python"])
@@ -8336,7 +8336,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_MSG_CHECKING([MySQL Connector/C++])
     if test "$with_system_mysql_cppconn" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_MYSQL_CPPCONN=YES
+        SYSTEM_MYSQL_CPPCONN=TRUE
         AC_LANG_PUSH([C++])
         AC_CHECK_HEADER(mysql_driver.h, [],
                     [AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
@@ -8365,7 +8365,7 @@ int main(int argc, char **argv) {
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
-        SYSTEM_MYSQL_CPPCONN=NO
+        SYSTEM_MYSQL_CPPCONN=
     fi
     AC_LANG_POP([C++])
 fi

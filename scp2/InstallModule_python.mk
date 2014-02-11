@@ -13,7 +13,7 @@ ifeq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DDISABLE_PYUNO \
 ))
-else ifeq ($(SYSTEM_PYTHON),YES)
+else ifneq ($(SYSTEM_PYTHON),)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DSYSTEM_PYTHON \
 ))

@@ -9,7 +9,7 @@
 
 # PythonTest class
 
-ifeq ($(SYSTEM_PYTHON),NO)
+ifeq ($(SYSTEM_PYTHON),)
 gb_PythonTest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
 gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
 else

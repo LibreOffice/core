@@ -316,7 +316,7 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_MYSQL_CPPCONN),YES)
+ifneq ($(SYSTEM_MYSQL_CPPCONN),)
 
 define gb_LinkTarget__use_mysqlcppconn
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2604,7 +2604,7 @@ endif # ENABLE_GCONF
 
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python
-ifeq ($(SYSTEM_PYTHON),YES)
+ifneq ($(SYSTEM_PYTHON),)
 
 define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_add_defs,$(1),\

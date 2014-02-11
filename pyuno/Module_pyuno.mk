@@ -28,7 +28,7 @@ endif
 # Windows: only --enable-python=internal possible
 # mingw: both cases possible: internal && system
 # that why it makes sense to handle the next 3 targets
-# with SYSTEM_PYTHON=YES and SYSTEM_PYTHON=NO
+# with SYSTEM_PYTHON=TRUE and SYSTEM_PYTHON=
 
 # zipcore: pyuno/python.exe on Windows
 ifeq ($(OS),WNT)
@@ -37,7 +37,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
-ifneq ($(SYSTEM_PYTHON),YES)
+ifeq ($(SYSTEM_PYTHON),)
 
 # zipcore: python.sh on Unix
 ifneq ($(OS),WNT)
