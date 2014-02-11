@@ -478,6 +478,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     if ( rSet.Put(aNames) || rSet.Put(aValues) )
                         bRet = sal_True;
                 }
+                break;
 
                 default:
                     DBG_WARNING( "W1:Wrong ID while getting Options!" );
