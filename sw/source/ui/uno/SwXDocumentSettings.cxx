@@ -552,6 +552,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::OLD_NUMBERING, bTmp);
         }
+        break;
         case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
