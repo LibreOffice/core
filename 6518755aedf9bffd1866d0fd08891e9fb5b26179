@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_d03b9536",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-11T12:38:19Z",
+      "side": 1,
+      "message": "How can this code be right. You map:\n-179|180 to 0|180\n-179|180 to 90|359\n\nwhile OOXML requires the values to be in the range -90 to +90\n\nI mentioned already that most likely the places where we have a value of -180|-90 and 90|180 need a more complex algorithm that also adapts the y rotation.\n\nObviously the current code can\u0027t be correct as it violates the spec.",
+      "revId": "6518755aedf9bffd1866d0fd08891e9fb5b26179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
