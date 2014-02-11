@@ -71,7 +71,7 @@ endef
 
 endif #SYSTEM_NPAPI_HEADERS
 
-ifeq ($(SYSTEM_ODBC_HEADERS),YES)
+ifneq ($(SYSTEM_ODBC_HEADERS),)
 
 define gb_LinkTarget__use_odbc_headers
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -80,7 +80,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 endef
 
-else
+else # !SYSTEM_ODBC_HEADERS
 
 define gb_LinkTarget__use_odbc_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -90,7 +90,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-endif
+endif # SYSTEM_ODBC_HEADERS
 
 ifneq ($(SYSTEM_VIGRA),)
 
@@ -2255,7 +2255,7 @@ endef
 endif # SYSTEM_HSQLDB
 
 
-ifeq ($(SYSTEM_OPENLDAP),YES)
+ifneq ($(SYSTEM_OPENLDAP),)
 
 define gb_LinkTarget__use_openldap
 
@@ -2268,7 +2268,7 @@ endef
 
 gb_ExternalProject__use_openldap :=
 
-else ifeq ($(SYSTEM_OPENLDAP),NO)
+else # !SYSTEM_OPENLDAP
 
 define gb_LinkTarget__use_openldap
 $(call gb_LinkTarget_use_unpacked,$(1),openldap)
@@ -2288,11 +2288,6 @@ define gb_ExternalProject__use_openldap
 $(call gb_ExternalProject_use_external_project,$(1),openldap)
 
 endef
-
-else # no openldap
-
-gb_LinkTarget__use_openldap :=
-gb_ExternalProject__use_openldap :=
 
 endif # SYSTEM_OPENLDAP
 

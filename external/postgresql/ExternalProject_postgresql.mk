@@ -38,7 +38,7 @@ postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl)/
 endif
 endif
 
-ifeq ($(SYSTEM_OPENLDAP),NO)
+ifeq ($(SYSTEM_OPENLDAP),)
 postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openldap)/include
 postgresql_LDFLAGS  += \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs \

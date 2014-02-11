@@ -8839,7 +8839,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
 if test "$with_system_odbc" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_ODBC_HEADERS=YES
+    SYSTEM_ODBC_HEADERS=TRUE
 
     AC_CHECK_HEADER(sqlext.h, [],
       [AC_MSG_ERROR(odbc not found. install odbc)], [])
@@ -8847,7 +8847,7 @@ elif test "$enable_database_connectivity" != yes; then
     AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_ODBC_HEADERS=NO
+    SYSTEM_ODBC_HEADERS=
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
@@ -8860,13 +8860,13 @@ if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
 AC_MSG_CHECKING([which openldap library to use])
 if test "$with_system_openldap" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_OPENLDAP=YES
+    SYSTEM_OPENLDAP=TRUE
     AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
     AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
     AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_OPENLDAP=NO
+    SYSTEM_OPENLDAP=
     BUILD_TYPE="$BUILD_TYPE OPENLDAP"
 fi
 fi
