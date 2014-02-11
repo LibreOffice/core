@@ -32,7 +32,7 @@ TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
 ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
     aRange( rRng ),
     nParts( nPaint ),
-    bPrint( sal_True )
+    bPrint( true )
 {
 }
 

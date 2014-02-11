@@ -27,8 +27,8 @@
 class ScPaintHint : public SfxHint
 {
     ScRange     aRange;
-    sal_uInt16      nParts;
-    sal_Bool        bPrint;     //  flag indicating whether print/preview if affected
+    sal_uInt16  nParts;
+    bool        bPrint;     //  flag indicating whether print/preview if affected
 
     ScPaintHint(); // disabled
 
@@ -37,7 +37,7 @@ public:
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
                     ~ScPaintHint();
 
-    void            SetPrintFlag(sal_Bool bSet) { bPrint = bSet; }
+    void            SetPrintFlag(bool bSet) { bPrint = bSet; }
 
     const ScRange&  GetRange() const        { return aRange; }
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
@@ -46,8 +46,8 @@ public:
     SCCOL           GetEndCol() const       { return aRange.aEnd.Col(); }
     SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
     SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
-    sal_uInt16          GetParts() const        { return nParts; }
-    sal_Bool            GetPrintFlag() const    { return bPrint; }
+    sal_uInt16      GetParts() const        { return nParts; }
+    bool            GetPrintFlag() const    { return bPrint; }
 };
 
 class ScUpdateRefHint : public SfxHint
