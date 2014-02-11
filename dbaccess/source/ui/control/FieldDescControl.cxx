@@ -521,14 +521,14 @@ OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
             if (pFormatSample)
                 return pFormatSample->GetText();
             break;
-        case FIELD_PRPOERTY_COLUMNNAME:
+        case FIELD_PROPERTY_COLUMNNAME:
             if(m_pColumnName)
                 return m_pColumnName->GetText();
-        case FIELD_PRPOERTY_TYPE:
+        case FIELD_PROPERTY_TYPE:
             if(m_pType)
                 return m_pType->GetSelectEntry();
             break;
-        case FIELD_PRPOERTY_AUTOINCREMENT:
+        case FIELD_PROPERTY_AUTOINCREMENT:
             if(m_pAutoIncrementValue)
                 return m_pAutoIncrementValue->GetText();
     }
@@ -597,15 +597,15 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
             if (pActFieldDescr)
                 UpdateFormatSample(pActFieldDescr);
             break;
-        case FIELD_PRPOERTY_COLUMNNAME:
+        case FIELD_PROPERTY_COLUMNNAME:
             if(m_pColumnName)
                 m_pColumnName->SetText(rText);
             break;
-        case FIELD_PRPOERTY_TYPE:
+        case FIELD_PROPERTY_TYPE:
             if(m_pType)
                 m_pType->SelectEntry(rText);
             break;
-        case FIELD_PRPOERTY_AUTOINCREMENT:
+        case FIELD_PROPERTY_AUTOINCREMENT:
             if(m_pAutoIncrementValue)
                 m_pAutoIncrementValue->SetText(rText);
             break;
@@ -816,7 +816,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pAutoIncrementValueText = CreateText(STR_AUTOINCREMENT_VALUE);
-        m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
+        m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PROPERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetText( getAutoIncrementValue() );
         InitializeControl(m_pAutoIncrementValue,HID_TAB_AUTOINCREMENTVALUE,false);
         break;
@@ -867,7 +867,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         m_pTypeText = CreateText(STR_TAB_FIELD_DATATYPE);
-        m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PRPOERTY_TYPE, WB_DROPDOWN );
+        m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_TYPE, WB_DROPDOWN );
         m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
@@ -903,7 +903,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_pColumnName = new OPropColumnEditCtrl( this,
                                                     aTmpString,
                                                     STR_HELP_DEFAULT_VALUE,
-                                                    FIELD_PRPOERTY_COLUMNNAME,
+                                                    FIELD_PROPERTY_COLUMNNAME,
                                                     WB_BORDER );
             m_pColumnName->SetMaxTextLen(nMax ? nMax : EDIT_NOLIMIT);
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );

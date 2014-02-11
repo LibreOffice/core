@@ -42,9 +42,9 @@
 #define FIELD_PROPERTY_SCALE            11
 #define FIELD_PROPERTY_BOOL_DEFAULT     12
 #define FIELD_PROPERTY_FORMAT           13
-#define FIELD_PRPOERTY_COLUMNNAME       14
-#define FIELD_PRPOERTY_TYPE             15
-#define FIELD_PRPOERTY_AUTOINCREMENT    16
+#define FIELD_PROPERTY_COLUMNNAME       14
+#define FIELD_PROPERTY_TYPE             15
+#define FIELD_PROPERTY_AUTOINCREMENT    16
 
 class FixedText;
 class PushButton;

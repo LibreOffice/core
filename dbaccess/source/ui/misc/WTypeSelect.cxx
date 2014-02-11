@@ -105,7 +105,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     switch(nColId)
     {
-        case FIELD_PRPOERTY_COLUMNNAME:
+        case FIELD_PROPERTY_COLUMNNAME:
             {
                 OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
                 // first we have to check if this name already exists
