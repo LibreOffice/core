@@ -287,7 +287,8 @@ namespace
         }
 
         virtual void SAL_CALL drawBitmap( const uno::Reference< rendering::XBitmap >& xBitmap,
-                                          const geometry::RealPoint2D&                aLeftTop ) throw (uno::RuntimeException)
+                                          const geometry::RealPoint2D&                aLeftTop )
+            throw (uno::RuntimeException, std::exception)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DHomMatrix offsetTransform(basegfx::tools::createTranslateB2DHomMatrix(aLeftTop.X,aLeftTop.Y));
