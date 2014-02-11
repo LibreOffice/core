@@ -1043,7 +1043,6 @@
 #define RID_SCDLG_CONTACTS              (SC_DIALOGS_START + 78)
 
 #define RID_SCPAGE_STAT                 (SC_DIALOGS_START + 79)
-#define RID_SCDLG_CHARTCOLROW           (SC_DIALOGS_START + 80)
 #define RID_SCDLG_AREAS                 (SC_DIALOGS_START + 81)
 
 // popup for drop-mode in navigator

@@ -22,47 +22,30 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-
-#include "sc.hrc"
-#include "scresid.hxx"
-
-//------------------------------------------------------------------------
 
 class ScColRowLabelDlg : public ModalDialog
 {
 public:
-            ScColRowLabelDlg( Window* pParent,
-                              sal_Bool bCol = false,
-                              sal_Bool bRow = false )
-                : ModalDialog( pParent, ScResId( RID_SCDLG_CHARTCOLROW ) ),
-                  aFlColRow  ( this, ScResId(6) ),
-                  aBtnRow    ( this, ScResId(2) ),
-                  aBtnCol    ( this, ScResId(1) ),
-                  aBtnOk     ( this, ScResId(3) ),
-                  aBtnCancel ( this, ScResId(4) ),
-                  aBtnHelp   ( this, ScResId(5) )
-                {
-                    FreeResource();
-                    aBtnCol.Check( bCol );
-                    aBtnRow.Check( bRow );
-                }
+    ScColRowLabelDlg(Window* pParent,
+                     bool bCol = false,
+                     bool bRow = false)
+        : ModalDialog(pParent, "ChangeSourceDialog",
+        "modules/scalc/ui/changesourcedialog.ui")
+    {
+        get(m_pBtnRow, "row");
+        get(m_pBtnCol, "col");
+        m_pBtnCol->Check(bCol);
+        m_pBtnRow->Check(bRow);
+    }
 
-    sal_Bool IsCol() { return aBtnCol.IsChecked(); }
-    sal_Bool IsRow() { return aBtnRow.IsChecked(); }
+    bool IsCol() const { return m_pBtnCol->IsChecked(); }
+    bool IsRow() const { return m_pBtnRow->IsChecked(); }
 
 private:
-    FixedLine       aFlColRow;
-    CheckBox        aBtnRow;
-    CheckBox        aBtnCol;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    CheckBox* m_pBtnRow;
+    CheckBox* m_pBtnCol;
 };
 
-
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

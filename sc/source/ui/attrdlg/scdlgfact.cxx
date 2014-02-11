@@ -638,23 +638,11 @@ AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( W
 }
 
 AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(Window* pParent,
-                                                                int nId,
                                                                 sal_Bool bCol ,
                                                                 sal_Bool bRow)
 {
-    ScColRowLabelDlg* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_CHARTCOLROW :
-            pDlg = new ScColRowLabelDlg( pParent, bCol,bRow );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScColRowLabelDlg_Impl( pDlg );
-    return 0;
+    ScColRowLabelDlg* pDlg = new ScColRowLabelDlg( pParent, bCol,bRow );
+    return new AbstractScColRowLabelDlg_Impl( pDlg );
 }
 
 AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const OUString& rExtendText, const OUString& rCurrentText )

@@ -338,7 +338,6 @@ public:
                                                                 ScDocument*                pDoc,
                                                                 int nId) = 0;
     virtual AbstractScColRowLabelDlg * CreateScColRowLabelDlg (Window* pParent,
-                                                                int nId,
                                                                 sal_Bool bCol = false,
                                                                 sal_Bool bRow = false) = 0;
 
