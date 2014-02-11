@@ -728,7 +728,7 @@ gb_LinkTarget__use_jawt :=
 endif # $(OS)$(COM) = WNTGCC
 
 
-ifeq ($(SYSTEM_LIBATOMIC_OPS),YES)
+ifneq ($(SYSTEM_LIBATOMIC_OPS),)
 
 define gb_LinkTarget__use_libatomic_ops
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2299,7 +2299,7 @@ endif # SYSTEM_OPENLDAP
 
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
-ifeq ($(SYSTEM_FIREBIRD),YES)
+ifneq ($(SYSTEM_FIREBIRD),)
 
 define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_set_include,$(1),\

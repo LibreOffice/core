@@ -30,9 +30,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		unset MAKEFLAGS \
 		&& export PKG_CONFIG="" \
 		&& export CPPFLAGS=" \
-			$(if $(filter NO,$(SYSTEM_LIBATOMIC_OPS)), \
-			-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
-			,$(LIBATOMIC_OPS_CFLAGS)) \
+			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_CFLAGS), \
+				-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+			) \
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(filter NO,$(SYSTEM_BOOST)), \

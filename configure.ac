@@ -8589,7 +8589,7 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
     AC_MSG_CHECKING([which Firebird to use])
     if test "$with_system_firebird" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_FIREBIRD=YES
+        SYSTEM_FIREBIRD=TRUE
         AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
         if test -z "$FIREBIRDCONFIG"; then
             AC_MSG_NOTICE([No fb_config -- using pkg-config])
@@ -8635,11 +8635,11 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
             dnl ===================================================================
             libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
             if test "$with_system_libatomic_ops" = "yes"; then
-                SYSTEM_LIBATOMIC_OPS=YES
+                SYSTEM_LIBATOMIC_OPS=TRUE
                 AC_CHECK_HEADERS(atomic_ops.h, [],
                 [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
             else
-                SYSTEM_LIBATOMIC_OPS=NO
+                SYSTEM_LIBATOMIC_OPS=
                 LIBATOMIC_OPS_CFLAGS="-I${WORKDIR}/UnpackedTarball/libatomic_ops/include"
                 LIBATOMIC_OPS_LIBS="-latomic_ops"
                 BUILD_TYPE="$BUILD_TYPE LIBATOMIC_OPS"
@@ -8647,7 +8647,7 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         fi
 
         AC_MSG_RESULT([internal])
-        SYSTEM_FIREBIRD=NO
+        SYSTEM_FIREBIRD=
         FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
         FIREBIRD_LIBS="-lfbembed"
 
