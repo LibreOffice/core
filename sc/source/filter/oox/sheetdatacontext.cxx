@@ -278,7 +278,10 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     RowModel aModel;
     sal_Int32 nRow = rAttribs.getInteger( XML_r, -1 );
     if(nRow != -1)
-        aModel.mnRow          = nRow;
+    {
+        aModel.mnRow = nRow;
+        mnRow = nRow;
+    }
     else
         aModel.mnRow = ++mnRow;
     mnCol = -1;
