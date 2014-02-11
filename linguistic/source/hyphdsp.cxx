@@ -699,8 +699,7 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
-    HyphenatorDispatcher            *pThis = (HyphenatorDispatcher *) this;
-    const HyphSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
+    const HyphSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
     if (pEntry)
     {
