@@ -99,7 +99,7 @@ private:
     ScAddress               aCellPos;
     ScEditEngineDefaulter*  pEditEngine;
     SvxEditEngineForwarder* pForwarder;
-    sal_Bool                    bDataValid;
+    bool                    bDataValid;
 
     SdrObject*                  GetCaptionObj();
 public:

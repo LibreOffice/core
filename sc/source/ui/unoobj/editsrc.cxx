@@ -167,7 +167,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
                 pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 
-    bDataValid = sal_True;
+    bDataValid = true;
     return pForwarder;
 }
 
