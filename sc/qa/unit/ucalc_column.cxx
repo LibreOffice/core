@@ -82,6 +82,14 @@ void Test::testColumnFindEditCells()
     nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,12,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), nResRow);
 
+    for (SCROW i = 0; i <= 5; ++i)
+        m_pDoc->SetString(ScAddress(2,i,0), "Text");
+
+    m_pDoc->SetScriptType(ScAddress(2,5,0), (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN));
+
+    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(2,1,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(-1), nResRow);
+
     m_pDoc->DeleteTab(0);
 }
 
