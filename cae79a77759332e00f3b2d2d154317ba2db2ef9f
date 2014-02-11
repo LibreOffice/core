@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_507ec5e5",
+        "filename": "writerfilter/source/dmapper/TrackChangesHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-11T13:24:33Z",
+      "side": 1,
+      "message": "Unused include?",
+      "revId": "cae79a77759332e00f3b2d2d154317ba2db2ef9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_307941fd",
+        "filename": "writerfilter/source/dmapper/TrackChangesHandler.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-11T13:24:33Z",
+      "side": 1,
+      "message": "WRITERFILTER_DLLPRIVATE is no longer needed, since gbuild we default to private symbols.",
+      "revId": "cae79a77759332e00f3b2d2d154317ba2db2ef9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
