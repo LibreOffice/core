@@ -1589,14 +1589,12 @@ struct SwStyleBase_Impl
     SfxItemSet*         pItemSet;
 
     const String&       rStyleName;
-    sal_uInt16              nPDescPos;
 
     SwStyleBase_Impl(SwDoc& rSwDoc, const String& rName) :
         rDoc(rSwDoc),
         pOldPageDesc(0),
         pItemSet(0),
-        rStyleName(rName),
-        nPDescPos(0xffff)
+        rStyleName(rName)
         {}
 
     ~SwStyleBase_Impl(){ delete pItemSet; }
@@ -1625,7 +1623,6 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             if(rDesc.GetName() == rStyleName)
             {
                 pOldPageDesc = & rDesc;
-                nPDescPos = i;
                 break;
             }
         }
@@ -1637,15 +1634,6 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
                 if(aFmtName == rStyleName)
                 {
                     pOldPageDesc = rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
-                    break;
-                }
-            }
-            for(i = 0; i < nPDescCount + 1; i++)
-            {
-                const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
-                if(rDesc.GetName() == rStyleName)
-                {
-                    nPDescPos = i;
                     break;
                 }
             }
