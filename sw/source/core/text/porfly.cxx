@@ -336,6 +336,9 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         pSdrObj = GetFlyFrm()->GetVirtDrawObj();
     }
 
+    if (!pSdrObj)
+        return;
+
     // position object
     objectpositioning::SwAsCharAnchoredObjectPosition aObjPositioning(
                                     *pSdrObj,
