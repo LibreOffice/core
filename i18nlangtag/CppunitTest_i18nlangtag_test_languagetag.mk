@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
 ))
 $(eval $(call gb_CppunitTest_add_defs,i18nlangtag_test_languagetag,-DENABLE_LIBLANGTAG))
 
-ifeq ($(SYSTEM_LIBLANGTAG),YES)
+ifneq ($(SYSTEM_LIBLANGTAG),)
 $(eval $(call gb_CppunitTest_add_defs,i18nlangtag_test_languagetag,-DSYSTEM_LIBLANGTAG))
 else
 $(eval $(call gb_CppunitTest_use_package,i18nlangtag_test_languagetag,liblangtag_data))

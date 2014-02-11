@@ -917,7 +917,7 @@ endef
 
 ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 
-ifeq ($(SYSTEM_LIBLANGTAG),YES)
+ifneq ($(SYSTEM_LIBLANGTAG),)
 
 define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2945,7 +2945,7 @@ endef
 endif # SYSTEM_BSH
 
 
-ifeq ($(SYSTEM_RHINO),YES)
+ifneq ($(SYSTEM_RHINO),)
 
 define gb_Jar__use_rhino
 $(call gb_Jar_use_system_jar,$(1),$(RHINO_JAR))

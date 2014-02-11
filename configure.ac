@@ -10876,7 +10876,7 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
     AC_MSG_CHECKING([which rhino to use])
     if test "$with_system_rhino" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_RHINO=YES
+        SYSTEM_RHINO=TRUE
         if test -z $RHINO_JAR; then
             RHINO_JAR=/usr/share/java/js.jar
         fi
@@ -10884,7 +10884,7 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
                    [AC_MSG_ERROR(js.jar not found.)], [])
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_RHINO=NO
+        SYSTEM_RHINO=
         BUILD_TYPE="$BUILD_TYPE RHINO"
     fi
 else
@@ -11870,13 +11870,13 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
     if test "$with_system_liblangtag" = yes; then
-        SYSTEM_LIBLANGTAG=YES
+        SYSTEM_LIBLANGTAG=TRUE
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
         LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         libo_MINGW_CHECK_DLL([liblangtag])
     else
-        SYSTEM_LIBLANGTAG=NO
+        SYSTEM_LIBLANGTAG=
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
         if test "$COM" = "MSC"; then
