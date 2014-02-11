@@ -142,7 +142,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         nNumberingType = *pNumFmt;
 
     bVirtuell = false;
-    if( bVirt )
+    if (bVirt && pDoc)
     {
         // check the flag since the layout NEVER sets it back
         const SfxItemPool &rPool = pDoc->GetAttrPool();
