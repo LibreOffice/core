@@ -199,6 +199,9 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    rBindings.Invalidate( SID_TABLE_VERT_NONE );
+    rBindings.Invalidate( SID_TABLE_VERT_CENTER );
+    rBindings.Invalidate( SID_TABLE_VERT_BOTTOM );
     // pseudo slots for Format menu
     rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
