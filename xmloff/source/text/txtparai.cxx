@@ -115,6 +115,7 @@ XMLCharContext::XMLCharContext(
     SvXMLImportContext( rImp, nPrfx, rLName )
     ,m_nControl(nControl)
     ,m_nCount(0)
+    ,m_c(0)
 {
 }
 
