@@ -35,10 +35,10 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			) \
 			" \
 		&& export CXXFLAGS=" \
-			$(if $(filter NO,$(SYSTEM_BOOST)), \
+			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
 				-I$(call gb_UnpackedTarball_get_dir,boost) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib \
-				,$(BOOST_CPPFLAGS)) \
+			) \
 			$(if $(filter NO,$(SYSTEM_ICU)), \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \

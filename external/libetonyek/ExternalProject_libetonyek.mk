@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
-			BOOST_CFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side),$(BOOST_CPPFLAGS))" \
+			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			XML_CFLAGS="$(if $(SYSTEM_LIBXML),$(LIBXML_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \

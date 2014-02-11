@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
-			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side),$(BOOST_CPPFLAGS))" \
+			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 		    $(if $(VERBOSE)$(verbose),V=1) \

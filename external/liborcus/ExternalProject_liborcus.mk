@@ -35,7 +35,7 @@ liborcus_LIBS=
 ifneq ($(SYSTEM_ZLIB),)
 liborcus_LIBS+=-lz
 endif
-ifeq ($(SYSTEM_BOOST),YES)
+ifneq ($(SYSTEM_BOOST),)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
 else
 liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboostsystem
@@ -52,7 +52,7 @@ ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
 # patched boost needs to find config_global.h
-ifeq ($(SYSTEM_BOOST),NO)
+ifeq ($(SYSTEM_BOOST),)
 liborcus_CPPFLAGS += -I$(BUILDDIR)/config_$(gb_Side)
 endif
 #
@@ -73,7 +73,7 @@ liborcus_LDFLAGS=$(LDFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
 endif
-ifeq ($(SYSTEM_BOOST),NO)
+ifeq ($(SYSTEM_BOOST),)
 liborcus_CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost
 else
 liborcus_LDFLAGS+=$(BOOST_LDFLAGS)
@@ -96,7 +96,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--disable-spreadsheet-model \
 			--disable-werror \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter NO,$(SYSTEM_BOOST)),--with-boost-system=boostsystem) \
+			$(if $(SYSTEM_BOOST),,--with-boost-system=boostsystem) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \
 	)

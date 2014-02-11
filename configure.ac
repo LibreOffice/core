@@ -8738,7 +8738,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which boost to use])
 if test "$with_system_boost" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_BOOST=YES
+    SYSTEM_BOOST=TRUE
     AX_BOOST_BASE(1.47)
     AX_BOOST_DATE_TIME
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
@@ -8770,7 +8770,7 @@ if test "$with_system_boost" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
-    SYSTEM_BOOST=NO
+    SYSTEM_BOOST=
 fi
 AC_SUBST(SYSTEM_BOOST)
 
@@ -9169,7 +9169,7 @@ if test -z "$enable_orcus" -o "$enable_orcus" != no; then
 
     libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.6 >= 0.5.0])
     if test "$with_system_orcus" != "yes"; then
-        if test "$SYSTEM_BOOST" = "YES"; then
+        if test "$SYSTEM_BOOST" = "TRUE"; then
             # ===========================================================
             # Determine if we are going to need to link with Boost.System
             # ===========================================================

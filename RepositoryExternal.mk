@@ -584,7 +584,7 @@ endef
 endif # SYSTEM_HUNSPELL
 
 
-ifeq ($(SYSTEM_BOOST),YES)
+ifneq ($(SYSTEM_BOOST),)
 
 define gb_LinkTarget__use_boostdatetime
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2692,7 +2692,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.6$(gb_StaticLibrary_PLAINEXT) \
 )
 
-$(if $(filter YES,$(SYSTEM_BOOST)), \
+$(if $(SYSTEM_BOOST), \
     $(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
     $(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
 )
