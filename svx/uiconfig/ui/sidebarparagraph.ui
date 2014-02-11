@@ -423,6 +423,7 @@
               <object class="svxlo-SvxRelativeField" id="beforetextindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Before Text Indent</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
@@ -462,6 +463,7 @@
               <object class="svxlo-SvxRelativeField" id="aftertextindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">After Text Indent</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
@@ -501,6 +503,7 @@
               <object class="svxlo-SvxRelativeField" id="firstlineindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">First Line Indent</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
