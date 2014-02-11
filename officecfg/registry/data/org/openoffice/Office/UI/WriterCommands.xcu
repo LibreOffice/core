@@ -272,16 +272,6 @@
           <value xml:lang="en-US">Copy Hyperlink Location</value>
         </prop>
       </node>
-      <node oor:name=".uno:AcceptChange" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Accept Change</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RejectChange" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reject Change</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertBookmark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Bookmar~k...</value>
