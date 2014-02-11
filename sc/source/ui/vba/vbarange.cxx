@@ -1413,14 +1413,17 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
                 }
             }
         }
+        break;
+
         case uno::TypeClass_INTERFACE:
         {
             uno::Reference< excel::XRange > xRange;
             aParam >>= xRange;
             if ( xRange.is() )
                 xRange->getCellRange() >>= xRangeParam;
-            break;
         }
+        break;
+
         default:
             throw uno::RuntimeException("Can't extact CellRangeAddress from type", uno::Reference< uno::XInterface >() );
     }
