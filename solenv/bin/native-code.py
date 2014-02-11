@@ -91,6 +91,8 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
+# xmloff/util/xo.component
+    "XMLVersionListPersistence_get_implementation",
     ]
 
 extended_core_factory_list = core_factory_list + [
