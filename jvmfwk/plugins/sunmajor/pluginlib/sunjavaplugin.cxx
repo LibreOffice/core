@@ -595,7 +595,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
          return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
-#ifdef UNX
+#if defined UNX && !defined MACOSX
     //Setting the JAVA_HOME is needed for awt
     OUString javaHome("JAVA_HOME=");
     OUString sPathLocation;
