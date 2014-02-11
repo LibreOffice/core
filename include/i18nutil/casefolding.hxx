@@ -58,7 +58,11 @@ struct Mapping
 
 struct MappingElement
 {
-    MappingElement() {element.nmap = current = 0;}
+    MappingElement()
+        : current(0)
+    {
+        element.type = element.nmap = 0;
+    }
     Mapping element;
     sal_Int8 current;
 };
