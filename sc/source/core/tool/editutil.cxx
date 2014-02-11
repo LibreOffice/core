@@ -891,7 +891,7 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
 }
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP ) :
+            SfxItemPool* pTextObjectPool, bool bDeleteEnginePoolP ) :
     ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
     if ( pTextObjectPool )

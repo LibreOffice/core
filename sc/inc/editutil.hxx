@@ -252,7 +252,7 @@ class ScNoteEditEngine : public ScEditEngineDefaulter
 public:
     ScNoteEditEngine( SfxItemPool* pEnginePool,
                 SfxItemPool* pTextObjectPool = NULL,
-                sal_Bool bDeleteEnginePool = false );
+                bool bDeleteEnginePool = false );
 
 };
 
