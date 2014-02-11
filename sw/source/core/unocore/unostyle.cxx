@@ -75,6 +75,7 @@
 #include "ccoll.hxx"
 #include "unocore.hrc"
 
+#include <cassert>
 #include <set>
 
 #define STYLE_FAMILY_COUNT 5            // we have 5 style families
@@ -1638,6 +1639,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             }
         }
     }
+    assert(pOldPageDesc != 0);
     return *pOldPageDesc;
 }
 
