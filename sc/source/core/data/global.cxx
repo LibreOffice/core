@@ -147,11 +147,11 @@ void global_InitAppOptions();
 //
 //========================================================================
 
-sal_Bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
+bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
                                const sal_uInt16       nWhich )
 {
-    sal_Bool                bInvalidate = false;
+    bool                bInvalidate = false;
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
@@ -177,7 +177,7 @@ sal_Bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                     ? rNewAttrs.Get( nWhich )
                     : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        bInvalidate = sal::static_int_cast<sal_Bool>(rNewItem != rOldItem);
+        bInvalidate = rNewItem != rOldItem;
     }
 
     return bInvalidate;
@@ -222,7 +222,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
+bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
@@ -889,11 +889,11 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
+bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
     if ( pObj1 == pObj2 )               // both empty or the same object
-        return sal_True;
+        return true;
 
     if ( pObj1 && pObj2 )
     {
@@ -912,7 +912,7 @@ sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
         sal_uLong nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
             if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
-                return sal_True;
+                return true;
     }
 
     return false;
@@ -971,7 +971,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGlobal::IsSystemRTL()
+bool ScGlobal::IsSystemRTL()
 {
     return MsLangId::isRightToLeft( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }

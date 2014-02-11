@@ -599,12 +599,12 @@ public:
 
     static OUString         GetErrorString(sal_uInt16 nErrNumber);
     static OUString         GetLongErrorString(sal_uInt16 nErrNumber);
-    static sal_Bool             EETextObjEqual( const EditTextObject* pObj1,
+    static bool             EETextObjEqual( const EditTextObject* pObj1,
                                             const EditTextObject* pObj2 );
-    static sal_Bool             CheckWidthInvalidate( bool& bNumFormatChanged,
+    static bool             CheckWidthInvalidate( bool& bNumFormatChanged,
                                                   const SfxItemSet& rNewAttrs,
                                                   const SfxItemSet& rOldAttrs );
-    static sal_Bool             HasAttrChanged( const SfxItemSet& rNewAttrs,
+    static bool             HasAttrChanged( const SfxItemSet& rNewAttrs,
                                             const SfxItemSet& rOldAttrs,
                                             const sal_uInt16      nWhich );
 
@@ -665,7 +665,7 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();
 
-    static sal_Bool IsSystemRTL();                      // depending on system language
+    static bool IsSystemRTL();                      // depending on system language
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
     SC_DLLPUBLIC static sal_uInt8   GetDefaultScriptType();             // for all WEAK characters
     /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
