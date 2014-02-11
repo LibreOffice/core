@@ -697,8 +697,9 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 47 : fPixelSize = rDGR.GetF(); break;
         case 98 : nNumberOfSeedPoints = rDGR.GetI(); break;
 
-        //!! passthrough !!
-        case 92 : nCurrentBoundaryPathIndex++;
+        case 92:
+            nCurrentBoundaryPathIndex++;
+            //fallthrough
         default:
         {
             sal_Bool bExecutingGroupCode = sal_False;
