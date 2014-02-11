@@ -26,7 +26,6 @@
 
 #include "dlgresid.hrc"
 #include "helpid.hrc"
-#include "managelang.hrc"
 
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -80,23 +79,19 @@ namespace {
     }
 }
 
-ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr ) :
-    ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
-    m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
-    m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
-    m_aAddPB            ( this, IDEResId( PB_ADD_LANG ) ),
-    m_aDeletePB         ( this, IDEResId( PB_DEL_LANG ) ),
-    m_aMakeDefPB        ( this, IDEResId( PB_MAKE_DEFAULT ) ),
-    m_aInfoFT           ( this, IDEResId( FT_INFO ) ),
-    m_aBtnLine          ( this, IDEResId( FL_BUTTONS ) ),
-    m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
-    m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
-    m_xLocalizationMgr  ( xLMgr ),
-    m_sDefLangStr       (IDE_RESSTR(STR_DEF_LANG)),
-    m_sDeleteStr        (IDE_RESSTR(STR_DELETE)),
-    m_sCreateLangStr    (IDE_RESSTR(STR_CREATE_LANG))
+ManageLanguageDialog::ManageLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
+    : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
+    , m_xLocalizationMgr(xLMgr)
+    , m_sDefLangStr(IDE_RESSTR(RID_STR_DEF_LANG))
+    , m_sDeleteStr(IDE_RESSTR(RID_STR_DELETE))
+    , m_sCreateLangStr(IDE_RESSTR(RID_STR_CREATE_LANG))
 {
-    FreeResource();
+    get(m_pLanguageLB, "treeview");
+    m_pLanguageLB->set_height_request(m_pLanguageLB->GetTextHeight() * 10);
+    m_pLanguageLB->set_width_request(m_pLanguageLB->approximate_char_width() * 50);
+    get(m_pAddPB, "add");
+    get(m_pDeletePB, "delete");
+    get(m_pMakeDefPB, "default");
 
     Init();
     FillLanguageBox();
@@ -118,42 +113,12 @@ void ManageLanguageDialog::Init()
     sText = sText.replaceAll("$1", sLibName);
     SetText( sText );
     // set handler
-    m_aAddPB.SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
-    m_aDeletePB.SetClickHdl( LINK( this, ManageLanguageDialog, DeleteHdl ) );
-    m_aMakeDefPB.SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
-    m_aLanguageLB.SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
+    m_pAddPB->SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
+    m_pDeletePB->SetClickHdl( LINK( this, ManageLanguageDialog, DeleteHdl ) );
+    m_pMakeDefPB->SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
+    m_pLanguageLB->SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
-    m_aLanguageLB.EnableMultiSelection( true );
-    CalcInfoSize();
-}
-
-void ManageLanguageDialog::CalcInfoSize()
-{
-    OUString sInfoStr = m_aInfoFT.GetText();
-    long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
-    long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
-    long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
-    long nLines = ( nTxtWidth / nInfoWidth ) + 1;
-    if ( nLines > INFO_LINES_COUNT )
-    {
-        Size aFTSize = m_aLanguageFT.GetSizePixel();
-        Size aSize = m_aInfoFT.GetSizePixel();
-        long nNewHeight = aFTSize.Height() * nLines;
-        long nDelta = nNewHeight - aSize.Height();
-        aSize.Height() = nNewHeight;
-        m_aInfoFT.SetSizePixel( aSize );
-
-        aSize = m_aLanguageLB.GetSizePixel();
-        aSize.Height() -= nDelta;
-        m_aLanguageLB.SetSizePixel( aSize );
-
-        Point aNewPos = m_aInfoFT.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        m_aInfoFT.SetPosPixel( aNewPos );
-        aNewPos = m_aMakeDefPB.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        m_aMakeDefPB.SetPosPixel( aNewPos );
-    }
+    m_pLanguageLB->EnableMultiSelection( true );
 }
 
 void ManageLanguageDialog::FillLanguageBox()
@@ -176,23 +141,23 @@ void ManageLanguageDialog::FillLanguageBox()
             {
                 sLanguage += " " + m_sDefLangStr;
             }
-            sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
-            m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
+            sal_uInt16 nPos = m_pLanguageLB->InsertEntry( sLanguage );
+            m_pLanguageLB->SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
     }
     else
-        m_aLanguageLB.InsertEntry( m_sCreateLangStr );
+        m_pLanguageLB->InsertEntry( m_sCreateLangStr );
 }
 
 void ManageLanguageDialog::ClearLanguageBox()
 {
-    sal_uInt16 i, nCount = m_aLanguageLB.GetEntryCount();
+    sal_uInt16 i, nCount = m_pLanguageLB->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
     {
-        LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData(i) );
+        LanguageEntry* pEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData(i) );
         delete pEntry;
     }
-    m_aLanguageLB.Clear();
+    m_pLanguageLB->Clear();
 }
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
@@ -219,14 +184,14 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
     aQBox.SetButtonText( RET_OK, m_sDeleteStr );
     if ( aQBox.Execute() == RET_OK )
     {
-        sal_uInt16 i, nCount = m_aLanguageLB.GetSelectEntryCount();
-        sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
+        sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
+        sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
         for ( i = 0; i < nCount; ++i )
         {
-            sal_uInt16 nSelPos = m_aLanguageLB.GetSelectEntryPos(i);
-            LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nSelPos ) );
+            sal_uInt16 nSelPos = m_pLanguageLB->GetSelectEntryPos(i);
+            LanguageEntry* pEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData( nSelPos ) );
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
         }
@@ -235,10 +200,10 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
         ClearLanguageBox();
         FillLanguageBox();
         // reset selection
-        nCount = m_aLanguageLB.GetEntryCount();
+        nCount = m_pLanguageLB->GetEntryCount();
         if ( nCount <= nPos )
             nPos = nCount - 1;
-        m_aLanguageLB.SelectEntryPos( nPos );
+        m_pLanguageLB->SelectEntryPos( nPos );
         SelectHdl( NULL );
     }
     return 1;
@@ -246,8 +211,8 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
 {
-    sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
-    LanguageEntry* pSelectEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nPos ) );
+    sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
+    LanguageEntry* pSelectEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData( nPos ) );
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
         // set new default entry
@@ -256,7 +221,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
         ClearLanguageBox();
         FillLanguageBox();
         // reset selection
-        m_aLanguageLB.SelectEntryPos( nPos );
+        m_pLanguageLB->SelectEntryPos( nPos );
         SelectHdl( NULL );
     }
 
@@ -265,14 +230,14 @@ IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 {
-    sal_uInt16 nCount = m_aLanguageLB.GetEntryCount();
+    sal_uInt16 nCount = m_pLanguageLB->GetEntryCount();
     bool bEmpty = ( !nCount ||
-                    m_aLanguageLB.GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
-    bool bSelect = ( m_aLanguageLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+                    m_pLanguageLB->GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
+    bool bSelect = ( m_pLanguageLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
     bool bEnable = ( !bEmpty && bSelect != false );
 
-    m_aDeletePB.Enable( bEnable != false );
-    m_aMakeDefPB.Enable( bEnable != false && nCount > 1 && m_aLanguageLB.GetSelectEntryCount() == 1 );
+    m_pDeletePB->Enable( bEnable != false );
+    m_pMakeDefPB->Enable( bEnable != false && nCount > 1 && m_pLanguageLB->GetSelectEntryCount() == 1 );
 
     return 1;
 }

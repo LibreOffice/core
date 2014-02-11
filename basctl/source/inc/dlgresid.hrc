@@ -49,6 +49,9 @@
 #define RID_STR_TRANSLATION_DEFAULT         ( RID_DLG_START +  22 )
 #define RID_STR_CLASS_TREECONTROL           ( RID_DLG_START +  23 )
 #define RID_STR_CLASS_SPINCONTROL           ( RID_DLG_START +  24 )
+#define RID_STR_DEF_LANG                    ( RID_DLG_START +  25 )
+#define RID_STR_DELETE                      ( RID_DLG_START +  26 )
+#define RID_STR_CREATE_LANG                 ( RID_DLG_START +  27 )
 
 // Property Browser Headline Id's -----------------------------------------------------------
 
@@ -58,8 +61,7 @@
 
 // Manage Language Dialogs
 
-#define RID_DLG_MANAGE_LANGUAGE             ( RID_DLG_START +  70 )
-#define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  71 )
+#define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  70 )
 
 // -----------------------------------------------------------------------
 

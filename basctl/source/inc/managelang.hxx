@@ -52,16 +52,10 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
 class ManageLanguageDialog : public ModalDialog
 {
 private:
-    FixedText           m_aLanguageFT;
-    ListBox             m_aLanguageLB;
-    PushButton          m_aAddPB;
-    PushButton          m_aDeletePB;
-    PushButton          m_aMakeDefPB;
-    FixedText           m_aInfoFT;
-
-    FixedLine           m_aBtnLine;
-    HelpButton          m_aHelpBtn;
-    OKButton            m_aCloseBtn;
+    ListBox*            m_pLanguageLB;
+    PushButton*         m_pAddPB;
+    PushButton*         m_pDeletePB;
+    PushButton*         m_pMakeDefPB;
 
     boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
@@ -70,7 +64,6 @@ private:
     OUString            m_sCreateLangStr;
 
     void                Init();
-    void                CalcInfoSize();
     void                FillLanguageBox();
     void                ClearLanguageBox();
 

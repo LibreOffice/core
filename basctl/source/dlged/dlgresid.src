@@ -132,4 +132,19 @@ String RID_STR_BRWTITLE_MULTISELECT
 
 // -----------------------------------------------------------------------
 
+String RID_STR_DEF_LANG
+{
+    Text [ en-US ] = "[Default Language]" ;
+};
+
+String RID_STR_DELETE
+{
+    Text [ en-US ] = "~Delete" ;
+};
+
+String RID_STR_CREATE_LANG
+{
+    Text [ en-US ] = "<Press 'Add' to create language resources>" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
