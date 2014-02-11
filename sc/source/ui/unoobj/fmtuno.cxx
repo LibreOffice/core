@@ -705,7 +705,7 @@ void ScTableValidationObj::ClearData_Impl()
 {
     nMode        = SC_COND_NONE;
     nValMode     = SC_VALID_ANY;
-    bIgnoreBlank = sal_True;
+    bIgnoreBlank = true;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
     bShowInput   = false;
     bShowError   = false;

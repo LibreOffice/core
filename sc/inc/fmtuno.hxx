@@ -217,12 +217,12 @@ private:
     ScAddress           aSrcPos;
     OUString            aPosString;     // formula position as text
     sal_uInt16          nValMode;       // enum ScValidationMode
-    sal_Bool            bIgnoreBlank;
+    bool                bIgnoreBlank;
     sal_Int16           nShowList;
-    sal_Bool            bShowInput;
+    bool                bShowInput;
     OUString            aInputTitle;
     OUString            aInputMessage;
-    sal_Bool            bShowError;
+    bool                bShowError;
     sal_uInt16          nErrorStyle;    // enum ScValidErrorStyle
     OUString            aErrorTitle;
     OUString            aErrorMessage;
