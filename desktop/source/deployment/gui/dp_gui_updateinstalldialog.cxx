@@ -661,7 +661,6 @@ void UpdateCommandEnv::handle(
 
     css::deployment::VersionException verExc;
     bool approve = false;
-    bool abort = false;
 
     if (request >>= verExc)
     {   //We must catch the version exception during the update,
@@ -672,7 +671,7 @@ void UpdateCommandEnv::handle(
         approve = true;
     }
 
-    if (approve == false && abort == false)
+    if (approve == false)
     {
         //forward to interaction handler for main dialog.
         handleInteractionRequest( m_xContext, xRequest );
@@ -694,15 +693,6 @@ void UpdateCommandEnv::handle(
                     xInteractionApprove->select();
                     // don't query again for ongoing continuations:
                     approve = false;
-                }
-            }
-            else if (abort) {
-                cssu::Reference< css::task::XInteractionAbort > xInteractionAbort(
-                    pConts[ pos ], cssu::UNO_QUERY );
-                if (xInteractionAbort.is()) {
-                    xInteractionAbort->select();
-                    // don't query again for ongoing continuations:
-                    abort = false;
                 }
             }
         }
