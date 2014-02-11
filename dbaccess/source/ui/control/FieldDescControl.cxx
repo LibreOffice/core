@@ -501,6 +501,7 @@ OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
         case FIELD_PROPERTY_TEXTLEN:
             if (pTextLen)
                 return OUString::number(pTextLen->GetValue());
+            break;
         case FIELD_PROPERTY_NUMTYPE:
             if (pNumType)
                 return pNumType->GetSelectEntry();
