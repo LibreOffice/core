@@ -276,7 +276,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         // portion format method.
         if ( IsFtnPortion() )
         {
-            dynamic_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
+            static_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
         }
         else if ( nTmp != nActual )
         {
