@@ -204,7 +204,7 @@ public:
 
     sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }
-    sal_uInt16 IsEmpty() const                              {     return m_aExtraRedlines.empty();               }
+    bool IsEmpty() const                              {     return m_aExtraRedlines.empty();               }
 };
 
 
