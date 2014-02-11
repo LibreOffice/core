@@ -2570,7 +2570,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool 
         rStr = rStr.copy( 0, nStartPos );
         rStr += aEndStr;
     }
-    if ( bEraseTrailingEmptyLines )
+    if ( bEraseTrailingEmptyLines && nStartPos != -1 )
     {
         sal_Int32 n = nStartPos;
         sal_Int32 nLen = rStr.getLength();
