@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,hyphen))
 
-ifeq ($(SYSTEM_HYPH),NO)
+ifeq ($(SYSTEM_HYPH),)
 
 $(eval $(call gb_Module_add_targets,hyphen,\
 	UnpackedTarball_hyphen \

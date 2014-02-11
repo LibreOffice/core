@@ -9483,7 +9483,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which libhunspell to use])
 if test "$with_system_hunspell" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_HUNSPELL=YES
+    SYSTEM_HUNSPELL=TRUE
     AC_LANG_PUSH([C++])
     PKG_CHECK_MODULES(HUNSPELL, hunspell, HUNSPELL_PC="TRUE", HUNSPELL_PC="" )
     if test "$HUNSPELL_PC" != "TRUE"; then
@@ -9501,7 +9501,7 @@ if test "$with_system_hunspell" = "yes"; then
     HUNSPELL_CFLAGS=$(printf '%s' "$HUNSPELL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_HUNSPELL=NO
+    SYSTEM_HUNSPELL=
     HUNSPELL_CFLAGS="-I${WORKDIR}/UnpackedTarball/hunspell/src/hunspell"
     if test "$COM" = "MSC"; then
         HUNSPELL_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/hunspell.lib"
@@ -9520,7 +9520,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which altlinuxhyph to use])
 if test "$with_system_altlinuxhyph" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_HYPH=YES
+    SYSTEM_HYPH=TRUE
     AC_CHECK_HEADER(hyphen.h, [],
        [ AC_MSG_ERROR(altlinuxhyph headers not found.)], [])
     AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
@@ -9539,7 +9539,7 @@ if test "$with_system_altlinuxhyph" = "yes"; then
     libo_MINGW_CHECK_DLL([libhyphen])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_HYPH=NO
+    SYSTEM_HYPH=
     BUILD_TYPE="$BUILD_TYPE HYPHEN"
     if test "$COM" = "MSC"; then
         HYPHEN_LIB="${WORKDIR}/LinkTarget/StaticLibrary/hyphen.lib"

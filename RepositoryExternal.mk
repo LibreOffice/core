@@ -511,7 +511,7 @@ $(call gb_LinkTarget__use_expat_impl,$(1),expat_x64)
 
 endef
 
-ifeq ($(SYSTEM_HYPH),YES)
+ifneq ($(SYSTEM_HYPH),)
 
 define gb_LinkTarget__use_hyphen
 $(call gb_LinkTarget_add_libs,$(1),$(HYPHEN_LIB))
@@ -540,7 +540,7 @@ endef
 
 endif # SYSTEM_HYPH
 
-ifeq ($(SYSTEM_HUNSPELL),YES)
+ifneq ($(SYSTEM_HUNSPELL),)
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_set_include,$(1),\
