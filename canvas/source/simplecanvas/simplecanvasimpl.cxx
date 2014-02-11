@@ -256,7 +256,8 @@ namespace
                                           createStrokingRenderState());
         }
 
-        virtual void SAL_CALL drawPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon ) throw (uno::RuntimeException)
+        virtual void SAL_CALL drawPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon )
+            throw (uno::RuntimeException, std::exception)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
