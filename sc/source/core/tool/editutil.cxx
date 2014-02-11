@@ -432,7 +432,7 @@ ScEditAttrTester::~ScEditAttrTester()
 }
 
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
-                sal_Bool bDeleteEnginePoolP )
+                bool bDeleteEnginePoolP )
             :
             pEnginePool( pEnginePoolP ),
             pDefaults( NULL ),
@@ -489,7 +489,7 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRemem
         if ( bDeleteDefaults )
             delete pDefaults;
         pDefaults = new SfxItemSet( rSet );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = true;
     }
     const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
     sal_Bool bUndo = IsUndoEnabled();
@@ -523,7 +523,7 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
     if ( !pDefaults )
     {
         pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = true;
     }
     pDefaults->Put( rItem );
     SetDefaults( *pDefaults, false );
@@ -534,7 +534,7 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
     if ( !pDefaults )
     {
         pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = true;
     }
     return *pDefaults;
 }

@@ -116,11 +116,11 @@ class ScEnginePoolHelper
 protected:
     SfxItemPool*    pEnginePool;
     SfxItemSet*     pDefaults;
-    sal_Bool            bDeleteEnginePool;
-    sal_Bool            bDeleteDefaults;
+    bool            bDeleteEnginePool;
+    bool            bDeleteDefaults;
 
                     ScEnginePoolHelper( SfxItemPool* pEnginePool,
-                        sal_Bool bDeleteEnginePool = false );
+                        bool bDeleteEnginePool = false );
                     ScEnginePoolHelper( const ScEnginePoolHelper& rOrg );
     virtual         ~ScEnginePoolHelper();
 };
