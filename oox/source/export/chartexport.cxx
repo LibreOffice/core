@@ -2396,22 +2396,23 @@ void ChartExport::_exportAxis(
         if(bDisplayUnits)
         {
             OUString aVal;
-            pFS->startElement( FSNS( XML_c, XML_dispUnits ),
-                FSEND );
             if(GetProperty( xAxisProp, "BuiltInUnit" ))
             {
                 mAny >>= aVal;
                 if(!aVal.isEmpty())
                 {
+                    pFS->startElement( FSNS( XML_c, XML_dispUnits ),
+                            FSEND );
+
                     OString aBuiltInUnit = OUStringToOString(aVal, RTL_TEXTENCODING_UTF8);
                     pFS->singleElement( FSNS( XML_c, XML_builtInUnit ),
-                        XML_val, aBuiltInUnit.getStr(),
-                        FSEND );
+                            XML_val, aBuiltInUnit.getStr(),
+                            FSEND );
+
+                    pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ),FSEND);
+                    pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
                 }
              }
-             pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ),FSEND);
-             pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
-
         }
     }
     // TODO: text properties
