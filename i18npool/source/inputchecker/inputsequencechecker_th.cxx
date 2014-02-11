@@ -25,8 +25,8 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 InputSequenceChecker_th::InputSequenceChecker_th()
+    : InputSequenceCheckerImpl("com.sun.star.i18n.InputSequenceChecker_th")
 {
-    serviceName = "com.sun.star.i18n.InputSequenceChecker_th";
 }
 
 InputSequenceChecker_th::~InputSequenceChecker_th()

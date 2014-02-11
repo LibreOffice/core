@@ -27,8 +27,8 @@ namespace star {
 namespace i18n {
 
 InputSequenceChecker_hi::InputSequenceChecker_hi()
+    : InputSequenceCheckerImpl("com.sun.star.i18n.InputSequenceChecker_hi")
 {
-    serviceName = "com.sun.star.i18n.InputSequenceChecker_hi";
 }
 
 InputSequenceChecker_hi::~InputSequenceChecker_hi()

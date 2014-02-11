@@ -36,7 +36,9 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponent
     cachedItem = NULL;
 }
 
-InputSequenceCheckerImpl::InputSequenceCheckerImpl()
+InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
+    : serviceName(pServiceName)
+    , cachedItem(NULL)
 {
 }
 

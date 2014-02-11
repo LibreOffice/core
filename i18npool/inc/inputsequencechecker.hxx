@@ -40,7 +40,7 @@ class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
 {
 public:
     InputSequenceCheckerImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
-    InputSequenceCheckerImpl();
+    InputSequenceCheckerImpl(const char *pServiceName);
     ~InputSequenceCheckerImpl();
 
     virtual sal_Bool SAL_CALL checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
@@ -56,11 +56,9 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
 
-protected:
-    sal_Int16 checkMode;
+private :
     const sal_Char *serviceName;
 
-private :
     struct lookupTableItem {
         lookupTableItem(const sal_Char* rLanguage, const com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedInputSequenceChecker >& rxISC) :
             aLanguage(rLanguage), xISC(rxISC) {}
