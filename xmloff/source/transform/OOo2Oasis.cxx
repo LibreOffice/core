@@ -1745,6 +1745,7 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_DATAPILOT_MEMBER_ACTIONS:
                     m_aActions[OOO_DATAPILOT_MEMBER_ACTIONS] =
                         new XMLTransformerActions( aDataPilotMemberActionTable );
+                    break;
                 case OOO_DATAPILOT_LEVEL_ACTIONS:
                     m_aActions[OOO_DATAPILOT_LEVEL_ACTIONS] =
                         new XMLTransformerActions( aDataPilotLevelActionTable );
