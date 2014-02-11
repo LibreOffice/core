@@ -33,7 +33,6 @@ class UnoControlContainerModel : public UnoControlModel
 {
 protected:
     ::com::sun::star::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   getPropertySetInfo() const;
     ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper();
 
 public:
