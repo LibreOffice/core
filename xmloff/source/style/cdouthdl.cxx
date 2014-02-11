@@ -230,6 +230,7 @@ bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::An
                     eNewStrikeout = eStrikeout;
                     break;
                 }
+                break;
             default:
                 OSL_ENSURE( bRet, "unexpected line type value" );
                 break;
