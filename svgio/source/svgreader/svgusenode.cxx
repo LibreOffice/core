@@ -121,6 +121,7 @@ namespace svgio
                             setHeight(aNum);
                         }
                     }
+                    break;
                 }
                 case SVGTokenXlinkHref:
                 {
