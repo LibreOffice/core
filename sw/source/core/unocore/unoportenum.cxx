@@ -839,7 +839,7 @@ lcl_ExportHints(
                     {
 
                         pUnoCrsr->Right(
-                            pAttr->GetFmtFld().GetField()->GetPar1().getLength() + 2,
+                            pAttr->GetFmtFld().GetField()->ExpandField( true ).getLength() + 2,
                             CRSR_SKIP_CHARS,
                             sal_False,
                             sal_False );
