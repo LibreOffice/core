@@ -892,7 +892,7 @@ lcl_ExportHints(
                     {
 
                         pUnoCrsr->Right(
-                            pAttr->GetFmtFld().GetField()->GetPar1().Len() + 2,
+                            pAttr->GetFmtFld().GetField()->ExpandField( true ).Len() + 2,
                             CRSR_SKIP_CHARS,
                             sal_False,
                             sal_False );
