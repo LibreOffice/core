@@ -1892,6 +1892,8 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
     }
+    break;
+
     case XML_NAMESPACE_SVG:
     {
         if( IsXMLToken( rLocalName, XML_X1 ) )
