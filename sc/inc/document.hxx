@@ -2047,9 +2047,10 @@ public:
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
 
     /**
-     * Called whenever the value of a cell inside the document is modified.
+     * Call this before any operations that might trigger one or more formula
+     * cells to get calculated.
      */
-    void CellContentModified();
+    void ClearFormulaContext();
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;

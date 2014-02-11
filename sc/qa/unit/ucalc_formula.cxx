@@ -490,6 +490,42 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, 5.0));
 
+    // Clear everything and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
+    m_pDoc->ClearFormulaContext();
+
+    // Totally empty range in a totally empty column (Column A).
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 3); // A1:A3
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+
+    // Totally empty range in a non-empty column (Column B).
+    m_pDoc->SetString(ScAddress(1,10,0), "Some text"); // B11
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,0,0), 3); // B1:B3
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,12,0), 3); // B13:B15
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+
+    // These values come from a cache because of the call above.
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,1,0), 3); // B2:B4
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+
     m_pDoc->DeleteTab(0);
 }
 
