@@ -54,10 +54,9 @@ private:
 // -----------------------------------------------------------------------
 
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
-
-:   PopupMenu( ResId( RID_SVXMNU_ZOOM, DIALOG_MGR() ) ),
-
-    nZoom( nZ )
+    : PopupMenu(ResId(RID_SVXMNU_ZOOM, DIALOG_MGR()))
+    , nZoom(nZ)
+    , nCurId(0)
 {
     static const sal_uInt16 aTable[] =
     {
