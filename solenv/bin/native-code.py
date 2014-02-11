@@ -54,6 +54,7 @@ core_constructor_list = [
     "com_sun_star_comp_framework_LayoutManager_get_implementation",
     "com_sun_star_comp_framework_ModuleManager_get_implementation",
     "com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation",
+    "com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation",
     "com_sun_star_comp_framework_PathSettings_get_implementation",
     "com_sun_star_comp_framework_PathSubstitution_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
