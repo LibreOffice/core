@@ -50,9 +50,8 @@ private:
     OUString     aFileName;
     OUString     aFilterName;
     OUString     aFilterOptions;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::io::XInputStream > xInputStream;
-    sal_Bool            bExport;
+    css::uno::Reference< css::io::XInputStream > xInputStream;
+    bool         bExport;
 
 public:
                             ScFilterOptionsObj();

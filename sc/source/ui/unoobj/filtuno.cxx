@@ -344,7 +344,7 @@ void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::
 void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    bExport = sal_True;
+    bExport = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
