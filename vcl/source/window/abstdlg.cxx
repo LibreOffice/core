@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <rtl/ustring.hxx>
 #include <osl/module.hxx>
@@ -33,6 +34,7 @@ extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
     FuncPtrCreateDialogFactory fp = 0;
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, OUString( CUI_DLL_NAME  ),
@@ -41,6 +43,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
 #else
     fp = CreateDialogFactory;
+#endif
 #endif
     if ( fp )
         return fp();
