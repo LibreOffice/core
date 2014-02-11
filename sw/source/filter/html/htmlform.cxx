@@ -1546,6 +1546,7 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONFOCUS:
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = sal_True;
@@ -1553,6 +1554,7 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONBLUR:               // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = sal_True;
@@ -1560,6 +1562,7 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONCLICK:
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = sal_True;
@@ -1567,6 +1570,7 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = sal_True;
@@ -1574,6 +1578,7 @@ void SwHTMLParser::InsertInput()
 
         case HTML_O_SDONSELECT:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
             bSetEvent = sal_True;
