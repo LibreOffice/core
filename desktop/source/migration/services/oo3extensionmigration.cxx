@@ -442,7 +442,6 @@ void TmpRepositoryCommandEnv::handle(
     OSL_ASSERT( xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     bool approve = true;
-    bool abort   = false;
 
     // select:
     uno::Sequence< Reference< task::XInteractionContinuation > > conts(
@@ -459,15 +458,6 @@ void TmpRepositoryCommandEnv::handle(
                 xInteractionApprove->select();
                 // don't query again for ongoing continuations:
                 approve = false;
-            }
-        }
-        else if (abort) {
-            uno::Reference< task::XInteractionAbort > xInteractionAbort(
-                pConts[ pos ], uno::UNO_QUERY );
-            if (xInteractionAbort.is()) {
-                xInteractionAbort->select();
-                // don't query again for ongoing continuations:
-                abort = false;
             }
         }
     }
