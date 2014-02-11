@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_700e7036",
+        "filename": "swext/mediawiki/src/filter/odt2mediawiki.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-02-11T22:09:29Z",
+      "side": 1,
+      "message": "Not sure if these whitespaces does matter or not",
+      "revId": "dee9722141fa1aea557b502ef2c184ad75b6aa7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
