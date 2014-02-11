@@ -144,7 +144,8 @@ namespace oglcanvas
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL SpriteCanvas::updateScreen(sal_Bool bUpdateAll)
+        throw (uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return maDeviceHelper.showBuffer(mbIsVisible, bUpdateAll);
