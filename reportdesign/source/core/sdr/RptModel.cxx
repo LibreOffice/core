@@ -81,7 +81,7 @@ SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 
 //----------------------------------------------------------------------------
 
-void OReportModel::SetChanged( sal_Bool bChanged )
+void OReportModel::SetChanged( bool bChanged )
 {
     SdrModel::SetChanged( bChanged );
     SetModified( bChanged );

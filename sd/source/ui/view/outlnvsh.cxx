@@ -959,7 +959,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (pOlView->GetOutliner()->IsModified())
     {
-        GetDoc()->SetChanged(sal_True);
+        GetDoc()->SetChanged(true);
     }
 
     // the status has to be set here because of overloading

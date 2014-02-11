@@ -635,7 +635,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         mpWorkStartupTimer->SetTimeout(2000);
         mpWorkStartupTimer->Start();
 
-        SetChanged(sal_False);
+        SetChanged(false);
     }
 }
 
@@ -678,7 +678,7 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 
         bOK = sal_True;
         StopWorkStartupDelay();
-        SetChanged(sal_False);
+        SetChanged(false);
     }
 
     return(bOK);

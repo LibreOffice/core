@@ -737,7 +737,7 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
         }
 
         if(modify)
-            mpModel->mpDoc->SetChanged(sal_True);
+            mpModel->mpDoc->SetChanged(true);
     }
 }
 

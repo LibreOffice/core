@@ -68,7 +68,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
                 else
                     pIMapInfo->SetImageMap( rImageMap );
 
-                GetDoc()->SetChanged( sal_True );
+                GetDoc()->SetChanged( true );
             }
         }
     }

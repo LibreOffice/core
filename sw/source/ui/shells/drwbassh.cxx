@@ -102,7 +102,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
     sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(sal_False);
+    pSdrView->GetModel()->SetChanged(false);
     const SfxPoolItem* pItem = 0;
     if(pArgs)
         pArgs->GetItemState(nSlotId, sal_False, &pItem);
@@ -599,7 +599,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         if (pSdrView->GetModel()->IsChanged())
             pSh->SetModified();
         else if (bChanged)
-            pSdrView->GetModel()->SetChanged(sal_True);
+            pSdrView->GetModel()->SetChanged(true);
         // 40220: After Delete from DrawObjecs over the API GPF through self-destruction
         if(bNotify)
             GetView().AttrChangedNotify(pSh); // Shell switch if applicable...

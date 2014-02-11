@@ -1387,7 +1387,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPerc
         rStr += "%";
 }
 
-void SdrModel::SetChanged(sal_Bool bFlg)
+void SdrModel::SetChanged(bool bFlg)
 {
     mbChanged = bFlg;
 }

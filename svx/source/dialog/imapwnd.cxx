@@ -127,7 +127,7 @@ sal_Bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
         pIMapObj->SetURL( rNewInfo.aMarkURL );
         pIMapObj->SetAltText( rNewInfo.aMarkAltText );
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
-        pModel->SetChanged( sal_True );
+        pModel->SetChanged( true );
         UpdateInfo( sal_False );
 
         bRet = sal_True;
@@ -152,7 +152,7 @@ const ImageMap& IMapWindow::GetImageMap()
                 aIMap.InsertIMapObject( *( ( (IMapUserData*) pPage->GetObj( i )->GetUserData( 0 ) )->GetObject() ) );
         }
 
-        pModel->SetChanged( sal_False );
+        pModel->SetChanged( false );
     }
 
     return aIMap;
@@ -167,7 +167,7 @@ void IMapWindow::SetTargetList( TargetList& rTargetList )
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
         aTargetList.push_back( rTargetList[ i ] );
 
-    pModel->SetChanged( sal_False );
+    pModel->SetChanged( false );
 }
 
 SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
@@ -527,7 +527,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             pIMapObj->SetURL( aBookMark.GetURL() );
             pIMapObj->SetAltText( aBookMark.GetDescription() );
-            pModel->SetChanged( sal_True );
+            pModel->SetChanged( true );
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
             UpdateInfo( sal_True );
@@ -649,7 +649,7 @@ void IMapWindow::DoMacroAssign()
         {
             const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
             pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
-            pModel->SetChanged( sal_True );
+            pModel->SetChanged( true );
             UpdateInfo( sal_False );
         }
 
@@ -687,7 +687,7 @@ void IMapWindow::DoPropertyDialog()
                 pIMapObj->SetDesc( aDlg->GetDesc() );
                 pIMapObj->SetTarget( aDlg->GetTarget() );
                 pIMapObj->SetName( aDlg->GetName() );
-                pModel->SetChanged( sal_True );
+                pModel->SetChanged( true );
                 UpdateInfo( sal_True );
             }
             delete aDlg;

@@ -220,8 +220,8 @@ public:
 
     virtual SdrModel*   AllocModel() const;
     virtual SdrPage*    AllocPage(bool bMasterPage);
-    virtual bool    IsReadOnly() const;
-    virtual void        SetChanged(sal_Bool bFlag = sal_True);
+    virtual bool        IsReadOnly() const;
+    virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
 
     SfxItemPool&        GetPool() { return( *pItemPool ); }
 
@@ -684,7 +684,7 @@ private:
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
     sal_Bool mbIsEnableSetModified;
-    sal_Bool mbIsDocumentChanged;
+    bool mbIsDocumentChanged;
 };
 
 }

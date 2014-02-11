@@ -2046,7 +2046,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
                 {
-                    pModel->SetChanged( sal_False );
+                    pModel->SetChanged( false );
                 }
             }
 

@@ -40,7 +40,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
     SdrView*        pView   = pSh->GetDrawView();
     SdrModel*       pDoc    = pView->GetModel();
     sal_Bool            bChanged = pDoc->IsChanged();
-    pDoc->SetChanged(sal_False);
+    pDoc->SetChanged(false);
 
     SfxItemSet aNewAttr( pDoc->GetItemPool() );
     pView->GetAttributes( aNewAttr );
@@ -165,7 +165,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pDoc->SetChanged(sal_True);
+            pDoc->SetChanged(true);
 }
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
@@ -174,7 +174,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
     SdrView*    pView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_Bool        bChanged = pView->GetModel()->IsChanged();
-    pView->GetModel()->SetChanged(sal_False);
+    pView->GetModel()->SetChanged(false);
 
     GetView().NoRotate();
 
@@ -214,7 +214,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pView->GetModel()->SetChanged(sal_True);
+            pView->GetModel()->SetChanged(true);
 }
 
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)

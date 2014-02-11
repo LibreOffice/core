@@ -1035,7 +1035,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         //        aTabControl.SetPageText( nPageId, rName );
 
         // set document to modified state
-        pDocument->SetChanged( sal_True );
+        pDocument->SetChanged( true );
 
         // inform navigator about change
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );

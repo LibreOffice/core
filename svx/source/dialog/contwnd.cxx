@@ -88,7 +88,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
         pView->CombineMarkedObjects( sal_False );
     }
 
-    pModel->SetChanged( sal_False );
+    pModel->SetChanged( false );
 }
 
 const PolyPolygon& ContourWindow::GetPolyPolygon()
@@ -108,7 +108,7 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
             aPolyPoly = PolyPolygon(aB2DPolyPolygon);
         }
 
-        pModel->SetChanged( sal_False );
+        pModel->SetChanged( false );
     }
 
     return aPolyPoly;

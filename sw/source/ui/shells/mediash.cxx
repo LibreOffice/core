@@ -85,7 +85,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         sal_uInt16              nSlotId = rReq.GetSlot();
         sal_Bool                bChanged = pSdrView->GetModel()->IsChanged();
 
-        pSdrView->GetModel()->SetChanged( sal_False );
+        pSdrView->GetModel()->SetChanged( false );
 
         switch( nSlotId )
         {
@@ -141,7 +141,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         if( pSdrView->GetModel()->IsChanged() )
             GetShell().SetModified();
         else if( bChanged )
-            pSdrView->GetModel()->SetChanged(sal_True);
+            pSdrView->GetModel()->SetChanged(true);
     }
 }
 

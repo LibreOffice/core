@@ -1526,7 +1526,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             ResetActualLayer();
 
-            GetDoc()->SetChanged(sal_True);
+            GetDoc()->SetChanged(true);
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);

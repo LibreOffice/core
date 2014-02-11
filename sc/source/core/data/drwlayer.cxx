@@ -2056,7 +2056,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
     pGlobalDrawPersist = pPersist;
 }
 
-void ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
+void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
 {
     if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( true );

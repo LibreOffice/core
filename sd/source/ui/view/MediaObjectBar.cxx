@@ -148,7 +148,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
 
                     //fdo #32598: after changing playback opts, set document's modified flag
                     SdDrawDocument& rDoc = mpView->GetDoc();
-                    rDoc.SetChanged(sal_True);
+                    rDoc.SetChanged(true);
                 }
             }
 

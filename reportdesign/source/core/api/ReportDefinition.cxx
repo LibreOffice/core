@@ -1934,7 +1934,7 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
     if ( m_pImpl->m_bModified != _bModified )
     {
         m_pImpl->m_bModified = _bModified;
-        if ( m_pImpl->m_pReportModel->IsChanged() != _bModified )
+        if ( ( m_pImpl->m_pReportModel->IsChanged() ? 1 : 0 ) != _bModified )
             m_pImpl->m_pReportModel->SetChanged(_bModified);
 
         lang::EventObject aEvent(*this);

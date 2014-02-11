@@ -337,7 +337,7 @@ void View::DoPaste (::Window* pWindow)
             if( !mrDoc.IsChanged() )
             {
                 if( pOutliner && pOutliner->IsModified() )
-                    mrDoc.SetChanged( sal_True );
+                    mrDoc.SetChanged( true );
             }
         }
     }

@@ -361,7 +361,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     }
 
     aContourWnd.SetPolyPolygon( aPolyPoly );
-    aContourWnd.GetSdrModel()->SetChanged( sal_True );
+    aContourWnd.GetSdrModel()->SetChanged( true );
 }
 
 PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
@@ -607,7 +607,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
         aUpdatePolyPoly = PolyPolygon();
         bUpdateGraphicLinked = sal_False;
 
-        aContourWnd.GetSdrModel()->SetChanged( sal_False );
+        aContourWnd.GetSdrModel()->SetChanged( false );
     }
 
     GetBindings().Invalidate( SID_CONTOUR_EXEC );

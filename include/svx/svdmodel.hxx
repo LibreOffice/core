@@ -438,8 +438,8 @@ public:
     // Modified-Flag. Wird automatisch gesetzt, wenn an den Pages oder
     // Zeichenobjekten was geaendert wird. Zuruecksetzen muss man es
     // jedoch selbst (z.B. bei Save() ...).
-    sal_Bool IsChanged() const { return mbChanged; }
-    virtual void SetChanged(sal_Bool bFlg = sal_True);
+    bool IsChanged() const { return mbChanged; }
+    virtual void SetChanged(bool bFlg = true);
 
     // PageNotValid bedeutet, dass das Model lediglich Objekte traegt die zwar
     // auf einer Page verankert sind, die Page aber nicht gueltig ist. Diese

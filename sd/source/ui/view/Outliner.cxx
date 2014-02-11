@@ -351,7 +351,7 @@ void Outliner::EndSpelling (void)
         if(mpView && mpView->ISA(OutlineView))
             static_cast<OutlineView*>(mpView)->PrepareClose(sal_False);
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
-            mpDrawDocument->SetChanged(sal_True);
+            mpDrawDocument->SetChanged(true);
     }
 
     // Now clear the modify flag to have a specified state of

@@ -224,7 +224,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         // is something has changed, we set the modified flag
         if ( bValuesChanged )
-            mpDoc->SetChanged( sal_True );
+            mpDoc->SetChanged( true );
     }
     delete pDlg;
 }

@@ -101,7 +101,7 @@ public:
 
     virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
-    virtual void    SetChanged( sal_Bool bFlg = sal_True );
+    virtual void    SetChanged( bool bFlg = true ) SAL_OVERRIDE;
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 

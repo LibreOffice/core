@@ -506,7 +506,7 @@ SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 }
 
 // When the model has changed
-void SdDrawDocument::SetChanged(sal_Bool bFlag)
+void SdDrawDocument::SetChanged(bool bFlag)
 {
     if (mpDocSh)
     {
@@ -676,7 +676,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
     UpdateAllLinks();
 
-    SetChanged( sal_False );
+    SetChanged( false );
 }
 
 /** updates all links, only links in this document should by resolved */

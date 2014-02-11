@@ -117,7 +117,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         maTabControl.SetPageText( nPageId, rName );
 
         // set document to modified state
-        GetDoc()->SetChanged( sal_True );
+        GetDoc()->SetChanged( true );
 
         // inform navigator about change
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
@@ -188,7 +188,7 @@ void DrawViewShell::ModifyLayer (
         mpDrawView->SetLayerLocked( rLayerName, bIsLocked);
         mpDrawView->SetLayerPrintable(rLayerName, bIsPrintable);
 
-        GetDoc()->SetChanged(sal_True);
+        GetDoc()->SetChanged(true);
 
         GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
 

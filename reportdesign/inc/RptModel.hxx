@@ -58,7 +58,7 @@ public:
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();
 
-    virtual void        SetChanged(sal_Bool bFlg = sal_True);
+    virtual void        SetChanged(bool bFlg = true) SAL_OVERRIDE;
     virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
     /** @returns the numbering type that is used to format page fields in drawing shapes */

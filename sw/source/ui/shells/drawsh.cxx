@@ -198,7 +198,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     sal_uInt16               nSlotId = rReq.GetSlot();
     sal_Bool                 bChanged = pSdrView->GetModel()->IsChanged();
 
-    pSdrView->GetModel()->SetChanged(sal_False);
+    pSdrView->GetModel()->SetChanged(false);
 
     const SfxPoolItem* pItem;
     if(pArgs)
@@ -401,7 +401,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(sal_True);
+        pSdrView->GetModel()->SetChanged(true);
 }
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
@@ -522,7 +522,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();
     sal_Bool        bChanged = pDrView->GetModel()->IsChanged();
-    pDrView->GetModel()->SetChanged(sal_False);
+    pDrView->GetModel()->SetChanged(false);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
@@ -542,7 +542,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged(sal_True);
+            pDrView->GetModel()->SetChanged(true);
 }
 
 //Return status values for FontWork

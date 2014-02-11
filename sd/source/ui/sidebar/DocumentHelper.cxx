@@ -150,7 +150,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
 
     // We are not interested in any automatisms for our modified internal
     // document.
-    rTargetDocument.SetChanged (sal_False);
+    rTargetDocument.SetChanged(false);
 
     return pNewMasterPage;
 }
