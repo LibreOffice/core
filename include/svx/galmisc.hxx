@@ -202,21 +202,19 @@ private:
     OUString       maThemeName;
     OUString       maStringData;
     sal_uIntPtr         mnData1;
-    sal_uIntPtr         mnData2;
 
 public:
 
-                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
-                        mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ), mnData2( nData2 ) {}
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL ) :
+                        mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ) {}
 
-                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
-                        mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL ) :
+                        mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ) {}
 
     sal_uIntPtr          GetType() const { return mnType; }
     const OUString& GetThemeName() const { return maThemeName; }
     const OUString& GetStringData() const { return maStringData; }
     sal_uIntPtr          GetData1() const { return mnData1; }
-    sal_uIntPtr          GetData2() const { return mnData2; }
 };
 
     #endif
