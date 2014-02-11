@@ -772,11 +772,14 @@ void OFieldExpressionControl::DeleteRows()
             m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
 
             ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aGroupPositions.begin(),m_aGroupPositions.end(),nGroupPos);
-            *aFind = NO_GROUP;
-            ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
-            for(++aFind;aFind != aEnd;++aFind)
-                if ( *aFind != NO_GROUP )
-                    --*aFind;
+            if (aFind != m_aGroupPositions.end())
+            {
+                *aFind = NO_GROUP;
+                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
+                for(++aFind;aFind != aEnd;++aFind)
+                    if ( *aFind != NO_GROUP )
+                        --*aFind;
+            }
         }
         nIndex = NextSelectedRow();
     }
