@@ -243,7 +243,6 @@ handle_r1c1:
         // integer.  we need to clean up this code.
         if( nPos < nLen && nPos > 0 &&
             '-' == pChar[nPos] && '[' == pChar[nPos-1] &&
-            NULL != pDoc &&
             formula::FormulaGrammar::CONV_XL_R1C1 == pDoc->GetAddressConvention() )
         {
             nPos++;
