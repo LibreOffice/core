@@ -2136,7 +2136,7 @@ endef
 
 endif # ENABLE_VALGRIND
 
-ifeq ($(SYSTEM_POPPLER),YES)
+ifneq ($(SYSTEM_POPPLER),)
 
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_set_include,$(1),\
@@ -3031,7 +3031,7 @@ endef
 endif # SYSTEM_APACHE_COMMONS
 
 
-ifeq ($(SYSTEM_JFREEREPORT),YES)
+ifneq ($(SYSTEM_JFREEREPORT),)
 
 define gb_Jar__use_flow-engine
 $(call gb_Jar_use_system_jar,$(1),$(JFREEREPORT_JAR))

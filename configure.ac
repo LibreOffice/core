@@ -10521,7 +10521,7 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
     AC_MSG_CHECKING([which PDF import backend to use])
     if test "$with_system_poppler" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_POPPLER=YES
+        SYSTEM_POPPLER=TRUE
         PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
         AC_LANG_PUSH([C++])
         save_CXXFLAGS=$CXXFLAGS
@@ -10537,7 +10537,7 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_POPPLER=NO
+        SYSTEM_POPPLER=
         BUILD_TYPE="$BUILD_TYPE POPPLER"
     fi
 else
@@ -10569,7 +10569,7 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
     ENABLE_REPORTBUILDER=TRUE
     AC_MSG_CHECKING([which jfreereport libs to use])
     if test "$with_system_jfreereport" = "yes"; then
-        SYSTEM_JFREEREPORT=YES
+        SYSTEM_JFREEREPORT=TRUE
         AC_MSG_RESULT([external])
         if test -z $SAC_JAR; then
             SAC_JAR=/usr/share/java/sac.jar
@@ -10729,13 +10729,13 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
 
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_JFREEREPORT=NO
+        SYSTEM_JFREEREPORT=
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
     fi
 else
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=
-    SYSTEM_JFREEREPORT=NO
+    SYSTEM_JFREEREPORT=
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
@@ -12670,7 +12670,7 @@ if test "$enable_mpl_subset" = "yes"; then
         AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
     fi
     if test -n "$ENABLE_PDFIMPORT"; then
-        if test "x$SYSTEM_POPPLER" != "xNO"; then
+        if test "x$SYSTEM_POPPLER" != "x"; then
             AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
         fi
     fi

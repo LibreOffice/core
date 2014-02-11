@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,poppler))
 
-ifeq ($(SYSTEM_POPPLER),NO)
+ifeq ($(SYSTEM_POPPLER),)
 
 $(eval $(call gb_Module_add_targets,poppler,\
 	ExternalProject_poppler \

@@ -8,7 +8,7 @@
 #
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
-ifneq ($(SYSTEM_JFREEREPORT),YES)
+ifeq ($(SYSTEM_JFREEREPORT),)
 include $(SRCDIR)/external/jfreereport/version.mk
 endif
 endif
@@ -134,7 +134,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 endif
 
-ifneq ($(SYSTEM_JFREEREPORT),YES)
+ifeq ($(SYSTEM_JFREEREPORT),)
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DFLUTE_VERSION=$(FLUTE_VERSION) \
