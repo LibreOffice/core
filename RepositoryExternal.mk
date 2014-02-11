@@ -430,7 +430,7 @@ endef
 
 endif # SYSTEM_JPEG
 
-ifeq ($(SYSTEM_MYTHES),YES)
+ifneq ($(SYSTEM_MYTHES),)
 
 define gb_LinkTarget__use_mythes
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1842,7 +1842,7 @@ endif # ANDROID
 endif # SYSTEM_LCMS2
 
 
-ifeq ($(SYSTEM_LPSOLVE),YES)
+ifneq ($(SYSTEM_LPSOLVE),)
 
 define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_add_libs,$(1),-llpsolve55)

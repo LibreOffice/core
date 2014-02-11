@@ -9556,7 +9556,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which mythes to use])
 if test "$with_system_mythes" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_MYTHES=YES
+    SYSTEM_MYTHES=TRUE
     AC_LANG_PUSH([C++])
     PKG_CHECK_MODULES(MYTHES, mythes, MYTHES_PKGCONFIG=yes, MYTHES_PKGCONFIG=no)
     if test "$MYTHES_PKGCONFIG" = "no"; then
@@ -9577,7 +9577,7 @@ if test "$with_system_mythes" = "yes"; then
     MYTHES_CFLAGS=$(printf '%s' "$MYTHES_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_MYTHES=NO
+    SYSTEM_MYTHES=
     BUILD_TYPE="$BUILD_TYPE MYTHES"
     if test "$COM" = "MSC"; then
         MYTHES_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/mythes.lib"
@@ -9605,7 +9605,7 @@ AC_SUBST(ENABLE_LPSOLVE)
 AC_MSG_CHECKING([which lpsolve to use])
 if test "$with_system_lpsolve" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_LPSOLVE=YES
+    SYSTEM_LPSOLVE=TRUE
     AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
        [ AC_MSG_ERROR(lpsolve headers not found.)], [])
     save_LIBS=$LIBS
@@ -9618,7 +9618,7 @@ if test "$with_system_lpsolve" = "yes"; then
     libo_MINGW_CHECK_DLL([lpsolve55])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_LPSOLVE=NO
+    SYSTEM_LPSOLVE=
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
