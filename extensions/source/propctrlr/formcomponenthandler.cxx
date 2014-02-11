@@ -2765,7 +2765,6 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        bool bIsLink = true;// reflect the legacy behavior
         OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
         ::sfx2::FileDialogHelper aFileDlg(
@@ -2776,7 +2775,6 @@ namespace pcr
         // non-linked images ( e.g. those located in the document
         // stream ) only if document is available
         Reference< XModel > xModel( impl_getContextDocument_nothrow() );
-        bool bHandleNonLink = false;
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
@@ -2785,8 +2783,8 @@ namespace pcr
             // do a preview by default
             xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
 
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(bIsLink));
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, bHandleNonLink );
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(sal_True));
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
 
         }
 
@@ -2802,24 +2800,7 @@ namespace pcr
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
         {
-            if ( bHandleNonLink && xController.is() )
-            {
-                xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
-            }
-            if ( !bIsLink )
-            {
-                Graphic aGraphic;
-                aFileDlg.GetGraphic( aGraphic );
-
-                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_xContext );
-                xGrfObj->setGraphic( aGraphic.GetXGraphic() );
-
-
-                _out_rNewValue <<= xGrfObj;
-
-            }
-            else
-                _out_rNewValue <<= (OUString)aFileDlg.GetPath();
+            _out_rNewValue <<= (OUString)aFileDlg.GetPath();
         }
         return bSuccess;
     }
