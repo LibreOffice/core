@@ -308,6 +308,9 @@ class SW_DLLPUBLIC SwInputField : public SwField
     // Accessing Input Field's content
     const OUString& getContent() const;
 
+    void LockNotifyContentChange();
+    void UnlockNotifyContentChange();
+
 public:
     /// Direct input via dialog; delete old value.
     SwInputField(

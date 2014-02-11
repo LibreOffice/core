@@ -453,6 +453,7 @@ SwTxtInputFld::SwTxtInputFld(
 
     : SwTxtFld( rAttr, nStart, bInClipboard )
     , m_nEnd( nEnd )
+    , m_bLockNotifyContentChange( false )
 {
     SetHasDummyChar( false );
     SetHasContent( true );
@@ -473,11 +474,30 @@ sal_Int32* SwTxtInputFld::GetEnd()
     return &m_nEnd;
 }
 
+
+void SwTxtInputFld::LockNotifyContentChange()
+{
+    m_bLockNotifyContentChange = true;
+}
+
+
+void SwTxtInputFld::UnlockNotifyContentChange()
+{
+    m_bLockNotifyContentChange = false;
+}
+
+
 void SwTxtInputFld::NotifyContentChange( SwFmtFld& rFmtFld )
 {
-    SwTxtFld::NotifyContentChange( rFmtFld );
+    if ( !m_bLockNotifyContentChange )
+    {
+        LockNotifyContentChange();
 
-    UpdateTextNodeContent( GetFieldContent() );
+        SwTxtFld::NotifyContentChange( rFmtFld );
+        UpdateTextNodeContent( GetFieldContent() );
+
+        UnlockNotifyContentChange();
+    }
 }
 
 const OUString SwTxtInputFld::GetFieldContent() const

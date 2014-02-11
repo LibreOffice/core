@@ -202,8 +202,14 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         ChgValid( false );
 
     NotifyClients( pOld, pNew );
+
     // update input fields that might be connected to the user field
-    GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
+    if ( !IsModifyLocked() )
+    {
+        LockModify();
+        GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
+        UnlockModify();
+    }
 }
 
 double SwUserFieldType::GetValue( SwCalc& rCalc )

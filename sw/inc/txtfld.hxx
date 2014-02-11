@@ -83,6 +83,8 @@ public:
 
     virtual sal_Int32* GetEnd();
 
+    void LockNotifyContentChange();
+    void UnlockNotifyContentChange();
     virtual void NotifyContentChange( SwFmtFld& rFmtFld );
 
     void UpdateTextNodeContent( const OUString& rNewContent );
@@ -92,6 +94,8 @@ public:
 
 private:
     sal_Int32 m_nEnd;
+
+    bool m_bLockNotifyContentChange;
 };
 
 #endif
