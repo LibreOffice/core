@@ -11809,7 +11809,7 @@ if test "$test_cairo" = "yes"; then
 
     : ${with_system_cairo:=$with_system_libs}
     if test "$with_system_cairo" = "yes"; then
-        SYSTEM_CAIRO=YES
+        SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
 
         PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
@@ -11833,7 +11833,7 @@ if test "$test_cairo" = "yes"; then
         libo_MINGW_TRY_DLL([libpixman])
         libo_MINGW_TRY_DLL([libpng15])
     else
-        SYSTEM_CAIRO=NO
+        SYSTEM_CAIRO=
         AC_MSG_RESULT([no])
 
         BUILD_TYPE="$BUILD_TYPE CAIRO"

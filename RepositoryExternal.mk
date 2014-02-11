@@ -1073,7 +1073,7 @@ endif # ANDROID
 endif # SYSTEM_REDLAND
 
 
-ifeq ($(SYSTEM_CAIRO),YES)
+ifneq ($(SYSTEM_CAIRO),)
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1085,7 +1085,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 
 endef
 
-else ifeq ($(SYSTEM_CAIRO),NO)
+else # !SYSTEM_CAIRO
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
