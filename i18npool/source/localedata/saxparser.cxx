@@ -199,7 +199,6 @@ public: // ExtendedDocumentHandler
 
 
     stack<LocaleNode *> currentNode ;
-    sal_Bool  fElement ;
     LocaleNode * rootNode;
 
     virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException)
