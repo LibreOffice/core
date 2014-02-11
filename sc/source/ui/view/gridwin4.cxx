@@ -940,7 +940,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         else
         {
             //  use EditEngine to draw mixed-script string
-            pEditEng = new ScEditEngineDefaulter( EditEngine::CreatePool(), sal_True );
+            pEditEng = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
             pEditEng->SetRefMapMode( pContentDev->GetMapMode() );
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
             rDefPattern.FillEditItemSet( pEditDefaults );

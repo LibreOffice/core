@@ -135,17 +135,17 @@ public:
                     /// bDeleteEnginePool: Engine becomes the owner of the pool
                     /// and deletes it on destruction
                     ScEditEngineDefaulter( SfxItemPool* pEnginePool,
-                        sal_Bool bDeleteEnginePool = false );
+                        bool bDeleteEnginePool = false );
                     /// If rOrg.bDeleteEnginePool: pool gets cloned and will be
                     /// deleted on destruction. Defaults are not set.
                     ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg );
     virtual         ~ScEditEngineDefaulter();
 
                     /// Creates a copy of SfxItemSet if bRememberCopy set
-    void            SetDefaults( const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
+    void            SetDefaults( const SfxItemSet& rDefaults, bool bRememberCopy = true );
 
                     /// Becomes the owner of the SfxItemSet if bTakeOwnership set
-    void            SetDefaults( SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
+    void            SetDefaults( SfxItemSet* pDefaults, bool bTakeOwnership = true );
 
                     /// Set the item in the default ItemSet which is created
                     /// if it doesn't exist yet.
@@ -159,19 +159,19 @@ public:
     void            SetText( const EditTextObject& rTextObject );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
+                        const SfxItemSet& rDefaults, bool bRememberCopy = true );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
+                        SfxItemSet* pDefaults, bool bTakeOwnership = true );
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
-                        const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
+                        const SfxItemSet& rDefaults, bool bRememberCopy = true );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
-                        SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
+                        SfxItemSet* pDefaults, bool bTakeOwnership = true );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset

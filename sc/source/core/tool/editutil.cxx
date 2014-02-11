@@ -459,7 +459,7 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
 }
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
-                sal_Bool bDeleteEnginePoolP )
+                bool bDeleteEnginePoolP )
             :
             ScEnginePoolHelper( pEnginePoolP, bDeleteEnginePoolP ),
             EditEngine( pEnginePoolP )
@@ -482,7 +482,7 @@ ScEditEngineDefaulter::~ScEditEngineDefaulter()
 {
 }
 
-void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRememberCopy )
+void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberCopy )
 {
     if ( bRememberCopy )
     {
@@ -508,7 +508,7 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRemem
         EnableUndo( sal_True );
 }
 
-void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, sal_Bool bTakeOwnership )
+void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, bool bTakeOwnership )
 {
     if ( bDeleteDefaults )
         delete pDefaults;
@@ -552,7 +552,7 @@ void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            const SfxItemSet& rSet, sal_Bool bRememberCopy )
+            const SfxItemSet& rSet, bool bRememberCopy )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
@@ -564,7 +564,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            SfxItemSet* pSet, sal_Bool bTakeOwnership )
+            SfxItemSet* pSet, bool bTakeOwnership )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
@@ -588,7 +588,7 @@ void ScEditEngineDefaulter::SetText( const OUString& rText )
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-            const SfxItemSet& rSet, sal_Bool bRememberCopy )
+            const SfxItemSet& rSet, bool bRememberCopy )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
@@ -600,7 +600,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-            SfxItemSet* pSet, sal_Bool bTakeOwnership )
+            SfxItemSet* pSet, bool bTakeOwnership )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
