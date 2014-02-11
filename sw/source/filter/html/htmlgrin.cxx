@@ -394,18 +394,21 @@ void SwHTMLParser::InsertImage()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONABORT:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONERROR:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
