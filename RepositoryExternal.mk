@@ -2926,7 +2926,7 @@ endef
 endif # SYSTEM_HSQLDB
 
 
-ifeq ($(SYSTEM_BSH),YES)
+ifneq ($(SYSTEM_BSH),)
 
 define gb_Jar__use_bsh
 $(call gb_Jar_use_system_jar,$(1),$(BSH_JAR))
@@ -2963,7 +2963,7 @@ endef
 
 endif # SYSTEM_RHINO
 
-ifeq ($(SYSTEM_APACHE_COMMONS),YES)
+ifneq ($(SYSTEM_APACHE_COMMONS),)
 
 define gb_Jar__use_commons-codec
 $(call gb_Jar_use_system_jar,$(1),$(COMMONS_CODEC_JAR))

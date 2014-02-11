@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
 			-q \
 			-f build.xml \
 			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),\
+			$(if $(SYSTEM_APACHE_COMMONS),\
 				-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR), \
 				-Dcommons-logging.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.1.1-SNAPSHOT.jar") \
 			-Dflute.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_flute)/dist/flute-$(FLUTE_VERSION).jar \

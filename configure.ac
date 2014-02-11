@@ -10756,7 +10756,7 @@ AC_SUBST(LIBSERIALIZER_JAR)
 if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
     AC_MSG_CHECKING([which Apache commons-* libs to use])
     if test "$with_system_apache_commons" = "yes"; then
-        SYSTEM_APACHE_COMMONS=YES
+        SYSTEM_APACHE_COMMONS=TRUE
         AC_MSG_RESULT([external])
         if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
             if test -z $COMMONS_CODEC_JAR; then
@@ -10822,7 +10822,7 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         fi
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_APACHE_COMMONS=NO
+        SYSTEM_APACHE_COMMONS=
         BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
     fi
 fi
@@ -10844,7 +10844,7 @@ if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
     AC_MSG_CHECKING([which beanshell to use])
     if test "$with_system_beanshell" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_BSH=YES
+        SYSTEM_BSH=TRUE
         if test -z $BSH_JAR; then
             BSH_JAR=/usr/share/java/bsh.jar
         fi
@@ -10852,7 +10852,7 @@ if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
                    [AC_MSG_ERROR(bsh.jar not found.)], [])
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_BSH=NO
+        SYSTEM_BSH=
         BUILD_TYPE="$BUILD_TYPE BSH"
     fi
 else

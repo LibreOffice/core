@@ -15,7 +15,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/extensions,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/extensions,\
-	$(if $(filter YES,$(SYSTEM_BSH)),\
+	$(if $(SYSTEM_BSH),\
 		-DBSH_JAR=\""$(call gb_Helper_make_url,$(BSH_JAR))"\" \
 	) \
 	$(if $(filter YES,$(SYSTEM_RHINO)),\
