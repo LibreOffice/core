@@ -2098,27 +2098,27 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                             eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
                             switch( eDateFormat )
                             {
-                                case SVXDATEFORMAT_STDSMALL: ;
-                                case SVXDATEFORMAT_A: ;     // 13.02.96
+                                case SVXDATEFORMAT_STDSMALL:
+                                case SVXDATEFORMAT_A:       // 13.02.96
                                 case SVXDATEFORMAT_B:       // 13.02.1996
                                     switch( eCurDateFormat )
                                     {
-                                        case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                        case SVXDATEFORMAT_C:       // 13.Feb 1996
                                         case SVXDATEFORMAT_D:       // 13.February 1996
-                                        case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                                        case SVXDATEFORMAT_STDBIG: ;
+                                        case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                                        case SVXDATEFORMAT_STDBIG:
                                         case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
                                             eDateFormat = eCurDateFormat;
                                             break;
                                         default:
                                             break;
                                     }
-                                case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                case SVXDATEFORMAT_C:       // 13.Feb 1996
                                 case SVXDATEFORMAT_D:       // 13.February 1996
                                     switch( eCurDateFormat )
                                     {
-                                        case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                                        case SVXDATEFORMAT_STDBIG: ;
+                                        case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                                        case SVXDATEFORMAT_STDBIG:
                                         case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
                                             eDateFormat = eCurDateFormat;
                                             break;
