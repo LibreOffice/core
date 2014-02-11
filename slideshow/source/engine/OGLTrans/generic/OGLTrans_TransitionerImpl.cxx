@@ -217,7 +217,7 @@ protected:
 
     bool createWindow( Window* pPWindow );
     void createTexture( unsigned int* texID,
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
             unx::GLXPixmap pixmap,
             bool usePixmap,
 #endif
@@ -255,7 +255,7 @@ private:
         unx::Display*           dpy;
         int                     screen;
         unx::Window             win;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
         unx::GLXFBConfig        fbc;
 #endif
         unx::XVisualInfo*       vi;
@@ -295,7 +295,7 @@ private:
     */
     uno::Sequence<sal_Int8> LeavingBytes;
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     unx::GLXPixmap LeavingPixmap;
     unx::GLXPixmap EnteringPixmap;
 #endif
@@ -460,7 +460,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
     GLWin.screen = XScreenNumberOfScreen( xattr.screen );
 
     unx::XVisualInfo* vi( NULL );
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     unx::XVisualInfo* visinfo;
     unx::XVisualInfo* firstVisual( NULL );
 #endif
@@ -517,7 +517,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
     delete pWindow;
     pWindow=NULL;
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     unx::GLXFBConfig* fbconfigs = NULL;
     int nfbconfigs = 0, value = 0, i = 0;
 #endif
@@ -530,7 +530,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                                    *pAttributeTable );
 
         if( vi ) {
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
             if( !firstVisual )
                 firstVisual = vi;
             SAL_INFO("slideshow.opengl", "trying VisualID " << vi->visualid);
@@ -599,7 +599,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
         ++pAttributeTable;
     }
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     if ( firstVisual && vi != firstVisual )
         XFree (firstVisual);
 #endif
@@ -816,7 +816,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
 
     if( mnGLXVersion >= 1.2999 && mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
@@ -943,7 +943,7 @@ void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> co
 }
 
 void OGLTransitionerImpl::createTexture( unsigned int* texID,
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
                      unx::GLXPixmap pixmap,
                      bool usePixmap,
 #endif
@@ -957,7 +957,7 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     unx::PFNGLXBINDTEXIMAGEEXTPROC myglXBindTexImageEXT = (unx::PFNGLXBINDTEXIMAGEEXTPROC) unx::glXGetProcAddress( (const GLubyte*) "glXBindTexImageEXT" );
 
     if( usePixmap ) {
@@ -1546,7 +1546,7 @@ void OGLTransitionerImpl::GLInitSlides()
         pFormat = chooseFormats();
 
     createTexture( &GLleavingSlide,
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
            LeavingPixmap,
            mbUseLeavingPixmap,
 #endif
@@ -1555,7 +1555,7 @@ void OGLTransitionerImpl::GLInitSlides()
            pFormat );
 
     createTexture( &GLenteringSlide,
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
            EnteringPixmap,
            mbUseEnteringPixmap,
 #endif
@@ -1676,7 +1676,7 @@ void OGLTransitionerImpl::disposeTextures()
     glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx );
 #endif
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     unx::PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (unx::PFNGLXRELEASETEXIMAGEEXTPROC) unx::glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
         myglXReleaseTexImageEXT( GLWin.dpy, LeavingPixmap, GLX_FRONT_LEFT_EXT );
