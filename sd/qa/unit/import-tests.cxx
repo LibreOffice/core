@@ -374,6 +374,7 @@ void SdFiltersTest::testN778859()
         // Get the object
         SdrObject *pObj = pPage->GetObj(1);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
 }
