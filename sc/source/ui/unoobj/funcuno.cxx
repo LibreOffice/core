@@ -92,7 +92,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
         pTempDoc = CreateDocument();
     else
     {
-        rCache.SetInUse( sal_True );
+        rCache.SetInUse( true );
         if ( !rCache.GetDocument() )
             rCache.SetDocument( CreateDocument() );
     }
