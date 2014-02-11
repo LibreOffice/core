@@ -7700,7 +7700,7 @@ fi
 
 if test "$with_system_jpeg" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_JPEG=YES
+    SYSTEM_JPEG=TRUE
     AC_CHECK_HEADER(jpeglib.h, [],
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
@@ -7708,7 +7708,7 @@ if test "$with_system_jpeg" = "yes"; then
     libo_MINGW_CHECK_DLL([libjpeg])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_JPEG=NO
+    SYSTEM_JPEG=
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
@@ -7723,7 +7723,7 @@ dnl but the contribs-lib check seems tricky
 AC_MSG_CHECKING([which clucene to use])
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_CLUCENE=YES
+    SYSTEM_CLUCENE=TRUE
     PKG_CHECK_MODULES(CLUCENE, libclucene-core)
     CLUCENE_CFLAGS=[$(printf '%s' "$CLUCENE_CFLAGS" | sed -e 's@-I[^ ]*/CLucene/ext@@' -e "s/-I/${ISYSTEM?}/g")]
     AC_LANG_PUSH([C++])
@@ -7742,7 +7742,7 @@ if test "$with_system_clucene" = "yes"; then
     CLUCENE_LIBS="$CLUCENE_LIBS -lclucene-contribs-lib"
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_CLUCENE=NO
+    SYSTEM_CLUCENE=
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
 AC_SUBST(SYSTEM_CLUCENE)
@@ -7757,7 +7757,7 @@ dnl proper pkg-config for it. It should really be fixed on the tinderbox though.
 AC_MSG_CHECKING([which expat to use])
 if test "$with_system_expat" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_EXPAT=YES
+    SYSTEM_EXPAT=TRUE
     AC_CHECK_HEADER(expat.h, [],
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
@@ -7765,7 +7765,7 @@ if test "$with_system_expat" = "yes"; then
     libo_MINGW_CHECK_DLL([libexpat])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_EXPAT=NO
+    SYSTEM_EXPAT=
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)

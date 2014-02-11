@@ -75,13 +75,13 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		CC="$(strip $(CC) \
 			$(if $(SYSTEM_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
 				$(if $(DISABLE_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include)) \
-			$(if $(filter NO,$(SYSTEM_EXPAT)),-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
+			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		LDFLAGS="$(strip $(LDFLAGS) \
 			$(if $(SYSTEM_OPENSSL),,-L$(call gb_UnpackedTarball_get_dir,openssl)) \
-			$(if $(filter YES,$(SYSTEM_EXPAT)),, -L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \

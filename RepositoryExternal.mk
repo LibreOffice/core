@@ -404,7 +404,7 @@ endef
 endif # SYSTEM_ZLIB
 
 
-ifeq ($(SYSTEM_JPEG),YES)
+ifneq ($(SYSTEM_JPEG),)
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_add_libs,$(1),-ljpeg)
@@ -463,7 +463,7 @@ endef
 endif # SYSTEM_MYTHES
 
 
-ifeq ($(SYSTEM_EXPAT),YES)
+ifneq ($(SYSTEM_EXPAT),)
 
 define gb_LinkTarget__use_expat_impl
 $(if $(2),,$(error gb_LinkTarget__use_expat_impl needs additional parameter))
@@ -2184,7 +2184,7 @@ endef
 endif # SYSTEM_POPPLER
 
 
-ifeq ($(SYSTEM_CLUCENE),YES)
+ifneq ($(SYSTEM_CLUCENE),)
 
 define gb_LinkTarget__use_clucene
 $(call gb_LinkTarget_add_defs,$(1),\
