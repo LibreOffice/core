@@ -2608,6 +2608,17 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr",
             "val", "accent3");
 
+    // check color transformations applied to theme colors have been preserved
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumMod",
+            "val", "40000");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumOff",
+            "val", "60000");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr/a:lumMod",
+            "val", "50000");
+
     // check direct color assignments have been preserved
     OUString sFillColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
@@ -2636,10 +2647,10 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
 
     // check colors are properly applied to shapes on import
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape1, "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xf79646), getProperty<sal_Int32>(xShape2, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xfcd5b5), getProperty<sal_Int32>(xShape2, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), getProperty<sal_Int32>(xShape3, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x3a5f8b), getProperty<sal_Int32>(xShape1, "LineColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(xShape2, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f6228), getProperty<sal_Int32>(xShape2, "LineColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), getProperty<sal_Int32>(xShape3, "LineColor"));
 
     // check line properties are properly applied to shapes on import

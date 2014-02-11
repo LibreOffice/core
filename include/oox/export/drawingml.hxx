@@ -127,7 +127,7 @@ public:
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteSolidFill( OUString sSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace );

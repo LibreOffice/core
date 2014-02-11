@@ -782,22 +782,29 @@ Reference< XShape > Shape::createAndInsert(
             }
 
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
+            Sequence< PropertyValue > aProperties( 6 );  //allocate the maximum possible number of slots
             sal_Int32 nSize = 2;
-            Sequence< PropertyValue > aProperties( nSize );
             PUT_PROP( aProperties, 0, "OriginalSolidFillClr", aShapeProps[PROP_FillColor] );
             PUT_PROP( aProperties, 1, "OriginalLnSolidFillClr", aShapeProps[PROP_LineColor] );
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
-                aProperties.realloc( ++nSize );
-                PUT_PROP( aProperties, nSize - 1, "SpPrSolidFillSchemeClr", sColorFillScheme );
+                PUT_PROP( aProperties, nSize, "SpPrSolidFillSchemeClr", sColorFillScheme );
+                nSize++;
+                PUT_PROP( aProperties, nSize, "SpPrSolidFillSchemeClrTransformations",
+                          aFillProperties.maFillColor.getTransformations() );
+                nSize++;
             }
             OUString sLnColorFillScheme = aLineProperties.maLineFill.maFillColor.getSchemeName();
             if( !aLineProperties.maLineFill.maFillColor.isPlaceHolder() && !sLnColorFillScheme.isEmpty() )
             {
-                aProperties.realloc( ++nSize );
-                PUT_PROP( aProperties, nSize - 1, "SpPrLnSolidFillSchemeClr", sLnColorFillScheme );
+                PUT_PROP( aProperties, nSize, "SpPrLnSolidFillSchemeClr", sLnColorFillScheme );
+                nSize++;
+                PUT_PROP( aProperties, nSize, "SpPrLnSolidFillSchemeClrTransformations",
+                          aLineProperties.maLineFill.maFillColor.getTransformations() );
+                nSize++;
             }
+            aProperties.realloc( nSize ); //shrink the Sequence if we didn't use all the slots
             putPropertiesToGrabBag( aProperties );
 
             // Store original gradient fill of the shape to InteropGrabBag

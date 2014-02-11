@@ -219,21 +219,10 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
-void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
+void DrawingML::WriteSolidFill( OUString sSchemeName, Sequence< PropertyValue > aTransformations )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
-    if( nAlpha < MAX_PERCENT )
-    {
-        Sequence< PropertyValue > aTransformations(1);
-        aTransformations[0].Name = "alpha";
-        aTransformations[0].Value <<= nAlpha;
-        WriteColor( sSchemeName, aTransformations );
-    }
-    else
-    {
-        Sequence< PropertyValue > aTransformations(0);
-        WriteColor( sSchemeName, aTransformations );
-    }
+    WriteColor( sSchemeName, aTransformations );
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
@@ -247,7 +236,7 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
     sal_uInt32 nOriginalColor = 0;
-    Sequence< PropertyValue > aStyleProperties;
+    Sequence< PropertyValue > aStyleProperties, aTransformations;
     if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
     {
         Sequence< PropertyValue > aGrabBag;
@@ -259,6 +248,8 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
                 aGrabBag[i].Value >>= nOriginalColor;
             else if( aGrabBag[i].Name == "StyleFillRef" )
                 aGrabBag[i].Value >>= aStyleProperties;
+            else if( aGrabBag[i].Name == "SpPrSolidFillSchemeClrTransformations" )
+                aGrabBag[i].Value >>= aTransformations;
     }
 
     sal_Int32 nAlpha = MAX_PERCENT;
@@ -276,7 +267,7 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
         WriteSolidFill( nFillColor & 0xffffff, nAlpha );
     else if ( !sColorFillScheme.isEmpty() )
         // the shape had a scheme color and the user didn't change it
-        WriteSolidFill( sColorFillScheme, nAlpha );
+        WriteSolidFill( sColorFillScheme, aTransformations );
     else if ( aStyleProperties.hasElements() )
     {
         sal_uInt32 nThemeColor = 0;
@@ -529,7 +520,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
     sal_uInt32 nOriginalColor( 0 ), nStyleColor( 0 ), nStyleLineWidth( 0 );
-    Sequence< PropertyValue > aStyleProperties;
+    Sequence< PropertyValue > aStyleProperties, aTransformations;
     drawing::LineStyle aStyleLineStyle( drawing::LineStyle_NONE );
     drawing::LineJoint aStyleLineJoint( drawing::LineJoint_NONE );
     if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
@@ -543,6 +534,8 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
                 aGrabBag[i].Value >>= nOriginalColor;
             else if( aGrabBag[i].Name == "StyleLnRef" )
                 aGrabBag[i].Value >>= aStyleProperties;
+            else if( aGrabBag[i].Name == "SpPrLnSolidFillSchemeClrTransformations" )
+                aGrabBag[i].Value >>= aTransformations;
         if( aStyleProperties.hasElements() )
         {
             for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
@@ -596,7 +589,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
             WriteSolidFill( nColor );
         else if( !sColorFillScheme.isEmpty() )
             // the line had a scheme color and the user didn't change it
-            WriteSolidFill( sColorFillScheme );
+            WriteSolidFill( sColorFillScheme, aTransformations );
         else if( aStyleProperties.hasElements() )
         {
             if( nColor != nStyleColor )
