@@ -32,7 +32,7 @@ postgresql_CPPFLAGS := $(ZLIB_CFLAGS)
 postgresql_LDFLAGS  :=
 
 ifeq ($(DISABLE_OPENSSL),)
-ifeq ($(SYSTEM_OPENSSL),NO)
+ifeq ($(SYSTEM_OPENSSL),)
 postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openssl)/include
 postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl)/
 endif
@@ -44,7 +44,7 @@ postgresql_LDFLAGS  += \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs \
-	$(if $(filter NO,$(SYSTEM_NSS)),\
+	$(if $(SYSTEM_NSS),,\
 		-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib) \
 
 endif

@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_externals,sc,\
     mdds_headers \
 ))
 
-ifeq ($(SYSTEM_LIBORCUS),YES)
+ifneq ($(SYSTEM_LIBORCUS),)
 $(eval $(call gb_Library_use_externals,sc,orcus))
 else
 $(eval $(call gb_Library_use_externals,sc,orcus-parser))

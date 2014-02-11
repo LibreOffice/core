@@ -31,7 +31,7 @@ endif
 endif
 
 # there are 2 include paths, the other one is passed to --with-nss below
-ifeq ($(SYSTEM_NSS),NO)
+ifeq ($(SYSTEM_NSS),)
 curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
 endif
 
@@ -43,7 +43,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		./configure \
 			$(if $(filter MACOSX IOS,$(OS)),\
 				--with-darwinssl, \
-				--with-nss$(if $(filter NO,$(SYSTEM_NSS)),="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
+				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
 			--without-ssl \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \

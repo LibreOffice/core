@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 	cppunit \
 ))
 
-ifeq ($(SYSTEM_LIBORCUS),YES)
+ifneq ($(SYSTEM_LIBORCUS),)
 $(eval $(call gb_Library_use_externals,scqahelper,orcus))
 else
 $(eval $(call gb_Library_use_externals,scqahelper,orcus-parser))

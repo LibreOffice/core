@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				--with-yielding_select=yes \
 				ac_cv_func_memcmp_working=yes \
 			) \
-			$(if $(filter YES,$(SYSTEM_NSS)), \
+			$(if $(SYSTEM_NSS), \
 				CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)" \
 				, \
 				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \

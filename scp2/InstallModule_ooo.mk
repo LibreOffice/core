@@ -119,13 +119,13 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DICU_MAJOR=$(ICU_MAJOR) \
 ))
 
-ifneq ($(SYSTEM_LIBXSLT),YES)
+ifeq ($(SYSTEM_LIBXSLT),)
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR) \
 ))
 endif
 
-ifneq ($(SYSTEM_REDLAND),YES)
+ifeq ($(SYSTEM_REDLAND),)
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DRAPTOR_MAJOR=$(RAPTOR_MAJOR) \

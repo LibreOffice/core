@@ -14,12 +14,12 @@ AC_ARG_WITH(system-$1,
 AC_MSG_CHECKING([which $1 to use])
 if test "$with_system_$1" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_$2=YES
+    SYSTEM_$2=TRUE
     PKG_CHECK_MODULES([$2], [$3])
     $2_CFLAGS=$(printf '%s' "${$2_CFLAGS}" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_$2=NO
+    SYSTEM_$2=
     $2_CFLAGS=$4
     $2_LIBS=$5
     BUILD_TYPE="$BUILD_TYPE $2"

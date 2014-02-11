@@ -7846,7 +7846,7 @@ dnl ===================================================================
 if test "$with_system_lcms2" = "yes"; then
     libo_MINGW_CHECK_DLL([liblcms2])
 else
-    SYSTEM_LCMS2=NO
+    SYSTEM_LCMS2=
 fi
 libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"])
 if test "$GCC" = "yes"; then
@@ -7924,7 +7924,7 @@ fi
 AC_MSG_CHECKING([which libxslt to use])
 if test "$with_system_libxml" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_LIBXSLT=YES
+    SYSTEM_LIBXSLT=TRUE
     if test "$_os" = "Darwin"; then
         dnl make sure to use SDK path
         LIBXSLT_CFLAGS="-I$MACOSX_SDK_PATH/usr/include/libxml2"
@@ -7950,7 +7950,7 @@ if test "$with_system_libxml" = "yes"; then
     libo_MINGW_TRY_DLL([iconv])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_LIBXSLT=NO
+    SYSTEM_LIBXSLT=
     LIBXSLT_MAJOR=1
     BUILD_TYPE="$BUILD_TYPE LIBXSLT"
 
@@ -8676,7 +8676,7 @@ fi
 
 if test "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_CURL=YES
+    SYSTEM_CURL=TRUE
 
     AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
 
@@ -8723,7 +8723,7 @@ elif test $_os = iOS; then
     ENABLE_CURL=
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_CURL=NO
+    SYSTEM_CURL=
     BUILD_TYPE="$BUILD_TYPE CURL"
     ENABLE_CURL=TRUE
 fi
@@ -8783,7 +8783,7 @@ dnl ===================================================================
 dnl Determine which hash container mdds shall use
 dnl ===================================================================
 AC_MSG_CHECKING([which hash container mdds shall use])
-if test "x$HAVE_CXX11" = "xTRUE" -a "x$SYSTEM_MDDS" = "xYES"; then
+if test "x$HAVE_CXX11" = "xTRUE" -a "x$SYSTEM_MDDS" = "xTRUE"; then
     MDDS_CPPFLAGS=$CXXFLAGS_CXX11
     AC_MSG_RESULT([std::unordered_map])
 else
@@ -9413,7 +9413,7 @@ if test "$enable_openssl" = "yes"; then
     elif test "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "DragonFly" \
             && test "$with_system_openssl" != "no"; then
         with_system_openssl=yes
-        SYSTEM_OPENSSL=YES
+        SYSTEM_OPENSSL=TRUE
         OPENSSL_CFLAGS=
         OPENSSL_LIBS="-lssl -lcrypto"
     else

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,redland))
 
-ifeq ($(SYSTEM_REDLAND),NO)
+ifeq ($(SYSTEM_REDLAND),)
 $(eval $(call gb_Module_add_targets,redland,\
 	UnpackedTarball_raptor \
 	UnpackedTarball_rasqal \

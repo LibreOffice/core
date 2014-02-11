@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libpng))
 
-ifeq ($(SYSTEM_LIBPNG),NO)
+ifeq ($(SYSTEM_LIBPNG),)
 
 $(eval $(call gb_Module_add_targets,libpng,\
 	StaticLibrary_png \

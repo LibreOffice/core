@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,openssl))
 
-ifeq ($(SYSTEM_OPENSSL),NO)
+ifeq ($(SYSTEM_OPENSSL),)
 $(eval $(call gb_Module_add_targets,openssl,\
 	UnpackedTarball_openssl \
 	ExternalPackage_openssl \

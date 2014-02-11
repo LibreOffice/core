@@ -109,11 +109,11 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_MDDS),YES)
+ifneq ($(SYSTEM_MDDS),)
 
 gb_LinkTarget__use_mdds_headers :=
 
-else
+else # !SYSTEM_MDDS
 
 define gb_LinkTarget__use_mdds_headers
 $(call gb_LinkTarget_use_unpacked,$(1),mdds)
@@ -124,7 +124,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-endif
+endif # SYSTEM_MDDS
 
 ifeq ($(SYSTEM_GLM),YES)
 
@@ -177,7 +177,7 @@ endif # SYSTEM_BLUEZ
 
 # External libraries
 
-ifeq ($(SYSTEM_CPPUNIT),YES)
+ifneq ($(SYSTEM_CPPUNIT),)
 
 define gb_LinkTarget__use_cppunit
 $(call gb_LinkTarget_set_include,$(1),\
@@ -191,7 +191,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-else
+else # !SYSTEM_CPPUNIT
 
 define gb_LinkTarget__use_cppunit
 $(call gb_LinkTarget_use_external_project,$(1),cppunit)
@@ -213,9 +213,9 @@ endif
 
 endef
 
-endif
+endif # SYSTEM_CPPUNIT
 
-ifeq ($(SYSTEM_GLEW),YES)
+ifneq ($(SYSTEM_GLEW),)
 
 define gb_LinkTarget__use_glew
 $(call gb_LinkTarget_set_include,$(1),\
@@ -226,7 +226,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
 
 endef
 
-else
+else # !SYSTEM_GLEW
 
 define gb_LinkTarget__use_glew
 $(call gb_LinkTarget_use_external_project,$(1),glew)
@@ -247,7 +247,7 @@ endif
 
 endef
 
-endif
+endif # SYSTEM_GLEW
 
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
@@ -686,7 +686,7 @@ endef
 endif # SYSTEM_BOOST
 
 
-ifeq ($(SYSTEM_CMIS),YES)
+ifneq ($(SYSTEM_CMIS),)
 
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
@@ -766,7 +766,7 @@ endef
 endif # SYSTEM_LIBATOMIC_OPS
 
 
-ifeq ($(SYSTEM_LIBEXTTEXTCAT),YES)
+ifneq ($(SYSTEM_LIBEXTTEXTCAT),)
 
 define gb_LinkTarget__use_libexttextcat
 $(call gb_LinkTarget_set_include,$(1),\
@@ -848,7 +848,7 @@ endef
 endif # SYSTEM_LIBXML
 
 
-ifeq ($(SYSTEM_LIBXSLT),YES)
+ifneq ($(SYSTEM_LIBXSLT),)
 
 define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_set_include,$(1),\
@@ -951,7 +951,7 @@ gb_LinkTarget__use_liblangtag :=
 endif # ENABLE_LIBLANGTAG
 
 
-ifeq ($(SYSTEM_NEON),YES)
+ifneq ($(SYSTEM_NEON),)
 
 define gb_LinkTarget__use_neon
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -988,7 +988,7 @@ endef
 endif # SYSTEM_NEON
 
 
-ifeq ($(SYSTEM_REDLAND),YES)
+ifneq ($(SYSTEM_REDLAND),)
 
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -1173,7 +1173,7 @@ endef
 
 endif # SYSTEM_FONTCONFIG
 
-ifeq ($(SYSTEM_GRAPHITE),YES)
+ifneq ($(SYSTEM_GRAPHITE),)
 
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1184,7 +1184,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(GRAPHITE_LIBS))
 
 endef
 
-else ifeq ($(SYSTEM_GRAPHITE),NO)
+else # !SYSTEM_GRAPHITE
 
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_use_unpacked,$(1),graphite)
@@ -1197,10 +1197,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 endef
-
-else # DISABLED GRAPHITE
-
-gb_LinkTarget__use_graphite :=
 
 endif # SYSTEM_GRAPHITE
 
@@ -1295,7 +1291,7 @@ endef
 endif # SYSTEM_ICU
 
 ifeq ($(ENABLE_HARFBUZZ),TRUE)
-ifeq ($(SYSTEM_HARFBUZZ),YES)
+ifneq ($(SYSTEM_HARFBUZZ),)
 
 define gb_LinkTarget__use_harfbuzz
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1306,7 +1302,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
 
 endef
 
-else # SYSTEM_HARFBUZZ != YES
+else # SYSTEM_HARFBUZZ != TRUE
 
 define gb_LinkTarget__use_harfbuzz
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1333,7 +1329,7 @@ gb_LinkTarget__use_openssl:=
 
 else # !DISABLE_OPENSSL
 
-ifeq ($(SYSTEM_OPENSSL),YES)
+ifneq ($(SYSTEM_OPENSSL),)
 
 gb_LinkTarget__use_openssl_headers:=
 gb_ExternalProject__use_openssl:=
@@ -1423,7 +1419,7 @@ gb_LinkTarget__use_libgcrypt:=
 endif # DISABLE_OPENSSL
 
 
-ifeq ($(SYSTEM_CDR),YES)
+ifneq ($(SYSTEM_CDR),)
 
 define gb_LinkTarget__use_cdr
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1450,7 +1446,7 @@ endef
 endif # SYSTEM_CDR
 
 
-ifeq ($(SYSTEM_EBOOK),YES)
+ifneq ($(SYSTEM_EBOOK),)
 
 define gb_LinkTarget__use_ebook
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1485,7 +1481,7 @@ endef
 endif # SYSTEM_EBOOK
 
 
-ifeq ($(SYSTEM_ETONYEK),YES)
+ifneq ($(SYSTEM_ETONYEK),)
 
 define gb_LinkTarget__use_etonyek
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1520,7 +1516,7 @@ endef
 endif # SYSTEM_ETONYEK
 
 
-ifeq ($(SYSTEM_FREEHAND),YES)
+ifneq ($(SYSTEM_FREEHAND),)
 
 define gb_LinkTarget__use_freehand
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1555,7 +1551,7 @@ endef
 endif # SYSTEM_FREEHAND
 
 
-ifeq ($(SYSTEM_ODFGEN),YES)
+ifneq ($(SYSTEM_ODFGEN),)
 
 define gb_LinkTarget__use_odfgen
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1583,7 +1579,7 @@ endef
 endif # SYSTEM_ODFGEN
 
 
-ifeq ($(SYSTEM_ABW),YES)
+ifneq ($(SYSTEM_ABW),)
 
 define gb_LinkTarget__use_abw
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1616,7 +1612,7 @@ endef
 endif # SYSTEM_ABW
 
 
-ifeq ($(SYSTEM_MSPUB),YES)
+ifneq ($(SYSTEM_MSPUB),)
 
 define gb_LinkTarget__use_mspub
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1644,7 +1640,7 @@ endef
 endif # SYSTEM_MSPUB
 
 
-ifeq ($(SYSTEM_VISIO),YES)
+ifneq ($(SYSTEM_VISIO),)
 
 define gb_LinkTarget__use_visio
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1672,7 +1668,7 @@ endef
 endif # SYSTEM_VISIO
 
 
-ifeq ($(SYSTEM_WPD),YES)
+ifneq ($(SYSTEM_WPD),)
 
 define gb_LinkTarget__use_wpd
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1705,7 +1701,7 @@ endef
 endif # SYSTEM_WPD
 
 
-ifeq ($(SYSTEM_WPG),YES)
+ifneq ($(SYSTEM_WPG),)
 
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1738,7 +1734,7 @@ endef
 endif # SYSTEM_WPG
 
 
-ifeq ($(SYSTEM_WPS),YES)
+ifneq ($(SYSTEM_WPS),)
 
 define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1771,7 +1767,7 @@ endef
 endif # SYSTEM_WPS
 
 
-ifeq ($(SYSTEM_MWAW),YES)
+ifneq ($(SYSTEM_MWAW),)
 
 define gb_LinkTarget__use_mwaw
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1799,7 +1795,7 @@ endef
 endif # SYSTEM_MWAW
 
 
-ifeq ($(SYSTEM_LCMS2),YES)
+ifneq ($(SYSTEM_LCMS2),)
 
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2053,7 +2049,7 @@ define gb_LinkTarget__use_pixbuf
 $(error gb_LinkTarget__use_pixbuf should not be used any more)
 endef
 
-ifeq ($(SYSTEM_LIBPNG),YES)
+ifneq ($(SYSTEM_LIBPNG),)
 
 define gb_LinkTarget__use_png
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2084,7 +2080,7 @@ endef
 endif # !SYSTEM_LIBPNG
 
 
-ifeq ($(SYSTEM_CURL),YES)
+ifneq ($(SYSTEM_CURL),)
 
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2352,7 +2348,7 @@ endef
 endif # SYSTEM_FIREBIRD
 
 else # !ENABLE_FIREBIRD_SDBC
-
+n
 gb_LinkTarget__use_firebird :=
 # gb_LinkTarget__use_atomic_ops :=
 # gb_LinkTarget__use_tommath :=
@@ -2670,7 +2666,7 @@ endif # SYSTEM_PYTHON
 # ORCUS
 ifeq ($(ENABLE_ORCUS),TRUE)
 
-ifeq ($(SYSTEM_LIBORCUS),YES)
+ifneq ($(SYSTEM_LIBORCUS),)
 
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2726,7 +2722,7 @@ endif
 
 ifeq ($(ENABLE_EOT),TRUE)
 
-ifeq ($(SYSTEM_LIBEOT),YES)
+ifneq ($(SYSTEM_LIBEOT),)
 
 define gb_LinkTarget__use_libeot
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2816,7 +2812,7 @@ gb_LinkTarget__use_nss3:=
 
 else
 
-ifeq ($(SYSTEM_NSS),YES)
+ifneq ($(SYSTEM_NSS),)
 
 define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -2844,7 +2840,7 @@ $(call gb_LinkTarget__use_nss3,$(1))
 
 endef
 
-else
+else # !SYSTEM_NSS
 
 define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_use_package,$(1),nss)
@@ -2904,7 +2900,8 @@ $(call gb_ExternalProject_use_package,$(1),nss)
 
 endef
 
-endif
+endif # SYSTEM_NSS
+
 endif # DESKTOP
 
 ### Jars ############################################################
@@ -3278,7 +3275,7 @@ endef
 
 endif # SYSTEM_LIBXML_FOR_BUILD
 
-ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
+ifneq ($(SYSTEM_LIBXSLT_FOR_BUILD),)
 
 gb_ExternalExecutable__register_xsltproc :=
 
