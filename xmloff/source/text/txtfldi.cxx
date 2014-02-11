@@ -986,6 +986,7 @@ XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
 ,   sPropertyPlaceholderType(sAPI_place_holder_type)
 ,   sPropertyPlaceholder(sAPI_place_holder)
 ,   sPropertyHint(sAPI_hint)
+,   nPlaceholderType(PlaceholderType::TEXT)
 {
 }
 
