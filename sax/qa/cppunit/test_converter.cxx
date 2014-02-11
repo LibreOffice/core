@@ -116,7 +116,7 @@ static void doTestDurationF(char const*const pis)
     bool bSuccess = Converter::convertDuration(od,
             OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","" << (od.Negative ? "-" : "+") << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
-    CPPUNIT_ASSERT(!bSuccess);
+    CPPUNIT_ASSERT_MESSAGE(pis, !bSuccess);
 }
 
 void ConverterTest::testDuration()
@@ -281,7 +281,7 @@ static void doTestTimeF(char const*const pis)
     bool bSuccess = Converter::parseTimeOrDateTime(odt, 0,
             OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
-    CPPUNIT_ASSERT(!bSuccess);
+    CPPUNIT_ASSERT_MESSAGE(pis, !bSuccess);
 }
 
 void ConverterTest::testTime() // time or dateTime + horrible backcompat mess
