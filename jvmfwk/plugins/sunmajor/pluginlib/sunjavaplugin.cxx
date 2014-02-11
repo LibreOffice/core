@@ -646,7 +646,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     options[n].optionString= (char *) "abort";
     options[n].extraInfo= (void* )(sal_IntPtr)abort_handler;
     ++n;
-    OString sClassPathProp("-Djava.class.path=");
     OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)
     {
@@ -654,12 +653,12 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
     // in the class path in order to have applet support.
         OString sClassPath = arOptions[i].optionString;
-        if (sClassPath.match(sClassPathProp, 0))
+        if (sClassPath.startsWith("-Djava.class.path="))
         {
-            char sep[] =  {SAL_PATHSEPARATOR, 0};
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             if (!sAddPath.isEmpty())
-                sClassPathOption = sClassPath + OString(sep) + sAddPath;
+                sClassPathOption = sClassPath + OString(SAL_PATHSEPARATOR)
+                    + sAddPath;
             else
                 sClassPathOption = sClassPath;
             options[n].optionString = (char *) sClassPathOption.getStr();
