@@ -1780,7 +1780,9 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             pUpperFrm = pFrm->GetUpper();
             while ( pUpperFrm && !pUpperFrm->IsCellFrm() )
                 pUpperFrm = pUpperFrm->GetUpper();
-            OSL_ENSURE( pUpperFrm, "pFrm is in table but does not have an upper cell frame" );
+            assert(pUpperFrm); //pFrm is in table but does not have an upper cell frame
+            if (!pUpperFrm)
+                return false;
             const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
             const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
             if ( ATT_VAR_SIZE == rFrmFmtSize.GetHeightSizeType() )
