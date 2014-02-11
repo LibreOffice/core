@@ -53,16 +53,18 @@ public:
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
               const OUString* pOfficeHelpPath = NULL )
-
             throw( HelpProcessingException );
 
     HelpLinker()
-        : m_pIndexerPreProcessor(NULL)
+        : bExtensionMode(false)
+        , m_pIndexerPreProcessor(NULL)
         , m_bUseLangRoot(true)
         , m_bCreateIndex(true)
     {}
     ~HelpLinker()
-        { delete m_pIndexerPreProcessor; }
+    {
+        delete m_pIndexerPreProcessor;
+    }
 
 private:
     Stringtable additionalFiles;
