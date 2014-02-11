@@ -243,8 +243,7 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
-    ThesaurusDispatcher             *pThis = (ThesaurusDispatcher *) this;
-    const ThesSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
+    const ThesSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
