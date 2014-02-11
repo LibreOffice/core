@@ -76,6 +76,7 @@ Thesaurus::Thesaurus() :
     aTLocs = NULL;
     aTNames = NULL;
     numthes = 0;
+    prevLocale = LANGUAGE_DONTKNOW;
 }
 
 
