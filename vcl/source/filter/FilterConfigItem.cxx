@@ -152,6 +152,7 @@ FilterConfigItem::FilterConfigItem( const OUString& rSubTree )
 }
 
 FilterConfigItem::FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
+    : bModified(false)
 {
     if ( pFilterData )
         aFilterData = *pFilterData;
