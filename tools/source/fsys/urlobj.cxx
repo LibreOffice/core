@@ -5015,11 +5015,11 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         {
             default:
                 OSL_FAIL("INetURLObject::appendUCS4(): Unsupported charset");
+                //fallthrough
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, cEscapePrefix, nUCS4);
                 break;
-
             case RTL_TEXTENCODING_UTF8:
                 appendUCS4Escape(rTheText, cEscapePrefix, nUCS4);
                 break;
