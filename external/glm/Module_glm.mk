@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,glm))
 
-ifeq ($(SYSTEM_GLM),NO)
+ifeq ($(SYSTEM_GLM),)
 
 $(eval $(call gb_Module_add_targets,glm,\
 	UnpackedTarball_glm \

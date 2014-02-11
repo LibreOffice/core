@@ -92,7 +92,7 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_VIGRA),YES)
+ifneq ($(SYSTEM_VIGRA),)
 
 gb_LinkTarget__use_vigra_headers :=
 
@@ -126,7 +126,7 @@ endef
 
 endif # SYSTEM_MDDS
 
-ifeq ($(SYSTEM_GLM),YES)
+ifneq ($(SYSTEM_GLM),)
 
 gb_LinkTarget__use_glm_headers :=
 

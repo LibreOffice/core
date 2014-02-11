@@ -8798,7 +8798,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which glm to use])
 if test "$with_system_glm" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_GLM=YES
+    SYSTEM_GLM=TRUE
     AC_LANG_PUSH([C++])
     AC_CHECK_HEADER([glm/glm.hpp], [],
        [AC_MSG_ERROR([glm/glm.hpp not found. install glm])], [])
@@ -8806,7 +8806,7 @@ if test "$with_system_glm" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE GLM"
-    SYSTEM_GLM=NO
+    SYSTEM_GLM=
 fi
 AC_SUBST([SYSTEM_GLM])
 
@@ -8821,7 +8821,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which vigra to use])
 if test "$with_system_vigra" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_VIGRA=YES
+    SYSTEM_VIGRA=TRUE
     AC_LANG_PUSH([C++])
     AC_CHECK_HEADER(vigra/copyimage.hxx, [],
        [AC_MSG_ERROR(vigra/copyimage.hxx not found. install vigra)], [])
@@ -8829,7 +8829,7 @@ if test "$with_system_vigra" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE VIGRA"
-    SYSTEM_VIGRA=NO
+    SYSTEM_VIGRA=
 fi
 AC_SUBST(SYSTEM_VIGRA)
 

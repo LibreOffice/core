@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,vigra))
 
-ifeq ($(SYSTEM_VIGRA),NO)
+ifeq ($(SYSTEM_VIGRA),)
 
 $(eval $(call gb_Module_add_targets,vigra,\
 	UnpackedTarball_vigra \
