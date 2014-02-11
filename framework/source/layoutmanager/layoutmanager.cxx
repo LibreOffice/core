@@ -1562,7 +1562,6 @@ throw (RuntimeException)
     WriteGuard aWriteLock( m_aLock );
 
     bool            bMustBeLayouted( false );
-    bool            bMustBeDestroyed( false );
     bool            bNotify( false );
     OUString aElementType;
     OUString aElementName;
@@ -1615,13 +1614,6 @@ throw (RuntimeException)
     }
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( bMustBeDestroyed )
-    {
-        if ( xComponent.is() )
-            xComponent->dispose();
-        bNotify = true;
-    }
 
     if ( bMustBeLayouted )
         doLayout();
