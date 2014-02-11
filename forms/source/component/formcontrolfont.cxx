@@ -532,6 +532,7 @@ namespace frm
 
         case PROPERTY_ID_FONT_WORDLINEMODE:
             aReturn = makeBoolAny(sal_False);
+            break;
 
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
