@@ -183,9 +183,9 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
+bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
-    sal_Bool bEqual =   (nCol           == r.nCol)
+    bool bEqual =   (nCol           == r.nCol)
                  && (nRow           == r.nRow)
                  && (nTab           == r.nTab)
                  && (bByCol         == r.bByCol)

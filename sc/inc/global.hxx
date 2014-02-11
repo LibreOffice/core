@@ -752,18 +752,18 @@ struct ScConsolidateParam
     SCROW           nRow;                   // or start of destination area respectively
     SCTAB           nTab;
     ScSubTotalFunc  eFunction;
-    sal_uInt16          nDataAreaCount;         // number of data areas
+    sal_uInt16      nDataAreaCount;         // number of data areas
     ScArea**        ppDataAreas;            // array of pointers into data areas
-    sal_Bool            bByCol;
-    sal_Bool            bByRow;
-    sal_Bool            bReferenceData;         // reference source data
+    bool            bByCol;
+    bool            bByRow;
+    bool            bReferenceData;         // reference source data
 
     ScConsolidateParam();
     ScConsolidateParam( const ScConsolidateParam& r );
     ~ScConsolidateParam();
 
     ScConsolidateParam& operator=       ( const ScConsolidateParam& r );
-    sal_Bool                operator==      ( const ScConsolidateParam& r ) const;
+    bool                operator==      ( const ScConsolidateParam& r ) const;
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, sal_uInt16 nCount );
