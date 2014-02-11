@@ -799,7 +799,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
     {
         String sEntry = String::CreateFromInt32(aZoomValues[i]);
-        sEntry += '%';
+        sEntry.AppendAscii( " %" );
         InsertEntry(sEntry);
     }
 }
@@ -931,7 +931,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     if(SFX_ITEM_AVAILABLE <= eState)
     {
         String sZoom(String::CreateFromInt32(((const SfxUInt16Item*)pState)->GetValue()));
-        sZoom += '%';
+        sZoom.AppendAscii( " %" );
         pBox->SetText(sZoom);
         pBox->SaveValue();
     }
