@@ -546,7 +546,6 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     }
 
     // Einzel-Header
-    bool bOwnPool = true;
     OUString aExternName;
     {
         // Header-Record suchen
@@ -560,7 +559,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         // Header-lesen
         rStream >> pImp->nLoadingVersion;
         aExternName = SfxPoolItem::readByteString(rStream);
-        bOwnPool = aExternName == pImp->aName;
+        bool bOwnPool = aExternName == pImp->aName;
 
         //! solange wir keine fremden Pools laden k"onnen
         if ( !bOwnPool )
@@ -730,12 +729,11 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         rStream >> pImp->nMajorVer >> pImp->nMinorVer;
     }
     sal_uInt32 nAttribSize(0);
-    bool bOwnPool = true;
     OUString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
         rStream >> pImp->nLoadingVersion;
     aExternName = SfxPoolItem::readByteString(rStream);
-    bOwnPool = aExternName == pImp->aName;
+    bool bOwnPool = aExternName == pImp->aName;
     pImp->bStreaming = true;
 
     //! solange wir keine fremden laden k"onnen
@@ -819,32 +817,21 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             nWhich = GetNewWhich( nWhich );
 
         rStream >> nSlot;
-        sal_uInt16 nMappedWhich = GetWhich(nSlot, sal_False);
-        bool bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         sal_uInt16 nRef(0), nCount(0), nVersion(0);
         sal_uInt32 nAttrSize(0);
         rStream >> nVersion >> nCount;
 
-        std::vector<SfxPoolItemArray_Impl*>::iterator ppArr;
-        SfxPoolItemArray_Impl *pNewArr = 0;
-        SfxPoolItem *pDefItem = 0;
-        if ( bKnownItem )
-        {
-            if ( !bOwnPool )
-                nWhich = nMappedWhich;
+        //!SFX_ASSERTWARNING( !nSlot || !HasMap() ||
+        //!         ( nSlot == GetSlotId( nWhich, sal_False ) ) ||
+        //!         !GetSlotId( nWhich, sal_False ),
+        //!         nWhich, "Slot/Which mismatch" );
 
-            //!SFX_ASSERTWARNING( !nSlot || !HasMap() ||
-            //!         ( nSlot == GetSlotId( nWhich, sal_False ) ) ||
-            //!         !GetSlotId( nWhich, sal_False ),
-            //!         nWhich, "Slot/Which mismatch" );
-
-            sal_uInt16 nIndex = GetIndex_Impl(nWhich);
-            ppArr = pImp->maPoolItems.begin();
-            std::advance(ppArr, nIndex);
-            pNewArr = new SfxPoolItemArray_Impl();
-            pDefItem = *(pImp->ppStaticDefaults + nIndex);
-        }
+        sal_uInt16 nIndex = GetIndex_Impl(nWhich);
+        std::vector<SfxPoolItemArray_Impl*>::iterator ppArr = pImp->maPoolItems.begin();
+        std::advance(ppArr, nIndex);
+        SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl();
+        SfxPoolItem *pDefItem = *(pImp->ppStaticDefaults + nIndex);
 
         // Position vor ersten Item merken
         sal_uLong nLastPos = rStream.Tell();
@@ -872,87 +859,81 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             sal_uLong nPos = nLastPos;
             rStream >> nRef;
 
-            if ( bKnownItem )
+            SfxPoolItem *pItem = 0;
+            if ( nRef )
             {
-                SfxPoolItem *pItem = 0;
-                if ( nRef )
+                pItem = pDefItem->Create(rStream, nVersion);
+
+                if ( !pImp->mbPersistentRefCounts )
+                    // bis <SfxItemPool::LoadCompleted()> festhalten
+                    AddRef(*pItem, 1);
+                else
                 {
-                    pItem = pDefItem->Create(rStream, nVersion);
-
-                    if ( !pImp->mbPersistentRefCounts )
-                        // bis <SfxItemPool::LoadCompleted()> festhalten
-                        AddRef(*pItem, 1);
+                    if ( nRef > SFX_ITEMS_OLD_MAXREF )
+                        pItem->SetKind( nRef );
                     else
-                    {
-                        if ( nRef > SFX_ITEMS_OLD_MAXREF )
-                            pItem->SetKind( nRef );
-                        else
-                            AddRef(*pItem, nRef);
-                    }
+                        AddRef(*pItem, nRef);
                 }
-                //pNewArr->insert( pItem, j );
-                pNewArr->push_back( (SfxPoolItem*) pItem );
-
-                // restliche gespeicherte Laenge skippen (neueres Format)
-                nLastPos = rStream.Tell();
             }
+            //pNewArr->insert( pItem, j );
+            pNewArr->push_back( (SfxPoolItem*) pItem );
+
+            // restliche gespeicherte Laenge skippen (neueres Format)
+            nLastPos = rStream.Tell();
 
             aSizeTable >> nAttrSize;
-            SFX_ASSERT( !bKnownItem || ( nPos + nAttrSize) >= nLastPos,
+            SFX_ASSERT( ( nPos + nAttrSize) >= nLastPos,
                         nPos,
                         "too many bytes read - version mismatch?" );
 
-            if ( !bKnownItem || ( nLastPos < (nPos + nAttrSize) ) )
+            if (nLastPos < (nPos + nAttrSize))
             {
                 nLastPos = nPos + nAttrSize;
                 rStream.Seek( nLastPos );
             }
         }
 
-        if ( bKnownItem )
+        SfxPoolItemArray_Impl *pOldArr = *ppArr;
+        *ppArr = pNewArr;
+
+        // die Items merken, die schon im Pool sind
+        bool bEmpty = true;
+        if ( 0 != pOldArr )
+            for ( size_t n = 0; bEmpty && n < pOldArr->size(); ++n )
+                bEmpty = pOldArr->operator[](n) == 0;
+        DBG_ASSERTWARNING( bEmpty, "loading non-empty pool" );
+        if ( !bEmpty )
         {
-            SfxPoolItemArray_Impl *pOldArr = *ppArr;
-            *ppArr = pNewArr;
-
-            // die Items merken, die schon im Pool sind
-            bool bEmpty = true;
-            if ( 0 != pOldArr )
-                for ( size_t n = 0; bEmpty && n < pOldArr->size(); ++n )
-                    bEmpty = pOldArr->operator[](n) == 0;
-            DBG_ASSERTWARNING( bEmpty, "loading non-empty pool" );
-            if ( !bEmpty )
+            // f"ur alle alten suchen, ob ein gleiches neues existiert
+            for ( size_t nOld = 0; nOld < pOldArr->size(); ++nOld )
             {
-                // f"ur alle alten suchen, ob ein gleiches neues existiert
-                for ( size_t nOld = 0; nOld < pOldArr->size(); ++nOld )
+                SfxPoolItem *pOldItem = (*pOldArr)[nOld];
+                if ( pOldItem )
                 {
-                    SfxPoolItem *pOldItem = (*pOldArr)[nOld];
-                    if ( pOldItem )
+                    bool bFound = false;
+                    for ( size_t nNew = 0;
+                          nNew < (*ppArr)->size();  ++nNew )
                     {
-                        bool bFound = false;
-                        for ( size_t nNew = 0;
-                              nNew < (*ppArr)->size();  ++nNew )
-                        {
-                            SfxPoolItem *&rpNewItem =
-                                (SfxPoolItem*&)(*ppArr)->operator[](nNew);
+                        SfxPoolItem *&rpNewItem =
+                            (SfxPoolItem*&)(*ppArr)->operator[](nNew);
 
-                            if ( rpNewItem && *rpNewItem == *pOldItem )
-                            {
-                                AddRef( *pOldItem, rpNewItem->GetRefCount() );
-                                SetRefCount( *rpNewItem, 0 );
-                                delete rpNewItem;
-                                rpNewItem = pOldItem;
-                                bFound = true;
-                                SAL_INFO("svl", "reusing item" << pOldItem);
-                                break;
-                            }
+                        if ( rpNewItem && *rpNewItem == *pOldItem )
+                        {
+                            AddRef( *pOldItem, rpNewItem->GetRefCount() );
+                            SetRefCount( *rpNewItem, 0 );
+                            delete rpNewItem;
+                            rpNewItem = pOldItem;
+                            bFound = true;
+                            SAL_INFO("svl", "reusing item" << pOldItem);
+                            break;
                         }
-                        SAL_INFO_IF(
-                            !bFound, "svl", "item not found: " << pOldItem);
                     }
+                    SAL_INFO_IF(
+                        !bFound, "svl", "item not found: " << pOldItem);
                 }
             }
-            delete pOldArr; /* @@@ */
         }
+        delete pOldArr; /* @@@ */
     }
 
     // Pool-Defaults lesen
@@ -967,24 +948,17 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             nWhich = GetNewWhich( nWhich );
 
         rStream >> nSlot;
-        sal_uInt16 nMappedWhich = GetWhich(nSlot, sal_False);
-        bool bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         sal_uLong nPos = nLastPos;
         sal_uInt32 nSize(0);
         sal_uInt16 nVersion(0);
         rStream >> nVersion;
 
-        if ( bKnownItem )
-        {
-            if ( !bOwnPool )
-                nWhich = nMappedWhich;
-            SfxPoolItem *pItem =
-                ( *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
-                ->Create( rStream, nVersion );
-            pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
-            *( pImp->ppPoolDefaults + GetIndex_Impl(nWhich) ) = pItem;
-        }
+        SfxPoolItem *pItem =
+            ( *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
+            ->Create( rStream, nVersion );
+        pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
+        *( pImp->ppPoolDefaults + GetIndex_Impl(nWhich) ) = pItem;
 
         nLastPos = rStream.Tell();
         aSizeTable >> nSize;
