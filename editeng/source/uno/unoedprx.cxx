@@ -385,7 +385,7 @@ SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdap
     return NULL;
 }
 
-SvxEditViewForwarder* SvxEditSourceAdapter::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* SvxEditSourceAdapter::GetEditViewForwarder( bool bCreate )
 {
     return GetEditViewForwarderAdapter( bCreate );
 }

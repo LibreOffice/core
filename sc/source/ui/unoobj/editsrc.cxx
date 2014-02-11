@@ -275,7 +275,7 @@ SvxViewForwarder* ScAccessibilityEditSource::GetViewForwarder()
     return mpAccessibleTextData->GetViewForwarder();
 }
 
-SvxEditViewForwarder* ScAccessibilityEditSource::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* ScAccessibilityEditSource::GetEditViewForwarder( bool bCreate )
 {
     return mpAccessibleTextData->GetEditViewForwarder(bCreate);
 }

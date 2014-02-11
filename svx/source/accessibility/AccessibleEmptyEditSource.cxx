@@ -62,7 +62,7 @@ namespace accessibility
         // from the SvxEditSource interface
         SvxTextForwarder*       GetTextForwarder();
         SvxViewForwarder*       GetViewForwarder();
-        SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+        SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
 
         SvxEditSource*          Clone() const;
 
@@ -198,7 +198,7 @@ namespace accessibility
         return maEditSource.GetViewForwarder();
     }
 
-    SvxEditViewForwarder* AccessibleProxyEditSource_Impl::GetEditViewForwarder( sal_Bool bCreate )
+    SvxEditViewForwarder* AccessibleProxyEditSource_Impl::GetEditViewForwarder( bool bCreate )
     {
         return maEditSource.GetEditViewForwarder( bCreate );
     }
@@ -287,7 +287,7 @@ namespace accessibility
         mbEditSourceEmpty = false;
     }
 
-    SvxEditViewForwarder* AccessibleEmptyEditSource::GetEditViewForwarder( sal_Bool bCreate )
+    SvxEditViewForwarder* AccessibleEmptyEditSource::GetEditViewForwarder( bool bCreate )
     {
         if( !mpEditSource.get() )
             return NULL;

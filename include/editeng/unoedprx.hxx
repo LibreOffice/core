@@ -145,9 +145,9 @@ public:
     virtual SvxEditSource*                      Clone() const;
     virtual SvxTextForwarder*                   GetTextForwarder();
     SvxAccessibleTextAdapter*                   GetTextForwarderAdapter(); // covariant return types don't work on MSVC
-     virtual SvxViewForwarder*                  GetViewForwarder();
-     virtual SvxEditViewForwarder*              GetEditViewForwarder( sal_Bool bCreate = sal_False );
-     SvxAccessibleTextEditViewAdapter*          GetEditViewForwarderAdapter( sal_Bool bCreate = sal_False ); // covariant return types don't work on MSVC
+    virtual SvxViewForwarder*                   GetViewForwarder();
+    virtual SvxEditViewForwarder*               GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
+    SvxAccessibleTextEditViewAdapter*           GetEditViewForwarderAdapter( sal_Bool bCreate = sal_False ); // covariant return types don't work on MSVC
     virtual void                                UpdateData();
     virtual SfxBroadcaster&                     GetBroadcaster() const;
 

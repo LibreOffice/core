@@ -80,7 +80,7 @@ namespace accessibility
             return NULL;
     }
 
-    SvxEditViewForwarder* AccessibleOutlineEditSource::GetEditViewForwarder( sal_Bool )
+    SvxEditViewForwarder* AccessibleOutlineEditSource::GetEditViewForwarder( bool )
     {
         // TODO: maybe suboptimal
         if( IsValid() )

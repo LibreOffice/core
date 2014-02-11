@@ -849,7 +849,7 @@ SvxViewForwarder* SmEditSource::GetViewForwarder()
     return &aViewFwd;
 }
 
-SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( sal_Bool /*bCreate*/ )
+SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( bool /*bCreate*/ )
 {
     return &aEditViewFwd;
 }

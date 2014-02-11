@@ -1087,7 +1087,7 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 }
 
 //------------------------------------------------------------------------
-SvxEditViewForwarder* SvxTextEditSource::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* SvxTextEditSource::GetEditViewForwarder( bool bCreate )
 {
     return mpImpl->GetEditViewForwarder( bCreate );
 }

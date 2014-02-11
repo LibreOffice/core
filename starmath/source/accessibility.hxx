@@ -302,8 +302,8 @@ public:
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
-     virtual SvxViewForwarder*  GetViewForwarder();
-     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual SvxViewForwarder*  GetViewForwarder();
+    virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
     virtual void                UpdateData();
     virtual SfxBroadcaster&     GetBroadcaster() const;
 };

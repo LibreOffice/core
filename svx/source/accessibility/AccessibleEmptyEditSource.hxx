@@ -60,7 +60,7 @@ namespace accessibility
 
         // this method internally switches from empty to proxy mode,
         // creating an SvxTextEditSource for the functionality.
-        SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+        SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
 
         void                    UpdateData();
         SfxBroadcaster&         GetBroadcaster() const;

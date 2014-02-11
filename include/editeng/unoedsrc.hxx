@@ -96,7 +96,7 @@ public:
         sal_True, all previously returned text forwarder can become
         invalid
      */
-     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false );
 
     /// Write back data to model
     virtual void                UpdateData() = 0;

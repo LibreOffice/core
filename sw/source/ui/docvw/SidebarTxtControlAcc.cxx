@@ -48,7 +48,7 @@ class SidebarTextEditSource : public SvxEditSource,
 
         virtual SvxTextForwarder* GetTextForwarder();
         virtual SvxViewForwarder* GetViewForwarder();
-        virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate = sal_False );
+        virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
 
         virtual void UpdateData();
 
@@ -96,7 +96,7 @@ SvxViewForwarder* SidebarTextEditSource::GetViewForwarder()
     return &mViewForwarder;
 }
 
-SvxEditViewForwarder* SidebarTextEditSource::GetEditViewForwarder( sal_Bool /*bCreate*/ )
+SvxEditViewForwarder* SidebarTextEditSource::GetEditViewForwarder( bool /*bCreate*/ )
 {
     return &mViewForwarder;
 }
