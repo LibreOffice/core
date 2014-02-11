@@ -54,31 +54,6 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
     return bRet;
 }
 
-namespace {
-    long getLongestWordWidth( const OUString& rText, const Window& rWin )
-    {
-        long nWidth = 0;
-        Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
-        sal_Int32 nStartPos = 0;
-        const Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-        Boundary aBoundary = xBreakIter->getWordBoundary(
-            rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, true );
-
-        while ( aBoundary.startPos != aBoundary.endPos )
-        {
-            nStartPos = aBoundary.endPos;
-            OUString sWord(rText.copy(aBoundary.startPos, aBoundary.endPos - aBoundary.startPos));
-            long nTemp = rWin.GetCtrlTextWidth( sWord );
-            if ( nTemp > nWidth )
-                nWidth = nTemp;
-            aBoundary = xBreakIter->nextWord(
-                rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES );
-        }
-
-        return nWidth;
-    }
-}
-
 ManageLanguageDialog::ManageLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
     : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
     , m_xLocalizationMgr(xLMgr)
