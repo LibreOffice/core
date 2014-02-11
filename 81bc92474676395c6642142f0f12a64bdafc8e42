@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_b0a29198",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_dd69ee26",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_fd76b205",
         "filename": "oox/source/drawingml/shapepropertymap.cxx",
         "patchSetId": 1
@@ -98,6 +116,24 @@
       "writtenOn": "2014-02-08T18:09:24Z",
       "side": 1,
       "message": "This is wrong.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_d09f154f",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_fd76b205",
       "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -157,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_f0ac198f",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_30ff8103",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_dd22ce00",
         "filename": "oox/source/export/chartexport.cxx",
         "patchSetId": 1
@@ -168,6 +222,24 @@
       "writtenOn": "2014-02-08T18:09:24Z",
       "side": 1,
       "message": "Variables should be defined as close to their use as possible.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_30b6a1dd",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_dd22ce00",
       "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -191,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_10aa7d70",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_bd250a0c",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_3d791afd",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 1
@@ -208,6 +298,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_50bb25c4",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_3d791afd",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_1d1d36be",
         "filename": "oox/source/export/drawingml.cxx",
         "patchSetId": 1
@@ -219,6 +327,24 @@
       "writtenOn": "2014-02-08T18:09:24Z",
       "side": 1,
       "message": "We don\u0027t use std::string. Please use OString or OUString.",
+      "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_70b029de",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-02-11T07:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_1d1d36be",
       "revId": "81bc92474676395c6642142f0f12a64bdafc8e42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
