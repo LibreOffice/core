@@ -1045,7 +1045,7 @@ bool Region::Intersect( const Region& rRegion )
     else
     {
         // prepare new regionBand
-        RegionBand* pNew = pCurrent ? new RegionBand(*pCurrent) : new RegionBand();
+        RegionBand* pNew = new RegionBand(*pCurrent);
 
         // intersect with source
         pNew->Intersect(*pSource);
