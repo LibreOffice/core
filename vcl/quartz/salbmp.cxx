@@ -767,7 +767,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     if( !maUserBuffer.get() )
 //  || maContextBuffer.get() && (maUserBuffer.get() != maContextBuffer.get()) )
     {
-        fprintf(stderr,"ASB::Acq(%dx%d,d=%d)\n",mnWidth,mnHeight,mnBits);
+        // fprintf(stderr,"ASB::Acq(%dx%d,d=%d)\n",mnWidth,mnHeight,mnBits);
         // TODO: AllocateUserData();
         return NULL;
     }
