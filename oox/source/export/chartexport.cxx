@@ -2390,7 +2390,7 @@ void ChartExport::_exportAxis(
     }
 
     sal_Bool bDisplayUnits = sal_False;
-    if(GetProperty( xAxisProp, "DisplayUnits" ) )
+    if( nAxisType == XML_valAx && GetProperty( xAxisProp, "DisplayUnits" ) )
     {
         mAny >>= bDisplayUnits;
         if(bDisplayUnits)
