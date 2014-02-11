@@ -156,7 +156,7 @@ void Diagram::build(  )
 #endif
 
     dgm::Points::iterator aCurrPoint( getData()->getPoints( ).begin() );
-    const dgm::Points::iterator aEndPoint( getData()->getPoints( ).end() );
+    dgm::Points::iterator aEndPoint( getData()->getPoints( ).end() );
     while( aCurrPoint != aEndPoint )
     {
 #if OSL_DEBUG_LEVEL > 1
