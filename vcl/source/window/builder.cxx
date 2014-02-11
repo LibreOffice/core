@@ -2717,6 +2717,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
                     pToolBoxParent->SetItemExpand(m_pParserState->m_nLastToolbarId, bTrue);
                 else
                     pCurrent->set_expand(bTrue);
+                continue;
             }
 
             if (pToolBoxParent)
