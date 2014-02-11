@@ -56,24 +56,31 @@ friend class SvStringHashTable;
     sal_uLong   nValue;
     sal_Bool    bHasId;
 public:
-                    SvStringHashEntry() : bHasId( sal_False ) {;}
-                    SvStringHashEntry( const OString& rName, sal_uInt32 nIdx )
-                        : aName( rName )
-                        , nHashId( nIdx )
-                        , nValue( 0 )
-                        , bHasId( sal_True ) {}
-                    ~SvStringHashEntry();
+    SvStringHashEntry()
+        : nHashId(0)
+        , nValue(0)
+        , bHasId(false)
+    {
+    }
+    SvStringHashEntry( const OString& rName, sal_uInt32 nIdx )
+        : aName(rName)
+        , nHashId(nIdx)
+        , nValue(0)
+        , bHasId(true)
+    {
+    }
+    ~SvStringHashEntry();
 
-    const OString& GetName() const { return aName; }
-    sal_Bool            HasId() const { return bHasId; }
-    sal_uInt32          GetId() const { return nHashId; }
+    const OString&  GetName() const { return aName; }
+    sal_Bool        HasId() const { return bHasId; }
+    sal_uInt32      GetId() const { return nHashId; }
 
     void            SetValue( sal_uLong n ) { nValue = n; }
     sal_uLong           GetValue() const { return nValue; }
 
-    sal_Bool            operator == ( const SvStringHashEntry & rRef )
+    sal_Bool        operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }
-    sal_Bool            operator != ( const SvStringHashEntry & rRef )
+    sal_Bool        operator != ( const SvStringHashEntry & rRef )
                     { return ! operator == ( rRef ); }
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
