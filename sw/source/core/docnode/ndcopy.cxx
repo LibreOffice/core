@@ -1612,14 +1612,14 @@ void SwDoc::CopyFlyInFlyImpl(
                 const SwFrmFmt *pFmtK = (*kIt).GetFmt();
                 if ( rChain.GetPrev() == pFmtK )
                 {
-                    ::lcl_ChainFmts( dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]),
-                                     dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]) );
+                    ::lcl_ChainFmts( static_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]),
+                                     static_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]) );
                     --nCnt;
                 }
                 else if ( rChain.GetNext() == pFmtK )
                 {
-                    ::lcl_ChainFmts( dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]),
-                                     dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]) );
+                    ::lcl_ChainFmts( static_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]),
+                                     static_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]) );
                     --nCnt;
                 }
             }
