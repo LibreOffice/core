@@ -63,6 +63,10 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 {
     FreeResource();
 
+    aFilterCtr.HideRange(false);
+    Size aCtrSize(LogicToPixel(Size(261 , 86), MAP_APPFONT));
+    aFilterCtr.SetSizePixel(aCtrSize);
+
     Point aFlFilterPt( aFlFilter.GetPosPixel() );
     aFlFilterPt.Y() += aFlFilter.GetSizePixel().Height();
     aFilterCtr.SetPosPixel( aFlFilterPt );
@@ -72,7 +76,6 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
     aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
-    aFilterCtr.HideRange(false);
     aFilterCtr.Show();
     SetDispatcherLock( true );
 
