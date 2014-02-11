@@ -534,6 +534,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\TransparentSelectionPercent\"?" );
                 seqValues[nProperty] >>= m_nTransparentSelectionPercent;
             }
+            break;
 
             case PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT:
             {
