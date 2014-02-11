@@ -14,7 +14,7 @@ $(eval $(call gb_Pagein_add_objects,common,\
     $(if $(MERGELIBS),merged) \
     $(if $(URELIBS),urelibs) \
     i18nlangtag \
-    $(if $(findstring YES,$(SYSTEM_ICU)),,\
+    $(if $(SYSTEM_ICU),,\
         icui18n \
         icuuc \
     ) \

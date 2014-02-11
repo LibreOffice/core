@@ -45,7 +45,7 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_NPAPI_HEADERS),YES)
+ifneq ($(SYSTEM_NPAPI_HEADERS),)
 
 # yes this uses internal headers too...
 # they are split across 2 dirs for this reason
@@ -1200,7 +1200,7 @@ endef
 
 endif # SYSTEM_GRAPHITE
 
-ifeq ($(SYSTEM_ICU),YES)
+ifneq ($(SYSTEM_ICU),)
 
 gb_LinkTarget__use_icu_headers:=
 gb_ExternalProject__use_icu:=
@@ -3202,7 +3202,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 )
 endef
 
-ifneq ($(SYSTEM_ICU),YES)
+ifeq ($(SYSTEM_ICU),)
 
 define gb_Executable__register_gendict
 $(call gb_Executable_add_runtime_dependencies,gendict,\

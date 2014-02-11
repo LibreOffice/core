@@ -8961,7 +8961,7 @@ AC_MSG_CHECKING([which NPAPI headers to use])
 
 if test "$with_system_npapi_headers" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_NPAPI_HEADERS=YES
+    SYSTEM_NPAPI_HEADERS=TRUE
     # First try npapi-sdk:
     PKG_CHECK_MODULES(NPAPI_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=no])
     # Then go with libxul:
@@ -8998,7 +8998,7 @@ else
     AC_MSG_RESULT([internal])
         dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
         dnl ENABLE_NPAPI_INTO_BROWSER is TRUE
-    SYSTEM_NPAPI_HEADERS=NO
+    SYSTEM_NPAPI_HEADERS=
 fi
 AC_SUBST(NPAPI_HEADERS_CFLAGS)
 AC_SUBST(SYSTEM_NPAPI_HEADERS)
@@ -9033,7 +9033,7 @@ ICU_RECLASSIFIED_HEBREW_LETTER="YES"
 AC_MSG_CHECKING([which icu to use])
 if test "$with_system_icu" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_ICU=YES
+    SYSTEM_ICU=TRUE
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
@@ -9118,7 +9118,7 @@ You can use --with-system-icu-for-build=force to use it anyway.])
     libo_MINGW_CHECK_DLL([icuuc][$ICU_MAJOR][$ICU_MINOR])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_ICU="NO"
+    SYSTEM_ICU=
     BUILD_TYPE="$BUILD_TYPE ICU"
     # surprisingly set these only for "internal" (to be used by various other
     # external libs): the system icu-config is quite unhelpful and spits out

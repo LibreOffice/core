@@ -39,12 +39,12 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,boost) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib \
 			) \
-			$(if $(filter NO,$(SYSTEM_ICU)), \
+			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
-				,$(ICU_CPPFLAGS)) \
+			) \
 			" \
 		&& ./configure \
 			--without-editline \
