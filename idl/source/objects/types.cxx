@@ -1669,6 +1669,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
                     rOutStm.WriteCharPtr( pBaseType->GetOdlName().getStr() );
             }
         }
+        break;
 
         default:
         {
