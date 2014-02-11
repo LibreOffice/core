@@ -131,9 +131,9 @@ static void ImplCalcBorder( WindowAlign eAlign, sal_Bool bNoAlign,
             rBottom = 0;
             break;
         case WINDOWALIGN_LEFT:
-            rLeft   = 2;
+            rLeft   = 0;
             rTop    = 2;
-            rRight  = 0;
+            rRight  = 2;
             rBottom = 2;
             break;
         case WINDOWALIGN_BOTTOM:
@@ -171,48 +171,23 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
         {
         case WINDOWALIGN_BOTTOM:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
-
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-            pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-            pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
+            pWin->DrawLine( Point( 0, 6 ), Point( nDX-1, 6 ) );
+            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
             break;
         case WINDOWALIGN_TOP:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
-
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 1, 1 ), Point( nDX-3, 1 ) );
-            pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-1 ) );
-            pWin->DrawLine( Point( nDX-1, 1 ), Point( nDX-1, nDY-1 ) );
+            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+            pWin->DrawLine( Point( 0, nDY-7 ), Point( nDX-1, nDY-7 ) );
             break;
         case WINDOWALIGN_LEFT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 1, 1 ), Point( nDX-1, 1 ) );
-            pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-            pWin->DrawLine( Point( 1, nDY-1 ), Point( nDX-1, nDY-1 ) );
+            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
+            pWin->DrawLine( Point( nDX-8, 0 ), Point( nDX-8, nDY-1 ) );
             break;
         default:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-2, 0 ) );
-            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
-
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-3, 1 ) );
-            pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-            break;
+            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
+            pWin->DrawLine( Point( 6, 0 ), Point( 6, nDY-1 ) );
         }
     }
 }
@@ -1590,7 +1565,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
 
 void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest ) const
 {
-    long nSplitSize = mpMainSet->mnSplitSize-2;
+    long nSplitSize = mpMainSet->mnSplitSize-1;
     if ( mbAutoHide || mbFadeOut || mbFadeIn )
         nSplitSize += SPLITWIN_SPLITSIZEEX;
 
@@ -1928,7 +1903,7 @@ void SplitWindow::ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool
         int height = (int) (0.5 * rRect.getHeight() + 0.5);
         int i = rRect.Top() + (rRect.getHeight() - height) / 2;
         height += i;
-        const int x = rRect.Left() + 1;
+        const int x = rRect.Left() + 2;
         ImplDrawFadeArrow( Point( x, i-8), bHorz, bLeft );
         while( i <= height )
         {
