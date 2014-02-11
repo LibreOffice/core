@@ -1545,8 +1545,12 @@ static bool lcl_parseDate(
         if (!bIgnoreInvalidOrMissingDate)
         {
             bSuccess &= (0 < nDay);
+        }
+        if (nMonth > 0) // not possible to check if month was missing
+        {
             bSuccess &= (nDay <= lcl_MaxDaysPerMonth(nMonth, nYear));
         }
+        else assert(bIgnoreInvalidOrMissingDate);
     }
 
     if (bSuccess && (nPos < string.getLength()))
