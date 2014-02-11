@@ -49,7 +49,7 @@ public:
     /** This returns the item pool from the given model, or the default pool if there is no model and bReadOnly is true.
         If bReadOnly is false and there is no model the default implementation returns NULL.
     */
-    virtual SfxItemPool* getModelPool( sal_Bool bReadOnly ) throw();
+    virtual SfxItemPool* getModelPool( bool bReadOnly ) throw();
 
     // overiden helpers from comphelper::PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );

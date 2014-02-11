@@ -37,7 +37,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // from SvxUnoDrawPool
-    virtual SfxItemPool*    getModelPool( sal_Bool bReadOnly ) throw();
+    virtual SfxItemPool*    getModelPool( bool bReadOnly ) throw() SAL_OVERRIDE;
 };
 
 #endif

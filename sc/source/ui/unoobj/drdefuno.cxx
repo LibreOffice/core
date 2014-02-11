@@ -50,7 +50,7 @@ void ScDrawDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-SfxItemPool* ScDrawDefaultsObj::getModelPool( sal_Bool bReadOnly ) throw()
+SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) throw()
 {
     SfxItemPool* pRet = NULL;
 

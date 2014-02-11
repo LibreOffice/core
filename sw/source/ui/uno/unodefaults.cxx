@@ -32,7 +32,7 @@ SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
 {
 }
 
-SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
+SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
 {
     if(m_pDoc)
     {

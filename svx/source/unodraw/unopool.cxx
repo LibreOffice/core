@@ -78,7 +78,7 @@ void SvxUnoDrawPool::init()
     mpDefaultsPool->FreezeIdRanges();
 }
 
-SfxItemPool* SvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
+SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) throw()
 {
     if( mpModel )
     {
@@ -204,7 +204,7 @@ void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** pp
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPool* pPool = getModelPool( sal_False );
+    SfxItemPool* pPool = getModelPool( false );
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( NULL == pPool )
@@ -219,7 +219,7 @@ void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** pp
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPool* pPool = getModelPool( sal_True );
+    SfxItemPool* pPool = getModelPool( true );
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( NULL == pPool )
@@ -234,7 +234,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPool* pPool = getModelPool( sal_True );
+    SfxItemPool* pPool = getModelPool( true );
 
     if( pPool && pPool != mpDefaultsPool )
     {
@@ -297,7 +297,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPool* pPool = getModelPool( sal_True );
+    SfxItemPool* pPool = getModelPool( true );
 
     // OD 10.10.2003 #i18732#
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
@@ -319,7 +319,7 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
     // OD 13.10.2003 #i18732# - use method <GetPoolDefaultItem(..)> instead of
     // using probably incompatible item pool <mpDefaultsPool>
     uno::Any aAny;
-    SfxItemPool* pPool = getModelPool( sal_True );
+    SfxItemPool* pPool = getModelPool( true );
     const sal_uInt16 nWhich = pPool->GetWhich( (sal_uInt16)pEntry->mnHandle );
     const SfxPoolItem *pItem = pPool->GetPoolDefaultItem ( nWhich );
     pItem->QueryValue( aAny, pEntry->mnMemberId );
