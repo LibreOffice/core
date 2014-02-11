@@ -86,6 +86,8 @@ public:
 
     virtual xub_StrLen* GetEnd();
 
+    void LockNotifyContentChange();
+    void UnlockNotifyContentChange();
     virtual void NotifyContentChange( SwFmtFld& rFmtFld );
 
     void UpdateTextNodeContent( const String& rNewContent );
@@ -95,6 +97,8 @@ public:
 
 private:
     xub_StrLen m_nEnd;
+
+    bool m_bLockNotifyContentChange;
 };
 
 #endif

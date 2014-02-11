@@ -327,6 +327,9 @@ class SW_DLLPUBLIC SwInputField : public SwField
     // Accessing Input Field's content
     const String& getContent() const;
 
+    void LockNotifyContentChange();
+    void UnlockNotifyContentChange();
+
 public:
     // Direkte Eingabe ueber Dialog alten Wert loeschen
     SwInputField(

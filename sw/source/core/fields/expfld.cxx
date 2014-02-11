@@ -1181,6 +1181,32 @@ const String& SwInputField::getContent() const
     return aContent;
 }
 
+
+void SwInputField::LockNotifyContentChange()
+{
+    if ( GetFmtFld() != NULL )
+    {
+        SwTxtInputFld* pTxtInputFld = dynamic_cast< SwTxtInputFld* >(GetFmtFld()->GetTxtFld());
+        if ( pTxtInputFld != NULL )
+        {
+            pTxtInputFld->LockNotifyContentChange();
+        }
+    }
+}
+
+
+void SwInputField::UnlockNotifyContentChange()
+{
+    if ( GetFmtFld() != NULL )
+    {
+        SwTxtInputFld* pTxtInputFld = dynamic_cast< SwTxtInputFld* >(GetFmtFld()->GetTxtFld());
+        if ( pTxtInputFld != NULL )
+        {
+            pTxtInputFld->UnlockNotifyContentChange();
+        }
+    }
+}
+
 void SwInputField::applyFieldContent( const String& rNewFieldContent )
 {
     if ( (nSubType & 0x00ff) == INP_TXT )
@@ -1194,6 +1220,13 @@ void SwInputField::applyFieldContent( const String& rNewFieldContent )
         if( pUserTyp )
         {
             pUserTyp->SetContent( rNewFieldContent );
+
+            // trigger update of the corresponding User Fields and other related Input Fields
+            {
+                LockNotifyContentChange();
+                pUserTyp->UpdateFlds();
+                UnlockNotifyContentChange();
+            }
         }
     }
 }
