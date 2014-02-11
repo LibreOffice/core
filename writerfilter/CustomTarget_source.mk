@@ -47,7 +47,6 @@ writerfilter_ALL = \
 	$(writerfilter_GEN_model_SprmCodeToStr_cxx) \
 	$(writerfilter_GEN_ooxml_Factory_cxx) \
 	$(writerfilter_GEN_ooxml_Factory_hxx) \
-	$(writerfilter_GEN_ooxml_FactoryValues_cxx) \
 	$(writerfilter_GEN_ooxml_FactoryValues_hxx) \
 	$(writerfilter_GEN_ooxml_FastTokens_hxx) \
 	$(writerfilter_GEN_ooxml_GperfFastToken_hxx) \
@@ -63,7 +62,6 @@ writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/gen
 writerfilter_GEN_doctok_SprmIds_hxx=$(writerfilter_WORK)/doctok/sprmids.hxx
 writerfilter_GEN_model_SprmCodeToStr_cxx=$(writerfilter_WORK)/sprmcodetostr.cxx
 writerfilter_GEN_model_SprmCodeToStr_tmp=$(writerfilter_WORK)/sprmcodetostr.tmp
-writerfilter_GEN_ooxml_FactoryValues_cxx=$(writerfilter_WORK)/OOXMLFactory_values.cxx
 writerfilter_GEN_ooxml_FactoryValues_hxx=$(writerfilter_WORK)/OOXMLFactory_values.hxx
 writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/OOXMLFactory_generated.cxx
 writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/OOXMLFactory_generated.hxx
@@ -85,7 +83,6 @@ writerfilter_SRC_doctok_SprmIds_xsl=$(writerfilter_SRC)/doctok/sprmids.xsl
 writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
 writerfilter_SRC_ooxml_Analyze_model_xsl=$(writerfilter_SRC)/ooxml/analyzemodel.xsl
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
-writerfilter_SRC_ooxml_FactoryValuesImpl_xsl=$(writerfilter_SRC)/ooxml/factoryimpl_values.xsl
 writerfilter_SRC_ooxml_FactoryValues_xsl=$(writerfilter_SRC)/ooxml/factory_values.xsl
 writerfilter_SRC_ooxml_FastTokens_xsl=$(writerfilter_SRC)/ooxml/fasttokens.xsl
 writerfilter_SRC_ooxml_GperfFastTokenHandler_xsl=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.xsl
@@ -114,10 +111,6 @@ $(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.xs
 $(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.xsl $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
-
-$(writerfilter_GEN_ooxml_FactoryValues_cxx) : $(writerfilter_SRC_ooxml_FactoryValuesImpl_xsl) $(writerfilter_GEN_ooxml_Model_processed)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_FactoryValuesImpl_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
 $(writerfilter_GEN_ooxml_FactoryValues_hxx) : $(writerfilter_SRC_ooxml_FactoryValues_xsl) $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)

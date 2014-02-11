@@ -54,22 +54,23 @@
   <!--
       Generates constant declarations for attribute values.
   -->
-  <xsl:template name="valueconstantdecls">
-    <xsl:text>
-extern OUString 
-    </xsl:text>
-    <xsl:call-template name="valuestringname">
-      <xsl:with-param name="string"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>;</xsl:text>    
-    <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
-      <xsl:text>
-extern OUString </xsl:text>
+  <xsl:template name="valueconstants">
+      <xsl:text>#define </xsl:text>
       <xsl:call-template name="valuestringname">
-        <xsl:with-param name="string" select="."/>
+	  <xsl:with-param name="string"></xsl:with-param>
       </xsl:call-template>
-      <xsl:text>;</xsl:text>
-    </xsl:for-each>
+      <xsl:text> ""
+</xsl:text>
+      <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
+	  <xsl:text>#define </xsl:text>
+	  <xsl:call-template name="valuestringname">
+	      <xsl:with-param name="string" select="."/>
+	  </xsl:call-template>
+	  <xsl:text> "</xsl:text>
+	  <xsl:value-of select="."/>
+	  <xsl:text>"
+</xsl:text>
+      </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="/">
@@ -77,7 +78,7 @@ extern OUString </xsl:text>
 #ifndef INCLUDED_FACTORY_VALUES</xsl:text>
 #include &lt;rtl/ustring.hxx&gt;
 
-<xsl:call-template name="valueconstantdecls"/>
+<xsl:call-template name="valueconstants"/>
 <xsl:text>
 #endif // INCLUDED_FACTORY_VALUES&#xa;</xsl:text>
   </xsl:template>
