@@ -316,6 +316,7 @@ public:
     void testCondCopyPaste();
 
     void testImportStream();
+    void testDeleteContents();
     void testTransliterateText();
 
     void testColumnFindEditCells();
@@ -448,6 +449,7 @@ public:
     CPPUNIT_TEST(testCondFormatInsertCol);
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testImportStream);
+    CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
     CPPUNIT_TEST(testColumnFindEditCells);
     CPPUNIT_TEST_SUITE_END();

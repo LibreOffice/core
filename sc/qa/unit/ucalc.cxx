@@ -5422,7 +5422,7 @@ void Test::testImportStream()
 
     m_pDoc->InsertTab(0, "Test");
 
-    m_pDoc->SetString(ScAddress(0,1,0), "=SUM(A1:C1)");
+    m_pDoc->SetString(ScAddress(0,1,0), "=SUM(A1:C1)"); // A2
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
@@ -5430,6 +5430,7 @@ void Test::testImportStream()
     ScAsciiOptions aOpt;
     aOpt.SetFieldSeps(",");
 
+    // Import values to A1:C1.
     ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
     aObj.SetExtOptions(aOpt);
@@ -5463,6 +5464,49 @@ void Test::testImportStream()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
 
     pUndoMgr->Clear();
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteContents()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    sc::UndoSwitch aUndoSwitch(*m_pDoc, true); // enable undo.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(ScAddress(3,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,2,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,3,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,4,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,5,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,6,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,7,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,8,0), 1.0);
+    m_pDoc->SetString(ScAddress(3,15,0), "=SUM(D2:D15)");
+
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula
+
+    // Delete D2:D6.
+    ScRange aRange(3,1,0,3,5,0);
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aRange);
+
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, pUndoDoc, false, IDF_CONTENTS, true);
+
+    clearRange(m_pDoc, aRange);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula
+
+    aUndo.Undo();
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula
+
+    aUndo.Redo();
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula
+
     m_pDoc->DeleteTab(0);
 }
 
