@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
-
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/writeguard.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -40,23 +35,17 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>
 
-using namespace framework;
-
 namespace {
-
-static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
-static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
 class ModuleManager:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo,
         css::frame::XModuleManager2,
         css::container::XContainerQuery >,
-    private ThreadHelpBase, private boost::noncopyable
+    private boost::noncopyable
 {
 private:
 
@@ -72,9 +61,6 @@ private:
         configuration API!
       */
     css::uno::Reference< css::container::XNameAccess > m_xCFG;
-
-//___________________________________________
-// interface
 
 public:
 
@@ -132,35 +118,8 @@ public:
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
         throw(css::uno::RuntimeException);
-//___________________________________________
-// helper
 
 private:
-
-    //---------------------------------------
-    /** @short  open the underlying configuration.
-
-        @descr  This method must be called every time
-                a (reaonly!) configuration is needed. Because
-                method works together with the member
-                m_xCFG, open it on demand and cache it
-                afterwards.
-
-                Note: A writable configuration access
-                must be created explicitly. Otherwise
-                we cant make sure that broken write requests
-                wont affect our read access !
-
-        @return [com.sun.star.container.XNameAccess]
-                the configuration object
-
-        @throw  [com.sun.star.uno.RuntimeException]
-                if config could not be opened successfully!
-
-        @threadsafe
-      */
-    css::uno::Reference< css::container::XNameAccess > implts_getConfig()
-        throw(css::uno::RuntimeException);
 
     //---------------------------------------
     /** @short  makes the real identification of the module.
@@ -187,15 +146,16 @@ private:
 };
 
 ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase(     )
-    , m_xContext    (xContext)
+    : m_xContext(xContext)
 {
+    m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
+                m_xContext, "/org.openoffice.Setup/Office/Factories",
+                comphelper::ConfigurationHelper::E_READONLY),
+            css::uno::UNO_QUERY_THROW );
 }
 
 ModuleManager::~ModuleManager()
 {
-    if (m_xCFG.is())
-        m_xCFG.clear();
 }
 
 OUString ModuleManager::getImplementationName()
@@ -289,20 +249,14 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
                     2);
         }
 
-        // SAFE -> ----------------------------------
-        ReadGuard aReadLock(m_aLock);
-        css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-        aReadLock.unlock();
-        // <- SAFE ----------------------------------
-
         // get access to the element
         // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
         // it cache it as a member of this module manager instance. If we change some props there ... but dont
         // flush changes (because an error occurred) we will read them later. If we use a different config access
         // we can close it without a flush ... and our read data wont be affected .-)
         css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
-                                                                            xContext,
-                                                                            OUString(CFGPATH_FACTORIES),
+                                                                            m_xContext,
+                                                                            "/org.openoffice.Setup/Office/Factories",
                                                                             ::comphelper::ConfigurationHelper::E_STANDARD);
         css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameReplace > xModule  ;
@@ -345,9 +299,8 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
           css::uno::RuntimeException            )
 {
     // get access to the element
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     css::uno::Reference< css::container::XNameAccess > xModule;
-    xCFG->getByName(sName) >>= xModule;
+    m_xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
@@ -357,15 +310,13 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
 
     // convert it to seq< PropertyValue >
     const css::uno::Sequence< OUString > lPropNames = xModule->getElementNames();
-          ::comphelper::SequenceAsHashMap       lProps     ;
-          sal_Int32                             c          = lPropNames.getLength();
-          sal_Int32                             i          = 0;
+    comphelper::SequenceAsHashMap lProps;
 
-    lProps[OUString(MODULEPROP_IDENTIFIER)] <<= sName;
-    for (i=0; i<c; ++i)
+    lProps[OUString("ooSetupFactoryModuleIdentifier")] <<= sName;
+    for (sal_Int32 i = 0; i < lPropNames.getLength(); ++i)
     {
-        const OUString& sPropName         = lPropNames[i];
-                               lProps[sPropName] = xModule->getByName(sPropName);
+        const OUString& sPropName = lPropNames[i];
+        lProps[sPropName] = xModule->getByName(sPropName);
     }
 
     return css::uno::makeAny(lProps.getAsConstPropertyValueList());
@@ -374,15 +325,13 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
 css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
-    return xCFG->getElementNames();
+    return m_xCFG->getElementNames();
 }
 
 sal_Bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
-    return xCFG->hasByName(sName);
+    return m_xCFG->hasByName(sName);
 }
 
 css::uno::Type SAL_CALL ModuleManager::getElementType()
@@ -394,8 +343,7 @@ css::uno::Type SAL_CALL ModuleManager::getElementType()
 sal_Bool SAL_CALL ModuleManager::hasElements()
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
-    return xCFG->hasElements();
+    return m_xCFG->hasElements();
 }
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const OUString&)
@@ -407,19 +355,15 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
     throw(css::uno::RuntimeException)
 {
-    ::comphelper::SequenceAsHashMap                 lSearchProps (lProperties);
-    css::uno::Sequence< OUString >           lModules     = getElementNames();
-    sal_Int32                                       c            = lModules.getLength();
-    sal_Int32                                       i            = 0;
-    ::comphelper::SequenceAsVector< css::uno::Any > lResult      ;
+    ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
+    const css::uno::Sequence< OUString > lModules = getElementNames();
+    ::comphelper::SequenceAsVector< css::uno::Any > lResult;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i = 0; i < lModules.getLength(); ++i)
     {
         try
         {
-            const OUString&                sModule      = lModules[i];
-                  ::comphelper::SequenceAsHashMap lModuleProps = getByName(sModule);
-
+            ::comphelper::SequenceAsHashMap lModuleProps = getByName(lModules[i]);
             if (lModuleProps.match(lSearchProps))
                 lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
         }
@@ -431,41 +375,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
     ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lResult.getAsConstList());
     css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
     return xEnum;
-}
-
-css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConfig()
-    throw(css::uno::RuntimeException)
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    if (m_xCFG.is())
-        return m_xCFG;
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    css::uno::Reference< css::uno::XInterface > xCfg;
-    try
-    {
-        xCfg = ::comphelper::ConfigurationHelper::openConfig(
-                    xContext,
-                    OUString(CFGPATH_FACTORIES),
-                    ::comphelper::ConfigurationHelper::E_READONLY);
-    }
-    catch(const css::uno::RuntimeException&)
-    {
-        throw;
-    }
-    catch(const css::uno::Exception&)
-    {
-        xCfg.clear();
-    }
-
-    // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
-    m_xCFG = css::uno::Reference< css::container::XNameAccess >(xCfg, css::uno::UNO_QUERY_THROW);
-    return m_xCFG;
-    // <- SAFE ----------------------------------
 }
 
 OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
@@ -484,18 +393,29 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
         return OUString();
 
     const css::uno::Sequence< OUString > lKnownModules = getElementNames();
-    const OUString*                      pKnownModules = lKnownModules.getConstArray();
-          sal_Int32                             c             = lKnownModules.getLength();
-          sal_Int32                             i             = 0;
-
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i = 0; i < lKnownModules.getLength(); ++i)
     {
-        if (xInfo->supportsService(pKnownModules[i]))
-            return pKnownModules[i];
+        if (xInfo->supportsService(lKnownModules[i]))
+            return lKnownModules[i];
     }
 
     return OUString();
 }
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(new ModuleManager(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
 
 }
 
@@ -504,7 +424,8 @@ com_sun_star_comp_framework_ModuleManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ModuleManager(context));
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
