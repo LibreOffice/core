@@ -42,7 +42,7 @@ class ScDocOptionsHelper
 public:
     static const SfxItemPropertyMapEntry* GetPropertyMap();
 
-    static sal_Bool setPropertyValue( ScDocOptions& rOptions,
+    static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue );

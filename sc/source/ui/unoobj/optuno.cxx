@@ -50,7 +50,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
     return aMap;
 }
 
-sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
+bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 const OUString& aPropertyName, const uno::Any& aValue )
 {
@@ -119,7 +119,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         break;
         default:;
     }
-    return sal_True;
+    return true;
 }
 
 uno::Any ScDocOptionsHelper::getPropertyValue(
