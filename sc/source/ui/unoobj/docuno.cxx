@@ -1791,7 +1791,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aString.equalsAscii( SC_UNO_COLLABELRNG ) )
         {
-            aRet <<= uno::Reference<sheet::XLabelRanges>(new ScLabelRangesObj( pDocShell, sal_True ));
+            aRet <<= uno::Reference<sheet::XLabelRanges>(new ScLabelRangesObj( pDocShell, true ));
         }
         else if ( aString.equalsAscii( SC_UNO_ROWLABELRNG ) )
         {

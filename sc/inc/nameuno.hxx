@@ -179,7 +179,7 @@ private:
      /** if true, adding new name or modifying existing one will set the
          document 'modified' and broadcast the change.  We turn this off during
          import. */
-    sal_Bool                mbModifyAndBroadcast;
+    bool                    mbModifyAndBroadcast;
 
     virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex) = 0;
     virtual ScNamedRangeObj* GetObjectByName_Impl(const OUString& aName) = 0;
@@ -338,7 +338,7 @@ class ScLabelRangeObj : public ::cppu::WeakImplHelper2<
 {
 private:
     ScDocShell*             pDocShell;
-    sal_Bool                bColumn;
+    bool                    bColumn;
     ScRange                 aRange;         ///< criterion to find range
 
 private:
@@ -346,7 +346,7 @@ private:
     void                    Modify_Impl( const ScRange* pLabel, const ScRange* pData );
 
 public:
-                            ScLabelRangeObj(ScDocShell* pDocSh, sal_Bool bCol, const ScRange& rR);
+                            ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& rR);
     virtual                 ~ScLabelRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -379,12 +379,12 @@ class ScLabelRangesObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
-    sal_Bool                    bColumn;
+    bool                    bColumn;
 
     ScLabelRangeObj*        GetObjectByIndex_Impl(size_t nIndex);
 
 public:
-                            ScLabelRangesObj(ScDocShell* pDocSh, sal_Bool bCol);
+                            ScLabelRangesObj(ScDocShell* pDocSh, bool bCol);
     virtual                 ~ScLabelRangesObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

@@ -941,7 +941,7 @@ SCTAB ScLocalNamedRangesObj::GetTab_Impl()
 
 //------------------------------------------------------------------------
 
-ScLabelRangeObj::ScLabelRangeObj(ScDocShell* pDocSh, sal_Bool bCol, const ScRange& rR) :
+ScLabelRangeObj::ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& rR) :
     pDocShell( pDocSh ),
     bColumn( bCol ),
     aRange( rR )
@@ -1062,7 +1062,7 @@ void SAL_CALL ScLabelRangeObj::setDataArea( const table::CellRangeAddress& aData
 
 //------------------------------------------------------------------------
 
-ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, sal_Bool bCol) :
+ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, bool bCol) :
     pDocShell( pDocSh ),
     bColumn( bCol )
 {
