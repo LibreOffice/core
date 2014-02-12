@@ -76,12 +76,12 @@
 #define SC_WID_UNO_END              ( SC_WID_UNO_START + 43 )
 
 
-inline sal_Bool IsScUnoWid( sal_uInt16 nWid )
+inline bool IsScUnoWid( sal_uInt16 nWid )
 {
     return nWid >= SC_WID_UNO_START && nWid <= SC_WID_UNO_END;
 }
 
-inline sal_Bool IsScItemWid( sal_uInt16 nWid )
+inline bool IsScItemWid( sal_uInt16 nWid )
 {
     return nWid >= ATTR_STARTINDEX && nWid <= ATTR_ENDINDEX;    // incl. page
 }
