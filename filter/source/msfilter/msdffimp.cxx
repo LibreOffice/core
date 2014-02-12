@@ -5287,6 +5287,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
             delete pTextImpRec->pWrapPolygon;
+            pTextImpRec->pWrapPolygon = NULL;
             sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
             rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
@@ -7290,16 +7291,11 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
 
 SvxMSDffImportRec::~SvxMSDffImportRec()
 {
-    if (pClientAnchorBuffer)
-        delete[] pClientAnchorBuffer;
-    if (pClientDataBuffer)
-        delete[] pClientDataBuffer;
-    if (pWrapPolygon)
-        delete pWrapPolygon;
-    if (pXRelTo)
-        delete pXRelTo;
-    if (pYRelTo)
-        delete pYRelTo;
+    delete[] pClientAnchorBuffer;
+    delete[] pClientDataBuffer;
+    delete pWrapPolygon;
+    delete pXRelTo;
+    delete pYRelTo;
 }
 
 void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
