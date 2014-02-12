@@ -31,8 +31,8 @@ class ScRefreshTimerControl
 
 public:
     ScRefreshTimerControl() : nBlockRefresh(0) {}
-    void SetAllowRefresh( sal_Bool b );
-    sal_Bool IsRefreshAllowed() const { return !nBlockRefresh; }
+    void SetAllowRefresh( bool b );
+    bool IsRefreshAllowed() const { return !nBlockRefresh; }
     ::osl::Mutex& GetMutex() { return aMutex; }
 };
 
@@ -47,8 +47,8 @@ public:
     virtual ~ScRefreshTimer();
 
     ScRefreshTimer& operator=( const ScRefreshTimer& r );
-    sal_Bool operator==( const ScRefreshTimer& r ) const;
-    sal_Bool operator!=( const ScRefreshTimer& r ) const;
+    bool operator==( const ScRefreshTimer& r ) const;
+    bool operator!=( const ScRefreshTimer& r ) const;
 
     void StartRefreshTimer();
     void SetRefreshControl( ScRefreshTimerControl * const * pp );

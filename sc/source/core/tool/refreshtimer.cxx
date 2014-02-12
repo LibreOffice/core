@@ -20,7 +20,7 @@
 #include "refreshtimer.hxx"
 #include "refreshtimerprotector.hxx"
 
-void ScRefreshTimerControl::SetAllowRefresh( sal_Bool b )
+void ScRefreshTimerControl::SetAllowRefresh( bool b )
 {
     if ( b && nBlockRefresh )
         --nBlockRefresh;
@@ -74,12 +74,12 @@ ScRefreshTimer& ScRefreshTimer::operator=( const ScRefreshTimer& r )
     return *this;
 }
 
-sal_Bool ScRefreshTimer::operator==( const ScRefreshTimer& r ) const
+bool ScRefreshTimer::operator==( const ScRefreshTimer& r ) const
 {
     return GetTimeout() == r.GetTimeout();
 }
 
-sal_Bool ScRefreshTimer::operator!=( const ScRefreshTimer& r ) const
+bool ScRefreshTimer::operator!=( const ScRefreshTimer& r ) const
 {
     return !ScRefreshTimer::operator==( r );
 }
