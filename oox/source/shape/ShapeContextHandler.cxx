@@ -273,7 +273,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
     mpThemePtr.reset(new Theme());
 
     if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) ||
-        Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == PPT_TOKEN(pic))
+        Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
