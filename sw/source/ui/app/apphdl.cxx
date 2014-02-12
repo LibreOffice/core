@@ -667,6 +667,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         pDocSh->GetDoc()->SetFixFields(false, 0);
                     }
                 }
+                break;
             case SFX_EVENT_CREATEDOC:
                 // Update all FIX-Date/Time fields
                 if( pWrtSh )
