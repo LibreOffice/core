@@ -36,7 +36,7 @@ protected:
     enum ExtensionType { EXTENSION_ARRAY, EXTENSION_NLR, EXTENSION_MEMAREA };
     typedef ::std::vector< ExtensionType >          ExtensionTypeVec;
 
-    sal_Bool                bExternName;    // wenn External Name gefunden wurde
+    bool                    bExternName;    // wenn External Name gefunden wurde
     static const sal_uInt16 nRowMask;
     static const sal_uInt16 nLastInd;       // letzter Index fuer Excel->SC-
                                         // Token Umsetzung
@@ -46,7 +46,7 @@ protected:
     // ---------------------------------------------------------------
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
-    void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const sal_Bool bName );
+    void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const bool bName );
 
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
@@ -59,7 +59,7 @@ public:
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
-    virtual sal_Bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
+    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
@@ -69,8 +69,8 @@ public:
 
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
-    static inline sal_Bool  IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 );
-    static inline sal_Bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
+    static inline bool  IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 );
+    static inline bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
 
     void                SetComplCol( ScComplexRefData& );
     void                SetComplRow( ScComplexRefData& );
@@ -84,13 +84,13 @@ public:
 };
 
 
-inline sal_Bool ExcelToSc::IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 )
+inline bool ExcelToSc::IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 )
 {
     return ( nCol1 == 0x00 ) && ( nCol2 == 0xFF );
 }
 
 
-inline sal_Bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
+inline bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
 {
     return ( ( nRow1 & 0x3FFF ) == 0x0000 ) && ( ( nRow2 & 0x3FFF ) == 0x3FFF );
 }
@@ -118,7 +118,7 @@ private:
     const XclImpLinkManager&    rLinkMan;
 
     void                ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nCol, ScSingleRefData&,
-                            const sal_Bool bName );
+                            const bool bName );
 
     bool                GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId ) const;
 
@@ -136,13 +136,13 @@ public:
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
-    static inline sal_Bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
+    static inline bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
 
-    virtual sal_Bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
+    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 };
 
 
-inline sal_Bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
+inline bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
 {
     return ( nRow1 == 0x0000 ) && ( nRow2 == 0xFFFF );
 }

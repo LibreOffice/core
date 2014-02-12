@@ -1401,7 +1401,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     return eRet;
 }
 
-void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData &rSRD, const sal_Bool bName )
+void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData &rSRD, const bool bName )
 {
     const bool bColRel = ( nC & 0x4000 ) != 0;
     const bool bRowRel = ( nC & 0x8000 ) != 0;
@@ -1439,7 +1439,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
 
 
 // stream seeks to first byte after <nLen>
-sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
+bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
 {
     sal_uInt8                   nOp;
     sal_uInt16                  nRow1, nRow2, nCol1, nCol2;
