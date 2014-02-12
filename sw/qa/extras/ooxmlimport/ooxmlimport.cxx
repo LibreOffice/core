@@ -1757,6 +1757,12 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupshapeRelsize, "groupshape-relsize.docx")
+{
+    // This was 43760, i.e. the height of the groupshape was larger than the page height, which is obviously incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(9142730)), getShape(1)->getSize().Height);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")
 {
     // Capitalization inside a group shape was not imported
