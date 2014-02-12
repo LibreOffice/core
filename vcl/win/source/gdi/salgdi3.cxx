@@ -125,7 +125,7 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
 
     // check the cache version
     sal_uInt32 nCacheMagic;
-    aCacheFile >> nCacheMagic;
+    aCacheFile.ReadUInt32(nCacheMagic);
     if( nCacheMagic != ImplFontAttrCache::MAGIC )
         return;  // ignore cache and rewrite if no match
 
@@ -140,12 +140,18 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
         aDFA.SetFamilyName(read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8));
 
         short n;
-        aCacheFile >> n; aDFA.SetWeight(static_cast<FontWeight>(n));
-        aCacheFile >> n; aDFA.SetItalic(static_cast<FontItalic>(n));
-        aCacheFile >> n; aDFA.SetPitch(static_cast<FontPitch>(n));
-        aCacheFile >> n; aDFA.SetWidthType(static_cast<FontWidth>(n));
-        aCacheFile >> n; aDFA.SetFamilyType(static_cast<FontFamily>(n));
-        aCacheFile >> n; aDFA.SetSymbolFlag(n != 0);
+        aCacheFile.ReadInt16(n);
+        aDFA.SetWeight(static_cast<FontWeight>(n));
+        aCacheFile.ReadInt16(n);
+        aDFA.SetItalic(static_cast<FontItalic>(n));
+        aCacheFile.ReadInt16(n);
+        aDFA.SetPitch(static_cast<FontPitch>(n));
+        aCacheFile.ReadInt16(n);
+        aDFA.SetWidthType(static_cast<FontWidth>(n));
+        aCacheFile.ReadInt16(n);
+        aDFA.SetFamilyType(static_cast<FontFamily>(n));
+        aCacheFile.ReadInt16(n);
+        aDFA.SetSymbolFlag(n != 0);
 
         OUString styleName;
         aCacheFile.ReadByteStringLine( styleName, RTL_TEXTENCODING_UTF8 );
