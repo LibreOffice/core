@@ -22,7 +22,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
-#include <tools/solar.h>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
@@ -96,7 +95,6 @@ namespace {
             return nSize;
     }
 }
-
 
 #define SPLITWIN_SPLITSIZE              3
 #define SPLITWIN_SPLITSIZEEX            4
@@ -2167,7 +2165,6 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         SetPointer( aPtr );
     }
 }
-
 
 void SplitWindow::StartSplit()
 {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALINST_H
 #define INCLUDED_VCL_INC_UNX_SALINST_H
 
-#include <tools/solar.h>
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
