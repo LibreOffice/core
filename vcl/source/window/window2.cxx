@@ -1161,40 +1161,70 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
                         double deltaXInPixels = double(deltaPoint.X());
                         double deltaYInPixels = double(deltaPoint.Y());
-
-                        double visSizeX = double(pHScrl->GetVisibleSize());
-                        double visSizeY = double(pVScrl->GetVisibleSize());
-
                         Size winSize = this->GetOutputSizePixel();
 
-                        double ratioX = deltaXInPixels / double(winSize.getWidth());
-                        double ratioY = deltaYInPixels / double(winSize.getHeight());
-
-                        long deltaXInLogic = long(visSizeX * ratioX);
-                        long deltaYInLogic = long(visSizeY * ratioY);
-
-                        // Touch need to work by pixels. Did not apply this to
-                        // Android, as android code may require adaptations
-                        // to work with this scrolling code
-#ifndef IOS
-                        long lineSizeX = pHScrl->GetLineSize();
-                        long lineSizeY = pVScrl->GetLineSize();
-
-                        deltaXInLogic /= lineSizeX;
-                        deltaYInLogic /= lineSizeY;
-#endif
-
-                        if ( deltaXInLogic || deltaYInLogic )
+                        if(pHScrl)
                         {
+                            double visSizeX = double(pHScrl->GetVisibleSize());
+                            double ratioX = deltaXInPixels / double(winSize.getWidth());
+                            long deltaXInLogic = long(visSizeX * ratioX);
+                            // Touch need to work by pixels. Did not apply this to
+                            // Android, as android code may require adaptations
+                            // to work with this scrolling code
 #ifndef IOS
-                            bool isMultiplyByLineSize = true;
-#else
-                            bool isMultiplyByLineSize = false;
-#endif
-                            lcl_HandleScrollHelper( pHScrl, deltaXInLogic, isMultiplyByLineSize );
-                            lcl_HandleScrollHelper( pVScrl, deltaYInLogic, isMultiplyByLineSize );
+                            long lineSizeX = pHScrl->GetLineSize();
 
-                            bRet = sal_True;
+                            if(lineSizeX)
+                            {
+                                deltaXInLogic /= lineSizeX;
+                            }
+                            else
+                            {
+                                deltaXInLogic = 0;
+                            }
+#endif
+                            if ( deltaXInLogic)
+                            {
+#ifndef IOS
+                                bool isMultiplyByLineSize = true;
+#else
+                                bool isMultiplyByLineSize = false;
+#endif
+                                lcl_HandleScrollHelper( pHScrl, deltaXInLogic, isMultiplyByLineSize );
+                                bRet = sal_True;
+                            }
+                        }
+                        if(pVScrl)
+                        {
+                            double visSizeY = double(pVScrl->GetVisibleSize());
+                            double ratioY = deltaYInPixels / double(winSize.getHeight());
+                            long deltaYInLogic = long(visSizeY * ratioY);
+
+                            // Touch need to work by pixels. Did not apply this to
+                            // Android, as android code may require adaptations
+                            // to work with this scrolling code
+#ifndef IOS
+                            long lineSizeY = pVScrl->GetLineSize();
+                            if(lineSizeY)
+                            {
+                                deltaYInLogic /= lineSizeY;
+                            }
+                            else
+                            {
+                                deltaYInLogic = 0;
+                            }
+#endif
+                            if ( deltaYInLogic )
+                            {
+#ifndef IOS
+                                bool isMultiplyByLineSize = true;
+#else
+                                bool isMultiplyByLineSize = false;
+#endif
+                                lcl_HandleScrollHelper( pVScrl, deltaYInLogic, isMultiplyByLineSize );
+
+                                bRet = sal_True;
+                            }
                         }
                     }
                 }
