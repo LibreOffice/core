@@ -58,7 +58,7 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
                 ScHTMLGraphEntry* pE = &aGraphList[ i ];
                 if ( !pE->bInCell )
                 {   // not all cells: table next to some
-                    bTabAlignedLeft = sal_True;
+                    bTabAlignedLeft = true;
                     break;
                 }
             }
@@ -155,7 +155,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             if ( pSGO->IsLinkedGraphic() )
                 aLinkName = pSGO->GetFileName();
             WriteImage( aLinkName, pSGO->GetGraphic(), aOpt, nXOutFlags );
-            pE->bWritten = sal_True;
+            pE->bWritten = true;
         }
         break;
         case OBJ_OLE2:
@@ -165,7 +165,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             {
                 OUString aLinkName;
                 WriteImage( aLinkName, *pGraphic, aOpt );
-                pE->bWritten = sal_True;
+                pE->bWritten = true;
             }
         }
         break;
@@ -175,7 +175,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
                 pDoc->GetDrawLayer(), pObject ) );
             OUString aLinkName;
             WriteImage( aLinkName, aGraph, aOpt );
-            pE->bWritten = sal_True;
+            pE->bWritten = true;
         }
     }
 }

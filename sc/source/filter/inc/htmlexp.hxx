@@ -45,13 +45,13 @@ struct ScHTMLStyle
 {   // Defaults aus StyleSheet
     Color               aBackgroundColor;
     OUString            aFontFamilyName;
-    sal_uInt32              nFontHeight;        // Item-Value
-    sal_uInt16              nFontSizeNumber;    // HTML value 1-7
-    sal_uInt8                nDefaultScriptType; // Font values are valid for the default script type
-    sal_Bool                bInitialized;
+    sal_uInt32          nFontHeight;        // Item-Value
+    sal_uInt16          nFontSizeNumber;    // HTML value 1-7
+    sal_uInt8           nDefaultScriptType; // Font values are valid for the default script type
+    bool                bInitialized;
 
     ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), nDefaultScriptType(0),
-        bInitialized(0) {}
+        bInitialized(false) {}
 
     const ScHTMLStyle& operator=( const ScHTMLStyle& r )
         {
@@ -71,11 +71,11 @@ struct ScHTMLGraphEntry
     Size                aSize;          // Groesse in Pixeln
     Size                aSpace;         // Spacing in Pixeln
     SdrObject*          pObject;
-    sal_Bool                bInCell;        // ob in Zelle ausgegeben wird
-    sal_Bool                bWritten;
+    bool                bInCell;        // ob in Zelle ausgegeben wird
+    bool                bWritten;
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
-        const Size& rSize,  sal_Bool bIn, const Size& rSpace ) :
+        const Size& rSize,  bool bIn, const Size& rSpace ) :
         aRange( rRange ), aSize( rSize ), aSpace( rSpace ),
         pObject( pObj ), bInCell( bIn ), bWritten( false ) {}
 };
@@ -106,13 +106,13 @@ class ScHTMLExport : public ScExportBase
     SCTAB               nUsedTables;
     short               nIndent;
     sal_Char            sIndent[nIndentMax+1];
-    sal_Bool                bAll;           // ganzes Dokument
-    sal_Bool                bTabHasGraphics;
-    sal_Bool                bTabAlignedLeft;
-    sal_Bool                bCalcAsShown;
-    sal_Bool                bCopyLocalFileToINet;
-    sal_Bool                bTableDataWidth;
-    sal_Bool                bTableDataHeight;
+    bool                bAll;           // ganzes Dokument
+    bool                bTabHasGraphics;
+    bool                bTabAlignedLeft;
+    bool                bCalcAsShown;
+    bool                bCopyLocalFileToINet;
+    bool                bTableDataWidth;
+    bool                bTableDataHeight;
 
     const SfxItemSet&   PageDefaults( SCTAB nTab );
 
@@ -131,9 +131,9 @@ class ScHTMLExport : public ScExportBase
     bool WriteFieldText( const EditTextObject* pData );
 
                         // kopiere ggfs. eine lokale Datei ins Internet
-    sal_Bool            CopyLocalFileToINet( OUString& rFileNm,
-                            const OUString& rTargetNm, sal_Bool bFileToFile = false );
-    sal_Bool            HasCId() { return !aCId.isEmpty(); }
+    bool            CopyLocalFileToINet( OUString& rFileNm,
+                            const OUString& rTargetNm, bool bFileToFile = false );
+    bool            HasCId() { return !aCId.isEmpty(); }
     void                MakeCIdURL( OUString& rURL );
 
     void                PrepareGraphics( ScDrawLayer*, SCTAB nTab,
@@ -155,7 +155,7 @@ class ScHTMLExport : public ScExportBase
 
 public:
                         ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
-                                        sal_Bool bAll, const OUString& aStreamPath );
+                                        bool bAll, const OUString& aStreamPath );
     virtual             ~ScHTMLExport();
     sal_uLong               Write();
     const OUString&     GetNonConvertibleChars() const

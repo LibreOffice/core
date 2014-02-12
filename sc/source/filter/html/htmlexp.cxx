@@ -210,7 +210,7 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP,
-                            sal_Bool bAllP, const OUString& rStreamPathP ) :
+                            bool bAllP, const OUString& rStreamPathP ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
@@ -221,8 +221,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     bTabHasGraphics( false ),
     bTabAlignedLeft( false ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
-    bTableDataWidth( sal_True ),
-    bTableDataHeight( sal_True )
+    bTableDataWidth( true ),
+    bTableDataHeight( true )
 {
     strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
@@ -478,7 +478,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     {
         const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
         aHTMLStyle.aBackgroundColor = pBrushItem->GetColor();
-        aHTMLStyle.bInitialized = sal_True;
+        aHTMLStyle.bInitialized = true;
     }
     return rSet;
 }
@@ -770,7 +770,7 @@ void ScHTMLExport::WriteTables()
         // IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
-        bTableDataWidth = sal_True;     // widths in first row
+        bTableDataWidth = true;     // widths in first row
         bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
@@ -782,7 +782,7 @@ void ScHTMLExport::WriteTables()
             }
 
             IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
-            bTableDataHeight = sal_True;  // height at every first cell of each row
+            bTableDataHeight = true;  // height at every first cell of each row
             for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
                 if ( pDoc->ColHidden(nCol2, nTab) )
@@ -1235,10 +1235,10 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 }
 
 
-sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
-        const OUString& rTargetNm, sal_Bool bFileToFile )
+bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
+        const OUString& rTargetNm, bool bFileToFile )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
@@ -1255,7 +1255,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             if( it != pFileNameMap->end() )
             {
                 rFileNm = it->second;
-                return sal_True;
+                return true;
             }
         }
         else
