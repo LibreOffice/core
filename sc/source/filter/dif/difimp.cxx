@@ -631,17 +631,17 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
 }
 
 
-sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
-    {
+bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
+{
     sal_Bool                    bNeg = false;
-    double                  fFracPos = 1.0;
+    double                      fFracPos = 1.0;
     sal_Int32                   nExp = 0;
     sal_Bool                    bExpNeg = false;
     sal_Bool                    bExpOverflow = false;
     static const sal_uInt16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
 
     sal_Unicode             cAkt;
-    sal_Bool                    bRet = false;
+    bool                    bRet = false;
 
     enum STATE { S_FIRST, S_PRE, S_POST, S_EXP_FIRST, S_EXP, S_END, S_FINDEND };
 
@@ -702,7 +702,7 @@ sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = sal_True;        // no
+                            bRet = true;        // no
                         default:                // break!
                             eS = S_END;
                     }
@@ -723,7 +723,7 @@ sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP_FIRST;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = sal_True;        // no
+                            bRet = true;        // no
                         default:                // break!
                             eS = S_END;
                     }
@@ -776,7 +776,7 @@ sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
             case S_FINDEND:
                 if( IsNumberEnding( cAkt ) )
                 {
-                    bRet = sal_True;        // damit sinnvoll weitergeparst werden kann
+                    bRet = true;        // damit sinnvoll weitergeparst werden kann
                     eS = S_END;
                 }
                 break;
@@ -900,7 +900,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 }
 
 
-DifAttrCache::DifAttrCache( const sal_Bool bNewPlain )
+DifAttrCache::DifAttrCache( const bool bNewPlain )
 {
     bPlain = bNewPlain;
     ppCols = new DifColumn *[ MAXCOL + 1 ];

@@ -70,15 +70,15 @@ public:
 private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
-    sal_Bool                bPlain;
+    bool                bPlain;
     OUString       aLookAheadLine;
 
     bool                ReadNextLine( OUString& rStr );
     bool                LookAhead();
     DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
-    static inline sal_Bool  IsBOT( const sal_Unicode* pRef );
-    static inline sal_Bool  IsEOD( const sal_Unicode* pRef );
-    static inline sal_Bool  Is1_0( const sal_Unicode* pRef );
+    static inline bool  IsBOT( const sal_Unicode* pRef );
+    static inline bool  IsEOD( const sal_Unicode* pRef );
+    static inline bool  Is1_0( const sal_Unicode* pRef );
 public:
                         DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, rtl_TextEncoding );
 
@@ -87,17 +87,17 @@ public:
     DATASET             GetNextDataset( void );
 
     const sal_Unicode*  ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet );
-    sal_Bool                ScanFloatVal( const sal_Unicode* pStart );
+    bool                ScanFloatVal( const sal_Unicode* pStart );
 
-    inline sal_Bool         IsNumber( const sal_Unicode cChar );
-    inline sal_Bool         IsNumberEnding( const sal_Unicode cChar );
+    inline bool         IsNumber( const sal_Unicode cChar );
+    inline bool         IsNumberEnding( const sal_Unicode cChar );
 
-    static inline sal_Bool  IsV( const sal_Unicode* pRef );
+    static inline bool  IsV( const sal_Unicode* pRef );
 
-    inline sal_Bool         IsPlain( void ) const;
+    inline bool         IsPlain( void ) const;
 };
 
-inline sal_Bool DifParser::IsBOT( const sal_Unicode* pRef )
+inline bool DifParser::IsBOT( const sal_Unicode* pRef )
 {
     return  (   pRef[ 0 ] == pKeyBOT[0] &&
                 pRef[ 1 ] == pKeyBOT[1] &&
@@ -105,7 +105,7 @@ inline sal_Bool DifParser::IsBOT( const sal_Unicode* pRef )
                 pRef[ 3 ] == pKeyBOT[3] );
 }
 
-inline sal_Bool DifParser::IsEOD( const sal_Unicode* pRef )
+inline bool DifParser::IsEOD( const sal_Unicode* pRef )
 {
     return  (   pRef[ 0 ] == pKeyEOD[0] &&
                 pRef[ 1 ] == pKeyEOD[1] &&
@@ -113,7 +113,7 @@ inline sal_Bool DifParser::IsEOD( const sal_Unicode* pRef )
                 pRef[ 3 ] == pKeyEOD[3] );
 }
 
-inline sal_Bool DifParser::Is1_0( const sal_Unicode* pRef )
+inline bool DifParser::Is1_0( const sal_Unicode* pRef )
 {
     return  (   pRef[ 0 ] == pKey1_0[0] &&
                 pRef[ 1 ] == pKey1_0[1] &&
@@ -121,23 +121,23 @@ inline sal_Bool DifParser::Is1_0( const sal_Unicode* pRef )
                 pRef[ 3 ] == pKey1_0[3] );
 }
 
-inline sal_Bool DifParser::IsV( const sal_Unicode* pRef )
+inline bool DifParser::IsV( const sal_Unicode* pRef )
 {
     return  (   pRef[ 0 ] == pKeyV[0] &&
                 pRef[ 1 ] == pKeyV[1]   );
 }
 
-inline sal_Bool DifParser::IsNumber( const sal_Unicode cChar )
+inline bool DifParser::IsNumber( const sal_Unicode cChar )
 {
     return ( cChar >= '0' && cChar <= '9' );
 }
 
-inline sal_Bool DifParser::IsNumberEnding( const sal_Unicode cChar )
+inline bool DifParser::IsNumberEnding( const sal_Unicode cChar )
 {
     return ( cChar == 0x00 );
 }
 
-inline sal_Bool DifParser::IsPlain( void ) const
+inline bool DifParser::IsPlain( void ) const
 {
     return bPlain;
 }
@@ -173,7 +173,7 @@ class DifAttrCache
 {
 public:
 
-    DifAttrCache( const sal_Bool bPlain );
+    DifAttrCache( const bool bPlain );
 
     ~DifAttrCache();
 
@@ -186,7 +186,7 @@ public:
 private:
 
     DifColumn**         ppCols;
-    sal_Bool                bPlain;
+    bool                bPlain;
 };
 
 #endif
