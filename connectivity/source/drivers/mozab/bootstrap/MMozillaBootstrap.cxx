@@ -47,7 +47,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance
 
 MozillaBootstrap::MozillaBootstrap(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    : OMozillaBootstrap_BASE(m_aMutex), m_xMSFactory( _rxFactory )
+    : OMozillaBootstrap_BASE(m_aMutex), m_xMSFactory( _rxFactory ),
+      m_ProfileAccess(NULL), m_ProfileManager(NULL)
 {
 }
 // -----------------------------------------------------------------------------
