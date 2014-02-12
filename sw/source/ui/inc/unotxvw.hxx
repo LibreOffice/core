@@ -219,7 +219,9 @@ public:
                std::exception);
     virtual sal_Bool SAL_CALL isAtEndOfLine(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL gotoEndOfLine(sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL gotoStartOfLine(sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL gotoStartOfLine(sal_Bool bExpand)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
