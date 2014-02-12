@@ -537,7 +537,8 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw(
     return *pxViewSettings;
 }
 
-Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAutomatic*/ ) throw(RuntimeException)
+Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAutomatic*/ )
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

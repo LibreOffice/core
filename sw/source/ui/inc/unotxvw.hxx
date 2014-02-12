@@ -115,7 +115,8 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue > > SAL_CALL getRubyList( sal_Bool bAutomatic )
-                throw(::com::sun::star::uno::RuntimeException);
+                throw (::com::sun::star::uno::RuntimeException,
+                       std::exception);
 
     virtual void SAL_CALL setRubyList(
         const ::com::sun::star::uno::Sequence<
