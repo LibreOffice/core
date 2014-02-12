@@ -922,7 +922,7 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     bDataValid( false ),
     bInUpdate( false ),
     bDirty( false ),
-    bDoUpdate( sal_True )
+    bDoUpdate( true )
 {
     if (pDocShell)
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -1034,7 +1034,7 @@ void ScCellTextData::UpdateData()
             //  during the own UpdateData call, bDataValid must not be reset,
             //  or things like attributes after the text would be lost
             //  (are not stored in the cell)
-            bInUpdate = sal_True;   // prevents bDataValid from being reset
+            bInUpdate = true;   // prevents bDataValid from being reset
             pDocShell->GetDocFunc().PutData(aCellPos, *pEditEngine, true); // always as text
 
             bInUpdate = false;
@@ -1042,7 +1042,7 @@ void ScCellTextData::UpdateData()
         }
     }
     else
-        bDirty = sal_True;
+        bDirty = true;
 }
 
 void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )

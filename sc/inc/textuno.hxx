@@ -373,10 +373,10 @@ protected:
     ScFieldEditEngine*      pEditEngine;
     SvxEditEngineForwarder* pForwarder;
     ScCellEditSource* pOriginalSource;
-    sal_Bool                    bDataValid;
-    sal_Bool                    bInUpdate;
-    sal_Bool                    bDirty;
-    sal_Bool                    bDoUpdate;
+    bool                    bDataValid;
+    bool                    bInUpdate;
+    bool                    bDirty;
+    bool                    bDoUpdate;
 
 protected:
     virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText);
@@ -398,9 +398,9 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     const ScAddress&        GetCellPos() const      { return aCellPos; }
 
-    void                    SetDirty(sal_Bool bValue)   { bDirty = bValue; }
-    sal_Bool                    IsDirty() const         { return bDirty; }
-    void                    SetDoUpdate(sal_Bool bValue)    { bDoUpdate = bValue; }
+    void                    SetDirty(bool bValue)   { bDirty = bValue; }
+    bool                    IsDirty() const         { return bDirty; }
+    void                    SetDoUpdate(bool bValue)    { bDoUpdate = bValue; }
 };
 
 class ScCellTextObj : public ScCellTextData, public SvxUnoText
