@@ -969,7 +969,7 @@ endef
 
 else # !SYSTEM_NEON
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 	neon \
 ))
 
@@ -2218,7 +2218,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 	clucene \
 ))
 
