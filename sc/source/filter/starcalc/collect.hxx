@@ -25,7 +25,7 @@
 class ScDataObject
 {
 public:
-                            ScDataObject() {}
+               ScDataObject() {}
     virtual    ~ScDataObject();
     virtual    ScDataObject*       Clone() const = 0;
 };
@@ -36,23 +36,23 @@ protected:
     sal_uInt16          nCount;
     sal_uInt16          nLimit;
     sal_uInt16          nDelta;
-    ScDataObject**  pItems;
+    ScDataObject**     pItems;
 public:
     ScCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
     ScCollection(const ScCollection& rCollection);
-    virtual             ~ScCollection();
+    virtual                 ~ScCollection();
 
     virtual ScDataObject*   Clone() const;
 
-    sal_Bool        AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject);
-    virtual sal_Bool        Insert(ScDataObject* pScDataObject);
+    bool                    AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject);
+    bool                    Insert(ScDataObject* pScDataObject);
 
-    ScDataObject*   At(sal_uInt16 nIndex) const;
-    virtual sal_uInt16      IndexOf(ScDataObject* pScDataObject) const;
-    sal_uInt16 GetCount() const;
+    ScDataObject*           At(sal_uInt16 nIndex) const;
+    sal_uInt16              IndexOf(ScDataObject* pScDataObject) const;
+    sal_uInt16              GetCount() const;
 
-            ScDataObject* operator[]( const sal_uInt16 nIndex) const {return At(nIndex);}
-            ScCollection&   operator=( const ScCollection& rCol );
+    ScDataObject*  operator[]( const sal_uInt16 nIndex) const { return At(nIndex); }
+    ScCollection&  operator= ( const ScCollection& rCol );
 };
 
 #endif

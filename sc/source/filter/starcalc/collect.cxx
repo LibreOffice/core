@@ -83,7 +83,7 @@ sal_uInt16 ScCollection::GetCount() const { return nCount; }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
+bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
     if ((nCount < MAXCOLLECTIONSIZE) && (nIndex <= nCount) && pItems)
     {
@@ -101,14 +101,14 @@ sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
             memmove(&pItems[nIndex + 1], &pItems[nIndex], (nCount - nIndex) * sizeof(ScDataObject*));
         pItems[nIndex] = pScDataObject;
         nCount++;
-        return sal_True;
+        return true;
     }
     return false;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScCollection::Insert(ScDataObject* pScDataObject)
+bool ScCollection::Insert(ScDataObject* pScDataObject)
 {
     return AtInsert(nCount, pScDataObject);
 }
