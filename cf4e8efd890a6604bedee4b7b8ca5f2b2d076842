@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_70d670c7",
+        "filename": "include/editeng/svxenum.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-02-12T19:56:46Z",
+      "side": 1,
+      "message": "Just a question: why \u0027\u003d 33\u0027?",
+      "revId": "cf4e8efd890a6604bedee4b7b8ca5f2b2d076842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
