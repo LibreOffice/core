@@ -353,8 +353,10 @@ int HTMLParser::FilterToken( int nToken )
 
     case HTML_HEAD_OFF:
         bIsInBody = true;
+        bIsInHeader = false;
+        break;
     case HTML_HEAD_ON:
-        bIsInHeader = HTML_HEAD_ON == nToken;
+        bIsInHeader = true;
         break;
 
     case HTML_BODY_ON:
