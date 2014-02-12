@@ -22,7 +22,6 @@
 #include <loadenv/targethelper.hxx>
 #include <framework/framelistanalyzer.hxx>
 
-#include <constant/containerquery.hxx>
 #include <interaction/quietinteraction.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
