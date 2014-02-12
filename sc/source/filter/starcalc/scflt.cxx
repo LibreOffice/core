@@ -1458,10 +1458,10 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetOption( VOPT_NULLVALS,    IS_SET(dfZerro,Display) );
             aSc30ViewOpt.SetOption( VOPT_SYNTAX,      IS_SET(dfSyntax,Display) );
             aSc30ViewOpt.SetOption( VOPT_NOTES,       IS_SET(dfNoteMark,Display) );
-            aSc30ViewOpt.SetOption( VOPT_VSCROLL,     sal_True );
-            aSc30ViewOpt.SetOption( VOPT_HSCROLL,     sal_True );
-            aSc30ViewOpt.SetOption( VOPT_TABCONTROLS, sal_True );
-            aSc30ViewOpt.SetOption( VOPT_OUTLINER,    sal_True );
+            aSc30ViewOpt.SetOption( VOPT_VSCROLL,     true );
+            aSc30ViewOpt.SetOption( VOPT_HSCROLL,     true );
+            aSc30ViewOpt.SetOption( VOPT_TABCONTROLS, true );
+            aSc30ViewOpt.SetOption( VOPT_OUTLINER,    true );
             aSc30ViewOpt.SetOption( VOPT_GRID,        IS_SET(dfGrid,Display) );
 
             // VOPT_HEADER wird in LoadViewColRowBar() gesetzt
