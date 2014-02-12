@@ -1600,17 +1600,10 @@ int HTMLParser::FilterPRE( int nToken )
 {
     switch( nToken )
     {
-#ifdef HTML_BEHAVIOUR
-    // These become LFs according to the definition
-    case HTML_PARABREAK_ON:
-    case HTML_LINEBREAK:
-        nToken = HTML_NEWPARA;
-#else
     // in Netscape they only have impact in not empty paragraphs
     case HTML_PARABREAK_ON:
         nToken = HTML_LINEBREAK;
     case HTML_LINEBREAK:
-#endif
     case HTML_NEWPARA:
         nPre_LinePos = 0;
         if( bPre_IgnoreNewPara )
