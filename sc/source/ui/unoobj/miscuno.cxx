@@ -41,10 +41,10 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
     return uno::Reference<uno::XInterface>();   //! Exception?
 }
 
-sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const OUString& rName, sal_Bool bDefault )
+bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
+                                            const OUString& rName, bool bDefault )
 {
-    sal_Bool bRet = bDefault;
+    bool bRet = bDefault;
     if ( xProp.is() )
     {
         try
@@ -133,7 +133,7 @@ OUString ScUnoHelpFunctions::GetStringProperty(
     return aRet;
 }
 
-sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
+bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
@@ -166,9 +166,10 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
     return nRet;
 }
 
-void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
+void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, bool bValue )
 {
-    rAny.setValue( &bValue, getBooleanCppuType() );
+    sal_Bool bTemp = bValue ? 1 : 0;
+    rAny.setValue( &bTemp, getBooleanCppuType() );
 }
 
 void ScUnoHelpFunctions::SetOptionalPropertyValue(

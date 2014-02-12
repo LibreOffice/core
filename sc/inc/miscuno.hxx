@@ -157,9 +157,9 @@ class SC_DLLPUBLIC ScUnoHelpFunctions
 public:
     static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
-    static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
+    static bool             GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const OUString& rName, sal_Bool bDefault = false );
+                                            const OUString& rName, bool bDefault = false );
     static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const OUString& rName, long nDefault = 0 );
@@ -170,11 +170,11 @@ public:
         const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
-    static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
+    static bool             GetBoolFromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int32        GetInt32FromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const com::sun::star::uno::Any& aAny );
-    static void             SetBoolInAny( com::sun::star::uno::Any& rAny, sal_Bool bValue );
+    static void             SetBoolInAny( com::sun::star::uno::Any& rAny, bool bValue );
 
     static void             SetOptionalPropertyValue(
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rPropSet,
