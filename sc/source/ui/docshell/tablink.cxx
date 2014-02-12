@@ -160,12 +160,12 @@ void ScTableLink::Closed()
     SvBaseLink::Closed();
 }
 
-sal_Bool ScTableLink::IsUsed() const
+bool ScTableLink::IsUsed() const
 {
     return pImpl->m_pDocSh->GetDocument()->HasLink( aFileName, aFilterName, aOptions );
 }
 
-sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
+bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                             const OUString* pNewOptions, sal_uLong nNewRefresh )
 {
     //  Dokument laden

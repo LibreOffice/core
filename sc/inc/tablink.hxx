@@ -54,7 +54,7 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    sal_Bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
+    bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
     void    SetInCreate(bool bSet)      { bInCreate = bSet; }
     void    SetAddUndo(bool bSet)       { bAddUndo = bSet; }
@@ -64,7 +64,7 @@ public:
     const OUString& GetFilterName() const { return aFilterName; }
     const OUString& GetOptions() const    { return aOptions; }
 
-    sal_Bool    IsUsed() const;
+    bool    IsUsed() const;
 
     DECL_LINK( RefreshHdl, void* );
     DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
