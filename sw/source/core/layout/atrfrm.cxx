@@ -1232,7 +1232,7 @@ SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion
     rStream.ReadInt64(yPos);
 #else
     sal_Int32 n;
-    rStream >> n;
+    rStream.ReadInt32(n);
     yPos = n;
 #endif
     rStream.ReadInt16( orient ).ReadInt16( relation );
