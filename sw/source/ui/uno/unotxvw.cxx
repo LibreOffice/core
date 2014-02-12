@@ -585,7 +585,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
 void SAL_CALL SwXTextView::setRubyList(
     const Sequence< Sequence< PropertyValue > >& rRubyList, sal_Bool /*bAutomatic*/ )
-        throw(RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

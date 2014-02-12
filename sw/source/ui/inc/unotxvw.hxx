@@ -121,7 +121,8 @@ public:
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue > >& RubyList, sal_Bool bAutomatic )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
