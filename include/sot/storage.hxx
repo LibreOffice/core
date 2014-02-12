@@ -96,7 +96,6 @@ class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 friend class SotStorageStream;
 friend class SvStorage;
 
-    BaseStorage *   m_pTmpStg;   // Temp-Storage fuer Transacted, nur auf diesem schreiben!        ??? Useless ???
     BaseStorage *   m_pOwnStg;   // Zielstorage
     SvStream *      m_pStorStm;  // nur fuer SDSTORAGES
     sal_uLong       m_nError;
