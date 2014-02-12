@@ -60,9 +60,9 @@ class ScXMLImportWrapper
         com::sun::star::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName, const OUString& sOldDocName,
         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
-        sal_Bool bMustBeSuccessfull);
+        bool bMustBeSuccessfull);
 
-    sal_Bool ExportToComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
+    bool ExportToComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
@@ -72,8 +72,8 @@ class ScXMLImportWrapper
 
 public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
-    sal_Bool Import(sal_Bool bStylesOnly, ErrCode& );
-    sal_Bool Export(sal_Bool bStylesOnly);
+    bool Import(bool bStylesOnly, ErrCode& );
+    bool Export(bool bStylesOnly);
 
     const sc::ImportPostProcessData& GetImportPostProcessData() const;
 };

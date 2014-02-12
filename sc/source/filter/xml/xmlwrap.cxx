@@ -105,7 +105,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
     const OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
-    sal_Bool bMustBeSuccessfull)
+    bool bMustBeSuccessfull)
 {
     uno::Reference < io::XStream > xDocStream;
     if ( !xStorage.is() && pMedium )
@@ -308,7 +308,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     return nReturn;
 }
 
-sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
+bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
 {
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -515,7 +515,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                        : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
                 OUString("styles.xml"),
-                sEmpty, aStylesArgs, sal_True);
+                sEmpty, aStylesArgs, true);
 
             SAL_INFO( "sc.filter", "styles import end" );
         }
@@ -537,7 +537,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                        : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
                 OUString("content.xml"),
                 OUString("Content.xml"), aDocArgs,
-                sal_True);
+                true);
 
             SAL_INFO( "sc.filter", "content import end" );
         }
@@ -550,13 +550,13 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         if (xStatusIndicator.is())
             xStatusIndicator->end();
 
-        sal_Bool bRet(false);
+        bool bRet(false);
         if (bStylesOnly)
         {
             if (nStylesRetval)
                 nError = nStylesRetval;
             else
-                bRet = sal_True;
+                bRet = true;
         }
         else
         {
@@ -567,7 +567,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
                     nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
                     nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
-                    bRet = sal_True;
+                    bRet = true;
             }
             else if (nStylesRetval)
                 nError = nStylesRetval;
@@ -576,7 +576,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             else if (nSettingsRetval)
                 nError = nSettingsRetval;
             else
-                bRet = sal_True;
+                bRet = true;
         }
 
         // set BuildId on XModel for later OLE object loading
@@ -643,13 +643,13 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
     return false;
 }
 
-sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
+bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XWriter>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
     uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
-    sal_Bool bRet(false);
+    bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
     uno::Reference<io::XStream> xStream;
 
@@ -757,7 +757,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XCompon
     return bRet;
 }
 
-sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
+bool ScXMLImportWrapper::Export(bool bStylesOnly)
 {
     rDoc.CreateAllNoteCaptions();
 
@@ -838,10 +838,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             }
         }
 
-        sal_Bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
-        sal_Bool bStylesRet (false);
-        sal_Bool bDocRet(false);
-        sal_Bool bSettingsRet(false);
+        bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
+        bool bStylesRet (false);
+        bool bDocRet(false);
+        bool bSettingsRet(false);
         ScMySharedData* pSharedData = NULL;
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );

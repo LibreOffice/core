@@ -457,7 +457,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Import(false, nError);
     else
-        bRet = aImport.Import(sal_True, nError);
+        bRet = aImport.Import(true, nError);
 
     if ( nError )
         pLoadMedium->SetError( nError, OUString( OSL_LOG_PREFIX ) );
@@ -529,7 +529,7 @@ sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::un
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(false);
     else
-        bRet = aImport.Export(sal_True);
+        bRet = aImport.Export(true);
 
     aDocument.EnableIdle(true);
 
