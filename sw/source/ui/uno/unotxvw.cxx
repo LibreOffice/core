@@ -767,7 +767,10 @@ void SAL_CALL SwXTextView::setPropertyValue(
 
 uno::Any SAL_CALL SwXTextView::getPropertyValue(
         const OUString& rPropertyName )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 
