@@ -27,21 +27,21 @@
 class SC_DLLPUBLIC ScPrintOptions
 {
 private:
-    sal_Bool    bSkipEmpty;
-    sal_Bool    bAllSheets;
-    sal_Bool    bForceBreaks;
+    bool    bSkipEmpty;
+    bool    bAllSheets;
+    bool    bForceBreaks;
 
 public:
                 ScPrintOptions();
                 ScPrintOptions( const ScPrintOptions& rCpy );
                 ~ScPrintOptions();
 
-    sal_Bool    GetSkipEmpty() const            { return bSkipEmpty; }
-    void    SetSkipEmpty( sal_Bool bVal )       { bSkipEmpty = bVal; }
-    sal_Bool    GetAllSheets() const            { return bAllSheets; }
-    void    SetAllSheets( sal_Bool bVal )       { bAllSheets = bVal; }
+    bool    GetSkipEmpty() const            { return bSkipEmpty; }
+    void    SetSkipEmpty( bool bVal )       { bSkipEmpty = bVal; }
+    bool    GetAllSheets() const            { return bAllSheets; }
+    void    SetAllSheets( bool bVal )       { bAllSheets = bVal; }
     bool    GetForceBreaks() const              { return bForceBreaks; }
-    void    SetForceBreaks( sal_Bool bVal )     { bForceBreaks = bVal; }
+    void    SetForceBreaks( bool bVal )     { bForceBreaks = bVal; }
 
     void    SetDefaults();
 

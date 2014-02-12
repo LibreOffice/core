@@ -46,7 +46,7 @@ ScPrintOptions::~ScPrintOptions()
 
 void ScPrintOptions::SetDefaults()
 {
-    bSkipEmpty = sal_True;
+    bSkipEmpty = true;
     bAllSheets = false;
     bForceBreaks = false;
 }
