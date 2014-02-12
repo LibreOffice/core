@@ -84,10 +84,10 @@ static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rStri
         rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
 
-static inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
+static inline void lcl_GenerateGUID( sal_uInt8* pGUID, bool& rValidGUID )
 {
     rtl_createUuid( pGUID, rValidGUID ? pGUID : NULL, false );
-    rValidGUID = sal_True;
+    rValidGUID = true;
 }
 
 static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
@@ -138,7 +138,7 @@ sal_Size XclExpUserBView::GetLen() const
 XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
 {
     sal_uInt8 aGUID[ 16 ];
-    sal_Bool bValidGUID = false;
+    bool bValidGUID = false;
     const std::set<OUString>& rStrColl = rChangeTrack.GetUserCollection();
     aViews.reserve(rStrColl.size());
     std::set<OUString>::const_iterator it = rStrColl.begin(), itEnd = rStrColl.end();
@@ -1153,7 +1153,7 @@ XclExpChTrInsertTab::XclExpChTrInsertTab(
     nTab( (SCTAB) rAction.GetBigRange().aStart.Tab() )
 {
     nLength = 0x0000021C;
-    bForceInfo = sal_True;
+    bForceInfo = true;
 }
 
 XclExpChTrInsertTab::~XclExpChTrInsertTab()
@@ -1584,9 +1584,9 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         aActionStack.push( pXclAction );
 }
 
-sal_Bool XclExpChangeTrack::WriteUserNamesStream()
+bool XclExpChangeTrack::WriteUserNamesStream()
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     SotStorageStreamRef xSvStrm = OpenStream( EXC_STREAM_USERNAMES );
     OSL_ENSURE( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.Is() )
@@ -1597,7 +1597,7 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
         XclExpChTr0x0192().Save( aXclStrm );
         XclExpChTr0x0197().Save( aXclStrm );
         xSvStrm->Commit();
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }

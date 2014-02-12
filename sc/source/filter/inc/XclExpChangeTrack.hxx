@@ -339,14 +339,14 @@ private:
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
     XclExpChTrAction*           pAddAction;     // additional record for this action
-    sal_Bool                    bAccepted;
+    bool                        bAccepted;
 
 protected:
     const XclExpTabInfo&        rTabInfo;       // for table num export (sc num -> xcl num)
     const XclExpChTrTabIdBuffer& rIdBuffer;     // for table num export (xcl num -> tab id)
     sal_uInt32                  nLength;        // this is not the record size
     sal_uInt16                  nOpCode;        // EXC_CHTR_OP_***
-    sal_Bool                    bForceInfo;
+    bool                        bForceInfo;
 
                                 XclExpChTrAction( const XclExpChTrAction& rCopy );
 
@@ -376,7 +376,7 @@ protected:
     virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
     inline sal_uInt32           GetActionNumber() const { return nIndex; }
-    inline sal_Bool             GetAccepted() const { return bAccepted; }
+    inline bool                 GetAccepted() const { return bAccepted; }
 
 public:
                                 XclExpChTrAction(
@@ -389,7 +389,7 @@ public:
     inline const OUString&      GetUsername() const             { return sUsername; }
     inline const DateTime&      GetDateTime() const             { return aDateTime; }
     inline const XclExpChTrTabIdBuffer& GetTabIdBuffer() const  { return rIdBuffer; }
-    inline sal_Bool             ForceInfoRecord() const         { return bForceInfo; }
+    inline bool                 ForceInfoRecord() const         { return bForceInfo; }
 
                                 // set own index & return new index
                                 // could be overloaded to use more indexes per action
@@ -599,12 +599,12 @@ private:
 
     XclExpChTrHeader*           pHeader;            // header record for last GUID
     sal_uInt8                   aGUID[ 16 ];        // GUID for action info records
-    sal_Bool                    bValidGUID;
+    bool                        bValidGUID;
 
     ScChangeTrack*              CreateTempChangeTrack();
     void                        PushActionRecord( const ScChangeAction& rAction );
 
-    sal_Bool                    WriteUserNamesStream();
+    bool                        WriteUserNamesStream();
 
 public:
                                 XclExpChangeTrack( const XclExpRoot& rRoot );
