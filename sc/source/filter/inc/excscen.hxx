@@ -51,7 +51,7 @@ public:
 
     ~ExcScenario();
 
-    void Apply( const XclImpRoot& rRoot, const sal_Bool bLast = false );
+    void Apply( const XclImpRoot& rRoot, const bool bLast = false );
 
 protected:
 

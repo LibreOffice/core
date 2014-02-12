@@ -229,7 +229,7 @@ ExcScenario::~ExcScenario()
         delete pUserName;
 }
 
-void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
+void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
     OUString            aSzenName( *pName );
