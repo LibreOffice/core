@@ -42,7 +42,7 @@ using namespace ::com::sun::star::beans;
 //==========================================================================
 //--------------------------------------------------------------------------
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
-    :OPropertyContainer_Base(_rBHelper)
+    :OPropertySetHelper(_rBHelper)
 {
 }
 
@@ -66,7 +66,7 @@ Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException
 //--------------------------------------------------------------------------
 void SAL_CALL OPropertyContainer::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue ) throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OPropertyContainer_Base::setFastPropertyValue( nHandle, rValue );
+    OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 }
 
 //--------------------------------------------------------------------------

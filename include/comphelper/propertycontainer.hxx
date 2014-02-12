@@ -30,10 +30,6 @@ namespace comphelper
 {
 //.........................................................................
 
-//==========================================================================
-//= OPropertyContainer
-//==========================================================================
-typedef ::cppu::OPropertySetHelper OPropertyContainer_Base;
 /** a OPropertySetHelper implementation which is just a simple container for properties represented
     by class members, usually in a derived class.
     <BR>
@@ -42,7 +38,7 @@ typedef ::cppu::OPropertySetHelper OPropertyContainer_Base;
     values which already have the correct type, it's unable to convert, for instance, a long to a short.
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainer
-            :public OPropertyContainer_Base
+            :public cppu::OPropertySetHelper
             ,public OPropertyContainerHelper
 {
 public:
@@ -70,7 +66,7 @@ protected:
                             throw (::com::sun::star::uno::Exception,
                                    std::exception);
 
-    using OPropertyContainer_Base::getFastPropertyValue;
+    using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle
