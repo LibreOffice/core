@@ -44,8 +44,10 @@ private:
 
 public:
 
-    TabWin_Impl( Window* pParent, WinBits nBits) :
-        Window( pParent, nBits )
+    TabWin_Impl(Window* pParent, WinBits nBits)
+        : Window(pParent, nBits)
+        , mpPage(0)
+        , nTabStyle(0)
     {
     }
 
