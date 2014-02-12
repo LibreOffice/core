@@ -2343,7 +2343,7 @@ endef
 endif # SYSTEM_FIREBIRD
 
 else # !ENABLE_FIREBIRD_SDBC
-n
+
 gb_LinkTarget__use_firebird :=
 # gb_LinkTarget__use_atomic_ops :=
 # gb_LinkTarget__use_tommath :=
