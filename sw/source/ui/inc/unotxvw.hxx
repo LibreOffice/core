@@ -190,7 +190,9 @@ public:
 
     //XPageCursor
     virtual sal_Bool SAL_CALL jumpToFirstPage(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL jumpToLastPage(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL jumpToLastPage()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL jumpToPage(sal_Int16 nPage) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL jumpToNextPage(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL jumpToPreviousPage(void) throw( ::com::sun::star::uno::RuntimeException );
