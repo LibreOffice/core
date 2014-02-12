@@ -47,7 +47,7 @@ import com.sun.star.util.XURLTransformer;
  *  <li> <code>'FrameLoader.Frame'</code> <b>(optional)</b>
  *  (of type <code>com.sun.star.frame.XFrame</code>):
  *   a target frame where component to be loaded. If this
- *   relation is ommited then a text document created and its
+ *   relation is omitted then a text document created and its
  *   frame is used. </li>
  * <ul> <p>
  *

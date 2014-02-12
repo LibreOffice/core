@@ -48,11 +48,11 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'FrameLoader.Frame'</code> <b>(optional)</b>
 *  (of type <code>com.sun.star.frame.XFrame</code>):
 *   a target frame where component to be loaded. If this
-*   relation is ommited then a text document created and its
+*   relation is omitted then a text document created and its
 *   frame is used. </li>
 *  <li> <code>'FrameLoader.args'</code> <b>(optional)</b>
 *   (of type <code>Object[]</code>):
-*   necessary arguuments for loading  a component. If ommited
+*   necessary arguuments for loading  a component. If omitted
 *   then zero length array is passed as parameter</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compilant. <p>

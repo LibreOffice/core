@@ -73,6 +73,6 @@ def capitalisePython( ):
             i+= 1
 
 
-# lists the scripts, that shall be visible inside OOo. Can be omited, if
+# lists the scripts, that shall be visible inside OOo. Can be omitted, if
 # all functions shall be visible, however here getNewString shall be surpressed
 g_exportedScripts = capitalisePython,
