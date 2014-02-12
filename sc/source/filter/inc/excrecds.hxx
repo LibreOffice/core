@@ -88,7 +88,7 @@ public:
 
 
 //------------------------------------------------------- class ExcBoolRecord -
-// stores sal_Bool as 16bit val ( 0x0000 | 0x0001 )
+// stores bool as 16bit val ( 0x0000 | 0x0001 )
 
 class ExcBoolRecord : public ExcRecord
 {
@@ -96,12 +96,12 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
-    sal_Bool                    bVal;
+    bool                    bVal;
 
     inline                  ExcBoolRecord() : bVal( false ) {}
 
 public:
-    inline                  ExcBoolRecord( const sal_Bool bDefault ) : bVal( bDefault ) {}
+    inline                  ExcBoolRecord( const bool bDefault ) : bVal( bDefault ) {}
 
     virtual sal_Size        GetLen( void ) const;
 };
@@ -250,7 +250,7 @@ public:
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 private:
-    sal_Bool                    bDateCompatibility;
+    bool                    bDateCompatibility;
 };
 
 
