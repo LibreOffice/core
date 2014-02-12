@@ -186,7 +186,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
 
 inline void Wallpaper::ImplMakeUnique( sal_Bool bReleaseCache )
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy them if other references exist
     if ( mpImplWallpaper->mnRefCount != 1 )
     {
         if ( mpImplWallpaper->mnRefCount )
@@ -215,9 +215,9 @@ Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
-    // Instance Daten uebernehmen und Referenzcounter erhoehen
+    // use Instance data and increment reference counter
     mpImplWallpaper = rWallpaper.mpImplWallpaper;
-    // RefCount == 0 fuer statische Objekte
+    // RefCount == 0 for static objekts
     if ( mpImplWallpaper->mnRefCount )
         mpImplWallpaper->mnRefCount++;
 }
@@ -256,9 +256,8 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
 
 Wallpaper::~Wallpaper()
 {
-
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // if ImpData are not static then delete them if it is the last reference,
+    // otherwise decrement reference counter
     if ( mpImplWallpaper->mnRefCount )
     {
         if ( mpImplWallpaper->mnRefCount == 1 )
@@ -495,12 +494,12 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // first increment reference counter, in order to self assign
     if ( rWallpaper.mpImplWallpaper->mnRefCount )
         rWallpaper.mpImplWallpaper->mnRefCount++;
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // if ImpData are not static then delete them if it is the last reference,
+    // otherwise decrement reference counter
     if ( mpImplWallpaper->mnRefCount )
     {
         if ( mpImplWallpaper->mnRefCount == 1 )

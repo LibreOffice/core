@@ -802,7 +802,7 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
                                            long nWidth, long nHeight,
                                            const Wallpaper& rWallpaper )
 {
-    // Wallpaper ohne Umrandung zeichnen
+    // draw wallpaper without border
     Color aOldLineColor = GetLineColor();
     Color aOldFillColor = GetFillColor();
     SetLineColor();

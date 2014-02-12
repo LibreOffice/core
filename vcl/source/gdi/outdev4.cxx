@@ -164,7 +164,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         aRect.Bottom() = aMirrorRect.Top();
     }
 
-    // Intensitaeten von Start- und Endfarbe ggf. aendern
+    // colour-intensities of start- and finish; change if needed
     long    nFactor;
     Color   aStartCol   = rGradient.GetStartColor();
     Color   aEndCol     = rGradient.GetEndColor();
@@ -355,14 +355,13 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
                                             sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
-    // Feststellen ob Ausgabe ueber Polygon oder PolyPolygon
-    // Bei Rasteroperationen ungleich Overpaint immer PolyPolygone,
-    // da es zu falschen Ergebnissen kommt, wenn man mehrfach uebereinander
-    // ausgibt
-    // Bei Druckern auch immer PolyPolygone, da nicht alle Drucker
-    // das Uebereinanderdrucken von Polygonen koennen
-    // Virtuelle Device werden auch ausgeklammert, da einige Treiber
-    // ansonsten zu langsam sind
+    // Determine if we output via Polygon or PolyPolygon
+    // For all rasteroperations other then Overpaint always use PolyPolygon,
+    // as we will get wrong results if we output multiple times on top of each other.
+    // Also for printers always use PolyPolygon, as not all printers
+    // can print polygons on top of each other.
+    // Also virtual devices are excluded, as some drivers are too slow.
+    //
     PolyPolygon*    pPolyPoly;
     Rectangle       aRect;
     Point           aCenter;
@@ -389,7 +388,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
 
-    // Anzahl der Schritte berechnen, falls nichts uebergeben wurde
+    // calculate number of steps, if this was not passed
     if( !nStepCount )
     {
         long nInc;
@@ -407,7 +406,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         nStepCount = nMinRect / nInc;
     }
 
-    // minimal drei Schritte und maximal die Anzahl der Farbunterschiede
+    // at least three steps and maximum number if colour differences
     long nSteps = std::max( nStepCount, 2L );
     long nCalcSteps  = std::abs( nRedSteps );
     long nTempSteps = std::abs( nGreenSteps );
@@ -421,7 +420,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     if ( !nSteps )
         nSteps = 1;
 
-    // Ausgabebegrenzungen und Schrittweite fuer jede Richtung festlegen
+    // determine output limits and stepsizes for all directions
     Polygon aPoly;
     double  fScanLeft = aRect.Left();
     double  fScanTop = aRect.Top();
@@ -464,10 +463,10 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         ImplDrawPolygon( aPoly = aExtRect, pClipPolyPoly );
     }
 
-    // Schleife, um nacheinander die Polygone/PolyPolygone auszugeben
+    // loop to output Polygone/PolyPolygone sequentially
     for( long i = 1; i < nSteps; i++ )
     {
-        // neues Polygon berechnen
+        // calculate new Polygon
         aRect.Left() = (long)( fScanLeft += fScanIncX );
         aRect.Top() = (long)( fScanTop += fScanIncY );
         aRect.Right() = (long)( fScanRight -= fScanIncX );
@@ -483,13 +482,13 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
         aPoly.Rotate( aCenter, nAngle );
 
-        // Farbe entsprechend anpassen
+        // adapt colour accordingly
         const long nStepIndex = ( ( pPolyPoly != NULL ) ? i : ( i + 1 ) );
         nRed = ImplGetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = ImplGetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = ImplGetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
-        // entweder langsame PolyPolygon-Ausgaben oder schnelles Polygon-Painting
+        // either slow PolyPolygon output or fast Polygon-Paiting
         if( pPolyPoly )
         {
             bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
@@ -526,7 +525,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         }
     }
 
-    // Falls PolyPolygon-Ausgabe, muessen wir noch ein letztes inneres Polygon zeichnen
+    // we should draw last inner Polygon if we output PolyPolygon
     if( pPolyPoly )
     {
         const Polygon& rPoly = pPolyPoly->GetObject( 1 );
@@ -626,11 +625,11 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    // Rechteck in Pixel umrechnen
+    // convert rectangle to pixels
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
     aRect.Justify();
 
-    // Wenn Rechteck leer ist, brauchen wir nichts machen
+    // do nothing if the rectangle is empty
     if ( !aRect.IsEmpty() )
     {
         // Clip Region sichern
@@ -656,7 +655,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
         if ( !mbOutputClipped )
         {
-            // Gradienten werden ohne Umrandung gezeichnet
+            // gradients are drawn without border
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
@@ -799,11 +798,11 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
             {
-                // Rechteck in Pixel umrechnen
+                // convert rectangle to pixels
                 Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
                 aRect.Justify();
 
-                // Wenn Rechteck leer ist, brauchen wir nichts machen
+                // do nothing if the rectangle is empty
                 if ( !aRect.IsEmpty() )
                 {
                     if( !mpGraphics && !ImplGetGraphics() )
@@ -816,7 +815,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                     {
                         PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
 
-                        // Gradienten werden ohne Umrandung gezeichnet
+                        // draw gradients without border
                         if( mbLineColor || mbInitLineColor )
                         {
                             mpGraphics->SetLineColor();
@@ -912,7 +911,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
 
     aRect.Justify();
 
-    // Wenn Rechteck leer ist, brauchen wir nichts machen
+    // do nothing if the rectangle is empty
     if ( !aRect.IsEmpty() )
     {
         Gradient        aGradient( rGradient );
