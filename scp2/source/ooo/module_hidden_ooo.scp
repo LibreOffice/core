@@ -142,7 +142,6 @@ Module gid_Module_Root_Files_4
 	auto_ooobinarytable_ALL,
 	gid_File_Lib_Bib,
 	gid_File_Lib_J,
-	gid_File_Lib_Sysdtrans,
 	gid_File_Lib_BaseBmp,
 	gid_File_Lib_Zip);
 End
@@ -157,9 +156,6 @@ Module gid_Module_Root_Files_5
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Lib_Crypto,
-#if ! defined SYSTEM_CLUCENE
-        gid_File_Lib_CLucene,
-#endif
 	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Icudata,
 	gid_File_Lib_Icui18n,
@@ -187,7 +183,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sqlite3,
 	gid_File_Lib_Ssl3,
 	gid_File_Lib_Sndfile,
-	gid_File_Lib_Ucpdav1,
 	gid_File_Lib_Neon,
 	gid_Unixlink_File_Lib_Xslt,
 	gid_Unixlink_File_Lib_eXslt,
