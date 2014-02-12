@@ -120,7 +120,7 @@ protected:
 
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
 
-    sal_Bool                    bTabTruncated;      // wenn Bereichsueberschreitung zum
+    bool                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
 
     bool mbBiff2HasXfs:1;      /// Select XF formatting or direct formatting in BIFF2.
