@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_7014b0f5",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2461,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-12T10:07:00Z",
+      "side": 1,
+      "message": "Same here, please use the \"r\" prefix for C++ references.",
+      "revId": "e39737a9c499ddc807c57cba31e4b5911dd1cfea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
