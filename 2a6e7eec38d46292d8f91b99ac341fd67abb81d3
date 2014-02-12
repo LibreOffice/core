@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_f05180d9",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-12T09:38:45Z",
+      "side": 1,
+      "message": "Once again I\u0027m a bit worried about seeing a new method in SwDoc, but I agree that is at least consistent with other redline types so far.",
+      "revId": "2a6e7eec38d46292d8f91b99ac341fd67abb81d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_d0547ccc",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4125,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-12T09:38:45Z",
+      "side": 1,
+      "message": "Nitpick: newline after VIM modeline is not needed.",
+      "revId": "2a6e7eec38d46292d8f91b99ac341fd67abb81d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
