@@ -26,17 +26,17 @@
 class ScInputOptions
 {
 private:
-    sal_uInt16      nMoveDir;           // enum ScDirection
-    sal_Bool        bMoveSelection;
-    sal_Bool        bEnterEdit;
-    sal_Bool        bExtendFormat;
-    sal_Bool        bRangeFinder;
-    sal_Bool        bExpandRefs;
-    sal_Bool        bMarkHeader;
-    sal_Bool        bUseTabCol;
-    sal_Bool        bTextWysiwyg;
-    sal_Bool        bReplCellsWarn;
-    sal_Bool        bLegacyCellSelection;
+    sal_uInt16  nMoveDir;           // enum ScDirection
+    bool        bMoveSelection;
+    bool        bEnterEdit;
+    bool        bExtendFormat;
+    bool        bRangeFinder;
+    bool        bExpandRefs;
+    bool        bMarkHeader;
+    bool        bUseTabCol;
+    bool        bTextWysiwyg;
+    bool        bReplCellsWarn;
+    bool        bLegacyCellSelection;
 
 public:
                 ScInputOptions();
@@ -47,26 +47,26 @@ public:
 
     void        SetMoveDir(sal_uInt16 nNew)         { nMoveDir = nNew;       }
     sal_uInt16      GetMoveDir() const              { return nMoveDir;       }
-    void        SetMoveSelection(sal_Bool bSet)     { bMoveSelection = bSet; }
-    sal_Bool        GetMoveSelection() const        { return bMoveSelection; }
-    void        SetEnterEdit(sal_Bool bSet)         { bEnterEdit = bSet;     }
-    sal_Bool        GetEnterEdit() const            { return bEnterEdit;     }
-    void        SetExtendFormat(sal_Bool bSet)      { bExtendFormat = bSet;  }
-    sal_Bool        GetExtendFormat() const         { return bExtendFormat;  }
-    void        SetRangeFinder(sal_Bool bSet)       { bRangeFinder = bSet;   }
-    sal_Bool        GetRangeFinder() const          { return bRangeFinder;   }
-    void        SetExpandRefs(sal_Bool bSet)        { bExpandRefs = bSet;    }
-    sal_Bool        GetExpandRefs() const           { return bExpandRefs;    }
-    void        SetMarkHeader(sal_Bool bSet)        { bMarkHeader = bSet;    }
-    sal_Bool        GetMarkHeader() const           { return bMarkHeader;    }
-    void        SetUseTabCol(sal_Bool bSet)         { bUseTabCol = bSet;     }
-    sal_Bool        GetUseTabCol() const            { return bUseTabCol;     }
-    void        SetTextWysiwyg(sal_Bool bSet)       { bTextWysiwyg = bSet;   }
-    sal_Bool        GetTextWysiwyg() const          { return bTextWysiwyg;   }
-    void        SetReplaceCellsWarn(sal_Bool bSet)  { bReplCellsWarn = bSet; }
-    sal_Bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
-    void        SetLegacyCellSelection(sal_Bool bSet)   { bLegacyCellSelection = bSet; }
-    sal_Bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
+    void        SetMoveSelection(bool bSet)     { bMoveSelection = bSet; }
+    bool        GetMoveSelection() const        { return bMoveSelection; }
+    void        SetEnterEdit(bool bSet)         { bEnterEdit = bSet;     }
+    bool        GetEnterEdit() const            { return bEnterEdit;     }
+    void        SetExtendFormat(bool bSet)      { bExtendFormat = bSet;  }
+    bool        GetExtendFormat() const         { return bExtendFormat;  }
+    void        SetRangeFinder(bool bSet)       { bRangeFinder = bSet;   }
+    bool        GetRangeFinder() const          { return bRangeFinder;   }
+    void        SetExpandRefs(bool bSet)        { bExpandRefs = bSet;    }
+    bool        GetExpandRefs() const           { return bExpandRefs;    }
+    void        SetMarkHeader(bool bSet)        { bMarkHeader = bSet;    }
+    bool        GetMarkHeader() const           { return bMarkHeader;    }
+    void        SetUseTabCol(bool bSet)         { bUseTabCol = bSet;     }
+    bool        GetUseTabCol() const            { return bUseTabCol;     }
+    void        SetTextWysiwyg(bool bSet)       { bTextWysiwyg = bSet;   }
+    bool        GetTextWysiwyg() const          { return bTextWysiwyg;   }
+    void        SetReplaceCellsWarn(bool bSet)  { bReplCellsWarn = bSet; }
+    bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
+    void        SetLegacyCellSelection(bool bSet)   { bLegacyCellSelection = bSet; }
+    bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };

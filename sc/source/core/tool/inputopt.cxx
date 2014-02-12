@@ -50,15 +50,15 @@ ScInputOptions::~ScInputOptions()
 void ScInputOptions::SetDefaults()
 {
     nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = sal_True;
+    bMoveSelection  = true;
     bEnterEdit      = false;
     bExtendFormat   = false;
-    bRangeFinder    = sal_True;
+    bRangeFinder    = true;
     bExpandRefs     = false;
-    bMarkHeader     = sal_True;
+    bMarkHeader     = true;
     bUseTabCol      = false;
     bTextWysiwyg    = false;
-    bReplCellsWarn  = sal_True;
+    bReplCellsWarn  = true;
     bLegacyCellSelection = false;
 }
 

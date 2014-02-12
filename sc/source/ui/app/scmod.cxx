@@ -1288,7 +1288,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
         sal_Bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
-        if ( bNew != pInputCfg->GetTextWysiwyg() )
+        if ( bNew != ( pInputCfg->GetTextWysiwyg() ? 1 : 0 ) )
         {
             pInputCfg->SetTextWysiwyg( bNew );
             bSaveInputOptions = true;
