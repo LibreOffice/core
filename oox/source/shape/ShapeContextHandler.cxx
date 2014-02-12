@@ -452,13 +452,16 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         }
         else if (mxChartShapeContext.is())
         {
-            basegfx::B2DHomMatrix aMatrix;
             ChartGraphicDataContext* pChartGraphicDataContext = dynamic_cast<ChartGraphicDataContext*>(mxChartShapeContext.get());
-            oox::drawingml::ShapePtr pShapePtr( pChartGraphicDataContext->getShape());
-            // See SwXTextDocument::createInstance(), ODF import uses the same hack.
-            pShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
-            pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
-            xResult = pShapePtr->getXShape();
+            if (pChartGraphicDataContext)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                oox::drawingml::ShapePtr xShapePtr( pChartGraphicDataContext->getShape());
+                // See SwXTextDocument::createInstance(), ODF import uses the same hack.
+                xShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
+                xShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, xShapePtr->getFillProperties() );
+                xResult = xShapePtr->getXShape();
+            }
             mxChartShapeContext.clear();
         }
         else if (mxWpsContext.is())
