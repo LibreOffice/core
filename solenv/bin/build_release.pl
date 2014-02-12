@@ -21,6 +21,7 @@
 #**************************************************************
 
 use strict;
+use warnings;
 use XML::LibXML;
 use open OUT => ":utf8";
 use LWP::Simple;
@@ -219,7 +220,39 @@ my %EnUSBasedLanguages = (
     );
 
 
-sub GetInstallationPackageName ($$$$$);
+sub ProcessCommandline (@);
+sub PrintUsageAndExit ();
+sub Trim ($);
+sub ReadReleaseDescription ($$);
+sub ProcessBuildDescription ($$$);
+sub ProcessPlatformDescription ($$);
+sub ProcessDownloadDescription ($$);
+sub ProcessPackageDescription ($$);
+sub ProcessWikiPackageDescription ($$$);
+sub ProcessLanguageDescription ($$);
+sub PostprocessLanguageList ($$);
+sub PostprocessPlatformList ($$);
+sub CheckLanguageSet ($@);
+sub WriteMakefile ($$);
+sub Upload ($$);
+sub PrepareUploadArea ($@);
+sub UploadFilesViaRsync ($$@);
+sub CollectDownloadSets ($);
+sub ProvideChecksums ($@);
+sub IsOlderThan ($$);
+sub GetInstallationPackageName ($$$$);
+sub ResolveTemplate ($$$$$);
+sub GetCurrentPlatformDescriptor ($);
+sub Wiki ($$);
+sub GetTableList ($);
+sub GetPackagesForTable ($$);
+sub GetLanguagesForTable ($@);
+sub GetPlatformsForTable ($@);
+sub WriteDownloadLinks ($$$$$$$);
+sub FindDownload ($$$$$);
+sub CreateLink ($$$);
+sub CheckLink ($);
+sub SignFile ($$);
 
 sub ProcessCommandline (@)
 {
@@ -286,11 +319,11 @@ sub ProcessCommandline (@)
         elsif ( ! defined $command)
         {
             $command = $argument;
-        if ($command eq "build-missing")
-        {
-            $command = "build";
-            $build_only_missing = 1;
-        }
+            if ($command eq "build-missing")
+            {
+                $command = "build";
+                $build_only_missing = 1;
+            }
             elsif ($command !~ /^(build|build-missing|upload|wiki)$/)
             {
                 printf STDERR "unknown command '%s'\n", $command;
@@ -312,7 +345,12 @@ sub ProcessCommandline (@)
     {
         $error = 1;
     }
-    if ($command =~ /^(wiki)$/)
+    if (! defined $command)
+    {
+        printf STDERR "ERROR: no command\n";
+        $error = 1;
+    }
+    elsif ($command =~ /^(wiki)$/)
     {
         if ( ! defined $output_filename)
         {
@@ -398,6 +436,7 @@ sub ReadReleaseDescription ($$)
     my $release = {
         'name' => $root->getAttribute("name"),
         'version' => $root->getAttribute("version"),
+        'previous-version' => $root->getAttribute("previous-version"),
         'builds' => [],
         'languages' => {},
         'language-ids' => [],
@@ -433,6 +472,15 @@ sub ReadReleaseDescription ($$)
         $release->{'packages'}->{$package_descriptor->{'id'}} = $package_descriptor;
     }
     printf "%d packages\n", scalar keys %{$release->{'packages'}};
+
+    # Platform specific the package descriptions.
+    for my $package_element ($root->getChildrenByTagName("platform-package"))
+    {
+        my $package_descriptor = ProcessPlatformPackageDescription($package_element, $context);
+        my $key = $package_descriptor->{'platform-id'} . "/" . $package_descriptor->{'package-id'};
+        $release->{'platform-packages'}->{$key} = $package_descriptor;
+    }
+    printf "%d platform packages\n", scalar keys %{$release->{'platform-packages'}};
 
     # Process the download descriptions.
     for my $download_element ($root->getChildrenByTagName("download"))
@@ -547,9 +595,12 @@ sub ProcessPlatformDescription ($$)
     # Optional tags.
     foreach my $id ("extension", "add-package-type-to-archive-name")
     {
-        $descriptor->{$id} = $element->getAttribute($id);
+        my $value = $element->getAttribute($id);
+        $descriptor->{$id} = $value if defined $value;
     }
 
+    $descriptor->{'add-package-type-to-archive-name'} = 0
+        unless defined $descriptor->{'add-package-type-to-archive-name'};
     $descriptor->{'package-types'} = [split(/;/, $descriptor->{'package-types'})];
 
     return $descriptor;
@@ -591,14 +642,14 @@ sub ProcessDownloadDescription ($$)
     The corresponding package descriptor is returned as a hash.
 
 =cut
-sub ProcessPackageDescription ($$$)
+sub ProcessPackageDescription ($$)
 {
-    my ($element, $context, $release_descriptor) = @_;
+    my ($element, $context) = @_;
 
     my $descriptor = {};
 
     # Mandatory tags.
-    foreach my $id ("id", "target", "archive-name", "display-name")
+    foreach my $id ("id", "target", "archive-path", "archive-name", "display-name")
     {
         $descriptor->{$id} = $element->getAttribute($id);
         die "release/package has no attribute $id" unless defined $descriptor->{$id};
@@ -607,7 +658,45 @@ sub ProcessPackageDescription ($$$)
     # Optional tags.
     foreach my $id ("link-tooltip", "link-URL", "download-extension")
     {
+        my $value = $element->getAttribute($id);
+        $descriptor->{$id} = $value if defined $value;
+    }
+
+    return $descriptor;
+}
+
+
+
+
+=head2 ProcessPlatformPackageDescription ($element, $context)
+
+    Process one <platform-package> element.
+
+    The corresponding package descriptor is returned as a hash.
+
+=cut
+sub ProcessPlatformPackageDescription ($$)
+{
+    my ($element, $context) = @_;
+
+    my $descriptor = {};
+
+    # Mandatory tags.
+    foreach my $id ("platform-id", "package-id")
+    {
         $descriptor->{$id} = $element->getAttribute($id);
+        die "release/package has no attribute $id" unless defined $descriptor->{$id};
+        die "release/package attribute $id is empty" unless $descriptor->{$id} !~ /^\s*$/;
+    }
+    # Optional tags.
+    foreach my $id ("extension", "package-types")
+    {
+        my $value = $element->getAttribute($id);
+        $descriptor->{$id} = $value if defined $value;
+    }
+    if (defined $descriptor->{'package-types'})
+    {
+        $descriptor->{'package-types'} = [split(/;/, $descriptor->{'package-types'})];
     }
 
     return $descriptor;
@@ -784,7 +873,7 @@ sub CheckLanguageSet ($@)
 
 
 
-=head2 WriteMakefile ($release_description, $context)
+=head2 WriteMakefile ($release_descriptor, $context)
 
     Write a makefile with all targets that match the <build> elements.
 
@@ -799,7 +888,7 @@ sub CheckLanguageSet ($@)
 =cut
 sub WriteMakefile ($$)
 {
-    my ($release_description, $context) = @_;
+    my ($release_descriptor, $context) = @_;
 
     my $filename = $context->{'output-filename'};
     if ( ! defined $filename)
@@ -809,13 +898,18 @@ sub WriteMakefile ($$)
 
     # Collect the targets to make.
     my @targets = ();
-    foreach my $build (@{$release_description->{'builds'}})
+    foreach my $build (@{$release_descriptor->{'builds'}})
     {
-        my $platform_descriptor = GetCurrentPlatformDescriptor($release_description);
-        my $package_descriptor = $release_description->{'packages'}->{$build->{'package-id'}};
+        my $platform_descriptor = GetCurrentPlatformDescriptor($release_descriptor);
+        my $package_descriptor = $release_descriptor->{'packages'}->{$build->{'package-id'}};
+        my $platform_package_descriptor = GetPlatformPackage(
+            $release_descriptor,
+            $platform_descriptor,
+            $package_descriptor);
+
         foreach my $language_id (@{$build->{'language-list'}})
         {
-            foreach my $package_format (@{$platform_descriptor->{'package-types'}})
+            foreach my $package_format (@{$platform_package_descriptor->{'package-types'}})
             {
                 my $full_target = sprintf("%s_%s.%s",
                     $package_descriptor->{'target'},
@@ -823,21 +917,20 @@ sub WriteMakefile ($$)
                     $package_format);
                 if ($context->{'build-only-missing'})
                 {
-                    my $source_path = GetInstallationPackagePath(
-                        $platform_descriptor,
+                    my ($archive_path, $archive_name) = GetInstallationPackageName(
+                        $release_descriptor,
+                        $platform_package_descriptor,
                         $package_format,
                         $language_id);
-                    my $archive_name = GetInstallationPackageName(
-                        $release_description,
-                        $package_descriptor,
-                        $package_format,
-                        $platform_descriptor,
-                        $language_id);
-                    my $candidate = $source_path . "/" . $archive_name;
+                    my $candidate = $archive_path . "/" . $archive_name;
                     if (-f $candidate)
                     {
                         printf "download set for %s already exists, skipping\n", $full_target;
                         next;
+                    }
+                    else
+                    {
+                        printf "%s  %s\n", $archive_path, $archive_name;
                     }
                 }
                 push @targets, $full_target;
@@ -892,7 +985,7 @@ sub WriteMakefile ($$)
 
 sub Upload ($$)
 {
-    my ($release_description, $context) = @_;
+    my ($release_descriptor, $context) = @_;
 
     if ( ! defined $context->{'upload-destination'})
     {
@@ -900,7 +993,7 @@ sub Upload ($$)
         PrintUsageAndExit();
     }
 
-    my @download_sets = CollectDownloadSets($release_description);
+    my @download_sets = CollectDownloadSets($release_descriptor);
 
     ProvideChecksums($context, @download_sets);
     my $source_path = PrepareUploadArea($context, @download_sets);
@@ -935,12 +1028,15 @@ sub PrepareUploadArea ($@)
         foreach my $extension ("", ".md5", ".sha256", ".asc")
         {
             my $basename = sprintf("%s%s", $download_set->{'archive-name'}, $extension);
-            my $source = sprintf("%s/%s", $download_set->{'source-path'}, $basename);
-            my $target_path = sprintf("%s/%s/%s", $tmpdir, $download_set->{'destination-path'});
+            my $source_path = $download_set->{'source-path'};
+            my $source = sprintf("%s/%s", $source_path, $basename);
+            my $target_path = sprintf("%s/%s", $tmpdir, $download_set->{'destination-path'});
             my $target = sprintf("%s/%s", $target_path, $basename);
             if ($context->{'dry-run'})
             {
                 printf "would create link for %s\n", $basename;
+                printf "    %s\n", $source_path;
+                printf " to %s\n", $target_path;
             }
             else
             {
@@ -1016,11 +1112,11 @@ sub UploadFilesViaRsync ($$@)
 
 sub CollectDownloadSets ($)
 {
-    my ($release_description) = @_;
+    my ($release_descriptor) = @_;
 
     my @download_sets = ();
 
-    foreach my $platform_descriptor (values %{$release_description->{'platforms'}})
+    foreach my $platform_descriptor (values %{$release_descriptor->{'platforms'}})
     {
         my $platform_path = sprintf("%s/instsetoo_native/%s",
             $ENV{'SOLARSRC'},
@@ -1030,39 +1126,39 @@ sub CollectDownloadSets ($)
             printf "ignoring missing %s\n", $platform_path;
             next;
         }
-        for my $package_descriptor (values %{$release_description->{'packages'}})
+        for my $package_descriptor (values %{$release_descriptor->{'packages'}})
         {
-
+            my $platform_package_descriptor = GetPlatformPackage(
+                $release_descriptor,
+                $platform_descriptor,
+                $package_descriptor);
             my @package_formats = @{$platform_descriptor->{'package-types'}};
             for my $package_format (@package_formats)
             {
-                for my $language_id (@{$release_description->{'language-ids'}})
+                for my $language_id (@{$release_descriptor->{'language-ids'}})
                 {
-                    my $source_path = GetInstallationPackagePath(
-                        $platform_descriptor,
+                    my ($archive_path, $archive_name) = GetInstallationPackageName(
+                        $release_descriptor,
+                        $platform_package_descriptor,
                         $package_format,
                         $language_id);
-                    my $archive_name = GetInstallationPackageName(
-                        $release_description,
-                        $package_descriptor,
-                        $package_format,
-                        $platform_descriptor,
-                        $language_id);
-                    my $candidate = $source_path."/".$archive_name;
+                    my $candidate = $archive_path."/".$archive_name;
                     if ( ! -f $candidate)
                     {
 #                        printf STDERR "ERROR: can not find download set '%s'\n", $candidate;
                         next;
                     }
                     printf "adding %s\n", $archive_name;
-                    push @download_sets, {
-                        'source-path' => $source_path,
+                    my $download_set = {
+                        'source-path' => $archive_path,
                         'archive-name' => $archive_name,
-                        'platform' => $platform_descriptor->{'pack-platform'},
+                        'platform' => $platform_descriptor->{'archive-platform'},
                         'destination-path' => sprintf("developer-snapshots/%s/%s",
-                            $release_description->{'name'},
-                            $platform_descriptor->{'pack-platform'})
+                            $release_descriptor->{'name'},
+                            $platform_descriptor->{'archive-platform'})
                     };
+                    printf "    %s\n", $download_set->{'destination-path'};
+                    push @download_sets, $download_set;
                 }
             }
         }
@@ -1101,12 +1197,12 @@ sub ProvideChecksums ($@)
             else
             {
                 my $digest = Digest::MD5->new();
-                open my $in, $full_archive_name;
+                open my ($in), $full_archive_name;
                 $digest->addfile($in);
                 my $checksum = $digest->hexdigest();
                 close $in;
 
-                open my $out, ">", $md5_filename;
+                open my ($out), ">", $md5_filename;
                 printf $out "%s *%s", $checksum, $download_set->{'archive-name'};
                 close $out;
 
@@ -1128,12 +1224,12 @@ sub ProvideChecksums ($@)
             else
             {
                 my $digest = Digest::SHA->new("sha256");
-                open my $in, $full_archive_name;
+                open my ($in), $full_archive_name;
                 $digest->addfile($in);
                 my $checksum = $digest->hexdigest();
                 close $in;
 
-                open my $out, ">", $sha256_filename;
+                open my ($out), ">", $sha256_filename;
                 printf $out "%s *%s", $checksum, $download_set->{'archive-name'};
                 close $out;
 
@@ -1190,45 +1286,80 @@ sub IsOlderThan ($$)
 
 
 
-sub GetInstallationPackageName ($$$$$)
+sub GetInstallationPackageName ($$$$)
 {
-    my ($release_description, $package_descriptor, $package_format, $platform_descriptor, $language) = @_;
+    my ($release_descriptor, $platform_package_descriptor, $package_format, $language) = @_;
 
-    my $name = $package_descriptor->{'archive-name'};
+    my $path = ResolveTemplate(
+        $platform_package_descriptor->{'archive-path'},
+        $release_descriptor,
+        $platform_package_descriptor,
+        $package_format,
+        $language);
+    my $name = ResolveTemplate(
+        $platform_package_descriptor->{'archive-name'},
+        $release_descriptor,
+        $platform_package_descriptor,
+        $package_format,
+        $language);
 
-    my $archive_package_type = "";
-    if ($platform_descriptor->{'add-package-type-to-archive-name'} =~ /^(1|true|yes)$/i)
-    {
-        $archive_package_type = "-".$package_format;
-    }
-
-    $name =~ s/%V/$release_description->{'version'}/g;
-    $name =~ s/%P/$platform_descriptor->{'archive-platform'}/g;
-    $name =~ s/%T/$archive_package_type/g;
-    $name =~ s/%L/$language/g;
-    $name =~ s/%E/$platform_descriptor->{'extension'}/g;
-    return $name;
+    return ($path, $name);
 }
 
 
 
 
-sub GetInstallationPackagePath ($$$)
+sub ResolveTemplate ($$$$$)
 {
-    my ($product_descriptor, $package_format, $language) = @_;
+    my ($template, $release_descriptor, $platform_package_descriptor, $package_format, $language) = @_;
 
+    my $archive_package_type = "";
+    if ($platform_package_descriptor->{'add-package-type-to-archive-name'} =~ /^(1|true|yes)$/i)
+    {
+        $archive_package_type = "-".$package_format;
+    }
     my $full_language = $language;
     if ($EnUSBasedLanguages{$language})
     {
         $full_language = "en-US_".$language;
     }
+    my $extension = $platform_package_descriptor->{'download-extension'};
+    if ( ! defined $extension)
+    {
+        $extension = $platform_package_descriptor->{'extension'};
+    }
 
-    return sprintf("%s/instsetoo_native/%s/Apache_OpenOffice%s/%s/install/%s_download",
-        $ENV{'SOLARSRC'},
-        $ENV{'INPATH'},
-        $product_descriptor->{'product-name-tail'},
-        $package_format,
-        $full_language);
+    my $old_to_new_version_dash = sprintf(
+        "v-%s_v-%s",
+        $release_descriptor->{'previous-version'},
+        $release_descriptor->{'version'});
+    $old_to_new_version_dash =~ s/\./-/g;
+    my $old_to_new_version_dots = sprintf(
+        "%s-%s",
+        $release_descriptor->{'previous-version'},
+        $release_descriptor->{'version'});
+
+
+    my $name = $template;
+
+    # Resolve %? template paramters.
+    $name =~ s/%V/$release_descriptor->{'version'}/g;
+    $name =~ s/%W/$old_to_new_version_dash/g;
+    $name =~ s/%w/$old_to_new_version_dots/g;
+    $name =~ s/%P/$platform_package_descriptor->{'archive-platform'}/g;
+    $name =~ s/%t/$archive_package_type/g;
+    $name =~ s/%T/$package_format/g;
+    $name =~ s/%l/$full_language/g;
+    $name =~ s/%L/$language/g;
+    $name =~ s/%E/$extension/g;
+
+    # Resolve $name environment references.
+    while ($name =~ /^(.*?)\$([a-zA-Z0-9_]+)(.*)$/)
+    {
+        $name = $1 . $ENV{$2} . $3;
+    }
+
+    return $name;
 }
 
 
@@ -1236,14 +1367,37 @@ sub GetInstallationPackagePath ($$$)
 
 sub GetCurrentPlatformDescriptor ($)
 {
-    my ($release_description) = @_;
+    my ($release_descriptor) = @_;
 
-    my $platform_descriptor = $release_description->{'platforms'}->{$ENV{'INPATH'}};
+    my $platform_descriptor = $release_descriptor->{'platforms'}->{$ENV{'INPATH'}};
     if ( ! defined $platform_descriptor)
     {
         printf STDERR "ERROR: platform '%s' is not supported\n", $ENV{'INPATH'};
     }
     return $platform_descriptor;
+}
+
+
+
+
+sub GetPlatformPackage ($$$)
+{
+    my ($release_descriptor, $platform_descriptor, $package_descriptor) = @_;
+    my $key = sprintf("%s/%s", $platform_descriptor->{'id'}, $package_descriptor->{'id'});
+
+    my $platform_package = $release_descriptor->{'platform-packages'}->{$key};
+    $platform_package = {}
+        unless defined $platform_package;
+
+    my $joined_descriptor = {
+        %$platform_descriptor,
+        %$package_descriptor,
+        %$platform_package,
+        'id' => $key,
+        'platform-id' => $platform_descriptor->{'id'},
+        'package-id' => $package_descriptor->{'id'}
+    };
+    return $joined_descriptor;
 }
 
 
@@ -1288,7 +1442,7 @@ sub Wiki ($$)
             if ($context->{'check-links'})
             {
                 $| = 1;
-                printf "%-5%s: ", $language_descriptor->{'id'};
+                printf "%-5s: ", $language_descriptor->{'id'};
             }
 
             print $out "|-\n";
@@ -1323,16 +1477,20 @@ sub Wiki ($$)
 
                 foreach my $platform_descriptor (@table_platforms)
                 {
-                    foreach my $package_type (@{$platform_descriptor->{'package-types'}})
+                    my $platform_package_descriptor = GetPlatformPackage(
+                        $release_descriptor,
+                        $platform_descriptor,
+                        $package_descriptor);
+
+                    foreach my $package_type (@{$platform_package_descriptor->{'package-types'}})
                     {
                         WriteDownloadLinks(
                             $out,
                             $release_descriptor,
                             $context,
-                            $release_descriptor,
                             $language_descriptor,
                             $wiki_package_descriptor,
-                            $platform_descriptor,
+                            $platform_package_descriptor,
                             $package_type);
                     }
                 }
@@ -1472,42 +1630,39 @@ sub WriteDownloadLinks ($$$$$$$)
     my ($out,
         $release_descriptor,
         $context,
-        $release_descriptor,
         $language_descriptor,
         $wiki_package_descriptor,
-        $platform_descriptor,
+        $platform_package_descriptor,
         $package_type) = @_;
 
-    my $package_descriptor = $wiki_package_descriptor->{'package'};
-
     # Check if the current language and platform match the package.
-    if (defined $wiki_package_descriptor->{'platforms'}->{$platform_descriptor->{'id'}}
+    my $platform_id = $platform_package_descriptor->{'platform-id'};
+    if (defined $wiki_package_descriptor->{'platforms'}->{$platform_id}
         && defined $wiki_package_descriptor->{'languages'}->{$language_descriptor->{'id'}})
     {
         my $archive_package_name = "";
         my $extension = $package_type;
-        if (defined $platform_descriptor->{'extension'})
+        if (defined $platform_package_descriptor->{'extension'})
         {
-            $extension = $platform_descriptor->{'extension'};
+            $extension = $platform_package_descriptor->{'extension'};
         }
-        if (defined $package_descriptor->{'download-extension'})
+        if (defined $platform_package_descriptor->{'download-extension'})
         {
-            $extension = $package_descriptor->{'download-extension'};
+            $extension = $platform_package_descriptor->{'download-extension'};
         }
         $archive_package_name = "-".$package_type if ($package_type =~ /deb|rpm/);
 
-        my $archive_name = GetInstallationPackageName(
+        my ($archive_path, $archive_name) = GetInstallationPackageName(
             $release_descriptor,
-            $package_descriptor,
+            $platform_package_descriptor,
             $package_type,
-            $platform_descriptor,
             $language_descriptor->{'id'});
 
         printf $out "| align=\"center\" | ";
         my $download = FindDownload(
             $context,
             $release_descriptor,
-            $platform_descriptor,
+            $platform_package_descriptor,
             $package_type,
             $archive_name);
         if (defined $download)
@@ -1537,14 +1692,14 @@ sub WriteDownloadLinks ($$$$$$$)
 sub FindDownload ($$$$$)
 {
     my ($context,
-    $release_descriptor,
-    $platform_descriptor,
-    $package_type,
+        $release_descriptor,
+        $platform_package_descriptor,
+        $package_type,
         $archive_name) = @_;
 
     foreach my $download (@{$release_descriptor->{'downloads'}})
     {
-        if ($download->{'platform-id'} eq $platform_descriptor->{'id'})
+        if ($download->{'platform-id'} eq $platform_package_descriptor->{'platform-id'})
         {
             my $url = $download->{'base-url'} . "/". $archive_name;
             if ($context->{'check-links'})
@@ -1629,7 +1784,7 @@ sub CreateLink ($$$)
     This is determined by downloading only the header.
 
 =cut
-my $LastCheckedURL = undef;
+my $LastCheckedURL = "";
 my $LastCheckedResult = undef;
 sub CheckLink ($)
 {
@@ -1662,16 +1817,16 @@ sub SignFile ($$)
 
 
 my $context = ProcessCommandline(@ARGV);
-my $release_description = ReadReleaseDescription($context->{'filename'}, $context);
+my $release_descriptor = ReadReleaseDescription($context->{'filename'}, $context);
 if ($context->{'command'} eq "build")
 {
-    WriteMakefile($release_description, $context);
+    WriteMakefile($release_descriptor, $context);
 }
 elsif ($context->{'command'} eq "upload")
 {
-    Upload($release_description, $context);
+    Upload($release_descriptor, $context);
 }
 elsif ($context->{'command'} eq "wiki")
 {
-    Wiki($release_description, $context);
+    Wiki($release_descriptor, $context);
 }
