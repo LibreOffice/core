@@ -38,6 +38,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.framework.Desktop">
     <service name="com.sun.star.frame.Desktop"/>
+    <singleton name="com.sun.star.frame.theDesktop"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.DocumentAcceleratorConfiguration"
       constructor="com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation">
