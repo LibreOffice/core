@@ -63,12 +63,12 @@ private:
     SotStorageStreamRef          xInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
-    sal_Bool                    bGlobExit;      // global exit loop
+    bool                        bGlobExit;      // global exit loop
 
     enum { nmBase, nmFound, nmNested }
                                 eNestedMode;    // action with nested content actions
 
-    inline sal_Bool             FoundNestedMode() { return eNestedMode == nmFound; }
+    inline bool                 FoundNestedMode() { return eNestedMode == nmFound; }
 
     void                        DoAcceptRejectAction( ScChangeAction* pAction );
     void                        DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLast );
@@ -78,7 +78,7 @@ private:
 
     inline sal_uInt8            LookAtuInt8();
     inline double               ReadRK();
-    inline sal_Bool             ReadBool();
+    inline bool                 ReadBool();
     inline void                 Read2DAddress( ScAddress& rAddress );
     inline void                 Read2DRange( ScRange& rRange );
     SCTAB                       ReadTabNum();
@@ -86,7 +86,7 @@ private:
 
     inline void                 ReadString( OUString& rString );
 
-    sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
+    bool                        CheckRecord( sal_uInt16 nOpCode );
 
     void                        ReadFormula(
                                     ScTokenArray*& rpTokenArray,
@@ -101,7 +101,7 @@ private:
     void                        ReadChTrInsertTab();        // 0x014D
     void                        InitNestedMode();           // 0x014E, 0x0150
     void                        ReadNestedRecords();
-    sal_Bool                    EndNestedMode();            // 0x014F, 0x0151
+    bool                        EndNestedMode();            // 0x014F, 0x0151
 
     void                        ReadRecords();
 
@@ -111,7 +111,7 @@ public:
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
                                 // ( called by XclImpChTrFmlConverter::Read3DTabReference() )
-    sal_Bool                    Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo );
+    bool                        Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo );
 
     void                        Apply();
 };
@@ -130,7 +130,7 @@ inline double XclImpChangeTrack::ReadRK()
     return XclTools::GetDoubleFromRK( pStrm->ReadInt32() );
 }
 
-inline sal_Bool XclImpChangeTrack::ReadBool()
+inline bool XclImpChangeTrack::ReadBool()
 {
     return (pStrm->ReaduInt16() != 0);
 }

@@ -132,7 +132,7 @@ void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
     rDateTime.SetNanoSec( 0 );
 }
 
-sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
+bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
 {
     if( (nOpCode != EXC_CHTR_OP_UNKNOWN) && (aRecHeader.nOpCode != nOpCode) )
     {
@@ -142,7 +142,7 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
     return aRecHeader.nIndex != 0;
 }
 
-sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo )
+bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo )
 {
     if( LookAtuInt8() == 0x01 )
     {
@@ -174,7 +174,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab,
         rExtInfo.maTabName = aTabName;
         rFirstTab = rLastTab = 0;
     }
-    return sal_True;
+    return true;
 }
 
 void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddress& rPosition )
@@ -450,10 +450,10 @@ void XclImpChangeTrack::ReadNestedRecords()
     }
 }
 
-sal_Bool XclImpChangeTrack::EndNestedMode()
+bool XclImpChangeTrack::EndNestedMode()
 {
     OSL_ENSURE( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
-    sal_Bool bReturn = (eNestedMode == nmNested);
+    bool bReturn = (eNestedMode == nmNested);
     eNestedMode = nmBase;
     return bReturn;
 }
@@ -466,7 +466,7 @@ void XclImpChangeTrack::ReadRecords()
     {
         switch( pStrm->GetRecId() )
         {
-            case 0x000A:    bGlobExit = sal_True;           break;
+            case 0x000A:    bGlobExit = true;               break;
             case 0x0137:    ReadChTrInsert();               break;
             case 0x0138:    ReadChTrInfo();                 break;
             case 0x013B:    ReadChTrCellContent();          break;
