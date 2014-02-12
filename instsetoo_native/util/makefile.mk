@@ -136,7 +136,7 @@ VERBOSESWITCH=-verbose
 VERBOSESWITCH=-quiet
 .ENDIF
 
-.IF "$(release:U)"=="T"
+.IF "$(release)"!=""
 RELEASE_SWITCH=-release
 $(foreach,i,$(alllangiso) openoffice_$i.msi) : prepare_release_build
 .ELSE
