@@ -54,7 +54,6 @@ ToolboxController::ToolboxController(
     const Reference< XFrame >& xFrame,
     const OUString& aCommandURL ) :
     OPropertyContainer(GetBroadcastHelper())
-    ,   OWeakObject()
     ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
@@ -81,7 +80,6 @@ ToolboxController::ToolboxController(
 
 ToolboxController::ToolboxController() :
     OPropertyContainer(GetBroadcastHelper())
-    ,   OWeakObject()
     ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
@@ -137,34 +135,31 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
 Any SAL_CALL ToolboxController::queryInterface( const Type& rType )
 throw ( RuntimeException )
 {
-    Any a = ::cppu::queryInterface(
-                rType ,
-                static_cast< XToolbarController* >( this ),
-                static_cast< XStatusListener* >( this ),
-                static_cast< XEventListener* >( this ),
-                static_cast< XInitialization* >( this ),
-                static_cast< XComponent* >( this ),
-                static_cast< XUpdatable* >( this ));
-    if ( !a.hasValue())
-    {
-        a = ::cppu::queryInterface(rType
-            ,static_cast<XPropertySet*>(this)
-            ,static_cast<XMultiPropertySet*>(this)
-            ,static_cast<XFastPropertySet*>(this));
-        if (!a.hasValue())
-            return OWeakObject::queryInterface( rType );
-    }
-    return a;
+    css::uno::Any a(ToolboxController_Base::queryInterface(rType));
+    return a.hasValue() ? a : OPropertyContainer::queryInterface(rType);
 }
 
 void SAL_CALL ToolboxController::acquire() throw ()
 {
-    OWeakObject::acquire();
+    ToolboxController_Base::acquire();
 }
 
 void SAL_CALL ToolboxController::release() throw ()
 {
-    OWeakObject::release();
+    ToolboxController_Base::release();
+}
+
+css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<css::uno::Type> s1(ToolboxController_Base::getTypes());
+    css::uno::Sequence<css::uno::Type> s2(OPropertyContainer::getTypes());
+    sal_Int32 n = s1.getLength();
+    s1.realloc(n + s2.getLength());
+    for (sal_Int32 i = 0; i != s2.getLength(); ++i) {
+        s1[n + i] = s2[i];
+    }
+    return s1;
 }
 
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )

@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -46,15 +46,17 @@ class ToolBox;
 namespace svt
 {
 
-class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusListener,
-                          public ::com::sun::star::frame::XToolbarController,
-                          public ::com::sun::star::lang::XInitialization,
-                          public ::com::sun::star::util::XUpdatable,
-                          public ::com::sun::star::lang::XComponent,
+typedef cppu::WeakImplHelper5<
+        css::frame::XStatusListener, css::frame::XToolbarController,
+        css::lang::XInitialization, css::util::XUpdatable,
+        css::lang::XComponent >
+    ToolboxController_Base;
+
+class SVT_DLLPUBLIC ToolboxController :
+                          public ToolboxController_Base,
                           public ::comphelper::OMutexAndBroadcastHelper,
                           public ::comphelper::OPropertyContainer,
-                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >,
-                          public ::cppu::OWeakObject
+                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >
 {
     private:
         sal_Bool  m_bSupportVisible;
@@ -76,6 +78,8 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
+        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+            throw (css::uno::RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
