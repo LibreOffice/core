@@ -749,11 +749,15 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_True;
 }
 
+} // namespace framework
+
+namespace {
+
 struct Instance {
     explicit Instance(
         css::uno::Reference<css::uno::XComponentContext> const & context):
         instance(static_cast<cppu::OWeakObject *>(
-                    new UICommandDescription(context)))
+                    new framework::UICommandDescription(context)))
     {
     }
 
@@ -765,7 +769,7 @@ struct Singleton:
         Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
 {};
 
-} // namespace framework
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_UICommandDescription_get_implementation(
@@ -773,7 +777,7 @@ com_sun_star_comp_framework_UICommandDescription_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                framework::Singleton::get(context).instance.get()));
+                Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
