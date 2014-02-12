@@ -41,12 +41,12 @@ struct TokenId
     inline  TokenId&    operator =( sal_uInt16 n ) { nId = n; return *this; }
     inline              operator sal_uInt16&() { return nId; }
     inline              operator const sal_uInt16&() const { return nId; }
-    inline  sal_Bool        operator <( sal_uInt16 n ) const { return nId < n; }
-    inline  sal_Bool        operator >( sal_uInt16 n ) const { return nId > n; }
-    inline  sal_Bool        operator <=( sal_uInt16 n ) const { return nId <= n; }
-    inline  sal_Bool        operator >=( sal_uInt16 n ) const { return nId >= n; }
-    inline  sal_Bool        operator ==( sal_uInt16 n ) const { return nId == n; }
-    inline  sal_Bool        operator !=( sal_uInt16 n ) const { return nId != n; }
+    inline  bool        operator <( sal_uInt16 n ) const { return nId < n; }
+    inline  bool        operator >( sal_uInt16 n ) const { return nId > n; }
+    inline  bool        operator <=( sal_uInt16 n ) const { return nId <= n; }
+    inline  bool        operator >=( sal_uInt16 n ) const { return nId >= n; }
+    inline  bool        operator ==( sal_uInt16 n ) const { return nId == n; }
+    inline  bool        operator !=( sal_uInt16 n ) const { return nId != n; }
 };
 
 
@@ -217,7 +217,7 @@ class TokenPool
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
         inline E_TYPE               GetType( const TokenId& nId ) const;
-        sal_Bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
+        bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const OUString*             GetExternal( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };

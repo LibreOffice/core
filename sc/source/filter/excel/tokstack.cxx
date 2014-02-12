@@ -919,7 +919,7 @@ void TokenPool::Reset( void )
 }
 
 
-sal_Bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
+bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 {
     sal_uInt16 nId = (sal_uInt16) rId;
     if( nId && nId <= nElementAkt )
