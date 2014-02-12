@@ -616,13 +616,13 @@ void XclObjComment::SaveXml( XclExpXmlStream& rStrm )
 
 // --- class XclObjDropDown ------------------------------------------
 
-XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, sal_Bool bFilt ) :
+XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, bool bFilt ) :
     XclObj( rObjMgr, EXC_OBJTYPE_DROPDOWN, true ),
     bIsFiltered( bFilt )
 {
-    SetLocked( sal_True );
+    SetLocked( true );
     SetPrintable( false );
-    SetAutoFill( sal_True );
+    SetAutoFill( true );
     SetAutoLine( false );
     nGrbit |= 0x0100;   // undocumented
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -1262,7 +1262,7 @@ ExcEScenario::~ExcEScenario()
 {
 }
 
-sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt )
+bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt )
 {
     if( aCells.size() == EXC_SCEN_MAXCELL )
         return false;
@@ -1270,7 +1270,7 @@ sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString&
     ExcEScenarioCell aCell(nCol, nRow, rTxt);
     aCells.push_back(aCell);
     nRecLen += 6 + aCell.GetStringBytes();        // 4 bytes address, 2 bytes ifmt
-    return sal_True;
+    return true;
 }
 
 void ExcEScenario::SaveCont( XclExpStream& rStrm )

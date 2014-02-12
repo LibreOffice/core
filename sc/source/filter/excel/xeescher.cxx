@@ -520,7 +520,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
 
     // OBJ record flags
-    SetLocked( sal_True );
+    SetLocked( true );
     SetPrintable( aCtrlProp.GetBoolProperty( "Printable" ) );
     SetAutoFill( false );
     SetAutoLine( false );
@@ -664,7 +664,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         return;
 
     // OBJ record flags
-    SetLocked( sal_True );
+    SetLocked( true );
     SetPrintable( aCtrlProp.GetBoolProperty( "Printable" ) );
     SetAutoFill( false );
     SetAutoLine( false );

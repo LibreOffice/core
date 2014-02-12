@@ -96,10 +96,10 @@ protected:
         XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
-        sal_uInt16              nObjId;
-        sal_uInt16              nGrbit;
+        sal_uInt16          nObjId;
+        sal_uInt16          nGrbit;
         SCTAB               mnScTab;
-        sal_Bool                bFirstOnSheet;
+        bool                bFirstOnSheet;
 
         bool                    mbOwnEscher;    /// true = Escher part created on the fly.
 
@@ -125,13 +125,13 @@ public:
     inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
     inline  SCTAB               GetTab() const          { return mnScTab; }
 
-    inline  void                SetLocked( sal_Bool b )
+    inline  void                SetLocked( bool b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
-    inline  void                SetPrintable( sal_Bool b )
+    inline  void                SetPrintable( bool b )
                                     { b ? nGrbit |= 0x0010 : nGrbit &= ~0x0010; }
-    inline  void                SetAutoFill( sal_Bool b )
+    inline  void                SetAutoFill( bool b )
                                     { b ? nGrbit |= 0x2000 : nGrbit &= ~0x2000; }
-    inline  void                SetAutoLine( sal_Bool b )
+    inline  void                SetAutoLine( bool b )
                                     { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
 
                                 // set corresponding Excel object type in OBJ/ftCmo
@@ -188,13 +188,13 @@ public:
 class XclObjDropDown : public XclObj
 {
 private:
-    sal_Bool                        bIsFiltered;
+    bool                        bIsFiltered;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 protected:
 public:
-                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, sal_Bool bFilt );
+                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, bool bFilt );
     virtual                     ~XclObjDropDown();
 };
 
@@ -396,7 +396,7 @@ private:
 
     std::vector<ExcEScenarioCell> aCells;
 
-    sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt );
+    bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt );
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
