@@ -100,7 +100,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
     return it->second;
 }
 
-sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const sal_Bool bSWB )
+sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const bool bSWB )
 {
     maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
     // return 1-based index of EXTERNSHEET
@@ -108,7 +108,7 @@ sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const
 }
 
 
-sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
+bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
 {
     OSL_ENSURE( nExcIndex,
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
@@ -122,7 +122,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
     if( rTabNum < 0xFFFD )
     {
         rScIndex = rTabNum;
-        return sal_True;
+        return true;
     }
 
     if( rTabNum == 0xFFFF )
@@ -133,7 +133,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
             if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
             {
                 rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
-                return sal_True;
+                return true;
             }
             else
                 rTabNum = 0xFFFD;
@@ -148,7 +148,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
                 if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                 {
                     rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
-                    return sal_True;
+                    return true;
                 }
                 else
                     rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
@@ -164,7 +164,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
 }
 
 
-sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
+bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index has to be >0!" );
 
@@ -175,7 +175,7 @@ sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 }
 
 
-sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
+bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );
 
@@ -199,13 +199,13 @@ void ExtSheetBuffer::Reset( void )
 
 
 
-sal_Bool ExtName::IsDDE( void ) const
+bool ExtName::IsDDE( void ) const
 {
     return ( nFlags & 0x0001 ) != 0;
 }
 
 
-sal_Bool ExtName::IsOLE( void ) const
+bool ExtName::IsOLE( void ) const
 {
     return ( nFlags & 0x0002 ) != 0;
 }

@@ -1150,7 +1150,7 @@ void ImportExcel::TableOp( void )
     }
     else
     {
-        bTabTruncated = sal_True;
+        bTabTruncated = true;
         GetTracer().TraceInvalidRow(nLastRow, MAXROW);
     }
 }

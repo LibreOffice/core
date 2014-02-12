@@ -51,7 +51,7 @@ public:
     inline void     operator =( const sal_Char* );
     inline void     operator =( const OUString& );
     inline void     operator =( const StringHashEntry& );
-    inline sal_Bool     operator ==( const StringHashEntry& ) const;
+    inline bool     operator ==( const StringHashEntry& ) const;
 };
 
 
@@ -87,7 +87,7 @@ inline void StringHashEntry::operator =( const StringHashEntry& r )
 }
 
 
-inline sal_Bool StringHashEntry::operator ==( const StringHashEntry& r ) const
+inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 {
     return ( nHash == r.nHash && aString ==  r.aString );
 }
@@ -170,11 +170,11 @@ private:
     struct Entry
     {
         StringHashEntry     aStrHashEntry;
-        ScComplexRefData        aScComplexRefDataRel;
+        ScComplexRefData    aScComplexRefDataRel;
         OUString            aScAbsName;
-        sal_uInt16              nAbsInd;        // == 0 -> noch keine Abs-Name!
-        sal_uInt16              nRelInd;
-        sal_Bool                bSingleRef;
+        sal_uInt16          nAbsInd;        // == 0 -> noch keine Abs-Name!
+        sal_uInt16          nRelInd;
+        bool                bSingleRef;
                             Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD )
                                 : aStrHashEntry( rName )
                                 , aScComplexRefDataRel( rCRD )
@@ -196,8 +196,8 @@ public:
     virtual                 ~RangeNameBufferWK3();
     void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
     inline void             Add( const OUString& rName, const ScRange& aScRange );
-    sal_Bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
-    sal_Bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
+    bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
+    bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
 };
 
 
@@ -230,8 +230,8 @@ private:
         sal_uInt16    nTabNum;    // 0xFFFF -> noch nicht angelegt
                                 // 0xFFFE -> versucht anzulegen, ging aber schief
                                 // 0xFFFD -> soll im selben Workbook sein, findet's aber nicht
-        sal_Bool        bSWB;
-        sal_Bool        bLink;
+        bool          bSWB;
+        bool          bLink;
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
@@ -240,7 +240,7 @@ private:
                         bSWB = bLink = false;
                     }
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName,
-                        const sal_Bool bSameWB ) :
+                        const bool bSameWB ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
@@ -256,11 +256,11 @@ public:
     inline          ExtSheetBuffer( RootData* );
 
     sal_Int16       Add( const OUString& rFilePathAndName,
-                        const OUString& rTabName, const sal_Bool bSameWorkbook = false );
+                        const OUString& rTabName, const bool bSameWorkbook = false );
 
-    sal_Bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
-    sal_Bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
-    sal_Bool            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
+    bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
+    bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
+    bool            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
     void            Reset( void );
 };
@@ -281,8 +281,8 @@ struct ExtName
 
     inline          ExtName( const OUString& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
-    sal_Bool            IsDDE( void ) const;
-    sal_Bool            IsOLE( void ) const;
+    bool            IsDDE( void ) const;
+    bool            IsOLE( void ) const;
 };
 
 

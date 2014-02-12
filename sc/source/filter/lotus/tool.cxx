@@ -538,7 +538,7 @@ void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& 
 }
 
 
-sal_Bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
+bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
@@ -556,7 +556,7 @@ sal_Bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 }
 
 
-sal_Bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
+bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
     OUString            aTmp( rRef );
     aTmp = aTmp.copy(1);
