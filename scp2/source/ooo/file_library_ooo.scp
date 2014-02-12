@@ -26,17 +26,6 @@
  ************************************************************************/
 #include "macros.inc"
 
-#ifndef SYSTEM_CLUCENE
-File gid_File_Lib_CLucene
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libclucene,UNXSUFFIX));
-  #else
-    Name = "clucene.dll";
-  #endif
-End
-#endif
-
 #if defined _MSC_VER
 
 File gid_File_Lib_Cli_Oootypes_Assembly
@@ -121,21 +110,6 @@ End
 #endif
 #endif
 
-#ifdef NEED_CAIRO
-
-#ifndef WNT
-
-File gid_File_Lib_Pixman
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "pixman.filelist";
-End
-
-#endif
-
-#endif
-
 #ifndef SYSTEM_ICU
 
 File gid_File_Lib_Icudata
@@ -188,20 +162,6 @@ End
 
 #if defined UNX && ! defined MACOSX
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
-#endif
-
-#if ! defined UNX
-File gid_File_Lib_Sysdtrans
-    PACKED_LIB_FILE_BODY;
-    Name = "sysdtrans.dll";
-End
-#endif
-
-#ifndef DISABLE_NEON
-SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
- #ifndef SYSTEM_NEON
-   SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
- #endif
 #endif
 
 #if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
