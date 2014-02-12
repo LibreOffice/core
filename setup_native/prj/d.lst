@@ -32,11 +32,13 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\mac\*.icns %_DEST%\bin%_EXT%\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin%_EXT%\Info.plist.langpack
 ..\source\mac\ooo\osxdndinstall.png %_DEST%\bin%_EXT%\osl\osxdndinstall.png
+..\source\mac\ooo\osxdndinstall_lang.png %_DEST%\bin%_EXT%\osl\osxdndinstall_lang.png
 ..\source\mac\ooo\osxdndinstall_nologo.png %_DEST%\bin%_EXT%\osl\osxdndinstall_nologo.png
 ..\source\mac\ooo\DS_Store %_DEST%\bin%_EXT%\osl\DS_Store
 ..\source\mac\ooo\DS_Store_Dev %_DEST%\bin%_EXT%\osl\DS_Store_Dev
 ..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin%_EXT%\osl\DS_Store_Langpack
 ..\source\mac\sdk\DS_Store_SDK %_DEST%\bin%_EXT%\osl\DS_Store_SDK
+..\source\mac\sdk\osxdndinstall_sdk.png %_DEST%\bin%_EXT%\osl\osxdndinstall_sdk.png
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat

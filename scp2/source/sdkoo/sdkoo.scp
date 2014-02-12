@@ -216,7 +216,7 @@ End
 
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
-    Copy = "osxdndinstall.png";
+    Copy = "osxdndinstall_sdk.png";
     Name = "background.png";
     UnixRights = 444;
     Styles = ();

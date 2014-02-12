@@ -318,9 +318,10 @@ End
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
     Copy = "osxdndinstall.png";
-    Name = "background.png";
+    LangPackCopy = "osxdndinstall_lang.png";
+	Name = "background.png";
     UnixRights = 444;
-    Styles = ();
+    Styles = (FORCELANGUAGEPACK);
     Subdir = ".background";
 End
 
