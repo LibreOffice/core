@@ -95,7 +95,7 @@ class FTPDialog(UnoDialog2, UIConsts):
     # @param p the publishert object that contains the data
     # for this dialog
     # @throws Exception
-    def __init__(self, xmsf, p):
+    def __init__(self, xmsf, p, oWizardResource):
 
         super(FTPDialog, self).__init__(xmsf)
         self.publish = p
@@ -109,7 +109,7 @@ class FTPDialog(UnoDialog2, UIConsts):
         self.password = ""
 
         # Load Resources
-        self.resources = FTPDialogResources(xmsf)
+        self.resources = FTPDialogResources(oWizardResource)
         self.ucb = UCB(xmsf)
 
         # set dialog properties...

@@ -16,21 +16,17 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from ..common.Resource import Resource
 from ..common.Configuration import Configuration
 from ..common.Properties import Properties
 from ..document.OfficeDocument import OfficeDocument
 
-class WebWizardDialogResources(Resource):
-    UNIT_NAME = "dbwizres"
-    MODULE_NAME = "dbw"
+class WebWizardDialogResources(object):
+
     RID_WEBWIZARDDIALOG_START = 4000
     RID_COMMON_START = 500
     RID_DB_COMMON_START = 1000
 
-    def __init__(self, xmsf):
-        super(WebWizardDialogResources,self).__init__(xmsf,
-            WebWizardDialogResources.MODULE_NAME)
+    def __init__(self, xmsf, oWizardResource):
         try:
             #python 3
             self.resbtnDocUp_value = chr(8743)
@@ -40,277 +36,276 @@ class WebWizardDialogResources(Resource):
             self.resbtnDocUp_value = unichr(8743)
             self.resbtnDocDown_value = unichr(8744) 
                     
-        #Delete the String, uncomment the getResText method
-        self.resWebWizardDialog_title = self.getResText(
+        self.resWebWizardDialog_title = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 1)
-        self.reslblIntroduction_value = self.getResText(
+        self.reslblIntroduction_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 2)
-        self.resbtnDelSession_value = self.getResText(
+        self.resbtnDelSession_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 4)
-        self.reslbIntroTitle_value = self.getResText(
+        self.reslbIntroTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 5)
-        self.reslblContentTitle_value = self.getResText(
+        self.reslblContentTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 6)
-        self.reslnDocsInfo_value = self.getResText(
+        self.reslnDocsInfo_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 8)
-        self.reslblDocTitle_value = self.getResText(
+        self.reslblDocTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 9)
-        self.reslblDocInfo_value = self.getResText(
+        self.reslblDocInfo_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 10)
-        self.reslblDocAuthor_value = self.getResText(
+        self.reslblDocAuthor_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 11)
-        self.reslblDocExportFormat_value = self.getResText(
+        self.reslblDocExportFormat_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 12)
-        self.reslblTitleGeneralPage_value = self.getResText(
+        self.reslblTitleGeneralPage_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 13)
-        self.reslblSiteTitle_value = self.getResText(
+        self.reslblSiteTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 14)
-        self.reslblSiteDesc_value = self.getResText(
+        self.reslblSiteDesc_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 16)
-        self.reslblSiteCreated_value = self.getResText(
+        self.reslblSiteCreated_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 18)
-        self.reslblEmail_value = self.getResText(
+        self.reslblEmail_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 20)
-        self.reslblCopyright_value = self.getResText(
+        self.reslblCopyright_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 21)
-        self.reslblSiteUpdated_value = self.getResText(
+        self.reslblSiteUpdated_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 22)
-        self.resbtnPreview_value = self.getResText(
+        self.resbtnPreview_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 24)
-        self.reslblTitlePublish_value = self.getResText(
+        self.reslblTitlePublish_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 25)
-        self.reslblCreateSite_value = self.getResText(
+        self.reslblCreateSite_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 26)
-        self.reschkLocalDir_value = self.getResText(
+        self.reschkLocalDir_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 27)
-        self.resbtnLocalDir_value = self.getResText(
+        self.resbtnLocalDir_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 28)
-        self.reschkFTP_value = self.getResText(
+        self.reschkFTP_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 29)
 
-        self.resbtnFTP_value = self.getResText(
+        self.resbtnFTP_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 31)
-        self.reschkZip_value = self.getResText(
+        self.reschkZip_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 32)
-        self.resbtnZip_value = self.getResText(
+        self.resbtnZip_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 33)
-        self.reschkSaveSettings_value = self.getResText(
+        self.reschkSaveSettings_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 34)
-        self.reslblSaveSettings_value = self.getResText(
+        self.reslblSaveSettings_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 35)
-        self.reslblLoadSettings_value = self.getResText(
+        self.reslblLoadSettings_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 36)
-        self.reslblSiteContent_value = self.getResText(
+        self.reslblSiteContent_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 37)
-        self.resbtnAddDoc_value = self.getResText(
+        self.resbtnAddDoc_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 38)
-        self.resbtnRemoveDoc_value = self.getResText(
+        self.resbtnRemoveDoc_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 39)
-        self.reslblLayoutTitle_value = self.getResText(
+        self.reslblLayoutTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 40)
-        self.reslblStyleTitle_value = self.getResText(
+        self.reslblStyleTitle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 41)
-        self.reslblStyle_value = self.getResText(
+        self.reslblStyle_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 42)
 
-        self.reslblLayouts_value = self.getResText(
+        self.reslblLayouts_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 48)
 
-        self.reschbDocDesc_value = self.getResText(
+        self.reschbDocDesc_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 50)
-        self.reschbDocAuthor_value = self.getResText(
+        self.reschbDocAuthor_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 51)
-        self.reschkDocCreated_value = self.getResText(
+        self.reschkDocCreated_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 52)
-        self.reschkDocChanged_value = self.getResText(
+        self.reschkDocChanged_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 53)
-        self.reschkDocFilename_value = self.getResText(
+        self.reschkDocFilename_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 54)
-        self.reschkDocFormat_value = self.getResText(
+        self.reschkDocFormat_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 55)
-        self.reschkDocFormatIcon_value = self.getResText(
+        self.reschkDocFormatIcon_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 56)
-        self.reschkDocPages_value = self.getResText(
+        self.reschkDocPages_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 57)
-        self.reschkDocSize_value = self.getResText(
+        self.reschkDocSize_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 58)
-        self.resFixedLine1_value = self.getResText(
+        self.resFixedLine1_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 59)
-        self.reslblLayout2Title_value = self.getResText(
+        self.reslblLayout2Title_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 60)
-        self.reslblDisplay_value = self.getResText(
+        self.reslblDisplay_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 61)
-        self.reslblOptimizeFor_value = self.getResText(
+        self.reslblOptimizeFor_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 62)
-        self.resoptOptimize640x480_value = self.getResText(
+        self.resoptOptimize640x480_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 64)
-        self.resoptOptimize800x600_value = self.getResText(
+        self.resoptOptimize800x600_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 65)
-        self.resoptOptimize1024x768_value = self.getResText(
+        self.resoptOptimize1024x768_value = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 66)
 
-        self.resStatusDialogTitle = self.getResText(
+        self.resStatusDialogTitle = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 70)
-        self.resCounter = self.getResText(
+        self.resCounter = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 71)
-        self.resPublishDir = self.getResText(
+        self.resPublishDir = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 72)
-        self.resFTPTargetExistsAsfile = self.getResText(
+        self.resFTPTargetExistsAsfile = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 73)
-        self.resLocalTargetExistsAsfile = self.getResText(
+        self.resLocalTargetExistsAsfile = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 74)
-        self.resZipTargetExists = self.getResText(
+        self.resZipTargetExists = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 75)
-        self.resFTPTargetNotEmpty = self.getResText(
+        self.resFTPTargetNotEmpty = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 76)
-        self.resLocalTragetNotEmpty = self.getResText(
+        self.resLocalTragetNotEmpty = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 77)
-        self.resSessionExists = self.getResText(
+        self.resSessionExists = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 78)
-        self.resTaskExportDocs = self.getResText(
+        self.resTaskExportDocs = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 79)
-        self.resTaskExportPrepare = self.getResText(
+        self.resTaskExportPrepare = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 80)
-        self.resTaskGenerateCopy = self.getResText(
+        self.resTaskGenerateCopy = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 81)
-        self.resTaskGeneratePrepare = self.getResText(
+        self.resTaskGeneratePrepare = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 82)
-        self.resTaskGenerateXsl = self.getResText(
+        self.resTaskGenerateXsl = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 83)
-        self.resTaskPrepare = self.getResText(
+        self.resTaskPrepare = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 84)
-        self.resTaskPublishPrepare = self.getResText(
+        self.resTaskPublishPrepare = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 86)
-        self.resTaskPublishLocal = self.getResText(
+        self.resTaskPublishLocal = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 87)
-        self.resTaskPublishFTP = self.getResText(
+        self.resTaskPublishFTP = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 88)
-        self.resTaskPublishZip = self.getResText(
+        self.resTaskPublishZip = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 89)
-        self.resTaskFinish = self.getResText(
+        self.resTaskFinish = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 90)
 
-        self.resImages = self.getResText(
+        self.resImages = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 94)
-        self.resAllFiles = self.getResText(
+        self.resAllFiles = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 95)
-        self.resZipFiles = self.getResText(
+        self.resZipFiles = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 96)
-        self.resBackgroundsDialog = self.getResText(
+        self.resBackgroundsDialog = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 98)
-        self.resBackgroundsDialogCaption = self.getResText(
+        self.resBackgroundsDialogCaption = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 99)
-        self.resIconsDialog = self.getResText(
+        self.resIconsDialog = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 100)
-        self.resIconsDialogCaption = self.getResText(
+        self.resIconsDialogCaption = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 101)
-        self.resOther = self.getResText(
+        self.resOther = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 102)
-        self.resDeselect = self.getResText(
+        self.resDeselect = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 103)
-        self.resFinishedSuccess = self.getResText(
+        self.resFinishedSuccess = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 104)
-        self.resFinishedNoSuccess = self.getResText(
+        self.resFinishedNoSuccess = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 105)
-        self.resErrTOC = self.getResText(
+        self.resErrTOC = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 106)
-        self.resErrTOCMedia = self.getResText(
+        self.resErrTOCMedia = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 107)
-        self.resErrDocInfo = self.getResText(
+        self.resErrDocInfo = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 108)
-        self.resErrDocExport = self.getResText(
+        self.resErrDocExport = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 109)
-        self.resErrMkDir = self.getResText(
+        self.resErrMkDir = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 110)
-        self.resErrSecurity = self.getResText(
+        self.resErrSecurity = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 111)
-        self.resErrExportIO = self.getResText(
+        self.resErrExportIO = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 112)
-        self.resErrPublishMedia = self.getResText(
+        self.resErrPublishMedia = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 113)
-        self.resErrPublish = self.getResText(
+        self.resErrPublish = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 114)
-        self.resErrUnknown = self.getResText(
+        self.resErrUnknown = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 115)
-        self.resErrDocValidate = self.getResText(
+        self.resErrDocValidate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 116)
-        self.resErrIsDirectory = self.getResText(
+        self.resErrIsDirectory = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 117)
-        self.resLoadingSession = self.getResText(
+        self.resLoadingSession = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 118)
-        self.resErrUnexpected = self.getResText(
+        self.resErrUnexpected = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 119)
-        self.resValidatingDocuments = self.getResText(
+        self.resValidatingDocuments = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 120)
-        self.resDefaultArchiveFilename = self.getResText(
+        self.resDefaultArchiveFilename = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 121)
-        self.resStep1 = self.getResText(
+        self.resStep1 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 122)
-        self.resStep2 = self.getResText(
+        self.resStep2 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 123)
-        self.resStep3 = self.getResText(
+        self.resStep3 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 124)
-        self.resStep4 = self.getResText(
+        self.resStep4 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 125)
-        self.resStep5 = self.getResText(
+        self.resStep5 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 126)
-        self.resStep6 = self.getResText(
+        self.resStep6 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 127)
-        self.resStep7 = self.getResText(
+        self.resStep7 = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 128)
-        self.resDelSessionConfirm = self.getResText(
+        self.resDelSessionConfirm = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 130)
-        self.resPages = self.getResText(
+        self.resPages = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 131)
-        self.resSlides = self.getResText(
+        self.resSlides = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 132)
-        self.resCreatedTemplate = self.getResText(
+        self.resCreatedTemplate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 133)
-        self.resUpdatedTemplate = self.getResText(
+        self.resUpdatedTemplate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 134)
-        self.resSessionName = self.getResText(
+        self.resSessionName = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 135)
-        self.reslblBackground = self.getResText(
+        self.reslblBackground = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 136)
-        self.reslblIconset = self.getResText(
+        self.reslblIconset = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 137)
-        self.reslblIconSetInfo = self.getResText(
+        self.reslblIconSetInfo = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 138)
-        self.reslblMetaData = self.getResText(
+        self.reslblMetaData = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 139)
-        self.resBtnChooseBackground = self.getResText(
+        self.resBtnChooseBackground = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 140)
-        self.resBtnChooseIconset = self.getResText(
+        self.resBtnChooseIconset = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 141)
-        self.resSessionNameNone = self.getResText(
+        self.resSessionNameNone = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 142)
-        self.reslblFTPDisabled = self.getResText(
+        self.reslblFTPDisabled = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 143)
-        self.resBackgroundNone = self.getResText(
+        self.resBackgroundNone = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 144)
-        self.resIconsetNone = self.getResText(
+        self.resIconsetNone = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 145)
-        self.resFTPTargetCouldNotCreate = self.getResText(
+        self.resFTPTargetCouldNotCreate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 146)
-        self.resFTPTargetCreate = self.getResText(
+        self.resFTPTargetCreate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 147)
-        self.resZipTargetIsDir = self.getResText(
+        self.resZipTargetIsDir = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 148)
-        self.resLocalTargetCouldNotCreate = self.getResText(
+        self.resLocalTargetCouldNotCreate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 149)
-        self.resLocalTargetCreate = self.getResText(
+        self.resLocalTargetCreate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 150)
-        self.resSizeTemplate = self.getResText(
+        self.resSizeTemplate = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 151)
-        self.resSpecifyNewFileLocation = self.getResText(
+        self.resSpecifyNewFileLocation = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 152)
-        self.resClose = self.getResText(
+        self.resClose = oWizardResource.getResText(
             WebWizardDialogResources.RID_COMMON_START + 17)
-        self.resCancel = self.getResText(
+        self.resCancel = oWizardResource.getResText(
             WebWizardDialogResources.RID_COMMON_START + 11)
-        self.resOK = self.getResText(
+        self.resOK = oWizardResource.getResText(
             WebWizardDialogResources.RID_COMMON_START + 18)
-        self.resHelp = self.getResText(
+        self.resHelp = oWizardResource.getResText(
             WebWizardDialogResources.RID_COMMON_START + 15)
         try:
             self.prodName = Configuration.getProductName(xmsf)

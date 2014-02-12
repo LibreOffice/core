@@ -84,8 +84,10 @@ class WebWizardDialog(WizardDialog):
 
     def __init__(self, xmsf):
         super(WebWizardDialog, self).__init__(xmsf, HID0_WEBWIZARD)
+        
         #Load Resources
-        self.resources = WebWizardDialogResources(xmsf)
+        self.resources = WebWizardDialogResources(xmsf, self.oWizardResource)
+        
         #set dialog properties...
         uno.invoke(self.xDialogModel, "setPropertyValues",(
             ("Closeable",

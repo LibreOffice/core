@@ -27,7 +27,7 @@ class LetterWizardDialog(WizardDialog):
     def __init__(self, xmsf):
         super(LetterWizardDialog, self).__init__(xmsf, HIDMAIN )
 
-        self.resources = LetterWizardDialogResources(xmsf)
+        self.resources = LetterWizardDialogResources(self.oWizardResource)
         uno.invoke(self.xDialogModel, "setPropertyValues",
             (("Closeable",
                 PropertyNames.PROPERTY_HEIGHT,

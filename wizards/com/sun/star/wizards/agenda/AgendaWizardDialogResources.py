@@ -15,11 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ..common.Resource import Resource
 
-class AgendaWizardDialogResources(Resource):
+class AgendaWizardDialogResources(object):
     
-    MODULE_NAME = "dbw"
     RID_AGENDAWIZARDDIALOG_START = 5000
     RID_COMMON_START = 500
     SECTION_ITEMS = "AGENDA_ITEMS"
@@ -27,185 +25,182 @@ class AgendaWizardDialogResources(Resource):
     SECTION_MINUTES_ALL = "MINUTES_ALL"
     SECTION_MINUTES = "MINUTES"
 
-    def __init__(self, xmsf):
-        super(AgendaWizardDialogResources,self).__init__(xmsf,
-            AgendaWizardDialogResources.MODULE_NAME)
-        #Delete the String, uncomment the getResText method
-        self.resAgendaWizardDialog_title = self.getResText(
+    def __init__(self, oWizardResource):
+        self.resAgendaWizardDialog_title = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 1)
-        self.resoptMakeChanges_value = self.getResText(
+        self.resoptMakeChanges_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 2)
-        self.reslblTemplateName_value = self.getResText(
+        self.reslblTemplateName_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 3)
-        self.reslblTemplatePath_value = self.getResText(
+        self.reslblTemplatePath_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 4)
-        self.reslblProceed_value = self.getResText(
+        self.reslblProceed_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 5)
-        self.reslblTitle1_value = self.getResText(
+        self.reslblTitle1_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 6)
-        self.reslblTitle3_value = self.getResText(
+        self.reslblTitle3_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 7)
-        self.reslblTitle2_value = self.getResText(
+        self.reslblTitle2_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 8)
-        self.reslblTitle4_value = self.getResText(
+        self.reslblTitle4_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 9)
-        self.reslblTitle5_value = self.getResText(
+        self.reslblTitle5_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 10)
-        self.reslblTitle6_value = self.getResText(
+        self.reslblTitle6_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 11)
-        self.reschkMinutes_value = self.getResText(
+        self.reschkMinutes_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 12)
-        self.reslblHelp1_value = self.getResText(
+        self.reslblHelp1_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 13)
-        self.reslblTime_value = self.getResText(
+        self.reslblTime_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 14)
-        self.reslblTitle_value = self.getResText(
+        self.reslblTitle_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 15)
-        self.reslblLocation_value = self.getResText(
+        self.reslblLocation_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 16)
-        self.reslblHelp2_value = self.getResText(
+        self.reslblHelp2_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 17)
-        self.resbtnTemplatePath_value = self.getResText(
+        self.resbtnTemplatePath_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 18)
-        self.resoptCreateAgenda_value = self.getResText(
+        self.resoptCreateAgenda_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 19)
-        self.reslblHelp6_value = self.getResText(
+        self.reslblHelp6_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 20)
-        self.reslblTopic_value = self.getResText(
+        self.reslblTopic_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 21)
-        self.reslblResponsible_value = self.getResText(
+        self.reslblResponsible_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 22)
-        self.reslblDuration_value = self.getResText(
+        self.reslblDuration_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 23)
-        self.reschkConvenedBy_value = self.getResText(
+        self.reschkConvenedBy_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 24)
-        self.reschkPresiding_value = self.getResText(
+        self.reschkPresiding_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 25)
-        self.reschkNoteTaker_value = self.getResText(
+        self.reschkNoteTaker_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 26)
-        self.reschkTimekeeper_value = self.getResText(
+        self.reschkTimekeeper_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 27)
-        self.reschkAttendees_value = self.getResText(
+        self.reschkAttendees_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 28)
-        self.reschkObservers_value = self.getResText(
+        self.reschkObservers_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 29)
-        self.reschkResourcePersons_value = self.getResText(
+        self.reschkResourcePersons_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 30)
-        self.reslblHelp4_value = self.getResText(
+        self.reslblHelp4_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 31)
-        self.reschkMeetingTitle_value = self.getResText(
+        self.reschkMeetingTitle_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 32)
-        self.reschkRead_value = self.getResText(
+        self.reschkRead_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 33)
-        self.reschkBring_value = self.getResText(
+        self.reschkBring_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 34)
-        self.reschkNotes_value = self.getResText(
+        self.reschkNotes_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 35)
-        self.reslblHelp3_value = self.getResText(
+        self.reslblHelp3_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 36)
-        self.reslblDate_value = self.getResText(
+        self.reslblDate_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 38)
-        self.reslblHelpPg6_value = self.getResText(
+        self.reslblHelpPg6_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 39)
-        self.reslblPageDesign_value = self.getResText(
+        self.reslblPageDesign_value = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 40)
-        self.resDefaultFilename = self.getResText(
+        self.resDefaultFilename = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 41)
         self.resDefaultFilename = self.resDefaultFilename[:-4] + ".ott"
-        self.resDefaultTitle = self.getResText(
+        self.resDefaultTitle = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 42)
-        self.resErrSaveTemplate = self.getResText(
+        self.resErrSaveTemplate = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 43)
-        self.resPlaceHolderTitle = self.getResText(
+        self.resPlaceHolderTitle = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 44)
-        self.resPlaceHolderDate = self.getResText(
+        self.resPlaceHolderDate = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 45)
-        self.resPlaceHolderTime = self.getResText(
+        self.resPlaceHolderTime = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 46)
-        self.resPlaceHolderLocation = self.getResText(
+        self.resPlaceHolderLocation = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 47)
-        self.resPlaceHolderHint = self.getResText(
+        self.resPlaceHolderHint = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 48)
-        self.resStep1 = self.getResText(
+        self.resStep1 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 50)
-        self.resStep2 = self.getResText(
+        self.resStep2 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 51)
-        self.resStep3 = self.getResText(
+        self.resStep3 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 52)
-        self.resStep4 = self.getResText(
+        self.resStep4 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 53)
-        self.resStep5 = self.getResText(
+        self.resStep5 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 54)
-        self.resStep6 = self.getResText(
+        self.resStep6 = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 55)
-        self.resErrOpenTemplate = self.getResText(
+        self.resErrOpenTemplate = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 56)
-        self.itemMeetingType = self.getResText(
+        self.itemMeetingType = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 57)
-        self.itemBring = self.getResText(
+        self.itemBring = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 58)
-        self.itemRead = self.getResText(
+        self.itemRead = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 59)
-        self.itemNote = self.getResText(
+        self.itemNote = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 60)
-        self.itemCalledBy = self.getResText(
+        self.itemCalledBy = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 61)
-        self.itemFacilitator = self.getResText(
+        self.itemFacilitator = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 62)
-        self.itemAttendees = self.getResText(
+        self.itemAttendees = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 63)
-        self.itemNotetaker = self.getResText(
+        self.itemNotetaker = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 64)
-        self.itemTimekeeper = self.getResText(
+        self.itemTimekeeper = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 65)
-        self.itemObservers = self.getResText(
+        self.itemObservers = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 66)
-        self.itemResource = self.getResText(
+        self.itemResource = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 67)
-        self.resButtonInsert = self.getResText(
+        self.resButtonInsert = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 68)
-        self.resButtonRemove = self.getResText(
+        self.resButtonRemove = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 69)
-        self.resButtonUp = self.getResText(
+        self.resButtonUp = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 70)
-        self.resButtonDown = self.getResText(
+        self.resButtonDown = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)        
 
         #Create a dictionary for localised string in the template
         self.dictConstants = {
-        "#datetitle#" : self.getResText(
+        "#datetitle#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 72),
-        "#timetitle#" : self.getResText(
+        "#timetitle#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 73),
-        "#locationtitle#" : self.getResText(
+        "#locationtitle#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 74),
-        "#topics#" : self.getResText(
+        "#topics#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 75),
-        "#num.#" : self.getResText(
+        "#num.#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 76),
-        "#topicheader#" : self.getResText(
+        "#topicheader#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 77),
-        "#responsibleheader#" : self.getResText(
+        "#responsibleheader#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 78),
-        "#timeheader#" : self.getResText(
+        "#timeheader#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 79),
-        "#additional-information#" : self.getResText(
+        "#additional-information#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 80),
-        "#minutes-for#" : self.getResText(
+        "#minutes-for#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 81),
-        "#discussion#" : self.getResText(
+        "#discussion#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 82),
-        "#conclusion#" : self.getResText(
+        "#conclusion#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 83),
-        "#to-do#" : self.getResText(
+        "#to-do#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 84),
-        "#responsible-party#" : self.getResText(
+        "#responsible-party#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 85),
-        "#deadline#" : self.getResText(
+        "#deadline#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 86)}
 
         #Common Resources
-        self.resOverwriteWarning = self.getResText(
+        self.resOverwriteWarning = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)
-        self.resTemplateDescription = self.getResText(
+        self.resTemplateDescription = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 20)

@@ -85,7 +85,7 @@ class WWD_General(WebWizardDialog):
     def getFTPDialog(self, pub):
         if self.ftpDialog is None:
             try:
-                self.ftpDialog = FTPDialog(self.xMSF, pub)
+                self.ftpDialog = FTPDialog(self.xMSF, pub, self.oWizardResource)
                 self.ftpDialog.createWindowPeer(self.xUnoDialog.getPeer())
             except Exception:
                 traceback.print_exc()
