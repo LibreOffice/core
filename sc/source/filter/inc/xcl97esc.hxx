@@ -144,13 +144,13 @@ private:
 class XclEscherHostAppData : public EscherExHostAppData
 {
 private:
-        sal_Bool                bStackedGroup;
+    bool                bStackedGroup;
 
 public:
                                 XclEscherHostAppData() : bStackedGroup( false )
                                     {}
-    inline  void                SetStackedGroup( sal_Bool b )   { bStackedGroup = b; }
-    inline  sal_Bool                IsStackedGroup() const  { return bStackedGroup; }
+    inline  void                SetStackedGroup( bool b )   { bStackedGroup = b; }
+    inline  bool                IsStackedGroup() const  { return bStackedGroup; }
 };
 
 

@@ -203,7 +203,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
-            pCurrAppData->SetStackedGroup( sal_True );
+            pCurrAppData->SetStackedGroup( true );
             UpdateDffFragmentEnd();
         }
     }
