@@ -61,16 +61,16 @@ private:
     ScRTFCellDefault*   pInsDefault;
     ScRTFCellDefault*   pActDefault;
     ScRTFCellDefault*   pDefMerge;
-    sal_uLong               nStartAdjust;
-    sal_uInt16              nLastWidth;
-    sal_Bool                bNewDef;
+    sal_uLong           nStartAdjust;
+    sal_uInt16          nLastWidth;
+    bool                bNewDef;
 
     DECL_LINK( RTFImportHdl, ImportInfo* );
     inline void         NextRow();
     void                EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );
     void                ColAdjust();
-    sal_Bool                SeekTwips( sal_uInt16 nTwips, SCCOL* pCol );
+    bool                SeekTwips( sal_uInt16 nTwips, SCCOL* pCol );
     void                NewCellRow( ImportInfo* );
 
 public:

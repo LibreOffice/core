@@ -112,26 +112,26 @@ inline void ScRTFParser::NextRow()
 }
 
 
-sal_Bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
+bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
     ScRTFColTwips::const_iterator it = pColTwips->find( nTwips );
     sal_Bool bFound = it != pColTwips->end();
     sal_uInt16 nPos = it - pColTwips->begin();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
-        return sal_True;
+        return true;
     sal_uInt16 nCount = pColTwips->size();
     if ( !nCount )
         return false;
     SCCOL nCol = *pCol;
     // nCol is insertion position; the next one higher up is there (or not)
     if ( nCol < static_cast<SCCOL>(nCount) && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
-        return sal_True;
+        return true;
     // Not smaller than everything else? Then compare with the next lower one
     else if ( nCol != 0 && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
     {
         (*pCol)--;
-        return sal_True;
+        return true;
     }
     return false;
 }
@@ -317,7 +317,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CELLX:         // closes cell default
         {
-            bNewDef = sal_True;
+            bNewDef = true;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue; // Right cell border
             maDefaultList.push_back( pInsDefault );
