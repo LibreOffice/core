@@ -829,7 +829,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pBar->Draw(pDev, aHeaderPos, aHeaderSize, nFlags);
 
         // draw the "upper left cell" (the intersection between the header bar and the handle column)
-        if (( pFirstCol->GetId() == 0 ) && ( pFirstCol->Width() > 4 ))
+        if (pFirstCol && (pFirstCol->GetId() == 0) && (pFirstCol->Width() > 4))
         {
             ButtonFrame aButtonFrame( aRealPos,
                 Size( pFirstCol->Width()-1, nTitleHeight-1 ),
