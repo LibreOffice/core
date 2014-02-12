@@ -203,7 +203,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         attrList->add(XML_layoutInCell, "1");
         attrList->add(XML_allowOverlap, "1");   // TODO
         if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
-            attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum()));
+            // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
+            attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
         else
             // relativeHeight is mandatory attribute, if value is not present, we must write default value
             attrList->add(XML_relativeHeight, "0");
