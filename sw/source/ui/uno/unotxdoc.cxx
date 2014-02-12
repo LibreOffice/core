@@ -2918,7 +2918,8 @@ void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
