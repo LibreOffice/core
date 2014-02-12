@@ -1012,17 +1012,18 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
-
+    long nTabPos = 0;
     if (nTabs > 0)
-    {
-        long TabPos = rDevice.GetTextWidth(OUString('n')) * 8;
+        nTabPos = rDevice.approximate_char_width() * 8;
 
+    if (nTabPos)
+    {
         aSize.Width() = 0;
 
         for (sal_uInt16 i = 0; i < nTabs; i++)
         {
             if (i > 0)
-                aSize.Width() = ((aSize.Width() / TabPos) + 1) * TabPos;
+                aSize.Width() = ((aSize.Width() / nTabPos) + 1) * nTabPos;
 
             OUString aText = rLine.getToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
@@ -1101,16 +1102,18 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
     SAL_INFO( "starmath", "SmViewShell::DrawTextLine" );
 
     Point   aPoint (rPosition);
+
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
-
+    long nTabPos = 0;
     if (nTabs > 0)
-    {
-        long TabPos = rDevice.GetTextWidth(OUString('n')) * 8;
+        nTabPos = rDevice.approximate_char_width() * 8;
 
-        for (sal_uInt16 i = 0; i < nTabs; i++)
+    if (nTabPos)
+    {
+        for (sal_uInt16 i = 0; i < nTabs; ++i)
         {
             if (i > 0)
-                aPoint.X() = ((aPoint.X() / TabPos) + 1) * TabPos;
+                aPoint.X() = ((aPoint.X() / nTabPos) + 1) * nTabPos;
 
             OUString aText = rLine.getToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
