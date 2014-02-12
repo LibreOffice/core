@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_50f32c0a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-12T08:55:41Z",
+      "side": 1,
+      "message": "Nitpick: a C++ reference should have the \"r\" prefix, not \"a\".",
+      "revId": "ee4a5cfbb5346a344dd2c585d11e8408f86550da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
