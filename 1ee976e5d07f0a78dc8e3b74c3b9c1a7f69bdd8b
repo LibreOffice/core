@@ -16,6 +16,23 @@
       "revId": "1ee976e5d07f0a78dc8e3b74c3b9c1a7f69bdd8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_10ee048c",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 5591,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-02-12T21:55:09Z",
+      "side": 1,
+      "message": "Note that this is the the number of parameters (the wizard UI can handle, hence 30) not the count of numbers the function can handle (which could all be in one range argument).\n\nIn general I suggest to not mix clean-ups with feature implementations, but create separate commits instead.",
+      "revId": "1ee976e5d07f0a78dc8e3b74c3b9c1a7f69bdd8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
