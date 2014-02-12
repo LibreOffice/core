@@ -185,7 +185,6 @@ throw ( Exception, RuntimeException )
     {
         SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
-        //shizhoubo add
         m_bSupportVisible = sal_False;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
@@ -714,7 +713,6 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 
 //
 //-------------------------------------------------------------------------
-// XPropertySet by shizhoubo
 com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -725,7 +723,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_C
 {
         return *const_cast<ToolboxController*>(this)->getArrayHelper();
 }
-//OPropertyArrayUsageHelper by shizhoubo
+
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
 {
@@ -733,12 +731,12 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_C
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
 }
-//shizhoubo for supportsvisiable
+
 void ToolboxController::setSupportVisibleProperty(sal_Bool bValue)
 {
     m_bSupportVisible = bValue;
 }
-//OPropertySetHelper by shizhoubo
+
 sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::uno::Any&    aConvertedValue ,
                                              com::sun::star::uno::Any&        aOldValue       ,
                                              sal_Int32                        nHandle         ,

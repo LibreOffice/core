@@ -51,13 +51,13 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                           public ::com::sun::star::lang::XInitialization,
                           public ::com::sun::star::util::XUpdatable,
                           public ::com::sun::star::lang::XComponent,
-                          public ::comphelper::OMutexAndBroadcastHelper,//shizhoubo
-                          public ::comphelper::OPropertyContainer,//shizhoubo
-                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >,//shizhoubo
+                          public ::comphelper::OMutexAndBroadcastHelper,
+                          public ::comphelper::OPropertyContainer,
+                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >,
                           public ::cppu::OWeakObject
 {
     private:
-        sal_Bool  m_bSupportVisible; //shizhoubo
+        sal_Bool  m_bSupportVisible;
     public:
         ToolboxController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
@@ -101,13 +101,13 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
-        // OPropertySetHelper //shizhoubo
+        // OPropertySetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception);
         virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException);
-        // XPropertySet //shizhoubo
+        // XPropertySet
         virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        // OPropertyArrayUsageHelper //shizhoubo
+        // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 
@@ -120,7 +120,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
-        void setSupportVisibleProperty(sal_Bool bValue); //shizhoubo
+        void setSupportVisibleProperty(sal_Bool bValue);
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
