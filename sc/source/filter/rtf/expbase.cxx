@@ -42,7 +42,7 @@ ScExportBase::~ScExportBase()
 }
 
 
-sal_Bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
     pDoc->GetDataStart( nTab, nStartCol, nStartRow );
@@ -51,7 +51,7 @@ sal_Bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
 }
 
 
-sal_Bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
     while ( nStartCol <= nEndCol && pDoc->ColHidden(nStartCol, nTab))
@@ -65,10 +65,10 @@ sal_Bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
 }
 
 
-sal_Bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
+bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
 {
     if ( !pDoc->HasTable( nTab ) || !pDoc->IsVisible( nTab ) )
-        return sal_True;
+        return true;
     SCCOL nStartCol, nEndCol;
     SCROW nStartRow, nEndRow;
     return !GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );

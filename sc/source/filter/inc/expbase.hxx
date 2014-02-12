@@ -46,17 +46,17 @@ public:
                         // Hidden Cols/Rows an den Raendern trimmen,
                         // return: sal_True wenn Bereich vorhanden
                         // Start/End/Col/Row muessen gueltige Ausgangswerte sein
-    sal_Bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+    bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Ausgabebereich einer Tabelle ermitteln,
                         // Hidden Cols/Rows an den Raendern beruecksichtigt,
                         // return: sal_True wenn Bereich vorhanden
-    sal_Bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+    bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Tabelle nicht vorhanden oder leer
-    sal_Bool                IsEmptyTable( SCTAB nTab ) const;
+    bool                IsEmptyTable( SCTAB nTab ) const;
 
     ScFieldEditEngine&  GetEditEngine() const;
 
