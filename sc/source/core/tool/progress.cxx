@@ -36,13 +36,13 @@ using namespace com::sun::star;
 
 static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = NULL;
-sal_uLong           ScProgress::nGlobalRange = 0;
-sal_uLong           ScProgress::nGlobalPercent = 0;
-sal_Bool            ScProgress::bGlobalNoUserBreak = sal_True;
+sal_uLong       ScProgress::nGlobalRange = 0;
+sal_uLong       ScProgress::nGlobalPercent = 0;
+bool            ScProgress::bGlobalNoUserBreak = true;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
 ScProgress*     ScProgress::pOldInterpretProgress = NULL;
-sal_uLong           ScProgress::nInterpretProgress = 0;
-sal_Bool            ScProgress::bAllowInterpretProgress = sal_True;
+sal_uLong       ScProgress::nInterpretProgress = 0;
+bool            ScProgress::bAllowInterpretProgress = true;
 ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
 
@@ -73,7 +73,7 @@ static bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
 }
 
 ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
-                        sal_uLong nRange, sal_Bool bAllDocs, sal_Bool bWait )
+                        sal_uLong nRange, bool bAllDocs, bool bWait )
 {
 
     if ( pGlobalProgress || SfxProgress::GetActiveProgress( NULL ) )
@@ -136,7 +136,7 @@ ScProgress::~ScProgress()
 }
 
 
-void ScProgress::CreateInterpretProgress( ScDocument* pDoc, sal_Bool bWait )
+void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
 {
     if ( bAllowInterpretProgress )
     {

@@ -41,13 +41,13 @@ class SC_DLLPUBLIC ScProgress
 {
 private:
     static  SfxProgress*    pGlobalProgress;
-    static  sal_uLong           nGlobalRange;
-    static  sal_uLong           nGlobalPercent;
-    static  sal_Bool            bGlobalNoUserBreak;
+    static  sal_uLong        nGlobalRange;
+    static  sal_uLong       nGlobalPercent;
+    static  bool            bGlobalNoUserBreak;
     static  ScProgress*     pInterpretProgress;
     static  ScProgress*     pOldInterpretProgress;
-    static  sal_uLong           nInterpretProgress;
-    static  sal_Bool            bAllowInterpretProgress;
+    static  sal_uLong       nInterpretProgress;
+    static  bool            bAllowInterpretProgress;
     static  ScDocument*     pInterpretDoc;
     static  bool            bIdleWasEnabled;
 
@@ -65,9 +65,9 @@ private:
 
 public:
     static  SfxProgress*    GetGlobalSfxProgress() { return pGlobalProgress; }
-    static  sal_Bool            IsUserBreak() { return !bGlobalNoUserBreak; }
+    static  bool            IsUserBreak() { return !bGlobalNoUserBreak; }
     static  void            CreateInterpretProgress( ScDocument* pDoc,
-                                                    sal_Bool bWait = sal_True );
+                                                    bool bWait = true );
     static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
     static  void            DeleteInterpretProgress();
     static  sal_uLong           GetInterpretCount() { return nInterpretProgress; }
@@ -76,8 +76,8 @@ public:
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const OUString& rText,
-                                         sal_uLong nRange, sal_Bool bAllDocs = false,
-                                         sal_Bool bWait = sal_True );
+                                         sal_uLong nRange, bool bAllDocs = false,
+                                         bool bWait = true );
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX
@@ -87,7 +87,7 @@ public:
                             /// might be NULL!
             SfxProgress*    GetSfxProgress() const { return pProgress; }
 
-            sal_Bool            SetStateText( sal_uLong nVal, const OUString &rVal, sal_uLong nNewRange = 0 )
+            bool            SetStateText( sal_uLong nVal, const OUString &rVal, sal_uLong nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -98,9 +98,9 @@ public:
                                             bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return true;
                                 }
-            sal_Bool            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
+            bool            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -111,9 +111,9 @@ public:
                                             bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return true;
                                 }
-            sal_Bool            SetStateCountDown( sal_uLong nVal )
+            bool            SetStateCountDown( sal_uLong nVal )
                                 {
                                     if ( pProgress )
                                     {
@@ -122,22 +122,22 @@ public:
                                             bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return true;
                                 }
-            sal_Bool            SetStateOnPercent( sal_uLong nVal )
+            bool            SetStateOnPercent( sal_uLong nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
-                                    return sal_True;
+                                    return true;
                                 }
-            sal_Bool            SetStateCountDownOnPercent( sal_uLong nVal )
+            bool            SetStateCountDownOnPercent( sal_uLong nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetStateCountDown( nVal );
-                                    return sal_True;
+                                    return true;
                                 }
             sal_uLong           GetState()
                                 {

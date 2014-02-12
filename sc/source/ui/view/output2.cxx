@@ -1068,7 +1068,7 @@ static inline void lcl_CreateInterpretProgress( sal_Bool& bProgress, ScDocument*
 {
     if ( !bProgress && pFCell->GetDirty() )
     {
-        ScProgress::CreateInterpretProgress( pDoc, sal_True );
+        ScProgress::CreateInterpretProgress( pDoc, true );
         bProgress = sal_True;
     }
 }
