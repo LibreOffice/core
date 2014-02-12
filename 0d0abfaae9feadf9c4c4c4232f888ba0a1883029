@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_50832ccc",
+        "filename": "scp2/source/ooo/module_hidden_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-12T15:52:39Z",
+      "side": 0,
+      "message": "this one needs removing",
+      "revId": "0d0abfaae9feadf9c4c4c4232f888ba0a1883029",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

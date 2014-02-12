@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_f01c20c4",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-12T15:52:39Z",
+      "side": 1,
+      "message": "sysdtrans was previously PLAINLIBS_OOO and is now OOOLIBS;\nthat will rename the library and maybe there is code that expects it to have the old name.\nprobably better to add a new section to install  PLAINLIBS_OOO for it.",
+      "revId": "f79c44a76cf15fe8e9b77807d31ecb6dc6990d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_1079a4fc",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-12T15:52:39Z",
+      "side": 1,
+      "message": "this one also was PLAINLIBS_OOO",
+      "revId": "f79c44a76cf15fe8e9b77807d31ecb6dc6990d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_307ea8e5",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-12T15:52:39Z",
+      "side": 1,
+      "message": "external libraries like \"neon\" are handled not here but in RepositoryExternal.mk",
+      "revId": "f79c44a76cf15fe8e9b77807d31ecb6dc6990d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_d01f1cb6",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-12T15:52:39Z",
+      "side": 1,
+      "message": "actually clucene is not a package, see external/clucene/Library_clucene.mk\n\nalso, since it\u0027s external it should be in RepositoryExternal.mk",
+      "revId": "f79c44a76cf15fe8e9b77807d31ecb6dc6990d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
