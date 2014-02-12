@@ -156,12 +156,12 @@ public:
     const ScOutlineArray*   GetRowArray() const     { return &aRowOutline; }
     ScOutlineArray*         GetRowArray()           { return &aRowOutline; }
 
-    sal_Bool                    TestInsertCol( SCSIZE nSize );
+    bool                    TestInsertCol( SCSIZE nSize );
     void                    InsertCol( SCCOL nStartCol, SCSIZE nSize );
-    sal_Bool                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo only using original
-    sal_Bool                    TestInsertRow( SCSIZE nSize );
+    bool                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo only using original
+    bool                    TestInsertRow( SCSIZE nSize );
     void                    InsertRow( SCROW nStartRow, SCSIZE nSize );
-    sal_Bool                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
+    bool                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
 };
 
 

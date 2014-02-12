@@ -805,7 +805,7 @@ ScOutlineTable::ScOutlineTable( const ScOutlineTable& rOutline ) :
 {
 }
 
-sal_Bool ScOutlineTable::TestInsertCol( SCSIZE nSize )
+bool ScOutlineTable::TestInsertCol( SCSIZE nSize )
 {
     return aColOutline.TestInsertSpace( nSize, MAXCOL );
 }
@@ -815,12 +815,12 @@ void ScOutlineTable::InsertCol( SCCOL nStartCol, SCSIZE nSize )
     aColOutline.InsertSpace( nStartCol, nSize );
 }
 
-sal_Bool ScOutlineTable::DeleteCol( SCCOL nStartCol, SCSIZE nSize )
+bool ScOutlineTable::DeleteCol( SCCOL nStartCol, SCSIZE nSize )
 {
     return aColOutline.DeleteSpace( nStartCol, nSize );
 }
 
-sal_Bool ScOutlineTable::TestInsertRow( SCSIZE nSize )
+bool ScOutlineTable::TestInsertRow( SCSIZE nSize )
 {
     return aRowOutline.TestInsertSpace( nSize, MAXROW );
 }
@@ -830,7 +830,7 @@ void ScOutlineTable::InsertRow( SCROW nStartRow, SCSIZE nSize )
     aRowOutline.InsertSpace( nStartRow, nSize );
 }
 
-sal_Bool ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
+bool ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
     return aRowOutline.DeleteSpace( nStartRow, nSize );
 }
