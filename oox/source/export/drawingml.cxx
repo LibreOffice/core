@@ -349,6 +349,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
         mpFS->endElementNS( XML_a, XML_gradFill );
     }
 }
+
 void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientStops, awt::Gradient rGradient )
 {
     // write back the original gradient
@@ -440,7 +441,6 @@ void DrawingML::WriteGradientFill( awt::Gradient rGradient )
                     FSEND );
             break;
     }
-    mpFS->endElementNS( XML_a, XML_gradFill );
 }
 
 void DrawingML::WriteLineArrow( Reference< XPropertySet > rXPropSet, sal_Bool bLineStart )
