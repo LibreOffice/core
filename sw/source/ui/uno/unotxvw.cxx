@@ -1322,7 +1322,8 @@ sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
     return nRet;
 }
 
-sal_Bool SwXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::screenDown()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;

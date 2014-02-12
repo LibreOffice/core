@@ -212,7 +212,9 @@ public:
     virtual void SAL_CALL  setString(const OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
 
     //XScreenCursor
-    virtual sal_Bool SAL_CALL screenDown(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL screenDown()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL screenUp(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XViewCursor
