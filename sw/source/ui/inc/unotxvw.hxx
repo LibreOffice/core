@@ -183,7 +183,9 @@ public:
     virtual void SAL_CALL collapseToEnd()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual sal_Bool SAL_CALL isCollapsed(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isCollapsed()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL gotoStart( sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);

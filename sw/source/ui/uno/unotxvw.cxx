@@ -986,7 +986,8 @@ void SwXTextViewCursor::collapseToEnd()
         throw uno::RuntimeException();
 }
 
-sal_Bool SwXTextViewCursor::isCollapsed(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::isCollapsed()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
