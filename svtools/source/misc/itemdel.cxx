@@ -38,13 +38,12 @@ class SfxItemDesruptor_Impl
     Link         aLink;
 
 private:
-    DECL_LINK( Delete, SfxItemDesruptor_Impl * );
-    SfxItemDesruptor_Impl( const SfxItemDesruptor_Impl& ); // n.i.
+                 DECL_LINK( Delete, void * );
+                 SfxItemDesruptor_Impl( const SfxItemDesruptor_Impl& ); // n.i.
 
 public:
-    SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt );
-    void LaunchDeleteOnIdle();
-    ~SfxItemDesruptor_Impl();
+                 SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt );
+                 ~SfxItemDesruptor_Impl();
 };
 
 // ------------------------------------------------------------------------
@@ -56,10 +55,7 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
     pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
-}
 
-void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
-{
     // process in Idle
     GetpApp()->InsertIdleHdl( aLink, 1 );
 }
@@ -79,18 +75,18 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK(SfxItemDesruptor_Impl, Delete, SfxItemDesruptor_Impl*, pImpl)
+IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
     {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}
-    delete pImpl;
+    delete this;
     return 0;
 }
 
-void DeleteItemOnIdle(SfxPoolItem* pItem)
+// ------------------------------------------------------------------------
+void DeleteItemOnIdle( SfxPoolItem* pItem )
 {
     DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
-    SfxItemDesruptor_Impl *pDesruptor = new SfxItemDesruptor_Impl(pItem);
-    pDesruptor->LaunchDeleteOnIdle();
+    new SfxItemDesruptor_Impl( pItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
