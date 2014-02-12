@@ -44,7 +44,7 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    sal_Bool    MakeArea            ( const OUString&     rAreaStr,
+    bool    MakeArea            ( const OUString&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   SCTAB         nTab,
@@ -53,14 +53,14 @@ public:
     void    CutPosString        ( const OUString&     theAreaStr,
                                   OUString&           thePosStr ) const;
 
-    sal_Bool    IsAbsTabArea        ( const OUString&     rAreaStr,
+    bool    IsAbsTabArea        ( const OUString&   rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
-                                  sal_uInt16*           pAreaCount  = 0,
-                                  sal_Bool              bAcceptCellRef = false,
+                                  sal_uInt16*       pAreaCount  = 0,
+                                  bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    IsAbsArea           ( const OUString& rAreaStr,
+    bool    IsAbsArea           ( const OUString& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   OUString*     pCompleteStr = 0,
@@ -68,21 +68,21 @@ public:
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    IsRefArea           ( const OUString&,
+    bool    IsRefArea           ( const OUString&,
                                   ScDocument*,
                                   SCTAB,
                                   OUString* = 0,
                                   ScRefAddress* = 0 ) const
                                       { return false; }
 
-    sal_Bool    IsAbsPos            ( const OUString& rPosStr,
+    bool    IsAbsPos            ( const OUString& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   OUString*       pCompleteStr = 0,
                                   ScRefAddress* pPosTripel   = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    MakeRangeFromName   ( const OUString& rName,
+    bool    MakeRangeFromName   ( const OUString& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
@@ -98,7 +98,7 @@ public:
     static void         AssignString(
                             OUString& rString,
                             const OUString& rNewStr,
-                            sal_Bool bAppendStr,
+                            bool bAppendStr,
                             sal_Unicode cSeparator = ' ');
 
     static sal_Int32    IndexOf(
@@ -130,7 +130,7 @@ public:
                             sal_Unicode cQuote = '\'');
 
 /// String to Range core
-    static sal_Bool     GetAddressFromString(
+    static bool     GetAddressFromString(
                             ScAddress& rAddress,
                             const OUString& rAddressStr,
                             const ScDocument* pDocument,
@@ -138,7 +138,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeFromString(
+    static bool     GetRangeFromString(
                             ScRange& rRange,
                             const OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -146,7 +146,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeListFromString(
+    static bool     GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const OUString& rRangeListStr,
                             const ScDocument* pDocument,
@@ -154,7 +154,7 @@ public:
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
-    static sal_Bool     GetAreaFromString(
+    static bool     GetAreaFromString(
                             ScArea& rArea,
                             const OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -164,7 +164,7 @@ public:
                             sal_Unicode cQuote = '\'');
 
 /// String to Range API
-    static sal_Bool     GetAddressFromString(
+    static bool     GetAddressFromString(
                             ::com::sun::star::table::CellAddress& rAddress,
                             const OUString& rAddressStr,
                             const ScDocument* pDocument,
@@ -172,7 +172,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeFromString(
+    static bool     GetRangeFromString(
                             ::com::sun::star::table::CellRangeAddress& rRange,
                             const OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -180,7 +180,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeListFromString(
+    static bool     GetRangeListFromString(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const OUString& rRangeListStr,
                             const ScDocument* pDocument,
@@ -195,7 +195,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
-                            sal_Bool bAppendStr = false,
+                            bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             OUString& rString,
@@ -203,7 +203,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
-                            sal_Bool bAppendStr = false,
+                            bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             OUString& rString,
@@ -219,7 +219,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
-                            sal_Bool bAppendStr = false,
+                            bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 /// Range to String API
@@ -229,7 +229,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
-                            sal_Bool bAppendStr = false,
+                            bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             OUString& rString,
@@ -237,7 +237,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
-                            sal_Bool bAppendStr = false,
+                            bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             OUString& rString,
@@ -269,8 +269,8 @@ public:
             ScArea( const ScArea& r );
 
     ScArea& operator=   ( const ScArea& r );
-    sal_Bool    operator==  ( const ScArea& r ) const;
-    sal_Bool    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
+    bool    operator==  ( const ScArea& r ) const;
+    bool    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
 
 public:
     SCTAB nTab;

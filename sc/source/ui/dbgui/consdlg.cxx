@@ -420,7 +420,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, sal_True, eConv ) )
+            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, true, eConv ) )
             {
                 // IsAbsTabArea() creates an array of ScArea pointers,
                 // which have been created dynamically as well.

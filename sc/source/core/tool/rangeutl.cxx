@@ -31,7 +31,7 @@
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
 
-sal_Bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
+bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
@@ -42,7 +42,7 @@ sal_Bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
-    sal_Bool        nSuccess    = false;
+    bool        nSuccess    = false;
     sal_Int32       nPointPos   = rAreaStr.indexOf('.');
     sal_Int32       nColonPos   = rAreaStr.indexOf(':');
     OUString      aStrArea( rAreaStr );
@@ -82,11 +82,11 @@ void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
     thePosStr = aPosStr;
 }
 
-sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
+bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                                 ScDocument*     pDoc,
                                 ScArea***       pppAreas,
                                 sal_uInt16*         pAreaCount,
-                                sal_Bool            /* bAcceptCellRef */,
+                                bool            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails ) const
 {
     OSL_ENSURE( pDoc, "No document given!" );
@@ -106,7 +106,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
      * which is published via ppAreas and also has to be deleted this route.
      */
 
-    sal_Bool    bStrOk = false;
+    bool    bStrOk = false;
     OUString  aTempAreaStr(rAreaStr);
     OUString  aStartPosStr;
     OUString  aEndPosStr;
@@ -139,7 +139,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                 aEndPos.SetRelRow( false );
                 aEndPos.SetRelTab( false );
 
-                bStrOk = sal_True;
+                bStrOk = true;
 
                 if ( pppAreas && pAreaCount ) // Array returned ?
                 {
@@ -169,7 +169,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
     return bStrOk;
 }
 
-sal_Bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
+bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
                              ScDocument*    pDoc,
                              SCTAB          nTab,
                              OUString*      pCompleteStr,
@@ -180,7 +180,7 @@ sal_Bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    sal_Bool bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
+    bool bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
@@ -208,7 +208,7 @@ sal_Bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
     return bIsAbsArea;
 }
 
-sal_Bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
+bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
                             OUString*       pCompleteStr,
@@ -217,7 +217,7 @@ sal_Bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
 {
     ScRefAddress    thePos;
 
-    sal_Bool bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
+    bool bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
     thePos.SetRelCol( false );
     thePos.SetRelRow( false );
     thePos.SetRelTab( false );
@@ -233,7 +233,7 @@ sal_Bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
     return bIsAbsPos;
 }
 
-sal_Bool ScRangeUtil::MakeRangeFromName (
+bool ScRangeUtil::MakeRangeFromName (
     const OUString& rName,
     ScDocument*     pDoc,
     SCTAB           nCurTab,
@@ -241,7 +241,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
     RutlNameScope   eScope,
     ScAddress::Details const & rDetails ) const
 {
-    sal_Bool bResult=false;
+    bool bResult = false;
     ScRangeUtil     aRangeUtil;
     SCTAB nTab = 0;
     SCCOL nColStart = 0;
@@ -289,7 +289,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
                 nRowStart  = aStartPos.Row();
                 nColEnd    = aEndPos.Col();
                 nRowEnd    = aEndPos.Row();
-                bResult    = sal_True;
+                bResult    = true;
             }
             else
             {
@@ -301,7 +301,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
                     nTab       = aStartPos.Tab();
                     nColStart  = nColEnd = aStartPos.Col();
                     nRowStart  = nRowEnd = aStartPos.Row();
-                    bResult    = sal_True;
+                    bResult    = true;
                 }
             }
         }
@@ -332,7 +332,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 void ScRangeStringConverter::AssignString(
         OUString& rString,
         const OUString& rNewStr,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_Unicode cSeparator)
 {
     if( bAppendStr )
@@ -435,7 +435,7 @@ sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Un
     return nCount;
 }
 
-sal_Bool ScRangeStringConverter::GetAddressFromString(
+bool ScRangeStringConverter::GetAddressFromString(
         ScAddress& rAddress,
         const OUString& rAddressStr,
         const ScDocument* pDocument,
@@ -457,7 +457,7 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
     return false;
 }
 
-sal_Bool ScRangeStringConverter::GetRangeFromString(
+bool ScRangeStringConverter::GetRangeFromString(
         ScRange& rRange,
         const OUString& rRangeStr,
         const ScDocument* pDocument,
@@ -467,7 +467,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         sal_Unicode cQuote )
 {
     OUString sToken;
-    sal_Bool bResult(false);
+    bool bResult(false);
     GetTokenByOffset( sToken, rRangeStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
@@ -522,7 +522,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
     return bResult;
 }
 
-sal_Bool ScRangeStringConverter::GetRangeListFromString(
+bool ScRangeStringConverter::GetRangeListFromString(
         ScRangeList& rRangeList,
         const OUString& rRangeListStr,
         const ScDocument* pDocument,
@@ -530,7 +530,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cSeparator,
         sal_Unicode cQuote )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
@@ -553,7 +553,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     return bRet;
 }
 
-sal_Bool ScRangeStringConverter::GetAreaFromString(
+bool ScRangeStringConverter::GetAreaFromString(
         ScArea& rArea,
         const OUString& rRangeStr,
         const ScDocument* pDocument,
@@ -563,7 +563,7 @@ sal_Bool ScRangeStringConverter::GetAreaFromString(
         sal_Unicode cQuote )
 {
     ScRange aScRange;
-    sal_Bool bResult(false);
+    bool bResult(false);
     if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
     {
         rArea.nTab = aScRange.aStart.Tab();
@@ -571,12 +571,12 @@ sal_Bool ScRangeStringConverter::GetAreaFromString(
         rArea.nRowStart = aScRange.aStart.Row();
         rArea.nColEnd = aScRange.aEnd.Col();
         rArea.nRowEnd = aScRange.aEnd.Row();
-        bResult = sal_True;
+        bResult = true;
     }
     return bResult;
 }
 
-sal_Bool ScRangeStringConverter::GetAddressFromString(
+bool ScRangeStringConverter::GetAddressFromString(
         table::CellAddress& rAddress,
         const OUString& rAddressStr,
         const ScDocument* pDocument,
@@ -586,16 +586,16 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
         sal_Unicode cQuote )
 {
     ScAddress aScAddress;
-    sal_Bool bResult(false);
+    bool bResult(false);
     if( GetAddressFromString( aScAddress, rAddressStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiAddress( rAddress, aScAddress );
-        bResult = sal_True;
+        bResult = true;
     }
     return bResult;
 }
 
-sal_Bool ScRangeStringConverter::GetRangeFromString(
+bool ScRangeStringConverter::GetRangeFromString(
         table::CellRangeAddress& rRange,
         const OUString& rRangeStr,
         const ScDocument* pDocument,
@@ -605,16 +605,16 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         sal_Unicode cQuote )
 {
     ScRange aScRange;
-    sal_Bool bResult(false);
+    bool bResult(false);
     if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiRange( rRange, aScRange );
-        bResult = sal_True;
+        bResult = true;
     }
     return bResult;
 }
 
-sal_Bool ScRangeStringConverter::GetRangeListFromString(
+bool ScRangeStringConverter::GetRangeListFromString(
         uno::Sequence< table::CellRangeAddress >& rRangeSeq,
         const OUString& rRangeListStr,
         const ScDocument* pDocument,
@@ -622,7 +622,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cSeparator,
         sal_Unicode cQuote )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     table::CellRangeAddress aRange;
     sal_Int32 nOffset = 0;
@@ -645,7 +645,7 @@ void ScRangeStringConverter::GetStringFromAddress(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
     if (pDocument && pDocument->HasTable(rAddress.Tab()))
@@ -661,7 +661,7 @@ void ScRangeStringConverter::GetStringFromRange(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
     if (pDocument && pDocument->HasTable(rRange.aStart.Tab()))
@@ -692,7 +692,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
         {
             const ScRange* pRange = (*pRangeList)[nIndex];
             if( pRange )
-                GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeparator, sal_True, nFormatFlags );
+                GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeparator, true, nFormatFlags );
         }
     }
     rString = sRangeListStr;
@@ -704,7 +704,7 @@ void ScRangeStringConverter::GetStringFromArea(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
     ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
@@ -717,7 +717,7 @@ void ScRangeStringConverter::GetStringFromAddress(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
     ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
@@ -730,7 +730,7 @@ void ScRangeStringConverter::GetStringFromRange(
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
-        sal_Bool bAppendStr,
+        bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
     ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
@@ -751,7 +751,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
-        GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, sal_True, nFormatFlags );
+        GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, true, nFormatFlags );
     }
     rString = sRangeListStr;
 }
@@ -999,7 +999,7 @@ ScArea& ScArea::operator=( const ScArea& r )
     return *this;
 }
 
-sal_Bool ScArea::operator==( const ScArea& r ) const
+bool ScArea::operator==( const ScArea& r ) const
 {
     return (   (nTab        == r.nTab)
             && (nColStart   == r.nColStart)
