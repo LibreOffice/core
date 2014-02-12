@@ -686,6 +686,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         // rListener->dispatchFinished potentially calls
         // framework::Desktop::terminate -> SfxApplication::Deinitialize ->
         // ~CntItemPool:
+        if (pDispatcher)
         {
             SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
             if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
