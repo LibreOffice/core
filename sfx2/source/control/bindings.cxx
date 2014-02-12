@@ -1609,7 +1609,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
         pDispatcher->Update_Impl();
 
     // modifying the SfxObjectInterface-stack without SfxBindings => nothing to do
-    SfxViewFrame* pFrame = pDispatcher->GetFrame();
+    SfxViewFrame* pFrame = pDispatcher ? pDispatcher->GetFrame() : NULL;
     if ( (pFrame && !pFrame->GetObjectShell()->AcceptStateUpdate()) || pSfxApp->IsDowning() || pImp->pCaches->empty() )
     {
         DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
