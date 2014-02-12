@@ -83,11 +83,10 @@ IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 }
 
 // ------------------------------------------------------------------------
-SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem )
+void DeleteItemOnIdle( SfxPoolItem* pItem )
 {
     DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
     new SfxItemDesruptor_Impl( pItem );
-    return pItem;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

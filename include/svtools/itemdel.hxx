@@ -23,7 +23,7 @@
 
 class SfxPoolItem;
 
-SVT_DLLPUBLIC SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem );
+SVT_DLLPUBLIC void DeleteItemOnIdle( SfxPoolItem* pItem );
 
 #endif
 
