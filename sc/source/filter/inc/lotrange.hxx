@@ -48,9 +48,9 @@ public:
                         LotusRange( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
                         LotusRange( const LotusRange& );
     inline LotusRange   &operator =( const LotusRange& );
-    inline sal_Bool         operator ==( const LotusRange& ) const;
-    inline sal_Bool         operator !=( const LotusRange& ) const;
-    inline sal_Bool         IsSingle( void ) const;
+    inline bool         operator ==( const LotusRange& ) const;
+    inline bool         operator !=( const LotusRange& ) const;
+    inline bool         IsSingle( void ) const;
 };
 
 
@@ -76,7 +76,7 @@ inline LotusRange &LotusRange::operator =( const LotusRange& rCpy )
 }
 
 
-inline sal_Bool LotusRange::operator ==( const LotusRange& rRef ) const
+inline bool LotusRange::operator ==( const LotusRange& rRef ) const
 {
     return ( nHash == rRef.nHash && nColStart == rRef.nColStart &&
         nRowStart == rRef.nRowStart && nColEnd == rRef.nColEnd &&
@@ -84,7 +84,7 @@ inline sal_Bool LotusRange::operator ==( const LotusRange& rRef ) const
 }
 
 
-inline sal_Bool LotusRange::operator !=( const LotusRange& rRef ) const
+inline bool LotusRange::operator !=( const LotusRange& rRef ) const
 {
     return ( nHash != rRef.nHash || nColStart != rRef.nColStart ||
         nRowStart != rRef.nRowStart || nColEnd != rRef.nColEnd ||
@@ -92,7 +92,7 @@ inline sal_Bool LotusRange::operator !=( const LotusRange& rRef ) const
 }
 
 
-inline sal_Bool LotusRange::IsSingle( void ) const
+inline bool LotusRange::IsSingle( void ) const
 {
     return ( nColStart == nColEnd && nRowStart == nRowEnd );
 }
