@@ -32,6 +32,7 @@ namespace wrapper
 WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedDirectStateProperty( "NumberFormat", "NumberFormat" )
         , m_spChart2ModelContact(spChart2ModelContact)
+        , m_pWrappedLinkNumberFormatProperty(NULL)
 {
     m_aOuterValue = getPropertyDefault( 0 );
 }
