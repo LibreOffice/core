@@ -42,7 +42,7 @@ ScMarkArray::~ScMarkArray()
 
 //------------------------------------------------------------------------
 
-void ScMarkArray::Reset( sal_Bool bMarked )
+void ScMarkArray::Reset( bool bMarked )
 {
     // always create pData here
     // (or have separate method to ensure pData)
@@ -57,11 +57,11 @@ void ScMarkArray::Reset( sal_Bool bMarked )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
+bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
     long    nHi         = static_cast<long>(nCount) - 1;
     long    i           = 0;
-    sal_Bool    bFound      = (nCount == 1);
+    bool    bFound      = (nCount == 1);
     if (pData)
     {
         long    nLo         = 0;
@@ -80,7 +80,7 @@ sal_Bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
                 if (nStartRow >= (long) nRow)
                     nHi = --i;
                 else
-                    bFound = sal_True;
+                    bFound = true;
         }
     }
     else
@@ -93,7 +93,7 @@ sal_Bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
     return bFound;
 }
 
-sal_Bool ScMarkArray::GetMark( SCROW nRow ) const
+bool ScMarkArray::GetMark( SCROW nRow ) const
 {
     SCSIZE i;
     if (Search( nRow, i ))
@@ -105,7 +105,7 @@ sal_Bool ScMarkArray::GetMark( SCROW nRow ) const
 
 //------------------------------------------------------------------------
 
-void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked )
+void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
@@ -232,7 +232,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked 
     }
 }
 
-sal_Bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
+bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
 {
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
@@ -241,21 +241,21 @@ sal_Bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
         if (pData[nStartIndex].bMarked)
             if (Search( nEndRow, nEndIndex ))
                 if (nEndIndex==nStartIndex)
-                    return sal_True;
+                    return true;
 
     return false;
 }
 
-sal_Bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
+bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     if ( nCount == 1 )
     {
         if ( pData[0].bMarked )
         {
             rStartRow = 0;
             rEndRow = MAXROW;
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else if ( nCount == 2 )
@@ -270,7 +270,7 @@ sal_Bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
             rStartRow = pData[0].nRow + 1;
             rEndRow = MAXROW;
         }
-        bRet = sal_True;
+        bRet = true;
     }
     else if ( nCount == 3 )
     {
@@ -278,7 +278,7 @@ sal_Bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         {
             rStartRow = pData[0].nRow + 1;
             rEndRow = pData[1].nRow;
-            bRet = sal_True;
+            bRet = true;
         }
     }
     return bRet;
@@ -299,7 +299,7 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
     rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
 }
 
-SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, sal_Bool bUp ) const
+SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
 {
     if (!pData)
         const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
@@ -325,7 +325,7 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, sal_Bool bUp ) const
     return nRet;
 }
 
-SCROW ScMarkArray::GetMarkEnd( SCROW nRow, sal_Bool bUp ) const
+SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 {
     if (!pData)
         const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
@@ -361,7 +361,7 @@ ScMarkArrayIter::~ScMarkArrayIter()
 {
 }
 
-sal_Bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
+bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
 {
     if ( nPos >= pArray->nCount )
         return false;
@@ -377,7 +377,7 @@ sal_Bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
     else
         rTop = pArray->pData[nPos-1].nRow + 1;
     ++nPos;
-    return sal_True;
+    return true;
 }
 
 
