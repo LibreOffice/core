@@ -37,7 +37,7 @@ struct ScSolveParam
     ~ScSolveParam();
 
     ScSolveParam&   operator=   ( const ScSolveParam& r );
-    sal_Bool        operator==  ( const ScSolveParam& r ) const;
+    bool           operator==  ( const ScSolveParam& r ) const;
 };
 
 /**

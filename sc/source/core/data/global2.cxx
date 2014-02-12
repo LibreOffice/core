@@ -273,15 +273,15 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSolveParam::operator==( const ScSolveParam& r ) const
+bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
-    sal_Bool bEqual =   (aRefFormulaCell  == r.aRefFormulaCell)
+    bool bEqual =   (aRefFormulaCell  == r.aRefFormulaCell)
                  && (aRefVariableCell == r.aRefVariableCell);
 
     if ( bEqual )
     {
         if ( !pStrTargetVal && !r.pStrTargetVal )
-            bEqual = sal_True;
+            bEqual = true;
         else if ( !pStrTargetVal || !r.pStrTargetVal )
             bEqual = false;
         else if ( pStrTargetVal && r.pStrTargetVal )
