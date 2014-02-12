@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="PivotTableLayout">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -19,8 +21,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
                 <property name="has_default">True</property>
+                <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -96,58 +98,45 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkBox" id="box5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
-                    <child>
-                      <object class="sclo-ScDPPageFieldControl" id="pagefield">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="row_homogeneous">True</property>
+                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="sclo-ScDPColFieldControl" id="columnfield">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sclo-ScDPRowFieldControl" id="rowfield">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
+                            <property name="left_attach">2</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
+                            <property name="width">6</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
@@ -155,13 +144,52 @@
                           <object class="sclo-ScDPDataFieldControl" id="datafield">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">6</property>
+                            <property name="height">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sclo-ScDPPageFieldControl" id="pagefield">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">7</property>
                             <property name="height">1</property>
                           </packing>
+                        </child>
+                        <child>
+                          <object class="sclo-ScDPRowFieldControl" id="rowfield">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">2</property>
+                            <property name="height">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -174,6 +202,7 @@
                       <object class="GtkLabel" id="info">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Drag the fields from the right into the desired position</property>
                       </object>
                       <packing>
@@ -211,6 +240,7 @@
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -221,8 +251,8 @@
                       <object class="GtkAlignment" id="alignment1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
                         <property name="top_padding">6</property>
+                        <property name="left_padding">12</property>
                         <child>
                           <object class="GtkBox" id="box3">
                             <property name="visible">True</property>
@@ -233,43 +263,115 @@
                               <object class="GtkBox" id="box4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <object class="GtkLabel" id="select_from">
+                                  <object class="GtkGrid" id="grid2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Selection from:</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">rangesel1</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="column_spacing">12</property>
+                                    <child>
+                                      <object class="GtkLabel" id="select_from">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">_Selection from:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">rangesel1</property>
+                                        <property name="ellipsize">end</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="foruilo-RefButton" id="changebutton1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">3</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="foruilo-RefButton" id="changebutton2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="foruilo-RefEdit" id="rangesel2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="width_chars">25</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="target_area">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="results_to">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Res_ults to:</property>
+                                        <property name="use_underline">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="foruilo-RefEdit" id="rangesel1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
                                     <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="foruilo-RefEdit" id="rangesel1">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="foruilo-RefButton" id="changebutton1">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -280,70 +382,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box6">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkLabel" id="results_to">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Res_ults to:</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">rangesel2</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="target_area">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="foruilo-RefEdit" id="rangesel2">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="foruilo-RefButton" id="changebutton2">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkGrid" id="grid3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">6</property>
                                 <child>
@@ -352,6 +394,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -369,6 +412,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -386,6 +430,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -403,6 +448,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -420,6 +466,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -437,6 +484,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -452,7 +500,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">2</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
@@ -487,7 +535,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="page_text">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Page Fields</property>
               </object>
@@ -499,7 +546,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="column_text">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Column Fields</property>
               </object>
@@ -511,7 +557,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="row_text">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Row Fields</property>
               </object>
@@ -523,7 +568,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="data_text">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Data Fields</property>
               </object>
@@ -535,7 +579,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="select_text">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Selection area</property>
               </object>
@@ -547,7 +590,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="sum">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Sum - </property>
               </object>
@@ -559,7 +601,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="count">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Count - </property>
               </object>
@@ -571,7 +612,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="mean">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Mean - </property>
               </object>
@@ -583,7 +623,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="max">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Max - </property>
               </object>
@@ -595,7 +634,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="min">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Min - </property>
               </object>
@@ -607,7 +645,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="product">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Product - </property>
               </object>
@@ -619,7 +656,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="count2">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Count - </property>
               </object>
@@ -631,7 +667,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="stdev">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">StDev - </property>
               </object>
@@ -643,7 +678,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="stdevp">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">StDevP - </property>
               </object>
@@ -655,7 +689,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="var">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Var - </property>
               </object>
@@ -667,7 +700,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="varp">
-                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">VarP - </property>
               </object>

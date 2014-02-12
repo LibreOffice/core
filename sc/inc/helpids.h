@@ -140,13 +140,6 @@
 #define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
 #define HID_SC_REPLCELLSWARN                                    "SC_HID_SC_REPLCELLSWARN"
 
-// data pilot layout dialog
-#define HID_SC_DPLAY_PAGE                                       "SC_HID_SC_DPLAY_PAGE"
-#define HID_SC_DPLAY_COLUMN                                     "SC_HID_SC_DPLAY_COLUMN"
-#define HID_SC_DPLAY_ROW                                        "SC_HID_SC_DPLAY_ROW"
-#define HID_SC_DPLAY_DATA                                       "SC_HID_SC_DPLAY_DATA"
-#define HID_SC_DPLAY_SELECT                                     "SC_HID_SC_DPLAY_SELECT"
-
 #define HID_SC_DRAW_RENAME                                      "SC_HID_SC_DRAW_RENAME"
 
 #define HID_SC_DPSUBT_OPT                                       "SC_HID_SC_DPSUBT_OPT"

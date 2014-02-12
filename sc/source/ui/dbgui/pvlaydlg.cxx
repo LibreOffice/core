@@ -56,7 +56,6 @@
 #include "reffact.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "pivot.hrc"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "dpshttab.hxx"
@@ -75,15 +74,6 @@ using ::std::for_each;
 namespace {
 
 const sal_uInt16 STD_FORMAT = sal_uInt16( SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
-
-Point DlgPos2WndPos( const Point& rPt, const Window& rWnd )
-{
-    Point aWndPt( rPt );
-    aWndPt.X() = rPt.X()-rWnd.GetPosPixel().X();
-    aWndPt.Y() = rPt.Y()-rWnd.GetPosPixel().Y();
-
-    return aWndPt;
-}
 
 static const OString* getFuncNames()
 {
@@ -135,15 +125,19 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     mpWndRow->Init( this, mpFtRow );
     mpWndData->Init( this, mpFtData );
     mpWndSelect->Init( this, NULL );
-    mpWndSelect->SetName( get<FixedText>("select_text")->GetText());
+    mpWndSelect->SetName(get<FixedText>("select_text")->GetText());
 
     get( mpFtInArea, "select_from" );
     get( mpEdInPos, "rangesel1" );
+    mpEdInPos->SetReferences(this, mpFtInArea);
     get( mpRbInPos, "changebutton1" );
+    mpRbInPos->SetReferences(this, mpEdInPos);
     get( mpLbOutPos, "target_area" );
     get( mpFtOutArea, "results_to" );
     get( mpEdOutPos, "rangesel2" );
+    mpEdOutPos->SetReferences(this, mpFtOutArea);
     get( mpRbOutPos, "changebutton2" );
+    mpRbOutPos->SetReferences(this, mpEdOutPos);
     get( mpBtnIgnEmptyRows, "ignore_empty" );
     get( mpBtnDetectCat, "detect_category" );
     get( mpBtnTotalCol, "total_cols" );
@@ -392,7 +386,7 @@ void ScPivotLayoutDlg::GrabFieldFocus( ScDPFieldControlBase* rFieldWindow )
         rFieldWindow->GrabFocus();
 }
 
-void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, const Point& rAtPos )
+void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, const Point& rScrPos )
 {
     ScPivotFuncData aFunc = mpWndSelect->GetFuncData(nFromIndex); // local copy
 
@@ -421,7 +415,7 @@ void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, co
         }
 
         aFunc.mnFuncMask = nMask;
-        size_t nAddedAt = toWnd->AddField(aStr, DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+        size_t nAddedAt = toWnd->AddField(aStr, toWnd->ScreenToOutputPixel(rScrPos), aFunc);
         if (nAddedAt != PIVOTFIELD_INVALID)
             toWnd->GrabFocus();
 
@@ -445,7 +439,7 @@ void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, co
         }
 
         const ScDPLabelData& rData = maLabelData[nFromIndex+mnOffset];
-        size_t nAddedAt = toWnd->AddField(rData.getDisplayName(), DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+        size_t nAddedAt = toWnd->AddField(rData.getDisplayName(), toWnd->ScreenToOutputPixel(rScrPos), aFunc);
         if (nAddedAt != PIVOTFIELD_INVALID)
             toWnd->GrabFocus();
     }
@@ -504,10 +498,10 @@ void ScPivotLayoutDlg::AppendField(size_t nFromIndex, ScPivotFieldType eToType)
     }
 }
 
-void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex, ScPivotFieldType eToType, const Point& rAtPos )
+void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex, ScPivotFieldType eToType, const Point& rScrPos )
 {
     if ( eFromType == PIVOTFIELDTYPE_SELECT )
-        AddField( nFromIndex, eToType, rAtPos );
+        AddField( nFromIndex, eToType, rScrPos );
     else if (eFromType != PIVOTFIELDTYPE_SELECT && eToType == PIVOTFIELDTYPE_SELECT)
         RemoveField(eFromType, nFromIndex);
     else if ( eFromType != eToType )
@@ -551,7 +545,7 @@ void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex,
                         }
 
                         nAddedAt = toWnd->AddField(
-                            GetLabelString(aFunc.mnCol), DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+                            GetLabelString(aFunc.mnCol), toWnd->ScreenToOutputPixel(rScrPos), aFunc);
                         if (nAddedAt != PIVOTFIELD_INVALID)
                             toWnd->GrabFocus();
                     }
@@ -567,7 +561,7 @@ void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex,
                         }
 
                         aFunc.mnFuncMask = nMask;
-                        nAddedAt = toWnd->AddField(aStr, DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+                        nAddedAt = toWnd->AddField(aStr, toWnd->ScreenToOutputPixel(rScrPos), aFunc);
                         if (nAddedAt != PIVOTFIELD_INVALID)
                             toWnd->GrabFocus();
                     }
@@ -586,7 +580,7 @@ void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex,
         size_t nAt = pWnd->GetFieldIndexByData(rFunc);
         if (nAt != PIVOTFIELD_INVALID)
         {
-            Point aToPos = DlgPos2WndPos( rAtPos, *pWnd );
+            Point aToPos = pWnd->ScreenToOutputPixel(rScrPos);
             size_t nToIndex = 0;
             pWnd->GetExistingIndex(aToPos, nToIndex);
 
@@ -894,10 +888,7 @@ void ScPivotLayoutDlg::NotifyRemoveField( ScPivotFieldType eType, size_t nFieldI
 
 Size ScPivotLayoutDlg::GetStdFieldBtnSize() const
 {
-    // This size is static but is platform dependent.  The field button size
-    // is calculated relative to the size of the OK button.
-    double w = static_cast<double>(mpBtnOk->GetSizePixel().Width()) * 0.70;
-    return Size(static_cast<long>(w), FIELD_BTN_HEIGHT);
+    return Size(approximate_char_width() * 8, FIELD_BTN_HEIGHT);
 }
 
 void ScPivotLayoutDlg::DropFieldItem( const Point& rScrPos, ScPivotFieldType eToType )
@@ -916,12 +907,11 @@ void ScPivotLayoutDlg::DropFieldItem( const Point& rScrPos, ScPivotFieldType eTo
     }
     else
     {
-        Point aOutPos = ScreenToOutputPixel(rScrPos);
-        MoveField(meDnDFromType, mnDnDFromIndex, eToType, aOutPos);
+        MoveField(meDnDFromType, mnDnDFromIndex, eToType, rScrPos);
     }
 }
 
-PointerStyle ScPivotLayoutDlg::GetPointerStyleAtPoint( const Point& /* rScrPos */, ScPivotFieldType eFieldType )
+PointerStyle ScPivotLayoutDlg::GetPointerStyle(ScPivotFieldType eFieldType)
 {
     if (!mbIsDrag)
         return POINTER_ARROW;
@@ -962,14 +952,15 @@ namespace {
 
 class InsideFieldControl : std::unary_function<ScDPFieldControlBase*, bool>
 {
-    Point maOutPos;
+    Point maScrPos;
 public:
-    InsideFieldControl(const Point& rOutPos) : maOutPos(rOutPos) {}
+    InsideFieldControl(const Point& rScrPos) : maScrPos(rScrPos) {}
 
     bool operator() (const ScDPFieldControlBase* p) const
     {
-        Rectangle aRect(p->GetPosPixel(), p->GetSizePixel());
-        return aRect.IsInside(maOutPos);
+        Point aOutputPos = p->ScreenToOutputPixel(maScrPos);
+        Rectangle aRect(Point(0, 0), p->GetSizePixel());
+        return aRect.IsInside(aOutputPos);
     }
 };
 
@@ -977,9 +968,8 @@ public:
 
 ScPivotFieldType ScPivotLayoutDlg::GetFieldTypeAtPoint( const Point& rScrPos ) const
 {
-    Point aOutputPos = ScreenToOutputPixel(rScrPos);
     std::vector<ScDPFieldControlBase*>::const_iterator it =
-        std::find_if(maFieldCtrls.begin(), maFieldCtrls.end(), InsideFieldControl(aOutputPos));
+        std::find_if(maFieldCtrls.begin(), maFieldCtrls.end(), InsideFieldControl(rScrPos));
 
     return it == maFieldCtrls.end() ? PIVOTFIELDTYPE_UNKNOWN : (*it)->GetFieldType();
 }
@@ -1088,113 +1078,26 @@ OUString ScPivotLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, bool bIsValue )
 
 void ScPivotLayoutDlg::InitControlAndDlgSizes()
 {
-    // The pivot.src file only specifies the positions of the controls. Here,
-    // we calculate appropriate size of each control based on how they are
-    // positioned relative to each other.
-
     // row/column/data area sizes
     long nFldW = GetStdFieldBtnSize().Width();
     long nFldH = GetStdFieldBtnSize().Height();
 
-    mpWndData->SetSizePixel(
-        Size(mpWndSelect->GetPosPixel().X() - mpWndData->GetPosPixel().X() - FIELD_AREA_GAP*4,
-             185));
-
-    mpWndPage->SetSizePixel(
-        Size(mpWndData->GetSizePixel().Width() + 85,
-             mpWndCol->GetPosPixel().Y() - mpWndPage->GetPosPixel().Y() - FIELD_AREA_GAP));
-    mpWndRow->SetSizePixel(
-        Size(mpWndData->GetPosPixel().X()-mpWndRow->GetPosPixel().X() - FIELD_AREA_GAP,
-             mpWndData->GetSizePixel().Height()));
-    mpWndCol->SetSizePixel(
-        Size(mpWndData->GetPosPixel().X() - mpWndCol->GetPosPixel().X() + mpWndData->GetSizePixel().Width(),
-             mpWndData->GetPosPixel().Y() - mpWndCol->GetPosPixel().Y() - FIELD_AREA_GAP));
-
-    // #i29203# align right border of page window with data window
-    long nDataPosX = mpWndData->GetPosPixel().X() + mpWndData->GetSizePixel().Width();
-    mpWndPage->SetPosPixel(
-        Point(nDataPosX - mpWndPage->GetSizePixel().Width(),
-              mpWndPage->GetPosPixel().Y()));
+    mpWndPage->set_width_request(approximate_char_width() * 35);
+    mpWndPage->set_height_request(GetTextHeight() * 4);
+    mpWndCol->set_width_request(approximate_char_width() * 30);
+    mpWndCol->set_height_request(GetTextHeight() * 4);
+    mpWndRow->set_width_request(approximate_char_width() * 10);
+    mpWndRow->set_height_request(GetTextHeight() * 8);
+    mpWndData->set_width_request(approximate_char_width() * 30);
+    mpWndData->set_height_request(GetTextHeight() * 8);
 
     // selection area
     long nLineSize = 10; // number of fields per column.
     long nH = OUTER_MARGIN_VER + nLineSize* nFldH + nLineSize * ROW_FIELD_BTN_GAP;
     nH += ROW_FIELD_BTN_GAP;
     nH += GetSettings().GetStyleSettings().GetScrollBarSize() + OUTER_MARGIN_VER;
-    mpWndSelect->SetSizePixel(
-        Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10, nH));
-
-    mpWndPage->CalcSize();
-    mpWndRow->CalcSize();
-    mpWndCol->CalcSize();
-    mpWndData->CalcSize();
-    mpWndSelect->CalcSize();
-
-    AdjustDlgSize();
-}
-
-namespace {
-
-class MoveWndDown : public std::unary_function<Window*, void>
-{
-    long mnDelta;
-public:
-    MoveWndDown(long nDelta) : mnDelta(nDelta) {}
-    void operator() (Window* p) const
-    {
-        Point aPos = p->GetPosPixel();
-        aPos.Y() += mnDelta;
-        p->SetPosPixel(aPos);
-    }
-};
-
-}
-
-void ScPivotLayoutDlg::AdjustDlgSize()
-{
-    // On some platforms such as Windows XP, the dialog is not large enough to
-    // show the 'Drag the fields from the right...' text at the bottom. Check
-    // if it overlaps, and if it does, make the dialog size larger.
-    Size aWndSize = GetSizePixel();
-
-    Point aPosText = mpFtInfo->GetPosPixel();
-    Size aSizeText = mpFtInfo->GetSizePixel();
-    long nYRef = mpWndData->GetPosPixel().Y() + mpWndData->GetSizePixel().Height();
-    if (aPosText.Y() > nYRef)
-        // This text is visible. No need to adjust.
-        return;
-
-    // Calculate the extra height necessary.
-    long nBottomMargin = aWndSize.Height() - (aPosText.Y() + aSizeText.Height());
-    long nHeightNeeded = nYRef + TEXT_INFO_GAP + aSizeText.Height() + nBottomMargin;
-    long nDelta = nHeightNeeded - aWndSize.Height();
-    if (nDelta <= 0)
-        // This should never happen but just in case....
-        return;
-
-    // Make the main dialog taller.
-    aWndSize.Height() += nDelta;
-    SetSizePixel(aWndSize);
-
-    // Move the relevant controls downward.
-    std::vector<Window*> aWndToMove;
-    aWndToMove.reserve(16);
-    aWndToMove.push_back(mpFtInfo);
-    //aWndToMove.push_back(mpBtnMore);
-    aWndToMove.push_back(mpFtInArea);
-    aWndToMove.push_back(mpEdInPos);
-    aWndToMove.push_back(mpRbInPos);
-    aWndToMove.push_back(mpFtOutArea);
-    aWndToMove.push_back(mpLbOutPos);
-    aWndToMove.push_back(mpEdOutPos);
-    aWndToMove.push_back(mpRbOutPos);
-    aWndToMove.push_back(mpBtnIgnEmptyRows);
-    aWndToMove.push_back(mpBtnDetectCat);
-    aWndToMove.push_back(mpBtnTotalCol);
-    aWndToMove.push_back(mpBtnTotalRow);
-    aWndToMove.push_back(mpBtnFilter);
-    aWndToMove.push_back(mpBtnDrillDown);
-    std::for_each(aWndToMove.begin(), aWndToMove.end(), MoveWndDown(nDelta));
+    mpWndSelect->set_width_request(2 * nFldW + ROW_FIELD_BTN_GAP + 10);
+    mpWndSelect->set_height_request(nH);
 }
 
 bool ScPivotLayoutDlg::GetPivotArrays(

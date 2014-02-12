@@ -50,8 +50,8 @@
 #include "dpuiglobal.hxx"
 #include "calcmacros.hxx"
 #include "AccessibleDataPilotControl.hxx"
+#include "sc.hrc"
 #include "scresid.hxx"
-#include "pivot.hrc"
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -116,22 +116,11 @@ ScAccessibleDataPilotControl *ScDPFieldControlBase::AccessRef::operator -> () co
     return static_cast< ScAccessibleDataPilotControl * >( mxRef.get() );
 }
 
-ScDPFieldControlBase::ScDPFieldControlBase(
-    ScPivotLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    Control(pParent),
-    mpDlg(pParent),
-    mpCaption(pCaption),
-    mnFieldSelected(0)
-{
-    SetHelpId( pcHelpId );
-
-    if (pCaption)
-        maName = MnemonicGenerator::EraseAllMnemonicChars( pCaption->GetText() );
-}
-
-ScDPFieldControlBase::ScDPFieldControlBase( Window* pParent ) :
-    Control (pParent),
-    mnFieldSelected(0)
+ScDPFieldControlBase::ScDPFieldControlBase(Window* pParent)
+    : Control(pParent)
+    , mpDlg(NULL)
+    , mpCaption(NULL)
+    , mnFieldSelected(0)
 {
 }
 
@@ -441,7 +430,7 @@ void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
     {
         Point aScrPos = OutputToScreenPixel(rMEvt.GetPosPixel());
         ScPivotFieldType eFieldType = mpDlg->GetFieldTypeAtPoint(aScrPos);
-        PointerStyle ePtr = mpDlg->GetPointerStyleAtPoint(aScrPos, eFieldType);
+        PointerStyle ePtr = mpDlg->GetPointerStyle(eFieldType);
         SetPointer( Pointer( ePtr ) );
     }
     const FieldNames& rFields = GetFieldNames();
@@ -700,7 +689,7 @@ void ScDPFieldControlBase::DrawInvertSelection()
 
 Size ScDPFieldControlBase::GetStdFieldBtnSize() const
 {
-    return mpDlg->GetStdFieldBtnSize();
+    return Size(approximate_char_width() * 8, FIELD_BTN_HEIGHT);
 }
 
 void ScDPFieldControlBase::MoveField( size_t nDestIndex )
@@ -896,21 +885,13 @@ size_t ScDPFieldControlBase::GetFieldIndexByData( const ScPivotFuncData& rData )
     return it == maFuncData.end() ? PIVOTFIELD_INVALID : std::distance(maFuncData.begin(), it);
 }
 
-//=============================================================================
-
-ScDPHorFieldControl::ScDPHorFieldControl(
-    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPFieldControlBase(pDialog, rResId, pCaption, pcHelpId),
-    maScroll(this, WB_HORZ | WB_DRAG),
-    mnFieldBtnRowCount(0),
-    mnFieldBtnColCount(0)
+void ScDPFieldControlBase::Resize()
 {
-    maScroll.SetScrollHdl( LINK(this, ScDPHorFieldControl, ScrollHdl) );
-    maScroll.SetEndScrollHdl( LINK(this, ScDPHorFieldControl, EndScrollHdl) );
-    maScroll.Hide();
-
-    AppendPaintable(&maScroll);
+    Control::Resize();
+    CalcSize();
 }
+
+//=============================================================================
 
 ScDPHorFieldControl::ScDPHorFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -1040,6 +1021,8 @@ void ScDPHorFieldControl::CalcSize()
     maScroll.SetVisibleSize(mnFieldBtnColCount);
     maScroll.SetPageSize(mnFieldBtnColCount);
     maScroll.SetRange(Range(0, mnFieldBtnColCount));
+
+    ResetScrollBar();
 }
 
 bool ScDPHorFieldControl::IsValidIndex(size_t /*nIndex*/) const
@@ -1171,12 +1154,6 @@ IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
 
 //=============================================================================
 
-ScDPPageFieldControl::ScDPPageFieldControl(
-    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
-{
-}
-
 ScDPPageFieldControl::ScDPPageFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
 {
@@ -1204,12 +1181,6 @@ OUString ScDPPageFieldControl::GetDescription() const
 
 //=============================================================================
 
-ScDPColFieldControl::ScDPColFieldControl(
-    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
-{
-}
-
 ScDPColFieldControl::ScDPColFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
 {
@@ -1235,19 +1206,6 @@ OUString ScDPColFieldControl::GetDescription() const
 }
 
 //=============================================================================
-
-ScDPRowFieldControl::ScDPRowFieldControl(
-    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPFieldControlBase(pDialog, rResId, pCaption, pcHelpId),
-    maScroll(this, WB_VERT | WB_DRAG),
-    mnColumnBtnCount(0)
-{
-    maScroll.SetScrollHdl( LINK(this, ScDPRowFieldControl, ScrollHdl) );
-    maScroll.SetEndScrollHdl( LINK(this, ScDPRowFieldControl, EndScrollHdl) );
-    maScroll.Show(false);
-
-    AppendPaintable(&maScroll);
-}
 
 ScDPRowFieldControl::ScDPRowFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -1372,6 +1330,7 @@ void ScDPRowFieldControl::CalcSize()
     maScroll.SetRange(Range(0, mnColumnBtnCount));
     maScroll.DoScroll(0);
 
+    ResetScrollBar();
 }
 
 bool ScDPRowFieldControl::IsValidIndex(size_t /*nIndex*/) const
@@ -1484,17 +1443,10 @@ IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
 
 //=============================================================================
 
-ScDPSelectFieldControl::ScDPSelectFieldControl(
-        ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
-{
-    SetName(OUString(ScResId(STR_SELECT)));
-}
-
 ScDPSelectFieldControl::ScDPSelectFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )
 {
-    //SetName(OUString(ScResId(STR_SELECT)));
+    SetName(OUString(ScResId(SCSTR_SELECT)));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPSelectFieldControl( Window *pParent, VclBuilder::stringmap & )
@@ -1517,12 +1469,6 @@ OUString ScDPSelectFieldControl::GetDescription() const
 }
 
 //=============================================================================
-
-ScDPDataFieldControl::ScDPDataFieldControl(
-    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
-{
-}
 
 ScDPDataFieldControl::ScDPDataFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )

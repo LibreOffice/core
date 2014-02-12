@@ -865,6 +865,11 @@ String SCSTR_VALERR
     Text [ en-US ] = "Invalid value" ;
 };
 
+String SCSTR_SELECT
+{
+    Text [ en-US ] = "Selection area";
+};
+
 String STR_NOFORMULASPECIFIED
 {
     Text [ en-US ] = "No formula specified." ;

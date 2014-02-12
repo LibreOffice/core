@@ -613,6 +613,27 @@
                         generic-name="CondFormatList" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
+    <glade-widget-class title="ScDPPageFieldControl" name="sclo-ScDPPageFieldControl"
+                        generic-name="ScDPPageFieldControl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ScDPColFieldControl" name="sclo-ScDPColFieldControl"
+                        generic-name="ScDPColFieldControl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ScDPRowFieldControl" name="sclo-ScDPRowFieldControl"
+                        generic-name="ScDPRowFieldControl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ScDPDataFieldControl" name="sclo-ScDPDataFieldControl"
+                        generic-name="ScDPDataFieldControl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ScDPSelectFieldControl" name="sclo-ScDPSelectFieldControl"
+                        generic-name="ScDPSelectFieldControl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+
+
+
+
+
+
     <glade-widget-class title="ScDPFunctionListBox" name="scuilo-ScDPFunctionListBox"
                         generic-name="DPFunctionListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>

@@ -79,6 +79,18 @@ class ScDocument;
 struct ScPivotFuncData;
 class ScDPObject;
 
+#define PIVOTSTR_SUM            0
+#define PIVOTSTR_COUNT          1
+#define PIVOTSTR_AVG            2
+#define PIVOTSTR_MAX            3
+#define PIVOTSTR_MIN            4
+#define PIVOTSTR_PROD           5
+#define PIVOTSTR_COUNT2         6
+#define PIVOTSTR_DEV            7
+#define PIVOTSTR_DEV2           8
+#define PIVOTSTR_VAR            9
+#define PIVOTSTR_VAR2           10
+
 class ScPivotLayoutDlg : public ScAnyRefDlg
 {
     /** data source type */
@@ -102,7 +114,7 @@ public:
     void                    NotifyMoveFieldToEnd      ( ScPivotFieldType eToType );
     void                    NotifyRemoveField    ( ScPivotFieldType eType, size_t nFieldIndex );
 
-    Size                    GetStdFieldBtnSize() const;
+    Size GetStdFieldBtnSize() const;
 
     /**
      * Drop currently dragged field item into specified position.
@@ -113,10 +125,10 @@ public:
     void DropFieldItem( const Point& rScrPos, ScPivotFieldType eToType );
 
     /**
-     * Get pointer style at current mouse position during dragging of field
+     * Get pointer style during dragging of field
      * item.
      */
-    PointerStyle GetPointerStyleAtPoint( const Point& rScrPos, ScPivotFieldType eFieldType );
+    PointerStyle GetPointerStyle( ScPivotFieldType eFieldType );
 
     /**
      * Determine the type of field at mouse cursor position.
@@ -133,8 +145,8 @@ protected:
     virtual sal_Bool    Close();
 
 private:
-    /** Returns the localized function name for the specified (1-based) resource index. */
-    inline const OUString& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[nFuncIdx-1]; }
+    /** Returns the localized function name for the specified resource index. */
+    inline const OUString& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[nFuncIdx]; }
 
     /** Fills the field windows from the current pivot table settings. */
     void                InitFieldWindows();
