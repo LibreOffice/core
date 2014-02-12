@@ -51,6 +51,7 @@ BinaryAny::BinaryAny(uno_Any const & raw) throw () {
 
 BinaryAny::BinaryAny(BinaryAny const & other) throw () {
     uno_type_any_construct(&data_, other.data_.pData, other.data_.pType, 0);
+    data_.pReserved = NULL;
 }
 
 BinaryAny::~BinaryAny() throw () {
