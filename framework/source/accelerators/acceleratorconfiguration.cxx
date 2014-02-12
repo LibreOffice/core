@@ -19,7 +19,6 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 
-#include <pattern/configuration.hxx>
 #include <accelerators/presethandler.hxx>
 
 #include <xml/saxnamespacefilter.hxx>
@@ -47,23 +46,15 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/configurationhelper.hxx>
+#include <officecfg/Setup.hxx>
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <stdio.h>
-
 
 namespace framework
 {
     const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
     const char CFG_PROP_COMMAND[] = "Command";
-
-#ifdef fpc
-    #error "Who exports this define? I use it as namespace alias ..."
-#else
-    namespace fpc = ::framework::pattern::configuration;
-#endif
 
     OUString lcl_getKeyString(salhelper::SingletonRef<framework::KeyMapping>& _rKeyMapping, const css::awt::KeyEvent& aKeyEvent)
     {
@@ -588,17 +579,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
 //-----------------------------------------------
 OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( xContext,
-        "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
-    css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
-    OUString                                 sISOLocale;
-    xProp->getPropertyValue("ooLocale") >>= sISOLocale;
+    OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 
     if (sISOLocale.isEmpty())
         return OUString("en-US");
@@ -1626,17 +1607,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 //-----------------------------------------------
 OUString XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( xContext,
-        "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
-    css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
-    OUString                                 sISOLocale;
-    xProp->getPropertyValue("ooLocale") >>= sISOLocale;
+    OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 
     if (sISOLocale.isEmpty())
         return OUString("en-US");
