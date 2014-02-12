@@ -844,7 +844,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                     {
                                         pViewSh->SetDrawSelMode(true);
                                         pViewSh->UpdateLayerLocks();
-                                        bDrawSelModeSet = sal_True;
+                                        bDrawSelModeSet = true;
                                     }
                                     if (!pPV)               // erstes Objekt
                                     {
@@ -1199,10 +1199,10 @@ bool ScTabViewObj::IsMouseListening() const
 
 }
 
-sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
+bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                                     throw (::uno::RuntimeException)
 {
-    sal_Bool bReturn(false);
+    bool bReturn(false);
     if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
         mbLeftMousePressed = true;
 
@@ -1224,7 +1224,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
             try
             {
                 if (!(*it)->mousePressed( aMouseEvent ))
-                    bReturn = sal_True;
+                    bReturn = true;
                 ++it;
             }
             catch ( uno::Exception& )
@@ -1267,7 +1267,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                 if (aRet >>= bRetValue)
                 {
                     if (bRetValue)
-                        bReturn = sal_True;
+                        bReturn = true;
                 }
             }
         }
@@ -1283,7 +1283,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         }
         catch( util::VetoException& )
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
         catch( uno::Exception& )
         {
@@ -1293,7 +1293,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
     return bReturn;
 }
 
-sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
+bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                                     throw (uno::RuntimeException)
 {
     if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
@@ -1316,7 +1316,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
         mbLeftMousePressed = false;
     }
 
-    sal_Bool bReturn(false);
+    bool bReturn(false);
 
     if (!aMouseClickHandlers.empty())
     {
@@ -1339,7 +1339,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                 try
                 {
                     if (!(*it)->mouseReleased( aMouseEvent ))
-                        bReturn = sal_True;
+                        bReturn = true;
                     ++it;
                 }
                 catch ( uno::Exception& )

@@ -1169,7 +1169,7 @@ void ScTabViewShell::StartSimpleRefDialog(
 
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    SC_MOD()->SetRefDialog( nId, sal_True, pViewFrm );
+    SC_MOD()->SetRefDialog( nId, true, pViewFrm );
 
     ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
     if (pWnd)
@@ -1308,7 +1308,7 @@ sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         sal_Bool bParent = ( GetViewFrame()->GetFrame().IsInPlace() && eFunc != KEYFUNC_DONTKNOW );
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
-            bUsed = pScMod->InputKeyEvent( rKEvt, sal_True );       // Eingabe
+            bUsed = pScMod->InputKeyEvent( rKEvt, true );       // Eingabe
     }
 
     if (!bInPlace && !bUsed && !bDraw)

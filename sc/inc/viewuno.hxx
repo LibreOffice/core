@@ -193,8 +193,8 @@ private:
     XMouseClickHandlerVector                aMouseClickHandlers;
     XActivationEventListenerVector          aActivationListeners;
     SCTAB                                   nPreviousTab;
-    sal_Bool                                bDrawSelModeSet;
-    sal_Bool                                bFilteredRangeSelection;
+    bool                                    bDrawSelModeSet;
+    bool                                    bFilteredRangeSelection;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     sal_Int16                   GetZoom(void) const;
@@ -225,8 +225,8 @@ public:
     // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
     void                    SheetChanged( bool bSameTabButMoved = false );
     bool                    IsMouseListening() const;
-    sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    bool                    MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    bool                    MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     void                    RangeSelDone( const OUString& rText );
     void                    RangeSelAborted( const OUString& rText );
