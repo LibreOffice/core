@@ -88,7 +88,10 @@ public:
 
     //XSelectionSupplier
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL select(const ::com::sun::star::uno::Any& aInterface) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL select(const ::com::sun::star::uno::Any& rInterface)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL addSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener) throw( ::com::sun::star::uno::RuntimeException );
 

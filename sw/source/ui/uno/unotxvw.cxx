@@ -226,7 +226,9 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     return aRet;
 }
 
-sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArgumentException, uno::RuntimeException )
+sal_Bool SwXTextView::select(const uno::Any& aInterface)
+    throw (lang::IllegalArgumentException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 
