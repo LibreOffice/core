@@ -25,7 +25,6 @@
 
 #include "rtl/ustring.hxx"
 #include "tools/resid.hxx"
-#include "tools/solar.h"
 #include "vcl/dialog.hxx"
 
 #include "dp_gui.hrc"

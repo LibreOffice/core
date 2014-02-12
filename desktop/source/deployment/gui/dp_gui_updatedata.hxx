@@ -20,7 +20,6 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDATA_HXX
 
 #include "sal/config.h"
-#include "tools/solar.h"
 #include "rtl/ustring.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 

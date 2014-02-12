@@ -25,7 +25,6 @@
 #include "osl/conditn.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "tools/resid.hxx"
-#include "tools/solar.h"
 #include "vcl/dialog.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
@@ -86,8 +85,6 @@ public:
         UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
 
     void stop();
-
-
 
 private:
     virtual ~Thread();
@@ -202,7 +199,6 @@ void UpdateInstallDialog::Thread::execute()
     m_updateCmdEnv->m_installThread.clear();
 }
 
-
 UpdateInstallDialog::UpdateInstallDialog(
     Window * parent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
@@ -257,7 +253,6 @@ short UpdateInstallDialog::Execute()
     m_thread->launch();
     return ModalDialog::Execute();
 }
-
 
 // make sure the solar mutex is locked before calling
 void UpdateInstallDialog::updateDone()
@@ -320,8 +315,6 @@ IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
     EndDialog(RET_CANCEL);
     return 0;
 }
-
-//------------------------------------------------------------------------------------------------
 
 void UpdateInstallDialog::Thread::downloadExtensions()
 {
@@ -434,6 +427,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         m_dialog.setError(e.Message);
     }
 }
+
 void UpdateInstallDialog::Thread::installExtensions()
 {
     //Update the fix text in the dialog to "Installing extensions..."
@@ -571,7 +565,6 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
     }
 }
 
-
 void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
 {
     {
@@ -619,9 +612,6 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     }
 }
 
-
-// -------------------------------------------------------------------------------------------------------
-
 UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
     ::rtl::Reference<UpdateInstallDialog::Thread>const & thread)
     : m_installThread(thread),
@@ -633,16 +623,13 @@ UpdateCommandEnv::~UpdateCommandEnv()
 {
 }
 
-
 // XCommandEnvironment
-//______________________________________________________________________________
 cssu::Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
 throw (cssu::RuntimeException)
 {
     return this;
 }
 
-//______________________________________________________________________________
 cssu::Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
 throw (cssu::RuntimeException)
 {
@@ -714,7 +701,6 @@ void UpdateCommandEnv::push( cssu::Any const & /*Status*/ )
 throw (cssu::RuntimeException)
 {
 }
-
 
 void UpdateCommandEnv::update( cssu::Any const & /*Status */)
 throw (cssu::RuntimeException)

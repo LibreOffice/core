@@ -31,7 +31,6 @@
 #include "svtools/svlbitm.hxx"
 #include "svx/checklbx.hxx"
 #include "tools/link.hxx"
-#include "tools/solar.h"
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

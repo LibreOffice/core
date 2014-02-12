@@ -22,14 +22,12 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <tools/solar.h>
 #include <tools/poly.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // predefines
 class VirtualDevice;
 class Font;
@@ -43,7 +41,6 @@ namespace drawinglayer { namespace attribute {
     class FontAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive
 
 namespace drawinglayer
@@ -116,7 +113,6 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
 // helper methods for vcl font handling
 
 namespace drawinglayer
@@ -149,8 +145,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
 
 #endif //_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 

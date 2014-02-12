@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <algorithm>
 
 #include "progressbar.hxx"
@@ -43,10 +42,6 @@ using ::std::vector;
 using ::std::find;
 
 namespace unocontrols{
-
-//____________________________________________________________________________________________________________
-//  construct/destruct
-//____________________________________________________________________________________________________________
 
 ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
@@ -107,10 +102,7 @@ ProgressMonitor::~ProgressMonitor()
     impl_cleanMemory () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XInterface
-//____________________________________________________________________________________________________________
-
 Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     // Attention:
@@ -132,10 +124,7 @@ Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType ) throw( Runtime
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
 //  XInterface
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::acquire() throw()
 {
     // Attention:
@@ -145,10 +134,7 @@ void SAL_CALL ProgressMonitor::acquire() throw()
     BaseControl::acquire();
 }
 
-//____________________________________________________________________________________________________________
 //  XInterface
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::release() throw()
 {
     // Attention:
@@ -158,10 +144,7 @@ void SAL_CALL ProgressMonitor::release() throw()
     BaseControl::release();
 }
 
-//____________________________________________________________________________________________________________
 //  XTypeProvider
-//____________________________________________________________________________________________________________
-
 Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException )
 {
     // Optimize this method !
@@ -191,10 +174,7 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException )
     return pTypeCollection->getTypes();
 }
 
-//____________________________________________________________________________________________________________
 //  XAggregation
-//____________________________________________________________________________________________________________
-
 Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
     // Ask for my own supported interfaces ...
@@ -216,10 +196,7 @@ Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( Runti
     return aReturn ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressMonitor
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::addText(
     const OUString& rTopic,
     const OUString& rText,
@@ -265,10 +242,7 @@ void SAL_CALL ProgressMonitor::addText(
     impl_recalcLayout       () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressMonitor
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbeforeProgress ) throw( RuntimeException )
 {
     // Safe impossible cases
@@ -307,10 +281,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressMonitor
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::updateText (
     const OUString& rTopic,
     const OUString& rText,
@@ -338,10 +309,7 @@ void SAL_CALL ProgressMonitor::updateText (
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressBar
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -350,10 +318,7 @@ void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor ) throw( Ru
     m_xProgressBar->setForegroundColor ( nColor ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressBar
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -362,10 +327,7 @@ void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor ) throw( Ru
     m_xProgressBar->setBackgroundColor ( nColor ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressBar
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -374,10 +336,7 @@ void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue ) throw( RuntimeExcep
     m_xProgressBar->setValue ( nValue ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressBar
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -386,10 +345,7 @@ void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw
     m_xProgressBar->setRange ( nMin, nMax ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XProgressBar
-//____________________________________________________________________________________________________________
-
 sal_Int32 SAL_CALL ProgressMonitor::getValue () throw( RuntimeException )
 {
     // Ready for multithreading
@@ -398,10 +354,7 @@ sal_Int32 SAL_CALL ProgressMonitor::getValue () throw( RuntimeException )
     return m_xProgressBar->getValue () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XButton
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -413,10 +366,7 @@ void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XA
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XButton
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -428,10 +378,7 @@ void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference<
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XButton
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -443,10 +390,7 @@ void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel ) throw( Runtim
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XButton
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -458,19 +402,13 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand ) thr
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XLayoutConstrains
-//____________________________________________________________________________________________________________
-
 Size SAL_CALL ProgressMonitor::getMinimumSize () throw( RuntimeException )
 {
     return Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XLayoutConstrains
-//____________________________________________________________________________________________________________
-
 Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
 {
     // Ready for multithreading
@@ -514,19 +452,13 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
     return Size ( nWidth, nHeight ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  XLayoutConstrains
-//____________________________________________________________________________________________________________
-
 Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException )
 {
     return getPreferredSize () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XControl
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    ) throw( RuntimeException )
 {
     if (!getPeer().is())
@@ -541,20 +473,14 @@ void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit 
     }
 }
 
-//____________________________________________________________________________________________________________
 //  XControl
-//____________________________________________________________________________________________________________
-
 sal_Bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
 {
     // We have no model.
     return sal_False ;
 }
 
-//____________________________________________________________________________________________________________
 //  XControl
-//____________________________________________________________________________________________________________
-
 css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw( RuntimeException )
 {
     // We have no model.
@@ -562,10 +488,7 @@ css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw
     return css::uno::Reference< XControlModel >  () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XComponent
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException )
 {
     // Ready for multithreading
@@ -597,10 +520,7 @@ void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException )
     BaseContainerControl::dispose () ;
 }
 
-//____________________________________________________________________________________________________________
 //  XWindow
-//____________________________________________________________________________________________________________
-
 void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags ) throw( RuntimeException )
 {
     Rectangle   aBasePosSize = getPosSize () ;
@@ -622,28 +542,19 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
     }
 }
 
-//____________________________________________________________________________________________________________
 //  impl but public method to register service
-//____________________________________________________________________________________________________________
-
 const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>();
 }
 
-//____________________________________________________________________________________________________________
 //  impl but public method to register service
-//____________________________________________________________________________________________________________
-
 const OUString ProgressMonitor::impl_getStaticImplementationName()
 {
     return OUString("stardiv.UnoControls.ProgressMonitor");
 }
 
-//____________________________________________________________________________________________________________
 //  protected method
-//____________________________________________________________________________________________________________
-
 void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
     if (rGraphics.is())
@@ -669,10 +580,7 @@ void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     }
 }
 
-//____________________________________________________________________________________________________________
 //  private method
-//____________________________________________________________________________________________________________
-
 void ProgressMonitor::impl_recalcLayout ()
 {
     sal_Int32   nX_Button               ;
@@ -821,10 +729,7 @@ void ProgressMonitor::impl_recalcLayout ()
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 ) ;
 }
 
-//____________________________________________________________________________________________________________
 //  private method
-//____________________________________________________________________________________________________________
-
 void ProgressMonitor::impl_rebuildFixedText ()
 {
     // Ready for multithreading
@@ -907,10 +812,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
     }
 }
 
-//____________________________________________________________________________________________________________
 //  private method
-//____________________________________________________________________________________________________________
-
 void ProgressMonitor::impl_cleanMemory ()
 {
     // Ready for multithreading
@@ -933,10 +835,7 @@ void ProgressMonitor::impl_cleanMemory ()
     maTextlist_Bottom.clear();
 }
 
-//____________________________________________________________________________________________________________
 //  private method
-//____________________________________________________________________________________________________________
-
 IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, sal_Bool bbeforeProgress )
 {
     // Get right textlist for following operations.
@@ -976,10 +875,7 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, s
     return NULL ;
 }
 
-//____________________________________________________________________________________________________________
 //  debug methods
-//____________________________________________________________________________________________________________
-
 #ifdef DBG_UTIL
 
 // addText, updateText

@@ -22,7 +22,6 @@
 #include "doceventnotifier.hxx"
 
 #include <o3tl/heap_ptr.hxx>
-#include <tools/solar.h>
 
 #include <svtools/treelistbox.hxx>
 #include <svl/lstner.hxx>
@@ -161,7 +160,7 @@ public:
 };
 
 
-/************************************************************
+/*
     Classification of types and pointers in the Entries:
 
     OBJ_TYPE_DOCUMENT        DocumentEntry
@@ -170,7 +169,7 @@ public:
     OBJ_TYPE_DIALOG          Entry
     OBJ_TYPE_METHOD          Entry
 
-**************************************************************/
+*/
 
 class TreeListBox : public SvTreeListBox, public DocumentEventListener
 {
