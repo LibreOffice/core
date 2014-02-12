@@ -112,7 +112,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
         pGlobalProgress = pProgress;
         nGlobalRange = nRange;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = sal_True;
+        bGlobalNoUserBreak = true;
     }
 }
 
@@ -131,7 +131,7 @@ ScProgress::~ScProgress()
         pGlobalProgress = NULL;
         nGlobalRange = 0;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = sal_True;
+        bGlobalNoUserBreak = true;
     }
 }
 

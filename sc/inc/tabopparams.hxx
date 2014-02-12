@@ -36,14 +36,14 @@ struct ScInterpreterTableOpParams
     ScAddress   aFormulaPos;
     ::std::vector< ScFormulaCell* > aNotifiedFormulaCells;
     ::std::vector< ScAddress >      aNotifiedFormulaPos;
-    sal_Bool        bValid;
-    sal_Bool        bRefresh;
-    sal_Bool        bCollectNotifications;
+    bool        bValid;
+    bool        bRefresh;
+    bool        bCollectNotifications;
 
     ScInterpreterTableOpParams()
             : bValid( false )
             , bRefresh( false )
-            , bCollectNotifications( sal_True )
+            , bCollectNotifications( true )
     {
     }
 
@@ -75,7 +75,7 @@ struct ScInterpreterTableOpParams
         return *this;
     }
 
-    sal_Bool operator ==( const ScInterpreterTableOpParams& r )
+    bool operator ==( const ScInterpreterTableOpParams& r )
     {
         return
             bValid && r.bValid &&
