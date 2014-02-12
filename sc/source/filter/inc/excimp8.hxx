@@ -58,7 +58,6 @@ public:
     void                    Labelsst( void );               // 0xFD
 
     void                    Hlink( void );                  // 0x01B8
-    void                    Codename( sal_Bool bWBGlobals );    // 0x01BA
     void                    SheetProtection( void );        // 0x0867
 
     virtual void            EndSheet( void );
