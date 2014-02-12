@@ -876,7 +876,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     OSL_ENSURE( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
-    aTableParam.bCellContent    = sal_True;
+    aTableParam.bCellContent    = true;
     aTableParam.bNotes          = GET_BOOL(pParamSet,ATTR_PAGE_NOTES);
     aTableParam.bGrid           = GET_BOOL(pParamSet,ATTR_PAGE_GRID);
     aTableParam.bHeaders        = GET_BOOL(pParamSet,ATTR_PAGE_HEADERS);
@@ -907,7 +907,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     else
     {
-        aTableParam.bScaleNone      = sal_True;
+        aTableParam.bScaleNone      = true;
         aTableParam.bScaleAll       = false;
         aTableParam.bScaleTo        = false;
         aTableParam.bScalePageNum   = false;
@@ -940,7 +940,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( pUserArea )                // UserArea (selection) has prority
     {
         bPrintCurrentTable    =
-        aAreaParam.bPrintArea = sal_True;                   // Selection
+        aAreaParam.bPrintArea = true;                   // Selection
         aAreaParam.aPrintArea = *pUserArea;
 
         //  The table-query is already in DocShell::Print, here always
@@ -952,7 +952,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         if ( pPrintArea )                               // at least one set?
         {
             bPrintCurrentTable    =
-            aAreaParam.bPrintArea = sal_True;
+            aAreaParam.bPrintArea = true;
             aAreaParam.aPrintArea = *pPrintArea;
 
             bMultiArea = ( pDoc->GetPrintRangeCount(nPrintTab) > 1 );
@@ -974,14 +974,14 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         }
         else
         {
-            aAreaParam.bPrintArea = sal_True;   // otherwise the table is always counted
+            aAreaParam.bPrintArea = true;   // otherwise the table is always counted
             bPrintCurrentTable = false;
         }
     }
 
     if ( pRepeatCol )
     {
-        aAreaParam.bRepeatCol = sal_True;
+        aAreaParam.bRepeatCol = true;
         aAreaParam.aRepeatCol = *pRepeatCol;
         nRepeatStartCol = pRepeatCol->aStart.Col();
         nRepeatEndCol   = pRepeatCol->aEnd  .Col();
@@ -994,7 +994,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     if ( pRepeatRow )
     {
-        aAreaParam.bRepeatRow = sal_True;
+        aAreaParam.bRepeatRow = true;
         aAreaParam.aRepeatRow = *pRepeatRow;
         nRepeatStartRow = pRepeatRow->aStart.Row();
         nRepeatEndRow   = pRepeatRow->aEnd  .Row();
