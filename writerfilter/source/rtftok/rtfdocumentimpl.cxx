@@ -2905,10 +2905,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
         case RTF_ABSW:
-            nId = NS_sprm::LN_PDxaWidth;
+            nId = NS_ooxml::LN_CT_FramePr_w;
             break;
         case RTF_ABSH:
-            nId = NS_sprm::LN_PWHeightAbs;
+            nId = NS_ooxml::LN_CT_FramePr_h;
             break;
         case RTF_POSX:
             {
@@ -5093,10 +5093,10 @@ void RTFFrame::setSprm(Id nId, Id nValue)
     }
     switch (nId)
     {
-        case NS_sprm::LN_PDxaWidth:
+        case NS_ooxml::LN_CT_FramePr_w:
             nW = nValue;
             break;
-        case NS_sprm::LN_PWHeightAbs:
+        case NS_ooxml::LN_CT_FramePr_h:
             nH = nValue;
             break;
         case NS_ooxml::LN_CT_FramePr_x:
@@ -5140,8 +5140,8 @@ RTFSprms RTFFrame::getSprms()
         NS_ooxml::LN_CT_FramePr_x,
         NS_ooxml::LN_CT_FramePr_y,
         NS_ooxml::LN_CT_FramePr_hRule, // Make sure nHRule is processed before nH
-        NS_sprm::LN_PWHeightAbs,
-        NS_sprm::LN_PDxaWidth,
+        NS_ooxml::LN_CT_FramePr_h,
+        NS_ooxml::LN_CT_FramePr_w,
         NS_sprm::LN_PDxaFromText,
         NS_sprm::LN_PDyaFromText,
         NS_ooxml::LN_CT_FramePr_hAnchor,
@@ -5168,7 +5168,7 @@ RTFSprms RTFFrame::getSprms()
                 if ( nY != 0 )
                     pValue.reset(new RTFValue(nY));
                 break;
-            case NS_sprm::LN_PWHeightAbs:
+            case NS_ooxml::LN_CT_FramePr_h:
                 if ( nH != 0 )
                 {
                     if (nHRule == NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact)
@@ -5177,7 +5177,7 @@ RTFSprms RTFFrame::getSprms()
                         pValue.reset(new RTFValue(nH));
                 }
                 break;
-            case NS_sprm::LN_PDxaWidth:
+            case NS_ooxml::LN_CT_FramePr_w:
                 if ( nW != 0 )
                     pValue.reset(new RTFValue(nW));
                 break;

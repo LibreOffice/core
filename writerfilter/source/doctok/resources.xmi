@@ -441,37 +441,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPRow-->
-        <!--SPRM sprmPDxaWidth-->
-        <UML:Class xmi.id="sprmPDxaWidth" name="sprmPDxaWidth">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x841A</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPDxaWidth</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPDxaWidth-->
         <!--SPRM sprmPWr-->
         <UML:Class xmi.id="sprmPWr" name="sprmPWr">
           <UML:ModelElement.stereotype>
@@ -573,37 +542,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFNoAutoHyph-->
-        <!--SPRM sprmPWHeightAbs-->
-        <UML:Class xmi.id="sprmPWHeightAbs" name="sprmPWHeightAbs">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x442B</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPWHeightAbs</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPWHeightAbs-->
         <!--SPRM sprmPShd-->
         <UML:Class xmi.id="sprmPShd" name="sprmPShd">
           <UML:ModelElement.stereotype>

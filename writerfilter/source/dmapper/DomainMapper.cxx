@@ -615,9 +615,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FramePr_y:
         case NS_ooxml::LN_CT_FramePr_yAlign:
         case NS_ooxml::LN_CT_FramePr_hRule:
+        case NS_ooxml::LN_CT_FramePr_w:
+        case NS_ooxml::LN_CT_FramePr_h:
         case NS_sprm::LN_PWr:
-        case NS_sprm::LN_PDxaWidth:
-        case NS_sprm::LN_PWHeightAbs:
         case NS_sprm::LN_PDxaFromText:
         case NS_sprm::LN_PDyaFromText:
         {
@@ -730,10 +730,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                                                  text::WrapTextMode_DYNAMIC : text::WrapTextMode_NONE );
                     }
                     break;
-                    case NS_sprm::LN_PDxaWidth:
+                    case NS_ooxml::LN_CT_FramePr_w:
                         pParaProperties->Setw(ConversionHelper::convertTwipToMM100(nIntValue));
                     break;
-                    case NS_sprm::LN_PWHeightAbs:
+                    case NS_ooxml::LN_CT_FramePr_h:
                         pParaProperties->Seth(ConversionHelper::convertTwipToMM100(nIntValue));
                     break;
                     case NS_sprm::LN_PDxaFromText:
@@ -1083,8 +1083,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PTableDepth: //sprmPTableDepth
         //not handled via sprm but via text( 0x07 )
     break;
-    case NS_sprm::LN_PDxaWidth:
-        break;  // sprmPDxaWidth
+    case NS_ooxml::LN_CT_FramePr_w:
+        break;
     case NS_sprm::LN_PWr:
         break;  // sprmPWr
 
@@ -1179,8 +1179,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFNoAutoHyph:   // sprmPFNoAutoHyph
         rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::makeAny( nIntValue ? false : true ));
         break;
-    case NS_sprm::LN_PWHeightAbs:
-        break;  // sprmPWHeightAbs
+    case NS_ooxml::LN_CT_FramePr_h:
+        break;
     case NS_sprm::LN_PShd: // sprmPShd
     {
         //contains fore color, back color and shadow percentage, results in a brush

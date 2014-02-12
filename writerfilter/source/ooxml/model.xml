@@ -21954,8 +21954,8 @@
       <kind name="paragraph"/>
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
-      <attribute name="w" tokenid="sprm:PDxaWidth"/>
-      <attribute name="h" tokenid="sprm:PWHeightAbs"/>
+      <attribute name="w" tokenid="ooxml:CT_FramePr_w"/>
+      <attribute name="h" tokenid="ooxml:CT_FramePr_h"/>
       <attribute name="vSpace" tokenid="sprm:PDyaFromText"/>
       <attribute name="hSpace" tokenid="sprm:PDxaFromText"/>
       <attribute name="wrap" tokenid="sprm:PWr"/>
