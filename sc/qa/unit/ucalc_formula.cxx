@@ -2291,6 +2291,41 @@ void Test::testFuncVLOOKUP()
         }
     }
 
+    // Clear the sheet and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
+
+    // Lookup on sorted data intersparsed with empty cells.
+
+    // A1:B8 is the search range.
+    m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,4,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,7,0), 4.0);
+    m_pDoc->SetString(ScAddress(1,2,0), "One");
+    m_pDoc->SetString(ScAddress(1,4,0), "Two");
+    m_pDoc->SetString(ScAddress(1,7,0), "Four");
+
+    // D1:D5 contain match values.
+    m_pDoc->SetValue(ScAddress(3,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(3,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(3,2,0), 3.0);
+    m_pDoc->SetValue(ScAddress(3,3,0), 4.0);
+    m_pDoc->SetValue(ScAddress(3,4,0), 5.0);
+
+    // E1:E5 contain formulas.
+    m_pDoc->SetString(ScAddress(4,0,0), "=VLOOKUP(D1;$A$1:$B$8;2)");
+    m_pDoc->SetString(ScAddress(4,1,0), "=VLOOKUP(D2;$A$1:$B$8;2)");
+    m_pDoc->SetString(ScAddress(4,2,0), "=VLOOKUP(D3;$A$1:$B$8;2)");
+    m_pDoc->SetString(ScAddress(4,3,0), "=VLOOKUP(D4;$A$1:$B$8;2)");
+    m_pDoc->SetString(ScAddress(4,4,0), "=VLOOKUP(D5;$A$1:$B$8;2)");
+    m_pDoc->CalcAll();
+
+    // Check the formula results in E1:E5.
+    CPPUNIT_ASSERT_EQUAL(OUString("One"), m_pDoc->GetString(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Two"), m_pDoc->GetString(ScAddress(4,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Two"), m_pDoc->GetString(ScAddress(4,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Four"), m_pDoc->GetString(ScAddress(4,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Four"), m_pDoc->GetString(ScAddress(4,4,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
