@@ -243,7 +243,7 @@ sal_Bool CppuType::dumpFile(CppuOptions* pOptions,
     }
 
     OString sFileName = createFileNameFromType(sOutPath, sName, sExtension);
-    if (sFileName.getLength() == 0)
+    if ( sFileName.isEmpty() )
         return sal_False;
 
     sal_Bool bFileExists = fileExists( sFileName );
@@ -492,7 +492,7 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
     sal_Bool bIsBaseException = sal_False;
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         if ( superType.equals("com/sun/star/uno/Exception") )
         {
@@ -552,7 +552,7 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
 
     o << indent() << "typelib_static_compound_type_init( &the_type, "
       << getTypeClass(m_typeName, sal_True) << ", \"" << m_typeName.replace('/', '.') << "\", ";
-    if ( superType.getLength() > 0 || bIsBaseException )
+    if ( !superType.isEmpty() || bIsBaseException )
     {
         if ( bIsBaseException )
         {
@@ -606,7 +606,7 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
         superType = rtl::OUStringToOString(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
-    if (superType.getLength() > 0) {
+    if ( !superType.isEmpty() ) {
         o << indent()
           << "const ::com::sun::star::uno::Type& rSuperType = ::cppu::UnoType< ";
         dumpType(o, superType, false, false, false, true);
@@ -660,7 +660,7 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "&pTD,\n" << indent() << "(typelib_TypeClass)"
       << getTypeClass() << ", sTypeName.pData,\n";
 
-    if (superType.getLength() > 0) {
+    if ( !superType.isEmpty() ) {
         o << indent() << "rSuperType.getTypeLibType(),\n";
     } else {
         o << indent() << "0,\n";
@@ -755,7 +755,7 @@ sal_uInt32 CppuType::checkInheritedMemberCount(const typereg::Reader* pReader)
         superType = rtl::OUStringToOString(
             pReader->getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
         if ( aSuperReader.isValid() )
@@ -795,10 +795,10 @@ sal_uInt32 CppuType::getInheritedMemberCount()
 
 OString CppuType::getTypeClass(const OString& type, sal_Bool bCStyle)
 {
-    OString     typeName = (type.getLength() > 0 ? type : m_typeName);
+    OString     typeName = (!type.isEmpty() ? type : m_typeName);
     RTTypeClass rtTypeClass = RT_TYPE_INVALID;
 
-    if (type.getLength() > 0)
+    if ( !type.isEmpty() )
     {
         typeName = type;
         rtTypeClass = m_typeMgr.getTypeClass(typeName);
@@ -905,7 +905,7 @@ void CppuType::dumpType(FileStream& o, const OString& type,
         case RT_TYPE_INVALID:
             {
                 OString tmp(translateSimpleUnoType(relType, cppuUnoType));
-                if (tmp.getLength() > 0)
+                if ( !tmp.isEmpty() )
                 {
                     o << tmp;
                 } else
@@ -2374,9 +2374,9 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
     if (m_reader.getSuperTypeCount() != 0) {
         base = rtl::OUStringToOString(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
-        OSL_ASSERT(base.getLength() > 0); //TODO
+        OSL_ASSERT( !base.isEmpty() ); //TODO
     }
-    if (base.getLength() > 0) {
+    if ( !base.isEmpty() ) {
         o << ": public " << scopedCppName(base);
     }
     o << " {\n";
@@ -2426,7 +2426,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
             o << " "
                 << rtl::OUStringToOString(
                     m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8);
-            if (i == 0 && base.getLength() > 0 && type != "double"
+            if (i == 0 && !base.isEmpty() && type != "double"
                 && type != "hyper" && type != "unsigned hyper")
             {
                 OSL_ASSERT(!parameterized);
@@ -2473,7 +2473,7 @@ sal_Bool StructureType::dumpHxxFile(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
     sal_Bool first = sal_True;
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << indent() << ": " << scopedCppName(superType) << "()\n";
         first = sal_False;
@@ -2549,7 +2549,7 @@ sal_Bool StructureType::dumpHxxFile(
 
         inc();
         first = sal_True;
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
         {
             o << indent() << ": " << scopedCppName(superType) << "(";
             dumpSuperMember(o, superType, sal_False);
@@ -2927,7 +2927,7 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
 {
     sal_Bool hasMember = sal_False;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
 
@@ -3127,7 +3127,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
         superType = rtl::OUStringToOString(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
                     o << " : public " << scopedCppName(superType);
 
     o << "\n{\npublic:\n";
@@ -3191,7 +3191,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
         o << indent();
         dumpType(o, fieldType);
         o << " " << fieldName;
-        if (i == 0 && superType.getLength() &&
+        if (i == 0 && !superType.isEmpty() &&
             !fieldType.equals("double") && !fieldType.equals("hyper") && !fieldType.equals("unsigned hyper"))
         {
             o << " CPPU_GCC3_ALIGN( " << scopedCppName(superType) << " )";
@@ -3230,7 +3230,7 @@ sal_Bool ExceptionType::dumpHxxFile(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
     sal_Bool first = sal_True;
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << indent() << ": " << scopedCppName(superType) << "()\n";
         first = sal_False;
@@ -3306,7 +3306,7 @@ sal_Bool ExceptionType::dumpHxxFile(
 
         inc();
         first = sal_True;
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
         {
             o << indent() << ": " << scopedCppName(superType) << "(";
             dumpSuperMember(o, superType, sal_False);
@@ -3351,7 +3351,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     o << indent() << m_name << "::" << m_name << "(" << m_name
       << " const & the_other)";
     first = true;
-    if (superType.getLength() > 0) {
+    if ( !superType.isEmpty() ) {
         o << ": " << scopedCppName(superType) << "(the_other)";
         first = false;
     }
@@ -3370,7 +3370,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     o << indent()
       << ("//TODO: Just like its implicitly-defined counterpart, this function"
           " definition is not exception-safe\n");
-    if (superType.getLength() > 0) {
+    if ( !superType.isEmpty() ) {
         o << indent() << scopedCppName(superType)
           << "::operator =(the_other);\n";
     }
@@ -3399,7 +3399,7 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
 {
     sal_Bool hasMember = sal_False;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
 
@@ -4094,7 +4094,7 @@ void ServiceType::addSpecialDependencies() {
 }
 
 bool ServiceType::isDefaultConstructor(sal_uInt16 ctorIndex) const {
-    return m_reader.getMethodName(ctorIndex).getLength() == 0;
+    return m_reader.getMethodName(ctorIndex).isEmpty();
 }
 
 bool ServiceType::hasRestParameter(sal_uInt16 ctorIndex) const {

@@ -191,7 +191,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0)
+                        if ( tmpName.isEmpty() )
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
