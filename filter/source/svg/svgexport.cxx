@@ -244,12 +244,12 @@ public:
                 case SVXDATEFORMAT_E:       // Tue, 13.February 1996
                     sDateFormat = "";
                     break;
-                case SVXDATEFORMAT_STDBIG: ;
+                case SVXDATEFORMAT_STDBIG:
                 case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
                     sDateFormat = "";
                     break;
                 // default case
-                case SVXDATEFORMAT_B: ;    // 13.02.1996
+                case SVXDATEFORMAT_B:      // 13.02.1996
                 default:
                     sDateFormat = "";
                     break;
@@ -264,16 +264,16 @@ public:
                 case SVXTIMEFORMAT_24_HMS:      // 13:49:38
                     sTimeFormat = "";
                     break;
-                case SVXTIMEFORMAT_AM_HM: ;     // 01:49 PM
+                case SVXTIMEFORMAT_AM_HM:      // 01:49 PM
                 case SVXTIMEFORMAT_12_HM:
                     sTimeFormat = "";
                     break;
-                case SVXTIMEFORMAT_AM_HMS: ;    // 01:49:38 PM
+                case SVXTIMEFORMAT_AM_HMS:     // 01:49:38 PM
                 case SVXTIMEFORMAT_12_HMS:
                     sTimeFormat = "";
                     break;
                 // default case
-                case SVXTIMEFORMAT_24_HM: ;      // 13:49
+                case SVXTIMEFORMAT_24_HM:     // 13:49
                 default:
                     sTimeFormat = "";
                     break;
