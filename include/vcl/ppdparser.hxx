@@ -246,7 +246,6 @@ public:
 
     int             getFonts() const
     { return m_pFontList ? m_pFontList->countValues() : 0; }
-    OUString        getFont( int ) const;
 
 
     OUString   translateKey( const OUString& i_rKey,

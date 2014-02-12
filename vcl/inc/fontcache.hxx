@@ -72,7 +72,6 @@ public:
 
     bool getFontCacheFile( int nDirID, const OString& rFile, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
     void updateFontCacheEntry( const PrintFontManager::PrintFont*, bool bFlush );
-    void markEmptyDir( int nDirID, bool bNoFiles = true );
 
     // returns false for non cached directory
     // a cached but empty directory will return true but not append anything

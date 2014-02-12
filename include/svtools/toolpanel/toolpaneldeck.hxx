@@ -151,12 +151,6 @@ namespace svt
         ::Window&           GetPanelWindowAnchor();
         const ::Window&     GetPanelWindowAnchor() const;
 
-        /** sets the window which should act as parent in the A11Y object hierarchy.
-
-            Calling this method has no effect if CreateAccessible had always been called.
-        */
-        ::Window*           GetAccessibleParentWindow() const;
-
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const;
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
@@ -179,9 +173,6 @@ namespace svt
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
-
-    private:
-        using Window::GetAccessibleParentWindow;
     };
 
 //........................................................................

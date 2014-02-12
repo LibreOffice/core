@@ -83,15 +83,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOTableTreeListBox(Window *p
     return new OTableTreeListBox(pParent, nWinStyle);
 }
 
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_Bool _bVirtualRoot)
-    :OMarkableTreeListBox(pParent, rResId)
-    ,m_xImageProvider( new ImageProvider )
-    ,m_bVirtualRoot(_bVirtualRoot)
-    ,m_bNoEmptyFolders( false )
-{
-    implSetDefaultImages();
-}
-
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;

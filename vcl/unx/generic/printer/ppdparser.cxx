@@ -1495,16 +1495,6 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
     rYRes = 300;
 }
 
-OUString PPDParser::getFont( int nFont ) const
-{
-    if( ! m_pFontList )
-        return OUString();
-
-    if( nFont >=0 && nFont < m_pFontList->countValues() )
-        return m_pFontList->getValue( nFont )->m_aOption;
-    return OUString();
-}
-
 OUString PPDParser::translateKey( const OUString& i_rKey,
                                        const com::sun::star::lang::Locale& i_rLocale ) const
 {

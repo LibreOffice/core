@@ -38,13 +38,6 @@ inline SvxFrameDirection lclVoidToEnum( void* pDirection )
 
 } // namespace
 
-// ============================================================================
-
-FrameDirectionListBox::FrameDirectionListBox( Window* pParent, const ResId& rResId ) :
-    ListBox( pParent, rResId )
-{
-}
-
 FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nBits ) :
     ListBox( pParent, nBits )
 {

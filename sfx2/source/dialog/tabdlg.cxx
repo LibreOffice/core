@@ -717,31 +717,6 @@ void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, sal_B
     AddTabPage( nId, rRiderText, 0, 0, bItemsOnDemand, nPos );
 }
 
-
-// -----------------------------------------------------------------------
-
-void SfxTabDialog::AddTabPage
-
-/*  [Description]
-
-    Adding a page to the dialogue. Must correspond to a entry in the
-    TabControl in the resource of the dialogue.
-*/
-
-(
-    sal_uInt16 nId,                // Page ID
-    CreateTabPage pCreateFunc,     // Pointer to the Factory Method
-    GetTabPageRanges pRangesFunc,  // Pointer to the Method for quering
-                                   // Ranges onDemand
-    sal_Bool bItemsOnDemand        // indicates whether the set of this page is
-                                   // requested when created
-)
-{
-    pImpl->aData.push_back(
-        new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
-}
-
-
 /*
     Adds a page to the dialog. The Name must correspond to a entry in the
     TabControl in the dialog .ui

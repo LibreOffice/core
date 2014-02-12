@@ -741,14 +741,4 @@ void FontCache::createCacheDir( int nDirID )
         m_aCache[nDirID].m_nTimestamp = (sal_Int64)aStat.st_mtime;
 }
 
-/*
- *  FontCache::markEmptyDir
- */
-void FontCache::markEmptyDir( int nDirID, bool bNoFiles )
-{
-    createCacheDir( nDirID );
-    m_aCache[nDirID].m_bNoFiles = bNoFiles;
-    m_bDoFlush = true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

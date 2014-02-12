@@ -73,7 +73,6 @@ namespace svt
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()
             ,m_bInDtor( false )
-            ,m_pAccessibleParent( NULL )
         {
             m_aPanels.AddListener( *this );
             m_aPanelAnchor.Show();
@@ -118,9 +117,6 @@ namespace svt
 
         bool                FocusActivePanel();
 
-        void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
-        Window*             GetAccessibleParentWindow() const { return m_pAccessibleParent; }
-
     protected:
         // IToolPanelDeckListener
         virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
@@ -141,7 +137,6 @@ namespace svt
         PanelDeckListeners  m_aListeners;
         PDeckLayouter       m_pLayouter;
         bool                m_bInDtor;
-        Window*             m_pAccessibleParent;
     };
 
     //--------------------------------------------------------------------
@@ -343,12 +338,6 @@ namespace svt
         // are dying, and we already sent this notification in our dtor.
     }
 
-    //--------------------------------------------------------------------
-    void ToolPanelDeck_Impl::SetAccessibleParentWindow( Window* i_pAccessibleParent )
-    {
-        m_pAccessibleParent = i_pAccessibleParent;
-    }
-
     //====================================================================
     //= ToolPanelDeck
     //====================================================================
@@ -513,15 +502,6 @@ namespace svt
             ENSURE_OR_RETURN_VOID( pLayouter.get(), "ToolPanelDeck::GetFocus: no layouter?!" );
             pLayouter->SetFocusToPanelSelector();
         }
-    }
-
-    //--------------------------------------------------------------------
-    Window* ToolPanelDeck::GetAccessibleParentWindow() const
-    {
-        Window* pAccessibleParent( m_pImpl->GetAccessibleParentWindow() );
-        if ( !pAccessibleParent )
-            pAccessibleParent = Window::GetAccessibleParentWindow();
-        return pAccessibleParent;
     }
 
     //--------------------------------------------------------------------

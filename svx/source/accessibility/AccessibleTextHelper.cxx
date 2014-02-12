@@ -76,20 +76,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    Window* GetCurrentEditorWnd()
-    {
-        Window* pWin = NULL;
-        SfxViewFrame* pFrame = SfxViewFrame::Current();
-        if (pFrame)
-        {
-            const SfxViewShell * pViewShell = pFrame->GetViewShell();
-            if(pViewShell)
-            {
-                pWin = pViewShell->GetWindow();
-            }
-        }
-        return pWin;
-    }
 
 //------------------------------------------------------------------------
 //

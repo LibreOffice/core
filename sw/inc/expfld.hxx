@@ -375,8 +375,6 @@ public:
      Compare TmpLst with current fields. */
     sal_uInt16      BuildSortLst();
 
-    void        RemoveUnselectedFlds();
-
 private:
     SwEditShell*              pSh;
     _SetGetExpFlds*           pSrtLst;

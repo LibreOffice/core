@@ -65,25 +65,6 @@ VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( VCLXAccessibleHeaderBarItem, WindowEventListener, VclSimpleEvent*, pEvent )
-{
-    DBG_CHKTHIS( VCLXAccessibleHeaderBarItem, 0 );
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "VCLXAccessibleHeaderBarItem::WindowEventListener: unknown window event!" );
-
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
-    {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "VCLXAccessibleHeaderBarItem::WindowEventListener: no window!" );
-        if ( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
-        {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
-        }
-    }
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------------
-
 void VCLXAccessibleHeaderBarItem::ProcessWindowEvent( const VclWindowEvent& )
 {
 }

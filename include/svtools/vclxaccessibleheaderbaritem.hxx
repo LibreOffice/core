@@ -57,7 +57,6 @@ private:
     sal_Int32                m_nIndexInParent;
 
 protected:
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );

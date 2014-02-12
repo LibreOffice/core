@@ -1527,24 +1527,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
 
 // -------------------------------------------------------------------------
 
-void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts )
-{
-    rFonts.clear();
-    ::std::list< fontID > aFontList;
-    getFontList( aFontList );
-
-    ::std::list< fontID >::iterator it;
-    for( it = aFontList.begin(); it != aFontList.end(); ++it )
-    {
-        FastPrintFontInfo aInfo;
-        aInfo.m_nID = *it;
-        fillPrintFontInfo( getFont( *it ), aInfo );
-        rFonts.push_back( aInfo );
-    }
-}
-
-// -------------------------------------------------------------------------
-
 bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const
 {
     PrintFont* pFont = getFont( nFontID );

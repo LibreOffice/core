@@ -339,8 +339,6 @@ public:
 
     // returns the ids of all managed fonts.
     void getFontList( std::list< fontID >& rFontIDs );
-    // get the font list and fast font info.
-    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts );
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;

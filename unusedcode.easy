@@ -1,3 +1,4 @@
+(anonymous namespace)::hasNonEmpty(std::vector<double, std::allocator<double> > const&, int, int)
 AddressWalker::pop()
 BackingWindow::LinkStubOpenTemplateHdl(void*, void*)
 BigInt::BigInt(unsigned int)
@@ -152,9 +153,11 @@ SwAccessiblePortionData::GetAttrFldType(int)
 SwAccessibleTable::ClearSelectionCellCache()
 SwAccessibleTable::SetTableData(SwAccessibleTableData_Impl*)
 SwCntntFrm::DelFrms(SwCntntNode const&)
+SwExtraRedlineTbl::Contains(SwExtraRedline const*) const
+SwExtraRedlineTbl::Remove(SwExtraRedline const*)
 SwFrmFmt::SetCaptionFmt(SwFrmFmt*)
-SwInputFieldList::RemoveUnselectedFlds()
 SwPostItField::GetByName(SwDoc*, rtl::OUString const&)
+SwTableRowRedline::SwTableRowRedline(SwRedlineData const&, SwTableLine&)
 SwViewImp::FireColumnChangeEvent(unsigned short, unsigned short)
 SwViewImp::FirePageChangeEvent(unsigned short, unsigned short)
 SwViewImp::FireSectionChangeEvent(unsigned short, unsigned short)
@@ -170,7 +173,6 @@ TypeManager::decompose(rtl::OUString const&, bool, rtl::OUString*, int*, std::ve
 TypeManager::foundAtPrimaryProvider(rtl::OUString const&) const
 TypeManager::loadProvider(rtl::OUString const&, bool)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
-VCLXAccessibleHeaderBarItem::LinkStubWindowEventListener(void*, void*)
 ValueSet::ImplGetVisibleItem(unsigned short)
 VclMultiLineEdit::IsRightToLeft() const
 VclMultiLineEdit::SetTextSelectable(bool)
@@ -178,7 +180,6 @@ accessibility::AccessibleParaManager::Release(int)
 accessibility::AccessibleShape::AccessibleShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&, accessibility::AccessibleShapeTreeInfo const&, int)
 accessibility::Document::justifySelection(TextPaM&, TextPaM&)
 accessibility::Document::notifySelectionChange(int, int)
-accessibility::GetCurrentEditorWnd()
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
@@ -330,9 +331,6 @@ oox::xls::FormulaParser::convertBoolToFormula(bool) const
 oox::xls::WorkbookHelper::getDocShell()
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
-psp::FontCache::markEmptyDir(int, bool)
-psp::PPDParser::getFont(int) const
-psp::PrintFontManager::getFontListWithFastInfo(std::list<psp::FastPrintFontInfo, std::allocator<psp::FastPrintFontInfo> >&)
 registry::tools::Options::Options(char const*)
 registry::tools::Options::badOption(char const*, char const*) const
 registry::tools::Options::initOptions(std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
@@ -372,13 +370,14 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::Formu
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 svl::SharedStringPool::SharedStringPool()
-svt::ToolPanelDeck_Impl::SetAccessibleParentWindow(Window*)
 svx::frame::Style::Style(editeng::SvxBorderLine const&, double, unsigned short)
 sw::access::SwAccessibleChild::GetAnchorPosition() const
 utl::MediaDescriptor::PROP_DEEPDETECTION()
 utl::toISO8601(com::sun::star::util::Time const&)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, int)
 writerfilter::WW8TableManager::WW8TableManager()
+writerfilter::dmapper::TrackChangesHandler::TrackChangesHandler(int)
+writerfilter::dmapper::TrackChangesHandler::getRedlineProperties() const
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::BinaryObj> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::Properties> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, rtl::OUString const&)

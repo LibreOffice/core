@@ -169,34 +169,4 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
     return pSrtLst->size();
 }
 
-/// remove all fields outside of any selections from list
-void SwInputFieldList::RemoveUnselectedFlds()
-{
-    _SetGetExpFlds* pNewLst = new _SetGetExpFlds();
-
-    FOREACHPAM_START(pSh->GetCrsr())
-    {
-        for (sal_uInt16 i = 0; i < Count();)
-        {
-            _SetGetExpFld* pFld = (*pSrtLst)[i];
-            SwPosition aPos(*PCURCRSR->GetPoint());
-
-            pFld->GetPos( aPos );
-
-            if (aPos >= *PCURCRSR->Start() && aPos < *PCURCRSR->End())
-            {
-                // field in selection
-                pNewLst->insert( (*pSrtLst)[i] );
-                pSrtLst->erase(i);
-            }
-            else
-                i++;
-        }
-    }
-    FOREACHPAM_END()
-
-    delete pSrtLst;
-    pSrtLst = pNewLst;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,12 +146,6 @@ public:
                                      sal_uInt16 nPageCreateId );    // Identifier of the Factory Method to create the page
 
     void                AddTabPage( sal_uInt16 nId,
-                                    CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // can be 0
-                                    sal_Bool bItemsOnDemand = sal_False);
-
-
-    void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0

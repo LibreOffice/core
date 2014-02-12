@@ -50,11 +50,6 @@ public:
 
     void init(bool bVirtualRoot) { m_bVirtualRoot = bVirtualRoot; }
 
-    OTableTreeListBox(
-        Window* pParent,
-        const ResId& rResId,
-        sal_Bool _bVirtualRoot );
-
     typedef ::std::pair< OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
 
