@@ -3601,7 +3601,7 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
                 ( rLSItem.GetPropLineSpace() < 100 ) )
             {
                 const EditLine* pL = pPortion->GetLines()[nFirstInvalid];
-                long n = pL->GetTxtHeight() * ( 100 - rLSItem.GetPropLineSpace() );
+                long n = pL->GetTxtHeight() * ( 100L - rLSItem.GetPropLineSpace() );
                 n /= 100;
                 aRange.Min() -= n;
                 aRange.Max() += n;
