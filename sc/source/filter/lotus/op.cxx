@@ -407,7 +407,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
     ScAddress aAddress( nCol, nRow, nTab );
 
-    LotusToSc aConv( r, pLotusRoot->eCharsetQ, sal_True );
+    LotusToSc aConv( r, pLotusRoot->eCharsetQ, true );
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 

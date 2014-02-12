@@ -74,8 +74,8 @@ private:
     void                DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtName );
     void                LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow,
                             ScSingleRefData& rSRD );
-    sal_Bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
-        sal_Bool                            bWK123;         // alternative for 123
+    bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
+    bool                bWK123;     // alternative for 123
     // -------------------------------------------------------------------
     void                ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nFlags );
     inline void         ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nFlags );
@@ -88,7 +88,7 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-                        LotusToSc( SvStream& aStr, rtl_TextEncoding eSrc, sal_Bool b );
+                        LotusToSc( SvStream& aStr, rtl_TextEncoding eSrc, bool b );
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -112,7 +112,7 @@ inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
 
 inline void LotusToSc::SetWK3( void )
 {
-        bWK3 = sal_True;
+        bWK3 = true;
 }
 
 
