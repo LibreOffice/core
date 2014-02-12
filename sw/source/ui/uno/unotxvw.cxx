@@ -1776,7 +1776,8 @@ SwPaM*  SwXTextViewCursor::GetPaM()
     return rSh.GetCrsr();
 }
 
-uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable(  ) throw (uno::RuntimeException)
+uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
