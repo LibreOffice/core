@@ -77,10 +77,12 @@ void SvxXConnectionPreview::AdaptSize()
     // Adapt size
     if( pObjList )
     {
-        SetMapMode( MAP_100TH_MM );
-
-        OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
         Rectangle aRect = pObjList->GetAllObjBoundRect();
+        if (aRect.GetHeight() == 0 || aRect.GetHeight() == 0)
+            return;
+
+        SetMapMode( MAP_100TH_MM );
+        OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
 
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
