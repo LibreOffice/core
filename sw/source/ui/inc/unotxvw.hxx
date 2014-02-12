@@ -214,7 +214,9 @@ public:
 //    virtual sal_Bool goRight(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
 
     //XLineCursor
-    virtual sal_Bool SAL_CALL isAtStartOfLine(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL isAtStartOfLine()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL isAtEndOfLine(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL gotoEndOfLine(sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL gotoStartOfLine(sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
