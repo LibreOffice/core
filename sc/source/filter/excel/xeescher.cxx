@@ -1188,7 +1188,7 @@ void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExp
 
 }
 
-void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
 {
     ::com::sun::star::awt::Point aPos = rXShape->getPosition();
     ::com::sun::star::awt::Size aSize = rXShape->getSize();

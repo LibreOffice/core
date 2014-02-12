@@ -322,7 +322,7 @@ public:
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
     virtual void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
-    void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
+    void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
 private:
     typedef boost::shared_ptr< XclExpChart > XclExpChartRef;
