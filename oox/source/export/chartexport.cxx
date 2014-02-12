@@ -1163,10 +1163,11 @@ void ChartExport::exportFill( Reference< XPropertySet > xPropSet )
     xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
     switch( aFillStyle )
     {
-    case FillStyle_GRADIENT :
-        exportGradientFill( xPropSet );
-    default:
-        WriteFill( xPropSet );
+        case FillStyle_GRADIENT :
+            exportGradientFill( xPropSet );
+            break;
+        default:
+            WriteFill( xPropSet );
     }
 }
 

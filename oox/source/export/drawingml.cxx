@@ -338,6 +338,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                     aGrabBag[i].Value >>= aOriginalGradient;
         }
 
+        mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
         // check if an ooxml gradient had been imported and if the user has modified it
         if( aGradientStops.hasElements() && EqualGradients( aOriginalGradient, aGradient ) )
         {
@@ -345,11 +346,11 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
         }
         else
             WriteGradientFill(aGradient);
+        mpFS->endElementNS( XML_a, XML_gradFill );
     }
 }
 void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientStops, awt::Gradient rGradient )
 {
-    mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
     // write back the original gradient
     mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
 
@@ -396,50 +397,48 @@ void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientSto
     mpFS->singleElementNS( XML_a, XML_lin,
                            XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
                            FSEND );
-    mpFS->endElementNS( XML_a, XML_gradFill );
 }
 
 void DrawingML::WriteGradientFill( awt::Gradient rGradient )
 {
-    mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
     switch( rGradient.Style ) {
-    default:
-    case GradientStyle_LINEAR:
-        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-        WriteGradientStop( 0, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
-        WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
-        mpFS->endElementNS( XML_a, XML_gsLst );
-        mpFS->singleElementNS( XML_a, XML_lin,
-                XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
-                FSEND );
-        break;
+        default:
+        case GradientStyle_LINEAR:
+            mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+            WriteGradientStop( 0, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+            WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+            mpFS->endElementNS( XML_a, XML_gsLst );
+            mpFS->singleElementNS( XML_a, XML_lin,
+                    XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                    FSEND );
+            break;
 
-    case GradientStyle_AXIAL:
-        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-        WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
-        WriteGradientStop( 50, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
-        WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
-        mpFS->endElementNS( XML_a, XML_gsLst );
-        mpFS->singleElementNS( XML_a, XML_lin,
-                XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
-                FSEND );
-        break;
+        case GradientStyle_AXIAL:
+            mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+            WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+            WriteGradientStop( 50, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+            WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+            mpFS->endElementNS( XML_a, XML_gsLst );
+            mpFS->singleElementNS( XML_a, XML_lin,
+                    XML_ang, I32S( ( ( ( 3600 - rGradient.Angle + 900 ) * 6000 ) % 21600000 ) ),
+                    FSEND );
+            break;
 
-        /* I don't see how to apply transformation to gradients, so
-         * elliptical will end as radial and square as
-         * rectangular. also position offsets are not applied */
-    case GradientStyle_RADIAL:
-    case GradientStyle_ELLIPTICAL:
-    case GradientStyle_RECT:
-    case GradientStyle_SQUARE:
-        mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
-        WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
-        WriteGradientStop( 100, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
-        mpFS->endElementNS( XML_a, XML_gsLst );
-        mpFS->singleElementNS( XML_a, XML_path,
-                XML_path, ( rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect",
-                        FSEND );
-        break;
+            /* I don't see how to apply transformation to gradients, so
+             * elliptical will end as radial and square as
+             * rectangular. also position offsets are not applied */
+        case GradientStyle_RADIAL:
+        case GradientStyle_ELLIPTICAL:
+        case GradientStyle_RECT:
+        case GradientStyle_SQUARE:
+            mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
+            WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+            WriteGradientStop( 100, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
+            mpFS->endElementNS( XML_a, XML_gsLst );
+            mpFS->singleElementNS( XML_a, XML_path,
+                    XML_path, ( rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect",
+                    FSEND );
+            break;
     }
     mpFS->endElementNS( XML_a, XML_gradFill );
 }
