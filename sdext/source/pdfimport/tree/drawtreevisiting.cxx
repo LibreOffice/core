@@ -35,6 +35,8 @@
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/i18n/ScriptType.hpp"
 #include "com/sun/star/i18n/DirectionProperty.hpp"
+#include "com/sun/star/rendering/PathCapType.hpp"
+#include "com/sun/star/rendering/PathJoinType.hpp"
 
 #include <string.h>
 
@@ -793,6 +795,36 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
 
             aGCProps[ "svg:stroke-width" ] = OUString::number( aVec.getLength() );
         }
+        OUString strokeLinejoinValue;
+        OUString strokeLinecapValue;
+        switch (rGC.LineJoin)
+        {
+        default:
+        case rendering::PathJoinType::MITER:
+            strokeLinejoinValue = "miter";
+            break;
+        case rendering::PathJoinType::ROUND:
+            strokeLinejoinValue = "round";
+            break;
+        case rendering::PathJoinType::BEVEL:
+            strokeLinejoinValue = "bevel";
+            break;
+        }
+        switch (rGC.LineCap)
+        {
+        default:
+        case rendering::PathCapType::BUTT:
+            strokeLinecapValue = "butt";
+            break;
+        case rendering::PathCapType::ROUND:
+            strokeLinecapValue = "round";
+            break;
+        case rendering::PathCapType::SQUARE:
+            strokeLinecapValue = "square";
+            break;
+        }
+        aGCProps[ "draw:stroke-linejoin" ] = strokeLinejoinValue;
+        aGCProps[ "svg:stroke-linecap" ] = strokeLinecapValue;
     }
     else
     {
