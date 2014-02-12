@@ -346,11 +346,8 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkIndex( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
-    sal_Int32 nRet = 0;
-
-    return nRet;
+    return 0;
 }
 
 AccessibleRelation SwAccessibleNoTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrm* pFrm )
@@ -367,28 +364,8 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleNoTextFrame::getAcce
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    // get the caption frame, and insert label relations into helper
-
-    AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
-
-    SwFlyFrm* pFlyFrm = getFlyFrm();
-    DBG_ASSERT( pFlyFrm != NULL, "fly frame expected" );
-
-    SwFlyFrm* pCaptionFrm = NULL;
-    const SwFrmFmt* pFrm = pFlyFrm ->GetFmt()->GetCaptionFmt();
-    if (pFrm)
-    {
-        SwClientIter aIter (*(SwModify*)pFrm);
-        pCaptionFrm = (SwFlyFrm*)aIter.First( TYPE ( SwFlyFrm ));
-    }
-    if(pCaptionFrm!=NULL)
-    {
-        pHelper->AddRelation( makeRelation( AccessibleRelationType::DESCRIBED_BY, pCaptionFrm ) );
-    }
-
-    return pHelper;
+    return new AccessibleRelationSetHelper();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

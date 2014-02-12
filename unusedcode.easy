@@ -155,7 +155,6 @@ SwAccessibleTable::SetTableData(SwAccessibleTableData_Impl*)
 SwCntntFrm::DelFrms(SwCntntNode const&)
 SwExtraRedlineTbl::Contains(SwExtraRedline const*) const
 SwExtraRedlineTbl::Remove(SwExtraRedline const*)
-SwFrmFmt::SetCaptionFmt(SwFrmFmt*)
 SwPostItField::GetByName(SwDoc*, rtl::OUString const&)
 SwTableRowRedline::SwTableRowRedline(SwRedlineData const&, SwTableLine&)
 SwViewImp::FireColumnChangeEvent(unsigned short, unsigned short)

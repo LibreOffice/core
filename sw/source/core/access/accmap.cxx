@@ -3323,64 +3323,10 @@ sal_Bool SwAccessibleMap::ReplaceChild (
 }
 
 ::com::sun::star::uno::Reference< XAccessible >
-    SwAccessibleMap::GetAccessibleCaption (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape)
+    SwAccessibleMap::GetAccessibleCaption (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&)
     throw (::com::sun::star::uno::RuntimeException)
 {
-        SdrObject* captionedObject = GetSdrObjectFromXShape(xShape);
-
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall( captionedObject );
-        OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
-                "fail" );
-        if( !pContact )
-            return 0;
-
-        SwDrawFrmFmt *pCaptionedFmt = (SwDrawFrmFmt *)pContact->GetFmt();
-        if( !pCaptionedFmt )
-            return 0;
-
-        SwFlyFrm* pFrm = NULL;
-        if (pCaptionedFmt->HasCaption())
-        {
-            const SwFrmFmt *pCaptionFrmFmt = pCaptionedFmt->GetCaptionFmt();
-            SwClientIter aIter (*(SwModify*)pCaptionFrmFmt);
-            pFrm = (SwFlyFrm*)aIter.First( TYPE ( SwFlyFrm ));
-        }
-        if (!pFrm)
-            return 0;
-        //SwFrmFmt* pFrm = pCaptionedFmt->GetCaptionFmt();
-        uno::Reference < XAccessible > xAcc( GetContext((SwFrm*)pFrm,sal_True) );
-        //Reference < XAccessibleShape > xAccShape( xAcc, UNO_QUERY );
-
-        uno::Reference< XAccessibleContext > xAccContext = xAcc->getAccessibleContext();
-        if( xAccContext.is() )
-        {   //get the parent of caption frame, which is paragaph
-            uno::Reference< XAccessible > xAccParent = xAccContext->getAccessibleParent();
-            if(xAccParent.is())
-            {
-                //get the great parent of caption frame which is text frame.
-                uno::Reference< XAccessibleContext > xAccParentContext = xAccParent->getAccessibleContext();
-                uno::Reference< XAccessible > xAccGreatParent = xAccParentContext->getAccessibleParent();
-                if(xAccGreatParent.is())
-                {
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.NewValue <<= xAccParent;
-                    ( static_cast< SwAccessibleContext * >(xAccGreatParent.get()) )->FireAccessibleEvent( aEvent );
-
-                }
-
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.NewValue <<= xAcc;
-                ( static_cast< SwAccessibleContext * >(xAccParent.get()) )->FireAccessibleEvent( aEvent );
-            }
-        }
-
-        if(xAcc.get())
-            return xAcc;
-        else
-            return NULL;
-
+    return NULL;
 }
 
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
