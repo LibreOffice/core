@@ -27,6 +27,8 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+
+#include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 
 namespace oox {
@@ -130,7 +132,7 @@ sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 ::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
 // Convert a TextVerticalAdjust item to string value appearing in ooxml
-SAL_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
+OOX_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
 
 // ============================================================================
 
