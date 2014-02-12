@@ -962,7 +962,8 @@ void SwXTextViewCursor::collapseToStart()
         throw uno::RuntimeException();
 }
 
-void SwXTextViewCursor::collapseToEnd(void) throw( uno::RuntimeException )
+void SwXTextViewCursor::collapseToEnd()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)
