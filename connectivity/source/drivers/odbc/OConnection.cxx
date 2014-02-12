@@ -48,6 +48,7 @@ using namespace com::sun::star::sdbc;
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
+                         ,m_aConnectionHandle(NULL)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
                          ,m_bClosed(sal_True)
