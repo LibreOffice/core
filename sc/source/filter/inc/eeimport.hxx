@@ -43,7 +43,7 @@ protected:
     ScTabEditEngine*    mpEngine;
     RowHeightMap        maRowHeights;
 
-    sal_Bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      ScEEParseEntry* );
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                        ScEEParseEntry* );

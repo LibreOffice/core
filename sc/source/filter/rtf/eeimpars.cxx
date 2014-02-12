@@ -130,7 +130,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
     nOverlapRowMax = 0;
     nMergeColAdd = 0;
     nLastMergedRow = SCROW_MAX;
-    sal_Bool bHasGraphics = false;
+    bool bHasGraphics = false;
     ScEEParseEntry* pE;
     if (!pFormatter)
         pFormatter = mpDoc->GetFormatTable();
@@ -477,11 +477,11 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 }
 
 
-sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
+bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
 {
     if ( !pE->maImageList.size() )
         return false;
-    sal_Bool bHasGraphics = false;
+    bool bHasGraphics = false;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     long nWidth, nHeight;
     nWidth = nHeight = 0;
@@ -490,7 +490,7 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
     {
         ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( pI->pGraphic )
-            bHasGraphics = sal_True;
+            bHasGraphics = true;
         Size aSizePix = pI->aSize;
         aSizePix.Width() += 2 * pI->aSpace.X();
         aSizePix.Height() += 2 * pI->aSpace.Y();
