@@ -530,9 +530,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	sdbc2 \
 	sofficeapp \
 	srtrs1 \
+	$(if $(filter $(OS),WNT),sysdtrans) \
 	textconv_dict \
 	ucb1 \
 	ucbhelper \
+	$(if $(DISABLE_NEON),,ucpdav1) \
 	ucpfile1 \
 	ucpftp1 \
 	ucpchelp1 \
@@ -561,7 +563,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
-	ucpdav1 \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
@@ -606,7 +607,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	regpatchactivex \
 	so_activex \
 	so_activex_x64 \
-	sysdtrans \
 	thidxmsi \
 ))
 endif
@@ -710,6 +710,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_CURL),,curl) \
 	$(if $(SYSTEM_LCMS2),,lcms2) \
 	$(if $(SYSTEM_LIBXSLT),,xslt) \
+	$(if $(SYSTEM_CAIRO),,cairo \
+		$(if $(filter $(OS),WNT),,pixman) \
+	) \
 ))
 
 # External executables
