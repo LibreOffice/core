@@ -1711,16 +1711,37 @@ for (;1;last)
     if ($installer::globals::is_release
         && $installer::globals::iswindowsbuild)
     {
-        $installer::logger::Info->printf("preparing MSI object for source version %s\n",
-            $installer::globals::source_version);
-        my $source_version_string = join(
-            "",
-            installer::patch::Version::StringToNumberArray($installer::globals::source_version));
-        $installer::globals::source_msi = installer::patch::Msi->FindAndCreate(
-            $installer::globals::source_version,
-            0,
-            $$languagestringref,
-            $installer::globals::product);
+        my $releases = installer::patch::ReleasesList::Instance()->{$installer::globals::source_version};
+        if ( ! defined $releases)
+        {
+            $installer::logger::Info->printf(
+                "there is no recorded information about previous version %s\n",
+                $installer::globals::source_version);
+            $installer::logger::Info->printf("    reverting to non-release build\n");
+            $installer::globals::is_release = 0;
+        }
+        elsif ( ! defined $releases->{'msi'}->{installer::languages::get_normalized_language($$languagestringref)})
+        {
+            $installer::logger::Info->printf(
+                "there is no recorded information about language '%s' in previous version %s\n",
+                $$languagestringref,
+                $installer::globals::source_version);
+            $installer::logger::Info->printf("    reverting to non-release build\n");
+            $installer::globals::is_release = 0;
+        }
+        else
+        {
+            $installer::logger::Info->printf("preparing MSI object for source version %s\n",
+                $installer::globals::source_version);
+            my $source_version_string = join(
+                "",
+                installer::patch::Version::StringToNumberArray($installer::globals::source_version));
+            $installer::globals::source_msi = installer::patch::Msi->FindAndCreate(
+                $installer::globals::source_version,
+                0,
+                $$languagestringref,
+                $installer::globals::product);
+        }
     }
 
     ############################################################

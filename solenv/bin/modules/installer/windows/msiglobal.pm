@@ -1512,7 +1512,11 @@ sub get_source_codes ($)
 {
     my ($languagesref) = @_;
 
-    if ( ! defined $installer::globals::source_version)
+    if ( ! $installer::globals::is_release)
+    {
+        return (undef, undef);
+    }
+    elsif ( ! defined $installer::globals::source_version)
     {
         $installer::logger::Lang->printf("no source version defined\n");
         return (undef, undef);

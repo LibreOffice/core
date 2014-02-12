@@ -115,17 +115,31 @@ sub ProcessLanguage ($$$$$)
     $installer::logger::Info->printf("%s\n", $language);
     $installer::logger::Info->increase_indentation();
 
-    # For every language we need
-    # 1. have downloadable installation set available (download if missing)
-    # 2. unpack it to get access to .cab and .msi
-    # 3. unpack .cab so that msimsp.exe can be run
+    if ( ! defined installer::patch::ReleasesList::Instance()
+        ->{$version}
+        ->{$package_format}
+        ->{$language})
+    {
+        $installer::logger::Info->printf(
+            "there is no recorded information about language '%s' in version '%s'\n",
+            $language,
+            $version);
+        $installer::logger::Info->printf("    skipping\n");
+    }
+    else
+    {
+        # For every language we need
+        # 1. have downloadable installation set available (download if missing)
+        # 2. unpack it to get access to .cab and .msi
+        # 3. unpack .cab so that msimsp.exe can be run
 
-    installer::patch::InstallationSet::ProvideUnpackedCab(
-        $version,
-        $is_current_version,
-        $language,
-        $package_format,
-        $product_name);
+        installer::patch::InstallationSet::ProvideUnpackedCab(
+            $version,
+            $is_current_version,
+            $language,
+            $package_format,
+            $product_name);
+    }
 
     $installer::logger::Info->decrease_indentation();
 }
