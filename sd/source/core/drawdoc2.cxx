@@ -407,7 +407,7 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 void SdDrawDocument::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos )
 {
     FmFormModel::InsertMasterPage( pPage, nPos );
-    if( pPage && pPage->IsMasterPage() && (static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD) )
+    if( pPage->IsMasterPage() && (static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD) )
     {
         // new master page created, add its style family
         SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
