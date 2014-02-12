@@ -2039,47 +2039,47 @@ ScMatrixValue ScMatrix::Get(SCSIZE nC, SCSIZE nR) const
     return pImpl->Get(nC, nR);
 }
 
-sal_Bool ScMatrix::IsString( SCSIZE nIndex ) const
+bool ScMatrix::IsString( SCSIZE nIndex ) const
 {
     return pImpl->IsString(nIndex);
 }
 
-sal_Bool ScMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsString(nC, nR);
 }
 
-sal_Bool ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmpty(nC, nR);
 }
 
-sal_Bool ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmptyPath(nC, nR);
 }
 
-sal_Bool ScMatrix::IsValue( SCSIZE nIndex ) const
+bool ScMatrix::IsValue( SCSIZE nIndex ) const
 {
     return pImpl->IsValue(nIndex);
 }
 
-sal_Bool ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValue(nC, nR);
 }
 
-sal_Bool ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValueOrEmpty(nC, nR);
 }
 
-sal_Bool ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsBoolean(nC, nR);
 }
 
-sal_Bool ScMatrix::IsNumeric() const
+bool ScMatrix::IsNumeric() const
 {
     return pImpl->IsNumeric();
 }

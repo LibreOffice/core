@@ -314,31 +314,31 @@ public:
     ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    sal_Bool IsString( SCSIZE nIndex ) const;
+    bool IsString( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    sal_Bool IsString( SCSIZE nC, SCSIZE nR ) const;
+    bool IsString( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty or empty path.
-    sal_Bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
+    bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty path.
-    sal_Bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
+    bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean.
-    sal_Bool IsValue( SCSIZE nIndex ) const;
+    bool IsValue( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if value or boolean.
-    sal_Bool IsValue( SCSIZE nC, SCSIZE nR ) const;
+    bool IsValue( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean or empty or empty path.
-    sal_Bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
+    bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if boolean.
-    sal_Bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
+    bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
-    sal_Bool IsNumeric() const;
+    bool IsNumeric() const;
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
