@@ -61,7 +61,7 @@ public:
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST(testDisplayUnits);
-    CPPUNIT_TEST(testFdo74115WallGradientFill);
+    // CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST_SUITE_END();
