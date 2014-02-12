@@ -38,6 +38,7 @@ BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
 {
     assert(type.is());
     uno_any_construct(&data_, value, type.get(), 0);
+    data_.pReserved = NULL;
 }
 
 BinaryAny::BinaryAny(uno_Any const & raw) throw () {
