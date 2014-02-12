@@ -2558,16 +2558,6 @@ struct NonNullStringFinder : std::unary_function<const rtl_uString*, bool>
     bool operator() (const rtl_uString* p) const { return p != NULL; }
 };
 
-bool hasNonEmpty( const sc::FormulaGroupContext::NumArrayType& rArray, SCROW nRow1, SCROW nRow2 )
-{
-    // The caller has to make sure the array is at least nRow2+1 long.
-    sc::FormulaGroupContext::NumArrayType::const_iterator it = rArray.begin();
-    std::advance(it, nRow1);
-    sc::FormulaGroupContext::NumArrayType::const_iterator itEnd = it;
-    std::advance(itEnd, nRow2-nRow1+1);
-    return std::find_if(it, itEnd, FiniteValueFinder()) != itEnd;
-}
-
 bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRow1, SCROW nRow2 )
 {
     // The caller has to make sure the array is at least nRow2+1 long.
