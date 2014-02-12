@@ -337,6 +337,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	svx \
 	svxcore \
 	sw \
+	$(if $(filter $(GUIBASE),unx),,sysdtrans) \
 	syssh \
 	$(if $(ENABLE_TDEAB),tdeab1) \
 	$(if $(ENABLE_TDEAB),tdeabdrv1) \
@@ -344,6 +345,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	textfd \
 	tk \
 	tl \
+	$(if $(DISABLE_NEON),,ucpdav1 \
+		$(if $(SYSTEM_NEON),,neon) \
+	) \
 	ucpexpand1 \
 	ucpext \
 	ucpcmis1 \
@@ -561,7 +565,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
-	ucpdav1 \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
@@ -606,7 +609,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	regpatchactivex \
 	so_activex \
 	so_activex_x64 \
-	sysdtrans \
 	thidxmsi \
 ))
 endif
@@ -707,9 +709,15 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	$(if $(SYSTEM_CLUCENE),,clucene) \
 	$(if $(SYSTEM_CURL),,curl) \
 	$(if $(SYSTEM_LCMS2),,lcms2) \
 	$(if $(SYSTEM_LIBXSLT),,xslt) \
+	$(if $(NEED_CAIRO), \
+		$(if $(filter $(OS),WNT),, \
+			pixman \
+		) \
+	) \
 ))
 
 # External executables
