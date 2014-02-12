@@ -418,6 +418,14 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
 
     xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+
+    xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", GetObjBoundRect().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", GetObjBoundRect().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", GetObjBoundRect().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", GetObjBoundRect().Height() );
+    xmlTextWriterEndElement( writer );
+
     xmlTextWriterEndElement( writer );
 
     if ( bCreateWriter )
