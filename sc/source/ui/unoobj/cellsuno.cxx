@@ -5233,7 +5233,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
     {
         uno::Any aAny;
         // bAllowNV = TRUE: errors as void
-        if ( ScRangeToSequence::FillMixedArray( aAny, pDocSh->GetDocument(), aRange, sal_True ) )
+        if ( ScRangeToSequence::FillMixedArray( aAny, pDocSh->GetDocument(), aRange, true ) )
         {
             uno::Sequence< uno::Sequence<uno::Any> > aSeq;
             if ( aAny >>= aSeq )

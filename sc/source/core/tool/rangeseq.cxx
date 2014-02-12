@@ -57,7 +57,7 @@ static long lcl_DoubleToLong( double fVal )
         return 0;       // out of range
 }
 
-sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -82,7 +82,7 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, con
     return !lcl_HasErrors( pDoc, rRange );
 }
 
-sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
+bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
         return false;
@@ -107,10 +107,10 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatr
     }
 
     rAny <<= aRowSeq;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -135,7 +135,7 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, c
     return !lcl_HasErrors( pDoc, rRange );
 }
 
-sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
+bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
         return false;
@@ -160,10 +160,10 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMa
     }
 
     rAny <<= aRowSeq;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -194,7 +194,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
     return !bHasErrors;
 }
 
-sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix,
+bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix,
                                             SvNumberFormatter* pFormatter )
 {
     if (!pMatrix)
@@ -231,11 +231,11 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
     }
 
     rAny <<= aRowSeq;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
-                                        sal_Bool bAllowNV )
+bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
+                                        bool bAllowNV )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -243,7 +243,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
-    sal_Bool bHasErrors = false;
+    bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
     uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
@@ -282,7 +282,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
     return bAllowNV || !bHasErrors;
 }
 
-sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
+bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
 {
     if (!pMatrix)
         return false;
@@ -320,7 +320,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
     }
 
     rAny <<= aRowSeq;
-    return sal_True;
+    return true;
 }
 
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
@@ -428,7 +428,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
     return xMatrix;
 }
 
-sal_Bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
+bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
                                         sal_uInt16 nEncoding )
 {
     uno::Sequence<sal_Int8> aSeq;
@@ -437,7 +437,7 @@ sal_Bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& r
         rString = OUString( (const sal_Char*)aSeq.getConstArray(),
                             aSeq.getLength(), nEncoding );
         rString = comphelper::string::stripEnd(rString, 0);
-        return sal_True;
+        return true;
     }
     return false;
 }

@@ -31,21 +31,21 @@ class ScRange;
 class ScRangeToSequence
 {
 public:
-    static sal_Bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static bool FillLongArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static bool FillLongArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static sal_Bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static bool FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static bool FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static sal_Bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static bool FillStringArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static bool FillStringArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
-    static sal_Bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static bool FillMixedArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
-                                sal_Bool bAllowNV = false );
+                                bool bAllowNV = false );
 
     /** @param bDataTypes
             Additionally to the differentiation between string and double allow
@@ -53,7 +53,7 @@ public:
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */
-    static sal_Bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static bool FillMixedArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
@@ -98,7 +98,7 @@ class ScByteSequenceToString
 public:
     //  rAny must contain Sequence<sal_Int8>,
     //  may or may not contain 0-bytes at the end
-    static sal_Bool GetString( OUString& rString, const com::sun::star::uno::Any& rAny,
+    static bool GetString( OUString& rString, const com::sun::star::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };
 
