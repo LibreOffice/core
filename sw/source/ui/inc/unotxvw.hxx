@@ -177,7 +177,9 @@ public:
     virtual ::com::sun::star::awt::Point SAL_CALL getPosition(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XTextCursor - neu
-    virtual void SAL_CALL collapseToStart(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL collapseToStart()
+        throw(::com::sun::star::uno::RuntimeException,
+              std::exception);
     virtual void SAL_CALL collapseToEnd(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isCollapsed(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);

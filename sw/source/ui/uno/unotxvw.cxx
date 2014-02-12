@@ -938,7 +938,8 @@ awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )
     return aRet;
 }
 
-void SwXTextViewCursor::collapseToStart(void) throw( uno::RuntimeException )
+void SwXTextViewCursor::collapseToStart()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)
