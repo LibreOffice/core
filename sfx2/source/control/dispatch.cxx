@@ -1368,11 +1368,13 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
         // keep own tools internally for collecting
         GetBindings()->GetDispatcher()->pImp->bUpdated = sal_False;
 
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
     SfxBindings* pBindings = GetBindings();
-    if ( pBindings )
+    if (pBindings)
+    {
         pBindings->DENTERREGISTRATIONS();
-
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame = pBindings->GetActiveFrame();
+        xFrame = pBindings->GetActiveFrame();
+    }
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, com::sun::star::uno::UNO_QUERY );
     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
