@@ -228,7 +228,7 @@ public:
     virtual                 ~ScStyleObj();
 
                             // created by getImplementation:
-    sal_Bool                IsInserted() const      { return pDocShell != NULL; }
+    bool                    IsInserted() const      { return pDocShell != NULL; }
     SfxStyleFamily          GetFamily() const       { return eFamily; }
     void                    InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName );
 
