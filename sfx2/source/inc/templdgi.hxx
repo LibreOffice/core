@@ -81,6 +81,45 @@ public:
     virtual bool     Notify( NotifyEvent& rNEvt );
 };
 
+typedef std::vector<OUString> ExpandedEntries_t;
+
+/*  [Description]
+
+    TreeListBox class for displaying the hierarchical view of the templates
+*/
+
+class StyleTreeListBox_Impl : public DropListBox_Impl
+{
+private:
+    SvTreeListEntry*                pCurEntry;
+    Link                            aDoubleClickLink;
+    Link                            aDropLink;
+    OUString                        aParent;
+    OUString                        aStyle;
+
+protected:
+    virtual void    Command( const CommandEvent& rMEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual sal_Bool    DoubleClickHdl();
+    virtual bool    ExpandingHdl();
+    virtual void    ExpandedHdl();
+    virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,
+                                     SvTreeListEntry*  pEntry,
+                                     SvTreeListEntry*& rpNewParent,
+                                     sal_uIntPtr&        rNewChildPos);
+public:
+    StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
+
+    void            SetDoubleClickHdl(const Link &rLink) { aDoubleClickLink = rLink; }
+    void            SetDropHdl(const Link &rLink) { aDropLink = rLink; }
+    using SvTreeListBox::GetParent;
+    const OUString& GetParent() const { return aParent; }
+    const OUString& GetStyle() const { return aStyle; }
+    void            MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
+
+    virtual PopupMenu* CreateContextMenu( void );
+};
+
 // class SfxActionListBox ------------------------------------------------
 
 class SfxActionListBox : public DropListBox_Impl
@@ -140,7 +179,7 @@ protected:
     SfxStyleFamilies*           pStyleFamilies;
     SfxTemplateItem*            pFamilyState[MAX_FAMILIES];
     SfxStyleSheetBasePool*      pStyleSheetPool;
-    SvTreeListBox*              pTreeBox;
+    StyleTreeListBox_Impl*      pTreeBox;
     SfxObjectShell*             pCurObjShell;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >
                                 xModuleManager;

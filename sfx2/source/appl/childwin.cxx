@@ -230,9 +230,9 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         }
     }
 
-    SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
-    if ( !pChild &&  pMod )
+    SfxDispatcher *pDisp = pBindings ? pBindings->GetDispatcher_Impl() : NULL;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) : NULL;
+    if (!pChild && pMod)
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
