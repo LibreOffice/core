@@ -326,7 +326,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     return bRet;
 }
 
-uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
+uno::Any SwXTextView::getSelection()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< uno::XInterface >  aRef;
