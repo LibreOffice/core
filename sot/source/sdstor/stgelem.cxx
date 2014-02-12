@@ -298,12 +298,12 @@ bool StgEntry::SetName( const OUString& rName )
         aName = aName.copy(0, nMaxLegalStr);
     }
 
-    int i;
-    for( i = 0; i < rName.getLength() && i < 32; i++ )
+    sal_uInt16 i;
+    for( i = 0; i < rName.getLength() && i <= nMaxLegalStr; i++ )
     {
         nName[ i ] = rName[ i ];
     }
-    while( i < 32 )
+    while (i <= nMaxLegalStr)
     {
         nName[ i++ ] = 0;
     }
