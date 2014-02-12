@@ -852,7 +852,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     INetURLObject url(
                         maAttachedDocuments[0], INetURLObject::WAS_ENCODED);
                     OUString subject(
-                        url.getName(
+                        url.getBase(
                             INetURLObject::LAST_SEGMENT, false,
                             INetURLObject::DECODE_WITH_CHARSET));
                     if (subject.isEmpty()) {
