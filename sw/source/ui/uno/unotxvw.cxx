@@ -1648,7 +1648,8 @@ sal_Bool SwXTextViewCursor::isAtStartOfLine()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::isAtEndOfLine(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::isAtEndOfLine()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;

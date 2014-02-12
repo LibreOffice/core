@@ -221,7 +221,9 @@ public:
     virtual sal_Bool SAL_CALL isAtStartOfLine()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual sal_Bool SAL_CALL isAtEndOfLine(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL isAtEndOfLine()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL gotoEndOfLine(sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL gotoStartOfLine(sal_Bool bExpand)
         throw (::com::sun::star::uno::RuntimeException,
