@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_70ed908b",
+        "filename": "sw/source/filter/html/htmlgrin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-02-12T22:56:55Z",
+      "side": 1,
+      "message": "Just ignore the error? As it is, slightly pointless.",
+      "revId": "57c1fba9fc56d832ebc84d8f88475e4217d0a68e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
