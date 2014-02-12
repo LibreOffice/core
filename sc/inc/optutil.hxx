@@ -31,7 +31,7 @@ public:
     // values must correspond with integer values stored in the configuration
     enum KeyBindingType { KEY_DEFAULT = 0, KEY_OOO_LEGACY = 1 };
 
-    static sal_Bool     IsMetricSystem();
+    static bool     IsMetricSystem();
 };
 
 
@@ -53,7 +53,7 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
             GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
-    sal_Bool PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
+    bool    PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
                             const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues)
                             { return ConfigItem::PutProperties( rNames, rValues ); }
 

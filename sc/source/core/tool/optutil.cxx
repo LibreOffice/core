@@ -23,7 +23,7 @@
 #include "global.hxx"
 #include <unotools/syslocale.hxx>
 
-sal_Bool ScOptionsUtil::IsMetricSystem()
+bool ScOptionsUtil::IsMetricSystem()
 {
     //! which language should be used here - system language or installed office language?
 
