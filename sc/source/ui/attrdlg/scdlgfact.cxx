@@ -170,12 +170,12 @@ OUString AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
     return pDlg->GetCurrFormatName();
 }
 
-sal_Bool  AbstractScColRowLabelDlg_Impl::IsCol()
+bool  AbstractScColRowLabelDlg_Impl::IsCol()
 {
     return  pDlg->IsCol();
 }
 
-sal_Bool AbstractScColRowLabelDlg_Impl::IsRow()
+bool AbstractScColRowLabelDlg_Impl::IsRow()
 {
     return pDlg->IsRow();
 }
@@ -285,12 +285,12 @@ OUString  AbstractScFillSeriesDlg_Impl::GetStartStr() const
     return pDlg->GetStartStr();
 }
 
-void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(sal_Bool bFlag)
+void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(bool bFlag)
 {
     pDlg->SetEdStartValEnabled(bFlag);
 }
 
-sal_Bool AbstractScGroupDlg_Impl::GetColsChecked() const
+bool AbstractScGroupDlg_Impl::GetColsChecked() const
 {
     return pDlg->GetColsChecked();
 }
@@ -310,32 +310,32 @@ sal_uInt16  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
     return pDlg->GetFormulaCmdBits();
 }
 
-sal_Bool    AbstractScInsertContentsDlg_Impl::IsSkipEmptyCells() const
+bool    AbstractScInsertContentsDlg_Impl::IsSkipEmptyCells() const
 {
     return pDlg->IsSkipEmptyCells();
 }
 
-sal_Bool    AbstractScInsertContentsDlg_Impl::IsLink() const
+bool    AbstractScInsertContentsDlg_Impl::IsLink() const
 {
     return pDlg->IsLink();
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetFillMode( sal_Bool bSet )
+void    AbstractScInsertContentsDlg_Impl::SetFillMode( bool bSet )
 {
     pDlg->SetFillMode( bSet );
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( sal_Bool bSet )
+void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( bool bSet )
 {
     pDlg->SetOtherDoc( bSet );
 }
 
-sal_Bool    AbstractScInsertContentsDlg_Impl::IsTranspose() const
+bool    AbstractScInsertContentsDlg_Impl::IsTranspose() const
 {
     return pDlg->IsTranspose();
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( sal_Bool bSet )
+void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( bool bSet )
 {
     pDlg->SetChangeTrack( bSet );
 }
@@ -350,12 +350,12 @@ InsCellCmd  AbstractScInsertContentsDlg_Impl::GetMoveMode()
     return pDlg->GetMoveMode();
 }
 
-sal_Bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
+bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
 {
     return pDlg->GetTablesFromFile();
 }
 
-sal_Bool AbstractScInsertTableDlg_Impl::GetTablesAsLink()
+bool AbstractScInsertTableDlg_Impl::GetTablesAsLink()
 {
     return pDlg->GetTablesAsLink();
 }
@@ -370,7 +370,7 @@ ScDocShell* AbstractScInsertTableDlg_Impl::GetDocShellTables()
     return pDlg->GetDocShellTables();
 }
 
-sal_Bool AbstractScInsertTableDlg_Impl::IsTableBefore()
+bool AbstractScInsertTableDlg_Impl::IsTableBefore()
 {
     return pDlg->IsTableBefore();
 }
@@ -468,12 +468,12 @@ void    AbstractScMoveTableDlg_Impl::SetForceCopyTable()
     return pDlg->SetForceCopyTable();
 }
 
-void    AbstractScMoveTableDlg_Impl::EnableCopyTable(sal_Bool bFlag)
+void    AbstractScMoveTableDlg_Impl::EnableCopyTable(bool bFlag)
 {
     return pDlg->EnableCopyTable( bFlag);
 }
 
-void    AbstractScMoveTableDlg_Impl::EnableRenameTable(sal_Bool bFlag)
+void    AbstractScMoveTableDlg_Impl::EnableRenameTable(bool bFlag)
 {
     return pDlg->EnableRenameTable( bFlag);
 }
@@ -550,7 +550,7 @@ void AbstractScNewScenarioDlg_Impl::GetScenarioData(
     pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }
 
-void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, sal_Bool bSelected )
+void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected )
 {
     pDlg->Insert( rString, bSelected);
 }
@@ -638,8 +638,8 @@ AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( W
 }
 
 AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(Window* pParent,
-                                                                sal_Bool bCol ,
-                                                                sal_Bool bRow)
+                                                                bool bCol ,
+                                                                bool bRow)
 {
     ScColRowLabelDlg* pDlg = new ScColRowLabelDlg( pParent, bCol,bRow );
     return new AbstractScColRowLabelDlg_Impl( pDlg );
@@ -746,7 +746,7 @@ AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Wind
 
 AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( Window* pParent,
                                                                 int nId,
-                                                            sal_Bool bDisallowCellMove )
+                                                                bool bDisallowCellMove )
 {
     ScInsertCellDlg * pDlg=NULL;
     switch ( nId )
@@ -890,7 +890,7 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
 }
 
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(Window* pParent, const OUString& rName,
-    sal_Bool bEdit, sal_Bool bSheetProtected)
+    bool bEdit, bool bSheetProtected)
 {
     ScNewScenarioDlg *pDlg = new ScNewScenarioDlg(pParent, rName, bEdit, bSheetProtected);
     return new AbstractScNewScenarioDlg_Impl( pDlg );
@@ -924,12 +924,12 @@ AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
 }
 
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,
-                                                                    sal_Bool                    bAscii,
+                                                                    bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle,
-                                                                    sal_Bool                    bMultiByte,
-                                                                    sal_Bool                    bOnlyDbtoolsEncodings,
-                                                                    sal_Bool                    bImport )
+                                                                    bool                    bMultiByte,
+                                                                    bool                    bOnlyDbtoolsEncodings,
+                                                                    bool                    bImport )
 {
     ScImportOptionsDlg * pDlg = new ScImportOptionsDlg( pParent, bAscii, pOptions,pStrTitle, bMultiByte,bOnlyDbtoolsEncodings, bImport );
     return new AbstractScImportOptionsDlg_Impl( pDlg );
