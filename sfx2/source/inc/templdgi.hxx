@@ -58,14 +58,19 @@ private:
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;
-    sal_uInt16                        nModifier;
+    sal_uInt16                    nModifier;
 
 public:
-    DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, rId ), pDialog( pD ) {}
-    DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, nWinBits ), pDialog( pD ) {}
-
+    DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD )
+        : SvTreeListBox(pParent, rId)
+        , pDialog(pD)
+        , nModifier(0)
+    {}
+    DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD )
+        : SvTreeListBox(pParent, nWinBits)
+        , pDialog(pD)
+        , nModifier(0)
+    {}
     virtual void     MouseButtonDown( const MouseEvent& rMEvt );
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
     using SvTreeListBox::ExecuteDrop;
