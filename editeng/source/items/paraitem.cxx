@@ -653,6 +653,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText = EE_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
+            break;
         }
 
         default:
