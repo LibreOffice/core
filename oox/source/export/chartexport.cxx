@@ -1192,9 +1192,9 @@ void ChartExport::exportBitmapFill( Reference< XPropertySet > xPropSet )
                 WriteBlipFill( xPropSet, sBitmapURL, XML_a, true, true );
             }
         }
-        catch( const uno::Exception & rEx )
+        catch (const uno::Exception & rEx)
         {
-            DBG_WARNING( "Bitmap Property not Found; ChartExport::exportBitmapFill" );
+            SAL_INFO("oox", "ChartExport::exportBitmapFill " << rEx.Message);
         }
 
     }
@@ -1218,9 +1218,10 @@ void ChartExport::exportGradientFill( Reference< XPropertySet > xPropSet )
                 WriteGradientFill( aGradient );
             }
         }
-        catch( const uno::Exception & rEx )
+        catch (const uno::Exception & rEx)
         {
-            DBG_WARNING( "Gradient Property not Found; ChartExport::exportGradientFill" );
+            SAL_INFO("oox",
+                "ChartExport::exportGradientFill " << rEx.Message);
         }
 
     }
