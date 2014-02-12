@@ -303,7 +303,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
             m_aResultSeq[nNewEntryNum-1].realloc( 4 ); // the maximal expected number of arguments is 4
 
             ::rtl::OUString aIDValue = xAttribs->getValueByName( m_aIDAttr );
-            if ( !aIDValue.getLength() )
+            if ( aIDValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ID value must present
 
             ::rtl::OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
@@ -313,19 +313,19 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
             m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aIDAttr;
             m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aIDValue;
 
-            if ( aTypeValue.getLength() )
+            if ( !aTypeValue.isEmpty() )
             {
                 m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aTypeAttr;
                 m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTypeValue;
             }
 
-            if ( aTargetValue.getLength() )
+            if ( !aTargetValue.isEmpty() )
             {
                 m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aTargetAttr;
                 m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetValue;
             }
 
-            if ( aTargetModeValue.getLength() )
+            if ( !aTargetModeValue.isEmpty() )
             {
                 m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aTargetModeAttr;
                 m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetModeValue;
@@ -369,11 +369,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
                 throw uno::RuntimeException();
 
             ::rtl::OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
-            if ( !aExtensionValue.getLength() )
+            if ( aExtensionValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the Extension value must present
 
             ::rtl::OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
-            if ( !aContentTypeValue.getLength() )
+            if ( aContentTypeValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ContentType value must present
 
             sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
@@ -398,11 +398,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
                 throw uno::RuntimeException();
 
             ::rtl::OUString aPartNameValue = xAttribs->getValueByName( m_aPartNameAttr );
-            if ( !aPartNameValue.getLength() )
+            if ( aPartNameValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the PartName value must present
 
             ::rtl::OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
-            if ( !aContentTypeValue.getLength() )
+            if ( aContentTypeValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ContentType value must present
 
             sal_Int32 nNewResultLen = m_aResultSeq[1].getLength() + 1;

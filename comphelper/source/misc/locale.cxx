@@ -472,12 +472,12 @@ void Locale::fromISO(const ::rtl::OUString& sISO)
     ::rtl::OUStringBuffer sISO(64);
 
     sISO.append(m_sLanguage);
-    if (m_sCountry.getLength())
+    if ( !m_sCountry.isEmpty() )
     {
         sISO.append(SEPERATOR_LC);
         sISO.append(m_sCountry);
 
-        if (m_sVariant.getLength())
+        if ( !m_sVariant.isEmpty() )
         {
             sISO.append(SEPERATOR_CV);
             sISO.append(m_sVariant);
@@ -635,7 +635,7 @@ sal_Bool Locale::getFallback(Locale& aLocale)
 
     // d) remove country from incoming locale
     //    e.g. "de-DE" => "de" or "en-US" => "en"!
-    if (aLocale.getCountry().getLength())
+    if ( !aLocale.getCountry().isEmpty())
     {
         aLocale.setCountry(::rtl::OUString());
         return sal_True;

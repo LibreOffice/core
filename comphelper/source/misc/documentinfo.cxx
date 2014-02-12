@@ -95,12 +95,12 @@ namespace comphelper {
         {
             // 1. ask the model and the controller for their XTitle::getTitle
             sTitle = lcl_getTitle( _rxDocument );
-            if ( sTitle.getLength() )
+            if ( !sTitle.isEmpty() )
                 return sTitle;
 
             Reference< XController > xController( _rxDocument->getCurrentController() );
             sTitle = lcl_getTitle( xController );
-            if ( sTitle.getLength() )
+            if ( !sTitle.isEmpty() )
                 return sTitle;
 
             // work around a problem with embedded objects, which sometimes return
@@ -110,13 +110,13 @@ namespace comphelper {
                 sDocURL = ::rtl::OUString();
 
             // 2. if the document is not saved, yet, check the frame title
-            if ( sDocURL.getLength() == 0 )
+            if ( sDocURL.isEmpty() )
             {
                 Reference< XFrame > xFrame;
                 if ( xController.is() )
                     xFrame.set( xController->getFrame() );
                 sTitle = lcl_getTitle( xFrame );
-                if ( sTitle.getLength() )
+                if ( !sTitle.isEmpty() )
                     return sTitle;
             }
 
@@ -128,14 +128,14 @@ namespace comphelper {
                     xDPS->getDocumentProperties(), UNO_QUERY_THROW );
                 OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
                 sTitle = xDocProps->getTitle();
-                if ( sTitle.getLength() )
+                if ( !sTitle.isEmpty() )
                     return sTitle;
             }
 
             // 4. try model arguments
             NamedValueCollection aModelArgs( _rxDocument->getArgs() );
             sTitle = aModelArgs.getOrDefault( "Title", sTitle );
-            if ( sTitle.getLength() )
+            if ( !sTitle.isEmpty() )
                 return sTitle;
 
             // 5. try the last segment of the document URL
@@ -143,7 +143,7 @@ namespace comphelper {
             // but since we moved this code to comphelper, we do not have access to an INetURLObject anymore
             // This heuristics here should be sufficient - finally, we will get an UNO title API in a not
             // too distant future (hopefully), then  this complete class is superfluous)
-            if ( sDocURL.getLength() == 0 )
+            if ( sDocURL.isEmpty() )
             {
                 Reference< XStorable > xDocStorable( _rxDocument, UNO_QUERY_THROW );
                 sDocURL = xDocStorable->getLocation();
@@ -156,7 +156,7 @@ namespace comphelper {
             }
             sTitle = sDocURL.copy( nLastSepPos + 1 );
 
-            if ( sTitle.getLength() != 0 )
+            if ( !sTitle.isEmpty() )
                 return sTitle;
 
             // 5.
@@ -165,7 +165,7 @@ namespace comphelper {
             Reference< XTitle > xTitle( _rxDocument, UNO_QUERY );
             if ( xTitle.is() )
             {
-                if ( xTitle->getTitle().getLength() != 0 )
+                if ( !xTitle->getTitle().isEmpty() )
                     return xTitle->getTitle();
             }
         }
