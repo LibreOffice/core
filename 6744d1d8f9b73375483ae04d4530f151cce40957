@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_f0eee0b3",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-02-12T14:21:22Z",
+      "side": 1,
+      "message": "The change here reminds me that also some of the new oc..._MS opcodes may need an entry here. Could you take care of those in a follow-up patch?",
+      "revId": "6744d1d8f9b73375483ae04d4530f151cce40957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
