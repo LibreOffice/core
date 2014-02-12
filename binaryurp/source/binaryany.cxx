@@ -31,7 +31,6 @@ namespace binaryurp {
 
 BinaryAny::BinaryAny() throw () {
     uno_any_construct(&data_, 0, 0, 0);
-    data_.pReserved = NULL;
 }
 
 BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
