@@ -231,7 +231,7 @@ public:
         {
             switch( eDateFormat )
             {
-                case SVXDATEFORMAT_STDSMALL: ;
+                case SVXDATEFORMAT_STDSMALL:
                 case SVXDATEFORMAT_A:       // 13.02.96
                     sDateFormat = "";
                     break;
