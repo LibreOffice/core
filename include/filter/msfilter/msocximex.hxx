@@ -66,13 +66,13 @@ public:
     SvxMSConvertOCXControls( const  ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     virtual ~SvxMSConvertOCXControls();
 
-    virtual sal_Bool InsertControl(
+    virtual bool InsertControl(
         const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& /*rFComp*/,
         const com::sun::star::awt::Size& /*rSize*/,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape >* /*pShape*/,
-        sal_Bool /*bFloatingCtrl*/ ) {return sal_False;}
+        bool /*bFloatingCtrl*/ ) {return false;}
 
     /*begin: Backwards compatability with office 95 import, modify later*/
     const com::sun::star::uno::Reference<

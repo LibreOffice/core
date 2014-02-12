@@ -2552,10 +2552,10 @@ WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
 {
 }
 
-sal_Bool SwMSConvertControls::InsertControl(
+bool SwMSConvertControls::InsertControl(
     const uno::Reference< form::XFormComponent > & rFComp,
     const awt::Size& rSize, uno::Reference< drawing::XShape > *pShape,
-    sal_Bool bFloatingCtrl)
+    bool bFloatingCtrl)
 {
     const uno::Reference< container::XIndexContainer > &rComps = GetFormComps();
     uno::Any aTmp( &rFComp, ::getCppuType((const uno::Reference<
@@ -2565,12 +2565,12 @@ sal_Bool SwMSConvertControls::InsertControl(
     const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory =
         GetServiceFactory();
     if( !rServiceFactory.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
         "com.sun.star.drawing.ControlShape");
     if( !xCreate.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< drawing::XShape > xShape =
         uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
@@ -2614,7 +2614,7 @@ sal_Bool SwMSConvertControls::InsertControl(
     if (pShape)
         *pShape = xShape;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

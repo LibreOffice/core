@@ -3399,7 +3399,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj,
         ::com::sun::star::awt::Size aDummySize;
         Reference< XShape > xShape;
         XclImpDffConvData& rConvData = GetConvData();
-        if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, sal_True ) )
+        if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, true ) )
         {
             xSdrObj.reset( rTbxObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
             // try to attach a macro to the control
@@ -3626,9 +3626,9 @@ sal_uLong XclImpDffConverter::Calc_nBLIPPos( sal_uLong /*nOrgVal*/, sal_uLong nS
     return nStreamPos + 4;
 }
 
-sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFormComp,
+bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFormComp,
         const ::com::sun::star::awt::Size& /*rSize*/, Reference< XShape >* pxShape,
-        sal_Bool /*bFloatingCtrl*/ )
+        bool /*bFloatingCtrl*/ )
 {
     if( GetDocShell() ) try
     {
@@ -3649,7 +3649,7 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
         // set control model at control shape and pass back shape to caller
         xCtrlShape->setControl( xCtrlModel );
         if( pxShape ) *pxShape = xShape;
-        return sal_True;
+        return true;
     }
     catch( const Exception& )
     {

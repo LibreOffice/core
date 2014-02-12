@@ -1644,15 +1644,15 @@ sal_Bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& rSrc,
     return bRes;
 }
 
-sal_Bool PPTConvertOCXControls::InsertControl(
+bool PPTConvertOCXControls::InsertControl(
         const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent > &rFComp,
         const com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShape,
-        sal_Bool /*bFloatingCtrl*/)
+        bool /*bFloatingCtrl*/)
 {
-    sal_Bool bRetValue = sal_False;
+    bool bRetValue = false;
     try
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xShape;
@@ -1687,7 +1687,7 @@ sal_Bool PPTConvertOCXControls::InsertControl(
                         xControlShape->setControl( xControlModel );
                         if (pShape)
                             *pShape = xShape;
-                        bRetValue = sal_True;
+                        bRetValue = true;
                     }
                 }
             }
@@ -1695,7 +1695,7 @@ sal_Bool PPTConvertOCXControls::InsertControl(
     }
     catch( ... )
     {
-        bRetValue = sal_False;
+        bRetValue = false;
     }
     return bRetValue;
 };

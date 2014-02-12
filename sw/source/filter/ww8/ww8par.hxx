@@ -713,11 +713,11 @@ class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
     virtual sal_Bool InsertFormula( WW8FormulaControl &rFormula);
-    virtual sal_Bool InsertControl(const com::sun::star::uno::Reference<
+    virtual bool InsertControl(const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& rFComp,
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShape,sal_Bool bFloatingCtrl);
+        com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl);
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
     virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<

@@ -1299,11 +1299,11 @@ public :
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
         sal_Bool bFloatingCtrl=sal_False );
-    virtual sal_Bool InsertControl(
+    virtual bool InsertControl(
         const com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > &rFComp,
         const com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShape,
-        sal_Bool bFloatingCtrl
+        bool bFloatingCtrl
     );
 };
 

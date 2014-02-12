@@ -1035,13 +1035,13 @@ private:
     // virtual functions of SvxMSConvertOCXControls
 
     /** Inserts the passed control rxFComp into the form. Needs call to SetCurrentForm() before. */
-    virtual sal_Bool    InsertControl(
+    virtual bool    InsertControl(
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XFormComponent >& rxFormComp,
                             const ::com::sun::star::awt::Size& rSize,
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape >* pxShape,
-                            sal_Bool bFloatingCtrl );
+                            bool bFloatingCtrl );
 
 private:
     /** Data per registered drawing manager, will be stacked for recursive calls. */
