@@ -37,11 +37,11 @@ struct CommentModel
     OUString     maAuthor;           /// Comment author (BIFF8 only).
     sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
     sal_uInt16          mnObjId;            /// Drawing object identifier (BIFF8 only).
-    sal_Bool            mbAutoFill;         /// Auto Selection of comment object's fill style
-    sal_Bool            mbAutoScale;        /// Auto Scale comment text
-    sal_Bool            mbColHidden;        /// Comment cell's Column is Hidden
-    sal_Bool            mbLocked;           /// Comment changes Locked
-    sal_Bool            mbRowHidden;        /// Comment cell's Row is Hidden
+    bool                mbAutoFill;         /// Auto Selection of comment object's fill style
+    bool                mbAutoScale;        /// Auto Scale comment text
+    bool                mbColHidden;        /// Comment cell's Column is Hidden
+    bool                mbLocked;           /// Comment changes Locked
+    bool                mbRowHidden;        /// Comment cell's Row is Hidden
     sal_Int32           mnTHA;              /// Horizontal Alignment
     sal_Int32           mnTVA;              /// Vertical Alignment
     ::com::sun::star::awt::Rectangle
