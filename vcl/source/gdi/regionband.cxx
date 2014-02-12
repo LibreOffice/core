@@ -1118,7 +1118,7 @@ void RegionBand::Intersect(const RegionBand& rSource)
 
 bool RegionBand::Exclude(const RegionBand& rSource)
 {
-    // Alle Rechtecke aus der uebergebenen Region auf diese Region anwenden
+    // apply all rectangles to the region passed to this region
     ImplRegionBand* pBand = rSource.mpFirstBand;
 
     while ( pBand )

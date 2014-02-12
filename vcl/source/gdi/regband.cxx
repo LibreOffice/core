@@ -29,17 +29,18 @@
 //
 // ImplRegionBand
 //
-// Jedes Band enthaelt die zwischen der enthaltenen Ober- und Untergrenze
-// enthaltenen Rechtecke. Bei den Operationen Union, Intersect, XOr und
-// Exclude werden immer Rechtecke der gleichen Hoehe ausgewerte; die
-// Grenzen der Baender sind immer so zu waehlen, dasz dies moeglich ist.
+// Each band contains all rectangles between upper and lower border.
+// For Union, Intersect, Xor and Exclude operations rectangles of
+// equal height are evaluated. The borders of the bands should always
+// be choosen such that this is possible.
 //
-// Die Rechtecke in den Baendern werden nach Moeglichkeit zusammengefaszt.
+// If possible, rectangles within the bands are condensed.
 //
-// Bei der Umwandlung von Polygonen werden alle Punkte des Polygons
-// in die einzelnen Baender eingetragen (sie stehen fuer jedes Band als
-// Punkte in einer Liste). Nach dem Eintragen der Punkte werden diese
-// in Rechtecke umgewandelt und die Liste der Punkte geloescht.
+// When converting polygons all points of the polygon are registered
+// in the individual bands (for each band they are stored as
+// points in a list). After registration of these points they are
+// converted to rectangles and the points in the list are deleted.
+//
 //
 // -----------------------------------------------------------------------
 

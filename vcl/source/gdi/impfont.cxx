@@ -725,8 +725,6 @@ void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes&
         rDFA.SetWeight(WEIGHT_BLACK);
     else if (aPSName.indexOf("black") != -1)
         rDFA.SetWeight(WEIGHT_BLACK);
-    //else if (aPSName.indexOf("book") != -1)
-    //    rDFA.SetWeight(WEIGHT_SEMIBOLD);
     else if( (aPSName.indexOf("semibold") != -1)
     ||  (aPSName.indexOf("smbd") != -1))
         rDFA.SetWeight(WEIGHT_SEMIBOLD);
