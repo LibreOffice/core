@@ -370,6 +370,8 @@ public:
     SAL_DLLPRIVATE SalGraphics const *ImplGetGraphics() const;
     SAL_DLLPRIVATE SalGraphics* ImplGetGraphics();
 
+    SAL_DLLPRIVATE void         ImplSetGraphics(SalGraphics *pGraphics) const;
+
     /** Initialize the graphics device that the output device uses to draw on.
 
      @returns true if was able to initialize the graphics device, false otherwise.
