@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
@@ -67,11 +66,10 @@ typedef ::cppu::WeakImplHelper2<
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
             static void CreateUIElement(const OUString& ResourceURL
-                        , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args
+                        ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args
                         ,const char* _pExtraMode
-                        ,const char* _pAsciiName
+                        ,const OUString& ResourceType
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         protected:

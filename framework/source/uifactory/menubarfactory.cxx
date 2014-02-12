@@ -58,21 +58,17 @@ Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    // SAFE
-    SolarMutexClearableGuard g;
-    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xContext );
-    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-    g.clear();
-    CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, xModuleManager, m_xContext);
+    Reference< ::com::sun::star::ui::XUIElement > xMenuBar(
+            static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);
+    CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, m_xContext);
     return xMenuBar;
 }
+
 void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
-                                     , const Sequence< PropertyValue >& Args
+                                     ,const Sequence< PropertyValue >& Args
                                      ,const char* _pExtraMode
-                                     ,const char* _pAsciiName
+                                     ,const OUString& ResourceType
                                      ,const Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
                                      ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
 {
     Reference< XUIConfigurationManager > xCfgMgr;
@@ -95,7 +91,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
             Args[n].Value >>= bExtraMode;
     }
-    if ( aResourceURL.indexOf( OUString::createFromAscii(_pAsciiName)) != 0 )
+    if (!aResourceURL.startsWith(ResourceType))
         throw IllegalArgumentException();
 
     // Identify frame and determine document based ui configuration manager/module ui configuration manager
@@ -120,7 +116,9 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 
         if ( !bHasSettings )
         {
-            OUString aModuleIdentifier = _xModuleManager->identify( xFrame );
+            Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager =
+                ModuleManager::create( _rxContext );
+            OUString aModuleIdentifier = xModuleManager->identify( xFrame );
             if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =

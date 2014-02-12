@@ -77,13 +77,10 @@ Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    SolarMutexClearableGuard g;
-    ToolBarWrapper* pWrapper = new ToolBarWrapper( m_xContext );
-    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = ModuleManager::create(m_xContext);
-    g.clear();
-    CreateUIElement(ResourceURL, Args, "PopupMode", "private:resource/toolbar/", xMenuBar, xModuleManager, m_xContext);
-    return xMenuBar;
+    Reference< ::com::sun::star::ui::XUIElement > xToolBar(
+           static_cast<OWeakObject *>(new ToolBarWrapper(m_xContext)), UNO_QUERY);
+    CreateUIElement(ResourceURL, Args, "PopupMode", "private:resource/toolbar/", xToolBar, m_xContext);
+    return xToolBar;
 }
 
 }

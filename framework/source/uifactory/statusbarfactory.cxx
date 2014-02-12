@@ -77,14 +77,10 @@ Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    // SAFE
-    SolarMutexClearableGuard g;
-    StatusBarWrapper* pWrapper = new StatusBarWrapper( m_xContext );
-    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-    g.clear();
-    MenuBarFactory::CreateUIElement(ResourceURL, Args, NULL, "private:resource/statusbar/", xMenuBar, xModuleManager, m_xContext );
-    return xMenuBar;
+    Reference< ::com::sun::star::ui::XUIElement > xStatusBar(
+            static_cast<OWeakObject *>(new StatusBarWrapper(m_xContext)), UNO_QUERY);
+    MenuBarFactory::CreateUIElement(ResourceURL, Args, NULL, "private:resource/statusbar/", xStatusBar, m_xContext);
+    return xStatusBar;
 }
 
 }
