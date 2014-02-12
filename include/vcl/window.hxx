@@ -372,6 +372,10 @@ private:
     friend const char* ImplDbgCheckWindow( const void* pObj );
 #endif
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
+
+public:
+    bool                               ImplInitGraphics();
+
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
