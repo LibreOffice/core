@@ -115,7 +115,7 @@ void ImportLotus::Bof( void )
 }
 
 
-sal_Bool ImportLotus::BofFm3( void )
+bool ImportLotus::BofFm3( void )
 {
     sal_uInt16  nFileCode, nFileSub;
 

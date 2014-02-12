@@ -42,7 +42,7 @@ private:
     // -------------------------------------------------------------------
     // in WK?-Datei
     void                Bof( void );                        // 0x0000   00
-    sal_Bool                BofFm3( void );                     // 0x0000   00
+    bool                BofFm3( void );                     // 0x0000   00
     void                Columnwidth( sal_uInt16 nRecLen );      // 0x0007   07
     void                Hiddencolumn( sal_uInt16 nRecLen );     // 0x0008   08
     void                Userrange( void );                  // 0x0009   09
