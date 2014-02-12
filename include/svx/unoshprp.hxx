@@ -258,7 +258,8 @@
     { OUString(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, ::getCppuType((const sal_Int16*)0) ,           0,     0}, \
     { OUString("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
     { OUString("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const OUString*)0), 0, MID_NAME }, \
-    { OUString(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, ::getCppuType((const sal_Int32*)0),          0,     0},
+    { OUString(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, ::getCppuType((const sal_Int32*)0),          0,     0}, \
+    { OUString(UNO_NAME_GRAPHIC_GRAPHICCROP), SDRATTR_GRAFCROP      , ::getCppuType((const ::com::sun::star::text::GraphicCrop*)0), 0, 0 },
 
 #define EDGERADIUS_PROPERTIES \
     { OUString(UNO_NAME_EDGERADIUS),        SDRATTR_ECKENRADIUS     , ::getCppuType((const sal_Int32*)0)  ,            0,     SFX_METRIC_ITEM},

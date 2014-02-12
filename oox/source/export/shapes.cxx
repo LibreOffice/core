@@ -518,7 +518,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
         mAny >>= bStretch;
 
     if ( pGraphic || bStretch )
-        WriteStretch();
+        pFS->singleElementNS( XML_a, XML_stretch, FSEND );
 
     pFS->endElementNS( mnXmlNamespace, XML_blipFill );
 

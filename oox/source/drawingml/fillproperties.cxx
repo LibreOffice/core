@@ -456,6 +456,24 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 rPropMap.setProperty( SHAPEPROP_FillBitmapOffsetY, nTileOffsetY );
                             }
                         }
+                        else if ( eBitmapMode == BitmapMode_STRETCH && maBlipProps.moFillRect.has() )
+                        {
+                            geometry::IntegerRectangle2D aFillRect( maBlipProps.moFillRect.get() );
+                            awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
+                            if ( aOriginalSize.Width && aOriginalSize.Height )
+                            {
+                                text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
+                                if ( aFillRect.X1 )
+                                    aGraphCrop.Left = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X1 ) / 100000 );
+                                if ( aFillRect.Y1 )
+                                    aGraphCrop.Top = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y1 ) / 100000 );
+                                if ( aFillRect.X2 )
+                                    aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X2 ) / 100000 );
+                                if ( aFillRect.Y2 )
+                                    aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
+                                rPropMap[ PROP_GraphicCrop ] <<= aGraphCrop;
+                            }
+                        }
                     }
                 }
             break;

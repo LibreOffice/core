@@ -109,7 +109,8 @@ protected:
             "math-mso2k7.docx",
             "ImageCrop.docx",
             "test_GIF_ImageCrop.docx",
-            "test_PNG_ImageCrop.docx"
+            "test_PNG_ImageCrop.docx",
+            "dml-shape-fillbitmapcrop.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -2939,6 +2940,29 @@ DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.d
     // 3rd frame's context is adjusted to the bottom
     xFrame.set(getTextFrameByName("Rectangle 3"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.docx")
+{
+    // Test the new GraphicCrop property which is introduced to define
+    // cropping of shapes filled with a picture in stretch mode.
+
+    // 1st shape has some cropping
+    text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 454 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 367 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -454 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -367 ), aGraphicCropStruct.Bottom );
+
+    // 2nd shape has no cropping
+    aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Bottom );
+
 }
 #endif
 

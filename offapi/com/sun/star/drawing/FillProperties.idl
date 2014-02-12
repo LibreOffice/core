@@ -209,6 +209,16 @@ published service FillProperties
      */
     [optional, property] boolean FillBitmapTile;
 
+    /** contains the cropping of the object.
+
+        If the property #FillBitmapMode is set to BitmapMode::STRETCH,
+        this is the cropping, otherwise it is empty.
+
+        @see com::sun::star::text::GraphicCrop
+        @since LibreOffice 4.3
+     */
+    [optional, property] com::sun::star::text::GraphicCrop GraphicCrop;
+
 };
 
 

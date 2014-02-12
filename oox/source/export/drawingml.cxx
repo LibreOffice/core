@@ -818,7 +818,7 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rU
     return sRelId;
 }
 
-void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
+void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet, const OUString& rURL )
 {
     BitmapMode eBitmapMode( BitmapMode_NO_REPEAT );
     if (GetProperty( rXPropSet, "FillBitmapMode" ) )
@@ -831,7 +831,7 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
         mpFS->singleElementNS( XML_a, XML_tile, FSEND );
         break;
     case BitmapMode_STRETCH:
-        WriteStretch();
+        WriteStretch( rXPropSet, rURL );
         break;
     default:
         ;
@@ -869,13 +869,13 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sBi
         WriteBlip( rXPropSet, sBitmapURL, bRelPathToMedia );
 
         if( bWriteMode )
-            WriteBlipMode( rXPropSet );
+            WriteBlipMode( rXPropSet, sBitmapURL );
         else if( GetProperty( rXPropSet, "FillBitmapStretch" ) ) {
                 bool bStretch = false;
                 mAny >>= bStretch;
 
                 if( bStretch )
-                    WriteStretch();
+                    WriteStretch( rXPropSet, sBitmapURL );
         }
         mpFS->endElementNS( nXmlNamespace, XML_blipFill );
     }
@@ -902,10 +902,34 @@ void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUStrin
     }
 }
 
-void DrawingML::WriteStretch()
+void DrawingML::WriteStretch( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& rURL )
 {
     mpFS->startElementNS( XML_a, XML_stretch, FSEND );
-    mpFS->singleElementNS( XML_a, XML_fillRect, FSEND );
+
+    bool bCrop = false;
+    if ( GetProperty( rXPropSet, "GraphicCrop" ) )
+    {
+        ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+        mAny >>= aGraphicCropStruct;
+
+        if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+        {
+            Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
+            mpFS->singleElementNS( XML_a, XML_fillRect,
+                          XML_l, I32S(((aGraphicCropStruct.Left) * 100000)/aOriginalSize.Width()),
+                          XML_t, I32S(((aGraphicCropStruct.Top) * 100000)/aOriginalSize.Height()),
+                          XML_r, I32S(((aGraphicCropStruct.Right) * 100000)/aOriginalSize.Width()),
+                          XML_b, I32S(((aGraphicCropStruct.Bottom) * 100000)/aOriginalSize.Height()),
+                          FSEND );
+            bCrop = true;
+        }
+    }
+
+    if( !bCrop )
+    {
+        mpFS->singleElementNS( XML_a, XML_fillRect, FSEND );
+    }
+
     mpFS->endElementNS( XML_a, XML_stretch );
 }
 

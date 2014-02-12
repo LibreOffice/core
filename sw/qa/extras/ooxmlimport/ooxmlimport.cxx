@@ -52,6 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <bordertest.hxx>
 
@@ -1788,6 +1789,29 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeParaAdjust, "dml-groupshape-paraadjust
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_BLOCK), getProperty<sal_Int16>(getRun(getParagraphOfText(6, xText), 1), "ParaAdjust"));
     // 7th line has no adjustment
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(7, xText), 1), "ParaAdjust"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.docx")
+{
+    // The same test can be found in ooxmlexport, but some rouding made on crop values so we can't test import and
+    // export with the same values.
+
+    // 1st shape has some cropping
+    text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 455 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 368 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -455 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -368 ), aGraphicCropStruct.Bottom );
+
+    // 2nd shape has no cropping
+    aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Bottom );
+
 }
 #endif
 
