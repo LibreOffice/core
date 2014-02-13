@@ -26,9 +26,7 @@
 #include "ParaBulletsControl.hxx"
 #include "ParaNumberingPopup.hxx"
 #include "ParaNumberingControl.hxx"
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,13 +45,6 @@
 #include <boost/bind.hpp>
 using namespace css;
 using namespace cssu;
-using ::sfx2::sidebar::Theme;
-using ::sfx2::sidebar::ControlFactory;
-
-const char UNO_LEFTPARA[]         = ".uno:LeftPara";
-const char UNO_RIGHTPARA[]        = ".uno:RightPara";
-const char UNO_CENTERPARA[]       = ".uno:CenterPara";
-const char UNO_JUSTIFYPARA[]      = ".uno:JustifyPara";
 
 const char UNO_DEFAULTBULLET[]    = ".uno:DefaultBullet";
 const char UNO_DEFAULTNUMBERING[] = ".uno:DefaultNumbering";
@@ -69,10 +60,6 @@ const char UNO_DEMOTE[]           = ".uno:Demote";
 const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
 
 const char UNO_LINESPACING[]      = ".uno:LineSpacing";
-
-const char UNO_CELLVERTTOP[]      = ".uno:CellVertTop";
-const char UNO_CELLVERTCENTER[]   = ".uno:CellVertCenter";
-const char UNO_CELLVERTBOTTOM[]   = ".uno:CellVertBottom";
 
 const char UNO_PARASPACEINC[]     = ".uno:ParaspaceIncrease";
 const char UNO_PARASPACEDEC[]     = ".uno:ParaspaceDecrease";
@@ -262,35 +249,6 @@ void ParaPropertyPanel::EndNumberingPopupMode (void)
 }
 
 
-void ParaPropertyPanel::InitToolBoxAlign()
-{
-    const sal_uInt16 nIdLeft    = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
-    const sal_uInt16 nIdCenter  = mpAlignToolBox->GetItemId(UNO_CENTERPARA);
-    const sal_uInt16 nIdRight   = mpAlignToolBox->GetItemId(UNO_RIGHTPARA);
-    const sal_uInt16 nIdJustify = mpAlignToolBox->GetItemId(UNO_JUSTIFYPARA);
-
-    mpAlignToolBox->SetItemImage(nIdLeft, maLeftAlignControl.GetIcon());
-    mpAlignToolBox->SetItemImage(nIdCenter, maCenterAlignControl.GetIcon());
-    mpAlignToolBox->SetItemImage(nIdRight, maRightAlignControl.GetIcon());
-    mpAlignToolBox->SetItemImage(nIdJustify, maJustifyAlignControl.GetIcon());
-
-    Link aLink = LINK( this, ParaPropertyPanel, AlignStyleModifyHdl_Impl );
-    mpAlignToolBox->SetSelectHdl( aLink );
-}
-
-void ParaPropertyPanel::InitToolBoxVertAlign()
-{
-    const sal_uInt16 nIdVertTop     = mpTBxVertAlign->GetItemId(UNO_CELLVERTTOP);
-    const sal_uInt16 nIdVertCenter  = mpTBxVertAlign->GetItemId(UNO_CELLVERTCENTER);
-    const sal_uInt16 nIdVertBottom  = mpTBxVertAlign->GetItemId(UNO_CELLVERTBOTTOM);
-
-    mpTBxVertAlign->SetItemImage(nIdVertTop, maVertTop.GetIcon());
-    mpTBxVertAlign->SetItemImage(nIdVertCenter, maVertCenter.GetIcon());
-    mpTBxVertAlign->SetItemImage(nIdVertBottom, maVertBottom.GetIcon());
-    mpTBxVertAlign->SetSelectHdl(LINK(this,ParaPropertyPanel,VertTbxSelectHandler));
-}
-
-
 void ParaPropertyPanel::InitToolBoxIndent()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
@@ -406,14 +364,7 @@ void ParaPropertyPanel::InitToolBoxLineSpacing()
 
 void ParaPropertyPanel::initial()
 {
-    GetBindings()->Invalidate(SID_ATTR_PARA_ADJUST_LEFT,sal_True,sal_False);
-    GetBindings()->Invalidate(SID_ATTR_PARA_ADJUST_CENTER,sal_True,sal_False);
-    GetBindings()->Invalidate(SID_ATTR_PARA_ADJUST_RIGHT,sal_True,sal_False);
-    GetBindings()->Invalidate(SID_ATTR_PARA_ADJUST_BLOCK,sal_True,sal_False);
-
     //toolbox
-    InitToolBoxAlign();
-    InitToolBoxVertAlign();
     InitToolBoxIndent();
     InitToolBoxBGColor();
     InitToolBoxBulletsNumbering();
@@ -485,117 +436,6 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 }
 
 
-//================================for Vertical Alignment========================================
-
-
-
-IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-    sal_uInt16 nSID = SID_TABLE_VERT_NONE;
-    EndTracking();
-
-    const sal_uInt16 nIdVertTop    = mpTBxVertAlign->GetItemId(UNO_CELLVERTTOP);
-    const sal_uInt16 nIdVertCenter = mpTBxVertAlign->GetItemId(UNO_CELLVERTCENTER);
-    const sal_uInt16 nIdVertBottom = mpTBxVertAlign->GetItemId(UNO_CELLVERTBOTTOM);
-
-    if (aCommand == UNO_CELLVERTTOP)
-    {
-        nSID = SID_TABLE_VERT_NONE;
-        mpTBxVertAlign->SetItemState(nIdVertTop, STATE_CHECK);
-        mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-    }
-    else if (aCommand == UNO_CELLVERTCENTER)
-    {
-        nSID = SID_TABLE_VERT_CENTER;
-        mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_CHECK);
-        mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-    }
-    else if (aCommand == UNO_CELLVERTBOTTOM)
-    {
-        nSID = SID_TABLE_VERT_BOTTOM;
-        mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_CHECK);
-    }
-    SfxBoolItem aBoolItem(nSID, true);
-    GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
-
-    return 0;
-}
-
-void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
-{
-    const sal_uInt16 nIdVertTop     = mpTBxVertAlign->GetItemId(UNO_CELLVERTTOP);
-    const sal_uInt16 nIdVertCenter  = mpTBxVertAlign->GetItemId(UNO_CELLVERTCENTER);
-    const sal_uInt16 nIdVertBottom  = mpTBxVertAlign->GetItemId(UNO_CELLVERTBOTTOM);
-
-    if (eState < SFX_ITEM_DONTCARE)
-    {
-        mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-        mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-        mpTBxVertAlign->EnableItem(nIdVertTop, false);
-        mpTBxVertAlign->EnableItem(nIdVertCenter, false);
-        mpTBxVertAlign->EnableItem(nIdVertBottom, false);
-    }
-    else
-    {
-        mpTBxVertAlign->EnableItem(nIdVertTop, true);
-        mpTBxVertAlign->EnableItem(nIdVertCenter, true);
-        mpTBxVertAlign->EnableItem(nIdVertBottom, true);
-        if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)))
-        {
-            const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
-            sal_Bool aBool = (sal_Bool)pItem->GetValue();
-
-            if (aBool)
-            {
-                if (nSID == SID_TABLE_VERT_NONE)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertTop, STATE_CHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-                }
-                else if (nSID == SID_TABLE_VERT_CENTER)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_CHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-                }
-                else if (nSID == SID_TABLE_VERT_BOTTOM)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-                    mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_CHECK);
-                }
-            }
-            else
-            {
-                if (nSID == SID_TABLE_VERT_NONE)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-                }
-                else if (nSID == SID_TABLE_VERT_CENTER)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-                }
-                else if (nSID == SID_TABLE_VERT_BOTTOM)
-                {
-                    mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-                }
-            }
-        }
-        else
-        {
-            mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
-            mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
-            mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
-        }
-    }
-}
 //==================================for Background color=====================
 
 IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
@@ -636,55 +476,6 @@ void ParaPropertyPanel::SetBGColor (
     SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
     mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
     maColor = aColor;
-}
-
-//==================================for Paragraph Alignment=====================
-IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
-{
-    const sal_uInt16 nIdLeft    = pBox->GetItemId(UNO_LEFTPARA);
-    const sal_uInt16 nIdRight   = pBox->GetItemId(UNO_RIGHTPARA);
-    const sal_uInt16 nIdCenter  = pBox->GetItemId(UNO_CENTERPARA);
-    const sal_uInt16 nIdJustify = pBox->GetItemId(UNO_JUSTIFYPARA);
-
-    const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
-
-        if( aCommand == UNO_LEFTPARA )
-        {
-            pBox->SetItemState(nIdLeft, STATE_CHECK);
-            pBox->SetItemState(nIdCenter, STATE_NOCHECK);
-            pBox->SetItemState(nIdRight, STATE_NOCHECK);
-            pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_LEFT,  true );
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_LEFT, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
-        }
-        else if( aCommand == UNO_CENTERPARA )
-        {
-            pBox->SetItemState(nIdCenter, STATE_CHECK);
-            pBox->SetItemState(nIdLeft, STATE_NOCHECK);
-            pBox->SetItemState(nIdRight, STATE_NOCHECK);
-            pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true );
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
-        }
-        else if( aCommand == UNO_RIGHTPARA )
-        {
-            pBox->SetItemState(nIdRight, STATE_CHECK);
-            pBox->SetItemState(nIdLeft, STATE_NOCHECK);
-            pBox->SetItemState(nIdCenter, STATE_NOCHECK);
-            pBox->SetItemState(nIdJustify, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true );
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_RIGHT, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
-        }
-        else if( aCommand == UNO_JUSTIFYPARA )
-        {
-            pBox->SetItemState(nIdJustify, STATE_CHECK);
-            pBox->SetItemState(nIdLeft, STATE_NOCHECK);
-            pBox->SetItemState(nIdRight, STATE_NOCHECK);
-            pBox->SetItemState(nIdCenter, STATE_NOCHECK);
-            SfxBoolItem aBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true );
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_BLOCK, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
-        }
-    return 0;
 }
 
 //==================================for Paragraph Indent=====================
@@ -922,13 +713,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
         StateChangedULImpl( nSID, eState, pState );
         break;
 
-    case SID_ATTR_PARA_ADJUST_LEFT:
-    case SID_ATTR_PARA_ADJUST_CENTER:
-    case SID_ATTR_PARA_ADJUST_RIGHT:
-    case SID_ATTR_PARA_ADJUST_BLOCK:
-        StateChangedAlignmentImpl( nSID, eState, pState );
-        break;
-
     case SID_OUTLINE_LEFT:
     case SID_OUTLINE_RIGHT:
         StateChangeOutLineImpl( nSID, eState, pState );
@@ -949,12 +733,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
         StateChangeBulletNumRuleImpl( nSID, eState, pState );
         break;
 
-    case SID_TABLE_VERT_NONE:
-    case SID_TABLE_VERT_CENTER:
-    case SID_TABLE_VERT_BOTTOM:
-        VertStateChanged( nSID, eState, pState);
-        break;
-
     case SID_BACKGROUND_COLOR:
         ParaBKGStateChanged(nSID, eState, pState);
         break;
@@ -963,96 +741,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
 
 
 
-
-void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    const sal_uInt16 nIdLeft    = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
-    const sal_uInt16 nIdRight   = mpAlignToolBox->GetItemId(UNO_RIGHTPARA);
-    const sal_uInt16 nIdCenter  = mpAlignToolBox->GetItemId(UNO_CENTERPARA);
-    const sal_uInt16 nIdJustify = mpAlignToolBox->GetItemId(UNO_JUSTIFYPARA);
-
-    if( eState >= SFX_ITEM_AVAILABLE )
-    {
-        const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
-        bool IsChecked = (bool)pItem->GetValue();
-        switch (nSID)
-        {
-        case SID_ATTR_PARA_ADJUST_LEFT:
-            {
-                if(IsChecked)
-                {
-                    mpAlignToolBox->SetItemState(nIdLeft,STATE_CHECK);
-                    mpAlignToolBox->SetItemState(nIdCenter,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdRight,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdJustify,STATE_NOCHECK);
-                }
-                else
-                    mpAlignToolBox->SetItemState(nIdLeft,STATE_NOCHECK);
-            }
-            break;
-        case SID_ATTR_PARA_ADJUST_CENTER:
-            {
-                if(IsChecked)
-                {
-                    mpAlignToolBox->SetItemState(nIdCenter,STATE_CHECK);
-                    mpAlignToolBox->SetItemState(nIdLeft,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdRight,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdJustify,STATE_NOCHECK);
-                }
-                else
-                    mpAlignToolBox->SetItemState(nIdCenter,STATE_NOCHECK);
-            }
-            break;
-        case SID_ATTR_PARA_ADJUST_RIGHT:
-            {
-                if(IsChecked)
-                {
-                    mpAlignToolBox->SetItemState(nIdRight,STATE_CHECK);
-                    mpAlignToolBox->SetItemState(nIdLeft,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdCenter,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdJustify,STATE_NOCHECK);
-                }
-                else
-                    mpAlignToolBox->SetItemState(nIdRight,STATE_NOCHECK);
-            }
-            break;
-        case SID_ATTR_PARA_ADJUST_BLOCK:
-            {
-                if(IsChecked)
-                {
-                    mpAlignToolBox->SetItemState(nIdJustify,STATE_CHECK);
-                    mpAlignToolBox->SetItemState(nIdLeft,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdCenter,STATE_NOCHECK);
-                    mpAlignToolBox->SetItemState(nIdRight,STATE_NOCHECK);
-                }
-                else
-                    mpAlignToolBox->SetItemState(nIdJustify,STATE_NOCHECK);
-            }
-            break;
-        }
-    }
-    else if( eState == SFX_ITEM_DISABLED )
-    {
-    }
-    else if ( eState == SFX_ITEM_DONTCARE )
-    {
-        switch (nSID)
-        {
-        case SID_ATTR_PARA_ADJUST_LEFT:
-            mpAlignToolBox->SetItemState(nIdLeft,STATE_NOCHECK);
-            break;
-        case SID_ATTR_PARA_ADJUST_CENTER:
-            mpAlignToolBox->SetItemState(nIdCenter,STATE_NOCHECK);
-            break;
-        case SID_ATTR_PARA_ADJUST_RIGHT:
-            mpAlignToolBox->SetItemState(nIdRight,STATE_NOCHECK);
-            break;
-        case SID_ATTR_PARA_ADJUST_BLOCK:
-            mpAlignToolBox->SetItemState(nIdJustify,STATE_NOCHECK);
-            break;
-        }
-    }
-}
 
 void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1453,10 +1141,6 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       m_last_eMetricUnit(FUNIT_NONE),
       m_eLRSpaceUnit(),
       m_eULSpaceUnit(),
-      maLeftAlignControl(SID_ATTR_PARA_ADJUST_LEFT, *pBindings, *this, OUString("LeftPara"), rxFrame),
-      maCenterAlignControl(SID_ATTR_PARA_ADJUST_CENTER, *pBindings, *this, OUString("CenterPara"), rxFrame),
-      maRightAlignControl(SID_ATTR_PARA_ADJUST_RIGHT, *pBindings, *this, OUString("RightPara"), rxFrame),
-      maJustifyAlignControl(SID_ATTR_PARA_ADJUST_BLOCK, *pBindings, *this, OUString("JustifyPara"), rxFrame),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maLNSpaceControl (SID_ATTR_PARA_LINESPACE, *pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
@@ -1464,9 +1148,6 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, OUString("OutlineLeft"), rxFrame),
       maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, OUString("DecrementIndent"), rxFrame),
       maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
-      maVertTop (SID_TABLE_VERT_NONE, *pBindings, *this, OUString("CellVertTop"), rxFrame),
-      maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this, OUString("CellVertCenter"), rxFrame),
-      maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this, OUString("CellVertBottom"), rxFrame),
       maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, OUString("DefaultBullet"), rxFrame),
       maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, OUString("DefaultNumbering"), rxFrame),
       maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
@@ -1483,7 +1164,6 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       mxSidebar(rxSidebar)
 {
     //Alignment
-    get(mpAlignToolBox, "horizontalalignment");
     get(mpTBxVertAlign, "verticalalignment");
     //NumBullet&Backcolor
     get(mpTBxNumBullet, "numberbullet");

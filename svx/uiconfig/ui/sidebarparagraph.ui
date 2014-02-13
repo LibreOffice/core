@@ -318,7 +318,7 @@
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkToolbar" id="horizontalalignment">
+              <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
@@ -328,14 +328,8 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="leftpara">
-                    <property name="width_request">25</property>
-                    <property name="height_request">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Left</property>
-                    <property name="tooltip_text" translatable="yes">Align Left</property>
-                    <property name="valign">start</property>
                     <property name="action_name">.uno:LeftPara</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -348,9 +342,6 @@
                   <object class="GtkToolButton" id="centerpara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Center</property>
-                    <property name="tooltip_text" translatable="yes">Align Center</property>
                     <property name="action_name">.uno:CenterPara</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -363,9 +354,6 @@
                   <object class="GtkToolButton" id="rightpara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Right</property>
-                    <property name="tooltip_text" translatable="yes">Align Right</property>
                     <property name="action_name">.uno:RightPara</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -378,9 +366,6 @@
                   <object class="GtkToolButton" id="substjustify">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Justified</property>
-                    <property name="tooltip_text" translatable="yes">Align Justified</property>
                     <property name="action_name">.uno:JustifyPara</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -435,7 +420,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="verticalalignment">
+              <object class="sfxlo-SidebarToolBox" id="verticalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
@@ -448,9 +433,6 @@
                   <object class="GtkToolButton" id="cellverttop">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Top</property>
-                    <property name="tooltip_text" translatable="yes">Align Top</property>
                     <property name="action_name">.uno:CellVertTop</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -463,9 +445,6 @@
                   <object class="GtkToolButton" id="cellvertcenter">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Center Vertically</property>
-                    <property name="tooltip_text" translatable="yes">Align Center Vertically</property>
                     <property name="action_name">.uno:CellVertCenter</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -476,12 +455,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="cellvertbottom">
-                    <property name="width_request">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Align Bottom</property>
-                    <property name="tooltip_text" translatable="yes">Align Bottom</property>
                     <property name="action_name">.uno:CellVertBottom</property>
                     <property name="use_underline">True</property>
                   </object>
