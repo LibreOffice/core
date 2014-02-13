@@ -320,17 +320,17 @@ uno::Sequence< OUString> SAL_CALL
 
     //====  internal  =========================================================
 
-sal_Bool ScAccessibleCell::IsDefunc(
+bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
-sal_Bool ScAccessibleCell::IsEditable(
+bool ScAccessibleCell::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    sal_Bool bEditable(sal_True);
+    bool bEditable(true);
     if (rxParentStates.is() && !rxParentStates->contains(AccessibleStateType::EDITABLE) &&
         mpDoc)
     {
@@ -344,11 +344,11 @@ sal_Bool ScAccessibleCell::IsEditable(
     return bEditable;
 }
 
-sal_Bool ScAccessibleCell::IsOpaque(
+bool ScAccessibleCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
-    sal_Bool bOpaque(sal_True);
+    bool bOpaque(true);
     if (mpDoc)
     {
         const SvxBrushItem* pItem = (const SvxBrushItem*)mpDoc->GetAttr(
@@ -360,7 +360,7 @@ sal_Bool ScAccessibleCell::IsOpaque(
     return bOpaque;
 }
 
-sal_Bool ScAccessibleCell::IsSelected()
+bool ScAccessibleCell::IsSelected()
 {
     if (IsFormulaMode())
     {
@@ -369,10 +369,10 @@ sal_Bool ScAccessibleCell::IsSelected()
         {
             return pSheet->IsScAddrFormulaSel(maCellAddress);
         }
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -565,16 +565,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
     return aAttribs;
 }
 
-sal_Bool ScAccessibleCell::IsFormulaMode()
+bool ScAccessibleCell::IsFormulaMode()
 {
-    ScAccessibleSpreadsheet* pSheet =static_cast<ScAccessibleSpreadsheet*>(mxParent.get());
+    ScAccessibleSpreadsheet* pSheet = static_cast<ScAccessibleSpreadsheet*>(mxParent.get());
     if (pSheet)
     {
         return pSheet->IsFormulaMode();
     }
-    return sal_False;
+    return false;
 }
-sal_Bool ScAccessibleCell::IsDropdown()
+
+bool ScAccessibleCell::IsDropdown()
 {
     sal_uInt16 nPosX = maCellAddress.Col();
     sal_uInt16 nPosY = sal_uInt16(maCellAddress.Row());
@@ -584,13 +585,13 @@ sal_Bool ScAccessibleCell::IsDropdown()
     {
         const ScValidationData* pData = mpDoc->GetValidationEntry( nValidation );
         if( pData && pData->HasSelectionList() )
-            return sal_True;
+            return true;
     }
     ScMergeFlagAttr* pAttr;
     pAttr = (ScMergeFlagAttr*)mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
     if( pAttr->HasAutoFilter() )
     {
-        return sal_True;
+        return true;
     }
     else
     {
@@ -619,11 +620,11 @@ sal_Bool ScAccessibleCell::IsDropdown()
                 {
                     bHasScenario = (aRange.aStart.Col() == nPosX && aRange.aStart.Row() == nPosY+1);
                 }
-                if( bHasScenario ) return sal_True;
+                if( bHasScenario ) return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

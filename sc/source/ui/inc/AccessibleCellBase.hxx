@@ -134,7 +134,7 @@ protected:
     sal_Int32 mnIndex;
 
 private:
-    virtual sal_Bool IsEditable(
+    virtual bool IsEditable(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:

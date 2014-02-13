@@ -159,16 +159,16 @@ private:
 
     ScSplitPos meSplitPos;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    virtual sal_Bool IsEditable(
+    virtual bool IsEditable(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsOpaque(
+    bool IsOpaque(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsSelected();
+    bool IsSelected();
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
@@ -182,8 +182,8 @@ private:
     void AddRelation(const ScRange& rRange,
         const sal_uInt16 aRelationType,
         ::utl::AccessibleRelationSetHelper* pRelationSet);
-    sal_Bool IsFormulaMode();
-    sal_Bool IsDropdown();
+    bool IsFormulaMode();
+    bool IsDropdown();
 };
 
 

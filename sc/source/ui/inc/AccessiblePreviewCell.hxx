@@ -98,7 +98,7 @@ private:
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    virtual sal_Bool IsEditable(
+    virtual bool IsEditable(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsOpaque(

@@ -311,12 +311,12 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessibleCellBaseImplementationId::get().getSeq();
 }
 
-sal_Bool ScAccessibleCellBase::IsEditable(
+bool ScAccessibleCellBase::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    sal_Bool bEditable(false);
+    bool bEditable(false);
     if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
-        bEditable = sal_True;
+        bEditable = true;
     return bEditable;
 }
 
