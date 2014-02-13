@@ -94,7 +94,6 @@ private:
      **
     ***********************************************************/
     //Alignment
-    ToolBox*            mpAlignToolBox;
     ToolBox*            mpTBxVertAlign;
     //NumBullet&Backcolor
     ToolBox*            mpTBxNumBullet;
@@ -154,10 +153,6 @@ private:
     **
     *****************************************************************/
 
-    ::sfx2::sidebar::ControllerItem  maLeftAlignControl;
-    ::sfx2::sidebar::ControllerItem  maCenterAlignControl;
-    ::sfx2::sidebar::ControllerItem  maRightAlignControl;
-    ::sfx2::sidebar::ControllerItem  maJustifyAlignControl;
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maLNSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;
@@ -165,9 +160,6 @@ private:
     ::sfx2::sidebar::ControllerItem  maOutLineRightControl;
     ::sfx2::sidebar::ControllerItem  maDecIndentControl;
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
-    ::sfx2::sidebar::ControllerItem  maVertTop;
-    ::sfx2::sidebar::ControllerItem  maVertCenter;
-    ::sfx2::sidebar::ControllerItem  maVertBottom;
     ::sfx2::sidebar::ControllerItem  maBulletOnOff;
     ::sfx2::sidebar::ControllerItem  maNumberOnOff;
     ::sfx2::sidebar::ControllerItem  maBackColorControl;
@@ -192,8 +184,6 @@ private:
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~ParaPropertyPanel (void);
 
-    DECL_LINK(AlignStyleModifyHdl_Impl, ToolBox*);
-    DECL_LINK(VertTbxSelectHandler, ToolBox*);
     DECL_LINK(NumBTbxSelectHandler, ToolBox*);
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);
@@ -201,9 +191,7 @@ private:
     DECL_LINK(ULSpaceHdl_Impl, void*);
     DECL_LINK(ClickUL_IncDec_Hdl_Impl, ToolBox*);
 
-    void VertStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     void ParaBKGStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
-    void StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedLnSPImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
@@ -227,8 +215,6 @@ private:
     DECL_LINK(NumBTbxDDHandler, ToolBox*);
     DECL_LINK(ToolBoxBackColorDDHandler, ToolBox *);
 
-    void InitToolBoxAlign();
-    void InitToolBoxVertAlign();
     void InitToolBoxIndent();
     void InitToolBoxBGColor();
     void InitToolBoxBulletsNumbering();
