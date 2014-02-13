@@ -400,8 +400,9 @@ void  SwInputWindow::CancelFormula()
         pWrtShell->EndSelTblCells();
 
         pView->GetEditWin().GrabFocus();
+
+        pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SFX_CALLMODE_ASYNCHRON);
     }
-    pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SFX_CALLMODE_ASYNCHRON);
 }
 
 const sal_Unicode CH_LRE = 0x202a;
