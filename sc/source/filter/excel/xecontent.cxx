@@ -415,12 +415,15 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         OUString aTextMark( rUrl.copy( 1 ) );
 
         sal_Int32 nSepPos = aTextMark.indexOf( '.' );
-        aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
-        OUString aSheetName( aTextMark.copy(0, nSepPos));
-
-        if ( aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
+        if(nSepPos != -1)
         {
-            aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, "'");
+            aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
+            OUString aSheetName( aTextMark.copy(0, nSepPos));
+
+            if ( aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
+            {
+                aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, "'");
+            }
         }
 
         mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
