@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <exception>
 
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/uno/Exception.hpp"
@@ -110,7 +111,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
         anInstanceProvider)
     throw (
         css::bridge::BridgeExistsException, css::lang::IllegalArgumentException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     rtl::Reference< Bridge > b;
     {

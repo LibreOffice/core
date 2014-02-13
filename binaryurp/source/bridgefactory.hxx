@@ -22,6 +22,7 @@
 
 #include "sal/config.h"
 
+#include <exception>
 #include <list>
 #include <map>
 
@@ -102,7 +103,7 @@ private:
         throw (
             com::sun::star::bridge::BridgeExistsException,
             com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
     SAL_CALL getBridge(
