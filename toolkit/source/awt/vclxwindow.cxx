@@ -1406,7 +1406,9 @@ namespace
     }
 }
 
-void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value )
+    throw(::com::sun::star::uno::RuntimeException,
+          std::exception)
 {
     SolarMutexGuard aGuard;
 

@@ -392,7 +392,9 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw (RuntimeException)
+    void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
+        throw (RuntimeException,
+               std::exception)
     {
         if ( !GetWindow() )
         {
