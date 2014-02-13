@@ -25,11 +25,6 @@
 
 #include "jni.h"
 
-// Workaround for problematic IBM JDK 1.6.0 on ppc
-#ifndef _JNI_IMPORT_OR_EXPORT_
-#define _JNI_IMPORT_OR_EXPORT_
-#endif
-
 #include "jawt_md.h"
 #include "jawt.h"
 
