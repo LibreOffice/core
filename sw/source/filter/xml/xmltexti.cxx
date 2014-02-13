@@ -572,7 +572,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = "URL";
         aMediaDescriptor[0].Value <<= OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+        if ( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
             uno::Reference< task::XInteractionHandler > xInteraction =
                                         pDoc->GetDocShell()->GetMedium()->GetInteractionHandler();
