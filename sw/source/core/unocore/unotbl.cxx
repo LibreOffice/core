@@ -1361,9 +1361,13 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTableRow::getPropertySetInfo(v
     return xRef;
 }
 
-void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
-    const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+    throw (beans::UnknownPropertyException,
+           beans::PropertyVetoException,
+           lang::IllegalArgumentException,
+           lang::WrappedTargetException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -3023,7 +3027,9 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
     }
 }
 
-void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SwXTextTable::autoFormat(const OUString& aName)
+    throw (lang::IllegalArgumentException, uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -3317,7 +3323,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     throw (beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -3813,7 +3820,7 @@ uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColum
 
 uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
         sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException,
            std::exception)
 {
     SolarMutexGuard aGuard;
