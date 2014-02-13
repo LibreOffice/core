@@ -256,7 +256,9 @@ protected:
                std::exception);
     void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException);
     void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException);
-    void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
+    void dragOver(const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();

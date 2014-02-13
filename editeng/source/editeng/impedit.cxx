@@ -1822,7 +1822,9 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
     }
 }
 
-void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+void ImpEditView::dragOver(const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE)
+    throw (::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aVclGuard;
 
