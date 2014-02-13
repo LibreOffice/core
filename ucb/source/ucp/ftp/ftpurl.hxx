@@ -138,7 +138,7 @@ namespace ftp {
             throw(curl_exception);
 
         void del() const
-            throw(curl_exception);
+            throw(curl_exception, malformed_exception);
 
 
     private:
