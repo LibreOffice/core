@@ -34,11 +34,13 @@ protected:
 
     // Creating a SdrObject based on a Description. Cann be used by derived classes to
     // support own ::com::sun::star::drawing::Shapes (for example Controls)
-    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )throw ();
+    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
+        throw (std::exception);
 
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw ();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
+        throw (std::exception);
 
 public:
     SvxFmDrawPage( SdrPage* pPage );
