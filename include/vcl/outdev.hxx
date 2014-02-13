@@ -270,8 +270,6 @@ class VCL_DLLPUBLIC OutputDevice
 
 private:
     mutable SalGraphics*        mpGraphics;         ///< Graphics context to draw on
-    mutable OutputDevice*       mpPrevGraphics;     ///< Previous output device in list
-    mutable OutputDevice*       mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;

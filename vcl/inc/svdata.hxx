@@ -156,10 +156,6 @@ struct ImplSVAppData
 
 struct ImplSVGDIData
 {
-    OutputDevice*           mpFirstWinGraphics; // First OutputDevice with a Frame Graphics
-    OutputDevice*           mpLastWinGraphics;  // Last OutputDevice with a Frame Graphics
-    OutputDevice*           mpFirstVirGraphics; // First OutputDevice with a VirtualDevice Graphics
-    OutputDevice*           mpLastVirGraphics;  // Last OutputDevice with a VirtualDevice Graphics
     OutputDevice*           mpFirstPrnGraphics; // First OutputDevice with a InfoPrinter Graphics
     OutputDevice*           mpLastPrnGraphics;  // Last OutputDevice with a InfoPrinter Graphics
     VirtualDevice*          mpFirstVirDev;      // First VirtualDevice
