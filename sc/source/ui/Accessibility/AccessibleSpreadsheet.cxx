@@ -128,12 +128,12 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     return ScMyAddress(0,0,maActiveCell.Tab());
 }
 
-sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize)
+bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize)
 {
     //Src Must be :Src > Dest
     if (pDest->In(*pSrc))
     {//Here is Src In Dest,Src <= Dest
-        return sal_False;
+        return false;
     }
     if (!pDest->Intersects(*pSrc))
     {
@@ -142,7 +142,7 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange
             * sal_uInt32(pDest->aEnd.Tab() - pDest->aStart.Tab() + 1);
         if (nCellCount + nSize > nMax)
         {
-            return sal_True;
+            return true;
         }
         else if(nCellCount > 0)
         {
@@ -155,7 +155,7 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange
                 }
             }
         }
-        return sal_False;
+        return false;
     }
     sal_Int32 nMinRow = pSrc->aStart.Row();
     sal_Int32 nMaxRow = pSrc->aEnd.Row();
@@ -165,7 +165,7 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange
         {
             if (nSize > nMax)
             {
-                return sal_True;
+                return true;
             }
             ScMyAddress cell(col,nMinRow,pSrc->aStart.Tab());
             if(!pDest->In(cell))
@@ -180,7 +180,7 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange
             {
                 if (nSize > nMax)
                 {
-                    return sal_True;
+                    return true;
                 }
                 ScMyAddress cell(col,nMaxRow,pSrc->aStart.Tab());
                 if(!pDest->In(cell))
@@ -191,22 +191,22 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc,ScRange
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 //In Src , Not in Dest
-sal_Bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet)
+bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet)
 {
     if (pSrc == NULL || pDest == NULL)
     {
-        return sal_False;
+        return false;
     }
     int nSize =0;
     if (pDest->GetCellCount() == 0)//if the Dest Rang List is empty
     {
         if (pSrc->GetCellCount() > sal_uInt32(nMax))//if the Src Cell count is greater then  nMax
         {
-            return sal_True;
+            return true;
         }
         //now the cell count is less then nMax
         vecRet.reserve(10);
@@ -222,7 +222,7 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc
                 }
             }
         }
-        return sal_False;
+        return false;
     }
     //the Dest Rang List is not empty
     vecRet.reserve(10);
@@ -236,11 +236,11 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc
             ScRange* pRangeDest = (*pDest)[j];
             if (CalcScRangeDifferenceMax(pRange,pRangeDest,nMax,vecRet,nSize))
             {
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 //=====  internal  ============================================================
@@ -255,9 +255,9 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     :
     ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
         ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
-    mbIsSpreadsheet( sal_True ),
-    m_bFormulaMode(sal_False),
-    m_bFormulaLastMode(sal_False),
+    mbIsSpreadsheet( true ),
+    m_bFormulaMode( false ),
+    m_bFormulaLastMode( false ),
     m_nMinX(0),m_nMaxX(0),m_nMinY(0),m_nMaxY(0)
 {
     ConstructScAccessibleSpreadsheet( pAccDoc, pViewShell, nTab, eSplitPos );
@@ -326,7 +326,7 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
     ScAccessibleTableBase::disposing();
 }
 
-void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
+void ScAccessibleSpreadsheet::CompleteSelectionChanged(bool bNewState)
 {
     if (IsFormulaMode())
     {
@@ -436,7 +436,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 if (m_bFormulaLastMode)
                 {//Last Notify Mode  Is Formula Mode.
                     m_vecFormulaLastMyAddr.clear();
-                    RemoveFormulaSelection(sal_True);
+                    RemoveFormulaSelection(true);
                     m_pAccFormulaCell.clear();
                     //Remove All Selection
                 }
@@ -667,7 +667,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
             {
                 // ignore next SC_HINT_DATACHANGED notification
-                mbDelIns = sal_True;
+                mbDelIns = true;
 
                 sal_Int16 nId(0);
                 SCsCOL nX(rRef.GetDx());
@@ -766,7 +766,7 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
     CommitChange(aEvent);
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsSameMarkCell()
+bool ScAccessibleSpreadsheet::IsSameMarkCell()
 {
     return m_LastMarkedRanges == *mpMarkedRanges;
 }
@@ -1225,16 +1225,16 @@ void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChild
                 ScAddress(static_cast<SCCOL>(nCol), nRow,mpViewShell->GetViewData()->GetTabNo()))
                 )
             {
-                SelectCell(nRow, nCol, sal_True);
+                SelectCell(nRow, nCol, true);
             }
             return ;
         }
         if (mpViewShell->GetViewData()->GetMarkData().IsCellMarked(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)))
-            SelectCell(nRow, nCol, sal_True);
+            SelectCell(nRow, nCol, true);
     }
 }
 
-void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Bool bDeselect)
+void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect)
 {
     if (IsFormulaMode())
     {
@@ -1379,29 +1379,29 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
     return aRect;
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsDefunc(
+bool ScAccessibleSpreadsheet::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsEditable(
+bool ScAccessibleSpreadsheet::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
     sal_Bool bProtected(false);
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
-        bProtected = sal_True;
+        bProtected = true;
     return !bProtected;
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsFocused()
+bool ScAccessibleSpreadsheet::IsFocused()
 {
-    sal_Bool bFocused(false);
+    bool bFocused(false);
     if (mpViewShell)
     {
         if (mpViewShell->GetViewData()->GetActivePart() == meSplitPos)
@@ -1410,21 +1410,21 @@ sal_Bool ScAccessibleSpreadsheet::IsFocused()
     return bFocused;
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
+bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 {
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if(mpViewShell)
     {
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
         aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked(maRange))
-            bResult = sal_True;
+            bResult = true;
     }
     return bResult;
 }
@@ -1552,7 +1552,7 @@ void ScAccessibleSpreadsheet::FireFirstCellFocus()
     {
         return ;
     }
-    mbIsFocusSend = sal_True;
+    mbIsFocusSend = true;
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
@@ -1655,7 +1655,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
     m_aFormulaActiveCell = aFormulaAddr;
 }
 
-void ScAccessibleSpreadsheet::RemoveFormulaSelection(sal_Bool bRemoveAll )
+void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
 {
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);
@@ -1678,18 +1678,18 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(sal_Bool bRemoveAll )
     }
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsScAddrFormulaSel(const ScAddress &addr) const
+bool ScAccessibleSpreadsheet::IsScAddrFormulaSel(const ScAddress &addr) const
 {
     if( addr.Col() >= m_nMinX && addr.Col() <= m_nMaxX &&
         addr.Row() >= m_nMinY && addr.Row() <= m_nMaxY &&
         addr.Tab() == mpViewShell->GetViewData()->GetTabNo() )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int32 nIndex) const
+bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int32 nIndex) const
 {
     sal_Int32 nMaxIndex = (m_nMaxX - m_nMinX +1)*(m_nMaxY - m_nMinY +1) -1 ;
     return nIndex <= nMaxIndex && nIndex >= 0 ;
@@ -1721,14 +1721,14 @@ sal_Int32 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sa
     return GetRowAll() * nRowRelative + nColRelative;
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsFormulaMode()
+bool ScAccessibleSpreadsheet::IsFormulaMode()
 {
     ScViewData *pViewData = mpViewShell->GetViewData();
     m_bFormulaMode = pViewData->IsRefMode() || SC_MOD()->IsFormulaMode();
     return m_bFormulaMode ;
 }
 
-sal_Bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
+bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
 {
     ScViewData *pViewData = mpViewShell->GetViewData();
     sal_uInt16 nRefX=0;
@@ -1746,9 +1746,9 @@ sal_Bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
     if( /* Always true: nRefX >= 0 && */ nRefX <= MAXCOL && nRefY >= 0 && nRefY <= MAXROW)
     {
         addr = ScAddress(nRefX,nRefY,pViewData->GetTabNo());
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 uno::Reference < XAccessible > ScAccessibleSpreadsheet::GetActiveCell()
