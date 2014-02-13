@@ -114,7 +114,7 @@ void ScAccessibleEditObject::LostFocus()
 
 void ScAccessibleEditObject::GotFocus()
 {
-    mbHasFocus = sal_True;
+    mbHasFocus = true;
     CommitFocusGained();
     if (mpTextHelper)
         mpTextHelper->SetFocus(sal_True);
@@ -346,7 +346,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
     //====  internal  =========================================================
 
-sal_Bool ScAccessibleEditObject::IsDefunc(
+bool ScAccessibleEditObject::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || !getAccessibleParent().is() ||

@@ -188,12 +188,12 @@ public:
 
 private:
     accessibility::AccessibleTextHelper* mpTextHelper;
-    EditView* mpEditView;
-    Window* mpWindow;
+    EditView*      mpEditView;
+    Window*        mpWindow;
     EditObjectType meObjectType;
-    sal_Bool mbHasFocus;
+    bool           mbHasFocus;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
