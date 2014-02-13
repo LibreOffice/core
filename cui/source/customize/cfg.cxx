@@ -3986,10 +3986,7 @@ void
 ToolbarSaveInData::SetEntries( SvxEntries* pNewEntries )
 {
     // delete old menu hierarchy first
-    if ( pRootEntry != NULL && pRootEntry->GetEntries() != NULL )
-    {
-        delete pRootEntry->GetEntries();
-    }
+    delete pRootEntry->GetEntries();
 
     // now set new menu hierarchy
     pRootEntry->SetEntries( pNewEntries );
