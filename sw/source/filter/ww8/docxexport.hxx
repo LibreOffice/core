@@ -109,6 +109,8 @@ public:
     /// Determines if the format is expected to support unicode.
     virtual bool SupportsUnicode() const { return true; }
 
+    virtual bool SupportsOneColumnBreak() const { return true; }
+
     virtual bool ignoreAttributeForStyles( sal_uInt16 nWhich ) const;
 
     /// Guess the script (asian/western).

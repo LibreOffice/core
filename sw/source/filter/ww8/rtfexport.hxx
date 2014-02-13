@@ -62,6 +62,8 @@ public:
     /// Determines if the format is expected to support unicode.
     virtual bool SupportsUnicode() const { return true; }
 
+    virtual bool SupportsOneColumnBreak() const { return false; }
+
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
 

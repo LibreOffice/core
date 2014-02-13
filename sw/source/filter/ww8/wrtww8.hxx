@@ -633,6 +633,9 @@ public:
     /// Determines if the format is expected to support unicode.
     virtual bool SupportsUnicode() const = 0;
 
+    /// Determines if column break with one column should be exported or not.
+    virtual bool SupportsOneColumnBreak() const = 0;
+
     /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
     virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
 
@@ -955,6 +958,8 @@ public:
 
     /// False for WW6, true for WW8.
     virtual bool SupportsUnicode() const { return bWrtWW8; }
+
+    virtual bool SupportsOneColumnBreak() const { return false; }
 
 private:
     /// Format-dependent part of the actual export.
