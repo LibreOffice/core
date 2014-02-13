@@ -2670,7 +2670,7 @@ sal_Bool SAL_CALL SdMasterPagesAccess::hasElements()
 
 // XDrawPages
 uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIndex( sal_Int32 nInsertPos )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
