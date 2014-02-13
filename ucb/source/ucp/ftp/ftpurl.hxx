@@ -126,7 +126,8 @@ namespace ftp {
         // seeked to the beginning of.
         oslFileHandle open() throw(curl_exception);
 
-        FTPDirentry direntry() const throw(curl_exception);
+        FTPDirentry direntry() const
+            throw(curl_exception, malformed_exception);
 
         void insert(bool ReplaceExisting,void* stream) const
             throw(curl_exception);
