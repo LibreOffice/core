@@ -85,8 +85,9 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException );
+        throw (::com::sun::star::xml::sax::SAXException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
         virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
