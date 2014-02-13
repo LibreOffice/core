@@ -52,12 +52,12 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder() = 0;
     virtual SvxViewForwarder* GetViewForwarder() = 0;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) = 0;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) = 0;
     virtual SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
     virtual void                UpdateData() = 0;
-    virtual void                SetDoUpdate(sal_Bool bValue) = 0;
-    virtual sal_Bool            IsDirty() const = 0;
+    virtual void                SetDoUpdate(bool bValue) = 0;
+    virtual bool            IsDirty() const = 0;
 
 private:
     mutable SfxBroadcaster maBroadcaster;
@@ -80,8 +80,8 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) { ScCellTextData::Notify(rBC, rHint); }
 
     virtual void                UpdateData() { ScCellTextData::UpdateData(); }
-    virtual void                SetDoUpdate(sal_Bool bValue) { ScCellTextData::SetDoUpdate(bValue); }
-    virtual sal_Bool            IsDirty() const { return ScCellTextData::IsDirty(); }
+    virtual void                SetDoUpdate(bool bValue) { ScCellTextData::SetDoUpdate(bValue); }
+    virtual bool                IsDirty() const { return ScCellTextData::IsDirty(); }
 };
 
 
@@ -102,7 +102,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
@@ -128,7 +128,7 @@ class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
     // Add a para to indicate whether the object is cloned
-    ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, sal_Bool isClone=sal_False);
+    ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone = false);
     virtual             ~ScAccessibleEditObjectTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -137,21 +137,21 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return false; }
+    virtual void                SetDoUpdate(bool /* bValue */) {  }
+    virtual bool                IsDirty() const { return false; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
     ScEditObjectViewForwarder* mpViewForwarder;
-    ScEditViewForwarder* mpEditViewForwarder;
-    EditView* mpEditView;
-    EditEngine* mpEditEngine;
-    SvxEditEngineForwarder* mpForwarder;
-    Window* mpWindow;
-    sal_Bool mbIsCloned;
+    ScEditViewForwarder*       mpEditViewForwarder;
+    EditView*                  mpEditView;
+    EditEngine*                mpEditEngine;
+    SvxEditEngineForwarder*    mpForwarder;
+    Window*                    mpWindow;
+    bool                       mbIsCloned;
 };
 
 
@@ -166,7 +166,7 @@ public:
     virtual ScAccessibleTextData* Clone() const;
 
     virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
 
     void Dispose();
     void TextChanged();
@@ -175,7 +175,7 @@ public:
 private:
     void ResetEditMode();
 
-    sal_Bool mbEditEngineCreated;
+    bool mbEditEngineCreated;
 };
 
 
@@ -194,7 +194,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -214,7 +214,7 @@ class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextDat
 {
 public:
                         ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-                            const OUString& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader);
+                            const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader);
     virtual             ~ScAccessiblePreviewHeaderCellTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -223,14 +223,14 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
     OUString        maText;
-    sal_Bool        mbColHeader;
-    sal_Bool        mbRowHeader;
+    bool            mbColHeader;
+    bool            mbRowHeader;
 
     // prevent the using of this method of the base class
     ScCellEditSource* GetOriginalSource() { return NULL; }
@@ -246,7 +246,7 @@ class ScAccessibleHeaderTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
-                            const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust);
+                            const EditTextObject* pEditObj, bool bHeader, SvxAdjust eAdjust);
     virtual             ~ScAccessibleHeaderTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -255,11 +255,11 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return false; }
+    virtual void                SetDoUpdate(bool /* bValue */) {  }
+    virtual bool                IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -267,8 +267,8 @@ private:
     SvxEditEngineForwarder* mpForwarder;
     ScDocShell*             mpDocSh;
     const EditTextObject*   mpEditObj;
-    sal_Bool                mbHeader;
-    sal_Bool                mbDataValid;
+    bool                    mbHeader;
+    bool                    mbDataValid;
     SvxAdjust               meAdjust;
 };
 
@@ -279,7 +279,7 @@ class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const OUString& sText, const ScAddress& aCellPos, sal_Bool bMarkNote);
+                            const OUString& sText, const ScAddress& aCellPos, bool bMarkNote);
     virtual             ~ScAccessibleNoteTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -288,11 +288,11 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return false; }
+    virtual void                SetDoUpdate(bool /* bValue */) {  }
+    virtual bool            IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -301,8 +301,8 @@ private:
     ScDocShell*             mpDocSh;
     OUString                msText;
     ScAddress               maCellPos;
-    sal_Bool                mbMarkNote;
-    sal_Bool                mbDataValid;
+    bool                    mbMarkNote;
+    bool                    mbDataValid;
 };
 
 
@@ -337,11 +337,11 @@ public:
 
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual SvxViewForwarder*   GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
 
     virtual void                UpdateData() {}
-    virtual void                SetDoUpdate( sal_Bool /* bValue */ ) {}
-    virtual sal_Bool            IsDirty() const { return false; }
+    virtual void                SetDoUpdate( bool /* bValue */ ) {}
+    virtual bool                IsDirty() const { return false; }
 };
 
 

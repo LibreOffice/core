@@ -946,7 +946,7 @@ SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool /* bCreate */ )
+SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bCreate */ )
 {
     //#102219#; there should no EditViewForwarder be, because the cell is now readonly in this interface
     return NULL;
@@ -976,7 +976,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 }
 
 
-ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, sal_Bool isClone)
+ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone)
     :
     mpViewForwarder(NULL),
     mpEditViewForwarder(NULL),
@@ -1027,7 +1027,7 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
 ScAccessibleTextData* ScAccessibleEditObjectTextData::Clone() const
 {
     // Add para to indicate the object is cloned
-    return new ScAccessibleEditObjectTextData(mpEditView, mpWindow,sal_True);
+    return new ScAccessibleEditObjectTextData(mpEditView, mpWindow, true);
 }
 
 SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
@@ -1055,7 +1055,7 @@ SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool bCreate )
 {
     if (!mpEditViewForwarder && mpEditView)
         mpEditViewForwarder = new ScEditViewForwarder(mpEditView, mpWindow);
@@ -1160,7 +1160,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 SfxItemPool* pEnginePool = EditEngine::CreatePool();
                 pEnginePool->FreezeIdRanges();
                 mpEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
-                mbEditEngineCreated = sal_True;
+                mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
                 mpEditEngine->SetRefMapMode( MAP_100TH_MM );
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
@@ -1180,7 +1180,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
     return mpForwarder;
 }
 
-SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool bCreate )
 {
     ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
@@ -1328,7 +1328,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-            const OUString& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
+            const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewForwarder(NULL),
     mpViewShell(pViewShell),
@@ -1435,7 +1435,7 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
 }
 
 ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
-                            const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust)
+                            const EditTextObject* pEditObj, bool bHeader, SvxAdjust eAdjust)
     :
     mpViewForwarder(NULL),
     mpViewShell(pViewShell),
@@ -1537,7 +1537,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
     if (mpEditObj)
         mpEditEngine->SetText(*mpEditObj);
 
-    mbDataValid = sal_True;
+    mbDataValid = true;
     return mpForwarder;
 }
 
@@ -1549,7 +1549,7 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
 }
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const OUString& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
+                            const OUString& sText, const ScAddress& aCellPos, bool bMarkNote)
     :
     mpViewForwarder(NULL),
     mpViewShell(pViewShell),
@@ -1644,7 +1644,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         mpEditEngine->SetText( msText );
     }
 
-    mbDataValid = sal_True;
+    mbDataValid = true;
 
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
@@ -1768,7 +1768,7 @@ SvxViewForwarder* ScAccessibleCsvTextData::GetViewForwarder()
     return mpViewForwarder.get();
 }
 
-SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( sal_Bool /* bCreate */ )
+SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( bool /* bCreate */ )
 {
     return NULL;
 }
