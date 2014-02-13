@@ -49,7 +49,7 @@ public:
     }
 
     static void RegisterChildWindow (
-                    sal_Bool   bVisible = sal_False,
+                    bool   bVisible = false,
                     SfxModule* pModule  = NULL,
                     sal_uInt16 nFlags   = 0)
     {
