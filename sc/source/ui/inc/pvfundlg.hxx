@@ -20,10 +20,13 @@
 #ifndef SC_PVFUNDLG_HXX
 #define SC_PVFUNDLG_HXX
 
+#include <boost/scoped_ptr.hpp>
+
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -162,33 +165,27 @@ private:
     DECL_LINK( SelectHdl, ListBox* );
 
 private:
-    FixedLine           maFlSortBy;
-    ListBox             maLbSortBy;
-    RadioButton         maRbSortAsc;
-    RadioButton         maRbSortDesc;
-    RadioButton         maRbSortMan;
-    FixedLine           maFlLayout;
-    FixedText           maFtLayout;
-    ListBox             maLbLayout;
-    CheckBox            maCbLayoutEmpty;
-    FixedLine           maFlAutoShow;
-    CheckBox            maCbShow;
-    NumericField        maNfShow;
-    FixedText           maFtShow;
-    FixedText           maFtShowFrom;
-    ListBox             maLbShowFrom;
-    FixedText           maFtShowUsing;
-    ListBox             maLbShowUsing;
-    FixedLine           maFlHide;
-    SvxCheckListBox     maLbHide;
-    FixedText           maFtHierarchy;
-    ListBox             maLbHierarchy;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    ListBox*            m_pLbSortBy;
+    RadioButton*        m_pRbSortAsc;
+    RadioButton*        m_pRbSortDesc;
+    RadioButton*        m_pRbSortMan;
+    VclContainer*       m_pLayoutFrame;
+    ListBox*            m_pLbLayout;
+    CheckBox*           m_pCbLayoutEmpty;
+    CheckBox*           m_pCbShow;
+    NumericField*       m_pNfShow;
+    FixedText*          m_pFtShow;
+    FixedText*          m_pFtShowFrom;
+    ListBox*            m_pLbShowFrom;
+    FixedText*          m_pFtShowUsing;
+    ListBox*            m_pLbShowUsing;
+    VclContainer*       m_pHideFrame;
+    SvxCheckListBox*    m_pLbHide;
+    FixedText*          m_pFtHierarchy;
+    ListBox*            m_pLbHierarchy;
 
-    ScDPListBoxWrapper  maLbLayoutWrp;      /// Wrapper for direct usage of API constants.
-    ScDPListBoxWrapper  maLbShowFromWrp;    /// Wrapper for direct usage of API constants.
+    boost::scoped_ptr<ScDPListBoxWrapper> m_xLbLayoutWrp;      /// Wrapper for direct usage of API constants.
+    boost::scoped_ptr<ScDPListBoxWrapper> m_xLbShowFromWrp;    /// Wrapper for direct usage of API constants.
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.

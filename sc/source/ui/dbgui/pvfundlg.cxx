@@ -523,38 +523,36 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
 
 ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
-        bool bEnableLayout ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPSUBTOTAL_OPT ) ),
-    maFlSortBy      ( this, ScResId( FL_SORT_BY ) ),
-    maLbSortBy      ( this, ScResId( LB_SORT_BY ) ),
-    maRbSortAsc     ( this, ScResId( RB_SORT_ASC ) ),
-    maRbSortDesc    ( this, ScResId( RB_SORT_DESC ) ),
-    maRbSortMan     ( this, ScResId( RB_SORT_MAN ) ),
-    maFlLayout      ( this, ScResId( FL_LAYOUT ) ),
-    maFtLayout      ( this, ScResId( FT_LAYOUT ) ),
-    maLbLayout      ( this, ScResId( LB_LAYOUT ) ),
-    maCbLayoutEmpty ( this, ScResId( CB_LAYOUT_EMPTY ) ),
-    maFlAutoShow    ( this, ScResId( FL_AUTOSHOW ) ),
-    maCbShow        ( this, ScResId( CB_SHOW ) ),
-    maNfShow        ( this, ScResId( NF_SHOW ) ),
-    maFtShow        ( this, ScResId( FT_SHOW ) ),
-    maFtShowFrom    ( this, ScResId( FT_SHOW_FROM ) ),
-    maLbShowFrom    ( this, ScResId( LB_SHOW_FROM ) ),
-    maFtShowUsing   ( this, ScResId( FT_SHOW_USING ) ),
-    maLbShowUsing   ( this, ScResId( LB_SHOW_USING ) ),
-    maFlHide        ( this, ScResId( FL_HIDE ) ),
-    maLbHide        ( this, ScResId( CT_HIDE ) ),
-    maFtHierarchy   ( this, ScResId( FT_HIERARCHY ) ),
-    maLbHierarchy   ( this, ScResId( LB_HIERARCHY ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maLbLayoutWrp   ( maLbLayout, spLayoutMap ),
-    maLbShowFromWrp ( maLbShowFrom, spShowFromMap ),
-    mrDPObj         ( rDPObj ),
-    maLabelData     ( rLabelData )
+        bool bEnableLayout )
+    : ModalDialog(pParent, "DataFieldOptionsDialog",
+        "modules/scalc/ui/datafieldoptionsdialog.ui")
+    , mrDPObj(rDPObj)
+    , maLabelData(rLabelData)
 {
-    FreeResource();
+    get(m_pLbSortBy, "sortby");
+    m_pLbSortBy->set_width_request(m_pLbSortBy->approximate_char_width() * 20);
+    get(m_pRbSortAsc, "ascending");
+    get(m_pRbSortDesc, "descending");
+    get(m_pRbSortMan, "manual");
+    get(m_pLayoutFrame, "layoutframe");
+    get(m_pLbLayout, "layout");
+    get(m_pCbLayoutEmpty, "emptyline");
+    get(m_pCbShow, "show");
+    get(m_pNfShow, "items");
+    get(m_pFtShow, "showft");
+    get(m_pFtShowFrom, "showfromft");
+    get(m_pLbShowFrom, "from");
+    get(m_pFtShowUsing, "usingft");
+    get(m_pLbShowUsing, "using");
+    get(m_pHideFrame, "hideframe");
+    get(m_pLbHide, "hideitems");
+    m_pLbHide->set_height_request(GetTextHeight() * 5);
+    get(m_pFtHierarchy, "hierarchyft");
+    get(m_pLbHierarchy, "hierarchy");
+
+    m_xLbLayoutWrp.reset(new ScDPListBoxWrapper(*m_pLbLayout, spLayoutMap));
+    m_xLbShowFromWrp.reset(new ScDPListBoxWrapper(*m_pLbShowFrom, spShowFromMap));
+
     Init( rDataFields, bEnableLayout );
 }
 
@@ -562,34 +560,34 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 {
     // *** SORTING ***
 
-    if( maRbSortMan.IsChecked() )
+    if( m_pRbSortMan->IsChecked() )
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::MANUAL;
-    else if( maLbSortBy.GetSelectEntryPos() == SC_SORTNAME_POS )
+    else if( m_pLbSortBy->GetSelectEntryPos() == SC_SORTNAME_POS )
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::NAME;
     else
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::DATA;
 
-    ScDPName aFieldName = GetFieldName(maLbSortBy.GetSelectEntry());
+    ScDPName aFieldName = GetFieldName(m_pLbSortBy->GetSelectEntry());
     if (!aFieldName.maName.isEmpty())
     {
         rLabelData.maSortInfo.Field =
             ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
-        rLabelData.maSortInfo.IsAscending = maRbSortAsc.IsChecked();
+        rLabelData.maSortInfo.IsAscending = m_pRbSortAsc->IsChecked();
     }
 
     // *** LAYOUT MODE ***
 
-    rLabelData.maLayoutInfo.LayoutMode = maLbLayoutWrp.GetControlValue();
-    rLabelData.maLayoutInfo.AddEmptyLines = maCbLayoutEmpty.IsChecked();
+    rLabelData.maLayoutInfo.LayoutMode = m_xLbLayoutWrp->GetControlValue();
+    rLabelData.maLayoutInfo.AddEmptyLines = m_pCbLayoutEmpty->IsChecked();
 
     // *** AUTO SHOW ***
 
-    aFieldName = GetFieldName(maLbShowUsing.GetSelectEntry());
+    aFieldName = GetFieldName(m_pLbShowUsing->GetSelectEntry());
     if (!aFieldName.maName.isEmpty())
     {
-        rLabelData.maShowInfo.IsEnabled = maCbShow.IsChecked();
-        rLabelData.maShowInfo.ShowItemsMode = maLbShowFromWrp.GetControlValue();
-        rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( maNfShow.GetValue() );
+        rLabelData.maShowInfo.IsEnabled = m_pCbShow->IsChecked();
+        rLabelData.maShowInfo.ShowItemsMode = m_xLbShowFromWrp->GetControlValue();
+        rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( m_pNfShow->GetValue() );
         rLabelData.maShowInfo.DataField =
             ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
     }
@@ -597,13 +595,13 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     // *** HIDDEN ITEMS ***
 
     rLabelData.maMembers = maLabelData.maMembers;
-    sal_uLong nVisCount = maLbHide.GetEntryCount();
+    sal_uLong nVisCount = m_pLbHide->GetEntryCount();
     for( sal_uInt16 nPos = 0; nPos < nVisCount; ++nPos )
-        rLabelData.maMembers[nPos].mbVisible = !maLbHide.IsChecked(nPos);
+        rLabelData.maMembers[nPos].mbVisible = !m_pLbHide->IsChecked(nPos);
 
     // *** HIERARCHY ***
 
-    rLabelData.mnUsedHier = maLbHierarchy.GetSelectEntryCount() ? maLbHierarchy.GetSelectEntryPos() : 0;
+    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectEntryCount() ? m_pLbHierarchy->GetSelectEntryPos() : 0;
 }
 
 void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayout )
@@ -613,110 +611,105 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
 
     // sort fields list box
-    maLbSortBy.InsertEntry(maLabelData.getDisplayName());
+    m_pLbSortBy->InsertEntry(maLabelData.getDisplayName());
 
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
         // Cache names for later lookup.
         maDataFieldNameMap.insert(NameMapType::value_type(aIt->maLayoutName, *aIt));
 
-        maLbSortBy.InsertEntry( aIt->maLayoutName );
-        maLbShowUsing.InsertEntry( aIt->maLayoutName );  // for AutoShow
+        m_pLbSortBy->InsertEntry( aIt->maLayoutName );
+        m_pLbShowUsing->InsertEntry( aIt->maLayoutName );  // for AutoShow
     }
 
-    if( maLbSortBy.GetEntryCount() > SC_SORTDATA_POS )
-        maLbSortBy.SetSeparatorPos( SC_SORTDATA_POS - 1 );
+    if( m_pLbSortBy->GetEntryCount() > SC_SORTDATA_POS )
+        m_pLbSortBy->SetSeparatorPos( SC_SORTDATA_POS - 1 );
 
     sal_uInt16 nSortPos = SC_SORTNAME_POS;
     if( nSortMode == DataPilotFieldSortMode::DATA )
     {
-        nSortPos = FindListBoxEntry( maLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
-        if( nSortPos >= maLbSortBy.GetEntryCount() )
+        nSortPos = FindListBoxEntry( *m_pLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
+        if( nSortPos >= m_pLbSortBy->GetEntryCount() )
         {
             nSortPos = SC_SORTNAME_POS;
             nSortMode = DataPilotFieldSortMode::MANUAL;
         }
     }
-    maLbSortBy.SelectEntryPos( nSortPos );
+    m_pLbSortBy->SelectEntryPos( nSortPos );
 
     // sorting mode
-    maRbSortAsc.SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    maRbSortDesc.SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    maRbSortMan.SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_pRbSortAsc->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_pRbSortDesc->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
+    m_pRbSortMan->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
 
     RadioButton* pRBtn = 0;
     switch( nSortMode )
     {
         case DataPilotFieldSortMode::NONE:
         case DataPilotFieldSortMode::MANUAL:
-            pRBtn = &maRbSortMan;
+            pRBtn = m_pRbSortMan;
         break;
         default:
-            pRBtn = maLabelData.maSortInfo.IsAscending ? &maRbSortAsc : &maRbSortDesc;
+            pRBtn = maLabelData.maSortInfo.IsAscending ? m_pRbSortAsc : m_pRbSortDesc;
     }
     pRBtn->Check();
     RadioClickHdl( pRBtn );
 
     // *** LAYOUT MODE ***
 
-    maFlLayout.Enable( bEnableLayout );
-    maFtLayout.Enable( bEnableLayout );
-    maLbLayout.Enable( bEnableLayout );
-    maCbLayoutEmpty.Enable( bEnableLayout );
+    m_pLayoutFrame->Enable(bEnableLayout);
 
-    maLbLayoutWrp.SetControlValue( maLabelData.maLayoutInfo.LayoutMode );
-    maCbLayoutEmpty.Check( maLabelData.maLayoutInfo.AddEmptyLines );
+    m_xLbLayoutWrp->SetControlValue( maLabelData.maLayoutInfo.LayoutMode );
+    m_pCbLayoutEmpty->Check( maLabelData.maLayoutInfo.AddEmptyLines );
 
     // *** AUTO SHOW ***
 
-    maCbShow.Check( maLabelData.maShowInfo.IsEnabled );
-    maCbShow.SetClickHdl( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
+    m_pCbShow->Check( maLabelData.maShowInfo.IsEnabled );
+    m_pCbShow->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
 
-    maLbShowFromWrp.SetControlValue( maLabelData.maShowInfo.ShowItemsMode );
+    m_xLbShowFromWrp->SetControlValue( maLabelData.maShowInfo.ShowItemsMode );
     long nCount = static_cast< long >( maLabelData.maShowInfo.ItemCount );
     if( nCount < 1 )
         nCount = SC_SHOW_DEFAULT;
-    maNfShow.SetValue( nCount );
+    m_pNfShow->SetValue( nCount );
 
-    // maLbShowUsing already filled above
-    maLbShowUsing.SelectEntry( maLabelData.maShowInfo.DataField );
-    if( maLbShowUsing.GetSelectEntryPos() >= maLbShowUsing.GetEntryCount() )
-        maLbShowUsing.SelectEntryPos( 0 );
+    // m_pLbShowUsing already filled above
+    m_pLbShowUsing->SelectEntry( maLabelData.maShowInfo.DataField );
+    if( m_pLbShowUsing->GetSelectEntryPos() >= m_pLbShowUsing->GetEntryCount() )
+        m_pLbShowUsing->SelectEntryPos( 0 );
 
-    CheckHdl( &maCbShow );      // enable/disable dependent controls
+    CheckHdl(m_pCbShow);      // enable/disable dependent controls
 
     // *** HIDDEN ITEMS ***
 
-    maLbHide.SetHelpId( HID_SC_DPSUBT_HIDE );
     InitHideListBox();
 
     // *** HIERARCHY ***
 
     if( maLabelData.maHiers.getLength() > 1 )
     {
-        lclFillListBox( maLbHierarchy, maLabelData.maHiers );
+        lclFillListBox( *m_pLbHierarchy, maLabelData.maHiers );
         sal_Int32 nHier = maLabelData.mnUsedHier;
         if( (nHier < 0) || (nHier >= maLabelData.maHiers.getLength()) ) nHier = 0;
-        maLbHierarchy.SelectEntryPos( static_cast< sal_uInt16 >( nHier ) );
-        maLbHierarchy.SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
+        m_pLbHierarchy->SelectEntryPos( static_cast< sal_uInt16 >( nHier ) );
+        m_pLbHierarchy->SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
     }
     else
     {
-        maFtHierarchy.Disable();
-        maLbHierarchy.Disable();
+        m_pFtHierarchy->Disable();
+        m_pLbHierarchy->Disable();
     }
 }
 
 void ScDPSubtotalOptDlg::InitHideListBox()
 {
-    maLbHide.Clear();
-    lclFillListBox( maLbHide, maLabelData.maMembers );
+    m_pLbHide->Clear();
+    lclFillListBox( *m_pLbHide, maLabelData.maMembers );
     size_t n = maLabelData.maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maLbHide.CheckEntryPos(static_cast<sal_uInt16>(i), !maLabelData.maMembers[i].mbVisible);
-    bool bEnable = maLbHide.GetEntryCount() > 0;
-    maFlHide.Enable( bEnable );
-    maLbHide.Enable( bEnable );
+        m_pLbHide->CheckEntryPos(static_cast<sal_uInt16>(i), !maLabelData.maMembers[i].mbVisible);
+    bool bEnable = m_pLbHide->GetEntryCount() > 0;
+    m_pHideFrame->Enable(bEnable);
 }
 
 ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
@@ -747,32 +740,32 @@ sal_uInt16 ScDPSubtotalOptDlg::FindListBoxEntry(
 
 IMPL_LINK( ScDPSubtotalOptDlg, RadioClickHdl, RadioButton*, pBtn )
 {
-    maLbSortBy.Enable( pBtn != &maRbSortMan );
+    m_pLbSortBy->Enable( pBtn != m_pRbSortMan );
     return 0;
 }
 
 IMPL_LINK( ScDPSubtotalOptDlg, CheckHdl, CheckBox*, pCBox )
 {
-    if( pCBox == &maCbShow )
+    if (pCBox == m_pCbShow)
     {
-        bool bEnable = maCbShow.IsChecked();
-        maNfShow.Enable( bEnable );
-        maFtShow.Enable( bEnable );
-        maFtShowFrom.Enable( bEnable );
-        maLbShowFrom.Enable( bEnable );
+        bool bEnable = m_pCbShow->IsChecked();
+        m_pNfShow->Enable( bEnable );
+        m_pFtShow->Enable( bEnable );
+        m_pFtShowFrom->Enable( bEnable );
+        m_pLbShowFrom->Enable( bEnable );
 
-        bool bEnableUsing = bEnable && (maLbShowUsing.GetEntryCount() > 0);
-        maFtShowUsing.Enable( bEnableUsing );
-        maLbShowUsing.Enable( bEnableUsing );
+        bool bEnableUsing = bEnable && (m_pLbShowUsing->GetEntryCount() > 0);
+        m_pFtShowUsing->Enable(bEnableUsing);
+        m_pLbShowUsing->Enable(bEnableUsing);
     }
     return 0;
 }
 
 IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
 {
-    if( pLBox == &maLbHierarchy )
+    if (pLBox == m_pLbHierarchy)
     {
-        mrDPObj.GetMembers(maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(), maLabelData.maMembers);
+        mrDPObj.GetMembers(maLabelData.mnCol, m_pLbHierarchy->GetSelectEntryPos(), maLabelData.maMembers);
         InitHideListBox();
     }
     return 0;
