@@ -1396,15 +1396,13 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     // muss der Master darueber hinaus die Widow-Regel ueberpruefen.
     if( !nHave )
     {
-        bool bSplit;
+        bool bSplit = true;
         if( !IsFollow() )   // only a master decides about orphans
         {
             const WidowsAndOrphans aWidOrp( this );
             bSplit = ( aLine.GetLineNr() >= aWidOrp.GetOrphansLines() &&
                        aLine.GetLineNr() >= aLine.GetDropLines() );
         }
-        else
-            bSplit = true;
 
         if( bSplit )
         {
@@ -2002,7 +2000,8 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
     aLine.Bottom();
     // is breaking necessary?
-    if ( 0 != ( bSplit = !aFrmBreak.IsInside( aLine ) ) )
+    bSplit = !aFrmBreak.IsInside( aLine );
+    if ( bSplit )
         bRet = !aFrmBreak.IsKeepAlways() && aFrmBreak.WouldFit( aLine, rMaxHeight, bTst );
     else
     {
