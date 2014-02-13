@@ -1526,7 +1526,9 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
     }
 }
 
-void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
+void ImpEditView::dragGestureRecognized(const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE)
+     throw (::com::sun::star::uno::RuntimeException,
+            std::exception)
 {
     DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
 

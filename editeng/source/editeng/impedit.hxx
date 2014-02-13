@@ -245,7 +245,9 @@ private:
 protected:
 
     // DragAndDropClient
-    void dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException);
+    void dragGestureRecognized(const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     void dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
