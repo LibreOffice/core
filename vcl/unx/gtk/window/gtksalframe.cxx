@@ -2888,6 +2888,11 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( ! pGraphics )
     {
         pGraphics = static_cast<GtkSalGraphics*>(GetGraphics());
+        if ( !pGraphics )
+        {
+            SAL_WARN("vcl", "Could not get graphics - unable to update settings");
+            return;
+        }
         bFreeGraphics = true;
     }
 
