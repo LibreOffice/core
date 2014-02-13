@@ -1322,16 +1322,16 @@ Window* Application::GetDefDialogParent()
             while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
                 pWin = pWin->mpWindowImpl->mpParent;
 
+            // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
+            if( !pWin->mpWindowImpl )
+            {
+                OSL_FAIL( "Window hierarchy corrupted!" );
+                pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
+                return NULL;
+            }
+
             if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
             {
-                // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
-                if( !pWin->mpWindowImpl )
-                {
-                    OSL_FAIL( "Window hierarchy corrupted!" );
-                    pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
-                    return NULL;
-                }
-
                 return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
             }
         }
