@@ -149,7 +149,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
-    sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
+    bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
 };
 
 
