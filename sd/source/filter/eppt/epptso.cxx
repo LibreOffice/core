@@ -286,7 +286,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
               .WriteUInt32( (sal_uInt32)0x5f005f ).WriteUInt32( (sal_uInt32)0x50005f )
               .WriteUInt32( (sal_uInt32)0x540050 ).WriteUInt16( (sal_uInt16)0x39 );
     }
-    if ( pBinTagStrm )
+    if ( pStrm && pBinTagStrm )
     {
         sal_uInt32 nLen = pBinTagStrm->Tell();
         nSize += nLen + 8;
