@@ -431,7 +431,6 @@ PYTHON_CFLAGS=-I<path-to-raspbian_rootfs>/usr/include/python2.7
 PYTHON_LIBS=-lpython2.7
 --with-java
 JAVAINC=-I<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/include
-JAVALIB=-L<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/jre/lib/arm
 --with-system-cairo
 --with-system-cppunit
 --with-system-icu

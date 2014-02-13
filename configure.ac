@@ -7001,90 +7001,56 @@ _ACEOF
     JAVA_HOME="$formatted_path"
 fi
 
-AWTLIB=
-
-if test "$ENABLE_JAVA" != ""; then
-    AC_MSG_CHECKING([for jawt lib name])
-    if test "$JDK" = "gcj"; then
-        save_CFLAGS=$CFLAGS
-        save_LDFLAGS=$LDFLAGS
-        CFLAGS="$CFLAGS -I$JAVA_HOME/include"
-        LDFLAGS="$LDFLAGS -L$JAVA_HOME/lib -lgcj"
-        exec 6>/dev/null # no output
-        AC_CHECK_HEADER(jni.h, [],
-                    [AC_MSG_ERROR([jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?])], [])
-        AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ AWTLIB="-lgcjawt -lgcj"] )
-        exec 6>&1 # output on again
-        CFLAGS=$save_CFLAGS
-        LDFLAGS=$save_LDFLAGS
-    fi
-    # IBM SDK 1.5.0-sr5 includes libjawt.so with unresolved symbols.
-    # A workaround is to link also against libpmawt.so
-    if test "$JDK" = "ibm"; then
-        save_CFLAGS=$CFLAGS
-        save_LDFLAGS=$LDFLAGS
-        save_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-        CFLAGS="$CFLAGS -I$JAVA_HOME/include"
-        LDFLAGS="$LDFLAGS -L$JAVA_HOME/jre/bin"
-        LD_LIBRARY_PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/jre/bin/classic:$JAVA_HOME/jre/bin/xawt:$LD_LIBRARY_PATH
-        export LD_LIBRARY_PATH
-        exec 6>/dev/null # no output
-        AC_CHECK_HEADER(jni.h, [],
-                    [AC_MSG_ERROR([jni.h could not be found.])], [])
-        AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB="-ljawt"] )
-        if test -z "$AWTLIB"; then
-            LDFLAGS="$LDFLAGS -L$JAVA_HOME/jre/bin/xawt -ljawt"
-            AC_CHECK_LIB(mawt, JAWT_GetAWT, [ AWTLIB="-L$JAVA_HOME/jre/bin/xawt -ljawt -lmawt"])
-        fi
-        exec 6>&1 # output on again
-        CFLAGS=$save_CFLAGS
-        LDFLAGS=$save_LDFLAGS
-        LD_LIBRARY_PATH=$save_LD_LIBRARY_PATH
-    fi
-    if test -z "$AWTLIB"; then
-        if test $_os = WINNT -a "$WITH_MINGW" != yes; then
-            AWTLIB=jawt.lib
+if test -z "$JAWTLIB" -a -n "$ENABLE_JAVA" -a "$_os" != Android -a \
+    "$_os" != Darwin
+then
+    AC_MSG_CHECKING([for JAWT lib])
+    if test "$_os" = WINNT; then
+        if test "$WITH_MINGW" = yes; then
+            # The path is presumably taken care of in gb_LinkTarget__use_jawt
+            # in RepositoryExternal.mk:
+            JAWTLIB=-ljawt
         else
-            AWTLIB=-ljawt
+            # The path to $JAVA_HOME/lib/$JAWTLIB is part of $ILIB:
+            JAWTLIB=jawt.lib
         fi
+    else
+        case "$host_cpu" in
+        arm*)
+            my_java_arch=arm
+            ;;
+        i*86)
+            my_java_arch=i386
+            ;;
+        m68k)
+            my_java_arch=mk68
+            ;;
+        powerpc)
+            my_java_arch=ppc
+            ;;
+        powerpc64)
+            my_java_arch=ppc64
+            ;;
+        x86_64)
+            my_java_arch=amd64
+            ;;
+        *)
+            my_java_arch=$host_cpu
+            ;;
+        esac
+        JAWTLIB="-L$JAVA_HOME/jre/lib/$my_java_arch -ljawt"
     fi
-    AC_MSG_RESULT([$AWTLIB])
-    AC_SUBST(AWTLIB)
+    AC_MSG_RESULT([$JAWTLIB])
 fi
+AC_SUBST(JAWTLIB)
 
-
-if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
-#
-# Determine JAVALIB
-# If your platform follow the common pattern
-# just define JAVA_ARCH and JAVA_TOOLKIT for it
-# if not, leave JAVA_ARCH empty and define JAVALIB manually
-# if you don't want JAVALIB to be exported at all
-# define x_JAVALIB=[\#]
-#
-    JAVA_ARCH=
-    JAVA_TOOLKIT=
-    x_JAVALIB=
-
+if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
     case "$host_os" in
 
     aix*)
-        JAVA_ARCH="ppc"
-        JAVA_TOOLKIT="classic"
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/aix"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
-
-        case "$JDK" in
-        [Ii][Bb][Mm]*)
-            JAVA_ARCH=
-            JRE_BASE_DIR="$JAVA_HOME/jre/bin"
-            JAVALIB="-L$JRE_BASE_DIR -L$JRE_BASE_DIR/classic"
-            ;;
-        *)
-            ;;
-        esac
-
         ;;
 
     cygwin*)
@@ -7093,41 +7059,15 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         ;;
 
     darwin*)
-        x_JAVALIB=[\#]
         JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers ${ISYSTEM}$FRAMEWORKSHOME/JavaVM/Headers"
         ;;
 
     dragonfly*)
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            JAVA_TOOLKIT="client"
-            ;;
-        x86_64)
-            JAVA_ARCH="amd64"
-            JAVA_TOOLKIT="server"
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     freebsd*)
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            JAVA_TOOLKIT="client"
-            ;;
-        x86_64)
-            if test "`echo $JAVA_HOME | sed -e 's,.*/,,'`" = "linux"; then
-                JAVA_ARCH="i386"
-                JAVA_TOOLKIT="client"
-            else
-                JAVA_ARCH="amd64"
-                JAVA_TOOLKIT="server"
-            fi
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/freebsd"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/bsd"
@@ -7136,202 +7076,41 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         ;;
 
     k*bsd*-gnu*)
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            JAVA_TOOLKIT="client"
-            ;;
-        x86_64)
-            JAVA_ARCH="amd64"
-            JAVA_TOOLKIT="server"
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     linux-gnu*)
-
-        case "$host_cpu" in
-
-        alpha)
-            JAVA_ARCH="alpha"
-            JAVA_TOOLKIT="server"
-            ;;
-        arm*)
-            JAVA_ARCH="arm"
-            JAVA_TOOLKIT="server"
-            ;;
-        hppa)
-            JAVA_ARCH="hppa"
-            JAVA_TOOLKIT="server"
-            ;;
-        i*86)
-            JAVA_ARCH="i386"
-            case "$JDK" in
-            [Ii][Bb][Mm]*)
-                JAVA_ARCH=
-                JRE_BASE_DIR="$JAVA_HOME/jre/bin"
-                JAVALIB="-L$JAVA_HOME/$LIB64 -L$JRE_BASE_DIR -L$JRE_BASE_DIR/classic -L$JRE_BASE_DIR/native_thread"
-                ;;
-            [Bb][Ee][Aa]*)
-                JAVA_TOOLKIT="jrockit"
-                ;;
-            *)
-                JAVA_TOOLKIT="client"
-                ;;
-            esac
-            ;;
-        ia64)
-            JAVA_ARCH="ia64"
-            JAVA_TOOLKIT="server"
-            ;;
-        m68k)
-            JAVA_ARCH="mk68"
-            JAVA_TOOLKIT="server"
-            ;;
-        mips|mips64|mipsel|mips64el)
-            JAVA_ARCH="$host_cpu"
-            JAVA_TOOLKIT="server"
-            ;;
-        mips32)
-            JAVA_ARCH="$host_cpu"
-            JAVA_TOOLKIT="client"
-            ;;
-        powerpc)
-            JAVA_ARCH="ppc"
-            case "$JDK" in
-            [Ii][Bb][Mm]*)
-                JAVA_TOOLKIT="classic"
-                ;;
-            gcj)
-                JAVA_TOOLKIT="client"
-                ;;
-            *)
-                JAVA_TOOLKIT="server"
-                ;;
-            esac
-            ;;
-        powerpc64)
-            JAVA_ARCH="ppc64"
-            if test "$JDK" = "gcj"; then
-                JAVA_TOOLKIT="client"
-            else
-                JAVA_TOOLKIT="server"
-            fi
-            ;;
-        sparc)
-            JAVA_ARCH="sparc"
-            JAVA_TOOLKIT="server"
-            ;;
-        s390)
-            JAVA_ARCH="s390"
-            JAVA_TOOLKIT="server"
-            ;;
-        s390x)
-            JAVA_ARCH="s390x"
-            JAVA_TOOLKIT="server"
-            ;;
-        x86_64)
-            JAVA_ARCH="amd64"
-            JAVA_TOOLKIT="server"
-            ;;
-        *)
-            AC_MSG_ERROR([No JAVALIB definition host_cpu $host_cpu for host_os $host_os])
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
-    linux-androideabi*)
-
-        case "$host_cpu" in
-
-        arm|armel)
-            JAVA_ARCH="arm"
-            JAVA_TOOLKIT="server"
-            ;;
-        esac
-        ;;
-
     mingw*)
-        x_JAVALIB=[\#]
         JAVAINC="-I$JAVA_HOME/include"
         ;;
 
     *netbsd*)
-
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            JAVA_TOOLKIT="client"
-            ;;
-        powerpc)
-            JAVA_ARCH="pcc"
-            JAVA_TOOLKIT="classic"
-            ;;
-        sparc)
-            JAVA_ARCH="sparc"
-            JAVA_TOOLKIT="client"
-            ;;
-        x86_64)
-            JAVA_ARCH="amd64"
-            JAVA_TOOLKIT="client"
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/netbsd"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
        ;;
 
     openbsd*)
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            JAVA_TOOLKIT="client"
-            ;;
-        x86_64)
-            JAVA_ARCH="amd64"
-            JAVA_TOOLKIT="server"
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/openbsd"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     solaris*)
-
-        JAVA_TOOLKIT="xawt"
-        case "$host_cpu" in
-        i*86)
-            JAVA_ARCH="i386"
-            ;;
-        sparc)
-            JAVA_ARCH="sparc"
-            ;;
-        esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/solaris"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
     esac
-
-    if test -n "$JAVA_ARCH"; then
-        JRE_BASE_DIR="$JAVA_HOME/jre/lib/$JAVA_ARCH"
-        JAVALIB="-L$JAVA_HOME/$LIB64"
-        test -d "$JRE_BASE_DIR" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR"
-        test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/$JAVA_TOOLKIT"
-        test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/native_thread"
-    fi
-elif test -z "$ENABLE_JAVA"; then
-    x_JAVALIB=[\#]
 fi
 SOLARINC="$SOLARINC $JAVAINC"
 
-AC_SUBST(JAVALIB)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
 AC_SUBST(JAVAINTERPRETER)
@@ -7341,7 +7120,6 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JDK)
-AC_SUBST(x_JAVALIB)
 
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
 if test -n "$with_idlc_cpp"; then
