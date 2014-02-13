@@ -1652,7 +1652,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             // then pBox received nodes from elsewhere.
             // If bNodesMoved is set for pBox the undo must move the
             // boxes back, otherwise it must delete them.
-            sal_Bool bNodesMoved =
+            sal_Bool bNodesMoved = pSourceBox &&
                 ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
                               pSourceBox->GetSttIdx() ) )
                 && ( nNodes - 1 > nLineDiff );
