@@ -272,6 +272,19 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 
+sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( hashCode64_WithLength )( const IMPL_RTL_STRCODE* pStr,
+                                                               sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
+{
+    sal_uInt64 nHash = 0;
+
+    for( sal_Int32 i = 0; i < nLen; i++ )
+        nHash = (nHash << 5) - nHash + *pStr++;
+    return nHash;
+}
+
+/* ----------------------------------------------------------------------- */
+
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                             sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
