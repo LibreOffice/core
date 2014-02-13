@@ -1957,8 +1957,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
         m_pAtVertPosFT->Enable( bEnable );
     }
 
-    if (pLB)    // only when Handler was called by changing of the controller
-        RangeModifyHdl( 0 );
+    RangeModifyHdl( 0 );
 
     sal_uInt16 nRel = 0;
     if (pLB->GetSelectEntryCount())
