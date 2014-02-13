@@ -31,6 +31,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/solar.h>
+#include <rtl/strbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2051,4 +2052,26 @@ SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
         return bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*_pPool);
 }
 
+// -----------------------------------------------------------------------
+
+sal_uInt64 SfxItemSet::getHash() const
+{
+    return stringify().hashCode64();
+}
+
+// -----------------------------------------------------------------------
+
+OString SfxItemSet::stringify() const
+{
+    rtl::OStringBuffer aString(100);
+    SvMemoryStream aStream;
+    OString aLine;
+    SfxItemSet aSet(*this);
+    aSet.InvalidateDefaultItems();
+    aSet.Store(aStream, true);
+    aStream.Flush();
+    aString.append((const char *)aStream.GetData(), aStream.GetEndOfData());
+
+    return aString.makeStringAndClear();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
