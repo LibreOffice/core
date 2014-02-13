@@ -136,7 +136,7 @@ private:
     ScAccessiblePageHeader* mpHeader;
     ScAccessiblePageHeader* mpFooter;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 

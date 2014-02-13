@@ -1665,7 +1665,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const throw (uno::Ru
     return aRect;
 }
 
-sal_Bool ScAccessibleDocumentPagePreview::IsDefunc(
+bool ScAccessibleDocumentPagePreview::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || !getAccessibleParent().is() ||
