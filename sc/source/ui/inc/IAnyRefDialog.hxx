@@ -37,11 +37,11 @@ public:
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-    virtual void RefInputDone( sal_Bool bForced = false ) = 0;
-    virtual sal_Bool IsTableLocked() const = 0;
-    virtual sal_Bool IsRefInputMode() const = 0;
+    virtual void RefInputDone( bool bForced = false ) = 0;
+    virtual bool IsTableLocked() const = 0;
+    virtual bool IsRefInputMode() const = 0;
 
-    virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const = 0;
+    virtual bool IsDocAllowed( SfxObjectShell* pDocSh ) const = 0;
     virtual void AddRefEntry() = 0;
     virtual void SetActive() = 0;
     virtual void ViewShellChanged() = 0;

@@ -68,7 +68,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( sal_Bool bForced = false );
+    virtual void    RefInputDone( bool bForced = false );
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -77,7 +77,7 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual sal_Bool    IsRefInputMode() const;
+    virtual bool    IsRefInputMode() const;
     virtual void    SetActive();
     virtual sal_Bool    Close();
 

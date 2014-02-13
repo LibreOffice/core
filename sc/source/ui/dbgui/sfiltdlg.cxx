@@ -279,7 +279,7 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
+bool ScSpecialFilterDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }

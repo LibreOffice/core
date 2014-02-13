@@ -382,7 +382,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 //------------------------------------------------------------------------
 
 
-sal_Bool ScDbNameDlg::IsRefInputMode() const
+bool ScDbNameDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }

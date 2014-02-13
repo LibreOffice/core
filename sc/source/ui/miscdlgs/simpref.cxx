@@ -145,9 +145,9 @@ void ScSimpleRefDlg::SetActive()
     RefInputDone();
 }
 //------------------------------------------------------------------------
-sal_Bool ScSimpleRefDlg::IsRefInputMode() const
+bool ScSimpleRefDlg::IsRefInputMode() const
 {
-    return sal_True;
+    return true;
 }
 
 OUString ScSimpleRefDlg::GetRefString() const
@@ -187,7 +187,7 @@ void ScSimpleRefDlg::StartRefInput()
     bCloseFlag=sal_True;
 }
 
-void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
+void ScSimpleRefDlg::RefInputDone( bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )

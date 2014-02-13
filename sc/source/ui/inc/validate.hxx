@@ -153,7 +153,7 @@ public:
             (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
-    virtual void        RefInputDone( sal_Bool bForced = false )
+    virtual void        RefInputDone( bool bForced = false )
     {
         if( !CanInputDone( bForced ) )
             return;

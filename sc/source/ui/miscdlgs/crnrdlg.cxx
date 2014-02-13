@@ -661,7 +661,7 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bCo
 #*
 #************************************************************************/
 
-sal_Bool ScColRowNameRangesDlg::IsRefInputMode() const
+bool ScColRowNameRangesDlg::IsRefInputMode() const
 {
     return (pEdActive != NULL);
 }

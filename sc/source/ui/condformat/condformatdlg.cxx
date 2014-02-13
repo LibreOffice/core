@@ -437,20 +437,20 @@ void ScCondFormatDlg::SetActive()
     RefInputDone();
 }
 
-void ScCondFormatDlg::RefInputDone( sal_Bool bForced )
+void ScCondFormatDlg::RefInputDone( bool bForced )
 {
     ScAnyRefModalDlg::RefInputDone(bForced);
 }
 
-sal_Bool ScCondFormatDlg::IsTableLocked() const
+bool ScCondFormatDlg::IsTableLocked() const
 {
     if (mpLastEdit && mpLastEdit != mpEdRange)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScCondFormatDlg::IsRefInputMode() const
+bool ScCondFormatDlg::IsRefInputMode() const
 {
     return mpEdRange->IsEnabled();
 }

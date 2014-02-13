@@ -101,7 +101,7 @@ public:
                     ~ScOptSolverDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const;
+    virtual bool    IsRefInputMode() const;
     virtual void    SetActive();
     virtual sal_Bool    Close();
 

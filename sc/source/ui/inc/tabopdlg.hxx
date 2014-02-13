@@ -51,7 +51,7 @@ public:
                     ~ScTabOpDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const { return sal_True; }
+    virtual bool    IsRefInputMode() const { return true; }
     virtual void    SetActive();
 
     virtual sal_Bool    Close();

@@ -41,7 +41,7 @@ public:
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual void    AddRefEntry();
 
-    virtual sal_Bool    IsTableLocked() const;
+    virtual bool    IsTableLocked() const;
 
     virtual void    SetActive();
     virtual void    Deactivate();

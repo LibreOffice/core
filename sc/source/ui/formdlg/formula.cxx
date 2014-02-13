@@ -381,7 +381,8 @@ void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
     m_aHelper.RefInputStart( aPair.second, aPair.first);
     RefInputStartAfter( aPair.second, aPair.first );
 }
-void ScFormulaDlg::RefInputDone( sal_Bool bForced )
+
+void ScFormulaDlg::RefInputDone( bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
     RefInputDoneAfter( bForced );
@@ -447,21 +448,21 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
     }
 }
 
-sal_Bool ScFormulaDlg::IsRefInputMode() const
+bool ScFormulaDlg::IsRefInputMode() const
 {
     const IFunctionDescription* pDesc = getCurrentFunctionDescription();
-    sal_Bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
+    bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
     return bRef;
 }
 
-sal_Bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
+bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 {
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
     if ( pDocSh && ((ScDocShell*)pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
         return false;
 
-    return sal_True;        // everything else is allowed
+    return true;        // everything else is allowed
 }
 
 void ScFormulaDlg::SetActive()
@@ -512,7 +513,7 @@ void ScFormulaDlg::AddRefEntry( )
 {
 
 }
-sal_Bool ScFormulaDlg::IsTableLocked( ) const
+bool ScFormulaDlg::IsTableLocked( ) const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
     return false;

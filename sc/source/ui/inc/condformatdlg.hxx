@@ -107,7 +107,7 @@ private:
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
 
-    virtual void RefInputDone( sal_Bool bForced = false );
+    virtual void RefInputDone( bool bForced = false );
 
 
 public:
@@ -118,9 +118,9 @@ public:
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 
     virtual void SetReference(const ScRange&, ScDocument*);
-    virtual sal_Bool IsRefInputMode() const;
+    virtual bool IsRefInputMode() const;
     virtual void SetActive();
-    virtual sal_Bool IsTableLocked() const;
+    virtual bool IsTableLocked() const;
 
     void InvalidateRefData();
 

@@ -171,12 +171,12 @@ sal_Bool ScPrintAreasDlg::Close()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScPrintAreasDlg::IsTableLocked() const
+bool ScPrintAreasDlg::IsTableLocked() const
 {
     //  Druckbereiche gelten pro Tabelle, darum macht es keinen Sinn,
     //  bei der Eingabe die Tabelle umzuschalten
 
-    return sal_True;
+    return true;
 }
 
 

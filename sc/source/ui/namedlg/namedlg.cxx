@@ -155,12 +155,12 @@ void ScNameDlg::Init()
 
 }
 
-sal_Bool ScNameDlg::IsRefInputMode() const
+bool ScNameDlg::IsRefInputMode() const
 {
     return m_pEdAssign->IsEnabled();
 }
 
-void ScNameDlg::RefInputDone( sal_Bool bForced)
+void ScNameDlg::RefInputDone( bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(m_pEdAssign);

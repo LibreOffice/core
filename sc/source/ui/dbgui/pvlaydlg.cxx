@@ -1392,7 +1392,7 @@ void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
     }
 }
 
-sal_Bool ScPivotLayoutDlg::IsRefInputMode() const
+bool ScPivotLayoutDlg::IsRefInputMode() const
 {
     return mbRefInputMode;
 }

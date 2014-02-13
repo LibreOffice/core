@@ -185,7 +185,7 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::IsRefInputMode() const
+bool ScSolverDlg::IsRefInputMode() const
 {
     return pEdActive != NULL;
 }

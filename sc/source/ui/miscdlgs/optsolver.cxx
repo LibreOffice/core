@@ -528,7 +528,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScOptSolverDlg::IsRefInputMode() const
+bool ScOptSolverDlg::IsRefInputMode() const
 {
     return mpEdActive != NULL;
 }

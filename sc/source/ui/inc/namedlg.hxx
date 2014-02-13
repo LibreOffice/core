@@ -119,7 +119,7 @@ private:
     DECL_LINK( ScopeChangedHdl, void* );
 
 protected:
-    virtual void    RefInputDone( sal_Bool bForced = sal_False );
+    virtual void    RefInputDone( bool bForced = false );
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -128,7 +128,7 @@ public:
     virtual         ~ScNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const;
+    virtual bool    IsRefInputMode() const;
 
     virtual void    SetActive();
     virtual sal_Bool    Close();

@@ -118,7 +118,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mpBtnSelectSource->GrabFocus(); // Initial focus is on the select source button.
 }
 
-sal_Bool ScXMLSourceDlg::IsRefInputMode() const
+bool ScXMLSourceDlg::IsRefInputMode() const
 {
     return mpActiveEdit != NULL && mpActiveEdit->IsEnabled();
 }

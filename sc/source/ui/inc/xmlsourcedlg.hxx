@@ -58,7 +58,7 @@ public:
     ScXMLSourceDlg(
         SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc);
 
-    virtual sal_Bool IsRefInputMode() const;
+    virtual bool IsRefInputMode() const;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);
     virtual void Deactivate();
     virtual void SetActive();

@@ -135,7 +135,7 @@ protected:
     void                SetDispatcherLock( bool bLock );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void        RefInputDone( sal_Bool bForced = false );
+    virtual void        RefInputDone( bool bForced = false );
     void                ShowSimpleReference(const OUString& rStr);
     void                ShowFormulaReference(const OUString& rStr);
 
@@ -151,9 +151,9 @@ public:
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void        AddRefEntry();
 
-    virtual sal_Bool        IsRefInputMode() const;
-    virtual sal_Bool        IsTableLocked() const;
-    virtual sal_Bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual bool        IsRefInputMode() const;
+    virtual bool        IsTableLocked() const;
+    virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
     virtual void        ShowReference(const OUString& rStr);
     virtual void        HideReference( sal_Bool bDoneRefMode = sal_True );

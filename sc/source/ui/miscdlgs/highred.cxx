@@ -155,7 +155,7 @@ sal_Bool ScHighlightChgDlg::Close()
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }
 
-void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
+void ScHighlightChgDlg::RefInputDone( bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if(bForced || !m_pRbAssign->IsVisible())
@@ -171,7 +171,7 @@ void ScHighlightChgDlg::SetActive()
 {
 }
 
-sal_Bool ScHighlightChgDlg::IsRefInputMode() const
+bool ScHighlightChgDlg::IsRefInputMode() const
 {
     return m_pEdAssign->IsVisible();
 }

@@ -890,7 +890,7 @@ void ScRefHandler::SwitchToDocument()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
+bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
     //  default: allow only same document (overridden in function dialog)
     OUString aCmpName;
@@ -903,7 +903,7 @@ sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh ma
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScRefHandler::IsRefInputMode() const
+bool ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
@@ -937,7 +937,7 @@ void ScRefHandler::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScRefHandler::IsTableLocked() const
+bool ScRefHandler::IsTableLocked() const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
 
@@ -1024,7 +1024,7 @@ void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pB
     m_aHelper.ReleaseFocus( pEdit,pButton );
 }
 //----------------------------------------------------------------------------
-void ScRefHandler::RefInputDone( sal_Bool bForced )
+void ScRefHandler::RefInputDone( bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
 }

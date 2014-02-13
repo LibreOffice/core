@@ -270,12 +270,12 @@ void ScNameDefDlg::GetNewData(OUString& rName, OUString& rScope)
     rScope = maScope;
 }
 
-sal_Bool ScNameDefDlg::IsRefInputMode() const
+bool ScNameDefDlg::IsRefInputMode() const
 {
     return m_pEdRange->IsEnabled();
 }
 
-void ScNameDefDlg::RefInputDone( sal_Bool bForced)
+void ScNameDefDlg::RefInputDone( bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     IsNameValid();

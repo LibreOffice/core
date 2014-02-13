@@ -92,11 +92,11 @@ public:
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void RefInputDone( sal_Bool bForced = false );
-    virtual sal_Bool IsTableLocked() const;
-    virtual sal_Bool IsRefInputMode() const;
+    virtual void RefInputDone( bool bForced = false );
+    virtual bool IsTableLocked() const;
+    virtual bool IsRefInputMode() const;
 
-    virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual bool IsDocAllowed( SfxObjectShell* pDocSh ) const;
     virtual void AddRefEntry();
     virtual void SetActive();
     virtual void ViewShellChanged();
