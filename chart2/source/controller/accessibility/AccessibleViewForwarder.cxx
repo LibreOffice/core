@@ -40,9 +40,9 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 
 // ________ IAccessibleViewforwarder ________
 
-sal_Bool AccessibleViewForwarder::IsValid() const
+bool AccessibleViewForwarder::IsValid() const
 {
-    return sal_True;
+    return true;
 }
 
 Rectangle AccessibleViewForwarder::GetVisibleArea() const

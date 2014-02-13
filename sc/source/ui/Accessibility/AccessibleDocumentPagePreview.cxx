@@ -512,7 +512,7 @@ public:
 
     ///=====  IAccessibleViewForwarder  ========================================
 
-    virtual sal_Bool IsValid (void) const;
+    virtual bool IsValid (void) const;
     virtual Rectangle GetVisibleArea() const;
     virtual Point LogicToPixel (const Point& rPoint) const;
     virtual Size LogicToPixel (const Size& rSize) const;
@@ -547,7 +547,7 @@ ScIAccessibleViewForwarder::~ScIAccessibleViewForwarder()
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-sal_Bool ScIAccessibleViewForwarder::IsValid (void) const
+bool ScIAccessibleViewForwarder::IsValid (void) const
 {
     SolarMutexGuard aGuard;
     return mbValid;

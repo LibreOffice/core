@@ -898,9 +898,9 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
 
 //=====  IAccessibleViewforwarder  ========================================
 
-sal_Bool SvxGraphCtrlAccessibleContext::IsValid (void) const
+bool SvxGraphCtrlAccessibleContext::IsValid (void) const
 {
-    return sal_True;
+    return true;
 }
 
 //-----------------------------------------------------------------------------

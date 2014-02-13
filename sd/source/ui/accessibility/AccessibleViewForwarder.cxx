@@ -62,9 +62,9 @@ AccessibleViewForwarder::~AccessibleViewForwarder (void)
 
 
 
-sal_Bool AccessibleViewForwarder::IsValid (void) const
+bool AccessibleViewForwarder::IsValid (void) const
 {
-    return sal_True;
+    return true;
 }
 
 

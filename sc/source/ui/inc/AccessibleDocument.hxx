@@ -204,7 +204,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual sal_Bool IsValid (void) const;
+    virtual bool IsValid (void) const;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
@@ -296,7 +296,7 @@ private:
     ScAccessibleEditObject* mpTempAccEdit;
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> mxTempAcc;
     Rectangle maVisArea;
-    sal_Bool mbCompleteSheetSelected;
+    bool mbCompleteSheetSelected;
 
 public:
     SCTAB getVisibleTable() const; // use it in ScChildrenShapes
@@ -304,17 +304,17 @@ public:
 private:
     void FreeAccessibleSpreadsheet();
 
-    sal_Bool IsTableSelected() const;
+    bool IsTableSelected() const;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsEditable(
+    bool IsEditable(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
-    void AddChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
-    void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
+    void AddChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, bool bFireEvent);
+    void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, bool bFireEvent);
 
     OUString GetCurrentCellName() const;
     OUString GetCurrentCellDescription() const;

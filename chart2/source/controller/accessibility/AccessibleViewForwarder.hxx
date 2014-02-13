@@ -36,7 +36,7 @@ public:
     virtual ~AccessibleViewForwarder();
 
     // ________ IAccessibleViewforwarder ________
-    virtual sal_Bool IsValid() const;
+    virtual bool IsValid() const;
     virtual Rectangle GetVisibleArea() const;
     virtual Point LogicToPixel( const Point& rPoint ) const;
     virtual Size LogicToPixel( const Size& rSize ) const;

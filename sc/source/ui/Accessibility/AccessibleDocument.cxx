@@ -1496,7 +1496,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
                 Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
-                    AddChild( pChildWin->GetAccessible(), sal_True );
+                    AddChild( pChildWin->GetAccessible(), true );
                 }
             }
             break;
@@ -1505,7 +1505,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
                 Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
-                    RemoveChild( pChildWin->GetAccessible(), sal_True );
+                    RemoveChild( pChildWin->GetAccessible(), true );
                 }
             }
             break;
@@ -1605,7 +1605,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
                     uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
-                    AddChild(xAcc, sal_True);
+                    AddChild(xAcc, true);
 
                     if (mpAccessibleSpreadsheet)
                         mpAccessibleSpreadsheet->LostFocus();
@@ -1624,7 +1624,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     mpTempAccEdit->LostFocus();
 
                 mpTempAccEdit = NULL;
-                RemoveChild(mxTempAcc, sal_True);
+                RemoveChild(mxTempAcc, true);
                 if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
                 else if( mpViewShell->IsActive())
@@ -1668,7 +1668,7 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
     sal_Bool bSelectionChanged(false);
     if (mpAccessibleSpreadsheet)
     {
-        sal_Bool bOldSelected(mbCompleteSheetSelected);
+        bool bOldSelected(mbCompleteSheetSelected);
         mbCompleteSheetSelected = IsTableSelected();
         if (bOldSelected != mbCompleteSheetSelected)
         {
@@ -2112,7 +2112,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-sal_Bool ScAccessibleDocument::IsValid (void) const
+bool ScAccessibleDocument::IsValid (void) const
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2280,9 +2280,9 @@ void ScAccessibleDocument::FreeAccessibleSpreadsheet()
     }
 }
 
-sal_Bool ScAccessibleDocument::IsTableSelected() const
+bool ScAccessibleDocument::IsTableSelected() const
 {
-    sal_Bool bResult (false);
+    bool bResult (false);
     if(mpViewShell)
     {
         SCTAB nTab(getVisibleTable());
@@ -2290,26 +2290,26 @@ sal_Bool ScAccessibleDocument::IsTableSelected() const
         ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
         aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked(ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))))
-            bResult = sal_True;
+            bResult = true;
     }
     return bResult;
 }
 
-sal_Bool ScAccessibleDocument::IsDefunc(
+bool ScAccessibleDocument::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
-sal_Bool ScAccessibleDocument::IsEditable(
+bool ScAccessibleDocument::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // what is with document protection or readonly documents?
-    return sal_True;
+    return true;
 }
 
-void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
+void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)
 {
     OSL_ENSURE(!mxTempAcc.is(), "this object should be removed before");
     if (xAcc.is())
@@ -2326,7 +2326,7 @@ void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, sal
     }
 }
 
-void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
+void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)
 {
     OSL_ENSURE(mxTempAcc.is(), "this object should be added before");
     if (xAcc.is())

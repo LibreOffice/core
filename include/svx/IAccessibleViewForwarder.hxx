@@ -60,7 +60,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual sal_Bool IsValid (void) const = 0;
+    virtual bool IsValid (void) const = 0;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.

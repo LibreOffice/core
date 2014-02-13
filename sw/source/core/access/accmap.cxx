@@ -3137,9 +3137,9 @@ void SwAccessibleMap::FireEvents()
 
 }
 
-sal_Bool SwAccessibleMap::IsValid() const
+bool SwAccessibleMap::IsValid() const
 {
-    return sal_True;
+    return true;
 }
 
 Rectangle SwAccessibleMap::GetVisibleArea() const
