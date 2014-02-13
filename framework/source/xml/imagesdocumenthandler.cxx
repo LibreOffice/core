@@ -165,7 +165,9 @@ throw(  SAXException, RuntimeException )
 
 void SAL_CALL OReadImagesDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException )
+        throw(SAXException,
+              RuntimeException,
+              std::exception)
 {
     ResetableGuard aGuard( m_aLock );
 
