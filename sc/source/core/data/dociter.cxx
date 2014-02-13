@@ -67,6 +67,14 @@ void incBlock(std::pair<_Iter, size_t>& rPos)
 }
 
 template<typename _Iter>
+void decBlock(std::pair<_Iter, size_t>& rPos)
+{
+    // Move to the last element of the previous block.
+    --rPos.first;
+    rPos.second = rPos.first->size - 1;
+}
+
+template<typename _Iter>
 void incPos(std::pair<_Iter, size_t>& rPos)
 {
     if (rPos.second + 1 < rPos.first->size)
@@ -1439,6 +1447,204 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     return (nFoundCol <= MAXCOL) && (nFoundRow <= MAXROW);
 }
 
+namespace {
+
+/**
+ * This class sequentially indexes non-empty cells in order, from the top of
+ * the block where the start row position is, to the bottom of the block
+ * where the end row position is.  It skips all empty blocks that may be
+ * present in between.
+ *
+ * The index value is an offset from the first element of the first block
+ * disregarding all empty cell blocks.
+ */
+class NonEmptyCellIndexer
+{
+    typedef std::map<size_t, sc::CellStoreType::const_iterator> BlockMapType;
+
+    BlockMapType maBlockMap;
+
+    const sc::CellStoreType& mrCells;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
+
+    size_t mnLowIndex;
+    size_t mnHighIndex;
+
+    bool mbValid;
+
+public:
+
+    typedef std::pair<ScRefCellValue, SCROW> CellType;
+
+    /**
+     * @param rCells cell storage container
+     * @param nStartRow logical start row position
+     * @param nEndRow logical end row position, inclusive.
+     * @param bSkipTopStrBlock when true, skip all leading string cells.
+     */
+    NonEmptyCellIndexer(
+        const sc::CellStoreType& rCells, SCROW nStartRow, SCROW nEndRow, bool bSkipTopStrBlock ) :
+        mrCells(rCells), mnStartRow(nStartRow), mnEndRow(nEndRow), mnLowIndex(0), mnHighIndex(0), mbValid(true)
+    {
+        if (nEndRow < nStartRow)
+        {
+            mbValid = false;
+            return;
+        }
+
+        // Find the low position.
+
+        sc::CellStoreType::const_position_type aLoPos = mrCells.position(nStartRow);
+        if (aLoPos.first->type == sc::element_type_empty)
+            incBlock(aLoPos);
+
+        if (aLoPos.first == rCells.end())
+        {
+            mbValid = false;
+            return;
+        }
+
+        if (bSkipTopStrBlock)
+        {
+            // Skip all leading string or empty blocks.
+            while (aLoPos.first->type == sc::element_type_string ||
+                   aLoPos.first->type == sc::element_type_edittext ||
+                   aLoPos.first->type == sc::element_type_empty)
+            {
+                incBlock(aLoPos);
+                if (aLoPos.first == rCells.end())
+                {
+                    mbValid = false;
+                    return;
+                }
+            }
+        }
+
+        SCROW nFirstRow = aLoPos.first->position;
+        SCROW nLastRow = aLoPos.first->position + aLoPos.first->size - 1;
+
+        if (nFirstRow > nEndRow)
+        {
+            // Both start and end row positions are within the leading skipped
+            // blocks.
+            mbValid = false;
+            return;
+        }
+
+        // Calculate the index of the low position.
+        if (nFirstRow < nStartRow)
+            mnLowIndex = nStartRow - nFirstRow;
+        else
+        {
+            // Start row is within the skipped block(s). Set it to the first
+            // element of the low block.
+            mnLowIndex = 0;
+        }
+
+        if (nEndRow < nLastRow)
+        {
+            assert(nEndRow > nFirstRow);
+            mnHighIndex = nEndRow - nFirstRow;
+
+            maBlockMap.insert(BlockMapType::value_type(aLoPos.first->size, aLoPos.first));
+            return;
+        }
+
+        // Find the high position.
+
+        sc::CellStoreType::const_position_type aHiPos = mrCells.position(aLoPos.first, nEndRow);
+        if (aHiPos.first->type == sc::element_type_empty)
+        {
+            // Move to the last position of the previous block.
+            decBlock(aHiPos);
+
+            if (aHiPos.first == mrCells.begin())
+            {
+                mbValid = false;
+                return;
+            }
+        }
+
+        // Tag the start and end blocks, and all blocks in between in order
+        // but skip all empty blocks.
+
+        size_t nPos = 0;
+        sc::CellStoreType::const_iterator itBlk = aLoPos.first;
+        while (itBlk != aHiPos.first)
+        {
+            if (itBlk->type == sc::element_type_empty)
+            {
+                ++itBlk;
+                continue;
+            }
+
+            nPos += itBlk->size;
+            maBlockMap.insert(BlockMapType::value_type(nPos, itBlk));
+            ++itBlk;
+
+            if (itBlk->type == sc::element_type_empty)
+                ++itBlk;
+
+            assert(itBlk != mrCells.end());
+        }
+
+        assert(itBlk == aHiPos.first);
+        nPos += itBlk->size;
+        maBlockMap.insert(BlockMapType::value_type(nPos, itBlk));
+
+        // Calculate the high index.
+        BlockMapType::const_reverse_iterator ri = maBlockMap.rbegin();
+        mnHighIndex = ri->first;
+        mnHighIndex -= ri->second->size;
+        mnHighIndex += aHiPos.second;
+    }
+
+    sc::CellStoreType::const_position_type getPosition( size_t nIndex ) const
+    {
+        assert(mbValid);
+        assert(mnLowIndex <= nIndex);
+        assert(nIndex <= mnHighIndex);
+
+        sc::CellStoreType::const_position_type aRet(mrCells.end(), 0);
+
+        BlockMapType::const_iterator it = maBlockMap.upper_bound(nIndex);
+        if (it == maBlockMap.end())
+            return aRet;
+
+        sc::CellStoreType::const_iterator itBlk = it->second;
+        size_t nBlkIndex = it->first - itBlk->size; // index of the first element of the block.
+        assert(nBlkIndex <= nIndex);
+        assert(nIndex < it->first);
+
+        size_t nOffset = nIndex - nBlkIndex;
+        aRet.first = itBlk;
+        aRet.second = nOffset;
+        return aRet;
+    }
+
+    CellType getCell( size_t nIndex ) const
+    {
+        std::pair<ScRefCellValue, SCROW> aRet;
+        aRet.second = -1;
+
+        sc::CellStoreType::const_position_type aPos = getPosition(nIndex);
+        if (aPos.first == mrCells.end())
+            return aRet;
+
+        aRet.first = sc::toRefCell(aPos.first, aPos.second);
+        aRet.second = aPos.first->position + aPos.second;
+        return aRet;
+    }
+
+    size_t getLowIndex() const { return mnLowIndex; }
+
+    size_t getHighIndex() const { return mnHighIndex; }
+
+    bool isValid() const { return mbValid; }
+};
+
+}
 
 bool ScQueryCellIterator::BinarySearch()
 {
@@ -1450,9 +1656,6 @@ bool ScQueryCellIterator::BinarySearch()
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;
-
-    PositionType aHiPos, aLoPos;
-    ScRefCellValue aCell;
 
     CollatorWrapper* pCollator = (mpParam->bCaseSens ? ScGlobal::GetCaseCollator() :
         ScGlobal::GetCollator());
@@ -1467,78 +1670,67 @@ bool ScQueryCellIterator::BinarySearch()
 
     nRow = mpParam->nRow1;
     if (mpParam->bHasHeader)
-        nRow++;
+        ++nRow;
 
-    aLoPos = pCol->maCells.position(nRow);
-    if (bFirstStringIgnore && aLoPos.first->type == sc::element_type_string)
+    ScRefCellValue aCell;
+    if (bFirstStringIgnore)
     {
-        OUString aCellStr;
-        sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLoPos));
-        aCell = sc::toRefCell(aLoPos.first, aLoPos.second);
-        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
-        sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
-        if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
-                (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
-                (rEntry.eOp == SC_EQUAL && nTmp != 0))
+        sc::CellStoreType::const_position_type aPos = pCol->maCells.position(nRow);
+        if (aPos.first->type == sc::element_type_string || aPos.first->type == sc::element_type_edittext)
         {
-            // Skip the first string value at low point.
-            incPos(aLoPos);
+            aCell = sc::toRefCell(aPos.first, aPos.second);
+            sal_uLong nFormat = pCol->GetNumberFormat(nRow);
+            OUString aCellStr;
+            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
+            sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
+            if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
+                    (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
+                    (rEntry.eOp == SC_EQUAL && nTmp != 0))
+                ++nRow;
         }
     }
 
-    aHiPos = pCol->maCells.position(mpParam->nRow2);
-    if (bAllStringIgnore)
-    {
-        // Skip all string cells, but never go past the high point.
-        if (aLoPos.first->type == sc::element_type_string)
-        {
-            if (aLoPos.first == pCol->maCells.end())
-                // This is the last block. Move to the last element in this block.
-                aLoPos.second = aLoPos.first->size - 1;
-            else
-                // Move to the next block.
-                incBlock(aLoPos);
-        }
+    NonEmptyCellIndexer aIndexer(pCol->maCells, nRow, mpParam->nRow2, bAllStringIgnore);
+    if (!aIndexer.isValid())
+        return false;
 
-        if (toLogicalPos(aLoPos) > toLogicalPos(aHiPos))
-            // Never go past the high point.
-            aLoPos = aHiPos;
-    }
+    size_t nLo = aIndexer.getLowIndex();
+    size_t nHi = aIndexer.getHighIndex();
+    NonEmptyCellIndexer::CellType aCellData;
 
     // Bookkeeping values for breaking up the binary search in case the data
     // range isn't strictly sorted.
-    PositionType aLastInRange = aLoPos;
-    PositionType aFirstLastInRange = aLastInRange;
+    size_t nLastInRange = nLo;
+    size_t nFirstLastInRange = nLastInRange;
     double fLastInRangeValue = bLessEqual ?
         -(::std::numeric_limits<double>::max()) :
             ::std::numeric_limits<double>::max();
     OUString aLastInRangeString;
     if (!bLessEqual)
         aLastInRangeString = OUString(sal_Unicode(0xFFFF));
-    if (aLastInRange.first != pCol->maCells.end())
+
+    aCellData = aIndexer.getCell(nLastInRange);
+    aCell = aCellData.first;
+    if (aCell.hasString())
     {
-        aCell = sc::toRefCell(aLastInRange.first, aLastInRange.second);
-        if (aCell.hasString())
+        sal_uLong nFormat = pCol->GetNumberFormat(aCellData.second);
+        OUString aStr;
+        ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
+        aLastInRangeString = aStr;
+    }
+    else
+    {
+        switch (aCell.meType)
         {
-            sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLastInRange));
-            OUString aStr;
-            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
-            aLastInRangeString = aStr;
-        }
-        else
-        {
-            switch (aCell.meType)
+            case CELLTYPE_VALUE :
+                fLastInRangeValue = aCell.mfValue;
+            break;
+            case CELLTYPE_FORMULA :
+                fLastInRangeValue = aCell.mpFormula->GetValue();
+            break;
+            default:
             {
-                case CELLTYPE_VALUE :
-                    fLastInRangeValue = aCell.mfValue;
-                break;
-                case CELLTYPE_FORMULA :
-                    fLastInRangeValue = aCell.mpFormula->GetValue();
-                break;
-                default:
-                {
-                    // added to avoid warnings
-                }
+                // added to avoid warnings
             }
         }
     }
@@ -1546,38 +1738,22 @@ bool ScQueryCellIterator::BinarySearch()
     sal_Int32 nRes = 0;
     bool bFound = false;
     bool bDone = false;
-    size_t nLogicalLow = toLogicalPos(aLoPos), nLogicalHigh = toLogicalPos(aHiPos);
-    while (nLogicalLow <= nLogicalHigh && !bDone)
+    while (nLo <= nHi && !bDone)
     {
-        size_t nMid = (nLogicalLow+nLogicalHigh)/2;
+        size_t nMid = (nLo+nHi)/2;
         size_t i = nMid;
-        if (i > nLogicalHigh)
+        if (i > nHi)
         {
             if (nMid > 0)
-                nLogicalHigh = nMid - 1;
+                nHi = nMid - 1;
             else
                 bDone = true;
             continue; // while
         }
 
-        bool bHaveRefCell = false;
-        PositionType aPos = pCol->maCells.position(i);
-        bool bStr;
-        switch (aPos.first->type)
-        {
-            case sc::element_type_formula:
-                aCell = sc::toRefCell(aPos.first, aPos.second);
-                bHaveRefCell = true;
-                bStr = aCell.hasString();
-                break;
-            case sc::element_type_string:
-            case sc::element_type_edittext:
-                bStr = true;
-                break;
-            default:
-                bStr = false;
-                break;
-        }
+        aCellData = aIndexer.getCell(i);
+        aCell = aCellData.first;
+        bool bStr = aCell.hasString();
         nRes = 0;
 
         // compares are content<query:-1, content>query:1
@@ -1585,16 +1761,12 @@ bool ScQueryCellIterator::BinarySearch()
         if (!bStr && !bByString)
         {
             double nCellVal;
-            if (!bHaveRefCell)
-                aCell = sc::toRefCell(aPos.first, aPos.second);
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
-                    nCellVal = aCell.mfValue;
-                    break;
                 case CELLTYPE_FORMULA :
-                    nCellVal = aCell.mpFormula->GetValue();
-                    break;
+                    nCellVal = aCell.getValue();
+                break;
                 default:
                     nCellVal = 0.0;
             }
@@ -1607,12 +1779,12 @@ bool ScQueryCellIterator::BinarySearch()
                     if (fLastInRangeValue < nCellVal)
                     {
                         fLastInRangeValue = nCellVal;
-                        aLastInRange = aPos;
+                        nLastInRange = i;
                     }
                     else if (fLastInRangeValue > nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
-                        aLastInRange = aFirstLastInRange;
+                        nLastInRange = nFirstLastInRange;
                         bDone = true;
                     }
                 }
@@ -1626,12 +1798,12 @@ bool ScQueryCellIterator::BinarySearch()
                     if (fLastInRangeValue > nCellVal)
                     {
                         fLastInRangeValue = nCellVal;
-                        aLastInRange = aPos;
+                        nLastInRange = i;
                     }
                     else if (fLastInRangeValue < nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
-                        aLastInRange = aFirstLastInRange;
+                        nLastInRange = nFirstLastInRange;
                         bDone = true;
                     }
                 }
@@ -1640,9 +1812,7 @@ bool ScQueryCellIterator::BinarySearch()
         else if (bStr && bByString)
         {
             OUString aCellStr;
-            sal_uLong nFormat = pCol->GetNumberFormat(i);
-            if (!bHaveRefCell)
-                aCell = sc::toRefCell(aPos.first, aPos.second);
+            sal_uLong nFormat = pCol->GetNumberFormat(aCellData.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
@@ -1653,12 +1823,12 @@ bool ScQueryCellIterator::BinarySearch()
                 if (nTmp < 0)
                 {
                     aLastInRangeString = aCellStr;
-                    aLastInRange = aPos;
+                    nLastInRange = i;
                 }
                 else if (nTmp > 0)
                 {
                     // not strictly sorted, continue with GetThis()
-                    aLastInRange = aFirstLastInRange;
+                    nLastInRange = nFirstLastInRange;
                     bDone = true;
                 }
             }
@@ -1669,12 +1839,12 @@ bool ScQueryCellIterator::BinarySearch()
                 if (nTmp > 0)
                 {
                     aLastInRangeString = aCellStr;
-                    aLastInRange = aPos;
+                    nLastInRange = i;
                 }
                 else if (nTmp < 0)
                 {
                     // not strictly sorted, continue with GetThis()
-                    aLastInRange = aFirstLastInRange;
+                    nLastInRange = nFirstLastInRange;
                     bDone = true;
                 }
             }
@@ -1683,22 +1853,22 @@ bool ScQueryCellIterator::BinarySearch()
         {
             nRes = -1; // numeric < string
             if (bLessEqual)
-                aLastInRange = aPos;
+                nLastInRange = i;
         }
         else // if (bStr && !bByString)
         {
             nRes = 1; // string > numeric
             if (!bLessEqual)
-                aLastInRange = aPos;
+                nLastInRange = i;
         }
         if (nRes < 0)
         {
             if (bLessEqual)
-                nLogicalLow = nMid + 1;
+                nLo = nMid + 1;
             else // assumed to be SC_GREATER_EQUAL
             {
                 if (nMid > 0)
-                    nLogicalHigh = nMid - 1;
+                    nHi = nMid - 1;
                 else
                     bDone = true;
             }
@@ -1708,19 +1878,20 @@ bool ScQueryCellIterator::BinarySearch()
             if (bLessEqual)
             {
                 if (nMid > 0)
-                    nLogicalHigh = nMid - 1;
+                    nHi = nMid - 1;
                 else
                     bDone = true;
             }
             else // assumed to be SC_GREATER_EQUAL
-                nLogicalLow = nMid + 1;
+                nLo = nMid + 1;
         }
         else
         {
-            aLoPos = aPos;
+            nLo = i;
             bDone = bFound = true;
         }
     }
+
     if (!bFound)
     {
         // If all hits didn't result in a moving limit there's something
@@ -1731,13 +1902,14 @@ bool ScQueryCellIterator::BinarySearch()
         // Else, in case no exact match was found, we step back for a
         // subsequent GetThis() to find the last in range. Effectively this is
         // --nLo with nLastInRange == nLo-1. Both conditions combined yield:
-        aLoPos = aLastInRange;
+        nLo = nLastInRange;
     }
 
-    if (aLoPos.first != pCol->maCells.end() && toLogicalPos(aLoPos) <= static_cast<size_t>(mpParam->nRow2))
+    aCellData = aIndexer.getCell(nLo);
+    if (nLo <= nHi && aCellData.second <= mpParam->nRow2)
     {
-        nRow = toLogicalPos(aLoPos);
-        maCurPos = aLoPos;
+        nRow = aCellData.second;
+        maCurPos = aIndexer.getPosition(nLo);
         return true;
     }
     else
