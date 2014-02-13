@@ -106,7 +106,9 @@ public:
     // XAsynchronousExecutableDialog functions
     //------------------------------------------------------------------------------------
     virtual void SAL_CALL setDialogTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //------------------------------------------------------------------------------------
     // XFilePicker functions

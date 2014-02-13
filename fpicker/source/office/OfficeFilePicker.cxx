@@ -519,7 +519,9 @@ void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle ) throw (Ru
 }
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener )
+    throw (RuntimeException,
+           std::exception)
 {
     m_xDlgClosedListener = xListener;
     prepareDialog();
