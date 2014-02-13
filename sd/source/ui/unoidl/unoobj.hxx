@@ -56,7 +56,7 @@ private:
     void SetPresObj( sal_Bool bPresObj ) throw();
 
     bool IsEmptyPresObj() const throw();
-    void SetEmptyPresObj( bool bEmpty ) throw();
+    void SetEmptyPresObj(bool bEmpty) throw std::exception();
 
     sal_Bool IsMasterDepend() const throw();
     void SetMasterDepend( sal_Bool bDepend ) throw();
