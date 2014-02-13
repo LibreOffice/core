@@ -748,6 +748,8 @@ bool NumericField::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
+    else if (rKey == "spin-size")
+        SetSpinSize(rValue.toInt32());
     else
         return SpinField::set_property(rKey, rValue);
     return true;
