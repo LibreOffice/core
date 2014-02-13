@@ -47,7 +47,7 @@ ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         const uno::Reference<XAccessible>& rxParent,
         ScPreviewShell* pViewShell,
         const EditTextObject* pEditObj,
-        sal_Bool bHeader,
+        bool bHeader,
         SvxAdjust eAdjust)
         : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT),
         mpEditObj(pEditObj->Clone()),

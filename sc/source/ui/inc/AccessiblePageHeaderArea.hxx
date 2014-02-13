@@ -41,7 +41,7 @@ public:
         ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell,
         const EditTextObject* pEditObj,
-        sal_Bool bHeader,
+        bool bHeader,
         SvxAdjust eAdjust);
 protected:
     virtual ~ScAccessiblePageHeaderArea (void);
@@ -117,8 +117,8 @@ private:
     EditTextObject* mpEditObj;
     accessibility::AccessibleTextHelper* mpTextHelper;
     ScPreviewShell* mpViewShell;
-    sal_Bool mbHeader;
-    SvxAdjust meAdjust;
+    bool            mbHeader;
+    SvxAdjust       meAdjust;
 
     void CreateTextHelper();
 };
