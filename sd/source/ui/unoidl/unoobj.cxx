@@ -476,7 +476,8 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
            ::com::sun::star::beans::PropertyVetoException,
            ::com::sun::star::lang::IllegalArgumentException,
            ::com::sun::star::lang::WrappedTargetException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -853,7 +854,8 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
 }
 
 /** */
-SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const throw()
+SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const
+    throw (std::exception)
 {
     SdAnimationInfo* pInfo = NULL;
 
@@ -949,7 +951,7 @@ OUString SdXShape::GetPlaceholderText() const
 /** sets/reset the empty status of a presentation object
 */
 void SdXShape::SetEmptyPresObj(bool bEmpty)
-    throw std::exception()
+    throw (std::exception)
 {
     // only possible if this actually *is* a presentation object
     if( !IsPresObj() )
