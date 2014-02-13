@@ -23,7 +23,7 @@
 using namespace com::sun::star;
 
 
-sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeName )
+bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeName )
 {
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
@@ -39,7 +39,7 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCod
             if( aProps[i].Value >>= sCodeName )
             {
                 rCodeName = sCodeName;
-                return sal_True;
+                return true;
             }
         }
     }

@@ -31,7 +31,7 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper1< ::com::sun::star::co
     OUString msDocName;
     OUString msCodeNameProp;
 
-    static sal_Bool _getCodeName( const ::com::sun::star::uno::Any& aAny,
+    static bool _getCodeName( const ::com::sun::star::uno::Any& aAny,
                            OUString& rCodeName );
 
 public:
