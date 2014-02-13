@@ -24,7 +24,6 @@ core_factory_list = [
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
-    ("libfwklo.a", "fwk_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory"),

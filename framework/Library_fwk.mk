@@ -103,7 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/layoutmanager/uielement \
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
-    framework/source/register/registerservices \
     framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/autorecovery \
     framework/source/services/desktop \
