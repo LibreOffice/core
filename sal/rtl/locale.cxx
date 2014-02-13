@@ -316,7 +316,7 @@ sal_Int32 SAL_CALL rtl_locale_hashCode( rtl_Locale * This )
  */
 sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  )
 {
-    return sal_Int32(This == obj);
+    return This == obj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
