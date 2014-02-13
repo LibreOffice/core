@@ -46,6 +46,7 @@ public:
     void testFdo74115WallGradientFill();
     void testFdo74115WallBitmapFill();
     void testBarChartRotation();
+    void testColumnChartWithDataLabels();
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
 
@@ -66,6 +67,7 @@ public:
     // CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST(testBarChartRotation);
+    CPPUNIT_TEST(testColumnChartWithDataLabels);
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
     CPPUNIT_TEST_SUITE_END();
@@ -584,6 +586,16 @@ void Chart2ExportTest::testBarChartRotation()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", "30");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "50");
+}
+
+void Chart2ExportTest::testColumnChartWithDataLabels()
+{
+    load ("/chart2/qa/extras/data/docx/", "columnChartWithDataLbls.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser[2]/c:dLbls/c:showVal", "val", "1");
+
 }
 
 void Chart2ExportTest::testShapeFollowedByChart()
