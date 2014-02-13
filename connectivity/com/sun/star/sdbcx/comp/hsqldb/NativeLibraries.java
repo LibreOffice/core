@@ -44,8 +44,18 @@ final class NativeLibraries {
         } catch (UnsatisfiedLinkError e) {
             ClassLoader cl = NativeLibraries.class.getClassLoader();
             if (cl instanceof URLClassLoader) {
-                URL url = ((URLClassLoader) cl).findResource(
-                    System.mapLibraryName(libname));
+                String sysname = System.mapLibraryName(libname);
+                // At least Oracle's 1.7.0_51 now maps to .dylib rather than
+                // .jnilib:
+                if (System.getProperty("os.name").startsWith("Mac")
+                    && sysname.endsWith(".dylib"))
+                {
+                    sysname
+                        = sysname.substring(
+                            0, sysname.length() - "dylib".length())
+                        + "jnilib";
+                }
+                URL url = ((URLClassLoader) cl).findResource(sysname);
                 if (url != null) {
                     try {
                         System.load(
