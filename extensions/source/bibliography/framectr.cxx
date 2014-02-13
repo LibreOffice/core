@@ -414,7 +414,9 @@ static Window* lcl_GetFocusChild( Window* pParent )
 }
 
 //class XDispatch
-void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
+void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs)
+    throw (::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     if ( !bDisposing )
     {
