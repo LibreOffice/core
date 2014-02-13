@@ -295,7 +295,7 @@ protected:
     /// Calls all FocusListener to tell they that the focus is lost.
     void CommitFocusLost() const;
 
-    sal_Bool IsDefunc() const { return rBHelper.bDisposed; }
+    bool IsDefunc() const { return rBHelper.bDisposed; }
 
     virtual void IsObjectValid() const
         throw (::com::sun::star::lang::DisposedException);
