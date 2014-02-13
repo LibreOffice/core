@@ -19,6 +19,7 @@
 class AgendaWizardDialogResources(object):
     
     RID_AGENDAWIZARDDIALOG_START = 5000
+    RID_AGENDAWIZARDROADMAP_START = 5049
     RID_COMMON_START = 500
     SECTION_ITEMS = "AGENDA_ITEMS"
     SECTION_TOPICS = "AGENDA_TOPICS"
@@ -121,18 +122,6 @@ class AgendaWizardDialogResources(object):
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 47)
         self.resPlaceHolderHint = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 48)
-        self.resStep1 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 50)
-        self.resStep2 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 51)
-        self.resStep3 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 52)
-        self.resStep4 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 53)
-        self.resStep5 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 54)
-        self.resStep6 = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 55)
         self.resErrOpenTemplate = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 56)
         self.itemMeetingType = oWizardResource.getResText(
@@ -204,3 +193,6 @@ class AgendaWizardDialogResources(object):
             AgendaWizardDialogResources.RID_COMMON_START + 19)
         self.resTemplateDescription = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 20)
+            
+        self.RoadmapLabels = oWizardResource.getResArray(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1 , 6)            

@@ -219,7 +219,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(
-                [True, True, True, False, True], self.resources.RoadmapLabels)
+                self.resources.RoadmapLabels, [True, True, True, False, True])
 
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)

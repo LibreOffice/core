@@ -190,13 +190,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 
     def insertRoadmap(self):
         self.addRoadmap()
-
         self.insertRoadMapItems(
-            [True, True, True, True, True, True],
-            [self.resources.resStep1, self.resources.resStep2,
-                self.resources.resStep3, self.resources.resStep4,
-                self.resources.resStep5, self.resources.resStep6])
-
+            self.resources.RoadmapLabels, [True, True, True, True, True, True])
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)

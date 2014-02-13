@@ -194,13 +194,11 @@ class WWD_Startup(WWD_General):
     Disables the finbihButton.
     '''
 
-    def addRoadMapItems(self):
+    def insertRoadmap(self):
+        
         self.insertRoadMapItems(
-            [True, True, False, False, False, False, False],
-            [self.resources.resStep1, self.resources.resStep2,
-                self.resources.resStep3, self.resources.resStep4,
-                self.resources.resStep5, self.resources.resStep6,
-                self.resources.resStep7])
+            self.resources.RoadmapLabels, 
+            [True, True, False, False, False, False, False])
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
@@ -232,7 +230,7 @@ class WWD_Startup(WWD_General):
             xContainerWindow = self.myFrame.getComponentWindow()
             self.createWindowPeer(xContainerWindow)
             self.addRoadmap()
-            self.addRoadMapItems()
+            self.insertRoadmap()
             self.addStylePreview()
             self.checkSteps()
             self.executeDialogFromComponent(self.myFrame)

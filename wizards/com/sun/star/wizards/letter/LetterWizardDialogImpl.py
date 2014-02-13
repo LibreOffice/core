@@ -843,11 +843,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             
     def insertRoadmap(self):
         self.addRoadmap()
-
         self.insertRoadMapItems(
-                [True, False, True, True, False, True],
-                self.resources.RoadmapLabels)
-
+                self.resources.RoadmapLabels,
+                [True, False, True, True, False, True])
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)

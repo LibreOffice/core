@@ -145,18 +145,6 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
 
-    def insertRoadmapItem(self, Index, _bEnabled, _sLabel, _CurItemID):
-        try:
-            if isinstance(_sLabel, int):
-                _sLabel = self.sRMItemLabels(_sLabel)
-            oRoadmapItem = self.oRoadmap.createInstance()
-            oRoadmapItem.Label = _sLabel
-            oRoadmapItem.Enabled = _bEnabled
-            oRoadmapItem.ID = _CurItemID
-            self.oRoadmap.insertByIndex(Index, oRoadmapItem)
-        except Exception:
-            traceback.print_exc()
-
     def getRoadmapItemByID(self, _ID):
         try:
             getByIndex = self.oRoadmap.getByIndex
@@ -296,10 +284,17 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
 
-    def insertRoadMapItems(self, enabled, items):
+    def insertRoadMapItems(self, items, enabled):
         for index, item in enumerate(items):
-            self.insertRoadmapItem(index, enabled[index], item, index + 1)
-
+            try:
+                oRoadmapItem = self.oRoadmap.createInstance()
+                oRoadmapItem.Label = item
+                oRoadmapItem.Enabled = enabled[index]
+                oRoadmapItem.ID = index + 1
+                self.oRoadmap.insertByIndex(index, oRoadmapItem)
+            except Exception:
+                traceback.print_exc()
+            
     def setStepEnabled(self, _nStep, bEnabled, enableNextButton=None):
         xRoadmapItem = self.getRoadmapItemByID(_nStep)
         if xRoadmapItem is not None:

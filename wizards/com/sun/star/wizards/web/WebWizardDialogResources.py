@@ -25,6 +25,7 @@ class WebWizardDialogResources(object):
     RID_WEBWIZARDDIALOG_START = 4000
     RID_COMMON_START = 500
     RID_DB_COMMON_START = 1000
+    RID_WEBWIZARDROADMAP_START = 4121
 
     def __init__(self, xmsf, oWizardResource):
         try:
@@ -239,20 +240,6 @@ class WebWizardDialogResources(object):
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 120)
         self.resDefaultArchiveFilename = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 121)
-        self.resStep1 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 122)
-        self.resStep2 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 123)
-        self.resStep3 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 124)
-        self.resStep4 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 125)
-        self.resStep5 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 126)
-        self.resStep6 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 127)
-        self.resStep7 = oWizardResource.getResText(
-            WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 128)
         self.resDelSessionConfirm = oWizardResource.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 130)
         self.resPages = oWizardResource.getResText(
@@ -307,6 +294,11 @@ class WebWizardDialogResources(object):
             WebWizardDialogResources.RID_COMMON_START + 18)
         self.resHelp = oWizardResource.getResText(
             WebWizardDialogResources.RID_COMMON_START + 15)
+            
+            
+        self.RoadmapLabels = oWizardResource.getResArray(
+            WebWizardDialogResources.RID_WEBWIZARDROADMAP_START + 1 , 7)
+                        
         try:
             self.prodName = Configuration.getProductName(xmsf)
             self.resGifFiles = Properties.getPropertyValue(
