@@ -133,6 +133,7 @@ gb_Executable_$(1) += $(2)
 endef
 
 define gb_Helper_register_executables_for_install
+$(if $(3),,$(call gb_Output_error,gb_Helper_register_executables_for_install: no executables - need 3 parameters))
 $(call gb_Helper_register_executables,$(1),$(3))
 
 gb_Executable_MODULE_$(2) += $(3)
@@ -157,6 +158,7 @@ endef
 # the first argument is the group, which sets rpaths etc.
 # the second argument is the install module, which describes in which distro package/msi a lib should show up
 define gb_Helper_register_libraries_for_install
+$(if $(3),,$(call gb_Output_error,gb_Helper_register_libraries_for_install: no libraries - need 3 parameters))
 $(call gb_Helper_register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))
@@ -180,6 +182,7 @@ endef
 
 # $(call gb_Helper_register_jars_for_install,layer,installmodule,jars)
 define gb_Helper_register_jars_for_install
+$(if $(3),,$(call gb_Output_error,gb_Helper_register_jars_for_install: no jars - need 3 parameters))
 $(call gb_Helper_register_jars,$(1),$(3))
 
 gb_Jar_MODULE_$(2) += $(3)
@@ -188,6 +191,7 @@ endef
 
 # $(call gb_Helper_register_packages_for_install,installmodule,packages)
 define gb_Helper_register_packages_for_install
+$(if $(2),,$(call gb_Output_error,gb_Helper_register_packages_for_install: no packages - need 2 parameters))
 
 gb_Package_MODULE_$(1) += $(2)
 
