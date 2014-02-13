@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_efb52132",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-13T11:54:41Z",
+      "side": 1,
+      "message": "No need to call CollectGrfsOfBullets() here, it\u0027s already called in the subclasses, for DOCX that happens in DocxExport::ExportGrfBullet().",
+      "revId": "212a71ea8d9bd5007c208018e8895a0f0c125273",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
