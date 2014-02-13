@@ -43,7 +43,6 @@ class RtfExportFilter : public cppu::WeakImplHelper2
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xCtx;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc;
-    SvStream* m_pStream;
 public:
     RtfExportFilter( const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xCtx );
     virtual ~RtfExportFilter();

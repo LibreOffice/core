@@ -29,8 +29,8 @@
 
 using namespace ::com::sun::star;
 
-RtfExportFilter::RtfExportFilter( const uno::Reference< uno::XComponentContext >& xCtx) :
-    m_xCtx( xCtx )
+RtfExportFilter::RtfExportFilter( const uno::Reference< uno::XComponentContext >& xCtx)
+    : m_xCtx(xCtx)
 {
 }
 
@@ -46,8 +46,8 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     utl::MediaDescriptor aMediaDesc = aDescriptor;
     ::uno::Reference< io::XStream > xStream =
           aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >() );
-    m_pStream = utl::UcbStreamHelper::CreateStream( xStream, sal_True );
-    m_aWriter.SetStream(m_pStream);
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStream, sal_True );
+    m_aWriter.SetStream(pStream);
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( m_xSrcDoc, uno::UNO_QUERY );
@@ -89,7 +89,7 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
             delete pCurPam->GetNext();
         delete pCurPam;
     }
-    delete m_pStream;
+    delete pStream;
 
     return sal_True;
 }
