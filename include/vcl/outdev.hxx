@@ -368,6 +368,21 @@ public:
 
     /** Initialize the graphics device that the output device uses to draw on.
 
+     There is an LRU of OutputDevices that is used to get the graphics. The
+     actual creation of a SalGraphics instance is done via the SalFrame
+     implementation.
+
+     However, the SalFrame instance will only return a valid SalGraphics
+     instance if it is not in use or there wasn't one in the first place. When
+     this happens, ImplInitGraphics finds the least recently used OutputDevice
+     in a different frame and "steals" it (releases it then starts using it).
+
+     If there are no frames to steal an OutputDevice's SalGraphics instance from
+     then it blocks until the graphics is released.
+
+     Once it has acquired a graphics instance, then we add the OutputDevice to
+     the LRU.
+
      @returns true if was able to initialize the graphics device, false otherwise.
      */
     SAL_DLLPRIVATE bool         ImplInitGraphics() const;
