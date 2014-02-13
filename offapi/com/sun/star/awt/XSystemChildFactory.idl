@@ -49,11 +49,10 @@ published interface XSystemChildFactory : com::sun::star::uno::XInterface
         JAVA: global reference to a java.awt.Component
         object provided from the JNI-API.<BR>
 
-        MAC: Not supported.<BR></p>
+        MAC: (NSView*) pointer.<BR></p>
 
         @param ProcessId
-        the process identifier. Use the sal_getGlobalProcessId
-        function of the RTL library.
+        Ignored.
 
         @param SystemType
         one constant out of the constant group
