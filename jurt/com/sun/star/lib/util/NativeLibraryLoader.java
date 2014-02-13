@@ -43,7 +43,16 @@ public final class NativeLibraryLoader {
         library name is system dependent
      */
     public static void loadLibrary(ClassLoader loader, String libname) {
-        File path = getResource(loader, System.mapLibraryName(libname));
+        String sysname = System.mapLibraryName(libname);
+        // At least Oracle's 1.7.0_51 now maps to .dylib rather than .jnilib:
+        if (System.getProperty("os.name").startsWith("Mac")
+            && sysname.endsWith(".dylib"))
+        {
+            sysname
+                = sysname.substring(0, sysname.length() - "dylib".length())
+                + "jnilib";
+        }
+        File path = getResource(loader, sysname);
         if (path == null) {
             // If the library cannot be found as a class loader resource, try
             // the global System.loadLibrary as a last resort:
