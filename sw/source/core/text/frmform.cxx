@@ -888,13 +888,13 @@ sal_Bool SwTxtFrm::CalcPreps()
             // MustFit in any case
             if( bPrepMustFit )
             {
-                aFrmBreak.SetKeep( sal_False );
+                aFrmBreak.SetKeep( false );
                 aFrmBreak.ClrOrphLines();
             }
             // Before calling FormatAdjust, we need to make sure
             // that the lines protruding at the bottom get indeed
             // truncated
-            sal_Bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
+            bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
             bRet = sal_True;
             while( !bBreak && aLine.Next() )
             {
@@ -1384,7 +1384,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // to the non-fitting line. Or else the mass of text is lost,
     // because the Ofst was set wrongly in the Follow.
 
-    sal_Bool bBreak = ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 )
+    bool bBreak = ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 )
                     && aFrmBreak.IsBreakNowWidAndOrp( rLine );
     if( bBreak )
     {
@@ -1393,7 +1393,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             bPrevDone = 0 != rLine.Prev();
         if( bPrevDone )
         {
-            aFrmBreak.SetKeep( sal_False );
+            aFrmBreak.SetKeep( false );
             rLine.Next();
         }
         rLine.TruncLines();

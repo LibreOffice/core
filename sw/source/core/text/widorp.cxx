@@ -45,7 +45,7 @@
  *                  inline IsNastyFollow()
  *************************************************************************/
 // A Follow on the same page as its master is nasty.
-inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
+inline bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
     OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
             ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
@@ -69,7 +69,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
               && !pSct->MoveAllowed( pFrm ) ) ||
             !pFrm->GetTxtNode()->GetSwAttrSet().GetSplit().GetValue() ||
             pFrm->GetTxtNode()->GetSwAttrSet().GetKeep().GetValue();
-    bBreak = sal_False;
+    bBreak = false;
 
     if( !nRstHeight && !pFrm->IsFollow() && pFrm->IsInFtn() && pFrm->HasPara() )
     {
@@ -99,7 +99,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  *************************************************************************/
 
 /* BP(22.07.92): Calculation of Widows and Orphans.
- * The method returns sal_True if one of the rules matches.
+ * The method returns true if one of the rules matches.
  *
  * One difficulty with Widows and different formats between
  * Master- and Follow-Frame:
@@ -109,9 +109,9 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * to decide if the whole paragraph goes to the next page or not.
  */
 
-sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
+bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
-    sal_Bool bFit = sal_False;
+    bool bFit = false;
 
     SWAP_IF_SWAPPED( pFrm )
     SWRECTFN( pFrm )
@@ -135,7 +135,7 @@ sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
         // The Frm has a height to fit on the page.
         SwTwips nHeight =
             (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), nOrigin );
-        // If everything is inside the existing frame the result is sal_True;
+        // If everything is inside the existing frame the result is true;
         bFit = nHeight >= nLineHeight;
 
         // --> OD #i103292#
@@ -174,14 +174,14 @@ sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
  *                  SwTxtFrmBreak::IsBreakNow()
  *************************************************************************/
 
-sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
+bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
 {
     SWAP_IF_SWAPPED( pFrm )
 
     // bKeep is stronger than IsBreakNow()
     // Is there enough space ?
     if( bKeep || IsInside( rLine ) )
-        bBreak = sal_False;
+        bBreak = false;
     else
     {
         /* This class assumes that the SwTxtMargin is processed from Top to
@@ -194,18 +194,18 @@ sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
         // 6010: include DropLines
 
         bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
-        bBreak = sal_True;
+        bBreak = true;
         if( ( bFirstLine && pFrm->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )
         {
-            bKeep = sal_True;
-            bBreak = sal_False;
+            bKeep = true;
+            bBreak = false;
         }
         else if(bFirstLine && pFrm->IsInFtn() && !pFrm->FindFtnFrm()->GetPrev())
         {
             SwLayoutFrm* pTmp = pFrm->FindFtnBossFrm()->FindBodyCont();
             if( !pTmp || !pTmp->Lower() )
-                bBreak = sal_False;
+                bBreak = false;
         }
     }
 
@@ -239,7 +239,7 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
  *************************************************************************/
 
 WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
-    sal_Bool bChkKeep   )
+    bool bChkKeep   )
     : SwTxtFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
     SWAP_IF_SWAPPED( pFrm )
@@ -251,7 +251,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
         if( bChkKeep && !pFrm->GetPrev() && !pFrm->IsInFtn() &&
             pFrm->IsMoveable() &&
             ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
-            bKeep = sal_False;
+            bKeep = false;
         // Even if Keep is set, Orphans has to be respected.
         // e.g. if there are chained frames where a Follow in the last frame
         // receives a Keep, because it is not (forward) movable -
@@ -294,7 +294,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
             // Inside of footnotes there are good reasons to turn off the Keep attribute
             // as well as Widows/Orphans.
             SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            sal_Bool bFt = !pFtn->GetAttr()->GetFtn().IsEndNote();
+            const bool bFt = !pFtn->GetAttr()->GetFtn().IsEndNote();
             if( !pFtn->GetPrev() &&
                 pFtn->FindFtnBossFrm( bFt ) != pFtn->GetRef()->FindFtnBossFrm( bFt )
                 && ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
@@ -305,7 +305,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 
         if ( bResetFlags )
         {
-            bKeep = sal_False;
+            bKeep = false;
             nOrphLines = 0;
             nWidLines = 0;
         }
@@ -323,8 +323,8 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
  * FindBreak()
  */
 
-sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
-    sal_Bool bHasToFit )
+bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
+    bool bHasToFit )
 {
     // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
     // Thus, assertion on situation, that these are different to figure out why.
@@ -332,22 +332,22 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
     SWAP_IF_SWAPPED( pFrm )
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     MSHORT nOldOrphans = nOrphLines;
     if( bHasToFit )
         nOrphLines = 0;
     rLine.Bottom();
     // OD 2004-02-25 #i16128# - method renamed
     if( !IsBreakNowWidAndOrp( rLine ) )
-        bRet = sal_False;
+        bRet = false;
     if( !FindWidows( pFrame, rLine ) )
     {
-        sal_Bool bBack = sal_False;
+        bool bBack = false;
         // OD 2004-02-25 #i16128# - method renamed
         while( IsBreakNowWidAndOrp( rLine ) )
         {
             if( rLine.PrevLine() )
-                bBack = sal_True;
+                bBack = true;
             else
                 break;
         }
@@ -376,17 +376,17 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
 /*  FindWidows positions the SwTxtMargin of the Master to the line where to
  *  break by examining and formatting the Follow.
- *  Returns sal_True if the Widows-rule matches, that means that the
+ *  Returns true if the Widows-rule matches, that means that the
  *  paragraph should not be split (keep) !
  */
 
-sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
+bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 {
     OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
             "WidowsAndOrphans::FindWidows with swapped frame" );
 
     if( !nWidLines || !pFrame->IsFollow() )
-        return sal_False;
+        return false;
 
     rLine.Bottom();
 
@@ -394,12 +394,12 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     SwTxtFrm *pMaster = pFrame->FindMaster();
     OSL_ENSURE(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
-        return sal_False;
+        return false;
 
     // 5156: If the first line of the Follow does not fit, the master
     // probably is full of Dummies. In this case a PREP_WIDOWS would be fatal.
     if( pMaster->GetOfst() == pFrame->GetOfst() )
-        return sal_False;
+        return false;
 
     // Remaining height of the master
     SWRECTFN( pFrame )
@@ -444,9 +444,9 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
                 }
             }
 
-            pFrame->SetJustWidow( sal_False );
+            pFrame->SetJustWidow( false );
         }
-        return sal_False;
+        return false;
     }
 
     // 8575: Follow to Master II
@@ -463,8 +463,8 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
             pMaster->Prepare( PREP_ADJUST_FRM );
             pMaster->_InvalidateSize();
             pMaster->InvalidatePage();
-            pFrame->SetJustWidow( sal_False );
-            return sal_False;
+            pFrame->SetJustWidow( false );
+            return false;
         }
     }
 
@@ -498,18 +498,18 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
                 nLines = 2;
         }
         if( nLines <= nNeed )
-            return sal_False;
+            return false;
     }
 
     pMaster->Prepare( PREP_WIDOWS, (void*)&nNeed );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
  *                  WidowsAndOrphans::WouldFit()
  *************************************************************************/
 
-sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTst )
+bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTst )
 {
     // Here it does not matter, if pFrm is swapped or not.
     // IsInside() takes care for itself
@@ -521,7 +521,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     // First satisfy the Orphans-rule and the wish for initials ...
     const MSHORT nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );
     if ( nLineCnt < nMinLines )
-        return sal_False;
+        return false;
 
     rLine.Top();
     SwTwips nLineSum = rLine.GetLineHeight();
@@ -529,13 +529,13 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     while( nMinLines > rLine.GetLineNr() )
     {
         if( !rLine.NextLine() )
-            return sal_False;
+            return false;
         nLineSum += rLine.GetLineHeight();
     }
 
     // We do not fit
     if( !IsInside( rLine ) )
-        return sal_False;
+        return false;
 
     // Check the Widows-rule
     if( !nWidLines && !pFrm->IsFollow() )
@@ -561,10 +561,10 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
         if( rMaxHeight >= nLineSum )
         {
             rMaxHeight -= nLineSum;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,21 +30,21 @@ private:
     SwTwips  nOrigin;
 protected:
     SwTxtFrm *pFrm;
-    sal_Bool     bBreak;
-    sal_Bool     bKeep;
+    bool     bBreak;
+    bool     bKeep;
 public:
     SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst = 0  );
-    sal_Bool IsBreakNow( SwTxtMargin &rLine );
+    bool IsBreakNow( SwTxtMargin &rLine );
 
-    sal_Bool IsBroken() const   { return bBreak; }
-    sal_Bool IsKeepAlways() const { return bKeep; }
-    void Keep()             { bKeep = sal_True; }
-    void Break()                { bKeep = sal_False; bBreak = sal_True; }
+    bool IsBroken() const     { return bBreak; }
+    bool IsKeepAlways() const { return bKeep; }
+    void Keep()               { bKeep = true; }
+    void Break()              { bKeep = false; bBreak = true; }
 
-    inline sal_Bool GetKeep() const { return bKeep; }
-    inline void SetKeep( const sal_Bool bNew ) { bKeep = bNew; }
+    inline bool GetKeep() const { return bKeep; }
+    inline void SetKeep( const bool bNew ) { bKeep = bNew; }
 
-    sal_Bool IsInside( SwTxtMargin &rLine ) const;
+    bool IsInside( SwTxtMargin &rLine ) const;
 
     // In order to be able to handle special cases with Ftn.
     // SetRstHeight sets the rest height for SwTxtFrmBreak. This is needed
@@ -63,19 +63,19 @@ private:
 
 public:
     WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst = 0,
-        sal_Bool bCheckKeep = sal_True );
-    sal_Bool FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine );
+        bool bCheckKeep = true );
+    bool FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine );
     MSHORT GetWidowsLines() const
     { return nWidLines; }
     MSHORT GetOrphansLines() const
     { return nOrphLines; }
     void ClrOrphLines(){ nOrphLines = 0; }
 
-    sal_Bool FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine, sal_Bool bHasToFit );
-    sal_Bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTest );
+    bool FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine, bool bHasToFit );
+    bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTest );
     // OD 2004-02-25 #i16128# - rename method to avoid confusion with base class
     // method <SwTxtFrmBreak::IsBreakNow>, which isn't virtual.
-    sal_Bool IsBreakNowWidAndOrp( SwTxtMargin &rLine )
+    bool IsBreakNowWidAndOrp( SwTxtMargin &rLine )
     {
         return ( rLine.GetLineNr() > nOrphLines ) && IsBreakNow( rLine );
     }
