@@ -16,6 +16,24 @@
       "revId": "6518755aedf9bffd1866d0fd08891e9fb5b26179",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_4f09cd2b",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000560
+      },
+      "writtenOn": "2014-02-13T06:35:42Z",
+      "side": 1,
+      "message": "According to spec OOXML supports -90 to 90 for rotX.But it is observe that for pie chart type it supports 0 to 90 for rotx.\n\nDuring import for pie chart X rotation in View3DConverter::convertFromModel()\n // X rotation a.k.a. elevation (map OOXML [0..90] to Chart2 [-90,0])\n nRotationX \u003d getLimitedValue\u003c sal_Int32, sal_Int32 \u003e( mrModel.monRotationX.get( 15 ), 0, 90 ) - 90;\nhttp://opengrok.libreoffice.org/xref/core/oox/source/drawingml/chart/plotareaconverter.cxx#224",
+      "parentUuid": "da9df570_d03b9536",
+      "revId": "6518755aedf9bffd1866d0fd08891e9fb5b26179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
