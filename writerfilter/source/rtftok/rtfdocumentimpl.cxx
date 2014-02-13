@@ -3555,15 +3555,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
         case RTF_DFRMTXTX:
-            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDxaFromText, nParam);
+            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
             break;
         case RTF_DFRMTXTY:
-            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDyaFromText, nParam);
+            m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
             break;
         case RTF_DXFRTEXT:
             {
-                m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDxaFromText, nParam);
-                m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDyaFromText, nParam);
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hSpace, nParam);
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vSpace, nParam);
             }
             break;
         case RTF_FLYVERT:
@@ -5105,10 +5105,10 @@ void RTFFrame::setSprm(Id nId, Id nValue)
         case NS_ooxml::LN_CT_FramePr_y:
             nY = nValue;
             break;
-        case NS_sprm::LN_PDxaFromText:
+        case NS_ooxml::LN_CT_FramePr_hSpace:
             nHoriPadding = nValue;
             break;
-        case NS_sprm::LN_PDyaFromText:
+        case NS_ooxml::LN_CT_FramePr_vSpace:
             nVertPadding = nValue;
             break;
         case NS_ooxml::LN_CT_FramePr_xAlign:
@@ -5142,8 +5142,8 @@ RTFSprms RTFFrame::getSprms()
         NS_ooxml::LN_CT_FramePr_hRule, // Make sure nHRule is processed before nH
         NS_ooxml::LN_CT_FramePr_h,
         NS_ooxml::LN_CT_FramePr_w,
-        NS_sprm::LN_PDxaFromText,
-        NS_sprm::LN_PDyaFromText,
+        NS_ooxml::LN_CT_FramePr_hSpace,
+        NS_ooxml::LN_CT_FramePr_vSpace,
         NS_ooxml::LN_CT_FramePr_hAnchor,
         NS_ooxml::LN_CT_FramePr_vAnchor,
         NS_ooxml::LN_CT_FramePr_xAlign,
@@ -5181,11 +5181,11 @@ RTFSprms RTFFrame::getSprms()
                 if ( nW != 0 )
                     pValue.reset(new RTFValue(nW));
                 break;
-            case NS_sprm::LN_PDxaFromText:
+            case NS_ooxml::LN_CT_FramePr_hSpace:
                 if ( nHoriPadding != 0 )
                     pValue.reset(new RTFValue(nHoriPadding));
                 break;
-            case NS_sprm::LN_PDyaFromText:
+            case NS_ooxml::LN_CT_FramePr_vSpace:
                 if ( nVertPadding != 0 )
                     pValue.reset(new RTFValue(nVertPadding));
                 break;

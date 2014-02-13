@@ -573,68 +573,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPShd-->
-        <!--SPRM sprmPDyaFromText-->
-        <UML:Class xmi.id="sprmPDyaFromText" name="sprmPDyaFromText">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x842E</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPDyaFromText</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPDyaFromText-->
-        <!--SPRM sprmPDxaFromText-->
-        <UML:Class xmi.id="sprmPDxaFromText" name="sprmPDxaFromText">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x842F</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPDxaFromText</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPDxaFromText-->
         <!--SPRM sprmPFLocked-->
         <UML:Class xmi.id="sprmPFLocked" name="sprmPFLocked">
           <UML:ModelElement.stereotype>

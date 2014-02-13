@@ -21956,8 +21956,8 @@
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
       <attribute name="w" tokenid="ooxml:CT_FramePr_w"/>
       <attribute name="h" tokenid="ooxml:CT_FramePr_h"/>
-      <attribute name="vSpace" tokenid="sprm:PDyaFromText"/>
-      <attribute name="hSpace" tokenid="sprm:PDxaFromText"/>
+      <attribute name="vSpace" tokenid="ooxml:CT_FramePr_vSpace"/>
+      <attribute name="hSpace" tokenid="ooxml:CT_FramePr_hSpace"/>
       <attribute name="wrap" tokenid="sprm:PWr"/>
       <attribute name="hAnchor" tokenid="ooxml:CT_FramePr_hAnchor"/>
       <attribute name="vAnchor" tokenid="ooxml:CT_FramePr_vAnchor"/>

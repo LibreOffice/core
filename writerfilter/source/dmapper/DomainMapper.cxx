@@ -618,8 +618,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FramePr_w:
         case NS_ooxml::LN_CT_FramePr_h:
         case NS_sprm::LN_PWr:
-        case NS_sprm::LN_PDxaFromText:
-        case NS_sprm::LN_PDyaFromText:
+        case NS_ooxml::LN_CT_FramePr_hSpace:
+        case NS_ooxml::LN_CT_FramePr_vSpace:
         {
             ParagraphProperties* pParaProperties = dynamic_cast< ParagraphProperties*>(
                     m_pImpl->GetTopContextOfType( CONTEXT_PARAGRAPH ).get() );
@@ -736,10 +736,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_h:
                         pParaProperties->Seth(ConversionHelper::convertTwipToMM100(nIntValue));
                     break;
-                    case NS_sprm::LN_PDxaFromText:
+                    case NS_ooxml::LN_CT_FramePr_hSpace:
                         pParaProperties->SethSpace( ConversionHelper::convertTwipToMM100(nIntValue ));
                     break;
-                    case NS_sprm::LN_PDyaFromText:
+                    case NS_ooxml::LN_CT_FramePr_vSpace:
                         pParaProperties->SetvSpace( ConversionHelper::convertTwipToMM100(nIntValue ));
                     break;
                     default:;
@@ -1202,9 +1202,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
     }
     break;
-    case NS_sprm::LN_PDyaFromText:
+    case NS_ooxml::LN_CT_FramePr_vSpace:
         break;  // sprmPDyaFromText
-    case NS_sprm::LN_PDxaFromText:
+    case NS_ooxml::LN_CT_FramePr_hSpace:
         break;  // sprmPDxaFromText
     case NS_sprm::LN_PFLocked:
         break;  // sprmPFLocked
