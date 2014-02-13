@@ -667,7 +667,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                     sal_Int32 nSuffix = 1;
                     do
                     {
-                        aTmpName = aName + rRenameSuffix + OUString::valueOf(nSuffix);
+                        aTmpName = aName + rRenameSuffix + OUString::number(nSuffix);
                         pExistingSheet = Find(aTmpName, eFamily);
                         nSuffix++;
                     } while( pExistingSheet && pExistingSheet->GetItemSet().getHash() != nHash );
