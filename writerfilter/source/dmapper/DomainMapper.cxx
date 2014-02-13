@@ -2271,7 +2271,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             StyleSheetPropertyMap* pStyleSheetPropertyMap = NULL;
             if ( m_pImpl->IsStyleSheetImport() )
             {
-                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
             }
 
             if ( pStyleSheetPropertyMap != NULL )
@@ -2293,7 +2293,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             StyleSheetPropertyMap* pStyleSheetPropertyMap = NULL;
             if ( m_pImpl->IsStyleSheetImport() )
             {
-                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
             }
 
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();
