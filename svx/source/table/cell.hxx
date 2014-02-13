@@ -117,7 +117,9 @@ public:
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XLayoutConstrains
-    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
 

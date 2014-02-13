@@ -890,7 +890,9 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
 }
 
 // XLayoutConstrains
-::com::sun::star::awt::Size SAL_CALL Cell::getMinimumSize(  ) throw (RuntimeException)
+::com::sun::star::awt::Size SAL_CALL Cell::getMinimumSize()
+    throw (RuntimeException,
+           std::exception)
 {
     return ::com::sun::star::awt::Size( getMinimumWidth(),  getMinimumHeight() );
 }
