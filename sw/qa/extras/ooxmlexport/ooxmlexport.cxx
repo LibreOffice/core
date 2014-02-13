@@ -3190,6 +3190,24 @@ DECLARE_OOXMLEXPORT_TEST(testOuterShdw,"testOuterShdw.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "57811035");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_MultipleColumns,"alphabeticalIndex_MultipleColumns.docx")
+{
+    // Bug :: fdo#73596
+    /*
+     * Index with multiple columns was not imported correctly
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+        if (!pXmlDoc)
+            return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[3]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT( contents.match(" INDEX \\c \"4\"\\e \"") );
+    // check for section breaks after and before the Index Section
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:type","val","continuous");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
