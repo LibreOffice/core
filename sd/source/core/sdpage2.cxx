@@ -54,16 +54,6 @@ using namespace ::com::sun::star::office;
 
 extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
 
-static sal_uInt64 lcl_getHash( OString aString )
-{
-    sal_Int32  len = aString.getLength();
-    sal_uInt64 nHash = 0;
-
-    for( sal_Int32 i = 0; i < len; i++ )
-        nHash = (nHash << 5) - nHash + aString[i];
-    return nHash;
-}
-
 /*************************************************************************
 |*
 |* Sets: names of layout, master page links and templates for presentation
@@ -615,7 +605,7 @@ OString SdPage::stringify() const
 
 sal_uInt64 SdPage::getHash() const
 {
-    return lcl_getHash( stringify() );
+    return stringify().hashCode64();
 }
 
 

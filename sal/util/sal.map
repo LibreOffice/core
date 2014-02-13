@@ -221,6 +221,7 @@ UDK_3_0_0 {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength;
         rtl_str_hashCode;
         rtl_str_hashCode_WithLength;
+        rtl_str_hashCode64_WithLength;
         rtl_str_indexOfChar;
         rtl_str_indexOfChar_WithLength;
         rtl_str_indexOfStr;
