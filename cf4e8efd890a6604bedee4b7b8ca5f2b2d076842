@@ -16,6 +16,24 @@
       "revId": "cf4e8efd890a6604bedee4b7b8ca5f2b2d076842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_0fffc502",
+        "filename": "include/editeng/svxenum.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-02-13T06:07:39Z",
+      "side": 1,
+      "message": "Please look at : http://opengrok.libreoffice.org/xref/core/sw/source/filter/ww8/docxattributeoutput.cxx#3840\n\nHere we het numberingType as 33 for HEBREW. Thats why I used SVX_NUM_HEBREW with 3 value",
+      "parentUuid": "baa201ad_70d670c7",
+      "revId": "cf4e8efd890a6604bedee4b7b8ca5f2b2d076842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
