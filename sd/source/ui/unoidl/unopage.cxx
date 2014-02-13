@@ -3093,7 +3093,9 @@ void SAL_CALL SdMasterPage::add( const Reference< drawing::XShape >& xShape ) th
     SdGenericDrawPage::add( xShape );
 }
 
-void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape ) throw(uno::RuntimeException)
+void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
+    throw (uno::RuntimeException,
+           std::exception)
 {
     ::SolarMutexGuard aGuard;
 
