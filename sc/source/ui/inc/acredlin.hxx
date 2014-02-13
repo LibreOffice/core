@@ -81,10 +81,10 @@ public:
     SCTAB           nTable;
     SCCOL           nCol;
     SCROW           nRow;
-    sal_uLong           nActionNo;
-    sal_uLong           nInfo;
-    sal_Bool            bIsRejectable;
-    sal_Bool            bIsAcceptable;
+    sal_uLong       nActionNo;
+    sal_uLong       nInfo;
+    bool            bIsRejectable;
+    bool            bIsAcceptable;
 };
 
 typedef long LExpNum;
