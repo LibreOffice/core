@@ -3314,7 +3314,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
         throw uno::RuntimeException();
 }
 
-uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
+    throw (beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
