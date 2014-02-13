@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_afab19d5",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-13T11:41:10Z",
+      "side": 1,
+      "message": "was that accidentally left unused?  (removed now with b093ccd77255806014f5f30571e712169d5456a4)",
+      "revId": "07911ac9fd343fd59229b631c0fcf8dd30426b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
