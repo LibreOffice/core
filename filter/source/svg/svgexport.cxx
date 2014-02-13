@@ -87,6 +87,8 @@ static const char    aOOOAttrDateTimeFormat[] = NSPREFIX "date-time-format";
 // ooo xml attributes for Placeholder Shapes
 static const char    aOOOAttrTextAdjust[] = NSPREFIX "text-adjust";
 
+static const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
+
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -734,7 +736,7 @@ sal_Bool SVGFilter::implExportDocument()
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::number( 28.222 ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", "round" );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/2000/svg" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", OUString::createFromAscii(constSvgNamespace) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", "http://xml.openoffice.org/svg/export" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", "http://www.w3.org/1999/xlink" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", "preserve" );
@@ -2301,6 +2303,16 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     aAttr += " ";
     aAttr += OUString::number( aSize.Height() * 100L );
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
+
+    AddAttribute( XML_NAMESPACE_NONE, "version", "1.1" );
+
+    if( IsUseTinyProfile() )
+         AddAttribute( XML_NAMESPACE_NONE, "baseProfile", "tiny" );
+
+    AddAttribute( XML_NAMESPACE_NONE, "xmlns", OUString::createFromAscii(constSvgNamespace) );
+    AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::number( 28.222 ) );
+    AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", "round" );
+    AddAttribute( XML_NAMESPACE_NONE, "xml:space", "preserve" );
 
     {
         SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
