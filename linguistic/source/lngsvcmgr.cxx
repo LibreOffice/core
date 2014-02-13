@@ -1541,7 +1541,8 @@ uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getAvailableServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException,
+              std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
