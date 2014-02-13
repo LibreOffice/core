@@ -87,10 +87,9 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16
 }
 
 SvxContourDlg::SvxContourDlg( SfxBindings* _pBindings, SfxChildWindow* pCW,
-                              Window* _pParent, const ResId& rResId ) :
-
-    SfxFloatingWindow   ( _pBindings, pCW, _pParent, rResId )
-
+                              Window* _pParent, const ResId& rResId )
+    : SfxFloatingWindow(_pBindings, pCW, _pParent, rResId)
+    , pSuperClass(NULL)
 {
 }
 
