@@ -40,7 +40,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
-        com::sun::star::uno::Exception aException;
+        com::sun::star::uno::RuntimeException aException;
         aException.Message = "not a work window";
         throw aException;
     }
