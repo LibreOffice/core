@@ -75,14 +75,13 @@ class JobSetup;
 class Size;
 class Point;
 
-// From embobj.hxx
 #define ASPECT_CONTENT      1
 #define ASPECT_THUMBNAIL    2 /* 120 * 120, 6 Colors DIB in MetaFile */
 #define ASPECT_ICON         4
 #define ASPECT_DOCPRINT     8
 #define ASPECT_ALL      (ASPECT_CONTENT | ASPECT_THUMBNAIL | ASPECT_ICON | ASPECT_DOCPRINT)
 
-// from pseudo.hxx; must be the same as in OLE2
+// must be the same as in OLE2
 #define SVOBJ_MISCSTATUS_SERVERRESIZE           1
 #define SVOBJ_MISCSTATUS_NOTREPLACE             4
 #define SVOBJ_MISCSTATUS_CANTLINKINSIDE         16
