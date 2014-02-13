@@ -1631,9 +1631,10 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 }
 
 
-SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
-    SmEditAccessibleBaseClass(),
-    aAccName            (SM_RESSTR(STR_CMDBOXWINDOW))
+SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc )
+    : SmEditAccessibleBaseClass()
+    , aAccName(SM_RESSTR(STR_CMDBOXWINDOW))
+    , pTextHelper(NULL)
 {
     pWin = rSmAcc.pWin;
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
