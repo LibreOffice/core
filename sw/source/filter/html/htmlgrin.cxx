@@ -68,6 +68,9 @@
 #include <numrule.hxx>
 #include <boost/shared_ptr.hpp>
 
+#include <sax/tools/converter.hxx>
+#include <vcl/graphicfilter.hxx>
+
 using namespace ::com::sun::star;
 
 
@@ -394,18 +397,21 @@ void SwHTMLParser::InsertImage()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
+                // fallthrough
             case HTML_O_ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONABORT:
                 eScriptType2 = STARBASIC;
+                // fallthrough
             case HTML_O_ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONERROR:
                 eScriptType2 = STARBASIC;
+                // fallthrough
             case HTML_O_ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
@@ -694,7 +700,22 @@ IMAGE_SETEVENT:
     aFrmSet.Put( aFrmSize );
 
     Graphic aEmptyGrf;
-    aEmptyGrf.SetDefaultType();
+    if( sGrfNm.startsWith("data:") )
+    {
+        // use embedded base64 encoded data
+        ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
+        OUString sBase64Data = sGrfNm.replaceAt(0,22,"");
+        ::sax::Converter::decodeBase64(aPass, sBase64Data);
+        if( aPass.hasElements() )
+        {
+                SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), STREAM_READ);
+                GraphicFilter::GetGraphicFilter().ImportGraphic( aEmptyGrf, OUString(), aStream );
+        }
+    }
+    else
+    {
+        aEmptyGrf.SetDefaultType();
+    }
     SwFrmFmt *pFlyFmt = pDoc->Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
