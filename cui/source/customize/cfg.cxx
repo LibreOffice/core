@@ -1052,10 +1052,7 @@ void
 MenuSaveInData::SetEntries( SvxEntries* pNewEntries )
 {
     // delete old menu hierarchy first
-    if ( pRootEntry != NULL )
-    {
-        delete pRootEntry->GetEntries();
-    }
+    delete pRootEntry->GetEntries();
 
     // now set new menu hierarchy
     pRootEntry->SetEntries( pNewEntries );
