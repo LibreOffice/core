@@ -50,7 +50,7 @@ public:
     ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();
 
-    static sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape);
+    static bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape);
     void    AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                    const OUString &rRangeList);
     void    FixupOLEs();

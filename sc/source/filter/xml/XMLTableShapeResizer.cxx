@@ -49,7 +49,7 @@ ScMyOLEFixer::~ScMyOLEFixer()
 {
 }
 
-sal_Bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape >& rShape)
+bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape >& rShape)
 {
     return rShape->getShapeType() == "com.sun.star.drawing.OLE2Shape";
 }
