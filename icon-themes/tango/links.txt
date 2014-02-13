@@ -62,7 +62,6 @@ sd/imglst/lc27017.png cmd/lc_zoompanning.png
 res/lc05700.png cmd/lc_redo.png
 cmd/sc_insertsymbol.png cmd/sc_symbolcatalogue.png
 sd/imglst/lc27059.png cmd/lc_animationmode.png
-cmd/lc_printdefault.png cmd/lc_print.png
 cmd/lc_printpagepreview.png cmd/lc_print.png
 res/lc05509.png cmd/lc_print.png
 res/lc05504.png cmd/lc_print.png
