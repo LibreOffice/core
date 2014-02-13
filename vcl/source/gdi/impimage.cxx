@@ -58,13 +58,14 @@ ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 }
 
 ImplImageList::ImplImageList()
+    : mnRefCount(1)
 {
 }
 
-ImplImageList::ImplImageList( const ImplImageList &aSrc ) :
-    maPrefix( aSrc.maPrefix ),
-    maImageSize( aSrc.maImageSize ),
-    mnRefCount( 1 )
+ImplImageList::ImplImageList( const ImplImageList &aSrc )
+    : maPrefix(aSrc.maPrefix)
+    , maImageSize(aSrc.maImageSize)
+    , mnRefCount(1)
 {
     maImages.reserve( aSrc.maImages.size() );
     for ( ImageAryDataVec::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )
@@ -116,6 +117,7 @@ sal_Bool ImplImageData::IsEqual( const ImplImageData& rData )
 }
 
 ImplImage::ImplImage()
+    : mnRefCount(1)
 {
 }
 

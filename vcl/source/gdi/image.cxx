@@ -168,7 +168,6 @@ void Image::ImplInit( const BitmapEx& rBmpEx )
     if( !rBmpEx.IsEmpty() )
     {
         mpImplData = new ImplImage;
-        mpImplData->mnRefCount = 1;
 
         if( rBmpEx.GetTransparentType() == TRANSPARENT_NONE )
         {
@@ -365,7 +364,6 @@ ImageList::ImageList( const ImageList& rImageList ) :
 
 ImageList::~ImageList()
 {
-
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
 }
@@ -373,7 +371,6 @@ ImageList::~ImageList()
 void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
 {
     mpImplData = new ImplImageList;
-    mpImplData->mnRefCount = 1;
     mpImplData->maImages.reserve( nItems );
     mpImplData->maImageSize = rSize;
 }
