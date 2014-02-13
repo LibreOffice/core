@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include "vbacontrols.hxx"
 #include "vbacontrol.hxx"
@@ -433,7 +434,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
     }
     catch (const uno::Exception& e)
     {
-        throw lang::WrappedTargetException( "Can not create AXControl!",
+        throw lang::WrappedTargetRuntimeException( "Can not create AXControl!",
                 uno::Reference< uno::XInterface >(),
                 uno::makeAny( e ) );
     }
