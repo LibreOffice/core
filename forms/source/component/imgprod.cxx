@@ -207,7 +207,9 @@ ImageProducer::~ImageProducer()
 
 // ------------------------------------------------------------
 
-void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException)
+void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer )
+    throw(::com::sun::star::uno::RuntimeException,
+          std::exception)
 {
     DBG_ASSERT( rxConsumer.is(), "::AddConsumer(...): No consumer referenced!" );
     if( rxConsumer.is() )

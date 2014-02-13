@@ -87,7 +87,9 @@ public:
     void            setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef );
 
     // ::com::sun::star::awt::XImageProducer
-    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer )
+        throw(::com::sun::star::uno::RuntimeException,
+              std::exception);
     void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL startProduction(  ) throw(::com::sun::star::uno::RuntimeException);
 
