@@ -365,7 +365,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/app/rfindlst \
     sc/source/ui/app/scdll \
     sc/source/ui/app/scmod \
-    sc/source/ui/app/scmod2 \
     sc/source/ui/app/seltrans \
     sc/source/ui/app/transobj \
     sc/source/ui/app/typemap \
