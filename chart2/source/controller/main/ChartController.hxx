@@ -389,7 +389,8 @@ public:
     // ::com::sun::star::util::XModeChangeListener
     virtual void SAL_CALL modeChanged(
         const ::com::sun::star::util::ModeChangeEvent& _rSource )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     // ::com::sun::star::frame::XLayoutManagerListener
     virtual void SAL_CALL layoutEvent(

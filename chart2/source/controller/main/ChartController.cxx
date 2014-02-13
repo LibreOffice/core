@@ -431,7 +431,7 @@ void SAL_CALL ChartController::attachFrame(
 
 //XModeChangeListener
 void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
-    throw ( uno::RuntimeException )
+    throw (uno::RuntimeException, std::exception)
 {
     //adjust controller to view status changes
 
