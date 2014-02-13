@@ -1649,8 +1649,8 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotField(pTempDataPilotField),
-    bDisplay( sal_True ),
-    bDisplayDetails( sal_True ),
+    bDisplay( true ),
+    bDisplayDetails( true ),
     bHasName( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1668,7 +1668,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME :
             {
                 sName = sValue;
-                bHasName = sal_True;
+                bHasName = true;
             }
             break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME:

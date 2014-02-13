@@ -325,9 +325,9 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     ScDPSaveDimension*          pDim;
 
     ::std::vector<ScXMLDataPilotGroup> aGroups;
-    OUString               sGroupSource;
-    OUString               sSelectedPage;
-    OUString               sName;
+    OUString                    sGroupSource;
+    OUString                    sSelectedPage;
+    OUString                    sName;
     double                      fStart;
     double                      fEnd;
     double                      fStep;
@@ -335,11 +335,11 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     sal_Int32                   nGroupPart;
     sal_Int16                   nFunction;
     sal_Int16                   nOrientation;
-    sal_Bool                    bSelectedPage:1;
-    sal_Bool                    bIsGroupField:1;
-    sal_Bool                    bDateValue:1;
-    sal_Bool                    bAutoStart:1;
-    sal_Bool                    bAutoEnd:1;
+    bool                        bSelectedPage:1;
+    bool                        bIsGroupField:1;
+    bool                        bDateValue:1;
+    bool                        bAutoStart:1;
+    bool                        bAutoEnd:1;
     bool                        mbHasHiddenMember:1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -362,7 +362,7 @@ public:
 
     virtual void EndElement();
 
-    void SetShowEmpty(const sal_Bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
+    void SetShowEmpty(const bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
     void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
     void AddMember(ScDPSaveMember* pMember);
     void SetSubTotalName(const OUString& rName);
@@ -371,9 +371,9 @@ public:
     void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
     void SetLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
     void SetGrouping(const OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
-        sal_Int32 nPart, sal_Bool bDate, sal_Bool bAutoSt, sal_Bool bAutoE)
+        sal_Int32 nPart, bool bDate, bool bAutoSt, bool bAutoE)
     {
-        bIsGroupField = sal_True;
+        bIsGroupField = true;
         sGroupSource = rGroupSource;
         fStart = rStart;
         fEnd = rEnd;
@@ -572,9 +572,9 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
 
     OUString sName;
     OUString maDisplayName;
-    sal_Bool    bDisplay;
-    sal_Bool    bDisplayDetails;
-    sal_Bool    bHasName;
+    bool     bDisplay;
+    bool     bDisplayDetails;
+    bool     bHasName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
