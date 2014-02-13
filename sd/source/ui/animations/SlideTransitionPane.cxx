@@ -50,7 +50,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <algorithm>
-#include <memory>
 
 
 using namespace ::com::sun::star;

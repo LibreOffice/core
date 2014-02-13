@@ -39,7 +39,6 @@
 #include <tools/weakbase.hxx>
 #include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
 
 namespace sd {

@@ -27,11 +27,8 @@
 #include "glob.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
-
-#include <set>
 
 class SdDrawDocument;
 class SfxRequest;

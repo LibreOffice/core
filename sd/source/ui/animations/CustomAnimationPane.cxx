@@ -76,7 +76,6 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 
-#include <memory>
 #include <algorithm>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

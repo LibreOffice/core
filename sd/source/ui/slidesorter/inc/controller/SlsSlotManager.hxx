@@ -21,7 +21,6 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include <tools/link.hxx>
-#include <memory>
 #include <queue>
 
 class AbstractSvxNameDialog;

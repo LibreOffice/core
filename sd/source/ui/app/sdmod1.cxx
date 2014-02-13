@@ -60,7 +60,6 @@
 #include "FrameView.hxx"
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include "slideshow.hxx"

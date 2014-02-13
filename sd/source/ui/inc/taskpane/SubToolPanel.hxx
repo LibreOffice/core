@@ -24,7 +24,6 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
-#include <memory>
 #include <vector>
 
 

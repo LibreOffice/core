@@ -24,7 +24,6 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
-#include <memory>
 #include "PreviewRenderer.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/timer.hxx>

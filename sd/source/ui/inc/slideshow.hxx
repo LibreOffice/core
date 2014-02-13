@@ -32,7 +32,6 @@
 
 #include <editeng/unoipset.hxx>
 
-#include <memory>
 #include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {

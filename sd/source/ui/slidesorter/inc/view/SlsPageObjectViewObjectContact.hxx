@@ -26,7 +26,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 
 class SdrPage;

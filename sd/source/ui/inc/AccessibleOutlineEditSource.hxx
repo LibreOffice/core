@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEOUTLINEEDITSOURCE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEOUTLINEEDITSOURCE_HXX
 
-#include <memory>
 #include <vcl/svapp.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>

@@ -49,7 +49,6 @@
 #include <svtools/colorcfg.hxx>
 #include "ViewShell.hxx"
 #include "View.hxx"
-#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

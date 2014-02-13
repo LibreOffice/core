@@ -53,7 +53,6 @@
 #include "sdpage.hxx"
 #include "slideshow.hxx"
 #include "anminfo.hxx"
-#include <memory>
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"

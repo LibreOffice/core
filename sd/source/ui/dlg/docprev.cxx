@@ -40,8 +40,6 @@
 #include "sfx2/viewfrm.hxx"
 #include <vcl/svapp.hxx>
 
-#include <memory>
-
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::animations::XAnimationNode;
 using namespace ::com::sun::star;

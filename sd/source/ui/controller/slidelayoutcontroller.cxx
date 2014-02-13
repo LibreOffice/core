@@ -26,9 +26,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 
-#include <memory>
-#include <boost/scoped_ptr.hpp>
-
 #include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>

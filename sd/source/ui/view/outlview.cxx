@@ -18,7 +18,6 @@
  */
 
 #include "OutlineView.hxx"
-#include <memory>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>

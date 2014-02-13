@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
 
 #include <sal/types.h>
-#include <memory>
 
 class Window;
 

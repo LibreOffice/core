@@ -55,7 +55,6 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 
 #include <vector>
-#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

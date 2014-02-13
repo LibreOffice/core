@@ -30,7 +30,6 @@ class SdDrawDocument;
 #include <osl/mutex.hxx>
 #include <vcl/region.hxx>
 
-#include <memory>
 #include <vector>
 #include <functional>
 

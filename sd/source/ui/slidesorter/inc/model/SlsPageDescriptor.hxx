@@ -26,9 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <memory>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/scoped_ptr.hpp>
 
 
 class SdPage;
