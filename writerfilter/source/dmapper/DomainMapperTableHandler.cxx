@@ -944,9 +944,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             }
             else
             {
-                aFrameProperties.realloc(aFrameProperties.getLength() + 1);
-                aFrameProperties[aFrameProperties.getLength() - 1].Name = "FrameWidthPercent";
-                aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("RelativeWidth");
+                aFrameProperties.realloc(aFrameProperties.getLength() + 2);
+                aFrameProperties[aFrameProperties.getLength() - 2].Name = "FrameWidthPercent";
+                aFrameProperties[aFrameProperties.getLength() - 2].Value = xTableProperties->getPropertyValue("RelativeWidth");
+
+                aFrameProperties[aFrameProperties.getLength() - 1].Name = "RelativeWidthRelation";
+                aFrameProperties[aFrameProperties.getLength() - 1].Value = uno::makeAny(text::RelOrientation::PAGE_FRAME);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
                 xTableProperties->setPropertyValue("RelativeWidth", uno::makeAny(sal_Int16(100)));

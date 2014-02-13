@@ -1848,6 +1848,18 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8154), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFloatingTableWithRelativeWidth, "floating-table-with-relative-width.docx")
+{
+    // Floating tables are imported to text frames and the size is defined by the frame size.
+    // Width of the text frame including table was relative to the paragraph area and not to the page.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(80), getProperty<sal_Int32>(xFrame, "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RelOrientation::PAGE_FRAME), getProperty<sal_Int16>(xFrame, "RelativeWidthRelation"));
+
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
