@@ -689,7 +689,10 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
 }
 
 ::com::sun::star::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::beans::UnknownPropertyException,
+           ::com::sun::star::lang::WrappedTargetException,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
 
