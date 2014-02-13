@@ -141,7 +141,7 @@ public:
 
     // This method is called fpr every style after all styles have been
     // inserted into the document.
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 
     sal_Bool IsDefaultStyle() const { return mbDefaultStyle; }
 
@@ -210,7 +210,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
     TYPEINFO();

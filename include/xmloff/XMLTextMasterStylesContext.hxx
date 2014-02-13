@@ -37,7 +37,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
     TYPEINFO();

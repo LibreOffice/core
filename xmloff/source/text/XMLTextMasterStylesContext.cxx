@@ -33,9 +33,9 @@ using ::xmloff::token::XML_MASTER_PAGE;
 
 TYPEINIT1( XMLTextMasterStylesContext, SvXMLStylesContext );
 
-sal_Bool XMLTextMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool XMLTextMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
-    return sal_True;
+    return true;
 }
 
 XMLTextMasterStylesContext::XMLTextMasterStylesContext(

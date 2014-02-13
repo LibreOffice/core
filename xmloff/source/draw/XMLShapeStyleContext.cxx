@@ -304,7 +304,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     }
 }
 
-void XMLShapeStyleContext::Finish( sal_Bool /*bOverwrite*/ )
+void XMLShapeStyleContext::Finish( bool /*bOverwrite*/ )
 {
 }
 

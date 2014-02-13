@@ -58,7 +58,7 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<

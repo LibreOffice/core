@@ -1707,7 +1707,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     return nKey;
 }
 
-void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
+void SvXMLNumFormatContext::Finish( bool bOverwrite )
 {
     SvXMLStyleContext::Finish( bOverwrite );
 }

@@ -227,7 +227,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     }
 }
 
-void XMLTextShapeStyleContext::Finish( sal_Bool bOverwrite )
+void XMLTextShapeStyleContext::Finish( bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
 }

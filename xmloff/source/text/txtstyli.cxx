@@ -264,7 +264,7 @@ void XMLTextStyleContext::SetDefaults( )
     }
 }
 
-void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
+void XMLTextStyleContext::Finish( bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
 

@@ -332,7 +332,7 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
 }
 
 // Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
-void XMLFootnoteConfigurationImportContext::Finish( sal_Bool bOverwrite )
+void XMLFootnoteConfigurationImportContext::Finish( bool bOverwrite )
 {
 
     if (bOverwrite)

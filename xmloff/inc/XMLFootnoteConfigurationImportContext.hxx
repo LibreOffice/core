@@ -95,7 +95,7 @@ public:
     /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
        at this time all styles it references have been set. (#i40579#)
     */
-    virtual void Finish( sal_Bool bOverwrite);
+    virtual void Finish( bool bOverwrite);
 
     /// set configuration at document
     void ProcessSettings(

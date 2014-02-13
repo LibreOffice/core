@@ -193,7 +193,7 @@ void SvXMLStyleContext::CreateAndInsertLate( sal_Bool /*bOverwrite*/ )
 {
 }
 
-void SvXMLStyleContext::Finish( sal_Bool /*bOverwrite*/ )
+void SvXMLStyleContext::Finish( bool /*bOverwrite*/ )
 {
 }
 
@@ -547,9 +547,9 @@ SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
     return 0;
 }
 
-sal_Bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue ) const

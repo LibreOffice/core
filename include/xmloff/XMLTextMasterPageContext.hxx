@@ -77,11 +77,11 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bFooter,
-            const sal_Bool bLeft,
-            const sal_Bool bFirst );
+            const bool bFooter,
+            const bool bLeft,
+            const bool bFirst );
 
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 };
 
 #endif

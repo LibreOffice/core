@@ -147,7 +147,7 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 
     // #i35918#
     virtual void FillPropertySet(
@@ -198,7 +198,7 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
     return pContext;
 }
 
-void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
+void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
 

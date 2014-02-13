@@ -237,9 +237,9 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bFooter,
-            const sal_Bool bLeft,
-            const sal_Bool bFirst )
+            const bool bFooter,
+            const bool bLeft,
+            const bool bFirst )
 {
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     return new XMLTextHeaderFooterContext( GetImport(),
@@ -249,7 +249,7 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
                                                 bFooter, bLeft, bFirst );
 }
 
-void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
+void XMLTextMasterPageContext::Finish( bool bOverwrite )
 {
     if( xStyle.is() && (IsNew() || bOverwrite) )
     {

@@ -932,9 +932,9 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
 // ---------------------------------------------------------------------------
 TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
-sal_Bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
-    return sal_True;
+    return true;
 }
 
 ScXMLMasterStylesContext::ScXMLMasterStylesContext(
@@ -1010,16 +1010,16 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bFooter,
-            const sal_Bool bLeft,
-            const sal_Bool /*bFirst*/ )
+            const bool bFooter,
+            const bool bLeft,
+            const bool /*bFirst*/ )
 {
     if (!bLeft)
     {
         if (bFooter)
-            bContainsRightFooter = sal_True;
+            bContainsRightFooter = true;
         else
-            bContainsRightHeader = sal_True;
+            bContainsRightHeader = true;
     }
     if (!xPropSet.is())
         xPropSet.set(GetStyle(), UNO_QUERY );
@@ -1048,7 +1048,7 @@ void ScMasterPageContext::ClearContent(const OUString& rContent)
     }
 }
 
-void ScMasterPageContext::Finish( sal_Bool bOverwrite )
+void ScMasterPageContext::Finish( bool bOverwrite )
 {
     XMLTextMasterPageContext::Finish(bOverwrite);
     if (!bContainsRightFooter)
@@ -1061,7 +1061,7 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
     XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     nLastSheet(-1)
 {

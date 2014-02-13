@@ -93,7 +93,7 @@ public:
     const OUString& GetDataStyleName() const { return sDataStyleName; }
 
     virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
     virtual void SetDefaults();
 
     // overload FillPropertySet, so we can get at the combined characters

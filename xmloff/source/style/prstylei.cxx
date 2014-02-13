@@ -329,7 +329,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     }
 }
 
-void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
+void XMLPropStyleContext::Finish( bool bOverwrite )
 {
     if( mxStyle.is() && (IsNew() || bOverwrite) )
     {

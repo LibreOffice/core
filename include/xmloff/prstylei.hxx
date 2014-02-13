@@ -91,7 +91,7 @@ public:
     virtual void SetDefaults();
 
     virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 };
 
 #endif

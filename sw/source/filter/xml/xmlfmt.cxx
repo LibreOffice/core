@@ -287,7 +287,7 @@ public:
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 };
 
 TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
@@ -371,7 +371,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
+void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 {
     XMLTextStyleContext::Finish( bOverwrite );
 
@@ -755,7 +755,7 @@ public:
             sal_Bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
-    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
     virtual void EndElement();
 };
@@ -848,12 +848,12 @@ SwXMLStylesContext_Impl::~SwXMLStylesContext_Impl()
 {
 }
 
-sal_Bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
+bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
     const SwXMLImport& rSwImport = GetSwImport();
     sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
 
-    sal_Bool bIns = sal_True;
+    bool bIns = true;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -932,7 +932,7 @@ void SwXMLStylesContext_Impl::EndElement()
 class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 {
 protected:
-    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
     const SwXMLImport& GetSwImport() const
@@ -964,9 +964,9 @@ SwXMLMasterStylesContext_Impl::~SwXMLMasterStylesContext_Impl()
 {
 }
 
-sal_Bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
+bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
-    sal_Bool bIns;
+    bool bIns;
 
     const SwXMLImport& rSwImport = GetSwImport();
     sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();

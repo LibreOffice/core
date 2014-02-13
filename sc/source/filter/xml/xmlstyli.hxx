@@ -197,7 +197,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
     TYPEINFO();
@@ -219,8 +219,8 @@ class ScMasterPageContext : public XMLTextMasterPageContext
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
     const OUString     sEmpty;
-    sal_Bool                bContainsRightHeader;
-    sal_Bool                bContainsRightFooter;
+    bool                bContainsRightHeader;
+    bool                bContainsRightFooter;
 
     void ClearContent(const OUString& rContent);
 public:
@@ -243,11 +243,11 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bFooter,
-            const sal_Bool bLeft,
-            const sal_Bool bFirst );
+            const bool bFooter,
+            const bool bLeft,
+            const bool bFirst );
 
-    virtual void Finish( sal_Bool bOverwrite );
+    virtual void Finish( bool bOverwrite );
 };
 
 class ScCellTextStyleContext : public XMLTextStyleContext
@@ -263,7 +263,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-            sal_Bool bDefaultStyle = false );
+            bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
     // overload FillPropertySet to store style information

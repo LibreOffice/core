@@ -176,7 +176,7 @@ public:
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void CreateAndInsert(sal_Bool bOverwrite);
-    virtual void Finish(sal_Bool bOverwrite);
+    virtual void Finish(bool bOverwrite);
 
     SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();
