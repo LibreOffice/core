@@ -4644,7 +4644,8 @@ uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor(void) t
 }
 
 void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
-    throw( uno::RuntimeException )
+    throw (uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     SwSortOptions aSortOpt;
