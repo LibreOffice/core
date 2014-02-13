@@ -647,7 +647,8 @@ IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
 void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
     const util::URL& aURL)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
