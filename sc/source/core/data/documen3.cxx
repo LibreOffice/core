@@ -73,7 +73,6 @@
 #include "scopetools.hxx"
 
 #include "globalnames.hxx"
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;

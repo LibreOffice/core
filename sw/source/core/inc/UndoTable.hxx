@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 #include <undobj.hxx>
-#include <memory>
 #include <vector>
 #include <set>
 #include <swtypes.hxx>

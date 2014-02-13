@@ -50,7 +50,6 @@
 
 #include <list>
 #include <vector>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/noncopyable.hpp>

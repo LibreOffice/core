@@ -19,7 +19,6 @@
 #ifndef SC_XMLANNOI_HXX
 #define SC_XMLANNOI_HXX
 
-#include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>

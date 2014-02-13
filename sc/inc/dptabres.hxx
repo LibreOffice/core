@@ -31,7 +31,6 @@
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <vector>
-#include <memory>
 #include <map>
 
 namespace com { namespace sun { namespace star { namespace sheet {

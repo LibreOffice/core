@@ -20,7 +20,6 @@
 #ifndef SC_TOKEN_HXX
 #define SC_TOKEN_HXX
 
-#include <memory>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 

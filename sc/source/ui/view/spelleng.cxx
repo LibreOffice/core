@@ -20,8 +20,6 @@
 #include "spelleng.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
-#include <memory>
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

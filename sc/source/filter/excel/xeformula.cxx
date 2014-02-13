@@ -19,7 +19,6 @@
 
 #include <list>
 #include <map>
-#include <memory>
 #include "addincol.hxx"
 #include "compiler.hxx"
 #include "document.hxx"

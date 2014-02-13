@@ -40,7 +40,6 @@
 
 #include <config_lgpl.h>
 
-#include <memory>
 #include <vector>
 
 #include <boost/ptr_container/ptr_vector.hpp>

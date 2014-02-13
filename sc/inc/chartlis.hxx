@@ -26,7 +26,6 @@
 #include "token.hxx"
 #include "externalrefmgr.hxx"
 
-#include <memory>
 #include <vector>
 #include <list>
 

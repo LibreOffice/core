@@ -24,9 +24,6 @@
 #include "tools/gen.hxx"
 #include "tools/fract.hxx"
 
-#include <boost/shared_ptr.hpp>
-#include <memory>
-
 class OutputDevice;
 class Point;
 class Size;

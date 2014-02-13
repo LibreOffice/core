@@ -29,7 +29,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vector>
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>

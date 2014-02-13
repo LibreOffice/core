@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <ooo/vba/word/WdBuiltInProperty.hpp>
 #include <ooo/vba/office/MsoDocProperties.hpp>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include "wordvbahelper.hxx"
 #include "fesh.hxx"

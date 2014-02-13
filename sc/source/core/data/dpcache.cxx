@@ -35,8 +35,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <svl/zforlist.hxx>
 
-#include <memory>
-
 #if DEBUG_PIVOT_TABLE
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif

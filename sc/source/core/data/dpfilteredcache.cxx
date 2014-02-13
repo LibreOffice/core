@@ -38,13 +38,10 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-#include <memory>
-
 using namespace ::com::sun::star;
 
 using ::std::vector;
 using ::std::pair;
-using ::std::auto_ptr;
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;

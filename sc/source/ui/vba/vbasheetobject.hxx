@@ -20,7 +20,6 @@
 #ifndef SC_VBA_SHEETOBJECT_HXX
 #define SC_VBA_SHEETOBJECT_HXX
 
-#include <memory>
 #include <ooo/vba/excel/XButton.hpp>
 #include <ooo/vba/excel/XControlObject.hpp>
 #include <ooo/vba/excel/XSheetObject.hpp>

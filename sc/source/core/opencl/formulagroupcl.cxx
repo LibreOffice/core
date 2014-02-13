@@ -52,7 +52,6 @@ static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #ifdef MD5_KERNEL
 #include <rtl/digest.h>
 #endif
-#include <memory>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>

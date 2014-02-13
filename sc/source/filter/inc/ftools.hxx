@@ -23,7 +23,6 @@
 #include <vector>
 #include <map>
 #include <limits>
-#include <memory>
 #include <sal/macros.h>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

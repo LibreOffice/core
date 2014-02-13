@@ -88,7 +88,6 @@
 #include "stringutil.hxx"
 #include <documentlinkmgr.hxx>
 
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;

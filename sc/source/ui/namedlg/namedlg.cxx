@@ -35,7 +35,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <map>
-#include <memory>
 
 // defines -------------------------------------------------------------------
 
