@@ -184,7 +184,7 @@ private:
     sal_Int32           mnIndex;
     mutable ScPreviewTableInfo* mpTableInfo;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
