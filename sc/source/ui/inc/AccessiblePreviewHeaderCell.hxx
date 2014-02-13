@@ -45,7 +45,7 @@ public:
     ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
-                            const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
+                            const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
                             sal_Int32 nIndex );
 
 protected:
@@ -128,11 +128,11 @@ private:
     accessibility::AccessibleTextHelper* mpTextHelper;
     sal_Int32           mnIndex;
     ScAddress           maCellPos;
-    sal_Bool            mbColumnHeader;
-    sal_Bool            mbRowHeader;
+    bool                mbColumnHeader;
+    bool                mbRowHeader;
     mutable ScPreviewTableInfo* mpTableInfo;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 

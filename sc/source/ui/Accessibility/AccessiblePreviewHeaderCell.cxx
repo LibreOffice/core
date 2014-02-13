@@ -75,7 +75,7 @@ using namespace ::com::sun::star::accessibility;
 ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
-                            const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
+                            const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
                             sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
     mpViewShell( pViewShell ),
@@ -417,7 +417,7 @@ OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(un
     return sName;
 }
 
-sal_Bool ScAccessiblePreviewHeaderCell::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
+bool ScAccessiblePreviewHeaderCell::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
