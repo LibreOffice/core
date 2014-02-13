@@ -1140,6 +1140,21 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 #endif
 
+#if DBG_UTIL
+
+namespace {
+
+void debug_callback(GLenum source, GLenum type, GLuint id,
+        GLenum severity, GLsizei , const GLchar* message, void* )
+{
+    SAL_WARN("chart2.opengl", "OpenGL debug message: source: " << source << ", type: "
+            << type << ", id: " << id << ", severity: " << severity << " with message: " << message);
+}
+
+}
+
+#endif
+
 bool DummyChart::initOpengl()
 {
     SAL_WARN("chart2.opengl", "DummyChart::initOpengl----start");
@@ -1252,6 +1267,16 @@ bool DummyChart::initOpengl()
 #endif
 
     m_GLRender.InitOpenGL(GLWin);
+
+#if DBG_UTIL
+    // only enable debug output in dbgutil build
+    if( GLEW_ARB_debug_output )
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(&debug_callback, NULL);
+    }
+
+#endif
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
