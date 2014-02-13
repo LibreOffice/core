@@ -745,6 +745,7 @@ private:
     SwWriteTable *m_pTableWrt;
 
     bool m_bParagraphOpened;
+    bool m_bIsFirstParagraph;
 
     // Remember that a column break has to be opened at the
     // beginning of the next paragraph

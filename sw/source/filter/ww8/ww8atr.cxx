@@ -2058,8 +2058,25 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             switch (pTOX->GetType())
             {
             case TOX_INDEX:
+
+                // Add a continuous section break
+                if( GetExport().AddSectionBreaksForTOX() )
+                {
+                    sal_uLong nRstLnNum = 0;
+                    WW8_SepInfo rInfo( &GetExport( ).pDoc->GetPageDesc( 0 ), rSect.GetParent()->GetFmt() , nRstLnNum );
+                    GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
+                }
+
                 eCode = ww::eINDEX;
                 sStr = FieldString(eCode);
+
+                {
+                    const SwFmtCol& rCol = (const SwFmtCol&)( rSect.GetFmt()->GetFmtAttr( RES_COL ) );
+                    const SwColumns& rColumns = rCol.GetColumns();
+                    sal_Int32 nCol = rColumns.size();
+                    sStr += "\\c \"" + OUString::number( nCol ) + "\"";
+                }
+
 
                 if (pTOX->GetTOXForm().IsCommaSeparated())
                     sStr += "\\r ";
@@ -2351,6 +2368,13 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
     {
         ww::eField eCode = TOX_INDEX == pTOX->GetType() ? ww::eINDEX : ww::eTOC;
         GetExport( ).OutputField( 0, eCode, OUString(), WRITEFIELD_CLOSE );
+
+        if ( pTOX->GetType() == TOX_INDEX && GetExport().AddSectionBreaksForTOX() )
+        {
+            sal_uLong nRstLnNum = 0;
+            WW8_SepInfo rInfo( &GetExport( ).pDoc->GetPageDesc( 0 ), rSect.GetFmt() , nRstLnNum );
+            GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
+        }
     }
     GetExport( ).bInWriteTOX = false;
     if (bCareEnd)

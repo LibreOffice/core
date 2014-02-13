@@ -1910,7 +1910,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             bLastCR = true;
     }
 
-    AttrOutput().StartParagraph( pTextNodeInfo );
 
     bool bFlyInTable = mpParentFrame && IsInTable();
 
@@ -1934,6 +1933,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             m_aCurrentCharPropStarts.push( 0 );
         }
     }
+
+    AttrOutput().StartParagraph( pTextNodeInfo );
 
     const SwSection* pTOXSect = 0;
     if( bInWriteTOX )
@@ -2606,14 +2607,9 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     const SfxPoolItem* pI;
     if( pSet)
     {
-        bool bNoPageBreak = false;
+        bool bNoPageBreak = true;
         if ( SFX_ITEM_ON != pSet->GetItemState(RES_PAGEDESC, true, &pI)
             || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() )
-        {
-            bNoPageBreak = true;
-        }
-
-        if (bNoPageBreak)
         {
             if (SFX_ITEM_ON != pSet->GetItemState(RES_BREAK, true, &pI))
                 bNoPageBreak = true;

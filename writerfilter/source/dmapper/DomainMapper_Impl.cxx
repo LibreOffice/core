@@ -57,6 +57,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <oox/mathml/import.hxx>
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -2847,6 +2848,19 @@ void DomainMapper_Impl::handleIndex
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
+
+    OUString sValue;
+    if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
+    {
+        sValue = sValue.replaceAll("\"", "");
+        uno::Reference<text::XTextColumns> xTextColumns;
+        xTOC->getPropertyValue(rPropNameSupplier.GetName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+        if (xTextColumns.is())
+        {
+            xTextColumns->setColumnCount( sValue.toInt32() );
+            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
+        }
+    }
 }
 
 /*-------------------------------------------------------------------------
