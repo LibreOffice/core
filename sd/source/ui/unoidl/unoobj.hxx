@@ -53,7 +53,8 @@ private:
     // Intern
     SdAnimationInfo* GetAnimationInfo( sal_Bool bCreate = sal_False ) const
         throw (std::exception);
-    sal_Bool IsPresObj() const throw();
+    sal_Bool IsPresObj() const
+        throw (std::exception);
     void SetPresObj( sal_Bool bPresObj ) throw();
 
     bool IsEmptyPresObj() const throw();

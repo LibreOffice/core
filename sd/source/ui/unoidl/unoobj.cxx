@@ -892,7 +892,8 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(::
 
 /** checks if this is a presentation object
  */
-sal_Bool SdXShape::IsPresObj() const throw()
+sal_Bool SdXShape::IsPresObj() const
+    throw (std::exception)
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
