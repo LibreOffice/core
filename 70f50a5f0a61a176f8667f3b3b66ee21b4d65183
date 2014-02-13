@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_4f20ed9b",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-13T09:24:40Z",
+      "side": 1,
+      "message": "See the comment above the assert: the whole point of this test is to assert that the relative width is *not* 0.",
+      "revId": "70f50a5f0a61a176f8667f3b3b66ee21b4d65183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
