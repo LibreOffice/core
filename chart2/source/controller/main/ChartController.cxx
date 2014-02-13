@@ -1030,7 +1030,7 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
 void SAL_CALL ChartController::dispatch(
     const util::URL& rURL,
     const uno::Sequence< beans::PropertyValue >& rArgs )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     //@todo avoid OString
     OString aCommand( OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
