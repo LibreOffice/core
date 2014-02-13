@@ -430,7 +430,7 @@ sal_Bool SvxEditSourceAdapter::IsValid() const
 
 //--------------------------------------------------------------------------------------
 
-SvxAccessibleTextAdapter::SvxAccessibleTextAdapter() : mrTextForwarder( NULL )
+SvxAccessibleTextAdapter::SvxAccessibleTextAdapter() : mpTextForwarder( NULL )
 {
 }
 
@@ -440,24 +440,24 @@ SvxAccessibleTextAdapter::~SvxAccessibleTextAdapter()
 
 sal_Int32 SvxAccessibleTextAdapter::GetParagraphCount() const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetParagraphCount();
+    return mpTextForwarder->GetParagraphCount();
 }
 
 sal_Int32 SvxAccessibleTextAdapter::GetTextLen( sal_Int32 nParagraph ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
-    aIndex.SetEEIndex( nParagraph, mrTextForwarder->GetTextLen( nParagraph ), *this );
+    aIndex.SetEEIndex( nParagraph, mpTextForwarder->GetTextLen( nParagraph ), *this );
 
     return aIndex.GetIndex();
 }
 
 OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -472,7 +472,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         ::std::swap( aStartIndex, aEndIndex );
     }
 
-    OUString sStr = mrTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
+    OUString sStr = mpTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
 
     // trim field text, if necessary
     if( aStartIndex.InField() )
@@ -526,7 +526,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 
 SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -534,39 +534,39 @@ SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, sal_Boo
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    return mrTextForwarder->GetAttribs( MakeEESelection(aStartIndex, aEndIndex),
+    return mpTextForwarder->GetAttribs( MakeEESelection(aStartIndex, aEndIndex),
                                         bOnlyHardAttrib );
 }
 
 SfxItemSet SvxAccessibleTextAdapter::GetParaAttribs( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetParaAttribs( nPara );
+    return mpTextForwarder->GetParaAttribs( nPara );
 }
 
 void SvxAccessibleTextAdapter::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    mrTextForwarder->SetParaAttribs( nPara, rSet );
+    mpTextForwarder->SetParaAttribs( nPara, rSet );
 }
 
 void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 }
 
 void SvxAccessibleTextAdapter::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    mrTextForwarder->GetPortions( nPara, rList );
+    mpTextForwarder->GetPortions( nPara, rList );
 }
 
 sal_uInt16 SvxAccessibleTextAdapter::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -574,20 +574,20 @@ sal_uInt16 SvxAccessibleTextAdapter::GetItemState( const ESelection& rSel, sal_u
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    return mrTextForwarder->GetItemState( MakeEESelection(aStartIndex, aEndIndex),
+    return mpTextForwarder->GetItemState( MakeEESelection(aStartIndex, aEndIndex),
                                           nWhich );
 }
 
 sal_uInt16 SvxAccessibleTextAdapter::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetItemState( nPara, nWhich );
+    return mpTextForwarder->GetItemState( nPara, nWhich );
 }
 
 void SvxAccessibleTextAdapter::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -595,13 +595,13 @@ void SvxAccessibleTextAdapter::QuickInsertText( const OUString& rText, const ESe
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    mrTextForwarder->QuickInsertText( rText,
+    mpTextForwarder->QuickInsertText( rText,
                                       MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 void SvxAccessibleTextAdapter::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -609,13 +609,13 @@ void SvxAccessibleTextAdapter::QuickInsertField( const SvxFieldItem& rFld, const
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    mrTextForwarder->QuickInsertField( rFld,
+    mpTextForwarder->QuickInsertField( rFld,
                                        MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 void SvxAccessibleTextAdapter::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -623,13 +623,13 @@ void SvxAccessibleTextAdapter::QuickSetAttribs( const SfxItemSet& rSet, const ES
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    mrTextForwarder->QuickSetAttribs( rSet,
+    mpTextForwarder->QuickSetAttribs( rSet,
                                       MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 void SvxAccessibleTextAdapter::QuickInsertLineBreak( const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -637,36 +637,36 @@ void SvxAccessibleTextAdapter::QuickInsertLineBreak( const ESelection& rSel )
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    mrTextForwarder->QuickInsertLineBreak( MakeEESelection(aStartIndex, aEndIndex) );
+    mpTextForwarder->QuickInsertLineBreak( MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 SfxItemPool* SvxAccessibleTextAdapter::GetPool() const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetPool();
+    return mpTextForwarder->GetPool();
 }
 
 OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
+    return mpTextForwarder->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
 void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    mrTextForwarder->FieldClicked( rField, nPara, nPos );
+    mpTextForwarder->FieldClicked( rField, nPara, nPos );
 }
 
 sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
-    aIndex.SetIndex(nPara, nLogicalIndex, *mrTextForwarder);
+    aIndex.SetIndex(nPara, nLogicalIndex, *mpTextForwarder);
     return aIndex.GetEEIndex();
 }
 
@@ -674,66 +674,66 @@ sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_I
 
 sal_Bool SvxAccessibleTextAdapter::IsValid() const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    if( mrTextForwarder )
-        return mrTextForwarder->IsValid();
+    if( mpTextForwarder )
+        return mpTextForwarder->IsValid();
     else
         return sal_False;
 }
 
 LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
 
     aIndex.SetIndex( nPara, nPos, *this );
 
-    return mrTextForwarder->GetLanguage( nPara, aIndex.GetEEIndex() );
+    return mpTextForwarder->GetLanguage( nPara, aIndex.GetEEIndex() );
 }
 
 sal_Int32 SvxAccessibleTextAdapter::GetFieldCount( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetFieldCount( nPara );
+    return mpTextForwarder->GetFieldCount( nPara );
 }
 
 EFieldInfo SvxAccessibleTextAdapter::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetFieldInfo( nPara, nField );
+    return mpTextForwarder->GetFieldInfo( nPara, nField );
 }
 
 EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetBulletInfo( nPara );
+    return mpTextForwarder->GetBulletInfo( nPara );
 }
 
 void SvxAccessibleTextAdapter::SetUpdateModeForAcc(sal_Bool bUp)
 {
-    return mrTextForwarder->SetUpdateModeForAcc(bUp);
+    return mpTextForwarder->SetUpdateModeForAcc(bUp);
 }
 
 sal_Bool SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
 {
-    return mrTextForwarder->GetUpdateModeForAcc();
+    return mpTextForwarder->GetUpdateModeForAcc();
 }
 
 Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
     aIndex.SetIndex( nPara, nIndex, *this );
 
     // preset if anything goes wrong below
     // n-th char in GetParagraphIndex's paragraph
-    Rectangle aRect = mrTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+    Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
     if( aIndex.InBullet() )
     {
@@ -766,12 +766,12 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
             {
                 ESelection aSel = MakeEESelection( aIndex );
 
-                SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mrTextForwarder->GetAttribs( aSel ) );
+                SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mpTextForwarder->GetAttribs( aSel ) );
                 AccessibleStringWrap aStringWrap( *pOutDev,
                                                   aFont,
-                                                  mrTextForwarder->GetText( aSel ) );
+                                                  mpTextForwarder->GetText( aSel ) );
 
-                Rectangle aStartRect = mrTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+                Rectangle aStartRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
                 if( !aStringWrap.GetCharacterBounds( aIndex.GetFieldOffset(), aRect ) )
                     aRect = aStartRect;
@@ -786,7 +786,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
 
 Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
@@ -795,35 +795,35 @@ Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
         // include bullet in para bounding box
-        Rectangle aRect( mrTextForwarder->GetParaBounds( nPara ) );
+        Rectangle aRect( mpTextForwarder->GetParaBounds( nPara ) );
 
         aRect.Union( aBulletInfo.aBounds );
 
         return aRect;
     }
 
-    return mrTextForwarder->GetParaBounds( nPara );
+    return mpTextForwarder->GetParaBounds( nPara );
 }
 
 MapMode SvxAccessibleTextAdapter::GetMapMode() const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetMapMode();
+    return mpTextForwarder->GetMapMode();
 }
 
 OutputDevice* SvxAccessibleTextAdapter::GetRefDevice() const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetRefDevice();
+    return mpTextForwarder->GetRefDevice();
 }
 
 sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    if( !mrTextForwarder->GetIndexAtPoint( rPoint, nPara, nIndex ) )
+    if( !mpTextForwarder->GetIndexAtPoint( rPoint, nPara, nIndex ) )
         return sal_False;
 
     SvxAccessibleTextIndex aIndex;
@@ -874,12 +874,12 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
             return sal_False;
 
         ESelection aSelection = MakeEESelection( aIndex );
-        SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mrTextForwarder->GetAttribs( aSelection ) );
+        SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mpTextForwarder->GetAttribs( aSelection ) );
         AccessibleStringWrap aStringWrap( *pOutDev,
                                           aFont,
-                                          mrTextForwarder->GetText( aSelection ) );
+                                          mpTextForwarder->GetText( aSelection ) );
 
-        Rectangle aRect = mrTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+        Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
         Point aPoint = rPoint;
         aPoint.Move( -aRect.Left(), -aRect.Top() );
 
@@ -896,7 +896,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
 
 sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
     aIndex.SetIndex(nPara, nIndex, *this);
@@ -931,7 +931,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
         return sal_True;
     }
 
-    if( !mrTextForwarder->GetWordIndices( nPara, nIndex, nStart, nEnd ) )
+    if( !mpTextForwarder->GetWordIndices( nPara, nIndex, nStart, nEnd ) )
         return sal_False;
 
     aIndex.SetEEIndex( nPara, nStart, *this );
@@ -951,7 +951,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
 
 sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool /* bInCell */ ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aIndex;
     aIndex.SetIndex(nPara, nIndex, *this);
@@ -983,7 +983,7 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
         return sal_True;
     }
 
-    if( !mrTextForwarder->GetAttributeRun( nStartIndex, nEndIndex, nPara, nIndex ) )
+    if( !mpTextForwarder->GetAttributeRun( nStartIndex, nEndIndex, nPara, nIndex ) )
         return sal_False;
 
     aIndex.SetEEIndex( nPara, nStartIndex, *this );
@@ -1003,14 +1003,14 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
 
 sal_Int32 SvxAccessibleTextAdapter::GetLineCount( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetLineCount( nPara );
+    return mpTextForwarder->GetLineCount( nPara );
 }
 
 sal_Int32 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -1020,7 +1020,7 @@ sal_Int32 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_Int32 nLine
     {
         nLastIndex = nCurrIndex;
         nCurrIndex =
-            nCurrIndex + mrTextForwarder->GetLineLen( nPara, nCurrLine );
+            nCurrIndex + mpTextForwarder->GetLineLen( nPara, nCurrLine );
     }
 
     aEndIndex.SetEEIndex( nPara, nCurrIndex, *this );
@@ -1036,17 +1036,17 @@ sal_Int32 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_Int32 nLine
 
 void SvxAccessibleTextAdapter::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
-    mrTextForwarder->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
+    mpTextForwarder->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
 }
 
 sal_Int32 SvxAccessibleTextAdapter::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    return mrTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
+    return mpTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
 }
 
 sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -1054,12 +1054,12 @@ sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    return mrTextForwarder->Delete( MakeEESelection(aStartIndex, aEndIndex ) );
+    return mpTextForwarder->Delete( MakeEESelection(aStartIndex, aEndIndex ) );
 }
 
 sal_Bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -1067,38 +1067,38 @@ sal_Bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESele
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    return mrTextForwarder->InsertText( rStr, MakeEESelection(aStartIndex, aEndIndex) );
+    return mpTextForwarder->InsertText( rStr, MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 sal_Bool SvxAccessibleTextAdapter::QuickFormatDoc( sal_Bool bFull )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->QuickFormatDoc( bFull );
+    return mpTextForwarder->QuickFormatDoc( bFull );
 }
 
 sal_Int16 SvxAccessibleTextAdapter::GetDepth( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetDepth( nPara );
+    return mpTextForwarder->GetDepth( nPara );
 }
 
 sal_Bool SvxAccessibleTextAdapter::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->SetDepth( nPara, nNewDepth );
+    return mpTextForwarder->SetDepth( nPara, nNewDepth );
 }
 
 void SvxAccessibleTextAdapter::SetForwarder( SvxTextForwarder& rForwarder )
 {
-    mrTextForwarder = &rForwarder;
+    mpTextForwarder = &rForwarder;
 }
 
 sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
@@ -1116,7 +1116,7 @@ sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
 
 sal_Bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
@@ -1134,7 +1134,7 @@ sal_Bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
 
 sal_Bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
 {
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+    DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -1178,6 +1178,8 @@ void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
 //---------------------------------------------------------------------------------------
 
 SvxAccessibleTextEditViewAdapter::SvxAccessibleTextEditViewAdapter()
+    : mpViewForwarder(NULL)
+    , mpTextForwarder(NULL)
 {
 }
 
@@ -1187,49 +1189,49 @@ SvxAccessibleTextEditViewAdapter::~SvxAccessibleTextEditViewAdapter()
 
 sal_Bool SvxAccessibleTextEditViewAdapter::IsValid() const
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    if( mrViewForwarder )
-        return mrViewForwarder->IsValid();
+    if( mpViewForwarder )
+        return mpViewForwarder->IsValid();
     else
         return sal_False;
 }
 
 Rectangle SvxAccessibleTextEditViewAdapter::GetVisArea() const
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->GetVisArea();
+    return mpViewForwarder->GetVisArea();
 }
 
 Point SvxAccessibleTextEditViewAdapter::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->LogicToPixel(rPoint, rMapMode);
+    return mpViewForwarder->LogicToPixel(rPoint, rMapMode);
 }
 
 Point SvxAccessibleTextEditViewAdapter::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->PixelToLogic(rPoint, rMapMode);
+    return mpViewForwarder->PixelToLogic(rPoint, rMapMode);
 }
 
 sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     ESelection aSelection;
 
-    if( !mrViewForwarder->GetSelection( aSelection ) )
+    if( !mpViewForwarder->GetSelection( aSelection ) )
         return sal_False;
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetEEIndex( aSelection.nStartPara, aSelection.nStartPos, *mrTextForwarder );
-    aEndIndex.SetEEIndex( aSelection.nEndPara, aSelection.nEndPos, *mrTextForwarder );
+    aStartIndex.SetEEIndex( aSelection.nStartPara, aSelection.nStartPos, *mpTextForwarder );
+    aEndIndex.SetEEIndex( aSelection.nEndPara, aSelection.nEndPos, *mpTextForwarder );
 
     DBG_ASSERT(aStartIndex.GetIndex() >= 0 && aStartIndex.GetIndex() <= USHRT_MAX &&
                aEndIndex.GetIndex() >= 0 && aEndIndex.GetIndex() <= USHRT_MAX,
@@ -1243,43 +1245,43 @@ sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) cons
 
 sal_Bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel )
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *mrTextForwarder );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *mrTextForwarder );
+    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *mpTextForwarder );
+    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *mpTextForwarder );
 
-    return mrViewForwarder->SetSelection( MakeEESelection(aStartIndex, aEndIndex) );
+    return mpViewForwarder->SetSelection( MakeEESelection(aStartIndex, aEndIndex) );
 }
 
 sal_Bool SvxAccessibleTextEditViewAdapter::Copy()
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->Copy();
+    return mpViewForwarder->Copy();
 }
 
 sal_Bool SvxAccessibleTextEditViewAdapter::Cut()
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->Cut();
+    return mpViewForwarder->Cut();
 }
 
 sal_Bool SvxAccessibleTextEditViewAdapter::Paste()
 {
-    DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
+    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
-    return mrViewForwarder->Paste();
+    return mpViewForwarder->Paste();
 }
 
 void SvxAccessibleTextEditViewAdapter::SetForwarder( SvxEditViewForwarder&      rForwarder,
                                                      SvxAccessibleTextAdapter&  rTextForwarder )
 {
-    mrViewForwarder = &rForwarder;
-    mrTextForwarder = &rTextForwarder;
+    mpViewForwarder = &rForwarder;
+    mpTextForwarder = &rTextForwarder;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

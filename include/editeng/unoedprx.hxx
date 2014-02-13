@@ -106,7 +106,7 @@ public:
     sal_Bool                IsEditable( const ESelection& rSelection );
 
 private:
-    SvxTextForwarder* mrTextForwarder;
+    SvxTextForwarder* mpTextForwarder;
 };
 
 class SvxAccessibleTextEditViewAdapter : public SvxEditViewForwarder
@@ -132,8 +132,8 @@ public:
     void                SetForwarder( SvxEditViewForwarder&, SvxAccessibleTextAdapter& );
 
 private:
-    SvxEditViewForwarder*       mrViewForwarder;
-    SvxAccessibleTextAdapter*   mrTextForwarder;
+    SvxEditViewForwarder*       mpViewForwarder;
+    SvxAccessibleTextAdapter*   mpTextForwarder;
 };
 
 class EDITENG_DLLPUBLIC SvxEditSourceAdapter : public SvxEditSource
