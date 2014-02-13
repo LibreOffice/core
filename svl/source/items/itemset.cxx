@@ -31,7 +31,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/solar.h>
-#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2041,14 +2041,13 @@ sal_uInt64 SfxItemSet::getHash() const
 
 OString SfxItemSet::stringify() const
 {
-    rtl::OStringBuffer aString(100);
     SvMemoryStream aStream;
     SfxItemSet aSet(*this);
     aSet.InvalidateDefaultItems();
     aSet.Store(aStream, true);
     aStream.Flush();
-    aString.append((const char *)aStream.GetData(), aStream.GetEndOfData());
-
-    return aString.makeStringAndClear();
+    return OString(
+        static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
