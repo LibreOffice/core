@@ -7065,7 +7065,6 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
     JAVA_ARCH=
     JAVA_TOOLKIT=
     x_JAVALIB=
-    x_JDKLIB=[\#]
 
     case "$host_os" in
 
@@ -7089,8 +7088,6 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         ;;
 
     cygwin*)
-        x_JDKLIB=
-        JDKLIB="$JAVA_HOME/lib"
         JAVAINC="-I$JAVA_HOME/include/win32"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
@@ -7331,7 +7328,6 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
     fi
 elif test -z "$ENABLE_JAVA"; then
     x_JAVALIB=[\#]
-    x_JDKLIB=[\#]
 fi
 SOLARINC="$SOLARINC $JAVAINC"
 
@@ -7345,10 +7341,7 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JDK)
-AC_SUBST(JDKLIB)
 AC_SUBST(x_JAVALIB)
-AC_SUBST(x_JDKLIB)
-
 
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
 if test -n "$with_idlc_cpp"; then
