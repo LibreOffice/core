@@ -252,7 +252,7 @@ TabAlign GetTabAlign( sal_Int32 aToken )
     return nEnum;
 }
 
-const char* GetHatchPattern( const Hatch& rHatch )
+const char* GetHatchPattern( const drawing::Hatch& rHatch )
 {
     const char* sPattern = 0;
     const sal_Int32 nAngle = rHatch.Angle > 1800 ? rHatch.Angle - 1800 : rHatch.Angle;
@@ -261,7 +261,7 @@ const char* GetHatchPattern( const Hatch& rHatch )
     {
         switch( rHatch.Style )
         {
-            case HatchStyle_SINGLE:
+            case drawing::HatchStyle_SINGLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "ltHorz";
@@ -270,8 +270,8 @@ const char* GetHatchPattern( const Hatch& rHatch )
 
                 break;
             }
-            case HatchStyle_DOUBLE:
-            case HatchStyle_TRIPLE:
+            case drawing::HatchStyle_DOUBLE:
+            case drawing::HatchStyle_TRIPLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "smGrid";
@@ -288,7 +288,7 @@ const char* GetHatchPattern( const Hatch& rHatch )
     {
         switch( rHatch.Style )
         {
-            case HatchStyle_SINGLE:
+            case drawing::HatchStyle_SINGLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "ltUpDiag";
@@ -297,8 +297,8 @@ const char* GetHatchPattern( const Hatch& rHatch )
 
                 break;
             }
-            case HatchStyle_DOUBLE:
-            case HatchStyle_TRIPLE:
+            case drawing::HatchStyle_DOUBLE:
+            case drawing::HatchStyle_TRIPLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "smCheck";
@@ -315,7 +315,7 @@ const char* GetHatchPattern( const Hatch& rHatch )
     {
         switch( rHatch.Style )
         {
-            case HatchStyle_SINGLE:
+            case drawing::HatchStyle_SINGLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "ltVert";
@@ -324,8 +324,8 @@ const char* GetHatchPattern( const Hatch& rHatch )
 
                 break;
             }
-            case HatchStyle_DOUBLE:
-            case HatchStyle_TRIPLE:
+            case drawing::HatchStyle_DOUBLE:
+            case drawing::HatchStyle_TRIPLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "smGrid";
@@ -342,7 +342,7 @@ const char* GetHatchPattern( const Hatch& rHatch )
     {
         switch( rHatch.Style )
         {
-            case HatchStyle_SINGLE:
+            case drawing::HatchStyle_SINGLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "ltDnDiag";
@@ -351,8 +351,8 @@ const char* GetHatchPattern( const Hatch& rHatch )
 
                 break;
             }
-            case HatchStyle_DOUBLE:
-            case HatchStyle_TRIPLE:
+            case drawing::HatchStyle_DOUBLE:
+            case drawing::HatchStyle_TRIPLE:
             {
                 if( rHatch.Distance < 75 )
                     sPattern = "smCheck";
