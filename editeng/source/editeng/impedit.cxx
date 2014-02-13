@@ -1609,7 +1609,9 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     }
 }
 
-void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
+void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE )
+    throw (::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aVclGuard;
 
