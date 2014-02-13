@@ -879,7 +879,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     }
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
-            throw css::io::IOException(
+            throw css::uno::RuntimeException(
                 ("XBridge::getInstance sInstanceName contains non-ASCII"
                  " character"),
                 css::uno::Reference< css::uno::XInterface >());
