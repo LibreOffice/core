@@ -1290,7 +1290,9 @@ throw ( ::com::sun::star::uno::Exception,
 }
 
 void ImageManagerImpl::store()
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::Exception,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     ResetableGuard aGuard( m_aLock );
 
