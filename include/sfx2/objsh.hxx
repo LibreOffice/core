@@ -480,8 +480,6 @@ public:
     StarBASIC*                  GetBasic() const;
 
     // Interface Document content, Organizer
-#define INDEX_IGNORE USHRT_MAX
-
 #define CONTENT_STYLE 0
 #define CONTENT_CONFIG 1
 #define CONTENT_MACRO 2
