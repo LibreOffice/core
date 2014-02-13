@@ -385,6 +385,16 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, SdStyleShee
     rStyles = aUsedStyles;
 }
 
+SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, OUString aStyleName)
+{
+    for(SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    {
+        if(OUString((*aIt)->GetName()).startsWith(aStyleName))
+            return (*aIt).get();
+    }
+    return NULL;
+}
+
 }
 
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
@@ -545,7 +555,10 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
     SdStyleSheetVector aNewGraphicStyles;
-    pStyleSheetPool->CopyGraphicSheets(*pBookmarkStyleSheetPool, aNewGraphicStyles);
+    OUString aRenameStr;
+    if(!bReplace && !bNoDialogs)
+        aRenameStr = OUString("_");
+    pStyleSheetPool->RenameAndCopyGraphicSheets(*pBookmarkStyleSheetPool, aNewGraphicStyles, aRenameStr);
     SdStyleSheetVector aNewCellStyles;
     pStyleSheetPool->CopyCellSheets(*pBookmarkStyleSheetPool, aNewCellStyles);
 
@@ -952,6 +965,31 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // Make absolutely sure no double masterpages are there
     RemoveUnnecessaryMasterPages(NULL, sal_True, sal_True);
 
+    // Rename object styles if necessary
+    if(!aRenameStr.isEmpty())
+    {
+        try
+        {
+            for(sal_uInt32 p = nInsertPos; p < (nInsertPos + nBMSdPageCount); p++)
+            {
+                SdPage *pPg = (SdPage *) GetPage(p);
+                for(sal_uIntPtr i = 0; i < pPg->GetObjCount(); i++)
+                {
+                    if(pPg->GetObj(i)->GetStyleSheet())
+                    {
+                        OUString aStyleName = pPg->GetObj(i)->GetStyleSheet()->GetName();
+                        SfxStyleSheet *pSheet = lcl_findStyle(aNewGraphicStyles, aStyleName + aRenameStr);
+                        if(pSheet != NULL)
+                            pPg->GetObj(i)->SetStyleSheet(pSheet, true);
+                    }
+                }
+            }
+        }
+        catch(...)
+        {
+            OSL_FAIL("Exception while renaming styles @ SdDrawDocument::InsertBookmarkAsPage");
+        }
+    }
     // remove copied styles not used on any inserted page and create
     // undo records
     // WARNING: SdMoveStyleSheetsUndoAction clears the passed list of

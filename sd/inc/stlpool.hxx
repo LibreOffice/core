@@ -82,6 +82,8 @@ public:
     void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
+    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, OUString &rRenameSuffix);
+    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
@@ -122,8 +124,11 @@ public:
     virtual void SAL_CALL acquire (void) throw ();
     virtual void SAL_CALL release (void) throw ();
 protected:
+    void RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
+    void RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, OUString &rRenameSuffix);
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
+    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix );
 
     virtual SfxStyleSheetBase* Create(const String& rName, SfxStyleFamily eFamily, sal_uInt16 nMask);
     virtual SfxStyleSheetBase* Create(const SdStyleSheet& rStyle);

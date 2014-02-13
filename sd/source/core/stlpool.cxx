@@ -70,6 +70,34 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 
+namespace
+{
+
+OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > > &rRenamedList, OUString aOriginalName )
+{
+    std::vector< std::pair< OUString, OUString > >::iterator aIter;
+    for( aIter = rRenamedList.begin(); aIter != rRenamedList.end(); ++aIter )
+    {
+        if((*aIter).first == aOriginalName )
+            return (*aIter).second;
+    }
+    return OUString();
+}
+
+SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, OUString aStyleName)
+{
+    if( aStyleName.isEmpty() )
+        return NULL;
+    for(SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    {
+        if(OUString((*aIt)->GetName()) == aStyleName)
+            return (*aIt).get();
+    }
+    return NULL;
+}
+
+}
+
 // ----------------------------------------------------------
 
 SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pDocument)
@@ -521,6 +549,11 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
     CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS );
 }
 
+void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, OUString &rRenameSuffix)
+{
+    RenameAndCopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rRenameSuffix );
+}
+
 void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
 {
     CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL );
@@ -593,19 +626,42 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleShee
     CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL, rCreatedSheets );
 }
 
+void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix)
+{
+    RenameAndCopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
+}
+
+void SdStyleSheetPool::RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, OUString &rRenameSuffix)
+{
+    SdStyleSheetVector aTmpSheets;
+    RenameAndCopySheets( rSourcePool, eFamily, aTmpSheets, rRenameSuffix );
+}
+
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
 {
     SdStyleSheetVector aTmpSheets;
     CopySheets(rSourcePool, eFamily, aTmpSheets);
 }
 
+void SdStyleSheetPool::RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix)
+{
+    CopySheets( rSourcePool, eFamily, rCreatedSheets, rRenameSuffix );
+}
+
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)
+{
+    OUString emptyName;
+    CopySheets(rSourcePool, eFamily, rCreatedSheets, emptyName);
+}
+
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString& rRenameSuffix)
 {
     String aHelpFile;
 
     sal_uInt32 nCount = rSourcePool.aStyles.size();
 
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > > aNewStyles;
+    std::vector< std::pair< OUString, OUString > > aRenamedList;
 
     for (sal_uInt32 n = 0; n < nCount; n++)
     {
@@ -613,8 +669,27 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
         if( xSheet->GetFamily() == eFamily )
         {
+            bool bAddToList = false;
             String aName( xSheet->GetName() );
-            if ( !Find( aName, eFamily ) )
+            SfxStyleSheetBase* pExistingSheet = Find(aName, eFamily);
+            if( pExistingSheet && !rRenameSuffix.isEmpty() )
+            {
+                sal_uInt64 nHash = xSheet->GetItemSet().getHash();
+                if( pExistingSheet->GetItemSet().getHash() != nHash )
+                {
+                    OUString aTmpName = aName + rRenameSuffix;
+                    sal_Int32 nSuffix = 1;
+                    do
+                    {
+                        aTmpName = aName + rRenameSuffix + OUString::valueOf(nSuffix);
+                        pExistingSheet = Find(aTmpName, eFamily);
+                        nSuffix++;
+                    } while( pExistingSheet && pExistingSheet->GetItemSet().getHash() != nHash );
+                    aName = aTmpName;
+                    bAddToList = true;
+                }
+            }
+            if ( !pExistingSheet )
             {
                 rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
 
@@ -629,6 +704,13 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
+                aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
+            }
+            else if( bAddToList )
+            {
+                // Add to list - used for renaming
+                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pExistingSheet ) ) );
+                aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
             }
         }
     }
@@ -637,6 +719,15 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > >::iterator aIter;
     for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); ++aIter )
     {
+        if( !rRenameSuffix.isEmpty() )
+        {
+            SfxStyleSheet *pParent = lcl_findStyle(rCreatedSheets, lcl_findRenamedStyleName(aRenamedList, (*aIter).second));
+            if( pParent )
+            {
+                (*aIter).first->SetParent( pParent->GetName() );
+                continue;
+            }
+        }
         DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
         (*aIter).first->SetParent( (*aIter).second );
     }
