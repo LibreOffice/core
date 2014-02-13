@@ -836,7 +836,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : static_cast<sal_uInt16>(eMax);
     sal_uInt16 nI = n / 32;                     // # des sal_uInt32
-    sal_uLong nMask = 1 << ( n % 32 );          // Maske fuer Bits
+    sal_uInt32 nMask = 1 << ( n % 32 );          // Maske fuer Bits
 
     if ((sizeof(nFieldTagAlways)/sizeof(nFieldTagAlways[0])) <= nI)
     {   // if indexes larger than 95 are needed, then a new configuration

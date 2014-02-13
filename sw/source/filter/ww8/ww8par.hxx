@@ -1243,11 +1243,11 @@ private:
     OUString sBaseURL;
 
                                 // Ini-Flags:
-    sal_uLong nIniFlags;            // Flags aus der writer.ini
-    sal_uLong nIniFlags1;           // dito ( zusaetzliche Flags )
-    sal_uLong nFieldFlags;          // dito fuer Feldern
-    sal_uLong nFieldTagAlways[3];   // dito fuers Taggen von Feldern
-    sal_uLong nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
+    sal_uInt32 nIniFlags;            // Flags aus der writer.ini
+    sal_uInt32 nIniFlags1;           // dito ( zusaetzliche Flags )
+    sal_uInt32 nFieldFlags;          // dito fuer Feldern
+    sal_uInt32 nFieldTagAlways[3];   // dito fuers Taggen von Feldern
+    sal_uInt32 nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
     bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
     WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
