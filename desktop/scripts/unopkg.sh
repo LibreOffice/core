@@ -66,7 +66,7 @@ do
 done
 
 #make sure shared extensions will be readable by users
-[ $SHARED = true ] && umask 0022
+[ "$SHARED" = "true" ] && umask 0022
 
 # LHM-Patch: Sicherstellen, dass unopkg-Aufrufe als root die Profilverzeichnisse von Benutzern
 # unbeeinflusst lassen, auch wenn diese mit "sudo -s" (statt mit "sudo -s -H") arbeiten.
