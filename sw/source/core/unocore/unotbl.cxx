@@ -4007,7 +4007,11 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
     }
 }
 
-uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
+    throw (beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
