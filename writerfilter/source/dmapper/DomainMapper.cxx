@@ -1935,7 +1935,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 
             SectionColumnHandlerPtr pSectHdl( new SectionColumnHandler );
             pProperties->resolve(*pSectHdl);
-            if(pSectionContext)
+            if(pSectionContext && !m_pImpl->isInIndexContext())
             {
                 if( pSectHdl->IsEqualWidth() )
                 {

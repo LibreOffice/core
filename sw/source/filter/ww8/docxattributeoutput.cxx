@@ -269,6 +269,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_pSectionInfo.reset();
 
     m_bParagraphOpened = true;
+    m_bIsFirstParagraph = false;
 }
 
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
@@ -3693,7 +3694,9 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
         case msword::PageBreak:
             if ( pSectionInfo )
             {
-                if ( !m_bParagraphOpened )
+                // don't add section properties if this is the first
+                // section in the document
+                if ( !m_bParagraphOpened && !m_bIsFirstParagraph)
                 {
                     // Create a dummy paragraph if needed
                     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
@@ -6332,6 +6335,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nNextAnnotationMarkId( 0 ),
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
+      m_bIsFirstParagraph( true ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_nTextFrameLevel( 0 ),
       m_closeHyperlinkInThisRun( false ),

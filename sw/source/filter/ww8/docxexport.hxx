@@ -113,6 +113,8 @@ public:
 
     virtual bool FieldsQuoted() const { return true; }
 
+    virtual bool AddSectionBreaksForTOX() const { return true; }
+
     virtual bool ignoreAttributeForStyles( sal_uInt16 nWhich ) const;
 
     /// Guess the script (asian/western).
