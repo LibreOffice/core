@@ -3813,7 +3813,8 @@ uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColum
 
 uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
         sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
-    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException
+           std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRet;
