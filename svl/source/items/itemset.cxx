@@ -2043,7 +2043,6 @@ OString SfxItemSet::stringify() const
 {
     rtl::OStringBuffer aString(100);
     SvMemoryStream aStream;
-    OString aLine;
     SfxItemSet aSet(*this);
     aSet.InvalidateDefaultItems();
     aSet.Store(aStream, true);
