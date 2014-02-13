@@ -74,7 +74,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
 
 void XMLPageExport::exportMasterPageContent(
                 const Reference < XPropertySet > &,
-                sal_Bool /*bAutoStyles*/ )
+                bool /*bAutoStyles*/ )
 {
 
 }
@@ -102,7 +102,7 @@ sal_Bool XMLPageExport::exportStyle(
         aEntry.sStyleName = rStyle->getName();
         aNameVector.push_back( aEntry );
 
-        exportMasterPageContent( xPropSet, sal_True );
+        exportMasterPageContent( xPropSet, true );
     }
     else
     {
@@ -143,7 +143,7 @@ sal_Bool XMLPageExport::exportStyle(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_MASTER_PAGE, sal_True, sal_True );
 
-        exportMasterPageContent( xPropSet, sal_False );
+        exportMasterPageContent( xPropSet, false );
     }
 
     return sal_True;

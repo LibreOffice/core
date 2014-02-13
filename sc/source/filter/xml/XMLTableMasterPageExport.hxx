@@ -35,18 +35,18 @@ class XMLTableMasterPageExport : public XMLTextMasterPageExport
 {
     void exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
                             const xmloff::token::XMLTokenEnum aName,
-                            const sal_Bool bDisplay);
+                            const bool bDisplay);
 
 protected:
     virtual void exportHeaderFooterContent(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XText >& rText,
-            sal_Bool bAutoStyles, sal_Bool bProgress );
+            bool bAutoStyles, bool bProgress );
 
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                 sal_Bool bAutoStyles );
+                 bool bAutoStyles );
 
 public:
     XMLTableMasterPageExport( ScXMLExport& rExp );

@@ -51,12 +51,12 @@ protected:
     virtual void exportHeaderFooterContent(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XText >& rText,
-            sal_Bool bAutoStyles, sal_Bool bExportParagraph = sal_True );
+            bool bAutoStyles, bool bExportParagraph = true );
 
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                 sal_Bool bAutoStyles );
+                 bool bAutoStyles );
 
 public:
     XMLTextMasterPageExport( SvXMLExport& rExp );

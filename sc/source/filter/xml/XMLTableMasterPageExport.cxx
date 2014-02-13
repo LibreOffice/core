@@ -44,7 +44,7 @@ XMLTableMasterPageExport::~XMLTableMasterPageExport()
 
 void XMLTableMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
-            sal_Bool bAutoStyles, sal_Bool bProgress )
+            bool bAutoStyles, bool bProgress )
 {
     OSL_ENSURE( rText.is(), "There is the text" );
 
@@ -60,7 +60,7 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
 
 void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
                                                     const XMLTokenEnum aName,
-                                                    const sal_Bool bDisplay)
+                                                    const bool bDisplay)
 {
     if( xHeaderFooter.is() )
     {
@@ -107,7 +107,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
 
 void XMLTableMasterPageExport::exportMasterPageContent(
                 const Reference < XPropertySet > & rPropSet,
-                sal_Bool bAutoStyles )
+                bool bAutoStyles )
 {
     Reference < sheet::XHeaderFooterContent > xHeader(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_RIGHTHDRCON ) ), uno::UNO_QUERY);
 
@@ -121,27 +121,27 @@ void XMLTableMasterPageExport::exportMasterPageContent(
     {
         if( xHeader.is() )
         {
-            exportHeaderFooterContent( xHeader->getCenterText(), sal_True, false );
-            exportHeaderFooterContent( xHeader->getLeftText(), sal_True, false );
-            exportHeaderFooterContent( xHeader->getRightText(), sal_True, false );
+            exportHeaderFooterContent( xHeader->getCenterText(), true, false );
+            exportHeaderFooterContent( xHeader->getLeftText(), true, false );
+            exportHeaderFooterContent( xHeader->getRightText(), true, false );
         }
         if( xHeaderLeft.is())
         {
-            exportHeaderFooterContent( xHeaderLeft->getCenterText(), sal_True, false );
-            exportHeaderFooterContent( xHeaderLeft->getLeftText(), sal_True, false );
-            exportHeaderFooterContent( xHeaderLeft->getRightText(), sal_True, false );
+            exportHeaderFooterContent( xHeaderLeft->getCenterText(), true, false );
+            exportHeaderFooterContent( xHeaderLeft->getLeftText(), true, false );
+            exportHeaderFooterContent( xHeaderLeft->getRightText(), true, false );
         }
         if( xFooter.is() )
         {
-            exportHeaderFooterContent( xFooter->getCenterText(), sal_True, false );
-            exportHeaderFooterContent( xFooter->getLeftText(), sal_True, false );
-            exportHeaderFooterContent( xFooter->getRightText(), sal_True, false );
+            exportHeaderFooterContent( xFooter->getCenterText(), true, false );
+            exportHeaderFooterContent( xFooter->getLeftText(), true, false );
+            exportHeaderFooterContent( xFooter->getRightText(), true, false );
         }
         if( xFooterLeft.is())
         {
-            exportHeaderFooterContent( xFooterLeft->getCenterText(), sal_True, false );
-            exportHeaderFooterContent( xFooterLeft->getLeftText(), sal_True, false );
-            exportHeaderFooterContent( xFooterLeft->getRightText(), sal_True, false );
+            exportHeaderFooterContent( xFooterLeft->getCenterText(), true, false );
+            exportHeaderFooterContent( xFooterLeft->getLeftText(), true, false );
+            exportHeaderFooterContent( xFooterLeft->getRightText(), true, false );
         }
     }
     else

@@ -79,7 +79,7 @@ protected:
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                 sal_Bool bAutoStyles );
+                 bool bAutoStyles );
 
     sal_Bool exportStyle(
                 const ::com::sun::star::uno::Reference<
