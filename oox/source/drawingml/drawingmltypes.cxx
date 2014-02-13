@@ -252,7 +252,120 @@ TabAlign GetTabAlign( sal_Int32 aToken )
     return nEnum;
 }
 
-// --------------------------------------------------------------------
+const char* GetHatchPattern( const Hatch& rHatch )
+{
+    const char* sPattern = 0;
+    const sal_Int32 nAngle = rHatch.Angle > 1800 ? rHatch.Angle - 1800 : rHatch.Angle;
+    // Angle ~ 0° (horizontal)
+    if( (nAngle >= 0 && nAngle < 225) || nAngle >= 1575 )
+    {
+        switch( rHatch.Style )
+        {
+            case HatchStyle_SINGLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "ltHorz";
+                else
+                    sPattern = "horz";
+
+                break;
+            }
+            case HatchStyle_DOUBLE:
+            case HatchStyle_TRIPLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "smGrid";
+                else
+                    sPattern = "lgGrid";
+
+                break;
+            }
+            default: break;
+        }
+    }
+    // Angle ~ 45° (upward diagonal)
+    else if( nAngle < 675 )
+    {
+        switch( rHatch.Style )
+        {
+            case HatchStyle_SINGLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "ltUpDiag";
+                else
+                    sPattern = "wdUpDiag";
+
+                break;
+            }
+            case HatchStyle_DOUBLE:
+            case HatchStyle_TRIPLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "smCheck";
+                else
+                    sPattern = "openDmnd";
+
+                break;
+            }
+            default: break;
+        }
+    }
+    // Angle ~ 90° (vertical)
+    else if( nAngle < 1125 )
+    {
+        switch( rHatch.Style )
+        {
+            case HatchStyle_SINGLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "ltVert";
+                else
+                    sPattern = "vert";
+
+                break;
+            }
+            case HatchStyle_DOUBLE:
+            case HatchStyle_TRIPLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "smGrid";
+                else
+                    sPattern = "lgGrid";
+
+                break;
+            }
+            default: break;
+        }
+    }
+    // Angle ~ 135° (downward diagonal)
+    else if( nAngle < 1575 )
+    {
+        switch( rHatch.Style )
+        {
+            case HatchStyle_SINGLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "ltDnDiag";
+                else
+                    sPattern = "wdDnDiag";
+
+                break;
+            }
+            case HatchStyle_DOUBLE:
+            case HatchStyle_TRIPLE:
+            {
+                if( rHatch.Distance < 75 )
+                    sPattern = "smCheck";
+                else
+                    sPattern = "openDmnd";
+
+                break;
+            }
+            default: break;
+        }
+    }
+    return sPattern;
+}
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttribs )

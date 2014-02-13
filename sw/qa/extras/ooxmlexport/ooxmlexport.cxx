@@ -50,6 +50,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
@@ -2949,7 +2950,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 1st shape has some cropping
     text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 454 ), aGraphicCropStruct.Left );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 367 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( -454 ), aGraphicCropStruct.Top );
@@ -2957,7 +2957,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 2nd shape has no cropping
     aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
-
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Left );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Top );
@@ -3038,6 +3037,83 @@ DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br","type","column");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
+{
+    // Hatching was ignored by the export.
+
+    // 1st shape: light horizontal pattern (ltHorz)
+    drawing::Hatch aHatch = getProperty<drawing::Hatch>(getShape(1), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x99FF66), aHatch.Color);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 2nd shape: horizontal pattern (horz)
+    aHatch = getProperty<drawing::Hatch>(getShape(2), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 3rd shape: light vertical pattern (ltVert)
+    aHatch = getProperty<drawing::Hatch>(getShape(3), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(900), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 4th shape: vertical pattern (vert)
+    aHatch = getProperty<drawing::Hatch>(getShape(4), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(900), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 5th shape: light upward diagonal pattern (ltUpDiag)
+    aHatch = getProperty<drawing::Hatch>(getShape(5), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 6th shape: wide upward diagonal pattern (wdUpDiag)
+    aHatch = getProperty<drawing::Hatch>(getShape(6), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 7th shape: light downward diagonal pattern (ltDnDiag)
+    aHatch = getProperty<drawing::Hatch>(getShape(7), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1350), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 8th shape: wide downward diagonal pattern (wdDnDiag)
+    aHatch = getProperty<drawing::Hatch>(getShape(8), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1350), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
+
+    // 9th shape: small grid pattern (smGrid)
+    aHatch = getProperty<drawing::Hatch>(getShape(9), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
+
+    // 10th shape: large grid pattern (lgGrid)
+    aHatch = getProperty<drawing::Hatch>(getShape(10), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
+
+    // 11th shape: small checker board pattern (smCheck)
+    aHatch = getProperty<drawing::Hatch>(getShape(11), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
+
+    // 12th shape: outlined diamond pattern (openDmnd)
+    aHatch = getProperty<drawing::Hatch>(getShape(12), "FillHatch");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
+    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

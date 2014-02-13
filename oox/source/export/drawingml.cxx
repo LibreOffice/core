@@ -881,6 +881,28 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sBi
     }
 }
 
+void DrawingML::WritePattFill( Reference< XPropertySet > rXPropSet )
+{
+    if ( GetProperty( rXPropSet, "FillHatch" ) )
+    {
+        drawing::Hatch aHatch;
+        mAny >>= aHatch;
+
+        mpFS->startElementNS( XML_a , XML_pattFill, XML_prst, GetHatchPattern(aHatch), FSEND );
+
+        mpFS->startElementNS( XML_a , XML_fgClr, FSEND );
+        WriteColor(aHatch.Color);
+        mpFS->endElementNS( XML_a , XML_fgClr );
+
+        // In Writer hatching has no background so use white as a default value.
+        mpFS->startElementNS( XML_a , XML_bgClr, FSEND );
+        WriteColor(COL_WHITE);
+        mpFS->endElementNS( XML_a , XML_bgClr );
+
+        mpFS->endElementNS( XML_a , XML_pattFill );
+    }
+}
+
 void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUString& rURL )
 {
     Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
@@ -1885,9 +1907,6 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
 
-    if( aFillStyle == FillStyle_HATCH )
-        return;
-
     if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ) )
     {
         // map full transparent background to no fill
@@ -1907,6 +1926,9 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
         break;
     case FillStyle_BITMAP :
         WriteBlipFill( xPropSet, "FillBitmapURL" );
+        break;
+    case FillStyle_HATCH :
+        WritePattFill( xPropSet );
         break;
     case FillStyle_NONE:
         mpFS->singleElementNS( XML_a, XML_noFill, FSEND );

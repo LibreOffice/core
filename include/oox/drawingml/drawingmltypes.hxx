@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -128,11 +129,14 @@ sal_Int16 GetCaseMap( sal_Int32 nToken );
 /** converts a paragraph align to a ParaAdjust */
 sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 
-// Convert vertical adjust tokens to a TextVerticalAdjust item
+// Converts vertical adjust tokens to a TextVerticalAdjust item
 ::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
-// Convert a TextVerticalAdjust item to string value appearing in ooxml
+// Converts a TextVerticalAdjust item to string value appearing in ooxml
 OOX_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
+
+// Converts a Hatch object to an ooxml pattern.
+const char* GetHatchPattern( const ::com::sun::star::drawing::Hatch& rHatch );
 
 // ============================================================================
 
