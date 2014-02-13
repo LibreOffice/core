@@ -68,6 +68,9 @@
 #include <numrule.hxx>
 #include <boost/shared_ptr.hpp>
 
+#include <sax/tools/converter.hxx>
+#include <vcl/graphicfilter.hxx>
+
 using namespace ::com::sun::star;
 
 
@@ -697,7 +700,22 @@ IMAGE_SETEVENT:
     aFrmSet.Put( aFrmSize );
 
     Graphic aEmptyGrf;
-    aEmptyGrf.SetDefaultType();
+    if( sGrfNm.startsWith("data:") )
+    {
+        // use embedded base64 encoded data
+        ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
+        OUString sBase64Data = sGrfNm.replaceAt(0,22,"");
+        ::sax::Converter::decodeBase64(aPass, sBase64Data);
+        if( aPass.hasElements() )
+        {
+                SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), STREAM_READ);
+                GraphicFilter::GetGraphicFilter().ImportGraphic( aEmptyGrf, OUString(), aStream );
+        }
+    }
+    else
+    {
+        aEmptyGrf.SetDefaultType();
+    }
     SwFrmFmt *pFlyFmt = pDoc->Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
