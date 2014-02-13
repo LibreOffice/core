@@ -41,25 +41,6 @@ using namespace com::sun::star;
 
 using namespace std;
 
-enum SymbolEnum { Symbol_Square=0
-                 , Symbol_Diamond
-                 , Symbol_DownArrow
-                 , Symbol_UpArrow
-                 , Symbol_RightArrow
-                 , Symbol_LeftArrow
-                 , Symbol_Bowtie
-                 , Symbol_Sandglass
-                 , Symbol_Circle
-                 , Symbol_Star
-                 , Symbol_X
-                 , Symbol_Plus
-                 , Symbol_Asterisk
-                 , Symbol_HorizontalBar
-                 , Symbol_VerticalBar
-                 , Symbol_COUNT
-};
-
-
 namespace chart {
 
 namespace dummy {
