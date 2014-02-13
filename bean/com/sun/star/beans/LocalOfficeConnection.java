@@ -78,6 +78,15 @@ public class LocalOfficeConnection
         // load libofficebean.so/officebean.dll
         String aSharedLibName = getProgramPath() + java.io.File.separator +
             System.mapLibraryName(OFFICE_LIB_NAME);
+        // At least Oracle's 1.7.0_51 now maps to .dylib rather than .jnilib:
+        if (System.getProperty("os.name").startsWith("Mac")
+            && aSharedLibName.endsWith(".dylib"))
+        {
+            aSharedLibName
+                = aSharedLibName.substring(
+                    0, aSharedLibName.length() - "dylib".length())
+                + "jnilib";
+        }
         System.load( aSharedLibName );
     }
 
