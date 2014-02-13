@@ -202,7 +202,7 @@ void XMLAutoTextEventExport::exportEvents()
 void XMLAutoTextEventExport::_ExportMeta() {}
 void XMLAutoTextEventExport::_ExportScripts() {}
 void XMLAutoTextEventExport::_ExportFontDecls() {}
-void XMLAutoTextEventExport::_ExportStyles( sal_Bool ) {}
+void XMLAutoTextEventExport::_ExportStyles( bool ) {}
 void XMLAutoTextEventExport::_ExportAutoStyles() {}
 void XMLAutoTextEventExport::_ExportMasterStyles() {}
 void XMLAutoTextEventExport::_ExportContent() {}

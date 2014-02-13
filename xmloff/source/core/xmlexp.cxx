@@ -1171,7 +1171,7 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
                                 sal_True, sal_True );
 
-        _ExportStyles( sal_False );
+        _ExportStyles( false );
     }
 
     // transfer style names (+ families) TO other components (if appropriate)
@@ -1579,7 +1579,7 @@ void SvXMLExport::_ExportFontDecls()
         mxFontAutoStylePool->exportXML();
 }
 
-void SvXMLExport::_ExportStyles( sal_Bool )
+void SvXMLExport::_ExportStyles( bool )
 {
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
     if( xFact.is())

@@ -1958,7 +1958,7 @@ void ScXMLExport::_ExportContent()
     GetProgressBarHelper()->SetValue(GetProgressBarHelper()->GetReference());
 }
 
-void ScXMLExport::_ExportStyles( sal_Bool bUsed )
+void ScXMLExport::_ExportStyles( bool bUsed )
 {
     if (!pSharedData)
     {

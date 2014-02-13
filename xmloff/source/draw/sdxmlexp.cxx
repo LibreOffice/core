@@ -2136,7 +2136,7 @@ void SdXMLExport::exportPresentationSettings()
     }
 }
 
-void SdXMLExport::_ExportStyles(sal_Bool bUsed)
+void SdXMLExport::_ExportStyles(bool bUsed)
 {
     GetPropertySetMapper()->SetAutoStyles( sal_False );
 

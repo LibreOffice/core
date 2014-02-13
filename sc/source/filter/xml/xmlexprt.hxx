@@ -132,7 +132,7 @@ class ScXMLExport : public SvXMLExport
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportFontDecls();
-    virtual void _ExportStyles( sal_Bool bUsed );
+    virtual void _ExportStyles( bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void SetBodyAttributes();

@@ -125,7 +125,7 @@ class SdXMLExport : public SvXMLExport
     const OUString         msEndShape;
     const OUString         msPageLayoutNames;
 
-    virtual void _ExportStyles(sal_Bool bUsed);
+    virtual void _ExportStyles(bool bUsed);
     virtual void _ExportAutoStyles();
     virtual void _ExportFontDecls();
     virtual void _ExportMasterStyles();

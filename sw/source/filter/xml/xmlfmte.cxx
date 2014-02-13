@@ -163,7 +163,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 }
 
 
-void SwXMLExport::_ExportStyles( sal_Bool bUsed )
+void SwXMLExport::_ExportStyles( bool bUsed )
 {
     SvXMLExport::_ExportStyles( bUsed );
 

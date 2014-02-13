@@ -197,7 +197,7 @@ protected:
     // This method should be overloaded to export the content of <style:styles>.
     // If bUsed is set, used styles should be exported only.
     // Overloaded Methods must call this method !
-    virtual void _ExportStyles( sal_Bool bUsed ) ;
+    virtual void _ExportStyles( bool bUsed );
 
     // This method must be overloaded to export the contents of
     // <style:auto-styles>

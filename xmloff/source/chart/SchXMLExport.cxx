@@ -3543,7 +3543,7 @@ sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     return SvXMLExport::exportDoc( eClass );
 }
 
-void SchXMLExport::_ExportStyles( sal_Bool bUsed )
+void SchXMLExport::_ExportStyles( bool bUsed )
 {
     SvXMLExport::_ExportStyles( bUsed );
 }

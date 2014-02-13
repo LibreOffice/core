@@ -1295,7 +1295,7 @@ void ODBExport::_ExportAutoStyles()
     }
 }
 
-void ODBExport::_ExportStyles(sal_Bool bUsed)
+void ODBExport::_ExportStyles(bool bUsed)
 {
     SvXMLExport::_ExportStyles(bUsed);
 }

@@ -91,7 +91,7 @@ class SwXMLExport : public SvXMLExport
 
     virtual void _ExportMeta();
     virtual void _ExportFontDecls();
-    virtual void _ExportStyles( sal_Bool bUsed );
+    virtual void _ExportStyles( bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void SetBodyAttributes();

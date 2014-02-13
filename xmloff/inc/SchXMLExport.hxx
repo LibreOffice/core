@@ -45,7 +45,7 @@ private:
 protected:
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
-    virtual void _ExportStyles( sal_Bool bUsed );
+    virtual void _ExportStyles( bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();

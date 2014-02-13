@@ -1361,7 +1361,7 @@ void ORptExport::_ExportAutoStyles()
         GetPageExport()->exportAutoStyles();
 }
 // -----------------------------------------------------------------------------
-void ORptExport::_ExportStyles(sal_Bool bUsed)
+void ORptExport::_ExportStyles(bool bUsed)
 {
     SvXMLExport::_ExportStyles(bUsed);
 
