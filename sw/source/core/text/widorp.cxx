@@ -41,9 +41,9 @@
 #undef WIDOWTWIPS
 
 
-/*************************************************************************
- *                  inline IsNastyFollow()
- *************************************************************************/
+namespace
+{
+
 // A Follow on the same page as its master is nasty.
 inline bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
@@ -51,6 +51,8 @@ inline bool IsNastyFollow( const SwTxtFrm *pFrm )
             ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
             "IsNastyFollow: Was ist denn hier los?" );
     return  pFrm->IsFollow() && pFrm->GetPrev();
+}
+
 }
 
 /*************************************************************************
