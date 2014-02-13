@@ -305,64 +305,70 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                                         const Reference< XComponent >& xDoc ) throw()
 {
     OUString aDocMimetype;
-        // get document service name
-    Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
-    Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
-    if( xStore.is() )
+    try
     {
-        OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
-        if ( !aDocServiceName.isEmpty() )
+        // get document service name
+        Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
+        Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
+        if( xStore.is() )
         {
-            // get the actual filter name
-            OUString aFilterName;
-            Reference< lang::XMultiServiceFactory > xConfigProvider =
-                configuration::theDefaultProvider::get( xContext );
-            uno::Sequence< uno::Any > aArgs( 1 );
-            beans::NamedValue aPathProp;
-            aPathProp.Name = "nodepath";
-            aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/" );
-            aArgs[0] <<= aPathProp;
-
-            Reference< container::XNameAccess > xSOFConfig(
-                xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),
-                uno::UNO_QUERY );
-
-            Reference< container::XNameAccess > xApplConfig;
-            xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
-            if ( xApplConfig.is() )
+            OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
+            if ( !aDocServiceName.isEmpty() )
             {
-                xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
-                if( !aFilterName.isEmpty() )
+                // get the actual filter name
+                OUString aFilterName;
+                Reference< lang::XMultiServiceFactory > xConfigProvider =
+                    configuration::theDefaultProvider::get( xContext );
+                uno::Sequence< uno::Any > aArgs( 1 );
+                beans::NamedValue aPathProp;
+                aPathProp.Name = "nodepath";
+                aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/" );
+                aArgs[0] <<= aPathProp;
+
+                Reference< container::XNameAccess > xSOFConfig(
+                    xConfigProvider->createInstanceWithArguments(
+                        "com.sun.star.configuration.ConfigurationAccess", aArgs ),
+                    uno::UNO_QUERY );
+
+                Reference< container::XNameAccess > xApplConfig;
+                xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
+                if ( xApplConfig.is() )
                 {
-                    // find the related type name
-                    OUString aTypeName;
-                    Reference< container::XNameAccess > xFilterFactory(
-                        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
-                        uno::UNO_QUERY );
-
-                    Sequence< beans::PropertyValue > aFilterData;
-                    xFilterFactory->getByName( aFilterName ) >>= aFilterData;
-                    for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                        if ( aFilterData[nInd].Name == "Type" )
-                            aFilterData[nInd].Value >>= aTypeName;
-
-                    if ( !aTypeName.isEmpty() )
+                    xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
+                    if( !aFilterName.isEmpty() )
                     {
-                        // find the mediatype
-                        Reference< container::XNameAccess > xTypeDetection(
-                            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
-                            UNO_QUERY );
+                        // find the related type name
+                        OUString aTypeName;
+                        Reference< container::XNameAccess > xFilterFactory(
+                            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
+                            uno::UNO_QUERY );
 
-                        Sequence< beans::PropertyValue > aTypeData;
-                        xTypeDetection->getByName( aTypeName ) >>= aTypeData;
-                        for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
-                            if ( aTypeData[nInd].Name == "MediaType" )
-                                aTypeData[nInd].Value >>= aDocMimetype;
+                        Sequence< beans::PropertyValue > aFilterData;
+                        xFilterFactory->getByName( aFilterName ) >>= aFilterData;
+                        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
+                            if ( aFilterData[nInd].Name == "Type" )
+                                aFilterData[nInd].Value >>= aTypeName;
+
+                        if ( !aTypeName.isEmpty() )
+                        {
+                            // find the mediatype
+                            Reference< container::XNameAccess > xTypeDetection(
+                                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+                                UNO_QUERY );
+
+                            Sequence< beans::PropertyValue > aTypeData;
+                            xTypeDetection->getByName( aTypeName ) >>= aTypeData;
+                            for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
+                                if ( aTypeData[nInd].Name == "MediaType" )
+                                    aTypeData[nInd].Value >>= aDocMimetype;
+                        }
                     }
                 }
             }
         }
+    }
+    catch (...)
+    {
     }
     return aDocMimetype;
 }
