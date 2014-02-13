@@ -252,7 +252,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBox() const throw (uno::RuntimeExc
     return aCellRect;
 }
 
-sal_Bool ScAccessiblePreviewCell::IsDefunc(
+bool ScAccessiblePreviewCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
@@ -265,13 +265,13 @@ bool ScAccessiblePreviewCell::IsEditable(
     return false;
 }
 
-sal_Bool ScAccessiblePreviewCell::IsOpaque(
+bool ScAccessiblePreviewCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
     //! could be moved to ScAccessibleCellBase
 
-    sal_Bool bOpaque(sal_True);
+    bool bOpaque(true);
     if (mpDoc)
     {
         const SvxBrushItem* pItem = (const SvxBrushItem*)mpDoc->GetAttr(
