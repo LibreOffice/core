@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_4fa54d03",
+        "filename": "sw/source/core/doc/number.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-13T11:26:01Z",
+      "side": 1,
+      "message": "Sorry, this is not the correct way to fix this. Please let the importer set the start value to 0 explicitly, in case w:start is missing in the input DOCX.",
+      "revId": "4fb583b221ea67ddd7d072c893c434f31d9fc8fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
