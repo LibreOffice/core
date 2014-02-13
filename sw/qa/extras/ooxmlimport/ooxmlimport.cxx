@@ -1339,11 +1339,10 @@ DECLARE_OOXMLIMPORT_TEST(testFdo65632, "fdo65632.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testFdo66474, "fdo66474.docx")
 {
-    // The table wasn't relative (relative with was 0), so the table didn't
-    // take the full available width, like it would have to.
+    // The table width was too small, so the text in the second cell was unreadable: this was 1397.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10492), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRotation, "groupshape-rotation.docx")
