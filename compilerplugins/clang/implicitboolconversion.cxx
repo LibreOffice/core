@@ -493,12 +493,23 @@ bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
 }
 
 bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
-    bool ext = hasCLanguageLinkageType(decl)
-        && decl->isThisDeclarationADefinition()
-        && (compat::getReturnType(*decl)->isSpecificBuiltinType(
-                BuiltinType::Int)
-            || compat::getReturnType(*decl)->isSpecificBuiltinType(
-                BuiltinType::UInt));
+    bool ext = false;
+    if (hasCLanguageLinkageType(decl) && decl->isThisDeclarationADefinition()) {
+        QualType t { compat::getReturnType(*decl) };
+        if (t->isSpecificBuiltinType(BuiltinType::Int)
+            || t->isSpecificBuiltinType(BuiltinType::UInt))
+        {
+            ext = true;
+        } else {
+            TypedefType const * t2 = t->getAs<TypedefType>();
+            // cf. rtl_locale_equals (and sal_Int32 can be long):
+            if (t2 != nullptr
+                && t2->getDecl()->getNameAsString() == "sal_Int32")
+            {
+                ext = true;
+            }
+        }
+    }
     if (ext) {
         assert(!externCIntFunctionDefinition);
         externCIntFunctionDefinition = true;
