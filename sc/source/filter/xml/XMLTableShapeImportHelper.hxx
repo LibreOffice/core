@@ -30,7 +30,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
     ::com::sun::star::table::CellAddress aStartCell;
     ScXMLAnnotationContext* pAnnotationContext;
-    sal_Bool bOnTable;
+    bool bOnTable;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 
 
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
-    void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
+    void SetOnTable (const bool bTempOnTable) { bOnTable = bTempOnTable; }
     void SetAnnotation(ScXMLAnnotationContext* pAnnotation) { pAnnotationContext = pAnnotation; }
 
     ScXMLAnnotationContext* GetAnnotationContext() const    { return pAnnotationContext; }
