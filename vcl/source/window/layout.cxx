@@ -801,13 +801,13 @@ VclGrid::array_type VclGrid::assembleGrid() const
                 if (get_column_homogeneous())
                 {
                     for (sal_Int32 nSpanX = 1; nSpanX < rEntry.nSpanWidth; ++nSpanX)
-                        aNonEmptyCols[x+1] = true;
+                        aNonEmptyCols[x+nSpanX] = true;
                 }
                 aNonEmptyRows[y] = true;
                 if (get_row_homogeneous())
                 {
                     for (sal_Int32 nSpanY = 1; nSpanY < rEntry.nSpanHeight; ++nSpanY)
-                        aNonEmptyRows[x+1] = true;
+                        aNonEmptyRows[y+nSpanY] = true;
                 }
             }
         }
