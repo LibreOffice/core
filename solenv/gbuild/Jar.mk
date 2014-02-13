@@ -95,7 +95,7 @@ endef
 define gb_Jar_Jar
 ifeq (,$$(findstring $(1),$$(gb_Jar_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
-$$(eval $$(call gb_Output_error,Jar $(1) must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Jar $(1) must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=

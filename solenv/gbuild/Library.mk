@@ -51,7 +51,7 @@ define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 
 $(if $(gb_Package_PRESTAGEDIR),\

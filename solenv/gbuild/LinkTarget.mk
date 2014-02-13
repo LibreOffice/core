@@ -831,7 +831,7 @@ endef
 define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 
 ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
@@ -1078,7 +1078,7 @@ endef
 define gb_LinkTarget_use_library_objects
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 $(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktarget,$(lib))))
 $(call gb_LinkTarget_get_headers_target,$(1)) : \

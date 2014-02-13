@@ -59,7 +59,7 @@ define gb_Executable_Executable
 $(call gb_Postprocess_register_target,AllExecutables,Executable,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Executable_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known executables: $(sort $(gb_Executable_KNOWN)),ALL))
-$$(eval $$(call gb_Output_error,Executable $(1) must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Executable $(1) must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 $(call gb_Executable__Executable_impl,$(1),$(call gb_Executable_get_linktarget,$(1)))
 

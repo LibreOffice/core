@@ -108,7 +108,7 @@ endef
 define gb_JavaClassSet_use_jar
 ifneq (,$$(filter-out $(gb_Jar_KNOWN),$(2)))
 $$(eval $$(call gb_Output_info,currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against jar $$(filter-out $(gb_Jar_KNOWN),$(2)). Jars must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Cannot link against jar $$(filter-out $(gb_Jar_KNOWN),$(2)). Jars must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_Jar_get_target,$(2))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_Jar_get_target,$(2))

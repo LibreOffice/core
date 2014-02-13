@@ -178,7 +178,7 @@ endef
 define gb_ExternalProject_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 ifneq (,$$(filter $$(gb_MERGEDLIBS),$(2)))
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter $$(gb_MERGEDLIBS),$(2)) because they are merged.))
