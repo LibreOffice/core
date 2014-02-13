@@ -1306,7 +1306,8 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 }
 
 // beans::XMultiPropertyStates
-void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault(  ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

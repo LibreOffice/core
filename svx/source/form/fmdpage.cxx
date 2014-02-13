@@ -81,7 +81,8 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type&
     return aTypes;
 }
 
-SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr ) throw ()
+SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr )
+    throw (std::exception)
 {
     OUString aShapeType( xDescr->getShapeType() );
 
@@ -94,7 +95,8 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const throw ()
+::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const
+    throw (std::exception)
 {
     if( FmFormInventor == pObj->GetObjInventor() )
     {

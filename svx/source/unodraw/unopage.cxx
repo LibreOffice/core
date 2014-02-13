@@ -233,7 +233,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 }
 
 void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -430,7 +430,8 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
+SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xShape)
+    throw (std::exception)
 {
     sal_uInt16 nType = 0;
     sal_uInt32 nInventor = 0;
@@ -785,7 +786,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
     return pRet;
 }
 
-Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const throw()
+Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
+    throw (std::exception)
 {
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),

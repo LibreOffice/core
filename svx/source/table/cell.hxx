@@ -120,7 +120,9 @@ public:
     SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
 
     // XMergeableCell
@@ -159,7 +161,9 @@ public:
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XMultiPropertyStates
-    SVX_DLLPRIVATE virtual void SAL_CALL setAllPropertiesToDefault(  ) throw (::com::sun::star::uno::RuntimeException);
+    SVX_DLLPRIVATE virtual void SAL_CALL setAllPropertiesToDefault()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     SVX_DLLPRIVATE virtual void SAL_CALL setPropertiesToDefault( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 

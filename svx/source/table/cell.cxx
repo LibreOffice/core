@@ -899,7 +899,9 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::awt::Size SAL_CALL Cell::getPreferredSize(  ) throw (RuntimeException)
+::com::sun::star::awt::Size SAL_CALL Cell::getPreferredSize()
+    throw (RuntimeException,
+           std::exception)
 {
     return getMinimumSize();
 }
@@ -1579,7 +1581,8 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 // XMultiPropertyStates
 // -----------------------------------------------------------------------------
 
-void SAL_CALL Cell::setAllPropertiesToDefault(  ) throw (RuntimeException)
+void SAL_CALL Cell::setAllPropertiesToDefault()
+    throw (RuntimeException, std::exception)
 {
     delete mpProperties;
     mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this );
