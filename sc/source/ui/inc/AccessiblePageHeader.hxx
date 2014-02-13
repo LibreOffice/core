@@ -34,7 +34,7 @@ class ScAccessiblePageHeader : public ScAccessibleContextBase
 public:
     ScAccessiblePageHeader( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell, sal_Bool bHeader, sal_Int32 nIndex );
+                            ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex );
 
 protected:
     virtual ~ScAccessiblePageHeader();
@@ -87,12 +87,12 @@ protected:
 private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
-    sal_Bool            mbHeader;
+    bool                mbHeader;
     typedef std::vector< ScAccessiblePageHeaderArea* > ScHFAreas;
     ScHFAreas           maAreas;
     sal_Int32           mnChildCount;
 
-    sal_Bool IsDefunc(
+    bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 

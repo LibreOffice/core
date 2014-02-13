@@ -85,7 +85,7 @@ struct Dispose
 
 ScAccessiblePageHeader::ScAccessiblePageHeader( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell, sal_Bool bHeader, sal_Int32 nIndex ) :
+                            ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex ) :
 ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : AccessibleRole::FOOTER ),
     mpViewShell( pViewShell ),
     mnIndex( nIndex ),
@@ -389,7 +389,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
     return aRect;
 }
 
-sal_Bool ScAccessiblePageHeader::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
+bool ScAccessiblePageHeader::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));

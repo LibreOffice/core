@@ -1441,7 +1441,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 
                     if (!mpHeader)
                     {
-                        mpHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, aCount.nBackShapes + aCount.nHeaders - 1);
+                        mpHeader = new ScAccessiblePageHeader( this, mpViewShell, true, aCount.nBackShapes + aCount.nHeaders - 1);
                         mpHeader->acquire();
                     }
                     if (!mpFooter)
@@ -1519,7 +1519,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         {
             if ( !mpHeader )
             {
-                mpHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, nIndex );
+                mpHeader = new ScAccessiblePageHeader( this, mpViewShell, true, nIndex );
                 mpHeader->acquire();
             }
 
