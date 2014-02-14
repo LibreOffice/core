@@ -88,7 +88,7 @@ public:
 
     // IControlReferenceHandler
     virtual void ShowReference(const OUString& _sRef);
-    virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
+    virtual void HideReference( bool bDoneRefMode = true );
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 

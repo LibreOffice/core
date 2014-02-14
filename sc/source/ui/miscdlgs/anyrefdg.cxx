@@ -910,10 +910,10 @@ bool ScRefHandler::IsRefInputMode() const
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScRefHandler::DoClose( sal_uInt16 nId )
+bool ScRefHandler::DoClose( sal_uInt16 nId )
 {
     m_aHelper.DoClose(nId);
-    return sal_True;
+    return true;
 }
 
 void ScRefHandler::SetDispatcherLock( bool bLock )
@@ -1009,7 +1009,7 @@ bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, S
     return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
 }
 // -----------------------------------------------------------------------------
-void ScRefHandler::HideReference( sal_Bool bDoneRefMode )
+void ScRefHandler::HideReference( bool bDoneRefMode )
 {
     m_aHelper.HideReference( bDoneRefMode );
 }

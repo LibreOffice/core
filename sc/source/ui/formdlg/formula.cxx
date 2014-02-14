@@ -501,7 +501,7 @@ void ScFormulaDlg::ShowReference(const OUString& _sFormula)
 {
     m_aHelper.ShowReference(_sFormula);
 }
-void ScFormulaDlg::HideReference( sal_Bool bDoneRefMode )
+void ScFormulaDlg::HideReference( bool bDoneRefMode )
 {
     m_aHelper.HideReference(bDoneRefMode);
 }

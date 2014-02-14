@@ -177,7 +177,7 @@ void FormulaDialog::ShowReference(const OUString& /*_sRef*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaDialog::HideReference( sal_Bool /*bDoneRefMode*/)
+void FormulaDialog::HideReference( bool /*bDoneRefMode*/)
 {
 }
 // -----------------------------------------------------------------------------

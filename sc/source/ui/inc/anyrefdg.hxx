@@ -130,7 +130,7 @@ private:
 
 
 protected:
-    virtual sal_Bool        DoClose( sal_uInt16 nId );
+    virtual bool        DoClose( sal_uInt16 nId );
 
     void                SetDispatcherLock( bool bLock );
 
@@ -156,7 +156,7 @@ public:
     virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
     virtual void        ShowReference(const OUString& rStr);
-    virtual void        HideReference( sal_Bool bDoneRefMode = sal_True );
+    virtual void        HideReference( bool bDoneRefMode = true );
 
     virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
@@ -170,7 +170,7 @@ public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
     inline  bool        CanInputStart( const formula::RefEdit *pEdit );
-    inline  bool        CanInputDone( sal_Bool bForced );
+    inline  bool        CanInputDone( bool bForced );
 };
 
 //============================================================================
@@ -322,7 +322,7 @@ inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
     return m_aHelper.CanInputStart( pEdit );
 }
 
-inline  bool ScRefHandler::CanInputDone( sal_Bool bForced )
+inline  bool ScRefHandler::CanInputDone( bool bForced )
 {
     return m_aHelper.CanInputDone( bForced );
 }
