@@ -3046,10 +3046,10 @@ void SAL_CALL SwXTextDocument::render(
                     {
                         // #i96167# haggai: delete ViewOptionsAdjust here because it makes use
                         // of the shell, which might get destroyed in lcl_DisposeView!
-                        if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
+                        if (m_pRenderData->IsViewOptionAdjust())
                             m_pRenderData->ViewOptionAdjustStop();
 
-                        if (m_pRenderData && m_pRenderData->HasPostItData())
+                        if (m_pRenderData->HasPostItData())
                             m_pRenderData->DeletePostItData();
                         if (m_pHiddenViewFrame)
                         {
