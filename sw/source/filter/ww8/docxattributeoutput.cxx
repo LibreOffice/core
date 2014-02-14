@@ -682,6 +682,39 @@ void DocxAttributeOutput::EndRun()
     DoWriteBookmarks( );
     DoWriteAnnotationMarks( );
 
+    if( m_closeHyperlinkInThisRun && m_startedHyperlink && m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
+        {
+            OUString sToken;
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_rPr );
+            m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                    FSNS( XML_w, XML_fldCharType ), "begin",
+                    FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_fldChar );
+            m_pSerializer->endElementNS( XML_w, XML_r );
+
+
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_rPr );
+            sToken = "PAGEREF " + m_hyperLinkAnchor + " \\h"; // '\h' Creates a hyperlink to the bookmarked paragraph.
+            DoWriteCmd( sToken );
+            m_pSerializer->endElementNS( XML_w, XML_r );
+
+            // Write the Field separator
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_rPr );
+            m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+                    FSNS( XML_w, XML_fldCharType ), "separate",
+                    FSEND );
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
+
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     if(GetExport().bTabInTOC && m_pHyperlinkAttrList)
     {
@@ -691,7 +724,6 @@ void DocxAttributeOutput::EndRun()
 
     // write the run start + the run content
     m_pSerializer->mergeTopMarks(); // merges the "actual run start"
-
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
@@ -712,6 +744,21 @@ void DocxAttributeOutput::EndRun()
     {
         if ( m_startedHyperlink )
         {
+            if( m_endPageRef )
+            {
+                // Hyperlink is started and fldchar "end" needs to be written for PAGEREF
+                m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+                m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+                m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+                m_pSerializer->endElementNS( XML_w, XML_rPr );
+                m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+                        FSNS( XML_w, XML_fldCharType ), "end",
+                        FSEND );
+                m_pSerializer->endElementNS( XML_w, XML_r );
+                m_endPageRef = false;
+                m_hyperLinkAnchor = "";
+            }
+
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
         }
@@ -946,6 +993,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
            sToken = sToken.replaceAll("NNNN", "dddd");
            sToken = sToken.replaceAll("NN", "ddd");
         }
+
         // Write the Field command
         DoWriteCmd( sToken );
 
@@ -1573,6 +1621,8 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 
     bool bBookmarkOnly = AnalyzeURL( rUrl, rTarget, &sUrl, &sMark );
 
+    m_hyperLinkAnchor = sMark;
+
     if ( !sMark.isEmpty() && !bBookmarkOnly )
     {
         m_rExport.OutputField( NULL, ww::eHYPERLINK, sUrl );
@@ -1632,6 +1682,10 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 bool DocxAttributeOutput::EndURL()
 {
     m_closeHyperlinkInThisRun = true;
+    if(m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
+    {
+        m_endPageRef = true;
+    }
     return true;
 }
 
@@ -6614,6 +6668,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pHyperlinkAttrList( NULL ),
       m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
+      m_endPageRef( false ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),

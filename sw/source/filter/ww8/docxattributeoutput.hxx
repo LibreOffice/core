@@ -690,7 +690,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// Attributes of the paragraph background
     ::sax_fastparser::FastAttributeList *m_pBackgroundAttrList;
-
+    OUString m_hyperLinkAnchor;
+    bool m_endPageRef;
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
