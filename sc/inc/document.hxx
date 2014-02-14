@@ -503,6 +503,7 @@ public:
     ScFieldEditEngine*  CreateFieldEditEngine();
     void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
+    // Note: the returned ScRangeName is volatile, and it can be changed at any time.
     SC_DLLPUBLIC ScRangeName*   GetRangeName();
     void            SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }

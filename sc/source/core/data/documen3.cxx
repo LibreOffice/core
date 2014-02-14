@@ -95,6 +95,9 @@ ScRangeName* ScDocument::GetRangeName()
 
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 {
+    if (pRangeName == pNewRangeName)
+        return;
+
     if (pRangeName)
         delete pRangeName;
     pRangeName = pNewRangeName;
