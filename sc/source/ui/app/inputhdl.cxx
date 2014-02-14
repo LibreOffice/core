@@ -298,6 +298,11 @@ handle_r1c1:
     }
 }
 
+void ScInputHandler::SetDocumentDisposing( bool b )
+{
+    mbDocumentDisposing = b;
+}
+
 static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelection& rOldSel )
 {
     if ( pView )
@@ -518,6 +523,7 @@ ScInputHandler::ScInputHandler()
         bProtected( false ),
         bCellHasPercentFormat( false ),
         bLastIsSymbol( false ),
+        mbDocumentDisposing(false),
         nValidation( 0 ),
         eAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
         aScaleX( 1,1 ),
@@ -541,7 +547,7 @@ ScInputHandler::~ScInputHandler()
     //  Wenn dies der Applikations-InputHandler ist, wird der dtor erst nach SfxApplication::Main
     //  gerufen, darf sich also auf keine Sfx-Funktionen mehr verlassen
 
-    if ( !SFX_APP()->IsDowning() )          // inplace
+    if (!mbDocumentDisposing)          // inplace
         EnterHandler();                     // Eingabe noch abschliessen
 
     if (SC_MOD()->GetRefInputHdl()==this)

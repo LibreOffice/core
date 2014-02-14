@@ -100,6 +100,7 @@ private:
     bool                    bProtected:1;
     bool                    bCellHasPercentFormat:1;
     bool                    bLastIsSymbol:1;
+    bool                    mbDocumentDisposing:1;
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
@@ -255,6 +256,8 @@ public:
 
                     // actually private, public for SID_INPUT_SUM
     void            InitRangeFinder(const OUString& rFormula);
+
+    void SetDocumentDisposing( bool b );
 
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 };
