@@ -559,7 +559,7 @@ void ScHTMLExport::WriteBody()
     const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
 
     // default text color black
-    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteCharPtr( "=\"#000000\"" );
+    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body );
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
     {
