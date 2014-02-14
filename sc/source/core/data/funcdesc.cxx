@@ -181,14 +181,14 @@ OUString ScFuncDesc::GetParamList() const
 
             aSig.append(maDefArgNames[nFix]);
             aSig.append('1');
-            aSig.appendAscii( ", " );
+            aSig.append(sep);
             aSig.append(maDefArgNames[nFix+1]);
             aSig.append('1');
             aSig.append(sep);
             aSig.appendAscii( " " );
             aSig.append(maDefArgNames[nFix]);
             aSig.append('2');
-            aSig.appendAscii( ", " );
+            aSig.append(sep);
             aSig.append(maDefArgNames[nFix+1]);
             aSig.append('2');
             aSig.append(sep);
