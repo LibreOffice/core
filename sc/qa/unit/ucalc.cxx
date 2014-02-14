@@ -1360,6 +1360,34 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTrackingMatrix()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    // Set a numeric value to A1.
+    m_pDoc->SetValue(ScAddress(0,0,0), 11.0);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 0, aMark, "=A1", NULL);
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get formula cell.", pFC);
+    pFC->SetChanged(false); // Clear this flag to simulate displaying of formula cell value on screen.
+
+    m_pDoc->SetString(ScAddress(0,0,0), "ABC");
+    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), m_pDoc->GetString(ScAddress(1,0,0)));
+    pFC->SetChanged(false);
+
+    // Put a new value into A1. The formula should update.
+    m_pDoc->SetValue(ScAddress(0,0,0), 13.0);
+    CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 namespace {
 
 bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const ScAddress& rTo)
