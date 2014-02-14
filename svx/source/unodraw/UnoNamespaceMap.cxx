@@ -158,7 +158,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         if( 0 != *mpWhichId )
         {
             mnItem = 0;
-            mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount2( *mpWhichId ) : 0;
+            mnItemCount = mpPool ? mpPool->GetItemCount2( *mpWhichId ) : 0;
             return next( rPrefix, rURL );
         }
 
