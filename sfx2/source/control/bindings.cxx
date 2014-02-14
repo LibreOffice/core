@@ -1126,7 +1126,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         pCache->GetSlotServer( rDispatcher, pImp->xProv );
     }
 
-    if ( pCache && pCache->GetDispatch().is() )
+    if ( pCache->GetDispatch().is() )
     {
         DBG_ASSERT( !ppInternalArgs, "Internal args get lost when dispatched!" );
 
