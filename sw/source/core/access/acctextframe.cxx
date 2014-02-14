@@ -46,23 +46,20 @@ using ::com::sun::star::accessibility::XAccessibleContext;
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
         SwAccessibleMap* pInitMap,
-        const SwFlyFrm* pFlyFrm  ) :
-    SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, pFlyFrm ),
+        const SwFlyFrm& rFlyFrm  ) :
+    SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, &rFlyFrm ),
     msTitle(),
     msDesc()
 {
-    if ( pFlyFrm )
-    {
-        const SwFlyFrmFmt* pFlyFrmFmt =
-                        dynamic_cast<const SwFlyFrmFmt*>( pFlyFrm->GetFmt() );
-        msTitle = pFlyFrmFmt->GetObjTitle();
+    const SwFlyFrmFmt* pFlyFrmFmt =
+                    dynamic_cast<const SwFlyFrmFmt*>( rFlyFrm.GetFmt() );
+    msTitle = pFlyFrmFmt->GetObjTitle();
 
-        msDesc = pFlyFrmFmt->GetObjDescription();
-        if ( msDesc.isEmpty() &&
-             msTitle != GetName() )
-        {
-            msDesc = msTitle;
-        }
+    msDesc = pFlyFrmFmt->GetObjDescription();
+    if ( msDesc.isEmpty() &&
+         msTitle != GetName() )
+    {
+        msDesc = msTitle;
     }
 }
 

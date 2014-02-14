@@ -1886,7 +1886,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                             pAcc = new SwAccessibleEmbeddedObject( this, pFlyFrm );
                             break;
                         default:
-                            pAcc = new SwAccessibleTextFrame( this, pFlyFrm );
+                            pAcc = new SwAccessibleTextFrame( this, *pFlyFrm );
                             break;
                         }
                     }

@@ -43,7 +43,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
+    SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm& rFlyFrm );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
