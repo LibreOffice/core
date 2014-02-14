@@ -122,8 +122,6 @@ private:
 
     ImageList   maNumBImageList;
     ImageList   maNumBImageListRTL;
-    Image       maImgBackColorHigh;
-    Image       maImgBackColor;
 
     /****************************************************************
     **
