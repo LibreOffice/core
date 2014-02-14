@@ -111,6 +111,10 @@ endif
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
+ifneq ($(MACOSX_DEPLOYMENT_TARGET),)
+	gb_CXXFLAGS += -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_$(subst .,_,$(MACOSX_DEPLOYMENT_TARGET))
+endif
+
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror

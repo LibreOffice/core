@@ -36,10 +36,10 @@ LINKOUTPUT_FILTER=
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -D_USE_NAMESPACE=1
 
-# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build result
-# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
-# http://developer.apple.com/technotes/tn2002/tn2064.html
-# done in setsolar/configure now. left here for documentation
+.IF "$(MACOSX_DEPLOYMENT_TARGET)" != ""
+    CDEFS += -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_$(subst,.,_ $(MACOSX_DEPLOYMENT_TARGET))
+.ENDIF
+
 CDEFS+=-DQUARTZ 
 EXTRA_CDEFS*=-isysroot $(MACOSX_SDK_PATH)
 
