@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_cellrangeobj))
 
-$(eval $(call gb_CppunitTest_use_external,sc_cellrangesbase,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sc_cellrangeobj,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellrangesbase, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_cellrangeobj, \
     sc/qa/extras/sccellrangeobj\
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_cellrangesbase, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_cellrangeobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -54,20 +54,20 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_cellrangesbase, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_set_include,sc_cellrangeobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_use_api,sc_cellrangeobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_use_ure,sc_cellrangeobj))
 
-$(eval $(call gb_CppunitTest_use_components,sc_cellrangesbase,\
+$(eval $(call gb_CppunitTest_use_components,sc_cellrangeobj,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -101,8 +101,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_cellrangesbase,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_use_configuration,sc_cellrangeobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_cellrangesbase))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_cellrangeobj))
 
 # vim: set noet sw=4 ts=4:
