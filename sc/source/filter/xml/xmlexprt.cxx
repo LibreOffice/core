@@ -2534,10 +2534,6 @@ void ScXMLExport::_ExportAutoStyles()
         CollectShapesAutoStyles(nTableCount);
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(false))
         {
-            bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
-                              pSheetData->HasStreamPos(nTable) && xSourceStream.is() &&
-                              !pDoc->GetChangeTrack();
-
             Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
             if (!xTable.is())
                 continue;
@@ -2555,9 +2551,6 @@ void ScXMLExport::_ExportAutoStyles()
                     aTableStyles.push_back(sName);
                 }
             }
-
-            if (bUseStream)
-                continue;
 
             // collect other auto-styles only for non-copied sheets
             Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
