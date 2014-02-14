@@ -50,7 +50,7 @@ class ScCellShell: public ScFormatShell
 {
 private:
     CellShell_Impl* pImpl;
-    sal_Bool            bPastePossible;
+    bool            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
     void        ExecuteExternalSource(
