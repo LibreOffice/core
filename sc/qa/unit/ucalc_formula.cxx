@@ -2514,6 +2514,24 @@ void Test::testFuncMATCH()
         clearRange(m_pDoc, ScRange(0, 0, 0, 40, 4, 0));
     }
 
+    {
+        // search range contains leading and trailing empty cell ranges.
+
+        clearRange(m_pDoc, ScRange(0,0,0,2,100,0));
+
+        // A5:A8 contains sorted values.
+        m_pDoc->SetValue(ScAddress(0,4,0), 1.0);
+        m_pDoc->SetValue(ScAddress(0,5,0), 2.0);
+        m_pDoc->SetValue(ScAddress(0,6,0), 3.0);
+        m_pDoc->SetValue(ScAddress(0,7,0), 4.0);
+
+        // Find value 2 which is in A6.
+        m_pDoc->SetString(ScAddress(1,0,0), "=MATCH(2;A1:A20)");
+        m_pDoc->CalcAll();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("6"), m_pDoc->GetString(ScAddress(1,0,0)));
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
