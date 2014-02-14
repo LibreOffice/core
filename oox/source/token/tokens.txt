@@ -5114,6 +5114,7 @@ textFadeUp
 textField
 textFields
 textFile
+textFill
 textFit
 textHAlign
 textInflate
@@ -5571,6 +5572,7 @@ vstream
 vt
 w
 w10
+w14
 wAfter
 wArH
 wBefore

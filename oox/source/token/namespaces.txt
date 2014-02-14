@@ -74,9 +74,9 @@ mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/mai
 wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
 wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
 wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
+w14                     http://schemas.microsoft.com/office/word/2010/wordml
 
 # extlst namespaces
 
 # xlsExtLst for features introduced by excel 2010
 xlsExtLst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
-
