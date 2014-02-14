@@ -61,7 +61,7 @@ class SwContourCache
     MSHORT nObjCnt;
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
         const SwTxtFrm* pFrm, const SwRect &rLine, const long nXPos,
-        const sal_Bool bRight );
+        const bool bRight );
 
 public:
     SwContourCache();
@@ -81,7 +81,7 @@ public:
                                        const SwRect &rLine,
                                        const SwTxtFrm* pFrm,
                                        const long nXPos,
-                                       const sal_Bool bRight );
+                                       const bool bRight );
 };
 
 /**
@@ -128,15 +128,15 @@ class SwTxtFly
     long nNextTop;  /// Stores the upper edge of the "next" frame
     sal_uLong nIndex;
 
-    sal_Bool bOn : 1;
-    sal_Bool bTopRule: 1;
-    sal_Bool mbIgnoreCurrentFrame: 1;
-    sal_Bool mbIgnoreContour: 1;
+    bool bOn : 1;
+    bool bTopRule: 1;
+    bool mbIgnoreCurrentFrame: 1;
+    bool mbIgnoreContour: 1;
 
     /** boolean, indicating if objects in page header|footer are considered for
         text frames not in page header|footer.
      */
-    sal_Bool mbIgnoreObjsInHeaderFooter: 1;
+    bool mbIgnoreObjsInHeaderFooter: 1;
 
     /**
         This method will be called during the LineIter formatting
@@ -146,7 +146,7 @@ class SwTxtFly
         \param[in] rPortion
             Scope: document global.
      */
-    SwRect _GetFrm( const SwRect &rPortion, sal_Bool bTop ) const;
+    SwRect _GetFrm( const SwRect &rPortion, bool bTop ) const;
 
     SwAnchoredObjList* InitAnchoredObjList();
 
@@ -156,7 +156,7 @@ class SwTxtFly
         Look for the first object which overlaps with the rectangle.
         Iterates over the anchored object list mpAnchoredObjList.
     */
-    sal_Bool ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid ) const;
+    bool ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const;
 
     /**
       \li There is less than 2cm space on both sides for the text:
@@ -195,9 +195,9 @@ class SwTxtFly
      */
     SwAnchoredObjList::size_type GetPos( const SwAnchoredObject* pAnchoredObj ) const;
 
-    sal_Bool GetTop( const SwAnchoredObject* _pAnchoredObj,
-                     const sal_Bool bInFtn,
-                     const sal_Bool bInFooterOrHeader );
+    bool GetTop( const SwAnchoredObject* _pAnchoredObj,
+                 const bool bInFtn,
+                 const bool bInFooterOrHeader );
 
     SwTwips CalcMinBottom() const;
 
@@ -214,8 +214,8 @@ public:
 
     void SetTopRule();
 
-    SwRect GetFrm( const SwRect &rPortion, sal_Bool bTop = sal_True ) const;
-    sal_Bool IsOn() const;
+    SwRect GetFrm( const SwRect &rPortion, bool bTop = true ) const;
+    bool IsOn() const;
 
     /**
         If there is no flying object frame standing in rRect (usually the current row),
@@ -223,8 +223,8 @@ public:
 
         \param rRect is global to the document!
      */
-    sal_Bool Relax( const SwRect &rRect );
-    sal_Bool Relax();
+    bool Relax( const SwRect &rRect );
+    bool Relax();
 
     SwTwips GetMinBottom() const;
     const SwCntntFrm* GetMaster() const;
@@ -255,7 +255,7 @@ public:
 
         DrawText() takes over the on optimization!
      */
-    sal_Bool DrawTextOpaque( SwDrawTextInfo &rInf );
+    bool DrawTextOpaque( SwDrawTextInfo &rInf );
 
     /**
         Two subtleties needs to be mentioned:
@@ -266,7 +266,7 @@ public:
         won't be scribbled
      */
     void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
-                      const SwTxtPaintInfo &rInf, sal_Bool bNoGraphic = sal_False );
+                      const SwTxtPaintInfo &rInf, bool bNoGraphic = false );
 
     /**
         Used to switch off the SwTxtFly when there is no overlapping object (Relax).
@@ -274,29 +274,29 @@ public:
         \param[in] the line area
         \return whether the line will be overlapped by a frame
      */
-    sal_Bool IsAnyFrm( const SwRect &rLine ) const;
+    bool IsAnyFrm( const SwRect &rLine ) const;
 
     /**
         Same as IsAnyFrm(const SwRect&), but uses the current frame print
         area
      */
-    sal_Bool IsAnyFrm() const;
+    bool IsAnyFrm() const;
 
     /**
-        sal_True when a frame or DrawObj must to be taken in account. The optimizations
+        true when a frame or DrawObj must to be taken in account. The optimizations
         like Paint/FormatEmpty for empty sentences or the virtual OutputDevice can
-        be used only when sal_False is returned.
+        be used only when false is returned.
 
         \param rRect
             The rectangle can be empty, the current frame is then used. The value is
             global to the document.
       */
-    sal_Bool IsAnyObj( const SwRect& rRect ) const;
+    bool IsAnyObj( const SwRect& rRect ) const;
 
-    void SetIgnoreCurrentFrame( sal_Bool bNew );
-    void SetIgnoreContour( sal_Bool bNew );
+    void SetIgnoreCurrentFrame( bool bNew );
+    void SetIgnoreContour( bool bNew );
 
-    void SetIgnoreObjsInHeaderFooter( const sal_Bool _bNew );
+    void SetIgnoreObjsInHeaderFooter( const bool bNew );
 };
 
 
@@ -309,22 +309,24 @@ inline SwAnchoredObjList* SwTxtFly::GetAnchoredObjList() const
 
 inline void SwTxtFly::SetTopRule()
 {
-    bTopRule = sal_False;
+    bTopRule = false;
 }
 
-inline sal_Bool SwTxtFly::IsOn() const
+inline bool SwTxtFly::IsOn() const
 {
     return bOn;
 }
 
-inline sal_Bool SwTxtFly::Relax( const SwRect &rRect )
+inline bool SwTxtFly::Relax( const SwRect &rRect )
 {
-    return 0 != (bOn = bOn && IsAnyFrm( rRect ));
+    bOn &= IsAnyFrm( rRect );
+    return bOn;
 }
 
-inline sal_Bool SwTxtFly::Relax()
+inline bool SwTxtFly::Relax()
 {
-    return 0 != (bOn = bOn && IsAnyFrm());
+    bOn &= IsAnyFrm();
+    return bOn;
 }
 
 inline SwTwips SwTxtFly::GetMinBottom() const
@@ -347,24 +349,24 @@ inline void SwTxtFly::SetNextTop( long nNew ) const
     ((SwTxtFly*)this)->nNextTop = nNew;
 }
 
-inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
+inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, bool bTop ) const
 {
     return bOn ? _GetFrm( rRect, bTop ) : SwRect();
 }
 
-inline void SwTxtFly::SetIgnoreCurrentFrame( sal_Bool bNew )
+inline void SwTxtFly::SetIgnoreCurrentFrame( bool bNew )
 {
     mbIgnoreCurrentFrame = bNew;
 }
 
-inline void SwTxtFly::SetIgnoreContour( sal_Bool bNew )
+inline void SwTxtFly::SetIgnoreContour( bool bNew )
 {
     mbIgnoreContour = bNew;
 }
 
-inline void SwTxtFly::SetIgnoreObjsInHeaderFooter( const sal_Bool _bNew )
+inline void SwTxtFly::SetIgnoreObjsInHeaderFooter( const bool bNew )
 {
-    mbIgnoreObjsInHeaderFooter = _bNew;
+    mbIgnoreObjsInHeaderFooter = bNew;
 }
 
 #endif

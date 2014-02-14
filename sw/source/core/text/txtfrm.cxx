@@ -2692,13 +2692,13 @@ void SwTxtFrm::CalcBaseOfstForFly()
     }
 
     SwTxtFly aTxtFly( this );
-    aTxtFly.SetIgnoreCurrentFrame( sal_True );
-    aTxtFly.SetIgnoreContour( sal_True );
+    aTxtFly.SetIgnoreCurrentFrame( true );
+    aTxtFly.SetIgnoreContour( true );
     // #118809# - ignore objects in page header|footer for
     // text frames not in page header|footer
-    aTxtFly.SetIgnoreObjsInHeaderFooter( sal_True );
+    aTxtFly.SetIgnoreObjsInHeaderFooter( true );
     SwTwips nRet1 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
-    aTxtFly.SetIgnoreCurrentFrame( sal_False );
+    aTxtFly.SetIgnoreCurrentFrame( false );
     SwTwips nRet2 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
 
     // make values relative to frame start position
