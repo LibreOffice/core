@@ -61,6 +61,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
     mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
     mpImpl->maImageNotValidated = Image( SVX_RES( RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 
+#ifndef MACOSX
     if (_rStb.GetDPIScaleFactor() > 1)
     {
         Image arr[3] = {mpImpl->maImage, mpImpl->maImageBroken, mpImpl->maImageNotValidated};
@@ -76,6 +77,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
         mpImpl->maImageBroken = arr[1];
         mpImpl->maImageNotValidated = arr[2];
     }
+#endif
 
 }
 

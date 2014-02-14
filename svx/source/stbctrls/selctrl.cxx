@@ -80,13 +80,14 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
     mnState( 0 ),
     maImage( SVX_RES( RID_SVXBMP_SELECTION ) )
 {
+#ifndef MACOSX
     if ( GetStatusBar().GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = maImage.GetBitmapEx();
         b.Scale(GetStatusBar().GetDPIScaleFactor(), GetStatusBar().GetDPIScaleFactor(), BMP_SCALE_FAST);
         maImage = Image(b);
     }
-
+#endif
     GetStatusBar().SetItemText( GetId(), "" );
 }
 

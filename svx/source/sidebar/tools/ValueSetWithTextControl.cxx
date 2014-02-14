@@ -100,6 +100,7 @@ void ValueSetWithTextControl::AddItem(
                                 ? *pSelectedItemImage
                                 : rItemImage;
 
+#ifndef MACOSX
     if ( GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = aItem.maItemImage.GetBitmapEx();
@@ -113,7 +114,7 @@ void ValueSetWithTextControl::AddItem(
             aItem.maSelectedItemImage = Image(b);
         }
     }
-
+#endif
     aItem.maItemText = rItemText;
 
     maItems.push_back( aItem );
@@ -167,6 +168,7 @@ void ValueSetWithTextControl::ReplaceItemImages(
                                              ? *pSelectedItemImage
                                              : rItemImage;
 
+#ifndef MACOSX
     if ( GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = maItems[nItemId-1].maItemImage.GetBitmapEx();
@@ -180,6 +182,7 @@ void ValueSetWithTextControl::ReplaceItemImages(
             maItems[nItemId-1].maSelectedItemImage = Image(b);
         }
     }
+#endif
 }
 
 

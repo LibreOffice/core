@@ -73,6 +73,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mpImpl(new ImplData)
 {
+#ifndef MACOSX
     if ( rStb.GetDPIScaleFactor() > 1 )
     {
         for (int i = 0; i < mpImpl->MODIFICATION_STATE_SIZE; i++)
@@ -82,7 +83,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
             mpImpl->maImages[i] = Image(b);
         }
     }
-
+#endif
     mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 

@@ -1274,7 +1274,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
     BindListener();
     AddStatusListener(OUString(".uno:BorderReducedMode"));
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
-
+#ifndef MACOSX
     if( pParentWindow->GetDPIScaleFactor() > 1 )
     {
         for (short i = 0; i < aImgList.GetImageCount(); i++)
@@ -1285,7 +1285,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
             aImgList.ReplaceImage(rImageName, Image(b));
         }
     }
-
+#endif
     /*
      *  1       2        3         4
      *  -------------------------------------
