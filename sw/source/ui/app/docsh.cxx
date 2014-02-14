@@ -269,8 +269,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     // Maybe put away one old Doc
     if ( pDoc != pRdr->GetDoc() )
     {
-        if( pDoc )
-            RemoveLink();
+        RemoveLink();
         pDoc = pRdr->GetDoc();
 
         AddLink();
