@@ -60,8 +60,8 @@ void ScDDComboBoxButton::SetOptSizePixel()
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
-                               sal_Bool         bState,
-                               sal_Bool         bBtnIn  /* = sal_False */ )
+                               bool         bState,
+                               bool         bBtnIn  /* = false */ )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
         return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
@@ -118,7 +118,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 //------------------------------------------------------------------------
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
-                                       sal_Bool             bState )
+                                       bool             bState )
 {
     // no need to save old line and fill color here (is restored after the call)
 

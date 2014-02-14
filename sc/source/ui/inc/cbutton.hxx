@@ -40,16 +40,16 @@ public:
 
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
-                  sal_Bool          bState,
-                  sal_Bool          bBtnIn = false );
+                  bool          bState,
+                  bool          bBtnIn = false );
 
     void    Draw( const Point&  rAt,
-                  sal_Bool          bState,
-                  sal_Bool          bBtnIn = false )
+                  bool          bState,
+                  bool          bBtnIn = false )
                 { Draw( rAt, aBtnSize, bState, bBtnIn ); }
 
-    void    Draw( sal_Bool          bState,
-                  sal_Bool          bBtnIn = false )
+    void    Draw( bool          bState,
+                  bool          bBtnIn = false )
                 { Draw( aBtnPos, aBtnSize, bState, bBtnIn ); }
 
     void    SetOptSizePixel();
@@ -62,7 +62,7 @@ public:
 
 private:
     void    ImpDrawArrow( const Rectangle&  rRect,
-                          sal_Bool              bState );
+                          bool              bState );
 
 protected:
     OutputDevice* pOut;
