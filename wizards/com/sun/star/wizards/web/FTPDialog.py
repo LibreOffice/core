@@ -113,24 +113,8 @@ class FTPDialog(UnoDialog2, UIConsts):
         self.ucb = UCB(xmsf)
 
         # set dialog properties...
-        uno.invoke(self.xDialogModel, "setPropertyValues",
-                (("Closeable",
-                 PropertyNames.PROPERTY_HEIGHT,
-                 PropertyNames.PROPERTY_HELPURL, "Moveable",
-                 PropertyNames.PROPERTY_NAME,
-                 PropertyNames.PROPERTY_POSITION_X,
-                 PropertyNames.PROPERTY_POSITION_Y,
-                 "Title",
-                 PropertyNames.PROPERTY_WIDTH),
-                (True,
-                 160,
-                 HelpIds.getHelpIdString(HID_FTP),
-                 True,
-                 "FTPDialog",
-                 167,
-                 82,
-                 self.resources.resFTPDialog_title,
-                 222)))
+        self.setDialogProperties( True, 160, HelpIds.getHelpIdString(HID_FTP),
+            True, "FTPDialog", 167, 82, self.resources.resFTPDialog_title, 222)
 
         # add controls to dialog
         self.build()

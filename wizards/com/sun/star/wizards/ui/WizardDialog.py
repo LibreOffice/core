@@ -80,6 +80,21 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
 
+    def setDialogProperties(self, closeable, height, moveable, position_x,
+        position_Y, step, tabIndex, title, width):
+        uno.invoke(self.xDialogModel, "setPropertyValues",
+             ((PropertyNames.PROPERTY_CLOSEABLE, 
+                PropertyNames.PROPERTY_HEIGHT, 
+                PropertyNames.PROPERTY_MOVEABLE,
+                PropertyNames.PROPERTY_POSITION_X,
+                PropertyNames.PROPERTY_POSITION_Y,
+                PropertyNames.PROPERTY_STEP, 
+                PropertyNames.PROPERTY_TABINDEX,
+                PropertyNames.PROPERTY_TITLE,
+                PropertyNames.PROPERTY_WIDTH),
+             (closeable, height, moveable, position_x, position_Y, step, 
+                tabIndex, title, width)))     
+        
     def setRoadmapInteractive(self, _bInteractive):
         self.oRoadmap.Activated = _bInteractive
 

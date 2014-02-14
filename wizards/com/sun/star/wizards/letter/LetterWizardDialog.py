@@ -27,21 +27,12 @@ class LetterWizardDialog(WizardDialog):
     def __init__(self, xmsf):
         super(LetterWizardDialog, self).__init__(xmsf, HIDMAIN )
 
+        #Load Resources
         self.resources = LetterWizardDialogResources(self.oWizardResource)
-        uno.invoke(self.xDialogModel, "setPropertyValues",
-            (("Closeable",
-                PropertyNames.PROPERTY_HEIGHT,
-                "Moveable",
-                PropertyNames.PROPERTY_NAME,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
-                "Title",
-                PropertyNames.PROPERTY_WIDTH),
-            (True, 210, True,
-                "LetterWizardDialog", 104, 52, 1, 1,
-                self.resources.resLetterWizardDialog_title, 310)))
+        
+        #set dialog properties...        
+        self.setDialogProperties(True, 210, True, 104, 52, 1, 1, 
+            self.resources.resLetterWizardDialog_title, 310)
                 
         self.fontDescriptor1 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')

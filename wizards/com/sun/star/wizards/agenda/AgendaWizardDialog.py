@@ -30,16 +30,8 @@ class AgendaWizardDialog(WizardDialog):
         self.resources = AgendaWizardDialogResources(self.oWizardResource)
         
         #set dialog properties...
-        uno.invoke(self.xDialogModel, "setPropertyValues",
-            (("Closeable", 
-                PropertyNames.PROPERTY_HEIGHT,
-                "Moveable", PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
-                "Title", PropertyNames.PROPERTY_WIDTH),
-            (True, 210, True, 200, 52, 1, 1,
-                self.resources.resAgendaWizardDialog_title,310)))
+        self.setDialogProperties(True, 210, True, 200, 52, 1, 1,
+            self.resources.resAgendaWizardDialog_title, 310)
 
         self.PROPS_LIST = ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,

@@ -89,19 +89,9 @@ class WebWizardDialog(WizardDialog):
         self.resources = WebWizardDialogResources(xmsf, self.oWizardResource)
         
         #set dialog properties...
-        uno.invoke(self.xDialogModel, "setPropertyValues",(
-            ("Closeable",
-            PropertyNames.PROPERTY_HEIGHT,
-            PropertyNames.PROPERTY_HELPURL, "Moveable",
-            PropertyNames.PROPERTY_NAME,
-            PropertyNames.PROPERTY_POSITION_X,
-            PropertyNames.PROPERTY_POSITION_Y,
-            PropertyNames.PROPERTY_STEP,
-            PropertyNames.PROPERTY_TABINDEX, "Title",
-            PropertyNames.PROPERTY_WIDTH),
-        (True, 210, HelpIds.getHelpIdString(HID0_WEBWIZARD), True,
-            "WebWizardDialog", 102, 52, 1, 6,
-            self.resources.resWebWizardDialog_title, 330)))
+        self.setDialogProperties( True, 210, True, 102, 52, 1, 6, 
+            self.resources.resWebWizardDialog_title, 330)
+            
         self.fontDescriptor0 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor1 = \
@@ -114,6 +104,7 @@ class WebWizardDialog(WizardDialog):
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor7 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
+            
         self.imgIconsPrev = range(8)
         #Set member- self.fontDescriptors...
         self.fontDescriptor0.Weight = 100
@@ -136,7 +127,6 @@ class WebWizardDialog(WizardDialog):
         self.fontDescriptor7.Weight = 100
 
     #build components
-
     def buildStep1(self):
         tabIndex = 100
         self.insertLabel("lbIntroTitle", WebWizardDialog.PROPNAMES_TITLE,

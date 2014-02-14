@@ -29,4 +29,6 @@ class PropertyNames:
     PROPERTY_TABINDEX = "TabIndex"
     PROPERTY_STATE = "State"
     PROPERTY_IMAGEURL = "ImageURL"
-
+    PROPERTY_TITLE = "Title"
+    PROPERTY_MOVEABLE = "Moveable"
+    PROPERTY_CLOSEABLE = "Closeable"

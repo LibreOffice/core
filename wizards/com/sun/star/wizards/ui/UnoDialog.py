@@ -38,7 +38,6 @@ class UnoDialog(object):
             self.ControlList = {}
             self.xDialogModel = xMSF.createInstance(
                 "com.sun.star.awt.UnoControlDialogModel")
-            self.xDialogModel.setPropertyValues(PropertyNames, PropertyValues)
             self.xUnoDialog = xMSF.createInstance(
                 "com.sun.star.awt.UnoControlDialog")
             self.xUnoDialog.setModel(self.xDialogModel)
