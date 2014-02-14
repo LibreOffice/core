@@ -488,7 +488,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init(  rTxtNode.GetSwAttrSet(),
                                        *rTxtNode.getIDocumentSettingAccess(), NULL );
-                    SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
+                    SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, true );
                 }
             }
 

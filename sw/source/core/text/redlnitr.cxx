@@ -71,7 +71,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         if ( pFrm->IsVertical() )
         {
             bVertLayout = true;
-            pFnt->SetVertical( pFnt->GetOrientation(), sal_True );
+            pFnt->SetVertical( pFnt->GetOrientation(), true );
         }
         bRTL = pFrm->IsRightToLeft();
     }
@@ -172,12 +172,12 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
  *************************************************************************/
 
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
-                            SwAttrHandler& rAH, sal_Int32 nRed, sal_Bool bShw,
+                            SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
                             const std::vector<sal_uInt16> *pArr,
                             sal_Int32 nExtStart )
     : rDoc( *rTxtNd.GetDoc() ), rAttrHandler( rAH ), pSet( 0 ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
-      nAct( COMPLETE_STRING ), bOn( sal_False ), bShow( bShw )
+      nAct( COMPLETE_STRING ), bOn( false ), bShow( bShw )
 {
     if( pArr )
         pExt = new SwExtend( *pArr, nExtStart );
@@ -238,7 +238,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             {
                 if( nNew >= nStart ) // der einzig moegliche Kandidat
                 {
-                    bOn = sal_True;
+                    bOn = true;
                     const SwRangeRedline *pRed = rDoc.GetRedlineTbl()[ nAct ];
 
                     if (pSet)
@@ -260,7 +260,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                     {
                         const SfxPoolItem* pItem;
                         if( ( nWhich < RES_CHRATR_END ) &&
-                            ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True, &pItem ) ) )
+                            ( SFX_ITEM_SET == pSet->GetItemState( nWhich, true, &pItem ) ) )
                         {
                             SwTxtAttr* pAttr = MakeRedlineTxtAttr(
                                 const_cast<SwDoc&>(rDoc),
@@ -269,7 +269,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                             m_Hints.push_back(pAttr);
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
                             if( RES_CHRATR_COLOR == nWhich )
-                                rFnt.SetNoCol( sal_True );
+                                rFnt.SetNoCol( true );
                         }
                         nWhich = aIter.NextWhich();
                     }
@@ -304,7 +304,7 @@ void SwRedlineItr::FillHints( MSHORT nAuthor, RedlineType_t eType )
     }
 }
 
-void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
+void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, bool bChg )
 {
     OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTxtAttr: Off?" );
 
@@ -328,7 +328,7 @@ void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
 void SwRedlineItr::_Clear( SwFont* pFnt )
 {
     OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
-    bOn = sal_False;
+    bOn = false;
     while (!m_Hints.empty())
     {
         SwTxtAttr *pPos = m_Hints.front();
@@ -340,7 +340,7 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
         SwTxtAttr::Destroy(pPos, const_cast<SwDoc&>(rDoc).GetAttrPool() );
     }
     if( pFnt )
-        pFnt->SetNoCol( sal_False );
+        pFnt->SetNoCol( false );
 }
 
 sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
@@ -363,7 +363,7 @@ sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
     return nNext;
 }
 
-sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
+bool SwRedlineItr::_ChkSpecialUnderline() const
 {
     // Wenn die Unterstreichung oder das Escapement vom Redling kommt,
     // wenden wir immer das SpecialUnderlining, d.h. die Unterstreichung
@@ -373,21 +373,21 @@ sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
         MSHORT nWhich = m_Hints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
+bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
     if( nFirst == COMPLETE_STRING )
-        return sal_False;
+        return false;
     if( nChkEnd == nChkStart ) // Leerzeilen gucken ein Zeichen weiter.
         ++nChkEnd;
     sal_Int32 nOldStart = nStart;
     sal_Int32 nOldEnd = nEnd;
     sal_Int32 nOldAct = nAct;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     for( nAct = nFirst; nAct < (sal_Int32)rDoc.GetRedlineTbl().size() ; ++nAct )
     {
@@ -396,7 +396,7 @@ sal_Bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
             break;
         if( nChkStart <= nEnd && ( nChkEnd > nStart || COMPLETE_STRING == nEnd ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -428,7 +428,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr )
         rFnt.SetBackColor( new Color( rStyleSettings.GetHighlightColor() ) );
     }
     if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
-        rFnt.SetGreyWave( sal_True );
+        rFnt.SetGreyWave( true );
 }
 
 short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
@@ -445,7 +445,7 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     return 0;
 }
 
-sal_Bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
+bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
     MSHORT nOldAttr = rArr[ nPos - nStart ];
@@ -464,9 +464,9 @@ sal_Bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
         rFnt = *pFnt;
         delete pFnt;
         pFnt = NULL;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SwExtend::Next( sal_Int32 nNext )

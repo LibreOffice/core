@@ -268,7 +268,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
             aAttrHandler.Init(  GetTxtNode()->GetSwAttrSet(),
                                *GetTxtNode()->getIDocumentSettingAccess(), NULL );
             SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler,
-                                 nRedlPos, sal_True );
+                                 nRedlPos, true );
         }
     }
 
