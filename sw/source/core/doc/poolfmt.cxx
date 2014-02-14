@@ -1509,8 +1509,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             aSet.Put( aLR );
             aSet.Put( aUL );
-            if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL | nsUseOnPage::PD_FIRSTSHARE );
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL | nsUseOnPage::PD_FIRSTSHARE );
         }
         break;
 
@@ -1520,12 +1519,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            if( pNewPgDsc )
-            {
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-                if( RES_POOLPAGE_FIRST == nId )
-                    pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_STANDARD ));
-            }
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            if( RES_POOLPAGE_FIRST == nId )
+                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_STANDARD ));
         }
         break;
 
@@ -1535,13 +1531,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
-            if( pNewPgDsc )
-            {
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
-                // this relies on GetPageDescFromPool() not going into infinite recursion
-                // (by this point RES_POOLPAGE_LEFT will not reach this place again)
-                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_RIGHT ));
-            }
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
+            // this relies on GetPageDescFromPool() not going into infinite recursion
+            // (by this point RES_POOLPAGE_LEFT will not reach this place again)
+            pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_RIGHT ));
         }
         break;
     case RES_POOLPAGE_RIGHT:        // "Right Page"
@@ -1550,11 +1543,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
-            if( pNewPgDsc )
-            {
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
-                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_LEFT ));
-            }
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
+            pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_LEFT ));
         }
         break;
 
@@ -1568,11 +1558,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
 
-            if( pNewPgDsc )
-            {
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-                pNewPgDsc->SetLandscape( sal_True );
-            }
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetLandscape( sal_True );
         }
         break;
 
@@ -1585,8 +1572,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
 
-            if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
         }
         break;
 
@@ -1596,8 +1582,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
             SwPageFtnInfo aInf( pNewPgDsc->GetFtnInfo() );
             aInf.SetLineWidth( 0 );
             aInf.SetTopDist( 0 );
@@ -1619,11 +1604,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aFrmSz );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            if( pNewPgDsc )
-            {
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-                pNewPgDsc->SetLandscape( sal_True );
-            }
+            pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+            pNewPgDsc->SetLandscape( sal_True );
         }
         break;
 
