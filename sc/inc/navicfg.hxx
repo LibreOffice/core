@@ -20,7 +20,7 @@
 #ifndef SC_NAVICFG_HXX
 #define SC_NAVICFG_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 // CfgItem for navigator-state
 

@@ -21,7 +21,6 @@
 #define SC_ADDRESS_HXX
 
 #include <tools/stream.hxx>
-#include <tools/solar.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/endian.h>
 

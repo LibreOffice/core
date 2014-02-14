@@ -21,7 +21,6 @@
 #define SC_INPUTOPT_HXX
 
 #include <unotools/configitem.hxx>
-#include <tools/solar.h>
 
 class ScInputOptions
 {

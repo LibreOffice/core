@@ -24,7 +24,6 @@
 
 #include <list>
 #include <stack>
-#include <tools/solar.h>
 
 class ScFormulaCell;
 

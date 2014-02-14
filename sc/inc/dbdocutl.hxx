@@ -21,7 +21,6 @@
 #define SC_DBDOCUTL_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 #include <com/sun/star/uno/Reference.hxx>
 
 class ScDocument;

@@ -21,7 +21,6 @@
 #define SC_MARKARR_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 
 #define SC_MARKARRAY_DELTA    4
 

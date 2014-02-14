@@ -20,7 +20,6 @@
 #ifndef SC_CHARTHELPER_HXX
 #define SC_CHARTHELPER_HXX
 
-#include <tools/solar.h>
 #include "address.hxx"
 #include "global.hxx"
 #include "rangelst.hxx"

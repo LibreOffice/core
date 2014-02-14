@@ -21,8 +21,6 @@
 #define SC_PRNSAVE_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
-
 #include <vector>
 
 class ScRange;
@@ -66,7 +64,6 @@ public:
 
     bool    operator==( const ScPrintRangeSaver& rCmp ) const;
 };
-
 
 #endif
 

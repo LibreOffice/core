@@ -515,7 +515,6 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>

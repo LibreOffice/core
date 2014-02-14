@@ -21,7 +21,6 @@
 #define SC_FILTOPT_HXX
 
 #include <unotools/configitem.hxx>
-#include <tools/solar.h>
 #include "scdllapi.h"
 
 // filter options
