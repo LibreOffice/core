@@ -2187,7 +2187,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 
     // now add visible edges to row and column handles
-    if( mpImpl && mpImpl->mpLayouter )
+    if( mpImpl->mpLayouter )
     {
         TableLayouter& rLayouter = *mpImpl->mpLayouter;
 
