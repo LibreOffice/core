@@ -1465,8 +1465,6 @@ class NonEmptyCellIndexer
     BlockMapType maBlockMap;
 
     const sc::CellStoreType& mrCells;
-    SCROW mnStartRow;
-    SCROW mnEndRow;
 
     size_t mnLowIndex;
     size_t mnHighIndex;
@@ -1485,7 +1483,7 @@ public:
      */
     NonEmptyCellIndexer(
         const sc::CellStoreType& rCells, SCROW nStartRow, SCROW nEndRow, bool bSkipTopStrBlock ) :
-        mrCells(rCells), mnStartRow(nStartRow), mnEndRow(nEndRow), mnLowIndex(0), mnHighIndex(0), mbValid(true)
+        mrCells(rCells), mnLowIndex(0), mnHighIndex(0), mbValid(true)
     {
         if (nEndRow < nStartRow)
         {
