@@ -67,7 +67,7 @@ namespace rtl_OStringBuffer
             sal_Int32 nLenStrBuftmp = aStrBuftmp.getLength();
 
             rtl::OString sStr(aStrBuftmp.getStr());
-            sal_Bool res = aStrtmp.equals( sStr );
+            bool res = aStrtmp.equals( sStr );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -195,7 +195,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf1;
             ::rtl::OString         aStr1;
 
-            sal_Bool lastRes = (aStrBuf1.makeStringAndClear() ==  aStr1 );
+            bool lastRes = (aStrBuf1.makeStringAndClear() ==  aStr1 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -211,7 +211,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf2(26);
             ::rtl::OString         aStr2;
 
-            sal_Bool lastRes = (aStrBuf2.makeStringAndClear() == aStr2 );
+            bool lastRes = (aStrBuf2.makeStringAndClear() == aStr2 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -227,7 +227,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf3(*arrOUS[0]);
             ::rtl::OString        aStr3(*arrOUS[0]);
 
-            sal_Bool lastRes = (aStrBuf3.makeStringAndClear() == aStr3 );
+            bool lastRes = (aStrBuf3.makeStringAndClear() == aStr3 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -243,7 +243,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf4(*arrOUS[1]);
             ::rtl::OString         aStr4(*arrOUS[1]);
 
-            sal_Bool lastRes = (aStrBuf4.makeStringAndClear() ==  aStr4 );
+            bool lastRes = (aStrBuf4.makeStringAndClear() ==  aStr4 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -258,7 +258,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf5(*arrOUS[2]);
             ::rtl::OString         aStr5(*arrOUS[2]);
 
-            sal_Bool lastRes = (aStrBuf5.makeStringAndClear() ==  aStr5 );
+            bool lastRes = (aStrBuf5.makeStringAndClear() ==  aStr5 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -273,7 +273,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf6(*arrOUS[3]);
             ::rtl::OString         aStr6(*arrOUS[3]);
 
-            sal_Bool lastRes = (aStrBuf6.makeStringAndClear() == aStr6 );
+            bool lastRes = (aStrBuf6.makeStringAndClear() == aStr6 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -288,7 +288,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf7(*arrOUS[4]);
             ::rtl::OString         aStr7(*arrOUS[4]);
 
-            sal_Bool lastRes = (aStrBuf7.makeStringAndClear() == aStr7 );
+            bool lastRes = (aStrBuf7.makeStringAndClear() == aStr7 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -303,7 +303,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf8(*arrOUS[5]);
             ::rtl::OString         aStr8(*arrOUS[5]);
 
-            sal_Bool lastRes = (aStrBuf8.makeStringAndClear() == aStr8 );
+            bool lastRes = (aStrBuf8.makeStringAndClear() == aStr8 );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -2760,7 +2760,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr45 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
@@ -2776,7 +2776,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr46 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
@@ -2792,7 +2792,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr47 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
@@ -2808,7 +2808,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr48 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
@@ -2824,7 +2824,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr47 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
@@ -2840,7 +2840,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr48 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
@@ -2856,7 +2856,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr47 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
@@ -2872,7 +2872,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr48 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
@@ -2888,7 +2888,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr49 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
@@ -2904,7 +2904,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr50 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
@@ -14224,7 +14224,7 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            sal_Bool bRes = expVal.equals( aStrBuf.getStr() );
+            bool bRes = expVal.equals( aStrBuf.getStr() );
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[0]+(-9223372036854775808)",

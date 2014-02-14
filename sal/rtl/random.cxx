@@ -76,7 +76,7 @@ struct RandomPool_Impl
 
 /** __rtl_random_initPool.
  */
-static sal_Bool __rtl_random_initPool (
+static bool __rtl_random_initPool (
     RandomPool_Impl *pImpl);
 
 /** __rtl_random_seedPool.
@@ -108,7 +108,7 @@ static double __rtl_random_data (RandomData_Impl *pImpl)
 /*
  * __rtl_random_initPool.
  */
-static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
+static bool __rtl_random_initPool (RandomPool_Impl *pImpl)
 {
     pImpl->m_hDigest = rtl_digest_create (RTL_RANDOM_DIGEST);
     if (pImpl->m_hDigest)
@@ -148,9 +148,9 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
             seed = __rtl_random_data (&rd);
             __rtl_random_seedPool (pImpl, (sal_uInt8*)&seed, sizeof(seed));
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*

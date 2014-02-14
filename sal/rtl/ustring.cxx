@@ -1026,7 +1026,7 @@ sal_Bool rtl_convertStringToUString(
 {
     sal_uInt32 info;
     rtl_string2UString_status(target, source, length, encoding, flags, &info);
-    return (sal_Bool) ((info & RTL_TEXTTOUNICODE_INFO_ERROR) == 0);
+    return (info & RTL_TEXTTOUNICODE_INFO_ERROR) == 0;
 }
 
 void rtl_uString_newReplaceFirst(

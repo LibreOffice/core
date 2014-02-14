@@ -275,10 +275,10 @@ public:
         rtl_Locale* pData1 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
         rtl_Locale* pData2 = rtl_locale_register(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
 
-        sal_Bool bLocaleAreEqual = sal_False;
+        bool bLocaleAreEqual = false;
         bLocaleAreEqual = (pData1 == pData2);
 
-        CPPUNIT_ASSERT_MESSAGE("check operator ==()", bLocaleAreEqual == sal_True);
+        CPPUNIT_ASSERT_MESSAGE("check operator ==()", bLocaleAreEqual);
     }
 
     void equals_002()

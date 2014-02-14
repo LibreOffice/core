@@ -34,10 +34,10 @@ using namespace rtl;
 
 /** print Boolean value.
 */
-inline void printBool( sal_Bool bOk )
+inline void printBool( bool bOk )
 {
     printf("#printBool# " );
-    ( sal_True == bOk ) ? printf("TRUE!\n" ): printf("FALSE!\n" );
+    bOk ? printf("TRUE!\n" ): printf("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -106,7 +106,7 @@ namespace osl_Condition
     class ctors : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void ctors_001( )
         {
@@ -114,7 +114,7 @@ namespace osl_Condition
             bRes = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition its initial check state should be sal_False.",
-                                    sal_False == bRes );
+                                    !bRes );
         }
 
         void ctors_002( )
@@ -124,7 +124,7 @@ namespace osl_Condition
             bRes = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and set it.",
-                                    sal_True == bRes );
+                                    bRes );
         }
 
         CPPUNIT_TEST_SUITE( ctors );
@@ -140,7 +140,7 @@ namespace osl_Condition
     class set : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1, bRes2;
+        bool bRes, bRes1, bRes2;
 
         void set_001( )
         {
@@ -149,7 +149,7 @@ namespace osl_Condition
             bRes = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: check state should be sal_True after set.",
-                                    sal_True == bRes );
+                                    bRes );
         }
 
         void set_002( )
@@ -168,7 +168,7 @@ namespace osl_Condition
             myThread2.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
-                                    sal_True == bRes && sal_False == bRes1 && sal_True == bRes2 );
+                                    bRes && !bRes1 && bRes2 );
         }
 
 
@@ -185,7 +185,7 @@ namespace osl_Condition
     class reset : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1, bRes2;
+        bool bRes, bRes1, bRes2;
 
         void reset_001( )
         {
@@ -202,7 +202,7 @@ namespace osl_Condition
             bRes1 = myThread.isRunning( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait will cause a reset thread block, use set to release it.",
-                                    sal_True == bRes && sal_False == bRes1 && sal_False == bRes2 );
+                                    bRes && !bRes1 && !bRes2 );
         }
 
         void reset_002( )
@@ -214,7 +214,7 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and reset/set it.",
-                                    ( sal_False == bRes && sal_True == bRes1 ) );
+                                    !bRes && bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( reset );
@@ -230,7 +230,7 @@ namespace osl_Condition
     class wait : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1, bRes2;
+        bool bRes, bRes1, bRes2;
         TimeValue *tv1;
 
         void setUp( )
@@ -280,7 +280,7 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait a condition after set/reset.",
-                                    ( sal_False == bRes ) && ( sal_True == bRes1 ) &&
+                                    !bRes && bRes1 &&
                                     ( ::osl::Condition::result_timeout == wRes ) &&
                                     ( ::osl::Condition::result_ok == wRes1 ) );
         }
@@ -298,7 +298,7 @@ namespace osl_Condition
     class check : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1, bRes2;
+        bool bRes, bRes1, bRes2;
 
         void check_001( )
         {
@@ -310,7 +310,7 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: check the condition states.",
-                                    ( sal_False == bRes && sal_True == bRes1 ) );
+                                    !bRes && bRes1 );
         }
 
         void check_002( )
@@ -329,7 +329,7 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use threads to set/reset Condition and check it in main routine.",
-                                    ( sal_True == bRes && sal_False == bRes1 ) );
+                                    bRes && !bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( check );

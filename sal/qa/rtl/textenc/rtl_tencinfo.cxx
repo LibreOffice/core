@@ -1540,31 +1540,31 @@ namespace
                 rtl_TextEncodingInfo aInfo1, aInfo2, aInfo3, aInfo4, aInfo5;
                 aInfo1.StructSize = 4;
                 // not implemented
-                sal_Bool bRes1 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo1 );
+                bool bRes1 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo1 );
                 // implemented
-                sal_Bool bRes11 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo1 );
-                CPPUNIT_ASSERT_MESSAGE("should return sal_False.", bRes1 == sal_False && bRes11 == sal_False );
+                bool bRes11 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo1 );
+                CPPUNIT_ASSERT_MESSAGE("should return sal_False.", !bRes1 && !bRes11);
 
                 aInfo2.StructSize = 5;
-                sal_Bool bRes2 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo2 );
-                sal_Bool bRes21 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo2 );
-                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes2 == sal_True && bRes21 == sal_True && aInfo2.MinimumCharSize >=1 );
+                bool bRes2 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo2 );
+                bool bRes21 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo2 );
+                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes2 && bRes21 && aInfo2.MinimumCharSize >=1 );
 
                 aInfo3.StructSize = 6;
-                sal_Bool bRes3 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo3 );
-                sal_Bool bRes31 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo3 );
-                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes3 == sal_True && bRes31 == sal_True );
+                bool bRes3 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo3 );
+                bool bRes31 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo3 );
+                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes3 && bRes31);
 //&& aInfo2.MinimumCharSize >=1 );
 
                 aInfo4.StructSize = 8;
-                sal_Bool bRes4 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo4 );
-                sal_Bool bRes41 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo4);
-               CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes4 == sal_True && bRes41 == sal_True);
+                bool bRes4 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo4 );
+                bool bRes41 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo4);
+               CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes4 && bRes41);
 // && aInfo2.MinimumCharSize >=1 );
 
         aInfo5.StructSize = sizeof aInfo5;
-                sal_Bool bRes5 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo5 );
-                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes5 == sal_False && aInfo5.Flags == 0);
+                bool bRes5 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo5 );
+                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", !bRes5 && aInfo5.Flags == 0);
 
             }
         CPPUNIT_TEST_SUITE(testTextEncodingInfo);

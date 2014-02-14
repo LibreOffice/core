@@ -327,11 +327,11 @@ class OSuspendThread : public Thread
 {
     ThreadSafeValue<sal_Int32> m_aFlag;
 public:
-    OSuspendThread(){ m_bSuspend = sal_False; }
+    OSuspendThread(){ m_bSuspend = false; }
     sal_Int32 getValue() { return m_aFlag.getValue(); }
     void setSuspend()
         {
-            m_bSuspend = sal_True;
+            m_bSuspend = true;
         }
     virtual void SAL_CALL suspend()
         {
@@ -340,7 +340,7 @@ public:
             m_aFlag.release();
         }
 protected:
-    sal_Bool m_bSuspend;
+    bool m_bSuspend;
     void SAL_CALL run()
         {
             //if the thread should terminate, schedule return false
@@ -349,10 +349,10 @@ protected:
                 m_aFlag.addValue(1);
 
                 ThreadHelper::thread_sleep_tenth_sec(1);
-                if (m_bSuspend == sal_True)
+                if (m_bSuspend)
                 {
                     suspend();
-                    m_bSuspend  = sal_False;
+                    m_bSuspend  = false;
                 }
             }
         }
@@ -508,11 +508,11 @@ namespace osl_Thread
         void create_001()
             {
                 myThread* newthread = new myThread();
-                sal_Bool bRes = newthread->create();
-                CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!\n", bRes == sal_True );
+                bool bRes = newthread->create();
+                CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!\n", bRes);
 
                 ThreadHelper::thread_sleep_tenth_sec(1);        // wait short
-                sal_Bool isRunning = newthread->isRunning();    // check if thread is running
+                bool isRunning = newthread->isRunning();    // check if thread is running
                 /// wait for the new thread to assure it has run
                 ThreadHelper::thread_sleep_tenth_sec(3);
                 sal_Int32 nValue = newthread->getValue();
@@ -521,11 +521,11 @@ namespace osl_Thread
                 delete newthread;
 
                 t_print("   nValue = %d\n", (int) nValue);
-                t_print("isRunning = %s\n", isRunning == sal_True ? "true" : "false");
+                t_print("isRunning = %s\n", isRunning ? "true" : "false");
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Creates a new thread",
-                    nValue >= 1 && isRunning == sal_True
+                    nValue >= 1 && isRunning
                     );
 
             }
@@ -535,8 +535,8 @@ namespace osl_Thread
         void create_002()
             {
                 myThread* newthread = new myThread();
-                sal_Bool res1 = newthread->create();
-                sal_Bool res2 = newthread->create();
+                bool res1 = newthread->create();
+                bool res2 = newthread->create();
                 t_print("In non pro, an assertion should occurred. This behaviour is right.\n");
                 termAndJoinThread(newthread);
                 delete newthread;
@@ -577,11 +577,11 @@ namespace osl_Thread
         void createSuspended_001()
             {
                 myThread* newthread = new myThread();
-                sal_Bool bRes = newthread->createSuspended();
-                CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!", bRes == sal_True );
+                bool bRes = newthread->createSuspended();
+                CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!", bRes);
 
                 ThreadHelper::thread_sleep_tenth_sec(1);
-                sal_Bool isRunning = newthread->isRunning();
+                bool isRunning = newthread->isRunning();
                 ThreadHelper::thread_sleep_tenth_sec(3);
                 sal_Int32 nValue = newthread->getValue();
 
@@ -599,8 +599,8 @@ namespace osl_Thread
         void createSuspended_002()
             {
                 myThread* newthread = new myThread();
-                sal_Bool res1 = newthread->createSuspended();
-                sal_Bool res2 = newthread->createSuspended();
+                bool res1 = newthread->createSuspended();
+                bool res2 = newthread->createSuspended();
 
                 resumeAndWaitThread(newthread);
 
@@ -660,8 +660,8 @@ namespace osl_Thread
         void suspend_001()
             {
                 OCountThread* aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
                 // the thread run for some seconds, but not terminate
                 suspendCountThread( aCountThread );
 
@@ -679,7 +679,7 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Suspend the thread",
-                    bRes == sal_True && nValue == nLaterValue
+                    bRes && nValue == nLaterValue
                     );
 
             }
@@ -689,8 +689,8 @@ namespace osl_Thread
         void suspend_002()
             {
                 OSuspendThread* aThread = new OSuspendThread();
-                sal_Bool bRes = aThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
                 // first the thread run for some seconds, but not terminate
                 sal_Int32 nValue = 0;
                 //while (1)
@@ -720,7 +720,7 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Suspend the thread",
-                    bRes == sal_True && nValue == nLaterValue
+                    bRes && nValue == nLaterValue
                     );
             }
 
@@ -754,8 +754,8 @@ namespace osl_Thread
         void resume_001()
             {
                 OCountThread* pCountThread = new OCountThread();
-                sal_Bool bRes = pCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = pCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 suspendCountThread(pCountThread);
 
@@ -792,8 +792,8 @@ namespace osl_Thread
         void resume_002()
             {
                 myThread* newthread = new myThread();
-                sal_Bool bRes = newthread->createSuspended();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't create thread!", bRes == sal_True );
+                bool bRes = newthread->createSuspended();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't create thread!", bRes );
 
                 newthread->resume();
                 ThreadHelper::thread_sleep_tenth_sec(2);
@@ -838,8 +838,8 @@ namespace osl_Thread
         void terminate_001()
             {
                 OCountThread* aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 ThreadHelper::thread_sleep_tenth_sec(2);
                 sal_Int32 nValue = aCountThread->getValue();
@@ -848,7 +848,7 @@ namespace osl_Thread
                 sal_Int32 nLaterValue = aCountThread->getValue();
 
                 // isRunning should be false after terminate
-                sal_Bool isRunning = aCountThread->isRunning();
+                bool isRunning = aCountThread->isRunning();
                 aCountThread->join();
                 delete aCountThread;
 
@@ -857,7 +857,7 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Terminate the thread",
-                    isRunning == sal_False && nLaterValue >= nValue
+                    !isRunning && nLaterValue >= nValue
                     );
             }
         /** Check if a suspended thread will terminate after call terminate, different on w32 and on UNX
@@ -865,8 +865,8 @@ namespace osl_Thread
         void terminate_002()
             {
                 OCountThread* aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 ThreadHelper::thread_sleep_tenth_sec(1);
                 suspendCountThread(aCountThread);
@@ -919,8 +919,8 @@ namespace osl_Thread
         void join_001()
             {
                 OCountThread *aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 StopWatch aStopWatch;
                 aStopWatch.start();
@@ -954,8 +954,8 @@ namespace osl_Thread
         void join_002()
             {
                 OCountThread *aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 //record the time when the running begin
                 // TimeValue aTimeVal_befor;
@@ -1006,19 +1006,19 @@ namespace osl_Thread
         void isRunning_001()
             {
                 OCountThread *aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
-                sal_Bool bRun = aCountThread->isRunning();
+                bool bRun = aCountThread->isRunning();
 
                 ThreadHelper::thread_sleep_tenth_sec(2);
                 termAndJoinThread(aCountThread);
-                sal_Bool bTer = aCountThread->isRunning();
+                bool bTer = aCountThread->isRunning();
                 delete aCountThread;
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
-                    bRun == sal_True && bTer == sal_False
+                    bRun && !bTer
                     );
             }
         /** check the value of isRunning when suspending and after resume
@@ -1026,29 +1026,25 @@ namespace osl_Thread
         void isRunning_002()
             {
                 OCountThread *aCountThread = new OCountThread();
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 // sal_Bool bRunning = aCountThread->isRunning();
                 // sal_Int32 nValue = 0;
                 suspendCountThread(aCountThread);
 
-                sal_Bool bRunning_sup = aCountThread->isRunning();
+                bool bRunning_sup = aCountThread->isRunning();
                 ThreadHelper::thread_sleep_tenth_sec(2);
                 aCountThread->resume();
                 ThreadHelper::thread_sleep_tenth_sec(2);
-                sal_Bool bRunning_res = aCountThread->isRunning();
+                bool bRunning_res = aCountThread->isRunning();
                 termAndJoinThread(aCountThread);
-                sal_Bool bRunning_ter = aCountThread->isRunning();
+                bool bRunning_ter = aCountThread->isRunning();
                 delete aCountThread;
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
-                    bRes == sal_True &&
-                    bRunning_sup == sal_True &&
-                    bRunning_res == sal_True &&
-                    bRunning_ter == sal_False
-                    );
+                    bRes && bRunning_sup && bRunning_res && !bRunning_ter );
 
             }
 
@@ -1674,8 +1670,8 @@ namespace osl_Thread
                 sal_Int32 nWaitSec = 5;
                 aCountThread->setWait(nWaitSec);
                 // thread runs at least 5 seconds.
-                sal_Bool bRes = aCountThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aCountThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 //record the time when the running begin
                 StopWatch aStopWatch;
@@ -1762,8 +1758,8 @@ namespace osl_Thread
         void schedule_001()
             {
                 OAddThread* aThread = new OAddThread();
-                sal_Bool bRes = aThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aThread->create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 ThreadHelper::thread_sleep_tenth_sec(2);
                 aThread->suspend();
@@ -1810,8 +1806,8 @@ namespace osl_Thread
         void schedule_002()
             {
                 ONoScheduleThread aThread; // this thread runs 10 sec. (no schedule() used)
-                sal_Bool bRes = aThread.create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
+                bool bRes = aThread.create();
+                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 ThreadHelper::thread_sleep_tenth_sec(2);
                 aThread.suspend();

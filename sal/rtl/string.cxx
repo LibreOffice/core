@@ -173,12 +173,12 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
+bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                                                   sal_Unicode const * pSource,
                                                   sal_Int32 nLength,
                                                   rtl_TextEncoding nEncoding,
                                                   sal_uInt32 nFlags,
-                                                  sal_Bool bCheckErrors)
+                                                  bool bCheckErrors)
 {
     OSL_ASSERT(pTarget != NULL
                && (pSource != NULL || nLength == 0)
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                     nLength--;
                 }
                 while ( nLength );
-                return sal_True;
+                return true;
             }
 
             nMaxCharLen = 4;
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
             {
                 rtl_freeMemory(pTemp);
                 rtl_destroyUnicodeToTextConverter(hConverter);
-                return sal_False;
+                return false;
             }
 
             if ((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0)
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         if ( pTemp && !nDestBytes )
             rtl_string_new( pTarget );
     }
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL rtl_uString2String( rtl_String** ppThis,
@@ -312,7 +312,7 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
     SAL_THROW_EXTERN_C()
 {
     rtl_impl_convertUStringToString(ppThis, pUStr, nULen, eTextEncoding,
-                                    nCvtFlags, sal_False);
+                                    nCvtFlags, false);
 }
 
 sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
     SAL_THROW_EXTERN_C()
 {
     return rtl_impl_convertUStringToString(pTarget, pSource, nLength, nEncoding,
-                                           nFlags, sal_True);
+                                           nFlags, true);
 }
 
 void rtl_string_newReplaceFirst(

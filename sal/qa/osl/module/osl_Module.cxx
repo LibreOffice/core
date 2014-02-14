@@ -34,11 +34,10 @@ using ::rtl::OString;
 
 /** print Boolean value.
 */
-inline void printBool( sal_Bool bOk )
+inline void printBool( bool bOk )
 {
     printf("#printBool# " );
-    ( sal_True == bOk ) ? printf( "TRUE!\n" )
-                        : printf( "FALSE!\n" );
+    bOk ? printf( "TRUE!\n" ) : printf( "FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -108,21 +107,21 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
 }
 
 //check if the file exist
-inline sal_Bool ifFileExist( const ::rtl::OUString & str )
+inline bool ifFileExist( const ::rtl::OUString & str )
 {
     ::rtl::OUString     aUStr;
     if ( isURL( str ) )
         ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
     else
-        return sal_False;
+        return false;
 
     ::osl::File strFile( aUStr );
     ::osl::FileBase::RC nError = strFile.open( osl_File_OpenFlag_Read );
     if ( ::File::E_NOENT == nError )
-        return sal_False;
+        return false;
     else{
         strFile.close( );
-        return sal_True;
+        return true;
     }
 }
 
@@ -171,7 +170,7 @@ namespace osl_Module
     class ctors : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void ctors_none( )
         {
@@ -179,7 +178,7 @@ namespace osl_Module
             bRes = aMod.is();
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor without parameter.",
-                                    sal_False == bRes  );
+                                    !bRes  );
         }
 
         void ctors_name_mode( )
@@ -197,7 +196,7 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with load action.",
-                                    sal_True == bRes  );
+                                    bRes );
         }
 
         CPPUNIT_TEST_SUITE( ctors );
@@ -213,7 +212,7 @@ namespace osl_Module
     class getUrlFromAddress : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void getUrlFromAddress_001( )
         {
@@ -225,7 +224,7 @@ namespace osl_Module
             }
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test get Module URL from address.",
-                                    sal_True == bRes && 0 < aFileURL.lastIndexOf('/')  );
+                                    bRes && 0 < aFileURL.lastIndexOf('/')  );
         }
 
         void getUrlFromAddress_002( )
@@ -244,7 +243,7 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
-                                    sal_True == bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
+                                    bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
 #endif
         }
 
@@ -264,7 +263,7 @@ namespace osl_Module
     class load : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void load_001( )
         {
@@ -277,7 +276,7 @@ namespace osl_Module
             aMod1.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load function should do the same thing as constructor with library name.",
-                                    sal_True == bRes  );
+                                    bRes );
         }
 
         CPPUNIT_TEST_SUITE( load );
@@ -292,7 +291,7 @@ namespace osl_Module
     class unload : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void unload_001( )
         {
@@ -302,7 +301,7 @@ namespace osl_Module
             bRes = oslModule(aMod) ==NULL;
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: unload function should do the same thing as destructor.",
-                                    sal_True == bRes  );
+                                    bRes );
         }
 
         CPPUNIT_TEST_SUITE( unload );
@@ -317,7 +316,7 @@ namespace osl_Module
     class is : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void is_001( )
         {
@@ -335,7 +334,7 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test if a module is a loaded module.",
-                                     sal_False == bRes && sal_True == bRes1);
+                                    !bRes && bRes1 );
         }
         CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
@@ -349,7 +348,7 @@ namespace osl_Module
     class getSymbol : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes;
+        bool bRes;
 
         void getSymbol_001( )
         {
@@ -357,13 +356,13 @@ namespace osl_Module
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
             FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
-            bRes = sal_False;
+            bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );
             aMod.unload();
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and call one function in it.",
-                                     sal_True == bRes );
+                                    bRes );
 #endif
         }
 
@@ -379,7 +378,7 @@ namespace osl_Module
     class optr_oslModule : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void optr_oslModule_001( )
         {
@@ -394,7 +393,7 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: the m_Module of a Module instance will be NULL when is not loaded, it will not be NULL after loaded.",
-                                     sal_True == bRes && sal_True == bRes1);
+                                    bRes && bRes1 );
 #endif
         }
 
@@ -406,14 +405,14 @@ namespace osl_Module
             ::rtl::OUString funcName( "firstfunc" );
 
             FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
-            bRes = sal_False;
+            bRes = false;
             if ( pFunc )
                 bRes = pFunc( bRes );
 
             aMod.unload();
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use m_Module to call osl_getSymbol() function.",
-                                     sal_True == bRes  );
+                                    bRes );
 #endif
         }
 
@@ -429,7 +428,7 @@ namespace osl_Module
     class getFunctionSymbol : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void getFunctionSymbol_001( )
         {
@@ -441,7 +440,7 @@ namespace osl_Module
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
-                 sal_True == bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
+                 bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
 #endif
         }
 

@@ -78,7 +78,7 @@ sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt )
 }
 
 //------------------------------------------------------------------------
-sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
+bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
 {
     const sal_Char* pBuf1 = str1;
     const sal_Char* pBuf2 = str2;
@@ -93,11 +93,11 @@ sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
     return( i == len );
 }
 //-----------------------------------------------------------------------
-sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
+bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
 {
     const sal_Char* pBuf1 = str1;
     const sal_Char* pBuf2 = str2;
-    sal_Bool res = sal_True;
+    bool res = true;
 
     while ( (*pBuf1 == *pBuf2) && *pBuf1 !='\0' && *pBuf2 != '\0')
     {
@@ -105,13 +105,13 @@ sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2 )
         (pBuf2)++;
     }
     if (*pBuf1 == '\0' && *pBuf2 == '\0')
-        res = sal_True;
+        res = true;
     else
-        res = sal_False;
+        res = false;
     return (res);
 }
 //------------------------------------------------------------------------
-sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len )
+bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len )
 {
     const sal_Unicode* pBuf1 = str1;
     const sal_Unicode* pBuf2 = str2;
@@ -127,11 +127,11 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 l
 }
 
 //-----------------------------------------------------------------------
-sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
+bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
 {
     const sal_Unicode* pBuf1 = str1;
     const sal_Unicode* pBuf2 = str2;
-    sal_Bool res = sal_True;
+    bool res = true;
 
     while ( (*pBuf1 == *pBuf2) && *pBuf1 !='\0' && *pBuf2 != '\0')
     {
@@ -139,9 +139,9 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
         (pBuf2)++;
     }
     if (*pBuf1 == '\0' && *pBuf2 == '\0')
-        res = sal_True;
+        res = true;
     else
-        res = sal_False;
+        res = false;
     return (res);
 }
 

@@ -158,7 +158,7 @@ namespace {
 
 //----------------------------------------------------------------------------
 
-static sal_Bool getFromCommandLineArgs(
+static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
 {
     OSL_ASSERT(value != NULL);
@@ -202,7 +202,7 @@ static sal_Bool getFromCommandLineArgs(
         pNameValueList = &nameValueList;
     }
 
-    sal_Bool found = sal_False;
+    bool found = false;
 
     for( NameValueList::iterator ii = pNameValueList->begin() ;
          ii != pNameValueList->end() ;
@@ -211,7 +211,7 @@ static sal_Bool getFromCommandLineArgs(
         if( (*ii).sName.equals(key) )
         {
             *value = (*ii).sValue;
-            found = sal_True;
+            found = true;
             break;
         }
     }
@@ -761,7 +761,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 
-    sal_Bool found = sal_False;
+    bool found = false;
     if(ppValue && pName)
     {
         if (handle == 0)

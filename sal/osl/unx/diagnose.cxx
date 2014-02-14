@@ -206,7 +206,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     // assertions are routed to some external instance
     static bool envAbort = isEnv( "SAL_DIAGNOSE_ABORT" );
     static bool envBacktrace = isEnv( "SAL_DIAGNOSE_BACKTRACE" );
-    sal_Bool const doAbort = envAbort && f == NULL;
+    bool const doAbort = envAbort && f == NULL;
 
     /* If there's a callback for detailed messages, use it */
     if ( g_pDetailedDebugMessageFunc != NULL )

@@ -31,22 +31,22 @@ sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix )
     return (n < nRadix) ? n : -1;
 }
 
-sal_Bool rtl_ImplIsWhitespace( sal_Unicode c )
+bool rtl_ImplIsWhitespace( sal_Unicode c )
 {
     /* Space or Control character? */
     if ( (c <= 32) && c )
-        return sal_True;
+        return true;
 
     /* Only in the General Punctuation area Space or Control characters are included? */
     if ( (c < 0x2000) || (c > 0x206F) )
-        return sal_False;
+        return false;
 
     if ( ((c >= 0x2000) && (c <= 0x200B)) ||    /* All Spaces           */
          (c == 0x2028) ||                       /* LINE SEPARATOR       */
          (c == 0x2029) )                        /* PARAGRAPH SEPARATOR  */
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -263,7 +263,7 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
  * on request
  *********************************************/
 
-static struct dirent* osl_readdir_impl_(DIR* pdir, sal_Bool bFilterLocalAndParentDir)
+static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir)
 {
     struct dirent* pdirent;
 
@@ -300,7 +300,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     else
 #endif
     {
-        pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, sal_True);
+        pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, true);
     }
 
     if (NULL == pEntry)
@@ -945,7 +945,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         {
             size_t nToRead = std::min( sizeof(pBuffer), nRemains );
             sal_uInt64 nRead;
-            sal_Bool succeeded;
+            bool succeeded;
             if ( osl_readFile( SourceFileFH, pBuffer, nToRead, &nRead ) != osl_File_E_None || nRead > nToRead || nRead == 0 )
                 break;
 

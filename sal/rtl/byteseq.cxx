@@ -234,10 +234,10 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
     {
         return sal_False;
     }
-    return (sal_Bool)
-        (memcmp(
+    return
+        memcmp(
             pSequence1->elements, pSequence2->elements, pSequence1->nElements )
-         == 0);
+        == 0;
 }
 
 

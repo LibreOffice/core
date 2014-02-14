@@ -32,10 +32,10 @@
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src );
 sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
 
-sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len );
-sal_Bool cmpstr( const sal_Char* str1, const sal_Char* str2 );
-sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len );
-sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 );
+bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len );
+bool cmpstr( const sal_Char* str1, const sal_Char* str2 );
+bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len );
+bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 );
 
 sal_Char* createName( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
 
@@ -44,7 +44,7 @@ sal_uInt32 AStringLen( const sal_Char *pAStr );
 
 //------------------------------------------------------------------------
 
-sal_Bool AStringNIsValid( const sal_Char   *pAStr,
+bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
                         );
 

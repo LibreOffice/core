@@ -39,8 +39,8 @@
 /* implemented in file.c */
 extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
-static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
-    sal_Bool result = sal_False;
+static bool getModulePathFromAddress(void * address, rtl_String ** path) {
+    bool result = false;
     // We do want to have this functionality also in the
     // DISABLE_DYNLOADING case, I think?
 #if defined(AIX)
@@ -90,22 +90,17 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     Dl_info dl_info;
 
 #if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
-    result = lo_dladdr(address, &dl_info);
+    result = lo_dladdr(address, &dl_info) != 0;
 #else
-    result = dladdr(address, &dl_info);
+    result = dladdr(address, &dl_info) != 0;
 #endif
 
-    if (result != 0)
+    if (result)
     {
         rtl_string_newFromStr(path, dl_info.dli_fname);
 #if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
         free((void *) dl_info.dli_fname);
 #endif
-        result = sal_True;
-    }
-    else
-    {
-        result = sal_False;
     }
 #endif
     return result;
@@ -304,7 +299,7 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
-    sal_Bool result = sal_False;
+    bool result = false;
     rtl_String * path = NULL;
     if (getModulePathFromAddress(addr, &path))
     {
@@ -326,11 +321,11 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 
             rtl_uString_release(workDir);
-            result = sal_True;
+            result = true;
         }
         else
         {
-            result = sal_False;
+            result = false;
         }
         rtl_string_release(path);
     }

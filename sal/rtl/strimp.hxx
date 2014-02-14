@@ -48,7 +48,7 @@
 
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 
-sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
+bool rtl_ImplIsWhitespace( sal_Unicode c );
 
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES

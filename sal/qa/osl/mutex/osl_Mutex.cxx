@@ -47,10 +47,10 @@ inline void printUString( const ::rtl::OUString & str )
 
 /** print Boolean value.
 */
-inline void printBool( sal_Bool bOk )
+inline void printBool( bool bOk )
 {
     printf("#printBool# " );
-    ( sal_True == bOk ) ? printf("YES!\n" ): printf("NO!\n" );
+    bOk ? printf("YES!\n" ): printf("NO!\n" );
 }
 
 /** pause nSec seconds helper function.
@@ -307,7 +307,7 @@ namespace osl_Mutex
             myThread1.join( );
             myThread2.join( );
 
-            sal_Bool bRes = sal_False;
+            bool bRes = false;
 
             // every 5 datas should the same
             // LLA: this is not a good check, it's too fix
@@ -319,13 +319,13 @@ namespace osl_Mutex
                 m_Data.buffer[6] == m_Data.buffer[7] &&
                 m_Data.buffer[7] == m_Data.buffer[8] &&
                 m_Data.buffer[8] == m_Data.buffer[9])
-                bRes = sal_True;
+                bRes = true;
 
             /*for (sal_Int8 i=0; i<BUFFER_SIZE; i++)
                 printf("#data in buffer is %d\n", m_Data.buffer[i]);
             */
 
-            CPPUNIT_ASSERT_MESSAGE("Mutex ctor", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Mutex ctor", bRes);
 
         }
 
@@ -346,13 +346,13 @@ namespace osl_Mutex
             myThread1.join( );
             myThread2.join( );
 
-            sal_Bool bRes = sal_False;
+            bool bRes = false;
 
             // every 5 datas should the same
             if ( ( m_Res.data1 == 0 ) && ( m_Res.data2 == 3 ) )
-                bRes = sal_True;
+                bRes = true;
 
-            CPPUNIT_ASSERT_MESSAGE( "test Mutex ctor function: increase and decrease a number 3 times without interrupt.", bRes == sal_True );
+            CPPUNIT_ASSERT_MESSAGE( "test Mutex ctor function: increase and decrease a number 3 times without interrupt.", bRes );
         }
 
         CPPUNIT_TEST_SUITE( ctor );
@@ -375,7 +375,7 @@ namespace osl_Mutex
         {
             Mutex aMutex;
             //acquire here
-            sal_Bool bRes = aMutex.acquire( );
+            bool bRes = aMutex.acquire( );
             // pass the pointer of mutex to child thread
             HoldThread myThread( &aMutex );
             myThread.create( );
@@ -383,16 +383,15 @@ namespace osl_Mutex
             ThreadHelper::thread_sleep_tenth_sec( 2 );
             // if acquire in myThread does not work, 2 secs is long enough,
             // myThread should terminate now, and bRes1 should be sal_False
-            sal_Bool bRes1 = myThread.isRunning( );
+            bool bRes1 = myThread.isRunning( );
 
             aMutex.release( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
             // after release mutex, myThread stops blocking and will terminate immediately
-            sal_Bool bRes2 = myThread.isRunning( );
+            bool bRes2 = myThread.isRunning( );
             myThread.join( );
 
-            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire",
-                bRes == sal_True && bRes1 == sal_True && bRes2 == sal_False );
+            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", bRes && bRes1 && !bRes2 );
         }
 
         //in the same thread, acquire twice should success
@@ -400,15 +399,14 @@ namespace osl_Mutex
         {
             Mutex aMutex;
             //acquire here
-            sal_Bool bRes = aMutex.acquire();
-            sal_Bool bRes1 = aMutex.acquire();
+            bool bRes = aMutex.acquire();
+            bool bRes1 = aMutex.acquire();
 
-            sal_Bool bRes2 = aMutex.tryToAcquire();
+            bool bRes2 = aMutex.tryToAcquire();
 
             aMutex.release();
 
-            CPPUNIT_ASSERT_MESSAGE("Mutex acquire",
-                bRes == sal_True && bRes1 == sal_True && bRes2 == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Mutex acquire", bRes && bRes1 && bRes2);
 
         }
 
@@ -436,20 +434,19 @@ namespace osl_Mutex
             // ensure the child thread acquire the mutex
             ThreadHelper::thread_sleep_tenth_sec(1);
 
-            sal_Bool bRes1 = aMutex.tryToAcquire();
+            bool bRes1 = aMutex.tryToAcquire();
 
-            if (bRes1 == sal_True)
+            if (bRes1)
                 aMutex.release();
             // wait the child thread terminate
             myThread.join();
 
-            sal_Bool bRes2 = aMutex.tryToAcquire();
+            bool bRes2 = aMutex.tryToAcquire();
 
-            if (bRes2 == sal_True)
+            if (bRes2)
                 aMutex.release();
 
-        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex",
-                bRes1 == sal_False && bRes2 == sal_True);
+        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", !bRes1 && bRes2);
         }
 
         CPPUNIT_TEST_SUITE(tryToAcquire);
@@ -474,18 +471,18 @@ namespace osl_Mutex
             // ensure the child thread acquire the mutex
             ThreadHelper::thread_sleep_tenth_sec( 1 );
 
-            sal_Bool bRunning = myThread.isRunning( );
-            sal_Bool bRes1 = aMutex.tryToAcquire( );
+            bool bRunning = myThread.isRunning( );
+            bool bRes1 = aMutex.tryToAcquire( );
             // wait the child thread terminate
             myThread.join( );
 
-            sal_Bool bRes2 = aMutex.tryToAcquire( );
+            bool bRes2 = aMutex.tryToAcquire( );
 
-            if ( bRes2 == sal_True )
+            if ( bRes2 )
                 aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to acquire before and after the mutex has been released",
-                bRes1 == sal_False && bRes2 == sal_True && bRunning == sal_True );
+                !bRes1 && bRes2 && bRunning );
 
         }
 
@@ -518,20 +515,19 @@ namespace osl_Mutex
             myThread.create();
 
             ThreadHelper::thread_sleep_tenth_sec(1);
-            sal_Bool bRes1 = myThread.isRunning();
+            bool bRes1 = myThread.isRunning();
 
             pGlobalMutex->release();
             ThreadHelper::thread_sleep_tenth_sec(1);
             // after release mutex, myThread stops blocking and will terminate immediately
-            sal_Bool bRes2 = myThread.isRunning();
+            bool bRes2 = myThread.isRunning();
 
-            CPPUNIT_ASSERT_MESSAGE("Global Mutex works",
-                bRes1 == sal_True && bRes2 == sal_False);
+            CPPUNIT_ASSERT_MESSAGE("Global Mutex works", bRes1 && !bRes2);
         }
 
         void getGlobalMutex_002( )
         {
-            sal_Bool bRes;
+            bool bRes;
 
             Mutex *pGlobalMutex;
             pGlobalMutex = Mutex::getGlobalMutex( );
@@ -543,7 +539,7 @@ namespace osl_Mutex
             }
 
             CPPUNIT_ASSERT_MESSAGE( "Global Mutex works: if the code between {} get the different mutex as the former one, it will return false when release.",
-                bRes == sal_True );
+                bRes );
         }
 
         CPPUNIT_TEST_SUITE(getGlobalMutex);
@@ -600,15 +596,15 @@ namespace osl_Guard
             myThread.create();
 
             ThreadHelper::thread_sleep_tenth_sec(1);
-            sal_Bool bRes = aMutex.tryToAcquire();
+            bool bRes = aMutex.tryToAcquire();
             // after 1 second, the mutex has been guarded, and the child thread should be running
-            sal_Bool bRes1 = myThread.isRunning();
+            bool bRes1 = myThread.isRunning();
 
             myThread.join();
-            sal_Bool bRes2 = aMutex.tryToAcquire();
+            bool bRes2 = aMutex.tryToAcquire();
 
             CPPUNIT_ASSERT_MESSAGE("GuardThread constructor",
-                bRes == sal_False && bRes1 == sal_True && bRes2 == sal_True);
+                !bRes && bRes1 && bRes2);
         }
 
         void ctor_002( )
@@ -624,14 +620,14 @@ namespace osl_Guard
 
             /// is it still blocking?
             ThreadHelper::thread_sleep_tenth_sec( 2 );
-            sal_Bool bRes = myThread.isRunning( );
+            bool bRes = myThread.isRunning( );
 
             /// oh, release him.
             aMutex.release( );
             myThread.join( );
 
             CPPUNIT_ASSERT_MESSAGE("GuardThread constructor: reference initialization, acquire the mutex before running the thread, then check if it is blocking.",
-                bRes == sal_True);
+                bRes);
         }
 
         CPPUNIT_TEST_SUITE(ctor);
@@ -692,10 +688,10 @@ namespace osl_ClearableGuard
             ClearableMutexGuard myMutexGuard( &aMutex );
 
             /// it will return sal_False if the aMutex has not been Guarded.
-            sal_Bool bRes = aMutex.release( );
+            bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized.",
-                bRes == sal_True );
+                bRes);
         }
 
         void ctor_002( )
@@ -706,10 +702,10 @@ namespace osl_ClearableGuard
             ClearableMutexGuard myMutexGuard( aMutex );
 
             /// it will return sal_False if the aMutex has not been Guarded.
-            sal_Bool bRes = aMutex.release( );
+            bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
-                bRes == sal_True );
+                bRes);
         }
 
         CPPUNIT_TEST_SUITE(ctor);
@@ -764,15 +760,15 @@ namespace osl_ClearableGuard
 
             /// is it blocking?
             ThreadHelper::thread_sleep_tenth_sec( 4 );
-            sal_Bool bRes = myThread.isRunning( );
+            bool bRes = myThread.isRunning( );
 
             /// use clear to release.
             myMutexGuard.clear( );
             myThread.join( );
-            sal_Bool bRes1 = myThread.isRunning( );
+            bool bRes1 = myThread.isRunning( );
 
             CPPUNIT_ASSERT_MESSAGE( "ClearableGuard method: clear, control the HoldThread's running status!",
-                ( sal_True == bRes ) && ( sal_False == bRes1 ) );
+                bRes && !bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( clear );
@@ -831,10 +827,10 @@ namespace osl_ResettableGuard
             ResettableMutexGuard myMutexGuard( &aMutex );
 
             /// it will return sal_False if the aMutex has not been Guarded.
-            sal_Bool bRes = aMutex.release( );
+            bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initilized.",
-                bRes == sal_True );
+                bRes);
         }
 
         void ctor_002( )
@@ -845,10 +841,10 @@ namespace osl_ResettableGuard
             ResettableMutexGuard myMutexGuard( aMutex );
 
             /// it will return sal_False if the aMutex has not been Guarded.
-            sal_Bool bRes = aMutex.release( );
+            bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
-                bRes == sal_True );
+                bRes);
         }
 
 
@@ -869,17 +865,17 @@ namespace osl_ResettableGuard
             myThread.create( );
 
             /// is it running? and clear done?
-            sal_Bool bRes = myThread.isRunning( );
+            bool bRes = myThread.isRunning( );
             myMutexGuard.clear( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
 
             /// if reset is not success, the release will return sal_False
             myMutexGuard.reset( );
-            sal_Bool bRes1 = aMutex.release( );
+            bool bRes1 = aMutex.release( );
             myThread.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset",
-                ( sal_True == bRes ) && ( sal_True == bRes1 ) );
+                bRes && bRes1 );
         }
 
         void reset_002( )
@@ -889,14 +885,14 @@ namespace osl_ResettableGuard
 
             /// shouldn't release after clear;
             myMutexGuard.clear( );
-            sal_Bool bRes = aMutex.release( );
+            bool bRes = aMutex.release( );
 
             /// can release after reset.
             myMutexGuard.reset( );
-            sal_Bool bRes1 = aMutex.release( );
+            bool bRes1 = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
-                ( sal_False == bRes ) && ( sal_True == bRes1 ) );
+                !bRes && bRes1 );
         }
 
         CPPUNIT_TEST_SUITE(reset);

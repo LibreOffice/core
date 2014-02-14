@@ -61,8 +61,8 @@ namespace rtl_OUString
                 memset(pBuffer, 0, 2 * 8);
                 free(pBuffer);
 
-                sal_Bool bResult = aStrToTest == "a String";
-                CPPUNIT_ASSERT_MESSAGE("String must not be empty",  bResult == sal_True);
+                bool bResult = aStrToTest == "a String";
+                CPPUNIT_ASSERT_MESSAGE("String must not be empty", bResult);
             }
 
         // Change the following lines only, if you add, remove or rename

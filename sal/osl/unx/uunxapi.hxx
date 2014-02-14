@@ -44,7 +44,7 @@ namespace osl
      @see realpath
      **********************************/
 
-    inline sal_Bool realpath(
+    inline bool realpath(
         const rtl::OUString& ustrFileName,
         rtl::OUString& ustrResolvedName)
     {

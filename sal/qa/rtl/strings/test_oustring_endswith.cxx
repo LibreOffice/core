@@ -100,7 +100,7 @@ void test::oustring::EndsWith::endsWith()
             RTL_CONSTASCII_STRINGPARAM(".endsWithIgnoreAsciiCaseAsciiL("));
         appendString(msg, rtl::OString(data[i].str2, data[i].str2Len));
         msg.append(RTL_CONSTASCII_STRINGPARAM(") == "));
-        msg.append(static_cast< sal_Bool >(data[i].endsWith));
+        msg.append(data[i].endsWith);
         CPPUNIT_ASSERT_MESSAGE(
             msg.getStr(),
             rtl::OUString(

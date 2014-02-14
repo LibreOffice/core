@@ -33,7 +33,7 @@ typedef struct _oslConditionImpl
 {
     pthread_cond_t  m_Condition;
     pthread_mutex_t m_Lock;
-    sal_Bool            m_State;
+    bool            m_State;
 } oslConditionImpl;
 
 
@@ -50,7 +50,7 @@ oslCondition SAL_CALL osl_createCondition()
         return 0;
     }
 
-    pCond->m_State = sal_False;
+    pCond->m_State = false;
 
     /* init condition variable with default attr. (PTHREAD_PROCESS_PRIVAT) */
     nRet =  pthread_cond_init(&pCond->m_Condition, PTHREAD_CONDATTR_DEFAULT);
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
        return sal_False;
    }
 
-   pCond->m_State = sal_True;
+   pCond->m_State = true;
    nRet = pthread_cond_broadcast(&pCond->m_Condition);
    if ( nRet != 0 )
    {
@@ -186,7 +186,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
         return sal_False;
     }
 
-    pCond->m_State = sal_False;
+    pCond->m_State = false;
 
     nRet = pthread_mutex_unlock(&pCond->m_Lock);
     if ( nRet != 0 )
@@ -302,7 +302,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
-    sal_Bool State;
+    bool State;
     oslConditionImpl* pCond;
     int nRet=0;
 

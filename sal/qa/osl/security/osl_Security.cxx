@@ -39,10 +39,10 @@ using namespace rtl;
 
 /** print Boolean value.
 */
-inline void printBool( sal_Bool bOk )
+inline void printBool( bool bOk )
 {
     //t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    bOk ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -70,7 +70,7 @@ namespace osl_Security
     class ctors : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void ctors_001( )
         {
@@ -96,7 +96,7 @@ namespace osl_Security
     class logonUser : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes;
+        bool bRes;
 
         void logonUser_user_pwd( )
         {
@@ -104,7 +104,7 @@ namespace osl_Security
             bRes = aSec.logonUser( aLogonUser, aLogonPasswd );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: check logon user through forwarded user name, pwd, passed in (UNX), failed in (W32).",
-                                    ( sal_True == bRes )  );
+                                    bRes );
         }
 
         void logonUser_user_pwd_server( )
@@ -113,7 +113,7 @@ namespace osl_Security
             bRes = aSec.logonUser( aLogonUser, aLogonPasswd, aFileServer );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: check logon user through forwarded user name, pwd and server name, failed in (UNX)(W32).",
-                                    ( sal_True == bRes )  );
+                                    bRes );
         }
 
 
@@ -138,7 +138,7 @@ namespace osl_Security
     class getUserIdent : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void getUserIdent_001( )
         {
@@ -154,7 +154,7 @@ namespace osl_Security
             aMessage.append(", bRes: ");
             aMessage.append(bRes);
 
-            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && (bRes == sal_True));
+            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && bRes );
         }
 
         CPPUNIT_TEST_SUITE( getUserIdent );
@@ -169,7 +169,7 @@ namespace osl_Security
     class getUserName : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void getUserName_001( )
         {
@@ -187,7 +187,7 @@ namespace osl_Security
                 nPos = strGetName.indexOf(strName);
             }
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserName and compare it with names got at the beginning of the test.",
-                                    ( nPos >= 0 ) && ( sal_True == bRes ) );
+                                    ( nPos >= 0 ) && bRes );
         }
 
         CPPUNIT_TEST_SUITE( getUserName );
@@ -202,7 +202,7 @@ namespace osl_Security
     class getConfigDir : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes, bRes1;
+        bool bRes, bRes1;
 
         void getConfigDir_001( )
         {
@@ -210,8 +210,7 @@ namespace osl_Security
             ::rtl::OUString strConfig;
             bRes = aSec.getConfigDir( strConfig );
 
-            CPPUNIT_ASSERT_MESSAGE( "failed to find a ConfigDir!",
-                                     ( sal_True == bRes ));
+            CPPUNIT_ASSERT_MESSAGE( "failed to find a ConfigDir!", bRes );
         }
 
         CPPUNIT_TEST_SUITE( getConfigDir );
@@ -225,7 +224,7 @@ namespace osl_Security
     class isAdministrator : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes;
+        bool bRes;
 
         void isAdministrator_001( )
         {
@@ -271,9 +270,9 @@ namespace osl_Security
         void loadUserProfile( )
             {
                 ::osl::Security aSec;
-                sal_Bool bValue = osl_loadUserProfile(aSec.getHandle());
+                bool bValue = osl_loadUserProfile(aSec.getHandle());
 
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", bValue == sal_False );
+                CPPUNIT_ASSERT_MESSAGE( "empty function.", !bValue );
             }
 
         void unloadUserProfile( )
@@ -378,7 +377,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     /// is administrator;
     if( !getuid( ) )
-        isAdmin = sal_True;
+        isAdmin = true;
 
 #endif
 #if defined ( WNT )
@@ -616,7 +615,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         printUString( strUserID );
 
     t_print("Current User is:            ");
-    if ( isAdmin == sal_False )
+    if ( !isAdmin )
         t_print("NOT Administrator.\n" );
     else
         t_print("Administrator.\n" );

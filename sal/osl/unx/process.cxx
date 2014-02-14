@@ -905,10 +905,10 @@ struct osl_procStat
     unsigned long vm_lib;     /* library size */
 };
 
-sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
+bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     char name[PATH_MAX + 1];
     snprintf(name, sizeof(name), "/proc/%u/stat", pid);
 
@@ -922,7 +922,7 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         close(fd);
 
         if (!bRet)
-            return sal_False;
+            return false;
 
         tmp = strrchr(prstatbuf, ')');
         *tmp = '\0';
@@ -953,11 +953,11 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
     return bRet;
 }
 
-sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
+bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     snprintf(name, sizeof(name), "/proc/%u/status", pid);
 
@@ -971,7 +971,7 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         close(fd);
 
         if (!bRet)
-            return sal_False;
+            return false;
 
         tmp = strstr(prstatusbuf,"Uid:");
         if(tmp)

@@ -898,7 +898,7 @@ namespace {
                                                                      sal_Int16 nRadix )
     {
         BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_signed);
-        sal_Bool    bNeg;
+        bool    bNeg;
         sal_Int16   nDigit;
         U           n = 0;
 
@@ -911,14 +911,14 @@ namespace {
 
         if ( *pStr == '-' )
         {
-            bNeg = sal_True;
+            bNeg = true;
             pStr++;
         }
         else
         {
             if ( *pStr == '+' )
                 pStr++;
-            bNeg = sal_False;
+            bNeg = false;
         }
 
         T nDiv;
