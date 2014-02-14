@@ -1202,22 +1202,8 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
 {
     SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Object )" );
 
-    // get the object name
-    OUString aName;
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
-    {
-        if ( (*aIt).second == xObj )
-        {
-            aName = (*aIt).first;
-            break;
-        }
-
-        ++aIt;
-    }
-
     // try to load it from the container storage
-    return GetGraphicStream( aName, pMediaType );
+    return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
 bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
