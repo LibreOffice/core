@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	nss/nss.aix.patch \
 	nss/nss-3.13.5-zlib-werror.patch \
 	nss/nss_macosx.patch \
+	nss/nss-linux-x86.patch.0 \
 	$(if $(filter WNTMSC,$(OS)$(COM)),nss/nss.windows.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),nss/nspr-4.9-build.patch.3 \
 	nss/nss-3.13.3-build.patch.3 \
