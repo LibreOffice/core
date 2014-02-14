@@ -34,17 +34,10 @@ class LetterWizardDialog(WizardDialog):
         self.setDialogProperties(True, 210, True, 104, 52, 1, 1, 
             self.resources.resLetterWizardDialog_title, 310)
                 
-        self.fontDescriptor1 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        self.fontDescriptor2 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor5 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor6 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        self.fontDescriptor1.Weight = 150
-        self.fontDescriptor1.Underline = SINGLE
-        self.fontDescriptor2.Weight = 100
         self.fontDescriptor5.Weight = 100
         self.fontDescriptor6.Weight = 150
 

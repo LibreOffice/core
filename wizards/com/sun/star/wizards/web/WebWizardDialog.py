@@ -92,10 +92,6 @@ class WebWizardDialog(WizardDialog):
         self.setDialogProperties( True, 210, True, 102, 52, 1, 6, 
             self.resources.resWebWizardDialog_title, 330)
             
-        self.fontDescriptor0 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        self.fontDescriptor1 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor4 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor5 = \
@@ -105,11 +101,6 @@ class WebWizardDialog(WizardDialog):
         self.fontDescriptor7 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
             
-        self.imgIconsPrev = range(8)
-        #Set member- self.fontDescriptors...
-        self.fontDescriptor0.Weight = 100
-        self.fontDescriptor1.Weight = 150
-        self.fontDescriptor1.Underline = SINGLE
         self.fontDescriptor4.Weight = 150
         self.fontDescriptor5.Name = "Angsana New"
         self.fontDescriptor5.Height = 16
@@ -126,7 +117,6 @@ class WebWizardDialog(WizardDialog):
         self.fontDescriptor7.StyleName = "Regular"
         self.fontDescriptor7.Weight = 100
 
-    #build components
     def buildStep1(self):
         tabIndex = 100
         self.insertLabel("lbIntroTitle", WebWizardDialog.PROPNAMES_TITLE,

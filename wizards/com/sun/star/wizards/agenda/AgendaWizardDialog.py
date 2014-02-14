@@ -99,22 +99,10 @@ class AgendaWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH)
                 
-        self.fontDescriptor1 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        self.fontDescriptor2 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor4 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-            
-        #Set member- FontDescriptors...
-        self.fontDescriptor1.Weight = 150
-        self.fontDescriptor1.Underline = SINGLE
-        self.fontDescriptor2.Weight = 100
         self.fontDescriptor4.Weight = 150
 
-    '''
-    build components
-    '''
     def buildStep1(self):
         self.insertLabel("lblTitle1", self.PROPS_LABEL_B,
             (self.fontDescriptor4, 16, self.resources.reslblTitle1_value,

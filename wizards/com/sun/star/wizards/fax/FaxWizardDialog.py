@@ -33,24 +33,13 @@ class FaxWizardDialog(WizardDialog):
         self.setDialogProperties(True, 210, True, 104, 52, 1, 1,
             self.resources.resFaxWizardDialog_title, 310)
 
-        self.fontDescriptor1 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        self.fontDescriptor2 = \
-            uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor4 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor5 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
-        #Set member- FontDescriptors...
-        self.fontDescriptor1.Weight = 150
-        self.fontDescriptor1.Underline = SINGLE
-        self.fontDescriptor2.Weight = 100
         self.fontDescriptor4.Weight = 100
         self.fontDescriptor5.Weight = 150
 
-    '''
-    build components
-    '''
     def buildStep1(self):
         self.optBusinessFax = self.insertRadioButton("optBusinessFax",
             FaxWizardDialogConst.OPTBUSINESSFAX_ITEM_CHANGED,
