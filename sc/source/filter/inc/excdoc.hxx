@@ -20,14 +20,13 @@
 #ifndef SC_EXCDOC_HXX
 #define SC_EXCDOC_HXX
 
-#include <tools/solar.h>
 #include "excrecds.hxx"
 #include "xeroot.hxx"
 #include "root.hxx"
 #include "xeescher.hxx"
 #include <boost/shared_ptr.hpp>
 
-//------------------------------------------------------------------ Forwards -
+// Forwards -
 
 class SvStream;
 
@@ -35,8 +34,7 @@ class NameBuffer;
 
 class XclExpChangeTrack;
 
-
-//------------------------------------------------------------ class ExcTable -
+// class ExcTable -
 
 class XclExpCellTable;
 
@@ -76,9 +74,6 @@ public:
     void                        WriteXml( XclExpXmlStream& );
 };
 
-
-//--------------------------------------------------------- class ExcDocument -
-
 class ExcDocument : protected XclExpRoot
 {
 friend class ExcTable;
@@ -104,9 +99,6 @@ public:
     void                Write( SvStream& rSvStrm );
     void                WriteXml( XclExpXmlStream& );
 };
-
-
-
 
 #endif
 

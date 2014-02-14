@@ -20,10 +20,8 @@
 #ifndef SC_EXPBASE_HXX
 #define SC_EXPBASE_HXX
 
-#include <tools/solar.h>
 #include "global.hxx"
 #include "address.hxx"
-
 
 class SvStream;
 class ScFieldEditEngine;
@@ -59,9 +57,7 @@ public:
     bool                IsEmptyTable( SCTAB nTab ) const;
 
     ScFieldEditEngine&  GetEditEngine() const;
-
 };
-
 
 #endif  // SC_EXPBASE_HXX
 

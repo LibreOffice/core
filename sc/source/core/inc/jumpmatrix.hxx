@@ -22,7 +22,6 @@
 
 #include "formula/token.hxx"
 #include "formula/errorcodes.hxx"
-#include <tools/solar.h>
 #include <vector>
 #include "types.hxx"
 #include "address.hxx"

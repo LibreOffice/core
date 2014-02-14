@@ -21,7 +21,6 @@
 #define SC_DRAWUTIL_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 
 class Fraction;
 class OutputDevice;
@@ -36,8 +35,6 @@ public:
                         double nPPTX, double nPPTY,
                         Fraction& rScaleX, Fraction& rScaleY );
 };
-
-
 
 #endif
 

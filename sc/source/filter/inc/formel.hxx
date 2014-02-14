@@ -20,8 +20,6 @@
 #ifndef SC_FORMEL_HXX
 #define SC_FORMEL_HXX
 
-#include <tools/solar.h>
-
 #include <compiler.hxx>
 #include <global.hxx>
 
@@ -90,8 +88,6 @@ protected:
     void                Reset();
 };
 
-
-
 class ExcelConverterBase : public ConverterBase
 {
 protected:
@@ -107,8 +103,6 @@ public:
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
-
-
 
 class LotusConverterBase : public ConverterBase
 {
@@ -136,7 +130,6 @@ public:
 protected:
     using               ConverterBase::Reset;
 };
-
 
 inline void LotusConverterBase::Ignore( const long nSeekRel )
 {
@@ -181,6 +174,5 @@ inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

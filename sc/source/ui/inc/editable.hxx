@@ -21,13 +21,11 @@
 #define SC_EDITABLE_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 
 class ScDocument;
 class ScViewFunc;
 class ScMarkData;
 class ScRange;
-
 
 class ScEditableTester
 {

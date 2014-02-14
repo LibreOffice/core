@@ -21,14 +21,11 @@
 #define SC_UNDOUTIL_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 
 class ScRange;
 class ScDocShell;
 class ScDBData;
 class ScDocument;
-
-//----------------------------------------------------------------------------
 
 class ScUndoUtil
 {

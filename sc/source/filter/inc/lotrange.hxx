@@ -20,14 +20,12 @@
 #ifndef SC_LOTRANGE_HXX
 #define SC_LOTRANGE_HXX
 
-#include <tools/solar.h>
 #include <compiler.hxx>
-
-// --------------------------------------------------------- class LotusRange -
 
 class LotusRangeList;
 
 typedef sal_uInt16  LR_ID;
+
 #define ID_FAIL 0xFFFF
 
 class LotusRange
@@ -53,7 +51,6 @@ public:
     inline bool         IsSingle( void ) const;
 };
 
-
 inline void LotusRange::Copy( const LotusRange& rCpy )
 {
     nColStart = rCpy.nColStart;
@@ -62,19 +59,16 @@ inline void LotusRange::Copy( const LotusRange& rCpy )
     nRowEnd = rCpy.nRowEnd;
 }
 
-
 inline void LotusRange::SetId( LR_ID nNewId )
 {
     nId = nNewId;
 }
-
 
 inline LotusRange &LotusRange::operator =( const LotusRange& rCpy )
 {
     Copy( rCpy );
     return *this;
 }
-
 
 inline bool LotusRange::operator ==( const LotusRange& rRef ) const
 {
@@ -83,7 +77,6 @@ inline bool LotusRange::operator ==( const LotusRange& rRef ) const
         nRowEnd == rRef.nRowEnd );
 }
 
-
 inline bool LotusRange::operator !=( const LotusRange& rRef ) const
 {
     return ( nHash != rRef.nHash || nColStart != rRef.nColStart ||
@@ -91,15 +84,10 @@ inline bool LotusRange::operator !=( const LotusRange& rRef ) const
         nRowEnd != rRef.nRowEnd );
 }
 
-
 inline bool LotusRange::IsSingle( void ) const
 {
     return ( nColStart == nColEnd && nRowStart == nRowEnd );
 }
-
-
-
-// ----------------------------------------------------- class LotusRangeList -
 
 class LotusRangeList
 {
@@ -122,13 +110,11 @@ public:
     inline static void  SetEing( const SCCOL nCol, const SCROW nRow );
 };
 
-
 inline LR_ID LotusRangeList::GetIndex( SCCOL nCol, SCROW nRow )
 {
     LotusRange aRef( nCol, nRow );
     return GetIndex( aRef );
 }
-
 
 inline LR_ID LotusRangeList::GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE )
 {
@@ -136,18 +122,15 @@ inline LR_ID LotusRangeList::GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SC
     return GetIndex( aRef );
 }
 
-
 inline void LotusRangeList::Append( SCCOL nCol, SCROW nRow, const OUString& rName )
 {
     Append( new LotusRange( nCol, nRow ), rName );
 }
 
-
 inline void LotusRangeList::Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const OUString& r )
 {
     Append( new LotusRange( nColS, nRowS, nColE, nRowE ), r );
 }
-
 
 inline void LotusRangeList::SetEing( const SCCOL nCol, const SCROW nRow )
 {
@@ -156,7 +139,6 @@ inline void LotusRangeList::SetEing( const SCCOL nCol, const SCROW nRow )
 }
 
 #endif
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #ifndef SC_REFUNDO_HXX
 #define SC_REFUNDO_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 class ScDocument;
 class ScDBCollection;
@@ -51,8 +51,6 @@ public:
     void        DeleteUnchanged( const ScDocument* pDoc );
     void        DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst );
 };
-
-
 
 #endif
 

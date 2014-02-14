@@ -22,7 +22,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 
 struct RootData;
 class XclImpRoot;

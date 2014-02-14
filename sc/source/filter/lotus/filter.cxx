@@ -20,9 +20,6 @@
 //  Das geht:   Versionserkennung WKS, WK1 und WK3
 //              ...Rest steht in op.cpp
 
-//------------------------------------------------------------------------
-
-#include <tools/solar.h>
 #include <string.h>
 #include <map>
 
@@ -42,12 +39,12 @@
 
 #include "op.h"
 
-// Konstanten ------------------------------------------------------------
+// Konstanten
 const sal_uInt16        nBOF = 0x0000;
 
 
 
-// externe Variablen -----------------------------------------------------
+// externe Variablen
 extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
 WKTYP               eTyp;
 

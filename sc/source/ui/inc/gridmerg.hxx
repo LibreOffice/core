@@ -20,8 +20,6 @@
 #ifndef SC_GRIDMERG_HXX
 #define SC_GRIDMERG_HXX
 
-#include <tools/solar.h>
-
 class OutputDevice;
 
 class ScGridMerger
@@ -48,8 +46,6 @@ public:
     void        AddVerLine( long nX, long nY1, long nY2 );
     void        Flush();
 };
-
-
 
 #endif
 

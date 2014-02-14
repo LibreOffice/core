@@ -21,7 +21,6 @@
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/solar.h>
 
 #include "rangenam.hxx"
 #include "compiler.hxx"
@@ -37,11 +36,11 @@
 
 #include <math.h>
 
-//--------------------------------------------------------- EXTERNE VARIABLEN -
+// External variable
 extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
 extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 
-//--------------------------------------------------------- GLOBALE VARIABLEN -
+// Global variable
 sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
@@ -57,9 +56,6 @@ FormCache*                  pValueFormCache;
 
 SCCOL                       LotusRangeList::nEingCol;
 SCROW                       LotusRangeList::nEingRow;
-
-
-
 
 void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 {
@@ -104,9 +100,6 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), pLotusRoot->eCharsetQ), &aParam);
 }
 
-
-
-
 void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt )
 {
     //  PREC:   nSt = Standard-Dezimalstellenanzahl
@@ -123,7 +116,6 @@ void InitPage( void )
 {   // Seitenformat initialisieren, d.h. Default-Werte von SC holen
     //scGetPageFormat( 0, &aPage );
 }
-
 
 double SnumToDouble( sal_Int16 nVal )
 {
@@ -169,7 +161,6 @@ double Snum32ToDouble( sal_uInt32 nValue )
     return fValue;
 }
 
-
 FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
 {   // Default-Format ist 'Default'
     nDefaultFormat = nNewDefaultFormat;
@@ -179,13 +170,11 @@ FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
     eLanguage = ScGlobal::eLnge;
 }
 
-
 FormCache::~FormCache()
 {
     for( sal_uInt16 nC = 0 ; nC < __nSize ; nC++ )
         delete aIdents[ nC ].GetAttr();
 }
-
 
 SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
@@ -369,9 +358,6 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     return new SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nHandle );
 }
 
-
-
-
 void LotusRange::MakeHash( void )
 {
     // 33222222222211111111110000000000
@@ -386,7 +372,6 @@ void LotusRange::MakeHash( void )
     nHash += static_cast<sal_uInt32>(nRowEnd ) << 16;
 }
 
-
 LotusRange::LotusRange( SCCOL nCol, SCROW nRow )
 {
     nColStart = nColEnd = nCol;
@@ -394,7 +379,6 @@ LotusRange::LotusRange( SCCOL nCol, SCROW nRow )
     nId = ID_FAIL;
     MakeHash();
 }
-
 
 LotusRange::LotusRange( SCCOL nCS, SCROW nRS, SCCOL nCE, SCROW nRE )
 {
@@ -406,15 +390,10 @@ LotusRange::LotusRange( SCCOL nCS, SCROW nRS, SCCOL nCE, SCROW nRE )
     MakeHash();
 }
 
-
 LotusRange::LotusRange( const LotusRange& rCpy )
 {
     Copy( rCpy );
 }
-
-
-
-
 
 LotusRangeList::LotusRangeList( void )
 {
@@ -455,7 +434,6 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
     return ID_FAIL;
 }
 
-
 void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
 {
     OSL_ENSURE( pLR, "*LotusRangeList::Append(): das wird nichts!" );
@@ -488,21 +466,16 @@ void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
     nIdCnt++;
 }
 
-
-
-
 RangeNameBufferWK3::RangeNameBufferWK3( void )
 {
     pScTokenArray = new ScTokenArray;
     nIntCount = 1;
 }
 
-
 RangeNameBufferWK3::~RangeNameBufferWK3()
 {
     delete pScTokenArray;
 }
-
 
 void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
@@ -537,7 +510,6 @@ void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& 
     pLotusRoot->pScRangeName->insert( pData );
 }
 
-
 bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
@@ -554,7 +526,6 @@ bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 
     return false;
 }
-
 
 bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
@@ -605,6 +576,5 @@ bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
