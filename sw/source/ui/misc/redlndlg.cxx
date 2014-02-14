@@ -413,8 +413,7 @@ void SwRedlineAcceptDlg::Activate()
                         return;
                     continue;
                 }
-                if (pBackupData)
-                    pBackupData = pBackupData->pNext;
+                pBackupData = pBackupData->pNext;
                 pRedlineData = pRedlineData->Next();
             }
         }
