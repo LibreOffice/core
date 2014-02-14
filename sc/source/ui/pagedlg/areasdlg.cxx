@@ -237,7 +237,7 @@ void ScPrintAreasDlg::AddRefEntry()
 
 void ScPrintAreasDlg::Deactivate()
 {
-    bDlgLostFocus = sal_True;
+    bDlgLostFocus = true;
 }
 
 
@@ -355,14 +355,14 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
+bool ScPrintAreasDlg::Impl_CheckRefStrings()
 {
-    sal_Bool        bOk = false;
+    bool        bOk = false;
     OUString      aStrPrintArea   = pEdPrintArea->GetText();
     OUString      aStrRepeatRow   = pEdRepeatRow->GetText();
     OUString      aStrRepeatCol   = pEdRepeatCol->GetText();
 
-    sal_Bool bPrintAreaOk = sal_True;
+    bool bPrintAreaOk = true;
     if ( !aStrPrintArea.isEmpty() )
     {
         const sal_uInt16 nValidAddr  = SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
@@ -386,11 +386,11 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         }
     }
 
-    sal_Bool bRepeatRowOk = aStrRepeatRow.isEmpty();
+    bool bRepeatRowOk = aStrRepeatRow.isEmpty();
     if ( !bRepeatRowOk )
         bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, NULL);
 
-    sal_Bool bRepeatColOk = aStrRepeatCol.isEmpty();
+    bool bRepeatColOk = aStrRepeatCol.isEmpty();
     if ( !bRepeatColOk )
         bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, NULL);
 

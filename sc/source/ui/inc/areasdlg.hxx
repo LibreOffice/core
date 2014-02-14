@@ -63,7 +63,7 @@ private:
     OKButton*        pBtnOk;
     CancelButton*    pBtnCancel;
 
-    sal_Bool            bDlgLostFocus;
+    bool            bDlgLostFocus;
     formula::RefEdit*       pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
@@ -72,7 +72,7 @@ private:
 #ifdef _AREASDLG_CXX
 private:
     void Impl_Reset();
-    sal_Bool Impl_CheckRefStrings();
+    bool Impl_CheckRefStrings();
     void Impl_FillLists();
     bool Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
 
