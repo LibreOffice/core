@@ -20,7 +20,6 @@
 #ifndef SC_ROOT_HXX
 #define SC_ROOT_HXX
 
-#include <tools/solar.h>
 #include "global.hxx"
 #include "address.hxx"
 #include "flttypes.hxx"
@@ -45,7 +44,7 @@ class XclExpUserBViewList;
 class XclImpRoot;
 class XclExpRoot;
 
-// ---------------------------------------------------------- Excel Imp~/Exp~ -
+// Excel Imp~/Exp~ -
 
 struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
@@ -80,7 +79,7 @@ protected:
     inline          ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
 };
 
-// ---------------------------------------------------------- Lotus Imp~/Exp~ -
+// Lotus Imp~/Exp~ -
 
 class LotusRangeList;
 class LotusFontBuffer;
@@ -105,8 +104,6 @@ struct LOTUS_ROOT
 };
 
 extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
-
-// ----------------------------------------------------------------------------
 
 #endif
 

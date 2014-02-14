@@ -20,7 +20,6 @@
 #define SC_VIEWUTIL_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 #include <sal/types.h>
 
 class SfxItemSet;
@@ -37,8 +36,6 @@ class ScRange;
 class ScMarkData;
 
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
-
-// ---------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScViewUtil
 {
@@ -73,8 +70,6 @@ public:
     static void SetFullScreen( SfxViewShell& rViewShell, bool bSet );
 };
 
-// ---------------------------------------------------------------------------
-
 class ScUpdateRect
 {
 private:
@@ -91,9 +86,6 @@ public:
     void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     sal_Bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 };
-
-
-
 
 #endif
 

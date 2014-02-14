@@ -20,8 +20,6 @@
 #ifndef SC_UNDOOLK_HXX
 #define SC_UNDOOLK_HXX
 
-#include <tools/solar.h>
-
 class SdrUndoAction;
 class ScDocument;
 
@@ -30,8 +28,6 @@ void            DoSdrUndoAction     ( SdrUndoAction* pUndoAction, ScDocument* pD
 void            RedoSdrUndoAction   ( SdrUndoAction* pUndoAction );
 void            DeleteSdrUndoAction ( SdrUndoAction* pUndoAction );
 void            EnableDrawAdjust    ( ScDocument* pDoc, sal_Bool bEnable );
-
-
 
 #endif
 

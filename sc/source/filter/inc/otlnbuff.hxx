@@ -20,7 +20,6 @@
 #ifndef SC_OTLNBUFF_HXX
 #define SC_OTLNBUFF_HXX
 
-#include <tools/solar.h>
 #include <mdds/flat_segment_tree.hpp>
 #include <set>
 

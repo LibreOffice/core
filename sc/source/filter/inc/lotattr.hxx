@@ -22,8 +22,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include <tools/solar.h>
-
 #include "address.hxx"
 #include "scitems.hxx"
 
@@ -107,7 +105,6 @@ private:
     LOTUS_ROOT* mpLotusRoot;
 };
 
-
 class LotAttrCol
 {
 public:
@@ -125,7 +122,6 @@ private:
 
     boost::ptr_vector<ENTRY> aEntries;
 };
-
 
 class LotAttrTable
 {

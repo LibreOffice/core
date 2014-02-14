@@ -20,8 +20,6 @@
 #ifndef SC_SCMEM_H
 #define SC_SCMEM_H
 
-#include <tools/solar.h>
-
 sal_Bool MemNew( void );
 void MemDelete( void );
 

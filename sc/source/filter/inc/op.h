@@ -20,7 +20,6 @@
 #ifndef SC_OP_H
 #define SC_OP_H
 
-#include <tools/solar.h>
 #include <patattr.hxx>
 
 // OP-Code-Funktionen

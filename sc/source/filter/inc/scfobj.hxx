@@ -20,8 +20,6 @@
 #ifndef SC_SCFOBJ_HXX
 #define SC_SCFOBJ_HXX
 
-#include <tools/solar.h>
-
 class ScDocument;
 class Rectangle;
 
@@ -31,7 +29,6 @@ public:
     static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 );
 };
-
 
 #endif
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/solar.h>
 #include <rtl/math.hxx>
 
 #include <stdio.h>
@@ -69,18 +68,15 @@ void NI( SvStream& r, sal_uInt16 n )
     r.SeekRel( n );
 }
 
-
 void OP_BOF( SvStream& r, sal_uInt16 /*n*/ )
 {
     r.SeekRel( 2 );        // Versionsnummer ueberlesen
 }
 
-
 void OP_EOF( SvStream& /*r*/, sal_uInt16 /*n*/ )
 {
     bEOF = sal_True;
 }
-
 
 void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
 {
@@ -101,7 +97,6 @@ void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
     }
 }
 
-
 void OP_Number( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt8           nFormat;
@@ -120,7 +115,6 @@ void OP_Number( SvStream& r, sal_uInt16 /*n*/ )
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
     }
 }
-
 
 void OP_Label( SvStream& r, sal_uInt16 n )
 {
@@ -179,7 +173,6 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
     }
 }
 
-
 void OP_ColumnWidth( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt16              nCol, nBreite;
@@ -202,7 +195,6 @@ void OP_ColumnWidth( SvStream& r, sal_uInt16 /*n*/ )
         pDoc->SetColWidth( static_cast<SCCOL> (nCol), nTab, nBreite );
     }
 }
-
 
 void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
     {
@@ -242,7 +234,6 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
     }
 }
 
-
 void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
 {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
@@ -281,24 +272,20 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
     }
 }
 
-
 void OP_Footer( SvStream& r, sal_uInt16 n )
 {
     r.SeekRel( n );
 }
-
 
 void OP_Header( SvStream& r, sal_uInt16 n )
 {
     r.SeekRel( n );
 }
 
-
 void OP_Margins( SvStream& r, sal_uInt16 n )
 {
     r.SeekRel( n );
 }
-
 
 void OP_HiddenCols( SvStream& r, sal_uInt16 /*n*/ )
 {
@@ -322,7 +309,6 @@ void OP_HiddenCols( SvStream& r, sal_uInt16 /*n*/ )
     }
 }
 
-
 void OP_Window1( SvStream& r, sal_uInt16 n )
 {
     r.SeekRel( 4 );    // Cursor Pos ueberspringen
@@ -342,7 +328,6 @@ void OP_Window1( SvStream& r, sal_uInt16 n )
         pDoc->SetColWidth( nCol, 0, nDefWidth );
 }
 
-
 void OP_Blank( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt16      nCol, nRow;
@@ -356,7 +341,6 @@ void OP_BOF123( SvStream& r, sal_uInt16 /*n*/ )
 {
     r.SeekRel( 26 );
 }
-
 
 void OP_EOF123( SvStream& /*r*/, sal_uInt16 /*n*/ )
 {

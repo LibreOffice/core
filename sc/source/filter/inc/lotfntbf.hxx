@@ -20,13 +20,10 @@
 #ifndef SC_LOTFNTBF_HXX
 #define SC_LOTFNTBF_HXX
 
-#include <tools/solar.h>
 #include "scitems.hxx"
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
-
-// ---------------------------------------------------- class LotusFontBuffer -
 
 // Code in fontbuff.cxx (excel)
 
