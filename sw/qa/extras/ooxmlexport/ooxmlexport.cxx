@@ -3696,6 +3696,25 @@ DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
     CPPUNIT_ASSERT(contents.match("PAGEREF _Toc355095261 \\h"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_AutoColumn.docx")
+{
+    // Bug :: fdo#73596
+    /*
+     * When the columns in Index are 0; i.e not specified by the
+     * "\c" switch, don't write back '\c "0"' or the section breaks
+     * before and after the Index Context
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+        if (!pXmlDoc)
+            return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT( contents.match(" INDEX \\e \"") );
+    // check for section break doestn't appear for any paragraph
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
