@@ -409,7 +409,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     }
 
     const sal_uInt16 nSdPageCount = GetSdPageCount(PK_STANDARD);
-    const sal_uInt16 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
+    const sal_uInt32 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
     const sal_uInt16 nMPageCount = GetMasterPageCount();
 
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
