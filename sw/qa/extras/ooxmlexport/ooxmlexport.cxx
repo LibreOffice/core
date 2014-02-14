@@ -2341,7 +2341,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[2]/w:t");
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t");
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match("15"));
@@ -3025,6 +3025,19 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74110,"fdo74110.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]",
                 "prst", "rect");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]",0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
+{
+    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
+    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:hyperlink/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match("PAGEREF _Toc355095261 \\h"));
 }
 
 #endif
