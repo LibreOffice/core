@@ -8056,6 +8056,14 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
             MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-fstack-protector-strong//)
         fi
         MARIADB_LIBS=`$MARIADBCONFIG --libs_r`
+        dnl At least mariadb-5.5.34-3.fc20.x86_64 plus
+        dnl mariadb-5.5.34-3.fc20.i686 reports 64-bit specific output even under
+        dnl linux32:
+        if test "$OS" = LINUX -a "$CPUNAME" = INTEL; then
+            MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-m64//)
+            MARIADB_LIBS=$(printf '%s' "$MARIADB_LIBS" \
+                | sed -e 's|/lib64/|/lib/|')
+        fi
         AC_MSG_RESULT([includes '$MARIADB_CFLAGS', libraries '$MARIADB_LIBS'])
         AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
         if test "$enable_bundle_mariadb" = "yes"; then
