@@ -698,7 +698,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
 
     aLbDocuments.Hide();        // bei NAV_LMODE_NONE gibts die nicht
 
-    aLbEntries.InitWindowBits(sal_True);
+    aLbEntries.InitWindowBits(true);
 
     aLbEntries.SetSpaceBetweenEntries(0);
     aLbEntries.SetSelectionMode( SINGLE_SELECTION );
@@ -741,7 +741,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         aTbxCmd.Select(IID_ZOOMOUT);
         aTbxCmd.RemoveItem(aTbxCmd.GetItemPos(IID_ZOOMOUT));
     }
-    aLbEntries.SetNavigatorDlgFlag(sal_True);
+    aLbEntries.SetNavigatorDlgFlag(true);
 }
 
 //------------------------------------------------------------------------

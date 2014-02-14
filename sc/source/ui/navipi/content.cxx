@@ -78,7 +78,7 @@ static const sal_uInt16 pTypeList[SC_CONTENT_COUNT] =
     SC_CONTENT_DRAWING
 };
 
-sal_Bool ScContentTree::bIsInDrag = false;
+bool ScContentTree::bIsInDrag = false;
 
 
 ScDocShell* ScContentTree::GetManualOrCurrent()
@@ -121,7 +121,7 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( false ),
     pHiddenDocument ( NULL ),
-    bisInNavigatoeDlg  ( sal_False )
+    bisInNavigatoeDlg  ( false )
 {
     sal_uInt16 i;
     for (i=0; i<SC_CONTENT_COUNT; i++)
@@ -148,7 +148,7 @@ ScContentTree::~ScContentTree()
 }
 
 // helper function for  GetEntryAltText and GetEntryLongDescription
-OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const
+OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltText) const
 {
     SdrObject* pFound = NULL;
 
@@ -203,12 +203,12 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool i
 
 OUString  ScContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
 {
-    return getAltLongDescText( pEntry, sal_True );
+    return getAltLongDescText( pEntry, true );
 }
 
 OUString ScContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
 {
-    return getAltLongDescText( pEntry, sal_False);
+    return getAltLongDescText( pEntry, false );
 }
 
 void ScContentTree::InitRoot( sal_uInt16 nType )
@@ -1099,7 +1099,7 @@ ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
     return pDoc->GetNotePosition(nIndex);
 }
 
-sal_Bool ScContentTree::NoteStringsChanged()
+bool ScContentTree::NoteStringsChanged()
 {
     ScDocument* pDoc = GetSourceDocument();
     if (!pDoc)
@@ -1132,7 +1132,7 @@ sal_Bool ScContentTree::NoteStringsChanged()
     return false;
 }
 
-sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
+bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
 {
     ScDocument* pDoc = GetSourceDocument();
     if (!pDoc)
@@ -1147,7 +1147,7 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     // iterate in flat mode for groups
     SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
 
-    sal_Bool bEqual = sal_True;
+    bool bEqual = true;
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pDrawLayer && pShell)
@@ -1296,7 +1296,7 @@ static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_u
 void ScContentTree::DoDrag()
 {
     ScDocumentLoader* pDocLoader = NULL;
-    bIsInDrag = sal_True;
+    bIsInDrag = true;
 
     ScModule* pScMod = SC_MOD();
 
@@ -1452,20 +1452,20 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-sal_Bool ScContentTree::LoadFile( const OUString& rUrl )
+bool ScContentTree::LoadFile( const OUString& rUrl )
 {
     OUString aDocName = rUrl;
     sal_Int32 nPos = aDocName.indexOf('#');
     if ( nPos != -1 )
         aDocName = aDocName.copy(0, nPos);           // nur der Name, ohne #...
 
-    sal_Bool bReturn = false;
+    bool bReturn = false;
     OUString aURL = aDocName;
     OUString aFilter, aOptions;
     ScDocumentLoader aLoader( aURL, aFilter, aOptions );
     if ( !aLoader.IsError() )
     {
-        bHiddenDoc = sal_True;
+        bHiddenDoc = true;
         aHiddenName = aDocName;
         aHiddenTitle = aLoader.GetTitle();
         pHiddenDocument = aLoader.GetDocument();
@@ -1482,11 +1482,11 @@ sal_Bool ScContentTree::LoadFile( const OUString& rUrl )
     return bReturn;
 }
 
-void ScContentTree::InitWindowBits( sal_Bool bButtons )
+void ScContentTree::InitWindowBits( bool bButtons )
 {
-    WinBits nFlags = GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL;
+    WinBits nFlags = GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL;
     if (bButtons)
-        nFlags |= WB_HASBUTTONS|WB_HASBUTTONSATROOT;
+        nFlags |= WB_HASBUTTONS | WB_HASBUTTONSATROOT;
 
     SetStyle( nFlags );
 }

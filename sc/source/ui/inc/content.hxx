@@ -51,16 +51,16 @@ class ScContentTree : public SvTreeListBox
     SvTreeListEntry*        pRootNodes[SC_CONTENT_COUNT];
     sal_uInt16              nRootType;          // set as Root
     OUString            aManualDoc;         // Switched in Navigator (Title)
-    sal_Bool                bHiddenDoc;         // Hidden active?
+    bool                bHiddenDoc;         // Hidden active?
     OUString            aHiddenName;        // URL to load
     OUString            aHiddenTitle;       // for display
     ScDocument*         pHiddenDocument;    // temporary
-    sal_Bool            bisInNavigatoeDlg;
+    bool                bisInNavigatoeDlg;
     OUString            sKeyString;
 
     sal_uInt16              pPosList[SC_CONTENT_COUNT];     // for the sequence
 
-    static sal_Bool bIsInDrag;      // static, if the Navigator is deleted in ExecuteDrag
+    static bool bIsInDrag;      // static, if the Navigator is deleted in ExecuteDrag
 
     ScDocShell* GetManualOrCurrent();
 
@@ -81,8 +81,8 @@ class ScContentTree : public SvTreeListBox
 
     static bool IsPartOfType( sal_uInt16 nContentType, sal_uInt16 nObjIdentifier );
 
-    sal_Bool    DrawNamesChanged( sal_uInt16 nType );
-    sal_Bool    NoteStringsChanged();
+    bool    DrawNamesChanged( sal_uInt16 nType );
+    bool    NoteStringsChanged();
 
     ScAddress GetNotePos( sal_uLong nIndex );
     const ScAreaLink* GetLink( sal_uLong nIndex );
@@ -106,8 +106,8 @@ class ScContentTree : public SvTreeListBox
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 public:
     SvTreeListEntry* pTmpEntry;
-
     bool m_bFirstPaint;
+
 protected:
 
     using SvTreeListBox::ExecuteDrop;
@@ -117,23 +117,24 @@ protected:
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
     virtual void        DragFinished( sal_Int8 nAction );
 
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind);
+    virtual void        Command( const CommandEvent& rCEvt );
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
+    virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind);
+
 public:
             ScContentTree( Window* pParent, const ResId& rResId );
             ~ScContentTree();
 
-    OUString getAltLongDescText(SvTreeListEntry* pEntry , sal_Bool isAltText) const;
+    OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;
     OUString GetEntryAltText( SvTreeListEntry* pEntry ) const;
     OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const;
 
     void     ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry = NULL);
-    sal_Bool     SetNavigatorDlgFlag(sal_Bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
+    bool     SetNavigatorDlgFlag(bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
 
-    void    InitWindowBits( sal_Bool bButtons );
+    void    InitWindowBits( bool bButtons );
 
     void    Refresh( sal_uInt16 nType = 0 );
 
@@ -144,7 +145,7 @@ public:
     void    ActiveDocChanged();
     void    ResetManualDoc();
     void    SetManualDoc(const OUString& rName);
-    sal_Bool    LoadFile(const OUString& rUrl);
+    bool    LoadFile(const OUString& rUrl);
     void    SelectDoc(const OUString& rName);
 
     const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
@@ -154,7 +155,7 @@ public:
     /** Stores the current listbox state in the navigator settings. */
     void                        StoreSettings() const;
 
-    static sal_Bool IsInDrag()  { return bIsInDrag; }
+    static bool IsInDrag()  { return bIsInDrag; }
 };
 
 
