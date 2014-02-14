@@ -2774,7 +2774,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
                 break;
         case RTF_NOWRAP:
-                m_aStates.top().aFrame.setSprm(NS_sprm::LN_PWr, NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside);
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_wrap, NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside);
                 break;
         case RTF_MNOR:
                 m_bMathNor = true;
@@ -5123,8 +5123,8 @@ void RTFFrame::setSprm(Id nId, Id nValue)
         case NS_ooxml::LN_CT_FramePr_vAnchor:
             nVertAnchor = nValue;
             break;
-        case NS_sprm::LN_PWr:
-            oWrap.reset(nValue);
+        case NS_ooxml::LN_CT_FramePr_wrap:
+            oWrap = nValue;
             break;
         default:
             break;
@@ -5148,7 +5148,7 @@ RTFSprms RTFFrame::getSprms()
         NS_ooxml::LN_CT_FramePr_vAnchor,
         NS_ooxml::LN_CT_FramePr_xAlign,
         NS_ooxml::LN_CT_FramePr_yAlign,
-        NS_sprm::LN_PWr,
+        NS_ooxml::LN_CT_FramePr_wrap,
         NS_ooxml::LN_CT_FramePr_dropCap,
         NS_ooxml::LN_CT_FramePr_lines
     };
@@ -5218,7 +5218,7 @@ RTFSprms RTFFrame::getSprms()
                     pValue.reset(new RTFValue(nHRule));
                 }
                 break;
-            case NS_sprm::LN_PWr:
+            case NS_ooxml::LN_CT_FramePr_wrap:
                 if (oWrap)
                     pValue.reset(new RTFValue(*oWrap));
                 break;

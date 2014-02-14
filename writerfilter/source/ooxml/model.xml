@@ -21958,7 +21958,7 @@
       <attribute name="h" tokenid="ooxml:CT_FramePr_h"/>
       <attribute name="vSpace" tokenid="ooxml:CT_FramePr_vSpace"/>
       <attribute name="hSpace" tokenid="ooxml:CT_FramePr_hSpace"/>
-      <attribute name="wrap" tokenid="sprm:PWr"/>
+      <attribute name="wrap" tokenid="ooxml:CT_FramePr_wrap"/>
       <attribute name="hAnchor" tokenid="ooxml:CT_FramePr_hAnchor"/>
       <attribute name="vAnchor" tokenid="ooxml:CT_FramePr_vAnchor"/>
       <attribute name="x" tokenid="ooxml:CT_FramePr_x"/>
@@ -21966,7 +21966,7 @@
       <attribute name="y" tokenid="ooxml:CT_FramePr_y"/>
       <attribute name="yAlign" tokenid="ooxml:CT_FramePr_yAlign"/>
       <attribute name="hRule" tokenid="ooxml:CT_FramePr_hRule"/>
-      <attribute name="anchorLock" tokenid="sprm:PFLocked"/>
+      <attribute name="anchorLock" tokenid="ooxml:CT_FramePr_anchorLock"/>
     </resource>
     <resource name="ST_TabJc" resource="List">
       <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>

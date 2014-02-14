@@ -617,7 +617,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FramePr_hRule:
         case NS_ooxml::LN_CT_FramePr_w:
         case NS_ooxml::LN_CT_FramePr_h:
-        case NS_sprm::LN_PWr:
+        case NS_ooxml::LN_CT_FramePr_wrap:
         case NS_ooxml::LN_CT_FramePr_hSpace:
         case NS_ooxml::LN_CT_FramePr_vSpace:
         {
@@ -720,7 +720,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                          }
                         pParaProperties->SethRule( nIntValue );
                     break;
-                    case NS_sprm::LN_PWr:
+                    case NS_ooxml::LN_CT_FramePr_wrap:
                     {
                         //should be either LN_Value_wordprocessingml_ST_Wrap_notBeside or LN_Value_wordprocessingml_ST_Wrap_around
                         OSL_ENSURE( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ||
@@ -1085,8 +1085,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_CT_FramePr_w:
         break;
-    case NS_sprm::LN_PWr:
-        break;  // sprmPWr
+    case NS_ooxml::LN_CT_FramePr_wrap:
+        break;
 
     case NS_ooxml::LN_CT_PrBase_pBdr: //paragraph border
         resolveSprmProps(*this, rSprm);
@@ -1206,8 +1206,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPDyaFromText
     case NS_ooxml::LN_CT_FramePr_hSpace:
         break;  // sprmPDxaFromText
-    case NS_sprm::LN_PFLocked:
-        break;  // sprmPFLocked
+    case NS_ooxml::LN_CT_FramePr_anchorLock:
+        break;
     case NS_sprm::LN_PFWidowControl:
     case NS_ooxml::LN_CT_PPrBase_widowControl:
     {
