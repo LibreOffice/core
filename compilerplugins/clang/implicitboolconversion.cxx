@@ -184,7 +184,9 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
             } else {
                 std::ptrdiff_t n = j - expr->arg_begin();
                 assert(n >= 0);
-                assert(n < compat::getNumParams(*t) || t->isVariadic());
+                assert(
+                    static_cast<std::size_t>(n) < compat::getNumParams(*t)
+                    || t->isVariadic());
                 if (n < compat::getNumParams(*t)
                     && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
                              BuiltinType::Int)
