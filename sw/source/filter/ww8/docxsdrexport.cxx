@@ -991,7 +991,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     if (m_pImpl->m_pDashLineStyleAttr)
     {
         sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr);
-        m_pImpl->m_pFlyFillAttrList = NULL;
+        m_pImpl->m_pDashLineStyleAttr = NULL;
         pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
     }
     pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
