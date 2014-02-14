@@ -72,15 +72,15 @@ private:
     ScViewData*     pViewData;
     ScDocument*     pDoc;
     formula::RefEdit*       pEdActive;
-    sal_Bool            bDlgLostFocus;
+    bool            bDlgLostFocus;
 
 #ifdef _CRNRDLG_CXX
 private:
     void Init               ();
     void UpdateNames        ();
-    void UpdateRangeData    ( const ScRange& rRange, sal_Bool bColName );
-    void SetColRowData( const ScRange& rLabelRange,sal_Bool bRef=false);
-    void AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef=false);
+    void UpdateRangeData    ( const ScRange& rRange, bool bColName );
+    void SetColRowData( const ScRange& rLabelRange, bool bRef=false);
+    void AdjustColRowData( const ScRange& rDataRange, bool bRef=false);
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );

@@ -212,7 +212,7 @@ void ScColRowNameRangesDlg::Init()
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool bRef)
+void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef)
 {
     theCurData = theCurArea = rLabelRange;
     sal_Bool bValid = sal_True;
@@ -311,7 +311,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef)
+void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bRef)
 {
     theCurData = rDataRange;
     if ( pBtnColHead->IsChecked() )
@@ -396,9 +396,9 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
             RefInputStart( pEdActive );
 
         if ( pEdActive == pEdAssign )
-            SetColRowData( rRef, sal_True );
+            SetColRowData( rRef, true );
         else
-            AdjustColRowData( rRef, sal_True );
+            AdjustColRowData( rRef, true );
         pBtnColHead->Enable();
         pBtnRowHead->Enable();
         pBtnAdd->Enable();
@@ -611,7 +611,7 @@ void ScColRowNameRangesDlg::UpdateNames()
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bColName )
+void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColName )
 {
     ScRangePair* pPair = NULL;
     sal_Bool bFound = false;
