@@ -636,6 +636,9 @@ public:
     /// Determines if column break with one column should be exported or not.
     virtual bool SupportsOneColumnBreak() const = 0;
 
+    /// Determines if the import filter already quoted fields or not.
+    virtual bool FieldsQuoted() const = 0;
+
     /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
     virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
 
@@ -961,6 +964,7 @@ public:
 
     virtual bool SupportsOneColumnBreak() const { return false; }
 
+    virtual bool FieldsQuoted() const { return false; }
 private:
     /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl();

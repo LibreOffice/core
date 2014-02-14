@@ -2579,7 +2579,11 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_SETEXPFLD:
         if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
-            OUString sStr = FieldString(ww::eSEQ) +  pFld->GetTyp()->GetName() + " ";
+            OUString sStr;
+            if (GetExport().FieldsQuoted())
+                sStr = FieldString(ww::eSEQ) +  pFld->GetTyp()->GetName() + " ";
+            else
+                sStr = FieldString(ww::eSEQ) + "\"" + pFld->GetTyp()->GetName() +"\" ";
             GetNumberPara( sStr, *pFld );
             GetExport().OutputField(pFld, ww::eSEQ, sStr);
         }

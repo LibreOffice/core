@@ -64,6 +64,7 @@ public:
 
     virtual bool SupportsOneColumnBreak() const { return false; }
 
+    virtual bool FieldsQuoted() const { return true; }
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
 
