@@ -1740,6 +1740,9 @@ ScTabViewShell::~ScTabViewShell()
     //  alles auf NULL, falls aus dem TabView-dtor noch darauf zugegriffen wird
     //! (soll eigentlich nicht !??!?!)
 
+    if (pInputHandler)
+        pInputHandler->SetDocumentDisposing(true);
+
     DELETEZ(pFontworkBarShell);
     DELETEZ(pExtrusionBarShell);
     DELETEZ(pCellShell);
