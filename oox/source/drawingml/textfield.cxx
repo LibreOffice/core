@@ -132,7 +132,8 @@ sal_Int32 TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
-        const TextCharacterProperties& rTextCharacterStyle ) const
+        const TextCharacterProperties& rTextCharacterStyle,
+        float /*nDefaultCharHeight*/) const
 {
     sal_Int32 nCharHeight = 0;
     try

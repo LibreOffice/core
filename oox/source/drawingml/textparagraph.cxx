@@ -47,7 +47,7 @@ void TextParagraph::insertAt(
         const Reference < XText > &xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextStyleProperties,
-        const TextListStyle& rTextListStyle, bool bFirst) const
+        const TextListStyle& rTextListStyle, bool bFirst, float nDefaultCharHeight) const
 {
     try {
         sal_Int32 nParagraphSize = 0;
@@ -95,7 +95,7 @@ void TextParagraph::insertAt(
                 // This is currently applied to only empty runs
                 if( !nLen && ( ( aIt + 1 ) == aEnd ) )
                     (*aIt)->getTextCharacterProperties().assignUsed( maEndProperties );
-                nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle ) );
+                nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle, nDefaultCharHeight ) );
                 nParagraphSize += nLen;
             }
         }

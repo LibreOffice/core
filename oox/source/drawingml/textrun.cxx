@@ -50,7 +50,8 @@ sal_Int32 TextRun::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
-        const TextCharacterProperties& rTextCharacterStyle ) const
+        const TextCharacterProperties& rTextCharacterStyle,
+        float nDefaultCharHeight) const
 {
     sal_Int32 nCharHeight = 0;
     try {
@@ -61,6 +62,9 @@ sal_Int32 TextRun::insertAt(
         aTextCharacterProps.assignUsed( maTextCharacterProperties );
         if ( aTextCharacterProps.moHeight.has() )
             nCharHeight = aTextCharacterProps.moHeight.get();
+        else
+            // UNO API has the character height as float, DML has it as int, but in hundreds.
+            aTextCharacterProps.moHeight = static_cast<sal_Int32>(nDefaultCharHeight * 100);
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         if( maTextCharacterProperties.maHyperlinkPropertyMap.empty() )

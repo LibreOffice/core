@@ -20,6 +20,7 @@
 #include "oox/drawingml/textbody.hxx"
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/drawingml/textparagraph.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -63,8 +64,10 @@ void TextBody::insertAt(
     aCombinedTextStyle.apply( *pMasterTextListStylePtr );
     aCombinedTextStyle.apply( maTextListStyle );
 
+    Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
+    float nCharHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
     for( TextParagraphVector::const_iterator aBeg = maParagraphs.begin(), aIt = aBeg, aEnd = maParagraphs.end(); aIt != aEnd; ++aIt )
-        (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg );
+        (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg, nCharHeight );
 }
 
 bool TextBody::isEmpty()

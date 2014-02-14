@@ -45,7 +45,8 @@ public:
                                     const ::oox::core::XmlFilterBase& rFilterBase,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText >& xText,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor >& xAt,
-                                    const TextCharacterProperties& rTextCharacterStyle ) const;
+                                    const TextCharacterProperties& rTextCharacterStyle,
+                                    float nDefaultCharHeight) const;
 
 private:
     OUString             msText;

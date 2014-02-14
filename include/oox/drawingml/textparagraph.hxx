@@ -54,7 +54,8 @@ public:
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
                                     const TextCharacterProperties& rTextStyleProperties,
                                     const TextListStyle& rTextListStyle,
-                                    bool bFirst = false ) const;
+                                    bool bFirst = false,
+                                    float nDefaultCharHeight = 0) const;
 
 private:
     TextParagraphProperties     maProperties;
