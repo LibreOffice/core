@@ -28,7 +28,6 @@
 
 #include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 class SdrModel;
 

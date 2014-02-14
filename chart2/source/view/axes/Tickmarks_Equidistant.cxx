@@ -22,7 +22,6 @@
 #include <rtl/math.hxx>
 
 #include <limits>
-#include <memory>
 
 namespace chart
 {

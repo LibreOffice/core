@@ -29,7 +29,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vector>
-#include <memory>
 
 namespace chart
 {

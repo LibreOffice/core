@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 

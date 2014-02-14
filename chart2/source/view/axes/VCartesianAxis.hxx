@@ -22,8 +22,6 @@
 #include "VAxisBase.hxx"
 #include <basegfx/vector/b2dvector.hxx>
 
-#include <memory>
-
 namespace chart
 {
 

@@ -22,7 +22,6 @@
 #include "Tickmarks_Dates.hxx"
 #include "ViewDefines.hxx"
 #include <rtl/math.hxx>
-#include <memory>
 
 namespace chart
 {

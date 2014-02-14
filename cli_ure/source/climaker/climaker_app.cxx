@@ -23,7 +23,6 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include <memory>
 
 #include "climaker_share.h"
 

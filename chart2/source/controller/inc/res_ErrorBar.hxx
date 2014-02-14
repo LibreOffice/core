@@ -32,8 +32,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#include <memory>
-
 class Dialog;
 
 namespace chart

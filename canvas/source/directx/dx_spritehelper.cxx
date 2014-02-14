@@ -18,7 +18,6 @@
  */
 
 
-#include <ctype.h>
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
@@ -39,8 +38,6 @@
 #include "dx_canvascustomsprite.hxx"
 #include "dx_spritehelper.hxx"
 #include "dx_impltools.hxx"
-
-#include <memory>
 
 using namespace ::com::sun::star;
 

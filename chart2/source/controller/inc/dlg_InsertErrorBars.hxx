@@ -22,7 +22,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <svl/itemset.hxx>
-#include <memory>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include "res_ErrorBar.hxx"

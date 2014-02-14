@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 namespace chart

@@ -23,7 +23,6 @@
 #include "Tickmarks.hxx"
 #include "macros.hxx"
 
-#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 namespace chart

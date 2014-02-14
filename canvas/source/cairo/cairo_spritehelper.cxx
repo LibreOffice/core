@@ -37,9 +37,6 @@
 #include "cairo_canvascustomsprite.hxx"
 #include "cairo_spritehelper.hxx"
 
-#include <memory>
-
-
 using namespace ::cairo;
 using namespace ::com::sun::star;
 

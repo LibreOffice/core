@@ -22,7 +22,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <memory>
 #include <vector>
 
 #include <boost/scoped_ptr.hpp>
