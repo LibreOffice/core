@@ -346,7 +346,6 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     }
 
     bOn = rTxtFly.bOn;
-    bLeftSide = rTxtFly.bLeftSide;
     bTopRule = rTxtFly.bTopRule;
     nMinBottom = rTxtFly.nMinBottom;
     nNextTop = rTxtFly.nNextTop;
@@ -382,7 +381,6 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     // That's why we do not optimize for: bOn = pSortedFlys && IsAnyFrm();
     bOn = pPage->GetSortedObjs() != 0;
     bTopRule = sal_True;
-    bLeftSide = sal_False;
     nMinBottom = 0;
     nIndex = ULONG_MAX;
 }

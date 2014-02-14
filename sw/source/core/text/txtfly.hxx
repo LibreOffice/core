@@ -129,7 +129,6 @@ class SwTxtFly
     sal_uLong nIndex;
 
     sal_Bool bOn : 1;
-    sal_Bool bLeftSide : 1;
     sal_Bool bTopRule: 1;
     sal_Bool mbIgnoreCurrentFrame: 1;
     sal_Bool mbIgnoreContour: 1;
