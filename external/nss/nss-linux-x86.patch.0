@@ -1,0 +1,10 @@
+--- nss/lib/freebl/Makefile
++++ nss/lib/freebl/Makefile
+@@ -195,6 +195,7 @@
+ ifeq ($(CPU_ARCH),x86)
+     ASFILES  = mpi_x86.s
+     DEFINES += -DMP_ASSEMBLY_MULTIPLY -DMP_ASSEMBLY_SQUARE 
++    DEFINES += -DMP_USE_UINT_DIGIT
+     DEFINES += -DMP_ASSEMBLY_DIV_2DX1D
+     DEFINES += -DMP_CHAR_STORE_SLOW -DMP_IS_LITTLE_ENDIAN
+     # The floating point ECC code doesn't work on Linux x86 (bug 311432).
