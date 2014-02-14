@@ -35,12 +35,12 @@ class SwSaveClip
 protected:
     OutputDevice* pOut;
     void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
-                   sal_Bool bEnlargeRect );
+                   bool bEnlargeRect );
 public:
     inline SwSaveClip( OutputDevice* pOut );
     inline ~SwSaveClip();
     inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0,
-                         sal_Bool bEnlargeRect = sal_False)
+                         bool bEnlargeRect = false)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
            void Reset();
     inline bool IsOn()  const { return bOn; }
@@ -70,7 +70,7 @@ class SwDbgOut
 protected:
         OutputDevice* pOut;
 public:
-        inline SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn = sal_True );
+        inline SwDbgOut( OutputDevice* pOutDev, const bool bOn = true );
 };
 
 /*************************************************************************
@@ -81,7 +81,7 @@ class DbgBackColor : public SwDbgOut
 {
         Color   aOldFillColor;
 public:
-        DbgBackColor( OutputDevice* pOut, const sal_Bool bOn = sal_True,
+        DbgBackColor( OutputDevice* pOut, const bool bOn = true,
                   ColorData nColor = COL_YELLOW );
        ~DbgBackColor();
 };
@@ -94,7 +94,7 @@ class DbgRect : public SwDbgOut
 {
 public:
         DbgRect( OutputDevice* pOut, const Rectangle &rRect,
-                 const sal_Bool bOn = sal_True,
+                 const bool bOn = true,
                  ColorData eColor = COL_LIGHTBLUE );
 };
 
@@ -102,12 +102,12 @@ public:
  *                      Inline-Implementierung
  *************************************************************************/
 
-inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn )
+inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )
                :pOut( bOn ? pOutDev : 0 )
 { }
 
 
-inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const sal_Bool bOn,
+inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const bool bOn,
                            ColorData eColor )
     :SwDbgOut( pOutDev, bOn )
 {
@@ -127,7 +127,7 @@ inline DbgBackColor::~DbgBackColor()
 }
 
 inline DbgRect::DbgRect( OutputDevice* pOutDev, const Rectangle &rRect,
-                         const sal_Bool bOn,
+                         const bool bOn,
                          ColorData eColor )
     : SwDbgOut( pOutDev, bOn )
 {

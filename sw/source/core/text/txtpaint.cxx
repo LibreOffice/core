@@ -49,10 +49,10 @@ void SwSaveClip::Reset()
  *************************************************************************/
 
 void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
-                           sal_Bool bEnlargeRect )
+                           bool bEnlargeRect )
 {
     SwRect aOldRect( rRect );
-    const sal_Bool bVertical = pFrm && pFrm->IsVertical();
+    const bool bVertical = pFrm && pFrm->IsVertical();
 
     if ( pFrm && pFrm->IsRightToLeft() )
         pFrm->SwitchLTRtoRTL( (SwRect&)rRect );
@@ -104,7 +104,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
             pOut->SetClipRegion( aClipRegion );
         }
 #ifdef DBG_UTIL
-        static sal_Bool bDbg = sal_False;
+        static bool bDbg = false;
         if( bDbg )
         {
             DbgBackColor aDbg( pOut, bDbg, COL_RED );
