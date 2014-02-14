@@ -1343,7 +1343,7 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->mbExportRelativeFsysLinks = m_pCbExportRelativeFsysLinks->IsChecked();
 
     bool bIsPDFASel = false;
-    ImpPDFTabGeneralPage* pGeneralPage = paParent ? paParent->getGeneralPage() : NULL;
+    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
     if (pGeneralPage)
         bIsPDFASel = pGeneralPage->IsPdfaSelected();
     // if PDF/A-1 was not selected while exiting dialog...
