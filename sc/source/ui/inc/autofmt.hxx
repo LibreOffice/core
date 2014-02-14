@@ -101,17 +101,6 @@ private:
                               Font& rCJKFont,
                               Font& rCTLFont );
 
-    SAL_DLLPRIVATE OUString MakeNumberString( OUString cellString, sal_Bool bAddDec );
-    SAL_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
-                              Point                 from,
-                              Point                 to,
-                              sal_Bool                  bHorizontal,
-                              const ::editeng::SvxBorderLine&   rLineLT,
-                              const ::editeng::SvxBorderLine&   rLineL,
-                              const ::editeng::SvxBorderLine&   rLineLB,
-                              const ::editeng::SvxBorderLine&   rLineRT,
-                              const ::editeng::SvxBorderLine&   rLineR,
-                              const ::editeng::SvxBorderLine&   rLineRB );
     SAL_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
                               AutoFmtLine       eLine,
                               ::editeng::SvxBorderLine& rLine );
