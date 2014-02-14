@@ -741,7 +741,7 @@ void SwPageFrm::PrepareFooter()
         if ( GetUpper() )
             ::RegistFlys( this, pF );
     }
-    else if ( pLay && pLay->IsFooterFrm() )
+    else if ( pLay->IsFooterFrm() )
     {   // Remove footer if already present
         ::DelFlys( pLay, this );
         SwViewShell *pShell;
