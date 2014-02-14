@@ -218,11 +218,11 @@ protected:
 public:
     virtual ~SwCacheAccess();
 
-    virtual sal_Bool IsAvailable() const;
+    virtual bool IsAvailable() const;
 
     //Abkuerzung fuer diejenigen, die wissen, das die Ableitung das IsAvailable
     //nicht ueberladen haben.
-    sal_Bool IsAvail() const { return pObj != 0; }
+    bool IsAvail() const { return pObj != 0; }
 };
 
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )

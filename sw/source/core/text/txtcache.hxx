@@ -56,7 +56,7 @@ public:
 
     inline SwTxtLine &GetTxtLine();
 
-    virtual sal_Bool IsAvailable() const;
+    virtual bool IsAvailable() const;
 };
 
 

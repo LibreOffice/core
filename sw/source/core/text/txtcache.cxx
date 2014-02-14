@@ -88,11 +88,9 @@ SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
 |*
 |*************************************************************************/
 
-sal_Bool SwTxtLineAccess::IsAvailable() const
+bool SwTxtLineAccess::IsAvailable() const
 {
-    if ( pObj )
-        return ((SwTxtLine*)pObj)->GetPara() != 0;
-    return sal_False;
+    return pObj && ((SwTxtLine*)pObj)->GetPara();
 }
 
 /*************************************************************************

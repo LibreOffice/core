@@ -467,7 +467,7 @@ void SwCacheAccess::_Get()
     }
 }
 
-sal_Bool SwCacheAccess::IsAvailable() const
+bool SwCacheAccess::IsAvailable() const
 {
     return pObj != 0;
 }
