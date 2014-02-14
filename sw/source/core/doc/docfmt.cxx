@@ -1695,7 +1695,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
     if ( pPara->bReset )
     {
-        if( pFmt->GetAttrOutlineLevel() == 0 && pPara )
+        if( pFmt->GetAttrOutlineLevel() == 0 )
             pPara->bKeepOutlineLevelAttr = true;
 
         lcl_RstAttr( pCNd, pPara );
