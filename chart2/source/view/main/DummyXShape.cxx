@@ -1140,7 +1140,7 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 #endif
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
 
 namespace {
 
@@ -1272,7 +1272,7 @@ bool DummyChart::initOpengl()
 
     m_GLRender.InitOpenGL(GLWin);
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
     // only enable debug output in dbgutil build
     if( GLEW_ARB_debug_output )
     {
