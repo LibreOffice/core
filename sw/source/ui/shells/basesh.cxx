@@ -1880,8 +1880,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
     eFrameMode = eMode;
     SfxBindings &rBnd = pSh->GetView().GetViewFrame()->GetBindings();
 
-    if( eMode == FLY_DRAG ||
-        (pSh && (pSh->IsFrmSelected() || pSh->IsObjSelected())) )
+    if( eMode == FLY_DRAG || pSh->IsFrmSelected() || pSh->IsObjSelected() )
     {
         const SfxPointItem aTmp1( SID_ATTR_POSITION, pSh->GetAnchorObjDiff());
         const SvxSizeItem  aTmp2( SID_ATTR_SIZE,     pSh->GetObjSize());
