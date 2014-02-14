@@ -191,16 +191,16 @@ class ScCheckListBox : public SvTreeListBox
 {
     SvLBoxButtonData*   mpCheckButton;
     SvTreeListEntry* CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
-    void            CheckAllChildren( SvTreeListEntry* pEntry, sal_Bool bCheck = sal_True );
+    void            CheckAllChildren( SvTreeListEntry* pEntry, bool bCheck = true );
 
     public:
 
     ScCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
     ~ScCheckListBox() { delete mpCheckButton; }
     void Init();
-    void            CheckEntry( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck = sal_True );
-    void            CheckEntry( SvTreeListEntry* pEntry, sal_Bool bCheck = sal_True );
-    sal_Bool        IsChecked( OUString& sName, SvTreeListEntry* pParent );
+    void            CheckEntry( OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
+    void            CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
+    bool            IsChecked( OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
     void         ExpandChildren( SvTreeListEntry* pParent );

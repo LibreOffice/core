@@ -1364,15 +1364,15 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
-sal_Bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
+bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
     if ( pEntry && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck )
+void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, bool bCheck )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
     if ( pEntry )
@@ -1380,7 +1380,7 @@ void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, sal_
 }
 
 // Recursively check all children of pParent
-void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, sal_Bool bCheck )
+void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
 {
     if ( pParent )
     {
@@ -1396,7 +1396,7 @@ void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, sal_Bool bCheck
     }
 }
 
-void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, sal_Bool bCheck )
+void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
 {
     // recursively check all items below pParent
     CheckAllChildren( pParent, bCheck );
