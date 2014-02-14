@@ -95,24 +95,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
 
-    if(pPickObj && !bIsGraphic && pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
-    {
-        // fill style change (fill object with graphic), independent of mnAction
-        // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
-        if( IsUndoEnabled() )
-        {
-            BegUndo(OUString(SdResId(STR_UNDO_DRAGDROP)));
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
-            EndUndo();
-        }
-
-        SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
-
-        aSet.Put(XFillStyleItem(XFILL_BITMAP));
-        aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
-        pPickObj->SetMergedItemSetAndBroadcast(aSet);
-    }
-    else if(DND_ACTION_LINK == mnAction
+    if (DND_ACTION_LINK == mnAction
         && pPickObj
         && pPV
         && (bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster))) // #121603# Do not use pObj, it may be NULL
@@ -125,7 +108,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if( bIsGraphic )
         {
-            // Das Objekt wird mit der Bitmap gefuellt
+            // We fill the object with the Bitmap
             pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
             pNewGrafObj->SetGraphic(rGraphic);
         }
@@ -145,7 +128,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if (pPage && pPage->IsPresObj(pPickObj))
         {
-            // Neues PresObj in die Liste eintragen
+            // Insert new PresObj into the list
             pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
             pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
         }
@@ -158,6 +141,28 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( IsUndoEnabled() )
             EndUndo();
     }
+    else if (DND_ACTION_LINK == mnAction
+        && pPickObj
+        && !bIsGraphic
+        && pPickObj->IsClosedObj()
+        && !dynamic_cast< SdrOle2Obj* >(pPickObj))
+    {
+        // fill style change (fill object with graphic), independent of mnAction
+        // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
+        if( IsUndoEnabled() )
+        {
+            BegUndo(OUString(SdResId(STR_UNDO_DRAGDROP)));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+            EndUndo();
+        }
+
+        SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
+        pPickObj->SetMergedItemSetAndBroadcast(aSet);
+    }
+
     else if ( pPV )
     {
         // create  new object
