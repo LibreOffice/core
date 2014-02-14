@@ -58,7 +58,7 @@ const char UNO_JUSTIFYPARA[]      = ".uno:JustifyPara";
 const char UNO_DEFAULTBULLET[]    = ".uno:DefaultBullet";
 const char UNO_DEFAULTNUMBERING[] = ".uno:DefaultNumbering";
 
-const char UNO_PARABACKCOLOR[]    = ".uno:ParaBackColor";
+const char UNO_PARABACKCOLOR[]    = ".uno:BackgroundColor";
 
 const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
@@ -345,7 +345,6 @@ void ParaPropertyPanel::InitToolBoxBGColor()
 {
     const sal_uInt16 nIdBackColor = mpTBxBackColor->GetItemId(UNO_PARABACKCOLOR);
 
-    mpTBxBackColor->SetItemImage(nIdBackColor, GetDisplayBackground().GetColor().IsDark()? maImgBackColorHigh : maImgBackColor);
     mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(0 /* not defined, default is transparent */, nIdBackColor, mpTBxBackColor));
     mpTBxBackColor->SetItemBits( nIdBackColor, mpTBxBackColor->GetItemBits( nIdBackColor ) | TIB_DROPDOWNONLY );
 
@@ -1439,8 +1438,6 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maNumBImageList (SVX_RES(IL_NUM_BULLET)),
       maNumBImageListRTL (SVX_RES(IL_NUM_BULLET_RTL)),
-      maImgBackColorHigh (SVX_RES(IMG_BACK_COLOR_H)),
-      maImgBackColor (SVX_RES(IMG_BACK_COLOR)),
       maTxtLeft (0),
       mpLnSPItem (NULL),
       meLnSpState (SFX_ITEM_DONTCARE),

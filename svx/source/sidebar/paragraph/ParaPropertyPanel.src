@@ -47,14 +47,6 @@
     };                     \
     IdCount = { 2 ; };
 
-Image IMG_BACK_COLOR
-{
-    ImageBitmap = Bitmap{File = "symphony/sc_backgroundcolor.png";};
-};
-Image IMG_BACK_COLOR_H
-{
-    ImageBitmap = Bitmap{File = "symphony/sch_backgroundcolor.png";};
-};
 Image IMG_SPACE3
 {
     ImageBitmap = Bitmap{File = "symphony/spacing3.png";};
