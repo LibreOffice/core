@@ -19,8 +19,7 @@
 #endif
 
 #if defined( MACOSX )
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
+#  include <GL/glew.h>
 #else
 #  include <GL/gl.h>
 #  include <GL/glu.h>
