@@ -1206,6 +1206,46 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
     return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const OUString& aName, OUString* pMediaType )
+{
+    SAL_INFO( "comphelper.container", "comphelper::EmbeddedObjectContainer::GetObjectStream( Name )" );
+
+    uno::Reference < io::XInputStream > xInputStream;
+
+    SAL_WARN_IF( aName.isEmpty(), "comphelper.container", "Retrieving stream for unknown object!" );
+    if ( !aName.isEmpty() )
+    {
+        try
+        {
+            uno::Reference < io::XStream > xStream = pImpl->mxStorage->cloneStreamElement( aName );  //get a readonly clone
+            xInputStream = xStream->getInputStream();
+            if ( pMediaType )
+            {
+                uno::Reference < beans::XPropertySet > xSet( xInputStream, uno::UNO_QUERY );
+                if ( xSet.is() )
+                {
+                    uno::Any aAny = xSet->getPropertyValue("MediaType");
+                    aAny >>= *pMediaType;
+                }
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+
+    return xInputStream;
+}
+
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString* pMediaType )
+{
+
+    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Object )" );
+
+    // try to load it from the container storage
+    return GetObjectStream( GetEmbeddedObjectName( xObj ), pMediaType );
+}
+
 bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertGraphicStream" );

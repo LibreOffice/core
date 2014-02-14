@@ -135,6 +135,10 @@ public:
     // move an embedded object to another container (keep the persistent name)
     bool            MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& );
 
+    // get the stored representation for the object
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > GetObjectStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, OUString* pMediaType=0 );
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > GetObjectStream( const OUString& aName, OUString* pMediaType );
+
     // get the stored graphical representation for the object
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, OUString* pMediaType=0 );
 
