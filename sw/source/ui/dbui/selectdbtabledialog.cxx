@@ -171,7 +171,7 @@ OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
-    return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : OUString();
+    return m_aTableLB.GetEntryText(pEntry, 0);
 }
 
 void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTable)
