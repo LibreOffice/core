@@ -18,12 +18,7 @@
 #  include "postwin.h"
 #endif
 
-#if defined( MACOSX )
-#  include <GL/glew.h>
-#else
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#endif
+#include <GL/glew.h>
 
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>

@@ -1144,8 +1144,12 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 namespace {
 
-void debug_callback(GLenum source, GLenum type, GLuint id,
-        GLenum severity, GLsizei , const GLchar* message, void* )
+extern "C" void
+#if defined _WIN32
+APIENTRY
+#endif
+debug_callback(GLenum source, GLenum type, GLuint id,
+        GLenum severity, GLsizei , const GLchar* message, GLvoid* )
 {
     SAL_WARN("chart2.opengl", "OpenGL debug message: source: " << source << ", type: "
             << type << ", id: " << id << ", severity: " << severity << " with message: " << message);
