@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8c0949_6e5dafe9",
+        "filename": "Repository.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-14T14:46:15Z",
+      "side": 1,
+      "message": "i think this needs a SYSTEM_CAIRO check, or actually why not move it to RepositoryExternal.mk",
+      "revId": "e6cdd584157a116d2f16e7b79f75b725d859b356",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
