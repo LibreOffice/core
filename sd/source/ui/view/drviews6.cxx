@@ -72,7 +72,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() &&
-         mpDrawView && !mpDrawView->IsPresObjSelected() )
+         !mpDrawView->IsPresObjSelected() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
 
