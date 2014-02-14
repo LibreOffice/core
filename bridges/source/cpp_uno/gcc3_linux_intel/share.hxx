@@ -17,13 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uno/mapping.h"
+#include "sal/config.h"
 
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
 
+#include <cxxabi.h>
+#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
+#define _GLIBCXX_CDTOR_CALLABI
+#endif
+
+#include "config_gcc.h"
 #include <uno/any2.h>
+#include "uno/mapping.h"
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -69,24 +76,37 @@ struct __cxa_eh_globals
 
 }
 
-extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
+// __cxa_get_globals is exported from libstdc++ since GCC 3.4.0 (CXXABI_1.3),
+// but it is only declared in cxxabi.h (in namespace __cxxabiv1) since
+// GCC 4.7.0.  It returns a pointer to a struct __cxa_eh_globals, but that
+// struct is only incompletely declared even in the GCC 4.7.0 cxxabi.h.
+// Therefore, provide a declaration here for old GCC (libstdc++, really) version
+// that returns a void pointer, and in the code calling it always cast to the
+// above fake definition of CPPU_CURRENT_NAMESPACE::__cxa_eh_globals (which
+// hopefully keeps matching the real definition in libstdc++); similarly for
+// __cxa_allocate_exception and __cxa_throw, though they do not have the
+// additional problem of an incompletely declared return type:
+
+#if !HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS
+namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
+#endif
+
+#if !HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION
+namespace __cxxabiv1 {
+extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
+}
+#endif
+
+#if !HAVE_GCC_CXXABI_H_CXA_THROW
+namespace __cxxabiv1 {
+extern "C" void __cxa_throw(
+    void * thrown_exception, void * tinfo, void (* dest)(void *))
+    __attribute__((noreturn));
+}
+#endif
 
 namespace CPPU_CURRENT_NAMESPACE
 {
-
-// The following are in cxxabi.h since GCC 4.7 (they are wrapped in
-// CPPU_CURRENT_NAMESPACE here as different GCC versions have slightly different
-// declarations for them, e.g., with or without throw() specification, so would
-// complain about redeclarations of these somewhat implicitly declared
-// functions):
-#if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
-extern "C" void *__cxa_allocate_exception(
-    std::size_t thrown_size ) throw();
-extern "C" void __cxa_throw (
-    void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
-#endif
-
-// -----
 
 //==================================================================================================
 void raiseException(

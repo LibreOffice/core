@@ -22,11 +22,6 @@
 #include <dlfcn.h>
 #include <boost/unordered_map.hpp>
 
-#include <cxxabi.h>
-#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
-#define _GLIBCXX_CDTOR_CALLABI
-#endif
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -248,7 +243,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             Reference< XInterface >() );
     }
 
-    pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
+    pCppExc = __cxxabiv1::__cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception
@@ -280,7 +275,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     }
     }
 
-    __cxa_throw( pCppExc, rtti, deleteException );
+    __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
 //==================================================================================================
