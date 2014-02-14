@@ -397,11 +397,10 @@ static void GetFormatAndCreateCursorFromRangeRep(
         // is the correct table format already provided?
         if (*ppTblFmt != NULL  &&  (*ppTblFmt)->GetName() == aTblName)
             pTblFmt = *ppTblFmt;
-        else if (ppTblFmt)
+        else
             GetTableByName( *pDoc, aTblName, &pTblFmt, NULL );
 
-        if (ppTblFmt)
-            *ppTblFmt = pTblFmt;
+        *ppTblFmt = pTblFmt;
 
         if (ppUnoCrsr != NULL)
         {
