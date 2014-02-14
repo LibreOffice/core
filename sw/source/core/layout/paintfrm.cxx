@@ -2822,7 +2822,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
     }
     SwLineEntrySetIter aIter = pLineSet->begin();
 
-    while ( pLineSet && aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
+    while ( aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
     {
         const SwLineEntry& rOld = *aIter;
         const SwLineEntry::OverlapType nOverlapType = rOld.Overlaps( rNew );
