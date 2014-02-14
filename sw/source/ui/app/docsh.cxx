@@ -431,7 +431,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
-    if ( pWrtShell && pDoc &&
+    if ( pWrtShell &&
          pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *pDoc ) )
     {
