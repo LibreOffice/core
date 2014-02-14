@@ -290,18 +290,18 @@ void ScConsolidateDlg::SetActive()
 
 void ScConsolidateDlg::Deactivate()
 {
-    bDlgLostFocus = sal_True;
+    bDlgLostFocus = true;
 }
 
 
-sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
+bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
          ((pEd != pEdDataArea) && (pEd != pEdDestArea)) )
         return false;
 
     SCTAB    nTab    = pViewData->GetTabNo();
-    sal_Bool bEditOk = false;
+    bool bEditOk = false;
     OUString theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 

@@ -76,7 +76,7 @@ private:
     PushButton*      pBtnAdd;
     PushButton*      pBtnRemove;
 
-    OUString        aStrUndefined;
+    OUString         aStrUndefined;
 
     ScConsolidateParam  theConsData;
     ScViewData*         pViewData;
@@ -84,16 +84,16 @@ private:
     ScRangeUtil*        pRangeUtil;
     ScAreaData*         pAreaData;
     size_t              nAreaDataCount;
-    sal_uInt16              nWhichCons;
+    sal_uInt16          nWhichCons;
 
-    formula::RefEdit*           pRefInputEdit;
-    sal_Bool                bDlgLostFocus;
+    formula::RefEdit*   pRefInputEdit;
+    bool                bDlgLostFocus;
 
 #ifdef _CONSDLG_CXX
 private:
     void Init               ();
     void FillAreaLists      ();
-    sal_Bool VerifyEdit         ( formula::RefEdit* pEd );
+    bool VerifyEdit         ( formula::RefEdit* pEd );
 
     DECL_LINK( OkHdl,        void* );
     DECL_LINK( ClickHdl,     PushButton* );
