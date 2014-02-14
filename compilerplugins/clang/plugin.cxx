@@ -29,7 +29,7 @@ Plugin::Plugin( const InstantiationData& data )
     {
     }
 
-DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
+DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc ) const
     {
     return handler.report( level, name, message, compiler, loc );
     }
