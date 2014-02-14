@@ -41,6 +41,8 @@ class XFillGradientItem;
 class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
+class Graphic;
+class GraphicAttr;
 class SwPageDesc;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
@@ -55,6 +57,11 @@ class SwPageDesc;
 void DrawGraphic( const SvxBrushItem *, const XFillStyleItem*, const XFillGradientItem*, OutputDevice *,
                   const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
                   const sal_Bool bConsiderBackgroundTransparency = sal_False );
+
+void paintGraphicUsingPrimitivesHelper(
+        OutputDevice & rOutputDevice,
+        Graphic const& rGraphic, GraphicAttr const& rGraphicAttr,
+        SwRect const& rAlignedGrfArea);
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations

@@ -1796,7 +1796,16 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     /// Because for drawing a graphic left-top-corner and size coordinations are
     /// used, these coordinations have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
-    pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
+
+    if (pGrf->GetGraphic().getSvgData().get())
+    {   // fdo#68927 - SVGs are rasterized badly by DrawWithPDFHandling
+        paintGraphicUsingPrimitivesHelper(*pOut,
+                pGrf->GetGraphic(), pGrf->GetAttr(), aAlignedGrfRect);
+    }
+    else
+    {
+        pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
+    }
 
     if ( bNotInside )
         pOut->Pop();

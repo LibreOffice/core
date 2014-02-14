@@ -735,6 +735,36 @@ bool paintUsingPrimitivesHelper(
     return false;
 }
 
+
+void paintGraphicUsingPrimitivesHelper(OutputDevice & rOutputDevice,
+         Graphic const& rGraphic, GraphicAttr const& rGraphicAttr,
+         SwRect const& rAlignedGrfArea)
+{
+    // unify using GraphicPrimitive2D
+    // -> the primitive handles all crop and mirror stuff
+    // -> the primitive renderer will create the needed pdf export data
+    // -> if bitmap content, it will be cached system-dependent
+    const basegfx::B2DRange aTargetRange(
+        rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
+        rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
+    const basegfx::B2DHomMatrix aTargetTransform(
+        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            aTargetRange.getRange(),
+            aTargetRange.getMinimum()));
+    drawinglayer::primitive2d::Primitive2DSequence aContent(1);
+
+    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+        aTargetTransform,
+        rGraphic,
+        rGraphicAttr);
+
+    paintUsingPrimitivesHelper(
+        rOutputDevice,
+        aContent,
+        aTargetRange,
+        aTargetRange);
+}
+
 /** Paint the graphic.
 
     We require either a QuickDraw-Bitmap or a graphic here. If we do not have
@@ -857,30 +887,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 }
                 else
                 {
-                    // unify using GraphicPrimitive2D
-                    // -> the primitive handles all crop and mirror stuff
-                    // -> the primitive renderer will create the needed pdf export data
-                    // -> if bitmap conent, it will be cached system-dependent
-                    const basegfx::B2DRange aTargetRange(
-                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
-                        aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
-                    const basegfx::B2DHomMatrix aTargetTransform(
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            aTargetRange.getRange(),
-                            aTargetRange.getMinimum()));
-                    drawinglayer::primitive2d::Primitive2DSequence aContent;
-
-                    aContent.realloc(1);
-                    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
-                        aTargetTransform,
-                        rGrfObj.GetGraphic(),
-                        aGrfAttr);
-
-                    paintUsingPrimitivesHelper(
-                        *pOut,
-                        aContent,
-                        aTargetRange,
-                        aTargetRange);
+                    paintGraphicUsingPrimitivesHelper(*pOut,
+                            rGrfObj.GetGraphic(), aGrfAttr, aAlignedGrfArea);
                 }
             }
             else
