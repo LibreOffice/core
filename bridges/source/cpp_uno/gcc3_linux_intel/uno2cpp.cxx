@@ -202,8 +202,11 @@ static void cpp_call(
     }
      catch (...)
      {
-          // fill uno exception
-        fillUnoException( __cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+         // fill uno exception
+         fillUnoException(
+             reinterpret_cast< CPPU_CURRENT_NAMESPACE::__cxa_eh_globals * >(
+                 __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+             *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
         // temporary params
         for ( ; nTempIndices--; )
