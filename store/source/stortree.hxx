@@ -198,14 +198,14 @@ struct OStoreBTreeNodeData : public store::OStorePageData
 
     /** queryMerge.
     */
-    sal_Bool queryMerge (const self &rPageR) const
+    bool queryMerge (const self &rPageR) const
     {
         return ((usageCount() + rPageR.usageCount()) <= capacityCount());
     }
 
     /** querySplit.
     */
-    sal_Bool querySplit (void) const
+    bool querySplit (void) const
     {
         return (!(usageCount() < capacityCount()));
     }

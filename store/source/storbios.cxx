@@ -98,7 +98,7 @@ struct OStoreSuperBlock
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStoreSuperBlock & rhs) const
+    bool operator== (const OStoreSuperBlock & rhs) const
     {
         return ((m_aGuard  == rhs.m_aGuard ) &&
                 (m_aDescr  == rhs.m_aDescr ) &&

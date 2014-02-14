@@ -66,7 +66,7 @@ OStoreLockBytes::~OStoreLockBytes (void)
 /*
  * isKindOf.
  */
-sal_Bool SAL_CALL OStoreLockBytes::isKindOf (sal_uInt32 nTypeId)
+bool SAL_CALL OStoreLockBytes::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }

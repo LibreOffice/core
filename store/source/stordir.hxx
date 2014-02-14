@@ -70,7 +70,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+    virtual bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
 
 protected:
     /** Destruction.

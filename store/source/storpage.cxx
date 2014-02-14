@@ -61,7 +61,7 @@ OStorePageManager::~OStorePageManager (void)
 /*
  * isKindOf.
  */
-sal_Bool SAL_CALL OStorePageManager::isKindOf (sal_uInt32 nTypeId)
+bool SAL_CALL OStorePageManager::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }

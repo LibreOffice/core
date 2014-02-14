@@ -105,7 +105,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nMagic);
+    virtual bool SAL_CALL isKindOf (sal_uInt32 nMagic);
 
 protected:
     /** Destruction (OReference).

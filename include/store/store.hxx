@@ -326,7 +326,7 @@ public:
             @param  it [in] current directory entry.
             @return sal_True to continue iteration, sal_False to stop.
          */
-        virtual sal_Bool visit (const iterator& it) = 0;
+        virtual bool visit (const iterator& it) = 0;
 
     protected:
         ~traveller() {}

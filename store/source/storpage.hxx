@@ -58,7 +58,7 @@ public:
      *  @return sal_True  upon successful initialization,
      *          sal_False otherwise.
      */
-    inline sal_Bool isValid (void) const;
+    inline bool isValid (void) const;
 
     /** DirectoryPage I/O (managed).
      */
@@ -130,7 +130,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+    virtual bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
 
 protected:
     /** Destruction.
@@ -190,7 +190,7 @@ private:
     OStorePageManager& operator= (const OStorePageManager&);
 };
 
-inline sal_Bool OStorePageManager::isValid (void) const
+inline bool OStorePageManager::isValid (void) const
 {
     return (base::isValid() /* @@@ NYI && (m_aRoot.is()) */);
 }

@@ -83,7 +83,7 @@ public:
 
     /** isValid.
      */
-    inline sal_Bool isValid (void) const;
+    inline bool isValid (void) const;
 
     /** Page Access.
      */
@@ -233,7 +233,7 @@ inline bool OStorePageBIOS::isWriteable (void) const
 {
     return m_bWriteable;
 }
-inline sal_Bool OStorePageBIOS::isValid (void) const
+inline bool OStorePageBIOS::isValid (void) const
 {
     return m_xLockBytes.is();
 }
