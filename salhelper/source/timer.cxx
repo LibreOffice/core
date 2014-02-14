@@ -39,13 +39,13 @@ public:
     ~TimerManager();
 
     /// register timer
-    sal_Bool SAL_CALL registerTimer(salhelper::Timer* pTimer);
+    bool SAL_CALL registerTimer(salhelper::Timer* pTimer);
 
     /// unregister timer
-    sal_Bool SAL_CALL unregisterTimer(salhelper::Timer* pTimer);
+    bool SAL_CALL unregisterTimer(salhelper::Timer* pTimer);
 
     /// lookup timer
-    sal_Bool SAL_CALL lookupTimer(const salhelper::Timer* pTimer);
+    bool SAL_CALL lookupTimer(const salhelper::Timer* pTimer);
 
     /// retrieves the "Singleton" TimerManager Instance
     static TimerManager* SAL_CALL getTimerManager();
@@ -283,13 +283,13 @@ TimerManager* TimerManager::getTimerManager()
     return m_pManager;
 }
 
-sal_Bool TimerManager::registerTimer(Timer* pTimer)
+bool TimerManager::registerTimer(Timer* pTimer)
 {
     OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {
-        return sal_False;
+        return false;
     }
 
     osl::MutexGuard Guard(m_Lock);
@@ -321,16 +321,16 @@ sal_Bool TimerManager::registerTimer(Timer* pTimer)
         m_notEmpty.set();
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool TimerManager::unregisterTimer(Timer* pTimer)
+bool TimerManager::unregisterTimer(Timer* pTimer)
 {
     OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {
-        return sal_False;
+        return false;
     }
 
     // lock access
@@ -344,21 +344,21 @@ sal_Bool TimerManager::unregisterTimer(Timer* pTimer)
         {
             // remove timer from list
             *ppIter = (*ppIter)->m_pNext;
-            return sal_True;
+            return true;
         }
         ppIter= &((*ppIter)->m_pNext);
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool TimerManager::lookupTimer(const Timer* pTimer)
+bool TimerManager::lookupTimer(const Timer* pTimer)
 {
     OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {
-        return sal_False;
+        return false;
     }
 
     // lock access
@@ -369,11 +369,11 @@ sal_Bool TimerManager::lookupTimer(const Timer* pTimer)
     {
         if (pIter == pTimer)
         {
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void TimerManager::checkForTimeout()
