@@ -200,10 +200,12 @@ void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
 
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 {
+    if (pRangeName == pNewRangeName)
+        return;
+
     delete pRangeName;
     pRangeName = pNewRangeName;
 }
-
 
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
