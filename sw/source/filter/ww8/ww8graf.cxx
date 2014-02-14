@@ -3065,7 +3065,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         pFormImpl = new SwMSConvertControls(mpDocShell, pPaM);
 
         pWWZOrder = new wwZOrderer(sw::util::SetLayer(rDoc), pDrawPg,
-            pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
+            pMSDffManager->GetShapeOrders());
     }
 }
 
