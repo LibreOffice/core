@@ -20,7 +20,6 @@
 #ifndef SC_SHAPEUNO_HXX
 #define SC_SHAPEUNO_HXX
 
-#include <tools/solar.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextContent.hpp>

@@ -934,7 +934,6 @@
 #include <tools/resid.hxx>
 #include <tools/rtti.hxx>
 #include <tools/shl.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>

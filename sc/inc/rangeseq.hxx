@@ -20,7 +20,6 @@
 #ifndef SC_RANGESEQ_HXX
 #define SC_RANGESEQ_HXX
 
-#include <tools/solar.h>
 #include <com/sun/star/uno/Any.h>
 #include "types.hxx"
 

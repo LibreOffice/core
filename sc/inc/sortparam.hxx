@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "address.hxx"
-#include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 

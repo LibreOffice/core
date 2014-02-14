@@ -21,7 +21,6 @@
 #define SC_TOKENARRAY_HXX
 
 #include "formula/token.hxx"
-#include <tools/solar.h>
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"

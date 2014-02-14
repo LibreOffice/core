@@ -20,12 +20,11 @@
 #ifndef SC_XMLWRAP_HXX
 #define SC_XMLWRAP_HXX
 
-#include <tools/solar.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-
 #include <importfilterdata.hxx>
+#include <sal/types.h>
 
 class ScDocument;
 class SfxMedium;

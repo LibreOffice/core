@@ -22,8 +22,8 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include <tools/solar.h>
 #include <vector>
+#include <sal/types.h>
 
 class ScDocument;
 

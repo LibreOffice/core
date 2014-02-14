@@ -21,7 +21,7 @@
 #define SC_PARAMISC_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
+#include <sal/types.h>
 
 struct ScSolveParam
 {

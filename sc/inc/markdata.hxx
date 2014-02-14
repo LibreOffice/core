@@ -21,7 +21,6 @@
 #define SC_MARKDATA_HXX
 
 #include "address.hxx"
-#include <tools/solar.h>
 #include "scdllapi.h"
 
 #include <set>
@@ -135,9 +134,6 @@ public:
     const_iterator end() const;
 };
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
