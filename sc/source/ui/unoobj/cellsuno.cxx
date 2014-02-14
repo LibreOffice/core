@@ -5618,7 +5618,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh); // Bereich muss angelegt sein
-        aFunc.Sort( nTab, aParam, sal_True, sal_True, sal_True );
+        aFunc.Sort( nTab, aParam, true, true, true );
     }
 }
 
@@ -5728,7 +5728,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
         //! if created by createFilterDescriptorByObject ???
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.Query( nTab, aParam, NULL, sal_True, sal_True );  // Bereich muss angelegt sein
+        aFunc.Query( nTab, aParam, NULL, true, true );  // Bereich muss angelegt sein
     }
 }
 
@@ -5874,7 +5874,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, NULL, sal_True, sal_True );    // Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, NULL, true, true );    // Bereich muss angelegt sein
     }
 }
 
@@ -5901,7 +5901,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, NULL, sal_True, sal_True );    // Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, NULL, true, true );    // Bereich muss angelegt sein
     }
 }
 

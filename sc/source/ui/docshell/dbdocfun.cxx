@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------
 
-bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool /* bApi */ )
+bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool /* bApi */ )
 {
 
     ScDocShellModificator aModificator( rDocShell );
@@ -425,8 +425,8 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
-                            sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi )
+bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
+                            bool bRecord, bool bPaint, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -578,7 +578,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         pDoc->Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
     }
 
-    sal_Bool bSave = sal_True;
+    bool bSave = true;
     if (bCopy)
     {
         ScSortParam aOldSortParam;
@@ -663,13 +663,13 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     aModificator.SetDocumentModified();
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
-                        const ScRange* pAdvSource, sal_Bool bRecord, sal_Bool bApi )
+bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
+                        const ScRange* pAdvSource, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -925,7 +925,7 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     //  speichern: Inplace immer, sonst je nach Einstellung
     //             alter Inplace-Filter ist ggf. schon aufgehoben
 
-    sal_Bool bSave = rQueryParam.bInplace || rQueryParam.bDestPers;
+    bool bSave = rQueryParam.bInplace || rQueryParam.bDestPers;
     if (bSave)                                                  // merken
     {
         pDBData->SetQueryParam( rQueryParam );
@@ -1004,13 +1004,13 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             PAINT_GRID | PAINT_LEFT);
     aModificator.SetDocumentModified();
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
-                                const ScSortParam* pForceNewSort, sal_Bool bRecord, sal_Bool bApi )
+bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
+                                const ScSortParam* pForceNewSort, bool bRecord, bool bApi )
 {
     //! auch fuer ScDBFunc::DoSubTotals benutzen!
     //  dann bleibt aussen:

@@ -2295,7 +2295,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
         OUString aString(aName);
         ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
                             (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
-        bDone = aFunc.AddDBRange( aString, aNameRange, sal_True );
+        bDone = aFunc.AddDBRange( aString, aNameRange, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2466,7 +2466,7 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
         OUString aString(STR_DB_LOCAL_NONAME);
         ScRange aUnnamedRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
                             (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
-        bDone = aFunc.AddDBRange( aString, aUnnamedRange, sal_True );
+        bDone = aFunc.AddDBRange( aString, aUnnamedRange, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
