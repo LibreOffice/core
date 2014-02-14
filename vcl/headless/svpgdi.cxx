@@ -61,12 +61,14 @@ rDevice
 }
 
 // ===========================================================================
+#ifndef IOS
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )
 {
     // TODO(P3) implement alpha blending
     return false;
 }
+
 
 bool SvpSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,
@@ -80,11 +82,13 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return false;
 }
 
+
 bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt8 /*nTransparency*/ )
 {
     // TODO(P3) implement alpha blending
     return false;
 }
+#endif
 
 #ifndef IOS
 
@@ -381,6 +385,8 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     }
 }
 
+
+#ifndef IOS
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {
     if( m_bUseLineColor )
@@ -553,6 +559,8 @@ bool SvpSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*f
     return false;
 }
 
+#endif
+
 void SvpSalGraphics::copyArea( long nDestX,
                                       long nDestY,
                                       long nSrcX,
@@ -592,6 +600,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
     dbgOut( m_aDevice );
 }
 
+#ifndef IOS
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSalBitmap )
 {
@@ -665,6 +674,8 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
         m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
 }
+
+#endif
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
@@ -740,6 +751,13 @@ void SvpSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext
     mrContext = xContext;
     mbForeignContext = xContext != NULL;
 };
+
+void  SvpSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
+{
+    if (m_aDevice && m_aDevice->getDamageTracker() != NULL)
+        m_aDevice->getDamageTracker()->damaged(basegfx::B2IBox( basegfx::fround(lX), basegfx::fround(lY), basegfx::fround(lX + lWidth), basegfx::fround(lY + lHeight)));
+}
+
 
 #endif
 
