@@ -524,13 +524,16 @@ $(call gb_XcdTarget_get_target,Langpack-$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list : \
-	$(call gb_XcuLangpackTarget_get_target,Langpack-$(1).xcu)
+	$(call gb_XcuLangpackTarget_get_target,Langpack-$(1).xcu) \
+	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
 
 $(call gb_XcdTarget_get_target,fcfg_langpack_$(1).xcd) : \
-	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list
+	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list \
+	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list : \
-	$(call gb_Configuration_get_target,fcfg_langpack)
+	$(call gb_Configuration_get_target,fcfg_langpack) \
+	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
 
 $(call gb_XcdTarget_get_target,registry_$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list
@@ -540,7 +543,8 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list : \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
 		$(foreach driver,$(postprocess_DRIVERS),$(call gb_Configuration_get_target,$(driver))) \
 	) \
-	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),$(call gb_Configuration_get_target,updchk))
+	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),$(call gb_Configuration_get_target,updchk)) \
+	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
 
 endef
 $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(lang))))
