@@ -1031,10 +1031,10 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     float actualX = (x / OPENGL_SCALE_VALUE);
     float actualY = (y / OPENGL_SCALE_VALUE);
     Bubble2DPointList aBubble2DPointList;
-    aBubble2DPointList.x = actualX;
-    aBubble2DPointList.y = actualY;
     aBubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
     aBubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
+    aBubble2DPointList.x = actualX + aBubble2DPointList.xScale / 2;
+    aBubble2DPointList.y = actualY + aBubble2DPointList.yScale / 2;
 
     m_Bubble2DShapePointList.push_back(aBubble2DPointList);
     return 0;
