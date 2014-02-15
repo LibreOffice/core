@@ -221,6 +221,17 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
     return ProgramID;
 }
 
+namespace {
+
+GLfloat texCoords[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f
+};
+
+}
+
 int OpenGLRender::InitOpenGL(GLWindow aWindow)
 {
     glWin = aWindow;
@@ -318,10 +329,12 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 
     glGenBuffers(1, &m_RenderTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenBuffers(1, &m_TextTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 #if defined( WNT )
@@ -1476,7 +1489,7 @@ int OpenGLRender::RenderTextShape()
         glUniform1i(m_TextTexID, 0);
         CHECK_GL_ERROR();
         //TODO: moggi: get rid fo GL_QUADS
-        glDrawArrays(GL_QUADS, 0, 3);
+        glDrawArrays(GL_QUADS, 0, 4);
         CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_TextTexCoordID);
         CHECK_GL_ERROR();
