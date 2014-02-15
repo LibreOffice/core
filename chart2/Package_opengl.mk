@@ -16,8 +16,6 @@ $(eval $(call gb_Package_add_files,chart2_opengl_shader,$(LIBO_BIN_FOLDER)/openg
 	commonVertexShader.glsl \
 	debugFragmentShader.glsl \
 	debugVertexShader.glsl \
-	renderFragmentShader.glsl \
-	renderVertexShader.glsl \
 	symbolFragmentShader.glsl \
 	symbolVertexShader.glsl \
 	textFragmentShader.glsl \
