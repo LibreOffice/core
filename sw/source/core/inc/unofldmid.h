@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFLDMID_H
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOFLDMID_H
 
-#include <tools/solar.h>
-
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }

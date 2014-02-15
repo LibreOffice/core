@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_NDTYP_HXX
 #define INCLUDED_SW_INC_NDTYP_HXX
 
-#include <tools/solar.h>
-
 // IDs for different nodes. The member indicating the type of node is
 // in base class.
 const sal_uInt8 ND_ENDNODE      = 0x01;
@@ -57,8 +55,6 @@ enum SwStartNodeType
 // distance before or after if the node is the first or last in a section.
 const sal_uInt8 ND_HAS_PREV_LAYNODE = 0x01;
 const sal_uInt8 ND_HAS_NEXT_LAYNODE = 0x02;
-
-
 
 #endif
 

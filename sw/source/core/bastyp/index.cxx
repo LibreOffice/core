@@ -22,13 +22,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 
 TYPEINIT0(SwIndexReg);
 
-// -------
 // SwIndex
-// -------
 
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
@@ -213,9 +210,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
     return *this;
 }
 
-// ----------
 // SwIndexReg
-// ----------
 
 SwIndexReg::SwIndexReg()
     : m_pFirst( 0 ), m_pLast( 0 )
@@ -287,9 +282,7 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
 
 #ifdef DBG_UTIL
 
-// -------
 // SwIndex
-// -------
 
 sal_Int32 SwIndex::operator++(int)
 {

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_HINTIDS_HXX
 #define INCLUDED_SW_INC_HINTIDS_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 #include "swdllapi.h"
 
@@ -277,8 +276,6 @@ RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
 RES_UNKNOWNATR_END
 };
 
-
-
 // Format IDs
 enum RES_FMT
 {
@@ -378,48 +375,58 @@ inline bool isATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
+
 inline bool isCHRATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_CHRATR_END > nWhich);
 }
+
 inline bool isTXTATR_WITHEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_WITHEND_BEGIN <= nWhich)
         && (RES_TXTATR_WITHEND_END > nWhich);
 }
+
 inline bool isTXTATR_NOEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_NOEND_BEGIN <= nWhich)
         && (RES_TXTATR_NOEND_END > nWhich);
 }
+
 inline bool isTXTATR(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_BEGIN <= nWhich) && (RES_TXTATR_END > nWhich);
 }
+
 inline bool isPARATR(const sal_uInt16 nWhich)
 {
     return (RES_PARATR_BEGIN <= nWhich) && (RES_PARATR_END > nWhich);
 }
+
 inline bool isPARATR_LIST(const sal_uInt16 nWhich)
 {
-    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
+    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich);
+}
+
 inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
 }
+
 inline bool isGRFATR(const sal_uInt16 nWhich)
 {
     return (RES_GRFATR_BEGIN <= nWhich) && (RES_GRFATR_END > nWhich);
 }
+
 inline bool isBOXATR(const sal_uInt16 nWhich)
 {
     return (RES_BOXATR_BEGIN <= nWhich) && (RES_BOXATR_END > nWhich);
 }
+
 inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 {
     return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
-
 
 // Take the respective default attribute from the statistical default
 // attributes table over the Which-value.
