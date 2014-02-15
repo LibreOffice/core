@@ -1862,7 +1862,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
         (pFrm->Frm().*fnRect->fnGetWidth)() -
         ( rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight( pFrm ) ) );
     pOldPara = pFrm->HasPara() ? pFrm->GetPara() : NULL;
-    pFrm->SetPara( new SwParaPortion(), sal_False );
+    pFrm->SetPara( new SwParaPortion(), false );
 
     OSL_ENSURE( ! pFrm->IsSwapped(), "A frame is swapped before _Format" );
 

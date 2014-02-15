@@ -172,7 +172,7 @@ class SwTxtFrm: public SwCntntFrm
 
     sal_Bool _GetDropRect( SwRect &rRect ) const;
 
-    void SetPara( SwParaPortion *pNew, sal_Bool bDelete = sal_True );
+    void SetPara( SwParaPortion *pNew, bool bDelete = true );
 
     sal_Bool _IsFtnNumFrm() const;
 
@@ -351,8 +351,8 @@ public:
 
     SwParaPortion *GetPara();
     inline const SwParaPortion *GetPara() const;
-    inline sal_Bool HasPara() const;
-    sal_Bool _HasPara() const;
+    inline bool HasPara() const;
+    bool _HasPara() const;
     // If there are any hanging punctuation portions in the margin
     // the offset will be returned.
     SwTwips HangingMargin() const;
@@ -614,9 +614,9 @@ inline const SwParaPortion *SwTxtFrm::GetPara() const
     return ((SwTxtFrm*)this)->GetPara();
 }
 
-inline sal_Bool SwTxtFrm::HasPara() const
+inline bool SwTxtFrm::HasPara() const
 {
-    return nCacheIdx != USHRT_MAX ? _HasPara() : sal_False;
+    return nCacheIdx!=USHRT_MAX && _HasPara();
 }
 
 // 9104: Frm().Height() - Prt().Height(), siehe widorp.cxx und 7455, 6114, 7908

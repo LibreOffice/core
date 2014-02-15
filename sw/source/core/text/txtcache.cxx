@@ -99,19 +99,19 @@ bool SwTxtLineAccess::IsAvailable() const
 |*
 |*************************************************************************/
 
-sal_Bool SwTxtFrm::_HasPara() const
+bool SwTxtFrm::_HasPara() const
 {
     SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                            Get( this, GetCacheIdx(), sal_False );
+                                            Get( this, GetCacheIdx(), false );
     if ( pTxtLine )
     {
         if ( pTxtLine->GetPara() )
-            return sal_True;
+            return true;
     }
     else
         ((SwTxtFrm*)this)->nCacheIdx = MSHRT_MAX;
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -124,7 +124,7 @@ SwParaPortion *SwTxtFrm::GetPara()
 {
     if ( GetCacheIdx() != MSHRT_MAX )
     {   SwTxtLine *pLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), sal_False );
+                                        Get( this, GetCacheIdx(), false );
         if ( pLine )
             return pLine->GetPara();
         else
@@ -146,7 +146,7 @@ void SwTxtFrm::ClearPara()
     if ( !IsLocked() && GetCacheIdx() != MSHRT_MAX )
     {
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), sal_False );
+                                        Get( this, GetCacheIdx(), false );
         if ( pTxtLine )
         {
             delete pTxtLine->GetPara();
@@ -163,13 +163,13 @@ void SwTxtFrm::ClearPara()
 |*
 |*************************************************************************/
 
-void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
+void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
 {
     if ( GetCacheIdx() != MSHRT_MAX )
     {
         // Only change the information, the CacheObj stays there
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), sal_False );
+                                        Get( this, GetCacheIdx(), false );
         if ( pTxtLine )
         {
             if( bDelete )
