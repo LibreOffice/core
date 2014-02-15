@@ -35,7 +35,7 @@ class PluginHandler
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     private:
         void handleOption( const string& option );
-        void createPlugin( const string& name );
+        void createPlugins( set< string > rewriters );
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         CompilerInstance& compiler;
         Rewriter rewriter;

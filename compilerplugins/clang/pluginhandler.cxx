@@ -56,7 +56,7 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >
     , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     {
-    bool wasPlugin = false;
+    set< string > rewriters;
     for( vector< string >::const_iterator it = args.begin();
          it != args.end();
          ++it )
@@ -64,13 +64,9 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >
         if( it->size() >= 2 && (*it)[ 0 ] == '-' && (*it)[ 1 ] == '-' )
             handleOption( it->substr( 2 ));
         else
-            {
-            createPlugin( *it );
-            wasPlugin = true;
-            }
+            rewriters.insert( *it );
         }
-    if( !wasPlugin )
-        createPlugin( "" ); // = all non-rewriters
+    createPlugins( rewriters );
     pluginObjectsCreated = true;
     }
 
@@ -109,28 +105,19 @@ void PluginHandler::handleOption( const string& option )
         report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
     }
 
-void PluginHandler::createPlugin( const string& name )
+void PluginHandler::createPlugins( set< string > rewriters )
     {
     for( int i = 0;
          i < pluginCount;
          ++i )
         {
-        // if no plugin is given, create all by-default plugins as non-
-        // rewriters; otherwise, create the given plugin as a potential
-        // rewriter:
-        if( name.empty())
-            {
-            if( plugins[ i ].byDefault )
-                plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, NULL } );
-            }
-        else if( plugins[ i ].optionName == name )
-            {
-                plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, &rewriter } );
-            return;
-            }
+        if( rewriters.erase( plugins[i].optionName ) != 0 )
+            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, &rewriter } );
+        else if( plugins[ i ].byDefault )
+            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, NULL } );
         }
-    if( !name.empty())
-        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << name;
+    for( auto r: rewriters )
+        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << r;
     }
 
 void PluginHandler::registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
