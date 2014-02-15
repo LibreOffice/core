@@ -822,7 +822,7 @@ awt::Point DummyGroup2D::getPosition()
         }
     }
 
-    return awt::Point(nTop, nLeft);
+    return awt::Point(nLeft, nTop);
 }
 
 awt::Size DummyGroup2D::getSize()
