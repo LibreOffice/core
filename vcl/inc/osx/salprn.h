@@ -71,7 +71,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     void                        SetupPrinterGraphics( CGContextRef i_xContext ) const;
 
-    virtual SalGraphics*        GetGraphics() SAL_OVERRIDE;
+    virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) SAL_OVERRIDE;
     virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
     virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) SAL_OVERRIDE;

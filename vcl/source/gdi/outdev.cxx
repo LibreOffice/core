@@ -538,7 +538,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     {
         Window* pWindow = (Window*)this;
 
-        mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
+        mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
         // try harder if no wingraphics was available directly
         if ( !mpGraphics )
         {
@@ -565,7 +565,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
                         break;
                     pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
-                    mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
+                    mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
                 }
             }
         }
@@ -587,14 +587,14 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
 
         if ( pVirDev->mpVirDev )
         {
-            mpGraphics = pVirDev->mpVirDev->GetGraphics();
+            mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                mpGraphics = pVirDev->mpVirDev->GetGraphics();
+                mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
             }
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
@@ -617,14 +617,14 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         else if ( pPrinter->mpDisplayDev )
         {
             const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
-            mpGraphics = pVirDev->mpVirDev->GetGraphics();
+            mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                mpGraphics = pVirDev->mpVirDev->GetGraphics();
+                mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
             }
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
@@ -639,14 +639,14 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         }
         else
         {
-            mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
+            mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
             // if needed retry after releasing least recently used printer graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
                     break;
                 pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
-                mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
+                mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
             }
             // update global LRU list of printer graphics
             if ( mpGraphics )

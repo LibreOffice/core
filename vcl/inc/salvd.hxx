@@ -33,7 +33,7 @@ public:
 
     // SalGraphics or NULL, but two Graphics for all SalVirtualDevices
     // must be returned
-    virtual SalGraphics*    GetGraphics() = 0;
+    virtual SalGraphics*    AcquireGraphics() = 0;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
     // Set new size, without saving the old contents

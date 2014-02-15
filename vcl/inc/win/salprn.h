@@ -59,7 +59,7 @@ public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter();
 
-    virtual SalGraphics*            GetGraphics();
+    virtual SalGraphics*            AcquireGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData );

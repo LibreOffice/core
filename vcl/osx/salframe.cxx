@@ -274,7 +274,7 @@ void AquaSalFrame::screenParametersChanged()
 
 
 
-SalGraphics* AquaSalFrame::GetGraphics()
+SalGraphics* AquaSalFrame::AcquireGraphics()
 {
     if ( mbGraphics )
         return NULL;
@@ -1216,7 +1216,7 @@ void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 {
     if( ! mpGraphics )
     {
-        GetGraphics();
+        AcquireGraphics();
         ReleaseGraphics( mpGraphics );
     }
     mpGraphics->GetResolution( o_rDPIX, o_rDPIY );

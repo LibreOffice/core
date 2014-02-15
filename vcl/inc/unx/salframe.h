@@ -210,7 +210,7 @@ public:
     bool                    appendUnicodeSequence( sal_Unicode );
     bool                    endUnicodeSequence();
 
-    virtual SalGraphics*        GetGraphics();
+    virtual SalGraphics*        AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
     // call with true to clear graphics (setting None as drawable)

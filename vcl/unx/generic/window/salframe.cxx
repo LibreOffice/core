@@ -875,7 +875,7 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     return &maSystemChildData;
 }
 
-SalGraphics *X11SalFrame::GetGraphics()
+SalGraphics *X11SalFrame::AcquireGraphics()
 {
     if( pGraphics_ )
         return NULL;
