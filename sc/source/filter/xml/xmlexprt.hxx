@@ -63,6 +63,12 @@ class ScXMLEditAttributeMap;
 class EditTextObject;
 class ScFormulaCell;
 
+namespace sc {
+
+class CompileFormulaContext;
+
+}
+
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
 class ScXMLExport : public SvXMLExport
@@ -76,6 +82,7 @@ class ScXMLExport : public SvXMLExport
 
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     boost::scoped_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
+    boost::scoped_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;

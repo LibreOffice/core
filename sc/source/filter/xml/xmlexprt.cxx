@@ -63,6 +63,7 @@
 #include <arealink.hxx>
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
+#include <tokenstringcontext.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -3177,21 +3178,26 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             {
                 if (aCell.maBaseCell.meType == CELLTYPE_FORMULA)
                 {
-                    OUStringBuffer sFormula;
                     ScFormulaCell* pFormulaCell = aCell.maBaseCell.mpFormula;
                     if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                     {
-                        const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-                        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-                        pFormulaCell->GetFormula(sFormula, eGrammar);
-                        OUString sOUFormula(sFormula.makeStringAndClear());
+                        if (!mpCompileFormulaCxt)
+                        {
+                            const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+                            mpCompileFormulaCxt.reset(new sc::CompileFormulaContext(pDoc, eGrammar));
+                        }
+
+                        OUString aFormula = pFormulaCell->GetFormula(*mpCompileFormulaCxt);
+                        sal_uInt16 nNamespacePrefix =
+                            (mpCompileFormulaCxt->getGrammar() == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+
                         if (!bIsMatrix)
                         {
-                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula, false ));
+                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey(nNamespacePrefix, aFormula, false));
                         }
                         else
                         {
-                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula.copy(1, sOUFormula.getLength() - 2), false ));
+                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey(nNamespacePrefix, aFormula.copy(1, aFormula.getLength()-2), false));
                         }
                     }
                     if (pFormulaCell->GetErrCode())

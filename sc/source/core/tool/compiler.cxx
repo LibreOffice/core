@@ -1612,6 +1612,7 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
         case FormulaGrammar::CONV_XL_A1 :
         case FormulaGrammar::CONV_XL_R1C1 :
         case FormulaGrammar::CONV_XL_OOX :
+        case FormulaGrammar::CONV_ODF :
             if( bNeedsQuote )
             {
                 const OUString one_quote('\'');
