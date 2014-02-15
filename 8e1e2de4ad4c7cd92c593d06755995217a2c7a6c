@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8c0949_4ee713e5",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-02-15T05:20:07Z",
+      "side": 1,
+      "message": "This code here is still not correct. I mentioned a few times already why this does not work. If you want to prove that the spec is wrong you need to be more convincing and provide some facts and not just one document.",
+      "revId": "8e1e2de4ad4c7cd92c593d06755995217a2c7a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
