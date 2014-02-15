@@ -915,7 +915,7 @@ void generateSkeleton(ProgramOptions const & options,
         if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
             ((std::ofstream*)pofs)->close();
             delete pofs;
-            OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
+            OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";

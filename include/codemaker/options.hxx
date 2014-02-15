@@ -47,13 +47,13 @@ public:
     Options();
     virtual ~Options();
 
-    virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    virtual bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
         throw( IllegalArgument ) = 0;
 
     virtual ::rtl::OString  prepareHelp() = 0;
 
     const ::rtl::OString&   getProgramName() const;
-    sal_Bool                isValid(const ::rtl::OString& option) const;
+    bool                isValid(const ::rtl::OString& option) const;
     const ::rtl::OString    getOption(const ::rtl::OString& option) const
         throw( IllegalArgument );
 

@@ -65,7 +65,7 @@ OString getTempDir(const OString& sFileName)
 OString createFileNameFromType( const OString& destination,
                                 const OString typeName,
                                 const OString postfix,
-                                sal_Bool bLowerCase,
+                                bool bLowerCase,
                                 const OString prefix )
 {
     OString type(typeName.replace('.', '/'));
@@ -77,21 +77,21 @@ OString createFileNameFromType( const OString& destination,
 
     sal_uInt32 length = destination.getLength();
 
-    sal_Bool withPoint = sal_False;
+    bool withPoint = false;
     if (length == 0)
     {
         length++;
-        withPoint = sal_True;
+        withPoint = true;
     }
 
     length += prefix.getLength() + type.getLength() + postfix.getLength();
 
-    sal_Bool withSeparator = sal_False;
+    bool withSeparator = false;
     if (!(destination.endsWith("\\") || destination.endsWith("/"))
         && !(type.startsWith("\\") || type.startsWith("/")))
     {
         length++;
-        withSeparator = sal_True;
+        withSeparator = true;
     }
 
     OStringBuffer fileNameBuf(length);
@@ -158,24 +158,24 @@ OString createFileNameFromType( const OString& destination,
     return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());;
 }
 
-sal_Bool fileExists(const OString& fileName)
+bool fileExists(const OString& fileName)
 {
     FILE  *f= fopen(fileName.getStr(), "r");
 
     if (f != NULL)
     {
         fclose(f);
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileName)
+bool checkFileContent(const OString& targetFileName, const OString& tmpFileName)
 {
     FILE  *target = fopen(targetFileName.getStr(), "r");
     FILE  *tmp = fopen(tmpFileName.getStr(), "r");
-    sal_Bool    bFindChanges = sal_False;
+    bool    bFindChanges = false;
 
     if (target != NULL && tmp != NULL)
     {
@@ -190,10 +190,10 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
             n2 = fread(buffer2, sizeof(sal_Char), 1024, tmp);
 
             if ( n1 != n2 )
-                bFindChanges = sal_True;
+                bFindChanges = true;
             else
                 if ( memcmp(buffer1, buffer2, n2) != 0 )
-                    bFindChanges =  sal_True;
+                    bFindChanges =  true;
         }
     }
 
@@ -203,36 +203,36 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
     return bFindChanges;
 }
 
-sal_Bool makeValidTypeFile(const OString& targetFileName, const OString& tmpFileName,
-                           sal_Bool bFileCheck)
+bool makeValidTypeFile(const OString& targetFileName, const OString& tmpFileName,
+                           bool bFileCheck)
 {
     if (bFileCheck) {
         if (checkFileContent(targetFileName, tmpFileName)) {
             if ( !unlink(targetFileName.getStr()) )
                 if ( !rename(tmpFileName.getStr(), targetFileName.getStr()) )
-                    return sal_True;
+                    return true;
         } else
             return removeTypeFile(tmpFileName);
     } else {
         if (fileExists(targetFileName))
             if (!removeTypeFile(targetFileName))
-                return sal_False;
+                return false;
 
         if ( rename(tmpFileName.getStr(), targetFileName.getStr()) ) {
             if (errno == EEXIST)
-                return sal_True;
+                return true;
         } else
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool removeTypeFile(const OString& fileName)
+bool removeTypeFile(const OString& fileName)
 {
     if ( !unlink(fileName.getStr()) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 OUString convertToFileUrl(const OString& fileName)
@@ -283,12 +283,12 @@ FileStream::~FileStream()
         osl_closeFile(m_file);
 }
 
-sal_Bool FileStream::isValid()
+bool FileStream::isValid()
 {
     if ( m_file )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 void FileStream::createTempFile(const OString& sPath)

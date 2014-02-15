@@ -30,10 +30,10 @@
 #define SEPARATOR '\\'
 #endif
 
-sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
+bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {
-    sal_Bool    ret = sal_True;
+    bool    ret = true;
     sal_uInt16  i=0;
 
     if (!bCmdFile)
@@ -47,7 +47,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         if (ac < 2)
         {
             fprintf(stderr, "%s", prepareHelp().getStr());
-            ret = sal_False;
+            ret = false;
         }
 
         i = 1;
@@ -193,7 +193,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                   if( cmdFile == NULL )
                   {
                     fprintf(stderr, "%s", prepareHelp().getStr());
-                    ret = sal_False;
+                    ret = false;
                 } else
                 {
                     int rargc=0;

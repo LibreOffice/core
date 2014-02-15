@@ -32,7 +32,7 @@
 
 struct EqualString
 {
-    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
+    bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
     {
         return (str1 == str2);
     }
@@ -48,7 +48,7 @@ struct HashString
 
 struct LessString
 {
-    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
+    bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
     {
         return (str1 < str2);
     }
@@ -75,7 +75,7 @@ public:
     FileStream();
     virtual ~FileStream();
 
-    sal_Bool isValid();
+    bool isValid();
 
     void createTempFile(const ::rtl::OString& sPath);
     void close();
@@ -107,14 +107,14 @@ private:
 ::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
                                       const ::rtl::OString type,
                                       const ::rtl::OString postfix,
-                                      sal_Bool bLowerCase=sal_False,
+                                      bool bLowerCase=false,
                                       const ::rtl::OString prefix="");
 
-sal_Bool fileExists(const ::rtl::OString& fileName);
-sal_Bool makeValidTypeFile(const ::rtl::OString& targetFileName,
+bool fileExists(const ::rtl::OString& fileName);
+bool makeValidTypeFile(const ::rtl::OString& targetFileName,
                            const ::rtl::OString& tmpFileName,
-                           sal_Bool bFileCheck);
-sal_Bool removeTypeFile(const ::rtl::OString& fileName);
+                           bool bFileCheck);
+bool removeTypeFile(const ::rtl::OString& fileName);
 
 ::rtl::OUString convertToFileUrl(const ::rtl::OString& fileName);
 

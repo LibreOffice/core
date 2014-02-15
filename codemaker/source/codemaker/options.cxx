@@ -36,7 +36,7 @@ const OString& Options::getProgramName() const
     return m_program;
 }
 
-sal_Bool Options::isValid(const OString& option) const
+bool Options::isValid(const OString& option) const
 {
     return m_options.find(option) != m_options.end();
 }
