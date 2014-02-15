@@ -653,7 +653,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     {
         *phNewKey = m_openKeyTable[sFullKeyName];
         ((ORegKey*)*phNewKey)->acquire();
-        ((ORegKey*)*phNewKey)->setDeleted(sal_False);
+        ((ORegKey*)*phNewKey)->setDeleted(false);
         return REG_NO_ERROR;
     }
 
@@ -850,7 +850,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     pOldKey->setModified();
 
     // set flag deleted !!!
-    pOldKey->setDeleted(sal_True);
+    pOldKey->setDeleted(true);
 
     return pKey->closeKey(pOldKey);
 }
@@ -900,7 +900,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 //  loadKey
 //
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
-                            sal_Bool bWarnings, sal_Bool bReport)
+                            bool bWarnings, bool bReport)
 {
     RegError _ret = REG_NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
@@ -948,7 +948,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 //  saveKey
 //
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
-                            sal_Bool bWarnings, sal_Bool bReport)
+                            bool bWarnings, bool bReport)
 {
     RegError _ret = REG_NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
@@ -1002,8 +1002,8 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
                                      ORegKey* pSourceKey,
                                      const OUString& valueName,
                                      sal_uInt32 nCut,
-                                     sal_Bool bWarnings,
-                                     sal_Bool bReport)
+                                     bool bWarnings,
+                                     bool bReport)
 {
     OStoreStream    rValue;
     sal_uInt8*      pBuffer;
@@ -1130,9 +1130,9 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                               const OUString& sTargetPath,
                               sal_uInt32 srcValueSize,
                               sal_uInt8* pSrcBuffer,
-                              sal_Bool bReport)
+                              bool bReport)
 {
-    RegistryTypeReader reader(pSrcBuffer, srcValueSize, sal_False);
+    RegistryTypeReader reader(pSrcBuffer, srcValueSize, false);
 
     if (reader.getTypeClass() == RT_TYPE_INVALID)
     {
@@ -1159,7 +1159,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
             if (!rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, rwBytes) &&
                 (rwBytes == valueSize))
             {
-                RegistryTypeReader reader2(pBuffer, valueSize, sal_False);
+                RegistryTypeReader reader2(pBuffer, valueSize, false);
 
                 if ((reader.getTypeClass() != reader2.getTypeClass())
                     || reader2.getTypeClass() == RT_TYPE_INVALID)
@@ -1335,8 +1335,8 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     ORegKey* pSourceKey,
                                     const OUString& keyName,
                                     sal_uInt32 nCut,
-                                    sal_Bool bWarnings,
-                                    sal_Bool bReport)
+                                    bool bWarnings,
+                                    bool bReport)
 {
     RegError    _ret = REG_NO_ERROR;
     OUString    sRelPath(pSourceKey->getName().copy(nCut));
@@ -1359,7 +1359,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 
     if (m_openKeyTable.count(sFullKeyName) > 0)
     {
-        m_openKeyTable[sFullKeyName]->setDeleted(sal_False);
+        m_openKeyTable[sFullKeyName]->setDeleted(false);
     }
 
     ORegKey* pTmpKey = 0;

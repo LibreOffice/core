@@ -249,7 +249,7 @@ public:
     CPInfoTag       readTag(sal_uInt16 index);
 
     const sal_Char*     readUTF8NameConstant(sal_uInt16 index);
-    sal_Bool            readBOOLConstant(sal_uInt16 index);
+    bool            readBOOLConstant(sal_uInt16 index);
     sal_Int8            readBYTEConstant(sal_uInt16 index);
     sal_Int16           readINT16Constant(sal_uInt16 index);
     sal_uInt16          readUINT16Constant(sal_uInt16 index);
@@ -343,15 +343,15 @@ const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
     return aName;
 }
 
-sal_Bool ConstantPool::readBOOLConstant(sal_uInt16 index)
+bool ConstantPool::readBOOLConstant(sal_uInt16 index)
 {
-    sal_Bool aBool = sal_False;
+    bool aBool = false;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
         if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_BOOL)
         {
-            aBool = (sal_Bool) readBYTE(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+            aBool = readBYTE(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA) != 0;
         }
     }
 
@@ -1081,7 +1081,7 @@ public:
     sal_uInt16      m_offset_SUPERTYPES;
 
     TypeRegistryEntry(
-        const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer);
+        const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
         // throws std::bad_alloc
 
     ~TypeRegistryEntry();
@@ -1090,7 +1090,7 @@ public:
 };
 
 TypeRegistryEntry::TypeRegistryEntry(
-    const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer):
+    const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer):
     BlopObject(buffer, len, copyBuffer), m_pCP(NULL), m_pFields(NULL),
     m_pMethods(NULL), m_pReferences(NULL), m_refCount(1), m_nSuperTypes(0),
     m_offset_SUPERTYPES(0)

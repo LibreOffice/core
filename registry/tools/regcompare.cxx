@@ -450,17 +450,17 @@ static void printConstValue(RTConstValue& constValue)
     }
 }
 
-static void dumpTypeClass(sal_Bool & rbDump, RTTypeClass typeClass, OUString const & keyName)
+static void dumpTypeClass(bool & rbDump, RTTypeClass typeClass, OUString const & keyName)
 {
     if (rbDump)
         fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-    rbDump = sal_False;
+    rbDump = false;
 }
 
 static sal_uInt32 checkConstValue(Options_Impl const & options,
                                   const OUString& keyName,
                                   RTTypeClass typeClass,
-                                  sal_Bool & bDump,
+                                  bool & bDump,
                                   RTConstValue& constValue1,
                                   RTConstValue& constValue2,
                                   sal_uInt16 index1)
@@ -621,7 +621,7 @@ enum verbosity_t {SILENT, REPORT};
 static sal_uInt32 checkField(Options_Impl const & options,
                              const OUString& keyName,
                              RTTypeClass typeClass,
-                             sal_Bool & bDump,
+                             bool & bDump,
                              typereg::Reader& reader1,
                              typereg::Reader& reader2,
                              sal_uInt16 index1,
@@ -734,7 +734,7 @@ static char const * getParamMode(RTParamMode paramMode)
 static sal_uInt32 checkMethod(Options_Impl const & options,
                               const OUString& keyName,
                               RTTypeClass typeClass,
-                              sal_Bool & bDump,
+                              bool & bDump,
                               typereg::Reader& reader1,
                               typereg::Reader& reader2,
                               sal_uInt16 index)
@@ -905,7 +905,7 @@ static char const * getReferenceType(RTReferenceType refType)
 static sal_uInt32 checkReference(Options_Impl const & options,
                                  const OUString& keyName,
                                  RTTypeClass typeClass,
-                                 sal_Bool & bDump,
+                                 bool & bDump,
                                  typereg::Reader& reader1,
                                     typereg::Reader& reader2,
                                     sal_uInt16 index1,
@@ -962,7 +962,7 @@ static sal_uInt32 checkReference(Options_Impl const & options,
 static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
                                           const OUString& keyName,
                                           RTTypeClass typeClass,
-                                          sal_Bool & bDump,
+                                          bool & bDump,
                                           typereg::Reader& reader1,
                                           typereg::Reader& reader2)
 {
@@ -982,7 +982,7 @@ static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
         }
     }
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     ::std::set< sal_uInt16 > moreProps;
 
     for (i=0; i < nFields1; i++)
@@ -991,7 +991,7 @@ static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
         {
             if (!checkField(options, keyName, typeClass, bDump, reader1, reader2, i, j, SILENT))
             {
-                bFound =  sal_True;
+                bFound =  true;
                 moreProps.insert(j);
                 break;
             }
@@ -1008,7 +1008,7 @@ static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
         }
         else
         {
-            bFound = sal_False;
+            bFound = false;
         }
     }
 
@@ -1044,7 +1044,7 @@ static sal_uInt32 checkBlob(
     typereg::Reader& reader2, sal_uInt32 size2)
 {
     sal_uInt32 nError = 0;
-    sal_Bool bDump = sal_True;
+    bool bDump = true;
 
     if ( options.fullCheck() && (size1 != size2) )
     {
@@ -1127,13 +1127,13 @@ static sal_uInt32 checkBlob(
 
     sal_uInt16 nFields1 = (sal_uInt16)reader1.getFieldCount();
     sal_uInt16 nFields2 = (sal_uInt16)reader2.getFieldCount();
-    sal_Bool bCheckNormal = sal_True;
+    bool bCheckNormal = true;
 
     if ( (typeClass == RT_TYPE_SERVICE ||
           typeClass == RT_TYPE_MODULE ||
           typeClass == RT_TYPE_CONSTANTS) && options.unoTypeCheck() )
     {
-        bCheckNormal = sal_False;
+        bCheckNormal = false;
     }
 
     if ( bCheckNormal )
@@ -1216,7 +1216,7 @@ static sal_uInt32 checkBlob(
                 }
             }
 
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             ::std::set< sal_uInt16 > moreReferences;
 
             for (i=0; i < nReference1; i++)
@@ -1225,7 +1225,7 @@ static sal_uInt32 checkBlob(
                 {
                     if (!checkReference(options, keyName, typeClass, bDump, reader1, reader2, i, j))
                     {
-                        bFound =  sal_True;
+                        bFound =  true;
                         moreReferences.insert(j);
                         break;
                     }
@@ -1244,7 +1244,7 @@ static sal_uInt32 checkBlob(
                 }
                 else
                 {
-                    bFound = sal_False;
+                    bFound = false;
                 }
             }
 
@@ -1321,7 +1321,7 @@ static sal_uInt32 checkValueDifference(
 
     if ( valueType1 == valueType2 )
     {
-        sal_Bool bEqual = sal_True;
+        bool bEqual = true;
         switch (valueType1)
         {
         case RG_VALUETYPE_LONGLIST:
@@ -1334,14 +1334,14 @@ static sal_uInt32 checkValueDifference(
                 sal_uInt32 length2 = valueList1.getLength();
                 if ( length1 != length2 )
                 {
-                    bEqual = sal_False;
+                    bEqual = false;
                     break;
                 }
                 for (sal_uInt32 i=0; i<length1; i++)
                 {
                     if ( valueList1.getElement(i) != valueList2.getElement(i) )
                     {
-                        bEqual = sal_False;
+                        bEqual = false;
                         break;
                     }
                 }
@@ -1357,14 +1357,14 @@ static sal_uInt32 checkValueDifference(
                 sal_uInt32 length2 = valueList1.getLength();
                 if ( length1 != length2 )
                 {
-                    bEqual = sal_False;
+                    bEqual = false;
                     break;
                 }
                 for (sal_uInt32 i=0; i<length1; i++)
                 {
                     if ( strcmp(valueList1.getElement(i), valueList2.getElement(i)) != 0 )
                     {
-                        bEqual = sal_False;
+                        bEqual = false;
                         break;
                     }
                 }
@@ -1380,14 +1380,14 @@ static sal_uInt32 checkValueDifference(
                 sal_uInt32 length2 = valueList1.getLength();
                 if ( length1 != length2 )
                 {
-                    bEqual = sal_False;
+                    bEqual = false;
                     break;
                 }
                 for (sal_uInt32 i=0; i<length1; i++)
                 {
                     if ( rtl_ustr_compare(valueList1.getElement(i), valueList2.getElement(i)) != 0 )
                     {
-                        bEqual = sal_False;
+                        bEqual = false;
                         break;
                     }
                 }
@@ -1722,12 +1722,12 @@ static sal_uInt32 checkDifferences(
 
     for (i=0; i<length1; i++)
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for (j=0; j<length2; j++)
         {
             if ( subKeyNames1.getElement(i) == subKeyNames2.getElement(j) )
             {
-                bFound = sal_True;
+                bFound = true;
                 keys.insert(subKeyNames1.getElement(i));
                 break;
             }
@@ -1841,12 +1841,12 @@ static sal_uInt32 checkDifferences(
 
     for (i=0; i<length2; i++)
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for (j=0; j<length1; j++)
         {
             if ( subKeyNames2.getElement(i) == subKeyNames1.getElement(j) )
             {
-                bFound = sal_True;
+                bFound = true;
                 keys.insert(subKeyNames2.getElement(i));
                 break;
             }

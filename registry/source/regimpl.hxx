@@ -91,13 +91,13 @@ public:
 
     RegError    loadKey(RegKeyHandle hKey,
                         const OUString& regFileName,
-                        sal_Bool bWarings=sal_False,
-                        sal_Bool bReport=sal_False);
+                        bool bWarings=false,
+                        bool bReport=false);
 
     RegError    saveKey(RegKeyHandle hKey,
                         const OUString& regFileName,
-                        sal_Bool bWarings=sal_False,
-                        sal_Bool bReport=sal_False);
+                        bool bWarings=false,
+                        bool bReport=false);
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
@@ -128,14 +128,14 @@ private:
                                  ORegKey* pSourceKey,
                                  const OUString& valueName,
                                  sal_uInt32 nCut,
-                                 sal_Bool bWarnings=sal_False,
-                                 sal_Bool bReport=sal_False);
+                                 bool bWarnings=false,
+                                 bool bReport=false);
 
     RegError    checkBlop(store::OStoreStream& rValue,
                           const OUString& sTargetPath,
                           sal_uInt32 srcValueSize,
                           sal_uInt8* pSrcBuffer,
-                          sal_Bool bReport=sal_False);
+                          bool bReport=false);
 
     RegError    mergeModuleValue(store::OStoreStream& rTargetValue,
                                  RegistryTypeReader& reader,
@@ -145,8 +145,8 @@ private:
                                 ORegKey* pSourceKey,
                                 const OUString& keyName,
                                 sal_uInt32 nCut,
-                                sal_Bool bWarnings=sal_False,
-                                sal_Bool bReport=sal_False);
+                                bool bWarnings=false,
+                                bool bReport=false);
 
     RegError    dumpValue(const OUString& sPath,
                           const OUString& sName,

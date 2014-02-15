@@ -110,13 +110,13 @@ public:
     inline Registry& operator = (const Registry& toAssign);
 
     /// checks if the registry points to a valid registry data file.
-    inline sal_Bool isValid() const;
+    inline bool isValid() const;
 
     /** returns the access mode of the registry.
 
         @return TRUE if the access mode is readonly else FALSE.
     */
-    inline sal_Bool     isReadOnly() const;
+    inline bool     isReadOnly() const;
 
     /** opens the root key of the registry.
 
@@ -204,8 +204,8 @@ public:
     inline RegError mergeKey(RegistryKey& rKey,
                                 const rtl::OUString& keyName,
                                 const rtl::OUString& regFileName,
-                             sal_Bool bWarnings = sal_False,
-                                sal_Bool bReport = sal_False);
+                                bool bWarnings = false,
+                                bool bReport = false);
 
     /** This function reports the complete registry information of a key and all of its subkeys.
 
@@ -408,13 +408,13 @@ public:
     inline RegistryKey& operator = (const RegistryKey& toAssign);
 
     /// checks if the key points to a valid registry key.
-    inline sal_Bool isValid() const;
+    inline bool isValid() const;
 
     /** returns the access mode of the key.
 
         @return TRUE if access mode is read only else FALSE.
     */
-    inline sal_Bool     isReadOnly() const;
+    inline bool     isReadOnly() const;
 
     /// returns the full qualified name of the key beginning with the rootkey.
     inline rtl::OUString getName();
@@ -634,7 +634,7 @@ public:
         @return REG_NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const rtl::OUString& keyName,
-                                       sal_Bool firstLinkOnly,
+                                       bool firstLinkOnly,
                                            rtl::OUString& rResolvedName) const;
 
     /// returns the name of the registry in which the key is defined.
@@ -823,15 +823,15 @@ inline RegistryKey& RegistryKey::operator = (const RegistryKey& toAssign)
     return *this;
 }
 
-inline sal_Bool RegistryKey::isValid() const
+inline bool RegistryKey::isValid() const
     {  return (m_hImpl != NULL); }
 
-inline sal_Bool RegistryKey::isReadOnly() const
+inline bool RegistryKey::isReadOnly() const
     {
         if  (m_registry.isValid())
             return (m_registry.m_pApi)->isKeyReadOnly(m_hImpl);
         else
-            return sal_False;
+            return false;
     }
 
 inline rtl::OUString RegistryKey::getName()
@@ -1125,7 +1125,7 @@ inline RegError RegistryKey::getLinkTarget(const rtl::OUString& linkName,
 
 
 inline RegError RegistryKey::getResolvedKeyName(const rtl::OUString& keyName,
-                                                   sal_Bool firstLinkOnly,
+                                                bool firstLinkOnly,
                                                        rtl::OUString& rResolvedName) const
     {
         if (m_registry.isValid())
@@ -1181,10 +1181,10 @@ inline Registry& Registry::operator = (const Registry& toAssign)
     return *this;
 }
 
-inline sal_Bool Registry::isValid() const
+inline bool Registry::isValid() const
     {  return ( m_hImpl != NULL ); }
 
-inline sal_Bool Registry::isReadOnly() const
+inline bool Registry::isReadOnly() const
     {  return m_pApi->isReadOnly(m_hImpl); }
 
 inline RegError Registry::openRootKey(RegistryKey& rRootKey)
@@ -1244,8 +1244,8 @@ inline RegError Registry::saveKey(RegistryKey& rKey,
 inline RegError Registry::mergeKey(RegistryKey& rKey,
                                          const rtl::OUString& keyName,
                                          const rtl::OUString& regFileName,
-                                         sal_Bool bWarnings,
-                                         sal_Bool bReport)
+                                         bool bWarnings,
+                                         bool bReport)
     {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, bWarnings, bReport); }
 
 inline RegError Registry::dumpRegistry(RegistryKey& rKey)

@@ -112,7 +112,7 @@ public:
      */
     inline RegistryTypeReader(const sal_uInt8* buffer,
                               sal_uInt32 bufferLen,
-                              sal_Bool copyData);
+                              bool copyData);
 
     /// Copy constructcor
     inline RegistryTypeReader(const RegistryTypeReader& toCopy);
@@ -124,7 +124,7 @@ public:
     inline RegistryTypeReader& operator == (const RegistryTypeReader& toAssign);
 
     /// checks if the registry type reader points to a valid Api.
-    inline sal_Bool         isValid() const;
+    inline bool         isValid() const;
 
     /** @deprecated
         returns the minor version number.
@@ -315,7 +315,7 @@ protected:
 
 inline RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
                                               sal_uInt32 bufferLen,
-                                              sal_Bool copyData)
+                                              bool copyData)
     : m_pApi(initRegistryTypeReader_Api())
     , m_hImpl(NULL)
     {
@@ -347,7 +347,7 @@ inline RegistryTypeReader& RegistryTypeReader::operator == (const RegistryTypeRe
 inline sal_uInt16 RegistryTypeReader::getMinorVersion() const
     {  return m_pApi->getMinorVersion(m_hImpl); }
 
-inline sal_Bool RegistryTypeReader::isValid() const
+inline bool RegistryTypeReader::isValid() const
     {  return (m_hImpl != NULL); }
 
 inline sal_uInt16 RegistryTypeReader::getMajorVersion() const

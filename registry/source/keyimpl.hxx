@@ -99,7 +99,7 @@ public:
     bool isDeleted() const
         { return m_bDeleted != 0; }
 
-    void setDeleted (sal_Bool bKeyDeleted)
+    void setDeleted (bool bKeyDeleted)
         { m_bDeleted = bKeyDeleted ? 1 : 0; }
 
     bool isModified() const
@@ -108,7 +108,7 @@ public:
     void setModified (bool bModified = true)
         { m_bModified = bModified ? 1 : 0; }
 
-    sal_Bool        isReadOnly() const
+    bool        isReadOnly() const
                     { return m_pRegistry->isReadOnly(); }
 
     sal_uInt32      countSubKeys();
