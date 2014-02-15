@@ -39,19 +39,19 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
     OUString               maDriver;
     OUString               maLocation;
     OUString               maComment;
-    sal_uLong                   mnStatus;
-    sal_uLong                   mnJobs;
+    sal_uLong              mnStatus;
+    sal_uLong              mnJobs;
     OUString*              mpSysData;
 
-                            SalPrinterQueueInfo();
-                            ~SalPrinterQueueInfo();
+                           SalPrinterQueueInfo();
+                           ~SalPrinterQueueInfo();
 };
 
 class VCL_PLUGIN_PUBLIC SalInfoPrinter
 {
 public:
-    std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
-    bool                                m_bPapersInit;      // set to true after InitPaperFormats
+    std::vector< PaperInfo  >       m_aPaperFormats;    // all printer supported formats
+    bool                            m_bPapersInit;      // set to true after InitPaperFormats
 
     SalInfoPrinter() : m_bPapersInit( false ) {}
     virtual ~SalInfoPrinter();
@@ -59,29 +59,30 @@ public:
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
     virtual SalGraphics*            GetGraphics() = 0;
+    virtual bool                    AcquireGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
+    virtual sal_Bool                Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
-    virtual sal_Bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
+    virtual sal_Bool                SetPrinterData( ImplJobSetup* pSetupData ) = 0;
     // This function merged the indepen driver data
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual sal_Bool                    SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual sal_Bool                SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual sal_uLong                   GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
-    virtual sal_uLong                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
+    virtual sal_uLong               GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
+    virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
+    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
 };
 
 class VCL_PLUGIN_PUBLIC SalPrinter
@@ -90,7 +91,7 @@ public:
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual sal_Bool                StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               sal_uLong nCopies,
@@ -100,17 +101,17 @@ public:
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns sal_False
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual sal_Bool                StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 
-    virtual sal_Bool                    EndJob() = 0;
-    virtual sal_Bool                    AbortJob() = 0;
+    virtual sal_Bool                EndJob() = 0;
+    virtual sal_Bool                AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData ) = 0;
-    virtual sal_Bool                    EndPage() = 0;
-    virtual sal_uLong                   GetErrorCode() = 0;
+    virtual sal_Bool                EndPage() = 0;
+    virtual sal_uLong               GetErrorCode() = 0;
 
 };
 

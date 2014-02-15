@@ -33,9 +33,9 @@
 
 struct SalDriverData
 {
-    sal_uIntPtr                 mnSysSignature;
-    sal_uInt16                  mnDriverOffset;
-    BYTE                    maDriverData[1];
+    sal_uIntPtr                     mnSysSignature;
+    sal_uInt16                      mnDriverOffset;
+    BYTE                            maDriverData[1];
 };
 
 #pragma pack()
@@ -49,30 +49,31 @@ class WinSalGraphics;
 class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    WinSalGraphics*         mpGraphics;             // current Printer graphics
-    OUString               maDriverName;           // printer driver name
-    OUString               maDeviceName;           // printer device name
-    OUString               maPortName;             // printer port name
-    HDC                     mhDC;                   // printer hdc
-    sal_Bool                    mbGraphics;             // is Graphics used
+    WinSalGraphics*                 mpGraphics;             // current Printer graphics
+    OUString                        maDriverName;           // printer driver name
+    OUString                        maDeviceName;           // printer device name
+    OUString                        maPortName;             // printer port name
+    HDC                             mhDC;                   // printer hdc
+    sal_Bool                        mbGraphics;             // is Graphics used
 public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter();
 
     virtual SalGraphics*            GetGraphics();
+    virtual bool                    AcquireGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
-    virtual sal_Bool                    SetPrinterData( ImplJobSetup* pSetupData );
-    virtual sal_Bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
+    virtual sal_Bool                Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual sal_Bool                SetPrinterData( ImplJobSetup* pSetupData );
+    virtual sal_Bool                SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight );
-    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
-    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
+    virtual sal_uIntPtr             GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
+    virtual sal_uIntPtr             GetPaperBinCount( const ImplJobSetup* pSetupData );
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
+    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
 // -----------------
@@ -82,37 +83,37 @@ public:
 class WinSalPrinter : public SalPrinter
 {
 public:
-    WinSalGraphics*         mpGraphics;             // current Printer graphics
-    WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
-    WinSalPrinter*          mpNextPrinter;          // next printing printer
-    HDC                     mhDC;                   // printer hdc
-    sal_uIntPtr                 mnError;                // Error Code
-    sal_uIntPtr                 mnCopies;               // Kopien
-    sal_Bool                    mbCollate;              // Sortierte Kopien
-    sal_Bool                    mbAbort;                // Job Aborted
+    WinSalGraphics*                 mpGraphics;             // current Printer graphics
+    WinSalInfoPrinter*              mpInfoPrinter;          // pointer to the compatible InfoPrinter
+    WinSalPrinter*                  mpNextPrinter;          // next printing printer
+    HDC                             mhDC;                   // printer hdc
+    sal_uIntPtr                     mnError;                // Error Code
+    sal_uIntPtr                     mnCopies;               // Kopien
+    sal_Bool                        mbCollate;              // Sortierte Kopien
+    sal_Bool                        mbAbort;                // Job Aborted
 
-    bool                    mbValid;
+    bool                            mbValid;
 
 public:
     WinSalPrinter();
     virtual ~WinSalPrinter();
 
     using SalPrinter::StartJob;
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual sal_Bool                StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
-    virtual sal_Bool                    EndJob();
-    virtual sal_Bool                    AbortJob();
+    virtual sal_Bool                EndJob();
+    virtual sal_Bool                AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData );
-    virtual sal_Bool                    EndPage();
-    virtual sal_uIntPtr                 GetErrorCode();
+    virtual sal_Bool                EndPage();
+    virtual sal_uIntPtr             GetErrorCode();
 
-    void markInvalid();
-    bool isValid() const { return mbValid; }
+    void                            markInvalid();
+    bool                            isValid() const { return mbValid; }
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALPRN_H

@@ -41,19 +41,20 @@ class X11SalVirtualDevice : public SalVirtualDevice
     int             nDX_;
     int             nDY_;
     sal_uInt16      nDepth_;
-    sal_Bool        bGraphics_;         // is Graphics used
+    bool            bGraphics_;         // is Graphics used
     sal_Bool        bExternPixmap_;
 
 public:
     X11SalVirtualDevice();
     virtual ~X11SalVirtualDevice();
 
-    sal_Bool            Init( SalDisplay *pDisplay,
-                              long nDX, long nDY,
-                              sal_uInt16 nBitCount,
-                              SalX11Screen nXScreen,
-                              Pixmap hDrawable = None,
-                              XRenderPictFormat* pXRenderFormat = NULL );
+    sal_Bool                Init( SalDisplay *pDisplay,
+                                  long nDX, long nDY,
+                                  sal_uInt16 nBitCount,
+                                  SalX11Screen nXScreen,
+                                  Pixmap hDrawable = None,
+                                  XRenderPictFormat* pXRenderFormat = NULL );
+
     void InitGraphics( X11SalVirtualDevice *pVD )
     {
         pGraphics_->Init( pVD );
@@ -70,13 +71,14 @@ public:
     {
         return pDisplay_->IsDisplay();
     }
-    Pixmap          GetDrawable() const { return hDrawable_; }
-    sal_uInt16      GetDepth() const { return nDepth_; }
+    Pixmap                  GetDrawable() const { return hDrawable_; }
+    sal_uInt16              GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
 
     virtual SalGraphics*    GetGraphics();
+    virtual bool            AcquireGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
                             // Set new size, without saving the old contents
