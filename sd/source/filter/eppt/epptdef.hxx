@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
 
-#include <tools/solar.h>
-
 #define EPP_FLAG_CONTAINER 0x0F             // If the version field of a record
                                             // header takes on this value, the
                                             // record header marks the start of

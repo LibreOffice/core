@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_DOCUMENTHELPER_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_DOCUMENTHELPER_HXX
 
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>

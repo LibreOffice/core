@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEWCLIPBOARD_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEWCLIPBOARD_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 class SdPage;
 class SdTransferable;

@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SD_INC_GLOB_HXX
 #define INCLUDED_SD_INC_GLOB_HXX
 
-#include <tools/solar.h>
-
 #include <rsc/rscsfx.hxx>
-
-//------------------------------------------------------------------
+#include <sal/types.h>
 
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + 0
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + 1
@@ -82,8 +79,6 @@ const sal_uInt32 SdUDInventor=sal_uInt32('S')*0x00000001+
 // option-stream identifier
 #define SD_OPTION_MORPHING  "Morph"
 #define SD_OPTION_VECTORIZE "Vectorize"
-
-//------------------------------------------------------------------
 
 #endif // _ INCLUDED_SD_INC_GLOB_HXX
 

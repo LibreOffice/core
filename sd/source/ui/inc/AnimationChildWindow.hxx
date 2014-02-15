@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_ANIMATIONCHILDWINDOW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_ANIMATIONCHILDWINDOW_HXX
 
-#include <tools/solar.h>
 #include <sfx2/childwin.hxx>
+#include <sal/types.h>
 
 class Window;
 class SfxBindings;
