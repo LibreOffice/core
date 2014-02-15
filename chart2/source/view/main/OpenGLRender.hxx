@@ -191,8 +191,6 @@ private:
     int CreateTextureObj(int width, int height);
     int CreateRenderObj(int width, int height);
     int CreateFrameBufferObj();
-    int RenderTexture(GLuint TexID);
-    int RenderTexture2FBO(GLuint TexID);
 #if defined( _WIN32 )
     int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
     bool WGLisExtensionSupported(const char *extension);
