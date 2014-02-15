@@ -128,8 +128,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( nPrevPos )
                 --nPrevPos;
 
-            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( ((SwTxtNode&)rNode),
-                                                              sal_True );
+            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( ((SwTxtNode&)rNode), true );
 
             sal_uInt8 nLevel = 0;
             if ( ! pSI )

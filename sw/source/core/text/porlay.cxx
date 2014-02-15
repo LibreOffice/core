@@ -293,7 +293,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     bool bOnlyPostIts = true;
     SetHanging( false );
 
-    sal_Bool bTmpDummy = ( 0 == GetLen() );
+    bool bTmpDummy = !GetLen();
     SwFlyCntPortion* pFlyCnt = 0;
     if( bTmpDummy )
     {
@@ -316,7 +316,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         {
             SetLen( pPortion->GetLen() );
             if( GetLen() )
-                bTmpDummy = sal_False;
+                bTmpDummy = false;
         }
         else
         {
@@ -464,7 +464,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     }
                 }
                 else if( pPos->GetLen() )
-                    bTmpDummy = sal_False;
+                    bTmpDummy = false;
 
                 if( !HasCntnt() && !pPos->InNumberGrp() )
                 {
@@ -479,8 +479,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         SetCntnt();
                 }
 
-                bTmpDummy = bTmpDummy && !HasCntnt() &&
-                            ( !pPos->Width() || pPos->IsFlyPortion() );
+                bTmpDummy &= !HasCntnt() && ( !pPos->Width() || pPos->IsFlyPortion() );
 
                 pLast = pPos;
                 pPos = pPos->GetPortion();
@@ -582,7 +581,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
             SwTwips nPortionDesc = static_cast<SwTwips>(pTmpPortion->Height()) -
                                    nPortionAsc;
 
-            const sal_Bool bFlyCmp = pTmpPortion->IsFlyCntPortion() ?
+            const bool bFlyCmp = pTmpPortion->IsFlyCntPortion() ?
                                      static_cast<const SwFlyCntPortion*>(pTmpPortion)->IsMax() :
                                      !( pTmpPortion == _pDontConsiderPortion );
 
@@ -672,7 +671,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     InitScriptInfo( rNode, nDefaultDir == UBIDI_RTL );
 }
 
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 {
     if( !g_pBreakIt->GetBreakIter().is() )
         return;
@@ -2056,7 +2055,7 @@ sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray
 }
 
 SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
-                                           sal_Bool bAllowInvalid )
+                                           bool bAllowInvalid )
 {
     SwIterator<SwTxtFrm,SwTxtNode> aIter( rTNd );
     SwScriptInfo* pScriptInfo = 0;
@@ -2181,7 +2180,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
         || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const SfxPoolItem* pItem = 0;
-    if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) &&
+    if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
         ((SvxCharHiddenItem*)pItem)->GetValue() )
     {
         rHiddenMulti.SelectAll();

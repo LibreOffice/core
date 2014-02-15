@@ -91,7 +91,7 @@ public:
     ~SwScriptInfo();
 
     // determines script changes
-    void InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL );
+    void InitScriptInfo( const SwTxtNode& rNode, bool bRTL );
     void InitScriptInfo( const SwTxtNode& rNode );
 
     // set/get position from which data is invalid
@@ -361,7 +361,7 @@ public:
                                long nSpaceAdd = 0 );
 
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
-                                        sal_Bool bAllowInvalid = sal_False );
+                                        bool bAllowInvalid = false );
 
     static sal_uInt8 WhichFont(sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI);
 };
