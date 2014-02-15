@@ -67,6 +67,7 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
+    void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
     void testCellNoteExportODS();
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
+    CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
     CPPUNIT_TEST(testCellNoteExportXLS);
@@ -672,6 +674,30 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
 
     xNewDocSh3->DoClose();
+}
+
+void ScExportTest::testFormulaRefSheetNameODS()
+{
+    ScDocShellRef xDocSh = loadDoc("formula-quote-in-sheet-name.", ODS, true);
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn on auto calc.
+    pDoc->SetString(ScAddress(1,1,0), "='90''s Data'.B2");
+    CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1,1,0)));
+    if (!checkFormula(*pDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Now, save and reload this document.
+    ScDocShellRef xNewDocSh = saveAndReload(xDocSh, ODS);
+    xDocSh->DoClose();
+
+    pDoc = xNewDocSh->GetDocument();
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1,1,0)));
+    if (!checkFormula(*pDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    xNewDocSh->DoClose();
 }
 
 void ScExportTest::testCellValuesExportODS()
