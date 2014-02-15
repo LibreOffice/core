@@ -56,6 +56,7 @@ class CompileFormulaContext
 
 public:
     CompileFormulaContext( ScDocument* pDoc );
+    CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
 
     formula::FormulaGrammar::Grammar getGrammar() const;
     void setGrammar( formula::FormulaGrammar::Grammar eGram );
