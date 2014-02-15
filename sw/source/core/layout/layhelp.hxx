@@ -127,13 +127,13 @@ public:
 
     bool CheckInsertPage();
 
-    // Look for fresh text frames at this (new) page and set them to the right
-    // position, if they are in the fly cache.
+    /// Look for fresh text frames at this (new) page and set them to the right
+    /// position, if they are in the fly cache.
     void CheckFlyCache( SwPageFrm* pPage )
     { if( pImpl && nFlyIdx < pImpl->GetFlyCount() ) _CheckFlyCache( pPage ); }
 
-    // Look for this text frame and set it to the right position,
-    // if it's in the fly cache.
+    /// Look for this text frame and set it to the right position,
+    /// if it's in the fly cache.
     static bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
@@ -174,35 +174,35 @@ private:
 public:
     SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd );
 
-    // Get input or output stream
+    /// Get input or output stream
     SvStream& GetStream() const { return *pStream; }
 
-    // Open a record of type "nType"
+    /// Open a record of type "nType"
     bool OpenRec( sal_uInt8 nType );
 
-    // Close a record of type "nType". This skips any unread data that
-    // remains in the record.
+    /// Close a record of type "nType". This skips any unread data that
+    /// remains in the record.
     bool CloseRec( sal_uInt8 nType );
 
-    // Return the number of bytes contained in the current record that
-    // haven't been read by now.
+    /// Return the number of bytes contained in the current record that
+    /// haven't been read by now.
     sal_uInt32 BytesLeft();
 
-    // Return the current record's type
+    /// Return the current record's type
     sal_uInt8 Peek();
 
-    // Skip the current record
+    /// Skip the current record
     void SkipRec();
 
-    // Open a flag record for reading. The uppermost four bits are flags,
-    // while the lowermost are the flag record's size. Flag records cannot
-    // be nested.
+    /// Open a flag record for reading. The uppermost four bits are flags,
+    /// while the lowermost are the flag record's size. Flag records cannot
+    /// be nested.
     sal_uInt8 OpenFlagRec();
 
-    // Open flag record for writing;
+    /// Open flag record for writing;
     void OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen );
 
-    // Close a flag record. Any bytes left are skipped.
+    /// Close a flag record. Any bytes left are skipped.
     void CloseFlagRec();
 
     bool HasError() const { return bError; }
@@ -215,8 +215,8 @@ public:
 class SwFlyCache : public SwRect // position and size
 {
 public:
-    sal_uLong nOrdNum;      // Id to recognize text frames
-    sal_uInt16 nPageNum;    // page number
+    sal_uLong nOrdNum;      ///< Id to recognize text frames
+    sal_uInt16 nPageNum;    ///< page number
     SwFlyCache( sal_uInt16 nP, sal_uLong nO, long nXL, long nYL, long nWL, long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };

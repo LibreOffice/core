@@ -191,9 +191,9 @@ const Point SwFlyInCntFrm::GetRelPos() const
     return GetCurrRelPos();
 }
 
+/// @see SwRowFrm::RegistFlys()
 void SwFlyInCntFrm::RegistFlys()
 {
-    // vgl. SwRowFrm::RegistFlys()
     SwPageFrm *pPage = FindPageFrm();
     OSL_ENSURE( pPage, "Register Flys without pages?" );
     ::RegistFlys( pPage, this );

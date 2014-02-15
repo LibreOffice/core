@@ -1739,8 +1739,8 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
     pFrm->mbValidPrtArea  = bOldPrt;
 }
 
-// This routine checks whether there are no other FtnBosses
-// between the pFrm's FtnBoss and the pNxt's FtnBoss.
+/// This routine checks whether there are no other FtnBosses
+/// between the pFrm's FtnBoss and the pNxt's FtnBoss.
 static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
     OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );

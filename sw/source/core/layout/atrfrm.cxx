@@ -2453,7 +2453,7 @@ void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
-//Deletes all Frms which are registered in aDepend.
+/// Delete all Frms that are registered in aDepend.
 void SwFrmFmt::DelFrms()
 {
     SwIterator<SwFrm,SwFmt> aIter( *this );
@@ -2648,8 +2648,8 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
         } while( 0 != ( pC = a2ndIter.Next() ));
 }
 
-//Creates the Frms if the format describes a paragraph-bound frame.
-//MA: 1994-02-14, creates the Frms also for frames anchored at page.
+/// Creates the Frms if the format describes a paragraph-bound frame.
+/// MA: 1994-02-14: creates the Frms also for frames anchored at page.
 void SwFlyFrmFmt::MakeFrms()
 {
     // is there a layout?
@@ -2945,9 +2945,9 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     bool bReturn = false;
 
-    /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
-    ///     and there is no background graphic, it "inherites" the background
-    ///     from its anchor.
+    // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
+    //     and there is no background graphic, it "inherites" the background
+    //     from its anchor.
     if ( (GetBackground().GetColor().GetTransparency() != 0) &&
          (GetBackground().GetColor() != COL_TRANSPARENT)
        )

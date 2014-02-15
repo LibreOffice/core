@@ -32,8 +32,8 @@
 
 using namespace ::com::sun::star;
 
-// helper class for correct notification due to the positioning of
-// the anchored drawing object
+/// helper class for correct notification due to the positioning of
+/// the anchored drawing object
 class SwPosNotify
 {
     private:
@@ -120,7 +120,7 @@ Point SwPosNotify::LastObjPos() const
 }
 
 // #i32795#
-// helper class for oscillation control on object positioning
+/// helper class for oscillation control on object positioning
 class SwObjPosOscillationControl
 {
     private:

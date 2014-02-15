@@ -7220,15 +7220,15 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         if( pFrm->IsSctFrm() )
         {
             const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
-            /// OD 20.08.2002 #99657# #GetTransChg#
-            ///     Note: If frame <pFrm> is a section of the index and
-            ///         it its background color is "no fill"/"auto fill" and
-            ///         it has no background graphic and
-            ///         we are not in the page preview and
-            ///         we are not in read-only mode and
-            ///         option "index shadings" is set and
-            ///         the output is not the printer
-            ///         then set <rpCol> to the color of the index shading
+            // OD 20.08.2002 #99657# #GetTransChg#
+            //     Note: If frame <pFrm> is a section of the index and
+            //         it its background color is "no fill"/"auto fill" and
+            //         it has no background graphic and
+            //         we are not in the page preview and
+            //         we are not in read-only mode and
+            //         option "index shadings" is set and
+            //         the output is not the printer
+            //         then set <rpCol> to the color of the index shading
             if( pSection && (   TOX_HEADER_SECTION == pSection->GetType() ||
                                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 (rBack.GetColor() == COL_TRANSPARENT) &&
@@ -7246,15 +7246,15 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
             }
         }
 
-        /// OD 20.08.2002 #99657#
-        ///     determine, if background draw of frame <pFrm> considers transparency
-        ///     --> Status Quo: background transparency have to be
-        ///                     considered for fly frames
+        // OD 20.08.2002 #99657#
+        //     determine, if background draw of frame <pFrm> considers transparency
+        //     --> Status Quo: background transparency have to be
+        //                     considered for fly frames
         const sal_Bool bConsiderBackgroundTransparency = pFrm->IsFlyFrm();
-        /// OD 20.08.2002 #99657#
-        ///     add condition:
-        ///     If <bConsiderBackgroundTransparency> is set - see above -,
-        ///     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
+        // OD 20.08.2002 #99657#
+        //     add condition:
+        //     If <bConsiderBackgroundTransparency> is set - see above -,
+        //     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
         if ( !rBack.GetColor().GetTransparency() ||
              rBack.GetGraphicPos() != GPOS_NONE ||
              rpCol ||
@@ -7285,14 +7285,13 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         }
 
         if ( bLowerMode )
-            /// Do not try to get background brush from parent (anchor/upper)
+            // Do not try to get background brush from parent (anchor/upper)
             return sal_False;
 
-        /// get parent frame - anchor or upper - for next loop
+        // get parent frame - anchor or upper - for next loop
         if ( pFrm->IsFlyFrm() )
-            /// OD 20.08.2002 - use "static_cast" instead of "old C-cast"
+            // OD 20.08.2002 - use "static_cast" instead of "old C-cast"
             pFrm = (static_cast<const SwFlyFrm*>(pFrm))->GetAnchorFrm();
-            ///pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
         else
             pFrm = pFrm->GetUpper();
 

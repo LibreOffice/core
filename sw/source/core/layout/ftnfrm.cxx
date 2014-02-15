@@ -142,8 +142,8 @@ SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     mnType = FRMC_FTNCONT;
 }
 
-// lcl_Undersize(..) klappert einen SwFrm und dessen Inneres ab
-// und liefert die Summe aller TxtFrm-Vergroesserungswuensche
+/// lcl_Undersize(..) klappert einen SwFrm und dessen Inneres ab
+/// und liefert die Summe aller TxtFrm-Vergroesserungswuensche
 static long lcl_Undersize( const SwFrm* pFrm )
 {
     long nRet = 0;

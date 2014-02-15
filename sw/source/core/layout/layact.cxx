@@ -206,10 +206,10 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
             }
         }
 
-        /// OD 19.08.2002 #99657#
-        ///     Fly frame without a lower have to be subtracted from paint region.
-        ///     For checking, if fly frame contains transparent graphic or
-        ///     has surrounded contour, assure that fly frame has a lower
+        // OD 19.08.2002 #99657#
+        //     Fly frame without a lower have to be subtracted from paint region.
+        //     For checking, if fly frame contains transparent graphic or
+        //     has surrounded contour, assure that fly frame has a lower
         if ( pFly->Lower() &&
              pFly->Lower()->IsNoTxtFrm() &&
              ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
@@ -219,9 +219,9 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
             continue;
         }
 
-        /// OD 19.08.2002 #99657#
-        ///     Region of a fly frame with transparent background or a transparent
-        ///     shadow have not to be subtracted from paint region
+        // OD 19.08.2002 #99657#
+        //     Region of a fly frame with transparent background or a transparent
+        //     shadow have not to be subtracted from paint region
         if ( pFly->IsBackgroundTransparent() ||
              pFly->IsShadowTransparent() )
         {
@@ -1045,11 +1045,11 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     {
         if ( bBrowse )
         {
-            /// OD 15.10.2002 #103517# - format complete page
-            /// Thus, loop on all lowers of the page <prPage>, instead of only
-            /// format its first lower.
-            /// NOTE: In online layout (bBrowse == true) a page can contain
-            ///     a header frame and/or a footer frame beside the body frame.
+            // OD 15.10.2002 #103517# - format complete page
+            // Thus, loop on all lowers of the page <prPage>, instead of only
+            // format its first lower.
+            // NOTE: In online layout (bBrowse == true) a page can contain
+            //     a header frame and/or a footer frame beside the body frame.
             prPage->Calc();
             SwFrm* pPageLowerFrm = prPage->Lower();
             while ( pPageLowerFrm )

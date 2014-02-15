@@ -1868,9 +1868,8 @@ static SwTwips lcl_DeadLine( const SwFrm* pFrm )
     return pUp ? (pUp->*fnRect->fnGetPrtBottom)() :
                  (pFrm->Frm().*fnRect->fnGetBottom)();
 }
-// SwSectionFrm::Growable(..) checks whether the SectionFrm is still able to
-// grow, as case may be the environment has to be asked
 
+/// checks whether the SectionFrm is still able to grow, as case may be the environment has to be asked
 sal_Bool SwSectionFrm::Growable() const
 {
     SWRECTFN( this )
