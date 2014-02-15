@@ -1330,10 +1330,6 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, awt::Size aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {
-    glm::mat3 aTrans(rTrans.Line1.Column1, rTrans.Line1.Column2, rTrans.Line1.Column3,
-                    rTrans.Line2.Column1, rTrans.Line2.Column2, rTrans.Line2.Column3,
-                    rTrans.Line3.Column1, rTrans.Line3.Column3, rTrans.Line3.Column3);
-
 #if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;
     OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
@@ -1454,7 +1450,7 @@ int OpenGLRender::RenderTextShape()
         glEnableVertexAttribArray(m_TextVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_TextVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            m_TextVertexID,
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -1466,7 +1462,7 @@ int OpenGLRender::RenderTextShape()
         glEnableVertexAttribArray(m_TextTexCoordID);
         glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
         glVertexAttribPointer(
-            m_TextTexCoordID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            m_TextTexCoordID,
             2,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
