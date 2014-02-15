@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <vcl/outdev.hxx>
@@ -65,15 +64,7 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
-
 using namespace ::com::sun::star;
-
-
-/*************************************************************************
-|*
-|*  SwFrm::SwFrm()
-|*
-|*************************************************************************/
 
 SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
@@ -240,7 +231,6 @@ void SwTxtFrm::CheckDirection( sal_Bool bVert )
               sal_True, bBrowseMode );
 }
 
-/*************************************************************************/
 void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
@@ -352,11 +342,6 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-/*************************************************************************
-|*
-|*    SwFrm::Prepare()
-|*
-|*************************************************************************/
 void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
 {
     /* Do nothing */
@@ -472,11 +457,6 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::ChgSize()
-|*
-|*************************************************************************/
 Size SwFrm::ChgSize( const Size& aNewSize )
 {
     mbFixSize = sal_True;
@@ -727,11 +707,6 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::Remove()
-|*
-|*************************************************************************/
 void SwFrm::Remove()
 {
     OSL_ENSURE( mpUpper, "Remove without upper?" );
@@ -751,11 +726,7 @@ void SwFrm::Remove()
     mpNext  = mpPrev  = 0;
     mpUpper = 0;
 }
-/*************************************************************************
-|*
-|*  SwCntntFrm::Paste()
-|*
-|*************************************************************************/
+
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
     OSL_ENSURE( pParent, "No parent for pasting." );
@@ -858,11 +829,6 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     }
 }
 
-/*************************************************************************
-|*
-|*  SwCntntFrm::Cut()
-|*
-|*************************************************************************/
 void SwCntntFrm::Cut()
 {
     OSL_ENSURE( GetUpper(), "Cut without Upper()." );
@@ -1040,11 +1006,6 @@ void SwCntntFrm::Cut()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::Paste()
-|*
-|*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
     OSL_ENSURE( pParent, "No parent for pasting." );
@@ -1145,11 +1106,6 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::Cut()
-|*
-|*************************************************************************/
 void SwLayoutFrm::Cut()
 {
     if ( GetNext() )
@@ -1207,11 +1163,6 @@ void SwLayoutFrm::Cut()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::Grow()
-|*
-|*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative growth?" );
@@ -1256,11 +1207,6 @@ SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return 0L;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::Shrink()
-|*
-|*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative reduction?" );
@@ -1690,11 +1636,6 @@ void SwFrm::ImplInvalidateLineNum()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::ReinitializeFrmSizeAttrFlags
-|*
-|*************************************************************************/
 void SwFrm::ReinitializeFrmSizeAttrFlags()
 {
     const SwFmtFrmSize &rFmtSize = GetAttrSet()->GetFrmSize();
@@ -1734,11 +1675,6 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
     }
 }
 
-/*************************************************************************
-|*  SwFrm::ValidateThisAndAllLowers()
- *
- * FME 2007-08-30 #i81146# new loop control
-|*************************************************************************/
 void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 {
     // Stage 0: Only validate frames. Do not process any objects.
@@ -1783,11 +1719,6 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwCntntFrm::GrowFrm()
-|*
-|*************************************************************************/
 SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     SWRECTFN( this )
@@ -1893,11 +1824,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-/*************************************************************************
-|*
-|*  SwCntntFrm::ShrinkFrm()
-|*
-|*************************************************************************/
 SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     SWRECTFN( this )
@@ -2012,11 +1938,6 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-/*************************************************************************
-|*
-|*    SwCntntFrm::Modify()
-|*
-|*************************************************************************/
 void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
@@ -2219,7 +2140,6 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
             rInvFlags |= 0x01;
             break;
 
-
         case RES_FRM_SIZE:
             rInvFlags |= 0x01;
             /* no break here */
@@ -2241,11 +2161,6 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::SwLayoutFrm()
-|*
-|*************************************************************************/
 SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
     SwFrm( pFmt, pSib ),
     pLower( 0 )
@@ -2257,9 +2172,6 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
 
 // #i28701#
 TYPEINIT1(SwLayoutFrm,SwFrm);
-/*--------------------------------------------------
- * SwLayoutFrm::InnerHeight()
- * --------------------------------------------------*/
 
 SwTwips SwLayoutFrm::InnerHeight() const
 {
@@ -2299,11 +2211,6 @@ SwTwips SwLayoutFrm::InnerHeight() const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::GrowFrm()
-|*
-|*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -2465,11 +2372,6 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::ShrinkFrm()
-|*
-|*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -2794,7 +2696,6 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         }
         return;
     } // end of { special case }
-
 
     // Invalidate page for content only once.
     bool bInvaPageForCntnt = true;
@@ -3130,11 +3031,6 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::InvalidatePercentLowers()
-|*
-|*************************************************************************/
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
     OSL_ENSURE( pFrm->GetDrawObjs(), "Can't find any Objects" );
@@ -3200,11 +3096,6 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
         } while ( pFrm && IsAnLower( pFrm ) ) ;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::CalcRel()
-|*
-|*************************************************************************/
 long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
 {
     long nRet     = rSz.GetWidth(),
@@ -3290,9 +3181,6 @@ static bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
     return false;
 }
 
-/*************************************************************************
-|*  SwLayoutFrm::FormatWidthCols()
-|*************************************************************************/
 void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                                    const SwTwips nBorder, const SwTwips nMinHeight )
 {
@@ -3650,13 +3538,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     }
 }
 
-
-/*************************************************************************
-|*
-|*  SwRootFrm::InvalidateAllCntnt()
-|*
-|*************************************************************************/
-
 static SwCntntFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
 {
     SwSectionFrm* pSect = pCnt->FindSctFrm();
@@ -3857,6 +3738,5 @@ void SwRootFrm::InvalidateAllObjPos()
         pPageFrm = static_cast<const SwPageFrm*>(pPageFrm->GetNext());
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

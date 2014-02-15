@@ -199,8 +199,7 @@ public:
     void ChkStream() { if( !pStream ) NewStream(); }
 };
 
-/* --------------------------------------------------
- * Through the PROTOCOL_ENTER macro a SwEnterLeave object gets created. If the
+/* Through the PROTOCOL_ENTER macro a SwEnterLeave object gets created. If the
  * current function should be logged a SwImplEnterLeace object gets created.
  * The funny thing here is, that the Ctor of the Impl object is automatically
  * called at the beginning of the function and the Dtor is automatically called
@@ -209,7 +208,7 @@ public:
  * It's possible to derive from this class, for example to be able to document
  * frame resize while leaving a function. To do this, one only needs to add the
  * desired SwImplEnterLeave class in SwEnterLeave::Ctor().
- * --------------------------------------------------*/
+ */
 
 class SwImplEnterLeave
 {
@@ -341,10 +340,7 @@ SwImplProtocol::~SwImplProtocol()
     aVars.clear();
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::CheckLine analyzes a line in the INI file
- * --------------------------------------------------*/
-
+/// analyze a line in the INI file
 void SwImplProtocol::CheckLine( OString& rLine )
 {
     rLine = rLine.toAsciiLowerCase(); // upper/lower case is the same
@@ -444,10 +440,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
     while ( nIndex >= 0 );
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::FileInit() reads the file "dbg_lay.ini"
- * in the current directory and evaluates it.
- * --------------------------------------------------*/
+/// read the file "dbg_lay.ini" in the current directory and evaluate it.
 void SwImplProtocol::FileInit()
 {
     OUString aName("dbg_lay.ini");
@@ -476,10 +469,7 @@ void SwImplProtocol::FileInit()
     aStream.Close();
 }
 
-/* --------------------------------------------------
- * lcl_Start enables indentation by two spaces during ACT_START and disables
- * it again at ACT_END.
- * --------------------------------------------------*/
+/// enable indentation by two spaces during ACT_START and disable it again at ACT_END.
 static void lcl_Start(OStringBuffer& rOut, OStringBuffer& rLay, sal_uLong nAction)
 {
     if( nAction == ACT_START )
@@ -498,11 +488,8 @@ static void lcl_Start(OStringBuffer& rOut, OStringBuffer& rLay, sal_uLong nActio
     }
 }
 
-/* --------------------------------------------------
- * lcl_Flags outputs the ValidSize-, ValidPos- and ValidPrtArea-Flag ("Sz","Ps","PA")
- * of the frame; "+" stands for valid, "-" stands for invalid.
- * --------------------------------------------------*/
-
+/// output the ValidSize-, ValidPos- and ValidPrtArea-Flag ("Sz","Ps","PA")
+/// of the frame; "+" stands for valid, "-" stands for invalid.
 static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
 {
     rOut.append(" Sz");
@@ -513,10 +500,7 @@ static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
     rOut.append(pFrm->GetValidPrtAreaFlag() ? '+' : '-');
 }
 
-/* --------------------------------------------------
- * lcl_FrameType outputs the type of the frame as clear text.
- * --------------------------------------------------*/
-
+/// output the type of the frame as plain text.
 static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
@@ -562,12 +546,12 @@ static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
         rOut.append("Not impl. ");
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::Record(..) is only called if the PROTOCOL macro finds out,
- * that this function should be recorded ( SwProtocol::nRecord ).
+/**
+ * Is only called if the PROTOCOL macro finds out,
+ * that this function should be recorded ( @see{SwProtocol::nRecord} ).
+ *
  * In this method we also check if FrmId and frame type should be logged.
- * --------------------------------------------------*/
-
+ */
 void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     sal_uInt16 nSpecial = 0;
@@ -728,11 +712,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         SwProtocol::SetRecord( 0 );        // => end f logging
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::SectFunc(...) is called from SwImplProtocol::_Record(..)
- * here we handle the output of the SectionFrms.
- * --------------------------------------------------*/
-
+/// Handle the output of the SectionFrms.
 void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
 {
     bool bTmp = false;
@@ -760,12 +740,13 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
     }
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::InsertFrm(..) takes a new FrmId for logging; if pFrmIds==NULL
- * all are going to be logged but as soon as pFrmIds are set through
- * InsertFrm(..) only the added FrmIds are being logged.
- * --------------------------------------------------*/
-
+/**
+ * if pFrmIds==NULL all Frames will be logged. But as soon as pFrmIds are
+ * set, only the added FrmIds are being logged.
+ *
+ * @param nId new FrmId for logging
+ * @return TRUE if newly added, FALSE if FrmId is already under control
+ */
 bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
@@ -776,10 +757,7 @@ bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
     return true;
 }
 
-/* --------------------------------------------------
- * SwImplProtocol::DeleteFrm(..) removes a FrmId from the pFrmIds array, so they
- * won't be logged anymore.
- * --------------------------------------------------*/
+/// Removes a FrmId from the pFrmIds array, so that it won't be logged anymore.
 bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
@@ -789,12 +767,11 @@ bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
     return false;
 }
 
-/* --------------------------------------------------
- * SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should
+/* SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should
  * be logged.
  * The task here is to find the right SwImplEnterLeave object based on the
  * function; everything else is then done in his Ctor/Dtor.
- * --------------------------------------------------*/
+ */
 void SwEnterLeave::Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar )
 {
     switch( nFunc )
@@ -810,12 +787,10 @@ void SwEnterLeave::Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, voi
     pImpl->Enter();
 }
 
-/* --------------------------------------------------
- * SwEnterLeave::Dtor() only calls the Dtor of the SwImplEnterLeave object. It's
+/* SwEnterLeave::Dtor() only calls the Dtor of the SwImplEnterLeave object. It's
  * just no inline because we don't want the SwImplEnterLeave definition inside
  * dbg_lay.hxx.
- * --------------------------------------------------*/
-
+ */
 void SwEnterLeave::Dtor()
 {
     if( pImpl )

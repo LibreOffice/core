@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftnidx.hxx>
@@ -35,16 +34,10 @@
 #include "viewopt.hxx"
 #include <switerator.hxx>
 
-/*************************************************************************
-|*
-|*  lcl_FindFtnPos()        Sucht die Position des Attributes im FtnArray am
-|*      Dokument, dort stehen die Fussnoten gluecklicherweise nach ihrem
-|*      Index sortiert.
-|*
-|*************************************************************************/
-
 #define ENDNOTE 0x80000000
 
+/// Sucht die Position des Attributes im FtnArray am Dokument, dort stehen die Fussnoten
+/// gluecklicherweise nach ihrem Index sortiert.
 static sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
@@ -70,15 +63,9 @@ sal_Bool SwFtnFrm::operator<( const SwTxtFtn* pTxtFtn ) const
            lcl_FindFtnPos( pDoc, pTxtFtn );
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* pBoss, SwPageFrm* pPage)
-|*  setzt pBoss auf den naechsten SwFtnBossFrm, das kann entweder eine Spalte
-|*  oder eine Seite (ohne Spalten) sein. Wenn die Seite dabei gewechselt wird
-|*  enthaelt pPage die neue Seite und die Funktion liefert sal_True.
-|*
-|*************************************************************************/
-
+/// setzt pBoss auf den naechsten SwFtnBossFrm, das kann entweder eine Spalte oder eine
+/// Seite (ohne Spalten) sein. Wenn die Seite dabei gewechselt wird enthaelt pPage die
+/// neue Seite und die Funktion liefert sal_True.
 static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
     sal_Bool bDontLeave )
 {
@@ -120,14 +107,7 @@ static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*  sal_uInt16 lcl_ColumnNum( SwFrm* pBoss )
-|*  liefert die Spaltennummer, wenn pBoss eine Spalte ist,
-|*  sonst eine Null (bei Seiten).
-|*
-|*************************************************************************/
-
+/// liefert die Spaltennummer, wenn pBoss eine Spalte ist, sonst eine Null (bei Seiten).
 static sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 {
     sal_uInt16 nRet = 0;
@@ -156,23 +136,14 @@ static sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFtnContFrm::SwFtnContFrm()
-|*
-|*************************************************************************/
-
-
 SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
     mnType = FRMC_FTNCONT;
 }
 
-
 // lcl_Undersize(..) klappert einen SwFrm und dessen Inneres ab
 // und liefert die Summe aller TxtFrm-Vergroesserungswuensche
-
 static long lcl_Undersize( const SwFrm* pFrm )
 {
     long nRet = 0;
@@ -200,16 +171,8 @@ static long lcl_Undersize( const SwFrm* pFrm )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFtnContFrm::Format()
-|*
-|*  Beschreibung:       "Formatiert" den Frame;
-|*                      Die Fixsize wird hier nicht eingestellt.
-|*
-|*************************************************************************/
-
-
+/// "Formatiert" den Frame.
+/// Die Fixsize wird hier nicht eingestellt.
 void SwFtnContFrm::Format( const SwBorderAttrs * )
 {
     //GesamtBorder ermitteln, es gibt nur einen Abstand nach oben.
@@ -290,11 +253,6 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
         mbValidSize = sal_True;
     }
 }
-/*************************************************************************
-|*
-|*  SwFtnContFrm::GrowFrm(), ShrinkFrm()
-|*
-|*************************************************************************/
 
 SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 {
@@ -433,7 +391,6 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
     return nReal;
 }
 
-
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
 {
     SwPageFrm *pPage = FindPageFrm();
@@ -464,14 +421,6 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
     return 0;
 }
 
-
-/*************************************************************************
-|*
-|*  SwFtnFrm::SwFtnFrm()
-|*
-|*************************************************************************/
-
-
 SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
     SwLayoutFrm( pFmt, pSib ),
     pFollow( 0 ),
@@ -484,13 +433,6 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt
 {
     mnType = FRMC_FTN;
 }
-
-/*************************************************************************
-|*
-|*  SwFtnFrm::InvalidateNxtFtnCnts()
-|*
-|*************************************************************************/
-
 
 void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
 {
@@ -530,7 +472,6 @@ SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return SwLayoutFrm::GrowFrm( nDist, bTst, bInfo );
 }
 
-
 SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     static sal_uInt16 nNum = USHRT_MAX;
@@ -546,13 +487,6 @@ SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return SwLayoutFrm::ShrinkFrm( nDist, bTst, bInfo );
 }
 #endif
-
-/*************************************************************************
-|*
-|*  SwFtnFrm::Cut()
-|*
-|*************************************************************************/
-
 
 void SwFtnFrm::Cut()
 {
@@ -604,13 +538,6 @@ void SwFtnFrm::Cut()
         }
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFtnFrm::Paste()
-|*
-|*************************************************************************/
-
 
 void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
 {
@@ -671,17 +598,8 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
     InvalidateNxtFtnCnts( pPage );
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetNextFtnLeaf()
-|*
-|*  Beschreibung        Liefert das naechste LayoutBlatt in den das
-|*      Frame gemoved werden kann.
-|*      Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
-|*
-|*************************************************************************/
-
-
+/// Liefert das naechste LayoutBlatt in den das Frame gemoved werden kann.
+/// Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
 SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
 {
     SwFtnBossFrm *pOldBoss = FindFtnBossFrm();
@@ -765,16 +683,7 @@ SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
     return pCont;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetPrevFtnLeaf()
-|*
-|*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
-|*      Frame gemoved werden kann.
-|*
-|*************************************************************************/
-
-
+/// Liefert das vorhergehende LayoutBlatt in das der Frame gemoved werden kann.
 SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
 {
     //Der Vorgaenger fuer eine Fussnote ist falls moeglich der Master
@@ -897,13 +806,6 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
     return pRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::IsFtnAllowed()
-|*
-|*************************************************************************/
-
-
 sal_Bool SwFrm::IsFtnAllowed() const
 {
     if ( !IsInDocBody() )
@@ -919,13 +821,6 @@ sal_Bool SwFrm::IsFtnAllowed() const
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::UpdateFtnNums()
-|*
-|*************************************************************************/
-
-
 void SwRootFrm::UpdateFtnNums()
 {
     //Seitenweise Numerierung nur wenn es am Dokument so eingestellt ist.
@@ -940,13 +835,7 @@ void SwRootFrm::UpdateFtnNums()
     }
 }
 
-/*************************************************************************
-|*
-|*  RemoveFtns()        Entfernen aller Fussnoten (nicht etwa die Referenzen)
-|*                      und Entfernen aller Fussnotenseiten.
-|*
-|*************************************************************************/
-
+/// Entfernen aller Fussnoten (nicht etwa die Referenzen) und Entfernen aller Fussnotenseiten.
 void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes )
 {
     do
@@ -1034,12 +923,7 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, sal_Bool bPageOnly, sal_Bool bEndN
     } while ( pPage );
 }
 
-/*************************************************************************
-|*
-|*  SetFtnPageDescs()   Seitenvorlagen der Fussnotenseiten aendern
-|*
-|*************************************************************************/
-
+/// Seitenvorlagen der Fussnotenseiten aendern
 void SwRootFrm::CheckFtnPageDescs( sal_Bool bEndNote )
 {
     SwPageFrm *pPage = (SwPageFrm*)Lower();
@@ -1050,14 +934,6 @@ void SwRootFrm::CheckFtnPageDescs( sal_Bool bEndNote )
     if ( pPage )
         SwFrm::CheckPageDescs( pPage, sal_False );
 }
-
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::MakeFtnCont()
-|*
-|*************************************************************************/
-
 
 SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
 {
@@ -1077,13 +953,6 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
     pNew->Paste( this, pLay->GetNext() );
     return pNew;
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::FindFtnCont()
-|*
-|*************************************************************************/
-
 
 SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
 {
@@ -1106,12 +975,6 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
 
     return (SwFtnContFrm*)pFrm;
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::FindNearestFtnCont()  Sucht den naechst greifbaren Fussnotencontainer.
-|*
-|*************************************************************************/
 
 SwFtnContFrm *SwFtnBossFrm::FindNearestFtnCont( sal_Bool bDontLeave )
 {
@@ -1136,16 +999,6 @@ SwFtnContFrm *SwFtnBossFrm::FindNearestFtnCont( sal_Bool bDontLeave )
     }
     return pCont;
 }
-
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::FindFirstFtn()
-|*
-|*  Beschreibung        Erste Fussnote des Fussnotenbosses suchen.
-|*
-|*************************************************************************/
-
 
 SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
 {
@@ -1225,15 +1078,7 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
     return pRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::FindFirstFtn()
-|*
-|*  Beschreibunt        Erste Fussnote zum Cnt suchen.
-|*
-|*************************************************************************/
-
-
+/// Erste Fussnote zum Cnt suchen.
 const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
 {
     const SwFtnFrm *pRet = ((SwFtnBossFrm*)this)->FindFirstFtn();
@@ -1266,13 +1111,6 @@ const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
     }
     return pRet;
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::ResetFtn()
-|*
-|*************************************************************************/
-
 
 void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
 {
@@ -1313,13 +1151,6 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
         pFrm = aIter.Next();
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::InsertFtn()
-|*
-|*************************************************************************/
-
 
 void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
 {
@@ -1581,13 +1412,6 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
     pNew->Paste( pParent, pSibling );
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::AppendFtn()
-|*
-|*************************************************************************/
-
-
 void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
 {
     //Wenn es die Fussnote schon gibt tun wir nix.
@@ -1808,12 +1632,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
     else
         delete pNew;
 }
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::FindFtn()
-|*
-|*************************************************************************/
-
 
 SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
 {
@@ -1854,12 +1672,6 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
 
     return 0;
 }
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::RemoveFtn()
-|*
-|*************************************************************************/
-
 
 void SwFtnBossFrm::RemoveFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr,
                               sal_Bool bPrep )
@@ -1885,13 +1697,6 @@ void SwFtnBossFrm::RemoveFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr,
     FindPageFrm()->UpdateFtnNum();
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::ChangeFtnRef()
-|*
-|*************************************************************************/
-
-
 void SwFtnBossFrm::ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *pAttr,
                                  SwCntntFrm *pNew )
 {
@@ -1902,13 +1707,6 @@ void SwFtnBossFrm::ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *pAttr,
         pFtn = pFtn->GetFollow();
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::CollectFtns()
-|*
-|*************************************************************************/
-
 
 /// OD 03.04.2003 #108446# - add parameter <_bCollectOnlyPreviousFtns> in
 /// order to control, if only footnotes, which are positioned before the
@@ -1967,12 +1765,6 @@ void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
     _CollectFtns( _pRef, pFtn, _rFtnArr, _bCollectOnlyPreviousFtns, pRefBossFrm );
 }
 
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::_CollectFtns()
-|*
-|*************************************************************************/
 inline void FtnInArr( SwFtnFrms& rFtnArr, SwFtnFrm* pFtn )
 {
     if ( rFtnArr.end() == std::find( rFtnArr.begin(), rFtnArr.end(), pFtn ) )
@@ -2126,13 +1918,6 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
             break;
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::_MoveFtns()
-|*
-|*************************************************************************/
-
 
 void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
 {
@@ -2335,13 +2120,6 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::MoveFtns()
-|*
-|*************************************************************************/
-
-
 void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                              SwTxtFtn *pAttr )
 {
@@ -2379,13 +2157,6 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
         }
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::RearrangeFtns()
-|*
-|*************************************************************************/
-
 
 void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                                   const SwTxtFtn *pAttr )
@@ -2611,12 +2382,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::UpdateFtnNum()
-|*
-|*************************************************************************/
-
 void SwPageFrm::UpdateFtnNum()
 {
     //Seitenweise Numerierung nur wenn es am Dokument so eingestellt ist.
@@ -2675,12 +2440,6 @@ void SwPageFrm::UpdateFtnNum()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::SetFtnDeadLine()
-|*
-|*************************************************************************/
-
 void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
 {
     SwFrm *pBody = FindBodyCont();
@@ -2709,11 +2468,6 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
         nMaxFtnHeight = nMax;
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::GetVarSpace()
-|*
-|*************************************************************************/
 SwTwips SwFtnBossFrm::GetVarSpace() const
 {
     //Fuer Seiten soll ein Wert von 20% der Seitenhoehe nicht unterschritten
@@ -2786,20 +2540,15 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFtnBossFrm::NeighbourhoodAdjustment(SwFrm*)
-|*
-|*  gibt Auskunft, ob die Groessenveraenderung von pFrm von AdjustNeighbourhood(...)
+/** gibt Auskunft, ob die Groessenveraenderung von pFrm von AdjustNeighbourhood(...)
 |*  oder von Grow/Shrink(..) verarbeitet werden sollte.
+|*
 |*  Bei einem PageFrm oder in Spalten direkt unterhalb der Seite muss AdjustNei..
 |*  gerufen werden, in Rahmenspalten Grow/Shrink.
 |*  Spannend sind die spaltigen Bereiche: Wenn es in der Spalte einen Fussnotencontainer
 |*  gibt und die Fussnoten nicht vom Bereich eingesammelt werden, ist ein Adjust..,
 |*  ansonsten ein Grow/Shrink notwendig.
-|*
-|*************************************************************************/
-
+|*/
 sal_uInt8 SwFtnBossFrm::_NeighbourhoodAdjustment( const SwFrm* ) const
 {
     sal_uInt8 nRet = NA_ONLY_ADJUST;
@@ -2829,11 +2578,6 @@ sal_uInt8 SwFtnBossFrm::_NeighbourhoodAdjustment( const SwFrm* ) const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::SetColMaxFtnHeight()
-|*
-|*************************************************************************/
 void SwPageFrm::SetColMaxFtnHeight()
 {
     SwLayoutFrm *pBody = FindBodyCont();
@@ -2847,13 +2591,6 @@ void SwPageFrm::SetColMaxFtnHeight()
         } while ( pCol );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::MoveLowerFtns
-|*
-|*************************************************************************/
-
 
 sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                                  SwFtnBossFrm *pNewBoss, const sal_Bool bFtnNums )
@@ -2942,13 +2679,6 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     }
     return bMoved;
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::MoveFtnCntFwd()
-|*
-|*************************************************************************/
-
 
 sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
 {
@@ -3082,13 +2812,6 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
     return bSamePage;
 }
 
-/*************************************************************************
-|*
-|*  class SwSaveFtnHeight
-|*
-|*************************************************************************/
-
-
 SwSaveFtnHeight::SwSaveFtnHeight( SwFtnBossFrm *pBs, const SwTwips nDeadLine ) :
     pBoss( pBs ),
     nOldHeight( pBs->GetMaxFtnHeight() )
@@ -3097,8 +2820,6 @@ SwSaveFtnHeight::SwSaveFtnHeight( SwFtnBossFrm *pBs, const SwTwips nDeadLine ) :
     nNewHeight = pBoss->GetMaxFtnHeight();
 }
 
-
-
 SwSaveFtnHeight::~SwSaveFtnHeight()
 {
     //Wenn zwischendurch jemand an der DeadLine gedreht hat, so lassen wir
@@ -3106,7 +2827,6 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
     if ( nNewHeight == pBoss->GetMaxFtnHeight() )
         pBoss->nMaxFtnHeight = nOldHeight;
 }
-
 
 #ifdef DBG_UTIL
 //JP 15.10.2001: in a non pro version test if the attribute has the same
@@ -3134,7 +2854,6 @@ SwCntntFrm* SwFtnFrm::GetRef()
             "sw", "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
-
 #endif
 
 const SwCntntFrm* SwFtnFrm::GetRefFromAttr()  const

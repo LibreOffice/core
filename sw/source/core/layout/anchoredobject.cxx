@@ -30,14 +30,11 @@
 // --> #i35911#
 #include <layouter.hxx>
 
-
 using namespace ::com::sun::star;
 
-
-// ============================================================================
 // --> #i28701# -
 // implementation of helper class <SwObjPositioningInProgress>
-// ============================================================================
+
 SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     mpAnchoredObj( 0L ),
     // --> #i52904#
@@ -67,7 +64,7 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
     }
 }
 
-// ============================================================================
+// SwAnchoredObject
 
 TYPEINIT0(SwAnchoredObject);
 
@@ -112,9 +109,6 @@ SwAnchoredObject::~SwAnchoredObject()
     ClearVertPosOrientFrm();
 }
 
-// =============================================================================
-// accessors for member <mpDrawObj>
-// =============================================================================
 void SwAnchoredObject::SetDrawObj( SdrObject& _rDrawObj )
 {
     mpDrawObj = &_rDrawObj;
@@ -130,9 +124,6 @@ SdrObject* SwAnchoredObject::DrawObj()
     return mpDrawObj;
 }
 
-// =============================================================================
-// accessors for member <mpAnchorFrm>
-// =============================================================================
 const SwFrm* SwAnchoredObject::GetAnchorFrm() const
 {
     return mpAnchorFrm;
@@ -174,9 +165,6 @@ SwFrm* SwAnchoredObject::GetAnchorFrmContainingAnchPos()
     return pAnchorFrmContainingAnchPos;
 }
 
-// =============================================================================
-// #i28701# accessors for member <mpPageFrm>
-// =============================================================================
 SwPageFrm* SwAnchoredObject::GetPageFrm()
 {
     return mpPageFrm;
@@ -205,9 +193,6 @@ void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
     }
 }
 
-// =============================================================================
-// accessors for member <maLastCharRect>
-// =============================================================================
 const SwRect& SwAnchoredObject::GetLastCharRect() const
 {
     return maLastCharRect;
@@ -232,9 +217,7 @@ void SwAnchoredObject::ResetLastCharRectHeight()
 {
     maLastCharRect.Height( 0 );
 }
-// =============================================================================
-// accessors for member <mpVertPosOrientFrm>
-// =============================================================================
+
 void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm )
 {
     ClearVertPosOrientFrm();
@@ -248,9 +231,6 @@ void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFr
     RegisterAtCorrectPage();
 }
 
-// =============================================================================
-// accessors for member <mnLastTopOfLine>
-// =============================================================================
 SwTwips SwAnchoredObject::GetLastTopOfLine() const
 {
     return mnLastTopOfLine;
@@ -554,9 +534,6 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
     return bRet;
 }
 
-// =============================================================================
-// --> #i28701# - accessors to booleans for layout process
-// =============================================================================
 bool SwAnchoredObject::ConsiderForTextWrap() const
 {
     if ( ConsiderObjWrapInfluenceOnObjPos() )

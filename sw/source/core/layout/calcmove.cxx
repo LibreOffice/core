@@ -42,19 +42,9 @@
 // #i36347#
 #include <flyfrms.hxx>
 
-//------------------------------------------------------------------------
-//              Move methods
-//------------------------------------------------------------------------
+// Move methods
 
-/*************************************************************************
-|*
-|*  SwCntntFrm::ShouldBwdMoved()
-|*
-|*  Description        Return value tells whether the Frm should be moved.
-|*
-|*************************************************************************/
-
-
+/// Return value tells whether the Frm should be moved.
 sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool & )
 {
     if ( (SwFlowFrm::IsMoveBwdJump() || !IsPrevObjMove()))
@@ -213,27 +203,8 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
     return  sal_False;
 }
 
-//------------------------------------------------------------------------
-//              Calc methods
-//------------------------------------------------------------------------
+// Calc methods
 
-/*************************************************************************
-|*
-|*  SwFrm::Prepare()
-|*
-|*  Description:        Prepares the Frm for "formatting" (MakeAll()).
-|*      This method serves to save stack space: To calculate the position
-|*      of the Frm we have to make sure that the positions of Upper and Prev
-|*      respectively are valid. This may require a recursive call (a loop
-|*      would be quite expensive, as it's not required very often).
-|*      Every call of MakeAll requires around 500 bytes on the stack - you
-|*      easily see where this leads. _Prepare requires only a little bit of
-|*      stack space, so the recursive call should not be a problem here.
-|*      Another advantage is that one nice day, _Prepare and with it
-|*      the formatting of predecessors could be avoided. Then it could
-|*      probably be possible to jump "quickly" to the document's end.
-|*
-|*************************************************************************/
 // Two little friendships form a secret society
 inline void PrepareLock( SwFlowFrm *pTab )
 {
@@ -256,6 +227,23 @@ static bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
            !( rFrm.IsTabFrm() && rFrm.GetUpper()->IsInTab() );
 }
 
+/** Prepares the Frame for "formatting" (MakeAll()).
+ *
+ * This method serves to save stack space: To calculate the position of the Frm
+ * we have to make sure that the positions of Upper and Prev respectively are
+ * valid. This may require a recursive call (a loop would be quite expensive,
+ * as it's not required very often).
+ *
+ * Every call of MakeAll requires around 500 bytes on the stack - you easily
+ * see where this leads to. This method requires only a little bit of stack
+ * space, so the recursive call should not be a problem here.
+ *
+ * Another advantage is that one nice day, this method and with it the
+ * formatting of predecessors could be avoided. Then it could probably be
+ * possible to jump "quickly" to the document's end.
+ *
+ * @see MakeAll()
+ */
 void SwFrm::PrepareMake()
 {
     StackHack aHack;
@@ -382,8 +370,6 @@ void SwFrm::OptPrepareMake()
     }
 }
 
-
-
 void SwFrm::PrepareCrsr()
 {
     StackHack aHack;
@@ -460,12 +446,6 @@ void SwFrm::PrepareCrsr()
     }
     Calc();
 }
-
-/*************************************************************************
-|*
-|*  SwFrm::MakePos()
-|*
-|*************************************************************************/
 
 // Here we return GetPrev(); however we will ignore empty SectionFrms
 static SwFrm* lcl_Prev( SwFrm* pFrm, bool bSectPrv = true )
@@ -631,11 +611,6 @@ void SwFrm::MakePos()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::MakeAll()
-|*
-|*************************************************************************/
 // #i28701# - new type <SwSortedObjs>
 static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
 {
@@ -810,13 +785,6 @@ void SwPageFrm::MakeAll()
         "Upper (Root) must be wide enough to contain the widest page");
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::MakeAll()
-|*
-|*************************************************************************/
-
-
 void SwLayoutFrm::MakeAll()
 {
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
@@ -894,11 +862,6 @@ void SwLayoutFrm::MakeAll()
     delete pAccess;
 }
 
-/*************************************************************************
-|*
-|*  SwCntntFrm::MakePrtArea()
-|*
-|*************************************************************************/
 bool SwTxtNode::IsCollapse() const
 {
     if (GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA )
@@ -1063,12 +1026,6 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
     }
     return bSizeChgd;
 }
-
-/*************************************************************************
-|*
-|*  SwCntntFrm::MakeAll()
-|*
-|*************************************************************************/
 
 #define STOP_FLY_FORMAT 10
 // - loop prevention
@@ -1704,7 +1661,6 @@ void SwCntntFrm::MakeAll()
 
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
 
-
     // NEW: Looping Louie (Light). Should not be applied in balanced sections.
     // Should only be applied if there is no better solution!
     LOOPING_LOUIE_LIGHT( bMovedFwd && bMovedBwd && !IsInBalancedSection() &&
@@ -1735,15 +1691,6 @@ void SwCntntFrm::MakeAll()
     delete pNotify;
     SetFlyLock( sal_False );
 }
-
-/*************************************************************************
-|*
-|*  SwCntntFrm::_WouldFit()
-|*
-|*************************************************************************/
-
-
-
 
 void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 {
@@ -1794,7 +1741,6 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 
 // This routine checks whether there are no other FtnBosses
 // between the pFrm's FtnBoss and the pNxt's FtnBoss.
-
 static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
     OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
@@ -1810,7 +1756,6 @@ static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     return ( pFrm && pNxt && pFrm->GetNext() == pNxt );
 }
 
-//
 sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                             SwLayoutFrm *pNewUpper,
                             sal_Bool bTstMove,

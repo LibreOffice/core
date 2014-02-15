@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
 #include "txtfrm.hxx"
@@ -45,13 +44,6 @@
 
 using namespace ::com::sun::star;
 
-
-/*************************************************************************
-|*
-|*  SwFlyAtCntFrm::SwFlyAtCntFrm()
-|*
-|*************************************************************************/
-
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
@@ -61,11 +53,6 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 // #i28701#
 TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
-/*************************************************************************
-|*
-|*  SwFlyAtCntFrm::Modify()
-|*
-|*************************************************************************/
 
 void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
@@ -179,25 +166,6 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         SwFlyFrm::Modify( pOld, pNew );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyAtCntFrm::MakeAll()
-|*
-|*  Description         With a paragraph-anchored fly it's absolutely possible that
-|*      the anchor reacts to changes of the fly. To this reaction the fly must
-|*      certaily react too. Sadly this can lead to oscillations; for example the
-|*      fly wants to go down therefore the content can go up - this leads to a
-|*      smaller TxtFrm thus the fly needs to go up again whereby the text will
-|*      get pushed down...
-|*      To avoid such oscillations, a small position stack is built. If the fly
-|*      reaches a position which it already had once, the action is stopped.
-|*      To not run into problems, the stack is designed to hold five positions.
-|*      If the stack flows over, the action is stopped too.
-|*      Cancellation leads to the situation that the fly has a bad position in
-|*      the end. In case of cancellation, the frame is set to automatic top
-|*      alignment to not trigger a 'big oscillation' when calling from outside
-|*      again.
-|*************************************************************************/
 //We need some helper classes to monitor the oscillation and a few functions
 //to not get lost.
 
@@ -221,6 +189,7 @@ public:
     bool ChkOsz();
     static bool IsInProgress( const SwFlyFrm *pFly );
 };
+
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
 const SwFlyFrm *SwOszControl::pStk3 = 0;
@@ -314,6 +283,22 @@ bool SwOszControl::ChkOsz()
     return bOscillationDetected;
 }
 
+/**
+|*      With a paragraph-anchored fly it's absolutely possible that
+|*      the anchor reacts to changes of the fly. To this reaction the fly must
+|*      certaily react too. Sadly this can lead to oscillations; for example the
+|*      fly wants to go down therefore the content can go up - this leads to a
+|*      smaller TxtFrm thus the fly needs to go up again whereby the text will
+|*      get pushed down...
+|*      To avoid such oscillations, a small position stack is built. If the fly
+|*      reaches a position which it already had once, the action is stopped.
+|*      To not run into problems, the stack is designed to hold five positions.
+|*      If the stack flows over, the action is stopped too.
+|*      Cancellation leads to the situation that the fly has a bad position in
+|*      the end. In case of cancellation, the frame is set to automatic top
+|*      alignment to not trigger a 'big oscillation' when calling from outside
+|*      again.
+|*/
 void SwFlyAtCntFrm::MakeAll()
 {
     if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
@@ -536,16 +521,6 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
     return SwFlyFreeFrm::IsFormatPossible() &&
            !SwOszControl::IsInProgress( this );
 }
-
-/*************************************************************************
-|*
-|*  FindAnchor() und Hilfsfunktionen.
-|*
-|*  Description:        Searches an anchor for paragraph bound objects
-|*      starting from pOldAnch. This is used to show anchors as well as changing
-|*      anchors when dragging paragraph bound objects.
-|*
-|*************************************************************************/
 
 class SwDistance
 {
@@ -1039,6 +1014,11 @@ static void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 
 }
 
+/** Searches an anchor for paragraph bound objects starting from pOldAnch.
+ *
+ *  This is used to show anchors as well as changing anchors
+ *  when dragging paragraph bound objects.
+ */
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                               const sal_Bool bBodyOnly )
 {
@@ -1189,12 +1169,6 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     else
         return nDownLst < nUpLst ? pDownLst : pUpLst;
 }
-
-/*************************************************************************
-|*
-|*  SwFlyAtCntFrm::SetAbsPos()
-|*
-|*************************************************************************/
 
 void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {

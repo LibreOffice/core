@@ -34,16 +34,7 @@
 #include <poolfmt.hxx>
 #include <switerator.hxx>
 
-
 using namespace ::com::sun::star;
-
-/*************************************************************************
-|*
-|*  SwPageDesc::SwPageDesc()
-|*
-|*************************************************************************/
-
-
 
 SwPageDesc::SwPageDesc( const OUString& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     SwModify( 0 ),
@@ -107,17 +98,8 @@ SwPageDesc::~SwPageDesc()
 {
 }
 
-/*************************************************************************
-|*
-|*  SwPageDesc::Mirror()
-|*
-|*  Description         Only the margin is mirrored.
-|*      Attributes like borders and so on are copied 1:1.
-|*
-|*************************************************************************/
-
-
-
+/// Only the margin is mirrored.
+/// Attributes like borders and so on are copied 1:1.
 void SwPageDesc::Mirror()
 {
     //Only the margins are mirrored, all other values are just copied.
@@ -149,14 +131,6 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
     rFmt.SetFmtAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
 }
 
-/*************************************************************************
-|*
-|*                SwPageDesc::GetInfo()
-|*
-|*    Description       retrieves information
-|*
-*************************************************************************/
-
 // gets information from Modify
 bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
@@ -169,15 +143,7 @@ bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
     return m_FirstLeft.GetInfo( rInfo );
 }
 
-/*************************************************************************
-|*
-|*                SwPageDesc::SetRegisterFmtColl()
-|*
-|*    Description       sets the style for the grid alignment
-|*
-*************************************************************************/
-
-
+/// set the style for the grid alignment
 void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 {
     if( pFmt != GetRegisterFmtColl() )
@@ -191,30 +157,14 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
     }
 }
 
-/*************************************************************************
-|*
-|*                SwPageDesc::GetRegisterFmtColl()
-|*
-|*    Description       retrieves the style for the grid alignment
-|*
-*************************************************************************/
-
-
+/// retrieve the style for the grid alignment
 const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 {
     const SwModify* pReg = aDepend.GetRegisteredIn();
     return (SwTxtFmtColl*)pReg;
 }
 
-/*************************************************************************
-|*
-|*                SwPageDesc::RegisterChange()
-|*
-|*    Description       notifies all affected page frames
-|*
-*************************************************************************/
-
-
+/// notifie all affected page frames
 void SwPageDesc::RegisterChange()
 {
     // #117072# - During destruction of the document <SwDoc>
@@ -267,15 +217,7 @@ void SwPageDesc::RegisterChange()
     }
 }
 
-/*************************************************************************
-|*
-|*                SwPageDesc::Modify()
-|*
-|*    special handling if the style of the grid alignment changes
-|*
-*************************************************************************/
-
-
+/// special handling if the style of the grid alignment changes
 void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -412,15 +354,6 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
     return 0;
 }
 
-
-/*************************************************************************
-|*
-|*  SwPageFtnInfo::SwPageFtnInfo()
-|*
-|*************************************************************************/
-
-
-
 SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
     nLineWidth(10),
@@ -434,8 +367,6 @@ SwPageFtnInfo::SwPageFtnInfo() :
            FTNADJ_LEFT;
 }
 
-
-
 SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
     nMaxHeight( rCpy.GetHeight() ),
     nLineWidth(rCpy.nLineWidth),
@@ -447,14 +378,6 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
     nBottomDist( rCpy.GetBottomDist() )
 {
 }
-
-/*************************************************************************
-|*
-|*  SwPageFtnInfo::operator=
-|*
-|*************************************************************************/
-
-
 
 SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
@@ -468,13 +391,6 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
     nBottomDist = rCpy.GetBottomDist();
     return *this;
 }
-/*************************************************************************
-|*
-|*  SwPageFtnInfo::operator==
-|*
-|*************************************************************************/
-
-
 
 sal_Bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {

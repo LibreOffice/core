@@ -29,10 +29,6 @@
 
 #if OSL_DEBUG_LEVEL > 1
 
-/*************************************************************************
- *                          class DbgRect
- *************************************************************************/
-
 class DbgRect
 {
         OutputDevice *pOut;
@@ -120,11 +116,6 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
         _pVirDev->SetPixelOffset( Size( -aPixelOffset.X(), -aPixelOffset.Y() ) );
 }
 
-
-/*************************************************************************
- *                          SwVOut::DoesFit()
- *************************************************************************/
-
 // rSize must be pixel coordinates!
 sal_Bool SwLayVout::DoesFit( const Size &rNew )
 {
@@ -159,9 +150,6 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
     return sal_True;
 }
 
-/*************************************************************************
- *                         SwLayVout::Enter
- *************************************************************************/
 /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
 ///     in order to return value of class member variable <aRect>, if virtual
 ///     output is used.
@@ -227,10 +215,6 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
     }
 }
 
-/*************************************************************************
- *                         SwLayVout::Flush()
- *************************************************************************/
-
 void SwLayVout::_Flush()
 {
     OSL_ENSURE( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
@@ -239,6 +223,5 @@ void SwLayVout::_Flush()
     SetOutDev( pSh, pOut );
     pOut = NULL;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -81,15 +81,10 @@
 #include <PostItMgr.hxx>
 #include <vector>
 
-/*************************************************************************
-|*
-|*  SwLayAction static stuff
-|*
-|*************************************************************************/
+// SwLayAction static stuff
 
 #define IS_FLYS (pPage->GetSortedObjs())
 #define IS_INVAFLY (pPage->IsInvalidFly())
-
 
 // Save some typing work to avoid accessing destroyed pages.
 #if OSL_DEBUG_LEVEL > 1
@@ -142,11 +137,6 @@ void SwLayAction::CheckWaitCrsr()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::CheckIdleEnd()
-|*
-|*************************************************************************/
 // Time over already?
 inline void SwLayAction::CheckIdleEnd()
 {
@@ -154,11 +144,6 @@ inline void SwLayAction::CheckIdleEnd()
         bInput = GetInputType() && Application::AnyInput( GetInputType() );
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::SetStatBar()
-|*
-|*************************************************************************/
 void SwLayAction::SetStatBar( sal_Bool bNew )
 {
     if ( bNew )
@@ -170,16 +155,6 @@ void SwLayAction::SetStatBar( sal_Bool bNew )
         nEndPage = USHRT_MAX;
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::PaintCntnt()
-|*
-|*  Description        Depending of the type, the Cntnt is output
-|*      according to it's changes, or the area to be outputted is
-|*      registered with the region, respectively.
-|*      PaintCntnt: fills the region
-|*
-|*************************************************************************/
 sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
                                     const SwPageFrm *pPage )
 {
@@ -276,6 +251,10 @@ inline sal_Bool SwLayAction::_PaintCntnt( const SwCntntFrm *pCntnt,
     return sal_False;
 }
 
+/**
+ * Depending of the type, the Cntnt is output according to it's changes, or the area
+ * to be outputted is registered with the region, respectively.
+ */
 void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
                               const SwPageFrm *pPage,
                               const SwRect &rOldRect,
@@ -327,11 +306,6 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::SwLayAction()
-|*
-|*************************************************************************/
 SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI ),
@@ -360,11 +334,6 @@ SwLayAction::~SwLayAction()
     pImp->pLayAct = 0;      // unregister
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::Reset()
-|*
-|*************************************************************************/
 void SwLayAction::Reset()
 {
     pOptTab = 0;
@@ -375,12 +344,6 @@ void SwLayAction::Reset()
     bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
     bUpdateExpFlds = bBrowseActionStop = sal_False;
 }
-
-/*************************************************************************
-|*
-|*  SwLayAction::RemoveEmptyBrowserPages()
-|*
-|*************************************************************************/
 
 sal_Bool SwLayAction::RemoveEmptyBrowserPages()
 {
@@ -409,12 +372,6 @@ sal_Bool SwLayAction::RemoveEmptyBrowserPages()
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*  SwLayAction::Action()
-|*
-|*************************************************************************/
 void SwLayAction::Action()
 {
     bActionInProgress = sal_True;
@@ -879,11 +836,7 @@ void SwLayAction::InternalAction()
     if( bNoLoop )
         pLayoutAccess->GetLayouter()->EndLoopControl();
 }
-/*************************************************************************
-|*
-|*  SwLayAction::TurboAction(), _TurboAction()
-|*
-|*************************************************************************/
+
 sal_Bool SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
 {
 
@@ -957,19 +910,7 @@ sal_Bool SwLayAction::TurboAction()
         bRet = sal_False;
     return bRet;
 }
-/*************************************************************************
-|*
-|*  SwLayAction::IsShortCut()
-|*
-|*  Description:       Returns True if the page lies directly below or
-|*      right of the visible area.
-|*      It's possible for things to change in such a way that the processing
-|*      (of the caller!) has to continue with the predecessor of the passed
-|*      page. The parameter might therefore get modified!
-|*      For BrowseMode, you may even activate the ShortCut if the invalid
-|*      content of the page lies below the visible area.
-|*
-|*************************************************************************/
+
 static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
 {
     if (
@@ -1084,6 +1025,14 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
     return 0;
 }
 
+/* Returns True if the page lies directly below or right of the visible area.
+ *
+ * It's possible for things to change in such a way that the processing
+ * (of the caller!) has to continue with the predecessor of the passed page.
+ * The parameter might therefore get modified!
+ * For BrowseMode, you may even activate the ShortCut if the invalid content
+ * of the page lies below the visible area.
+ */
 sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     sal_Bool bRet = sal_False;
@@ -1114,7 +1063,6 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
         if ( IsAgain() )
             return sal_False;
     }
-
 
     const SwRect &rVis = pImp->GetShell()->VisArea();
     if ( (prPage->Frm().Top() >= rVis.Bottom()) ||
@@ -1302,11 +1250,6 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::FormatLayout(), FormatLayoutFly, FormatLayoutTab()
-|*
-|*************************************************************************/
 // OD 15.11.2002 #105155# - introduce support for vertical layout
 sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 {
@@ -1723,11 +1666,6 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
     return bChanged;
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::FormatCntnt()
-|*
-|*************************************************************************/
 sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
@@ -1908,14 +1846,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
     // OD 14.04.2003 #106346# - consider interrupt formatting.
     return !IsInterrupt() || mbFormatCntntOnInterrupt;
 }
-/*************************************************************************
-|*
-|*  SwLayAction::_FormatCntnt()
-|*
-|*  Description         Returns sal_True if the paragraph has been processed,
-|*                      sal_False if there wasn't anything to be processed.
-|*
-|*************************************************************************/
+
 void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                                 const SwPageFrm  *pPage )
 {
@@ -1946,15 +1877,8 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::_FormatFlyCntnt()
-|*
-|*  Description:
-|*      - Returns sal_True if all Cntnts of the Fly have been processed completely.
-|*        Returns sal_False if processing has been interrupted prematurely.
-|*
-|*************************************************************************/
+/// Returns sal_True if all Cntnts of the Fly have been processed completely.
+/// Returns sal_False if processing has been interrupted prematurely.
 sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
 {
     const SwCntntFrm *pCntnt = pFly->ContainsCntnt();
@@ -2015,11 +1939,6 @@ sal_Bool SwLayAction::IsStopPrt() const
     return bResult;
 }
 
-/*************************************************************************
-|*
-|*  SwLayAction::FormatSpelling(), _FormatSpelling()
-|*
-|*************************************************************************/
 sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 {
     OSL_ENSURE( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
@@ -2230,11 +2149,6 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
 }
 
 #if HAVE_FEATURE_DESKTOP && defined DBG_UTIL
-/*************************************************************************
-|*
-|*  void SwLayIdle::SwLayIdle()
-|*
-|*************************************************************************/
 void SwLayIdle::ShowIdle( ColorData eColorData )
 {
     if ( !m_bIndicator )
@@ -2259,11 +2173,6 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #define SHOW_IDLE( ColorData )
 #endif // DBG_UTIL
 
-/*************************************************************************
-|*
-|*  void SwLayIdle::SwLayIdle()
-|*
-|*************************************************************************/
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )

@@ -60,14 +60,7 @@
 
 using namespace ::com::sun::star;
 
-
 TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::SwFlyFrm()
-|*
-|*************************************************************************/
 
 SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFmt, pSib ),
@@ -236,12 +229,6 @@ void SwFlyFrm::InsertCnt()
     }
  }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::~SwFlyFrm()
-|*
-|*************************************************************************/
-
 SwFlyFrm::~SwFlyFrm()
 {
     // Accessible objects for fly frames will be destroyed in this destructor.
@@ -338,12 +325,6 @@ void SwFlyFrm::DeleteCnt()
     InvalidatePage();
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::InitDrawObj()
-|*
-|*************************************************************************/
-
 sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
 {
     sal_uInt32 nOrdNum( 0L );
@@ -405,8 +386,6 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
     return pDrawObj;
 }
 
-
-
 void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
 {
     // Find ContactObject from the Format. If there's already one, we just
@@ -435,12 +414,6 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     if ( bNotify )
         NotifyDrawObj();
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::FinitDrawObj()
-|*
-|*************************************************************************/
 
 void SwFlyFrm::FinitDrawObj()
 {
@@ -497,12 +470,6 @@ void SwFlyFrm::FinitDrawObj()
     delete GetVirtDrawObj();            // Deregisters itself at the Master
     delete pMyContact;                  // Destroys the Master itself
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::ChainFrames()
-|*
-|*************************************************************************/
 
 void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 {
@@ -598,12 +565,6 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 }
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::FindChainNeighbour()
-|*
-|*************************************************************************/
-
 SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
 {
     // We look for the Fly that's in the same Area.
@@ -650,13 +611,6 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     return pFly;
 }
 
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::FindLastLower()
-|*
-|*************************************************************************/
-
 SwFrm *SwFlyFrm::FindLastLower()
 {
     SwFrm *pRet = ContainsAny();
@@ -669,13 +623,6 @@ SwFrm *SwFlyFrm::FindLastLower()
     }
     return pRet;
 }
-
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::FrmSizeChg()
-|*
-|*************************************************************************/
 
 sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 {
@@ -725,12 +672,6 @@ sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
     }
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::Modify()
-|*
-|*************************************************************************/
 
 void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
@@ -1106,26 +1047,13 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-/*************************************************************************
-|*
-|*    SwFlyFrm::GetInfo()
-|*
-|*   Gets information from the Modify
-|*
-*************************************************************************/
-
+/// Gets information from the Modify
 bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
         return false;   // There's a FlyFrm, so use it
     return true;        // Continue searching
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::_Invalidate()
-|*
-|*************************************************************************/
 
 void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 {
@@ -1157,16 +1085,10 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::ChgRelPos()
-|*
-|*  Change the relative position
-|*  The position will be Fix automatically and the attribute is changed
-|*  accordingly.
-|*
-|*************************************************************************/
-
+/** Change the relative position
+ *
+ * The position will be Fix automatically and the attribute is changed accordingly.
+ */
 void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 {
     if ( GetCurrRelPos() != rNewPos )
@@ -1280,15 +1202,11 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         pFmt->GetDoc()->SetAttr( aSet, *pFmt );
     }
 }
-/*************************************************************************
-|*
-|*  SwFlyFrm::Format()
-|*
-|*  "Formats" the Frame; Frm and PrtArea.
-|*  The FixSize is not inserted here.
-|*
-|*************************************************************************/
 
+/** "Formats" the Frame; Frm and PrtArea.
+ *
+ * The FixSize is not inserted here.
+ */
 void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "FlyFrm::Format, pAttrs is 0." );
@@ -1779,11 +1697,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
     while( true );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::MakeFlyPos()
-|*
-|*************************************************************************/
 // OD 2004-03-23 #i26791#
 //void SwFlyFrm::MakeFlyPos()
 void SwFlyFrm::MakeObjPos()
@@ -1810,11 +1723,6 @@ void SwFlyFrm::MakeObjPos()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::MakePrtArea()
-|*
-|*************************************************************************/
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
 
@@ -1830,12 +1738,6 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                                         rAttrs.CalcBottomLine() );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::_Grow(), _Shrink()
-|*
-|*************************************************************************/
 
 SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 {
@@ -2012,12 +1914,6 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
     return 0L;
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::ChgSize()
-|*
-|*************************************************************************/
-
 Size SwFlyFrm::ChgSize( const Size& aNewSize )
 {
     // #i53298#
@@ -2060,12 +1956,6 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
         return Frm().SSize();
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::IsLowerOf()
-|*
-|*************************************************************************/
-
 sal_Bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 {
     OSL_ENSURE( GetAnchorFrm(), "8-( Fly is lost in Space." );
@@ -2087,12 +1977,6 @@ sal_Bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 void SwFlyFrm::Cut()
 {
 }
-
-/*************************************************************************
-|*
-|*  SwFrm::AppendFly(), RemoveFly()
-|*
-|*************************************************************************/
 
 void SwFrm::AppendFly( SwFlyFrm *pNew )
 {
@@ -2175,13 +2059,6 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
         GetUpper()->InvalidateSize();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::AppendDrawObj(), RemoveDrawObj()
-|*
-|*  --> OD 2004-07-06 #i28701# - new methods
-|*
-|*************************************************************************/
 void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
@@ -2273,12 +2150,6 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     _rToRemoveObj.ChgAnchorFrm( 0 );
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::InvalidateObjs()
-|*
-|*************************************************************************/
-// #i28701# - change purpose of method and adjust its name
 void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                             const bool _bNoInvaOfAsCharAnchoredObjs )
 {
@@ -2348,12 +2219,6 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::NotifyLowerObjs()
-|*
-|*************************************************************************/
-// #i28701# - change purpose of method and its name
 // #i26945# - correct check, if anchored object is a lower
 // of the layout frame. E.g., anchor character text frame can be a follow text
 // frame.
@@ -2428,12 +2293,6 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::NotifyDrawObj()
-|*
-|*************************************************************************/
-
 void SwFlyFrm::NotifyDrawObj()
 {
     SwVirtFlyDrawObj* pObj = GetVirtDrawObj();
@@ -2444,12 +2303,6 @@ void SwFlyFrm::NotifyDrawObj()
     if ( GetFmt()->GetSurround().IsContour() )
         ClrContourCache( pObj );
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::CalcRel()
-|*
-|*************************************************************************/
 
 Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
 {
@@ -2519,12 +2372,6 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
     return aRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::CalcAutoWidth()
-|*
-|*************************************************************************/
-
 static SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
 {
     SwTwips nRet = 0;
@@ -2581,11 +2428,6 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
     return lcl_CalcAutoWidth( *this );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::GetContour()
-|*
-|*************************************************************************/
 /// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTxtFrm> contains
 /// a graphic, load of intrinsic graphic has to be avoided.
 sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
@@ -2698,10 +2540,9 @@ SwVirtFlyDrawObj* SwFlyFrm::GetVirtDrawObj()
     return static_cast<SwVirtFlyDrawObj*>(DrawObj());
 }
 
-// =============================================================================
 // OD 2004-03-24 #i26791# - implementation of pure virtual method declared in
 // base class <SwAnchoredObject>
-// =============================================================================
+
 void SwFlyFrm::InvalidateObjPos()
 {
     InvalidatePos();

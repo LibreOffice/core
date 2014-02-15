@@ -1102,7 +1102,6 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
 //  class SwFmtSurround
 //  Partially implemented inline in hxx
 
@@ -1325,7 +1324,6 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-
 //  class SwFmtHoriOrient
 //  Partially implemented inline in hxx
 
@@ -1421,8 +1419,6 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     return bRet;
 }
-
-
 
 //  class SwFmtAnchor
 //  Partially implemented inline in hxx
@@ -1634,7 +1630,6 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 //  class SwFmtURL
 //  Partially implemented inline in hxx
 
-
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
     pMap( 0 ),
@@ -1792,7 +1787,6 @@ bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
 // class SwNoReadOnly
 
 SfxPoolItem* SwFmtEditInReadonly::Clone( SfxItemPool* ) const
@@ -1813,7 +1807,6 @@ SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* ) const
 {
     return new SwFmtRowSplit( GetValue() );
 }
-
 
 // class SwFmtNoBalancedColumns
 
@@ -1955,7 +1948,6 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
 // class SwFmtFtnAtTxtEnd
 
 SfxPoolItem* SwFmtFtnAtTxtEnd::Clone( SfxItemPool* ) const
@@ -1975,7 +1967,6 @@ SfxPoolItem* SwFmtEndAtTxtEnd::Clone( SfxItemPool* ) const
 }
 
 //class SwFmtChain
-
 
 bool SwFmtChain::operator==( const SfxPoolItem &rAttr ) const
 {
@@ -2039,9 +2030,6 @@ bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     rVal <<= aRet;
     return bRet;
 }
-
-
-
 
 //class SwFmtLineNumber
 
@@ -2118,9 +2106,7 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-/*************************************************************************
- *    class SwTextGridItem
- *************************************************************************/
+// class SwTextGridItem
 
 SwTextGridItem::SwTextGridItem()
     : SfxPoolItem( RES_TEXTGRID ), aColor( COL_LIGHTGRAY ), nLines( 20 ),
@@ -2406,13 +2392,13 @@ void SwTextGridItem::Init()
         //}
     }
 }
+
 // class SwHeaderAndFooterEatSpacingItem
 
 SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 {
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
-
 
 //  class SwFrmFmt
 //  Partially implemented inline in hxx
@@ -2468,7 +2454,6 @@ void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
 }
 
 //Deletes all Frms which are registered in aDepend.
-
 void SwFrmFmt::DelFrms()
 {
     SwIterator<SwFrm,SwFmt> aIter( *this );
@@ -2484,8 +2469,6 @@ void SwFrmFmt::MakeFrms()
 {
     OSL_ENSURE( !this, "Sorry not implemented." );
 }
-
-
 
 SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
                                  const sal_Bool bCalcFrm ) const
@@ -2560,7 +2543,6 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     }
     return FindSdrObject();
 }
-
 
 sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 {
@@ -2668,7 +2650,6 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 
 //Creates the Frms if the format describes a paragraph-bound frame.
 //MA: 1994-02-14, creates the Frms also for frames anchored at page.
-
 void SwFlyFrmFmt::MakeFrms()
 {
     // is there a layout?
@@ -2860,7 +2841,6 @@ SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const sal_Bo
         return 0L;
     }
 }
-
 
 bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
@@ -3077,6 +3057,7 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
         mrFlyFrmFmt.MakeFrms();
     }
 }
+
 //  class SwDrawFrmFmt
 //  Partially implemented inline in hxx
 

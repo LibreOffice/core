@@ -24,11 +24,9 @@
 
 class SwTxtFrm;
 
-// -----------------------------------------------------------------------------
 // #i28701#
 // Format floating screen objects, which are anchored at a given anchor text frame
 // and registered at the given page frame.
-// -----------------------------------------------------------------------------
 class SwObjectFormatterTxtFrm : public SwObjectFormatter
 {
     private:

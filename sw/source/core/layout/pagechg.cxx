@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
 #include <docary.hxx>
@@ -72,23 +71,12 @@
 
 using namespace ::com::sun::star;
 
-
-/*************************************************************************
-|*
-|*  SwBodyFrm::SwBodyFrm()
-|*
-|*************************************************************************/
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
     mnType = FRMC_BODY;
 }
 
-/*************************************************************************
-|*
-|*  SwBodyFrm::Format()
-|*
-|*************************************************************************/
 void SwBodyFrm::Format( const SwBorderAttrs * )
 {
     //Formatieren des Body ist zu einfach, deshalb bekommt er ein eigenes
@@ -176,11 +164,6 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     mbValidSize = mbValidPrtArea = sal_True;
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::SwPageFrm(), ~SwPageFrm()
-|*
-|*************************************************************************/
 SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     SwFtnBossFrm( pFmt, pSib ),
     pSortedObjs( 0 ),
@@ -300,7 +283,6 @@ SwPageFrm::~SwPageFrm()
     }
 }
 
-
 void SwPageFrm::CheckGrid( sal_Bool bInvalidate )
 {
     sal_Bool bOld = bHasGrid;
@@ -323,7 +305,6 @@ void SwPageFrm::CheckGrid( sal_Bool bInvalidate )
         SetCompletePaint();
     }
 }
-
 
 void SwPageFrm::CheckDirection( sal_Bool bVert )
 {
@@ -370,14 +351,7 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::PreparePage()
-|*
-|*  Beschreibung        Erzeugt die Spezifischen Flys zur Seite und formatiert
-|*      generischen Cntnt
-|*
-|*************************************************************************/
+/// Erzeugt die Spezifischen Flys zur Seite und formatiert generischen Cntnt
 static void lcl_FormatLay( SwLayoutFrm *pLay )
 {
     //Alle LayoutFrms - nicht aber Tables, Flys o.ae. - formatieren.
@@ -524,11 +498,6 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::Modify()
-|*
-|*************************************************************************/
 void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -716,13 +685,6 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-/*************************************************************************
-|*
-|*                SwPageFrm::GetInfo()
-|*
-|*    Beschreibung      erfragt Informationen
-|*
-*************************************************************************/
     // erfrage vom Modify Informationen
 bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
@@ -734,11 +696,6 @@ bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
     return true;        // weiter suchen
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::SetPageDesc()
-|*
-|*************************************************************************/
 void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
 {
     pDesc = pNew;
@@ -746,11 +703,7 @@ void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
         SetFrmFmt( pFmt );
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::FindPageDesc()
-|*
-|*  Beschreibung        Der richtige PageDesc wird bestimmt:
+/** Der richtige PageDesc wird bestimmt:
 |*      0.  Vom Dokument bei Fussnotenseiten und Endnotenseiten
 |*      1.  vom ersten BodyCntnt unterhalb der Seite.
 |*      2.  vom PageDesc der vorstehenden Seite.
@@ -761,8 +714,7 @@ void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
 |*          Dokument oder Standard (der 0-te) wenn der erste Absatz keinen
 |*          wuenscht.
 |*     (6.  Im HTML-Mode ist der Pagedesc immer die HTML-Seitenvorlage.)
-|*
-|*************************************************************************/
+|*/
 SwPageDesc *SwPageFrm::FindPageDesc()
 {
     //0.
@@ -853,17 +805,11 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     pRoot->bCheckSuperfluous = bOld;
 }
 
-
 inline void SetLastPage( SwPageFrm *pPage )
 {
     ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::Cut()
-|*
-|*************************************************************************/
 void SwPageFrm::Cut()
 {
     //AdjustRootSize( CHG_CUTPAGE, 0 );
@@ -927,11 +873,6 @@ void SwPageFrm::Cut()
         static_cast<SwRootFrm*>(pRootFrm)->CheckViewLayout( 0, 0 );
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::Paste()
-|*
-|*************************************************************************/
 void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
     OSL_ENSURE( pParent->IsRootFrm(), "Parent ist keine Root." );
@@ -976,11 +917,6 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     getRootFrm()->CheckViewLayout( 0, 0 );
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::PrepareRegisterChg()
-|*
-|*************************************************************************/
 static void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
 {
     pFrm->Prepare( PREP_REGISTER );
@@ -1034,16 +970,12 @@ void SwPageFrm::PrepareRegisterChg()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::CheckPageDescs()
-|*
-|*  Beschreibung        Prueft alle Seiten ab der uebergebenen, daraufhin,
+/**
+|*      Prueft alle Seiten ab der uebergebenen, daraufhin,
 |*      ob sie das richtige FrmFmt verwenden. Wenn 'falsche' Seiten
 |*      aufgespuehrt werden, so wird versucht die Situation moeglichst
 |*      einfache zu bereinigen.
-|*
-|*************************************************************************/
+|*/
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm** ppPrev )
 {
     OSL_ENSURE( pStart, "Keine Startpage." );
@@ -1261,11 +1193,6 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
 #endif
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::InsertPage()
-|*
-|*************************************************************************/
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 {
     SwRootFrm *pRoot = (SwRootFrm*)pPrevPage->GetUpper();
@@ -1398,23 +1325,13 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::GrowFrm()
-|*
-|*************************************************************************/
-
 SwTwips SwRootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 {
     if ( !bTst )
         Frm().SSize().Height() += nDist;
     return nDist;
 }
-/*************************************************************************
-|*
-|*  SwRootFrm::ShrinkFrm()
-|*
-|*************************************************************************/
+
 SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 {
     OSL_ENSURE( nDist >= 0, "nDist < 0." );
@@ -1425,11 +1342,8 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
     return nDist;
 }
 
-/*************************************************************************
+/** Entfernung von ueberfluessigen Seiten.
 |*
-|*  SwRootFrm::RemoveSuperfluous()
-|*
-|*  Beschreibung:       Entfernung von ueberfluessigen Seiten.
 |*          Arbeitet nur wenn das Flag bCheckSuperfluous gesetzt ist.
 |*          Definition: Eine Seite ist genau dann leer, wenn der
 |*          Body-Textbereich keinen CntntFrm enthaelt, aber nicht, wenn noch
@@ -1439,8 +1353,7 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 |*          Es muss zweimal angesetzt werden um leeren Seiten aufzuspueren:
 |*              - einmal fuer die Endnotenseiten.
 |*              - und einmal fuer die Seiten des Bodytextes.
-|*
-|*************************************************************************/
+|*/
 void SwRootFrm::RemoveSuperfluous()
 {
     if ( !IsSuperfluous() )
@@ -1528,15 +1441,8 @@ void SwRootFrm::RemoveSuperfluous()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::AssertFlyPages()
-|*
-|*  Beschreibung        Stellt sicher, dass genuegend Seiten vorhanden
-|*      sind, damit alle Seitengebundenen Rahmen und DrawObject
-|*      untergebracht sind.
-|*
-|*************************************************************************/
+/// Stellt sicher, dass genuegend Seiten vorhanden sind, damit alle seitengebundenen
+/// Rahmen und DrawObject untergebracht sind.
 void SwRootFrm::AssertFlyPages()
 {
     if ( !IsAssertFlyPages() )
@@ -1611,15 +1517,8 @@ void SwRootFrm::AssertFlyPages()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::AssertPageFlys()
-|*
-|*  Beschreibung        Stellt sicher, dass ab der uebergebenen Seite
-|*      auf allen Seiten die Seitengebunden Objecte auf der richtigen
-|*      Seite (Seitennummer stehen).
-|*
-|*************************************************************************/
+/// Stellt sicher, dass ab der uebergebenen Seite auf allen Seiten die seitengebunden
+/// Objecte auf der richtigen Seite (Seitennummer stehen).
 void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 {
     while ( pPage )
@@ -1664,11 +1563,6 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::ChgSize()
-|*
-|*************************************************************************/
 Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
@@ -1677,11 +1571,6 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
     return Frm().SSize();
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::MakeAll()
-|*
-|*************************************************************************/
 void SwRootFrm::MakeAll()
 {
     if ( !mbValidPos )
@@ -1700,11 +1589,6 @@ void SwRootFrm::MakeAll()
         mbValidSize = sal_True;
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::ImplInvalidateBrowseWidth()
-|*
-|*************************************************************************/
 void SwRootFrm::ImplInvalidateBrowseWidth()
 {
     bBrowseWidthValid = sal_False;
@@ -1716,11 +1600,6 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::ImplCalcBrowseWidth()
-|*
-|*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
 {
     OSL_ENSURE( GetCurrShell() && GetCurrShell()->GetViewOptions()->getBrowseMode(),
@@ -1846,12 +1725,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
         pFrm = pFrm->FindNextCnt();
     } while ( pFrm );
 }
-
-/*************************************************************************
-|*
-|*  SwRootFrm::StartAllAction()
-|*
-|*************************************************************************/
 
 void SwRootFrm::StartAllAction()
 {

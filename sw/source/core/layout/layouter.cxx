@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "layouter.hxx"
 #include "doc.hxx"
 #include "sectfrm.hxx"
@@ -206,12 +205,6 @@ void SwLooping::Control( SwPageFrm* pPage )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayouter::SwLayouter()
-|*
-|*************************************************************************/
-
 SwLayouter::SwLayouter()
         : pEndnoter( NULL ),
           pLooping( NULL ),
@@ -323,10 +316,8 @@ sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 }
 
 // #i28701#
-// -----------------------------------------------------------------------------
 // methods to manage text frames, which are moved forward by the positioning
 // of its anchored objects
-// -----------------------------------------------------------------------------
 void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() &&
@@ -386,6 +377,7 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                 FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
     }
 }
+
 // #i26945#
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )

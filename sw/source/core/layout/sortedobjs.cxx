@@ -29,9 +29,7 @@
 #include <svx/svdobj.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-
 using namespace ::com::sun::star;
-
 
 SwSortedObjs::SwSortedObjs()
 {

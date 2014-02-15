@@ -26,9 +26,6 @@
 // #124218#
 #include <layact.hxx>
 
-// =============================================================================
-// implementation of class <SwObjectFormatterLayFrm>
-// =============================================================================
 SwObjectFormatterLayFrm::SwObjectFormatterLayFrm( SwLayoutFrm& _rAnchorLayFrm,
                                                   const SwPageFrm& _rPageFrm,
                                                   SwLayAction* _pLayAction )

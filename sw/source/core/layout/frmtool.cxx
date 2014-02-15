@@ -66,17 +66,12 @@ void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes 
 
 using namespace ::com::sun::star;
 
-
 bool bObjsDirect = true;
 bool bDontCreateObjects = false;
 bool bSetCompletePaintOnInvalidate = false;
 
 sal_uInt8 StackHack::nCnt = 0;
 sal_Bool StackHack::bLocked = sal_False;
-
-
-
-/*************************************************************************/
 
 SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     pFrm( pF ),
@@ -101,8 +96,6 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
                     (((SwCntntFrm*)pF)->GetFollow() ? sal_True : sal_False) :
                     sal_False;
 }
-
-/*************************************************************************/
 
 SwFrmNotify::~SwFrmNotify()
 {
@@ -401,15 +394,11 @@ SwFrmNotify::~SwFrmNotify()
     }
 }
 
-/*************************************************************************/
-
 SwLayNotify::SwLayNotify( SwLayoutFrm *pLayFrm ) :
     SwFrmNotify( pLayFrm ),
     bLowersComplete( sal_False )
 {
 }
-
-/*************************************************************************/
 
 // OD 2004-05-11 #i28701# - local method to invalidate the position of all
 // frames inclusive its floating screen objects, which are lowers of the given
@@ -618,8 +607,6 @@ SwLayNotify::~SwLayNotify()
         ((SwFlyFrm*)pLay)->AnchorFrm()->InvalidateSize();
 }
 
-/*************************************************************************/
-
 SwFlyNotify::SwFlyNotify( SwFlyFrm *pFlyFrm ) :
     SwLayNotify( pFlyFrm ),
     // #115759# - keep correct page frame - the page frame
@@ -628,8 +615,6 @@ SwFlyNotify::SwFlyNotify( SwFlyFrm *pFlyFrm ) :
     aFrmAndSpace( pFlyFrm->GetObjRectWithSpaces() )
 {
 }
-
-/*************************************************************************/
 
 SwFlyNotify::~SwFlyNotify()
 {
@@ -733,8 +718,6 @@ SwFlyNotify::~SwFlyNotify()
     }
 }
 
-/*************************************************************************/
-
 SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
     SwFrmNotify( pCntntFrm ),
     // OD 08.01.2004 #i11859#
@@ -760,8 +743,6 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
         }
     }
 }
-
-/*************************************************************************/
 
 SwCntntNotify::~SwCntntNotify()
 {
@@ -997,8 +978,6 @@ SwCntntNotify::~SwCntntNotify()
         }
     }
 }
-
-/*************************************************************************/
 
 void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage )
@@ -1584,7 +1563,6 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-
 void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                const SwNodeIndex &rEndIdx )
 {
@@ -1800,9 +1778,6 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
     bObjsDirect = true;
 }
 
-
-/*************************************************************************/
-
 SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) :
     SwCacheObj( pMod ),
     rAttrSet( pConstructor->IsCntntFrm()
@@ -1848,17 +1823,13 @@ SwBorderAttrs::~SwBorderAttrs()
     ((SwModify*)pOwner)->SetInCache( sal_False );
 }
 
-/*************************************************************************
-|*
-|*  SwBorderAttrs::CalcTop(), CalcBottom(), CalcLeft(), CalcRight()
-|*
-|*  Beschreibung        Die Calc-Methoden errechnen zusaetzlich zu den
+/*
+|*      Die Calc-Methoden errechnen zusaetzlich zu den
 |*      von den Attributen vorgegebenen Groessen einen Sicherheitsabstand.
 |*      der Sicherheitsabstand wird nur einkalkuliert, wenn Umrandung und/oder
 |*      Schatten im Spiel sind; er soll vermeiden, dass aufgrund der
 |*      groben physikalischen Gegebenheiten Raender usw. uebermalt werden.
-|*
-|*************************************************************************/
+|*/
 
 void SwBorderAttrs::_CalcTop()
 {
@@ -1956,7 +1927,6 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
             nLeft += rLR.GetLeft();
     }
 
-
     // correction: do not retrieve left margin for numbering in R2L-layout
 //    if ( pCaller->IsTxtFrm() )
     if ( pCaller->IsTxtFrm() && !pCaller->IsRightToLeft() )
@@ -1967,17 +1937,12 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     return nLeft;
 }
 
-/*************************************************************************
-|*
-|*  SwBorderAttrs::CalcTopLine(), CalcBottomLine(),
-|*                 CalcLeftLine(), CalcRightLine()
-|*
+/*
 |*  Beschreibung        Berechnung der Groessen fuer Umrandung und Schatten.
 |*                      Es kann auch ohne Linien ein Abstand erwuenscht sein,
 |*                      dieser wird  dann nicht vom Attribut sondern hier
 |*                      beruecksichtigt (bBorderDist, z.B. fuer Zellen).
-|*
-|*************************************************************************/
+|*/
 
 void SwBorderAttrs::_CalcTopLine()
 {
@@ -2015,8 +1980,6 @@ void SwBorderAttrs::_CalcRightLine()
     bRightLine = sal_False;
 }
 
-/*************************************************************************/
-
 void SwBorderAttrs::_IsLine()
 {
     bIsLine = rBox.GetTop() || rBox.GetBottom() ||
@@ -2024,10 +1987,7 @@ void SwBorderAttrs::_IsLine()
     bLine = sal_False;
 }
 
-/*************************************************************************
-|*
-|*  SwBorderAttrs::CmpLeftRightLine(), IsTopLine(), IsBottomLine()
-|*
+/*
 |*      Die Umrandungen benachbarter Absaetze werden nach folgendem
 |*      Algorithmus zusammengefasst:
 |*
@@ -2041,8 +2001,8 @@ void SwBorderAttrs::_IsLine()
 |*         oben eine Umrandung haben.
 |*      3. Die Umrandungen links und rechts vor Vorgaenger bzw. Nachfolger
 |*         sind identisch.
-|*
-|*************************************************************************/
+|*/
+
 inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
 {
     return ( ((pL1 && pL2) && (*pL1 == *pL2)) || (!pL1 && !pL2) );
@@ -2220,8 +2180,6 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
 {
 }
 
-/*************************************************************************/
-
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
     ((SwModify*)pOwner)->SetInCache( sal_True );
@@ -2233,16 +2191,12 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
     return (SwBorderAttrs*)SwCacheAccess::Get();
 }
 
-/*************************************************************************/
-
 SwOrderIter::SwOrderIter( const SwPageFrm *pPg, sal_Bool bFlys ) :
     pPage( pPg ),
     pCurrent( 0 ),
     bFlysOnly( bFlys )
 {
 }
-
-/*************************************************************************/
 
 const SdrObject *SwOrderIter::Top()
 {
@@ -2271,8 +2225,6 @@ const SdrObject *SwOrderIter::Top()
     return pCurrent;
 }
 
-/*************************************************************************/
-
 const SdrObject *SwOrderIter::Bottom()
 {
     pCurrent = 0;
@@ -2299,8 +2251,6 @@ const SdrObject *SwOrderIter::Bottom()
     }
     return pCurrent;
 }
-
-/*************************************************************************/
 
 const SdrObject *SwOrderIter::Next()
 {
@@ -2330,8 +2280,6 @@ const SdrObject *SwOrderIter::Next()
     return pCurrent;
 }
 
-/*************************************************************************/
-
 const SdrObject *SwOrderIter::Prev()
 {
     const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetOrdNumDirect() : 0;
@@ -2359,8 +2307,6 @@ const SdrObject *SwOrderIter::Prev()
     }
     return pCurrent;
 }
-
-/*************************************************************************/
 
 //Unterstruktur eines LayoutFrms fuer eine Aktion aufheben und wieder
 //restaurieren.
@@ -2682,8 +2628,6 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         pParent->Grow( nGrowVal );
 }
 
-/*************************************************************************/
-
 SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                           bool bOdd, bool bFirst, bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling )
@@ -2736,14 +2680,10 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     return pRet;
 }
 
-
-/*************************************************************************
-|*
-|*  RegistFlys(), Regist()  Die beiden folgenden Methoden durchsuchen rekursiv
+/*      Die beiden folgenden Methoden durchsuchen rekursiv
 |*      eine Layoutstruktur und melden alle FlyFrms, die einen beliebigen Frm
 |*      innerhalb der Struktur als Anker haben bei der Seite an.
-|*
-|*************************************************************************/
+|*/
 
 static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
@@ -2805,15 +2745,7 @@ void RegistFlys( SwPageFrm *pPage, const SwLayoutFrm *pLay )
     }
 }
 
-/*************************************************************************
-|*
-|*  void Notify()
-|*
-|*  Beschreibung        Benachrichtigt den Hintergrund je nach der
-|*      Veraenderung zwischen altem und neuem Rechteckt.
-|*
-|*************************************************************************/
-
+/// Benachrichtigt den Hintergrund je nach der Veraenderung zwischen altem und neuem Rechteck.
 void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
              const SwRect* pOldPrt )
 {
@@ -2889,8 +2821,6 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         pFly->NotifyBackground( pFly->FindPageFrm(), aFrm, PREP_FLY_ARRIVE );
     }
 }
-
-/*************************************************************************/
 
 static void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
 {
@@ -3126,14 +3056,8 @@ void Notify_Background( const SdrObject* pObj,
     }
 }
 
-/*************************************************************************
-|*
-|*  GetVirtualUpper() liefert bei absatzgebundenen Objekten den Upper
-|*  des Ankers. Falls es sich dabei um verkettete Rahmen oder
-|*  Fussnoten handelt, wird ggf. der "virtuelle" Upper ermittelt.
-|*
-|*************************************************************************/
-
+/// liefert bei absatzgebundenen Objekten den Upper des Ankers. Falls es sich dabei um
+/// verkettete Rahmen oder Fussnoten handelt, wird ggf. der "virtuelle" Upper ermittelt.
 const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
 {
     if( pFrm->IsTxtFrm() )
@@ -3165,8 +3089,6 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
     }
     return pFrm;
 }
-
-/*************************************************************************/
 
 bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 {
@@ -3241,9 +3163,6 @@ bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
 
     return false;
 }
-
-
-//---------------------------------
 
 static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
 {
@@ -3567,6 +3486,5 @@ bool SwDeletionChecker::HasBeenDeleted()
 
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

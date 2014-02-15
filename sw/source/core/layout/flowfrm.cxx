@@ -52,14 +52,6 @@
 
 sal_Bool SwFlowFrm::m_bMoveBwdJump = sal_False;
 
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::SwFlowFrm()
-|*
-|*************************************************************************/
-
-
 SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     m_rThis( rFrm ),
     m_pFollow( 0 ),
@@ -100,13 +92,7 @@ void SwFlowFrm::SetFollow(SwFlowFrm *const pFollow)
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFlowFrm::IsFollowLocked()
-|*     return sal_True if any follow has the JoinLocked flag
-|*
-|*************************************************************************/
-
+/// @return sal_True if any follow has the JoinLocked flag
 sal_Bool SwFlowFrm::HasLockedFollow() const
 {
     const SwFlowFrm* pFrm = GetFollow();
@@ -118,13 +104,6 @@ sal_Bool SwFlowFrm::HasLockedFollow() const
     }
     return sal_False;
 }
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::IsKeepFwdMoveAllowed()
-|*
-|*************************************************************************/
-
 
 sal_Bool SwFlowFrm::IsKeepFwdMoveAllowed()
 {
@@ -146,13 +125,6 @@ sal_Bool SwFlowFrm::IsKeepFwdMoveAllowed()
         bRet = sal_True;
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*    SwFlowFrm::CheckKeep()
-|*
-|*************************************************************************/
-
 
 void SwFlowFrm::CheckKeep()
 {
@@ -185,12 +157,6 @@ void SwFlowFrm::CheckKeep()
     if ( bKeep )
         pPre->InvalidatePos();
 }
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::IsKeep()
-|*
-|*************************************************************************/
 
 sal_Bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep ) const
 {
@@ -281,13 +247,6 @@ sal_Bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldK
     }
     return bKeep;
 }
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::BwdMoveNecessary()
-|*
-|*************************************************************************/
-
 
 sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
 {
@@ -395,18 +354,8 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFlowFrm::CutTree(), PasteTree(), MoveSubTree()
-|*
-|*  Description        A specialized form of Cut() and Paste(), which
-|*      relocates a whole chain (this and the following, in particular).
-|*      During this process, only the minimum operations and notifications
-|*      are done.
-|*
-|*************************************************************************/
-
-
+/// A specialized form of Cut(), which relocates a whole chain (this and the following,
+/// in particular). During this process, only the minimum operations and notifications are done.
 SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
 {
     // Cut the Start and all the neighbours; they are chained together and
@@ -471,8 +420,8 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     return pLay;
 }
 
-
-
+/// A specialized form of Paste(), which relocates a whole chain (this and the following,
+/// in particular). During this process, only the minimum operations and notifications are done.
 sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
                            SwFrm *pOldParent )
 {
@@ -586,8 +535,6 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
     return bRet;
 }
 
-
-
 void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
 {
     OSL_ENSURE( pParent, "No parent given." );
@@ -671,13 +618,6 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         m_rThis.GetUpper()->InvalidatePage( pPage );
 }
 
-/*************************************************************************
-|*
-|*  SwFlowFrm::IsAnFollow()
-|*
-|*************************************************************************/
-
-
 sal_Bool SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
 {
     const SwFlowFrm *pFoll = this;
@@ -688,13 +628,6 @@ sal_Bool SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
     } while ( pFoll );
     return sal_False;
 }
-
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::FindMaster()
-|*
-|*************************************************************************/
 
 SwTxtFrm* SwCntntFrm::FindMaster() const
 {
@@ -768,17 +701,10 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetLeaf()
-|*
-|*  Description        Returns the next/previous Layout leaf that's NOT below
-|*      this (or even is this itself). Also, that leaf must be in the same
-|*      text flow as the pAnch origin frm (Body, Ftn)
-|*
-|*************************************************************************/
-
-
+/**
+ * Returns the next/previous Layout leaf that's NOT below this (or even is this itself).
+ * Also, that leaf must be in the same text flow as the pAnch origin frame (Body, Ftn)
+ */
 const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd,
                                    const SwFrm *pAnch ) const
 {
@@ -805,15 +731,6 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd,
 
     return (const SwLayoutFrm*)pLeaf;
 }
-
-/*************************************************************************
-|*
-|*  SwFrm::GetLeaf()
-|*
-|*  Description        calls Get[Next|Prev]Leaf
-|*
-|*************************************************************************/
-
 
 SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 {
@@ -855,8 +772,6 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf( eMakePage );
 }
-
-
 
 sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
 {
@@ -927,15 +842,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
 }
 
 
-/*************************************************************************
-|*
-|*  SwFrm::GetNextLeaf()
-|*
-|*  Description        Returns the next layout leaf in which we can move
-|*      the frame.
-|*
-|*************************************************************************/
-
+/// Returns the next layout leaf in which we can move the frame.
 SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 {
     OSL_ENSURE( !IsInFtn(), "GetNextLeaf(), don't call me for Ftn." );
@@ -1067,15 +974,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     return pLayLeaf;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetPrevLeaf()
-|*
-|*  Returns the previous layout leaf where we can move the frame.
-|*
-|*************************************************************************/
-
-
+/// Returns the previous layout leaf where we can move the frame.
 SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 {
     OSL_ENSURE( !IsInFtn(), "GetPrevLeaf(), don't call me for Ftn." );
@@ -1108,13 +1007,6 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
     }
     return pLayLeaf ? pLayLeaf : pPrevLeaf;
 }
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::IsPrevObjMove()
-|*
-|*************************************************************************/
-
 
 sal_Bool SwFlowFrm::IsPrevObjMove() const
 {
@@ -1173,11 +1065,8 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool SwFlowFrm::IsPageBreak()
-|*
-|*  Description        If there's a hard page break before the Frm AND there's a
+/**
+|*      If there's a hard page break before the Frm AND there's a
 |*      predecessor on the same page, sal_True is returned (we need to create a
 |*      new PageBreak). Otherwise, returns sal_False.
 |*      If bAct is set to sal_True, this function returns sal_True if
@@ -1190,10 +1079,7 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
 |*      the FrmFmt contains a PageDesc.
 |*      The implementation works only on CntntFrms! - the definition
 |*      of the predecessor is not clear for LayoutFrms.
-|*
-|*************************************************************************/
-
-
+|*/
 sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
 {
     if ( !IsFollow() && m_rThis.IsInDocBody() &&
@@ -1238,10 +1124,7 @@ sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool SwFlowFrm::IsColBreak()
-|*
+/**
 |*      If there's a hard column break before the Frm AND there is
 |*      a predecessor in the same column, we return sal_True (we need to create
 |*      a ColBreak). Otherwise, we return sal_False.
@@ -1253,9 +1136,7 @@ sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
 |*      need to think further.
 |*      The implementation works only on CntntFrms! - the definition
 |*      of the predecessor is not clear for LayoutFrms.
-|*
-|*************************************************************************/
-
+|*/
 sal_Bool SwFlowFrm::IsColBreak( sal_Bool bAct ) const
 {
     if ( !IsFollow() && (m_rThis.IsMoveable() || bAct) )
@@ -1820,16 +1701,7 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
     return nAdditionalLowerSpace;
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool SwFlowFrm::CheckMoveFwd()
-|*
-|*  Description        Moves the Frm forward if it seems necessary regarding
-|*      the current conditions and attributes.
-|*
-|*************************************************************************/
-
-
+/// Moves the Frm forward if it seems necessary regarding the current conditions and attributes.
 sal_Bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool )
 {
     const SwFrm* pNxt = m_rThis.GetIndNext();
@@ -1914,16 +1786,7 @@ sal_Bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool )
     return bMovedFwd;
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool SwFlowFrm::MoveFwd()
-|*
-|*  Description        Return value tells us whether the Frm has changed
-|*      the page.
-|*
-|*************************************************************************/
-
-
+/// Return value tells us whether the Frm has changed the page.
 sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways )
 {
 //!!!!MoveFtnCntFwd might need to be updated as well.
@@ -2110,17 +1973,11 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
     return bSamePage;
 }
 
-
-/*************************************************************************
-|*
-|*  sal_Bool SwFlowFrm::MoveBwd()
-|*
-|*  Description        Return value tells whether the Frm should change the page.
-|*                     This should be called by derived classes.
-|*                     The actual moving must be implemented in the subclasses.
-|*
-|*************************************************************************/
-
+/** Return value tells whether the Frm should change the page.
+ *
+ * @note This should be called by derived classes.
+ * @note The actual moving must be implemented in the subclasses.
+ */
 sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
 {
     SwFlowFrm::SetMoveBwdJump( sal_False );
@@ -2649,12 +2506,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
     }
     return pNewUpper != 0;
 }
-
-/*************************************************************************
-|*
-|*  SwFlowFrm::CastFlowFrm
-|*
-|*************************************************************************/
 
 SwFlowFrm *SwFlowFrm::CastFlowFrm( SwFrm *pFrm )
 {

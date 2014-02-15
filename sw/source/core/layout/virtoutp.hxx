@@ -27,10 +27,6 @@
 class SwViewShell;
 #define VIRTUALHEIGHT 64
 
-/*************************************************************************
- *                      class SwTxtVout
- *************************************************************************/
-
 class SwLayVout
 {
     friend void _FrmFinit();    //deletes Vout
@@ -60,8 +56,6 @@ public:
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };
-
-
 
 #endif
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/smplhint.hxx>
 #include <svl/itemiter.hxx>
 #include <hints.hxx>
@@ -55,11 +54,6 @@
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
-|*
-|*************************************************************************/
 SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
     : SwLayoutFrm( rSect.GetFmt(), pSib )
     , SwFlowFrm( static_cast<SwFrm&>(*this) )
@@ -166,12 +160,6 @@ SwSectionFrm::~SwSectionFrm()
     }
 }
 
-
-/*************************************************************************
-|*
-|*  SwSectionFrm::DelEmpty()
-|*
-|*************************************************************************/
 void SwSectionFrm::DelEmpty( sal_Bool bRemove )
 {
     if( IsColLocked() )
@@ -229,11 +217,6 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::Cut()
-|*
-|*************************************************************************/
 void SwSectionFrm::Cut()
 {
     _Cut( sal_True );
@@ -314,12 +297,6 @@ void SwSectionFrm::_Cut( sal_Bool bRemove )
         }
     }
 }
-
-/*************************************************************************
-|*
-|*  SwSectionFrm::Paste()
-|*
-|*************************************************************************/
 
 void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
@@ -421,18 +398,12 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     }
 }
 
-
-/*************************************************************************
-|*
-|*  SwSectionFrm::HasToBreak()
-|*
+/**
 |*  Here it's decided whether the this-SectionFrm should break up
 |*  the passed (Section)frm (or not).
 |*  Initiall, all superior sections are broken up. Later on that could
 |*  be made configurable.
-|*
-|*************************************************************************/
-
+|*/
 sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
 {
     if( !pFrm->IsSctFrm() )
@@ -453,16 +424,11 @@ sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
     } while( true ); // ( pTmp->GetSect().GetValue() );
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::MergeNext()
-|*
+/**
 |*  Merges two SectionFrms, in case it's about the same section.
 |*  This can be necessary when a (sub)section is deleted that had
 |*  divided another part into two.
-|*
-|*************************************************************************/
-
+|*/
 void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 {
     if( !pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection() )
@@ -497,17 +463,12 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::SplitSect()
-|*
+/**
 |*  Divides a SectionFrm into two parts. The second one starts with the
 |*  passed frame.
 |*  This is required when inserting an inner section, because the MoveFwd
 |*  cannot have the desired effect within a frame or a table cell.
-|*
-|*************************************************************************/
-
+|*/
 sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 {
     OSL_ENSURE( pFrm, "SplitSect: Why?" );
@@ -549,20 +510,15 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::MoveCntntAndDelete()
-|*
+/**
 |*  MoveCntnt is called for destroying a SectionFrms, due to
 |*  the cancellation or hiding of a section, to handle the content.
 |*  If the SectionFrm hasn't broken up another one, then the content
 |*  is moved to the Upper. Otherwise the content is moved to another
 |*  SectionFrm, which has to be potentially merged.
-|*
-|*************************************************************************/
+|*/
 // If a multi-column section is cancelled, the ContentFrms have to be
 // invalidated
-
 static void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
 {
     while ( pFrm )
@@ -580,10 +536,7 @@ static void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
     }
 }
 
-
-//
 // Works like SwCntntFrm::ImplGetNextCntntFrm, but starts with a LayoutFrm
-//
 static SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
 {
     if ( bFwd )
@@ -898,17 +851,12 @@ sal_Bool SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
     return sal_False;
 }
 
-/*************************************************************************
- *
- *  SwSectionFrm::CollectEndnotes(  )
- *
+/**
  *  CollectEndnotes looks for endnotes in the sectionfrm and his follows,
  *  the endnotes will cut off the layout and put into the array.
  *  If the first endnote is not a master-SwFtnFrm, the whole sectionfrm
  *  contains only endnotes and it is not necessary to collect them.
- *
- *************************************************************************/
-
+ */
 static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
     SwLayouter *pLayouter )
 {
@@ -1005,21 +953,16 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
         lcl_ColumnRefresh( this, true );
 }
 
-/*************************************************************************
+/** Fits the size to the surroundings.
 |*
-|*  SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
-|*
-|*  Description: Fits the size to the surroundings.
 |*  Those that have a Follow or foot notes, have to extend until
 |*  the lower edge of a upper (bMaximize)
 |*  They must not extend above the Upper, as the case may be one can
 |*  try to grow its upper (bGrow)
 |*  If the size had to be changed, the content is calculated.
 |*
-|*************************************************************************/
-
-/// OD 18.09.2002 #100522#
-/// perform calculation of content, only if height has changed.
+|*  @note: perform calculation of content, only if height has changed (OD 18.09.2002 #100522#)
+|*/
 void SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
 {
     SWRECTFN( this )
@@ -1120,7 +1063,6 @@ void SwSectionFrm::SimpleFormat()
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
-        //
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
@@ -1277,14 +1219,7 @@ class ExtraFormatToPositionObjs
         }
 };
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::Format()
-|*
-|*  Description:        "formats" the frame; Frm and PrtArea
-|*
-|*************************************************************************/
-
+/// "formats" the frame; Frm and PrtArea
 void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // via DelEmpty
@@ -1500,17 +1435,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetNextSctLeaf()
-|*
-|*  Description:        Returns the next layout sheet where the frame
-|*      can be moved in.
-|*      New pages are created only if the parameter sal_True is set
-|*
-|*************************************************************************/
-
-
+/// Returns the next layout sheet where the frame can be moved in.
+/// New pages are created only if the parameter sal_True is set.
 SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 {
     // Attention: Nested sections are currently not supported
@@ -1734,16 +1660,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     return pLayLeaf;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetPrevSctLeaf()
-|*
-|*  Description         Returns the preceding layout sheet where the frame
-|*      can be moved into
-|*
-|*************************************************************************/
-
-
+/// Returns the preceding layout sheet where the frame can be moved into
 SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
 {
     PROTOCOL_ENTER( this, PROT_LEAF, ACT_PREV_SECT, GetUpper()->FindSctFrm() )
@@ -1964,12 +1881,6 @@ sal_Bool SwSectionFrm::Growable() const
     return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, sal_True ) );
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::_Grow(), _Shrink()
-|*
-|*************************************************************************/
-
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 {
     if ( !IsColLocked() && !HasFixSize() )
@@ -2170,10 +2081,7 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
     return 0L;
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::MoveAllowed()
-|*
+/*
 |*  When are Frms within a SectionFrms moveable?
 |*  If they are not in the last column of a SectionFrms yet,
 |*  if there is no Follow,
@@ -2182,11 +2090,10 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
 |*  layout sheet. In (column based/chained) Flys this is checked via
 |*  GetNextLayout, in tables and headers/footers there is none, however in the
 |*  DocBody and in foot notes there is always one.
+|*
 |*  This routine is used in the TxtFormatter to decided whether it's allowed to
 |*  create a (paragraph-)Follow or whether the paragraph has to stick together
-|*
-|*************************************************************************/
-
+|*/
 sal_Bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
 {
     // Is there a Follow or is the Frame not in the last column?
@@ -2367,12 +2274,6 @@ void SwSectionFrm::CalcEndAtEndFlag()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::Modify()
-|*
-|*************************************************************************/
-
 void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
@@ -2532,11 +2433,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
     }
 }
 
-/*--------------------------------------------------
- * SwSectionFrm::ToMaximize(..): A follow or a ftncontainer at the end of the
- * page causes a maximal Size of the sectionframe.
- * --------------------------------------------------*/
-
+/// A follow or a ftncontainer at the end of the page causes a maximal Size of the sectionframe.
 sal_Bool SwSectionFrm::ToMaximize( sal_Bool bCheckFollow ) const
 {
     if( HasFollow() )
@@ -2565,11 +2462,7 @@ sal_Bool SwSectionFrm::ToMaximize( sal_Bool bCheckFollow ) const
     return bRet;
 }
 
-/*--------------------------------------------------
- * sal_Bool SwSectionFrm::ContainsFtnCont()
- * checks every Column for FtnContFrms.
- * --------------------------------------------------*/
-
+/// Check every Column for FtnContFrms.
 SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
 {
     SwFtnContFrm* pRet = NULL;
@@ -2610,13 +2503,11 @@ void SwSectionFrm::InvalidateFtnPos()
     }
 }
 
-/*--------------------------------------------------
- * SwSectionFrm::Undersize() returns the value that the section
- * would like to be greater if it has undersized TxtFrms in it,
- * otherwise Null..
+/** Returns the value that the section would like to be
+ * greater if it has undersized TxtFrms in it,
+ * otherwise Null.
  * If necessary the undersized-flag is corrected.
- * --------------------------------------------------*/
-
+ */
 long SwSectionFrm::Undersize( sal_Bool bOverSize )
 {
     m_bUndersized = sal_False;
@@ -2664,7 +2555,8 @@ void SwSectionFrm::CalcFtnCntnt()
         }
     }
 }
-/* --------------------------------------------------
+
+/*
  * If a SectionFrm gets empty, e.g. because its content changes the page/column,
  * it is not destroyed immediately (there could be a pointer left to it on the
  * stack), instead it puts itself in a list at the RootFrm, which is processed
@@ -2675,8 +2567,7 @@ void SwSectionFrm::CalcFtnCntnt()
  * With InsertEmptySct the RootFrm stores a SectionFrm in the list,
  * with RemoveFromList it can be removed from the list (Dtor),
  * with DeleteEmptySct the list is processed and the SectionFrms are destroyed.
- * --------------------------------------------------*/
-
+ */
 void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 {
     if( !pDestroy )

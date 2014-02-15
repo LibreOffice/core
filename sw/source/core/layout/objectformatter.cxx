@@ -33,11 +33,8 @@
 
 #include <vector>
 
-// =============================================================================
-// helper class <SwPageNumAndTypeOfAnchors>
 // --> #i26945# - Additionally the type of the anchor text frame
 // is collected - by type is meant 'master' or 'follow'.
-// =============================================================================
 class SwPageNumAndTypeOfAnchors
 {
     private:
@@ -136,9 +133,6 @@ class SwPageNumAndTypeOfAnchors
         }
 };
 
-// =============================================================================
-// implementation of class <SwObjectFormatter>
-// =============================================================================
 SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
                                       SwLayAction* _pLayAction,
                                       const bool _bCollectPgNumOfAnchors )

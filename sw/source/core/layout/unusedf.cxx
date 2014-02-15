@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
-
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
@@ -76,6 +74,5 @@ sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
     OSL_FAIL( "GetCharRect() of the base called." );
     return sal_False;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

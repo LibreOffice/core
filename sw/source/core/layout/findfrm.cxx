@@ -32,13 +32,7 @@
 #include <txtfrm.hxx>
 #include <switerator.hxx>
 
-/*************************************************************************
-|*
-|*  FindBodyCont, FindLastBodyCntnt()
-|*
-|*  Description     Searches the first/last CntntFrm in BodyText below the page.
-|*
-|*************************************************************************/
+/// Searches the first CntntFrm in BodyText below the page.
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
 {
     SwFrm *pLay = Lower();
@@ -47,6 +41,7 @@ SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
     return (SwLayoutFrm*)pLay;
 }
 
+/// Searches the last CntntFrm in BodyText below the page.
 SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 {
     SwCntntFrm *pRet = FindFirstBodyCntnt();
@@ -58,16 +53,10 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
     return pRet;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::ContainsCntnt
-|*
-|*  Description     Checks if the frame contains one or more CntntFrm's
-|*          anywhere in his subsidiary structure; if so the first found CntntFrm
-|*          is returned
-|*
-|*************************************************************************/
-
+/**
+ * Checks if the frame contains one or more CntntFrm's anywhere in his
+ * subsidiary structure; if so the first found CntntFrm is returned.
+ */
 const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 {
     //Search downwards the layout leaf and if there is no content, jump to the
@@ -109,16 +98,11 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::FirstCell
-|*
-|*  Description     Calls ContainsAny first to reach the innermost cell. From
-|*                  there we walk back up to the first SwCellFrm. Since we use
-|*                  SectionFrms ContainsCntnt()->GetUpper() is not enough any
-|*                  more.
-|*************************************************************************/
-
+/**
+ * Calls ContainsAny first to reach the innermost cell. From there we walk back
+ * up to the first SwCellFrm. Since we use SectionFrms, ContainsCntnt()->GetUpper()
+ * is not enough anymore.
+ */
 const SwCellFrm *SwLayoutFrm::FirstCell() const
 {
     const SwFrm* pCnt = ContainsAny();
@@ -127,17 +111,11 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
     return (const SwCellFrm*)pCnt;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::ContainsAny
-|*
-|*  like ComtainsCntnt, but does not only return CntntFrms but
-|*  also sections and tables.
-|*************************************************************************/
-
-// #130797#
-// New parameter <_bInvestigateFtnForSections> controls investigation of
-// content of footnotes for sections.
+/** return CntntFrms, sections, and tables.
+ *
+ * @param _bInvestigateFtnForSections controls investigation of content of footnotes for sections.
+ * @see ContainsCntnt
+ */
 const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
 {
     //Search downwards the layout leaf and if there is no content, jump to the
@@ -178,12 +156,6 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
     return 0;
 }
 
-
-/*************************************************************************
-|*
-|*  SwFrm::GetLower()
-|*
-|*************************************************************************/
 const SwFrm* SwFrm::GetLower() const
 {
     return IsLayoutFrm() ? ((SwLayoutFrm*)this)->Lower() : 0;
@@ -194,11 +166,6 @@ SwFrm* SwFrm::GetLower()
     return IsLayoutFrm() ? ((SwLayoutFrm*)this)->Lower() : 0;
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::IsAnLower()
-|*
-|*************************************************************************/
 sal_Bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
 {
     const SwFrm *pUp = pAssumed;
@@ -274,9 +241,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
     return bReturn;
 }
 
-//
 // Local helper functions for GetNextLayoutLeaf
-//
 
 static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
@@ -299,18 +264,13 @@ static const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
            static_cast<const SwLayoutFrm*>(pFrm)->GetLastLower();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::ImplGetNextLayoutLeaf
-|*
-|* Finds the next layout leaf. This is a layout frame, which does not
+/**
+ * Finds the next layout leaf. This is a layout frame, which does not
  * have a lower which is a LayoutFrame. That means, pLower can be 0 or a
  * content frame.
  *
  * However, pLower may be a TabFrm
- *
-|*************************************************************************/
-
+ */
 const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 {
     const SwFrm       *pFrm = this;
@@ -355,22 +315,16 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
     return pLayoutFrm;
 }
 
-
-
-/*************************************************************************
-|*
-|*    SwFrm::ImplGetNextCntntFrm( bool )
-|*
-|*      Walk back inside the tree: grab the subordinate Frm if one exists and
-|*      the last step was not moving up a level (this would lead to an infinite
-|*      up/down loop!). With this we ensure that during walking back we search
-|*      through all sub trees. If we walked downwards we have to go to the end
-|*      of the chain first because we go backwards from the last Frm inside
-|*      another Frm. Walking forward works the same.
-|*************************************************************************/
-
-// Caution: fixes in ImplGetNextCntntFrm() may also need to be applied to the
-// lcl_NextFrm(..) method above
+/**
+ * Walk back inside the tree: grab the subordinate Frm if one exists and the
+ * last step was not moving up a level (this would lead to an infinite up/down
+ * loop!). With this we ensure that during walking back we search through all
+ * sub trees. If we walked downwards we have to go to the end of the chain first
+ * because we go backwards from the last Frm inside another Frm. Walking
+ * forward works the same.
+ *
+ * @warning fixes here may also need to be applied to the @{lcl_NextFrm} method above
+ */
 const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
@@ -410,15 +364,6 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
     return pCntntFrm;
 }
 
-
-
-
-/*************************************************************************
-|*
-|*  SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
-|*         FindPageFrm(), FindColFrm()
-|*
-|*************************************************************************/
 SwPageFrm* SwFrm::FindPageFrm()
 {
     SwFrm *pRet = this;
@@ -606,11 +551,6 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     return pRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFrmFrm::GetAttrSet()
-|*
-|*************************************************************************/
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
     if ( IsCntntFrm() )
@@ -1225,14 +1165,8 @@ void SwFrm::InvalidateNextPrtArea()
     }
 }
 
-/*************************************************************************
-|*
-|*    lcl_IsInColSect()
-|*
-|* returns true if the frame _directly_ sits in a section with columns
-|* but not if it sits in a table which itself sits in a section with columns.
-|*************************************************************************/
-
+/// @returns true if the frame _directly_ sits in a section with columns
+///     but not if it sits in a table which itself sits in a section with columns.
 static bool lcl_IsInColSct( const SwFrm *pUp )
 {
     bool bRet = false;
@@ -1249,11 +1183,6 @@ static bool lcl_IsInColSct( const SwFrm *pUp )
     return false;
 }
 
-/*************************************************************************
-|*
-|*    SwFrm::IsMoveable();
-|*
-|*************************************************************************/
 /** determine, if frame is moveable in given environment
 
     OD 08.08.2003 #110978#
@@ -1264,7 +1193,6 @@ static bool lcl_IsInColSct( const SwFrm *pUp )
 
     @author OD
 */
-
 bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 {
     bool bRetVal = false;
@@ -1327,11 +1255,6 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
     return bRetVal;
 }
 
-/*************************************************************************
-|*
-|*    SwFrm::SetInfFlags();
-|*
-|*************************************************************************/
 void SwFrm::SetInfFlags()
 {
     if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
@@ -1364,13 +1287,11 @@ void SwFrm::SetInfFlags()
     } while ( pFrm && !pFrm->IsPageFrm() ); //there is nothing above the page
 }
 
-/*
- * SwFrm::SetDirFlags( sal_Bool )
- * actualizes the vertical or the righttoleft-flags.
+/** Updates the vertical or the righttoleft-flags.
+ *
  * If the property is derived, it's from the upper or (for fly frames) from
  * the anchor. Otherwise we've to call a virtual method to check the property.
  */
-
 void SwFrm::SetDirFlags( sal_Bool bVert )
 {
     if( bVert )
@@ -1742,9 +1663,6 @@ bool SwFrm::IsInBalancedSection() const
     return bRet;
 }
 
-/*
- * SwLayoutFrm::GetLastLower()
- */
 const SwFrm* SwLayoutFrm::GetLastLower() const
 {
     const SwFrm* pRet = Lower();

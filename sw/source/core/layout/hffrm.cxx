@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "pagefrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
@@ -58,10 +57,8 @@ static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
         nMinHeight = 0;
     }
 
-
     return nMinHeight;
 }
-
 
 static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
 {
@@ -204,7 +201,6 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
             nNewHeight = 0;
 
         maPrt.Height(nNewHeight);
-
     }
     else
     {
@@ -655,16 +651,6 @@ sal_Bool SwHeadFootFrm::GetEatSpacing() const
     return sal_False;
 }
 
-
-/*************************************************************************
-|*
-|*  SwPageFrm::PrepareHeader()
-|*
-|*  Description        Creates or removes headers
-|*
-|*************************************************************************/
-
-
 void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
 {
     for ( int i = 0; pPage->GetSortedObjs() &&
@@ -684,8 +670,7 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
     }
 }
 
-
-
+/// Creates or removes headers
 void SwPageFrm::PrepareHeader()
 {
     SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
@@ -724,15 +709,8 @@ void SwPageFrm::PrepareHeader()
         delete pLay;
     }
 }
-/*************************************************************************
-|*
-|*  SwPageFrm::PrepareFooter()
-|*
-|*  Description        Creates or removes footer
-|*
-|*************************************************************************/
 
-
+/// Creates or removes footer
 void SwPageFrm::PrepareFooter()
 {
     SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
@@ -774,7 +752,5 @@ void SwPageFrm::PrepareFooter()
         delete pLay;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

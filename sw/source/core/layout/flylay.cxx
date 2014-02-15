@@ -27,7 +27,6 @@
 #include "hints.hxx"
 #include "sectfrm.hxx"
 
-
 #include <svx/svdpage.hxx>
 #include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
@@ -42,15 +41,7 @@
 #include <sortedobjs.hxx>
 #include <viewimp.hxx>
 
-
 using namespace ::com::sun::star;
-
-
-/*************************************************************************
-|*
-|*  SwFlyFreeFrm::SwFlyFreeFrm(), ~SwFlyFreeFrm()
-|*
-|*************************************************************************/
 
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch ),
@@ -65,7 +56,6 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 SwFlyFreeFrm::~SwFlyFreeFrm()
 {
-    // and goodbye.
     // #i28701# - use new method <GetPageFrm()>
     if( GetPageFrm() )
     {
@@ -92,28 +82,17 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
 
 // #i28701#
 TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
-/*************************************************************************
-|*
-|*  SwFlyFreeFrm::NotifyBackground()
-|*
-|*  Description      notifies the background (all CntntFrms that currently
-|*       are overlapping). Additionally, the window is also directly
-|*       invalidated (especially where there are no overlapping CntntFrms)
-|*       This also takes CntntFrms within other Flys into account.
-|*
-|*************************************************************************/
-
+/** Notifies the background (all CntntFrms that currently are overlapping).
+ *
+ * Additionally, the window is also directly invalidated (especially where
+ * there are no overlapping CntntFrms).
+ * This also takes CntntFrms within other Flys into account.
+ */
 void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
                                      const SwRect& rRect, PrepareHint eHint )
 {
     ::Notify_Background( GetVirtDrawObj(), pPageFrm, rRect, eHint, sal_True );
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFreeFrm::MakeAll()
-|*
-|*************************************************************************/
 
 void SwFlyFreeFrm::MakeAll()
 {
@@ -266,12 +245,6 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 
     return bRetVal;
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFreeFrm::CheckClip()
-|*
-|*************************************************************************/
 
 void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 {
@@ -477,12 +450,6 @@ bool SwFlyFreeFrm::IsFormatPossible() const
              ( GetAnchorFrm() && GetAnchorFrm()->IsInFly() ) );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyLayFrm::SwFlyLayFrm()
-|*
-|*************************************************************************/
-
 SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
@@ -491,11 +458,6 @@ SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 // #i28701#
 TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
-/*************************************************************************
-|*
-|*  SwFlyLayFrm::Modify()
-|*
-|*************************************************************************/
 
 void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
@@ -569,12 +531,6 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     else
         SwFlyFrm::Modify( pOld, pNew );
 }
-
-/*************************************************************************
-|*
-|*  SwPageFrm::AppendFly()
-|*
-|*************************************************************************/
 
 void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 {
@@ -672,12 +628,6 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::RemoveFly()
-|*
-|*************************************************************************/
-
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
     const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
@@ -726,12 +676,6 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     // #i28701# - use new method <SetPageFrm(..)>
     pToRemove->SetPageFrm( 0L );
 }
-
-/*************************************************************************
-|*
-|*  SwPageFrm::MoveFly
-|*
-|*************************************************************************/
 
 void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 {
@@ -830,13 +774,6 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::AppendDrawObjToPage(), RemoveDrawObjFromPage()
-|*
-|*  #i28701# - new methods
-|*
-|*************************************************************************/
 void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
@@ -915,12 +852,6 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
     _rToRemoveObj.SetPageFrm( 0 );
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::PlaceFly
-|*
-|*************************************************************************/
-
 // #i50432# - adjust method description and synopsis.
 void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 {
@@ -947,11 +878,6 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
     }
 }
 
-/*************************************************************************
-|*
-|*  ::CalcClipRect
-|*
-|*************************************************************************/
 // #i18732# - adjustments for following text flow or not
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
 // #i22305# - adjustment for following text flow for to frame anchored objects

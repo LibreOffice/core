@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "doc.hxx"
 #include "frmtool.hxx"
 #include "hints.hxx"
@@ -30,11 +29,6 @@
 //from FlyCnt.cxx
 void DeepCalc( const SwFrm *pFrm );
 
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
-|*
-|*************************************************************************/
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )
 {
@@ -51,7 +45,6 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 SwFlyInCntFrm::~SwFlyInCntFrm()
 {
-    //good bye
     if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
@@ -61,11 +54,7 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
 
 // #i28701#
 TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::SetRefPoint(),
-|*
-|*************************************************************************/
+
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelAttr,
                                  const Point& rRelPos )
@@ -93,11 +82,6 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::Modify()
-|*
-|*************************************************************************/
 void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     bool bCallPrepare = false;
@@ -137,13 +121,8 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if ( bCallPrepare && GetAnchorFrm() )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
 }
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::Format()
-|*
-|*  Here the content gets formatted initially.
-|*
-|*************************************************************************/
+
+/// Here the content gets formatted initially.
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
@@ -158,15 +137,12 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
     }
     SwFlyFrm::Format( pAttrs );
 }
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::MakeFlyPos()
-|*
-|*  Description         In contrast to other Frms we only calculate the RelPos
-|*      here. The absolute position is only calculated using SetAbsPos.
-|*************************************************************************/
-// OD 2004-03-23 #i26791#
-//void SwFlyInCntFrm::MakeFlyPos()
+
+/** Calculate object position
+ *
+ * @note: In contrast to other Frames, we only calculate the relative position
+ *        here. The absolute position is only calculated using SetAbsPos.
+ **/
 void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !mbValidPos )
@@ -199,11 +175,7 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
 }
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::NotifyBackground()
-|*
-|*************************************************************************/
+
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
                                        PrepareHint eHint)
 {
@@ -213,22 +185,12 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
         AnchorFrm()->Prepare( eHint, (void*)&rRect );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::GetRelPos()
-|*
-|*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
 {
     Calc();
     return GetCurrRelPos();
 }
 
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::RegistFlys()
-|*
-|*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
 {
     // vgl. SwRowFrm::RegistFlys()
@@ -237,11 +199,6 @@ void SwFlyInCntFrm::RegistFlys()
     ::RegistFlys( pPage, this );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyInCntFrm::MakeAll()
-|*
-|*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
 {
     // OD 2004-01-19 #110582#
@@ -284,7 +241,6 @@ void SwFlyInCntFrm::MakeAll()
             MakeObjPos();
         }
 
-        //
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( mbValidPos && mbValidSize &&

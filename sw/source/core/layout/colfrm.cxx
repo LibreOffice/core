@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/ulspitem.hxx>
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
@@ -33,12 +32,6 @@
 // ftnfrm.cxx:
 void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
 
-
-/*************************************************************************
-|*
-|*  SwColumnFrm::SwColumnFrm()
-|*
-|*************************************************************************/
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
 {
@@ -60,12 +53,6 @@ SwColumnFrm::~SwColumnFrm()
         pDoc->DelFrmFmt( pFmt );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::ChgColumns()
-|*
-|*************************************************************************/
 
 static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
@@ -105,7 +92,6 @@ static SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
     }
     return 0;
 }
-
 
 static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
 {
@@ -174,14 +160,16 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     return bRet;
 }
 
-/*--------------------------------------------------
- * ChgColumns() adds or removes columns from a layoutframe.
+/** add or remove columns from a layoutframe.
+ *
  * Normally, a layoutframe with a column attribut of 1 or 0 columns contains
  * no columnframe. However, a sectionframe with "footnotes at the end" needs
- * a columnframe. If the bChgFtn-flag is set, the columnframe will be inserted
- * or remove, if necessary.
- * --------------------------------------------------*/
-
+ * a columnframe.
+ *
+ * @param rOld
+ * @param rNew
+ * @param bChgFtn if true, the columnframe will be inserted or removed, if necessary.
+ */
 void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     const sal_Bool bChgFtn )
 {
@@ -291,12 +279,6 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         ::RestoreCntnt( pSave, (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower(), 0, true );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::AdjustColumns()
-|*
-|*************************************************************************/
 
 void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttributes )
 {
@@ -445,9 +427,5 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
         }
     }
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

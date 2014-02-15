@@ -32,10 +32,8 @@
 
 using namespace ::com::sun::star;
 
-// ============================================================================
 // helper class for correct notification due to the positioning of
 // the anchored drawing object
-// ============================================================================
 class SwPosNotify
 {
     private:
@@ -121,10 +119,8 @@ Point SwPosNotify::LastObjPos() const
     return maOldObjRect.Pos();
 }
 
-// ============================================================================
 // #i32795#
 // helper class for oscillation control on object positioning
-// ============================================================================
 class SwObjPosOscillationControl
 {
     private:
@@ -192,9 +188,8 @@ bool SwObjPosOscillationControl::OscillationDetected()
     return bOscillationDetected;
 }
 
-// ============================================================================
-// implementation of class <SwAnchoredDrawObject>
-// ============================================================================
+// class <SwAnchoredDrawObject>
+
 TYPEINIT1(SwAnchoredDrawObject,SwAnchoredObject);
 
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
@@ -247,10 +242,6 @@ bool SwAnchoredDrawObject::IsOutsidePage() const
     return bOutsidePage;
 }
 
-// =============================================================================
-// #i26791# - implementation of pure virtual method declared in
-// base class <SwAnchoredObject>
-// =============================================================================
 void SwAnchoredDrawObject::MakeObjPos()
 {
     if ( IsPositioningInProgress() )
@@ -847,7 +838,5 @@ void SwAnchoredDrawObject::RegisterAtCorrectPage()
         pPageFrm->AppendDrawObjToPage( *this );
     }
 }
-
-// =============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

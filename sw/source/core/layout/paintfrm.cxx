@@ -65,7 +65,6 @@
 #include <bodyfrm.hxx>
 #include <hffrm.hxx>
 #include <colfrm.hxx>
-// <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -1183,7 +1182,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     }
 }
 
-//-------------------------------------------------------------------------
 // Various functions that are use in this file.
 
 // Note: function <SwAlignRect(..)> also used outside this file.
@@ -2263,9 +2261,7 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &a
 #endif
 }
 
-//
 // FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES START
-//
 
 struct SwLineEntry
 {
@@ -2915,9 +2911,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
         pLineSet->insert( rNew );
 }
 
-//
 // FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
-//
 
 // --> OD #i76669#
 namespace
@@ -2959,21 +2953,15 @@ namespace
 
 } // end of anonymous namespace
 // <--
-/*************************************************************************
+/** Paint once for every visible page which is touched by Rect.
 |*
-|*  SwRootFrm::Paint()
-|*
-|*  Description
-|*      Paint once for every visible page which is touched by Rect.
 |*      1. Paint borders and backgrounds.
 |*      2. Paint the draw layer (frames and drawing objects) that is
 |*         below the document (hell).
 |*      3. Paint the document content (text)
 |*      4. Paint the draw layer that is above the document.
-|*************************************************************************/
-
-void
-SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
+|*/
+void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Lower of root is no page." );
 
@@ -3325,12 +3313,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::Paint()
-|*
-|*************************************************************************/
 
 static void lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
 {
@@ -3825,12 +3807,6 @@ bool SwFlyFrm::IsShadowTransparent() const
     return GetFmt()->IsShadowTransparent();
 };
 
-/*************************************************************************
-|*
-|*  SwFlyFrm::IsPaint()
-|*
-|*************************************************************************/
-
 sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 {
     SdrObjUserCall *pUserCall;
@@ -3925,20 +3901,11 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-/*************************************************************************
-|*  SwCellFrm::Paint( const SwRect& ) const
-|*************************************************************************/
 void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrm::Paint( rRect );
 }
-
-/*************************************************************************
-|*
-|*  SwFlyFrm::Paint()
-|*
-|*************************************************************************/
 
 struct BorderLinesGuard
 {
@@ -4193,11 +4160,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     if ( pProgress && pNoTxt )
         pProgress->Reschedule();
 }
-/*************************************************************************
-|*
-|*    SwTabFrm::Paint()
-|*
-|*************************************************************************/
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
@@ -4221,7 +4183,6 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             SwTabFrmPainter aHelper( *this );
             aHelper.PaintLines( *pGlobalShell->GetOut(), rRect );
         }
-        // <-- collapsing
 
         SwLayoutFrm::Paint( rRect );
     }
@@ -4461,18 +4422,14 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     }
 }
 
-/*************************************************************************
+/** Paints a shadow if the format requests so.
 |*
-|*  SwFrm::PaintShadow()
-|*
-|*  Description         Paints a shadow if the format requests so.
 |*      The shadow is always painted on the outer edge of the OutRect.
 |*      If needed, the OutRect is shrunk so the painting of the border can be
 |*      done on it.
 |*
-|*************************************************************************/
-/// OD 23.08.2002 #99657#
-///     draw full shadow rectangle for frames with transparent drawn backgrounds.
+|* @note: draw full shadow rectangle for frames with transparent drawn backgrounds (OD 23.08.2002 #99657#)
+*/
 void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                          const SwBorderAttrs &rAttrs ) const
 {
@@ -4511,12 +4468,6 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true);
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintBorderLine()
-|*
-|*************************************************************************/
-
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
                              const SwPageFrm *pPage,
@@ -4550,14 +4501,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
         pLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintBorderLines()
-|*
-|*  Descrtiption        Only all lines once or all lines twice!
-|*
-|*************************************************************************/
-
+/// @note Only all lines once or all lines twice!
 // OD 29.04.2003 #107169# - method called for left and right border rectangles.
 // For a printer output device perform adjustment for non-overlapping top and
 // bottom border rectangles. Thus, add parameter <_bPrtOutputDev> to indicate
@@ -5023,14 +4967,7 @@ void PaintCharacterBorder(
     }
 }
 
-/*************************************************************************
-|*
-|*  const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
-|*
-|* No comment. #i15844#
-|*
-|*************************************************************************/
-
+// #i15844#
 static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 {
     OSL_ENSURE( rFrm.IsCellFrm(),
@@ -5048,14 +4985,6 @@ static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 
     return 0;
 }
-
-/*************************************************************************
-|*
-|*  SwFrm::PaintBorder()
-|*
-|*  Description         Paints shadows and borders
-|*
-|*************************************************************************/
 
 /** local method to determine cell frame, from which the border attributes
     for paint of top/bottom border has to be used.
@@ -5248,6 +5177,7 @@ void SwFrm::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSeque
     }
 }
 
+/// Paints shadows and borders
 void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
@@ -5383,15 +5313,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         rAttrs.SetGetCacheLine( sal_False );
     }
 }
-/*************************************************************************
-|*
-|*  SwFtnContFrm::PaintBorder()
-|*
-|*  Description         Special implementation because of the footnote line.
+/*      Special implementation because of the footnote line.
 |*      Currently only the top frame needs to be taken into account.
 |*      Other lines and shadows are set aside.
-|*************************************************************************/
-
+|*/
 void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                                 const SwBorderAttrs & ) const
 {
@@ -5402,14 +5327,8 @@ void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     if ( !aRect.IsInside( rRect ) )
         PaintLine( rRect, pPage );
 }
-/*************************************************************************
-|*
-|*  SwFtnContFrm::PaintLine()
-|*
-|*  Description         Paint footnote lines.
-|*
-|*************************************************************************/
 
+/// Paint footnote lines.
 void SwFtnContFrm::PaintLine( const SwRect& rRect,
                               const SwPageFrm *pPage ) const
 {
@@ -5449,14 +5368,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
                 rInf.GetLineStyle() );
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::PaintColLines()
-|*
-|*  Description         Paints the separator line for inside columns
-|*
-|*************************************************************************/
-
+/// Paints the separator line for inside columns
 void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
                                  const SwPageFrm *pPage ) const
 {
@@ -6282,12 +6194,6 @@ SwRect SwPageFrm::GetBoundRect() const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintBaBo()
-|*
-|*************************************************************************/
-
 void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
                        const sal_Bool bLowerBorder, const bool bOnlyTxtBackground ) const
 {
@@ -6332,11 +6238,6 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     pOut->Pop();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintBackground()
-|*
-|*************************************************************************/
 /// OD 05.09.2002 #102912#
 /// Do not paint background for fly frames without a background brush by
 /// calling <PaintBaBo> at the page or at the fly frame its anchored
@@ -6530,14 +6431,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::RefreshSubsidiary()
-|*
-|*  Description         Refreshes all subsidiary lines of a page.
-|*
-|*************************************************************************/
-
+/// Refreshes all subsidiary lines of a page.
 void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
 {
     if ( IS_SUBS || IS_SUBS_TABLE || IS_SUBS_SECTION || IS_SUBS_FLYS )
@@ -6575,11 +6469,6 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::RefreshLaySubsidiary()
-|*
-|*************************************************************************/
 void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
@@ -6623,16 +6512,9 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::PaintSubsidiaryLines()
-|*
-|*  Description         Subsidiary lines to paint the PrtAreas
-|*      Only the LayoutFrms which directly contain Cntnt.
-|*
-|*************************************************************************/
-
-//Paints the desired line and pays attention to not overpaint any flys.
+/// Subsidiary lines to paint the PrtAreas.
+/// Only the LayoutFrms which directly contain Cntnt.
+/// Paints the desired line and pays attention to not overpaint any flys.
 // OD 18.11.2002 #99672# - new parameter <_pSubsLines>
 static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const SwPageFrm *pPage,
@@ -7069,16 +6951,8 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::RefreshExtraData(), SwLayoutFrm::RefreshExtraData()
-|*
-|* Description          Refreshes all extra data (line breaks a.s.o) of the
-|*                      page. Basically only those objects are considered which
-|*                      horizontally overlap the Rect.
-|*
-|*************************************************************************/
-
+/// Refreshes all extra data (line breaks a.s.o) of the page. Basically only those objects
+/// are considered which horizontally overlap the Rect.
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
@@ -7193,14 +7067,7 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
     return aGlobalRetoucheColor;
 }
 
-/*************************************************************************
-|*
-|*    SwPageFrm::GetEmptyPageFont()
-|*
-|*    create/return font used to paint the "empty page" string
-|*
-|*************************************************************************/
-
+/// create/return font used to paint the "empty page" string
 const Font& SwPageFrm::GetEmptyPageFont()
 {
     static Font* pEmptyPgFont = 0;
@@ -7219,16 +7086,12 @@ const Font& SwPageFrm::GetEmptyPageFont()
     return *pEmptyPgFont;
 }
 
-/*************************************************************************
+/** Retouch for a section.
 |*
-|*    SwFrm::Retouche
-|*
-|*    Description       Retouch for a section.
 |*      Retouch will only be done, if the Frm is the last one in his chain.
 |*      The whole area of the upper which is located below the Frm will be
 |*      cleared using PaintBackground.
-|*************************************************************************/
-
+|*/
 void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 {
     if ( bFlyMetafile )
@@ -7437,12 +7300,6 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
 
     return sal_False;
 }
-
-/*************************************************************************
-|*
-|*  SwFrmFmt::GetGraphic()
-|*
-|*************************************************************************/
 
 void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pO,
                       Window *pW, sal_uInt16 nZoom )

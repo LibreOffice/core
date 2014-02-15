@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ftnfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
@@ -205,12 +204,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 
 const sal_uInt16 nMinVertCellHeight = 1135;
 
-/*--------------------------------------------------
- * SwFrm::CheckDirChange(..)
- * checks the layout direction and
- * invalidates the lower frames rekursivly, if necessary.
- * --------------------------------------------------*/
-
+/// checks the layout direction and invalidates the lower frames rekursivly, if necessary.
 void SwFrm::CheckDirChange()
 {
     bool bOldVert = GetVerticalFlag();
@@ -305,10 +299,7 @@ void SwFrm::CheckDirChange()
     }
 }
 
-/*--------------------------------------------------
- * SwFrm::GetFrmAnchorPos(..)
- * returns the position for anchors based on frame direction
- * --------------------------------------------------*/
+/// returns the position for anchors based on frame direction
 // OD 2004-03-10 #i11860# - consider lower space and line spacing of
 // previous frame according to new option 'Use former object positioning'
 Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
@@ -345,13 +336,6 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 
     return aAnchor;
 }
-
-
-/*************************************************************************
-|*
-|*  SwFrm::~SwFrm()
-|*
-|*************************************************************************/
 
 void SwFrm::Destroy()
 {
@@ -409,8 +393,6 @@ SwFrm::~SwFrm()
 #endif
 }
 
-/*************************************************************************/
-
 const SwFrmFmt * SwLayoutFrm::GetFmt() const
 {
     return static_cast< const SwFlyFrmFmt * >( GetDep() );
@@ -420,14 +402,6 @@ SwFrmFmt * SwLayoutFrm::GetFmt()
 {
     return static_cast< SwFlyFrmFmt * >( GetDep() );
 }
-
-
-/*************************************************************************
-|*
-|*    SwLayoutFrm::SetFrmFmt()
-|*
-|*************************************************************************/
-
 
 void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
 {
@@ -440,18 +414,12 @@ void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
     }
 }
 
-/*************************************************************************
-|*                  SwCntntFrm::SwCntntFrm()
-|*************************************************************************/
 SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
     SwFrm( pCntnt, pSib ),
     SwFlowFrm( (SwFrm&)*this )
 {
 }
 
-/*************************************************************************
-|*                  SwCntntFrm::~SwCntntFrm()
-|*************************************************************************/
 SwCntntFrm::~SwCntntFrm()
 {
     SwCntntNode* pCNd;
@@ -548,12 +516,6 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
         delete pFrm;
     }
 }
-
-/*************************************************************************
-|*
-|*  SwLayoutFrm::~SwLayoutFrm
-|*
-|*************************************************************************/
 
 void SwLayoutFrm::Destroy()
 {
@@ -653,16 +615,11 @@ SwLayoutFrm::~SwLayoutFrm()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintArea()
-|*
+/**
 |*  The paintarea is the area, in which the content of a frame is allowed
 |*  to be displayed. This region could be larger than the printarea (Prt())
 |*  of the upper, it includes e.g. often the margin of the page.
-|*
-|*************************************************************************/
-
+|*/
 const SwRect SwFrm::PaintArea() const
 {
     // NEW TABLES
@@ -754,15 +711,10 @@ const SwRect SwFrm::PaintArea() const
     return aRect;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::UnionFrm()
-|*
+/**
 |*  The unionframe is the framearea (Frm()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.
-|*
-|*************************************************************************/
-
+|*/
 const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 {
     sal_Bool bVert = IsVertical();
@@ -813,8 +765,5 @@ const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
     (aRet.*fnRect->fnSetWidth)( nWidth );
     return aRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

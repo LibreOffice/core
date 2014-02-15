@@ -351,7 +351,6 @@ sal_uInt32 SwFrm::mnLastFrmId=0;
 TYPEINIT1(SwFrm,SwClient);      //rtti for SwFrm
 TYPEINIT1(SwCntntFrm,SwFrm);    //rtti for SwCntntFrm
 
-
 void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
@@ -362,8 +361,6 @@ void _FrmInit()
     );
     SwFrm::SetCache( pNew );
 }
-
-
 
 void _FrmFinit()
 {
@@ -380,11 +377,7 @@ void _FrmFinit()
     delete SwFrm::GetCachePtr();
 }
 
-/*************************************************************************
-|*
-|*  RootFrm::Everything that belongs to CurrShell
-|*
-|*************************************************************************/
+// RootFrm::Everything that belongs to CurrShell
 
 class SwCurrShells : public std::set<CurrShell*> {};
 
@@ -450,19 +443,11 @@ void InitCurrShells( SwRootFrm *pRoot )
     pRoot->pCurrShells = new SwCurrShells;
 }
 
-
-/*************************************************************************
-|*
-|*  SwRootFrm::SwRootFrm()
-|*
-|*  Description:
+/*
 |*      The RootFrm requests an own FrmFmt from the document, which it is
 |*      going to delete again in the dtor. The own FrmFmt is derived from
 |*      the passed FrmFmt.
-|*
-|*************************************************************************/
-
-
+|*/
 SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
         OUString("Root"), pFmt ), 0 ),
@@ -574,7 +559,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         pFieldsAccess->UpdateRefFlds( NULL );
     //b6433357: Update page fields after loading
-    // --->
     if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
@@ -588,14 +572,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     if (pViewSh)
         mbNeedGrammarCheck = pViewSh->GetViewOptions()->IsOnlineSpell();
 }
-
-/*************************************************************************
-|*
-|*  SwRootFrm::~SwRootFrm()
-|*
-|*************************************************************************/
-
-
 
 SwRootFrm::~SwRootFrm()
 {
@@ -640,13 +616,6 @@ SwRootFrm::~SwRootFrm()
     SwFrm::Destroy();
 }
 
-/*************************************************************************
-|*
-|*  SwRootFrm::RemoveMasterObjs()
-|*
-|*************************************************************************/
-
-
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
     // Remove all master objects from the Page. But don't delete!
@@ -657,7 +626,6 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
             pPg->RemoveObject( i );
     }
 }
-
 
 void SwRootFrm::AllCheckPageDescs() const
 {
@@ -674,14 +642,17 @@ void SwRootFrm::AllInvalidateAutoCompleteWords() const
         pPage = (SwPageFrm*)pPage->GetNext();
     }
 }
+
 void SwRootFrm::AllAddPaintRect() const
 {
     GetCurrShell()->AddPaintRect( this->Frm() );
 }
+
 void SwRootFrm::AllRemoveFtns()
 {
     RemoveFtns();
 }
+
 void SwRootFrm::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
 {
     SwPageFrm *pPage = (SwPageFrm*)this->Lower();
