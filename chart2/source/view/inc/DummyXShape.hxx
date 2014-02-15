@@ -355,7 +355,6 @@ private:
         chart2::XFormattedString > > maFormattedString;
 };
 
-
 class DummyXShapes : public DummyXShape, public com::sun::star::drawing::XShapes
 {
 public:

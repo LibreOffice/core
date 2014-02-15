@@ -742,6 +742,11 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         drawing::HomogenMatrix3 aTrans = rTrans.get<drawing::HomogenMatrix3>();
         setSize(awt::Size(20*bmpWidth, 20*bmpHeight));
         setPosition(awt::Point(aTrans.Line1.Column3, aTrans.Line2.Column3));
+        aTrans.Line1.Column1 = 20 * bmpWidth;
+        aTrans.Line2.Column2 = 20 * bmpHeight;
+        uno::Any aNewTrans;
+        aNewTrans <<= aTrans;
+        setPropertyValue("Transformation", aNewTrans);
     }
     else
         setSize(awt::Size(20*bmpWidth, 20*bmpHeight));
