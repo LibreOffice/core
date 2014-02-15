@@ -204,8 +204,8 @@ void SwFlyFrm::InsertCnt()
     }
 }
 
- void SwFlyFrm::InsertColumns()
- {
+void SwFlyFrm::InsertColumns()
+{
     // #i97379#
     // Check, if column are allowed.
     // Columns are not allowed for fly frames, which represent graphics or embedded objects.
@@ -227,7 +227,7 @@ void SwFlyFrm::InsertCnt()
         const SwFmtCol aOld; // ChgColumns() also needs an old value passed
         ChgColumns( aOld, rCol );
     }
- }
+}
 
 SwFlyFrm::~SwFlyFrm()
 {
@@ -562,7 +562,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         SwRootFrm* pLayout = pMaster->getRootFrm();
         if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
-}
+    }
 }
 
 SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )

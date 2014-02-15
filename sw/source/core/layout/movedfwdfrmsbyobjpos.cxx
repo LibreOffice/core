@@ -47,7 +47,7 @@ void SwMovedFwdFrmsByObjPos::Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
 void SwMovedFwdFrmsByObjPos::Remove( const SwTxtFrm& _rTxtFrm )
 {
     maMovedFwdFrms.erase( _rTxtFrm.GetTxtNode() );
-};
+}
 
 bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                                   sal_uInt32& _ornToPageNum ) const

@@ -4630,8 +4630,7 @@ static double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine
     return nExtent;
 }
 
-static void
-lcl_MakeBorderLine(SwRect const& rRect,
+static void lcl_MakeBorderLine(SwRect const& rRect,
         bool const isVerticalInModel,
         bool const isLeftOrTopBorderInModel,
         bool const isVertical,
