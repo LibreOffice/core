@@ -66,11 +66,11 @@ namespace
 ResData::ResData( const OString &rGId )
     :
     nIdLevel( ID_LEVEL_NULL ),
-    bChild( sal_False ),
-    bChildWithText( sal_False ),
-    bText( sal_False ),
-    bQuickHelpText( sal_False ),
-    bTitle( sal_False ),
+    bChild( false ),
+    bChildWithText( false ),
+    bText( false ),
+    bQuickHelpText( false ),
+    bTitle( false ),
     sGId( rGId ),
     sTextTyp( "Text" )
 {
@@ -80,11 +80,11 @@ ResData::ResData( const OString &rGId )
 ResData::ResData( const OString &rGId, const OString &rFilename)
     :
     nIdLevel( ID_LEVEL_NULL ),
-    bChild( sal_False ),
-    bChildWithText( sal_False ),
-    bText( sal_False ),
-    bQuickHelpText( sal_False ),
-    bTitle( sal_False ),
+    bChild( false ),
+    bChildWithText( false ),
+    bText( false ),
+    bQuickHelpText( false ),
+    bTitle( false ),
     sGId( rGId ),
     sFilename( rFilename ),
     sTextTyp( "Text" )
@@ -97,7 +97,7 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 //
 
 bool MergeEntrys::GetText( OString &rReturn,
-    sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
+    sal_uInt16 nTyp, const OString &nLangIndex, bool bDel )
 {
     bool bReturn = true;
     switch ( nTyp ) {
@@ -214,7 +214,7 @@ MergeEntrys* MergeData::GetMergeEntries()
     return pMergeEntrys;
 }
 
-sal_Bool MergeData::operator==( ResData *pData )
+bool MergeData::operator==( ResData *pData )
 {
     return pData->sId == sLID && pData->sGId == sGID
         && pData->sResTyp.equalsIgnoreAsciiCase(sTyp);

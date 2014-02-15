@@ -103,7 +103,7 @@ protected:
     CfgStack aStack;
     CfgStackData *pStackData;
 
-    sal_Bool bLocalize;
+    bool bLocalize;
 
     virtual void WorkOnText(
         OString &rText,
@@ -122,7 +122,7 @@ private:
         const OString &rIsoLang,
         const OString &rResTyp );
 
-    sal_Bool IsTokenClosed(const OString &rToken);
+    bool IsTokenClosed(const OString &rToken);
 
 public:
     CfgParser();
@@ -163,7 +163,7 @@ private:
     ResData *pResData;
 
     OString sFilename;
-    sal_Bool bEnglish;
+    bool bEnglish;
 
     std::ofstream pOutputStream;
 

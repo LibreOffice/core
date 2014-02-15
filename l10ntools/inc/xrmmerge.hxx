@@ -32,8 +32,8 @@ private:
     OString sGID;
     OString sLID;
 
-    sal_Bool bError;
-    sal_Bool bText;
+    bool bError;
+    bool bText;
 
     OString sCurrentOpenTag;
     OString sCurrentCloseTag;
@@ -65,8 +65,8 @@ public:
 
     int Execute( int nToken, char * pToken );
 
-    void SetError( sal_Bool bErr = sal_True ) { bError = bErr; }
-    sal_Bool GetError() { return bError; }
+    void SetError( bool bErr = true ) { bError = bErr; }
+    bool GetError() { return bError; }
 };
 
 

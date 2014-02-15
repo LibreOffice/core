@@ -46,7 +46,7 @@ private:
     sal_uInt16 nError;
     LngLineList *pLines;
     OString sSource;
-    sal_Bool bULF;
+    bool bULF;
     std::vector<OString> aLanguages;
 
     bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
@@ -56,11 +56,11 @@ private:
         const OString &rActFileName, const OString &rID);
 public:
     LngParser(const OString &rLngFile,
-        sal_Bool bULFFormat);
+        bool bULFFormat);
     ~LngParser();
 
-    sal_Bool CreatePO( const OString &rPOFile );
-    sal_Bool Merge(const OString &rPOFile, const OString &rDestinationFile,
+    bool CreatePO( const OString &rPOFile );
+    bool Merge(const OString &rPOFile, const OString &rDestinationFile,
          const OString &rLanguage );
 };
 

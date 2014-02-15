@@ -48,7 +48,7 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 // class LngParser
 //
 LngParser::LngParser(const OString &rLngFile,
-    sal_Bool bULFFormat)
+    bool bULFFormat)
     : nError( LNG_OK )
     , pLines( NULL )
     , sSource( rLngFile )
@@ -89,7 +89,7 @@ LngParser::~LngParser()
     delete pLines;
 }
 
-sal_Bool LngParser::CreatePO( const OString &rPOFile )
+bool LngParser::CreatePO( const OString &rPOFile )
 {
     PoOfstream aPOStream( rPOFile, PoOfstream::APP );
     if (!aPOStream.isOpen()) {
@@ -97,7 +97,7 @@ sal_Bool LngParser::CreatePO( const OString &rPOFile )
     }
 
     size_t nPos  = 0;
-    sal_Bool bStart = true;
+    bool bStart = true;
     OString sGroup, sLine;
     OStringHashMap Text;
     OString sID;
@@ -126,7 +126,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
     const OString &rID)
 {
 
-   sal_Bool bExport = true;
+   bool bExport = true;
    if ( bExport )
     {
         common::writePoEntry(
@@ -159,7 +159,7 @@ void LngParser::ReadLine(const OString &rLine_in,
     }
 }
 
-sal_Bool LngParser::Merge(
+bool LngParser::Merge(
     const OString &rPOFile,
     const OString &rDestinationFile,
     const OString &rLanguage )
@@ -176,7 +176,7 @@ sal_Bool LngParser::Merge(
         aLanguages = aMergeDataFile.GetLanguages();
 
     size_t nPos = 0;
-    sal_Bool bGroup = sal_False;
+    bool bGroup = false;
     OString sGroup;
 
     // seek to next group
@@ -187,7 +187,7 @@ sal_Bool LngParser::Merge(
         if ( sLine.startsWith("[") && sLine.endsWith("]") )
         {
             sGroup = getBracketedContent(sLine).trim();
-            bGroup = sal_True;
+            bGroup = true;
         }
         nPos ++;
     }
@@ -201,7 +201,7 @@ sal_Bool LngParser::Merge(
         pResData->sResTyp = "LngText";
         MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
         // read languages
-        bGroup = sal_False;
+        bGroup = false;
 
         OString sLanguagesDone;
 
@@ -212,7 +212,7 @@ sal_Bool LngParser::Merge(
             if ( sLine.startsWith("[") && sLine.endsWith("]") )
             {
                 sGroup = getBracketedContent(sLine).trim();
-                bGroup = sal_True;
+                bGroup = true;
                 nPos ++;
                 sLanguagesDone = "";
             }
@@ -242,7 +242,7 @@ sal_Bool LngParser::Merge(
                         if( !sLang.isEmpty() )
                         {
                             OString sNewText;
-                            pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
+                            pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, true );
                             if( sLang == "qtz" )
                                 continue;
 
@@ -280,7 +280,7 @@ sal_Bool LngParser::Merge(
                 {
 
                     OString sNewText;
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, true );
                     if( sCur == "qtz" )
                         continue;
                     if ( !sNewText.isEmpty() && sCur != "x-comment")
@@ -314,7 +314,7 @@ sal_Bool LngParser::Merge(
         aDestination << (*pLines)[i]->getStr() << '\n';
 
     aDestination.close();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

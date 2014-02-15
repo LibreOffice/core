@@ -71,15 +71,15 @@ class ResData
 public:
     ResData( const OString &rGId );
     ResData( const OString &rGId , const OString &rFilename );
-    sal_Bool SetId(const OString &rId, sal_uInt16 nLevel);
+    bool SetId(const OString &rId, sal_uInt16 nLevel);
 
     sal_uInt16 nIdLevel;
-    sal_Bool bChild;
-    sal_Bool bChildWithText;
+    bool bChild;
+    bool bChildWithText;
 
-    sal_Bool bText;
-    sal_Bool bQuickHelpText;
-    sal_Bool bTitle;
+    bool bText;
+    bool bQuickHelpText;
+    bool bTitle;
 
     OString sResTyp;
     OString sId;
@@ -130,23 +130,23 @@ private:
 
     ResStack aResStack;                 ///< stack for parsing recursive
 
-    sal_Bool bDefine;                       // cur. res. in a define?
-    sal_Bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
+    bool bDefine;                       // cur. res. in a define?
+    bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
     std::size_t nLevel; // res. recursiv? how deep?
     sal_uInt16 nList;                       ///< cur. res. is List
     std::size_t nListIndex;
     std::size_t nListLevel;
-    sal_Bool bMergeMode;
+    bool bMergeMode;
     OString sMergeSrc;
-    sal_Bool bError;                        // any errors while export?
-    sal_Bool bReadOver;
+    bool bError;                        // any errors while export?
+    bool bReadOver;
     OString sFilename;
     OString sLanguages;
 
     std::vector<OString> aLanguages;
 
-    sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False ); ///< called befor dest. cur ResData
-    sal_Bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
+    bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called befor dest. cur ResData
+    bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
     OString MergePairedList( OString const & sLine , OString const & sText );
 
@@ -179,8 +179,8 @@ public:
 
     void Init();
     int Execute( int nToken, const char * pToken ); ///< called from lexer
-    void SetError() { bError = sal_True; }
-    sal_Bool GetError() { return bError; }
+    void SetError() { bError = true; }
+    bool GetError() { return bError; }
     ParserQueue* pParseQueue; // public!!
 };
 
@@ -214,7 +214,7 @@ public:
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
     }
-    bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
+    bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, bool bDel = false );
 
     /**
       Generate QTZ string with ResData
@@ -293,7 +293,7 @@ public:
     ~MergeData();
     MergeEntrys* GetMergeEntries();
 
-    sal_Bool operator==( ResData *pData );
+    bool operator==( ResData *pData );
 };
 
 //

@@ -133,7 +133,7 @@ CfgStackData *CfgStack::GetStackData()
 
 CfgParser::CfgParser()
                 : pStackData( NULL ),
-                bLocalize( sal_False )
+                bLocalize( false )
 {
 }
 
@@ -141,7 +141,7 @@ CfgParser::~CfgParser()
 {
 }
 
-sal_Bool CfgParser::IsTokenClosed(const OString &rToken)
+bool CfgParser::IsTokenClosed(const OString &rToken)
 {
     return rToken[rToken.getLength() - 2] == '/';
 }
@@ -169,7 +169,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     OString sTokenName;
     OString sTokenId;
 
-    sal_Bool bOutput = sal_True;
+    bool bOutput = true;
 
     switch ( nToken ) {
         case CFG_TOKEN_PACKAGE:
@@ -202,7 +202,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     break;
                     case CFG_TOKEN_OORNAME:
                         sSearch = "oor:name=";
-                        bLocalize = sal_True;
+                        bLocalize = true;
                     break;
                     case CFG_TOKEN_OORVALUE:
                         sSearch = "oor:value=";
@@ -217,7 +217,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sCurrentIsoLang = sTemp.getToken(1, '"');
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
-                            bLocalize = sal_False;
+                            bLocalize = false;
 
                         pStackData->sTextTag = sToken;
 
@@ -272,11 +272,11 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
         case CFG_TEXTCHAR:
             sCurrentText += sToken;
-            bOutput = sal_False;
+            bOutput = false;
         break;
 
         case CFG_TOKEN_NO_TRANSLATE:
-            bLocalize = sal_False;
+            bLocalize = false;
         break;
     }
 
@@ -399,7 +399,7 @@ CfgMerge::CfgMerge(
                 : pMergeDataFile( NULL ),
                 pResData( NULL ),
                 sFilename( rFilename ),
-                bEnglish( sal_False )
+                bEnglish( false )
 {
     pOutputStream.open(
         rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
@@ -451,7 +451,7 @@ void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
         }
 
         if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
-            bEnglish = sal_True;
+            bEnglish = true;
     }
 }
 
@@ -472,7 +472,7 @@ void CfgMerge::WorkOnResourceEnd()
                 sCur = aLanguages[ i ];
 
                 OString sContent;
-                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
+                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , true );
                 if (
                     ( !sCur.equalsIgnoreAsciiCase("en-US") ) && !sContent.isEmpty())
                 {
@@ -511,7 +511,7 @@ void CfgMerge::WorkOnResourceEnd()
     }
     delete pResData;
     pResData = NULL;
-    bEnglish = sal_False;
+    bEnglish = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

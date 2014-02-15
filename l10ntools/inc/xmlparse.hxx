@@ -160,7 +160,7 @@ public:
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings; }
     void Write( OString const &rFilename );
-    sal_Bool Write( std::ofstream &rStream, XMLNode *pCur = NULL );
+    bool Write( std::ofstream &rStream, XMLNode *pCur = NULL );
 
     bool CheckExportStatus( XMLParentNode *pCur = NULL );
 

@@ -146,7 +146,7 @@ int GetError()
 // class ResData
 //
 
-sal_Bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
+bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 {
     if ( nLevel > nIdLevel )
     {
@@ -166,10 +166,10 @@ sal_Bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
             sId = sId.copy(0, 255).trim();
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //
@@ -196,15 +196,15 @@ static sal_Int32 lcl_countOccurrences(const OString& text, char c)
 
 Export::Export(const OString &rOutput)
                 :
-                bDefine( sal_False ),
-                bNextMustBeDefineEOL( sal_False ),
+                bDefine( false ),
+                bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
                 nList( LIST_NON ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bMergeMode( false ),
-                bError( sal_False ),
-                bReadOver( sal_False ),
+                bError( false ),
+                bReadOver( false ),
                 sFilename( global::inputPathname ),
                 sLanguages( OString() ),
                 pParseQueue( new ParserQueue( *this ) )
@@ -220,16 +220,16 @@ Export::Export(
     const OString &rMergeSource, const OString &rOutput,
     const OString &rLanguage, bool bUTF8BOM)
                 :
-                bDefine( sal_False ),
-                bNextMustBeDefineEOL( sal_False ),
+                bDefine( false ),
+                bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
                 nList( LIST_NON ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
-                bMergeMode( sal_True ),
+                bMergeMode( true ),
                 sMergeSrc( rMergeSource ),
-                bError( sal_False ),
-                bReadOver( sal_False ),
+                bError( false ),
+                bReadOver( false ),
                 sFilename( global::inputPathname ),
                 sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
@@ -243,8 +243,8 @@ Export::Export(
 void Export::Init()
 {
     // resets the internal status, used before parseing another file
-    bDefine = sal_False;
-    bNextMustBeDefineEOL = sal_False;
+    bDefine = false;
+    bNextMustBeDefineEOL = false;
     nLevel = 0;
     nList = LIST_NON;
     nListIndex = 0;
@@ -291,9 +291,9 @@ int Export::Execute( int nToken, const char * pToken )
         sTestToken = sTestToken.replaceAll("\t", OString()).
             replaceAll(" ", OString());
         if (( !bReadOver ) && ( sTestToken.startsWith("#ifndef__RSC_PARSER")))
-            bReadOver = sal_True;
+            bReadOver = true;
         else if (( bReadOver ) && ( sTestToken.startsWith("#endif") ))
-            bReadOver = sal_False;
+            bReadOver = false;
     }
     if ((( nToken < FILTER_LEVEL ) || ( bReadOver )) &&
         (!(( bNextMustBeDefineEOL ) && ( sOrig == "\n" )))) {
@@ -329,13 +329,13 @@ int Export::Execute( int nToken, const char * pToken )
             if ( bNextMustBeDefineEOL ) {
                 if ( nToken != RSCDEFINELEND ) {
                     // end of macro found, so destroy res.
-                    bDefine = sal_False;
+                    bDefine = false;
                     Execute( LEVELDOWN, "" );
-                    bNextMustBeDefineEOL = sal_False;
+                    bNextMustBeDefineEOL = false;
                 }
                 else {
                     // next line also in macro definition
-                    bNextMustBeDefineEOL = sal_False;
+                    bNextMustBeDefineEOL = false;
                     if ( bMergeMode )
                         WriteToMerged( sOrig , false );
                     return 1;
@@ -344,11 +344,11 @@ int Export::Execute( int nToken, const char * pToken )
         }
     }
 
-    sal_Bool bExecuteDown = sal_False;
+    bool bExecuteDown = false;
     if ( nToken != LEVELDOWN ) {
         sal_uInt16 nOpen = 0;
         sal_uInt16 nClose = 0;
-        sal_Bool bReadOver1 = sal_False;
+        bool bReadOver1 = false;
         sal_uInt16 i = 0;
         for ( i = 0; i < sToken.getLength(); i++ ) {
             if ( sToken[i] == '"' )
@@ -357,7 +357,7 @@ int Export::Execute( int nToken, const char * pToken )
                 nOpen++;
         }
 
-        bReadOver1 = sal_False;
+        bReadOver1 = false;
         for ( i = 0; i < sToken.getLength(); i++ ) {
             if ( sToken[i] == '"' )
                 bReadOver1 = !bReadOver1;
@@ -366,10 +366,10 @@ int Export::Execute( int nToken, const char * pToken )
         }
 
         if ( nOpen < nClose )
-            bExecuteDown = sal_True;
+            bExecuteDown = true;
     }
 
-    sal_Bool bWriteToMerged = bMergeMode;
+    bool bWriteToMerged = bMergeMode;
     switch ( nToken ) {
 
         case NORMDEFINE:
@@ -377,16 +377,16 @@ int Export::Execute( int nToken, const char * pToken )
                 WriteToMerged( sOrig , false );
             return 0;
         case RSCDEFINE:
-            bDefine = sal_True; // res. defined in macro
+            bDefine = true; // res. defined in macro
 
         case RESOURCE:
         case RESOURCEEXPR: {
             if ( nToken != RSCDEFINE )
-                bNextMustBeDefineEOL = sal_False;
+                bNextMustBeDefineEOL = false;
             // this is the beginning of a new res.
             nLevel++;
             if ( nLevel > 1 ) {
-                aResStack[ nLevel - 2 ]->bChild = sal_True;
+                aResStack[ nLevel - 2 ]->bChild = true;
             }
 
             // create new instance for this res. and fill mandatory fields
@@ -421,10 +421,10 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case SMALRESOURCE: {
             // this is the beginning of a new res.
-            bNextMustBeDefineEOL = sal_False;
+            bNextMustBeDefineEOL = false;
             nLevel++;
             if ( nLevel > 1 ) {
-                aResStack[ nLevel - 2 ]->bChild = sal_True;
+                aResStack[ nLevel - 2 ]->bChild = true;
             }
 
             // create new instance for this res. and fill mandatory fields
@@ -453,7 +453,7 @@ int Export::Execute( int nToken, const char * pToken )
                 sLowerTyp = "unknown";
             nLevel++;
             if ( nLevel > 1 ) {
-                aResStack[ nLevel - 2 ]->bChild = sal_True;
+                aResStack[ nLevel - 2 ]->bChild = true;
             }
 
             ResData *pNewData = new ResData( FullId() , sFilename );
@@ -466,8 +466,8 @@ int Export::Execute( int nToken, const char * pToken )
             if ( !nList || !nListLevel ) {
                 if ( nLevel ) {
                     if ( bDefine && (nLevel == 1 )) {
-                        bDefine = sal_False;
-                        bNextMustBeDefineEOL = sal_False;
+                        bDefine = false;
+                        bNextMustBeDefineEOL = false;
                     }
                     WriteData( pResData );
                     ResStack::iterator it = aResStack.begin();
@@ -485,7 +485,7 @@ int Export::Execute( int nToken, const char * pToken )
             else
             {
                 if ( bDefine )
-                    bNextMustBeDefineEOL = sal_True;
+                    bNextMustBeDefineEOL = true;
                 nListLevel--;
             }
         }
@@ -604,7 +604,7 @@ int Export::Execute( int nToken, const char * pToken )
                         if ( sLangIndex.equalsIgnoreAsciiCase("en-US") )
                             pResData->SetId( sText, ID_LEVEL_TEXT );
 
-                        pResData->bText = sal_True;
+                        pResData->bText = true;
                         pResData->sTextTyp = sOrigKey;
                         if ( !bMergeMode )
                         {
@@ -613,7 +613,7 @@ int Export::Execute( int nToken, const char * pToken )
                     }
                     else if ( sKey == "QUICKHELPTEXT" ) {
                         SetChildWithText();
-                        pResData->bQuickHelpText = sal_True;
+                        pResData->bQuickHelpText = true;
                         if ( !bMergeMode )
                         {
                             pResData->sQuickHelpText[ sLangIndex ] = sText;
@@ -621,7 +621,7 @@ int Export::Execute( int nToken, const char * pToken )
                     }
                     else if ( sKey == "TITLE" ) {
                         SetChildWithText();
-                        pResData->bTitle = sal_True;
+                        pResData->bTitle = true;
                         if ( !bMergeMode )
                         {
                             pResData->sTitle[ sLangIndex ] = sText;
@@ -636,14 +636,14 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case CONDITION: {
             if ( nLevel ) {
-                WriteData( pResData, sal_True );
+                WriteData( pResData, true );
             }
         }
         break;
         case EMPTYLINE : {
             if ( bDefine ) {
-                bNextMustBeDefineEOL = sal_False;
-                bDefine = sal_False;
+                bNextMustBeDefineEOL = false;
+                bDefine = false;
                 while ( nLevel )
                     Parse( LEVELDOWN, "" );
             }
@@ -691,11 +691,11 @@ void Export::CutComment( OString &rText )
     }
 }
 
-sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
+bool Export::WriteData( ResData *pResData, bool bCreateNew )
 {
     if ( bMergeMode ) {
         MergeRest( pResData );
-        return sal_True;
+        return true;
     }
 
        // mandatory to export: en-US
@@ -755,7 +755,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         if ( bCreateNew )
             pResData->m_aList.clear();
     }
-    return sal_True;
+    return true;
 }
 
 OString Export::GetPairedListID(const OString& rText)
@@ -780,7 +780,7 @@ OString Export::StripList(const OString & rText)
     return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
-sal_Bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
+bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
     const sal_uInt16 nTyp)
 {
     OString sGID(pResData->sGId);
@@ -823,7 +823,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
             sType, sGID, sLID, OString(), sText);
     }
 
-    return sal_True;
+    return true;
 }
 
 OString Export::FullId()
@@ -1012,15 +1012,15 @@ void Export::ConvertExportContent( OString& rText )
 
 void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
 {
-    sal_Bool bAddSemicolon = sal_False;
-    sal_Bool bFirst = sal_True;
+    bool bAddSemicolon = false;
+    bool bFirst = true;
     OString sCur;
 
     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
 
         OString sText;
-        sal_Bool bText = pEntry->GetText( sText, nType, sCur , sal_True );
+        bool bText = pEntry->GetText( sText, nType, sCur , true );
         if ( bText && !sText.isEmpty() ) {
             OStringBuffer sOutput;
             if ( bNextMustBeDefineEOL)  {
@@ -1029,7 +1029,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
                 else
                     sOutput.append(";\t\\\n");
             }
-            bFirst=sal_False;
+            bFirst=false;
             sOutput.append("\t" + rTextType);
 
             if ( !sCur.equalsIgnoreAsciiCase("en-US") ) {
@@ -1044,7 +1044,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
             else if ( !bNextMustBeDefineEOL )
                 sOutput.append(";\n");
             else
-                bAddSemicolon = sal_True;
+                bAddSemicolon = true;
             for ( sal_uInt16 j = 1; j < nLevel; j++ )
                 sOutput.append("\t");
             WriteToMerged( sOutput.makeStringAndClear() , true );
@@ -1154,7 +1154,7 @@ void Export::MergeRest( ResData *pResData )
 
                 MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                 OString sText;
-                bool bText = pEntrys ? pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, sal_True ) : false;
+                bool bText = pEntrys ? pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, true ) : false;
 
                 if( bText && !sText.isEmpty())
                 {
@@ -1203,7 +1203,7 @@ void Export::SetChildWithText()
 {
     if ( aResStack.size() > 1 ) {
         for ( size_t i = 0; i < aResStack.size() - 1; i++ ) {
-            aResStack[ i ]->bChildWithText = sal_True;
+            aResStack[ i ]->bChildWithText = true;
         }
     }
 }

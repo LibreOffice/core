@@ -40,8 +40,8 @@ void YYWarning( const char * );
 
 // set of global variables
 bool bMergeMode;
-sal_Bool bDisplayName;
-sal_Bool bExtensionDescription;
+bool bDisplayName;
+bool bExtensionDescription;
 OString sLanguage;
 OString sInputFileName;
 OString sOutputFile;
@@ -55,8 +55,8 @@ extern "C" {
 
 extern char *GetOutputFile( int argc, char* argv[])
 {
-    bDisplayName = sal_False;
-    bExtensionDescription = sal_False;
+    bDisplayName = false;
+    bExtensionDescription = false;
 
     common::HandledArgs aArgs;
     if ( common::handleArguments(argc, argv, aArgs) )
@@ -149,8 +149,8 @@ int GetError()
 
 
 XRMResParser::XRMResParser()
-    : bError( sal_False ),
-    bText( sal_False )
+    : bError( false ),
+    bText( false )
 {
 }
 
@@ -168,7 +168,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 if ( sNewGID != sGID ) {
                     sGID = sNewGID;
                 }
-                bText = sal_True;
+                bText = true;
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
                 Output( rToken );
@@ -182,26 +182,26 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
-                bText = sal_False;
+                bText = false;
                 rToken = OString("");
                 sCurrentText  = OString("");
         }
         break;
 
         case DESC_DISPLAY_NAME_START:{
-                bDisplayName = sal_True;
+                bDisplayName = true;
             }
         break;
 
         case DESC_DISPLAY_NAME_END:{
-                bDisplayName = sal_False;
+                bDisplayName = false;
             }
         break;
 
         case DESC_TEXT_START:{
                 if (bDisplayName) {
                     sGID = OString("dispname");
-                    bText = sal_True;
+                    bText = true;
                     sCurrentText = "";
                     sCurrentOpenTag = rToken;
                     Output( rToken );
@@ -217,7 +217,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     WorkOnText( sCurrentOpenTag, sCurrentText );
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
-                    bText = sal_False;
+                    bText = false;
                     rToken = OString("");
                     sCurrentText  = OString("");
                 }
@@ -225,12 +225,12 @@ int XRMResParser::Execute( int nToken, char * pToken )
         break;
 
         case DESC_EXTENSION_DESCRIPTION_START: {
-                bExtensionDescription = sal_True;
+                bExtensionDescription = true;
             }
         break;
 
         case DESC_EXTENSION_DESCRIPTION_END: {
-                bExtensionDescription = sal_False;
+                bExtensionDescription = false;
             }
         break;
 
@@ -420,7 +420,7 @@ void XRMResMerge::WorkOnDesc(
                 OString sContent;
                 if ( !sCur.equalsIgnoreAsciiCase("en-US")  &&
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
+                        sContent, STRING_TYP_TEXT, sCur, true )) &&
                     !sContent.isEmpty())
                 {
                     OString sText( sContent );
@@ -509,7 +509,7 @@ void XRMResMerge::EndOfText(
                 OString sContent;
                 if (!sCur.equalsIgnoreAsciiCase("en-US") &&
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
+                        sContent, STRING_TYP_TEXT, sCur, true )) &&
                     !sContent.isEmpty() &&
                     helper::isWellFormedXML( sContent ))
                 {
