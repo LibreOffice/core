@@ -36,17 +36,17 @@ static void out( const sal_Char * pText )
 #endif
 
 //-------------------------------------------------------------------------------
-sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
+bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dash = "-";
     if(aArg.indexOf(dash) != 0)
-        return sal_False;
+        return false;
 
     OUString aOpt = OUString::createFromAscii( pOpt );
 
     if (aArg.getLength() < aOpt.getLength())
-        return sal_False;
+        return false;
 
     if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) )) {
         // take next argument
@@ -67,7 +67,7 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
               out( tmp.getStr() );
 #endif
             ++(*pnIndex);
-            return sal_True;
+            return true;
         }
     } else if (aArg.indexOf(aOpt) == 1) {
         *pValue = aArg.copy(1 + aOpt.getLength());
@@ -80,13 +80,13 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 #endif
         ++(*pnIndex);
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 //-------------------------------------------------------------------------------
-sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
+bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dashdash("--");
@@ -102,9 +102,9 @@ sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
         out( "\n> identified option --" );
         out( pOpt );
 #endif
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 } // end of namespace unodevtools
