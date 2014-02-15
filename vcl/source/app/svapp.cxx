@@ -2060,8 +2060,8 @@ sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
 {
     sal_Bool bRet = true;
 
-// Disable Java bridge on UNIX
-#if defined UNX
+// Disable Java bridge on UNIX and OS/2
+#ifndef WNT
     (void) bShowCancel; // unsued
     (void) rCancelled; // unused
 #else
