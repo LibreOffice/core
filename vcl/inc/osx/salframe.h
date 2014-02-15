@@ -109,6 +109,7 @@ public:
     virtual ~AquaSalFrame();
 
     virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                PostEvent( void* pData );
     virtual void                SetTitle( const OUString& rTitle );
@@ -155,57 +156,57 @@ public:
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void ResetClipRegion();
+    virtual void                ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void BeginSetClipRegion( sal_uLong nRects );
+    virtual void                BeginSetClipRegion( sal_uLong nRects );
     // add a rectangle to the clip region
-    virtual void UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion
-    virtual void EndSetClipRegion();
+    virtual void                EndSetClipRegion();
 
-    virtual void SetClientSize( long nWidth, long nHeight );
+    virtual void                SetClientSize( long nWidth, long nHeight );
 
-    void UpdateFrameGeometry();
+    void                        UpdateFrameGeometry();
 
     // trigger painting of the window
-    void SendPaintEvent( const Rectangle* pRect = NULL );
+    void                        SendPaintEvent( const Rectangle* pRect = NULL );
 
-    static bool isAlive( const AquaSalFrame* pFrame )
-    { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }
+    static bool                 isAlive( const AquaSalFrame* pFrame )
+                                    { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }
 
-    static AquaSalFrame* GetCaptureFrame() { return s_pCaptureFrame; }
+    static AquaSalFrame*        GetCaptureFrame() { return s_pCaptureFrame; }
 
-    NSWindow* getNSWindow() const { return mpNSWindow; }
-    NSView* getNSView() const { return mpNSView; }
-    unsigned int getStyleMask() const { return mnStyleMask; }
+    NSWindow*                   getNSWindow() const { return mpNSWindow; }
+    NSView*                     getNSView() const { return mpNSView; }
+    unsigned int                getStyleMask() const { return mnStyleMask; }
 
-    void getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY );
+    void                        getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY );
 
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system
     // is supposed to be before and after
-    void VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen = true );
-    void CocoaToVCL( NSRect& io_rRect, bool bRelativeToScreen = true );
+    void                        VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen = true );
+    void                        CocoaToVCL( NSRect& io_rRect, bool bRelativeToScreen = true );
 
-    void VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen = true );
-    void CocoaToVCL( NSPoint& io_Point, bool bRelativeToScreen = true );
+    void                        VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen = true );
+    void                        CocoaToVCL( NSPoint& io_Point, bool bRelativeToScreen = true );
 
-    NSCursor* getCurrentCursor() const;
+    NSCursor*                   getCurrentCursor() const;
 
-    CGMutablePathRef getClipPath() const { return mrClippingPath; }
+    CGMutablePathRef            getClipPath() const { return mrClippingPath; }
 
     // called by VCL_NSApplication to indicate screen settings have changed
-    void screenParametersChanged();
+    void                        screenParametersChanged();
 
  private: // methods
     /** do things on initial show (like centering on parent or on screen)
     */
-    void initShow();
+    void                        initShow();
 
-    void initWindowAndView();
+    void                        initWindowAndView();
 
  private: // data
-    static AquaSalFrame*                   s_pCaptureFrame;
+    static AquaSalFrame*        s_pCaptureFrame;
 
     // make AquaSalFrame non copyable
     AquaSalFrame( const AquaSalFrame& );

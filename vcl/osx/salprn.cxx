@@ -150,9 +150,17 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 
 SalGraphics* AquaSalInfoPrinter::GetGraphics()
 {
-    SalGraphics* pGraphics = mbGraphics ? NULL : mpGraphics;
-    mbGraphics = true;
     return pGraphics;
+}
+
+bool AquaSalInfoPrinter::AcquireGraphics()
+{
+    if ( mpGraphics )
+        return false;
+    else
+        mbGraphics = true;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------

@@ -1174,13 +1174,17 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 
 SalGraphics* WinSalInfoPrinter::GetGraphics()
 {
-    if ( mbGraphics )
-        return NULL;
-
-    if ( mpGraphics )
-        mbGraphics = TRUE;
-
     return mpGraphics;
+}
+
+bool WinSalInfoPrinter::AcquireGraphics()
+{
+    if ( mpGraphics )
+        mbGraphics = true;
+    else
+        return false;
+
+    return true;
 }
 
 void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )

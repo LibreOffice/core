@@ -190,13 +190,17 @@ X11SalVirtualDevice::~X11SalVirtualDevice()
 
 SalGraphics* X11SalVirtualDevice::GetGraphics()
 {
-    if( bGraphics_ )
-        return NULL;
+    return pGraphics_;
+}
 
-    if( pGraphics_ )
+bool X11SalVirtualDevice::AcquireGraphics()
+{
+    if ( bGraphics_ )
+        return false;
+    else if ( pGraphics_ )
         bGraphics_ = true;
 
-    return pGraphics_;
+    return true;
 }
 
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )

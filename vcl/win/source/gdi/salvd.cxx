@@ -132,7 +132,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
             pVDev->mhDefBmp = NULL;
         pVDev->mpGraphics   = pVirGraphics;
         pVDev->mnBitCount   = nBitCount;
-        pVDev->mbGraphics   = FALSE;
+        pVDev->mbGraphics   = false;
         pVDev->mbForeignDC  = (pData != NULL);
 
         // insert VirDev in VirDevList
@@ -168,7 +168,7 @@ WinSalVirtualDevice::WinSalVirtualDevice()
     mpGraphics = NULL;          // current VirDev graphics
     mpNext = NULL;              // next VirDev
     mnBitCount = 0;             // BitCount (0 or 1)
-    mbGraphics = FALSE;         // is Graphics used
+    mbGraphics = false;         // is Graphics used
     mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
 }
 
@@ -201,20 +201,24 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
 
 SalGraphics* WinSalVirtualDevice::GetGraphics()
 {
-    if ( mbGraphics )
-        return NULL;
-
-    if ( mpGraphics )
-        mbGraphics = TRUE;
-
     return mpGraphics;
+}
+
+bool WinSalVirtualDevice::AcquireGraphics()
+{
+    if ( mbGraphics )
+        return false;
+    else
+        mbGraphics = true;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = FALSE;
+    mbGraphics = false;
 }
 
 // -----------------------------------------------------------------------

@@ -994,10 +994,25 @@ WinSalFrame::~WinSalFrame()
 
 // -----------------------------------------------------------------------
 
+
 SalGraphics* WinSalFrame::GetGraphics()
 {
+    WinSalGraphics* pGraphics;
+
+    SalData* pSalData = GetSalData();
+
+    if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
+        pGraphics = mpGraphics2;
+    else
+        pGraphics = mpGraphics;
+
+    return pGraphics;
+}
+
+bool WinSalFrame::AcquireGraphics()
+{
     if ( mbGraphics )
-        return NULL;
+        return false;
 
     // Other threads get an own DC, because Windows modify in the
     // other case our DC (changing clip region), when they send a
@@ -1008,7 +1023,7 @@ SalGraphics* WinSalFrame::GetGraphics()
         // We use only three CacheDC's for all threads, because W9x is limited
         // to max. 5 Cache DC's per thread
         if ( pSalData->mnCacheDCInUse >= 3 )
-            return NULL;
+            return false;
 
         if ( !mpGraphics2 )
         {
@@ -1033,13 +1048,13 @@ SalGraphics* WinSalFrame::GetGraphics()
                 RealizePalette( hDC );
             }
             ImplSalInitGraphics( mpGraphics2 );
-            mbGraphics = TRUE;
+            mbGraphics = true;
 
             pSalData->mnCacheDCInUse++;
-            return mpGraphics2;
+            return true;
         }
         else
-            return NULL;
+            return false;
     }
     else
     {
@@ -1061,13 +1076,13 @@ SalGraphics* WinSalFrame::GetGraphics()
                     RealizePalette( hDC );
                 }
                 ImplSalInitGraphics( mpGraphics );
-                mbGraphics = TRUE;
+                mbGraphics = true;
             }
         }
         else
-            mbGraphics = TRUE;
+            mbGraphics = true;
 
-        return mpGraphics;
+        return true;
     }
 }
 

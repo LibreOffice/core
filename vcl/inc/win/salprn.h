@@ -49,17 +49,18 @@ class WinSalGraphics;
 class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    WinSalGraphics*         mpGraphics;             // current Printer graphics
-    OUString               maDriverName;           // printer driver name
-    OUString               maDeviceName;           // printer device name
-    OUString               maPortName;             // printer port name
-    HDC                     mhDC;                   // printer hdc
-    sal_Bool                    mbGraphics;             // is Graphics used
+    WinSalGraphics*                 mpGraphics;             // current Printer graphics
+    OUString                        maDriverName;           // printer driver name
+    OUString                        maDeviceName;           // printer device name
+    OUString                        maPortName;             // printer port name
+    HDC                             mhDC;                   // printer hdc
+    sal_Bool                        mbGraphics;             // is Graphics used
 public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter();
 
     virtual SalGraphics*            GetGraphics();
+    virtual bool                    AcquireGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData );

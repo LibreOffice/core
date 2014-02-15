@@ -266,18 +266,26 @@ void AquaSalFrame::screenParametersChanged()
 
 SalGraphics* AquaSalFrame::GetGraphics()
 {
-    if ( mbGraphics )
-        return NULL;
+    return mpGraphics;
+}
 
+bool AquaSalFrame::AcquireGraphics()
+{
     if ( !mpGraphics )
     {
         mpGraphics = new AquaSalGraphics;
         mpGraphics->SetWindowGraphics( this );
+        mbGraphics = true;
+    }
+    else
+    {
+        return false;
     }
 
-    mbGraphics = TRUE;
-    return mpGraphics;
+    return true;
 }
+
+
 
 // -----------------------------------------------------------------------
 
@@ -285,7 +293,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     (void)pGraphics;
     DBG_ASSERT( pGraphics == mpGraphics, "graphics released on wrong frame" );
-    mbGraphics = FALSE;
+    mbGraphics = false;
 }
 
 // -----------------------------------------------------------------------
@@ -1196,7 +1204,7 @@ void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 {
     if( ! mpGraphics )
     {
-        GetGraphics();
+        AcquireGraphics();
         ReleaseGraphics( mpGraphics );
     }
     mpGraphics->GetResolution( o_rDPIX, o_rDPIY );

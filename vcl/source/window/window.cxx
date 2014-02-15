@@ -225,13 +225,13 @@ WindowImpl::WindowImpl( WindowType nType )
     mbMenuFloatingWindow= false;      // true: MenuFloatingWindow is the base class
     mbToolbarFloatingWindow= false;       // true: ImplPopupFloatWin is the base class, used for subtoolbars
     mbSplitter          = false;      // true: Splitter is the base class
-    mbVisible           = false;        // true: Show( sal_True ) called
+    mbVisible           = false;        // true: Show( true ) called
     mbOverlapVisible    = false;        // true: Hide called for visible window from ImplHideAllOverlapWindow()
-    mbDisabled          = false;        // true: Enable( sal_False ) called
-    mbInputDisabled     = false;        // true: EnableInput( sal_False ) called
+    mbDisabled          = false;        // true: Enable( false ) called
+    mbInputDisabled     = false;        // true: EnableInput( false ) called
     mbDropDisabled      = false;        // true: Drop is enabled
-    mbNoUpdate          = false;        // true: SetUpdateMode( sal_False ) called
-    mbNoParentUpdate    = false;        // true: SetParentUpdateMode( sal_False ) called
+    mbNoUpdate          = false;        // true: SetUpdateMode( false ) called
+    mbNoParentUpdate    = false;        // true: SetParentUpdateMode( false ) called
     mbActive            = false;        // true: Window Active
     mbParentActive      = false;        // true: OverlapActive from Parent
     mbReallyVisible     = false;        // true: this and all parents to an overlaped window are visible
@@ -239,7 +239,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbInInitShow        = false;        // true: we are in InitShow
     mbChildNotify       = false;        // true: ChildNotify
     mbChildPtrOverwrite = false;        // true: PointerStyle overwrites Child-Pointer
-    mbNoPtrVisible      = false;        // true: ShowPointer( sal_False ) called
+    mbNoPtrVisible      = false;        // true: ShowPointer( false ) called
     mbMouseMove         = false;        // true: BaseMouseMove called
     mbPaintFrame        = false;        // true: Paint is visible, but not painted
     mbInPaint           = false;        // true: Inside PaintHdl
@@ -1410,7 +1410,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = false;
-        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? sal_False : sal_True; // sal_True: try to draw this control with native theme API
+        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // true: try to draw this control with native theme API
    }
 
     return mpWindowImpl->mpWinData;
@@ -1564,14 +1564,14 @@ int Window::ImplTestMousePointerSet()
 {
     // as soon as mouse is captured, switch mouse-pointer
     if ( IsMouseCaptured() )
-        return sal_True;
+        return true;
 
     // if the mouse is over the window, switch it
     Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
     if ( aClientRect.IsInside( GetPointerPosPixel() ) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1579,7 +1579,7 @@ int Window::ImplTestMousePointerSet()
 PointerStyle Window::ImplGetMousePointer() const
 {
     PointerStyle    ePointerStyle;
-    sal_Bool            bWait = sal_False;
+    bool            bWait = false;
 
     if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
         ePointerStyle = GetPointer().GetStyle();
@@ -1903,7 +1903,7 @@ bool Window::ImplSysObjClip( const Region* pOldRegion )
                     //long                nHeight;
                     //sal_uLong               nRectCount;
                     //ImplRegionInfo      aInfo;
-                    //sal_Bool                bRegionRect;
+                    //bool                bRegionRect;
                     //
                     //nRectCount = aRegion.GetRectCount();
                     //mpWindowImpl->mpSysObj->BeginSetClipRegion( nRectCount );
@@ -2066,7 +2066,7 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
             while ( pWindow )
             {
                 if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-                    bUpdate = sal_False;
+                    bUpdate = false;
                 pWindow = pWindow->mpWindowImpl->mpNext;
             }
         }
@@ -2361,7 +2361,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
 // -----------------------------------------------------------------------
 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                    sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings )
+                                    bool bChildren, bool bParent, bool bSiblings )
 {
     Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
@@ -2802,7 +2802,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
         if ( pRegion )
         {
             // --- RTL --- remirror region before intersecting it
-            if ( ImplIsAntiparallel() )
+            if ( IsAntiparallel() )
             {
                 Region aRgn( *pRegion );
                 ReMirror( aRgn );
@@ -3393,7 +3393,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
             }
         }
-        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->IsAntiparallel() )
         {
             // mirrored window in LTR UI
             {
@@ -3695,7 +3695,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = mpWindowImpl->mpPrev;
 
             // take AlwaysOnTop into account
-            sal_Bool    bOnTop = IsAlwaysOnTopEnabled();
+            bool    bOnTop = IsAlwaysOnTopEnabled();
             Window* pNextWin = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
             if ( !bOnTop )
             {
@@ -3822,7 +3822,7 @@ void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
             pFocusWindow = pFocusWindow->ImplGetParent();
         }
         if ( (pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS) &&
-             !pFocusWindow->HasChildPathFocus( sal_True ) )
+             !pFocusWindow->HasChildPathFocus( true ) )
             pFocusWindow->GrabFocus();
     }
 
@@ -5665,7 +5665,7 @@ long Window::GetCursorExtTextInputWidth() const
 
 // -----------------------------------------------------------------------
 
-void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical ) {
+void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical ) {
 
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
@@ -5683,18 +5683,18 @@ void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLe
 // -----------------------------------------------------------------------
 void Window::SetSettings( const AllSettings& rSettings )
 {
-    SetSettings( rSettings, sal_False );
+    SetSettings( rSettings, false );
 }
 
-void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
+void Window::SetSettings( const AllSettings& rSettings, bool bChild )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->SetSettings( rSettings, sal_False );
+        mpWindowImpl->mpBorderWindow->SetSettings( rSettings, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->SetSettings( rSettings, sal_True );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->SetSettings( rSettings, true );
     }
 
     AllSettings aOldSettings(*mxSettings);
@@ -5929,7 +5929,7 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
                 //long                nHeight;
                 //sal_uLong               nRectCount;
                 //ImplRegionInfo      aInfo;
-                //sal_Bool                bRegionRect;
+                //bool                bRegionRect;
                 //
                 //nRectCount = mpWindowImpl->maWinRegion.GetRectCount();
                 //mpWindowImpl->mpFrame->BeginSetClipRegion( nRectCount );
@@ -5992,7 +5992,7 @@ const Region& Window::GetWindowRegionPixel() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsWindowRegionPixel() const
+bool Window::IsWindowRegionPixel() const
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -6019,7 +6019,7 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
         Region* pWinChildClipRegion = ((Window*)this)->ImplGetWinChildClipRegion();
         aWinClipRegion = *pWinChildClipRegion;
         // --- RTL --- remirror clip region before passing it to somebody
-        if( ImplIsAntiparallel() )
+        if( IsAntiparallel() )
         {
             ReMirror( aWinClipRegion );
         }
@@ -6068,7 +6068,7 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
 
         Region aWinChildRegion = *ImplGetWinChildClipRegion();
         // --- RTL -- only this region is in frame coordinates, so re-mirror it
-        if( ImplIsAntiparallel() )
+        if( IsAntiparallel() )
         {
             ReMirror( aWinChildRegion );
         }
@@ -6276,7 +6276,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
     ImplDelData aDogTag( this );
 
-    sal_Bool bRealVisibilityChanged = sal_False;
+    bool bRealVisibilityChanged = false;
     mpWindowImpl->mbVisible = bVisible;
 
     if ( !bVisible )
@@ -6296,7 +6296,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         else if ( mpWindowImpl->mbFrame )
         {
             mpWindowImpl->mbSuppressAccessibilityEvents = true;
-            mpWindowImpl->mpFrame->Show( sal_False, sal_False );
+            mpWindowImpl->mpFrame->Show( false, false );
         }
 
         StateChanged( STATE_CHANGE_VISIBLE );
@@ -6448,8 +6448,8 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
-            mpWindowImpl->mpFrame->Show( sal_True, bNoActivate );
+            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
+            mpWindowImpl->mpFrame->Show( true, bNoActivate );
             if( aDogTag.IsDead() )
                 return;
 
@@ -6618,7 +6618,7 @@ void Window::Enable( bool bEnable, bool bChild )
 
 void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
-    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? sal_True : sal_False;
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? true : false;
 
     Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
@@ -7106,7 +7106,7 @@ void Window::setPosSizePixel( long nX, long nY,
             {
                 nX += pParent->mnOutOffX;
             }
-            if( pParent && pParent->ImplIsAntiparallel() )
+            if( pParent && pParent->IsAntiparallel() )
             {
                 // --- RTL --- (re-mirror at parent window)
                 Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
@@ -7232,7 +7232,7 @@ long Window::ImplGetUnmirroredOutOffX()
     OutputDevice *pOutDev = GetOutDev();
     if( pOutDev->HasMirroredGraphics() )
     {
-        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->IsAntiparallel() )
         {
             if ( !ImplIsOverlapWindow() )
                 offx -= mpWindowImpl->mpParent->mnOutOffX;
@@ -7632,7 +7632,7 @@ void Window::CaptureMouse()
     if ( pSVData->maWinData.mpCaptureWin != this )
     {
         pSVData->maWinData.mpCaptureWin = this;
-        mpWindowImpl->mpFrame->CaptureMouse( sal_True );
+        mpWindowImpl->mpFrame->CaptureMouse( true );
     }
 }
 
@@ -7649,14 +7649,14 @@ void Window::ReleaseMouse()
     if ( pSVData->maWinData.mpCaptureWin == this )
     {
         pSVData->maWinData.mpCaptureWin = NULL;
-        mpWindowImpl->mpFrame->CaptureMouse( sal_False );
+        mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
     }
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsMouseCaptured() const
+bool Window::IsMouseCaptured() const
 {
 
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
@@ -7707,7 +7707,7 @@ void Window::SetPointerPosPixel( const Point& rPos )
         // mirroring is required here, SetPointerPos bypasses SalGraphics
         mpGraphics->mirror( aPos.X(), this );
     }
-    else if( ImplIsAntiparallel() )
+    else if( IsAntiparallel() )
     {
         ReMirror( aPos );
     }
@@ -7720,7 +7720,7 @@ Point Window::GetPointerPosPixel()
 {
 
     Point aPos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-    if( ImplIsAntiparallel() )
+    if( IsAntiparallel() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
         const OutputDevice *pOutDev = GetOutDev();
@@ -7735,7 +7735,7 @@ Point Window::GetLastPointerPosPixel()
 {
 
     Point aPos( mpWindowImpl->mpFrameData->mnBeforeLastMouseX, mpWindowImpl->mpFrameData->mnBeforeLastMouseY );
-    if( ImplIsAntiparallel() )
+    if( IsAntiparallel() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
         ReMirror( aPos );
@@ -7745,7 +7745,7 @@ Point Window::GetLastPointerPosPixel()
 
 // -----------------------------------------------------------------------
 
-void Window::ShowPointer( sal_Bool bVisible )
+void Window::ShowPointer( bool bVisible )
 {
 
     if ( mpWindowImpl->mbNoPtrVisible != !bVisible )
@@ -7770,7 +7770,7 @@ Window::PointerState Window::GetPointerState()
         SalFrame::SalPointerState aSalPointerState;
 
         aSalPointerState = mpWindowImpl->mpFrame->GetPointerState();
-        if( ImplIsAntiparallel() )
+        if( IsAntiparallel() )
         {
             // --- RTL --- (re-mirror mouse pos at this window)
             ReMirror( aSalPointerState.maPos );
@@ -8454,7 +8454,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 // Accessibility
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( sal_Bool bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
     /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
@@ -8474,7 +8474,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( GetComponentInterface( sal_True ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( GetComponentInterface( true ), ::com::sun::star::uno::UNO_QUERY );
     return xAcc;
 }
 
@@ -9283,7 +9283,7 @@ bool Window::IsTopWindow() const
         uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
-    return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? sal_True : sal_False;
+    return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? true : false;
 }
 
 void Window::ImplMirrorFramePos( Point &pt ) const
@@ -9465,7 +9465,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     else
         aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
 
-    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? sal_True : sal_False );
+    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? true : false );
     aArg[ 4 ] = makeAny( uno::Reference< awt::XWindow >(
                              const_cast<Window*>(this)->GetComponentInterface(),
                              uno::UNO_QUERY ));

@@ -61,7 +61,7 @@ public:
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                    SetSize( long nNewDX, long nNewDY );
-    virtual void                       GetSize( long& rWidth, long& rHeight );
+    virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALVD_H
