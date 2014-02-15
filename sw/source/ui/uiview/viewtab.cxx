@@ -1244,7 +1244,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         short nOffset = static_cast< short >(aLR.GetTxtLeft() +
                                         // #i42922# Mouse move of numbering label
                                         // has to consider the left indent of the paragraph
-                                        m_pNumRuleNodeFromDoc->GetLeftMarginWithNum( sal_True ) );
+                                        m_pNumRuleNodeFromDoc->GetLeftMarginWithNum( true ) );
 
                         short nFLOffset;
                         m_pNumRuleNodeFromDoc->GetFirstLineOfsWithNum( nFLOffset );

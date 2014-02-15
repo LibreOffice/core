@@ -1480,7 +1480,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );
             SwTwips nLeft = rFill.Left() + rLRSpace.GetLeft() +
-                            GetTxtNode()->GetLeftMarginWithNum( sal_False );
+                            GetTxtNode()->GetLeftMarginWithNum();
             SwTwips nRight = rFill.Right() - rLRSpace.GetRight();
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );
@@ -1553,7 +1553,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 else if( rFill.X() > nLeft )
                 {
                     SwTwips nTxtLeft = rFill.Left() + rLRSpace.GetTxtLeft() +
-                                    GetTxtNode()->GetLeftMarginWithNum( sal_True );
+                                    GetTxtNode()->GetLeftMarginWithNum( true );
                     rFill.nLineWidth += rFill.bFirstLine ? nLeft : nTxtLeft;
                     SwTwips nLeftTab = nLeft;
                     SwTwips nRightTab = nLeft;

@@ -1859,14 +1859,14 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
 
 // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
 // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
-sal_Bool SwTxtNode::SetAttr(
+bool SwTxtNode::SetAttr(
     const SfxItemSet& rSet,
     const sal_Int32 nStt,
     const sal_Int32 nEnd,
     const SetAttrMode nMode )
 {
     if( !rSet.Count() )
-        return sal_False;
+        return false;
 
     // teil die Sets auf (fuer Selektion in Nodes)
     const SfxItemSet* pSet = &rSet;
@@ -1898,8 +1898,8 @@ sal_Bool SwTxtNode::SetAttr(
             // we want to set them at the paragraph:
             if( aTxtSet.Count() != rSet.Count() )
             {
-                sal_Bool bRet = SetAttr( rSet );
-                  if( !aTxtSet.Count() )
+                const bool bRet = SetAttr( rSet );
+                if( !aTxtSet.Count() )
                     return bRet;
             }
 
@@ -1909,8 +1909,8 @@ sal_Bool SwTxtNode::SetAttr(
             if ( bAutoStyle )
             {
                 boost::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
-                sal_Bool bRet = SetAttr( *pAutoStyleSet );
-                  if( 1 == aTxtSet.Count() )
+                const bool bRet = SetAttr( *pAutoStyleSet );
+                if( 1 == aTxtSet.Count() )
                     return bRet;
             }
 
@@ -1988,7 +1988,7 @@ sal_Bool SwTxtNode::SetAttr(
 
     TryDeleteSwpHints();
 
-    return nCount ? sal_True : sal_False;
+    return nCount != 0;
 }
 
 static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
@@ -2079,8 +2079,8 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
 }
 
 // erfrage die Attribute vom TextNode ueber den Bereich
-sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
-                         sal_Bool bOnlyTxtAttr, sal_Bool bGetFromChrFmt,
+bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+                         const bool bOnlyTxtAttr, const bool bGetFromChrFmt,
                          const bool bMergeIndentValuesOfNumRule ) const
 {
     if( HasHints() )
@@ -2294,7 +2294,7 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         }
     }
 
-    return rSet.Count() ? sal_True : sal_False;
+    return rSet.Count() != 0;
 }
 
 

@@ -362,7 +362,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
     const sal_Int32 nSplitPos = rPos.nContent.GetIndex();
     const sal_Int32 nTxtLen = m_Text.getLength();
     SwTxtNode* const pNode =
-        _MakeNewTxtNode( rPos.nNode, sal_False, nSplitPos==nTxtLen );
+        _MakeNewTxtNode( rPos.nNode, false, nSplitPos==nTxtLen );
 
     // the first paragraph gets the XmlId,
     // _except_ if it is empty and the second is not empty
@@ -2450,7 +2450,7 @@ void SwTxtNode::GCAttr()
 }
 
 // #i23726#
-SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
+SwNumRule* SwTxtNode::_GetNumRule(bool bInParent) const
 {
     SwNumRule* pRet = 0;
 
@@ -2490,7 +2490,7 @@ SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
     return pRet;
 }
 
-SwNumRule* SwTxtNode::GetNumRule(sal_Bool bInParent) const
+SwNumRule* SwTxtNode::GetNumRule(bool bInParent) const
 {
     return _GetNumRule(bInParent);
 }
@@ -2526,15 +2526,10 @@ void SwTxtNode::NumRuleChgd()
 }
 
 // -> #i27615#
-sal_Bool SwTxtNode::IsNumbered() const
+bool SwTxtNode::IsNumbered() const
 {
-    sal_Bool bResult = sal_False;
-
     SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    if ( pRule && IsCountedInList() )
-        bResult = sal_True;
-
-    return bResult;
+    return pRule && IsCountedInList();
 }
 
 bool SwTxtNode::HasMarkedLabel() const
@@ -2551,8 +2546,8 @@ bool SwTxtNode::HasMarkedLabel() const
 }
 // <- #i27615#
 
-SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
-                                        sal_Bool bChgFollow )
+SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
+                                       bool bChgFollow )
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
     SwAttrSet* pNewAttrSet = 0;
@@ -2681,7 +2676,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
 {
     // Position hinter dem eingefuegt wird
     SwNodeIndex aIdx( rPos.nNode, 1 );
-    SwTxtNode* pNew = _MakeNewTxtNode( aIdx, sal_True );
+    SwTxtNode* pNew = _MakeNewTxtNode( aIdx, true );
 
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
@@ -2732,9 +2727,9 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
 }
 
 // -> #i29560#
-sal_Bool SwTxtNode::HasNumber() const
+bool SwTxtNode::HasNumber() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
@@ -2757,9 +2752,9 @@ sal_Bool SwTxtNode::HasNumber() const
     return bResult;
 }
 
-sal_Bool SwTxtNode::HasBullet() const
+bool SwTxtNode::HasBullet() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
@@ -2819,7 +2814,7 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
     return OUString();
 }
 
-long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
+long SwTxtNode::GetLeftMarginWithNum( bool bTxtLeft ) const
 {
     long nRet = 0;
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
@@ -2870,9 +2865,8 @@ long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
     return nRet;
 }
 
-sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
+bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
-    sal_Bool bRet( sal_False );
     // #i95907#
     rFLOffset = 0;
 
@@ -2915,14 +2909,11 @@ sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             }
         }
 
-        bRet = sal_True;
-    }
-    else
-    {
-        rFLOffset = GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+        return true;
     }
 
-    return bRet;
+    rFLOffset = GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+    return false;
 }
 
 //
@@ -3326,7 +3317,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
 }
 
 OUString SwTxtNode::GetRedlineTxt( sal_Int32 nIdx, sal_Int32 nLen,
-                                sal_Bool bExpandFlds, sal_Bool bWithNum ) const
+                                   bool bExpandFlds, bool bWithNum ) const
 {
     std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();

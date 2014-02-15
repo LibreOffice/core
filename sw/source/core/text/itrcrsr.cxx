@@ -192,14 +192,14 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     // 5. paragraph border
     // Note: These values have already been used during calculation
     // of the printing area of the paragraph.
-    const int nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
+    const int nLMWithNum = pNode->GetLeftMarginWithNum( true );
     if ( pFrm->IsRightToLeft() )
     {
         // this calculation is identical this the calculation for L2R layout - see below
         nLeft = pFrm->Frm().Left() +
                 pFrm->Prt().Left() +
                 nLMWithNum -
-                pNode->GetLeftMarginWithNum( sal_False ) -
+                pNode->GetLeftMarginWithNum() -
                 // #i95907#
                 // #i111284#
 //                rSpace.GetLeft() +
@@ -219,7 +219,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
-                    pNode->GetLeftMarginWithNum( sal_False ) -
+                    pNode->GetLeftMarginWithNum() -
                     // #i95907#
                     // #i111284#
                     ( bListLevelIndentsApplicableAndLabelAlignmentActive

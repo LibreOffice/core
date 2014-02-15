@@ -121,8 +121,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
-    SAL_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, sal_Bool bNext = sal_True,
-                                sal_Bool bChgFollow = sal_True );
+    SAL_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, bool bNext = true,
+                                bool bChgFollow = true );
 
     SAL_DLLPRIVATE void CutImpl(
           SwTxtNode * const pDest, const SwIndex & rDestStart,
@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     SAL_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SAL_DLLPRIVATE SwNumRule * _GetNumRule(sal_Bool bInParent = sal_True) const;
+    SAL_DLLPRIVATE SwNumRule * _GetNumRule(bool bInParent = true) const;
 
     SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
@@ -269,7 +269,7 @@ public:
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
         const SfxItemSet* pSet = 0,
-        const sal_Bool bInclRefToxMark = sal_False );
+        const bool bInclRefToxMark = false );
     void    GCAttr();
 
     // Delete text attribute (needs to be deregistered at Pool!)
@@ -289,19 +289,19 @@ public:
 
     /** Set these attributes at TextNode. If the whole range is comprised
        set them only in AutoAttrSet (SwCntntNode::SetAttr). */
-    sal_Bool SetAttr( const SfxItemSet& rSet,
+    bool SetAttr( const SfxItemSet& rSet,
                   sal_Int32 nStt, sal_Int32 nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     /** Query the attributes of textnode over the range.
        Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
-       If <bMergeIndentValuesOfNumRule> == sal_True, the indent attributes of
+       If <bMergeIndentValuesOfNumRule> == true, the indent attributes of
        the corresponding list level of an applied list style is merged into
-       the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == sal_False,
+       the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == false,
        corresponding node has not its own indent attributes and the
        position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT. */
-    sal_Bool GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
-                  sal_Bool bOnlyTxtAttr  = sal_False,
-                  sal_Bool bGetFromChrFmt = sal_True,
+    bool GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+                  const bool bOnlyTxtAttr  = false,
+                  const bool bGetFromChrFmt = true,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
 
     /// Convey attributes of an AttrSet (AutoFmt) to SwpHintsArray.
@@ -419,7 +419,7 @@ public:
 
        @return numbering rule of this text node or NULL if none is set
      */
-    SwNumRule *GetNumRule(sal_Bool bInParent = sal_True) const;
+    SwNumRule *GetNumRule(bool bInParent = true) const;
 
     inline const SwNodeNum* GetNum() const
     {
@@ -469,7 +469,7 @@ public:
 
        @return additional indents
      */
-     long GetLeftMarginWithNum( sal_Bool bTxtLeft = sal_False ) const;
+     long GetLeftMarginWithNum( bool bTxtLeft = false ) const;
 
     /**
        Returns the combined first line indent of this text node and
@@ -478,10 +478,10 @@ public:
        @param the first line indent of this text node taking the
                numbering into account (return parameter)
 
-       @retval sal_True   this node has SwNodeNum and has numbering rule
-       @retval sal_False  else
+       @retval true   this node has SwNodeNum and has numbering rule
+       @retval false  else
      */
-    sal_Bool GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+    bool GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
     SwTwips GetAdditionalIndentForStartingNewList() const;
 
@@ -500,10 +500,10 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of an enumeration type.
 
-        @retval sal_True    This text node has a number.
-        @retval sal_False   else
+        @retval true    This text node has a number.
+        @retval false   else
      */
-    sal_Bool HasNumber() const;
+    bool HasNumber() const;
 
     /** Returns if this text node has a bullet.
 
@@ -511,23 +511,23 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of a bullet type.
 
-        @retval sal_True    This text node has a bullet.
-        @retval sal_False   else
+        @retval true    This text node has a bullet.
+        @retval false   else
      */
-    sal_Bool HasBullet() const;
+    bool HasBullet() const;
 
     /** Returns is this text node is numbered.
 
         This node is numbered if it has a SwNodeNum and it has a
         numbering rule and has not a hidden SwNodeNum.
 
-        ATTENTION: Returns sal_True even if the SwNumFmt has type
+        ATTENTION: Returns true even if the SwNumFmt has type
         SVX_NUM_NUMBER_NONE.
 
-        @retval sal_True      This node is numbered.
-        @retval sal_False     else
+        @retval true      This node is numbered.
+        @retval false     else
      */
-    sal_Bool IsNumbered() const;
+    bool IsNumbered() const;
 
     /** Returns if this text node has a marked label.
 
@@ -613,7 +613,7 @@ public:
        Note: This function returns false, if the numbering format is
        SVX_NUM_NUMBER_NONE or if the numbering/bullet has been deleted.
 
-       @return     sal_True if the paragraph has a visible numbering/bullet/outline
+       @return     true if the paragraph has a visible numbering/bullet/outline
      */
     bool HasVisibleNumberingOrBullet() const;
 
@@ -663,11 +663,11 @@ public:
                     sal_uInt16 nScript = 0 ) const;
 
     /// in ndcopy.cxx
-    sal_Bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
+    bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     /// Interactive hyphenation: we find TxtFrm and call its CalcHyph.
-    sal_Bool Hyphenate( SwInterHyphInfo &rHyphInf );
+    bool Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const sal_Int32 nStart, const sal_Int32 nEnd );
 
     /** add 4th optional parameter <bAddSpaceAfterListLabelStr> indicating,
@@ -689,8 +689,8 @@ public:
 
     OUString GetRedlineTxt( sal_Int32 nIdx = 0,
                           sal_Int32 nLen = SAL_MAX_INT32,
-                          sal_Bool bExpandFlds = sal_False,
-                          sal_Bool bWithNum = sal_False ) const;
+                          bool bExpandFlds = false,
+                          bool bWithNum = false ) const;
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */

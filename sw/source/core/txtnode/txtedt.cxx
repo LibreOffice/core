@@ -374,7 +374,7 @@ void SwTxtNode::RstTxtAttr(
     const sal_Int32 nLen,
     const sal_uInt16 nWhich,
     const SfxItemSet* pSet,
-    const sal_Bool bInclRefToxMark )
+    const bool bInclRefToxMark )
 {
     if ( !GetpSwpHints() )
         return;
@@ -1574,7 +1574,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
 }
 
 /** Findet den TxtFrm und sucht dessen CalcHyph */
-sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // Abkuerzung: am Absatz ist keine Sprache eingestellt:
     if ( LANGUAGE_NONE == sal_uInt16( GetSwAttrSet().GetLanguage().GetLanguage() )
@@ -1582,7 +1582,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         if( !rHyphInf.IsCheck() )
             rHyphInf.SetNoLang( true );
-        return sal_False;
+        return false;
     }
 
     if( pLinguNode != this )
@@ -1599,7 +1599,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         // moeglich, in denen kein Frame zum Node vorliegt.
         // Also keinOSL_ENSURE
         OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
-        return sal_False;
+        return false;
     }
 
     while( pFrm )
@@ -1610,7 +1610,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
             // (7821, 7662, 7408); vgl. layact.cxx,
             // SwLayAction::_TurboAction(), if( !pCnt->IsValid() ...
             pFrm->SetCompletePaint();
-            return sal_True;
+            return true;
         }
         pFrm = (SwTxtFrm*)(pFrm->GetFollow());
         if( pFrm )
@@ -1619,7 +1619,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
             rHyphInf.nStart = pFrm->GetOfst();
         }
     }
-    return sal_False;
+    return false;
 }
 
 namespace

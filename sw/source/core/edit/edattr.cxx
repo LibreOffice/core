@@ -140,7 +140,7 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                         : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
 
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
-                                                sal_False, sal_True,
+                                                false, true,
                                                 bMergeIndentValuesOfNumRule );
                 }
                 break;
