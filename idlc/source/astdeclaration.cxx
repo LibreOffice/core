@@ -45,9 +45,9 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     : m_localName(name)
     , m_pScope(pScope)
     , m_nodeType(type)
-    , m_bImported(sal_False)
-    , m_bIsAdded(sal_False)
-    , m_bInMainFile(sal_False)
+    , m_bImported(false)
+    , m_bIsAdded(false)
+    , m_bInMainFile(false)
     , m_bPredefined(false)
 {
     if ( m_pScope )
@@ -69,11 +69,11 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     if ( idlc()->getFileName() == idlc()->getRealFileName() )
     {
         m_fileName = idlc()->getMainFileName();
-        m_bInMainFile = sal_True;
+        m_bInMainFile = true;
     } else
     {
         m_fileName = idlc()->getFileName();
-        m_bImported = sal_True;
+        m_bImported = true;
     }
 
     m_documentation = idlc()->processDocumentation();
@@ -93,7 +93,7 @@ void AstDeclaration::setPredefined(bool bPredefined)
     if ( m_bPredefined )
     {
         m_fileName = OString();
-        m_bInMainFile = sal_False;
+        m_bInMainFile = false;
     }
 }
 
@@ -147,19 +147,19 @@ bool AstDeclaration::isType() const {
     }
 }
 
-sal_Bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
+bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
 {
     if (this == pDecl)
-        return sal_True;
+        return true;
     if ( !m_pScope )
-        return sal_False;
+        return false;
     return scopeAsDecl(m_pScope)->hasAncestor(pDecl);
 }
 
-sal_Bool AstDeclaration::dump(RegistryKey& rKey)
+bool AstDeclaration::dump(RegistryKey& rKey)
 {
     AstScope* pScope = declAsScope(this);
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if ( pScope )
     {

@@ -34,8 +34,8 @@ AstInterface::AstInterface(const OString& name,
     , AstScope(NT_interface)
     , m_mandatoryInterfaces(0)
     , m_bIsDefined(false)
-    , m_bForwarded(sal_False)
-    , m_bForwardedInSameFile(sal_False)
+    , m_bForwarded(false)
+    , m_bForwardedInSameFile(false)
     , m_bSingleInheritance(pInherits != 0)
 {
     if (pInherits != 0) {
@@ -99,10 +99,10 @@ void AstInterface::forwardDefined(AstInterface const & def)
     m_bIsDefined = true;
 }
 
-sal_Bool AstInterface::dump(RegistryKey& rKey)
+bool AstInterface::dump(RegistryKey& rKey)
 {
     if ( !isDefined() )
-        return sal_True;
+        return true;
 
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -110,7 +110,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
     if (m_mandatoryInterfaces > SAL_MAX_UINT16
@@ -250,7 +250,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
     return true;

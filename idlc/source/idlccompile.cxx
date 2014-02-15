@@ -58,11 +58,11 @@ static OUString TMP("TMP");
 static OUString TEMP("TEMP");
 static sal_Char tmpFilePattern[512];
 
-sal_Bool isFileUrl(const OString& fileName)
+bool isFileUrl(const OString& fileName)
 {
     if (fileName.startsWith("file://") )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 OString convertToAbsoluteSystemPath(const OString& fileName)
@@ -174,19 +174,19 @@ OString makeTempName(const OString& prefix)
     return OString(tmpFilePattern);
 }
 
-sal_Bool copyFile(const OString* source, const OString& target)
+bool copyFile(const OString* source, const OString& target)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     FILE* pSource = source == 0 ? stdin : fopen(source->getStr(), "rb");
     if ( !pSource )
-        return sal_False;
+        return false;
 
     FILE* pTarget = fopen(target.getStr(), "wb");
     if ( !pTarget )
     {
         fclose(pSource);
-        return sal_False;
+        return false;
     }
 
     size_t totalSize = 512;
@@ -203,7 +203,7 @@ sal_Bool copyFile(const OString* source, const OString& target)
                     fclose(pSource);
                 }
                 fclose(pTarget);
-                return sal_False;
+                return false;
             }
         }
     }
@@ -212,7 +212,7 @@ sal_Bool copyFile(const OString* source, const OString& target)
         fclose(pSource);
     }
     if ( fflush(pTarget) )
-        bRet = sal_False;
+        bRet = false;
     fclose(pTarget);
 
     return bRet;

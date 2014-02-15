@@ -69,30 +69,30 @@ public:
 
     AstType const * getType() const
         { return m_pType; }
-    sal_Bool isReadonly() const
+    bool isReadonly() const
         { return ((m_flags & AF_READONLY) == AF_READONLY); }
-    sal_Bool isOptional() const
+    bool isOptional() const
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
-    sal_Bool isAttribute() const
+    bool isAttribute() const
         { return ((m_flags & AF_ATTRIBUTE) == AF_ATTRIBUTE); }
-    sal_Bool isProperty() const
+    bool isProperty() const
         { return ((m_flags & AF_PROPERTY) == AF_PROPERTY); }
-    sal_Bool isBound() const
+    bool isBound() const
         { return ((m_flags & AF_BOUND) == AF_BOUND); }
-    sal_Bool isMayBeVoid() const
+    bool isMayBeVoid() const
         { return ((m_flags & AF_MAYBEVOID) == AF_MAYBEVOID); }
-    sal_Bool isConstrained() const
+    bool isConstrained() const
         { return ((m_flags & AF_CONSTRAINED) == AF_CONSTRAINED); }
-    sal_Bool isTransient() const
+    bool isTransient() const
         { return ((m_flags & AF_TRANSIENT) == AF_TRANSIENT); }
-    sal_Bool isMayBeAmbiguous() const
+    bool isMayBeAmbiguous() const
         { return ((m_flags & AF_MAYBEAMBIGUOUS) == AF_MAYBEAMBIGUOUS); }
-    sal_Bool isMayBeDefault() const
+    bool isMayBeDefault() const
         { return ((m_flags & AF_MAYBEDEFAULT) == AF_MAYBEDEFAULT); }
-    sal_Bool isRemoveable() const
+    bool isRemoveable() const
         { return ((m_flags & AF_REMOVABLE) == AF_REMOVABLE); }
 
-    sal_Bool dumpBlob(
+    bool dumpBlob(
         typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex);
 
 private:

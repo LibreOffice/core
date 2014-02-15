@@ -50,7 +50,7 @@ AstConstant::~AstConstant()
 
 }
 
-sal_Bool AstConstant::dumpBlob(
+bool AstConstant::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, bool published)
 {
     RTConstValue    aConst;
@@ -102,7 +102,7 @@ sal_Bool AstConstant::dumpBlob(
             {
                 fprintf(stderr, "%s: exprtype to const type: cannot convert ExprType\n",
                         idlc()->getOptions()->getProgramName().getStr());
-                return sal_False;
+                return false;
             }
     }
 
@@ -119,7 +119,7 @@ sal_Bool AstConstant::dumpBlob(
         RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
         OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

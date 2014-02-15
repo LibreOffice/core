@@ -57,17 +57,17 @@ public:
     bool hasMandatoryInheritedInterfaces() const
     { return m_mandatoryInterfaces > 0; }
 
-    void setForwarded(sal_Bool bForwarded)
+    void setForwarded(bool bForwarded)
         { m_bForwarded = bForwarded; }
-    sal_Bool isForwarded()
+    bool isForwarded()
         { return m_bForwarded; }
-    void setForwardedInSameFile(sal_Bool bForwarded)
+    void setForwardedInSameFile(bool bForwarded)
         { m_bForwardedInSameFile = bForwarded; }
-    sal_Bool isForwardedInSameFile()
+    bool isForwardedInSameFile()
         { return m_bForwardedInSameFile; }
 
     void setDefined() { m_bIsDefined = true; }
-    sal_Bool isDefined() const
+    bool isDefined() const
         { return m_bIsDefined; }
 
     bool usesSingleInheritance() const { return m_bSingleInheritance; }
@@ -86,7 +86,7 @@ public:
 
     void forwardDefined(AstInterface const & def);
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 
 private:
     enum InterfaceKind {
@@ -124,9 +124,9 @@ private:
 
     InheritedInterfaces m_inheritedInterfaces;
     InheritedInterfaces::size_type m_mandatoryInterfaces;
-    sal_Bool    m_bIsDefined;
-    sal_Bool    m_bForwarded;
-    sal_Bool    m_bForwardedInSameFile;
+    bool    m_bIsDefined;
+    bool    m_bForwarded;
+    bool    m_bForwardedInSameFile;
     bool m_bSingleInheritance;
     VisibleInterfaces m_visibleInterfaces;
     VisibleMembers m_visibleMembers;

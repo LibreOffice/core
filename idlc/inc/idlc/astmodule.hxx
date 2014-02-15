@@ -36,7 +36,7 @@ public:
     {}
     virtual ~AstModule() {}
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 };
 
 #endif // _IDLC_ASTMODULE_HXX_

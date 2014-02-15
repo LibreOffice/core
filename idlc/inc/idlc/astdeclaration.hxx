@@ -80,13 +80,13 @@ public:
         { m_pScope = pSc; }
     NodeType getNodeType() const
         { return m_nodeType; }
-    sal_Bool isInMainfile() const
+    bool isInMainfile() const
         { return m_bInMainFile; }
-    void setInMainfile(sal_Bool bInMainfile)
+    void setInMainfile(bool bInMainfile)
         { m_bInMainFile = bInMainfile; }
-    sal_Bool isImported() const
+    bool isImported() const
         { return m_bImported; }
-    void setImported(sal_Bool bImported)
+    void setImported(bool bImported)
         { m_bImported = bImported; }
     sal_Int32 getLineNumber() const
         { return m_lineNumber; }
@@ -100,19 +100,19 @@ public:
         { return m_documentation; }
     void setDocumentation(const OUString& rDocumentation)
         { m_documentation = rDocumentation; }
-    sal_Bool isAdded()
+    bool isAdded()
         { return m_bIsAdded; }
     void markAsAdded()
-        { m_bIsAdded = sal_True; }
+        { m_bIsAdded = true; }
 
     virtual bool isType() const;
 
-    sal_Bool hasAncestor(AstDeclaration* pDecl);
+    bool hasAncestor(AstDeclaration* pDecl);
 
     void setPublished() { m_bPublished = true; }
     bool isPublished() const { return m_bPublished; }
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 
     bool isPredefined() { return m_bPredefined; }
     void setPredefined(bool bPredefined);
@@ -123,9 +123,9 @@ protected:
     OString      m_fullName;         // full qualified name with '/' as separator
     AstScope*           m_pScope;
     NodeType            m_nodeType;
-    sal_Bool            m_bImported;        // imported ?
-    sal_Bool            m_bIsAdded;         // mark declaration as added in scope
-    sal_Bool            m_bInMainFile;      // defined in main file
+    bool            m_bImported;        // imported ?
+    bool            m_bIsAdded;         // mark declaration as added in scope
+    bool            m_bInMainFile;      // defined in main file
     bool                m_bPublished;
     bool                m_bPredefined;
     sal_Int32           m_lineNumber;       // line number defined in

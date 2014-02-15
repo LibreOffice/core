@@ -134,11 +134,11 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     // Look up in the local scope and start with the first scope
     sal_Int32 nIndex = scopedName.indexOf(':');
     OString firstScope =  nIndex > 0 ? scopedName.copy(0, nIndex) : scopedName;
-    sal_Bool    bFindFirstScope = sal_True;
+    bool    bFindFirstScope = true;
     pDecl = lookupByNameLocal(firstScope);
     if ( !pDecl )
     {
-        bFindFirstScope = sal_False;
+        bFindFirstScope = false;
 
         // OK, not found. Go down parent scope chain
         pDecl = scopeAsDecl(this);

@@ -38,7 +38,7 @@ public:
     ExprType getConstValueType() const
         { return m_constValueType; }
 
-    sal_Bool dumpBlob(
+    bool dumpBlob(
         typereg::Writer & rBlob, sal_uInt16 index, bool published);
 private:
     AstExpression*                  m_pConstValue;

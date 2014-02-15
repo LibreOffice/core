@@ -141,14 +141,14 @@ public:
         { m_pSymbolicName = pSymbolicName; }
 
     // Evaluation and value coercion
-    AstExprValue* coerce(ExprType type, sal_Bool bAssign=sal_True);
+    AstExprValue* coerce(ExprType type, bool bAssign=true);
 
     // Evaluate then store value inside this AstExpression
     void evaluate(EvalKind ek);
 
     // Compare to AstExpressions
-    sal_Bool operator==(AstExpression *pExpr);
-    sal_Bool compare(AstExpression *pExpr);
+    bool operator==(AstExpression *pExpr);
+    bool compare(AstExpression *pExpr);
 
     OString toString();
     void dump() {}

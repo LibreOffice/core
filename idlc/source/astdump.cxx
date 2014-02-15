@@ -34,7 +34,7 @@
 
 using namespace ::rtl;
 
-sal_Bool AstModule::dump(RegistryKey& rKey)
+bool AstModule::dump(RegistryKey& rKey)
 {
     OUString emptyStr;
     RegistryKey localKey;
@@ -48,7 +48,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                     idlc()->getOptions()->getProgramName().getStr(),
                     getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-            return sal_False;
+            return false;
         }
     }
 
@@ -93,7 +93,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
                     getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-            return sal_False;
+            return false;
         }
     } else
     {
@@ -118,7 +118,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                         idlc()->getOptions()->getProgramName().getStr(),
                         getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-                return sal_False;
+                return false;
             }
         }
     }
@@ -129,7 +129,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
     return AstDeclaration::dump(rKey);
 }
 
-sal_Bool AstTypeDef::dump(RegistryKey& rKey)
+bool AstTypeDef::dump(RegistryKey& rKey)
 {
     OUString emptyStr;
     RegistryKey localKey;
@@ -138,7 +138,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
     typereg::Writer aBlob(
@@ -158,13 +158,13 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool AstService::dump(RegistryKey& rKey)
+bool AstService::dump(RegistryKey& rKey)
 {
     OUString emptyStr;
     typereg_Version version = m_bPublished
@@ -324,7 +324,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     return true;
 }
 
-sal_Bool AstAttribute::dumpBlob(
+bool AstAttribute::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex)
 {
     RTFieldAccess accessMode = RT_ACCESS_INVALID;
@@ -381,7 +381,7 @@ sal_Bool AstAttribute::dumpBlob(
         rBlob, m_setDocumentation, m_setExceptions, RT_MODE_ATTRIBUTE_SET,
         methodIndex);
 
-    return sal_True;
+    return true;
 }
 
 void AstAttribute::dumpExceptions(

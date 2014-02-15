@@ -36,7 +36,7 @@ public:
     virtual bool isUnsigned() const
     { return m_pBaseType != 0 && m_pBaseType->isUnsigned(); }
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 private:
     AstType const * m_pBaseType;
 };

@@ -40,7 +40,7 @@ bool AstOperation::isVariadic() const {
         && static_cast< AstParameter const * >(*(--i))->isRest();
 }
 
-sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
+bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = nExceptions();
@@ -118,7 +118,7 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 AstDeclaration* AstOperation::addDeclaration(AstDeclaration* pDecl)

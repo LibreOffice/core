@@ -199,8 +199,8 @@ static void SAL_CALL initializePredefinedTypes(AstModule* pRoot)
 
 Idlc::Idlc(Options* pOptions)
     : m_pOptions(pOptions)
-    , m_bIsDocValid(sal_False)
-    , m_bIsInMainfile(sal_True)
+    , m_bIsDocValid(false)
+    , m_bIsInMainfile(true)
     , m_published(false)
     , m_errorCount(0)
     , m_warningCount(0)
@@ -241,8 +241,8 @@ void Idlc::init()
 
 void Idlc::reset()
 {
-    m_bIsDocValid = sal_False;
-    m_bIsInMainfile = sal_True;
+    m_bIsDocValid = false;
+    m_bIsInMainfile = true;
     m_published = false;
 
     m_errorCount = 0;

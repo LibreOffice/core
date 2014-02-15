@@ -34,7 +34,7 @@ FeDeclarator::~FeDeclarator()
 {
 }
 
-sal_Bool FeDeclarator::checkType(AstDeclaration const * type)
+bool FeDeclarator::checkType(AstDeclaration const * type)
 {
     OString tmp(m_name);
     sal_Int32 count = m_name.lastIndexOf( ':' );
@@ -42,9 +42,9 @@ sal_Bool FeDeclarator::checkType(AstDeclaration const * type)
         tmp = m_name.copy( count+1 );
 
     if (tmp == type->getLocalName())
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)

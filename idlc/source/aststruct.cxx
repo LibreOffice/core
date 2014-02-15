@@ -77,7 +77,7 @@ bool AstStruct::isType() const {
         ? getTypeParameterCount() == 0 : AstDeclaration::isType();
 }
 
-sal_Bool AstStruct::dump(RegistryKey& rKey)
+bool AstStruct::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -85,7 +85,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
     if (m_typeParameters.size() > SAL_MAX_UINT16) {
@@ -170,10 +170,10 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

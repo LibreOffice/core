@@ -42,13 +42,13 @@ using namespace ::osl;
 
 StringList* pCreatedDirectories = NULL;
 
-static sal_Bool checkOutputPath(const OString& completeName)
+static bool checkOutputPath(const OString& completeName)
 {
     OString sysPathName = convertToAbsoluteSystemPath(completeName);
     OStringBuffer buffer(sysPathName.getLength());
 
     if ( sysPathName.indexOf( SEPARATOR ) == -1 )
-        return sal_True;
+        return true;
 
     sal_Int32 nIndex = 0;
     OString token(sysPathName.getToken(0, SEPARATOR, nIndex));
@@ -79,7 +79,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
                 {
                     fprintf(stderr, "%s: cannot create directory '%s'\n",
                             idlc()->getOptions()->getProgramName().getStr(), buffer.getStr());
-                    return sal_False;
+                    return false;
                 }
             } else
             {
@@ -90,10 +90,10 @@ static sal_Bool checkOutputPath(const OString& completeName)
         }
         buffer.append(SEPARATOR);
     } while( nIndex != -1 );
-    return sal_True;
+    return true;
 }
 
-static sal_Bool cleanPath()
+static bool cleanPath()
 {
     if ( pCreatedDirectories )
     {
@@ -109,13 +109,13 @@ static sal_Bool cleanPath()
             {
                 fprintf(stderr, "%s: cannot remove directory '%s'\n",
                         idlc()->getOptions()->getProgramName().getStr(), (*iter).getStr());
-                return sal_False;
+                return false;
             }
             ++iter;
         }
         delete pCreatedDirectories;
     }
-    return sal_True;
+    return true;
 }
 
 void removeIfExists(const OString& pathname)

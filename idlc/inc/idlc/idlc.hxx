@@ -70,18 +70,18 @@ public:
         { m_realFileName = realFileName; }
     const OString& getDocumentation()
         {
-            m_bIsDocValid = sal_False;
+            m_bIsDocValid = false;
             return m_documentation;
         }
     void setDocumentation(const OString& documentation)
         {
             m_documentation = documentation;
-            m_bIsDocValid = sal_True;
+            m_bIsDocValid = true;
         }
     OUString processDocumentation();
-    sal_Bool isInMainFile()
+    bool isInMainFile()
         { return m_bIsInMainfile; }
-    void setInMainfile(sal_Bool bInMainfile)
+    void setInMainfile(bool bInMainfile)
         { m_bIsInMainfile = bInMainfile; }
     sal_uInt32 getErrorCount()
         { return m_errorCount; }
@@ -130,9 +130,9 @@ private:
     OString      m_mainFileName;
     OString      m_realFileName;
     OString      m_documentation;
-    sal_Bool            m_bIsDocValid;
-    sal_Bool            m_bGenerateDoc;
-    sal_Bool            m_bIsInMainfile;
+    bool            m_bIsDocValid;
+    bool            m_bGenerateDoc;
+    bool            m_bIsInMainfile;
     bool                m_published;
     sal_uInt32          m_errorCount;
     sal_uInt32          m_warningCount;
@@ -153,10 +153,10 @@ sal_Int32 produceFile(const OString& filenameBase,
 void removeIfExists(const OString& pathname);
 
 OString makeTempName(const OString& prefix, const OString& postfix);
-sal_Bool copyFile(const OString* source, const OString& target);
+bool copyFile(const OString* source, const OString& target);
     // a null source means stdin
 
-sal_Bool isFileUrl(const OString& fileName);
+bool isFileUrl(const OString& fileName);
 OString convertToAbsoluteSystemPath(const OString& fileName);
 OString convertToFileUrl(const OString& fileName);
 

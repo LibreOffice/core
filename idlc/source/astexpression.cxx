@@ -707,7 +707,7 @@ eval_kind(AstExprValue *ev, EvalKind ek)
     return NULL;
 }
 
-AstExprValue* AstExpression::coerce(ExprType t, sal_Bool bAssign)
+AstExprValue* AstExpression::coerce(ExprType t, bool bAssign)
 {
     AstExprValue *copy;
 
@@ -785,9 +785,9 @@ void AstExpression::evaluate(EvalKind ek)
     m_exprValue = eval_kind(m_exprValue, ek);
 }
 
-sal_Bool AstExpression::operator==(AstExpression *pExpr)
+bool AstExpression::operator==(AstExpression *pExpr)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if (m_combOperator != pExpr->getCombOperator())
         return bRet;
     evaluate(EK_const);
@@ -830,14 +830,14 @@ sal_Bool AstExpression::operator==(AstExpression *pExpr)
             break;
         default:
             OSL_ASSERT(false);
-            bRet = sal_False;
+            bRet = false;
             break;
     }
 
     return bRet;
 }
 
-sal_Bool AstExpression::compare(AstExpression *pExpr)
+bool AstExpression::compare(AstExpression *pExpr)
 {
     bool bRet = false;
     if (m_combOperator != pExpr->getCombOperator())

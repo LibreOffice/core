@@ -51,7 +51,7 @@ public:
 
     virtual bool isType() const;
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 private:
     AstStruct const* m_pBaseType;
     DeclList m_typeParameters;

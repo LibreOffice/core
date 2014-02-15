@@ -34,7 +34,7 @@ public:
 
     AstService* getRealService()
         { return m_pRealService; }
-    sal_Bool isOptional()
+    bool isOptional()
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
 private:
     const sal_uInt32    m_flags;

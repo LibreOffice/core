@@ -205,7 +205,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 {
 	sal_Char	*r = pBuf;
 	sal_Char    *h;
-	sal_Bool	bIsInMain = sal_False;
+	bool	bIsInMain = sal_False;
 
 	/* Skip initial '#' */
 	if (*r != '#')

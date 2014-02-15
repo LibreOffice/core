@@ -32,7 +32,7 @@
 
 struct EqualString
 {
-    sal_Bool operator()(const OString& str1, const OString& str2) const
+    bool operator()(const OString& str1, const OString& str2) const
     {
         return (str1 == str2);
     }
@@ -48,7 +48,7 @@ struct HashString
 
 struct LessString
 {
-    sal_Bool operator()(const OString& str1, const OString& str2) const
+    bool operator()(const OString& str1, const OString& str2) const
     {
         return (str1 < str2);
     }

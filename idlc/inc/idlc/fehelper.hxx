@@ -44,7 +44,7 @@ public:
     DeclaratorType  getDeclType()
         { return m_declType; }
 
-    sal_Bool checkType(AstDeclaration const * pType);
+    bool checkType(AstDeclaration const * pType);
     AstType const * compose(AstDeclaration const * pDecl);
 private:
     AstDeclaration* m_pComplexPart;

@@ -38,7 +38,7 @@ public:
 
     AstConstant* checkValue(AstExpression* pExpr);
 
-    virtual sal_Bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey);
 
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 private:

@@ -47,7 +47,7 @@ public:
     sal_uInt16 nExceptions()
         { return (sal_uInt16)(m_exceptions.size()); }
 
-    sal_Bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
+    bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 
     // scope management
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
