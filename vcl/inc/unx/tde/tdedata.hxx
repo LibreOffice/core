@@ -73,6 +73,7 @@ public:
     virtual ~TDESalFrame();
 
     virtual SalGraphics* GetGraphics();
+    virtual bool AcquireGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );

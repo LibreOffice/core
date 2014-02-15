@@ -142,7 +142,7 @@ inline sal_uInt8 ImplGetGradientColorValue( long nValue )
 
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
-                                           sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                           bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -210,7 +210,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         nGreen      = (sal_uInt8)nStartGreen;
         nBlue       = (sal_uInt8)nStartBlue;
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -295,7 +295,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         fTempColor = ((double)nStartBlue) * (1.0-fAlpha) + ((double)nEndBlue) * fAlpha;
         nBlue = ImplGetGradientColorValue((long)fTempColor);
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -333,7 +333,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         nGreen = ImplGetGradientColorValue(nEndGreen);
         nBlue = ImplGetGradientColorValue(nEndBlue);
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -353,7 +353,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
 void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
-                                            sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // Feststellen ob Ausgabe ueber Polygon oder PolyPolygon
     // Bei Rasteroperationen ungleich Overpaint immer PolyPolygone,
@@ -442,7 +442,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
     if( bMtf )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
     else
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -510,7 +510,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             // the one painted in the window outdev path below. To get
             // matching colors, have to delay color setting here.
             if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
         }
@@ -518,7 +518,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         {
             // #107349# Set fill color _before_ geometry painting
             if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -545,7 +545,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
             if( bMtf )
             {
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
                 mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
             }
             else
@@ -670,9 +670,9 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
                 aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
             if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-                ImplDrawLinearGradient( aRect, aGradient, sal_False, NULL );
+                ImplDrawLinearGradient( aRect, aGradient, false, NULL );
             else
-                ImplDrawComplexGradient( aRect, aGradient, sal_False, NULL );
+                ImplDrawComplexGradient( aRect, aGradient, false, NULL );
         }
 
         Pop();
@@ -743,7 +743,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             }
             else
             {
-                const sal_Bool  bOldOutput = IsOutputEnabled();
+                const bool  bOldOutput = IsOutputEnabled();
 
                 DisableOutput();
                 Push( PUSH_RASTEROP );
@@ -835,7 +835,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                         if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
                             ImplDrawLinearGradient( aRect, aGradient, false, &aClipPolyPoly );
                         else
-                            ImplDrawComplexGradient( aRect, aGradient, sal_False, &aClipPolyPoly );
+                            ImplDrawComplexGradient( aRect, aGradient, false, &aClipPolyPoly );
                     }
                 }
             }

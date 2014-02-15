@@ -99,7 +99,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
     pSalData->maFrameCheck.insert( this );
 }
 
-
+// -----------------------------------------------------------------------
 
 AquaSalFrame::~AquaSalFrame()
 {
@@ -135,7 +135,7 @@ AquaSalFrame::~AquaSalFrame()
         [mpNSWindow release];
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::initWindowAndView()
 {
@@ -227,7 +227,7 @@ void AquaSalFrame::initWindowAndView()
     [mpNSWindow setContentView: mpNSView];
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::CocoaToVCL( NSRect& io_rRect, bool bRelativeToScreen )
 {
@@ -261,7 +261,7 @@ void AquaSalFrame::VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen )
         io_rPoint.y = maGeometry.nHeight - io_rPoint.y;
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::screenParametersChanged()
 {
@@ -272,24 +272,32 @@ void AquaSalFrame::screenParametersChanged()
     CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
 }
 
-
+// -----------------------------------------------------------------------
 
 SalGraphics* AquaSalFrame::GetGraphics()
 {
-    if ( mbGraphics )
-        return NULL;
+    return mpGraphics;
+}
 
+bool AquaSalFrame::AcquireGraphics()
+{
     if ( !mpGraphics )
     {
         mpGraphics = new AquaSalGraphics;
         mpGraphics->SetWindowGraphics( this );
+        mbGraphics = true;
+    }
+    else
+    {
+        return false;
     }
 
-    mbGraphics = TRUE;
-    return mpGraphics;
+    return true;
 }
 
 
+
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
@@ -298,7 +306,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     mbGraphics = FALSE;
 }
 
-
+// -----------------------------------------------------------------------
 
 bool AquaSalFrame::PostEvent( void *pData )
 {
@@ -306,7 +314,7 @@ bool AquaSalFrame::PostEvent( void *pData )
     return TRUE;
 }
 
-
+// -----------------------------------------------------------------------
 void AquaSalFrame::SetTitle(const OUString& rTitle)
 {
     if ( !mpNSWindow )
@@ -343,13 +351,13 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
         [pTitle release];
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetIcon( sal_uInt16 )
 {
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
 {
@@ -369,7 +377,7 @@ void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::initShow()
 {
@@ -422,7 +430,7 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
     CallCallback(SALEVENT_PAINT, &aPaintEvt);
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 {
@@ -485,13 +493,13 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Enable( sal_Bool )
 {
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
@@ -516,7 +524,7 @@ void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
@@ -545,7 +553,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
 {
@@ -564,7 +572,7 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
@@ -580,7 +588,7 @@ void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 {
@@ -656,7 +664,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
@@ -690,7 +698,7 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     return TRUE;
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
 {
@@ -730,7 +738,7 @@ void AquaSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 {
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
@@ -827,7 +835,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         SendPaintEvent();
 }
 
-
+// -----------------------------------------------------------------------
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
 class PreventSleepTimer : public AutoTimer
@@ -885,13 +893,13 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetAlwaysOnTop( sal_Bool )
 {
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::ToTop(sal_uInt16 nFlags)
 {
@@ -912,7 +920,7 @@ void AquaSalFrame::ToTop(sal_uInt16 nFlags)
         [mpNSWindow orderFront: NSApp];
 }
 
-
+// -----------------------------------------------------------------------
 
 NSCursor* AquaSalFrame::getCurrentCursor() const
 {
@@ -968,7 +976,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
     [mpNSWindow invalidateCursorRectsForView: mpNSView];
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetPointerPos( long nX, long nY )
 {
@@ -980,7 +988,7 @@ void AquaSalFrame::SetPointerPos( long nX, long nY )
     CGDisplayMoveCursorToPoint( mainDisplayID, aPoint );
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Flush( void )
 {
@@ -1002,7 +1010,7 @@ void AquaSalFrame::Flush( void )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Flush( const Rectangle& rRect )
 {
@@ -1025,7 +1033,7 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Sync()
 {
@@ -1039,7 +1047,7 @@ void AquaSalFrame::Sync()
     }
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 {
@@ -1055,13 +1063,13 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
         return;
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
-
+// -----------------------------------------------------------------------
 
 OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
@@ -1148,7 +1156,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return aResult.makeStringAndClear();
 }
 
-
+// -----------------------------------------------------------------------
 
 static void getAppleScrollBarVariant(StyleSettings &rSettings)
 {
@@ -1347,21 +1355,21 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     [mpNSView unlockFocus];
 }
 
-
+// -----------------------------------------------------------------------
 
 const SystemEnvData* AquaSalFrame::GetSystemData() const
 {
     return &maSysData;
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::Beep()
 {
     NSBeep();
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
@@ -1682,7 +1690,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     maGeometry.nHeight = static_cast<unsigned int>(aContentRect.size.height);
 }
 
-
+// -----------------------------------------------------------------------
 
 void AquaSalFrame::CaptureMouse( sal_Bool bCapture )
 {

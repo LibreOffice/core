@@ -700,7 +700,7 @@ public:
 
     using               OutputDevice::SetSettings;
     virtual void        SetSettings( const AllSettings& rSettings );
-    virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );
+    virtual void        SetSettings( const AllSettings& rSettings, bool bChild );
     void                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
@@ -818,7 +818,7 @@ public:
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)
 
-        @returns sal_True if a child or subchild is a running modal window
+        @returns true if a child or subchild is a running modal window
     */
     bool                IsInModalMode() const;
 
@@ -1006,7 +1006,7 @@ public:
     virtual void                    SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace );
 
     // Accessibility
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible( bool bCreate = true );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     void SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
 

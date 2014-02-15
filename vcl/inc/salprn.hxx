@@ -39,19 +39,19 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
     OUString               maDriver;
     OUString               maLocation;
     OUString               maComment;
-    sal_uLong                   mnStatus;
-    sal_uLong                   mnJobs;
+    sal_uLong              mnStatus;
+    sal_uLong              mnJobs;
     OUString*              mpSysData;
 
-                            SalPrinterQueueInfo();
-                            ~SalPrinterQueueInfo();
+                           SalPrinterQueueInfo();
+                           ~SalPrinterQueueInfo();
 };
 
 class VCL_PLUGIN_PUBLIC SalInfoPrinter
 {
 public:
-    std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
-    bool                                m_bPapersInit;      // set to true after InitPaperFormats
+    std::vector< PaperInfo  >       m_aPaperFormats;    // all printer supported formats
+    bool                            m_bPapersInit;      // set to true after InitPaperFormats
 
     SalInfoPrinter() : m_bPapersInit( false ) {}
     virtual ~SalInfoPrinter();
@@ -59,6 +59,7 @@ public:
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
     virtual SalGraphics*            GetGraphics() = 0;
+    virtual bool                    AcquireGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
     virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
@@ -75,13 +76,13 @@ public:
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual sal_uLong                   GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
-    virtual sal_uLong                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
+    virtual sal_uLong               GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
+    virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
+    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
 };
 
 class VCL_PLUGIN_PUBLIC SalPrinter
@@ -110,7 +111,7 @@ public:
     virtual bool                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData ) = 0;
     virtual bool                    EndPage() = 0;
-    virtual sal_uLong                   GetErrorCode() = 0;
+    virtual sal_uLong               GetErrorCode() = 0;
 
 };
 

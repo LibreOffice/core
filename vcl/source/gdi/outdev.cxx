@@ -305,7 +305,7 @@ OutputDevice::OutputDevice() :
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
-    maSettings( Application::GetSettings() )
+    mxSettings( new AllSettings(Application::GetSettings()) )
 {
 
     mpGraphics          = NULL;
@@ -391,7 +391,7 @@ OutputDevice::~OutputDevice()
 
     if ( GetUnoGraphicsList() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_False );
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
         if ( pWrapper )
             pWrapper->ReleaseAllGraphics( this );
         delete mpUnoGraphicsList;
@@ -456,7 +456,7 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
     return bHasSupport;
 }
 
-void OutputDevice::EnableRTL( sal_Bool bEnable )
+void OutputDevice::EnableRTL( bool bEnable )
 {
     mbEnableRTL = (bEnable != 0);
     if( meOutDevType == OUTDEV_VIRDEV )
@@ -492,6 +492,7 @@ void    OutputDevice::ReMirror( Point &rPoint ) const
 {
     rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
 }
+
 void    OutputDevice::ReMirror( Rectangle &rRect ) const
 {
     long nWidth = rRect.Right() - rRect.Left();
@@ -503,6 +504,7 @@ void    OutputDevice::ReMirror( Rectangle &rRect ) const
     rRect.Left() = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX;
     rRect.Right() = rRect.Left() + nWidth;
 }
+
 void    OutputDevice::ReMirror( Region &rRegion ) const
 {
     RectangleVector aRectangles;
@@ -573,9 +575,12 @@ bool OutputDevice::ImplInitGraphics() const
     {
         Window* pWindow = (Window*)this;
 
-        ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
         // try harder if no wingraphics was available directly
-        if ( !mpGraphics )
+        if ( pWindow->mpWindowImpl->mpFrame->AcquireGraphics() )
+        {
+            ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+        }
+        else
         {
             // find another output device in the same frame
             OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
@@ -590,7 +595,7 @@ bool OutputDevice::ImplInitGraphics() const
             {
                 // steal the wingraphics from the other outdev
                 mpGraphics = pReleaseOutDev->mpGraphics;
-                pReleaseOutDev->ImplReleaseGraphics( sal_False );
+                pReleaseOutDev->ImplReleaseGraphics( false );
             }
             else
             {
@@ -600,7 +605,10 @@ bool OutputDevice::ImplInitGraphics() const
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
                         break;
                     pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
-                    ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+                    if ( pWindow->mpWindowImpl->mpFrame->AcquireGraphics() )
+                    {
+                        ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+                    }
                 }
             }
         }
@@ -622,15 +630,17 @@ bool OutputDevice::ImplInitGraphics() const
 
         if ( pVirDev->mpVirDev )
         {
-            ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+            mpGraphics = pVirDev->mpVirDev->GetGraphics();
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+                if ( pVirDev->mpVirDev->AcquireGraphics() )
+                    ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
             }
+
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
             {
@@ -652,14 +662,15 @@ bool OutputDevice::ImplInitGraphics() const
         else if ( pPrinter->mpDisplayDev )
         {
             const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
-            ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+                if ( pVirDev->mpVirDev->AcquireGraphics() )
+                    ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
             }
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
@@ -674,14 +685,14 @@ bool OutputDevice::ImplInitGraphics() const
         }
         else
         {
-            mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
             // if needed retry after releasing least recently used printer graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
                     break;
                 pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pPrinter->mpInfoPrinter->GetGraphics() );
+                if ( pPrinter->mpInfoPrinter->AcquireGraphics() )
+                    ImplSetGraphics( pPrinter->mpInfoPrinter->GetGraphics() );
             }
             // update global LRU list of printer graphics
             if ( mpGraphics )
@@ -695,6 +706,11 @@ bool OutputDevice::ImplInitGraphics() const
             }
         }
     }
+    else
+    {
+        SAL_WARN("vcl", "Not a known OutputDevice type!");
+        assert( meOutDevType != OUTDEV_DONTKNOW );
+    }
 
     if ( mpGraphics )
     {
@@ -705,7 +721,7 @@ bool OutputDevice::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
-void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
+void OutputDevice::ImplReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -817,9 +833,9 @@ void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
         }
     }
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics = NULL;
+    mpNextGraphics = NULL;
+    mpPrevGraphics = NULL;
 }
 
 void OutputDevice::ImplInitOutDevData()
@@ -855,7 +871,7 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-sal_Bool OutputDevice::ImplIsRecordLayout() const
+bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
@@ -1261,7 +1277,7 @@ void OutputDevice::SetFillColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), sal_False ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
 
     if ( mbFillColor )
     {
@@ -2597,7 +2613,7 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
 
     aArg[ 0 ] = css::uno::makeAny( reinterpret_cast<sal_Int64>(this) );
     aArg[ 2 ] = css::uno::makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
-    aArg[ 3 ] = css::uno::makeAny( sal_False );
+    aArg[ 3 ] = css::uno::makeAny( false );
     aArg[ 5 ] = GetSystemGfxDataAny();
 
     css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();

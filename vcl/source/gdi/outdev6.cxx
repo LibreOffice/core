@@ -757,7 +757,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     pVDev->EnableMapMode( false );
                     aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( true ) here!
 
                     // create mask bitmap
                     pVDev->SetLineColor( COL_BLACK );
@@ -770,7 +770,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     pVDev->EnableMapMode( false );
                     aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( true ) here!
 
                     // create alpha mask from gradient
                     pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );

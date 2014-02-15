@@ -175,6 +175,11 @@ SalGraphics* SvpSalFrame::GetGraphics()
     return pGraphics;
 }
 
+bool SvpSalFrame::AcquireGraphics()
+{
+    return true;
+}
+
 void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     SvpSalGraphics* pSvpGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);

@@ -147,130 +147,130 @@ class GtkSalFrame : public SalFrame
         bool                            m_bFocused;
         bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
-        std::vector< sal_uInt16 >           m_aInputFlags;
+        std::vector< sal_uInt16 >       m_aInputFlags;
 
         IMHandler( GtkSalFrame* );
         ~IMHandler();
 
-        void            createIMContext();
-        void            deleteIMContext();
-        void            updateIMSpotLocation();
-        void            setInputContext( SalInputContext* pContext );
-        void            endExtTextInput( sal_uInt16 nFlags );
-        bool            handleKeyEvent( GdkEventKey* pEvent );
-        void            focusChanged( bool bFocusIn );
+        void                            createIMContext();
+        void                            deleteIMContext();
+        void                            updateIMSpotLocation();
+        void                            setInputContext( SalInputContext* pContext );
+        void                            endExtTextInput( sal_uInt16 nFlags );
+        bool                            handleKeyEvent( GdkEventKey* pEvent );
+        void                            focusChanged( bool bFocusIn );
 
-        void            doCallEndExtTextInput();
-        void            sendEmptyCommit();
+        void                            doCallEndExtTextInput();
+        void                            sendEmptyCommit();
 
-        static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
-        static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
-        static void         signalIMPreeditChanged( GtkIMContext*, gpointer );
-        static void         signalIMPreeditEnd( GtkIMContext*, gpointer );
-        static void         signalIMPreeditStart( GtkIMContext*, gpointer );
-        static gboolean     signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
+        static void                     signalIMCommit( GtkIMContext*, gchar*, gpointer );
+        static gboolean                 signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
+        static void                     signalIMPreeditChanged( GtkIMContext*, gpointer );
+        static void                     signalIMPreeditEnd( GtkIMContext*, gpointer );
+        static void                     signalIMPreeditStart( GtkIMContext*, gpointer );
+        static gboolean                 signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
     };
     friend struct IMHandler;
 
-    SalX11Screen                    m_nXScreen;
-    GtkWidget*                      m_pWindow;
-    int                             m_nDuringRender;
-    GdkWindow*                      m_pForeignParent;
-    GdkNativeWindow                 m_aForeignParentWindow;
-    GdkWindow*                      m_pForeignTopLevel;
-    GdkNativeWindow                 m_aForeignTopLevelWindow;
-    Pixmap                          m_hBackgroundPixmap;
-    sal_uLong                       m_nStyle;
-    SalExtStyle                     m_nExtStyle;
-    GtkFixed*                       m_pFixedContainer;
-    GtkSalFrame*                    m_pParent;
-    std::list< GtkSalFrame* >       m_aChildren;
-    GdkWindowState                  m_nState;
-    SystemEnvData                   m_aSystemData;
-    GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
-    sal_uInt16                      m_nKeyModifiers;
-    GdkCursor                      *m_pCurrentCursor;
-    GdkVisibilityState              m_nVisibility;
-    PointerStyle                    m_ePointerStyle;
-    int                             m_nSavedScreenSaverTimeout;
-    guint                           m_nGSMCookie;
-    int                             m_nWorkArea;
-    bool                            m_bFullscreen;
-    bool                            m_bSpanMonitorsWhenFullscreen;
-    bool                            m_bDefaultPos;
-    bool                            m_bDefaultSize;
-    bool                            m_bSendModChangeOnRelease;
-    bool                            m_bWindowIsGtkPlug;
-    bool                            m_bSetFocusOnMap;
-    OUString                   m_aTitle;
-    OUString                   m_sWMClass;
+    SalX11Screen                        m_nXScreen;
+    GtkWidget*                          m_pWindow;
+    int                                 m_nDuringRender;
+    GdkWindow*                          m_pForeignParent;
+    GdkNativeWindow                     m_aForeignParentWindow;
+    GdkWindow*                          m_pForeignTopLevel;
+    GdkNativeWindow                     m_aForeignTopLevelWindow;
+    Pixmap                              m_hBackgroundPixmap;
+    sal_uLong                           m_nStyle;
+    SalExtStyle                         m_nExtStyle;
+    GtkFixed*                           m_pFixedContainer;
+    GtkSalFrame*                        m_pParent;
+    std::list< GtkSalFrame* >           m_aChildren;
+    GdkWindowState                      m_nState;
+    SystemEnvData                       m_aSystemData;
+    GraphicsHolder                      m_aGraphics[ nMaxGraphics ];
+    sal_uInt16                          m_nKeyModifiers;
+    GdkCursor                           *m_pCurrentCursor;
+    GdkVisibilityState                  m_nVisibility;
+    PointerStyle                        m_ePointerStyle;
+    int                                 m_nSavedScreenSaverTimeout;
+    guint                               m_nGSMCookie;
+    int                                 m_nWorkArea;
+    bool                                m_bFullscreen;
+    bool                                m_bSpanMonitorsWhenFullscreen;
+    bool                                m_bDefaultPos;
+    bool                                m_bDefaultSize;
+    bool                                m_bSendModChangeOnRelease;
+    bool                                m_bWindowIsGtkPlug;
+    bool                                m_bSetFocusOnMap;
+    OUString                            m_aTitle;
+    OUString                            m_sWMClass;
 
-    IMHandler*                      m_pIMHandler;
+    IMHandler*                          m_pIMHandler;
 
-    Size                            m_aMaxSize;
-    Size                            m_aMinSize;
-    Rectangle                       m_aRestorePosSize;
+    Size                                m_aMaxSize;
+    Size                                m_aMinSize;
+    Rectangle                           m_aRestorePosSize;
 
 #if GTK_CHECK_VERSION(3,0,0)
-    cairo_region_t*                 m_pRegion;
+    cairo_region_t*                     m_pRegion;
 #else
-    GdkRegion*                      m_pRegion;
+    GdkRegion*                          m_pRegion;
 #endif
 
-    SalMenu*                        m_pSalMenu;
+    SalMenu*                            m_pSalMenu;
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
     public:
-    void EnsureDbusMenuSynced();
+    void                                EnsureDbusMenuSynced();
     private:
-    SalMenu*                        m_pLastSyncedDbusMenu;
-    friend void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
-    friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
-    friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
+    SalMenu*                            m_pLastSyncedDbusMenu;
+    friend void                         ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
+    friend void                         on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
+    friend void                         on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
 #endif
-    guint                           m_nWatcherId;
+    guint                               m_nWatcherId;
 
-    void Init( SalFrame* pParent, sal_uLong nStyle );
-    void Init( SystemParentData* pSysData );
-    void InitCommon();
+    void                                Init( SalFrame* pParent, sal_uLong nStyle );
+    void                                Init( SystemParentData* pSysData );
+    void                                InitCommon();
 
     // signals
-    static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
-    static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
-    static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
-    static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
-    static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
-    static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
-    static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
-    static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalState( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
-    static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
-    static void         signalDestroy( GtkWidget*, gpointer );
+    static gboolean                     signalButton( GtkWidget*, GdkEventButton*, gpointer );
+    static void                         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+    static gboolean                     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
+    static gboolean                     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
+    static gboolean                     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+    static gboolean                     signalMap( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean                     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean                     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
+    static gboolean                     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
+    static gboolean                     signalKey( GtkWidget*, GdkEventKey*, gpointer );
+    static gboolean                     signalDelete( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean                     signalState( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean                     signalScroll( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean                     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
+    static gboolean                     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
+    static void                         signalDestroy( GtkWidget*, gpointer );
 
-    void            Center();
-    void            SetDefaultSize();
-    void            setAutoLock( bool bLock );
-    void            setScreenSaverTimeout( int nTimeout );
+    void                                Center();
+    void                                SetDefaultSize();
+    void                                setAutoLock( bool bLock );
+    void                                setScreenSaverTimeout( int nTimeout );
 
-    void            doKeyCallback( guint state,
-                                   guint keyval,
-                                   guint16 hardware_keycode,
-                                   guint8 group,
-                                   guint32 time,
-                                   sal_Unicode aOrigCode,
-                                   bool bDown,
-                                   bool bSendRelease
-                                   );
+    void                                doKeyCallback( guint state,
+                                                       guint keyval,
+                                                       guint16 hardware_keycode,
+                                                       guint8 group,
+                                                       guint32 time,
+                                                       sal_Unicode aOrigCode,
+                                                       bool bDown,
+                                                       bool bSendRelease
+                                                     );
 
 
-    GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
+    GdkNativeWindow                     findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
-    static int m_nFloats;
+    static int                          m_nFloats;
 
     bool isFloatGrabWindow() const
     {
@@ -322,8 +322,8 @@ public:
     // dispatches an event, returns true if dispatched
     // and false else; if true was returned the event should
     // be swallowed
-    bool Dispatch( const XEvent* pEvent );
-    void grabPointer( bool bGrab, bool bOwnerEvents = false );
+    bool                            Dispatch( const XEvent* pEvent );
+    void                            grabPointer( bool bGrab, bool bOwnerEvents = false );
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();
@@ -352,6 +352,7 @@ public:
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
     virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
     // Event must be destroyed, when Frame is destroyed
@@ -379,7 +380,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual bool            GetWindowState( SalFrameState* pState );
+    virtual bool                GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( sal_Bool bStart );
@@ -404,8 +405,8 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
 
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual OUString            GetKeyName( sal_uInt16 nKeyCode );
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS

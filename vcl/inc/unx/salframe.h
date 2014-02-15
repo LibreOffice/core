@@ -54,40 +54,40 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     friend class vcl_sal::NetWMAdaptor;
     friend class vcl_sal::GnomeWMAdaptor;
 
-    X11SalFrame*    mpParent;             // pointer to parent frame
-                                          // which should never obscur this frame
-    bool            mbTransientForRoot;
-    std::list< X11SalFrame* > maChildren; // List of child frames
+    X11SalFrame*                mpParent;             // pointer to parent frame
+                                                      // which should never obscure this frame
+    bool                        mbTransientForRoot;
+    std::list< X11SalFrame* >   maChildren;           // List of child frames
 
-    SalDisplay     *pDisplay_;
-    SalX11Screen    m_nXScreen;
-    XLIB_Window     mhWindow;
-    XLIB_Window     mhShellWindow;
-    XLIB_Window     mhForeignParent;
+    SalDisplay                  *pDisplay_;
+    SalX11Screen                m_nXScreen;
+    XLIB_Window                 mhWindow;
+    XLIB_Window                 mhShellWindow;
+    XLIB_Window                 mhForeignParent;
     // window to fall back to when no longer in fullscreen mode
-    XLIB_Window     mhStackingWindow;
+    XLIB_Window                 mhStackingWindow;
     // window to listen for CirculateNotify events
 
-    Pixmap          mhBackgroundPixmap;
+    Pixmap                      mhBackgroundPixmap;
 
-    XLIB_Cursor     hCursor_;
-    int             nCaptured_;         // is captured
+    XLIB_Cursor                 hCursor_;
+    int                         nCaptured_;         // is captured
 
-    X11SalGraphics  *pGraphics_;            // current frame graphics
-    X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
+    X11SalGraphics              *pGraphics_;        // current frame graphics
+    X11SalGraphics              *pFreeGraphics_;    // first free frame graphics
 
-    XLIB_Time       nReleaseTime_;      // timestamp of last key release
-    sal_uInt16      nKeyCode_;          // last key code
-    sal_uInt16      nKeyState_;         // last key state
-    int             nCompose_;          // compose state
-    bool            mbSendExtKeyModChange;
-    sal_uInt16      mnExtKeyMod;
+    XLIB_Time                   nReleaseTime_;      // timestamp of last key release
+    sal_uInt16                  nKeyCode_;          // last key code
+    sal_uInt16                  nKeyState_;         // last key state
+    int                         nCompose_;          // compose state
+    bool                        mbSendExtKeyModChange;
+    sal_uInt16                  mnExtKeyMod;
 
     int             nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
     Rectangle       maRestorePosSize;
-    sal_uIntPtr         nStyle_;
+    sal_uIntPtr     nStyle_;
     SalExtStyle     mnExtStyle;
     bool            bAlwaysOnTop_;
     bool            bViewable_;
@@ -100,75 +100,75 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     bool            m_bSetFocusOnMap;
 
 
-    int             nScreenSaversTimeout_;
-    Rectangle       maPaintRegion;
+    int                         nScreenSaversTimeout_;
+    Rectangle                   maPaintRegion;
 
-    Timer           maAlwaysOnTopRaiseTimer;
+    Timer                       maAlwaysOnTopRaiseTimer;
 
     // data for WMAdaptor
-    int             meWindowType;
-    int             mnDecorationFlags;
-    bool            mbMaximizedVert;
-    bool            mbMaximizedHorz;
-    bool            mbShaded;
-    bool            mbFullScreen;
+    int                         meWindowType;
+    int                         mnDecorationFlags;
+    bool                        mbMaximizedVert;
+    bool                        mbMaximizedHorz;
+    bool                        mbShaded;
+    bool                        mbFullScreen;
 
     // icon id
-    int             mnIconID;
+    int                         mnIconID;
 
-    OUString          m_aTitle;
+    OUString                    m_aTitle;
 
-    OUString   m_sWMClass;
+    OUString                    m_sWMClass;
 
-    SystemEnvData maSystemChildData;
+    SystemEnvData               maSystemChildData;
 
-    SalI18N_InputContext *mpInputContext;
-    Bool            mbInputFocus;
+    SalI18N_InputContext        *mpInputContext;
+    Bool                        mbInputFocus;
 
-    XRectangle*     m_pClipRectangles;
-    int             m_nCurClipRect;
-    int             m_nMaxClipRect;
+    XRectangle*                 m_pClipRectangles;
+    int                         m_nCurClipRect;
+    int                         m_nMaxClipRect;
 
-    bool mPendingSizeEvent;
+    bool                        mPendingSizeEvent;
 
-    void            GetPosSize( Rectangle &rPosSize );
-    void            SetSize   ( const Size      &rSize );
-    void            Center();
-    void            SetPosSize( const Rectangle &rPosSize );
-    void            Minimize();
-    void            Maximize();
-    void            Restore();
+    void                        GetPosSize( Rectangle &rPosSize );
+    void                        SetSize   ( const Size      &rSize );
+    void                        Center();
+    void                        SetPosSize( const Rectangle &rPosSize );
+    void                        Minimize();
+    void                        Maximize();
+    void                        Restore();
 
-    void            RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
-    void            RestackChildren();
+    void                        RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
+    void                        RestackChildren();
 
-    long            HandleKeyEvent      ( XKeyEvent         *pEvent );
-    long            HandleMouseEvent    ( XEvent            *pEvent );
-    long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
-    long            HandleExposeEvent   ( XEvent            *pEvent );
-    long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    long            HandleColormapEvent ( XColormapEvent    *pEvent );
-    long            HandleMapUnmapEvent ( XEvent            *pEvent );
-    long            HandleStateEvent    ( XPropertyEvent    *pEvent );
-    long            HandleReparentEvent ( XReparentEvent    *pEvent );
-    long            HandleClientMessage ( XClientMessageEvent*pEvent );
+    long                        HandleKeyEvent      ( XKeyEvent         *pEvent );
+    long                        HandleMouseEvent    ( XEvent            *pEvent );
+    long                        HandleFocusEvent    ( XFocusChangeEvent *pEvent );
+    long                        HandleExposeEvent   ( XEvent            *pEvent );
+    long                        HandleSizeEvent     ( XConfigureEvent   *pEvent );
+    long                        HandleColormapEvent ( XColormapEvent    *pEvent );
+    long                        HandleMapUnmapEvent ( XEvent            *pEvent );
+    long                        HandleStateEvent    ( XPropertyEvent    *pEvent );
+    long                        HandleReparentEvent ( XReparentEvent    *pEvent );
+    long                        HandleClientMessage ( XClientMessageEvent*pEvent );
 
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
 
-    void            createNewWindow( XLIB_Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
-    void            updateScreenNumber();
+    void                        createNewWindow( XLIB_Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
+    void                        updateScreenNumber();
 
-    void            setXEmbedInfo();
-    void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
+    void                        setXEmbedInfo();
+    void                        askForXEmbedFocus( sal_Int32 i_nTimeCode );
 
-    void            updateWMClass();
+    void                        updateWMClass();
 public:
     X11SalFrame( SalFrame* pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
 
-    long            Dispatch( XEvent *pEvent );
-    void            Init( sal_uIntPtr nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
-                          SystemParentData* pParentData = NULL, bool bUseGeometry = false );
+    long                        Dispatch( XEvent *pEvent );
+    void                        Init( sal_uIntPtr nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
+                                      SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay* GetDisplay() const
     {
@@ -182,35 +182,36 @@ public:
     {
         return GetWindow();
     }
-    SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
-    XLIB_Window             GetWindow() const { return mhWindow; }
-    XLIB_Window             GetShellWindow() const { return mhShellWindow; }
-    XLIB_Window             GetForeignParent() const { return mhForeignParent; }
-    XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
-    long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
-    long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-              sal_uIntPtr           GetStyle() const { return nStyle_; }
+    SalX11Screen                GetScreenNumber() const { return m_nXScreen; }
+    XLIB_Window                 GetWindow() const { return mhWindow; }
+    XLIB_Window                 GetShellWindow() const { return mhShellWindow; }
+    XLIB_Window                 GetForeignParent() const { return mhForeignParent; }
+    XLIB_Window                 GetStackingWindow() const { return mhStackingWindow; }
+    long                        ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
+    long                        Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
+    sal_uIntPtr                 GetStyle() const { return nStyle_; }
 
-    XLIB_Cursor     GetCursor() const { return hCursor_; }
-    bool            IsCaptured() const { return nCaptured_ == 1; }
+    XLIB_Cursor                 GetCursor() const { return hCursor_; }
+    bool                        IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
-    void            HandleExtTextEvent (XClientMessageEvent *pEvent);
+    void                        HandleExtTextEvent (XClientMessageEvent *pEvent);
 #endif
-    bool                    IsOverrideRedirect() const;
-    bool                    IsChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_PLUG|SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
-    bool                    IsSysChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
-    bool                    IsFloatGrabWindow() const;
-    SalI18N_InputContext* getInputContext() const { return mpInputContext; }
-    void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
-    void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
-    bool                    isMapped() const { return bMapped_; }
-    bool                    hasFocus() const { return mbInputFocus; }
+    bool                        IsOverrideRedirect() const;
+    bool                        IsChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_PLUG|SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
+    bool                        IsSysChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
+    bool                        IsFloatGrabWindow() const;
+    SalI18N_InputContext*       getInputContext() const { return mpInputContext; }
+    void                        getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
+    void                        setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
+    bool                        isMapped() const { return bMapped_; }
+    bool                        hasFocus() const { return mbInputFocus; }
 
-    void                    beginUnicodeSequence();
-    bool                    appendUnicodeSequence( sal_Unicode );
-    bool                    endUnicodeSequence();
+    void                        beginUnicodeSequence();
+    bool                        appendUnicodeSequence( sal_Unicode );
+    bool                        endUnicodeSequence();
 
     virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
     // call with true to clear graphics (setting None as drawable)
@@ -222,13 +223,13 @@ public:
     virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu* pMenu );
-    virtual void                                DrawMenuBar();
+    virtual void                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
     virtual void                Enable( sal_Bool bEnable );
-    virtual void              SetMinClientSize( long nWidth, long nHeight );
-    virtual void              SetMaxClientSize( long nWidth, long nHeight );
+    virtual void                SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
@@ -247,12 +248,12 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
+    virtual OUString            GetKeyName( sal_uInt16 nKeyCode );
     virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep();
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData* GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
@@ -264,18 +265,18 @@ public:
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void                    ResetClipRegion();
+    virtual void                ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
+    virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion
-    virtual void                    EndSetClipRegion();
+    virtual void                EndSetClipRegion();
 
-    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
+    static Bool                 checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 
     /// @internal
-    void setPendingSizeEvent();
+    void                        setPendingSizeEvent();
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALFRAME_H

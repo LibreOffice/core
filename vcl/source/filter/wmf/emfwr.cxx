@@ -430,7 +430,7 @@ void EMFWriter::ImplEndRecord()
     }
 }
 
-sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
+bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
 {
     if( rHandle != HANDLE_INVALID )
     {
@@ -664,7 +664,7 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
        .WriteInt32( static_cast<sal_Int32>(aRect.Bottom()) );
 }
 
-void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose )
+void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, bool bClose )
 {
     if( rPoly.GetSize() )
     {
@@ -738,7 +738,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
     }
 }
 
-void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
+void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, bool bClosed )
 {
     if ( bClosed )
         ImplCheckFillAttr();

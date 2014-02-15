@@ -491,9 +491,12 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     }
 
     // we need a graphics
-    if ( !ImplGetGraphics() )
+    if ( !mpGraphics )
     {
         ImplInitDisplay( NULL );
+        // initialize the graphics only once we init the display
+        if ( !ImplInitGraphics() )
+            assert (mpGraphics);
         return;
     }
 

@@ -32,29 +32,29 @@ class WinSalGraphics;
 class WinSalFrame : public SalFrame
 {
 public:
-    HWND                    mhWnd;                  // Window handle
-    HCURSOR                 mhCursor;               // cursor handle
-    HIMC                    mhDefIMEContext;        // default IME-Context
-    WinSalGraphics*         mpGraphics;             // current frame graphics
-    WinSalGraphics*         mpGraphics2;            // current frame graphics for other threads
-    WinSalFrame*            mpNextFrame;            // pointer to next frame
-    HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
-    HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
-    SystemEnvData           maSysData;              // system data
-    SalFrameState           maState;                // frame state
-    int                     mnShowState;            // show state
-    long                    mnWidth;                // client width in pixeln
-    long                    mnHeight;               // client height in pixeln
-    int                     mnMinWidth;             // min. client width in pixeln
-    int                     mnMinHeight;            // min. client height in pixeln
-    int                     mnMaxWidth;             // max. client width in pixeln
-    int                     mnMaxHeight;            // max. client height in pixeln
-    RECT                    maFullScreenRect;       // fullscreen rect
-    int                     mnFullScreenShowState;  // fullscreen restore show state
-    UINT                    mnInputLang;            // current Input Language
-    UINT                    mnInputCodePage;        // current Input CodePage
-    sal_uIntPtr                   mnStyle;                // style
-    sal_Bool                    mbGraphics;             // is Graphics used
+    HWND                        mhWnd;                  // Window handle
+    HCURSOR                     mhCursor;               // cursor handle
+    HIMC                        mhDefIMEContext;        // default IME-Context
+    WinSalGraphics*             mpGraphics;             // current frame graphics
+    WinSalGraphics*             mpGraphics2;            // current frame graphics for other threads
+    WinSalFrame*                mpNextFrame;            // pointer to next frame
+    HMENU                       mSelectedhMenu;         // the menu where highlighting is currently going on
+    HMENU                       mLastActivatedhMenu;    // the menu that was most recently opened
+    SystemEnvData               maSysData;              // system data
+    SalFrameState               maState;                // frame state
+    int                         mnShowState;            // show state
+    long                        mnWidth;                // client width in pixeln
+    long                        mnHeight;               // client height in pixeln
+    int                         mnMinWidth;             // min. client width in pixeln
+    int                         mnMinHeight;            // min. client height in pixeln
+    int                         mnMaxWidth;             // max. client width in pixeln
+    int                         mnMaxHeight;            // max. client height in pixeln
+    RECT                        maFullScreenRect;       // fullscreen rect
+    int                         mnFullScreenShowState;  // fullscreen restore show state
+    UINT                        mnInputLang;            // current Input Language
+    UINT                        mnInputCodePage;        // current Input CodePage
+    sal_uIntPtr                 mnStyle;                // style
+    bool                        mbGraphics;             // is Graphics used
     sal_Bool                    mbCaption;              // has window a caption
     sal_Bool                    mbBorder;               // has window a border
     sal_Bool                    mbFixBorder;            // has window a fixed border
@@ -89,6 +89,7 @@ public:
     virtual ~WinSalFrame();
 
     virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                PostEvent( void* pData );
     virtual void                SetTitle( const OUString& rTitle );

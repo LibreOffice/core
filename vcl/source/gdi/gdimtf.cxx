@@ -224,10 +224,10 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
     return *this;
 }
 
-sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
+bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
     const size_t    nObjCount = aList.size();
-    sal_Bool        bRet = sal_False;
+    bool        bRet = sal_False;
 
     if( this == &rMtf )
         bRet = sal_True;
@@ -260,7 +260,7 @@ void GDIMetaFile::Clear()
     aList.clear();
 }
 
-void GDIMetaFile::Linker( OutputDevice* pOut, sal_Bool bLink )
+void GDIMetaFile::Linker( OutputDevice* pOut, bool bLink )
 {
     if( bLink )
     {
@@ -589,7 +589,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     }
 }
 
-void GDIMetaFile::Pause( sal_Bool _bPause )
+void GDIMetaFile::Pause( bool _bPause )
 {
     if( bRecord )
     {
@@ -685,12 +685,12 @@ void GDIMetaFile::RemoveAction( size_t nPos )
         pPrev->RemoveAction( nPos );
 }
 
-sal_Bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
+bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
     long        nMoveX, nMoveY;
     double      fScaleX, fScaleY;
-    sal_Bool        bRet;
+    bool        bRet;
 
     if( nMirrorFlags & MTF_MIRROR_HORZ )
         nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
@@ -2175,7 +2175,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
 void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
                           short nChannelRPercent, short nChannelGPercent,
-                          short nChannelBPercent, double fGamma, sal_Bool bInvert )
+                          short nChannelBPercent, double fGamma, bool bInvert )
 {
     // nothing to do? => return quickly
     if( nLuminancePercent || nContrastPercent ||
@@ -2869,7 +2869,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) const
+bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     VirtualDevice   aVDev;
@@ -2937,7 +2937,7 @@ sal_Bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExten
     return !rBmpEx.IsEmpty();
 }
 
-void GDIMetaFile::UseCanvas( sal_Bool _bUseCanvas )
+void GDIMetaFile::UseCanvas( bool _bUseCanvas )
 {
     bUseCanvas = _bUseCanvas;
 }

@@ -258,9 +258,9 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
         pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice( mpGraphics, nNewWidth, nNewHeight, mnBitCount );
         if ( pNewVirDev )
         {
-            SalGraphics* pGraphics = pNewVirDev->GetGraphics();
-            if ( pGraphics )
+            if ( pNewVirDev->AcquireGraphics() )
             {
+                SalGraphics* pGraphics = pNewVirDev->GetGraphics();
                 SalTwoRect aPosAry;
                 long nWidth;
                 long nHeight;

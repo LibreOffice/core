@@ -378,17 +378,39 @@ SalGraphics* KDESalFrame::GetGraphics()
             if( ! m_aGraphics[i].bInUse )
             {
                 m_aGraphics[i].bInUse = true;
-                if( ! m_aGraphics[i].pGraphics )
-                {
-                    m_aGraphics[i].pGraphics = new KDESalGraphics();
-                    m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
-                }
                 return m_aGraphics[i].pGraphics;
             }
         }
     }
 
+    SAL_WARN("vcl", "All graphics are in use! Either Acquire failed, or wasn't used.");
+
     return NULL;
+}
+
+bool KDESalFrame::AcquireGraphics()
+{
+    bool bAcquired = false;
+
+    if ( GetWindows() )
+    {
+        for ( int i = 0; i < nMaxGraphics; i++ )
+        {
+            if ( !m_aGraphics[i].bInUse )
+            {
+                if( !m_aGraphics[i].pGraphics )
+                {
+                    m_aGraphics[i].pGraphics = new KDESalGraphics();
+                    m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
+                }
+
+                bAcquired = true;
+                break;
+            }
+        }
+    }
+
+    return bAcquired;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

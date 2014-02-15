@@ -877,21 +877,31 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
 
 SalGraphics *X11SalFrame::GetGraphics()
 {
-    if( pGraphics_ )
-        return NULL;
+    return pGraphics_;
+}
 
-    if( pFreeGraphics_ )
+bool X11SalFrame::AcquireGraphics()
+{
+    bool bAcquired = false;
+
+    if ( pGraphics_ )
+    {
+        bAcquired = false;
+    }
+    else if ( pFreeGraphics_ )
     {
         pGraphics_      = pFreeGraphics_;
         pFreeGraphics_  = NULL;
+        bAcquired       = true;
     }
     else
     {
         pGraphics_ = new X11SalGraphics();
         pGraphics_->Init( this, GetWindow(), m_nXScreen );
+        bAcquired = true;
     }
 
-    return pGraphics_;
+    return bAcquired;
 }
 
 void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
