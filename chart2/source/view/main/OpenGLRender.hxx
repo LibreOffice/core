@@ -205,24 +205,11 @@ private:
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
 
-    GLint m_RenderProID;
-
-
     GLuint m_VertexBuffer;
 
     GLuint m_ColorBuffer;
 
     GLint m_MatrixID;
-
-    GLint m_RenderVertexID;
-
-    GLint m_RenderTexCoordID;
-
-    GLint m_RenderTexID;
-
-    GLuint m_RenderVertexBuf;
-
-    GLuint m_RenderTexCoordBuf;
 
     GLuint m_TextureObj;
 

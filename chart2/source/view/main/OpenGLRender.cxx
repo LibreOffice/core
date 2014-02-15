@@ -281,13 +281,6 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 
     CHECK_GL_ERROR();
 
-    m_RenderProID = LoadShaders("renderVertexShader", "renderFragmentShader");
-    m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
-    m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
-    m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
-
-    CHECK_GL_ERROR();
-
     m_CommonProID = LoadShaders("commonVertexShader", "commonFragmentShader");
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
@@ -322,15 +315,6 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
 
     CHECK_GL_ERROR();
-
-    glGenBuffers(1, &m_RenderVertexBuf);
-    glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glGenBuffers(1, &m_RenderTexCoordBuf);
-    glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenBuffers(1, &m_TextTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
@@ -650,9 +634,6 @@ void OpenGLRender::Release()
 {
     glDeleteBuffers(1, &m_VertexBuffer);
     glDeleteBuffers(1, &m_ColorBuffer);
-    glDeleteBuffers(1, &m_RenderVertexBuf);
-    glDeleteBuffers(1, &m_RenderTexCoordBuf);
-    glDeleteProgram(m_RenderProID);
     glDeleteProgram(m_CommonProID);
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_BackgroundProID);
@@ -704,7 +685,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
     , m_TextProID(0)
     , m_TextMatrixID(0)
     , m_TextVertexID(0)
-    , m_TextTexCoordID(1)
+    , m_TextTexCoordID(0)
     , m_TextTexCoordBuf(0)
     , m_TextTexID(0)
     , m_BackgroundProID(0)
