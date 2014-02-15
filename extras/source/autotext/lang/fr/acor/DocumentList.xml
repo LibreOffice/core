@@ -4,13 +4,115 @@
   <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
   <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
-  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="*..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="%o" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name="~~" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name="+/-" block-list:name="±"/>
   <block-list:block block-list:abbreviated-name="=/=" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name="===" block-list:name="≡"/>
   <block-list:block block-list:abbreviated-name="./." block-list:name="÷"/>
-  <block-list:block block-list:abbreviated-name="//." block-list:name="·"/>
-  <block-list:block block-list:abbreviated-name="//o" block-list:name="•"/>
-  <block-list:block block-list:abbreviated-name="V-" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name="*//." block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name="//-" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name="//>" block-list:name="►"/>
+  <block-list:block block-list:abbreviated-name="//o" block-list:name="Ø"/>
+  <block-list:block block-list:abbreviated-name="//d" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name="//D" block-list:name="∆"/>
+  <block-list:block block-list:abbreviated-name="//O" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name="//P" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name="//S" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name="//r" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name="//i" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name="//l" block-list:name="ℓ"/>
+  <block-list:block block-list:abbreviated-name="/No-" block-list:name="№"/>
+  <block-list:block block-list:abbreviated-name="/No" block-list:name="Nº"/>
+  <block-list:block block-list:abbreviated-name="/no" block-list:name="nº"/>
+  <block-list:block block-list:abbreviated-name="1//2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1//3" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name="1//4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="2//3" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name="3//4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name="1//8" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name="3//8" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name="5//8" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name="7//8" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name="*^1" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name="*^2" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name="*^3" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name="*^4" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name="*^5" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name="*^6" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name="*^7" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name="*^8" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name="*^9" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name="*^0" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name="*^+" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name="*^-" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name="*^=" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name="*^(" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name="*^)" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name="*_1" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name="*_2" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name="*_3" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name="*_4" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name="*_5" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name="*_6" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name="*_7" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name="*_8" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name="*_9" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name="*_0" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name="*_+" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name="*_-" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name="*_=" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name="*_(" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name="*_)" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name="__a" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name="__b" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name="__d" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name="__e" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name="__f" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name="__g" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name="__h" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name="__i" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name="__j" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name="__k" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name="__l" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name="__m" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name="__n" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name="__o" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name="__p" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name="__q" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name="__r" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name="__s" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name="__t" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name="__u" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name="__w" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name="__x" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name="__y" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name="__z" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name="__A" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name="__B" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name="__D" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name="__E" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name="__F" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name="__G" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name="__H" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name="__I" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name="__J" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name="__K" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name="__L" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name="__M" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name="__N" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name="__O" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name="__P" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name="__Q" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name="__R" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name="__S" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name="__T" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name="__U" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name="__W" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name="__X" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name="__Y" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name="__Z" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
@@ -31,16 +133,62 @@
   <block-list:block block-list:abbreviated-name="a-t'il" block-list:name="a-t-il"/>
   <block-list:block block-list:abbreviated-name="a-t'on" block-list:name="a-t-on"/>
   <block-list:block block-list:abbreviated-name="a-t'elle" block-list:name="a-t-elle"/>
-  <block-list:block block-list:abbreviated-name="abandoner" block-list:name="abandonner"/>
+  <block-list:block block-list:abbreviated-name="ym2" block-list:name="ym²"/>
+  <block-list:block block-list:abbreviated-name="zm2" block-list:name="zm²"/>
+  <block-list:block block-list:abbreviated-name="am2" block-list:name="am²"/>
+  <block-list:block block-list:abbreviated-name="fm2" block-list:name="fm²"/>
+  <block-list:block block-list:abbreviated-name="pm2" block-list:name="pm²"/>
+  <block-list:block block-list:abbreviated-name="nm2" block-list:name="nm²"/>
+  <block-list:block block-list:abbreviated-name="µm2" block-list:name="µm²"/>
+  <block-list:block block-list:abbreviated-name="mm2" block-list:name="mm²"/>
+  <block-list:block block-list:abbreviated-name="cm2" block-list:name="cm²"/>
+  <block-list:block block-list:abbreviated-name="dm2" block-list:name="dm²"/>
+  <block-list:block block-list:abbreviated-name="m2" block-list:name="m²"/>
+  <block-list:block block-list:abbreviated-name="dam2" block-list:name="dam²"/>
+  <block-list:block block-list:abbreviated-name="hm2" block-list:name="hm²"/>
+  <block-list:block block-list:abbreviated-name="km2" block-list:name="km²"/>
+  <block-list:block block-list:abbreviated-name="Mm2" block-list:name="Mm²"/>
+  <block-list:block block-list:abbreviated-name="Gm2" block-list:name="Gm²"/>
+  <block-list:block block-list:abbreviated-name="Tm2" block-list:name="Tm²"/>
+  <block-list:block block-list:abbreviated-name="Pm2" block-list:name="Pm²"/>
+  <block-list:block block-list:abbreviated-name="Em2" block-list:name="Em²"/>
+  <block-list:block block-list:abbreviated-name="Zm2" block-list:name="Zm²"/>
+  <block-list:block block-list:abbreviated-name="Ym2" block-list:name="Ym²"/>
+  <block-list:block block-list:abbreviated-name="ym3" block-list:name="ym³"/>
+  <block-list:block block-list:abbreviated-name="zm3" block-list:name="zm³"/>
+  <block-list:block block-list:abbreviated-name="am3" block-list:name="am³"/>
+  <block-list:block block-list:abbreviated-name="fm3" block-list:name="fm³"/>
+  <block-list:block block-list:abbreviated-name="pm3" block-list:name="pm³"/>
+  <block-list:block block-list:abbreviated-name="nm3" block-list:name="nm³"/>
+  <block-list:block block-list:abbreviated-name="µm3" block-list:name="µm³"/>
+  <block-list:block block-list:abbreviated-name="mm3" block-list:name="mm³"/>
+  <block-list:block block-list:abbreviated-name="cm3" block-list:name="cm³"/>
+  <block-list:block block-list:abbreviated-name="dm3" block-list:name="dm³"/>
+  <block-list:block block-list:abbreviated-name="m3" block-list:name="m³"/>
+  <block-list:block block-list:abbreviated-name="dam3" block-list:name="dam³"/>
+  <block-list:block block-list:abbreviated-name="hm3" block-list:name="hm³"/>
+  <block-list:block block-list:abbreviated-name="km3" block-list:name="km³"/>
+  <block-list:block block-list:abbreviated-name="Mm3" block-list:name="Mm³"/>
+  <block-list:block block-list:abbreviated-name="Gm3" block-list:name="Gm³"/>
+  <block-list:block block-list:abbreviated-name="Tm3" block-list:name="Tm³"/>
+  <block-list:block block-list:abbreviated-name="Pm3" block-list:name="Pm³"/>
+  <block-list:block block-list:abbreviated-name="Em3" block-list:name="Em³"/>
+  <block-list:block block-list:abbreviated-name="Zm3" block-list:name="Zm³"/>
+  <block-list:block block-list:abbreviated-name="Ym3" block-list:name="Ym³"/>
+  <block-list:block block-list:abbreviated-name="*m3/s" block-list:name="m³/s"/>
+  <block-list:block block-list:abbreviated-name="*g.m2" block-list:name="g·m²"/>
+  <block-list:block block-list:abbreviated-name="*m2.s" block-list:name="m²·s"/>
+  <block-list:block block-list:abbreviated-name="*/µm2" block-list:name="/µm²"/>
+  <block-list:block block-list:abbreviated-name="*/mm2" block-list:name="/mm²"/>
+  <block-list:block block-list:abbreviated-name="*/cm2" block-list:name="/cm²"/>
+  <block-list:block block-list:abbreviated-name="*/dm2" block-list:name="/dm²"/>
+  <block-list:block block-list:abbreviated-name="*/m2" block-list:name="/m²"/>
+  <block-list:block block-list:abbreviated-name="*/km2" block-list:name="/km²"/>
+  <block-list:block block-list:abbreviated-name="*/m3" block-list:name="/m³"/>
   <block-list:block block-list:abbreviated-name="abcisse" block-list:name="abscisse"/>
-  <block-list:block block-list:abbreviated-name="acalmie" block-list:name="accalmie"/>
   <block-list:block block-list:abbreviated-name="accompte" block-list:name="acompte"/>
-  <block-list:block block-list:abbreviated-name="accummuler" block-list:name="accumuler"/>
-  <block-list:block block-list:abbreviated-name="acréditif" block-list:name="accréditif"/>
-  <block-list:block block-list:abbreviated-name="acroc" block-list:name="accroc"/>
   <block-list:block block-list:abbreviated-name="acroître" block-list:name="accroître"/>
   <block-list:block block-list:abbreviated-name="afaires" block-list:name="affaires"/>
-  <block-list:block block-list:abbreviated-name="afiliation" block-list:name="affiliation"/>
   <block-list:block block-list:abbreviated-name="afirmer" block-list:name="affirmer"/>
   <block-list:block block-list:abbreviated-name="aggio" block-list:name="agio"/>
   <block-list:block block-list:abbreviated-name="aggios" block-list:name="agios"/>
@@ -48,43 +196,22 @@
   <block-list:block block-list:abbreviated-name="aler" block-list:name="aller"/>
   <block-list:block block-list:abbreviated-name="alleurs" block-list:name="ailleurs"/>
   <block-list:block block-list:abbreviated-name="allieurs" block-list:name="ailleurs"/>
-  <block-list:block block-list:abbreviated-name="alocation" block-list:name="allocation"/>
-  <block-list:block block-list:abbreviated-name="alocations" block-list:name="allocations"/>
   <block-list:block block-list:abbreviated-name="ambigue" block-list:name="ambiguë"/>
-  <block-list:block block-list:abbreviated-name="amorticement" block-list:name="amortissement"/>
   <block-list:block block-list:abbreviated-name="anée" block-list:name="année"/>
   <block-list:block block-list:abbreviated-name="anées" block-list:name="années"/>
-  <block-list:block block-list:abbreviated-name="annnée" block-list:name="année"/>
   <block-list:block block-list:abbreviated-name="annuller" block-list:name="annuler"/>
-  <block-list:block block-list:abbreviated-name="anonce" block-list:name="annonce"/>
-  <block-list:block block-list:abbreviated-name="anonces" block-list:name="annonces"/>
   <block-list:block block-list:abbreviated-name="anotation" block-list:name="annotation"/>
   <block-list:block block-list:abbreviated-name="anotations" block-list:name="annotations"/>
-  <block-list:block block-list:abbreviated-name="antologie" block-list:name="anthologie"/>
   <block-list:block block-list:abbreviated-name="anuller" block-list:name="annuler"/>
   <block-list:block block-list:abbreviated-name="aparaître" block-list:name="apparaître"/>
   <block-list:block block-list:abbreviated-name="apel" block-list:name="appel"/>
   <block-list:block block-list:abbreviated-name="apels" block-list:name="appels"/>
-  <block-list:block block-list:abbreviated-name="apliquer" block-list:name="appliquer"/>
   <block-list:block block-list:abbreviated-name="apparait" block-list:name="apparaît"/>
   <block-list:block block-list:abbreviated-name="apparaitre" block-list:name="apparaître"/>
   <block-list:block block-list:abbreviated-name="appeller" block-list:name="appeler"/>
   <block-list:block block-list:abbreviated-name="appercevoir" block-list:name="apercevoir"/>
-  <block-list:block block-list:abbreviated-name="aprécie" block-list:name="apprécie"/>
-  <block-list:block block-list:abbreviated-name="aprécier" block-list:name="apprécier"/>
-  <block-list:block block-list:abbreviated-name="aprécies" block-list:name="apprécies"/>
   <block-list:block block-list:abbreviated-name="aprendre" block-list:name="apprendre"/>
   <block-list:block block-list:abbreviated-name="aritmétique" block-list:name="arithmétique"/>
-  <block-list:block block-list:abbreviated-name="arondissement" block-list:name="arrondissement"/>
-  <block-list:block block-list:abbreviated-name="arondissements" block-list:name="arrondissements"/>
-  <block-list:block block-list:abbreviated-name="artisets" block-list:name="artistes"/>
-  <block-list:block block-list:abbreviated-name="artisna" block-list:name="artisan"/>
-  <block-list:block block-list:abbreviated-name="artisnas" block-list:name="artisans"/>
-  <block-list:block block-list:abbreviated-name="asociation" block-list:name="association"/>
-  <block-list:block block-list:abbreviated-name="asociations" block-list:name="associations"/>
-  <block-list:block block-list:abbreviated-name="asurance" block-list:name="assurance"/>
-  <block-list:block block-list:abbreviated-name="ateindre" block-list:name="atteindre"/>
-  <block-list:block block-list:abbreviated-name="atestation" block-list:name="attestation"/>
   <block-list:block block-list:abbreviated-name="atrapper" block-list:name="attrapper"/>
   <block-list:block block-list:abbreviated-name="au dela" block-list:name="au-delà"/>
   <block-list:block block-list:abbreviated-name="au delà" block-list:name="au-delà"/>
@@ -97,7 +224,6 @@
   <block-list:block block-list:abbreviated-name="authorisation" block-list:name="autorisation"/>
   <block-list:block block-list:abbreviated-name="avant JC" block-list:name="avant J.-C."/>
   <block-list:block block-list:abbreviated-name="après JC" block-list:name="après J.-C."/>
-  <block-list:block block-list:abbreviated-name="bacalauréat" block-list:name="baccalauréat"/>
   <block-list:block block-list:abbreviated-name="barage" block-list:name="barrage"/>
   <block-list:block block-list:abbreviated-name="baucoup" block-list:name="beaucoup"/>
   <block-list:block block-list:abbreviated-name="bibliotèque" block-list:name="bibliothèque"/>
@@ -105,35 +231,30 @@
   <block-list:block block-list:abbreviated-name="boeuf" block-list:name="bœuf"/>
   <block-list:block block-list:abbreviated-name="boeufs" block-list:name="bœufs"/>
   <block-list:block block-list:abbreviated-name="buletin" block-list:name="bulletin"/>
-  <block-list:block block-list:abbreviated-name="carefour" block-list:name="carrefour"/>
   <block-list:block block-list:abbreviated-name="ceal" block-list:name="cela"/>
   <block-list:block block-list:abbreviated-name="celà" block-list:name="cela"/>
+  <block-list:block block-list:abbreviated-name="càd" block-list:name="c’est-à-dire"/>
   <block-list:block block-list:abbreviated-name="celulle" block-list:name="cellule"/>
   <block-list:block block-list:abbreviated-name="cetrain" block-list:name="certain"/>
   <block-list:block block-list:abbreviated-name="chaqun" block-list:name="chacun"/>
   <block-list:block block-list:abbreviated-name="charette" block-list:name="charrette"/>
   <block-list:block block-list:abbreviated-name="charriot" block-list:name="chariot"/>
   <block-list:block block-list:abbreviated-name="chateau" block-list:name="château"/>
-  <block-list:block block-list:abbreviated-name="chifre" block-list:name="chiffre"/>
-  <block-list:block block-list:abbreviated-name="chifres" block-list:name="chiffres"/>
   <block-list:block block-list:abbreviated-name="circonstantiel" block-list:name="circonstanciel"/>
   <block-list:block block-list:abbreviated-name="clientéle" block-list:name="clientèle"/>
   <block-list:block block-list:abbreviated-name="cnet" block-list:name="cent"/>
-  <block-list:block block-list:abbreviated-name="coeur" block-list:name="cœur"/>
-  <block-list:block block-list:abbreviated-name="coeurs" block-list:name="cœurs"/>
+  <block-list:block block-list:abbreviated-name="*coeur" block-list:name="cœur"/>
+  <block-list:block block-list:abbreviated-name="*coeurs" block-list:name="cœurs"/>
   <block-list:block block-list:abbreviated-name="cometre" block-list:name="commettre"/>
   <block-list:block block-list:abbreviated-name="concesion" block-list:name="concession"/>
   <block-list:block block-list:abbreviated-name="concesions" block-list:name="concessions"/>
   <block-list:block block-list:abbreviated-name="concluse" block-list:name="conclue"/>
-  <block-list:block block-list:abbreviated-name="concurence" block-list:name="concurrence"/>
   <block-list:block block-list:abbreviated-name="confidenciel" block-list:name="confidentiel"/>
   <block-list:block block-list:abbreviated-name="connait" block-list:name="connaît"/>
   <block-list:block block-list:abbreviated-name="connaitre" block-list:name="connaître"/>
-  <block-list:block block-list:abbreviated-name="consone" block-list:name="consonne"/>
   <block-list:block block-list:abbreviated-name="contencieux" block-list:name="contentieux"/>
   <block-list:block block-list:abbreviated-name="controle" block-list:name="contrôle"/>
   <block-list:block block-list:abbreviated-name="couleru" block-list:name="couleur"/>
-  <block-list:block block-list:abbreviated-name="courament" block-list:name="couramment"/>
   <block-list:block block-list:abbreviated-name="couriers" block-list:name="courriers"/>
   <block-list:block block-list:abbreviated-name="courrir" block-list:name="courir"/>
   <block-list:block block-list:abbreviated-name="créee" block-list:name="créée"/>
@@ -144,7 +265,6 @@
   <block-list:block block-list:abbreviated-name="déja" block-list:name="déjà"/>
   <block-list:block block-list:abbreviated-name="deja" block-list:name="déjà"/>
   <block-list:block block-list:abbreviated-name="dejà" block-list:name="déjà"/>
-  <block-list:block block-list:abbreviated-name="démarer" block-list:name="démarrer"/>
   <block-list:block block-list:abbreviated-name="dépot" block-list:name="dépôt"/>
   <block-list:block block-list:abbreviated-name="désoeuvrement" block-list:name="désœuvrement"/>
   <block-list:block block-list:abbreviated-name="déveloper" block-list:name="développer"/>
@@ -164,20 +284,11 @@
   <block-list:block block-list:abbreviated-name="d'Etat" block-list:name="d’État"/>
   <block-list:block block-list:abbreviated-name="d’Etat" block-list:name="d’État"/>
   <block-list:block block-list:abbreviated-name="E-U" block-list:name="E.-U."/>
-  <block-list:block block-list:abbreviated-name="échaper" block-list:name="échapper"/>
-  <block-list:block block-list:abbreviated-name="echéance" block-list:name="échéance"/>
-  <block-list:block block-list:abbreviated-name="echéances" block-list:name="échéances"/>
   <block-list:block block-list:abbreviated-name="efets" block-list:name="effets"/>
-  <block-list:block block-list:abbreviated-name="égallement" block-list:name="également"/>
-  <block-list:block block-list:abbreviated-name="embarasser" block-list:name="embarrasser"/>
   <block-list:block block-list:abbreviated-name="emmission" block-list:name="émission"/>
-  <block-list:block block-list:abbreviated-name="endomagé" block-list:name="endommagé"/>
   <block-list:block block-list:abbreviated-name="entr’acte" block-list:name="entracte"/>
   <block-list:block block-list:abbreviated-name="envelope" block-list:name="enveloppe"/>
   <block-list:block block-list:abbreviated-name="enveloper" block-list:name="envelopper"/>
-  <block-list:block block-list:abbreviated-name="erronné" block-list:name="erroné"/>
-  <block-list:block block-list:abbreviated-name="erronnés" block-list:name="erronés"/>
-  <block-list:block block-list:abbreviated-name="évennement" block-list:name="événement"/>
   <block-list:block block-list:abbreviated-name="etc..." block-list:name="etc."/>
   <block-list:block block-list:abbreviated-name="etc…" block-list:name="etc."/>
   <block-list:block block-list:abbreviated-name="excelent" block-list:name="excellent"/>
@@ -197,7 +308,6 @@
   <block-list:block block-list:abbreviated-name="foetus" block-list:name="fœtus"/>
   <block-list:block block-list:abbreviated-name="francofone" block-list:name="francophone"/>
   <block-list:block block-list:abbreviated-name="fuire" block-list:name="fuir"/>
-  <block-list:block block-list:abbreviated-name="gasomètre" block-list:name="gazomètre"/>
   <block-list:block block-list:abbreviated-name="gèrer" block-list:name="gérer"/>
   <block-list:block block-list:abbreviated-name="gestionaire" block-list:name="gestionnaire"/>
   <block-list:block block-list:abbreviated-name="goufre" block-list:name="gouffre"/>
@@ -207,17 +317,12 @@
   <block-list:block block-list:abbreviated-name="grand père" block-list:name="grand-père"/>
   <block-list:block block-list:abbreviated-name="griffoner" block-list:name="griffonner"/>
   <block-list:block block-list:abbreviated-name="hatu" block-list:name="haut"/>
-  <block-list:block block-list:abbreviated-name="hémoragie" block-list:name="hémorragie"/>
-  <block-list:block block-list:abbreviated-name="hipocrisie" block-list:name="hypocrisie"/>
   <block-list:block block-list:abbreviated-name="icone" block-list:name="icône"/>
   <block-list:block block-list:abbreviated-name="imbécilité" block-list:name="imbécillité"/>
-  <block-list:block block-list:abbreviated-name="impressionisme" block-list:name="impressionnisme"/>
   <block-list:block block-list:abbreviated-name="inclu" block-list:name="inclus"/>
   <block-list:block block-list:abbreviated-name="inclue" block-list:name="incluse"/>
   <block-list:block block-list:abbreviated-name="indémniser" block-list:name="indemniser"/>
   <block-list:block block-list:abbreviated-name="indépendent" block-list:name="indépendant"/>
-  <block-list:block block-list:abbreviated-name="innitialiser" block-list:name="initialiser"/>
-  <block-list:block block-list:abbreviated-name="innonder" block-list:name="inonder"/>
   <block-list:block block-list:abbreviated-name="inovation" block-list:name="innovation"/>
   <block-list:block block-list:abbreviated-name="intéret" block-list:name="intérêt"/>
   <block-list:block block-list:abbreviated-name="intérresser" block-list:name="intéresser"/>
@@ -232,16 +337,18 @@
   <block-list:block block-list:abbreviated-name="license" block-list:name="licence"/>
   <block-list:block block-list:abbreviated-name="licenses" block-list:name="licences"/>
   <block-list:block block-list:abbreviated-name="lse" block-list:name="les"/>
-  <block-list:block block-list:abbreviated-name="maléable" block-list:name="malléable"/>
+  <block-list:block block-list:abbreviated-name="L'Eglise" block-list:name="L’Église"/>
+  <block-list:block block-list:abbreviated-name="l'Eglise" block-list:name="l’Église"/>
+  <block-list:block block-list:abbreviated-name="L’Eglise" block-list:name="L’Église"/>
+  <block-list:block block-list:abbreviated-name="l’Eglise" block-list:name="l’Église"/>
+  <block-list:block block-list:abbreviated-name="L'Etat" block-list:name="L’État"/>
+  <block-list:block block-list:abbreviated-name="l'Etat" block-list:name="l’État"/>
+  <block-list:block block-list:abbreviated-name="L’Etat" block-list:name="L’État"/>
+  <block-list:block block-list:abbreviated-name="l’Etat" block-list:name="l’État"/>
   <block-list:block block-list:abbreviated-name="manoeuvre" block-list:name="manœuvre"/>
   <block-list:block block-list:abbreviated-name="manoeuvres" block-list:name="manœuvres"/>
-  <block-list:block block-list:abbreviated-name="marronier" block-list:name="marronnier"/>
   <block-list:block block-list:abbreviated-name="Méditerannée" block-list:name="Méditerranée"/>
-  <block-list:block block-list:abbreviated-name="mème" block-list:name="même"/>
   <block-list:block block-list:abbreviated-name="mémotechnique" block-list:name="mnémotechnique"/>
-  <block-list:block block-list:abbreviated-name="milion" block-list:name="million"/>
-  <block-list:block block-list:abbreviated-name="millionaire" block-list:name="millionnaire"/>
-  <block-list:block block-list:abbreviated-name="millon" block-list:name="million"/>
   <block-list:block block-list:abbreviated-name="mio" block-list:name="moi"/>
   <block-list:block block-list:abbreviated-name="mions" block-list:name="moins"/>
   <block-list:block block-list:abbreviated-name="modéle" block-list:name="modèle"/>
@@ -251,8 +358,6 @@
   <block-list:block block-list:abbreviated-name="noeud" block-list:name="nœud"/>
   <block-list:block block-list:abbreviated-name="noeuds" block-list:name="nœuds"/>
   <block-list:block block-list:abbreviated-name="nosu" block-list:name="nous"/>
-  <block-list:block block-list:abbreviated-name="nourir" block-list:name="nourrir"/>
-  <block-list:block block-list:abbreviated-name="nouriture" block-list:name="nourriture"/>
   <block-list:block block-list:abbreviated-name="occupper" block-list:name="occuper"/>
   <block-list:block block-list:abbreviated-name="occurence" block-list:name="occurrence"/>
   <block-list:block block-list:abbreviated-name="occurences" block-list:name="occurrences"/>
@@ -268,24 +373,19 @@
   <block-list:block block-list:abbreviated-name="oesophage" block-list:name="œsophage"/>
   <block-list:block block-list:abbreviated-name="oeuf" block-list:name="œuf"/>
   <block-list:block block-list:abbreviated-name="oeufs" block-list:name="œufs"/>
-  <block-list:block block-list:abbreviated-name="oeuil" block-list:name="œil"/>
+  <block-list:block block-list:abbreviated-name="oeil" block-list:name="œil"/>
   <block-list:block block-list:abbreviated-name="oeuvre" block-list:name="œuvre"/>
   <block-list:block block-list:abbreviated-name="oeuvres" block-list:name="œuvres"/>
-  <block-list:block block-list:abbreviated-name="oficiel" block-list:name="officiel"/>
-  <block-list:block block-list:abbreviated-name="oficiels" block-list:name="officiels"/>
-  <block-list:block block-list:abbreviated-name="ofre" block-list:name="offre"/>
-  <block-list:block block-list:abbreviated-name="ofres" block-list:name="offres"/>
   <block-list:block block-list:abbreviated-name="oo" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name="paque" block-list:name="pâque"/>
   <block-list:block block-list:abbreviated-name="Paques" block-list:name="Pâques"/>
-  <block-list:block block-list:abbreviated-name="parafine" block-list:name="paraffine"/>
   <block-list:block block-list:abbreviated-name="parait" block-list:name="paraît"/>
   <block-list:block block-list:abbreviated-name="paraitre" block-list:name="paraître"/>
   <block-list:block block-list:abbreviated-name="paralèlle" block-list:name="parallèle"/>
   <block-list:block block-list:abbreviated-name="paralèlles" block-list:name="parallèles"/>
   <block-list:block block-list:abbreviated-name="paranoyaque" block-list:name="paranoïaque"/>
   <block-list:block block-list:abbreviated-name="parceque" block-list:name="parce que"/>
-  <block-list:block block-list:abbreviated-name="peid" block-list:name="pied"/>
+  <block-list:block block-list:abbreviated-name="parce-que" block-list:name="parce que"/>
   <block-list:block block-list:abbreviated-name="pélerin" block-list:name="pèlerin"/>
   <block-list:block block-list:abbreviated-name="périférique" block-list:name="périphérique"/>
   <block-list:block block-list:abbreviated-name="personalité" block-list:name="personnalité"/>
@@ -302,28 +402,16 @@
   <block-list:block block-list:abbreviated-name="proffessionelle" block-list:name="professionnelle"/>
   <block-list:block block-list:abbreviated-name="proffessionelles" block-list:name="professionnelles"/>
   <block-list:block block-list:abbreviated-name="proffessionels" block-list:name="professionnels"/>
-  <block-list:block block-list:abbreviated-name="programe" block-list:name="programme"/>
-  <block-list:block block-list:abbreviated-name="programer" block-list:name="programmer"/>
-  <block-list:block block-list:abbreviated-name="programes" block-list:name="programmes"/>
   <block-list:block block-list:abbreviated-name="quelq'un" block-list:name="quelqu'un"/>
   <block-list:block block-list:abbreviated-name="quelqun" block-list:name="quelqu'un"/>
-  <block-list:block block-list:abbreviated-name="questionaire" block-list:name="questionnaire"/>
-  <block-list:block block-list:abbreviated-name="quitance" block-list:name="quittance"/>
-  <block-list:block block-list:abbreviated-name="quitances" block-list:name="quittances"/>
   <block-list:block block-list:abbreviated-name="racourci" block-list:name="raccourci"/>
-  <block-list:block block-list:abbreviated-name="raffinner" block-list:name="raffiner"/>
-  <block-list:block block-list:abbreviated-name="raffoller" block-list:name="raffoler"/>
   <block-list:block block-list:abbreviated-name="rapel" block-list:name="rappel"/>
   <block-list:block block-list:abbreviated-name="rapelle" block-list:name="rappelle"/>
   <block-list:block block-list:abbreviated-name="rapeller" block-list:name="rappeller"/>
   <block-list:block block-list:abbreviated-name="rapels" block-list:name="rappels"/>
   <block-list:block block-list:abbreviated-name="recepissé" block-list:name="récépissé"/>
-  <block-list:block block-list:abbreviated-name="recomandé" block-list:name="recommandé"/>
-  <block-list:block block-list:abbreviated-name="recomandée" block-list:name="recommandée"/>
   <block-list:block block-list:abbreviated-name="reconnait" block-list:name="reconnaît"/>
   <block-list:block block-list:abbreviated-name="reconnaitre" block-list:name="reconnaître"/>
-  <block-list:block block-list:abbreviated-name="réference" block-list:name="référence"/>
-  <block-list:block block-list:abbreviated-name="réferences" block-list:name="références"/>
   <block-list:block block-list:abbreviated-name="réflection" block-list:name="réflexion"/>
   <block-list:block block-list:abbreviated-name="réglement" block-list:name="règlement"/>
   <block-list:block block-list:abbreviated-name="règlementation" block-list:name="réglementation"/>
@@ -331,11 +419,7 @@
   <block-list:block block-list:abbreviated-name="réhausser" block-list:name="rehausser"/>
   <block-list:block block-list:abbreviated-name="remèdier" block-list:name="remédier"/>
   <block-list:block block-list:abbreviated-name="réouvrir" block-list:name="rouvrir"/>
-  <block-list:block block-list:abbreviated-name="resembler" block-list:name="ressembler"/>
   <block-list:block block-list:abbreviated-name="resentir" block-list:name="ressentir"/>
-  <block-list:block block-list:abbreviated-name="resortir" block-list:name="ressortir"/>
-  <block-list:block block-list:abbreviated-name="resource" block-list:name="ressource"/>
-  <block-list:block block-list:abbreviated-name="resources" block-list:name="ressources"/>
   <block-list:block block-list:abbreviated-name="rhytme" block-list:name="rythme"/>
   <block-list:block block-list:abbreviated-name="rhytmes" block-list:name="rythmes"/>
   <block-list:block block-list:abbreviated-name="rintroduire" block-list:name="réintroduire"/>
@@ -349,22 +433,13 @@
   <block-list:block block-list:abbreviated-name="serat-elle" block-list:name="sera-t-elle"/>
   <block-list:block block-list:abbreviated-name="serat-il" block-list:name="sera-t-il"/>
   <block-list:block block-list:abbreviated-name="serat-on" block-list:name="sera-t-on"/>
-  <block-list:block block-list:abbreviated-name="soeur" block-list:name="sœur"/>
-  <block-list:block block-list:abbreviated-name="soeurs" block-list:name="sœurs"/>
+  <block-list:block block-list:abbreviated-name="*soeur" block-list:name="sœur"/>
+  <block-list:block block-list:abbreviated-name="*soeurs" block-list:name="sœurs"/>
   <block-list:block block-list:abbreviated-name="soutraitant" block-list:name="sous-traitant"/>
-  <block-list:block block-list:abbreviated-name="sucursale" block-list:name="succursale"/>
-  <block-list:block block-list:abbreviated-name="sucursales" block-list:name="succursales"/>
-  <block-list:block block-list:abbreviated-name="suport" block-list:name="support"/>
-  <block-list:block block-list:abbreviated-name="symmétrie" block-list:name="symétrie"/>
-  <block-list:block block-list:abbreviated-name="synonime" block-list:name="synonyme"/>
   <block-list:block block-list:abbreviated-name="tepms" block-list:name="temps"/>
-  <block-list:block block-list:abbreviated-name="tets" block-list:name="test"/>
-  <block-list:block block-list:abbreviated-name="timpan" block-list:name="tympan"/>
   <block-list:block block-list:abbreviated-name="toujorus" block-list:name="toujours"/>
   <block-list:block block-list:abbreviated-name="traffic" block-list:name="trafic"/>
   <block-list:block block-list:abbreviated-name="trés" block-list:name="très"/>
-  <block-list:block block-list:abbreviated-name="tricotter" block-list:name="tricoter"/>
-  <block-list:block block-list:abbreviated-name="trotoir" block-list:name="trottoir"/>
   <block-list:block block-list:abbreviated-name="valeru" block-list:name="valeur"/>
   <block-list:block block-list:abbreviated-name="vérouiller" block-list:name="verrouiller"/>
   <block-list:block block-list:abbreviated-name="veulliez" block-list:name="veuillez"/>
@@ -374,9 +449,4 @@
   <block-list:block block-list:abbreviated-name="volontier" block-list:name="volontiers"/>
   <block-list:block block-list:abbreviated-name="vosu" block-list:name="vous"/>
   <block-list:block block-list:abbreviated-name="voulior" block-list:name="vouloir"/>
-  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
-  <block-list:block block-list:abbreviated-name="1/3" block-list:name="⅓"/>
-  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
-  <block-list:block block-list:abbreviated-name="2/3" block-list:name="⅔"/>
-  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
 </block-list:block-list>
