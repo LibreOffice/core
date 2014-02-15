@@ -42,6 +42,9 @@
 
 #include <vcl/svapp.hxx>
 
+// #i42894#
+#include <EffectMigration.hxx>
+
 #include <string>
 #include <algorithm>
 
@@ -1199,36 +1202,43 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             pClone->NbcMove( aMoveSize );
         }
 
-        // create animation group
-        SdrObjGroup* pGroup   = new SdrObjGroup;
-        SdrObjList*  pObjList = pGroup->GetSubList();
+        // #i42894# Caution(!) variable pPage looks right, but it is a page from the local
+        // document the dialog is using (!), so get the target page from the target view
+        SdPage* pTargetSdPage = dynamic_cast< SdPage* >(rView.GetSdrPageView() ? rView.GetSdrPageView()->GetPage() : 0);
 
-        for (size_t i = 0; i < nCount; i++)
+        if(pTargetSdPage)
         {
-            // the clone remains in the animatior; we insert a clone of the
-            // clone into the group
-            pClone = pPage->GetObj(i);
-            SdrObject* pCloneOfClone = pClone->Clone();
-            //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
-            pObjList->InsertObject(pCloneOfClone, LIST_APPEND);
+            // create animation group
+            SdrObjGroup* pGroup   = new SdrObjGroup;
+            SdrObjList*  pObjList = pGroup->GetSubList();
+
+            for (size_t i = 0; i < nCount; i++)
+            {
+                // the clone remains in the animatior; we insert a clone of the
+                // clone into the group
+                pClone = pPage->GetObj(i);
+                SdrObject* pCloneOfClone = pClone->Clone();
+                //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
+                pObjList->InsertObject(pCloneOfClone, LIST_APPEND);
+            }
+
+            // until now the top left corner of the group is in the window center;
+            // correct the position by half of the size of the group
+            aTemp = aMaxSizeLog;
+            aTemp.Height() = - aTemp.Height() / 2;
+            aTemp.Width()  = - aTemp.Width() / 2;
+            pGroup->NbcMove(aTemp);
+
+            // #i42894# create needed SMIL stuff and move child objects to page directly (see
+            // comments at EffectMigration::CreateAnimatedGroup why this has to be done).
+            EffectMigration::CreateAnimatedGroup(*pGroup, *pTargetSdPage);
+
+            // #i42894# if that worked, delete the group again
+            if(!pGroup->GetSubList()->GetObjCount())
+            {
+                delete pGroup;
+            }
         }
-
-        // until now the top left corner of the group is in the window center;
-        // correct the position by half of the size of the group
-        aTemp = aMaxSizeLog;
-        aTemp.Height() = - aTemp.Height() / 2;
-        aTemp.Width()  = - aTemp.Width() / 2;
-        pGroup->NbcMove(aTemp);
-
-        // create animation information
-        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
-        pInfo->meEffect = presentation::AnimationEffect_NONE;
-        pInfo->meSpeed = presentation::AnimationSpeed_MEDIUM;
-        pInfo->mbActive = sal_True;
-        pInfo->mbIsMovie = sal_True;
-        pInfo->maBlueScreen = COL_WHITE;
-
-        rView.InsertObjectAtView( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
     }
 
     ClickFirstHdl( this );

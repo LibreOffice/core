@@ -597,8 +597,9 @@ void XMLAnimationsEffectContext::EndElement()
                     aAny <<= (sal_Bool)sal_True;
                     xSet->setPropertyValue( mpImpl->msIsAnimation, aAny );
 
-                    aAny <<= meSpeed;
-                    xSet->setPropertyValue( mpImpl->msSpeed, aAny );
+                    // #i42894# speed is not supported for the old group animation fallback, so no need to set it
+                    // aAny <<= meSpeed;
+                    // xSet->setPropertyValue( mpImpl->msSpeed, aAny );
                 }
                 else
                 {

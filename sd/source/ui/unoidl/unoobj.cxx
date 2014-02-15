@@ -55,6 +55,7 @@
 #include "Outliner.hxx"
 #include "sdresid.hxx"
 #include <comphelper/serviceinfohelper.hxx>
+#include <svx/svdogrp.hxx>
 
 #include "anminfo.hxx"
 #include "unohelp.hxx"
@@ -531,7 +532,39 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                     EffectMigration::SetAnimationSpeed( mpShape, eSpeed );
                     break;
                 }
-// TODO: WID_ISANIMATION
+                case WID_ISANIMATION:
+                {
+                    sal_Bool bIsAnimation(sal_False);
+
+                    if(!(aValue >>= bIsAnimation))
+                    {
+                        throw lang::IllegalArgumentException();
+                    }
+
+                    if(bIsAnimation)
+                    {
+                        SdrObjGroup* pGroup = dynamic_cast< SdrObjGroup* >(pObj);
+                        SdPage* pPage = dynamic_cast< SdPage* >(pGroup->GetPage());
+
+                        if(pGroup && pPage)
+                        {
+                            // #i42894# Animated Group object, migrate that effect
+                            EffectMigration::CreateAnimatedGroup(*pGroup, *pPage);
+
+                            // #i42894# unfortunately when doing this all group members have to
+                            // be moved to the page as direct members, else the currently
+                            // available forms of animation do not work. If it succeeds,
+                            // the group is empty and can be removed and deleted
+                            if(!pGroup->GetSubList()->GetObjCount())
+                            {
+                                pPage->NbcRemoveObject(pGroup->GetOrdNum());
+                                delete pGroup;
+                            }
+                        }
+                    }
+                    //pInfo->mbIsMovie = bIsAnimation;
+                    break;
+                }
                 case WID_BOOKMARK:
                 {
                     OUString aString;

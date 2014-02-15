@@ -21,9 +21,18 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/animations/Event.hpp>
+#include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/Timing.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/unoshape.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svditer.hxx>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include <CustomAnimationPreset.hxx>
@@ -35,14 +44,17 @@ using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
-
 using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::beans::NamedValue;
 
 struct deprecated_FadeEffect_conversion_table_entry
 {
     FadeEffect  meFadeEffect;
     const sal_Char* mpPresetId;
 }
+
 deprecated_FadeEffect_conversion_table[] =
 {
 // OOo 1.x transitions
@@ -1328,6 +1340,142 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
                 if( pMainSequence.get() )
                     CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0 ) );
             }
+        }
+    }
+}
+
+// #i42894# helper which creates the needed XAnimate for changing visibility and all the (currently) needed embeddings
+void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
+{
+    Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
+    Any aAny;
+
+    // create par container node
+    Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
+
+    // set begin
+    aAny <<= (double)(0.0);
+    xOuterSeqTimeContainer->setBegin(aAny);
+
+    // set fill
+    xOuterSeqTimeContainer->setFill(AnimationFill::HOLD);
+
+    // set named values
+    Sequence< NamedValue > aUserDataSequence;
+    aUserDataSequence.realloc(1);
+
+    aUserDataSequence[0].Name = OUString("node-type");
+    aUserDataSequence[0].Value <<= bOnClick ? EffectNodeType::ON_CLICK : EffectNodeType::AFTER_PREVIOUS;
+
+    xOuterSeqTimeContainer->setUserData(aUserDataSequence);
+
+    // create animate set to change visibility for rCandidate
+    Reference< XAnimationNode > xAnimateSetForLast(xMsf->createInstance("com.sun.star.animations.AnimateSet"), UNO_QUERY_THROW);
+
+    // set begin
+    aAny <<= (double)(0.0);
+    xAnimateSetForLast->setBegin(aAny);
+
+    // set duration
+    aAny <<= fDuration;
+    xAnimateSetForLast->setDuration(aAny);
+
+    // set fill
+    xAnimateSetForLast->setFill(AnimationFill::HOLD);
+
+    // set target
+    Reference< XAnimate > xAnimate(xAnimateSetForLast, UNO_QUERY);
+    Reference< XShape > xTargetShape(rCandidate.getUnoShape(), UNO_QUERY);
+    aAny <<= xTargetShape;
+    xAnimate->setTarget(aAny);
+
+    // set AttributeName
+    xAnimate->setAttributeName(OUString("Visibility"));
+
+    // set attribute value
+    aAny <<= bVisible ? sal_True : sal_False;
+    xAnimate->setTo(aAny);
+
+    // ad set node to par node
+    Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
+    xParentContainer->appendChild(xAnimateSetForLast);
+
+    // add node
+    rxParentContainer->appendChild(xOuterSeqTimeContainer);
+}
+
+// #i42894# older native formats supported animated group objects, that means all members of the group
+// were shown animated by showing one after the other. This is no longer supported, but the following
+// fallback will create the needed SMIL animation stuff. Unfortunately the members of the group
+// have to be moved directly to the page, else the (explained to be generic, thus I expected this to
+// work) animations will not work in slideshow
+void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
+{
+    // aw080 will give a vector immeditately
+    SdrObjListIter aIter(rGroupObj);
+
+    if(aIter.Count())
+    {
+        boost::shared_ptr< sd::MainSequence > pMainSequence(rPage.getMainSequence());
+
+        if(pMainSequence.get())
+        {
+            std::vector< SdrObject* > aObjects;
+            aObjects.reserve(aIter.Count());
+
+            while(aIter.IsMore())
+            {
+                // do move to page rough with old/current stuff, will be different in aw080 anyways
+                SdrObject* pCandidate = aIter.Next();
+                rGroupObj.GetSubList()->NbcRemoveObject(pCandidate->GetOrdNum());
+                rPage.NbcInsertObject(pCandidate);
+                aObjects.push_back(pCandidate);
+            }
+
+            // create main node
+            Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
+            Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
+            Any aAny;
+
+            // set begin
+            aAny <<= (double)(0.0);
+            xOuterSeqTimeContainer->setBegin(aAny);
+
+            // prepare parent container
+            Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
+
+            // prepare loop over objects
+            SdrObject* pLast = 0;
+            SdrObject* pNext = 0;
+            const double fDurationShow(0.2);
+            const double fDurationHide(0.001);
+
+            for(sal_uInt32 a(0); a < aObjects.size(); a++)
+            {
+                pLast = pNext;
+                pNext = aObjects[a];
+
+                // create node
+                if(pLast)
+                {
+                    createVisibilityOnOffNode(xParentContainer, *pLast, false, false, fDurationHide);
+                }
+
+                if(pNext)
+                {
+                    createVisibilityOnOffNode(xParentContainer, *pNext, true, !a, fDurationShow);
+                }
+            }
+
+            // create end node
+            if(pNext)
+            {
+                createVisibilityOnOffNode(xParentContainer, *pNext, false, false, fDurationHide);
+            }
+
+            // add to main sequence and rebuild
+            pMainSequence->createEffects(xOuterSeqTimeContainer);
+            pMainSequence->rebuild();
         }
     }
 }
