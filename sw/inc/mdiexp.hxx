@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_MDIEXP_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <tblenum.hxx>
 #include <swdllapi.h>
 

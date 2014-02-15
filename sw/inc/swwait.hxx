@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWWAIT_HXX
 #define INCLUDED_SW_INC_SWWAIT_HXX
 
-#include <tools/solar.h>
 #include "swdllapi.h"
 
 class SwDocShell;

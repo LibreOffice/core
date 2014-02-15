@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_CSHTYP_HXX
 #define INCLUDED_SW_INC_CSHTYP_HXX
 
-#include <tools/solar.h>
 #include "swdllapi.h"
 
 class SwPaM;
@@ -29,7 +28,6 @@ class SwLayoutFrm;
 // Structure for SwPaM. Contains the method-pointers for cursor movement.
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
-
 
 // Type definition for CrsrShell.
 // Direction-parameter for MovePage (initialized in SwCntntFrm).
@@ -68,7 +66,6 @@ typedef sal_Bool (*SwWhichRegion)( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
 extern SwPosRegion fnRegionStart, fnRegionEnd;
 
-
 /*
  * The following combinations are allowed:
  *  - find one in body                      -> FND_IN_BODY
@@ -85,7 +82,6 @@ enum FindRanges
     FND_IN_BODYONLY = 0x08,     ///< Find only in body - only in combination with FND_IN_SELALL !!!
     FND_IN_SELALL   = 0x01      ///< All (only in non-body and selections).
 };
-
 
 enum SwDocPositions
 {

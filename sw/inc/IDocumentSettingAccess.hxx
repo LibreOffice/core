@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 
-#include <tools/solar.h>
 #include <rtl/ref.hxx>
 #include <chcmprse.hxx>
 #include <fldupde.hxx>

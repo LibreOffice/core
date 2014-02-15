@@ -20,8 +20,6 @@
  #ifndef INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
  #define INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
 
- #include <tools/solar.h>
-
  /** Get information about the current document state
  */
  class IDocumentState

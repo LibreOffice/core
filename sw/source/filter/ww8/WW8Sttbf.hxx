@@ -20,7 +20,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <IDocumentExternalData.hxx>
