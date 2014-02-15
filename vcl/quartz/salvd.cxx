@@ -157,11 +157,17 @@ void AquaSalVirtualDevice::Destroy()
 
 SalGraphics* AquaSalVirtualDevice::GetGraphics()
 {
-    if( mbGraphicsUsed || !mpGraphics )
-        return 0;
-
-    mbGraphicsUsed = true;
     return mpGraphics;
+}
+
+bool AquaSalVirtualDevice::AcquireGraphics()
+{
+    if ( mbGraphicsUsed )
+        return false;
+    else
+        mbGraphicsUsed = true;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------

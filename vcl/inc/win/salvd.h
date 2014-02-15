@@ -31,28 +31,29 @@ class WinSalGraphics;
 class WinSalVirtualDevice : public SalVirtualDevice
 {
 private:
-    HDC                     mhLocalDC;              // HDC or 0 for Cache Device
+    HDC                         mhLocalDC;              // HDC or 0 for Cache Device
 
 public:
     HDC getHDC() { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
 
 public:
-    HBITMAP                 mhBmp;                  // Memory Bitmap
-    HBITMAP                 mhDefBmp;               // Default Bitmap
-    WinSalGraphics*         mpGraphics;             // current VirDev graphics
-    WinSalVirtualDevice*    mpNext;                 // next VirDev
+    HBITMAP                     mhBmp;                  // Memory Bitmap
+    HBITMAP                     mhDefBmp;               // Default Bitmap
+    WinSalGraphics*             mpGraphics;             // current VirDev graphics
+    WinSalVirtualDevice*        mpNext;                 // next VirDev
     sal_uInt16                  mnBitCount;             // BitCount (0 or 1)
-    sal_Bool                    mbGraphics;             // is Graphics used
+    bool                        mbGraphics;             // is Graphics used
     sal_Bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
 
-    virtual SalGraphics*            GetGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
-    virtual void                    GetSize( long& rWidth, long& rHeight );
+    virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
+    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
+    virtual sal_Bool            SetSize( long nNewDX, long nNewDY );
+    virtual void                GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALVD_H

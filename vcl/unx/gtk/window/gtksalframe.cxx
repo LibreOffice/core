@@ -1491,8 +1491,10 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     }
 }
 
-SalGraphics* GtkSalFrame::GetGraphics()
+bool GtkSalFrame::AcquireGraphics()
 {
+    bool bAcquired = false;
+
     if( m_pWindow )
     {
         for( int i = 0; i < nMaxGraphics; i++ )
@@ -1512,12 +1514,31 @@ SalGraphics* GtkSalFrame::GetGraphics()
                                                     m_nXScreen );
 #endif
                 }
-                return m_aGraphics[i].pGraphics;
+                bAcquired = true;
             }
         }
     }
 
-    return NULL;
+    return bAcquired;
+}
+
+SalGraphics* GtkSalFrame::GetGraphics()
+{
+    SalGraphics *pGraphics;
+
+    if( m_pWindow )
+    {
+        for( int i = 0; i < nMaxGraphics; i++ )
+        {
+            if( ! m_aGraphics[i].bInUse )
+            {
+                m_aGraphics[i].bInUse = true;
+                pGraphics = m_aGraphics[i].pGraphics;
+            }
+        }
+    }
+
+    return pGraphics;
 }
 
 void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
@@ -2887,12 +2908,13 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     bool bFreeGraphics = false;
     if( ! pGraphics )
     {
-        pGraphics = static_cast<GtkSalGraphics*>(GetGraphics());
-        if ( !pGraphics )
+        if ( !AcquireGraphics() )
         {
-            SAL_WARN("vcl", "Could not get graphics - unable to update settings");
+            SAL_WARN("vcl", "Could not acquire graphics - unable to update settings");
             return;
         }
+
+        pGraphics = static_cast<GtkSalGraphics*>(GetGraphics());
         bFreeGraphics = true;
     }
 
