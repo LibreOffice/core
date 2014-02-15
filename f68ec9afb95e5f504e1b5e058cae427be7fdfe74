@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a8c0949_0e798bfc",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-02-15T15:52:28Z",
+      "side": 1,
+      "message": "Correct.",
+      "parentUuid": "7a8c0949_6e3a0f38",
+      "revId": "f68ec9afb95e5f504e1b5e058cae427be7fdfe74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8c0949_ce4863cf",
         "filename": "sc/source/core/data/dociter.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7a8c0949_2e7e47e5",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-02-15T15:52:28Z",
+      "side": 1,
+      "message": "This prevents an earlier logic error I had which did reach this state. So this assert here is needed. Plus there is no over-assert here. It\u0027s better safe than sorry.",
+      "parentUuid": "7a8c0949_ce4863cf",
+      "revId": "f68ec9afb95e5f504e1b5e058cae427be7fdfe74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8c0949_0e126bb4",
         "filename": "sc/source/core/data/dociter.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2014-02-15T15:40:17Z",
       "side": 1,
       "message": "how could it not be true.. the only way to get there is to get out of the while loop before it, iow itBlk \u003d\u003d aHiPos.first\nthat loop has no break or other escape route afaict.\nAm I missing something ?",
+      "revId": "f68ec9afb95e5f504e1b5e058cae427be7fdfe74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_4e8393cc",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-02-15T15:52:28Z",
+      "side": 1,
+      "message": "This needs to be always true, sure, which is why we make sure this is the case by using assert. To me this is a valid way of using assert, to make sure our assumption holds true.",
+      "parentUuid": "7a8c0949_0e126bb4",
       "revId": "f68ec9afb95e5f504e1b5e058cae427be7fdfe74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
