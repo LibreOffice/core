@@ -201,8 +201,6 @@ class SwTxtFrm: public SwCntntFrm
         @param _bUseFont
         optional input parameter - boolean indicating, if the font has to be
         used to determine the height of the last line. default value: false
-
-        @author OD
     */
     void _CalcHeightOfLastLine( const bool _bUseFont = false );
 
@@ -246,8 +244,6 @@ public:
         Top of first paragraph line is the top of the paragraph.
         OD 2004-03-18 #i11860# - Consider upper space amount considered for
         previous frame and the page grid.
-
-        @author OD
 
         @param _onTopOfLine
         output parameter - top of line, if the given position is found in the
@@ -406,8 +402,6 @@ public:
         method hides respectively shows objects, which are anchored at paragraph,
         at/as a character of the paragraph, corresponding to the paragraph and
         paragraph portion visibility.
-
-        @author OD
     */
     void HideAndShowObjects();
 
@@ -487,8 +481,6 @@ public:
         are in LABEL_ALIGNMENT mode, in order to determine additional first
         line offset for the real text formatting due to the value of label
         adjustment attribute of the list level.
-
-        @author OD
     */
     void CalcAdditionalFirstLineOffset();
 

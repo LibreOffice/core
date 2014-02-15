@@ -248,8 +248,6 @@ public:
         anchored to paragraph or to character.
 
         OD 2004-03-16 #i11860#
-
-        @author OD
     */
     void InvalidateAllObjPos();
 

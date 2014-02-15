@@ -27,8 +27,6 @@
 /** class for a thread to retrieve an input stream given by an URL
 
     OD 2007-01-29 #i73788#
-
-    @author OD
 */
 class SwAsyncRetrieveInputStreamThread : public ObservableThread
 {

@@ -177,8 +177,6 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
 }
 
 /** method to format all floating screen objects at the given anchor frame
-
-    @author OD
 */
 bool SwObjectFormatter::FormatObjsAtFrm( SwFrm& _rAnchorFrm,
                                          const SwPageFrm& _rPageFrm,
@@ -201,8 +199,6 @@ bool SwObjectFormatter::FormatObjsAtFrm( SwFrm& _rAnchorFrm,
 }
 
 /** method to format a given floating screen object
-
-    @author OD
 */
 bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
                                    SwFrm* _pAnchorFrm,
@@ -242,8 +238,6 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     Method corresponds to methods <SwLayAction::FormatLayoutFly(..)> and
     <SwLayAction::FormatLayout(..)>. Thus, its code for the formatting have
     to be synchronised.
-
-    @author OD
 */
 void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
 {
@@ -264,8 +258,6 @@ void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
     format of the content of the given floating screen object.
 
     #i28701#
-
-    @author OD
 */
 void SwObjectFormatter::_FormatObjCntnt( SwAnchoredObject& _rAnchoredObj )
 {
@@ -304,8 +296,6 @@ void SwObjectFormatter::_FormatObjCntnt( SwAnchoredObject& _rAnchoredObj )
 /** performs the intrinsic format of a given floating screen object and its content.
 
     #i28701#
-
-    @author OD
 */
 void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
 {
@@ -404,8 +394,6 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     follow text frames, the 'master' text frame is passed to the method.
     Thus, the objects, whose anchor character is inside the follow text
     frame can be formatted.
-
-    @author OD
 */
 bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
 {
@@ -500,8 +488,6 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
 /** accessor to collected anchored object
 
     #i28701#
-
-    @author OD
 */
 SwAnchoredObject* SwObjectFormatter::GetCollectedObj( const sal_uInt32 _nIndex )
 {
@@ -511,8 +497,6 @@ SwAnchoredObject* SwObjectFormatter::GetCollectedObj( const sal_uInt32 _nIndex )
 /** accessor to 'anchor' page number of collected anchored object
 
     #i28701#
-
-    @author OD
 */
 sal_uInt32 SwObjectFormatter::GetPgNumOfCollected( const sal_uInt32 _nIndex )
 {
@@ -522,8 +506,6 @@ sal_uInt32 SwObjectFormatter::GetPgNumOfCollected( const sal_uInt32 _nIndex )
 /** accessor to 'anchor' type of collected anchored object
 
     #i26945#
-
-    @author OD
 */
 bool SwObjectFormatter::IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex )
 {
@@ -535,8 +517,6 @@ bool SwObjectFormatter::IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex )
 /** accessor to total number of collected anchored objects
 
     #i28701#
-
-    @author OD
 */
 sal_uInt32 SwObjectFormatter::CountOfCollected()
 {

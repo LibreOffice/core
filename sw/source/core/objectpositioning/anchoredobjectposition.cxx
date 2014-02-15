@@ -71,8 +71,6 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 
     members <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm>, <mpContact>,
     <mbFollowTextFlow> and <mbDoNotCaptureAnchoredObj> are set
-
-    @author OD
 */
 void SwAnchoredObjectPosition::_GetInfoAboutObj()
 {
@@ -156,8 +154,6 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
     object positioning
 
     #i11860#
-
-    @author OD
 */
 SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
                                                     const SwRectFn& _fnRect,
@@ -393,8 +389,6 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
     #i26945# - add parameter <_bFollowTextFlow>
     #i62875# - method now private and renamed.
     OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
-
-    @author OD
 */
 SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
                                                          const bool bVert,
@@ -491,8 +485,6 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
     'page' alignment layout frame.
 
     #i62875# - method now private and renamed.
-
-    @author OD
 */
 SwTwips SwAnchoredObjectPosition::_ImplAdjustHoriRelPos(
                                         const SwFrm&  _rPageAlignLayFrm,
@@ -541,10 +533,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustHoriRelPos(
     return nAdjustedRelPosX;
 }
 
-/** determine alignment value for horizontal position of object
-
-    @author OD
-*/
+/** determine alignment value for horizontal position of object */
 void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrientFrm,
                                                         const SwFrm&  _rPageAlignLayFrm,
                                                         const sal_Int16 _eRelOrient,
@@ -690,10 +679,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
     _orAlignAreaOffset = nOffset;
 }
 
-/** toggle given horizontal orientation and relative alignment
-
-    @author OD
-*/
+/** toggle given horizontal orientation and relative alignment */
 void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
                                         const bool _bToggleLeftRight,
                                         sal_Int16& _ioeHoriOrient,
@@ -748,10 +734,7 @@ void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
     }
 }
 
-/** calculate relative horizontal position
-
-    @author OD
-*/
+/** calculate relative horizontal position */
 SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
                                 const SwFrm& _rHoriOrientFrm,
                                 const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
@@ -864,8 +847,6 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
 // **************************************************************************
 /** adjust calculated horizontal position in order to draw object
     aside other objects with same positioning
-
-    @author OD
 */
 SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                             const SwFrm&  _rHoriOrientFrm,
@@ -1003,8 +984,6 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
 /** detemine, if object has to draw aside given fly frame
 
     method used by <_AdjustHoriRelPosForDrawAside(..)>
-
-    @author OD
 */
 bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
                                               const SwRect&   _rObjRect,
@@ -1056,8 +1035,6 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
     depending on parameter _bLeft check is done for left or right
     positioning.
     method used by <_DrawAsideFly(..)>
-
-    @author OD
 */
 bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
                                        sal_Int16 _eRelOrient2,

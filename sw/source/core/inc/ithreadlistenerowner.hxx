@@ -26,8 +26,6 @@
 /** interface class of the owner of a thread listener
 
     OD 2007-01-30 #i73788#
-
-    @author OD
 */
 class IThreadListenerOwner
 {

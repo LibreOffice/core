@@ -234,8 +234,6 @@ public:
         @param _bNoFlyCntPorAndLinePor
         optional input parameter - boolean, indicating that fly content portions
         and the line portion are considered or not.
-
-        @author OD
     */
     void MaxAscentDescent( SwTwips& _orAscent,
                            SwTwips& _orDescent,

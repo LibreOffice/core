@@ -2920,8 +2920,6 @@ OUString SwFlyFrmFmt::GetObjDescription() const
     because format of fly frame provides transparent backgrounds.
     Method determines, if background of fly frame is transparent.
 
-    @author OD
-
     @return true, if background color is transparent, but not "no fill"
     or the transparency of a existing background graphic is set.
 */
@@ -2960,8 +2958,6 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
     This is the case, if no background graphic is set and the background
     color is "no fill"/"auto fill"
     NOTE: condition is "copied" from method <SwFrm::GetBackgroundBrush(..).
-
-    @author OD
 
     @return true, if background brush is "inherited" from parent/grandparent
 */

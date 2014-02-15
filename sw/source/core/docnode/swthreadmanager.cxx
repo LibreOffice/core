@@ -25,8 +25,6 @@
 /** class to manage threads in Writer - it conforms the singleton pattern
 
     #i73788#
-
-    @author OD
 */
 bool SwThreadManager::mbThreadManagerInstantiated = false;
 

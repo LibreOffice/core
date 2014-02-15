@@ -25,8 +25,6 @@ using namespace ::com::sun::star;
 /** class to manage threads
 
     #i73788#
-
-    @author OD
 */
 const std::deque< ThreadManager::tThreadData >::size_type ThreadManager::mnStartedSize = 10;
 

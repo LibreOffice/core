@@ -373,8 +373,6 @@ void SwAnchoredDrawObject::MakeObjPos()
     anchored drawing object
 
     #i32795# - helper method for method <MakeObjPos>
-
-    @author OD
 */
 void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 {
@@ -463,8 +461,6 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
     drawing object
 
     #i32795# - helper method for method <MakeObjPos>
-
-    @author OD
 */
 void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
 {
@@ -523,8 +519,6 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
 /** method to invalidate the given page frame
 
     #i28701#
-
-    @author OD
 */
 void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
 {
@@ -675,8 +669,6 @@ bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
 /** adjust positioning and alignment attributes for new anchor frame
 
     #i33313# - add second optional parameter <_pNewObjRect>
-
-    @author OD
 */
 void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
                                                   const SwRect* _pNewObjRect )
@@ -744,8 +736,6 @@ void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
     This method is also used for the conversion for drawing objects
     (not anchored as-character) imported from OpenOffice.org file format
     once and directly before the first positioning.
-
-    @author OD
 */
 void SwAnchoredDrawObject::_SetPositioningAttr()
 {
@@ -821,8 +811,6 @@ void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
     page frame
 
     #i28701#
-
-    @author OD
 */
 void SwAnchoredDrawObject::RegisterAtCorrectPage()
 {

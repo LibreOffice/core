@@ -1083,8 +1083,6 @@ static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
     is located in header or footer.
 
     OD 23.06.2003 #108784#
-
-    @author OD
 */
 static bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
 {
@@ -1152,8 +1150,6 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
 /** local method to set 'working' position for newly inserted frames
 
     OD 12.08.2003 #i17969#
-
-    @author OD
 */
 static void lcl_SetPos( SwFrm&             _rNewFrm,
                  const SwLayoutFrm& _rLayFrm )
@@ -3398,8 +3394,6 @@ const SwRect SwPageFrm::PrtWithoutHeaderAndFooter() const
     OD 2004-03-10 #i28701#
     OD 2009-08-28 #i102458#
     Add output parameter <obIsLineSpacingProportional>
-
-    @author OD
 */
 void GetSpacingValuesOfFrm( const SwFrm& rFrm,
                             SwTwips& onLowerSpacing,

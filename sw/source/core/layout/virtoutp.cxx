@@ -87,8 +87,6 @@ sal_Bool SwRootFrm::HasSameRect( const SwRect& rRect )
     A define controls, which solution is used, in order to switch in escalation
     back to old solution.
 
-    @author OD
-
     @param _pOrgOutDev
     input parameter - constant instance of the original output device, for which
     the virtual output device is created.

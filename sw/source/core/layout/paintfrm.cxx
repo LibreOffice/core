@@ -1284,8 +1284,6 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
     method compares the x- or y-pixel position of two twip-point. If the x-/y-pixel
     positions are the same, the x-/y-pixel position of the second twip point is
     adjusted by a given amount of pixels.
-
-    @author OD
 */
 static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
                                 const Point&         _rRefPt,
@@ -1327,8 +1325,6 @@ static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
     and right-bottom-corner and the same convert of the same rectangle
     with left-top-corner and size.
     Call this method before each <GraphicObject.Draw(...)>
-
-    @author OD
 */
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
 {
@@ -1662,8 +1658,6 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
     <lcl_DrawGraphic>.
     Method implemented as a inline, checking the conditions and calling method
     method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
-
-    @author OD
 
     @param _rBackgrdBrush
     background brush contain the color the background has to be drawn.
@@ -2178,8 +2172,6 @@ void DrawGraphic( const SvxBrushItem *pBrush,
     ::SwAlignRect(..) - and other changes to the rectangle to be painted,
     this method is called for the rectangle to be painted in order to
     adjust it to the pixel it is overlapping.
-
-    @author OD
 */
 static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 {
@@ -3744,8 +3736,6 @@ void SwPageFrm::PaintDecorators( ) const
     transparent and the background is inherited from its parent/grandparent,
     the background brush, used for drawing, has to be investigated for transparency.
 
-    @author OD
-
     @return true, if background is transparent drawn.
 */
 bool SwFlyFrm::IsBackgroundTransparent() const
@@ -3797,8 +3787,6 @@ bool SwFlyFrm::IsBackgroundTransparent() const
     OD 13.08.2002
     determine, if shadow color of fly frame has to be drawn transparent
     declaration found in /core/inc/flyfrm.cxx
-
-    @author OD
 
     @return true, if shadow color is transparent.
 */
@@ -4981,8 +4969,6 @@ static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 
     OD 21.02.2003 #b4779636#, #107692#
 
-    @author OD
-
     @param _pCellFrm
     input parameter - constant pointer to cell frame for which the cell frame
     for the border attributes has to be determined.
@@ -5713,8 +5699,6 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     implement paint of margin area; margin area will be painted for a
     view shell with a window and if the document is not in online layout.
 
-    @author OD
-
     @param _rOutputRect
     input parameter - constant instance reference of the rectangle, for
     which an output has to be generated.
@@ -5792,8 +5776,6 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
 /** determine rectangle for bottom page shadow
 
     OD 12.02.2003 for #i9719# and #105645#
-
-    @author OD
 */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
                                                 const SwViewShell*    _pViewShell,
@@ -5857,8 +5839,6 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
 
     OD 12.02.2003 for #i9719# and #105645#
     implement paint of page border and shadow
-
-    @author OD
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
                                                  const SwViewShell*    _pViewShell,
@@ -7011,8 +6991,6 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
     Using existing method SwFrm::GetBackgroundBrush to determine the color
     that is set at the page frame respectively is parent. If none is found
     return the global retouche color
-
-    @author OD
 
     @return Color
 */

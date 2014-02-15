@@ -35,10 +35,7 @@
 using namespace ::com::sun::star;
 using namespace objectpositioning;
 
-/** constructor
-
-    @author OD
-*/
+/** constructor */
 SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
                                     SdrObject& _rDrawObj,
                                     const Point&    _rProposedAnchorPos,
@@ -60,17 +57,11 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
       mnLineAlignment ( 0 )
 {}
 
-/** destructor
-
-    @author OD
-*/
+/** destructor */
 SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 {}
 
-/** method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to needed type
-
-    @author OD
-*/
+/** method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to needed type */
 const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
     OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
@@ -85,8 +76,6 @@ const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
     members <maAnchorPos>, <mnRelPos>, <maObjBoundRect> and
     <mnLineAlignment> are calculated.
     calculated position is set at the given object.
-
-    @author OD
 */
 void SwAsCharAnchoredObjectPosition::CalcPosition()
 {
@@ -343,8 +332,6 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     value gives feedback for the line formatting.
     0 - no feedback; 1|2|3 - proposed formatting of characters
     at top|at center|at bottom of line.
-
-    @author OD
 */
 SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
                                             const SwTwips _nObjBoundHeight,
@@ -407,37 +394,25 @@ SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
     return nRelPosToBase;
 }
 
-/** calculated anchored position for object position
-
-    @author OD
-*/
+/** calculated anchored position for object position */
 Point SwAsCharAnchoredObjectPosition::GetAnchorPos() const
 {
     return maAnchorPos;
 }
 
-/** calculated relative position to base line for object position
-
-    @author OD
-*/
+/** calculated relative position to base line for object position */
 SwTwips SwAsCharAnchoredObjectPosition::GetRelPosY() const
 {
     return mnRelPos;
 }
 
-/** determined object rectangle including spacing for object
-
-    @author OD
-*/
+/** determined object rectangle including spacing for object */
 SwRect SwAsCharAnchoredObjectPosition::GetObjBoundRectInclSpacing() const
 {
     return maObjBoundRect;
 }
 
-/** determined line alignment
-
-    @author OD
-*/
+/** determined line alignment */
 sal_uInt8 SwAsCharAnchoredObjectPosition::GetLineAlignment() const
 {
     return mnLineAlignment;

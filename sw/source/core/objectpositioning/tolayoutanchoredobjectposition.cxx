@@ -48,10 +48,7 @@ SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _
 SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition()
 {}
 
-/** calculate position for object position type TO_LAYOUT
-
-    @author OD
-*/
+/** calculate position for object position type TO_LAYOUT */
 void SwToLayoutAnchoredObjectPosition::CalcPosition()
 {
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
@@ -233,10 +230,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     maRelPos = aRelPos;
 }
 
-/** calculated relative position for object position
-
-    @author OD
-*/
+/** calculated relative position for object position */
 Point SwToLayoutAnchoredObjectPosition::GetRelPos() const
 {
     return maRelPos;

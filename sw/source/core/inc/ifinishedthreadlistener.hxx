@@ -26,8 +26,6 @@
 
     OD 2007-03-30 #i73788#
     Note: The thread provides its ThreadID on the finish notification
-
-    @author OD
 */
 class IFinishedThreadListener
 {

@@ -451,8 +451,6 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     - Top of first paragraph line is the top of the printing area of the text frame
     - If a proportional line spacing is applied use top of anchor character as
       top of the line.
-
-    @author OD
 */
 bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
                              const SwPosition& _rPos ) const

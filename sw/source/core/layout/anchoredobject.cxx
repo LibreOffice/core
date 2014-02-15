@@ -151,8 +151,6 @@ void SwAnchoredObject::ChgAnchorFrm( SwFrm* _pNewAnchorFrm )
     for an at-page, at-frame or at-paragraph anchored object
     and the anchor character frame for an at-character and as-character
     anchored object.
-
-    @author OD
 */
 SwFrm* SwAnchoredObject::GetAnchorFrmContainingAnchPos()
 {
@@ -251,8 +249,6 @@ void SwAnchoredObject::AddLastTopOfLineY( SwTwips _nDiff )
     frame has to be invalidated.
 
     add parameter <_bCheckForParaPorInf>, default value <true>
-
-    @author OD
 */
 void SwAnchoredObject::CheckCharRectAndTopOfLine(
                                         const bool _bCheckForParaPorInf )
@@ -290,8 +286,6 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
     positioning, it's decided, if the Writer fly frame has to be invalidated.
 
     improvement - add second parameter <_rAnchorCharFrm>
-
-    @author OD
 */
 void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                                        const SwTxtFrm& _rAnchorCharFrm )
@@ -356,8 +350,6 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
     positioning, it's decided, if the Writer fly frame has to be invalidated.
 
     improvement - add second parameter <_rAnchorCharFrm>
-
-    @author OD
 */
 void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
                                         const SwTxtFrm& _rAnchorCharFrm )
@@ -413,8 +405,6 @@ void SwAnchoredObject::ObjectAttachedToAnchorFrame()
     #i31698#
     method has typically to be called, if the anchored object gets its
     anchor frame assigned.
-
-    @author OD
 */
 void SwAnchoredObject::UpdateLayoutDir()
 {
@@ -441,8 +431,6 @@ void SwAnchoredObject::UpdateLayoutDir()
     on the object positioning.
 
     #i28701#
-
-    @author OD
 */
 void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
                                                     const bool _bNotifyBackgrd )
@@ -469,8 +457,6 @@ void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
     #i28701#
     Note: result of this method also decides, if the booleans for the
     layout process are of relevance.
-
-    @author OD
 */
 bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
 {
@@ -508,8 +494,6 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     to the anchor frame, have to consider its wrap influence.
 
     // --> #i43255#
-
-    @author OD
 */
 bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
 {
@@ -585,8 +569,6 @@ void SwAnchoredObject::SetClearedEnvironment( const bool _bClearedEnvironment )
     style, its layout environment is cleared.
 
     #i35911#
-
-    @author OD
 */
 bool SwAnchoredObject::HasClearedEnvironment() const
 {
@@ -629,8 +611,6 @@ bool SwAnchoredObject::HasClearedEnvironment() const
 
     #i28701#
     #i68520# - return constant reference and use cache
-
-    @author OD
 */
 const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
 {
@@ -686,8 +666,6 @@ void SwAnchoredObject::SetObjLeft( const SwTwips _nLeft)
     on object positioning' is ON, additionally all anchored objects
     at the anchor frame and all following anchored objects on the page
     frame are invalidated.
-
-    @author OD
 */
 void SwAnchoredObject::UpdateObjInSortedList()
 {
@@ -740,8 +718,6 @@ void SwAnchoredObject::UpdateObjInSortedList()
 /** method to determine, if invalidation of position is allowed
 
     #i28701#
-
-    @author OD
 */
 bool SwAnchoredObject::InvalidationOfPosAllowed() const
 {
@@ -759,8 +735,6 @@ bool SwAnchoredObject::InvalidationOfPosAllowed() const
     or its anchor isn't correctly inserted in the layout, no page frame
     can be found. Thus, the return type changed to be a pointer and can
     be NULL.
-
-    @author OD
 */
 SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 {
@@ -780,8 +754,6 @@ SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
     is anchored at-character or as-character.
 
     #i26945#
-
-    @author OD
 
     @return SwTxtFrm*
     text frame containing the anchor character. It's NULL, if the object
@@ -811,8 +783,6 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
     #i28701#
     A format is possible, if anchored object is in an invisible layer.
     Note: method is virtual to refine the conditions for the sub-classes.
-
-    @author OD
 */
 bool SwAnchoredObject::IsFormatPossible() const
 {
@@ -861,8 +831,6 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpCo
     with a column, which is a previous one of the column its anchor
     frame is in.
     Only applied for at-paragraph and at-character anchored objects.
-
-    @author OD
 */
 bool SwAnchoredObject::OverlapsPrevColumn() const
 {
@@ -892,8 +860,6 @@ bool SwAnchoredObject::OverlapsPrevColumn() const
 
     #i30669#
     Usage: Needed layout information for WW8 export
-
-    @author OD
 */
 Point SwAnchoredObject::GetRelPosToAnchorFrm() const
 {
@@ -917,8 +883,6 @@ Point SwAnchoredObject::GetRelPosToAnchorFrm() const
     If <_bFollowTextFlow> is set and object is anchored inside table,
     the position relative to the table cell is determined. Output
     parameter <_obRelToTableCell> reflects this situation
-
-    @author OD
 */
 Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
                                             bool& _obRelToTableCell ) const
@@ -965,8 +929,6 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
 
     #i30669#
     Usage: Needed layout information for WW8 export
-
-    @author OD
 */
 Point SwAnchoredObject::GetRelPosToChar() const
 {
@@ -983,8 +945,6 @@ Point SwAnchoredObject::GetRelPosToChar() const
 
     #i30669#
     Usage: Needed layout information for WW8 export
-
-    @author OD
 */
 Point SwAnchoredObject::GetRelPosToLine() const
 {

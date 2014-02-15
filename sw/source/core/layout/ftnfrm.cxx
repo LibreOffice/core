@@ -2841,8 +2841,6 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
 /** search for last content in the current footnote frame
 
     OD 2005-12-02 #i27138#
-
-    @author OD
 */
 SwCntntFrm* SwFtnFrm::FindLastCntnt()
 {

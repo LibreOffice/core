@@ -105,8 +105,6 @@ bool SwObjectFormatterLayFrm::DoFormatObjs()
     anchor frame is valid.
 
     OD 2004-07-02 #i28701#
-
-    @author
 */
 bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 {

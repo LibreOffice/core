@@ -21,10 +21,7 @@
 
 #include "com/sun/star/util/XJobManager.hpp"
 
-/** Testing
-
-    @author OD
-*/
+/** Testing */
 class SwThreadJoiner
 {
     public:

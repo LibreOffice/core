@@ -40,8 +40,6 @@ class SwAsyncRetrieveInputStreamThreadConsumer;
     manager provides on creation of the data container.
     When a certain data container is filled with data, an user event is submitted
     to trigger the processing of with data.
-
-    @author OD
 */
 class SwRetrievedInputStreamDataManager
 {

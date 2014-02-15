@@ -21,8 +21,6 @@
 /** helper class to observe threads
 
     #i73788#
-
-    @author OD
 */
 ThreadListener::ThreadListener( IThreadListenerOwner& rThreadListenerOwner )
     : IFinishedThreadListener(),

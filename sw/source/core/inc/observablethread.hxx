@@ -35,8 +35,6 @@
     and ends with its <onTerminated()> method.
     Note: A thread can be only observed by one or none thread observer in order
     to notify, that the thread has finished its work.
-
-    @author OD
 */
 class ObservableThread : public osl::Thread,
                          public rtl::IReference
@@ -62,8 +60,6 @@ class ObservableThread : public osl::Thread,
             Do not override this method again. Instead override <threadFunction()>.
             Otherwise, it's not guaranteed, that its ref-count is increased
             during the execution of the thread.
-
-            @author OD
         */
         virtual void SAL_CALL run();
 
@@ -76,8 +72,6 @@ class ObservableThread : public osl::Thread,
             Otherwise, it's not guaranteed, that the ref-count is decreased at
             the end of its execution and that the observer is notified, that
             the thread has finished its work.
-
-            @author OD
         */
         virtual void SAL_CALL onTerminated();
 

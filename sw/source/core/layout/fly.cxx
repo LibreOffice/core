@@ -2584,8 +2584,6 @@ bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
     page frame
 
     OD 2004-07-02 #i28701#
-
-    @author OD
 */
 void SwFlyFrm::RegisterAtCorrectPage()
 {
@@ -2595,8 +2593,6 @@ void SwFlyFrm::RegisterAtCorrectPage()
 /** method to determine, if a <MakeAll()> on the Writer fly frame is possible
 
     OD 2004-05-11 #i28701#
-
-    @author OD
 */
 bool SwFlyFrm::IsFormatPossible() const
 {

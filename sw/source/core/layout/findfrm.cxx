@@ -191,8 +191,6 @@ sal_Bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
     constant reference of an instance of class <SwLayoutFrm> which
     is used as the reference for the relative position check.
 
-    @author OD
-
     @return true, if <this> is positioned before the layout frame <p>
 */
 bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
@@ -849,8 +847,6 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
     for a flow frame (content frame, table frame, section frame)
 
     OD 2005-11-30 #i27138#
-
-    @author OD
 */
 SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
 {
@@ -1116,8 +1112,6 @@ void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
 
     OD 09.01.2004 #i11859#
 
-    @author OD
-
     FME 2004-04-19 #i27145# Moved function from SwTxtFrm to SwFrm
 */
 void SwFrm::InvalidateNextPrtArea()
@@ -1190,8 +1184,6 @@ static bool lcl_IsInColSct( const SwFrm *pUp )
     Determines, if frame is moveable in given environment. if no environment
     is given (parameter _pLayoutFrm == 0L), the movability in the actual
     environment (<this->GetUpper()) is checked.
-
-    @author OD
 */
 bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 {

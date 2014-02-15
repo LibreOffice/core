@@ -42,8 +42,6 @@
     An instance of this class takes care of the starting of threads.
     It assures that not more than <mnStartedSize> threads
     are started.
-
-    @author OD
 */
 class ThreadManager : public IThreadListenerOwner
 {
@@ -59,14 +57,10 @@ class ThreadManager : public IThreadListenerOwner
         /** initialization
 
             IMPORTANT NOTE: Needs to be called directly after construction
-
-            @author OD
         */
         void Init();
 
         /** add thread to the thread manager and taking ownership for the thread
-
-            @author OD
 
             @return unique ID for added thread
         */
@@ -82,8 +76,6 @@ class ThreadManager : public IThreadListenerOwner
 
             Suspending the starting of further threads is sensible during the
             destruction of a Writer document.
-
-            @author OD
         */
         inline void SuspendStartingOfThreads()
         {
@@ -93,8 +85,6 @@ class ThreadManager : public IThreadListenerOwner
         }
 
         /** continues the starting of threads after it has been suspended
-
-            @author OD
         */
         void ResumeStartingOfThreads();
 

@@ -32,8 +32,6 @@
     Note:
     - A thread can only have one or none listener.
     - The notification is performed via the ThreadID
-
-    @author OD
 */
 class ThreadListener : public IFinishedThreadListener
 {

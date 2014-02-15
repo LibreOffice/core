@@ -41,8 +41,6 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
 
             OD 2004-07-02 #i28701#
 
-            @author OD
-
             @return boolean
             indicates, if format was successful
         */

@@ -32,10 +32,7 @@ SwEnvironmentOfAnchoredObject::SwEnvironmentOfAnchoredObject(
 SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
 {}
 
-/** determine environment layout frame for possible horizontal object positions
-
-    @author OD
-*/
+/** determine environment layout frame for possible horizontal object positions */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
                                             const SwFrm& _rHoriOrientFrm ) const
 {
@@ -65,8 +62,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
     return static_cast<const SwLayoutFrm&>(*pHoriEnvironmentLayFrm);
 }
 
-/** determine environment layout frame for possible vertical object positions
-*/
+/** determine environment layout frame for possible vertical object positions */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                                             const SwFrm& _rVertOrientFrm ) const
 {

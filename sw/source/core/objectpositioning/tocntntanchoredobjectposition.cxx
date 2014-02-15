@@ -1074,10 +1074,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     GetAnchoredObj().SetCurrRelPos( aRelPos );
 }
 
-/** determine frame for horizontal position
-
-    @author OD
-*/
+/** determine frame for horizontal position */
 const SwFrm& SwToCntntAnchoredObjectPosition::_GetHoriVirtualAnchor(
                                         const SwLayoutFrm& _rProposedFrm ) const
 {

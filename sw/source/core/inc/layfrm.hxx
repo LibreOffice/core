@@ -156,8 +156,6 @@ public:
         constant reference of an instance of class <SwLayoutFrm> which
         is used as the reference for the relative position check.
 
-        @author OD
-
         @return true, if <this> is positioned before the layout frame <p>
     */
     bool IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const;

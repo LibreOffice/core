@@ -1219,8 +1219,6 @@ sal_Bool SwFlowFrm::HasParaSpaceAtPages( sal_Bool bSct ) const
     upper space
 
     OD 2004-03-10 #i11860#
-
-    @author OD
 */
 const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm ) const
 {
@@ -1501,8 +1499,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 
     OD 2004-03-12 #i11860#
     Precondition: Position of frame is valid.
-
-    @author OD
 */
 SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPageGrid(
                             const SwTwips _nUpperSpaceWithoutGrid ) const
@@ -1557,8 +1553,6 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPageGrid(
     the previous frame
 
     OD 2004-03-11 #i11860#
-
-    @author OD
 */
 SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
 {
@@ -1595,8 +1589,6 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
     positioning' is OFF
 
     OD 2004-03-18 #i11860#
-
-    @author OD
 */
 SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
 {
@@ -1617,8 +1609,6 @@ SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
 /** calculation of lower space
 
     OD 2004-03-02 #106629#
-
-    @author OD
 */
 SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 {
@@ -1661,8 +1651,6 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     is the last inside a table cell
 
     OD 2004-07-16 #i26250#
-
-    @author OD
 */
 SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
                                             const SwBorderAttrs* _pAttrs ) const
