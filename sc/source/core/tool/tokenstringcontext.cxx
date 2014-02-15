@@ -114,6 +114,12 @@ CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc ) :
     updateTabNames();
 }
 
+CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
+    mpDoc(pDoc), meGram(eGram)
+{
+    updateTabNames();
+}
+
 void CompileFormulaContext::updateTabNames()
 {
     // Fetch all sheet names.
