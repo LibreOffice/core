@@ -994,7 +994,7 @@ WinSalFrame::~WinSalFrame()
 
 
 
-SalGraphics* WinSalFrame::GetGraphics()
+SalGraphics* WinSalFrame::AcquireGraphics()
 {
     if ( mbGraphics )
         return NULL;
@@ -3899,7 +3899,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
 
     // if we don't get the mutex, we can also change the clip region,
     // because other threads doesn't use the mutex from the main
-    // thread --> see GetGraphics()
+    // thread --> see AcquireGraphics()
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )

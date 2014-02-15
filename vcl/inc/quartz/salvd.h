@@ -58,7 +58,7 @@ public:
     AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
 
-    virtual SalGraphics*            GetGraphics();
+    virtual SalGraphics*            AcquireGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                       GetSize( long& rWidth, long& rHeight );

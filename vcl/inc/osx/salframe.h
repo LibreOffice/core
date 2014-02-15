@@ -112,7 +112,7 @@ public:
 
     virtual ~AquaSalFrame();
 
-    virtual SalGraphics*        GetGraphics() SAL_OVERRIDE;
+    virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
     virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
