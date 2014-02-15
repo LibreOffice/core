@@ -1484,8 +1484,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( aTxtFly.IsOn() )
                 {
                     // does any free-flying frame overlap?
-                    aTxtFly.Relax();
-                    if ( aTxtFly.IsOn() || IsUndersized() )
+                    if ( aTxtFly.Relax() || IsUndersized() )
                         break;
                 }
                 if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue())
@@ -1694,8 +1693,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         if( aTxtFly.IsOn() )
                         {
                             // does any free-flying frame overlap?
-                            aTxtFly.Relax();
-                            bFormat = aTxtFly.IsOn() || IsUndersized();
+                            bFormat = aTxtFly.Relax() || IsUndersized();
                         }
                     }
                 }
