@@ -995,7 +995,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFPageBreakBefore:
         rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
     break;  // sprmPFPageBreakBefore
-    case NS_sprm::LN_PIlvl: // sprmPIlvl
+    case NS_ooxml::LN_CT_NumPr_ilvl:
             if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
             {
                 SAL_INFO("writerfilter",
@@ -1012,7 +1012,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             else
                 rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny( (sal_Int16)nIntValue ));
         break;
-    case NS_sprm::LN_PIlfo: // sprmPIlfo
+    case NS_ooxml::LN_CT_NumPr_numId:
         {
             //convert the ListTable entry to a NumberingRules propery and apply it
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();

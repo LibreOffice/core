@@ -22307,8 +22307,8 @@
     </resource>
     <resource name="CT_NumPr" resource="Properties" tag="numbering">
       <kind name="paragraph"/>
-      <element name="ilvl" tokenid="sprm:PIlvl"/>
-      <element name="numId" tokenid="sprm:PIlfo"/>
+      <element name="ilvl" tokenid="ooxml:CT_NumPr_ilvl"/>
+      <element name="numId" tokenid="ooxml:CT_NumPr_numId"/>
       <element name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
       <element name="ins" tokenid="ooxml:CT_NumPr_ins"/>
     </resource>
