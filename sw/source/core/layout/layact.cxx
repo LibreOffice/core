@@ -2261,8 +2261,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
                 if ( bCrsrShell )
                     ((SwCrsrShell*)pSh)->SttCrsrMove();
-//              else
-//                  pSh->StartAction();
 
                 // If there are accrued paints, it's best to simply invalidate
                 // the whole window. Otherwise there would arise paint problems whose
@@ -2283,8 +2281,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                     // If the Crsr was visible, we need to make it visible again.
                     // Otherwise, EndCrsrMove with sal_True for IdleEnd
                     ((SwCrsrShell*)pSh)->EndCrsrMove( sal_True^aBools[nBoolIdx] );
-//              else
-//                  pSh->EndAction();
                 if( bUnlock )
                 {
                     if( bCrsrShell )

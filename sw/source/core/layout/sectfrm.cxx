@@ -410,8 +410,6 @@ sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
         return sal_False;
 
     SwSectionFmt *pTmp = (SwSectionFmt*)GetFmt();
-//  if( !pTmp->GetSect().GetValue() )
-//      return sal_False;
 
     const SwFrmFmt *pOtherFmt = ((SwSectionFrm*)pFrm)->GetFmt();
     do
@@ -1058,7 +1056,6 @@ void SwSectionFrm::SimpleFormat()
 {
     if ( IsJoinLocked() || IsColLocked() )
         return;
-    // OSL_ENSURE( pFollow, "SimpleFormat: Follow required" );
     LockJoin();
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
@@ -1454,10 +1451,6 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     if( GetUpper()->IsInTab() || FindFooterOrHeader() )
         return 0;
 
-// Why GetUpper()? This crashes sometimes, because in
-// FlyAtCnt::MakeFlyPos there is an Orient of the SectionFrm and on this a
-// GetLeaf is called
-//  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
     bool bWrongPage = false;
     OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrm" );

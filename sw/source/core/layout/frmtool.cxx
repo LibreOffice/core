@@ -1928,7 +1928,6 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     }
 
     // correction: do not retrieve left margin for numbering in R2L-layout
-//    if ( pCaller->IsTxtFrm() )
     if ( pCaller->IsTxtFrm() && !pCaller->IsRightToLeft() )
     {
         nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
@@ -2973,18 +2972,6 @@ void Notify_Background( const SdrObject* pObj,
         }
         pCnt = pCnt->GetNextCntntFrm();
     }
-// #108745# Sorry, but this causes nothing but trouble. I remove these lines
-// taking the risk that the footer frame will have a wrong height
-//  if( pPage->Lower() )
-//  {
-//      SwFrm* pFrm = pPage->Lower();
-//      while( pFrm->GetNext() )
-//          pFrm = pFrm->GetNext();
-//      if( pFrm->IsFooterFrm() &&
-//          ( ( pFrm->Frm().IsOver( pObj->GetBoundRect() ) ||
-//              pFrm->Frm().IsOver( rRect ) ) ) )
-//           pFrm->InvalidateSize();
-//  }
     // #128702# - make code robust
     if ( pPage && pPage->GetSortedObjs() )
     {

@@ -642,9 +642,6 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
     }
     if ( !mbObjRectWithSpacesValid )
     {
-        // --> #i70122# - correction:
-        // use bounding rectangle of anchored objects.
-//        maObjRectWithSpaces = GetObjRect();
         maObjRectWithSpaces = GetObjBoundRect();
         const SwFrmFmt& rFmt = GetFrmFmt();
         const SvxULSpaceItem& rUL = rFmt.GetULSpace();

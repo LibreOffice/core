@@ -1588,8 +1588,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             pNew->ColLock();
             pNew->KeepLockPosOfLowerObjs();
             // #i57914# - adjust fix #i49383#
-            // no extra notify for footnote frame
-//            SwLayNotify* pFtnFrmNotitfy = new SwLayNotify( pNew );
             SwCntntFrm *pCnt = pNew->ContainsCntnt();
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
@@ -1617,9 +1615,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             pNew->UnlockPosOfLowerObjs();
             pNew->Calc();
             // #i57914# - adjust fix #i49383#
-            // no extra notify for footnote frame
-//            pNew->UnlockPosOfLowerObjs();
-//            delete pFtnFrmNotitfy;
             if ( !bOldFtnFrmLocked && !pNew->GetLower() &&
                  !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
             {
@@ -1987,8 +1982,6 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
                 // lower objects during format of footnote content.
                 pFtn->KeepLockPosOfLowerObjs();
                 // #i57914# - adjust fix #i49383#
-                // no extra notify for footnote frame
-//                SwLayNotify aFtnFrmNotitfy( pFtn );
 
                 while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
                 {
@@ -2035,14 +2028,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
                     // enable lock of lower object position before format of footnote frame.
                     pFtn->UnlockPosOfLowerObjs();
                     pFtn->Calc();
-//                    pFtn->UnlockPosOfLowerObjs();
                 }
-                // #i57914# - adjust fix #i49383#
-                // no extra notify for footnote frame
-//                else
-//                {
-//                    aFtnFrmNotitfy.FrmDeleted();
-//                }
             }
         }
         else
@@ -2076,8 +2062,6 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
             // lower objects during format of footnote content.
             pNextFtn->KeepLockPosOfLowerObjs();
             // #i57914# - adjust fix #i49383#
-            // no extra notify for footnote frame
-//            SwLayNotify aFtnFrmNotitfy( pNextFtn );
 
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
@@ -2115,7 +2099,6 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
             // enable lock of lower object position before format of footnote frame.
             pNextFtn->UnlockPosOfLowerObjs();
             pNextFtn->Calc();
-//            pNextFtn->UnlockPosOfLowerObjs();
         }
     }
 }
@@ -2197,9 +2180,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
         // #i49383# - disable unlock of position of
         // lower objects during format of footnote and footnote content.
         SwFtnFrm* pLastFtnFrm( 0L );
-        // #i57914# - adjust fix #i49383#
-        // no extra notify for footnote frame
-//        SwLayNotify* pFtnFrmNotify( 0L );
         // footnote frame needs to be locked, if <bLock> isn't set.
         bool bUnlockLastFtnFrm( false );
         do
@@ -2226,9 +2206,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                         // enable lock of lower object position before format of footnote frame.
                         pLastFtnFrm->UnlockPosOfLowerObjs();
                         pLastFtnFrm->Calc();
-//                        pLastFtnFrm->UnlockPosOfLowerObjs();
-                        // no extra notify for footnote frame
-//                        delete pFtnFrmNotify;
                         if ( !bLock && bUnlockLastFtnFrm &&
                              !pLastFtnFrm->GetLower() &&
                              !pLastFtnFrm->IsColLocked() &&
@@ -2246,9 +2223,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     }
                     pFtnFrm->KeepLockPosOfLowerObjs();
                     pLastFtnFrm = pFtnFrm;
-                    // #i57914# - adjust fix #i49383#
-                    // no extra notify for footnote frame
-//                    pFtnFrmNotify = new SwLayNotify( pLastFtnFrm );
                 }
                 // OD 30.10.2002 #97265# - invalidate position of footnote
                 // frame, if it's below its footnote container, in order to
@@ -2289,10 +2263,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                             OSL_ENSURE( pLastFtnFrm == pFtnFrm,
                                     "<SwFtnBossFrm::RearrangeFtns(..)> - <pLastFtnFrm> != <pFtnFrm>" );
                             pLastFtnFrm = 0L;
-                            // #i57914# - adjust fix #i49383#
-                            // no extra notify for footnote frame
-//                            pFtnFrmNotify->FrmDeleted();
-//                            delete pFtnFrmNotify;
                             pFtnFrm->Cut();
                             delete pFtnFrm;
                         }
@@ -2367,9 +2337,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
             // enable lock of lower object position before format of footnote frame.
             pLastFtnFrm->UnlockPosOfLowerObjs();
             pLastFtnFrm->Calc();
-//            pLastFtnFrm->UnlockPosOfLowerObjs();
-            // no extra notify for footnote frame
-//            delete pFtnFrmNotify;
             if ( !bLock && bUnlockLastFtnFrm &&
                  !pLastFtnFrm->GetLower() &&
                  !pLastFtnFrm->IsColLocked() &&

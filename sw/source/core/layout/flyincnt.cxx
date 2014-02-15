@@ -236,8 +236,6 @@ void SwFlyInCntFrm::MakeAll()
 
         if ( !mbValidPos )
         {
-            // OD 2004-03-23 #i26791#
-            //MakeFlyPos();
             MakeObjPos();
         }
 

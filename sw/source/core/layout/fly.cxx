@@ -1268,13 +1268,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
                     }
-                    // #130878#
-                    // Do not keep old height, if content has no height.
-                    // The old height could be wrong due to wrong layout cache
-                    // and isn't corrected in the further formatting, because
-                    // the fly frame doesn't become invalid anymore.
-//                    if( !nRemaining )
-//                        nRemaining = nOldHeight - nUL;
                 }
                 if ( GetDrawObjs() )
                 {
@@ -1387,7 +1380,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 //                          problems in method <SwCntntFrm::_WouldFit(..)>,
 //                          which assumes that the follows are formatted.
 //                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
-//void CalcCntnt( SwLayoutFrm *pLay, sal_Bool bNoColl )
 void CalcCntnt( SwLayoutFrm *pLay,
                 bool bNoColl,
                 bool bNoCalcFollow )
@@ -1698,7 +1690,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
 }
 
 // OD 2004-03-23 #i26791#
-//void SwFlyFrm::MakeFlyPos()
 void SwFlyFrm::MakeObjPos()
 {
     if ( !mbValidPos )
@@ -1943,10 +1934,6 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
         SwFrmFmt *pFmt = GetFmt();
         SwFmtFrmSize aSz( pFmt->GetFrmSize() );
         aSz.SetWidth( aAdjustedNewSize.Width() );
-        // #i53298# - no tolerance any more.
-        // If it reveals that the tolerance is still needed, then suppress a
-        // <SetAttr> call, if <aSz> equals the current <SwFmtFrmSize> attribute.
-//        if ( Abs(aAdjustedNewSize.Height() - aSz.GetHeight()) > 1 )
         aSz.SetHeight( aAdjustedNewSize.Height() );
         // uebers Doc fuers Undo!
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );

@@ -4405,15 +4405,6 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     {
         SwRect &rOut = aRegion[i];
         aOut = rOut;
-        // OD 30.09.2002 #103636# - no SwAlign of shadow rectangle
-        // no alignment necessary, because (1) <rRect> is already aligned
-        // and because (2) paint of border and background will occur later.
-        // Thus, (1) assures that no conflicts with neighbour object will occur
-        // and (2) assures that border and background is not affected by the
-        // shadow paint.
-        /*
-        ::SwAlignRect( aOut, pGlobalShell );
-        */
         if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
         {
             aOut._Intersection( rRect );
@@ -6437,9 +6428,6 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
     if ( IS_SUBS || IS_SUBS_TABLE || IS_SUBS_SECTION || IS_SUBS_FLYS )
     {
         SwRect aRect( rRect );
-        // OD 18.02.2003 #104989# - Not necessary and incorrect alignment of
-        // the output rectangle.
-        //::SwAlignRect( aRect, pGlobalShell );
         if ( aRect.HasArea() )
         {
             //During paint using the root, the array is controlled from there.
@@ -7232,7 +7220,6 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
             if( pSection && (   TOX_HEADER_SECTION == pSection->GetType() ||
                                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 (rBack.GetColor() == COL_TRANSPARENT) &&
-                ///rBack.GetColor().GetTransparency() &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
                 !pOpt->IsPagePreview() &&
                 !pOpt->IsReadonly() &&

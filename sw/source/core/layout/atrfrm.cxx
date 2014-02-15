@@ -132,7 +132,6 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // Begin with start node of page header/footer to assure that
                 // complete content is checked for cursors and the complete content
                 // is deleted on below made method call <pDoc->DeleteSection(pNode)>
-//                SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 1 );
                 SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 0 );
                 // If there is a Crsr registered in one of the nodes, we need to call the
                 // ParkCrsr in an (arbitrary) shell.
@@ -2381,15 +2380,6 @@ void SwTextGridItem::Init()
         bDisplayGrid = 1;
         nBaseWidth = 210;
         bSnapToChars = 1;
-
-        //default grid type is line only in CJK env
-        //disable this function due to type area change
-        //if grid type change.
-        //if(SvtCJKOptions().IsAsianTypographyEnabled())
-        //{
-        //  bDisplayGrid = 0;
-        //  eGridType = GRID_LINES_ONLY;
-        //}
     }
 }
 
@@ -2437,10 +2427,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pF->RegisterToFormat( *pFmt );
     }
 
-    // MIB 24.3.98: We always have to call Modify of the baseclass, for example
-    // because of RESET_FMTWRITTEN.
-//  if ( GetDepends() )
-        SwFmt::Modify( pOld, pNew );
+    SwFmt::Modify( pOld, pNew );
 
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
@@ -2758,9 +2745,6 @@ void SwFlyFrmFmt::MakeFrms()
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
             {
-                // #i105535#
-                // fallback to anchor type at-paragraph, if no fly frame is found.
-//                pFrm = pFrm->FindFlyFrm();
                 SwFrm* pFlyFrm = pFrm->FindFlyFrm();
                 if ( pFlyFrm )
                 {

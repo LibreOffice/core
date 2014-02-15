@@ -812,8 +812,6 @@ inline void SetLastPage( SwPageFrm *pPage )
 
 void SwPageFrm::Cut()
 {
-    //AdjustRootSize( CHG_CUTPAGE, 0 );
-
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( !IsEmptyPage() )
     {
@@ -2276,8 +2274,6 @@ bool SwRootFrm::IsLeftToRightViewLayout() const
     // Layout direction determined by layout direction of the first page.
     // #i88036#
     // Only ask a non-empty page frame for its layout direction
-//    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
-//    return !pPage->IsRightToLeft() && !pPage->IsVertical();
     const SwPageFrm& rPage =
                     dynamic_cast<const SwPageFrm*>(Lower())->GetFormatPage();
     return !rPage.IsRightToLeft() && !rPage.IsVertical();

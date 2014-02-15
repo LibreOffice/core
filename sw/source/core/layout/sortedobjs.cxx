@@ -274,7 +274,6 @@ sal_uInt32 SwSortedObjs::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) cons
     if ( aIter != maSortedObjLst.end() )
     {
         // #i51941#
-//        nRetLstPos = aIter - maSortedObjLst.begin();
         std::vector< SwAnchoredObject* >::difference_type nPos =
                                                 aIter - maSortedObjLst.begin();
         nRetLstPos = sal_uInt32( nPos );
