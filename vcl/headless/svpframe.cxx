@@ -167,7 +167,7 @@ void SvpSalFrame::LoseFocus()
     }
 }
 
-SalGraphics* SvpSalFrame::GetGraphics()
+SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
     pGraphics->setDevice( m_aFrame );

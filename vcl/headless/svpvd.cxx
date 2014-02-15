@@ -33,7 +33,7 @@ SvpSalVirtualDevice::~SvpSalVirtualDevice()
 {
 }
 
-SalGraphics* SvpSalVirtualDevice::GetGraphics()
+SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
     pGraphics->setDevice( m_aDevice );

@@ -62,7 +62,7 @@ public:
     KDESalFrame( SalFrame* pParent, sal_uLong );
     virtual ~KDESalFrame();
 
-    virtual SalGraphics* GetGraphics();
+    virtual SalGraphics* AcquireGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );

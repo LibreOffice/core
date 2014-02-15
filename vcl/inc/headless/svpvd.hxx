@@ -41,7 +41,7 @@ public:
     virtual ~SvpSalVirtualDevice();
 
     // SalVirtualDevice
-    virtual SalGraphics*    GetGraphics();
+    virtual SalGraphics*    AcquireGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
     virtual bool        SetSize( long nNewDX, long nNewDY );
