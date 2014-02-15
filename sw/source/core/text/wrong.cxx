@@ -99,9 +99,11 @@ void SwWrongList::ClearList()
  */
 bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
-    MSHORT nPos = GetWrongPos( rChk );
-    sal_Int32 nWrPos;
-    if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
+    const MSHORT nPos = GetWrongPos( rChk );
+    if ( nPos >= Count() )
+        return false;
+    const sal_Int32 nWrPos = Pos( nPos );
+    if ( nWrPos <= rChk )
     {
         rLn = Len( nPos );
         if( nWrPos + rLn <= rChk )
