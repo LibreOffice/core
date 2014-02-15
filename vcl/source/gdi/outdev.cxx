@@ -492,6 +492,7 @@ void    OutputDevice::ReMirror( Point &rPoint ) const
 {
     rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
 }
+
 void    OutputDevice::ReMirror( Rectangle &rRect ) const
 {
     long nWidth = rRect.Right() - rRect.Left();
@@ -503,6 +504,7 @@ void    OutputDevice::ReMirror( Rectangle &rRect ) const
     rRect.Left() = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX;
     rRect.Right() = rRect.Left() + nWidth;
 }
+
 void    OutputDevice::ReMirror( Region &rRegion ) const
 {
     RectangleVector aRectangles;
@@ -573,9 +575,12 @@ bool OutputDevice::ImplInitGraphics() const
     {
         Window* pWindow = (Window*)this;
 
-        ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
         // try harder if no wingraphics was available directly
-        if ( !mpGraphics )
+        if ( pWindow->mpWindowImpl->mpFrame->AcquireGraphics() )
+        {
+            ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+        }
+        else
         {
             // find another output device in the same frame
             OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
@@ -600,7 +605,10 @@ bool OutputDevice::ImplInitGraphics() const
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
                         break;
                     pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
-                    ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+                    if ( pWindow->mpWindowImpl->mpFrame->AcquireGraphics() )
+                    {
+                        ImplSetGraphics( pWindow->mpWindowImpl->mpFrame->GetGraphics() );
+                    }
                 }
             }
         }
@@ -622,15 +630,17 @@ bool OutputDevice::ImplInitGraphics() const
 
         if ( pVirDev->mpVirDev )
         {
-            ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+            mpGraphics = pVirDev->mpVirDev->GetGraphics();
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+                if ( pVirDev->mpVirDev->AcquireGraphics() )
+                    ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
             }
+
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
             {
@@ -652,14 +662,15 @@ bool OutputDevice::ImplInitGraphics() const
         else if ( pPrinter->mpDisplayDev )
         {
             const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
-            ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+
             // if needed retry after releasing least recently used virtual device graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
                     break;
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
+                if ( pVirDev->mpVirDev->AcquireGraphics() )
+                    ImplSetGraphics( pVirDev->mpVirDev->GetGraphics() );
             }
             // update global LRU list of virtual device graphics
             if ( mpGraphics )
@@ -674,14 +685,14 @@ bool OutputDevice::ImplInitGraphics() const
         }
         else
         {
-            mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
             // if needed retry after releasing least recently used printer graphics
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
                     break;
                 pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
-                ImplSetGraphics( pPrinter->mpInfoPrinter->GetGraphics() );
+                if ( pPrinter->mpInfoPrinter->AcquireGraphics() )
+                    ImplSetGraphics( pPrinter->mpInfoPrinter->GetGraphics() );
             }
             // update global LRU list of printer graphics
             if ( mpGraphics )
@@ -694,6 +705,11 @@ bool OutputDevice::ImplInitGraphics() const
                     pSVData->maGDIData.mpLastPrnGraphics = const_cast<OutputDevice*>(this);
             }
         }
+    }
+    else
+    {
+        SAL_WARN("vcl", "Not a known OutputDevice type!");
+        assert( meOutDevType != OUTDEV_DONTKNOW );
     }
 
     if ( mpGraphics )
@@ -817,9 +833,9 @@ void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
         }
     }
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics = NULL;
+    mpNextGraphics = NULL;
+    mpPrevGraphics = NULL;
 }
 
 void OutputDevice::ImplInitOutDevData()

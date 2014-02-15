@@ -21,14 +21,6 @@
 SV_DECL_REF(SmDocShell)
 SV_IMPL_REF(SmDocShell)
 
-class TestOutputDevice : public OutputDevice
-{
-public:
-    TestOutputDevice()
-    {
-    }
-};
-
 using namespace ::com::sun::star;
 
 namespace {
@@ -510,7 +502,7 @@ void Test::testBinomInBinHor()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    TestOutputDevice aOutputDevice;
+    VirtualDevice aOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -538,7 +530,7 @@ void Test::testBinVerInUnary()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    TestOutputDevice aOutputDevice;
+    VirtualDevice aOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -567,7 +559,7 @@ void Test::testBinHorInSubSup()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    TestOutputDevice aOutputDevice;
+    VirtualDevice aOutputDevice;
 
     // Insert an RSup expression with a BinHor for the exponent
     aCursor.InsertText("a");
@@ -595,7 +587,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    TestOutputDevice aOutputDevice;
+    VirtualDevice aOutputDevice;
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 3; ++i)

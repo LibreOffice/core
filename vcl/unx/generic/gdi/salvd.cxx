@@ -174,7 +174,7 @@ X11SalVirtualDevice::X11SalVirtualDevice() :
     nDX_                    = 0;
     nDY_                    = 0;
     nDepth_                 = 0;
-    bGraphics_              = sal_False;
+    bGraphics_              = false;
     bExternPixmap_          = sal_False;
 }
 
@@ -190,17 +190,21 @@ X11SalVirtualDevice::~X11SalVirtualDevice()
 
 SalGraphics* X11SalVirtualDevice::GetGraphics()
 {
-    if( bGraphics_ )
-        return NULL;
-
-    if( pGraphics_ )
-        bGraphics_ = sal_True;
-
     return pGraphics_;
 }
 
+bool X11SalVirtualDevice::AcquireGraphics()
+{
+    if ( bGraphics_ )
+        return false;
+    else if ( pGraphics_ )
+        bGraphics_ = true;
+
+    return true;
+}
+
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
-{ bGraphics_ = sal_False; }
+{ bGraphics_ = false; }
 
 sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
