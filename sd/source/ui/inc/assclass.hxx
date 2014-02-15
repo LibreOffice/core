@@ -23,7 +23,6 @@
 #include <vector>
 #include <boost/scoped_array.hpp>
 
-#include <tools/solar.h>
 #include "sddllapi.h"
 
 #define MAX_PAGES 10

@@ -22,7 +22,6 @@
 #include <vector>
 #include "escherex.hxx"
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
@@ -30,8 +29,6 @@
 #include <pptexsoundcollection.hxx>
 
 #include "text.hxx"
-
-// ------------------------------------------------------------------------
 
 #include <vcl/mapmod.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -155,8 +152,6 @@ public:
     void            Write( SvStream* pStrm );
     void            WriteTextSpecInfo( SvStream* pStrm );
 };
-
-// ------------------------------------------------------------------------
 
 struct CellBorder;
 class PPTWriter : public PPTWriterBase, public PPTExBulletProvider

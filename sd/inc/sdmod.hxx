@@ -30,7 +30,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
-
+#include <sal/types.h>
 #include <memory>
 
 class SdOptions;
@@ -52,28 +52,23 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;
 } } } }
 
-
-// ----------------------
-// - SdOptionStreamMode -
-// ----------------------
-
 enum SdOptionStreamMode
 {
     SD_OPTION_LOAD = 0,
     SD_OPTION_STORE = 1
 };
 
-/*************************************************************************
-|*
-|* This subclass of <SfxModule> (which is a subclass of <SfxShell>) is
-|* linked to the DLL. One instance of this class exists while the DLL is
-|* loaded.
-|*
-|* SdModule is like to be compared with the <SfxApplication>-subclass.
-|*
-|* Remember: Don`t export this class! It uses DLL-internal symbols.
-|*
-\************************************************************************/
+/*
+
+  This subclass of <SfxModule> (which is a subclass of <SfxShell>) is
+  linked to the DLL. One instance of this class exists while the DLL is
+  loaded.
+
+  SdModule is like to be compared with the <SfxApplication>-subclass.
+
+  Remember: Don`t export this class! It uses DLL-internal symbols.
+
+*/
 
 class SdModule : public SfxModule, public SfxListener
 {

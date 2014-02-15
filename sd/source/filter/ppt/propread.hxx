@@ -24,7 +24,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
 
@@ -96,8 +95,6 @@
 #define VT_BYREF            0x4000
 #define VT_TYPEMASK         0xFFF
 
-// ------------------------------------------------------------------------
-
 typedef std::map<OUString,sal_uInt32> Dictionary;
 
 struct PropEntry
@@ -129,8 +126,6 @@ class PropItem : public SvMemoryStream
     using SvStream::Read;
 };
 
-// ------------------------------------------------------------------------
-
 class Section
 {
         sal_uInt16              mnTextEnc;
@@ -152,8 +147,6 @@ class Section
         const sal_uInt8*        GetFMTID() const { return aFMTID; };
         void                    Read( SvStorageStream* pStrm );
 };
-
-// ------------------------------------------------------------------------
 
 class PropRead
 {
@@ -177,7 +170,6 @@ class PropRead
         sal_Bool                IsValid() const { return mbStatus; };
         void                    Read();
 };
-
 
 #endif
 

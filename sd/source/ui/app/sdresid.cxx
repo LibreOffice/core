@@ -20,14 +20,9 @@
 
 #include "sdmod.hxx"
 #include "sdresid.hxx"
+#include <sal/types.h>
 
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-
+// Ctor
 SdResId::SdResId(sal_uInt16 nId) :
     ResId(nId, *SD_MOD()->GetResMgr())
 {
