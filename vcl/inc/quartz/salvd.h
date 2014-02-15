@@ -59,9 +59,10 @@ public:
     virtual ~AquaSalVirtualDevice();
 
     virtual SalGraphics*            GetGraphics();
+    virtual bool                    AcquireGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
-    virtual void                       GetSize( long& rWidth, long& rHeight );
+    virtual sal_Bool                SetSize( long nNewDX, long nNewDY );
+    virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALVD_H

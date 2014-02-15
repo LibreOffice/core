@@ -41,6 +41,11 @@ SalGraphics* SvpSalVirtualDevice::GetGraphics()
     return pGraphics;
 }
 
+bool SvpSalVirtualDevice::AcquireGraphics()
+{
+    return true;        // we only ever create a new one in headless mode
+}
+
 void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 {
     m_aGraphics.remove( dynamic_cast<SvpSalGraphics*>(pGraphics) );

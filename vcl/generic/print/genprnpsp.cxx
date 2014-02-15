@@ -535,18 +535,24 @@ int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 
 SalGraphics* PspSalInfoPrinter::GetGraphics()
 {
+    return m_pGraphics;
+}
+
+bool PspSalInfoPrinter::AcquireGraphics()
+{
     // return a valid pointer only once
     // the reasoning behind this is that we could have different
     // SalGraphics that can run in multiple threads
     // (future plans)
-    SalGraphics* pRet = NULL;
-    if( ! m_pGraphics )
+
+    if ( ! m_pGraphics )
     {
         m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
         m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, NULL, false, this );
-        pRet = m_pGraphics;
+        return true;
     }
-    return pRet;
+
+    return false;
 }
 
 void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
