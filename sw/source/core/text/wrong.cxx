@@ -97,7 +97,7 @@ void SwWrongList::ClearList()
 
     @return <true> if incorrectly selected, <false> otherwise
  */
-sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
+bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
     sal_Int32 nWrPos;
@@ -105,11 +105,11 @@ sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
     {
         rLn = Len( nPos );
         if( nWrPos + rLn <= rChk )
-            return sal_False;
+            return false;
         rChk = nWrPos;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /** Calculate first incorrectly selected area.
@@ -119,13 +119,13 @@ sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 
     @return <true> if incorrectly selected area was found, <false> otherwise
  */
-sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
+bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
     rLn += rChk;
 
     if( nPos == Count() )
-        return sal_False;
+        return false;
 
     sal_Int32 nWrPos = Pos( nPos );
     sal_Int32 nEnd = nWrPos + Len( nPos );
@@ -133,7 +133,7 @@ sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
     {
         ++nPos;
         if( nPos == Count() )
-            return sal_False;
+            return false;
 
         nWrPos = Pos( nPos );
         nEnd = nWrPos + Len( nPos );
@@ -147,7 +147,7 @@ sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
         rLn -= rChk;
         return 0 != rLn;
     }
-    return sal_False;
+    return false;
 }
 
 /** Find next incorrectly selected position.
@@ -353,11 +353,11 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 
    @return <true> if ???
  */
-sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
                              sal_Int32 nLen, MSHORT nIndex, sal_Int32 nCursorPos )
 {
     // length of word must be greater than 0 and cursor position must be outside the word
-    sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
+    bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
 
     sal_Int32 nWrPos = 0;
     sal_Int32 nWrEnd = rEnd;
@@ -380,7 +380,7 @@ sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
     if( nCnt < Count() && nWrPos == nPos && Len( nCnt ) == nLen )
     {
         ++nCnt;
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -425,16 +425,16 @@ void SwWrongList::Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
         _Invalidate( nBegin, nEnd );
 }
 
-sal_Bool SwWrongList::InvalidateWrong( )
+bool SwWrongList::InvalidateWrong( )
 {
     if( Count() )
     {
         const sal_Int32 nFirst = Pos( 0 );
         const sal_Int32 nLast = Pos( Count() - 1 ) + Len( Count() - 1 );
         Invalidate( nFirst, nLast );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )

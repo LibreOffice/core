@@ -212,18 +212,18 @@ public:
     inline WrongListType GetWrongListType() const { return meType; }
     inline sal_Int32 GetBeginInv() const { return nBeginInvalid; }
     inline sal_Int32 GetEndInv() const { return nEndInvalid; }
-    inline sal_Bool InsideInvalid( sal_Int32 nChk ) const
+    inline bool InsideInvalid( sal_Int32 nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
     inline void Validate(){ nBeginInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
-    sal_Bool InvalidateWrong();
-    sal_Bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+    bool InvalidateWrong();
+    bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
             sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos );
     sal_uInt16 GetWrongPos( sal_Int32 nValue ) const;
 
-    sal_Bool Check( sal_Int32 &rChk, sal_Int32 &rLn ) const;
-    sal_Bool InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const;
+    bool Check( sal_Int32 &rChk, sal_Int32 &rLn ) const;
+    bool InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const;
     sal_Int32 NextWrong( sal_Int32 nChk ) const;
 
     void Move( sal_Int32 nPos, sal_Int32 nDiff );

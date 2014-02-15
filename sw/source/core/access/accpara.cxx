@@ -964,7 +964,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                                 nLast += pWrongList->Len( nWrongPos );
                             }
                             //
-                            sal_Bool bIn = pWrongList->InWrongWord(nBegin,nLen); // && !pTxtNode->IsSymbol(nBegin) )
+                            const bool bIn = pWrongList->InWrongWord(nBegin, nLen); // && !pTxtNode->IsSymbol(nBegin) )
                             if(bIn)
                             {
                                 rBound.startPos = max(nNext, rBound.startPos);
