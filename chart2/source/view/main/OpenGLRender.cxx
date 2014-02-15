@@ -1251,7 +1251,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 }
 
 
-int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, awt::Size aSize, long rotation,
+int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {
 #if DEBUG_PNG // debug PNG writing
@@ -1291,9 +1291,6 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
     }
 
     TextInfo aTextInfo;
-    aTextInfo.x = (float)(aPos.X + aSize.Width / 2);
-    aTextInfo.y = (float)(aPos.Y + aSize.Height / 2);
-    aTextInfo.z = m_fZStep;
     aTextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
     aTextInfo.vertex[0] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[1] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
@@ -1314,19 +1311,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
     //if has ratotion, we must re caculate the central pos
     if (!rtl::math::approxEqual(0, rotation))
     {
-        //use left top
-        double r = sqrt((double)(aSize.Width * aSize.Width + aSize.Height * aSize.Height)) / 2;
-        double sinOrgAngle =  aTextInfo.vertex[1] / r / 2;
-        double cosOrgAngle = aTextInfo.vertex[0] / r / 2;
-        double sinDiataAngle = sin(aTextInfo.rotation);
-        double cosDiataAngle = cos(aTextInfo.rotation);
-        double x = r * (cosOrgAngle * cosDiataAngle - sinOrgAngle * sinDiataAngle);
-        double y = r * (sinOrgAngle * cosDiataAngle + cosOrgAngle * sinDiataAngle);
-        double diataX = x - aTextInfo.vertex[0];
-        double diataY = y - aTextInfo.vertex[1];
-        aTextInfo.x = aTextInfo.x - diataX;
-        aTextInfo.y = aTextInfo.y - diataY;
-
+        // handle rotation
     }
 
     CHECK_GL_ERROR();
@@ -1684,6 +1669,7 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
             0,                  // stride
             (void*)0            // array buffer offset
             );
+
     glDrawArrays(GL_POINTS, 0, 1);
 
     glDisableVertexAttribArray(m_SymbolVertexID);

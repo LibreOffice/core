@@ -79,9 +79,6 @@ struct RectanglePointList
 struct TextInfo
 {
     GLuint texture;
-    float x;
-    float y;
-    float z;
     double rotation;
     float vertex[12];
 };
@@ -168,8 +165,8 @@ public:
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
     int CreateTextTexture(const BitmapEx& rBitmapEx,
-            com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation,
-            const com::sun::star::drawing::HomogenMatrix3& rTrans);
+            const com::sun::star::awt::Point& aPos, const com::sun::star::awt::Size& aSize,
+            long rotation, const com::sun::star::drawing::HomogenMatrix3& rTrans);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);
