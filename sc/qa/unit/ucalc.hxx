@@ -150,7 +150,7 @@ public:
      */
     void testFormulaDepTracking2();
 
-    void testFormulaDepTrackingMatrix();
+    void testFormulaMatrixResultUpdate();
 
     /**
      * More direct test for cell broadcaster management, used to track formula
@@ -372,7 +372,7 @@ public:
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
-    CPPUNIT_TEST(testFormulaDepTrackingMatrix);
+    CPPUNIT_TEST(testFormulaMatrixResultUpdate);
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);

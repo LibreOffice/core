@@ -1360,7 +1360,7 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTrackingMatrix()
+void Test::testFormulaMatrixResultUpdate()
 {
     m_pDoc->InsertTab(0, "Test");
 
