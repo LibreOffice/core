@@ -1787,7 +1787,7 @@ bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// class SwNoReadOnly
+// class SwFmtEditInReadonly
 
 SfxPoolItem* SwFmtEditInReadonly::Clone( SfxItemPool* ) const
 {
