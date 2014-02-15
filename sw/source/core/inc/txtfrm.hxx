@@ -344,7 +344,7 @@ public:
 
     // Wir formatieren eine Zeile fuer die interaktive Trennung
     // Return: found
-    sal_Bool Hyphenate( SwInterHyphInfo &rInf );
+    bool Hyphenate( SwInterHyphInfo &rInf );
 
     // Probegrow
     inline SwTwips GrowTst( const SwTwips nGrow );

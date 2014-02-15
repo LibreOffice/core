@@ -61,19 +61,19 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
  * Wir formatieren eine Zeile fuer die interaktive Trennung
  *************************************************************************/
 
-sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
     if( !g_pBreakIt->GetBreakIter().is() )
-        return sal_False;
+        return false;
     // Wir machen den Laden erstmal dicht:
     OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
     // 4935: Der frame::Frame muss eine gueltige SSize haben!
     Calc();
     GetFormatted();
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !IsEmpty() )
     {
         // Wir muessen die Trennung immer einschalten.
@@ -230,7 +230,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     Boundary aBound =
         g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
-        g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
+        g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, true );
     nWrdStart = aBound.startPos;
     nLen = aBound.endPos - nWrdStart;
     if ( nLen == 0 )
@@ -481,12 +481,12 @@ void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * Fall 1: "Au-to"
  * 1) {Au}{-}{to}, {to} passt nicht mehr => Underflow
  * 2) {-} ruft Hyphenate => keine Alternative
- * 3) FormatEOL() und bFull = sal_True
+ * 3) FormatEOL() und bFull = true
  *
  * Fall 2: "Zuc-ker"
  * 1) {Zuc}{-}{ker}, {ker} passt nicht mehr => Underflow
  * 2) {-} ruft Hyphenate => Alternative!
- * 3) Underflow() und bFull = sal_True
+ * 3) Underflow() und bFull = true
  * 4) {Zuc} ruft Hyphenate => {Zuk}{-}{ker}
  */
 
