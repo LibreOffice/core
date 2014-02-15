@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_INC_UNOCOLL_HXX
 #define INCLUDED_SW_INC_UNOCOLL_HXX
-#include <tools/solar.h>
+
 #include <flyenum.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -189,9 +189,8 @@ class SwUnoCollection
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
-//
 // case-corrected versions of service-names (see #i67811)
-//
+
 #define CSS_TEXT_TEXTFIELD_DATE_TIME                    "com.sun.star.text.textfield.DateTime"
 #define CSS_TEXT_TEXTFIELD_USER                         "com.sun.star.text.textfield.User"
 #define CSS_TEXT_TEXTFIELD_SET_EXPRESSION               "com.sun.star.text.textfield.SetExpression"
@@ -532,10 +531,6 @@ public:
 };
 
 #endif
-
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

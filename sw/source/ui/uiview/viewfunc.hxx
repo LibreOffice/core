@@ -18,7 +18,6 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_UIVIEW_VIEWFUNC_HXX
 #define INCLUDED_SW_SOURCE_UI_UIVIEW_VIEWFUNC_HXX
-#include <tools/solar.h>
 
 class ImageButton;
 class Point;

@@ -254,7 +254,6 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
