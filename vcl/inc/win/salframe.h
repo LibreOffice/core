@@ -32,29 +32,29 @@ class WinSalGraphics;
 class WinSalFrame : public SalFrame
 {
 public:
-    HWND                    mhWnd;                  // Window handle
-    HCURSOR                 mhCursor;               // cursor handle
-    HIMC                    mhDefIMEContext;        // default IME-Context
-    WinSalGraphics*         mpGraphics;             // current frame graphics
-    WinSalGraphics*         mpGraphics2;            // current frame graphics for other threads
-    WinSalFrame*            mpNextFrame;            // pointer to next frame
-    HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
-    HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
-    SystemEnvData           maSysData;              // system data
-    SalFrameState           maState;                // frame state
-    int                     mnShowState;            // show state
-    long                    mnWidth;                // client width in pixeln
-    long                    mnHeight;               // client height in pixeln
-    int                     mnMinWidth;             // min. client width in pixeln
-    int                     mnMinHeight;            // min. client height in pixeln
-    int                     mnMaxWidth;             // max. client width in pixeln
-    int                     mnMaxHeight;            // max. client height in pixeln
-    RECT                    maFullScreenRect;       // fullscreen rect
-    int                     mnFullScreenShowState;  // fullscreen restore show state
-    UINT                    mnInputLang;            // current Input Language
-    UINT                    mnInputCodePage;        // current Input CodePage
-    sal_uIntPtr                   mnStyle;                // style
-    sal_Bool                    mbGraphics;             // is Graphics used
+    HWND                        mhWnd;                  // Window handle
+    HCURSOR                     mhCursor;               // cursor handle
+    HIMC                        mhDefIMEContext;        // default IME-Context
+    WinSalGraphics*             mpGraphics;             // current frame graphics
+    WinSalGraphics*             mpGraphics2;            // current frame graphics for other threads
+    WinSalFrame*                mpNextFrame;            // pointer to next frame
+    HMENU                       mSelectedhMenu;         // the menu where highlighting is currently going on
+    HMENU                       mLastActivatedhMenu;    // the menu that was most recently opened
+    SystemEnvData               maSysData;              // system data
+    SalFrameState               maState;                // frame state
+    int                         mnShowState;            // show state
+    long                        mnWidth;                // client width in pixeln
+    long                        mnHeight;               // client height in pixeln
+    int                         mnMinWidth;             // min. client width in pixeln
+    int                         mnMinHeight;            // min. client height in pixeln
+    int                         mnMaxWidth;             // max. client width in pixeln
+    int                         mnMaxHeight;            // max. client height in pixeln
+    RECT                        maFullScreenRect;       // fullscreen rect
+    int                         mnFullScreenShowState;  // fullscreen restore show state
+    UINT                        mnInputLang;            // current Input Language
+    UINT                        mnInputCodePage;        // current Input CodePage
+    sal_uIntPtr                 mnStyle;                // style
+    bool                        mbGraphics;             // is Graphics used
     sal_Bool                    mbCaption;              // has window a caption
     sal_Bool                    mbBorder;               // has window a border
     sal_Bool                    mbFixBorder;            // has window a fixed border
@@ -83,18 +83,19 @@ public:
     sal_Int32                   mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
     sal_Bool                    mbPropertiesStored;     // has values stored in the window property store
 
-    void updateScreenNumber();
+    void                        updateScreenNumber();
 public:
     WinSalFrame();
     virtual ~WinSalFrame();
 
     virtual SalGraphics*        GetGraphics();
+    virtual bool                AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual sal_Bool            PostEvent( void* pData );
     virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
-    virtual void                                SetMenu( SalMenu* pSalMenu );
-    virtual void                                DrawMenuBar();
+    virtual void                SetMenu( SalMenu* pSalMenu );
+    virtual void                DrawMenuBar();
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = FALSE );
     virtual void                Enable( sal_Bool bEnable );
@@ -105,7 +106,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual sal_Bool            GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
     virtual void                StartPresentation( sal_Bool bStart );
     virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
@@ -118,12 +119,12 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual OUString            GetKeyName( sal_uInt16 nKeyCode );
+    virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep();
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData* GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
