@@ -1290,6 +1290,9 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     aTextInfo.vertex[10] = (rTrans.Line2.Column3 + aSize.Height) / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[11] = m_fZStep;
 
+    aTextInfo.bmpWidth = bmpWidth;
+    aTextInfo.bmpHeight = bmpHeight;
+
     //if has ratotion, we must re caculate the central pos
     if (!rtl::math::approxEqual(0, rotation))
     {
@@ -1324,7 +1327,7 @@ int OpenGLRender::RenderTextShape()
     for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
-        PosVecf3 trans = {0, 0, 0};
+        PosVecf3 trans = { (float)-textInfo.bmpWidth/2.0f, (float)-textInfo.bmpHeight/2.0f, 0};
         PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);

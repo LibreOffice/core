@@ -81,6 +81,8 @@ struct TextInfo
     GLuint texture;
     double rotation;
     float vertex[12];
+    long bmpWidth;
+    long bmpHeight;
 };
 
 typedef std::vector<GLfloat> Area2DPointList;
