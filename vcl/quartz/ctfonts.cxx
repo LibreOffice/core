@@ -305,8 +305,17 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.mbSubsettable = true;
 
     // get font name
-    CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
+    const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
+    CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault, aUILang.getStr(), aUILang.getLength() );
+    CFStringRef pLang = NULL;
+    CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang );
+    if ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo )
+    {
+        CFRelease( pFamilyName );
+        pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
+    }
     rDFA.SetFamilyName( GetOUString( pFamilyName ) );
+
     // get font style
     CFStringRef pStyleName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontStyleNameAttribute );
     rDFA.SetStyleName( GetOUString( pStyleName ) );
