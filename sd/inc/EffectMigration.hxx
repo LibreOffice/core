@@ -33,6 +33,7 @@ class SvxShape;
 class SdAnimationInfo;
 class SdrObject;
 class SdrPathObj;
+class SdrObjGroup;
 
 namespace sd {
 
@@ -75,6 +76,7 @@ public:
     static sal_Bool GetSoundOn( SvxShape* pShape );
 
     static void SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj );
+    static void CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage);
 };
 
 } // end of namespace sd
