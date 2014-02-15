@@ -140,7 +140,7 @@ void destructStruct(
     _destructStruct( pValue, pTypeDescr, release );
 }
 //==================================================================================================
-sal_Bool equalStruct(
+bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -149,7 +149,7 @@ sal_Bool equalStruct(
     return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
 //==================================================================================================
-sal_Bool assignStruct(
+bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -178,7 +178,7 @@ void destructSequence(
 }
 
 //==================================================================================================
-sal_Bool equalSequence(
+bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )

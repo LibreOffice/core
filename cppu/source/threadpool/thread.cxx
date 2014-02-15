@@ -103,7 +103,7 @@ namespace cppu_threadpool {
     ORequestThread::ORequestThread( ThreadPoolHolder const &aThreadPool,
                                     JobQueue *pQueue,
                                     const ByteSequence &aThreadId,
-                                    sal_Bool bAsynchron )
+                                    bool bAsynchron )
         : m_aThreadPool( aThreadPool )
         , m_pQueue( pQueue )
         , m_aThreadId( aThreadId )
@@ -114,7 +114,7 @@ namespace cppu_threadpool {
 
     void ORequestThread::setTask( JobQueue *pQueue,
                                   const ByteSequence &aThreadId,
-                                  sal_Bool bAsynchron )
+                                  bool bAsynchron )
     {
         m_pQueue = pQueue;
         m_aThreadId = aThreadId;
@@ -169,7 +169,7 @@ namespace cppu_threadpool {
                     m_pQueue->enter(
                         sal::static_int_cast< sal_Int64 >(
                             reinterpret_cast< sal_IntPtr >(this)),
-                        sal_True );
+                        true );
 
                     if( m_pQueue->isEmpty() )
                     {

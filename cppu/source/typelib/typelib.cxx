@@ -99,7 +99,7 @@ static inline sal_Int32 newAlignedSize(
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
-static inline sal_Bool reallyWeak( typelib_TypeClass eTypeClass )
+static inline bool reallyWeak( typelib_TypeClass eTypeClass )
     SAL_THROW(())
 {
     return TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass );
@@ -159,7 +159,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
 //-----------------------------------------------------------------------------
 struct equalStr_Impl
 {
-    sal_Bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const SAL_THROW(())
+    bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const SAL_THROW(())
         { return 0 == rtl_ustr_compare( s1, s2 ); }
 };
 
@@ -1617,7 +1617,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
 }
 
 //------------------------------------------------------------------------
-static inline sal_Bool type_equals(
+static inline bool type_equals(
     typelib_TypeDescriptionReference * p1, typelib_TypeDescriptionReference * p2 )
     SAL_THROW(())
 {
@@ -1888,7 +1888,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
         *ppRet = 0;
     }
 
-    static sal_Bool bInited = sal_False;
+    static bool bInited = false;
     TypeDescriptor_Init_Impl &rInit = Init::get();
 
     if( !bInited )
@@ -1898,7 +1898,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
         if( !bInited )
         {
             // avoid recursion during the next ...new calls
-            bInited = sal_True;
+            bInited = true;
 
             rtl_uString * pTypeName = 0;
             typelib_TypeDescription * pType = 0;
@@ -2400,7 +2400,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isA
                         TYPELIB_DANGER_RELEASE( pFromDescr );
                         return sal_False;
                     }
-                    sal_Bool bRet = typelib_typedescriptionreference_isAssignableFrom(
+                    bool bRet = typelib_typedescriptionreference_isAssignableFrom(
                         pAssignable,
                         ((typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pFromDescr)->pBaseTypeDescription)->pWeakRef );
                     TYPELIB_DANGER_RELEASE( pFromDescr );

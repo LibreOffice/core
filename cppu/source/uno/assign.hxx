@@ -62,13 +62,13 @@ inline void * _queryInterface(
     return pSource;
 }
 //==================================================================================================
-sal_Bool assignStruct(
+bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW(());
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool _assignStruct(
+inline bool _assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -80,7 +80,7 @@ inline sal_Bool _assignStruct(
         if (! assignStruct( pDest, pSource, pTypeDescr->pBaseTypeDescription,
                             queryInterface, acquire, release ))
         {
-            return sal_False;
+            return false;
         }
     }
     // then copy members
@@ -95,13 +95,13 @@ inline sal_Bool _assignStruct(
                                      ppTypeRefs[nDescr],
                                      queryInterface, acquire, release ))
         {
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool _assignData(
+inline bool _assignData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,
     void * pSource,
@@ -116,7 +116,7 @@ inline sal_Bool _assignData(
     {
         _destructData( pDest, pDestType, pDestTypeDescr, release );
         _defaultConstructData( pDest, pDestType, pDestTypeDescr );
-        return sal_True;
+        return true;
     }
     while (typelib_TypeClass_ANY == pSourceType->eTypeClass)
     {
@@ -124,7 +124,7 @@ inline sal_Bool _assignData(
         pSourceType = ((uno_Any *)pSource)->pType;
         pSource = ((uno_Any *)pSource)->pData;
         if (pDest == pSource)
-            return sal_True;
+            return true;
     }
 
     switch (pDestType->eTypeClass)
@@ -136,195 +136,195 @@ inline sal_Bool _assignData(
         {
         case typelib_TypeClass_CHAR:
             *(sal_Unicode *)pDest = *(sal_Unicode *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_BOOLEAN:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BOOLEAN:
             *(sal_Bool *)pDest = (*(sal_Bool *)pSource != sal_False);
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_BYTE:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_Int8 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_SHORT:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_Int16 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_Int16 *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_UNSIGNED_SHORT:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_uInt16 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_uInt16 *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_LONG:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_Int32 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(sal_Int32 *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_Int32 *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_UNSIGNED_LONG:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_uInt32 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(sal_uInt32 *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_uInt32 *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_uInt32 *)pDest = *(sal_uInt32 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_HYPER:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_Int64 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(sal_Int64 *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_Int64 *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_LONG:
             *(sal_Int64 *)pDest = *(sal_Int32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_Int64 *)pDest = *(sal_uInt32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_UNSIGNED_HYPER:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(sal_uInt64 *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(sal_uInt64 *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(sal_uInt64 *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_LONG:
             *(sal_uInt64 *)pDest = *(sal_Int32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_LONG:
             *(sal_uInt64 *)pDest = *(sal_uInt32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             *(sal_uInt64 *)pDest = *(sal_uInt64 *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_FLOAT:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(float *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(float *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(float *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_FLOAT:
             *(float *)pDest = *(float *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_DOUBLE:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BYTE:
             *(double *)pDest = *(sal_Int8 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_SHORT:
             *(double *)pDest = *(sal_Int16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_SHORT:
             *(double *)pDest = *(sal_uInt16 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_LONG:
             *(double *)pDest = *(sal_Int32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_UNSIGNED_LONG:
             *(double *)pDest = *(sal_uInt32 *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_FLOAT:
             *(double *)pDest = *(float *)pSource;
-            return sal_True;
+            return true;
         case typelib_TypeClass_DOUBLE:
             *(double *)pDest = *(double *)pSource;
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_STRING:
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_STRING:
             ::rtl_uString_assign( (rtl_uString **)pDest, *(rtl_uString **)pSource );
-            return sal_True;
+            return true;
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_TYPE:
         switch (pSourceType->eTypeClass)
@@ -335,28 +335,28 @@ inline sal_Bool _assignData(
             ::typelib_typedescriptionreference_release( *pp );
             *pp = *(typelib_TypeDescriptionReference **)pSource;
             TYPE_ACQUIRE( *pp );
-            return sal_True;
+            return true;
         }
         default:
-            return sal_False;
+            return false;
         }
     case typelib_TypeClass_ANY:
         _destructAny( (uno_Any *)pDest, release );
         _copyConstructAny( (uno_Any *)pDest, pSource, pSourceType, pSourceTypeDescr, acquire, 0 );
-        return sal_True;
+        return true;
     case typelib_TypeClass_ENUM:
         if (_type_equals( pDestType, pSourceType ))
         {
             *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (typelib_TypeClass_STRUCT == pSourceType->eTypeClass ||
             typelib_TypeClass_EXCEPTION == pSourceType->eTypeClass)
         {
-            sal_Bool bRet = sal_False;
+            bool bRet = false;
             if (pSourceTypeDescr)
             {
                 typelib_CompoundTypeDescription * pTypeDescr =
@@ -393,29 +393,29 @@ inline sal_Bool _assignData(
             }
             return bRet;
         }
-        return sal_False;
+        return false;
     case typelib_TypeClass_SEQUENCE:
         if (typelib_TypeClass_SEQUENCE != pSourceType->eTypeClass)
-            return sal_False;
+            return false;
         // self assignment:
         if (*(uno_Sequence **)pSource == *(uno_Sequence **)pDest)
-            return sal_True;
+            return true;
         if (_type_equals( pDestType, pSourceType ))
         {
             osl_atomic_increment( &(*(uno_Sequence **)pSource)->nRefCount );
             idestructSequence(
                 *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
             *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE != pSourceType->eTypeClass)
-            return sal_False;
+            return false;
         if (_type_equals( pDestType, pSourceType ))
         {
             _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
-            return sal_True;
+            return true;
         }
         else if (*static_cast< void ** >(pSource) == 0)
         {
@@ -455,7 +455,7 @@ inline sal_Bool _assignData(
         }
     default:
         OSL_ASSERT(false);
-        return sal_False;
+        return false;
     }
 }
 

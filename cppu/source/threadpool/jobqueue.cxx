@@ -28,7 +28,7 @@ namespace cppu_threadpool {
 
     JobQueue::JobQueue() :
         m_nToDo( 0 ),
-        m_bSuspended( sal_False ),
+        m_bSuspended( false ),
         m_cndWait( osl_createCondition() )
     {
         osl_resetCondition( m_cndWait );
@@ -53,7 +53,7 @@ namespace cppu_threadpool {
         m_nToDo ++;
     }
 
-    void *JobQueue::enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob )
+    void *JobQueue::enter( sal_Int64 nDisposeId , bool bReturnWhenNoJob )
     {
         void *pReturn = 0;
         {
@@ -157,32 +157,32 @@ namespace cppu_threadpool {
     void JobQueue::suspend()
     {
         MutexGuard guard( m_mutex );
-        m_bSuspended = sal_True;
+        m_bSuspended = true;
     }
 
     void JobQueue::resume()
     {
         MutexGuard guard( m_mutex );
-        m_bSuspended = sal_False;
+        m_bSuspended = false;
         if( ! m_lstJob.empty() )
         {
             osl_setCondition( m_cndWait );
         }
     }
 
-    sal_Bool JobQueue::isEmpty() const
+    bool JobQueue::isEmpty() const
     {
         MutexGuard guard( m_mutex );
         return m_lstJob.empty();
     }
 
-    sal_Bool JobQueue::isCallstackEmpty() const
+    bool JobQueue::isCallstackEmpty() const
     {
         MutexGuard guard( m_mutex );
         return m_lstCallstack.empty();
     }
 
-    sal_Bool JobQueue::isBusy() const
+    bool JobQueue::isBusy() const
     {
         MutexGuard guard( m_mutex );
         return m_nToDo > 0;

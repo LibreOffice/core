@@ -53,22 +53,22 @@ namespace cppu_threadpool
 
         void add( void *pThreadSpecificData, RequestFun * doRequest );
 
-        void *enter( sal_Int64 nDisposeId , sal_Bool bReturnWhenNoJob = sal_False );
+        void *enter( sal_Int64 nDisposeId , bool bReturnWhenNoJob = false );
         void dispose( sal_Int64 nDisposeId );
 
         void suspend();
         void resume();
 
-        sal_Bool isEmpty() const;
-        sal_Bool isCallstackEmpty() const;
-        sal_Bool isBusy() const;
+        bool isEmpty() const;
+        bool isCallstackEmpty() const;
+        bool isBusy() const;
 
     private:
         mutable ::osl::Mutex m_mutex;
         JobList      m_lstJob;
         CallStackList m_lstCallstack;
         sal_Int32 m_nToDo;
-        sal_Bool m_bSuspended;
+        bool m_bSuspended;
         oslCondition m_cndWait;
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
     };

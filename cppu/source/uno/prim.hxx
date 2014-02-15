@@ -151,7 +151,7 @@ extern "C" void * binuno_queryInterface(
     void * pUnoI, typelib_TypeDescriptionReference * pDestType );
 
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool _type_equals(
+inline bool _type_equals(
     typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
     SAL_THROW(())
 {

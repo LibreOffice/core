@@ -98,7 +98,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 //==================================================================================================
 class ThreadKey
 {
-    sal_Bool     _bInit;
+    bool     _bInit;
     oslThreadKey _hThreadKey;
     oslThreadKeyCallbackFunction _pCallback;
 
@@ -110,7 +110,7 @@ public:
 };
 //__________________________________________________________________________________________________
 inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
-    : _bInit( sal_False )
+    : _bInit( false )
     , _pCallback( pCallback )
 {
 }
@@ -131,7 +131,7 @@ inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
         if (! _bInit)
         {
             _hThreadKey = ::osl_createThreadKey( _pCallback );
-            _bInit = sal_True;
+            _bInit = true;
         }
     }
     return _hThreadKey;
@@ -170,7 +170,7 @@ IdContainer * getIdContainer() SAL_THROW(())
         pId = new IdContainer();
         pId->pCurrentContext = 0;
         pId->pCurrentContextEnv = 0;
-        pId->bInit = sal_False;
+        pId->bInit = false;
         ::osl_setThreadKeyData( aKey, pId );
     }
     return pId;

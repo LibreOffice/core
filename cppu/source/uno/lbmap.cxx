@@ -68,7 +68,7 @@ public:
         { return operator = ( rMapping._pMapping ); }
     inline uno_Mapping * SAL_CALL get() const SAL_THROW(())
         { return _pMapping; }
-    inline sal_Bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pMapping != 0); }
 };
 //__________________________________________________________________________________________________
@@ -356,7 +356,7 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 static inline oslModule loadModule( const OUString & rBridgeName )
     SAL_THROW(())
 {
-    sal_Bool bNeg;
+    bool bNeg;
     {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );

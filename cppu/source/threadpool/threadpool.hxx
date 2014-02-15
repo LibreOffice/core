@@ -90,7 +90,7 @@ namespace cppu_threadpool {
 
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );
-        sal_Bool isDisposed( sal_Int64 nDisposeId );
+        bool isDisposed( sal_Int64 nDisposeId );
 
     private:
         ::osl::Mutex m_mutex;
@@ -128,7 +128,7 @@ namespace cppu_threadpool {
         void destroy( sal_Int64 nDisposeId );
 
         void addJob( const ByteSequence &aThreadId,
-                     sal_Bool bAsynchron,
+                     bool bAsynchron,
                      void *pThreadSpecificData,
                      RequestFun * doRequest );
 
@@ -138,7 +138,7 @@ namespace cppu_threadpool {
         /********
          * @return true, if queue could be successfully revoked.
          ********/
-        sal_Bool revokeQueue( const ByteSequence & aThreadId , sal_Bool bAsynchron );
+        bool revokeQueue( const ByteSequence & aThreadId , bool bAsynchron );
 
         void waitInPool( rtl::Reference< ORequestThread > const & pThread );
 
@@ -147,7 +147,7 @@ namespace cppu_threadpool {
         ThreadAdmin & getThreadAdmin() { return m_aThreadAdmin; }
 
     private:
-        void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, sal_Bool bAsynchron);
+        void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, bool bAsynchron);
 
 
         ThreadIdHashMap m_mapQueue;

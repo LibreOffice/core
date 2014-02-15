@@ -41,10 +41,10 @@ namespace cppu_threadpool {
         ORequestThread( ThreadPoolHolder const &aThreadPool,
                         JobQueue * ,
                         const ::rtl::ByteSequence &aThreadId,
-                        sal_Bool bAsynchron );
+                        bool bAsynchron );
         virtual ~ORequestThread();
 
-        void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , sal_Bool bAsynchron );
+        void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , bool bAsynchron );
 
         void launch();
 
@@ -61,7 +61,7 @@ namespace cppu_threadpool {
         ThreadPoolHolder m_aThreadPool;
         JobQueue *m_pQueue;
         ::rtl::ByteSequence m_aThreadId;
-        sal_Bool m_bAsynchron;
+        bool m_bAsynchron;
     };
 
 } // end cppu_threadpool

@@ -82,7 +82,7 @@ namespace cppu_threadpool
         }
     }
 
-    sal_Bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
+    bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
         for( DisposedCallerList::iterator ii = m_lst.begin() ;
@@ -91,10 +91,10 @@ namespace cppu_threadpool
         {
             if( (*ii) == nDisposeId )
             {
-                return sal_True;
+                return true;
             }
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -191,9 +191,9 @@ namespace cppu_threadpool
 
     void ThreadPool::createThread( JobQueue *pQueue ,
                                    const ByteSequence &aThreadId,
-                                   sal_Bool bAsynchron )
+                                   bool bAsynchron )
     {
-        sal_Bool bCreate = sal_True;
+        bool bCreate = true;
         {
             // Can a thread be reused ?
             MutexGuard guard( m_mutexWaitingThreadList );
@@ -209,7 +209,7 @@ namespace cppu_threadpool
 
                 // let the thread go
                 osl_setCondition( pWaitingThread->condition );
-                bCreate = sal_False;
+                bCreate = false;
             }
         }
 
@@ -221,7 +221,7 @@ namespace cppu_threadpool
         }
     }
 
-    sal_Bool ThreadPool::revokeQueue( const ByteSequence &aThreadId, sal_Bool bAsynchron )
+    bool ThreadPool::revokeQueue( const ByteSequence &aThreadId, bool bAsynchron )
     {
         MutexGuard guard( m_mutex );
 
@@ -233,7 +233,7 @@ namespace cppu_threadpool
             if( ! (*ii).second.second->isEmpty() )
             {
                 // another thread has put something into the queue
-                return sal_False;
+                return false;
             }
 
             (*ii).second.second = 0;
@@ -249,7 +249,7 @@ namespace cppu_threadpool
             if( ! (*ii).second.first->isEmpty() )
             {
                 // another thread has put something into the queue
-                return sal_False;
+                return false;
             }
             (*ii).second.first = 0;
         }
@@ -259,17 +259,17 @@ namespace cppu_threadpool
             m_mapQueue.erase( ii );
         }
 
-        return sal_True;
+        return true;
     }
 
 
     void ThreadPool::addJob(
         const ByteSequence &aThreadId ,
-        sal_Bool bAsynchron,
+        bool bAsynchron,
         void *pThreadSpecificData,
         RequestFun * doRequest )
     {
-        sal_Bool bCreateThread = sal_False;
+        bool bCreateThread = false;
         JobQueue *pQueue = 0;
         {
             MutexGuard guard( m_mutex );
@@ -288,7 +288,7 @@ namespace cppu_threadpool
                 if( ! (*ii).second.second )
                 {
                     (*ii).second.second = new JobQueue();
-                    bCreateThread = sal_True;
+                    bCreateThread = true;
                 }
                 pQueue = (*ii).second.second;
             }
@@ -297,7 +297,7 @@ namespace cppu_threadpool
                 if( ! (*ii).second.first )
                 {
                     (*ii).second.first = new JobQueue();
-                    bCreateThread = sal_True;
+                    bCreateThread = true;
                 }
                 pQueue = (*ii).second.first;
 
@@ -349,7 +349,7 @@ namespace cppu_threadpool
 
         if( pQueue->isCallstackEmpty() )
         {
-            if( revokeQueue( aThreadId , sal_False) )
+            if( revokeQueue( aThreadId , false) )
             {
                 // remove queue
                 delete pQueue;
@@ -370,7 +370,7 @@ using namespace cppu_threadpool;
 
 struct uno_ThreadPool_Equal
 {
-    sal_Bool operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
+    bool operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
         {
             return a == b;
         }

@@ -68,7 +68,7 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
         p->nRefCountOfCurrentId = 1;
         rtl_byte_sequence_acquire( p->pLocalThreadId );
         rtl_byte_sequence_acquire( p->pCurrentId );
-        p->bInit = sal_True;
+        p->bInit = true;
     }
     else
     {
@@ -108,7 +108,7 @@ extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId 
         p->nRefCountOfCurrentId = 1;
         p->pCurrentId = pThreadId;
         rtl_byte_sequence_acquire( p->pCurrentId );
-        p->bInit = sal_True;
+        p->bInit = true;
     }
     else
     {

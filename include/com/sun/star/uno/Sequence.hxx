@@ -72,7 +72,7 @@ template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-    sal_Bool success =
+    bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         const_cast< E * >( pElements ), len, (uno_AcquireFunc)cpp_acquire );
@@ -84,7 +84,7 @@ template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-    sal_Bool success =
+    bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, len, (uno_AcquireFunc)cpp_acquire );
@@ -134,7 +134,7 @@ template< class E >
 inline E * Sequence< E >::getArray()
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-    sal_Bool success =
+    bool success =
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
@@ -172,7 +172,7 @@ template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-    sal_Bool success =
+    bool success =
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
