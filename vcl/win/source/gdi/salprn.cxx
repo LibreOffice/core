@@ -1172,7 +1172,7 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
         return 900; // guess
 }
 
-SalGraphics* WinSalInfoPrinter::GetGraphics()
+SalGraphics* WinSalInfoPrinter::AcquireGraphics()
 {
     if ( mbGraphics )
         return NULL;

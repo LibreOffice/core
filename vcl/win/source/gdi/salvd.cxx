@@ -199,7 +199,7 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
 
 
 
-SalGraphics* WinSalVirtualDevice::GetGraphics()
+SalGraphics* WinSalVirtualDevice::AcquireGraphics()
 {
     if ( mbGraphics )
         return NULL;

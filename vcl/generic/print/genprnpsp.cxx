@@ -534,7 +534,7 @@ int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
     return 900;
 }
 
-SalGraphics* PspSalInfoPrinter::GetGraphics()
+SalGraphics* PspSalInfoPrinter::AcquireGraphics()
 {
     // return a valid pointer only once
     // the reasoning behind this is that we could have different

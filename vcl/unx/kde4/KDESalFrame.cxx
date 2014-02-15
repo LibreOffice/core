@@ -369,7 +369,7 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
     delete pGraphics;
 }
 
-SalGraphics* KDESalFrame::GetGraphics()
+SalGraphics* KDESalFrame::AcquireGraphics()
 {
     if( GetWindow() )
     {

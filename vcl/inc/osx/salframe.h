@@ -112,7 +112,7 @@ public:
 
     virtual ~AquaSalFrame();
 
-    virtual SalGraphics*        GetGraphics();
+    virtual SalGraphics*        AcquireGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                PostEvent( void* pData );
     virtual void                SetTitle( const OUString& rTitle );

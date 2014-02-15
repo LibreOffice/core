@@ -188,7 +188,7 @@ X11SalVirtualDevice::~X11SalVirtualDevice()
         XFreePixmap( GetXDisplay(), GetDrawable() );
 }
 
-SalGraphics* X11SalVirtualDevice::GetGraphics()
+SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 {
     if( bGraphics_ )
         return NULL;

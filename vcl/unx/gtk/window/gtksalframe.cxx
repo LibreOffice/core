@@ -1493,7 +1493,7 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     }
 }
 
-SalGraphics* GtkSalFrame::GetGraphics()
+SalGraphics* GtkSalFrame::AcquireGraphics()
 {
     if( m_pWindow )
     {
@@ -2889,7 +2889,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     bool bFreeGraphics = false;
     if( ! pGraphics )
     {
-        pGraphics = static_cast<GtkSalGraphics*>(GetGraphics());
+        pGraphics = static_cast<GtkSalGraphics*>(AcquireGraphics());
         if ( !pGraphics )
         {
             SAL_WARN("vcl", "Could not get graphics - unable to update settings");

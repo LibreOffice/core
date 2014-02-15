@@ -2036,7 +2036,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
-SalGraphics* KDESalFrame::GetGraphics()
+SalGraphics* KDESalFrame::AcquireGraphics()
 {
     if( GetWindow() )
     {
