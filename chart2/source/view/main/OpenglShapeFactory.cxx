@@ -401,7 +401,7 @@ uno::Reference< drawing::XShape >
                     , const uno::Any& rATransformation )
 {
     dummy::DummyText* pText = new dummy::DummyText( rText, rPropNames, rPropValues,
-            rATransformation );
+            rATransformation, xTarget );
     xTarget->add(pText);
     return pText;
 }

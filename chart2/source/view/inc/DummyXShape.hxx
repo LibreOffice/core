@@ -332,13 +332,18 @@ class DummyText : public DummyXShape
 {
 public:
     DummyText(const OUString& rText, const tNameSequence& rNames,
-            const tAnySequence& rValues, const uno::Any& rTrans );
+            const tAnySequence& rValues, const uno::Any& rTrans, com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShapes > xTarget);
 
     virtual void render() SAL_OVERRIDE;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException);
+
 private:
+    void setTransformatAsProperty(const com::sun::star::drawing::HomogenMatrix3& rMatrix);
+
     OUString maText;
     uno::Any maTrans;
     BitmapEx maBitmap;

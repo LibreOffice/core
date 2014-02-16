@@ -714,7 +714,7 @@ private:
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
-        const tAnySequence& rValues, const uno::Any& rTrans ):
+        const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > xTarget ):
     maText(rText),
     maTrans(rTrans)
 {
@@ -744,12 +744,25 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         setPosition(awt::Point(aTrans.Line1.Column3, aTrans.Line2.Column3));
         aTrans.Line1.Column1 = 20 * bmpWidth;
         aTrans.Line2.Column2 = 20 * bmpHeight;
-        uno::Any aNewTrans;
-        aNewTrans <<= aTrans;
-        setPropertyValue("Transformation", aNewTrans);
+        setTransformatAsProperty(aTrans);
     }
     else
+    {
         setSize(awt::Size(20*bmpWidth, 20*bmpHeight));
+        uno::Reference< drawing::XShape > xTargetShape(xTarget, uno::UNO_QUERY);
+        drawing::HomogenMatrix3 aTrans;
+        aTrans.Line1.Column1 = 20 * bmpWidth;
+        aTrans.Line2.Column2 = 20 * bmpHeight;
+        aTrans.Line3.Column3 = 1;
+        if(xTargetShape.is())
+        {
+            const awt::Point rPoint = xTargetShape->getPosition();
+            setPosition(rPoint);
+            aTrans.Line1.Column3 = rPoint.X;
+            aTrans.Line2.Column3 = rPoint.Y;
+        }
+        setTransformatAsProperty(aTrans);
+    }
 }
 
 void DummyText::render()
@@ -786,6 +799,34 @@ void DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
 {
     SAL_WARN("chart2.opengl", "property value set after image has been created");
     DummyXShape::setPropertyValue(rName, rValue);
+}
+
+void DummyText::setPosition(const awt::Point& rPosition )
+    throw(uno::RuntimeException)
+{
+    DummyXShape::setPosition(rPosition);
+    if(maTrans.hasValue())
+        return;
+
+    std::map<OUString, uno::Any>::const_iterator itr =
+        maProperties.find("Transformation");
+    if(itr != maProperties.end())
+    {
+        if(itr->second.hasValue())
+        {
+            drawing::HomogenMatrix3 aTrans = itr->second.get<drawing::HomogenMatrix3>();
+            aTrans.Line1.Column3 = rPosition.X;
+            aTrans.Line2.Column3 = rPosition.Y;
+            setTransformatAsProperty(aTrans);
+        }
+    }
+}
+
+void DummyText::setTransformatAsProperty(const drawing::HomogenMatrix3& rMatrix)
+{
+    uno::Any aNewTrans;
+    aNewTrans <<= rMatrix;
+    setPropertyValue("Transformation", aNewTrans);
 }
 
 DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
