@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <editeng/unoprnms.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -34,6 +35,8 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+
+#include <com/sun/star/beans/Property.hpp>
 
 #define ENABLE_DEBUG_PROPERTIES 0
 
@@ -44,6 +47,64 @@ using namespace std;
 namespace chart {
 
 namespace dummy {
+
+class DummyPropertySetInfo : public cppu::WeakImplHelper1<
+                                com::sun::star::beans::XPropertySetInfo >
+{
+public:
+    DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
+        mrProperties(rProps) {}
+
+    virtual sal_Bool hasPropertyByName( const OUString& rName )
+        throw(uno::RuntimeException);
+
+    virtual beans::Property getPropertyByName( const OUString& rName )
+        throw(uno::RuntimeException, beans::UnknownPropertyException);
+
+    virtual uno::Sequence< beans::Property > getProperties()
+        throw(uno::RuntimeException);
+
+private:
+    const std::map<OUString, uno::Any>& mrProperties;
+};
+
+sal_Bool DummyPropertySetInfo::hasPropertyByName( const OUString& rName )
+    throw(uno::RuntimeException)
+{
+    return mrProperties.find(rName) != mrProperties.end();
+}
+
+beans::Property DummyPropertySetInfo::getPropertyByName( const OUString& rName )
+    throw(uno::RuntimeException, beans::UnknownPropertyException)
+{
+    beans::Property aRet;
+    if(mrProperties.find(rName) == mrProperties.end())
+        throw beans::UnknownPropertyException();
+
+    std::map<OUString, uno::Any>::const_iterator itr = mrProperties.find(rName);
+    aRet.Name = rName;
+    aRet.Type = itr->second.getValueType();
+
+    return aRet;
+}
+
+uno::Sequence< beans::Property > DummyPropertySetInfo::getProperties()
+    throw(uno::RuntimeException)
+{
+    uno::Sequence< beans::Property > aRet(mrProperties.size());
+
+    size_t i = 0;
+    for(std::map<OUString, uno::Any>::const_iterator itr = mrProperties.begin(),
+            itrEnd = mrProperties.end(); itr != itrEnd; ++itr, ++i)
+    {
+        beans::Property aProp;
+
+        aProp.Name = itr->first;
+        aProp.Type = itr->second.getValueType();
+        aRet[i] = aProp;
+    }
+    return aRet;
+}
 
 namespace {
 
@@ -117,7 +178,7 @@ OUString DummyXShape::getShapeType()
 uno::Reference< beans::XPropertySetInfo > DummyXShape::getPropertySetInfo()
     throw(uno::RuntimeException)
 {
-    return uno::Reference< beans::XPropertySetInfo >();
+    return new DummyPropertySetInfo(maProperties);
 }
 
 void DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& rValue)
@@ -798,6 +859,7 @@ void DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
             uno::RuntimeException)
 {
     SAL_WARN("chart2.opengl", "property value set after image has been created");
+    SAL_WARN("chart2.opengl", rName);
     DummyXShape::setPropertyValue(rName, rValue);
 }
 
