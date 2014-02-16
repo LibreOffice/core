@@ -55,13 +55,13 @@ public:
     DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
         mrProperties(rProps) {}
 
-    virtual SAL_CALL sal_Bool hasPropertyByName( const OUString& rName )
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& rName )
         throw(uno::RuntimeException);
 
-    virtual SAL_CALL beans::Property getPropertyByName( const OUString& rName )
+    virtual beans::Property SAL_CALL getPropertyByName( const OUString& rName )
         throw(uno::RuntimeException, beans::UnknownPropertyException);
 
-    virtual SAL_CALL uno::Sequence< beans::Property > getProperties()
+    virtual uno::Sequence< beans::Property > SAL_CALL getProperties()
         throw(uno::RuntimeException);
 
 private:
