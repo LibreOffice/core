@@ -1957,11 +1957,9 @@ sal_Bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
     return sal_False;
 }
 
-/**
- * TODO: Implement SwFlyFrm::Cut()
- */
 void SwFlyFrm::Cut()
 {
+    // TODO: Implement SwFlyFrm::Cut()
 }
 
 void SwFrm::AppendFly( SwFlyFrm *pNew )
@@ -2199,8 +2197,7 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
             else
             {
                 pAnchoredObj->InvalidateObjPos();
-            } // end of distinction between writer fly frames and drawing objects
-
+            }
         } // end of loop on objects, which are connected to the frame
     }
 }

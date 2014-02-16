@@ -1648,37 +1648,6 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
 //---------------- Output for BrushItem ----------------
 
-/** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
-
-    Under certain circumstances we have to draw a background for a graphic.
-    This method takes care of the conditions and draws the background with the
-    corresponding color.
-    Method introduced for bug fix #103876# in order to optimize drawing tiled
-    background graphics. Previously, this code was integrated in method
-    <lcl_DrawGraphic>.
-    Method implemented as a inline, checking the conditions and calling method
-    method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
-
-    @param _rBackgrdBrush
-    background brush contain the color the background has to be drawn.
-
-    @param _pOut
-    output device the background has to be drawn in.
-
-    @param _rPaintRect
-    paint retangle in the output device, which has to be drawn with the background.
-    rectangle have to be aligned by method ::SwAlignRect
-
-    @param _rGraphicObj
-    graphic object, for which the background has to be drawn. Used for checking
-    the transparency of its bitmap, its type and if the graphic is drawn transparent
-
-    @param _bNumberingGraphic
-    boolean indicating that graphic is used as a numbering.
-
-    @param _bBackgrdAlreadyDrawn
-    boolean (optional; default: false) indicating, if the background is already drawn.
-*/
 static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                  OutputDevice* _pOut,
                                  const SwRect& _rAlignedPaintRect,
@@ -1728,6 +1697,37 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
+/** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
+
+    Under certain circumstances we have to draw a background for a graphic.
+    This method takes care of the conditions and draws the background with the
+    corresponding color.
+    Method introduced for bug fix #103876# in order to optimize drawing tiled
+    background graphics. Previously, this code was integrated in method
+    <lcl_DrawGraphic>.
+    Method implemented as a inline, checking the conditions and calling method
+    method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
+
+    @param _rBackgrdBrush
+    background brush contain the color the background has to be drawn.
+
+    @param _pOut
+    output device the background has to be drawn in.
+
+    @param _rAlignedPaintRect
+    paint retangle in the output device, which has to be drawn with the background.
+    rectangle have to be aligned by method ::SwAlignRect
+
+    @param _rGraphicObj
+    graphic object, for which the background has to be drawn. Used for checking
+    the transparency of its bitmap, its type and if the graphic is drawn transparent
+
+    @param _bNumberingGraphic
+    boolean indicating that graphic is used as a numbering.
+
+    @param _bBackgrdAlreadyDrawn
+    boolean (optional; default: false) indicating, if the background is already drawn.
+*/
 static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     OutputDevice* _pOut,
                                     const SwRect& _rAlignedPaintRect,
@@ -1735,10 +1735,10 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     bool _bNumberingGraphic,
                                     bool _bBackgrdAlreadyDrawn = false )
 {
-    /// draw background with background color, if
-    ///     (1) graphic is not used as a numbering AND
-    ///     (2) background is not already drawn AND
-    ///     (3) intrinsic graphic is transparent OR intrinsic graphic doesn't exists
+    // draw background with background color, if
+    //     (1) graphic is not used as a numbering AND
+    //     (2) background is not already drawn AND
+    //     (3) intrinsic graphic is transparent OR intrinsic graphic doesn't exists
     if ( !_bNumberingGraphic &&
          !_bBackgrdAlreadyDrawn &&
          ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GRAPHIC_NONE  )
@@ -1748,29 +1748,29 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
-/// Note: the transparency of the background graphic
-///     is saved in SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
-///     and is considered in the drawing of the graphic.
-///     Thus, to provide transparent background graphic for text frames nothing
-///     has to be coded.
-/// Use align rectangle for drawing graphic
-/// Pixel-align coordinations for drawing graphic.
-/// Outsource code for drawing background of the graphic
-///     with a background color in method <lcl_DrawGraphicBackgrd>
-///     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
+// Note: the transparency of the background graphic
+//     is saved in SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
+//     and is considered in the drawing of the graphic.
+//     Thus, to provide transparent background graphic for text frames nothing
+//     has to be coded.
+// Use align rectangle for drawing graphic
+/ Pixel-align coordinations for drawing graphic.
+// Outsource code for drawing background of the graphic
+//     with a background color in method <lcl_DrawGraphicBackgrd>
+//     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       bool bBackgrdAlreadyDrawn = false )
-                      /// add parameter <bBackgrdAlreadyDrawn> to indicate
-                      /// that the background is already drawn.
+                      // add parameter <bBackgrdAlreadyDrawn> to indicate
+                      // that the background is already drawn.
 {
-    /// Calculate align rectangle from parameter <rGrf> and use aligned
-    /// rectangle <aAlignedGrfRect> in the following code
+    // Calculate align rectangle from parameter <rGrf> and use aligned
+    // rectangle <aAlignedGrfRect> in the following code
     SwRect aAlignedGrfRect = rGrf;
     ::SwAlignRect( aAlignedGrfRect, &rSh );
 
-    /// Change type from <sal_Bool> to <bool>.
+    // Change type from <sal_Bool> to <bool>.
     const bool bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
@@ -1778,15 +1778,15 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         pOut->IntersectClipRegion( rOut.SVRect() );
     }
 
-    /// No Link here, we want to load the graphic synchronously!
+    // No Link here, we want to load the graphic synchronously!
     ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
     GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
-    /// Outsource drawing of background with a background color
+    // Outsource drawing of background with a background color
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
 
-    /// Because for drawing a graphic left-top-corner and size coordinations are
-    /// used, these coordinations have to be determined on pixel level.
+    // Because for drawing a graphic left-top-corner and size coordinations are
+    // used, these coordinations have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
 
     if (pGrf->GetGraphic().getSvgData().get())
@@ -1801,7 +1801,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 
     if ( bNotInside )
         pOut->Pop();
-} // end of method <lcl_DrawGraphic>
+}
 
 void DrawGraphic( const SvxBrushItem *pBrush,
                               const XFillStyleItem* pFillStyleItem,
@@ -1811,8 +1811,8 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                               const SwRect &rOut,
                               const sal_uInt8 nGrfNum,
                               const sal_Bool bConsiderBackgroundTransparency )
-    /// Add 6th parameter to indicate that method should
-    /// consider background transparency, saved in the color of the brush item
+    // Add 6th parameter to indicate that method should
+    // consider background transparency, saved in the color of the brush item
 {
     SwViewShell &rSh = *pGlobalShell;
     bool bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
@@ -1904,12 +1904,12 @@ void DrawGraphic( const SvxBrushItem *pBrush,
 
     case GPOS_AREA:
         aGrf = rOrg;
-        /// In spite the fact that the background graphic have to fill the complete
-        /// area, it has been checked, if the graphic will completely fill out
-        /// the region to be painted <rOut> and thus, nothing has to be retouched.
-        /// For example, this is the case for a fly frame without a background
-        /// brush positioned on the border of the page and inherited the
-        /// background brush from the page.
+        // In spite the fact that the background graphic have to fill the complete
+        // area, it has been checked, if the graphic will completely fill out
+        // the region to be painted <rOut> and thus, nothing has to be retouched.
+        // For example, this is the case for a fly frame without a background
+        // brush positioned on the border of the page and inherited the
+        // background brush from the page.
         bRetouche = !rOut.IsInside( aGrf );
         break;
 
@@ -2020,22 +2020,22 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             }
         }
 
-        /// to get color of brush, check background color against COL_TRANSPARENT ("no fill"/"auto fill")
-        /// instead of checking, if transparency is not set.
+        // to get color of brush, check background color against COL_TRANSPARENT ("no fill"/"auto fill")
+        // instead of checking, if transparency is not set.
         const Color aColor( pBrush &&
                             ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
                               bFlyMetafile )
                     ? pBrush->GetColor()
                     : aGlobalRetoucheColor );
 
-        /// determine, if background region have to be
-        ///     drawn transparent.
-        ///     background region has to be drawn transparent, if
-        ///         background transparency have to be considered
-        ///     AND
-        ///       ( background color is transparent OR
-        ///         background graphic is transparent and background color is "no fill"
-        ///       )
+        // determine, if background region have to be
+        //     drawn transparent.
+        //     background region has to be drawn transparent, if
+        //         background transparency have to be considered
+        //     AND
+        //       ( background color is transparent OR
+        //         background graphic is transparent and background color is "no fill"
+        //       )
 
         enum DrawStyle {
             Default,
@@ -2063,9 +2063,9 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             pOutDev->SetDrawMode( 0 );
         }
 
-        /// OD 06.08.2002 #99657# - if background region have to be drawn
-        ///     transparent, set only the RGB values of the background color as
-        ///     the fill color for the output device.
+        // OD 06.08.2002 #99657# - if background region have to be drawn
+        //     transparent, set only the RGB values of the background color as
+        //     the fill color for the output device.
         switch (eDrawStyle)
         {
             case Transparent:
@@ -2086,22 +2086,22 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         // restore draw mode
         pOutDev->SetDrawMode( nOldDrawMode );
 
-        /// OD 02.09.2002 #99657#
+        // OD 02.09.2002 #99657#
         switch (eDrawStyle)
         {
             case Transparent:
             {
-                /// background region have to be drawn transparent.
-                /// Thus, create a poly-polygon from the region and draw it with
-                /// the corresponding transparency precent.
+                // background region have to be drawn transparent.
+                // Thus, create a poly-polygon from the region and draw it with
+                // the corresponding transparency precent.
                 PolyPolygon aDrawPoly( rOut.SVRect() );
                 if ( aGrf.HasArea() )
                 {
                     if ( !bGrfIsTransparent )
                     {
-                        /// substract area of background graphic from draw area
-                        /// OD 08.10.2002 #103898# - consider only that part of the
-                        ///     graphic area that is overlapping with draw area.
+                        // substract area of background graphic from draw area
+                        // OD 08.10.2002 #103898# - consider only that part of the
+                        //     graphic area that is overlapping with draw area.
                         SwRect aTmpGrf = aGrf;
                         aTmpGrf.Intersection( rOut );
                         if ( aTmpGrf.HasArea() )
@@ -2113,15 +2113,15 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                     else
                         bGrfBackgrdAlreadyDrawn = true;
                 }
-                /// calculate transparency percent:
-                /// ( <transparency value[0x01..0xFF]>*100 + 0x7F ) / 0xFF
-                /// If there is a background graphic with a background color "no fill"/"auto fill",
-                /// the transparency value is taken from the background graphic,
-                /// otherwise take the transparency value from the color.
+                // calculate transparency percent:
+                // ( <transparency value[0x01..0xFF]>*100 + 0x7F ) / 0xFF
+                // If there is a background graphic with a background color "no fill"/"auto fill",
+                // the transparency value is taken from the background graphic,
+                // otherwise take the transparency value from the color.
                 sal_Int8 nTransparencyPercent = static_cast<sal_Int8>(
                   (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
                    )*100 + 0x7F)/0xFF);
-                /// draw poly-polygon transparent
+                // draw poly-polygon transparent
                 pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
 
                 break;
@@ -2139,7 +2139,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                     aRegion -= aGrf;
                 else
                     bGrfBackgrdAlreadyDrawn = true;
-                /// loop rectangles of background region, which has to be drawn
+                // loop rectangles of background region, which has to be drawn
                 for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                 {
                     pOutDev->DrawRect( aRegion[i].SVRect() );
@@ -2150,8 +2150,8 @@ void DrawGraphic( const SvxBrushItem *pBrush,
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
-        /// OD 02.09.2002 #99657#
-        /// add parameter <bGrfBackgrdAlreadyDrawn>
+        // OD 02.09.2002 #99657#
+        // add parameter <bGrfBackgrdAlreadyDrawn>
         lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, true, bGrfNum,
                          bGrfBackgrdAlreadyDrawn );
 
@@ -2175,45 +2175,45 @@ void DrawGraphic( const SvxBrushItem *pBrush,
 */
 static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 {
-    /// local constant object of class <Size> to determine number of Twips
-    /// representing a pixel.
+    // local constant object of class <Size> to determine number of Twips
+    // representing a pixel.
     const Size aTwipToPxSize( aOut.PixelToLogic( Size( 1,1 )) );
 
-    /// local object of class <Rectangle> in Twip coordinates
-    /// calculated from given rectangle aligned to pixel centers.
+    // local object of class <Rectangle> in Twip coordinates
+    // calculated from given rectangle aligned to pixel centers.
     const Rectangle aPxCenterRect = aOut.PixelToLogic(
             aOut.LogicToPixel( io_aSwRect.SVRect() ) );
 
-    /// local constant object of class <Rectangle> representing given rectangle
-    /// in pixel.
+    // local constant object of class <Rectangle> representing given rectangle
+    // in pixel.
     const Rectangle aOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
 
-    /// calculate adjusted rectangle from pixel centered rectangle.
-    /// Due to rounding differences <aPxCenterRect> doesn't exactly represents
-    /// the Twip-centers. Thus, adjust borders by half of pixel width/height plus 1.
-    /// Afterwards, adjust calculated Twip-positions of the all borders.
+    // calculate adjusted rectangle from pixel centered rectangle.
+    // Due to rounding differences <aPxCenterRect> doesn't exactly represents
+    // the Twip-centers. Thus, adjust borders by half of pixel width/height plus 1.
+    // Afterwards, adjust calculated Twip-positions of the all borders.
     Rectangle aSizedRect = aPxCenterRect;
     aSizedRect.Left() -= (aTwipToPxSize.Width()/2 + 1);
     aSizedRect.Right() += (aTwipToPxSize.Width()/2 + 1);
     aSizedRect.Top() -= (aTwipToPxSize.Height()/2 + 1);
     aSizedRect.Bottom() += (aTwipToPxSize.Height()/2 + 1);
 
-    /// adjust left()
+    // adjust left()
     while ( (aOut.LogicToPixel(aSizedRect)).Left() < aOrgPxRect.Left() )
     {
         ++aSizedRect.Left();
     }
-    /// adjust right()
+    // adjust right()
     while ( (aOut.LogicToPixel(aSizedRect)).Right() > aOrgPxRect.Right() )
     {
         --aSizedRect.Right();
     }
-    /// adjust top()
+    // adjust top()
     while ( (aOut.LogicToPixel(aSizedRect)).Top() < aOrgPxRect.Top() )
     {
         ++aSizedRect.Top();
     }
-    /// adjust bottom()
+    // adjust bottom()
     while ( (aOut.LogicToPixel(aSizedRect)).Bottom() > aOrgPxRect.Bottom() )
     {
         --aSizedRect.Bottom();
@@ -2226,25 +2226,25 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &a
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
-    /// check Left()
+    // check Left()
     --aSizedRect.Left();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect.Left() >= (aTestNewPxRect.Left()+1),
             "Error in lcl_AlignRectToPixelSize(..): Left() not correct adjusted");
     ++aSizedRect.Left();
-    /// check Right()
+    // check Right()
     ++aSizedRect.Right();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect.Right() <= (aTestNewPxRect.Right()-1),
             "Error in lcl_AlignRectToPixelSize(..): Right() not correct adjusted");
     --aSizedRect.Right();
-    /// check Top()
+    // check Top()
     --aSizedRect.Top();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect.Top() >= (aTestNewPxRect.Top()+1),
             "Error in lcl_AlignRectToPixelSize(..): Top() not correct adjusted");
     ++aSizedRect.Top();
-    /// check Bottom()
+    // check Bottom()
     ++aSizedRect.Bottom();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect.Bottom() <= (aTestNewPxRect.Bottom()-1),
@@ -3120,24 +3120,24 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
                 if(OUTDEV_WINDOW == pGlobalShell->GetOut()->GetOutDevType())
                 {
-                    /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
-                    /// 2nd parameter is no longer <const> and will be set to the
-                    /// rectangle the virtual output device is calculated from <aPaintRect>,
-                    /// if the virtual output is used.
+                    // OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
+                    // 2nd parameter is no longer <const> and will be set to the
+                    // rectangle the virtual output device is calculated from <aPaintRect>,
+                    // if the virtual output is used.
                     pVout->Enter( pSh, aPaintRect, !bNoVirDev );
 
-                    /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
-                    /// Thus, all objects overlapping on pixel level with the unadjusted
-                    /// paint rectangle will be considered in the paint.
+                    // OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
+                    // Thus, all objects overlapping on pixel level with the unadjusted
+                    // paint rectangle will be considered in the paint.
                     lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
                 }
 
                 // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
                 pVout->SetOrgRect( aPaintRect );
 
-                /// OD 29.08.2002 #102450#
-                /// determine background color of page for <PaintLayer> method
-                /// calls, paint <hell> or <heaven>
+                // OD 29.08.2002 #102450#
+                // determine background color of page for <PaintLayer> method
+                // calls, paint <hell> or <heaven>
                 const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
 
                 pPage->PaintBaBo( aPaintRect, pPage, sal_True );
@@ -3191,7 +3191,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
-                    /// OD 29.08.2002 #102450# - add 3rd parameter
+                    // OD 29.08.2002 #102450# - add 3rd parameter
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
                                             pPrintData,
@@ -4218,7 +4218,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( rOutRect.Top() + nHeight );
                     aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
@@ -4255,7 +4255,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( rOutRect.Bottom() - nHeight );
                     aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
@@ -4292,7 +4292,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( rOutRect.Bottom() - nHeight);
                     aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
@@ -4329,7 +4329,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( rOutRect.Top() + nHeight );
                     aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
@@ -4430,12 +4430,12 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         }
     }
 
-    /// OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
-    ///     be drawn or only two shadow rectangles beside the frame.
-    ///     draw full shadow rectangle, if frame background is drawn transparent.
-    ///     Status Quo:
-    ///         SwLayoutFrm can have transparent drawn backgrounds. Thus,
-    ///         "asked" their frame format.
+    // OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
+    //     be drawn or only two shadow rectangles beside the frame.
+    //     draw full shadow rectangle, if frame background is drawn transparent.
+    //     Status Quo:
+    //         SwLayoutFrm can have transparent drawn backgrounds. Thus,
+    //         "asked" their frame format.
     const bool bDrawFullShadowRectangle =
             ( IsLayoutFrm() &&
               (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
@@ -5289,6 +5289,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         rAttrs.SetGetCacheLine( sal_False );
     }
 }
+
 /*      Special implementation because of the footnote line.
 |*      Currently only the top frame needs to be taken into account.
 |*      Other lines and shadows are set aside.
@@ -6237,8 +6238,8 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     const SvxBrushItem* pItem;
     const XFillStyleItem* pFillStyleItem;
     const XFillGradientItem* pFillGradientItem;
-    /// OD 05.09.2002 #102912#
-    /// temporary background brush for a fly frame without a background brush
+    // OD 05.09.2002 #102912#
+    // temporary background brush for a fly frame without a background brush
     SvxBrushItem* pTmpBackBrush = 0;
     const Color* pCol;
     SwRect aOrigBackRect;
@@ -6327,10 +6328,10 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 if ( pPage->GetSortedObjs() )
                     ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
 
-                /// OD 06.08.2002 #99657# - determine, if background transparency
-                ///     have to be considered for drawing.
-                ///     --> Status Quo: background transparency have to be
-                ///        considered for fly frames
+                // OD 06.08.2002 #99657# - determine, if background transparency
+                //     have to be considered for drawing.
+                //     --> Status Quo: background transparency have to be
+                //        considered for fly frames
                 const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
                 if (!pFillStyleItem || pFillStyleItem->GetValue() != XFILL_GRADIENT || !pFillGradientItem)
                 {
@@ -6342,10 +6343,10 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                             if( !aRegion[i].HasArea() )
                                 continue;
                         }
-                        /// OD 06.08.2002 #99657# - add 6th parameter to indicate, if
-                        ///     background transparency have to be considered
-                        ///     Set missing 5th parameter to the default value GRFNUM_NO
-                        ///         - see declaration in /core/inc/frmtool.hxx.
+                        // OD 06.08.2002 #99657# - add 6th parameter to indicate, if
+                        //     background transparency have to be considered
+                        //     Set missing 5th parameter to the default value GRFNUM_NO
+                        //         - see declaration in /core/inc/frmtool.hxx.
                         if (IsTxtFrm() || !bOnlyTxtBackground)
                             ::DrawGraphic( pItem, pFillStyleItem, pFillGradientItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
                                     bConsiderBackgroundTransparency );
@@ -6364,8 +6365,8 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             bLowMode = bLowerMode ? sal_True : sal_False;
     }
 
-    /// OD 05.09.2002 #102912#
-    /// delete temporary background brush.
+    // OD 05.09.2002 #102912#
+    // delete temporary background brush.
     delete pTmpBackBrush;
 
     //Now process lower and his neighbour.
@@ -7352,7 +7353,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
-        /// OD 30.08.2002 #102450# - add 3rd parameter
+        // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false),
                           &aSwRedirector );

@@ -3375,8 +3375,7 @@ void GetSpacingValuesOfFrm( const SwFrm& rFrm,
     }
 }
 
-/** method to get the content of the table cell, skipping content from nested tables
-*/
+/// get the content of the table cell, skipping content from nested tables
 const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell )
 {
     const SwCntntFrm* pCntnt = rCell.ContainsCntnt();
@@ -3399,8 +3398,7 @@ const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell )
     return pCntnt;
 }
 
-/** Can be used to check if a frame has been deleted
- */
+/// Can be used to check if a frame has been deleted
 bool SwDeletionChecker::HasBeenDeleted()
 {
     if ( !mpFrm || !mpRegIn )
