@@ -277,59 +277,64 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->mergeTopMarks();
 
     // Write the anchored frame if any
-    // Make a copy and clear the original early, as this method is called
-    // recursively for in-frame paragraphs
-    std::vector<sw::Frame> aParentFrames = m_aParentFrames;
-    m_aParentFrames.clear();
-    for (size_t i = 0; i < aParentFrames.size(); ++i)
+    // Word can't handle nested text boxes, so write them on the same level.
+    ++m_nTextFrameLevel;
+    if( m_nTextFrameLevel == 1 )
     {
-        sw::Frame* pParentFrame = &aParentFrames[i];
-        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
+        {
+            sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
-        m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
-        m_pSerializer->startElementNS(XML_mc, XML_Choice,
-                XML_Requires, "wps",
-                FSEND);
-        /** FDO#71834 :
-           We should probably be renaming the function
-           switchHeaderFooter to something like SaveRetrieveTableReference.
-           Save the table reference attributes before calling WriteDMLTextFrame,
-           otherwise the StartParagraph function will use the previous existing
-           table reference attributes since the variable is being shared.
-        */
-        switchHeaderFooter(true,1);
-        /** Save the table info's before writing the shape
-            as there might be a new table that might get
-            spawned from within the VML & DML block and alter
-            the contents.
-        */
-        ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
-        //Reset the table infos after saving.
-        m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+            m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+            m_pSerializer->startElementNS(XML_mc, XML_Choice,
+                    XML_Requires, "wps",
+                    FSEND);
+            /** FDO#71834 :
+               We should probably be renaming the function
+               switchHeaderFooter to something like SaveRetrieveTableReference.
+               Save the table reference attributes before calling WriteDMLTextFrame,
+               otherwise the StartParagraph function will use the previous existing
+               table reference attributes since the variable is being shared.
+            */
+            switchHeaderFooter(true,1);
+            /** Save the table info's before writing the shape
+                as there might be a new table that might get
+                spawned from within the VML & DML block and alter
+                the contents.
+            */
+            ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+            //Reset the table infos after saving.
+            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
-        m_rExport.SdrExporter().writeDMLTextFrame(pParentFrame, m_anchorId++);
-        m_pSerializer->endElementNS(XML_mc, XML_Choice);
+            m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
+            m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
-        // Reset table infos, otherwise the depth of the cells will be incorrect,
-        // in case the text frame had table(s) and we try to export the
-        // same table second time.
-        m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-        //reset the tableReference.
-        switchHeaderFooter(false,0);
+            // Reset table infos, otherwise the depth of the cells will be incorrect,
+            // in case the text frame had table(s) and we try to export the
+            // same table second time.
+            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+            //reset the tableReference.
+            switchHeaderFooter(false,0);
 
-        m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-        m_rExport.SdrExporter().writeVMLTextFrame(pParentFrame);
-        /* FDO#71834 :Restore the data here after having written the Shape
-           for further processing.
-        */
-        switchHeaderFooter(false,-1);
-        m_rExport.mpTableInfo = pOldTableInfo;
+            m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+            m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
+            /* FDO#71834 :Restore the data here after having written the Shape
+               for further processing.
+            */
+            switchHeaderFooter(false,-1);
+            m_rExport.mpTableInfo = pOldTableInfo;
 
-        m_pSerializer->endElementNS(XML_mc, XML_Fallback);
-        m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+            m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+            m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
 
-        m_pSerializer->endElementNS( XML_w, XML_r );
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
+
+        m_aFramesOfParagraph.clear();
     }
+
+    --m_nTextFrameLevel;
 
     m_pSerializer->endElementNS( XML_w, XML_p );
 
@@ -3381,7 +3386,15 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
         case sw::Frame::eTxtBox:
             {
                 // The frame output is postponed to the end of the anchor paragraph
-                m_aParentFrames.push_back(sw::Frame(rFrame));
+                bool bDuplicate = false;
+                for( unsigned nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex )
+                {
+                    if( rFrame.GetFrmFmt().GetName() == m_aFramesOfParagraph[nIndex].GetFrmFmt().GetName() )
+                        bDuplicate = true;
+                }
+
+                if( !bDuplicate )
+                    m_aFramesOfParagraph.push_back(sw::Frame(rFrame));
             }
             break;
         case sw::Frame::eOle:
@@ -6320,6 +6333,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
+      m_nTextFrameLevel( 0 ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),

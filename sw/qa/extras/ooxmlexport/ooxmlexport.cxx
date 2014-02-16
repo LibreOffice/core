@@ -3236,6 +3236,18 @@ DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
+{
+    // First problem was LO crashed during export (crash test)
+
+    // Second problem was LO made file corruption, writing out nested text boxes, which can't be handled by Word.
+    // So test that all three exported text boxes are on the same level
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:t", 3);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
