@@ -1856,6 +1856,21 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8154), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx")
+{
+    // Problem was one of the two text frames was anchored to the other text frame
+    // Both frames should be anchored to the paragraph with the text "Anchor point"
+    uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+
+    xTextContent.set(getShape(2), uno::UNO_QUERY);
+    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
+    xText.set(xRange->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

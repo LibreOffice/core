@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <iostream>
+#include <set>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -1662,14 +1663,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pEndPam.reset(0);
 
     // see if there are frames already anchored to this node
-    std::vector<SwFrmFmt*> aAnchoredFrames;
+    std::set<OUString> aAnchoredFrames;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
     {
         SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
         if (FLY_AT_PARA == rAnchor.GetAnchorId() &&
-                aStartPam.GetNode()->GetIndex() == rAnchor.GetCntntAnchor()->nNode.GetIndex())
-            aAnchoredFrames.push_back(pFrmFmt);
+                aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetCntntAnchor()->nNode.GetIndex() &&
+                aStartPam.End()->nNode.GetIndex() >= rAnchor.GetCntntAnchor()->nNode.GetIndex())
+            aAnchoredFrames.insert(pFrmFmt->GetName());
     }
 
     SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
@@ -1709,12 +1711,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                         aNewAnchor, *pNewFrame->GetFrmFmt() );
 
                     // also move frames anchored to us
-                    for (std::vector<SwFrmFmt*>::iterator i = aAnchoredFrames.begin(); i != aAnchoredFrames.end(); ++i)
+                    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
                     {
-                        // copy the anchor to the next paragraph
-                        SwFmtAnchor aAnchor((*i)->GetAnchor());
-                        aAnchor.SetAnchor(aMovePam.Start());
-                        m_pImpl->m_pDoc->SetAttr(aAnchor, *(*i));
+                        SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
+                        if( aAnchoredFrames.find( pFrmFmt->GetName() ) != aAnchoredFrames.end() )
+                        {
+                            // copy the anchor to the next paragraph
+                            SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
+                            aAnchor.SetAnchor(aMovePam.Start());
+                            m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrmFmt);
+                        }
                     }
                 }
             }
