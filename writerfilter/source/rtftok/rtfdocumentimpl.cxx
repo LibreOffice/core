@@ -73,7 +73,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 {
     static const Id aBorderIds[] =
     {
-        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft, NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
+        NS_ooxml::LN_CT_PBdr_top, NS_ooxml::LN_CT_PBdr_left, NS_ooxml::LN_CT_PBdr_bottom, NS_ooxml::LN_CT_PBdr_right
     };
 
     return aBorderIds[nIndex];

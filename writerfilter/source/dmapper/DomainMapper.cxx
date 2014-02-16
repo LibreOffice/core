@@ -1091,10 +1091,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_PrBase_pBdr: //paragraph border
         resolveSprmProps(*this, rSprm);
     break;
-    case NS_sprm::LN_PBrcTop:   // sprmPBrcTop
-    case NS_sprm::LN_PBrcLeft:   // sprmPBrcLeft
-    case NS_sprm::LN_PBrcBottom:   // sprmPBrcBottom
-    case NS_sprm::LN_PBrcRight:   // sprmPBrcRight
+    case NS_ooxml::LN_CT_PBdr_top:
+    case NS_ooxml::LN_CT_PBdr_left:
+    case NS_ooxml::LN_CT_PBdr_bottom:
+    case NS_ooxml::LN_CT_PBdr_right:
     case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
         {
             //in binary format the borders are directly provided in OOXML they are inside of properties
@@ -1109,19 +1109,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     PropertyIds eBorderDistId = PropertyIds( 0 );
                     switch( nSprmId )
                     {
-                        case NS_sprm::LN_PBrcTop:
+                        case NS_ooxml::LN_CT_PBdr_top:
                             eBorderId = PROP_TOP_BORDER;
                             eBorderDistId = PROP_TOP_BORDER_DISTANCE;
                         break;
-                        case NS_sprm::LN_PBrcLeft:
+                        case NS_ooxml::LN_CT_PBdr_left:
                             eBorderId = PROP_LEFT_BORDER;
                             eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
                         break;
-                        case NS_sprm::LN_PBrcBottom:
+                        case NS_ooxml::LN_CT_PBdr_bottom:
                             eBorderId = PROP_BOTTOM_BORDER         ;
                             eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
                         break;
-                        case NS_sprm::LN_PBrcRight:
+                        case NS_ooxml::LN_CT_PBdr_right:
                             eBorderId = PROP_RIGHT_BORDER;
                             eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
                         break;
@@ -1134,7 +1134,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) , true);
                     if(eBorderDistId)
                         rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
-                    if (nSprmId == NS_sprm::LN_PBrcRight && pBorderHandler->getShadow())
+                    if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
                     {
                         table::ShadowFormat aFormat = rContext->getShadowFromBorder(pBorderHandler->getBorderLine());
                         rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
@@ -1152,19 +1152,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
                     OSL_FAIL( "TODO: inner border is not handled");
                     break;
-                case NS_sprm::LN_PBrcLeft:   // sprmPBrcLeft
+                case NS_ooxml::LN_CT_PBdr_left:
                     eBorderId = PROP_LEFT_BORDER;
                     eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
                     break;
-                case NS_sprm::LN_PBrcRight:   // sprmPBrcRight
+                case NS_ooxml::LN_CT_PBdr_right:
                     eBorderId = PROP_RIGHT_BORDER          ;
                     eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
                     break;
-                case NS_sprm::LN_PBrcTop:   // sprmPBrcTop
+                case NS_ooxml::LN_CT_PBdr_top:
                     eBorderId = PROP_TOP_BORDER            ;
                     eBorderDistId = PROP_TOP_BORDER_DISTANCE;
                     break;
-                case NS_sprm::LN_PBrcBottom:   // sprmPBrcBottom
+                case NS_ooxml::LN_CT_PBdr_bottom:
                 default:
                     eBorderId = PROP_BOTTOM_BORDER         ;
                     eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;

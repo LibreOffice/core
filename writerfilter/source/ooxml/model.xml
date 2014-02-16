@@ -22314,10 +22314,10 @@
     </resource>
     <resource name="CT_PBdr" resource="Properties" tag="paragraph">
       <kind name="paragraph"/>
-      <element name="top" tokenid="sprm:PBrcTop"/>
-      <element name="left" tokenid="sprm:PBrcLeft"/>
-      <element name="bottom" tokenid="sprm:PBrcBottom"/>
-      <element name="right" tokenid="sprm:PBrcRight"/>
+      <element name="top" tokenid="ooxml:CT_PBdr_top"/>
+      <element name="left" tokenid="ooxml:CT_PBdr_left"/>
+      <element name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
+      <element name="right" tokenid="ooxml:CT_PBdr_right"/>
       <element name="between" tokenid="sprm:PBrcBetween"/>
       <element name="bar" tokenid="sprm:PBrcBar"/>
     </resource>
