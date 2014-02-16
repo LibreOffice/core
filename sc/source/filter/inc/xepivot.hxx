@@ -344,7 +344,7 @@ class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpPivotTable( const XclExpRoot& rRoot,
-                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache );
+                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId );
 
     /** Returns a pivot cache field. */
     const XclExpPCField* GetCacheField( sal_uInt16 nCacheIdx ) const;
@@ -422,6 +422,7 @@ private:
     SCTAB               mnOutScTab;         /// Sheet index of the output range.
     bool                mbValid;            /// true = The pivot table is valid for export.
     bool                mbFilterBtn;        /// true = DataPilot has filter button.
+    size_t              mnId;               /// Stream ID
 };
 
 // ============================================================================
