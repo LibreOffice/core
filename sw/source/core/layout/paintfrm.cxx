@@ -1754,7 +1754,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 //     Thus, to provide transparent background graphic for text frames nothing
 //     has to be coded.
 // Use align rectangle for drawing graphic
-/ Pixel-align coordinations for drawing graphic.
+// Pixel-align coordinations for drawing graphic.
 // Outsource code for drawing background of the graphic
 //     with a background color in method <lcl_DrawGraphicBackgrd>
 //     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
