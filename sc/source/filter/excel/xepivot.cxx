@@ -1243,13 +1243,14 @@ void XclExpPTField::WriteSxvdex( XclExpStream& rStrm ) const
 
 // ============================================================================
 
-XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache ) :
+XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId ) :
     XclExpRoot( rRoot ),
     mrPCache( rPCache ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
     mnOutScTab( 0 ),
     mbValid( false ),
-    mbFilterBtn( false )
+    mbFilterBtn( false ),
+    mnId( nId )
 {
     const ScRange& rOutScRange = rDPObj.GetOutRange();
     if( GetAddressConverter().ConvertRange( maPTInfo.maOutXclRange, rOutScRange, true ) )
@@ -1352,8 +1353,8 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     if( !mbValid )
         return;
     sax_fastparser::FSHelperPtr aPivotTableDefinition = rStrm.CreateOutputStream(
-            XclXmlUtils::GetStreamName( "xl/", "pivotTables/pivotTable", mnOutScTab+1),
-            XclXmlUtils::GetStreamName( "../", "pivotTables/pivotTable", mnOutScTab+1),
+            XclXmlUtils::GetStreamName( "xl/", "pivotTables/pivotTable", mnId + 1),
+            XclXmlUtils::GetStreamName( "../", "pivotTables/pivotTable", mnId + 1),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.pivotTable+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable");
@@ -1849,7 +1850,7 @@ void XclExpPivotTableManager::CreatePivotTables()
         for( size_t nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
             if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
                 if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
-                    maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) );
+                    maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache, nDPObj ) );
 }
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotCachesRecord()
