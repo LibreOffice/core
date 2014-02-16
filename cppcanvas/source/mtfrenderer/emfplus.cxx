@@ -120,22 +120,6 @@ namespace cppcanvas
 {
     namespace internal
     {
-
-#if OSL_DEBUG_LEVEL > 1
-        void dumpWords (SvStream& s, int i)
-        {
-            sal_uInt32 pos = s.Tell ();
-            sal_Int16 data;
-            SAL_INFO ("cppcanvas.emf", "EMF+ dumping words");
-            for (; i > 0; i --) {
-                s >> data;
-                SAL_INFO ("cppcanvas.emf", "EMF+\tdata: " << std::hex << data << std::dec);
-            }
-            SAL_INFO ("cppcanvas.emf", "EMF+ end dumping words");
-            s.Seek (pos);
-        }
-#endif
-
         struct EMFPPath : public EMFPObject
         {
             ::basegfx::B2DPolyPolygon    aPolygon;
@@ -454,9 +438,6 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath length: " << pathLength);
 
                             sal_uInt32 pos = s.Tell ();
-#if OSL_DEBUG_LEVEL > 1
-                            dumpWords (s, 32);
-#endif
 
                             sal_uInt32 pathHeader;
                             sal_Int32 pathPoints, pathFlags;
@@ -523,10 +504,6 @@ namespace cppcanvas
                                 SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
                             }
                         }
-                        } else {
-#if OSL_DEBUG_LEVEL > 1
-                            dumpWords (s, 1024);
-#endif
                         }
                         break;
                     }
@@ -1009,7 +986,7 @@ namespace cppcanvas
 
                         SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
 
-                        mfStream >> file;
+                        mfStream.WriteStream(file);
                         file.Flush();
                         file.Close();
 #endif
@@ -1616,10 +1593,6 @@ namespace cppcanvas
             sal_uInt32 length = pAct->GetDataSize ();
             SvMemoryStream rMF ((void*) pAct->GetData (), length, STREAM_READ);
 
-#if OSL_DEBUG_LEVEL > 2
-            SAL_INFO("cppcanvas.emf", "EMF+\tDump of EMF+ record");
-            dumpWords(rMF, length);
-#endif
             length -= 4;
 
             while (length > 0) {
@@ -2274,9 +2247,6 @@ namespace cppcanvas
                 {
                     SAL_WARN("cppcanvas.emf", "ImplRenderer::processEMFPlus: "
                             "size " << size << " > length " << length);
-#if OSL_DEBUG_LEVEL > 1
-                    dumpWords(rMF, length);
-#endif
                     length = 0;
                 }
             }

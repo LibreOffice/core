@@ -236,19 +236,6 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nL
     return bOk;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void dumpWords( SvStream& s, int i )
-{
-    sal_uInt32 pos = s.Tell();
-    sal_Int16 data;
-    for( ; i > 0; i -- ) {
-        s >> data;
-        SAL_INFO("vcl.emf", "\t\t\tdata: " << std::hex << data << std::dec);
-    }
-    s.Seek (pos);
-};
-#endif
-
 void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
 {
     if (!bEMFPlus) {
@@ -260,7 +247,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         pWMF->Seek(0);
         SvFileStream file( OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
 
-        *pWMF >> file;
+        pWMF->WriteStream(file);
         file.Flush();
         file.Close();
 
