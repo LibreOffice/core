@@ -498,13 +498,10 @@ SwLayNotify::~SwLayNotify()
                 {
                     pLay->ChgLowersProp( aPrt.SSize() );
                 }
-                //Wenn die PrtArea gewachsen ist, so ist es moeglich, dass die
-                //Kette der Untergeordneten einen weiteren Frm aufnehmen kann,
-                //mithin muss also der 'moeglicherweise passende' Invalidiert werden.
-                //Das invalidieren lohnt nur, wenn es sich beim mir bzw. meinen
-                //Uppers um eine Moveable-Section handelt.
-                //Die PrtArea ist gewachsen, wenn die Breite oder die Hoehe groesser
-                //geworden ist.
+                // If the PrtArea has been extended, it might be possible that the chain of parts
+                // can take another frame. As a result, the "possible right one" needs to be
+                // invalidated. This only pays off if this or its Uppers are moveable sections.
+                // A PrtArea has been extended if width or height are larger than before.
                 if ( (pLay->Prt().Height() > aPrt.Height() ||
                       pLay->Prt().Width()  > aPrt.Width()) &&
                      (pLay->IsMoveable() || pLay->IsFlyFrm()) )
@@ -871,7 +868,7 @@ SwCntntNotify::~SwCntntNotify()
                     pNd->SetOLESizeInvalid( sal_False );
                     //TODO/LATER: needs OnDocumentPrinterChanged
                     //xObj->OnDocumentPrinterChanged( pNd->GetDoc()->getPrinter( false ) );
-                    pFESh->CalcAndSetScale( xObj );//Client erzeugen lassen.
+                    pFESh->CalcAndSetScale( xObj ); // create client
                 }
             }
             //dito animated graphics
@@ -1516,16 +1513,15 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             break;
 
         ++nIndex;
-        // Der Endnode wird nicht mehr mitgenommen, es muss vom
-        // Aufrufenden (Section/MakeFrms()) sichergestellt sein, dass das Ende
-        // des Bereichs vor dem EndIndex liegt!
+        // Do not consider the end node. The caller (section/MakeFrms()) has to ensure that the end
+        // of this area is positioned before EndIndex!
         if ( nEndIndex && nIndex >= nEndIndex )
             break;
     }
 
     if ( pActualSection )
     {
-        //Kann passieren, dass noch eine leere (Follow-)Section uebrig geblieben ist.
+        // Might happen that an empty (Follow-)Section is left over.
         if ( !(pLay = pActualSection->GetSectionFrm())->ContainsCntnt() )
         {
             pLay->Remove();
@@ -1534,7 +1530,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         delete pActualSection;
     }
 
-    if ( bPages )       //Jetzt noch die Flys verbinden lassen.
+    if ( bPages ) // let the Flys connect to each other
     {
         if ( !bDontCreateObjects )
             AppendAllObjs( pTbl, pLayout );
@@ -1586,24 +1582,22 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             else
                 bOldFtn = sal_True;
             SwSectionFrm* pSct = pUpper->FindSctFrm();
-            // Es sind innerhalb von Fussnoten nur die Bereiche interessant,
-            // die in den Fussnoten liegen, nicht etwa die (spaltigen) Bereiche,
-            // in denen die Fussnoten(Container) liegen.
+            // Inside of footnotes only those areas are interesting that are inside of them. But
+            // not the ones (e.g. column areas) in which are the footnote containers positioned.
             // #109767# Table frame is in section, insert section in cell frame.
             if( pSct && ((pFtnFrm && !pSct->IsInFtn()) || pUpper->IsCellFrm()) )
                 pSct = NULL;
             if( pSct )
-            {   // damit der SectionFrm nicht zerstoert wird durch pTmp->MoveFwd()
+            {   // to prevent pTmp->MoveFwd from destroying the SectionFrm
                 bOldLock = pSct->IsColLocked();
                 pSct->ColLock();
             }
             else
                 bOldLock = sal_True;
 
-            // Wenn pFrm sich nicht bewegen kann, koennen wir auch niemanden
-            // auf die naechste Seite schieben. Innerhalb eines Rahmens auch
-            // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
-            // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
+            // If pFrm cannot be moved, it is not possible to move it to the next page. This applies
+            // also for frames (in the first column of a frame pFrm is moveable) and column
+            // sections of tables (also here pFrm is moveable).
             bool bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
             bool bAllowMove = !pFrm->IsInFly() && pFrm->IsMoveable() &&
                  (!pFrm->IsInTab() || pFrm->IsTabFrm() );
@@ -1616,13 +1610,12 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
                 if ( bApres )
                 {
-                    // Wir wollen, dass der Rest der Seite leer ist, d.h.
-                    // der naechste muss auf die naechste Seite wandern.
-                    // Dieser kann auch in der naechsten Spalte stehen!
+                    // The rest of this page should be empty. Thus, the following one has to move to
+                    // the next page (it might also be located in the following column).
                     OSL_ENSURE( !pTmp->HasFollow(), "Follows forbidden" );
                     pPrev = pFrm;
-                    // Wenn unser umgebender SectionFrm einen Next besitzt,
-                    // so soll dieser ebenfalls gemoved werden!
+                    // If the surrounding SectionFrm has a "next" one,
+                    // so this one needs to be moved as well.
                     pMove = pFrm->GetIndNext();
                     SwColumnFrm* pCol = (SwColumnFrm*)pFrm->FindColFrm();
                     if( pCol )
@@ -1630,16 +1623,13 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     do
                     {
                         if( pCol && !pMove )
-                        {   // Bisher haben wir keinen Nachfolger gefunden
-                            // jetzt gucken wir in die naechste Spalte
+                        {   // No successor so far, look into the next column
                             pMove = pCol->ContainsAny();
                             if( pCol->GetNext() )
                                 pCol = (SwColumnFrm*)pCol->GetNext();
                             else if( pCol->IsInSct() )
-                            {   // Wenn es keine naechste Spalte gibt, wir aber
-                                // innerhalb eines spaltigen Bereichs sind,
-                                // koennte es noch ausserhalb des Bereich
-                                // (Seiten-)Spalten geben
+                            {   // If there is no following column but we are in a column frame,
+                                // there might be (page) columns outside of it.
                                 pCol = (SwColumnFrm*)pCol->FindSctFrm()->FindColFrm();
                                 if( pCol )
                                     pCol = (SwColumnFrm*)pCol->GetNext();
@@ -1647,8 +1637,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             else
                                 pCol = NULL;
                         }
-                        // Falls hier verschrottete SectionFrms herumgammeln,
-                        // muessen diese uebersprungen werden.
+                        // skip invalid SectionFrms
                         while( pMove && pMove->IsSctFrm() &&
                                !((SwSectionFrm*)pMove)->GetSection() )
                             pMove = pMove->GetNext();
@@ -1675,8 +1664,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 else
                 {
                     OSL_ENSURE( !pTmp->IsFollow(), "Follows really forbidden" );
-                    // Bei Bereichen muss natuerlich der Inhalt auf die Reise
-                    // geschickt werden.
+                    // move the _content_ of a section frame
                     if( pMove->IsSctFrm() )
                     {
                         while( pMove && pMove->IsSctFrm() &&
@@ -1694,9 +1682,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 if( pTmp )
                 {
                     SwFrm* pOldUp = pTmp->GetFrm()->GetUpper();
-                    // MoveFwd==sal_True bedeutet, dass wir auf der gleichen
-                    // Seite geblieben sind, wir wollen aber die Seite wechseln,
-                    // sofern dies moeglich ist
+                    // MoveFwd==sal_True means that we are still on the same page.
+                    // But since we want to move if possible!
                     sal_Bool bTmpOldLock = pTmp->IsJoinLocked();
                     pTmp->LockJoin();
                     while( pTmp->MoveFwd( sal_True, sal_False, sal_True ) )
@@ -1715,12 +1702,10 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             {
                 sal_Bool bSplit;
                 SwFrm* pPrv = bApres ? pFrm : pFrm->GetPrev();
-                // Wenn in einen SectionFrm ein anderer eingefuegt wird,
-                // muss dieser aufgebrochen werden
+                // If the section frame is inserted into another one, it must be split.
                 if( pSct && rSttIdx.GetNode().IsSectionNode() )
                 {
                     bSplit = pSct->SplitSect( pFrm, bApres );
-                    // Wenn pSct nicht aufgespalten werden konnte
                     if( !bSplit && !bApres )
                     {
                         pUpper = pSct->GetUpper();
@@ -1740,8 +1725,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                         AppendAllObjs( pTbl, pUpper );
                 }
 
-                // Wenn nichts eingefuegt wurde, z.B. ein ausgeblendeter Bereich,
-                // muss das Splitten rueckgaengig gemacht werden
+                // If nothing was added (e.g. a hidden section), the split must be reversed.
                 if( bSplit && pSct && pSct->GetNext()
                     && pSct->GetNext()->IsSctFrm() )
                     pSct->MergeNext( (SwSectionFrm*)pSct->GetNext() );
@@ -1758,9 +1742,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             if( !bOldLock )
             {
                 pSct->ColUnlock();
-                // Zum Beispiel beim Einfuegen von gelinkten Bereichen,
-                // die wiederum Bereiche enthalten, kann pSct jetzt leer sein
-                // und damit ruhig zerstoert werden.
+                // pSct might be empty (e.g. when inserting linked section containing further
+                // sections) and can be destroyed in such cases.
                 if( !pSct->ContainsCntnt() )
                 {
                     pSct->DelEmpty( sal_True );
@@ -1798,10 +1781,9 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
         rLR = SvxLRSpaceItem ( RES_LR_SPACE );
     }
 
-    //Achtung: Die USHORTs fuer die gecache'ten Werte werden absichtlich
-    //nicht initialisiert!
+    // Caution: The USHORTs for the cached values are not initialized by intention!
 
-    //Muessen alle einmal berechnet werden:
+    // everything needs to be calculated at least once:
     bTopLine = bBottomLine = bLeftLine = bRightLine =
     bTop     = bBottom     = bLine   = sal_True;
 
@@ -1819,13 +1801,10 @@ SwBorderAttrs::~SwBorderAttrs()
     ((SwModify*)pOwner)->SetInCache( sal_False );
 }
 
-/*
-|*      Die Calc-Methoden errechnen zusaetzlich zu den
-|*      von den Attributen vorgegebenen Groessen einen Sicherheitsabstand.
-|*      der Sicherheitsabstand wird nur einkalkuliert, wenn Umrandung und/oder
-|*      Schatten im Spiel sind; er soll vermeiden, dass aufgrund der
-|*      groben physikalischen Gegebenheiten Raender usw. uebermalt werden.
-|*/
+/* All calc methods calculate a safety distance in addition to the values given by the attributes.
+ * This safety distance is only added when working with borders and/or shadows to prevent that
+ * e.g. borders are painted over.
+ */
 
 void SwBorderAttrs::_CalcTop()
 {
@@ -1932,12 +1911,10 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     return nLeft;
 }
 
-/*
-|*  Beschreibung        Berechnung der Groessen fuer Umrandung und Schatten.
-|*                      Es kann auch ohne Linien ein Abstand erwuenscht sein,
-|*                      dieser wird  dann nicht vom Attribut sondern hier
-|*                      beruecksichtigt (bBorderDist, z.B. fuer Zellen).
-|*/
+/* Calculated values for borders and shadows.
+ * It might be that a distance is wanted even without lines. This will be
+ * considered here and not by the attribute (e.g. bBorderDist for cells).
+ */
 
 void SwBorderAttrs::_CalcTopLine()
 {
@@ -1982,21 +1959,15 @@ void SwBorderAttrs::_IsLine()
     bLine = sal_False;
 }
 
-/*
-|*      Die Umrandungen benachbarter Absaetze werden nach folgendem
-|*      Algorithmus zusammengefasst:
-|*
-|*      1. Die Umrandung oben faellt weg, wenn der Vorgaenger dieselbe
-|*         Umrandung oben aufweist und 3. Zutrifft.
-|*         Zusaetzlich muss der Absatz mindestens rechts oder links oder
-|*         unten eine Umrandung haben.
-|*      2. Die Umrandung unten faellt weg, wenn der Nachfolger dieselbe
-|*         Umrandung untern aufweist und 3. Zustrifft.
-|*         Zusaetzlich muss der Absatz mindestens rechts oder links oder
-|*         oben eine Umrandung haben.
-|*      3. Die Umrandungen links und rechts vor Vorgaenger bzw. Nachfolger
-|*         sind identisch.
-|*/
+/* The borders of neighboring paragraphs are condensed by following algorithm:
+ *
+ * 1. No top border if the predecessor has the same top border and (3) applies.
+ *    In addition, the paragraph needs to have a border at at least one side (left/right/bottom).
+ * 2. No bottom border if the successor has the same bottom border and (3) applies.
+ *    In addition, the paragraph needs to have a border at at least one side (left/right/top).
+ * 3. The borders on the left and right side are identical between the current and the
+ *    pre-/succeeding paragraph.
+ */
 
 inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
 {
@@ -2202,7 +2173,7 @@ const SdrObject *SwOrderIter::Top()
         if ( pObjs->Count() )
         {
             sal_uInt32 nTopOrd = 0;
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
+            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
@@ -2229,7 +2200,7 @@ const SdrObject *SwOrderIter::Bottom()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
+            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
@@ -2257,7 +2228,7 @@ const SdrObject *SwOrderIter::Next()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
+            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
@@ -2285,7 +2256,7 @@ const SdrObject *SwOrderIter::Prev()
         if ( pObjs->Count() )
         {
             sal_uInt32 nOrd = 0;
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
+            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
@@ -2303,24 +2274,19 @@ const SdrObject *SwOrderIter::Prev()
     return pCurrent;
 }
 
-//Unterstruktur eines LayoutFrms fuer eine Aktion aufheben und wieder
-//restaurieren.
-//Neuer Algorithmus: Es ist unuetz jeden Nachbarn einzeln zu betrachten und
-//die Pointer sauber zu setzen (Upper, Nachbarn, usw.)
-//Es reicht vollkommen jeweils eine Einzelkette zu loesen, und mit dem
-//Letzen der Einzelkette nachzuschauen ob noch eine weitere Kette
-//angeheangt werden muss. Es brauchen nur die Pointer korrigiert werden,
-//die zur Verkettung notwendig sind. So koennen Beipspielsweise die Pointer
-//auf die Upper auf den alten Uppern stehenbleiben. Korrigiert werden die
-//Pointer dann im RestoreCntnt. Zwischenzeitlich ist sowieso jeder Zugriff
-//verboten.
-//Unterwegs werden die Flys bei der Seite abgemeldet.
-
+/// Keep and restore the substructure of a layout frame for an action.
+// New algorithm:
+//   Do not look at each neighbor one by one to set all pointers correctly.
+//   It is sufficient to detach a part of a chain and check if another chain needs to be added
+//   when attaching it again. Only the pointers necessary for the chain connection need to be
+//   adjusted. The correction happens in RestoreCntnt(). In between all access is restricted.
+//   During this action, the Flys are detached from the page.
+//
 // #115759# - 'remove' also drawing object from page and
 // at-fly anchored objects from page
 static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 {
-    OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_RemoveFlysFromPage." );
+    OSL_ENSURE( _pFrm->GetDrawObjs(), "no DrawObjs in lcl_RemoveObjsFromPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
     for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
     {
@@ -2393,7 +2359,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
             pSav = pSav->GetUpper();
 
     if( pSav->IsInSct() )
-    { // Jetzt wird der oberste Bereich gesucht, der innerhalb von pLay ist.
+    { // search the upmost section inside of pLay
         SwFrm* pSect = pLay->FindSctFrm();
         SwFrm *pTmp = pSav;
         do
@@ -2410,9 +2376,9 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
     do
     {
         if( bGo )
-            pFloat->GetUpper()->pLower = 0;     //Die Teilkette ausklinken.
+            pFloat->GetUpper()->pLower = 0; // detach the chain part
 
-        //Das Ende der Teilkette suchen, unterwegs die Flys abmelden.
+        // search the end of the chain part, remove Flys on the way
         do
         {
             if( bGo )
@@ -2435,7 +2401,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                     }
                 }
                 else {
-                    OSL_ENSURE( !pFloat, "Neuer Float-Frame?" );
+                    OSL_ENSURE( !pFloat, "new FloatFrame?" );
                 }
             }
             if ( pFloat->GetNext()  )
@@ -2455,7 +2421,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
         } while ( pFloat );
 
-        //Die naechste Teilkette suchen und die Ketten miteinander verbinden.
+        // search next chain part and connect both chains
         SwFrm *pTmp = pFloat->FindNext();
         if( bGo )
             pFloat->mpUpper = NULL;
@@ -2469,7 +2435,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
         if ( pTmp && bGo )
         {
-            pFloat->mpNext = pTmp;           //Die beiden Ketten verbinden.
+            pFloat->mpNext = pTmp; // connect both chains
             pFloat->mpNext->mpPrev = pFloat;
         }
         pFloat = pTmp;
@@ -2483,7 +2449,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 // anchored objects to page
 static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 {
-    OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_AddFlysToPage." );
+    OSL_ENSURE( _pFrm->GetDrawObjs(), "no DrawObjs in lcl_AddObjsToPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
     for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
     {
@@ -2535,20 +2501,19 @@ static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 
 void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow )
 {
-    OSL_ENSURE( pSav && pParent, "Kein Save oder Parent fuer Restore." );
+    OSL_ENSURE( pSav && pParent, "no Save or Parent provided for RestoreCntnt." );
     SWRECTFN( pParent )
 
-    //Wenn es bereits FlowFrms unterhalb des neuen Parent gibt, so wird die
-    //Kette, beginnend mit pSav,  hinter dem letzten angehaengt.
-    //Die Teile werden kurzerhand insertet und geeignet invalidiert.
-    //Unterwegs werden die Flys der CntntFrms bei der Seite angemeldet.
+    // If there are already FlowFrms below the new parent, so add the chain (starting with pSav)
+    // after the last one. The parts are inserted and invalidated if needed.
+    // On the way, the Flys of the CntntFrms are registered at the page.
 
     SwPageFrm *pPage = pParent->FindPageFrm();
 
     if ( pPage )
-        pPage->InvalidatePage( pPage ); //Invalides Layout anmelden.
+        pPage->InvalidatePage( pPage );
 
-    //Vorgaenger festellen und die Verbindung herstellen bzw. initialisieren.
+    // determine predecessor and establish connection or initialize
     pSav->mpPrev = pSibling;
     SwFrm* pNxt;
     if ( pSibling )
@@ -2556,27 +2521,26 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         pNxt = pSibling->mpNext;
         pSibling->mpNext = pSav;
         pSibling->_InvalidatePrt();
-        ((SwCntntFrm*)pSibling)->InvalidatePage( pPage );//Invaliden Cntnt anmelden.
+        ((SwCntntFrm*)pSibling)->InvalidatePage( pPage );
         if ( ((SwCntntFrm*)pSibling)->GetFollow() )
             pSibling->Prepare( PREP_CLEAR, 0, sal_False );
     }
     else
     {   pNxt = pParent->pLower;
         pParent->pLower = pSav;
-        pSav->mpUpper = pParent;     //Schon mal setzen, sonst ist fuer das
-                                    //invalidate der Parent (z.B. ein Fly) nicht klar.
-        //Invaliden Cntnt anmelden.
+        pSav->mpUpper = pParent; // set here already, so that it is explicit when invalidating
+
         if ( pSav->IsCntntFrm() )
             ((SwCntntFrm*)pSav)->InvalidatePage( pPage );
         else
-        {   // pSav koennte auch ein leerer SectFrm sein
+        {   // pSav might be an empty SectFrm
             SwCntntFrm* pCnt = pParent->ContainsCntnt();
             if( pCnt )
                 pCnt->InvalidatePage( pPage );
         }
     }
 
-    //Der Parent muss entsprechend gegrow'ed werden.
+    // the parent needs to grow appropiately
     SwTwips nGrowVal = 0;
     SwFrm* pLast;
     do
@@ -2584,12 +2548,12 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         nGrowVal += (pSav->Frm().*fnRect->fnGetHeight)();
         pSav->_InvalidateAll();
 
-        //Jetzt die Flys anmelden, fuer TxtFrms gleich geeignet invalidieren.
+        // register Flys, if TxtFrms than also invalidate appropriately
         if ( pSav->IsCntntFrm() )
         {
             if ( pSav->IsTxtFrm() &&
                  ((SwTxtFrm*)pSav)->GetCacheIdx() != USHRT_MAX )
-                ((SwTxtFrm*)pSav)->Init();  //Ich bin sein Freund.
+                ((SwTxtFrm*)pSav)->Init();  // I am its friend
 
             if ( pPage && pSav->GetDrawObjs() )
                 ::lcl_AddObjsToPage( (SwCntntFrm*)pSav, pPage );
@@ -2603,7 +2567,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
                         ::lcl_AddObjsToPage( pBlub, pPage );
                     if( pBlub->IsTxtFrm() && ((SwTxtFrm*)pBlub)->HasFtn() &&
                          ((SwTxtFrm*)pBlub)->GetCacheIdx() != USHRT_MAX )
-                        ((SwTxtFrm*)pBlub)->Init(); //Ich bin sein Freund.
+                        ((SwTxtFrm*)pBlub)->Init(); // I am its friend
                     pBlub = pBlub->GetNextCntntFrm();
                 } while ( pBlub && ((SwLayoutFrm*)pSav)->IsAnLower( pBlub ));
             }
@@ -2651,8 +2615,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
         }
     }
     SwFrmFmt *pFmt(bOdd ? rDesc.GetRightFmt(bFirst) : rDesc.GetLeftFmt(bFirst));
-    //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben
-    //eine Leerseite einfuegen.
+    // If there is no FrmFmt for this page, add an empty page
     if ( !pFmt )
     {
         pFmt = bOdd ? rDesc.GetLeftFmt() : rDesc.GetRightFmt();
@@ -2675,10 +2638,9 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     return pRet;
 }
 
-/*      Die beiden folgenden Methoden durchsuchen rekursiv
-|*      eine Layoutstruktur und melden alle FlyFrms, die einen beliebigen Frm
-|*      innerhalb der Struktur als Anker haben bei der Seite an.
-|*/
+/* The following two methods search the layout structure recursively and
+ * register all Flys at the page that have a Frm in this structure as an anchor.
+ */
 
 static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
@@ -2689,7 +2651,7 @@ static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
         if ( pObj->ISA(SwFlyFrm) )
         {
             SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
-            //Ggf. ummelden, nicht anmelden wenn bereits bekannt.
+            // register (not if already known)
             // #i28701# - use new method <GetPageFrm()>
             SwPageFrm *pPg = pFly->IsFlyFreeFrm()
                              ? pFly->GetPageFrm() : pFly->FindPageFrm();
@@ -2740,13 +2702,13 @@ void RegistFlys( SwPageFrm *pPage, const SwLayoutFrm *pLay )
     }
 }
 
-/// Benachrichtigt den Hintergrund je nach der Veraenderung zwischen altem und neuem Rechteck.
+/// Notify the background based on the difference between old and new rectangle
 void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
              const SwRect* pOldPrt )
 {
     const SwRect aFrm( pFly->GetObjRectWithSpaces() );
     if ( rOld.Pos() != aFrm.Pos() )
-    {   //Positionsaenderung, alten und neuen Bereich invalidieren
+    {   // changed position, invalidate old and new area
         if ( rOld.HasArea() &&
              rOld.Left()+pFly->GetFmt()->GetLRSpace().GetLeft() < FAR_AWAY )
         {
@@ -2755,10 +2717,8 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         pFly->NotifyBackground( pFly->FindPageFrm(), aFrm, PREP_FLY_ARRIVE );
     }
     else if ( rOld.SSize() != aFrm.SSize() )
-    {   //Groessenaenderung, den Bereich der Verlassen wurde bzw. jetzt
-        //ueberdeckt wird invalidieren.
-        //Der Einfachheit halber wird hier bewusst jeweils ein Twip
-        //unnoetig invalidiert.
+    {   // changed size, invalidate the area that was left or is now overlapped
+        // For simplicity, we purposely invalidate a Twip even if not needed.
 
         SwViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
         if( pSh && rOld.HasArea() )
@@ -2886,9 +2846,7 @@ void Notify_Background( const SdrObject* pObj,
                         const PrepareHint eHint,
                         const sal_Bool bInva )
 {
-
-    //Wenn der Frm gerade erstmalig sinnvoll positioniert wurde, braucht der
-    //alte Bereich nicht benachrichtigt werden.
+    // If the frame was positioned correctly for the first time, do not inform the old area
     if ( eHint == PREP_FLY_LEAVE && rRect.Top() == FAR_AWAY )
          return;
 
@@ -2916,12 +2874,11 @@ void Notify_Background( const SdrObject* pObj,
         if( PREP_FLY_ARRIVE != eHint )
             lcl_CheckFlowBack( pArea, rRect );
 
-        //Es reagieren sowieso nur die auf den Anker folgenden auf den Fly, also
-        //brauchen diese nicht abgeklappert werden.
-        //Ausnahme sind ist natuerlich das LEAVE, denn der Fly koennte ja von
-        //"oben" kommen.
-        // Wenn der Anker auf der vorhergehenden Seite liegt, muss ebenfalls
-        // die gesamte Seite abgearbeitet werden. (47722)
+        // Only the Flys following this anchor are reacting. Thus, those do not
+        // need to be processed.
+        // An exception is LEAVE, since the Fly might come "from above".
+        // If the anchor is positioned on the previous page, the whole page
+        // needs to be processed (47722).
         // OD 2004-05-13 #i28701# - If the wrapping style has to be considered
         // on the object positioning, the complete area has to be processed,
         // because content frames before the anchor frame also have to consider
@@ -3006,11 +2963,9 @@ void Notify_Background( const SdrObject* pObj,
                         pFly->InvalidateSize();
                      }
                 }
-                //Flys, die ueber mir liegen muessen/mussten evtl.
-                //ausweichen, wenn sie eine automatische Ausrichtung haben.
-                //das ist unabhaengig von meinem Attribut, weil dies sich
-                //gerade geaendert haben kann und eben deshalb
-                //umformatiert wurde.
+                // Flys above myself might sidestep if they have an automatic
+                // alignment. This happens independently of my attributes since
+                // this might have been changed as well.
                 else if ( pFly->IsFlyAtCntFrm() &&
                         pObj->GetOrdNumDirect() <
                         pFly->GetVirtDrawObj()->GetOrdNumDirect() &&
@@ -3039,8 +2994,8 @@ void Notify_Background( const SdrObject* pObj,
     }
 }
 
-/// liefert bei absatzgebundenen Objekten den Upper des Ankers. Falls es sich dabei um
-/// verkettete Rahmen oder Fussnoten handelt, wird ggf. der "virtuelle" Upper ermittelt.
+/// Provides the Upper of an anchor in paragraph-bound objects. If the latter
+/// is a chained border or a footnote, the "virtual" Upper might be returne.
 const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
 {
     if( pFrm->IsTxtFrm() )
@@ -3104,10 +3059,9 @@ bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     return false;
 }
 
+/// provides the area of a frame in that no Fly from another area can overlap
 const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp )
 {
-    //Liefert die Umgebung des Frm in die kein Fly aus einer anderen
-    //Umgebung hineinragen kann.
     const sal_uInt16 nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
                         FRM_FTN  | FRM_FLY      |
                         FRM_TAB  | FRM_ROW      | FRM_CELL |
@@ -3168,9 +3122,7 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
         if ( nFlyAdd )
             nHeight += nFlyAdd;
 
-        //Der Border will natuerlich auch mitspielen, er kann leider nicht
-        //aus PrtArea und Frm errechnet werden, da diese in beliebiger
-        //Kombination ungueltig sein koennen.
+        // The border cannot be calculated based on PrtArea and Frm, since both can be invalid.
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
@@ -3309,8 +3261,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                         break;
                     }
 
-                    // bei Flys ggfs. ueber den Parent gehen wenn sie selbst
-                    // nocht nicht "formatiert" sind
+                    // for Flys go via the parent if the Fly is not yet "formatted"
                     if( !bCalcFrm && nFrmType & FRM_FLY &&
                         ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm() &&
                         FAR_AWAY == pTmpFrm->Frm().Pos().getX() &&
@@ -3337,8 +3288,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                 }
                 else
                 {
-                    // Wenn kein pPoint angegeben ist, dann reichen
-                    // wir irgendeinen raus: den ersten!
+                    // if no pPoint is provided, take the first one
                     pMinFrm = pTmpFrm;
                     break;
                 }

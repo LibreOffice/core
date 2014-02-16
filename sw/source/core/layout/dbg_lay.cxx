@@ -42,7 +42,6 @@
  * directory. The file contains lines with FrmId, function group and additional
  * information.
  *
- * Was genau protokolliert wird, kann auf folgende Arten eingestellt werden:
  * What exactly is going to be logged, can be defined as follows:
  * 1.   The static variable SwProtocol::nRecord contains the function groups
  *      which shall be logged.
@@ -55,63 +54,19 @@
  *      The member nTypes can be set to values like FRM_PAGE or FRM_SECTION and
  *      may be combined using binary OR. The default values is 0xFFFF - meaning
  *      all frame types.
-
- * 3.   In der SwImplProtocol-Klasse gibt es einen ArrayPointer auf FrmIds, die zu ueberwachen sind.
- *      Ist der Pointer Null, so werden alle Frames protokolliert, ansonsten nur Frames,
- *      die in dem Array vermerkt sind.
-
  * 3.   The SwImplProtocol class contains an ArrayPointer to FrmIds which need to be
  *      tracked. If the pointer is null, all frames will be logged; otherwise
  *      only frames of linked from the array will be logged.
  *
- * Eine Aufzeichnung in Gang zu setzen, erfordert entweder Codemanipulation, z.B. in
- * SwProtocol::Init() einen anderen Default fuer nRecord setzen oder Debuggermanipulation.
- * Im Debugger gibt verschiedene, sich anbietende Stellen:
-
  * Code changes are needed to start logging; either change the default of nRecord
  * in SwProtocol::Init() or change the debugger. There are several possible
  * places in the debugger:
-
- * 1.   In SwProtocol::Init() einen Breakpoint setzen und dort nRecord manipulieren, ggf.
- *      FrmIds eintragen, dann beginnt die Aufzeichnung bereits beim Programmstart.
-
  * 1.   Set a breakpoint in SwProtocol::Init() and manipulate nRecord there, set
-        FrmIds accordingly then start logging during program start.
-
- * 2.   Waehrend des Programmlaufs einen Breakpoint vor irgendein PROTOCOL oder PROTOCOL_ENTER-
- *      Makro setzen, dann am SwProtocol::nRecord das unterste Bit setzen (PROT_INIT). Dies
- *      bewirkt, dass die Funktionsgruppe des folgenden Makros aktiviert und in Zukunft
- *      protokolliert wird.
-
+ *      FrmIds accordingly then start logging during program start.
  * 2.   Set a breakpoint before any PROTOCOL or PROTOCOL_ENTER macro during
-        program execution, then set the lowest bit (PROT_INIT) of
-        SwProtocol::nRecord. This activates the function group of the following
-        macro and causes it to be logged in the future.
-
- * 3.   Spezialfall von 2.: Wenn man 2. in der Methode SwRootFrm::Paint(..) anwendet, werden
- *      die Aufzeichnungseinstellung aus der Datei "dbg_lay.ini" ausgelesen!
- *      In dieser INI-Datei kann es Kommentarzeilen geben, diese beginnen mit '#', dann
- *      sind die Sektionen "[frmid]", "[frmtype]" und "[record]" relevant.
- *      Nach [frmid] koennen die FrameIds der zu protokollierenden Frames folgen. Gibt es
- *      dort keine Eintraege, werden alle Frames aufgezeichnet.
- *      Nach [frmtype] koennen FrameTypen folgen, die aufgezeichnet werden sollen, da der
- *      Default hier allerdings USHRT_MAX ist, werden sowieso alle aufgezeichnet. Man kann
- *      allerdings auch Typen entfernen, in dem man ein '!' vor den Wert setzt, z.B.
- *      !0xC000 nimmt die SwCntntFrms aus der Aufzeichnung heraus.
- *      Nach [record] folgen die Funktionsgruppen, die aufgezeichnet werden sollen, Default
- *      ist hier 0, also keine. Auch hier kann man mit einem vorgestellten '!' Funktionen
- *      wieder entfernen.
- *      Hier mal ein Beispiel fuer eine INI-Datei:
- *      ------------------------------------------
- *          #Funktionen: Alle, ausser PRTAREA
- *          [record] 0xFFFFFFE !0x200
- *          [frmid]
- *          #folgende FrmIds:
- *          1 2 12 13 14 15
- *          #keine Layoutframes ausser ColumnFrms
- *          [frmtype] !0x3FFF 0x4
- *      ------------------------------------------
- *
+ *      program execution, then set the lowest bit (PROT_INIT) of
+ *      SwProtocol::nRecord. This activates the function group of the following
+ *      macro and causes it to be logged in the future.
  * 3.   There's a special case for 2: If one uses 2. in SwRootFrm::Paint(..),
  *      the log settings are taken from the file "dbg_lay.ini"!
  *      In this INI-file you can have comment lines starting with a '#'.
@@ -136,16 +91,11 @@
  *           #no layout frames, except ColumnFrms
  *           [frmtype] !0x3FFF 0x4
  *      ------------------------------------------
-
- * Wenn die Aufzeichnung erstmal laeuft, kann man in SwImplProtocol::_Record(...) mittels
- * Debugger vielfaeltige Manipulationen vornehmen, z.B. bezueglich FrameTypen oder FrmIds.
  *
-
  * As soon as the logging is in process, one can manipulate many things in
  * SwImplProtocol::_Record(...) using a debugger, especially concerning
  * frame types and FrmIds.
-
- * --------------------------------------------------*/
+ */
 
 #include "dbg_lay.hxx"
 

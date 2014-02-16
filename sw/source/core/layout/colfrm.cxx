@@ -57,14 +57,14 @@ SwColumnFrm::~SwColumnFrm()
 static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
-            "Keine Spalten zu entfernen." );
+            "no columns to remove." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
     sw_RemoveFtns( pColumn, sal_True, sal_True );
     while ( pColumn->GetNext() )
     {
         OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
-                "Nachbar von ColFrm kein ColFrm." );
+                "neighbor of ColumnFrame is no ColumnFrame." );
         pColumn = (SwColumnFrm*)pColumn->GetNext();
     }
     for ( sal_uInt16 i = 0; i < nCnt; ++i )
@@ -275,7 +275,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
                 ((SwLayoutFrm*)Lower())->Lower() &&
                 ((SwLayoutFrm*)Lower())->Lower()->IsLayoutFrm(),
-                "Gesucht: Spaltenbody (Tod oder Lebend)." );   // ColumnFrms jetzt mit BodyFrm
+                "no column body." );   // ColumnFrms contain BodyFrms
         ::RestoreCntnt( pSave, (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower(), 0, true );
     }
 }

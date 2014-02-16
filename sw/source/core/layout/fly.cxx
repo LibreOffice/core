@@ -258,7 +258,6 @@ SwFlyFrm::~SwFlyFrm()
         // OD 2004-01-19 #110582#
         DeleteCnt();
 
-        //Tschuess sagen.
         if ( GetAnchorFrm() )
             AnchorFrm()->RemoveFly( this );
     }
@@ -1935,7 +1934,7 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
         SwFmtFrmSize aSz( pFmt->GetFrmSize() );
         aSz.SetWidth( aAdjustedNewSize.Width() );
         aSz.SetHeight( aAdjustedNewSize.Height() );
-        // uebers Doc fuers Undo!
+        // go via the Doc for UNDO
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );
         return aSz.GetSize();
     }

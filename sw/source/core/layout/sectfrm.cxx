@@ -300,12 +300,12 @@ void SwSectionFrm::_Cut( sal_Bool bRemove )
 
 void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
-    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
-    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( pParent, "No parent for Paste()." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent is CntntFrm." );
+    OSL_ENSURE( pParent != this, "I'm my own parent." );
+    OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetUpper(),
-            "Bin noch irgendwo angemeldet." );
+            "I am still registered somewhere." );
 
     PROTOCOL( this, PROT_PASTE, 0, GetUpper() )
 
@@ -1675,7 +1675,6 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
             {
                 pCol = (SwLayoutFrm*)pCol->GetPrev();
                 // Is there any content?
-                // Gibt es dort Inhalt?
                 if( ((SwLayoutFrm*)pCol->Lower())->Lower() )
                 {
                     if( bJump )     // Did we skip a blank page?
