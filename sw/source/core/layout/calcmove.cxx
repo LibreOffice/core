@@ -310,9 +310,6 @@ void SwFrm::PrepareMake()
                          (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
                         break;
 
-    //MA: 24. Mar. 94, Calc would run into a _Prepare again and cause the whole chain to
-    // be run again.
-    //              pFrm->Calc();
                     pFrm->MakeAll();
                     if( IsSctFrm() && !((SwSectionFrm*)this)->GetSection() )
                         break;

@@ -713,10 +713,6 @@ SwPageDesc *SwPageFrm::FindPageDesc()
             return pDoc->GetFtnInfo().GetPageDesc( *pDoc );
     }
 
-    //6.
-    //if ( GetFmt()->GetDoc()->IsHTMLMode() )
-    //  return GetFmt()->GetDoc()->GetPageDescFromPool( RES_POOLPAGE_HTML );
-
     SwPageDesc *pRet = 0;
 
     //5.
@@ -1144,13 +1140,6 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
         }
         else
             bEmpty = false;
-
-//MA 21. Jun. 95: Kann zu testzwecken 'rein, ist aber bei zyklen durchaus
-//moeglich: Ein paar Seiten, auf der ersten 'erste Seite' anwenden,
-//rechte als folge der ersten, linke als folge der rechten, rechte als
-//folge der linken.
-//   OSL_ENSURE( pPg->GetPageDesc() == pPg->FindPageDesc(),
-//              "Seite mit falschem Descriptor." );
 
         pPg = (SwPageFrm*)pPg->GetNext();
     }

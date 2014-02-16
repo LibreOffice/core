@@ -498,9 +498,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     if ( pMd )
     {
         // Disable "multiple layout"
-        pDrawPage = pMd->GetPage(0); //pMd->AllocPage( FALSE );
-        //pMd->InsertPage( pDrawPage );
-        // end of disabling
+        pDrawPage = pMd->GetPage(0);
 
         pDrawPage->SetSize( Frm().SSize() );
     }

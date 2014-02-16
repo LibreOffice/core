@@ -1434,7 +1434,6 @@ void SwFlyAtCntFrm::RegisterAtCorrectPage()
 }
 
 // #i26791#
-//void SwFlyAtCntFrm::MakeFlyPos()
 void SwFlyAtCntFrm::MakeObjPos()
 {
     // if fly frame position is valid, nothing is to do. Thus, return

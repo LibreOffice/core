@@ -866,8 +866,6 @@ SwCntntNotify::~SwCntntNotify()
                 if ( pFESh && pNd->IsOLESizeInvalid() )
                 {
                     pNd->SetOLESizeInvalid( sal_False );
-                    //TODO/LATER: needs OnDocumentPrinterChanged
-                    //xObj->OnDocumentPrinterChanged( pNd->GetDoc()->getPrinter( false ) );
                     pFESh->CalcAndSetScale( xObj ); // create client
                 }
             }
@@ -1030,8 +1028,6 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj();
                         pFrm->AppendDrawObj( *(pNew->GetAnchoredObj( pDrawVirtObj )) );
 
-                        // for repaint, use new ActionChanged()
-                        // pDrawVirtObj->SendRepaintBroadcast();
                         pDrawVirtObj->ActionChanged();
                     }
 
