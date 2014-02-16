@@ -1561,7 +1561,7 @@ SwCursor::DoSetBidiLevelLeftRight(
             if( pSttFrm )
             {
                 sal_uInt8 nCrsrLevel = GetCrsrBidiLevel();
-                sal_Bool bForward = ! io_rbLeft;
+                bool bForward = ! io_rbLeft;
                 ((SwTxtFrm*)pSttFrm)->PrepareVisualMove( nPos, nCrsrLevel,
                                                          bForward, bInsertCrsr );
                 rIdx = nPos;

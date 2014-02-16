@@ -314,7 +314,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             SwitchVerticalToHorizontal( (SwRect&)rRect );
 
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
-        aLayoutModeModifier.Modify( sal_False );
+        aLayoutModeModifier.Modify( false );
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -330,7 +330,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
             SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
 
-            aLayoutModeModifier.Modify( sal_False );
+            aLayoutModeModifier.Modify( false );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
             bool bNoDummy = !aLine.GetNext(); // Only one empty line!
@@ -453,7 +453,7 @@ SwRect SwTxtFrm::Paint()
     return aRet;
 }
 
-sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
+bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 {
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
@@ -463,7 +463,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
         aTxtFly.SetTopRule();
         SwRect aRect;
         if( bCheck && aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
-            return sal_False;
+            return false;
         else if( pSh->GetWin() )
         {
             SwFont *pFnt;
@@ -503,7 +503,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
                 pFnt->SetVertical( 0, IsVertical() );
-                SwFrmSwapper aSwapper( this, sal_True );
+                SwFrmSwapper aSwapper( this, true );
                 SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
                 aLayoutModeModifier.Modify( IsRightToLeft() );
 
@@ -558,7 +558,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
                     aDrawInf.SetFrm( this );
                     aDrawInf.SetFont( pFnt );
-                    aDrawInf.SetSnapToGrid( sal_False );
+                    aDrawInf.SetSnapToGrid( false );
 
                     pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
                     pFnt->_DrawText( aDrawInf );
@@ -566,12 +566,12 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 delete pClip;
             }
             delete pFnt;
-            return sal_True;
+            return true;
         }
     }
     else
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
@@ -587,7 +587,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     Frm_Info aFrmInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
 
-    if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
+    if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
 #if OSL_DEBUG_LEVEL > 1
         const SwTwips nDbgY = Frm().Top();
@@ -607,7 +607,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             ((SwTxtFrm*)this)->GetFormatted( true );
             if( IsEmpty() )
             {
-                PaintEmpty( rRect, sal_False );
+                PaintEmpty( rRect, false );
                 return;
             }
             if( !HasPara() )

@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
  *                              _IsFtnNumFrm()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::_IsFtnNumFrm() const
+bool SwTxtFrm::_IsFtnNumFrm() const
 {
     const SwFtnFrm* pFtn = FindFtnFrm()->GetMaster();
     while( pFtn && !pFtn->ContainsCntnt() )
@@ -97,7 +97,7 @@ void SwTxtFrm::CalcFtnFlag( sal_Int32 nStop )//For testing the SplitFrm
 void SwTxtFrm::CalcFtnFlag()
 #endif
 {
-    bFtn = sal_False;
+    bFtn = false;
 
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( !pHints )
@@ -122,7 +122,7 @@ void SwTxtFrm::CalcFtnFlag()
                 break;
             if( GetOfst() <= nIdx )
             {
-                bFtn = sal_True;
+                bFtn = true;
                 break;
             }
         }
@@ -133,10 +133,10 @@ void SwTxtFrm::CalcFtnFlag()
  *                              CalcPrepFtnAdjust()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
+bool SwTxtFrm::CalcPrepFtnAdjust()
 {
     OSL_ENSURE( HasFtn(), "Wer ruft mich da?" );
-    SwFtnBossFrm *pBoss = FindFtnBossFrm( sal_True );
+    SwFtnBossFrm *pBoss = FindFtnBossFrm( true );
     const SwFtnFrm *pFtn = pBoss->FindFirstFtn( this );
     if( pFtn && FTNPOS_CHAPTER != GetNode()->GetDoc()->GetFtnInfo().ePos &&
         ( !pBoss->GetUpper()->IsSctFrm() ||
@@ -149,7 +149,7 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
         if ( pCont && (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
                                           (Frm().*fnRect->fnGetBottom)() ) > 0 )
         {
-            pBoss->RearrangeFtns( (Frm().*fnRect->fnGetBottom)(), sal_False,
+            pBoss->RearrangeFtns( (Frm().*fnRect->fnGetBottom)(), false,
                                   pFtn->GetAttr() );
             ValidateBodyFrm();
             ValidateFrm();
@@ -164,10 +164,10 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
             aLine.TruncLines();
             SetPara( 0 );       //Wird ggf. geloescht!
             ResetPreps();
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -372,10 +372,10 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, sal_True );
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, true );
             }
             else
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, sal_True );
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, true );
 
             nHeight += nTmp;
             if( nHeight < 0 )
@@ -474,7 +474,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
             if( nEnd >= nIdx )
             {
                 SwTxtFtn *pFtn = (SwTxtFtn*)pHt;
-                sal_Bool bEndn = pFtn->GetFtn().IsEndNote();
+                const bool bEndn = pFtn->GetFtn().IsEndNote();
 
                 if( bEndn )
                 {
@@ -485,7 +485,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                 {
                     if( !pFtnBoss )
                     {
-                        pFtnBoss = pSource->FindFtnBossFrm( sal_True );
+                        pFtnBoss = pSource->FindFtnBossFrm( true );
                         if( pFtnBoss->GetUpper()->IsSctFrm() )
                         {
                             SwSectionFrm* pSect = (SwSectionFrm*)
@@ -511,14 +511,14 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 
                 if( pFtnFrm )
                 {
-                    const bool bEndDoc = bEndn ? true : bFtnEndDoc;
+                    const bool bEndDoc = bEndn || bFtnEndDoc;
                     if( bRollBack )
                     {
                         while ( pFtnFrm )
                         {
                             pFtnFrm->SetRef( this );
                             pFtnFrm = pFtnFrm->GetFollow();
-                            SetFtn( sal_True );
+                            SetFtn( true );
                         }
                     }
                     else if( GetFollow() )
@@ -551,7 +551,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                             pFtnBoss->MoveFtns( this, pDest, pFtn );
                             bRemove = true;
                         }
-                        ((SwTxtFrm*)pDest)->SetFtn( sal_True );
+                        ((SwTxtFrm*)pDest)->SetFtn( true );
 
                         OSL_ENSURE( pDest->FindFtnBossFrm( !bEndn )->FindFtn( pDest,
                            pFtn),"SwTxtFrm::RemoveFtn: footnote ChgRef failed");
@@ -603,7 +603,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 /*************************************************************************
  *                      SwTxtFormatter::ConnectFtn()
  *************************************************************************/
-// sal_False, wenn irgendetwas schief gegangen ist.
+// false, wenn irgendetwas schief gegangen ist.
 // Es gibt eigentlich nur zwei Moeglichkeiten:
 // a) Die Ftn ist bereits vorhanden
 // => dann wird sie gemoved, wenn ein anderer pSrcFrm gefunden wurde
@@ -620,9 +620,9 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     OSL_ENSURE( !IsVertical() || !IsSwapped(),
             "SwTxtFrm::ConnectFtn with swapped frame" );
 
-    bFtn = sal_True;
-    bInFtnConnect = sal_True;   //Bloss zuruecksetzen!
-    sal_Bool bEnd = pFtn->GetFtn().IsEndNote();
+    bFtn = true;
+    bInFtnConnect = true;   //Bloss zuruecksetzen!
+    const bool bEnd = pFtn->GetFtn().IsEndNote();
 
     //
     // We want to store this value, because it is needed as a fallback
@@ -684,7 +684,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
             }
             else if( pSrcFrm != this )
                 pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
-            bInFtnConnect = sal_False;
+            bInFtnConnect = false;
             return;
         }
         else if( pSrcFrm )
@@ -705,7 +705,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
             pBoss->AppendFtn( this, pFtn );
         else if( pSrcFrm != this )
             pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
-        bInFtnConnect = sal_False;
+        bInFtnConnect = false;
         return;
     }
 
@@ -739,7 +739,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 if ( pFtnFrm->GetFollow() && nDiff > 0 )
                 {
                     SwTwips nHeight = (pCont->Frm().*fnRect->fnGetHeight)();
-                    pBoss->RearrangeFtns( nDeadLine, sal_False, pFtn );
+                    pBoss->RearrangeFtns( nDeadLine, false, pFtn );
                     ValidateBodyFrm();
                     ValidateFrm();
                     SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -747,7 +747,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                         //Damit uns nix durch die Lappen geht.
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
-                bInFtnConnect = sal_False;
+                bInFtnConnect = false;
                 return;
             }
             else
@@ -786,7 +786,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         // eingestellt werden kann.
         if( bBrutal )
         {
-            pBoss->RemoveFtn( pSrcFrm, pFtn, sal_False );
+            pBoss->RemoveFtn( pSrcFrm, pFtn, false );
             SwSaveFtnHeight *pHeight = bEnd ? NULL :
                 new SwSaveFtnHeight( pBoss, nDeadLine );
             pBoss->AppendFtn( this, pFtn );
@@ -802,7 +802,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         // Umgebung validieren, um Oszillationen zu verhindern.
         SwSaveFtnHeight aNochmal( pBoss, nDeadLine );
         ValidateBodyFrm();
-        pBoss->RearrangeFtns( nDeadLine, sal_True );
+        pBoss->RearrangeFtns( nDeadLine, true );
         ValidateFrm();
     }
     else if( pSect->IsFtnAtEnd() )
@@ -822,7 +822,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     nRstHeight = GetRstHeight();
     (void)nRstHeight;
 #endif
-    bInFtnConnect = sal_False;
+    bInFtnConnect = false;
     return;
 }
 
@@ -920,7 +920,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                     // gleichzeitig auf der Seite/Seitenspalte geben
                     if( pSct && !bAtSctEnd ) // liegt unser Container in einem (spaltigen) Bereich?
                     {
-                        SwFtnBossFrm* pTmp = pBoss->FindSctFrm()->FindFtnBossFrm( sal_True );
+                        SwFtnBossFrm* pTmp = pBoss->FindSctFrm()->FindFtnBossFrm( true );
                         SwFtnContFrm* pFtnC = pTmp->FindFtnCont();
                         if( pFtnC )
                         {
@@ -996,7 +996,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
 
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
-    OUString aFtnTxt( rFtn.GetViewNumStr( *pDoc, sal_True ));
+    OUString aFtnTxt( rFtn.GetViewNumStr( *pDoc, true ));
 
     const SwEndNoteInfo* pInfo;
     if( rFtn.IsEndNote() )
@@ -1364,14 +1364,14 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         // set the correct rotation at the footnote font
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
-            sal_True, &pItem ))
+            true, &pItem ))
             pFnt->SetVertical( ((SvxCharRotateItem*)pItem)->GetValue(),
                                 rInf.GetTxtFrm()->IsVertical() );
 
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
 
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
-            sal_True, &pItem ))
+            true, &pItem ))
             pFnt->SetBackColor( new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
     }
     else

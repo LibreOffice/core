@@ -291,7 +291,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
  *                      SwTxtFrm::FormatEmpty()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::FormatEmpty()
+bool SwTxtFrm::FormatEmpty()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
 
@@ -301,18 +301,18 @@ sal_Bool SwTxtFrm::FormatEmpty()
         0 != GetTxtNode()->GetNumRule() ||
         GetTxtNode()->HasHiddenCharAttribute( true ) ||
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
-        return sal_False;
+        return false;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
     if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
           (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
           aSet.GetRegister().GetValue() ) )
-        return sal_False;
+        return false;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( !bCollapse && ( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
         SVX_LINE_SPACE_FIX == rSpacing.GetLineSpaceRule() ||
         aSet.GetLRSpace().IsAutoFirst() ) )
-        return sal_False;
+        return false;
     else
     {
         SwTxtFly aTxtFly( this );
@@ -320,7 +320,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
         bool bFirstFlyCheck = 0 != Prt().Height();
         if ( !bCollapse && bFirstFlyCheck &&
              aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
-            return sal_False;
+            return false;
         else
         {
             SwTwips nHeight = EmptyHeight();
@@ -337,7 +337,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
             const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
 
             if( !nChg )
-                SetUndersized( sal_False );
+                SetUndersized( false );
             AdjustFrm( nChg );
 
             if( HasBlinkPor() )
@@ -348,23 +348,23 @@ sal_Bool SwTxtFrm::FormatEmpty()
             SetCacheIdx( MSHRT_MAX );
             if( !IsEmpty() )
             {
-                SetEmpty( sal_True );
+                SetEmpty( true );
                 SetCompletePaint();
             }
             if( !bCollapse && !bFirstFlyCheck &&
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
-                 return sal_False;
+                return false;
 
             // #i35635# - call method <HideAndShowObjects()>
             // to assure that objects anchored at the empty paragraph are
             // correctly visible resp. invisible.
             HideAndShowObjects();
-            return sal_True;
+            return true;
         }
     }
 }
 
-sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
+bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
 {
     const SwFrm *pFrm = this;
     rRegDiff = 0;

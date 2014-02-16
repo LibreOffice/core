@@ -148,7 +148,7 @@ void SwTxtFrm::ValidateBodyFrm()
     UNDO_SWAP( this )
 }
 
-sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
+bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 {
     SWAP_IF_NOT_SWAPPED( this )
 
@@ -168,12 +168,12 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
         if ( IsVertical() )
             SwitchHorizontalToVertical( rRect );
         UNDO_SWAP( this )
-        return sal_True;
+        return true;
     }
 
     UNDO_SWAP( this )
 
-    return sal_False;
+    return false;
 }
 
 const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
@@ -188,7 +188,7 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
     return 0;
 }
 
-sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
+bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
 {
     SWAP_IF_SWAPPED( this )
 
@@ -213,7 +213,7 @@ sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
         SwTwips nMyPos = (Frm().*fnRect->fnGetTop)();
 
         const SwPageFrm *pPage = 0;
-        sal_Bool  bOldInvaCntnt = sal_True;
+        bool bOldInvaCntnt = true;
         if ( !IsInFly() && GetNext() )
         {
             pPage = FindPageFrm();
@@ -235,7 +235,7 @@ sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
         }
 
         // The footnote area must not get larger
-        SwSaveFtnHeight aSave( FindFtnBossFrm( sal_True ), LONG_MAX );
+        SwSaveFtnHeight aSave( FindFtnBossFrm( true ), LONG_MAX );
 
         pMyFollow->CalcFtnFlag();
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFtn() )
@@ -343,16 +343,16 @@ sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
                               Frm().Top() - nMyPos ) )
         {
             UNDO_SWAP( this )
-            return sal_True;
+            return true;
         }
     }
 
     UNDO_SWAP( this )
 
-    return sal_False;
+    return false;
 }
 
-void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
+void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
 {
     if( IsUndersized() )
     {
@@ -560,7 +560,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const sal_Int32 nOffset, const sal_Int32 nEnd,
                              const sal_uInt8 nMode )
 {
-    SwFrmSwapper aSwapper( this, sal_False );
+    SwFrmSwapper aSwapper( this, false );
 
     // We got the rest of the text mass: Delete all Follows
     // DummyPortions() are a special case.
@@ -645,7 +645,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                             pFtnBoss = pFoll->FindFtnBossFrm( sal_True );
                         pFtnBoss->ChangeFtnRef( pFoll, (SwTxtFtn*)pHt, this );
                     }
-                    SetFtn( sal_True );
+                    SetFtn( true );
                 }
             }
         }
@@ -661,7 +661,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 #endif
 
     pFoll->MoveFlyInCnt( this, nStart, COMPLETE_STRING );
-    pFoll->SetFtn( sal_False );
+    pFoll->SetFtn( false );
     // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -738,7 +738,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
                             pFtnBoss = FindFtnBossFrm( sal_True );
                         pFtnBoss->ChangeFtnRef( this, (SwTxtFtn*)pHt, pNew );
                     }
-                    pNew->SetFtn( sal_True );
+                    pNew->SetFtn( true );
                 }
             }
         }
@@ -779,21 +779,21 @@ void SwTxtFrm::_SetOfst( const sal_Int32 nNewOfst )
     InvalidateSize();
 }
 
-sal_Bool SwTxtFrm::CalcPreps()
+bool SwTxtFrm::CalcPreps()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(), "SwTxtFrm::CalcPreps with swapped frame" );
     SWRECTFN( this );
 
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
-        return sal_False;
+        return false;
     const bool bPrep = pPara->IsPrep();
     const bool bPrepWidows = pPara->IsPrepWidows();
     const bool bPrepAdjust = pPara->IsPrepAdjust();
     const bool bPrepMustFit = pPara->IsPrepMustFit();
     ResetPreps();
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( bPrep && !pPara->GetReformat()->Len() )
     {
         // PREP_WIDOWS means that the orphans rule got activated in the Follow.
@@ -803,7 +803,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             if( !GetFollow() )
             {
                 OSL_ENSURE( GetFollow(), "+SwTxtFrm::CalcPreps: no credits" );
-                return sal_False;
+                return false;
             }
 
             // We need to prepare for two cases:
@@ -817,7 +817,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             {
                 if( bPrepMustFit )
                 {
-                    GetFollow()->SetJustWidow( sal_True );
+                    GetFollow()->SetJustWidow( true );
                     GetFollow()->Prepare( PREP_CLEAR );
                 }
                 else if ( bVert )
@@ -825,7 +825,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                     Frm().Width( Frm().Width() + Frm().Left() );
                     Prt().Width( Prt().Width() + Frm().Left() );
                     Frm().Left( 0 );
-                    SetWidow( sal_True );
+                    SetWidow( true );
                 }
                 else
                 {
@@ -833,7 +833,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                     SwTwips nDiff = nTmp - Frm().Height();
                     Frm().Height( nTmp );
                     Prt().Height( Prt().Height() + nDiff );
-                    SetWidow( sal_True );
+                    SetWidow( true );
                 }
             }
             else
@@ -843,7 +843,7 @@ sal_Bool SwTxtFrm::CalcPreps()
 
                 nChgHeight = (Prt().*fnRect->fnGetHeight)() - nChgHeight;
 
-                GetFollow()->SetJustWidow( sal_True );
+                GetFollow()->SetJustWidow( true );
                 GetFollow()->Prepare( PREP_CLEAR );
                 Shrink( nChgHeight );
                 SwRect &rRepaint = *(pPara->GetRepaint());
@@ -860,9 +860,8 @@ sal_Bool SwTxtFrm::CalcPreps()
                 if( 0 >= rRepaint.Width() )
                     rRepaint.Width(1);
             }
-            bRet = sal_True;
+            bRet = true;
         }
-
         else if ( bPrepAdjust )
         {
             if ( HasFtn() )
@@ -874,7 +873,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                         SwTxtLineAccess aAccess( this );
                         aAccess.GetPara()->SetPrepMustFit();
                     }
-                    return sal_False;
+                    return false;
                 }
             }
 
@@ -895,7 +894,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             // that the lines protruding at the bottom get indeed
             // truncated
             bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
-            bRet = sal_True;
+            bRet = true;
             while( !bBreak && aLine.Next() )
             {
                 bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
@@ -926,7 +925,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                     const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
                     *(pPara->GetReformat()) += aFollowRg;
                     // We should continue!
-                    bRet = sal_False;
+                    bRet = false;
                 }
             }
 
@@ -975,7 +974,7 @@ sal_Bool SwTxtFrm::CalcPreps()
 void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                              WidowsAndOrphans &rFrmBreak,
                              const sal_Int32 nStrLen,
-                             const sal_Bool bDummy )
+                             const bool bDummy )
 {
     SWAP_IF_NOT_SWAPPED( this )
 
@@ -1141,7 +1140,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
  * Else, wo don't know whether we can limit the repaint or not.
 *************************************************************************/
 
-sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
+bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
             "SwTxtFrm::FormatLine( rLine, bPrev) with unswapped frame" );
@@ -1254,31 +1253,31 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 
     // Stop!
     if( rLine.IsStop() )
-        return sal_False;
+        return false;
 
     // Absolutely another line
     if( rLine.IsNewLine() )
-        return sal_True;
+        return true;
 
     // Until the String's end?
     if (nNewStart >= GetTxtNode()->GetTxt().getLength())
-        return sal_False;
+        return false;
 
     if( rLine.GetInfo().IsShift() )
-        return sal_True;
+        return true;
 
     // Reached the Reformat's end?
     const sal_Int32 nEnd = pPara->GetReformat()->Start() +
                         pPara->GetReformat()->Len();
 
     if( nNewStart <= nEnd )
-        return sal_True;
+        return true;
 
     return 0 != *(pPara->GetDelta());
 }
 
 void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
-                        const sal_Bool bAdjust )
+                        const bool bAdjust )
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),"SwTxtFrm::_Format with unswapped frame" );
 
@@ -1377,7 +1376,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // The whole thing looks weird, but we need to make sure that
     // rLine stops at the last non-fitting line when calling IsBreakNow.
     bool bFirst  = true;
-    sal_Bool bFormat = sal_True;
+    bool bFormat = true;
 
     // The CharToLine() can also get us into the danger zone.
     // In that case we need to walk back until rLine is set
@@ -1417,10 +1416,10 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     Jump(End/Mid)Hyph: if a cutoff point disappears
  */
-    sal_Bool bJumpEndHyph  = sal_False,
-         bWatchEndHyph = sal_False,
-         bJumpMidHyph  = sal_False,
-         bWatchMidHyph = sal_False;
+    bool bJumpEndHyph  = false;
+    bool bWatchEndHyph = false;
+    bool bJumpMidHyph  = false;
+    bool bWatchMidHyph = false;
 
     const SwAttrSet& rAttrSet = GetTxtNode()->GetSwAttrSet();
     bool bMaxHyph = ( 0 !=
@@ -1447,7 +1446,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         if( pRest )
             rInf.SetRest( pRest );
         else
-            SetFieldFollow( sal_False );
+            SetFieldFollow( false );
     }
 
     /* Ad cancel criterion:
@@ -1486,7 +1485,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                 }
                 rLine.Insert( new SwLineLayout() );
                 rLine.Next();
-                bFormat = sal_True;
+                bFormat = true;
             }
         }
         if ( !bFormat && bMaxHyph &&
@@ -1500,8 +1499,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             else
             {
                 bFormat = bJumpEndHyph;
-                bWatchEndHyph = sal_False;
-                bJumpEndHyph = sal_False;
+                bWatchEndHyph = false;
+                bJumpEndHyph = false;
             }
             if ( rLine.GetCurr()->IsMidHyph() )
             {
@@ -1510,9 +1509,9 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             }
             else
             {
-                bFormat = bFormat || bJumpMidHyph;
-                bWatchMidHyph = sal_False;
-                bJumpMidHyph = sal_False;
+                bFormat |= bJumpMidHyph;
+                bWatchMidHyph = false;
+                bJumpMidHyph = false;
             }
         }
         if( bFormat )
@@ -1653,7 +1652,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 rLine.CalcDropHeight( 1 );
                 SwCharRange aTmpRange( 0, rInf.GetTxt().getLength() );
                 *(pPara->GetReformat()) = aTmpRange;
-                _Format( rLine, rInf, sal_True );
+                _Format( rLine, rInf, true );
                 // We paint everything ...
                 SetCompletePaint();
             }
@@ -1765,7 +1764,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if ( nStrLen || !FormatEmpty() )
     {
 
-        SetEmpty( sal_False );
+        SetEmpty( false );
         // In order to not get confused by nested Formats
         FormatLevel aLevel;
         if( 12 == aLevel.GetLevel() )
@@ -1814,7 +1813,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 aAccess.GetPara()->SetPrep();
                 CalcPreps();
             }
-            SetWidow( sal_False );
+            SetWidow( false );
         }
         else if( bSetOfst && IsFollow() )
         {
@@ -1834,7 +1833,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             if ( bSetOfst )
                 _SetOfst( 0 );
 
-            const sal_Bool bOrphan = IsWidow();
+            const bool bOrphan = IsWidow();
             const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
             SwTwips nFtnHeight = 0;
             if( pFtnBoss )
@@ -1862,7 +1861,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             if( bOrphan )
             {
                 ValidateFrm();
-                SetWidow( sal_False );
+                SetWidow( false );
             }
         }
         if( IsEmptyMaster() )
@@ -1902,7 +1901,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
  * force the quick formatting in the situation of issue i29062.
  *************************************************************************/
 
-sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
+bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
@@ -1921,31 +1920,31 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 #endif
 
     if( IsEmpty() && FormatEmpty() )
-        return sal_True;
+        return true;
 
     // We're very picky:
     if( HasPara() || IsWidow() || IsLocked()
         || !GetValidSizeFlag() ||
         ( ( IsVertical() ? Prt().Width() : Prt().Height() ) && IsHiddenNow() ) )
-        return sal_False;
+        return false;
 
     SwTxtLineAccess aAccess( this );
     SwParaPortion *pPara = aAccess.GetPara();
     if( !pPara )
-        return sal_False;
+        return false;
 
-    SwFrmSwapper aSwapper( this, sal_True );
+    SwFrmSwapper aSwapper( this, true );
 
     SwTxtFrmLocker aLock(this);
     SwTxtFormatInfo aInf( this, false, true );
     if( 0 != aInf.MaxHyph() )   // Respect MaxHyphen!
-        return sal_False;
+        return false;
 
     SwTxtFormatter  aLine( this, &aInf );
 
     // DropCaps are too complicated ...
     if( aLine.GetDropFmt() )
-        return sal_False;
+        return false;
 
     sal_Int32 nStart = GetOfst();
     const sal_Int32 nEnd = GetFollow()
@@ -1968,11 +1967,11 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         // Attention: This situation can occur due to FormatLevel==12. Don't panic!
         const sal_Int32 nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
-        return sal_False;
+        return false;
     }
 
     if (m_pFollow && nStart != (static_cast<SwTxtFrm*>(m_pFollow))->GetOfst())
-        return sal_False; // can be caused by e.g. Orphans
+        return false; // can be caused by e.g. Orphans
 
     // We made it!
 
@@ -1984,7 +1983,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     *(pPara->GetReformat()) = SwCharRange();
     *(pPara->GetDelta()) = 0;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

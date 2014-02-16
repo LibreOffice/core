@@ -83,8 +83,8 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
 {
     if ( pF->IsTxtFrm() )
     {
-        mnFlyAnchorOfst = ((SwTxtFrm*)pF)->GetBaseOfstForFly( sal_True );
-        mnFlyAnchorOfstNoWrap = ((SwTxtFrm*)pF)->GetBaseOfstForFly( sal_False );
+        mnFlyAnchorOfst = ((SwTxtFrm*)pF)->GetBaseOfstForFly( true );
+        mnFlyAnchorOfstNoWrap = ((SwTxtFrm*)pF)->GetBaseOfstForFly( false );
     }
     else
     {
@@ -112,8 +112,8 @@ SwFrmNotify::~SwFrmNotify()
     const bool bChgHeight =
             (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
     const bool bChgFlyBasePos = pFrm->IsTxtFrm() &&
-       ( ( mnFlyAnchorOfst != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_True ) ) ||
-         ( mnFlyAnchorOfstNoWrap != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_False ) ) );
+       ( ( mnFlyAnchorOfst != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( true ) ) ||
+         ( mnFlyAnchorOfstNoWrap != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( false ) ) );
 
     if ( pFrm->IsFlowFrm() && !pFrm->IsInFtn() )
     {

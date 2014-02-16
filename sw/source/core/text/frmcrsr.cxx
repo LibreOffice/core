@@ -265,7 +265,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if( !pFrm->HasPara() )
             return sal_False;
 
-        SwFrmSwapper aSwapper( pFrm, sal_True );
+        SwFrmSwapper aSwapper( pFrm, true );
         if ( bVert )
             nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 
@@ -367,10 +367,10 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
  * and is used by the auto-positioned frame.
  */
 
-sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
+bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 {
     if( IsHiddenNow() )
-        return sal_False;
+        return false;
 
     const sal_Int32 nOffset = rPos.nContent.GetIndex();
     SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
@@ -411,14 +411,14 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
                 aPnt2.Y() = nMaxY;
         }
         rOrig = SwRect( aPnt1, aPnt2 );
-        return sal_True;
+        return true;
     }
     else
     {
         if( !pFrm->HasPara() )
-            return sal_False;
+            return false;
 
-        SwFrmSwapper aSwapper( pFrm, sal_True );
+        SwFrmSwapper aSwapper( pFrm, true );
         if ( bVert )
             nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 
@@ -440,9 +440,9 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );
 
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 }
 
@@ -499,7 +499,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
             else
             {
                 // assure that text frame is in a horizontal layout
-                SwFrmSwapper aSwapper( pFrm, sal_True );
+                SwFrmSwapper aSwapper( pFrm, true );
                 // determine text line that contains the requested position
                 SwTxtSizeInfo aInf( pFrm );
                 SwTxtCursor aLine( pFrm, &aInf );
@@ -552,14 +552,14 @@ struct SwFillData
     void SetOrient( const sal_Int16 eNew ){ pCMS->pFill->eOrient = eNew; }
 };
 
-sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
-                    const sal_Bool bChgFrm, SwCrsrMoveState* pCMS ) const
+bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
+                    const bool bChgFrm, SwCrsrMoveState* pCMS ) const
 {
     // _GetCrsrOfst is called by GetCrsrOfst and GetKeyCrsrOfst.
-    // Never just a return sal_False.
+    // Never just a return false.
 
     if( IsLocked() || IsHiddenNow() )
-        return sal_False;
+        return false;
 
     ((SwTxtFrm*)this)->GetFormatted();
 
@@ -586,7 +586,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         {
             SwTwips nDiff = rPoint.X() - Frm().Left() - Prt().Left();
             if( nDiff > 50 || nDiff < 0 )
-                ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
+                ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
         }
     }
     else
@@ -665,7 +665,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     (Point&)rPoint = aOldPoint;
     delete pFillData;
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -787,8 +787,8 @@ public:
     inline void SetRight( const sal_Bool bNew ) { bRight = bNew; }
 };
 
-sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
-                            sal_Bool bSetInReadOnly ) const
+bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
+                        bool bSetInReadOnly ) const
 {
     // Set the RightMargin if needed
     SwSetToRightMargin aSet;
@@ -865,7 +865,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 #endif
                 // The node should not be changed
                 sal_Int32 nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
-                                                         aCharBox.Pos(), sal_False );
+                                                         aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                         "SwTxtFrm::UnitUp: illegal node change" );
@@ -875,11 +875,11 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 if( nTmpOfst >= nStart && nStart && !bSecondOfDouble )
                 {
                     nTmpOfst = nStart;
-                    aSet.SetRight( sal_True );
+                    aSet.SetRight( true );
                 }
                 pPam->GetPoint()->nContent =
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nTmpOfst );
-                return sal_True;
+                return true;
             }
 
             if ( IsFollow() )
@@ -901,7 +901,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
         if( pTmpPrev )
         {
             SwViewShell *pSh = getRootFrm()->GetCurrShell();
-            sal_Bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
+            const bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTxtFrm *pPrevPrev = pTmpPrev;
             // We skip protected frames and frames without content here
             while( pPrevPrev && ( pPrevPrev->GetOfst() == nOffs ||
@@ -930,7 +930,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // bLeft: whether the break iterator has to add or subtract from the
 //        current position
 static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nIdx,
-                              sal_Int32& nPos, sal_Bool& bRight,
+                              sal_Int32& nPos, bool& bRight,
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
@@ -985,7 +985,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         {
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
             sal_Int32 nTmpPos = nPos - nIdx;
-            sal_Bool bTmpForward = ! bRight;
+            bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
                                      nTmpCrsrLevel, nDefaultDir + 1 );
@@ -998,7 +998,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         // go forward
         else
         {
-            bRight = sal_True;
+            bRight = true;
             nCrsrLevel = nDefaultDir;
         }
 
@@ -1044,7 +1044,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         {
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
             sal_Int32 nTmpPos = nPos - nIdx;
-            sal_Bool bTmpForward = ! bRight;
+            bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
                                      nTmpCrsrLevel, nDefaultDir + 1 );
@@ -1068,14 +1068,14 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         // go backward
         else
         {
-            bRight = sal_False;
+            bRight = false;
             nCrsrLevel = nDefaultDir;
         }
     }
 }
 
 void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
-                                  sal_Bool& bForward, sal_Bool bInsertCrsr )
+                                  bool& bForward, bool bInsertCrsr )
 {
     if( IsEmpty() || IsHiddenNow() )
         return;
@@ -1182,8 +1182,8 @@ void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
  *                      SwTxtFrm::_UnitDown()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
-                            sal_Bool bSetInReadOnly ) const
+bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
+                         bool bSetInReadOnly ) const
 {
 
     if ( IsInTab() &&
@@ -1234,7 +1234,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                     aLine.NextLine();
 
                 sal_Int32 nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
-                                 aCharBox.Pos(), sal_False );
+                                 aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                     "SwTxtFrm::UnitDown: illegal node change" );
@@ -1249,7 +1249,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 if ( IsVertical() )
                     ((SwTxtFrm*)this)->SwapWidthAndHeight();
 
-                return sal_True;
+                return true;
             }
             if( 0 != ( pTmpFollow = GetFollow() ) )
             {   // Skip protected follows

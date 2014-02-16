@@ -96,65 +96,65 @@ class SwTxtFrm: public SwCntntFrm
     void CalcLineSpace();
 
     // Wird nur in Format gerufen:
-    void AdjustFrm( const SwTwips nChgHeight, sal_Bool bHasToFit = sal_False );
+    void AdjustFrm( const SwTwips nChgHeight, bool bHasToFit = false );
 
     // wertet in Format() die Preps aus.
-    sal_Bool CalcPreps();
-    void PrepWidows( const sal_uInt16 nNeed, sal_Bool bNotify = sal_True );
+    bool CalcPreps();
+    void PrepWidows( const sal_uInt16 nNeed, bool bNotify = true );
     void _InvalidateRange( const SwCharRange &, const long = 0);
     inline void InvalidateRange( const SwCharRange &, const long = 0);
 
     // WidowsAndOrphans, AdjustFrm, AdjustFollow
     void FormatAdjust( SwTxtFormatter &rLine, WidowsAndOrphans &rFrmBreak,
-                       const sal_Int32 nStrLen, const sal_Bool bDummy );
+                       const sal_Int32 nStrLen, const bool bDummy );
 
-    sal_Bool bLocked        : 1;        // im Format?
-    sal_Bool bFormatted     : 1;        // nach Format auf sal_True
-    sal_Bool bWidow         : 1;        // sind wir ein Widow
-    sal_Bool bJustWidow     : 1;        // haben wir soeben Widow angefordert
-    sal_Bool bEmpty         : 1;        // sind wir ein leerer Absatz
-    sal_Bool bInFtnConnect  : 1;        // Steht gerade im Connect
-    sal_Bool bFtn           : 1;        // Hat mindestens eine Fussnote
-    sal_Bool bRepaint       : 1;        // TxtFrm: Repaint steht zur Abholung bereit
-    sal_Bool bBlinkPor      : 1;        // enthaelt Blink-Portions
-    sal_Bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
-    sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
-    sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
+    bool bLocked        : 1;        // im Format?
+    bool bFormatted     : 1;        // nach Format auf true
+    bool bWidow         : 1;        // sind wir ein Widow
+    bool bJustWidow     : 1;        // haben wir soeben Widow angefordert
+    bool bEmpty         : 1;        // sind wir ein leerer Absatz
+    bool bInFtnConnect  : 1;        // Steht gerade im Connect
+    bool bFtn           : 1;        // Hat mindestens eine Fussnote
+    bool bRepaint       : 1;        // TxtFrm: Repaint steht zur Abholung bereit
+    bool bBlinkPor      : 1;        // enthaelt Blink-Portions
+    bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
+    bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
+    bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
     // OD 14.03.2003 #i11760# - flag to control, if follow is formatted in
     // method <CalcFollow(..)>.
     // E.g., avoid formatting of follow, if method <SwLayoutFrm::FormatWidthCols(..)>
     // is running.
-    sal_Bool mbFollowFormatAllowed : 1;
+    bool mbFollowFormatAllowed : 1;
 
     void ResetPreps();
-    inline void Lock() { bLocked = sal_True; }
-    inline void Unlock() { bLocked = sal_False; }
-    inline void SetFormatted( const sal_Bool bNew ) { bFormatted = bNew; }
-    inline void SetWidow( const sal_Bool bNew ) { bWidow = bNew; }
-    inline void SetJustWidow( const sal_Bool bNew ) { bJustWidow = bNew; }
-    inline void SetEmpty( const sal_Bool bNew ) { bEmpty = bNew; }
-    inline void SetFieldFollow( const sal_Bool bNew ) { bFieldFollow = bNew; }
+    inline void Lock() { bLocked = true; }
+    inline void Unlock() { bLocked = false; }
+    inline void SetFormatted( const bool bNew ) { bFormatted = bNew; }
+    inline void SetWidow( const bool bNew ) { bWidow = bNew; }
+    inline void SetJustWidow( const bool bNew ) { bJustWidow = bNew; }
+    inline void SetEmpty( const bool bNew ) { bEmpty = bNew; }
+    inline void SetFieldFollow( const bool bNew ) { bFieldFollow = bNew; }
 
-    sal_Bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
+    bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
 
     // Wechselt den Frame oder auch nicht (vgl. FlyCnt)
-    sal_Bool _GetCrsrOfst(SwPosition *pPos, const Point &rPoint,
-                      const sal_Bool bChgFrm, SwCrsrMoveState* = 0 ) const;
+    bool _GetCrsrOfst(SwPosition *pPos, const Point &rPoint,
+                      const bool bChgFrm, SwCrsrMoveState* = 0 ) const;
     void FillCrsrPos( SwFillData &rFill ) const;
 
     // formatiert genau eine Zeile ...
-    sal_Bool FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev );
+    bool FormatLine( SwTxtFormatter &rLine, const bool bPrev );
 
     // Um Stack einzusparen aufgeteilt ...
     // _Format ruft _Format mit Parametern
     void _Format( SwParaPortion *pPara );
     void _Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
-                  const sal_Bool bAdjust = sal_False );
+                  const bool bAdjust = false );
     void FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf );
 
     // formatiert den Follow und sorgt fuer die Entsorgung bei Orphans
-    sal_Bool CalcFollow(  const sal_Int32 nTxtOfst );
+    bool CalcFollow(  const sal_Int32 nTxtOfst );
 
     // korrigiert die Stelle ab der formatiert werden muss.
     sal_Int32 FindBrk(const OUString &rTxt, const sal_Int32 nStart,
@@ -164,26 +164,26 @@ class SwTxtFrm: public SwCntntFrm
     SwTwips _GetFtnFrmHeight() const;
 
     // Aus CalcPreps ausgelagert.
-    sal_Bool CalcPrepFtnAdjust();
+    bool CalcPrepFtnAdjust();
 
     // Fuer Ftn und WidOrp: Zwangsvalidierung
     void ValidateFrm();
     void ValidateBodyFrm();
 
-    sal_Bool _GetDropRect( SwRect &rRect ) const;
+    bool _GetDropRect( SwRect &rRect ) const;
 
     void SetPara( SwParaPortion *pNew, bool bDelete = true );
 
-    sal_Bool _IsFtnNumFrm() const;
+    bool _IsFtnNumFrm() const;
 
     // 6995: Formatinformationen auffrischen
-    sal_Bool FormatQuick( bool bForceQuickFormat );
+    bool FormatQuick( bool bForceQuickFormat );
 
     // Opt: Leere Absaetze formatieren
-    sal_Bool FormatEmpty();
+    bool FormatEmpty();
     SwTwips EmptyHeight() const;
     // Opt: Leere Absaetze painten
-    sal_Bool PaintEmpty( const SwRect &, sal_Bool bCheck ) const;
+    bool PaintEmpty( const SwRect &, bool bCheck ) const;
 
     void ChgThisLines();//Muss immer gerufen werden, wenn sich die Zeilenazahl
                         //veraendert haben kann.
@@ -234,7 +234,7 @@ public:
     virtual sal_Bool   GetCharRect( SwRect& rRect, const SwPosition& rPos,
                                 SwCrsrMoveState* pCMS = 0 ) const;
     // Eine etwas abgespeckte GetCharRect-Version fuer autopositionierte Rahmen
-    sal_Bool GetAutoPos( SwRect &, const SwPosition& ) const;
+    bool GetAutoPos( SwRect &, const SwPosition& ) const;
 
     /** determine top of line for given position in the text frame
 
@@ -265,14 +265,14 @@ public:
     //gesetzten Textbuffers zurueck, welcher der durch aPoint
     //gegebenen Position innerhalb der SSize des Layout am
     //naechsten ist. Wenn der SPoint ausserhalb der SSize liegt,
-    //liefert die Funktion sal_False, sal_True sonst.
+    //liefert die Funktion false, true sonst.
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
                                   SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).
-    inline  sal_Bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
-            { return _GetCrsrOfst( pPos, rPoint, sal_False ); }
+    inline bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
+            { return _GetCrsrOfst( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
@@ -289,15 +289,15 @@ public:
                             sal_Bool bSetInReadOnly = sal_False  ) const;
     virtual sal_Bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
                             sal_Bool bSetInReadOnly = sal_False ) const;
-    sal_Bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
-    sal_Bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
+    bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
+                            bool bSetInReadOnly = false ) const;
+    bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
+                            bool bSetInReadOnly = false ) const;
 
     // Prepares the cursor position for a visual cursor move (BiDi).
     // The behaviour is different for insert and overwrite cursors
     void PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
-                            sal_Bool& bRight, sal_Bool bInsertCrsr );
+                            bool& bRight, bool bInsertCrsr );
 
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const sal_Int32 nTxtPos );
@@ -311,7 +311,7 @@ public:
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
     SwTxtFrm&   GetFrmAtOfst( const sal_Int32 nOfst );
     // Wenn es einen Follow gibt und wir selbst keinen Text enthalten:
-    inline sal_Bool IsEmptyMaster() const
+    inline bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
     // Liefert den zu bearbeitenden Textausschnitt zurueck (inline, s.u.)
@@ -362,27 +362,27 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtFrm)
 
     // Locking
-    inline sal_Bool IsLocked()      const { return bLocked;     }
-    inline sal_Bool IsFormatted()   const { return bFormatted;  }
+    inline bool IsLocked()      const { return bLocked;     }
+    inline bool IsFormatted()   const { return bFormatted;  }
 
-    inline sal_Bool IsWidow()       const { return bWidow;      }
-    inline sal_Bool IsJustWidow()   const { return bJustWidow;  }
-    inline sal_Bool IsEmpty()       const { return bEmpty;      }
-    inline sal_Bool HasFtn()        const { return bFtn;        }
-    inline sal_Bool IsInFtnConnect()const { return bInFtnConnect;}
-    inline sal_Bool IsFieldFollow() const { return bFieldFollow;}
+    inline bool IsWidow()       const { return bWidow;      }
+    inline bool IsJustWidow()   const { return bJustWidow;  }
+    inline bool IsEmpty()       const { return bEmpty;      }
+    inline bool HasFtn()        const { return bFtn;        }
+    inline bool IsInFtnConnect()const { return bInFtnConnect;}
+    inline bool IsFieldFollow() const { return bFieldFollow;}
 
     inline void SetRepaint() const;
     inline void ResetRepaint() const;
-    inline sal_Bool HasRepaint() const { return bRepaint; }
+    inline bool HasRepaint() const { return bRepaint; }
     inline void SetBlinkPor() const;
     inline void ResetBlinkPor() const;
-    inline sal_Bool HasBlinkPor() const { return bBlinkPor; }
+    inline bool HasBlinkPor() const { return bBlinkPor; }
     inline void SetAnimation() const
-        { ( (SwTxtFrm*)this )->bHasAnimation = sal_True; }
-    inline sal_Bool HasAnimation() const { return bHasAnimation; }
+        { ( (SwTxtFrm*)this )->bHasAnimation = true; }
+    inline bool HasAnimation() const { return bHasAnimation; }
 
-    inline sal_Bool IsSwapped() const { return bIsSwapped; }
+    inline bool IsSwapped() const { return bIsSwapped; }
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
 #ifdef DBG_UTIL
@@ -392,7 +392,7 @@ public:
 #endif
 
     // Hidden
-    sal_Bool IsHiddenNow() const;       // bHidden && pOut == pPrt
+    bool IsHiddenNow() const;       // bHidden && pOut == pPrt
     void HideHidden();              // Anhaengsel entfernen wenn Hidden
     void HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd );
 
@@ -446,16 +446,16 @@ public:
     SwTxtFrm* GetFormatted( bool bForceQuickFormat = false );
 
     // wird demnaechst uebertragen
-    inline void SetFtn( const sal_Bool bNew ) { bFtn = bNew; }
+    inline void SetFtn( const bool bNew ) { bFtn = bNew; }
 
     // Beruecksichtigung der Follows
-    inline sal_Bool IsInside( const sal_Int32 nPos ) const;
+    inline bool IsInside( const sal_Int32 nPos ) const;
 
     const SwBodyFrm   *FindBodyFrm()   const;
 
     // DropCaps und Selektionen
-    inline sal_Bool GetDropRect( SwRect &rRect ) const
-    { return HasPara() ? _GetDropRect( rRect ) : sal_False; }
+    inline bool GetDropRect( SwRect &rRect ) const
+    { return HasPara() && _GetDropRect( rRect ); }
 
     static SwCache *GetTxtCache() { return pTxtCache; }
     static void     SetTxtCache( SwCache *pNew ) { pTxtCache = pNew; }
@@ -470,7 +470,7 @@ public:
     void ClearPara();
 
     // Bin ich ein FtnFrm, der eine Nummer am Absatzanfang hat?
-    inline sal_Bool IsFtnNumFrm() const
+    inline bool IsFtnNumFrm() const
     { return IsInFtn() && !GetIndPrev() && _IsFtnNumFrm(); }
 
     // simuliert eine Formatierung, als wenn es keinen rechten Rand und
@@ -505,7 +505,7 @@ public:
     sal_Int32 CalcFlyPos( SwFrmFmt* pSearch );
 
     // Ermittelt die Startposition und Schrittweite des Registers
-    sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
+    bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
 
     sal_uInt16 GetLineCount( sal_Int32 nPos );     //Ermittelt die Zeilenanzahl
@@ -572,7 +572,7 @@ public:
         mbFollowFormatAllowed = false;
     }
 
-    SwTwips GetBaseOfstForFly( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
+    SwTwips GetBaseOfstForFly( bool bIgnoreFlysAnchoredAtThisFrame ) const
     {
         return ( bIgnoreFlysAnchoredAtThisFrame ?
                  mnFlyAnchorOfst :
@@ -638,19 +638,19 @@ inline SwTwips SwTxtFrm::GetRightMargin() const
 }
 inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
 {
-    return Grow( nGrow, sal_True );
+    return Grow( nGrow, true );
 }
 
-inline sal_Bool SwTxtFrm::IsInside( const sal_Int32 nPos ) const
+inline bool SwTxtFrm::IsInside( const sal_Int32 nPos ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if( nPos < GetOfst() )
-        bRet = sal_False;
+        bRet = false;
     else
     {
         const SwTxtFrm *pFoll = GetFollow();
         if( pFoll && nPos >= pFoll->GetOfst() )
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -692,35 +692,35 @@ inline void SwTxtFrm::SetOfst( const sal_Int32 nNewOfst )
 
 inline void SwTxtFrm::SetRepaint() const
 {
-    ((SwTxtFrm*)this)->bRepaint = sal_True;
+    ((SwTxtFrm*)this)->bRepaint = true;
 }
 inline void SwTxtFrm::ResetRepaint() const
 {
-    ((SwTxtFrm*)this)->bRepaint = sal_False;
+    ((SwTxtFrm*)this)->bRepaint = false;
 }
 
 inline void SwTxtFrm::SetBlinkPor() const
 {
-    ((SwTxtFrm*)this)->bBlinkPor = sal_True;
+    ((SwTxtFrm*)this)->bBlinkPor = true;
 }
 inline void SwTxtFrm::ResetBlinkPor() const
 {
-    ((SwTxtFrm*)this)->bBlinkPor = sal_False;
+    ((SwTxtFrm*)this)->bBlinkPor = false;
 }
 
 #define SWAP_IF_SWAPPED( pFrm )\
-    sal_Bool bUndoSwap = sal_False;   \
+    bool bUndoSwap = false;   \
     if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
     {                                 \
-        bUndoSwap = sal_True;         \
+        bUndoSwap = true;         \
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
     }
 
 #define SWAP_IF_NOT_SWAPPED( pFrm )\
-    sal_Bool bUndoSwap = sal_False;     \
+    bool bUndoSwap = false;     \
     if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
     {                                   \
-        bUndoSwap = sal_True;           \
+        bUndoSwap = true;           \
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
     }
 
@@ -733,9 +733,9 @@ inline void SwTxtFrm::ResetBlinkPor() const
 class SwFrmSwapper
 {
     const SwTxtFrm* pFrm;
-    sal_Bool bUndo;
+    bool bUndo;
 public:
-    SwFrmSwapper( const SwTxtFrm* pFrm, sal_Bool bSwapIfNotSwapped );
+    SwFrmSwapper( const SwTxtFrm* pFrm, bool bSwapIfNotSwapped );
     ~SwFrmSwapper();
 };
 
@@ -746,7 +746,7 @@ class SwLayoutModeModifier
 public:
     SwLayoutModeModifier( const OutputDevice& rOutp );
     ~SwLayoutModeModifier();
-    void Modify( sal_Bool bChgToRTL );
+    void Modify( bool bChgToRTL );
     void SetAuto();
 };
 

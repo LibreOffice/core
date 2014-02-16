@@ -245,14 +245,14 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     return aTmp.Y();
 }
 
-SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, sal_Bool bSwapIfNotSwapped )
-    : pFrm( pTxtFrm ), bUndo( sal_False )
+SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, bool bSwapIfNotSwapped )
+    : pFrm( pTxtFrm ), bUndo( false )
 {
     if ( pFrm->IsVertical() &&
         ( (   bSwapIfNotSwapped && ! pFrm->IsSwapped() ) ||
           ( ! bSwapIfNotSwapped && pFrm->IsSwapped() ) ) )
     {
-        bUndo = sal_True;
+        bUndo = true;
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
     }
 }
@@ -295,7 +295,7 @@ SwLayoutModeModifier::~SwLayoutModeModifier()
     ((OutputDevice&)rOut).SetLayoutMode( nOldLayoutMode );
 }
 
-void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
+void SwLayoutModeModifier::Modify( bool bChgToRTL )
 {
     ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
@@ -405,15 +405,15 @@ void SwTxtFrm::ResetPreps()
 /*************************************************************************
  *                        SwTxtFrm::IsHiddenNow()
  *************************************************************************/
-sal_Bool SwTxtFrm::IsHiddenNow() const
+bool SwTxtFrm::IsHiddenNow() const
 {
-    SwFrmSwapper aSwapper( this, sal_True );
+    SwFrmSwapper aSwapper( this, true );
 
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        // invalid when stack overflows (StackHack)!
     {
 //        OSL_FAIL( "SwTxtFrm::IsHiddenNow: thin frame" );
-        return sal_True;
+        return true;
     }
 
     const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
@@ -429,11 +429,11 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
              ( bHiddenCharsHidePara &&
                !pVsh->GetViewOptions()->IsShowHiddenChar() ) )
         {
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -671,19 +671,19 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
  *                      SwTxtFrm::IsIdxInside()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
+bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
     if( nLen != COMPLETE_STRING && GetOfst() > nPos + nLen ) // the range preceded us
-        return sal_False;
+        return false;
 
     if( !GetFollow() )            // the range doesn't precede us,
-        return sal_True;          // nobody follows us.
+        return true;          // nobody follows us.
 
     const sal_Int32 nMax = GetFollow()->GetOfst();
 
     // either the range overlap or our text has been deleted
     if( nMax > nPos || nMax > GetTxt().getLength() )
-        return sal_True;
+        return true;
 
     // changes made in the first line of a follow can modify the master
     const SwParaPortion* pPara = GetFollow()->GetPara();
@@ -710,7 +710,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
         return;
     }
 
-    SetWidow( sal_False );
+    SetWidow( false );
     SwParaPortion *pPara = GetPara();
 
     bool bInv = false;
@@ -1367,7 +1367,7 @@ bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
  *                      SwTxtFrm::PrepWidows()
  *************************************************************************/
 
-void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
+void SwTxtFrm::PrepWidows( const MSHORT nNeed, bool bNotify )
 {
     OSL_ENSURE(GetFollow() && nNeed, "+SwTxtFrm::Prepare: lost all friends");
 
@@ -1409,7 +1409,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
             GetFollow()->SetOfst( aLine.GetEnd() );
             aLine.TruncLines( true );
             if( pPara->IsFollowField() )
-                GetFollow()->SetFieldFollow( sal_True );
+                GetFollow()->SetFieldFollow( true );
         }
     }
     if ( bNotify )
@@ -1451,7 +1451,7 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint eP
 void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         sal_Bool bNotify )
 {
-    SwFrmSwapper aSwapper( this, sal_False );
+    SwFrmSwapper aSwapper( this, false );
 
 #if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
@@ -1959,7 +1959,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
                        ( 0 == Frm().Left() ) :
                        ( LONG_MAX - 20000 < Frm().Bottom() ) ) )
     {
-        SetWidow(sal_False);
+        SetWidow(false);
         if ( GetFollow() )
         {
             // Wenn wir hier durch eine Widow-Anforderung unseres Follows gelandet

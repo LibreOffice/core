@@ -144,7 +144,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
 SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, sal_Bool bCenter ) const
 {
     SWRECTFN( pFrm )
-    SwFrmSwapper aSwapper( pFrm, sal_True );
+    SwFrmSwapper aSwapper( pFrm, true );
 
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );

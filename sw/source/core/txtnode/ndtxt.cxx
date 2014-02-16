@@ -328,7 +328,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         {
                             pFtn->SetRef( pFrm );
                             pFtn = pFtn->GetFollow();
-                            ((SwTxtFrm*)pFrm)->SetFtn( sal_True );
+                            ((SwTxtFrm*)pFrm)->SetFtn( true );
                         }
                     }
 #if OSL_DEBUG_LEVEL > 0
