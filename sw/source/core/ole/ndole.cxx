@@ -361,7 +361,7 @@ sal_Bool SwOLENode::SavePersistentData()
 
            if ( IsChart() && !sChartTblName.isEmpty() && !bChartWithInternalProvider )
                bKeepObjectToTempStorage = sal_False;
-           pCnt->RemoveEmbeddedObject( aOLEObj.aName, sal_False, bKeepObjectToTempStorage );
+           pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
            // modify end
 
 
@@ -719,7 +719,7 @@ SwOLEObj::~SwOLEObj()
             try
             {
                 // remove object from container but don't close it
-                pCnt->RemoveEmbeddedObject( aName, sal_False);
+                pCnt->RemoveEmbeddedObject( aName, false);
             }
             catch ( uno::Exception& )
             {

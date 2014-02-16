@@ -94,7 +94,7 @@ COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::
 //------------------------------------------------------------------
 /** check if the given set has the given property.
 */
-COMPHELPER_DLLPUBLIC sal_Bool hasProperty(const OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
 
 //------------------------------------------------------------------
 /** copy properties between property sets, in compliance with the property
@@ -117,16 +117,16 @@ COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPr
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <typename T>
-sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const T& _rCurrentValue)
+bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const T& _rCurrentValue)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     T aNewValue = T();
     ::cppu::convertPropertyValue(aNewValue, _rValueToSet);
     if (aNewValue != _rCurrentValue)
     {
         _rConvertedValue <<= aNewValue;
         _rOldValue <<= _rCurrentValue;
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -141,13 +141,13 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class ENUMTYPE>
-sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
+bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
     if (cppu::getTypeFavourUnsigned(&_rCurrentValue).getTypeClass()
         != staruno::TypeClass_ENUM)
         return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
 
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     ENUMTYPE aNewValue;
     ::cppu::any2enum(aNewValue, _rValueToSet);
         // will throw an exception if not convertible
@@ -156,7 +156,7 @@ sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::An
     {
         _rConvertedValue <<= aNewValue;
         _rOldValue <<= _rCurrentValue;
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -170,16 +170,16 @@ sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::An
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to a boolean type
 */
-inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, sal_Bool _bCurrentValue)
+inline bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, bool _bCurrentValue)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     sal_Bool bNewValue(sal_False);
     ::cppu::convertPropertyValue(bNewValue, _rValueToSet);
-    if (bNewValue != _bCurrentValue)
+    if (bool(bNewValue) != _bCurrentValue)
     {
         _rConvertedValue.setValue(&bNewValue, ::getBooleanCppuType());
         _rOldValue.setValue(&_bCurrentValue, ::getBooleanCppuType());
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -194,7 +194,7 @@ inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno:
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
 
 //.........................................................................
 }

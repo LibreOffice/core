@@ -261,10 +261,10 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
 }
 
 //-------------------------------------------------------------------------
-sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
+bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
                                                 embed::VerbDescriptor& aDescriptor )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     uno::Reference< container::XNameAccess > xVerbsConfig = GetVerbsConfiguration();
     uno::Reference< container::XNameAccess > xVerbsProps;
@@ -279,7 +279,7 @@ sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortc
               && ( xVerbsProps->getByName("VerbAttributes") >>= aTempDescr.VerbAttributes ) )
             {
                 aDescriptor = aTempDescr;
-                bResult = sal_True;
+                bResult = true;
             }
         }
     }
@@ -569,7 +569,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMe
 //-----------------------------------------------------------------------
 OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                                         uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                        sal_Bool bIgnoreType )
+                                        bool bIgnoreType )
 {
     OUString aFilterName;
 
@@ -647,12 +647,12 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
     OSL_ENSURE( !aDocName.isEmpty(), "The name must exist at this point!\n" );
 
 
-    sal_Bool bNeedsAddition = sal_True;
+    bool bNeedsAddition = true;
     for ( sal_Int32 nMedInd = 0; nMedInd < aMediaDescr.getLength(); nMedInd++ )
         if ( aMediaDescr[nMedInd].Name == "DocumentService" )
         {
             aMediaDescr[nMedInd].Value <<= aDocName;
-            bNeedsAddition = sal_False;
+            bNeedsAddition = false;
             break;
         }
 
@@ -664,7 +664,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         aMediaDescr[nOldLen].Value <<= aDocName;
     }
 
-    return UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_True );
+    return UpdateMediaDescriptorWithFilterName( aMediaDescr, true );
 }
 
 #ifdef WNT
@@ -871,16 +871,16 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
 
 
 //-------------------------------------------------------------------------
-sal_Bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
+bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
 {
     if ( aClassID1.getLength() != aClassID2.getLength() )
-        return sal_False;
+        return false;
 
     for ( sal_Int32 nInd = 0; nInd < aClassID1.getLength(); nInd++ )
         if ( aClassID1[nInd] != aClassID2[nInd] )
-            return sal_False;
+            return false;
 
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------

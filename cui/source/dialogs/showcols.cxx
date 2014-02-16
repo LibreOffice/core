@@ -60,7 +60,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
             {
                 try
                 {
-                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, ::cppu::bool2any(sal_False));
+                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, ::cppu::bool2any(false));
                 }
                 catch(...)
                 {

@@ -201,7 +201,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
             OUString* _pPropName, sal_Int16* _pAttributes, sal_Int32 _nHandle)
 {
     ConstPropertyAccessorMapIterator i = m_aPropertyAccessors.find(_nHandle);
-    sal_Bool bRet = i != m_aPropertyAccessors.end();
+    bool bRet = i != m_aPropertyAccessors.end();
     if (bRet)
     {
         const  ::com::sun::star::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
@@ -214,15 +214,15 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandle, Property& _rProperty ) const
+bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandle, Property& _rProperty ) const
 {
     ConstPropertyAccessorMapIterator pos = m_aPropertyAccessors.find(_nHandle);
     if ( pos != m_aPropertyAccessors.end() )
     {
         _rProperty = m_aProperties[ pos->second.nPos ];
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -442,7 +442,7 @@ namespace internal
 //------------------------------------------------------------------------------
 OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHlp )
     :OPropertyStateHelper( rBHlp )
-    ,m_bListening( sal_False )
+    ,m_bListening( false )
 {
     m_pForwarder = new PropertyForwarder( *this );
 }
@@ -478,7 +478,7 @@ void OPropertySetAggregationHelper::disposing()
         // register as a single listener
         m_xAggregateMultiSet->removePropertiesChangeListener(this);
         m_xAggregateSet->removeVetoableChangeListener(OUString(), this);
-        m_bListening = sal_False;
+        m_bListening = false;
     }
 
     OPropertyStateHelper::disposing();
@@ -489,7 +489,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
-        m_bListening = sal_False;
+        m_bListening = false;
 }
 
 //------------------------------------------------------------------------------
@@ -565,7 +565,7 @@ void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno:
     {
         m_xAggregateMultiSet->removePropertiesChangeListener(this);
         m_xAggregateSet->removeVetoableChangeListener(OUString(), this);
-        m_bListening = sal_False;
+        m_bListening = false;
     }
 
     m_xAggregateState       =  m_xAggregateState.query( _rxDelegate );
@@ -590,7 +590,7 @@ void OPropertySetAggregationHelper::startListening()
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
         m_xAggregateSet->addVetoableChangeListener(OUString(), this);
 
-        m_bListening = sal_True;
+        m_bListening = true;
     }
 }
 
@@ -979,7 +979,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     OSL_ENSURE( m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::convertFastPropertyValue: this is no forwarded property - did you use declareForwardedProperty for it?" );
     if ( m_pForwarder->isResponsibleFor( _nHandle ) )

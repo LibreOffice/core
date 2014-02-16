@@ -79,7 +79,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
         if ( m_bRestartRequested )
             return;
 
-        m_bRestartRequested = sal_True;
+        m_bRestartRequested = true;
 
         // the office is still not initialized, no need to terminate, changing the state is enough
         if ( !m_bOfficeInitialized )
@@ -103,7 +103,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
     catch ( uno::Exception& )
     {
         // the try to request restart has failed
-        m_bRestartRequested = sal_False;
+        m_bRestartRequested = false;
     }
 }
 
@@ -126,7 +126,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 {
     try
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 
         if ( m_xContext.is() )
         {
@@ -153,12 +153,12 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
         }
 
         if ( !bSuccess )
-            m_bRestartRequested = sal_False;
+            m_bRestartRequested = false;
     }
     catch( uno::Exception& )
     {
         // the try to restart has failed
-        m_bRestartRequested = sal_False;
+        m_bRestartRequested = false;
     }
 }
 

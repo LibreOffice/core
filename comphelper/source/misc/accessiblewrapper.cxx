@@ -75,7 +75,7 @@ namespace comphelper
     //-------------------------------------------------------------------------
     OWrappedAccessibleChildrenManager::OWrappedAccessibleChildrenManager( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
-        ,m_bTransientChildren( sal_True )
+        ,m_bTransientChildren( true )
     {
     }
 
@@ -85,7 +85,7 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    void OWrappedAccessibleChildrenManager::setTransientChildren( sal_Bool _bSet )
+    void OWrappedAccessibleChildrenManager::setTransientChildren( bool _bSet )
     {
         m_bTransientChildren = _bSet;
     }
@@ -123,7 +123,7 @@ namespace comphelper
 
     //-------------------------------------------------------------------------
     Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapperFor(
-        const Reference< XAccessible >& _rxKey, sal_Bool _bCreate )
+        const Reference< XAccessible >& _rxKey, bool _bCreate )
     {
         Reference< XAccessible > xValue;
 
@@ -185,7 +185,7 @@ namespace comphelper
         _rOutValue.clear();
         Reference< XAccessible > xChild;
         if ( _rInValue >>= xChild )
-            _rOutValue <<= getAccessibleWrapperFor( xChild, sal_True );
+            _rOutValue <<= getAccessibleWrapperFor( xChild, true );
     }
 
     //-------------------------------------------------------------------------
@@ -460,7 +460,7 @@ namespace comphelper
 #if OSL_DEBUG_LEVEL > 0
         if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
         {
-            sal_Bool bChildTransienceChanged = sal_False;
+            bool bChildTransienceChanged = false;
             sal_Int16 nChangeState = 0;
             if ( _rEvent.OldValue >>= nChangeState )
                 bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;

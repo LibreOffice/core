@@ -77,11 +77,11 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 //= OPropertyChangeMultiplexer
 //========================================================================
 //------------------------------------------------------------------
-OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, sal_Bool _bAutoReleaseSet)
+OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
             ,m_nLockCount(0)
-            ,m_bListening(sal_False)
+            ,m_bListening(false)
             ,m_bAutoSetRelease(_bAutoReleaseSet)
 {
     m_pListener->setAdapter(this);
@@ -118,7 +118,7 @@ void OPropertyChangeMultiplexer::dispose()
         m_pListener->setAdapter(NULL);
 
         m_pListener = NULL;
-        m_bListening = sal_False;
+        m_bListening = false;
 
         if (m_bAutoSetRelease)
             m_xSet = NULL;
@@ -140,7 +140,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
     }
 
     m_pListener = NULL;
-    m_bListening = sal_False;
+    m_bListening = false;
 
     if (m_bAutoSetRelease)
         m_xSet = NULL;
@@ -162,7 +162,7 @@ void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
         m_xSet->addPropertyChangeListener(_sPropertyName, static_cast< XPropertyChangeListener*>(this));
         m_aProperties.realloc(m_aProperties.getLength() + 1);
         m_aProperties.getArray()[m_aProperties.getLength()-1] = _sPropertyName;
-        m_bListening = sal_True;
+        m_bListening = true;
     }
 }
 

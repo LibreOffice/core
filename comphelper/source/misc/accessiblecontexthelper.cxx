@@ -196,7 +196,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAccessibleContextHelper::isAlive() const
+    bool OAccessibleContextHelper::isAlive() const
     {
         return !GetBroadcastHelper().bDisposed && !GetBroadcastHelper().bInDispose;
     }

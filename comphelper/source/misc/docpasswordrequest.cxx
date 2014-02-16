@@ -50,13 +50,13 @@ class AbortContinuation : public ::cppu::WeakImplHelper1< XInteractionAbort >
 public:
     inline explicit     AbortContinuation() : mbSelected( false ) {}
 
-    inline sal_Bool     isSelected() const { return mbSelected; }
+    inline bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
     virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
 
 private:
-    sal_Bool            mbSelected;
+    bool            mbSelected;
 };
 
 // ============================================================================
@@ -64,12 +64,12 @@ private:
 class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword2 >
 {
 public:
-    inline explicit     PasswordContinuation() : mbReadOnly( sal_False ), mbSelected( sal_False ) {}
+    inline explicit     PasswordContinuation() : mbReadOnly( false ), mbSelected( false ) {}
 
-    inline sal_Bool     isSelected() const { return mbSelected; }
-    inline void         reset() { mbSelected = sal_False; }
+    inline bool     isSelected() const { return mbSelected; }
+    inline void         reset() { mbSelected = false; }
 
-    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = sal_True; }
+    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
 
     virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException ) { maPassword = rPass; }
     virtual OUString SAL_CALL getPassword() throw( RuntimeException ) { return maPassword; }
@@ -83,8 +83,8 @@ public:
 private:
     OUString            maPassword;
     OUString            maModifyPassword;
-    sal_Bool            mbReadOnly;
-    sal_Bool            mbSelected;
+    bool            mbReadOnly;
+    bool            mbSelected;
 };
 
 // ============================================================================
@@ -106,7 +106,7 @@ SimplePasswordRequest::~SimplePasswordRequest()
 {
 }
 
-sal_Bool SimplePasswordRequest::isPassword() const
+bool SimplePasswordRequest::isPassword() const
 {
     return mpPassword->isSelected();
 }
@@ -129,7 +129,7 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest
 // ============================================================================
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
-        PasswordRequestMode eMode, const OUString& rDocumentName, sal_Bool bPasswordToModify )
+        PasswordRequestMode eMode, const OUString& rDocumentName, bool bPasswordToModify )
 : mpAbort( NULL )
 , mpPassword( NULL )
 {
@@ -162,7 +162,7 @@ DocPasswordRequest::~DocPasswordRequest()
 {
 }
 
-sal_Bool DocPasswordRequest::isPassword() const
+bool DocPasswordRequest::isPassword() const
 {
     return mpPassword->isSelected();
 }
@@ -177,7 +177,7 @@ OUString DocPasswordRequest::getPasswordToModify() const
     return mpPassword->getPasswordToModify();
 }
 
-sal_Bool DocPasswordRequest::getRecommendReadOnly() const
+bool DocPasswordRequest::getRecommendReadOnly() const
 {
     return mpPassword->getRecommendReadOnly();
 }

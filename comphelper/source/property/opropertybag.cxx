@@ -162,11 +162,11 @@ namespace comphelper
             bool bIgnoreRuntimeExceptionsWhileFiring)
     {
         if (nCount && !bVetoable) {
-            setModifiedImpl(sal_True, bIgnoreRuntimeExceptionsWhileFiring);
+            setModifiedImpl(true, bIgnoreRuntimeExceptionsWhileFiring);
         }
     }
 
-    void OPropertyBag::setModifiedImpl(::sal_Bool bModified,
+    void OPropertyBag::setModifiedImpl(bool bModified,
             bool bIgnoreRuntimeExceptionsWhileFiring)
     {
         { // do not lock mutex while notifying (#i93514#) to prevent deadlock

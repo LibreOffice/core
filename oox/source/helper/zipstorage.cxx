@@ -62,7 +62,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
          */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
             ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext,
-            sal_False );    // DEV300_m80: Was sal_True, but DOCX and others did not load
+            false );    // DEV300_m80: Was sal_True, but DOCX and others did not load
     }
     catch (Exception const& e)
     {
@@ -80,7 +80,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     {
         const sal_Int32 nOpenMode = ElementModes::READWRITE | ElementModes::TRUNCATE;
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, rxContext, sal_True );
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, rxContext, true );
     }
     catch (Exception const& e)
     {

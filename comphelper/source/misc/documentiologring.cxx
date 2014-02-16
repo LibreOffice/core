@@ -34,8 +34,8 @@ namespace comphelper
 // ----------------------------------------------------------
 OSimpleLogRing::OSimpleLogRing()
 : m_aMessages( SIMPLELOGRING_SIZE )
-, m_bInitialized( sal_False )
-, m_bFull( sal_False )
+, m_bInitialized( false )
+, m_bFull( false )
 , m_nPos( 0 )
 {
 }
@@ -87,11 +87,11 @@ void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::
     if ( ++m_nPos >= m_aMessages.getLength() )
     {
         m_nPos = 0;
-        m_bFull = sal_True;
+        m_bFull = true;
     }
 
     // if used once then default initialized
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 }
 
 // ----------------------------------------------------------
@@ -107,7 +107,7 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno:
         aResult[nInd] = m_aMessages[ ( nStart + nInd ) % m_aMessages.getLength() ];
 
     // if used once then default initialized
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 
     return aResult;
 }
@@ -135,7 +135,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
                 0 );
     }
 
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 }
 
 // XServiceInfo

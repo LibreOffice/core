@@ -120,7 +120,7 @@ namespace comphelper
             <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
             <method>getImplementation</method>.
         */
-        static sal_Bool setAccessibleParent(
+        static bool setAccessibleParent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewParent
         );

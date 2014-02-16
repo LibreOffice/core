@@ -189,7 +189,7 @@ namespace svx
 
         // OCommonAccessibleSelection
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-        virtual sal_Bool
+        virtual bool
             implIsSelected( sal_Int32 nAccessibleChildIndex )
             throw (::com::sun::star::uno::RuntimeException);
 

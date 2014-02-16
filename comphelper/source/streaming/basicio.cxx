@@ -75,14 +75,14 @@ const staruno::Reference<stario::XObjectInputStream>& operator >> (
 }
 
 //------------------------------------------------------------------------------
-const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Bool& _rVal)
+const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, bool& _rVal)
 {
     _rVal = _rxInStream->readBoolean();
     return _rxInStream;
 }
 
 //------------------------------------------------------------------------------
-const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Bool _bVal)
+const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, bool _bVal)
 {
     _rxOutStream->writeBoolean(_bVal);
     return _rxOutStream;

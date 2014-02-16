@@ -39,8 +39,8 @@ class OSimpleLogRing : public ::cppu::WeakImplHelper3< ::com::sun::star::logging
     ::osl::Mutex m_aMutex;
     ::com::sun::star::uno::Sequence< OUString > m_aMessages;
 
-    sal_Bool m_bInitialized;
-    sal_Bool m_bFull;
+    bool m_bInitialized;
+    bool m_bFull;
     sal_Int32 m_nPos;
 
 public:

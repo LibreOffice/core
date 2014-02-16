@@ -66,7 +66,7 @@ namespace
 //==========================================================================
 //--------------------------------------------------------------------------
 OPropertyContainerHelper::OPropertyContainerHelper()
-    :m_bUnused(sal_False)
+    :m_bUnused(false)
 {
 }
 
@@ -147,13 +147,13 @@ void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, 
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OPropertyContainerHelper::isRegisteredProperty( sal_Int32 _nHandle ) const
+bool OPropertyContainerHelper::isRegisteredProperty( sal_Int32 _nHandle ) const
 {
     return const_cast< OPropertyContainerHelper* >( this )->searchHandle( _nHandle ) != m_aProperties.end();
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) const
+bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) const
 {
     // TODO: the current structure is from a time where properties were
     // static, not dynamic. Since we allow that properties are also dynamic,
@@ -220,10 +220,10 @@ namespace
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
+bool OPropertyContainerHelper::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) SAL_THROW( (IllegalArgumentException) )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     // get the property somebody is asking for
     PropertiesIterator aPos = searchHandle(_nHandle);
@@ -241,7 +241,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
         case PropertyDescription::ltHoldMyself:
         case PropertyDescription::ltDerivedClassAnyType:
         {
-            sal_Bool bMayBeVoid = ((aPos->aProperty.Attributes & PropertyAttribute::MAYBEVOID) != 0);
+            bool bMayBeVoid = ((aPos->aProperty.Attributes & PropertyAttribute::MAYBEVOID) != 0);
 
 
             // non modifiable version of the value-to-be-set
@@ -320,7 +320,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
 
             if (!_rValue.getValueType().equals(aPos->aProperty.Type))
             {
-                sal_Bool bConverted = sal_False;
+                bool bConverted = false;
 
                 // a temporary any of the correct (required) type
                 aProperlyTyped = Any( NULL, aPos->aProperty.Type.getTypeLibType() );
@@ -336,7 +336,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                     )
                 {
                     // could query for the requested interface
-                    bConverted = sal_True;
+                    bConverted = true;
                     pNewValue = &aProperlyTyped;
                 }
 
@@ -390,7 +390,7 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
 
         case PropertyDescription::ltDerivedClassRealType:
 #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
 #endif
             // copy the data from the to-be-set value
             uno_type_assignData(

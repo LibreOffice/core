@@ -129,7 +129,7 @@ public:
             <FALSE/> otherwise
       */
 
-    static sal_Bool IsModifyPasswordCorrect(
+    static bool IsModifyPasswordCorrect(
                 const OUString& aPassword,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 

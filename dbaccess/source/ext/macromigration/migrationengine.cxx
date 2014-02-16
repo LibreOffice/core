@@ -1176,7 +1176,7 @@ namespace dbmm
             const sal_Int32 nBaseNameLen = sBaseName.getLength();
             for ( sal_Int32 i=0; i<nBaseNameLen; ++i )
             {
-                if ( ::comphelper::OStorageHelper::IsValidZipEntryFileName( pBaseName + i, 1, sal_False ) )
+                if ( ::comphelper::OStorageHelper::IsValidZipEntryFileName( pBaseName + i, 1, false ) )
                     ++nValid;
                 else
                     ++nInvalid;
@@ -1189,7 +1189,7 @@ namespace dbmm
                 const sal_Unicode* pReplacement = aReplacement.getStr();
                 for ( sal_Int32 i=0; i<nBaseNameLen; ++i )
                 {
-                    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( pReplacement + i, 1, sal_False ) )
+                    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( pReplacement + i, 1, false ) )
                         aReplacement[i] = '_';
                 }
                 sBaseName = aReplacement.makeStringAndClear();

@@ -280,7 +280,7 @@ namespace comphelper
         }
 
         // XEnumeration equivalents
-        ::sal_Bool hasMoreElements();
+        bool hasMoreElements();
         Any nextElement();
 
         // IMapModificationListener
@@ -725,7 +725,7 @@ namespace comphelper
     //= MapEnumerator
     //====================================================================
     //--------------------------------------------------------------------
-    ::sal_Bool MapEnumerator::hasMoreElements()
+    bool MapEnumerator::hasMoreElements()
     {
         if ( m_disposed )
             throw DisposedException( OUString(), m_rParent );

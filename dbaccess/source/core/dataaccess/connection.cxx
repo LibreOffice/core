@@ -92,7 +92,7 @@ Sequence< OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeExc
     SAL_INFO("dbaccess", "OConnection::getSupportedServiceNames" );
     Sequence< OUString > aSupported = OConnectionWrapper::getSupportedServiceNames();
 
-    if ( 0 == findValue( aSupported, SERVICE_SDB_CONNECTION, sal_True ).getLength() )
+    if ( 0 == findValue( aSupported, SERVICE_SDB_CONNECTION, true ).getLength() )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );

@@ -2781,9 +2781,9 @@ namespace pcr
         if (xController.is())
         {
             // do a preview by default
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(true));
 
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(sal_True));
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(true));
             xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
 
         }

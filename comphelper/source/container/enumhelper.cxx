@@ -33,7 +33,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     :m_aNames(_rxAccess->getElementNames())
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)
-    ,m_bListening(sal_False)
+    ,m_bListening(false)
 {
     impl_startDisposeListening();
 }
@@ -44,7 +44,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     :m_aNames(_aNames)
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)
-    ,m_bListening(sal_False)
+    ,m_bListening(false)
 {
     impl_startDisposeListening();
 }
@@ -117,7 +117,7 @@ void OEnumerationByName::impl_startDisposeListening()
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
-        m_bListening = sal_True;
+        m_bListening = true;
     }
     --m_refCount;
 }
@@ -135,7 +135,7 @@ void OEnumerationByName::impl_stopDisposeListening()
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
-        m_bListening = sal_False;
+        m_bListening = false;
     }
     --m_refCount;
 }
@@ -147,7 +147,7 @@ void OEnumerationByName::impl_stopDisposeListening()
 OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
     :m_nPos(0)
     ,m_xAccess(_rxAccess)
-    ,m_bListening(sal_False)
+    ,m_bListening(false)
 {
     impl_startDisposeListening();
 }
@@ -220,7 +220,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
-        m_bListening = sal_True;
+        m_bListening = true;
     }
     --m_refCount;
 }
@@ -238,7 +238,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
-        m_bListening = sal_False;
+        m_bListening = false;
     }
     --m_refCount;
 }

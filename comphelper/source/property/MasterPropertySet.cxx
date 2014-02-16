@@ -63,7 +63,7 @@ using namespace ::com::sun::star::beans;
 SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 : mpSlave ( pSlave )
 , mxSlave ( pSlave )
-, mbInit ( sal_False )
+, mbInit ( false )
 {
 }
 
@@ -242,7 +242,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
                         aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preSetValues();
-                    pSlave->SetInit ( sal_True );
+                    pSlave->SetInit ( true );
                 }
                 pSlave->mpSlave->_setSingleValue( *((*aIter).second->mpInfo), *pAny );
             }
@@ -255,7 +255,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
             if ( (*aSlaveIter).second->IsInit())
             {
                 (*aSlaveIter).second->mpSlave->_postSetValues();
-                (*aSlaveIter).second->SetInit ( sal_False );
+                (*aSlaveIter).second->SetInit ( false );
             }
             ++aSlaveIter;
         }
@@ -307,7 +307,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
                         aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preGetValues();
-                    pSlave->SetInit ( sal_True );
+                    pSlave->SetInit ( true );
                 }
                 pSlave->mpSlave->_getSingleValue( *((*aIter).second->mpInfo), *pAny );
             }
@@ -320,7 +320,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
             if ( (*aSlaveIter).second->IsInit())
             {
                 (*aSlaveIter).second->mpSlave->_postSetValues();
-                (*aSlaveIter).second->SetInit ( sal_False );
+                (*aSlaveIter).second->SetInit ( false );
             }
             ++aSlaveIter;
         }
@@ -406,7 +406,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
                 if (!pSlave->IsInit())
                 {
                     pSlave->mpSlave->_preGetPropertyState();
-                    pSlave->SetInit ( sal_True );
+                    pSlave->SetInit ( true );
                 }
                 pSlave->mpSlave->_getPropertyState( *((*aIter).second->mpInfo), *pState );
             }
@@ -418,7 +418,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
             if ( (*aSlaveIter).second->IsInit())
             {
                 (*aSlaveIter).second->mpSlave->_postGetPropertyState();
-                (*aSlaveIter).second->SetInit ( sal_False );
+                (*aSlaveIter).second->SetInit ( false );
             }
             ++aSlaveIter;
         }

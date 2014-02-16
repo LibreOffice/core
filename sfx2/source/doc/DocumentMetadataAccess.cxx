@@ -236,7 +236,7 @@ static bool isFileNameValid(const OUString & i_rFileName)
           segment == "."         ||  // no . segments
           segment == ".."        ||  // no .. segments
           !::comphelper::OStorageHelper::IsValidZipEntryFileName(
-              segment, sal_False))      // no invalid characters
+              segment, false))      // no invalid characters
                                       return false;
     } while (idx >= 0);
     return true;

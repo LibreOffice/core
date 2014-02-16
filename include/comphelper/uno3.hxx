@@ -230,7 +230,7 @@ namespace comphelper
                 ....
     */
     template <class iface>
-    sal_Bool query_aggregation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxAggregate, ::com::sun::star::uno::Reference<iface>& _rxOut)
+    bool query_aggregation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxAggregate, ::com::sun::star::uno::Reference<iface>& _rxOut)
     {
         _rxOut = static_cast<iface*>(NULL);
         if (_rxAggregate.is())
@@ -250,7 +250,7 @@ namespace comphelper
                 ....
     */
     template <class iface>
-    sal_Bool query_interface(const InterfaceRef& _rxObject, ::com::sun::star::uno::Reference<iface>& _rxOut)
+    bool query_interface(const InterfaceRef& _rxObject, ::com::sun::star::uno::Reference<iface>& _rxOut)
     {
         _rxOut = static_cast<iface*>(NULL);
         if (_rxObject.is())
@@ -263,7 +263,7 @@ namespace comphelper
                 return _rxOut.is();
             }
         }
-        return sal_False;
+        return false;
     }
 
 //.........................................................................

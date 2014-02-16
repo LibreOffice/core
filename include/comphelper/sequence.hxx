@@ -38,7 +38,7 @@ namespace comphelper
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
-    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
+    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst = false);
 
     namespace internal
     {
@@ -126,7 +126,7 @@ namespace comphelper
         */
         OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny);
 
-        sal_Bool hasMoreElements() const;
+        bool hasMoreElements() const;
         ::com::sun::star::uno::Any  nextElement();
 
     private:
@@ -151,7 +151,7 @@ namespace comphelper
         ,m_pCurrent(NULL)
     {
         ::com::sun::star::uno::Sequence< TYPE > aContainer;
-        sal_Bool bSuccess = _rSequenceAny >>= aContainer;
+        bool bSuccess = _rSequenceAny >>= aContainer;
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
         (void)bSuccess;
         construct(aContainer);
@@ -168,7 +168,7 @@ namespace comphelper
 
     //---------------------------------------------------------------------
     template <class TYPE>
-    sal_Bool OSequenceIterator<TYPE>::hasMoreElements() const
+    bool OSequenceIterator<TYPE>::hasMoreElements() const
     {
         return m_pCurrent - m_pElements < m_nLen;
     }

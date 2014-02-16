@@ -154,7 +154,7 @@ public:
 
     /** returns information about a property given by handle
     */
-    sal_Bool getPropertyByHandle( sal_Int32 _nHandle, ::com::sun::star::beans::Property& _rProperty ) const;
+    bool getPropertyByHandle( sal_Int32 _nHandle, ::com::sun::star::beans::Property& _rProperty ) const;
 
 
     enum PropertyOrigin
@@ -206,7 +206,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>    m_xAggregateFastSet;
 
     internal::PropertyForwarder*    m_pForwarder;
-    sal_Bool                        m_bListening : 1;
+    bool                        m_bListening : 1;
 
 public:
     OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );

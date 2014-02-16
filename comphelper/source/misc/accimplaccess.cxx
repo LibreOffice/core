@@ -139,7 +139,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAccessibleImplementationAccess::setAccessibleParent(
+    bool OAccessibleImplementationAccess::setAccessibleParent(
             const Reference< XAccessibleContext >& _rxComponent, const Reference< XAccessible >& _rxNewParent )
     {
         OAccessibleImplementationAccess* pImplementation = getImplementation( _rxComponent );

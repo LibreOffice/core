@@ -43,8 +43,8 @@ OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >
 : m_xContext( xContext )
 , m_pLockListener( NULL )
 , m_pListenersContainer( NULL )
-, m_bDisposed( sal_False )
-, m_bInitialized( sal_False )
+, m_bDisposed( false )
+, m_bInitialized( false )
 {
 }
 
@@ -92,7 +92,7 @@ void SAL_CALL OInstanceLocker::dispose()
         m_xLockListener = uno::Reference< uno::XInterface >();
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // --------------------------------------------------------
@@ -185,7 +185,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
         throw;
     }
 
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 }
 
 // XServiceInfo
@@ -242,8 +242,8 @@ OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWra
 : m_xInstance( xInstance )
 , m_xApproval( xApproval )
 , m_xWrapper( xWrapper )
-, m_bDisposed( sal_False )
-, m_bInitialized( sal_False )
+, m_bDisposed( false )
+, m_bInitialized( false )
 , m_nMode( nMode )
 {
 }
@@ -289,7 +289,7 @@ void OLockListener::Dispose()
     }
 
     m_xInstance = uno::Reference< uno::XInterface >();
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // XEventListener
@@ -445,12 +445,12 @@ void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent 
 
 // XInitialization
 // --------------------------------------------------------
-sal_Bool OLockListener::Init()
+bool OLockListener::Init()
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     if ( m_bDisposed || m_bInitialized )
-        return sal_False;
+        return false;
 
     try
     {
@@ -480,9 +480,9 @@ sal_Bool OLockListener::Init()
         throw;
     }
 
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 
-    return sal_True;
+    return true;
 }
 
 void createRegistryInfo_OInstanceLocker()

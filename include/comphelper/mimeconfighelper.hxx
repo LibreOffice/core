@@ -73,7 +73,7 @@ public:
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xObjectProps );
 
-    sal_Bool GetVerbByShortcut( const OUString& aVerbShortcut,
+    bool GetVerbByShortcut( const OUString& aVerbShortcut,
                                 ::com::sun::star::embed::VerbDescriptor& aDescriptor );
 
     OUString GetExplicitlyRegisteredObjClassID( const OUString& aMediaType );
@@ -106,7 +106,7 @@ public:
 
     OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
-                        sal_Bool bIgnoreType );
+                        bool bIgnoreType );
     OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
@@ -127,7 +127,7 @@ public:
                         sal_Int32 nMustFlags,
                         sal_Int32 nDontFlags );
 
-    static sal_Bool ClassIDsEqual( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID1,
+    static bool ClassIDsEqual( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID1,
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID2 );
     static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,

@@ -1694,7 +1694,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                 uno::Sequence< beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name = "URL";
                 aArgs[0].Value <<= m_aLinkURL;
-                m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, sal_False );
+                m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, false );
             }
         }
 

@@ -286,7 +286,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            sal_Bool bRepairStorage )
+            bool bRepairStorage )
     throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
@@ -317,7 +317,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
             const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            sal_Bool bRepairStorage )
+            bool bRepairStorage )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
@@ -349,7 +349,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            sal_Bool bRepairStorage )
+            bool bRepairStorage )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
@@ -437,14 +437,14 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 }
 
 // ----------------------------------------------------------------------
-sal_Bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, sal_Bool bSlashAllowed )
+bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
 {
     return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
 }
 
 // ----------------------------------------------------------------------
-sal_Bool OStorageHelper::IsValidZipEntryFileName(
-    const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed )
+bool OStorageHelper::IsValidZipEntryFileName(
+    const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed )
 {
     for ( sal_Int32 i = 0; i < nLength; i++ )
     {
@@ -457,23 +457,23 @@ sal_Bool OStorageHelper::IsValidZipEntryFileName(
             case '\"':
             case '|':
             case ':':
-                return sal_False;
+                return false;
             case '/':
                 if ( !bSlashAllowed )
-                    return sal_False;
+                    return false;
                 break;
             default:
                 if ( pChar[i] < 32  || (pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF) )
-                    return sal_False;
+                    return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 // ----------------------------------------------------------------------
-sal_Bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
+bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     const sal_Int32 nPathLen = aPath.getLength();
     const sal_Int32 nSegLen = aSegment.getLength();
 
@@ -486,16 +486,16 @@ sal_Bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& 
         aInternalSegment += "/";
 
         if ( aPath.indexOf( aInternalSegment ) >= 0 )
-            bResult = sal_True;
+            bResult = true;
 
         if ( !bResult && !aPath.compareTo( aSegment, nSegLen ) )
         {
             if ( nPathLen == nSegLen || aPath[nSegLen] == '/' )
-                bResult = sal_True;
+                bResult = true;
         }
 
         if ( !bResult && nPathLen > nSegLen && aPath.copy( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
-            bResult = sal_True;
+            bResult = true;
     }
 
     return bResult;

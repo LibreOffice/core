@@ -145,7 +145,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
-        sal_Bool bUnknown = sal_False;
+        bool bUnknown = false;
         sal_Int32 n;
         for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
         {
@@ -174,7 +174,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
-        sal_Bool bUnknown = sal_False;
+        bool bUnknown = false;
         sal_Int32 n;
         for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
         {
@@ -239,7 +239,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
     {
         const OUString* pNames = aPropertyName.getConstArray();
 
-        sal_Bool bUnknown = sal_False;
+        bool bUnknown = false;
 
         PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
 

@@ -128,7 +128,7 @@ namespace
             <TRUE/> if and only if the client could be found and
             <arg>rPos</arg> has been filled with it's position
     */
-    static sal_Bool implLookupClient(
+    static bool implLookupClient(
             const AccessibleEventNotifier::TClientId nClient,
             ClientMap::iterator& rPos )
     {

@@ -1263,7 +1263,7 @@ void SdrOle2Obj::Disconnect_Impl()
                     comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();
                     if ( pContainer )
                     {
-                        pContainer->RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
+                        pContainer->RemoveEmbeddedObject( xObjRef.GetObject(), false);
 
                         // TODO/LATER: mpImpl->aPersistName contains outdated information, to keep it updated
                         // it should be returned from RemoveEmbeddedObject call. Currently it is no problem,

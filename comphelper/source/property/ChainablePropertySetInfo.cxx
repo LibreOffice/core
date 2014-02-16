@@ -96,7 +96,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& r
 sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );
+    return maMap.find ( rName ) != maMap.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

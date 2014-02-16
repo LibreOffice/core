@@ -112,7 +112,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rNam
 sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );
+    return maMap.find ( rName ) != maMap.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

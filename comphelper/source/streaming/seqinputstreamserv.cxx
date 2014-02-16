@@ -81,13 +81,13 @@ private:
 
 
     ::osl::Mutex m_aMutex;
-    sal_Bool m_bInitialized;
+    bool m_bInitialized;
     uno::Reference< io::XInputStream > m_xInputStream;
     uno::Reference< io::XSeekable > m_xSeekable;
 };
 
 SequenceInputStreamService::SequenceInputStreamService()
-: m_bInitialized( sal_False )
+: m_bInitialized( false )
 {}
 
 // com.sun.star.uno.XServiceInfo:
@@ -221,7 +221,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com
         uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY_THROW );
         m_xInputStream = xInputStream;
         m_xSeekable = xSeekable;
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
     }
     else
         throw lang::IllegalArgumentException( OUString("Unexpected type of argument!\n"),

@@ -54,12 +54,12 @@ inline ::com::sun::star::uno::Any SAL_CALL int2enum(
  * @param rAny          enum or int
  * @param sal_True if enum or int value was set else sal_False.
  */
-inline sal_Bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::Any & rAny )
+inline bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::Any & rAny )
 {
     if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_ENUM)
     {
         rnEnum = * reinterpret_cast< const int * >( rAny.getValue() );
-        return sal_True;
+        return true;
     }
 
     return rAny >>= rnEnum;
@@ -110,7 +110,7 @@ inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
  * @return sal_True if any reference (including the null ref) was retrieved from any else sal_False.
  */
 template< class T >
-inline sal_Bool SAL_CALL extractInterface(
+inline bool SAL_CALL extractInterface(
     ::com::sun::star::uno::Reference< T > & rxOut,
     const ::com::sun::star::uno::Any & rAny )
 {
@@ -124,7 +124,7 @@ inline sal_Bool SAL_CALL extractInterface(
  * a ::com::sun::star::lang::IllegalArgumentException is thrown
  *
  */
-inline sal_Bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
+inline bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
     throw( ::com::sun::star::lang::IllegalArgumentException )
 {
     if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
@@ -146,7 +146,7 @@ inline sal_Bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
  * @DEPRECATED : use makeAny< sal_Bool >()
  *
  */
-inline ::com::sun::star::uno::Any SAL_CALL bool2any( sal_Bool bBool )
+inline ::com::sun::star::uno::Any SAL_CALL bool2any( bool bBool )
 {
     return ::com::sun::star::uno::Any( &bBool, ::getCppuBooleanType() );
 }

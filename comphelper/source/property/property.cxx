@@ -130,14 +130,14 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 }
 
 //------------------------------------------------------------------
-sal_Bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
+bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
 {
     if (_rxSet.is())
     {
         //  XPropertySetInfoRef xInfo(rxSet->getPropertySetInfo());
         return _rxSet->getPropertySetInfo()->hasPropertyByName(_rName);
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------
@@ -177,9 +177,9 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPro
 }
 
 //------------------------------------------------------------------
-sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, const Any& _rCurrentValue, const Type& _rExpectedType)
+bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, const Any& _rCurrentValue, const Type& _rExpectedType)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     if (_rCurrentValue.getValue() != _rValueToSet.getValue())
     {
         if ( _rValueToSet.hasValue() && ( !_rExpectedType.equals( _rValueToSet.getValueType() ) ) )
@@ -203,7 +203,7 @@ sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rV
         if ( _rCurrentValue != _rConvertedValue )
         {
             _rOldValue = _rCurrentValue;
-            bModified = sal_True;
+            bModified = true;
         }
     }
     return bModified;

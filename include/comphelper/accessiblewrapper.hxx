@@ -339,7 +339,7 @@ namespace comphelper
         ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible >
                                 m_aOwningAccessible;    // the XAccessible which belongs to the XAccessibleContext which we work for
         AccessibleMap           m_aChildrenMap;         // for caching children
-        sal_Bool                m_bTransientChildren;   // are we prohibited to cache our children?
+        bool                m_bTransientChildren;   // are we prohibited to cache our children?
 
     public:
         /// ctor
@@ -350,7 +350,7 @@ namespace comphelper
         /** specifies if the children are to be consideren transient (i.e.: not cached)
             <p>to be called only once per lifetime</p>
         */
-        void    setTransientChildren( sal_Bool _bSet = sal_True );
+        void    setTransientChildren( bool _bSet = true );
 
         /** sets the XAccessible which belongs to the XAccessibleContext which we work for
             <p>to be called only once per lifetime</p>
@@ -361,7 +361,7 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 getAccessibleWrapperFor(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxKey,
-                    sal_Bool _bCreate = sal_True
+                    bool _bCreate = true
                 );
 
         /// erases the given key from the map (if it is present there)

@@ -57,7 +57,7 @@ namespace comphelper
         inline OUString convertLogArgToString( sal_Int32   _nValue ) { return OUString::number( _nValue ); }
         inline OUString convertLogArgToString( sal_Int16   _nValue ) { return OUString::number( _nValue ); }
         inline OUString convertLogArgToString( sal_Unicode _nValue ) { return OUString( _nValue ); }
-        inline OUString convertLogArgToString( sal_Bool    _bValue ) { return OUString::boolean( _bValue ); }
+        inline OUString convertLogArgToString( bool    _bValue ) { return OUString::boolean( _bValue ); }
 
     } } // namespace log::convert
 

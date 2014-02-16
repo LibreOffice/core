@@ -185,7 +185,7 @@ namespace comphelper
             sal_Bool bVetoable,
             bool bIgnoreRuntimeExceptionsWhileFiring);
 
-        void SAL_CALL setModifiedImpl( ::sal_Bool bModified,
+        void SAL_CALL setModifiedImpl( bool bModified,
             bool bIgnoreRuntimeExceptionsWhileFiring);
 
     private:

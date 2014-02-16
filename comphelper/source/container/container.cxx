@@ -41,23 +41,23 @@ IndexAccessIterator::~IndexAccessIterator() {}
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
 {
-    sal_Bool bCheckingStartingPoint = !m_xCurrentObject.is();
+    bool bCheckingStartingPoint = !m_xCurrentObject.is();
         // Is the current node the starting point?
-    sal_Bool bAlreadyCheckedCurrent = m_xCurrentObject.is();
+    bool bAlreadyCheckedCurrent = m_xCurrentObject.is();
         // Have I already tested the current node through ShouldHandleElement?
     if (!m_xCurrentObject.is())
         m_xCurrentObject = m_xStartingPoint;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xSearchLoop( m_xCurrentObject);
-    sal_Bool bHasMoreToSearch = sal_True;
-    sal_Bool bFoundSomething = sal_False;
+    bool bHasMoreToSearch = true;
+    bool bFoundSomething = false;
     while (!bFoundSomething && bHasMoreToSearch)
     {
         // Priming loop
         if (!bAlreadyCheckedCurrent && ShouldHandleElement(xSearchLoop))
         {
             m_xCurrentObject = xSearchLoop;
-            bFoundSomething = sal_True;
+            bFoundSomething = true;
         }
         else
         {
@@ -67,7 +67,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
             {
                 ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
                 xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue();
-                bCheckingStartingPoint = sal_False;
+                bCheckingStartingPoint = false;
 
                 m_arrChildIndizies.push_back((sal_Int32)0);
             }
@@ -92,7 +92,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
                         // and check the next child
                         ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
                         xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aElement.getValue();
-                        bCheckingStartingPoint = sal_False;
+                        bCheckingStartingPoint = false;
                         // and update its position in the list.
                         m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);
 
@@ -100,12 +100,12 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     }
                     // Finally, if there's nothing more to do in this row (to the right), we'll move on to the next row.
                     xSearchLoop = xParent;
-                    bCheckingStartingPoint = sal_False;
+                    bCheckingStartingPoint = false;
                 }
 
                 if (m_arrChildIndizies.empty() && !bCheckingStartingPoint)
                 {   //This is the case if there is nothing to the right in the original search loop
-                    bHasMoreToSearch = sal_False;
+                    bHasMoreToSearch = false;
                 }
             }
 
@@ -114,12 +114,12 @@ IndexAccessIterator::~IndexAccessIterator() {}
                 if (ShouldHandleElement(xSearchLoop))
                 {
                     m_xCurrentObject = xSearchLoop;
-                    bFoundSomething = sal_True;
+                    bFoundSomething = true;
                 }
                 else
                     if (bCheckingStartingPoint)
-                        bHasMoreToSearch = sal_False;
-                bAlreadyCheckedCurrent = sal_True;
+                        bHasMoreToSearch = false;
+                bAlreadyCheckedCurrent = true;
             }
         }
     }

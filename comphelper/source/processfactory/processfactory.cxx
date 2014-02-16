@@ -36,7 +36,7 @@ namespace comphelper
     This function preserves only that the xProcessFactory variable will not be create when
     the library is loaded.
 */
-Reference< XMultiServiceFactory > localProcessFactory( const Reference< XMultiServiceFactory >& xSMgr, sal_Bool bSet )
+Reference< XMultiServiceFactory > localProcessFactory( const Reference< XMultiServiceFactory >& xSMgr, bool bSet )
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
 
@@ -52,13 +52,13 @@ Reference< XMultiServiceFactory > localProcessFactory( const Reference< XMultiSe
 
 void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
 {
-    localProcessFactory( xSMgr, sal_True );
+    localProcessFactory( xSMgr, true );
 }
 
 Reference< XMultiServiceFactory > getProcessServiceFactory()
 {
     Reference< XMultiServiceFactory> xReturn;
-    xReturn = localProcessFactory( xReturn, sal_False );
+    xReturn = localProcessFactory( xReturn, false );
     if ( !xReturn.is() )
     {
         throw DeploymentException(

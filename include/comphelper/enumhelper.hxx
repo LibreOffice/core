@@ -61,7 +61,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
     staruno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
     staruno::Reference< starcontainer::XNameAccess >    m_xAccess;
-    sal_Bool                                            m_bListening;
+    bool                                            m_bListening;
 
 public:
     OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess);
@@ -92,7 +92,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
 {
     sal_Int32                                         m_nPos;
     staruno::Reference< starcontainer::XIndexAccess > m_xAccess;
-    sal_Bool                                          m_bListening;
+    bool                                          m_bListening;
 
 public:
     OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess);

@@ -132,7 +132,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aListRowSet()
     ,m_eListSourceType(ListSourceType_TABLE)
-    ,m_bEmptyIsNull(sal_True)
+    ,m_bEmptyIsNull(true)
 {
     m_nClassId = FormComponentType::COMBOBOX;
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
@@ -353,7 +353,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
         _rxOutStream << nBoundColumn;
     }
 
-    _rxOutStream << (sal_Bool)m_bEmptyIsNull;
+    _rxOutStream << m_bEmptyIsNull;
     _rxOutStream << m_aDefaultText;
     writeHelpTextCompatibly(_rxOutStream);
 
@@ -391,7 +391,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
         m_aBoundColumn <<= (sal_Int16)0;
         m_aDefaultText = OUString();
         m_eListSourceType = ListSourceType_TABLE;
-        m_bEmptyIsNull = sal_True;
+        m_bEmptyIsNull = true;
         defaultCommonProperties();
         return;
     }
@@ -429,7 +429,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     if (nVersion > 0x0001)
     {
-        sal_Bool bNull;
+        bool bNull;
         _rxInStream >> bNull;
         m_bEmptyIsNull = bNull;
     }

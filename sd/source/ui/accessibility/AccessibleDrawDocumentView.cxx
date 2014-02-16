@@ -693,7 +693,7 @@ OUString
 
 /** Return selection state of specified child
 */
-sal_Bool
+bool
     AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
     throw (uno::RuntimeException)
 {

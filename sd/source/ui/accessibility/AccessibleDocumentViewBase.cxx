@@ -817,11 +817,11 @@ uno::Reference< XAccessibleContext >
 }
 
 // return sal_False in default case
-sal_Bool
+bool
     AccessibleDocumentViewBase::implIsSelected( sal_Int32 )
     throw (uno::RuntimeException)
 {
-    return( sal_False );
+    return( false );
 }
 
 // return nothing in default case

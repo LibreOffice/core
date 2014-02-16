@@ -44,7 +44,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OCommonAccessibleComponent::containsPoint( const Point& _rPoint ) throw (RuntimeException)
+    bool SAL_CALL OCommonAccessibleComponent::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );

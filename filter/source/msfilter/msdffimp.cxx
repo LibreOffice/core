@@ -2657,7 +2657,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
                         ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-                            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, sal_True ) );
+                            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, true ) );
                     if ( xStorage.is() )
                     {
                         const OUString sDRS( "drs" );

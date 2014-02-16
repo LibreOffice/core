@@ -25,7 +25,7 @@ namespace comphelper
 //.........................................................................
 
 //------------------------------------------------------------------------------
-staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, sal_Bool _bOnlyFirst)
+staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst)
 {
     sal_Int32 nLength = _rList.getLength();
 

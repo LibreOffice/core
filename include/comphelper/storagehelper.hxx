@@ -148,7 +148,7 @@ public:
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
-            sal_Bool bRepairStorage = sal_False )
+            bool bRepairStorage = false )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
@@ -157,7 +157,7 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
-            sal_Bool bRepairStorage = sal_False )
+            bool bRepairStorage = false )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
@@ -167,17 +167,17 @@ public:
             sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
-            sal_Bool bRepairStorage = sal_False )
+            bool bRepairStorage = false )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
         CreatePackageEncryptionData(
             const OUString& aPassword );
 
-    static sal_Bool IsValidZipEntryFileName( const OUString& aName, sal_Bool bSlashAllowed );
-    static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
+    static bool IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed );
+    static bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed );
 
-    static sal_Bool PathHasSegment( const OUString& aPath, const OUString& aSegment );
+    static bool PathHasSegment( const OUString& aPath, const OUString& aSegment );
 
     // Methods to allow easy use of hierachical names inside storages
 

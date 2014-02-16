@@ -28,9 +28,9 @@
 namespace comphelper{
 
 StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
-             : m_bUsed                    (sal_False)
-             , m_bHandledByMySelf         (sal_False)
-             , m_bHandledByInternalHandler(sal_False)
+             : m_bUsed                    (false)
+             , m_bHandledByMySelf         (false)
+             , m_bHandledByInternalHandler(false)
 {
     ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
@@ -58,12 +58,12 @@ void StillReadWriteInteraction::resetInterceptions()
 
 void StillReadWriteInteraction::resetErrorStates()
 {
-    m_bUsed                     = sal_False;
-    m_bHandledByMySelf          = sal_False;
-    m_bHandledByInternalHandler = sal_False;
+    m_bUsed                     = false;
+    m_bHandledByMySelf          = false;
+    m_bHandledByInternalHandler = false;
 }
 
-sal_Bool StillReadWriteInteraction::wasWriteError()
+bool StillReadWriteInteraction::wasWriteError()
 {
     return (m_bUsed && m_bHandledByMySelf);
 }
@@ -72,10 +72,10 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
                                                                   const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
 {
     // we are used!
-    m_bUsed = sal_True;
+    m_bUsed = true;
 
     // check if it's a real interception - might some parameters are not the right ones ...
-    sal_Bool bAbort = sal_False;
+    bool bAbort = false;
     switch(aRequest.Handle)
     {
     case HANDLE_INTERACTIVEIOEXCEPTION:
@@ -97,7 +97,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
 
     case HANDLE_UNSUPPORTEDDATASINKEXCEPTION:
         {
-            bAbort = sal_True;
+            bAbort = true;
         }
         break;
     }
@@ -105,7 +105,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     // handle interaction by ourself
     if (bAbort)
     {
-        m_bHandledByMySelf = sal_True;
+        m_bHandledByMySelf = true;
         css::uno::Reference< css::task::XInteractionContinuation > xAbort = ::ucbhelper::InterceptedInteraction::extractContinuation(
             xRequest->getContinuations(),
             ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0)));
@@ -118,7 +118,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     // Otherwhise use internal handler.
     if (m_xInterceptedHandler.is())
     {
-        m_bHandledByInternalHandler = sal_True;
+        m_bHandledByInternalHandler = true;
         m_xInterceptedHandler->handle(xRequest);
     }
     return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;

@@ -2680,7 +2680,7 @@ OUString DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
             sText = _rxField->getString();
             if ( m_bBound )
             {
-                Sequence< sal_Int16 > aPosSeq = ::comphelper::findValue( m_aValueList, sText, sal_True );
+                Sequence< sal_Int16 > aPosSeq = ::comphelper::findValue( m_aValueList, sText, true );
                 if ( aPosSeq.getLength() )
                     sText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
                 else
@@ -3038,7 +3038,7 @@ void DbFilterField::SetText(const OUString& rText)
         }   break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
-            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, sal_True);
+            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, true);
             if (aPosSeq.getLength())
                 static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], sal_True);
             else

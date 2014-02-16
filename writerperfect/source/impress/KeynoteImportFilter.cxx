@@ -302,7 +302,7 @@ throw( com::sun::star::uno::RuntimeException )
             lComponentDataNV.realloc( nCDSize + 1 );
             beans::NamedValue aValue;
             aValue.Name = "IsPackage";
-            aValue.Value = comphelper::makeBoolAny(sal_True);
+            aValue.Value = comphelper::makeBoolAny(true);
             lComponentDataNV[nCDSize] = aValue;
             Descriptor[nComponentDataLocation].Value <<= lComponentDataNV;
         }
@@ -312,7 +312,7 @@ throw( com::sun::star::uno::RuntimeException )
             lComponentDataPV.realloc( nCDSize + 1 );
             beans::PropertyValue aProp;
             aProp.Name = "IsPackage";
-            aProp.Value = comphelper::makeBoolAny(sal_True);
+            aProp.Value = comphelper::makeBoolAny(true);
             aProp.Handle = -1;
             aProp.State = beans::PropertyState_DIRECT_VALUE;
             lComponentDataPV[nCDSize] = aProp;

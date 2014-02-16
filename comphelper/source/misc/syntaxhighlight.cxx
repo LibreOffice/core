@@ -261,10 +261,10 @@ class SyntaxHighlighter::Tokenizer
     sal_uInt16 aCharTypeTab[256];
 
     // Auxiliary function: testing of the character flags
-    sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
+    bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
 
     // Get new token, EmptyString == nothing more over there
-    sal_Bool getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+    bool getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
     const char** ppListKeyWords;
@@ -282,7 +282,7 @@ public:
 };
 
 // Helper function: test character flag
-sal_Bool SyntaxHighlighter::Tokenizer::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
+bool SyntaxHighlighter::Tokenizer::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
 {
     bool bRet = false;
     if( c != 0 && c <= 255 )
@@ -303,7 +303,7 @@ void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uIn
     nKeyWordCount = nCount;
 }
 
-sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
     /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos )
 {
     reType = TT_UNKNOWN;
@@ -312,24 +312,24 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
 
     sal_Unicode c = *pos;
     if( c == 0 )
-        return sal_False;
+        return false;
 
     ++pos;
 
     //*** Go through all possibilities ***
     // Space?
-    if ( (testCharFlags( c, CHAR_SPACE ) == sal_True) )
+    if ( testCharFlags( c, CHAR_SPACE ) )
     {
-        while( testCharFlags( *pos, CHAR_SPACE ) == sal_True )
+        while( testCharFlags( *pos, CHAR_SPACE ) )
             ++pos;
 
         reType = TT_WHITESPACE;
     }
 
     // Identifier?
-    else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == sal_True) )
+    else if ( testCharFlags( c, CHAR_START_IDENTIFIER ) )
     {
-        sal_Bool bIdentifierChar;
+        bool bIdentifierChar;
         do
         {
             // Naechstes Zeichen holen
@@ -372,7 +372,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
                     {
                         // Remove all characters until end of line or EOF
                         sal_Unicode cPeek = *pos;
-                        while( cPeek != 0 && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
+                        while( cPeek != 0 && !testCharFlags( cPeek, CHAR_EOL ) )
                         {
                             c = *pos++;
                             cPeek = *pos;
@@ -387,14 +387,14 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
 
     // Operator?
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
-    else if ( ( testCharFlags( c, CHAR_OPERATOR ) == sal_True ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
+    else if ( testCharFlags( c, CHAR_OPERATOR ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
     {
         // parameters for SQL view
         if ( (c==':') || (c=='?'))
         {
             if (c!='?')
             {
-                sal_Bool bIdentifierChar;
+                bool bIdentifierChar;
                 do
                 {
                     // Get next character
@@ -413,7 +413,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
             if (cPeekNext=='-')
             {
                 // Remove all characters until end of line or EOF
-                while( cPeekNext != 0 && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
+                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CHAR_EOL ) )
                 {
                     ++pos;
                     cPeekNext = *pos;
@@ -427,7 +427,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
            if (cPeekNext=='/')
            {
                // Remove all characters until end of line or EOF
-               while( cPeekNext != 0 && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
+               while( cPeekNext != 0 && !testCharFlags( cPeekNext, CHAR_EOL ) )
                {
                    ++pos;
                    cPeekNext = *pos;
@@ -469,7 +469,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
     }
 
     // Number?
-    else if( testCharFlags( c, CHAR_START_NUMBER ) == sal_True )
+    else if( testCharFlags( c, CHAR_START_NUMBER ) )
     {
         reType = TT_NUMBER;
 
@@ -511,7 +511,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
         if( reType == TT_NUMBER && nRadix == 10 )
         {
             // Flag if the last character is an exponent
-            sal_Bool bAfterExpChar = sal_False;
+            bool bAfterExpChar = false;
 
             // Read all numbers
             while( testCharFlags( *pos, CHAR_IN_NUMBER ) ||
@@ -526,7 +526,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
     }
 
     // String?
-    else if( testCharFlags( c, CHAR_START_STRING ) == sal_True )
+    else if( testCharFlags( c, CHAR_START_STRING ) )
     {
         // Remember which character has opened the string
         sal_Unicode cEndString = c;
@@ -544,7 +544,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
                 break;
             }
             c = *pos++;
-            if( testCharFlags( c, CHAR_EOL ) == sal_True )
+            if( testCharFlags( c, CHAR_EOL ) )
             {
                 // ERROR: unterminated string literal
                 reType = TT_ERROR;
@@ -563,11 +563,11 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
     }
 
     // End of line?
-    else if( testCharFlags( c, CHAR_EOL ) == sal_True )
+    else if( testCharFlags( c, CHAR_EOL ) )
     {
         // If another EOL character comes, read it
         sal_Unicode cNext = *pos;
-        if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == sal_True )
+        if( cNext != c && testCharFlags( cNext, CHAR_EOL ) )
             ++pos;
 
         reType = TT_EOL;
@@ -577,7 +577,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
 
     // Save end position
     rpEndPos = pos;
-    return sal_True;
+    return true;
 }
 
 SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(aLang)

@@ -43,19 +43,19 @@ namespace comphelper
     */
     class OInteractionSelect
     {
-        sal_Bool    m_bSelected : 1;    /// indicates if the select event occurred
+        bool    m_bSelected : 1;    /// indicates if the select event occurred
 
     protected:
-        OInteractionSelect() : m_bSelected(sal_False) { }
+        OInteractionSelect() : m_bSelected(false) { }
 
     public:
         /// determines whether or not this handler was selected
-        sal_Bool    wasSelected() const { return m_bSelected; }
+        bool    wasSelected() const { return m_bSelected; }
         /// resets the state to "not selected", so you may reuse the handler
-        void        reset() { m_bSelected = sal_False; }
+        void        reset() { m_bSelected = false; }
 
     protected:
-        void    implSelected() { m_bSelected = sal_True; }
+        void    implSelected() { m_bSelected = true; }
     };
 
     //=========================================================================

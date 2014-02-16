@@ -39,13 +39,13 @@ bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rVal
 {
     if( rStrImpValue == maTrueStr )
     {
-        rValue = ::cppu::bool2any( sal_True );
+        rValue = ::cppu::bool2any( true );
         return true;
     }
 
     if( rStrImpValue == maFalseStr )
     {
-        rValue = ::cppu::bool2any( sal_False );
+        rValue = ::cppu::bool2any( false );
         return true;
     }
 

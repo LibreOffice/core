@@ -43,7 +43,7 @@ public:
     const PropertyMap* getPropertyMap() const throw();
 
     Property getPropertyByName( const OUString& aName ) throw( UnknownPropertyException );
-    sal_Bool hasPropertyByName( const OUString& aName ) throw();
+    bool hasPropertyByName( const OUString& aName ) throw();
 
 private:
     PropertyMap maPropertyMap;
@@ -138,7 +138,7 @@ Property PropertyMapImpl::getPropertyByName( const OUString& aName ) throw( Unkn
     return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
 }
 
-sal_Bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
+bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
 {
     return maPropertyMap.find( aName ) != maPropertyMap.end();
 }

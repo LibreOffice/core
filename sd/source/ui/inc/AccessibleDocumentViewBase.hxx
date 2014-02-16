@@ -275,7 +275,7 @@ private:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     // return sal_False in default case
-    virtual sal_Bool
+    virtual bool
         implIsSelected( sal_Int32 nAccessibleChildIndex )
         throw (::com::sun::star::uno::RuntimeException);
 

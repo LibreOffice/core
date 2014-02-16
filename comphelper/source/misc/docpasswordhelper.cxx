@@ -95,9 +95,9 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 }
 
 // ============================================================================
-sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
+bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( !aPassword.isEmpty() && aInfo.getLength() )
     {
         OUString sAlgorithm;
@@ -123,7 +123,7 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, 
             for ( sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aHash.getLength() && aNewHash[nInd] == aHash[nInd]; nInd ++ )
             {
                 if ( nInd == aNewHash.getLength() - 1 && nInd == aHash.getLength() - 1 )
-                    bResult = sal_True;
+                    bResult = true;
             }
         }
     }

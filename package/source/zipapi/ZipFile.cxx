@@ -852,7 +852,7 @@ sal_Int32 ZipFile::readCEN()
                                                    aEntry.nPathLen,
                                                    RTL_TEXTENCODING_UTF8 );
 
-            if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, sal_True ) )
+            if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
                 throw ZipException("Zip entry has an invalid name.", uno::Reference < XInterface > () );
 
             aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );

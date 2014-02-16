@@ -317,7 +317,7 @@ void SAL_CALL SvxShowCharSetAcc::disposing()
 IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
 // -----------------------------------------------------------------------
-sal_Bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw (RuntimeException)
+bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw (RuntimeException)
 {
     return m_pParent && m_pParent->getCharSetControl()->IsSelected(
         sal::static_int_cast<sal_uInt16>(nAccessibleChildIndex));

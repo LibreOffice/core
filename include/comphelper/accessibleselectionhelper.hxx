@@ -56,7 +56,7 @@ namespace comphelper
             throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-        virtual sal_Bool
+        virtual bool
             implIsSelected( sal_Int32 nAccessibleChildIndex )
             throw (::com::sun::star::uno::RuntimeException) = 0;
 
@@ -70,7 +70,7 @@ namespace comphelper
         /** non-virtual versions of the methods which can be implemented using <method>implIsSelected</method> and <method>implSelect</method>
         */
         void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL selectAllAccessibleChildren(  ) throw (::com::sun::star::uno::RuntimeException);
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);

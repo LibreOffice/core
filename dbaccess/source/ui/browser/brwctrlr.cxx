@@ -1107,7 +1107,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     SolarMutexGuard aGuard;
     // the IsModified changed to sal_False ?
     if  (   (evt.PropertyName.equals(PROPERTY_ISMODIFIED))
-        &&  (::comphelper::getBOOL(evt.NewValue) == sal_False)
+        &&  !::comphelper::getBOOL(evt.NewValue)
         )
     {   // -> the current field isn't modified anymore, too
         setCurrentModified( sal_False );
@@ -1115,7 +1115,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 
     // switching to a new record ?
     if  (   (evt.PropertyName.equals(PROPERTY_ISNEW))
-        &&  (::comphelper::getBOOL(evt.NewValue) == sal_True)
+        &&  ::comphelper::getBOOL(evt.NewValue)
         )
     {
         if (::comphelper::getINT32(xSource->getPropertyValue(PROPERTY_ROWCOUNT)) == 0)
@@ -1719,7 +1719,7 @@ void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, s
         FormErrorHelper aError(this);
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(_xParser->getFilter()));
         xFormSet->setPropertyValue(PROPERTY_HAVING_CLAUSE, makeAny(_xParser->getHavingClause()));
-        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(true));
 
         bSuccess = reloadForm(m_xLoadable);
     }
@@ -1884,8 +1884,8 @@ void SbaXDataBrowserController::ExecuteSearch()
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(false));
+    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
@@ -1909,8 +1909,8 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
+    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(false));
     xModelSet->setPropertyValue("CursorColor", Any());
 }
 
@@ -1963,7 +1963,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             {
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 sal_Bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER));
-                xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(!bApplied)));
+                xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(!bApplied));
                 reloadForm(m_xLoadable);
             }
             InvalidateFeature(ID_BROWSER_FILTERED);
@@ -2439,7 +2439,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
     Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
 
     // and move to the field
@@ -2485,7 +2485,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
         Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-        xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
         xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
     }
     catch( const Exception& )

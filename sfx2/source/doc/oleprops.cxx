@@ -962,7 +962,7 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
     ::com::sun::star::util::Date aApiDate;
 
     if( rValue.getValueType() == ::getBooleanCppuType() )
-        SetBoolValue( nPropId, ::comphelper::getBOOL( rValue ) == sal_True );
+        SetBoolValue( nPropId, ::comphelper::getBOOL( rValue ) );
     else if( rValue >>= nInt32 )
         SetInt32Value( nPropId, nInt32 );
     else if( rValue >>= fDouble )

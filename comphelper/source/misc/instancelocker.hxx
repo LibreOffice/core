@@ -51,8 +51,8 @@ class OInstanceLocker : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
-    sal_Bool m_bDisposed;
-    sal_Bool m_bInitialized;
+    bool m_bDisposed;
+    bool m_bInitialized;
 
 public:
     OInstanceLocker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
@@ -92,8 +92,8 @@ class OLockListener : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XC
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent > m_xWrapper;
 
-    sal_Bool m_bDisposed;
-    sal_Bool m_bInitialized;
+    bool m_bDisposed;
+    bool m_bInitialized;
 
     sal_Int32 m_nMode;
 
@@ -105,7 +105,7 @@ public:
 
     ~OLockListener();
 
-    sal_Bool Init();
+    bool Init();
     void Dispose();
 
 // XEventListener

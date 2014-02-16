@@ -2423,7 +2423,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
+    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
@@ -2538,7 +2538,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, sal_False ) )
+    if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
@@ -2691,7 +2691,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
+    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
@@ -2853,7 +2853,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, sal_False ) )
+    if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
@@ -2945,7 +2945,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
@@ -3012,7 +3012,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
@@ -3083,7 +3083,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
@@ -3175,8 +3175,8 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
+      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
@@ -3279,8 +3279,8 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
+      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !xDest.is() )
@@ -3380,8 +3380,8 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
+      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
@@ -3692,7 +3692,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() ); // the interface is not supported and must not be accessible
 
-    if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, sal_False ) )
+    if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     uno::Reference < io::XInputStream > xTempIn;
@@ -3799,7 +3799,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
     if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-    if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, sal_False ) )
+    if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     uno::Reference < io::XInputStream > xTempIn;
@@ -3916,7 +3916,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
     if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
+    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !xInStream.is() )
@@ -4252,7 +4252,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_False ) )
+    if ( aName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
@@ -5501,7 +5501,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
+    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
@@ -5592,8 +5592,8 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
+      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
@@ -5845,7 +5845,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
+    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
@@ -5946,7 +5946,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
+    if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
@@ -6030,7 +6030,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )
+    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, true ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE )
@@ -6100,7 +6100,7 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
         throw lang::DisposedException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )
+    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, true ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
@@ -6137,7 +6137,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
     if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )
+    if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, true ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !aEncryptionData.getLength() )

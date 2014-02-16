@@ -180,7 +180,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
     }
 }
 
-const css::uno::Any SequenceAsHashMap::getAsConstAny(::sal_Bool bAsPropertyValueList) const
+const css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
 {
     css::uno::Any aDestination;
     if (bAsPropertyValueList)
@@ -204,7 +204,7 @@ const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsCo
     return lReturn;
 }
 
-sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
+bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 {
     const_iterator pCheck;
     for (  pCheck  = rCheck.begin();
@@ -216,14 +216,14 @@ sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
               const_iterator   pFound      = find(sCheckName);
 
         if (pFound == end())
-            return sal_False;
+            return false;
 
         const css::uno::Any& aFoundValue = pFound->second;
         if (aFoundValue != aCheckValue)
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)

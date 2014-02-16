@@ -70,15 +70,15 @@ namespace comphelper
          ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>  m_xSet;
         OSelectionChangeListener*                   m_pListener;
         sal_Int32                                   m_nLockCount;
-        sal_Bool                                    m_bListening        : 1;
-        sal_Bool                                    m_bAutoSetRelease   : 1;
+        bool                                    m_bListening        : 1;
+        bool                                    m_bAutoSetRelease   : 1;
 
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&);
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&);
     protected:
         virtual ~OSelectionChangeMultiplexer();
     public:
-        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>& _rxSet, sal_Bool _bAutoReleaseSet = sal_True);
+        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet = true);
 
     // XEventListener
         virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);

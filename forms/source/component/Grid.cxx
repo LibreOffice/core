@@ -736,11 +736,11 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_DISPLAYSYNCHRON:
         case PROPERTY_ID_ENABLED:
         case PROPERTY_ID_ENABLEVISIBLE:
-            aReturn = makeBoolAny(sal_True);
+            aReturn = makeBoolAny(true);
             break;
 
         case PROPERTY_ID_ALWAYSSHOWCURSOR:
-            aReturn = makeBoolAny(sal_False);
+            aReturn = makeBoolAny(false);
             break;
 
         case PROPERTY_ID_HELPURL:

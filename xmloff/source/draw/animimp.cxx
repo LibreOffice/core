@@ -605,7 +605,7 @@ void XMLAnimationsEffectContext::EndElement()
                 {
                     if( meKind == XMLE_HIDE && !mbTextEffect && meEffect == EK_none )
                     {
-                        aAny = bool2any( sal_True );
+                        aAny = bool2any( true );
                         xSet->setPropertyValue( mpImpl->msDimHide, aAny );
                     }
                     else
@@ -634,7 +634,7 @@ void XMLAnimationsEffectContext::EndElement()
                     aAny <<= bool2any( mbPlayFull );
                     xSet->setPropertyValue( mpImpl->msPlayFull, aAny );
 
-                    aAny <<= bool2any( sal_True );
+                    aAny <<= bool2any( true );
                     xSet->setPropertyValue( mpImpl->msSoundOn, aAny );
                 }
                 else

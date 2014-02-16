@@ -68,11 +68,11 @@ void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
 //= OSelectionChangeMultiplexer
 //========================================================================
 //------------------------------------------------------------------
-OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet, sal_Bool _bAutoReleaseSet)
+OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
             ,m_nLockCount(0)
-            ,m_bListening(sal_False)
+            ,m_bListening(false)
             ,m_bAutoSetRelease(_bAutoReleaseSet)
 {
     m_pListener->setAdapter(this);
@@ -113,7 +113,7 @@ void OSelectionChangeMultiplexer::dispose()
         m_pListener->setAdapter(NULL);
 
         m_pListener = NULL;
-        m_bListening = sal_False;
+        m_bListening = false;
 
         if (m_bAutoSetRelease)
             m_xSet = NULL;
@@ -135,7 +135,7 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
     }
 
     m_pListener = NULL;
-    m_bListening = sal_False;
+    m_bListening = false;
 
     if (m_bAutoSetRelease)
         m_xSet = NULL;

@@ -406,7 +406,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     }
     else
     {
-        ::comphelper::UStringMixEqual aCase(sal_False);
+        ::comphelper::UStringMixEqual aCase(false);
         // search for typeinfo where the typename is equal _sTypeName
         OTypeInfoMap::const_iterator typeInfoLoop = _rTypeInfo.begin();
         OTypeInfoMap::const_iterator typeInfoEnd  = _rTypeInfo.end();

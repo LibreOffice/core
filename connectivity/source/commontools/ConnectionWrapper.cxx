@@ -120,7 +120,7 @@ OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::su
 
     // append our own service, if necessary
     OUString sConnectionService( "com.sun.star.sdbc.Connection" );
-    if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, sal_True ).getLength() )
+    if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, true ).getLength() )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );

@@ -38,14 +38,14 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper3< ::com::sun::star::
     ::osl::Mutex m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
-    sal_Bool m_bOfficeInitialized;
-    sal_Bool m_bRestartRequested;
+    bool m_bOfficeInitialized;
+    bool m_bRestartRequested;
 
 public:
     OOfficeRestartManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
-    , m_bOfficeInitialized( sal_False )
-    , m_bRestartRequested( sal_False )
+    , m_bOfficeInitialized( false )
+    , m_bRestartRequested( false )
     {}
 
     virtual ~OOfficeRestartManager()

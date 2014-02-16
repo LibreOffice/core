@@ -85,7 +85,7 @@ private:
     typedef Properties::const_iterator              ConstPropertiesIterator;
     Properties      m_aProperties;
 
-    sal_Bool        m_bUnused;
+    bool        m_bUnused;
 
 protected:
     OPropertyContainerHelper();
@@ -139,14 +139,14 @@ protected:
 
 
     /// checkes whether a property with the given handle has been registered
-    sal_Bool    isRegisteredProperty( sal_Int32 _nHandle ) const;
+    bool    isRegisteredProperty( sal_Int32 _nHandle ) const;
 
     /// checkes whether a property with the given name has been registered
-    sal_Bool    isRegisteredProperty( const OUString& _rName ) const;
+    bool    isRegisteredProperty( const OUString& _rName ) const;
 
 
     // helper for implementing OPropertySetHelper overridables
-    sal_Bool    convertFastPropertyValue(
+    bool    convertFastPropertyValue(
                     ::com::sun::star::uno::Any & rConvertedValue,
                     ::com::sun::star::uno::Any & rOldValue,
                     sal_Int32 nHandle,

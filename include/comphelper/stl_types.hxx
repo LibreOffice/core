@@ -60,15 +60,15 @@ public:
 //------------------------------------------------------------------------
 class UStringMixEqual: public std::binary_function<OUString, OUString, bool>
 {
-    sal_Bool m_bCaseSensitive;
+    bool m_bCaseSensitive;
 
 public:
-    UStringMixEqual(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
+    UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
     bool operator() (const OUString& lhs, const OUString& rhs) const
     {
         return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
     }
-    sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
+    bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 //------------------------------------------------------------------------
 class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,OUString,bool>

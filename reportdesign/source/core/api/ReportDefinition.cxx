@@ -844,7 +844,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames( 
         aSupported = m_aProps->m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
-    if ( 0 == ::comphelper::findValue( aSupported, SERVICE_REPORTDEFINITION, sal_True ).getLength() )
+    if ( 0 == ::comphelper::findValue( aSupported, SERVICE_REPORTDEFINITION, true ).getLength() )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );
@@ -1571,9 +1571,9 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     {
         sal_Bool bPersist = sal_False;
         if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
-            bPersist = m_pImpl->m_pObjectContainer->StoreChildren(sal_True,sal_False);
+            bPersist = m_pImpl->m_pObjectContainer->StoreChildren(true,false);
         else
-            bPersist = m_pImpl->m_pObjectContainer->StoreAsChildren(sal_True,sal_True,_xStorageToSaveTo);
+            bPersist = m_pImpl->m_pObjectContainer->StoreAsChildren(true,true,_xStorageToSaveTo);
 
         if( bPersist )
             m_pImpl->m_pObjectContainer->SetPersistentEntries(m_pImpl->m_xStorage);

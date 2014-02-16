@@ -84,7 +84,7 @@ namespace frm
         void DownloadDone();
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
-        inline sal_Bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
+        inline bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
         inline void     setDispatchUrlInternal(sal_Bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:

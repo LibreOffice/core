@@ -87,7 +87,7 @@ protected:
         // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
         // into the stream at a given moment.
 
-    sal_Bool                                        m_bConnected;
+    bool                                        m_bConnected;
         // closeOutput has been called ?
 
     ::osl::Mutex                                    m_aMutex;

@@ -53,7 +53,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     }
 
     // enable lazy writing
-    sal_Bool bLazy = ((eMode & ConfigurationHelper::E_LAZY_WRITE)==ConfigurationHelper::E_LAZY_WRITE);
+    bool bLazy = ((eMode & ConfigurationHelper::E_LAZY_WRITE)==ConfigurationHelper::E_LAZY_WRITE);
     aParam.Name    = "lazywrite";
     aParam.Value   = css::uno::makeAny(bLazy);
     lParams.push_back(css::uno::makeAny(aParam));
@@ -61,7 +61,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     // open it
     css::uno::Reference< css::uno::XInterface > xCFG;
 
-    sal_Bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
+    bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
                 OUString("com.sun.star.configuration.ConfigurationAccess"),

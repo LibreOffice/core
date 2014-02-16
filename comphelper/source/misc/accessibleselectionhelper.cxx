@@ -46,7 +46,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    bool SAL_CALL OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         return( implIsSelected( nChildIndex ) );
     }

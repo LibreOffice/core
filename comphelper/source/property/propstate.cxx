@@ -155,7 +155,7 @@ namespace comphelper
         Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
         Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
 
-        sal_Bool bEqual = uno_type_equalData(
+        bool bEqual = uno_type_equalData(
                 const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
                 const_cast< void* >( aDefaultValue.getValue() ), aDefaultValue.getValueType().getTypeLibType(),
                 reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),

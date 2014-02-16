@@ -172,7 +172,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @return A const Any, which
                     contains all items of this map.
          */
-        const ::com::sun::star::uno::Any getAsConstAny(::sal_Bool bAsPropertyValue) const;
+        const ::com::sun::star::uno::Any getAsConstAny(bool bAsPropertyValue) const;
 
         //---------------------------------------
         /** @short  return this map instance to as a
@@ -262,16 +262,16 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     FALSE if it already exists.
          */
         template< class TValueType >
-        sal_Bool createItemIfMissing(const OUString& sKey  ,
+        bool createItemIfMissing(const OUString& sKey  ,
                                      const TValueType&      aValue)
         {
             if (find(sKey) == end())
             {
                 (*this)[sKey] = ::com::sun::star::uno::makeAny(aValue);
-                return sal_True;
+                return true;
             }
 
-            return sal_False;
+            return false;
         }
 
         //---------------------------------------
@@ -290,7 +290,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     TRUE if all items of Rcheck could be found
                     in these map; FALSE otherwise.
          */
-        sal_Bool match(const SequenceAsHashMap& rCheck) const;
+        bool match(const SequenceAsHashMap& rCheck) const;
 
         //---------------------------------------
         /** @short  merge all values from the given map into

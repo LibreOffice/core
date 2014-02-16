@@ -35,10 +35,10 @@ namespace comphelper
     {
         ChainablePropertySet * mpSlave;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxSlave;
-        sal_Bool mbInit;
+        bool mbInit;
         SlaveData ( ChainablePropertySet *pSlave);
-        inline sal_Bool IsInit () { return mbInit;}
-        inline void SetInit ( sal_Bool bInit) { mbInit = bInit; }
+        inline bool IsInit () { return mbInit;}
+        inline void SetInit ( bool bInit) { mbInit = bInit; }
     };
 }
 typedef std::map < sal_uInt8, comphelper::SlaveData* > SlaveMap;

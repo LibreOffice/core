@@ -42,7 +42,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
 //-------------------------------------------------------------------------
-sal_Bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
+bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
 {
     return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
@@ -54,7 +54,7 @@ sal_Bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool operator ==(const Date& _rLeft, const Date& _rRight)
+bool operator ==(const Date& _rLeft, const Date& _rRight)
 {
     return ( _rLeft.Day == _rRight.Day) &&
     ( _rLeft.Month == _rRight.Month) &&
@@ -62,7 +62,7 @@ sal_Bool operator ==(const Date& _rLeft, const Date& _rRight)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool operator ==(const Time& _rLeft, const Time& _rRight)
+bool operator ==(const Time& _rLeft, const Time& _rRight)
 {
     return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
@@ -119,9 +119,9 @@ OUString getString(const Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool getBOOL(const Any& _rAny)
+bool getBOOL(const Any& _rAny)
 {
-    sal_Bool nReturn = sal_False;
+    bool nReturn = false;
     if (_rAny.getValueType() == ::getCppuBooleanType())
         nReturn = *(sal_Bool*)_rAny.getValue();
     else
@@ -149,7 +149,7 @@ FontDescriptor  getDefaultFont()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
+bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 {
     // getthe type lib descriptions
     typelib_TypeDescription* pAssignable = NULL;
@@ -164,7 +164,7 @@ sal_Bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 
 //------------------------------------------------------------------
 template<class TYPE>
-bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, TYPE& _rOut)
+bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, TYPE& _rOut)
 {
     bool bSuccess = _rValue >>= _rOut;
     _bIdentical = bSuccess && (_rOut == *reinterpret_cast<const TYPE*>(_pData));
@@ -172,7 +172,7 @@ bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, T
 }
 
 //------------------------------------------------------------------
-bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Unicode& _rOut)
+bool tryCompare(const void* _pData, const Any& _rValue, bool& _bIdentical, sal_Unicode& _rOut)
 {
     bool bSuccess = ( _rValue.getValueTypeClass() == TypeClass_CHAR );
     if ( bSuccess )
@@ -182,9 +182,9 @@ bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, s
 }
 
 //------------------------------------------------------------------
-sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
+bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
 
     if (_rType.getTypeClass() == TypeClass_ANY)
     {
@@ -208,16 +208,16 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
     }
     else
     {
-        sal_Bool bConversionSuccess = sal_False;
+        bool bConversionSuccess = false;
         switch (_rType.getTypeClass())
         {
             case TypeClass_VOID:
-                bConversionSuccess = sal_True;
+                bConversionSuccess = true;
                 bRes = _rValue.getValueType().getTypeClass() == TypeClass_VOID;
                 break;
             case TypeClass_BOOLEAN:
             {
-                sal_Bool aDummy;
+                bool aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
@@ -298,7 +298,7 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                         bRes = *(FontDescriptor*)pData == aTemp;
                     }
                     else
-                        bRes = sal_False;
+                        bRes = false;
                     break;
                 }
                 if (isA(_rType, static_cast<Date*>(NULL)))
@@ -413,7 +413,7 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                 }
                 break;
             default:
-                bRes = sal_False;
+                bRes = false;
         }
 
         bRes = bRes && bConversionSuccess;
@@ -422,13 +422,13 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool compare(const Any& rLeft, const Any& rRight)
+bool compare(const Any& rLeft, const Any& rRight)
 {
     return compare_impl(rLeft.getValueType(), rLeft.getValue(), rRight);
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
+bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
 {
     return ( _rLeft.Name.equals( _rRight.Name ) ) &&
     ( _rLeft.Height == _rRight.Height ) &&

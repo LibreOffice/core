@@ -1360,7 +1360,7 @@ void OBoundControlModel::implInitAggMultiplexer( )
     increment( m_refCount );
     if ( m_xAggregateSet.is() )
     {
-        m_pAggPropMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
+        m_pAggPropMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, false );
         m_pAggPropMultiplexer->acquire();
     }
     decrement( m_refCount );

@@ -523,35 +523,35 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
+bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
 {
     if (_rContainer == m_xStartingPoint)
         // would be quite stupid to step over the root ....
-        return sal_True;
+        return true;
 
     return Reference< XControlModel>(_rContainer, UNO_QUERY).is();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>& _rElement)
+bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>& _rElement)
 {
     if (!_rElement.is())
         // NULL element
-        return sal_False;
+        return false;
 
     if (Reference< XForm>(_rElement, UNO_QUERY).is() || Reference< XGrid>(_rElement, UNO_QUERY).is())
         // a forms or a grid
-        return sal_False;
+        return false;
 
     Reference< XPropertySet> xSet(_rElement, UNO_QUERY);
     if (!xSet.is() || !::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         // no "BoundField" property
-        return sal_False;
+        return false;
 
     Any aVal( xSet->getPropertyValue(FM_PROP_BOUNDFIELD) );
     if (aVal.getValueTypeClass() != TypeClass_INTERFACE)
         // void or invalid property value
-        return sal_False;
+        return false;
 
     return aVal.hasValue();
 }
@@ -4031,7 +4031,7 @@ SearchableControlIterator::SearchableControlIterator(Reference< XInterface> xSta
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterface>& xElement)
+bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterface>& xElement)
 {
     // wenn das Ding eine ControlSource und einen BoundField-Property hat
     Reference< XPropertySet> xProperties(xElement, UNO_QUERY);
@@ -4044,7 +4044,7 @@ sal_Bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterf
         {
             // nehmen wir's
             m_sCurrentValue = ::comphelper::getString(xProperties->getPropertyValue(FM_PROP_CONTROLSOURCE));
-            return sal_True;
+            return true;
         }
     }
 
@@ -4055,17 +4055,17 @@ sal_Bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterf
         if (::comphelper::getINT16(aClassId) == FormComponentType::GRIDCONTROL)
         {
             m_sCurrentValue = "";
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*xContainer*/) const
+bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*xContainer*/) const
 {
-    return sal_True;
+    return true;
 }
 
 //==============================================================================

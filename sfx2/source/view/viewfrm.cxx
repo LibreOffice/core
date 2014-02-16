@@ -198,7 +198,7 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
                  bMSType ? ::comphelper::DocPasswordRequestType_MS : ::comphelper::DocPasswordRequestType_STANDARD,
                  bFirstTime ? ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER : ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER,
                  aPath,
-                 sal_True ) );
+                 true ) );
 
             uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
             xHandler->handle( rRequest );

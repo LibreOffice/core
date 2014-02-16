@@ -203,7 +203,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
             readHelpTextCompatibly(_rxInStream);
 
             // DispatchInternal
-            sal_Bool bDispath;
+            bool bDispath;
             _rxInStream >> bDispath;
             setDispatchUrlInternal(bDispath);
         }

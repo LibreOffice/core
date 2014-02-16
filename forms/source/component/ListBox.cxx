@@ -992,7 +992,7 @@ namespace frm
         // - this would be unable to reflect in the db column
         if ( hasField() )
         {
-            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, ::cppu::bool2any( ( sal_False ) ) );
+            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, ::cppu::bool2any( false ) );
         }
 
         if ( !hasExternalListSource() )
@@ -1372,7 +1372,7 @@ namespace frm
             {
                 // the indexes where the current string appears in our string items
                 Sequence< sal_Int16 > aThisEntryIndexes;
-                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, sal_False );
+                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, false );
 
                 // insert all the indexes of this entry into our set
                 ::std::copy(
@@ -1397,7 +1397,7 @@ namespace frm
             OUString sStringToSelect;
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
 
-            aSelectIndexes = findValue( getStringItemList(), sStringToSelect, sal_False );
+            aSelectIndexes = findValue( getStringItemList(), sStringToSelect, false );
         }
         break;
         }

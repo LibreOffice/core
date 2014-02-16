@@ -209,7 +209,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString( "delete" ),
-                                comphelper::makeBoolAny( sal_True ) );
+                                comphelper::makeBoolAny( true ) );
     }
     catch( uno::Exception& )
     {

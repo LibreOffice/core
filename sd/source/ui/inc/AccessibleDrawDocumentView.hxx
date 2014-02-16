@@ -123,7 +123,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    virtual sal_Bool
+    virtual bool
         implIsSelected( sal_Int32 nAccessibleChildIndex )
         throw (::com::sun::star::uno::RuntimeException);
 

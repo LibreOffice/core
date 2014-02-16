@@ -1121,7 +1121,7 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     // have it enabled by default because of 85071)
     uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( getPeer(), uno::UNO_QUERY );
     if ( xVclWindowPeer.is() )
-        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), ::cppu::bool2any( sal_True ) );
+        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), ::cppu::bool2any( true ) );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)

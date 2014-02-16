@@ -143,7 +143,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
     ,m_nMinimumResize(_nMinimumResize)
     ,m_nMaximumResize(_nMaximumResize)
     ,m_nSize(0) // starting at position 0
-    ,m_bConnected(sal_True)
+    ,m_bConnected(true)
 {
     OSL_ENSURE(m_nResizeFactor > 1, "OSequenceOutputStream::OSequenceOutputStream : invalid resize factor !");
     OSL_ENSURE((m_nMaximumResize < 0) || (m_nMaximumResize > m_nMinimumResize),
@@ -228,7 +228,7 @@ void SAL_CALL OSequenceOutputStream::closeOutput(  ) throw(NotConnectedException
     // cut the sequence to the real size
     m_rSequence.realloc(m_nSize);
     // and don't allow any further accesses
-    m_bConnected = sal_False;
+    m_bConnected = false;
 }
 
 } // namespace comphelper

@@ -81,21 +81,21 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool OCommonAccessibleText::implIsValidBoundary( i18n::Boundary& rBoundary, sal_Int32 nLength )
+    bool OCommonAccessibleText::implIsValidBoundary( i18n::Boundary& rBoundary, sal_Int32 nLength )
     {
         return ( rBoundary.startPos >= 0 ) && ( rBoundary.startPos < nLength ) && ( rBoundary.endPos >= 0 ) && ( rBoundary.endPos <= nLength );
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool OCommonAccessibleText::implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength )
+    bool OCommonAccessibleText::implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength )
     {
         return ( nIndex >= 0 ) && ( nIndex < nLength );
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool OCommonAccessibleText::implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength )
+    bool OCommonAccessibleText::implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength )
     {
         return ( nStartIndex >= 0 ) && ( nStartIndex <= nLength ) && ( nEndIndex >= 0 ) && ( nEndIndex <= nLength );
     }
@@ -133,9 +133,9 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool OCommonAccessibleText::implGetWordBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    bool OCommonAccessibleText::implGetWordBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        sal_Bool bWord = sal_False;
+        bool bWord = false;
         OUString sText( implGetText() );
 
         if ( implIsValidIndex( nIndex, sText.getLength() ) )
@@ -151,7 +151,7 @@ namespace comphelper
                 {
                     sal_Int32 nType = xCharClass->getCharacterType( sText, rBoundary.startPos, implGetLocale() );
                     if ( ( nType & ( i18n::KCharacterType::LETTER | i18n::KCharacterType::DIGIT ) ) != 0 )
-                        bWord = sal_True;
+                        bWord = true;
                 }
             }
         }
@@ -360,7 +360,7 @@ namespace comphelper
             case AccessibleTextType::WORD:
             {
                 // get word at index
-                sal_Bool bWord = implGetWordBoundary( aBoundary, nIndex );
+                bool bWord = implGetWordBoundary( aBoundary, nIndex );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
                 {
                     aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -472,7 +472,7 @@ namespace comphelper
                 // get word at index
                 implGetWordBoundary( aBoundary, nIndex );
                 // get previous word
-                sal_Bool bWord = sal_False;
+                bool bWord = false;
                 while ( !bWord && aBoundary.startPos > 0 )
                     bWord = implGetWordBoundary( aBoundary, aBoundary.startPos - 1 );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
@@ -597,7 +597,7 @@ namespace comphelper
                 // get word at index
                 implGetWordBoundary( aBoundary, nIndex );
                 // get next word
-                sal_Bool bWord = sal_False;
+                bool bWord = false;
                 while ( !bWord && aBoundary.endPos < nLength )
                     bWord = implGetWordBoundary( aBoundary, aBoundary.endPos );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
@@ -615,7 +615,7 @@ namespace comphelper
                 // get next sentence
                 sal_Int32 nEnd = aBoundary.endPos;
                 sal_Int32 nI = aBoundary.endPos;
-                sal_Bool bFound = sal_False;
+                bool bFound = false;
                 while ( !bFound && ++nI < nLength )
                 {
                     implGetSentenceBoundary( aBoundary, nI );

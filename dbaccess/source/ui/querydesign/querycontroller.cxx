@@ -1333,7 +1333,7 @@ void OQueryController::executeQuery()
                 aProps[2].Value <<= sTranslatedStmt;
 
                 aProps[3].Name = PROPERTY_ENABLE_BROWSER;
-                aProps[3].Value = ::cppu::bool2any(sal_False);
+                aProps[3].Value = ::cppu::bool2any(false);
 
                 aProps[4].Name = PROPERTY_ACTIVE_CONNECTION;
                 aProps[4].Value <<= getConnection();
