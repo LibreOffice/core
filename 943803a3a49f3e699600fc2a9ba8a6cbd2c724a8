@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8c0949_0eeeeb8b",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Since you are already changing this, the initialization should happen in initialization list.",
+      "range": {
+        "startLine": 112,
+        "startChar": 20,
+        "endLine": 112,
+        "endChar": 21
+      },
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_2ef3a774",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Same as above: the member should be initialized in initialization list. Even better, the copy ctor is not needed at all.",
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_6eedaf8b",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Explicit dtor is not needed now.",
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_4ee8f37c",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Explicit operator\u003d is not needed now.",
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_aefeb736",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Please avoid inconsequential changes like moving braces around.",
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_8e01fb3b",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-16T10:28:29Z",
+      "side": 1,
+      "message": "Why not assign to mpData directly?",
+      "range": {
+        "startLine": 829,
+        "startChar": 0,
+        "endLine": 829,
+        "endChar": 8
+      },
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
