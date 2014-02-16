@@ -68,13 +68,13 @@ private:
     const std::map<OUString, uno::Any>& mrProperties;
 };
 
-sal_Bool DummyPropertySetInfo::hasPropertyByName( const OUString& rName )
+sal_Bool SAL_CALL DummyPropertySetInfo::hasPropertyByName( const OUString& rName )
     throw(uno::RuntimeException)
 {
     return mrProperties.find(rName) != mrProperties.end();
 }
 
-beans::Property DummyPropertySetInfo::getPropertyByName( const OUString& rName )
+beans::Property SAL_CALL DummyPropertySetInfo::getPropertyByName( const OUString& rName )
     throw(uno::RuntimeException, beans::UnknownPropertyException)
 {
     beans::Property aRet;
@@ -88,7 +88,7 @@ beans::Property DummyPropertySetInfo::getPropertyByName( const OUString& rName )
     return aRet;
 }
 
-uno::Sequence< beans::Property > DummyPropertySetInfo::getProperties()
+uno::Sequence< beans::Property > SAL_CALL DummyPropertySetInfo::getProperties()
     throw(uno::RuntimeException)
 {
     uno::Sequence< beans::Property > aRet(mrProperties.size());
