@@ -275,7 +275,7 @@ public:
         ComponentInstantiation pCreateFunction_,
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_,
-        sal_Bool bOneInstance_ = sal_False )
+        bool bOneInstance_ = false )
         SAL_THROW(())
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
@@ -322,11 +322,11 @@ public:
 
 private:
     Reference<XInterface >  xTheInstance;
-    sal_Bool                bOneInstance;
+    bool                bOneInstance;
 protected:
     // needed for implementing XUnloadingPreference in inheriting classes
-    sal_Bool isOneInstance() {return bOneInstance;}
-    sal_Bool isInstance() {return xTheInstance.is();}
+    bool isOneInstance() {return bOneInstance;}
+    bool isInstance() {return xTheInstance.is();}
 };
 
 
@@ -494,7 +494,7 @@ public:
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_,
         const Reference<XRegistryKey > & xImplementationKey_,
-        sal_Bool bOneInstance_ = sal_False ) SAL_THROW(())
+        bool bOneInstance_ = false ) SAL_THROW(())
             : OFactoryComponentHelper(
                 rServiceManager, rImplementationName_, 0, 0, 0, bOneInstance_ ),
               OPropertySetHelper( OComponentHelper::rBHelper ),
@@ -868,10 +868,10 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames(void)
 
 sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool retVal= sal_True;
+    bool retVal= true;
     if( isOneInstance() && isInstance())
     {
-        retVal= sal_False;
+        retVal= false;
     }
     else if( ! isOneInstance())
     {
@@ -986,7 +986,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, sal_False );
+        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, false );
 }
 
 // global function
@@ -1008,7 +1008,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, sal_True );
+        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, true );
 }
 
 // global function
@@ -1019,7 +1019,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     SAL_THROW(())
 {
     return new ORegistryFactoryHelper(
-        rServiceManager, rImplementationName, rImplementationKey, sal_False );
+        rServiceManager, rImplementationName, rImplementationKey, false );
 }
 
 // global function
@@ -1030,7 +1030,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     SAL_THROW(())
 {
     return new ORegistryFactoryHelper(
-        rServiceManager, rImplementationName, rImplementationKey, sal_True );
+        rServiceManager, rImplementationName, rImplementationKey, true );
 }
 
 //##################################################################################################
@@ -1042,7 +1042,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, sal_False );
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, false );
 }
 
 Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
@@ -1053,7 +1053,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFa
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, sal_True );
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, true );
 }
 
 }

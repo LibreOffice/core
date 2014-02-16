@@ -31,7 +31,7 @@ sal_Bool component_writeInfoHelper(
     SAL_UNUSED_PARAMETER void *, void * pRegistryKey,
     ImplementationEntry const * entries)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if( pRegistryKey )
@@ -47,7 +47,7 @@ sal_Bool component_writeInfoHelper(
                 for ( sal_Int32 nPos = 0 ; nPos < seq.getLength(); nPos ++ )
                     xNewKey->createKey( pArray[nPos] );
             }
-            bRet = sal_True;
+            bRet = true;
         }
     }
     catch ( InvalidRegistryException & )

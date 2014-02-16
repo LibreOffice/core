@@ -95,7 +95,7 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
 
 OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW(())
 {
-    sal_Bool bShared;
+    bool bShared;
     {
     MutexGuard aGuard( rCont.rMutex );
     // bResetInUse protect the iterator against recursion

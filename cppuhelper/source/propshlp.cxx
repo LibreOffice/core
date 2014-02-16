@@ -465,7 +465,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
     // to change their value.
 
     Any aConverted, aOld;
-    sal_Bool bChanged = convertFastPropertyValue( aConverted, aOld, i_handle, i_value );
+    bool bChanged = convertFastPropertyValue( aConverted, aOld, i_handle, i_value );
     if ( !bChanged )
         return;
 
@@ -524,7 +524,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
     Any aOldVal;
 
     // Will the property change?
-    sal_Bool bChanged;
+    bool bChanged;
     {
         MutexGuard aGuard( rBHelper.rMutex );
         bChanged = convertFastPropertyValue( aConvertedVal, aOldVal, nHandle, rValue );

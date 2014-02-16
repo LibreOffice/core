@@ -148,14 +148,14 @@ void OComponentHelper::dispose()
 
     // Guard dispose against multible threading
     // Remark: It is an error to call dispose more than once
-    sal_Bool bDoDispose = sal_False;
+    bool bDoDispose = false;
     {
     MutexGuard aGuard( rBHelper.rMutex );
     if( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
         // only one call go into this section
         rBHelper.bInDispose = sal_True;
-        bDoDispose = sal_True;
+        bDoDispose = true;
     }
     }
 

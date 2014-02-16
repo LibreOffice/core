@@ -59,16 +59,16 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
     if( ::com::sun::star::uno::TypeClass_LONG == tc ) {
         sal_Int32 i32 = 0;
         a >>= i32;
-        b = ( sal_Bool )i32;
+        b = i32 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c = *(sal_Unicode*) a.getValue();
-        b = ( sal_Bool ) c;
+        b = c != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
         sal_Int16 i16 = 0;
         a >>= i16;
-        b = ( sal_Bool ) i16;
+        b = i16 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         b = *((sal_Bool*)a.getValue());
@@ -76,17 +76,17 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
         sal_Int8 i8 = 0;
         a >>= i8;
-        b = ( sal_Bool ) i8;
+        b = i8 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
         sal_uInt16 i16 = 0;
         a >>= i16;
-        b = ( sal_Bool  ) i16;
+        b = i16 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_LONG == tc ) {
         sal_uInt32 i32 = 0;
         a >>= i32;
-        b = ( sal_Bool ) i32;
+        b = i32 != 0;
     }
     else {
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -122,7 +122,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
         i = ( sal_Int64 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_Int64 ) b;
     }
@@ -176,7 +176,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const ::com::sun::s
         i = ( sal_uInt64 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_uInt64 ) b;
     }
@@ -221,7 +221,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
         i = ( sal_Int32 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_Int32 ) b;
     }
@@ -269,7 +269,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const ::com::sun::s
         i = ( sal_uInt32 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_uInt32 ) b;
     }
@@ -303,7 +303,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const ::com::sun::st
         i = ( sal_Int16 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_Int16 ) b;
     }
@@ -336,7 +336,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const ::com::sun::s
         i = ( sal_Int16 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_Int16 ) b;
     }
@@ -364,7 +364,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const ::com::sun::sta
         a >>= i;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         i = ( sal_Int8 ) b;
     }
@@ -413,7 +413,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         f = ( float ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         f = ( float ) b;
     }
@@ -480,7 +480,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const ::com::sun::star::u
         d = (double) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        sal_Bool b;
+        bool b;
         b =  *((sal_Bool * )a.getValue());
         d = (double) b;
     }
