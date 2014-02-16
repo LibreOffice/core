@@ -117,7 +117,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             //////////////////////////////////////////////////////////////
 
             uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
-                xSet ( m_pContent->getAdditionalPropertySet( sal_False ) );
+                xSet ( m_pContent->getAdditionalPropertySet( false ) );
 
             if ( xSet.is() )
             {
@@ -185,7 +185,7 @@ void PropertySetInfo::reset()
 }
 
 //=========================================================================
-sal_Bool PropertySetInfo::queryProperty(
+bool PropertySetInfo::queryProperty(
     const OUString& rName, beans::Property& rProp )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -200,11 +200,11 @@ sal_Bool PropertySetInfo::queryProperty(
         if ( rCurrProp.Name == rName )
         {
             rProp = rCurrProp;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 //=========================================================================
@@ -357,7 +357,7 @@ void CommandProcessorInfo::reset()
 
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand(
+bool CommandProcessorInfo::queryCommand(
     const OUString& rName,
     com::sun::star::ucb::CommandInfo& rCommand )
 {
@@ -374,15 +374,15 @@ sal_Bool CommandProcessorInfo::queryCommand(
         if ( rCurrCommand.Name == rName )
         {
             rCommand = rCurrCommand;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand(
+bool CommandProcessorInfo::queryCommand(
     sal_Int32 nHandle,
     com::sun::star::ucb::CommandInfo& rCommand )
 {
@@ -399,11 +399,11 @@ sal_Bool CommandProcessorInfo::queryCommand(
         if ( rCurrCommand.Handle == nHandle )
         {
             rCommand = rCurrCommand;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 } // namespace ucbhelper

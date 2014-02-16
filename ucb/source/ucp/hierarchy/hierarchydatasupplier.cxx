@@ -230,25 +230,25 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-sal_Bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
+bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_aResults.size() > nIndex )
     {
         // Result already present.
-        return sal_True;
+        return true;
     }
 
     // Result not (yet) present.
 
     if ( m_pImpl->m_bCountFinal )
-        return sal_False;
+        return false;
 
     // Try to obtain result...
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_uInt32 nPos = nOldCount;
 
     while ( m_pImpl->m_aFolder.next( m_pImpl->m_aIterator ) )
@@ -261,7 +261,7 @@ sal_Bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
             if ( nPos == nIndex )
             {
                 // Result obtained.
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }
@@ -333,7 +333,7 @@ sal_uInt32 HierarchyResultSetDataSupplier::currentCount()
 
 //=========================================================================
 // virtual
-sal_Bool HierarchyResultSetDataSupplier::isCountFinal()
+bool HierarchyResultSetDataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }

@@ -211,20 +211,20 @@ ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 }
 
 // virtual
-sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
+bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_aResults.size() > nIndex )
     {
         // Result already present.
-        return sal_True;
+        return true;
     }
 
     // Result not (yet) present.
 
     if ( m_pImpl->m_bCountFinal )
-        return sal_False;
+        return false;
 
     // Try to obtain result...
 
@@ -337,7 +337,7 @@ sal_uInt32 ResultSetDataSupplier::currentCount()
 }
 
 // virtual
-sal_Bool ResultSetDataSupplier::isCountFinal()
+bool ResultSetDataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }

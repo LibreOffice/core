@@ -328,7 +328,7 @@ Content::Content( const Content& rOther )
 
 //=========================================================================
 // static
-sal_Bool Content::create( const OUString& rURL,
+bool Content::create( const OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
                           const Reference< XComponentContext >& rCtx,
                           Content& rContent )
@@ -339,16 +339,16 @@ sal_Bool Content::create( const OUString& rURL,
     Reference< XContentIdentifier > xId
         = getContentIdentifier( pBroker, rURL, false );
     if ( !xId.is() )
-        return sal_False;
+        return false;
 
     Reference< XContent > xContent = getContent( pBroker, xId, false );
     if ( !xContent.is() )
-        return sal_False;
+        return false;
 
     rContent.m_xImpl
         = new Content_Impl( rCtx, xContent, rEnv );
 
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
@@ -791,11 +791,11 @@ Reference< XStream > Content::openWriteableStreamNoLock()
 }
 
 //=========================================================================
-sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
+bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( !isDocument() )
-        return sal_False;
+        return false;
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
@@ -810,15 +810,15 @@ sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
 
     m_xImpl->executeCommand( aCommand );
 
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
-sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
+bool Content::openStream( const Reference< XOutputStream >& rStream )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( !isDocument() )
-        return sal_False;
+        return false;
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
@@ -833,12 +833,12 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
 
     m_xImpl->executeCommand( aCommand );
 
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
 void Content::writeStream( const Reference< XInputStream >& rStream,
-                           sal_Bool bReplaceExisting )
+                           bool bReplaceExisting )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     InsertCommandArgument aArg;
@@ -876,7 +876,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
+bool Content::insertNewContent( const OUString& rContentType,
                                     const Sequence< OUString >&
                                         rPropertyNames,
                                     const Sequence< Any >& rPropertyValues,
@@ -891,7 +891,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
+bool Content::insertNewContent( const OUString& rContentType,
                                     const Sequence< OUString >&
                                         rPropertyNames,
                                     const Sequence< Any >& rPropertyValues,
@@ -900,7 +900,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( rContentType.isEmpty() )
-        return sal_False;
+        return false;
 
     // First, try it using "createNewContent" command -> the "new" way.
     ContentInfo aInfo;
@@ -932,12 +932,12 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
         Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
 
         if ( !xCreator.is() )
-            return sal_False;
+            return false;
 
         xNew = xCreator->createNewContent( aInfo );
 
         if ( !xNew.is() )
-            return sal_False;
+            return false;
     }
 
     Content aNewContent(
@@ -951,11 +951,11 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
     aNewContent.m_xImpl->inserted();
 
     rNewContent = aNewContent;
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
-sal_Bool Content::transferContent( const Content& rSourceContent,
+bool Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
                                    const OUString & rTitle,
                                    const sal_Int32 nNameClashAction,
@@ -1030,14 +1030,14 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
     Any aRet = pBroker->execute( aCommand, 0, m_xImpl->getEnvironment() );
     if ( pResultURL != NULL )
         aRet >>= *pResultURL;
-    return sal_True;
+    return true;
 }
 
 //=========================================================================
-sal_Bool Content::isFolder()
+bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    sal_Bool bFolder = sal_False;
+    bool bFolder = false;
     if ( getPropertyValue("IsFolder")
         >>= bFolder )
         return bFolder;
@@ -1052,7 +1052,7 @@ sal_Bool Content::isFolder()
 #if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     // Unreachable - cancelCommandExecution always throws an exception.
     // But some compilers complain...
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -1060,10 +1060,10 @@ sal_Bool Content::isFolder()
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
-sal_Bool Content::isDocument()
+bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    sal_Bool bDoc = sal_False;
+    bool bDoc = false;
     if ( getPropertyValue("IsDocument")
         >>= bDoc )
         return bDoc;
@@ -1077,7 +1077,7 @@ sal_Bool Content::isDocument()
 
     // Unreachable - cancelCommandExecution always throws an exception,
     // But some compilers complain...
-    return sal_False;
+    return false;
 }
 
 SAL_WNOUNREACHABLE_CODE_POP

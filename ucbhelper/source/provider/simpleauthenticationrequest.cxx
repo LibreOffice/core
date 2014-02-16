@@ -32,8 +32,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rUserName,
                                       const OUString & rPassword,
                                       const OUString & rAccount,
-                                      sal_Bool bAllowPersistentStoring,
-                                      sal_Bool bAllowUseSystemCredentials )
+                                      bool bAllowPersistentStoring,
+                                      bool bAllowUseSystemCredentials )
 {
 
     // Fill request...
@@ -56,9 +56,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     aRequest.URL = rURL;
 
     initialize(aRequest,
-       sal_False,
-       sal_True,
-       sal_True,
+       false,
+       true,
+       true,
        aRequest.HasAccount,
        bAllowPersistentStoring,
        bAllowUseSystemCredentials );
@@ -103,19 +103,19 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        eUserNameType == ENTITY_MODIFY,
        ePasswordType == ENTITY_MODIFY,
        eAccountType == ENTITY_MODIFY,
-       sal_True,
-       sal_False );
+       true,
+       false );
 }
 
 //=========================================================================
 void SimpleAuthenticationRequest::initialize(
       const ucb::URLAuthenticationRequest & rRequest,
-      sal_Bool bCanSetRealm,
-      sal_Bool bCanSetUserName,
-      sal_Bool bCanSetPassword,
-      sal_Bool bCanSetAccount,
-      sal_Bool bAllowPersistentStoring,
-      sal_Bool bAllowUseSystemCredentials )
+      bool bCanSetRealm,
+      bool bCanSetUserName,
+      bool bCanSetPassword,
+      bool bCanSetAccount,
+      bool bAllowPersistentStoring,
+      bool bAllowUseSystemCredentials )
 {
     setRequest( uno::makeAny( rRequest ) );
 

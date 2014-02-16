@@ -114,7 +114,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
         css::uno::Type aInterceptedType = rInterception.Request.getValueType();
 
         // check the request
-        sal_Bool bMatch = sal_False;
+        bool bMatch = false;
         if (rInterception.MatchExact)
             bMatch = aInterceptedType.equals(aRequestType);
         else

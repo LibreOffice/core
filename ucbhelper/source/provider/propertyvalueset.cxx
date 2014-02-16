@@ -83,7 +83,7 @@ struct PropertyValue
     sal_uInt32  nOrigValue;
 
     OUString    aString;    // getString
-    sal_Bool    bBoolean;   // getBoolean
+    bool    bBoolean;   // getBoolean
     sal_Int8    nByte;      // getByte
     sal_Int16   nShort;     // getShort
     sal_Int32   nInt;       // getInt
@@ -145,7 +145,7 @@ class PropertyValues : public PropertyValuesVector {};
                                                                               \
     _type_ aValue = _type_();   /* default ctor */                            \
                                                                               \
-    m_bWasNull = sal_True;                                                    \
+    m_bWasNull = true;                                                    \
                                                                               \
     if ( ( columnIndex < 1 )                                                  \
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
@@ -163,7 +163,7 @@ class PropertyValues : public PropertyValuesVector {};
             {                                                                 \
                 /* Values is present natively... */                           \
                 aValue = rValue._member_name_;                                \
-                m_bWasNull = sal_False;                                       \
+                m_bWasNull = false;                                       \
             }                                                                 \
             else                                                              \
             {                                                                 \
@@ -184,7 +184,7 @@ class PropertyValues : public PropertyValuesVector {};
                         {                                                     \
                             rValue._member_name_ = aValue;                    \
                             rValue.nPropsSet |= _type_name_;                  \
-                            m_bWasNull = sal_False;                           \
+                            m_bWasNull = false;                           \
                         }                                                     \
                         else                                                  \
                         {                                                     \
@@ -204,7 +204,7 @@ class PropertyValues : public PropertyValuesVector {};
                                     {                                         \
                                         rValue._member_name_ = aValue;        \
                                         rValue.nPropsSet |= _type_name_;      \
-                                        m_bWasNull = sal_False;               \
+                                        m_bWasNull = false;               \
                                     }                                         \
                                 }                                             \
                                 catch (const IllegalArgumentException&)       \
@@ -255,8 +255,8 @@ PropertyValueSet::PropertyValueSet(
                     const Reference< XComponentContext >& rxContext )
 :  m_xContext( rxContext ),
   m_pValues( new PropertyValues ),
-  m_bWasNull( sal_False ),
-  m_bTriedToGetTypeConverter( sal_False )
+  m_bWasNull( false ),
+  m_bTriedToGetTypeConverter( false )
 
 {
 }
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL_TYPE(
-            sal_Bool, BOOLEAN_VALUE_SET, bBoolean, getCppuBooleanType() );
+            bool, BOOLEAN_VALUE_SET, bBoolean, getCppuBooleanType() );
 }
 
 //=========================================================================
@@ -435,7 +435,7 @@ Any SAL_CALL PropertyValueSet::getObject(
 
     Any aValue;
 
-    m_bWasNull = sal_True;
+    m_bWasNull = true;
 
     if ( ( columnIndex < 1 )
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
@@ -451,7 +451,7 @@ Any SAL_CALL PropertyValueSet::getObject(
         {
             // Values is present natively...
             aValue = rValue.aObject;
-            m_bWasNull = sal_False;
+            m_bWasNull = false;
         }
         else
         {
@@ -546,7 +546,7 @@ Any SAL_CALL PropertyValueSet::getObject(
             {
                 rValue.aObject = aValue;
                 rValue.nPropsSet |= OBJECT_VALUE_SET;
-                m_bWasNull = sal_False;
+                m_bWasNull = false;
             }
         }
      }
@@ -622,7 +622,7 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
-        m_bTriedToGetTypeConverter = sal_True;
+        m_bTriedToGetTypeConverter = true;
         m_xTypeConverter = Converter::create(m_xContext);
 
         OSL_ENSURE( m_xTypeConverter.is(),
@@ -641,7 +641,7 @@ void PropertyValueSet::appendString( const OUString& rPropName,
 
 //=========================================================================
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
-                                      sal_Bool bValue )
+                                      bool bValue )
 {
     SETVALUE_IMPL( rPropName, BOOLEAN_VALUE_SET, bBoolean, bValue );
 }
@@ -744,7 +744,7 @@ void PropertyValueSet::appendPropertySet(
 }
 
 //=========================================================================
-sal_Bool PropertyValueSet::appendPropertySetValue(
+bool PropertyValueSet::appendPropertySetValue(
                                 const Reference< XPropertySet >& rxSet,
                                 const Property& rProperty )
 {
@@ -756,7 +756,7 @@ sal_Bool PropertyValueSet::appendPropertySetValue(
             if ( aValue.hasValue() )
             {
                 appendObject( rProperty, aValue );
-                return sal_True;
+                return true;
             }
         }
         catch (const UnknownPropertyException&)
@@ -768,7 +768,7 @@ sal_Bool PropertyValueSet::appendPropertySetValue(
     }
 
     // Error.
-    return sal_False;
+    return false;
 }
 
 } // namespace ucbhelper

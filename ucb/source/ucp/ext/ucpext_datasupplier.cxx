@@ -272,15 +272,15 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool DataSupplier::getResult( sal_uInt32 i_nIndex )
+    bool DataSupplier::getResult( sal_uInt32 i_nIndex )
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
         if ( m_pImpl->m_aResults.size() > i_nIndex )
             // result already present.
-            return sal_True;
+            return true;
 
-        return sal_False;
+        return false;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -297,9 +297,9 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool DataSupplier::isCountFinal()
+    bool DataSupplier::isCountFinal()
     {
-        return sal_True;
+        return true;
     }
 
     //------------------------------------------------------------------------------------------------------------------

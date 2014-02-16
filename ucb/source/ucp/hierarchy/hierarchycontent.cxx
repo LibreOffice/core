@@ -500,7 +500,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         }
 
         // Remove own and all children's Additional Core Properties.
-        removeAdditionalPropertySet( sal_True );
+        removeAdditionalPropertySet( true );
     }
     else if ( aCommand.Name == "transfer" && isFolder() && !isReadOnly() )
     {
@@ -976,7 +976,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                     xAdditionalPropSet
                         = uno::Reference< beans::XPropertySet >(
                             pProvider->getAdditionalPropertySet( rContentId,
-                                                                 sal_False ),
+                                                                 false ),
                             uno::UNO_QUERY );
                     bTriedToGetAdditionalPropSet = sal_True;
                 }
@@ -1053,7 +1053,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
         // Append all Additional Core Properties.
 
         uno::Reference< beans::XPropertySet > xSet(
-            pProvider->getAdditionalPropertySet( rContentId, sal_False ),
+            pProvider->getAdditionalPropertySet( rContentId, false ),
             uno::UNO_QUERY );
         xRow->appendPropertySet( xSet );
     }
@@ -1252,7 +1252,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
-                xAdditionalPropSet = getAdditionalPropertySet( sal_False );
+                xAdditionalPropSet = getAdditionalPropertySet( false );
                 bTriedToGetAdditionalPropSet = sal_True;
             }
 
@@ -1317,7 +1317,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
                                          xNewId->getContentIdentifier(),
-                                         sal_True );
+                                         true );
         }
         else
         {
@@ -1846,7 +1846,7 @@ void HierarchyContent::transfer(
         }
 
         // Remove own and all children's Additional Core Properties.
-        xSource->removeAdditionalPropertySet( sal_True );
+        xSource->removeAdditionalPropertySet( true );
     }
 }
 

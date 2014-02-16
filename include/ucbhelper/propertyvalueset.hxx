@@ -64,8 +64,8 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
                                      m_xTypeConverter;
     osl::Mutex      m_aMutex;
     PropertyValues* m_pValues;
-    sal_Bool        m_bWasNull;
-    sal_Bool        m_bTriedToGetTypeConverter;
+    bool        m_bWasNull;
+    bool        m_bTriedToGetTypeConverter;
 
 private:
     UCBHELPER_DLLPRIVATE const com::sun::star::uno::Reference<
@@ -194,12 +194,12 @@ public:
         appendString( rProp.Name, rValue );
     }
 
-    void appendBoolean( const OUString& rPropName, sal_Bool bValue );
-    void appendBoolean( const sal_Char* pAsciiPropName, sal_Bool bValue )
+    void appendBoolean( const OUString& rPropName, bool bValue );
+    void appendBoolean( const sal_Char* pAsciiPropName, bool bValue )
     {
         appendBoolean( OUString::createFromAscii( pAsciiPropName ), bValue );
     }
-    void appendBoolean( const ::com::sun::star::beans::Property& rProp, sal_Bool bValue )
+    void appendBoolean( const ::com::sun::star::beans::Property& rProp, bool bValue )
     {
         appendBoolean( rProp.Name, bValue );
     }
@@ -262,7 +262,7 @@ public:
        *    @return False, if the property value cannot be obtained from the
       *         given property pet. True, otherwise.
        */
-    sal_Bool appendPropertySetValue(
+    bool appendPropertySetValue(
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XPropertySet >& rSet,
                         const ::com::sun::star::beans::Property& rProperty );

@@ -58,7 +58,7 @@ class PropertySetInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    sal_Bool queryProperty( const OUString& rName,
+    bool queryProperty( const OUString& rName,
                             com::sun::star::beans::Property& rProp );
 
 public:
@@ -114,9 +114,9 @@ class CommandProcessorInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    sal_Bool queryCommand( const OUString& rName,
+    bool queryCommand( const OUString& rName,
                            com::sun::star::ucb::CommandInfo& rCommand );
-    sal_Bool queryCommand( sal_Int32 nHandle,
+    bool queryCommand( sal_Int32 nHandle,
                            com::sun::star::ucb::CommandInfo& rCommand );
 
 public:

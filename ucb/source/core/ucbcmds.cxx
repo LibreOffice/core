@@ -413,7 +413,7 @@ NameClashContinuation interactiveNameClashResolve(
             rTargetURL,  // target folder URL
             rClashingName,   // clashing name
             OUString(), // no proposal for new name
-            sal_True /* bSupportsOverwriteData */ ) );
+            true /* bSupportsOverwriteData */ ) );
 
     rException = xRequest->getRequest();
     if ( xEnv.is() )

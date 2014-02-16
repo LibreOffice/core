@@ -194,25 +194,25 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
     return Reference< XContent >();
 }
 
-sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
     {
         // Result already present.
-        return sal_True;
+        return true;
     }
 
     // Result not (yet) present.
 
     if ( m_pImpl->m_bCountFinal )
-        return sal_False;
+        return false;
 
     // Try to obtain result...
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_uInt32 nPos = nOldCount;
 
     // @@@ Obtain data and put it into result list...
@@ -229,7 +229,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
             if ( nPos == nIndex )
             {
                 // Result obtained.
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }
@@ -295,7 +295,7 @@ sal_uInt32 DataSupplier::currentCount()
     return m_pImpl->m_aResults.size();
 }
 
-sal_Bool DataSupplier::isCountFinal()
+bool DataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }

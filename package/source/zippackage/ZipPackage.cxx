@@ -1318,7 +1318,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                 // just try to write an empty stream to it
 
                 uno::Reference< XInputStream > xTempIn = new DummyInputStream; //uno::Reference< XInputStream >( xTempOut, UNO_QUERY );
-                aOriginalContent.writeStream( xTempIn , sal_True );
+                aOriginalContent.writeStream( xTempIn , true );
             }
 
             OpenCommandArgument2 aArg;

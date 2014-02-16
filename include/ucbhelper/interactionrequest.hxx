@@ -345,13 +345,13 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
     com::sun::star::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
     com::sun::star::ucb::RememberAuthentication m_eRememberAccountMode;
     com::sun::star::ucb::RememberAuthentication m_eDefaultRememberAccountMode;
-    unsigned m_bCanSetRealm    : 1;
-    unsigned m_bCanSetUserName : 1;
-    unsigned m_bCanSetPassword : 1;
-    unsigned m_bCanSetAccount  : 1;
-    unsigned m_bCanUseSystemCredentials     : 1;
-    unsigned m_bDefaultUseSystemCredentials : 1;
-    unsigned m_bUseSystemCredentials        : 1;
+    bool m_bCanSetRealm    : 1;
+    bool m_bCanSetUserName : 1;
+    bool m_bCanSetPassword : 1;
+    bool m_bCanSetAccount  : 1;
+    bool m_bCanUseSystemCredentials     : 1;
+    bool m_bDefaultUseSystemCredentials : 1;
+    bool m_bUseSystemCredentials        : 1;
 
 public:
     /**
@@ -371,10 +371,10 @@ public:
       */
     inline InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
-                    sal_Bool bCanSetRealm,
-                    sal_Bool bCanSetUserName,
-                    sal_Bool bCanSetPassword,
-                    sal_Bool bCanSetAccount);
+                    bool bCanSetRealm,
+                    bool bCanSetUserName,
+                    bool bCanSetPassword,
+                    bool bCanSetAccount);
     /**
       * Constructor.
       *
@@ -411,10 +411,10 @@ public:
       */
     inline InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
-                    sal_Bool bCanSetRealm,
-                    sal_Bool bCanSetUserName,
-                    sal_Bool bCanSetPassword,
-                    sal_Bool bCanSetAccount,
+                    bool bCanSetRealm,
+                    bool bCanSetUserName,
+                    bool bCanSetPassword,
+                    bool bCanSetAccount,
                     const com::sun::star::uno::Sequence<
                         com::sun::star::ucb::RememberAuthentication > &
                             rRememberPasswordModes,
@@ -425,8 +425,8 @@ public:
                             rRememberAccountModes,
                     const com::sun::star::ucb::RememberAuthentication
                         eDefaultRememberAccountMode,
-                    sal_Bool bCanUseSystemCredentials,
-                    sal_Bool bDefaultUseSystemCredentials );
+                    bool bCanUseSystemCredentials,
+                    bool bDefaultUseSystemCredentials );
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
@@ -554,16 +554,16 @@ public:
     const com::sun::star::ucb::RememberAuthentication &
     getRememberAccountMode() const { return m_eRememberAccountMode; }
 
-    sal_Bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
+    bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
 };
 
 //============================================================================
 inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
-                    sal_Bool bCanSetRealm,
-                    sal_Bool bCanSetUserName,
-                    sal_Bool bCanSetPassword,
-                    sal_Bool bCanSetAccount )
+                    bool bCanSetRealm,
+                    bool bCanSetUserName,
+                    bool bCanSetPassword,
+                    bool bCanSetAccount )
 : InteractionContinuation( pRequest ),
   m_aRememberPasswordModes( com::sun::star::uno::Sequence<
                 com::sun::star::ucb::RememberAuthentication >( 1 ) ),
@@ -579,9 +579,9 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetUserName( bCanSetUserName ),
   m_bCanSetPassword( bCanSetPassword ),
   m_bCanSetAccount( bCanSetAccount ),
-  m_bCanUseSystemCredentials( sal_False ),
-  m_bDefaultUseSystemCredentials( sal_False ),
-  m_bUseSystemCredentials( sal_False )
+  m_bCanUseSystemCredentials( false ),
+  m_bDefaultUseSystemCredentials( false ),
+  m_bUseSystemCredentials( false )
 {
     m_aRememberPasswordModes[ 0 ]
         = com::sun::star::ucb::RememberAuthentication_NO;
@@ -592,10 +592,10 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 //============================================================================
 inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     InteractionRequest * pRequest,
-    sal_Bool bCanSetRealm,
-    sal_Bool bCanSetUserName,
-    sal_Bool bCanSetPassword,
-    sal_Bool bCanSetAccount,
+    bool bCanSetRealm,
+    bool bCanSetUserName,
+    bool bCanSetPassword,
+    bool bCanSetAccount,
     const com::sun::star::uno::Sequence<
         com::sun::star::ucb::RememberAuthentication > & rRememberPasswordModes,
     const com::sun::star::ucb::RememberAuthentication
@@ -604,8 +604,8 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
         com::sun::star::ucb::RememberAuthentication > & rRememberAccountModes,
     const com::sun::star::ucb::RememberAuthentication
         eDefaultRememberAccountMode,
-    sal_Bool bCanUseSystemCredentials,
-    sal_Bool bDefaultUseSystemCredentials )
+    bool bCanUseSystemCredentials,
+    bool bDefaultUseSystemCredentials )
 : InteractionContinuation( pRequest ),
   m_aRememberPasswordModes( rRememberPasswordModes ),
   m_aRememberAccountModes( rRememberAccountModes ),
@@ -619,7 +619,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetAccount( bCanSetAccount ),
   m_bCanUseSystemCredentials( bCanUseSystemCredentials ),
   m_bDefaultUseSystemCredentials( bDefaultUseSystemCredentials ),
-  m_bUseSystemCredentials( bDefaultUseSystemCredentials & bCanUseSystemCredentials )
+  m_bUseSystemCredentials( bDefaultUseSystemCredentials && bCanUseSystemCredentials )
 {
 }
 

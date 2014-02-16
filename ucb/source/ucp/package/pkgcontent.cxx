@@ -597,7 +597,7 @@ uno::Any SAL_CALL Content::execute(
         }
 
         // Remove own and all children's Additional Core Properties.
-        removeAdditionalPropertySet( sal_True );
+        removeAdditionalPropertySet( true );
     }
     else if ( aCommand.Name == "transfer" )
     {
@@ -894,7 +894,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     xAdditionalPropSet
                         = uno::Reference< beans::XPropertySet >(
                             rProvider->getAdditionalPropertySet( rContentId,
-                                                                 sal_False ),
+                                                                 false ),
                             uno::UNO_QUERY );
                     bTriedToGetAdditionalPropSet = sal_True;
                 }
@@ -1015,7 +1015,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Append all Additional Core Properties.
 
         uno::Reference< beans::XPropertySet > xSet(
-            rProvider->getAdditionalPropertySet( rContentId, sal_False ),
+            rProvider->getAdditionalPropertySet( rContentId, false ),
             uno::UNO_QUERY );
         xRow->appendPropertySet( xSet );
     }
@@ -1315,7 +1315,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
-                xAdditionalPropSet = getAdditionalPropertySet( sal_False );
+                xAdditionalPropSet = getAdditionalPropertySet( false );
                 bTriedToGetAdditionalPropSet = sal_True;
             }
 
@@ -1385,7 +1385,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
                                          xNewId->getContentIdentifier(),
-                                         sal_True );
+                                         true );
         }
         else
         {
@@ -2088,7 +2088,7 @@ void Content::transfer(
         }
 
         // Remove own and all children's Additional Core Properties.
-        xSource->removeAdditionalPropertySet( sal_True );
+        xSource->removeAdditionalPropertySet( true );
     }
 }
 

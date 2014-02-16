@@ -52,22 +52,22 @@ namespace ucbhelper
 struct ResultSetColumnData
 {
     /** @see ResultSetMetaData::isAutoIncrement */
-    sal_Bool        isAutoIncrement;
+    bool        isAutoIncrement;
 
     /** @see ResultSetMetaData::isCaseSensitive */
-    sal_Bool        isCaseSensitive;
+    bool        isCaseSensitive;
 
     /** @see ResultSetMetaData::isSearchable */
-    sal_Bool        isSearchable;
+    bool        isSearchable;
 
     /** @see ResultSetMetaData::isCurrency */
-    sal_Bool        isCurrency;
+    bool        isCurrency;
 
     /** @see ResultSetMetaData::isNullable */
     sal_Int32       isNullable;
 
     /** @see ResultSetMetaData::isSigned */
-    sal_Bool        isSigned;
+    bool        isSigned;
 
     /** @see ResultSetMetaData::getColumnDisplaySize */
     sal_Int32       columnDisplaySize;
@@ -94,13 +94,13 @@ struct ResultSetColumnData
     OUString columnTypeName;
 
     /** @see ResultSetMetaData::isReadOnly */
-    sal_Bool        isReadOnly;
+    bool        isReadOnly;
 
     /** @see ResultSetMetaData::isWritable */
-    sal_Bool        isWritable;
+    bool        isWritable;
 
     /** @see ResultSetMetaData::isDefinitelyWritable */
-    sal_Bool        isDefinitelyWritable;
+    bool        isDefinitelyWritable;
 
     /** @see ResultSetMetaData::getColumnServiceName */
     OUString columnServiceName;
@@ -112,18 +112,18 @@ struct ResultSetColumnData
 //       may havily depend on the behaviour of the default constructor.
 
 ResultSetColumnData::ResultSetColumnData()
-: isAutoIncrement( sal_False ),
-  isCaseSensitive( sal_True ),
-  isSearchable( sal_False ),
-  isCurrency( sal_False ),
+: isAutoIncrement( false ),
+  isCaseSensitive( true ),
+  isSearchable( false ),
+  isCurrency( false ),
   isNullable( ::com::sun::star::sdbc::ColumnValue::NULLABLE ),
-  isSigned( sal_False ),
+  isSigned( false ),
   columnDisplaySize( 16 ),
   precision( -1 ),
   scale( 0 ),
-  isReadOnly( sal_True ),
-  isWritable( sal_False ),
-  isDefinitelyWritable( sal_False )
+  isReadOnly( true ),
+  isWritable( false ),
+  isDefinitelyWritable( false )
 {
 }
 
@@ -148,7 +148,7 @@ protected:
         ::com::sun::star::uno::XComponentContext >     m_xContext;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::Property >            m_aProps;
-    sal_Bool m_bReadOnly;
+    bool m_bReadOnly;
 
 public:
 
@@ -166,7 +166,7 @@ public:
                 ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::Property >& rProps,
-            sal_Bool bReadOnly = sal_True );
+            bool bReadOnly = true );
 
     /**
       * Constructor.

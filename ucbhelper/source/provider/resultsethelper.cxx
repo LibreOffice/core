@@ -53,8 +53,8 @@ ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const com::sun::star::ucb::OpenCommandArgument2& rCommand )
 : m_pDisposeEventListeners( 0 ),
-  m_bStatic( sal_False ),
-  m_bInitDone( sal_False ),
+  m_bStatic( false ),
+  m_bInitDone( false ),
   m_aCommand( rCommand ),
   m_xContext( rxContext )
 {
@@ -166,7 +166,7 @@ ResultSetImplHelper::getStaticResultSet()
     if ( m_xListener.is() )
         throw com::sun::star::ucb::ListenerAlreadySetException();
 
-    init( sal_True );
+    init( true );
     return m_xResultSet1;
 }
 
@@ -194,7 +194,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
     //       are a fake. This implementation will never call "notify" at the
     //       listener to propagate any changes!!!
 
-    init( sal_False );
+    init( false );
 
     uno::Any aInfo;
     aInfo <<= com::sun::star::ucb::WelcomeDynamicResultSetStruct(
@@ -273,7 +273,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
 //
 //=========================================================================
 
-void ResultSetImplHelper::init( sal_Bool bStatic )
+void ResultSetImplHelper::init( bool bStatic )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -286,7 +286,7 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
 
             OSL_ENSURE( m_xResultSet1.is(),
                         "ResultSetImplHelper::init - No 1st result set!" );
-            m_bStatic = sal_True;
+            m_bStatic = true;
         }
         else
         {
@@ -297,9 +297,9 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
                         "ResultSetImplHelper::init - No 1st result set!" );
             OSL_ENSURE( m_xResultSet2.is(),
                         "ResultSetImplHelper::init - No 2nd result set!" );
-            m_bStatic = sal_False;
+            m_bStatic = false;
         }
-        m_bInitDone = sal_True;
+        m_bInitDone = true;
     }
 }
 

@@ -459,7 +459,7 @@ uno::Any SAL_CALL Content::execute(
 
         // Note: Implemented by base class.
         aRet <<= getPropertySetInfo( Environment,
-                                     sal_False /* don't cache data */ );
+                                     false /* don't cache data */ );
     }
     else if ( aCommand.Name == "getCommandInfo" )
     {
@@ -468,7 +468,7 @@ uno::Any SAL_CALL Content::execute(
         //////////////////////////////////////////////////////////////////
 
         // Note: Implemented by base class.
-        aRet <<= getCommandInfo( Environment, sal_False );
+        aRet <<= getCommandInfo( Environment, false );
     }
     else if ( aCommand.Name == "open" )
     {
@@ -565,7 +565,7 @@ uno::Any SAL_CALL Content::execute(
         destroy( bDeletePhysical );
 
         // Remove own and all children's Additional Core Properties.
-        removeAdditionalPropertySet( sal_True );
+        removeAdditionalPropertySet( true );
     }
     else if ( aCommand.Name == "transfer" && isFolder( Environment ) )
     {
@@ -801,7 +801,7 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
         aCmdArg.Property.Name, aSpecialName );
 
     // Note: This requires network access!
-    if ( getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
+    if ( getPropertySetInfo( xEnv, false /* don't cache data */ )
              ->hasPropertyByName(
                  bIsSpecial ? aSpecialName : aCmdArg.Property.Name ) )
     {
@@ -1179,7 +1179,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     xAdditionalPropSet
                         = uno::Reference< beans::XPropertySet >(
                             rProvider->getAdditionalPropertySet( rContentId,
-                                                                 sal_False ),
+                                                                 false ),
                             uno::UNO_QUERY );
                     bTriedToGetAdditionalPropSet = sal_True;
                 }
@@ -1218,7 +1218,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // Append all local Additional Properties.
         uno::Reference< beans::XPropertySet > xSet(
-            rProvider->getAdditionalPropertySet( rContentId, sal_False ),
+            rProvider->getAdditionalPropertySet( rContentId, false ),
             uno::UNO_QUERY );
         xRow->appendPropertySet( xSet );
     }
@@ -1689,7 +1689,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if ( !xInfo.is() )
                 xInfo = getPropertySetInfo( xEnv,
-                                            sal_False /* don't cache data */ );
+                                            false /* don't cache data */ );
 
             if ( !xInfo->hasPropertyByName(
                      bIsSpecial ? aSpecialName : rName ) )
@@ -1758,7 +1758,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                          !xAdditionalPropSet.is() )
                     {
                         xAdditionalPropSet
-                            = getAdditionalPropertySet( sal_False );
+                            = getAdditionalPropertySet( false );
                         bTriedToGetAdditionalPropSet = sal_True;
                     }
 

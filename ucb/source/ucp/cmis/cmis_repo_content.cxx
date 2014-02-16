@@ -89,11 +89,11 @@ namespace cmis
             {
                 if ( rProp.Name == "IsDocument" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsFolder" )
                 {
-                    xRow->appendBoolean( rProp, sal_True );
+                    xRow->appendBoolean( rProp, true );
                 }
                 else if ( rProp.Name == "Title" )
                 {
@@ -101,7 +101,7 @@ namespace cmis
                 }
                 else if ( rProp.Name == "IsReadOnly" )
                 {
-                    xRow->appendBoolean( rProp, sal_True );
+                    xRow->appendBoolean( rProp, true );
                 }
                 else
                 {
@@ -325,9 +325,9 @@ namespace cmis
             aRet <<= getPropertyValues( Properties, xEnv );
         }
         else if ( aCommand.Name == "getPropertySetInfo" )
-            aRet <<= getPropertySetInfo( xEnv, sal_False );
+            aRet <<= getPropertySetInfo( xEnv, false );
         else if ( aCommand.Name == "getCommandInfo" )
-            aRet <<= getCommandInfo( xEnv, sal_False );
+            aRet <<= getCommandInfo( xEnv, false );
         else if ( aCommand.Name == "open" )
         {
             ucb::OpenCommandArgument2 aOpenCommand;

@@ -258,7 +258,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 
 uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
 ContentProviderImplHelper::getAdditionalPropertySet(
-    const OUString& rKey, sal_Bool bCreate )
+    const OUString& rKey, bool bCreate )
 {
     // Get propertyset registry.
     getAdditionalPropertySetRegistry();
@@ -274,13 +274,13 @@ ContentProviderImplHelper::getAdditionalPropertySet(
     return uno::Reference< com::sun::star::ucb::XPersistentPropertySet >();
 }
 
-sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
+bool ContentProviderImplHelper::renameAdditionalPropertySet(
     const OUString& rOldKey,
     const OUString& rNewKey,
-    sal_Bool bRecursive )
+    bool bRecursive )
 {
     if ( rOldKey == rNewKey )
-        return sal_True;
+        return true;
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -324,23 +324,23 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                                 = rKey.replaceAt(
                                     0, rOldKey.getLength(), rNewKey );
                             if ( !renameAdditionalPropertySet(
-                                    rKey, aNewKey, sal_False ) )
-                                return sal_False;
+                                    rKey, aNewKey, false ) )
+                                return false;
                         }
                     }
                 }
             }
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_False;
+            return false;
     }
     else
     {
         // Get old property set, if exists.
         uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xOldSet
-            = getAdditionalPropertySet( rOldKey, sal_False );
+            = getAdditionalPropertySet( rOldKey, false );
         if ( xOldSet.is() )
         {
             // Rename property set.
@@ -352,19 +352,19 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                 xNamed->setName( rNewKey );
             }
             else
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
+bool ContentProviderImplHelper::copyAdditionalPropertySet(
     const OUString& rSourceKey,
     const OUString& rTargetKey,
-    sal_Bool bRecursive )
+    bool bRecursive )
 {
     if ( rSourceKey == rTargetKey )
-        return sal_True;
+        return true;
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -408,35 +408,35 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
                                 = rKey.replaceAt(
                                     0, rSourceKey.getLength(), rTargetKey );
                             if ( !copyAdditionalPropertySet(
-                                    rKey, aNewKey, sal_False ) )
-                                return sal_False;
+                                    rKey, aNewKey, false ) )
+                                return false;
                         }
                     }
                 }
             }
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_False;
+            return false;
     }
     else
     {
         // Get old property set, if exists.
         uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
-            xOldPropSet = getAdditionalPropertySet( rSourceKey, sal_False );
+            xOldPropSet = getAdditionalPropertySet( rSourceKey, false );
         if ( !xOldPropSet.is() )
-            return sal_False;
+            return false;
 
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo
             = xOldPropSet->getPropertySetInfo();
         if ( !xPropSetInfo.is() )
-            return sal_False;
+            return false;
 
         uno::Reference< beans::XPropertyAccess > xOldPropAccess(
             xOldPropSet, uno::UNO_QUERY );
         if ( !xOldPropAccess.is() )
-            return sal_False;
+            return false;
 
         // Obtain all values from old set.
         uno::Sequence< beans::PropertyValue > aValues
@@ -451,19 +451,19 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
             // Fail, if property set with new key already exists.
             uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
                 xNewPropSet
-                    = getAdditionalPropertySet( rTargetKey, sal_False );
+                    = getAdditionalPropertySet( rTargetKey, false );
             if ( xNewPropSet.is() )
-                return sal_False;
+                return false;
 
             // Create new, empty set.
-            xNewPropSet = getAdditionalPropertySet( rTargetKey, sal_True );
+            xNewPropSet = getAdditionalPropertySet( rTargetKey, true );
             if ( !xNewPropSet.is() )
-                return sal_False;
+                return false;
 
             uno::Reference< beans::XPropertyContainer > xNewPropContainer(
                 xNewPropSet, uno::UNO_QUERY );
             if ( !xNewPropContainer.is() )
-                return sal_False;
+                return false;
 
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
@@ -496,11 +496,11 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
-    const OUString& rKey, sal_Bool bRecursive )
+bool ContentProviderImplHelper::removeAdditionalPropertySet(
+    const OUString& rKey, bool bRecursive )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -541,17 +541,17 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
                              || rCurrKey.equals( aKeyWithoutSlash ) )
                         {
                             if ( !removeAdditionalPropertySet(
-                                     rCurrKey, sal_False ) )
-                                return sal_False;
+                                     rCurrKey, false ) )
+                                return false;
                         }
                     }
                 }
             }
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_False;
+            return false;
     }
     else
     {
@@ -561,9 +561,9 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
         if ( m_pImpl->m_xPropertySetRegistry.is() )
             m_pImpl->m_xPropertySetRegistry->removePropertySet( rKey );
         else
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 } // namespace ucbhelper

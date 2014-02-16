@@ -226,7 +226,7 @@ public:
       */
     ::com::sun::star::uno::Reference<
         com::sun::star::ucb::XPersistentPropertySet >
-    getAdditionalPropertySet( const OUString& rKey, sal_Bool bCreate );
+    getAdditionalPropertySet( const OUString& rKey, bool bCreate );
 
     /**
       * This method renames the propertyset containing the Additional Core
@@ -238,9 +238,9 @@ public:
       *         children described by rOldKey shall be renamed, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool renameAdditionalPropertySet( const OUString& rOldKey,
+    bool renameAdditionalPropertySet( const OUString& rOldKey,
                                           const OUString& rNewKey,
-                                          sal_Bool bRecursive );
+                                          bool bRecursive );
 
     /**
       * This method copies the propertyset containing the Additional Core
@@ -252,9 +252,9 @@ public:
       *         children described by rSourceKey shall be copied, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool copyAdditionalPropertySet( const OUString& rSourceKey,
+    bool copyAdditionalPropertySet( const OUString& rSourceKey,
                                         const OUString& rTargetKey,
-                                        sal_Bool bRecursive );
+                                        bool bRecursive );
 
     /**
       * This method removes the propertyset containing the Additional Core
@@ -265,8 +265,8 @@ public:
       *         children described by rOldKey shall be removed, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool removeAdditionalPropertySet( const OUString& rKey,
-                                          sal_Bool bRecursive );
+    bool removeAdditionalPropertySet( const OUString& rKey,
+                                          bool bRecursive );
 };
 
 } // namespace ucbhelper

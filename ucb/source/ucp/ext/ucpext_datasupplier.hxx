@@ -55,11 +55,11 @@ namespace ucb { namespace ucp { namespace ext
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex );
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > queryContent( sal_uInt32 nIndex );
 
-        virtual sal_Bool getResult( sal_uInt32 nIndex );
+        virtual bool getResult( sal_uInt32 nIndex );
 
         virtual sal_uInt32 totalCount();
         virtual sal_uInt32 currentCount();
-        virtual sal_Bool isCountFinal();
+        virtual bool isCountFinal();
 
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > queryPropertyValues( sal_uInt32 nIndex  );
         virtual void releasePropertyValues( sal_uInt32 nIndex );

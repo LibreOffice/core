@@ -1419,16 +1419,16 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
     m_xAuthSupplier
         = new ::ucbhelper::InteractionSupplyAuthentication(
                 this,
-                sal_False, // bCanSetRealm
-                sal_False,  // bCanSetUserName
-                sal_True,  // bCanSetPassword
-                sal_False, // bCanSetAccount
+                false, // bCanSetRealm
+                false,  // bCanSetUserName
+                true,  // bCanSetPassword
+                false, // bCanSetAccount
                 aRememberModes, // rRememberPasswordModes
                 RememberAuthentication_NO, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
                 RememberAuthentication_NO, // eDefaultRememberAccountMode
-                sal_False, // bCanUseSystemCredentials
-                sal_False  // bDefaultUseSystemCredentials
+                false, // bCanUseSystemCredentials
+                false  // bDefaultUseSystemCredentials
             );
 
     Sequence<

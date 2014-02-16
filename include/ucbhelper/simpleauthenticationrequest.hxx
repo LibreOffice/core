@@ -56,12 +56,12 @@ class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::Intera
 
 private:
     void initialize( const ::com::sun::star::ucb::URLAuthenticationRequest & rRequest,
-                     sal_Bool bCanSetRealm,
-                     sal_Bool bCanSetUserName,
-                     sal_Bool bCanSetPassword,
-                     sal_Bool bCanSetAccount,
-                      sal_Bool bAllowPersistentStoring,
-                     sal_Bool bAllowUseSystemCredentials );
+                     bool bCanSetRealm,
+                     bool bCanSetUserName,
+                     bool bCanSetPassword,
+                     bool bCanSetAccount,
+                      bool bAllowPersistentStoring,
+                     bool bAllowUseSystemCredentials );
 
 public:
     /** Specification whether some entity (realm, username, password, account)
@@ -96,8 +96,8 @@ public:
                                  const OUString & rUserName,
                                  const OUString & rPassword,
                                  const OUString & rAccount,
-                                 sal_Bool bAllowPersistentStoring,
-                                 sal_Bool bAllowUseSystemCredentials );
+                                 bool bAllowPersistentStoring,
+                                 bool bAllowUseSystemCredentials );
 
 
     /**

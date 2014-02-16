@@ -55,17 +55,17 @@ struct ResultSetMetaData_Impl
 {
     osl::Mutex                                      m_aMutex;
     std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
-    sal_Bool                                        m_bObtainedTypes;
-    sal_Bool                                        m_bGlobalReadOnlyValue;
+    bool                                        m_bObtainedTypes;
+    bool                                        m_bGlobalReadOnlyValue;
 
     ResultSetMetaData_Impl( sal_Int32 nSize )
-    : m_aColumnData( nSize ), m_bObtainedTypes( sal_False ),
-      m_bGlobalReadOnlyValue( sal_True ) {}
+    : m_aColumnData( nSize ), m_bObtainedTypes( false ),
+      m_bGlobalReadOnlyValue( true ) {}
 
     ResultSetMetaData_Impl(
         const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
-    : m_aColumnData( rColumnData ), m_bObtainedTypes( sal_False ),
-      m_bGlobalReadOnlyValue( sal_False ) {}
+    : m_aColumnData( rColumnData ), m_bObtainedTypes( false ),
+      m_bGlobalReadOnlyValue( false ) {}
 };
 
 }
@@ -85,7 +85,7 @@ namespace ucbhelper {
 ResultSetMetaData::ResultSetMetaData(
                         const Reference< XComponentContext >& rxContext,
                         const Sequence< Property >& rProps,
-                        sal_Bool bReadOnly )
+                        bool bReadOnly )
 : m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
   m_xContext( rxContext ),
   m_aProps( rProps ),
@@ -101,7 +101,7 @@ ResultSetMetaData::ResultSetMetaData(
 : m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
   m_xContext( rxContext ),
   m_aProps( rProps ),
-  m_bReadOnly( sal_True )
+  m_bReadOnly( true )
 {
     OSL_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
                 "ResultSetMetaData ctor - different array sizes!" );
@@ -435,7 +435,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                 // createInstance
             }
 
-            m_pImpl->m_bObtainedTypes = sal_True;
+            m_pImpl->m_bObtainedTypes = true;
         }
     }
 

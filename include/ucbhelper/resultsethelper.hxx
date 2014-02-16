@@ -59,8 +59,8 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public com::sun::star::ucb::XDynamicResultSet
 {
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
-    sal_Bool                         m_bStatic;
-    sal_Bool                         m_bInitDone;
+    bool                         m_bStatic;
+    bool                         m_bInitDone;
 
 protected:
     osl::Mutex                                           m_aMutex;
@@ -78,7 +78,7 @@ protected:
         com::sun::star::ucb::XDynamicResultSetListener > m_xListener;
 
 private:
-    UCBHELPER_DLLPRIVATE void init( sal_Bool bStatic );
+    UCBHELPER_DLLPRIVATE void init( bool bStatic );
 
     /**
       * Your implementation of this method has to fill the protected member
@@ -194,7 +194,7 @@ public:
       *
       * @return true, if the resultset type is "static". False, otherwise.
       */
-    sal_Bool isStatic() const { return m_bStatic; }
+    bool isStatic() const { return m_bStatic; }
 };
 
 }

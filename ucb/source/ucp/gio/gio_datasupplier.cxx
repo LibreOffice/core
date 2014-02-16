@@ -185,15 +185,15 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     if ( maResults.size() > nIndex ) // Result already present.
-        return sal_True;
+        return true;
 
     if ( getData() && maResults.size() > nIndex )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 sal_uInt32 DataSupplier::totalCount()
@@ -207,7 +207,7 @@ sal_uInt32 DataSupplier::currentCount()
     return maResults.size();
 }
 
-sal_Bool DataSupplier::isCountFinal()
+bool DataSupplier::isCountFinal()
 {
     return mbCountFinal;
 }

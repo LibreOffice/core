@@ -481,7 +481,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         else if ( rProp.Name == "IsVolume" )
         {
             //What do we use this for ?
-            xRow->appendBoolean( rProp, sal_False );
+            xRow->appendBoolean( rProp, false );
         }
         else if ( rProp.Name == "IsCompactDisc" )
         {
@@ -499,7 +499,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsFloppy" )
         {
-            xRow->appendBoolean( rProp, sal_False );
+            xRow->appendBoolean( rProp, false );
         }
         else if ( rProp.Name == "IsHidden" )
         {
@@ -929,9 +929,9 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= getPropertyValues( Properties, xEnv );
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
-        aRet <<= getPropertySetInfo( xEnv, sal_False );
+        aRet <<= getPropertySetInfo( xEnv, false );
     else if ( aCommand.Name == "getCommandInfo" )
-        aRet <<= getCommandInfo( xEnv, sal_False );
+        aRet <<= getCommandInfo( xEnv, false );
     else if ( aCommand.Name == "open" )
     {
         ucb::OpenCommandArgument2 aOpenCommand;

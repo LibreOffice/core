@@ -52,7 +52,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
 
         // insert serialized data to content -> PUT
         CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
-        aContent.writeStream(aInStream, sal_True);
+        aContent.writeStream(aInStream, true);
         //aContent.closeStream();
 
         // no content as a result of put...

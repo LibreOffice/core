@@ -699,7 +699,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
 
         try
         {
-            aCnt.writeStream( data, sal_True /* bReplaceExisting */ );
+            aCnt.writeStream( data, true /* bReplaceExisting */ );
         }
         catch ( CommandFailedException const & )
         {

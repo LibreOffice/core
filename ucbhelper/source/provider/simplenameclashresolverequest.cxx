@@ -28,7 +28,7 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,
                                     const OUString & rClashingName,
                                     const OUString & rProposedNewName,
-                                    sal_Bool bSupportsOverwriteData )
+                                    bool bSupportsOverwriteData )
 {
     // Fill request...
     ucb::NameClashResolveRequest aRequest;

@@ -89,7 +89,7 @@ class PropertySetInfo :
     uno::Sequence< beans::Property >*            m_pProps;
 
 private:
-    sal_Bool queryProperty(
+    bool queryProperty(
         const OUString& aName, beans::Property& rProp );
 
 public:
@@ -164,8 +164,8 @@ struct ResultSet_Impl
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     PropertyChangeListeners*            m_pPropertyChangeListeners;
     sal_Int32                           m_nPos;
-    sal_Bool                            m_bWasNull;
-    sal_Bool                            m_bAfterLast;
+    bool                            m_bWasNull;
+    bool                            m_bAfterLast;
 
     inline ResultSet_Impl(
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -188,8 +188,8 @@ inline ResultSet_Impl::ResultSet_Impl(
   m_pDisposeEventListeners( 0 ),
   m_pPropertyChangeListeners( 0 ),
   m_nPos( 0 ), // Position is one-based. Zero means: before first element.
-  m_bWasNull( sal_False ),
-  m_bAfterLast( sal_False )
+  m_bWasNull( false ),
+  m_bAfterLast( false )
 {
 }
 
@@ -383,7 +383,7 @@ sal_Bool SAL_CALL ResultSet::next()
     // getResult works zero-based!
     if ( !m_pImpl->m_xDataSupplier->getResult( m_pImpl->m_nPos ) )
     {
-        m_pImpl->m_bAfterLast = sal_True;
+        m_pImpl->m_bAfterLast = true;
         m_pImpl->m_xDataSupplier->validate();
         return sal_False;
     }
@@ -467,7 +467,7 @@ void SAL_CALL ResultSet::beforeFirst()
     throw( sdbc::SQLException, uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-    m_pImpl->m_bAfterLast = sal_False;
+    m_pImpl->m_bAfterLast = false;
     m_pImpl->m_nPos = 0;
     m_pImpl->m_xDataSupplier->validate();
 }
@@ -478,7 +478,7 @@ void SAL_CALL ResultSet::afterLast()
     throw( sdbc::SQLException, uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-    m_pImpl->m_bAfterLast = sal_True;
+    m_pImpl->m_bAfterLast = true;
     m_pImpl->m_xDataSupplier->validate();
 }
 
@@ -491,7 +491,7 @@ sal_Bool SAL_CALL ResultSet::first()
     if ( m_pImpl->m_xDataSupplier->getResult( 0 ) )
     {
         osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-        m_pImpl->m_bAfterLast = sal_False;
+        m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = 1;
         m_pImpl->m_xDataSupplier->validate();
         return sal_True;
@@ -510,7 +510,7 @@ sal_Bool SAL_CALL ResultSet::last()
     if ( nCount )
     {
         osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-        m_pImpl->m_bAfterLast = sal_False;
+        m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = nCount;
         m_pImpl->m_xDataSupplier->validate();
         return sal_True;
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         if ( ( row * -1 ) > nCount )
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
@@ -572,7 +572,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         else // |row| <= nCount
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( nCount + row + 1 );
             m_pImpl->m_xDataSupplier->validate();
             return sal_True;
@@ -591,7 +591,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         if ( row <= nCount )
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = row;
             m_pImpl->m_xDataSupplier->validate();
             return sal_True;
@@ -599,7 +599,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         else // row > nCount
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_True;
+            m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
         }
@@ -635,7 +635,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         if ( ( m_pImpl->m_nPos + rows ) > 0 )
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
             return sal_True;
@@ -643,7 +643,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         else
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
@@ -661,7 +661,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         if ( ( m_pImpl->m_nPos + rows ) <= nCount )
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_False;
+            m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
             return sal_True;
@@ -669,7 +669,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         else
         {
             osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-            m_pImpl->m_bAfterLast = sal_True;
+            m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
         }
@@ -691,7 +691,7 @@ sal_Bool SAL_CALL ResultSet::previous()
 
     if ( m_pImpl->m_bAfterLast )
     {
-        m_pImpl->m_bAfterLast = sal_False;
+        m_pImpl->m_bAfterLast = false;
         sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
         m_pImpl->m_nPos = nCount;
     }
@@ -803,13 +803,13 @@ OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getString( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return OUString();
 }
@@ -826,13 +826,13 @@ sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getBoolean( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return sal_False;
 }
@@ -849,13 +849,13 @@ sal_Int8 SAL_CALL ResultSet::getByte( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getByte( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -872,13 +872,13 @@ sal_Int16 SAL_CALL ResultSet::getShort( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getShort( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -895,13 +895,13 @@ sal_Int32 SAL_CALL ResultSet::getInt( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getInt( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -918,13 +918,13 @@ sal_Int64 SAL_CALL ResultSet::getLong( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getLong( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -941,13 +941,13 @@ float SAL_CALL ResultSet::getFloat( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getFloat( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -964,13 +964,13 @@ double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getDouble( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return 0;
 }
@@ -988,13 +988,13 @@ ResultSet::getBytes( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getBytes( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Sequence< sal_Int8 >();
 }
@@ -1011,13 +1011,13 @@ util::Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getDate( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return util::Date();
 }
@@ -1034,13 +1034,13 @@ util::Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getTime( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return util::Time();
 }
@@ -1058,13 +1058,13 @@ ResultSet::getTimestamp( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getTimestamp( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return util::DateTime();
 }
@@ -1082,13 +1082,13 @@ ResultSet::getBinaryStream( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getBinaryStream( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< io::XInputStream >();
 }
@@ -1106,13 +1106,13 @@ ResultSet::getCharacterStream( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getCharacterStream( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< io::XInputStream >();
 }
@@ -1131,13 +1131,13 @@ uno::Any SAL_CALL ResultSet::getObject(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getObject( columnIndex, typeMap );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Any();
 }
@@ -1155,13 +1155,13 @@ ResultSet::getRef( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getRef( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< sdbc::XRef >();
 }
@@ -1179,13 +1179,13 @@ ResultSet::getBlob( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getBlob( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< sdbc::XBlob >();
 }
@@ -1203,13 +1203,13 @@ ResultSet::getClob( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getClob( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< sdbc::XClob >();
 }
@@ -1227,13 +1227,13 @@ ResultSet::getArray( sal_Int32 columnIndex )
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
-            m_pImpl->m_bWasNull = sal_False;
+            m_pImpl->m_bWasNull = false;
             m_pImpl->m_xDataSupplier->validate();
             return xValues->getArray( columnIndex );
         }
     }
 
-    m_pImpl->m_bWasNull = sal_True;
+    m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
     return uno::Reference< sdbc::XArray >();
 }
@@ -1643,7 +1643,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 }
 
 //=========================================================================
-sal_Bool PropertySetInfo::queryProperty(
+bool PropertySetInfo::queryProperty(
     const OUString& aName, beans::Property& rProp )
 {
     sal_Int32 nCount = m_pProps->getLength();
@@ -1654,11 +1654,11 @@ sal_Bool PropertySetInfo::queryProperty(
         if ( rCurr.Name == aName )
         {
             rProp = rCurr;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 } // namespace ucbhelper_impl

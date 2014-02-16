@@ -78,7 +78,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                 @attention  This parameter does not influence the check of the continuation
                             type! The continuation must be matched exactly every time ...
              */
-            sal_Bool MatchExact;
+            bool MatchExact;
 
             //-----------------------------------
             /** @short  its an unique identifier, which must be managed by the outside code.
@@ -98,7 +98,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
              */
             InterceptedRequest()
             {
-                MatchExact = sal_False;
+                MatchExact = false;
                 Handle     = INVALID_HANDLE;
             }
 
@@ -124,7 +124,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             InterceptedRequest(      sal_Int32                    nHandle      ,
                                const ::com::sun::star::uno::Any&  aRequest     ,
                                const ::com::sun::star::uno::Type& aContinuation,
-                                     sal_Bool                     bMatchExact  )
+                                     bool                     bMatchExact  )
             {
                 Handle       = nHandle;
                 Request      = aRequest;

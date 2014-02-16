@@ -537,7 +537,7 @@ namespace cmis
                         if ( obj )
                             xRow->appendBoolean( rProp, obj->getBaseType( ) == "cmis:folder" );
                         else
-                            xRow->appendBoolean( rProp, sal_False );
+                            xRow->appendBoolean( rProp, false );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -674,27 +674,27 @@ namespace cmis
                 }
                 else if ( rProp.Name == "IsVolume" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsRemote" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsRemoveable" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsFloppy" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsCompactDisc" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsHidden" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "TargetURL" )
                 {
@@ -1620,9 +1620,9 @@ namespace cmis
             aRet <<= getPropertyValues( Properties, xEnv );
         }
         else if ( aCommand.Name == "getPropertySetInfo" )
-            aRet <<= getPropertySetInfo( xEnv, sal_False );
+            aRet <<= getPropertySetInfo( xEnv, false );
         else if ( aCommand.Name == "getCommandInfo" )
-            aRet <<= getCommandInfo( xEnv, sal_False );
+            aRet <<= getCommandInfo( xEnv, false );
         else if ( aCommand.Name == "open" )
         {
             ucb::OpenCommandArgument2 aOpenCommand;

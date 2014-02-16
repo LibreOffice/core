@@ -478,7 +478,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return true, if there is a content at the given index.
      */
-    virtual sal_Bool getResult( sal_uInt32 nIndex ) = 0;
+    virtual bool getResult( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the total count of objects in the logical data array
@@ -515,7 +515,7 @@ public:
      * @return true, if the value returned by currentCount() won't change
                anymore.
      */
-    virtual sal_Bool isCountFinal() = 0;
+    virtual bool isCountFinal() = 0;
 
     /**
      * This method returns an object for accessing the property values at

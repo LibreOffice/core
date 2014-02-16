@@ -433,7 +433,7 @@ void SAL_CALL ContentImplHelper::addProperty(
     // Add a new dynamic property.
     // Open/create persistent property set.
     uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xSet(
-                                    getAdditionalPropertySet( sal_True ) );
+                                    getAdditionalPropertySet( true ) );
 
     OSL_ENSURE( xSet.is(),
                 "ContentImplHelper::addProperty - No property set!" );
@@ -528,7 +528,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
     // Try to remove property from dynamic property set.
     // Open persistent property set, if exists.
     uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xSet(
-        getAdditionalPropertySet( sal_False ) );
+        getAdditionalPropertySet( false ) );
     if ( xSet.is() )
     {
         uno::Reference< beans::XPropertyContainer > xContainer(
@@ -651,32 +651,32 @@ void SAL_CALL ContentImplHelper::setParent(
 }
 
 uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
-ContentImplHelper::getAdditionalPropertySet( sal_Bool bCreate )
+ContentImplHelper::getAdditionalPropertySet( bool bCreate )
 {
     // Get propertyset from provider.
     return m_xProvider->getAdditionalPropertySet(
                             m_xIdentifier->getContentIdentifier(), bCreate );
 }
 
-sal_Bool ContentImplHelper::renameAdditionalPropertySet(
+bool ContentImplHelper::renameAdditionalPropertySet(
     const OUString& rOldKey,
     const OUString& rNewKey,
-    sal_Bool bRecursive )
+    bool bRecursive )
 {
     return m_xProvider->renameAdditionalPropertySet(
                                             rOldKey, rNewKey, bRecursive );
 }
 
-sal_Bool ContentImplHelper::copyAdditionalPropertySet(
+bool ContentImplHelper::copyAdditionalPropertySet(
     const OUString& rSourceKey,
     const OUString& rTargetKey,
-    sal_Bool bRecursive )
+    bool bRecursive )
 {
     return m_xProvider->copyAdditionalPropertySet(
                                         rSourceKey, rTargetKey, bRecursive );
 }
 
-sal_Bool ContentImplHelper::removeAdditionalPropertySet( sal_Bool bRecursive )
+bool ContentImplHelper::removeAdditionalPropertySet( bool bRecursive )
 {
     return m_xProvider->removeAdditionalPropertySet(
                     m_xIdentifier->getContentIdentifier(), bRecursive );
@@ -855,7 +855,7 @@ void ContentImplHelper::deleted()
     m_xProvider->removeContent( this );
 }
 
-sal_Bool ContentImplHelper::exchange(
+bool ContentImplHelper::exchange(
     const uno::Reference< com::sun::star::ucb::XContentIdentifier >& rNewId )
 {
     uno::Reference< com::sun::star::ucb::XContent > xThis = this;
@@ -869,7 +869,7 @@ sal_Bool ContentImplHelper::exchange(
         // @@@
         // Big trouble. Another object with the new identity exists.
         // How shall I mutate to / merge with the other object?
-        return sal_False;
+        return false;
     }
 
     uno::Reference< com::sun::star::ucb::XContentIdentifier > xOldId
@@ -889,13 +889,13 @@ sal_Bool ContentImplHelper::exchange(
         this,
         xOldId );
     notifyContentEvent( aEvt );
-    return sal_True;
+    return true;
 }
 
 uno::Reference< com::sun::star::ucb::XCommandInfo >
 ContentImplHelper::getCommandInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
-    sal_Bool bCache )
+    bool bCache )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -912,7 +912,7 @@ ContentImplHelper::getCommandInfo(
 uno::Reference< beans::XPropertySetInfo >
 ContentImplHelper::getPropertySetInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
-    sal_Bool bCache )
+    bool bCache )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

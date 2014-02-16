@@ -84,15 +84,15 @@ namespace cmis
         return maResults[ nIndex ]->xContent;
     }
 
-    sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
+    bool DataSupplier::getResult( sal_uInt32 nIndex )
     {
         if ( maResults.size() > nIndex ) // Result already present.
-            return sal_True;
+            return true;
 
         if ( getData() && maResults.size() > nIndex )
-            return sal_True;
+            return true;
 
-        return sal_False;
+        return false;
     }
 
     sal_uInt32 DataSupplier::totalCount()
@@ -106,7 +106,7 @@ namespace cmis
         return maResults.size();
     }
 
-    sal_Bool DataSupplier::isCountFinal()
+    bool DataSupplier::isCountFinal()
     {
         return mbCountFinal;
     }

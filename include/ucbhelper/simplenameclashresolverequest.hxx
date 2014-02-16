@@ -58,7 +58,7 @@ public:
     SimpleNameClashResolveRequest( const OUString & rTargetFolderURL,
                                    const OUString & rClashingName,
                                    const OUString & rProposedNewName,
-                                   sal_Bool bSupportsOverwriteData = sal_True );
+                                   bool bSupportsOverwriteData = true );
     /**
       * This method returns the new name that was supplied by the interaction
       * handler.

@@ -177,7 +177,7 @@ public:
       * @param rContent will be filled by this method with the content created.
       * @return true, if the operation was successful - false, otherwise.
       */
-    static sal_Bool
+    static bool
     create( const OUString& rURL,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
@@ -520,7 +520,7 @@ public:
       * @param rSink is the implementation of an XActiveDataSink interface,
       *        which shall be used by the content to deliver the data.
       */
-    sal_Bool
+    bool
     openStream( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::io::XActiveDataSink >& rSink )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -534,7 +534,7 @@ public:
       * @param rStream is the implementation of an XOutputStream interface,
       *        which shall be used by the content to deliver the data.
       */
-    sal_Bool
+    bool
     openStream( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::io::XOutputStream >& rStream )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -553,7 +553,7 @@ public:
     void
     writeStream( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::io::XInputStream >& rStream,
-                 sal_Bool bReplaceExisting )
+                 bool bReplaceExisting )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -594,7 +594,7 @@ public:
       * @param rNewContent will be filled by the implementation of this method
       *        with the new content.
       */
-    sal_Bool
+    bool
     insertNewContent( const OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
                         OUString >& rPropertyNames,
@@ -630,7 +630,7 @@ public:
       * @param rNewContent will be filled by the implementation of this method
       *        with the new content.
       */
-    sal_Bool
+    bool
     insertNewContent( const OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
                         OUString >& rPropertyNames,
@@ -672,7 +672,7 @@ public:
       *        case there was a change (introduced for the checkin operation)
       * @param rDocumentId is the document Id ( in case of CMIS ).
       */
-    sal_Bool
+    bool
     transferContent( const Content& rSourceContent,
                      InsertOperation eOperation,
                      const OUString & rTitle,
@@ -696,7 +696,7 @@ public:
       * @return true, if the content is a folder ( it can contain other
       *         UCB contents). false, otherwise.
       */
-    sal_Bool
+    bool
     isFolder()
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -707,7 +707,7 @@ public:
       * @return true, if the content is a document ( it has a content stream ).
       *         false, otherwise.
       */
-    sal_Bool
+    bool
     isDocument()
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,

@@ -417,11 +417,11 @@ namespace ucb { namespace ucp { namespace ext
                 }
                 else if ( rProp.Name == "IsDocument" )
                 {
-                    xRow->appendBoolean( rProp, sal_False );
+                    xRow->appendBoolean( rProp, false );
                 }
                 else if ( rProp.Name == "IsFolder" )
                 {
-                    xRow->appendBoolean( rProp, sal_True );
+                    xRow->appendBoolean( rProp, true );
                 }
                 else
                 {
@@ -447,12 +447,12 @@ namespace ucb { namespace ucp { namespace ext
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                sal_False );
+                false );
             xRow->appendBoolean( Property( OUString("IsFolder"),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                sal_True );
+                true );
         }
 
         return Reference< XRow >( xRow.get() );

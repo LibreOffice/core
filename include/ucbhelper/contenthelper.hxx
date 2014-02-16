@@ -166,7 +166,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
     getPropertySetInfo( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment > & xEnv,
-                        sal_Bool bCache = sal_True );
+                        bool bCache = true );
 
     /**
       * This method returns complete meta data for the commands supported by
@@ -182,7 +182,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
     getCommandInfo( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment > & xEnv,
-                    sal_Bool bCache = sal_True );
+                    bool bCache = true );
 
     /**
       * This method can be used to propagate changes of property values.
@@ -238,7 +238,7 @@ protected:
       * @param  rNewId is the new content identifier for the contant.
       * @return a success indicator.
       */
-    sal_Bool exchange( const com::sun::star::uno::Reference<
+    bool exchange( const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XContentIdentifier >& rNewId );
 
     /**
@@ -254,7 +254,7 @@ protected:
       */
     com::sun::star::uno::Reference<
         com::sun::star::ucb::XPersistentPropertySet >
-    getAdditionalPropertySet( sal_Bool bCreate );
+    getAdditionalPropertySet( bool bCreate );
 
     /**
       * This method renames the propertyset containing the Additional Core
@@ -266,9 +266,9 @@ protected:
       *         children described by rOldKey shall be renamed too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool renameAdditionalPropertySet( const OUString& rOldKey,
+    bool renameAdditionalPropertySet( const OUString& rOldKey,
                                           const OUString& rNewKey,
-                                          sal_Bool bRecursive );
+                                          bool bRecursive );
 
     /**
       * This method copies the propertyset containing the Additional Core
@@ -280,9 +280,9 @@ protected:
       *         children described by rSourceKey shall be copied too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool copyAdditionalPropertySet( const OUString& rSourceKey,
+    bool copyAdditionalPropertySet( const OUString& rSourceKey,
                                         const OUString& rTargetKey,
-                                        sal_Bool bRecursive );
+                                        bool bRecursive );
 
     /**
       * This method removes the propertyset containing the Additional Core
@@ -292,7 +292,7 @@ protected:
       *         children described by rOldKey shall be removed too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool removeAdditionalPropertySet( sal_Bool bRecursive );
+    bool removeAdditionalPropertySet( bool bRecursive );
 
 public:
     /**
