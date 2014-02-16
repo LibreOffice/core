@@ -3514,7 +3514,6 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorP
 
         aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pPlainLine );
 
-
         // Dashed line in twips
         aStrokePattern.push_back( 40 );
         aStrokePattern.push_back( 40 );
@@ -3610,7 +3609,6 @@ void SwColumnFrm::PaintBreak( ) const
                     }
 
                     basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
-
 
                     drawinglayer::primitive2d::Primitive2DSequence aSeq =
                         lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
@@ -6816,7 +6814,6 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                  ( IsCellFrm() && IsCoveredCell() ) )
                 return;
     }
-    // <-- collapsing
 
     const bool bFlys = pPage->GetSortedObjs() ? true : false;
 

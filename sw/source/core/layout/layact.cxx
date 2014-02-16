@@ -1332,7 +1332,6 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                     for ( i = 0; i < aRegion.size(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                 }
-
             }
             else
             {

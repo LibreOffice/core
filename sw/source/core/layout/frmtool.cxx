@@ -1714,6 +1714,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 }
                 else
                     bSplit = sal_False;
+
                 ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), sal_False,
                               nEndIdx, pPrv );
                 // OD 23.06.2003 #108784# - correction: append objects doesn't

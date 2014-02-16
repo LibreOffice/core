@@ -55,7 +55,6 @@
 
 #include <set>
 
-
 using namespace ::com::sun::star;
 
 /*
@@ -934,7 +933,6 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         sal_uInt16 nPgNum = pPage->GetPhyPageNum();
 
-        //
         // NOTE: Here we do not use the absolute ordnums but
         // relative ordnums for the objects on this page.
 
@@ -1123,7 +1121,6 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 }
 
 // Close record
-
 bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
 {
     bool bRes = true;

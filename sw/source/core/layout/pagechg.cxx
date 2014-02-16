@@ -1599,7 +1599,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     default:
                         break;
-
                 }
                 nBrowseWidth = std::max( nBrowseWidth, nWidth );
             }

@@ -672,11 +672,10 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
     {
             if ( bFirstMaster )
             {
-                //
                 // Optimization. This makes code like this obsolete:
                 // while ( pTab->IsFollow() )
                 //     pTab = pTab->FindMaster();
-                //
+
                 if ( !pTab->IsFollow() )
                 {
                     SwTabFrm* pNxt = pTab;
