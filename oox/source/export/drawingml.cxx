@@ -1793,7 +1793,6 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
 
         const Polygon& rPoly = rPolyPolygon[ i ];
         Rectangle aRect( rPoly.GetBoundRect() );
-        sal_Bool bBezier = sal_False;
 
         mpFS->startElementNS( XML_a, XML_path,
                               XML_w, I64S( aRect.GetWidth() ),
@@ -1812,46 +1811,36 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
             mpFS->endElementNS( XML_a, XML_moveTo );
         }
 
-        sal_Int32 nCounter = 0 ;
         for( sal_uInt16 j = 1; j < rPoly.GetSize(); j ++ )
         {
             enum PolyFlags flags = rPoly.GetFlags(j);
-            if( flags == POLY_CONTROL && !bBezier )
+            if( flags == POLY_CONTROL )
             {
-                mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
-                bBezier = sal_True;
+                // a:cubicBezTo can only contain 3 a:pt elements, so we need to make sure of this
+                if( j+2 < rPoly.GetSize() && rPoly.GetFlags(j+1) == POLY_CONTROL && rPoly.GetFlags(j+2) != POLY_CONTROL )
+                {
+
+                    mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
+                    for( sal_uInt8 k = 0; k <= 2; ++k )
+                    {
+                        mpFS->singleElementNS( XML_a, XML_pt,
+                                               XML_x, I64S( rPoly[j+k].X() - aRect.Left() ),
+                                               XML_y, I64S( rPoly[j+k].Y() - aRect.Top() ),
+                                               FSEND );
+
+                    }
+                    mpFS->endElementNS( XML_a, XML_cubicBezTo );
+                    j += 2;
+                }
             }
-            else if( flags == POLY_NORMAL && !bBezier )
+            else if( flags == POLY_NORMAL )
             {
                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
-                ++nCounter ;
-            }
-
-            mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S( rPoly[j].X() - aRect.Left() ),
-                                   XML_y, I64S( rPoly[j].Y() - aRect.Top() ),
-                                   FSEND );
-
-            if( ( flags == POLY_NORMAL || flags == POLY_SYMMTR || j == rPoly.GetSize() - 1) && bBezier )
-            {
-                mpFS->endElementNS( XML_a, XML_cubicBezTo );
-                bBezier = sal_False;
-            }
-            else if( flags == POLY_NORMAL && !bBezier )
+                mpFS->singleElementNS( XML_a, XML_pt,
+                                       XML_x, I64S( rPoly[j].X() - aRect.Left() ),
+                                       XML_y, I64S( rPoly[j].Y() - aRect.Top() ),
+                                       FSEND );
                 mpFS->endElementNS( XML_a, XML_lnTo );
-
-            /* ( j % 3 == 0 ) will fail to address the iterations
-               that have been dedicated to XML_lnTo in case if the
-               flag is POLY_NORMAL.
-               Similarly the sequence would go wrong if we do not
-               make the flag bBezier as false after ending the element.
-            */
-            else if( bBezier && ( ( j - nCounter ) % 3 ) == 0 )
-            {
-                // //a:cubicBezTo can only contain 3 //a:pt elements, so we
-                // need to break things up...
-                mpFS->endElementNS( XML_a, XML_cubicBezTo );
-                bBezier = sal_False;
             }
         }
 

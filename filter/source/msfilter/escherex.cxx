@@ -1969,7 +1969,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                                 {
                                     aPolygon.SetFlags( nPointIndex, POLY_CONTROL);
                                     aPolygon.SetFlags( nPointIndex+1, POLY_CONTROL);
-                                    aPolygon.SetFlags( nPointIndex+2, POLY_CONTROL);
+                                    aPolygon.SetFlags( nPointIndex+2, POLY_NORMAL);
                                     nPointIndex += 3;
                                     break;
                                 }
