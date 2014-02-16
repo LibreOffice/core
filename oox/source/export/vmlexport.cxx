@@ -1034,6 +1034,11 @@ sal_Int32 VMLExport::StartShape()
         // start of the shape
         m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
     }
+    else
+    {
+        // start of the shape
+        m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
+    }
 
     // now check if we have some text and we have a text exporter registered
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
