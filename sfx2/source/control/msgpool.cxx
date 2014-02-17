@@ -111,7 +111,10 @@ TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 
 void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
 {
-    DBG_ASSERT( _pInterfaces, "releasing SfxInterface, but there are none" );
+    SAL_WARN_IF(!_pInterfaces, "sfx.control", "releasing SfxInterface, but there are none");
+    if (!_pInterfaces)
+        return ;
+
     // remove from the list of SfxInterface instances
     SfxInterfaceArr_Impl::iterator i = std::find(_pInterfaces->begin(), _pInterfaces->end(), &rInterface);
     if(i != _pInterfaces->end())
@@ -122,7 +125,9 @@ void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
 
 const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 {
-    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
+    SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
+    if (!_pInterfaces)
+        return 0;
 
     // First, search their own interfaces
     for ( sal_uInt16 nInterf = 0; nInterf < _pInterfaces->size(); ++nInterf )
@@ -142,7 +147,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 
 OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 {
-    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
+    SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
 
     // if the group exists, use it
     if ( _pGroups && nNo < _pGroups->size() )
@@ -195,7 +200,9 @@ sal_uInt16 SfxSlotPool::GetGroupCount()
 
 const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 {
-    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
+    SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
+    if (!_pInterfaces)
+        return 0;
 
     // The numbering starts at the interfaces of the parent pool
     sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
@@ -208,7 +215,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
     // Is the Interface still in the Parent-Pool?
     if ( nStartInterface < nFirstInterface )
     {
-        DBG_ASSERT( _pParentPool, "No parent pool!" );
+        SAL_WARN_IF(!_pParentPool, "sfx.control", "No parent pool!");
         _nCurInterface = nStartInterface;
         return _pParentPool->SeekSlot( nStartInterface );
     }
@@ -238,7 +245,9 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 
 const SfxSlot* SfxSlotPool::NextSlot()
 {
-    DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
+    SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
+    if (!_pInterfaces)
+        return 0;
 
     // The numbering starts at the interfaces of the parent pool
     sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
@@ -248,7 +257,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
     if ( _nCurInterface < nFirstInterface )
     {
-        DBG_ASSERT( _pParentPool, "No parent pool!" );
+        SAL_WARN_IF(!_pParentPool, "sfx.control", "No parent pool!");
         const SfxSlot *pSlot = _pParentPool->NextSlot();
         _nCurInterface = _pParentPool->_nCurInterface;
         if ( pSlot )
@@ -294,7 +303,7 @@ SfxInterface* SfxSlotPool::FirstInterface()
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )
 {
     const SfxSlot *pSlot = NULL;
-    for ( sal_uInt16 nInterface=0; nInterface<_pInterfaces->size(); ++nInterface )
+    for (sal_uInt16 nInterface = 0; _pInterfaces && nInterface < _pInterfaces->size(); ++nInterface)
     {
         pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
         if ( pSlot )
