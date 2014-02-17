@@ -54,16 +54,21 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
 {
     get(m_pNameRo, "namero");
     get(m_pNameRw, "namerw");
+    m_pNameRo->set_width_request(m_pNameRw->get_preferred_size().Width());
     get(m_pAutoCB, "autoupdate");
     get(m_pFollowFt, "nextstyleft");
     get(m_pFollowLb, "nextstyle");
     m_pFollowLb->SetStyle(m_pFollowLb->GetStyle() | WB_SORT);
+    const sal_Int32 nMaxWidth(62);
+    m_pFollowLb->setMaxWidthChars(nMaxWidth);
     get(m_pBaseFt, "linkedwithft");
     get(m_pBaseLb, "linkedwith");
     m_pBaseLb->SetStyle(m_pBaseLb->GetStyle() | WB_SORT);
+    m_pBaseLb->setMaxWidthChars(nMaxWidth);
     get(m_pFilterFt, "categoryft");
     get(m_pFilterLb, "category");
     m_pFilterLb->SetStyle(m_pFilterLb->GetStyle() | WB_SORT);
+    m_pFilterLb->setMaxWidthChars(nMaxWidth);
     get(m_pDescFt, "desc");
 
     // this Page needs ExchangeSupport
