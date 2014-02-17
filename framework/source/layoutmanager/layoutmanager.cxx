@@ -2895,6 +2895,8 @@ throw( RuntimeException )
         // Our frame gets disposed, release all our references that depends on a working frame reference.
         Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
+        setDockingAreaAcceptor( Reference< ui::XDockingAreaAcceptor >() );
+
         // destroy all elements, it's possible that dettaching is NOT called!
         implts_destroyElements();
         impl_clearUpMenuBar();
@@ -2939,7 +2941,6 @@ throw( RuntimeException )
         m_xFrame.clear();
         delete m_pGlobalSettings;
         m_pGlobalSettings = 0;
-                m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
 
         bDisposeAndClear = sal_True;
     }
