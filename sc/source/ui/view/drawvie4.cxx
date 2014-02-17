@@ -56,7 +56,7 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
+void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
 {
     rAnyOle = rOneOle = false;
     sal_uLong nCount = rMarkList.GetMarkCount();
@@ -67,7 +67,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_
         sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
         if (nSdrObjKind == OBJ_OLE2)
         {
-            rAnyOle = sal_True;
+            rAnyOle = true;
             rOneOle = (nCount == 1);
             break;
         }
@@ -79,7 +79,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_
             {
                 if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    rAnyOle = sal_True;
+                    rAnyOle = true;
                     // rOneOle remains sal_False - a group isn't treated like a single OLE object
                     return;
                 }
@@ -89,9 +89,9 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_
     }
 }
 
-sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
+bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     if ( AreObjectsMarked() )
     {
@@ -102,7 +102,7 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
-        sal_Bool bAnyOle, bOneOle;
+        bool bAnyOle, bOneOle;
         const SdrMarkList& rMarkList = GetMarkedObjectList();
         CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -404,7 +404,7 @@ void ScDrawView::DoCopy()
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 {
-    sal_Bool bAnyOle, bOneOle;
+    bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     CheckOle( rMarkList, bAnyOle, bOneOle );
 

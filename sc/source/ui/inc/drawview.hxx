@@ -41,7 +41,7 @@ class ScDrawView: public FmFormView
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
-    sal_Bool                    bInConstruct;
+    bool                    bInConstruct;
 
     void            Construct();
     void            UpdateBrowser();
@@ -90,7 +90,7 @@ public:
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
+    bool            BeginDrag( Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -115,7 +115,7 @@ public:
 
     void            SetMarkedOriginalSize();
 
-    sal_Bool            SelectObject( const OUString& rName );
+    bool            SelectObject( const OUString& rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
@@ -147,8 +147,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 
     SdrObject*  GetObjectByName(const OUString& rName);
-    sal_Bool    GetObjectIsMarked(  SdrObject * pObject );
-    sal_Bool    SelectCurrentViewObject( const OUString& rName );
+    bool        GetObjectIsMarked(  SdrObject * pObject );
+    bool        SelectCurrentViewObject( const OUString& rName );
 
     // #i123922# helper which checks if a Graphic may be appied to an existing
     // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a
@@ -160,7 +160,7 @@ public:
         const OUString& rFile,
         const OUString& rFilter);
 
-    static void CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
+    static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
     virtual void SyncForGrid( SdrObject* pObj );
 };
 

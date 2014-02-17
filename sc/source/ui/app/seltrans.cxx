@@ -330,7 +330,7 @@ void ScSelectionTransferObj::CreateDrawData()
         ScDrawView* pDrawView = pView->GetScDrawView();
         if ( pDrawView )
         {
-            sal_Bool bAnyOle, bOneOle;
+            bool bAnyOle, bOneOle;
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             ScDrawView::CheckOle( rMarkList, bAnyOle, bOneOle );
 

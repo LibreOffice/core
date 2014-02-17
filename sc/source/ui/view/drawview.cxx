@@ -663,11 +663,11 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 
 //realize multi-selection of objects
 //==================================================
-sal_Bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
+bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = NULL;
-       sal_Bool bUnMark=sal_False;
+    bool bUnMark = false;
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pShell)
     {
@@ -713,10 +713,10 @@ sal_Bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
               bUnMark = IsObjMarked(pFound);
            MarkObj( pFound, pPV, bUnMark);
     }
-    return ( bUnMark );
+    return bUnMark;
 }
 
-sal_Bool ScDrawView::SelectObject( const OUString& rName )
+bool ScDrawView::SelectObject( const OUString& rName )
 {
     UnmarkAll();
 
@@ -778,9 +778,9 @@ sal_Bool ScDrawView::SelectObject( const OUString& rName )
 }
 
 //If  object  is marked , return true , else return false .
-sal_Bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
+bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
 {
-    sal_Bool bisMarked =false;
+    bool bisMarked = false;
     if (pObject )
     {
         bisMarked = IsObjMarked(pObject);
