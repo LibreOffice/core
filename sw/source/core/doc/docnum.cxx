@@ -2083,7 +2083,7 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
         }
-        else if (bDel && pTxtNd->GetNumRule(sal_False) &&
+        else if (bDel && pTxtNd->GetNumRule(false) &&
                  pTxtNd->GetActualListLevel() >= 0 &&
                  pTxtNd->GetActualListLevel() < MAXLEVEL)
         {
