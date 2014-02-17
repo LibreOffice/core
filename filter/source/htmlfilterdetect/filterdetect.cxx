@@ -53,7 +53,7 @@ bool isHTMLStream(const OString& aStreamHeader)
     for ( i = 0; i < nLength; ++i, ++pHeader )
     {
         char c = *pHeader;
-        if ( c == ' ' || c == '\n' || c == '\t' )
+        if ( c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f' )
         {
             if ( dp == TagOpened )
                 return false; // Invalid: Should start with a tag name
@@ -76,8 +76,8 @@ bool isHTMLStream(const OString& aStreamHeader)
         }
         else if ( c == '!' )
         {
-            if ( i == 1 && dp == TagOpened )
-                return true; // "<!" at the very beginning of the file
+            if ( dp == TagOpened )
+                return true; // "<!" - DOCTYPE or comments block
             else
                 return false; // Invalid: '!' before '<' or inside tag name
         }
