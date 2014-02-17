@@ -56,12 +56,12 @@ FuConstPolygon::~FuConstPolygon()
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -77,7 +77,7 @@ sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        bReturn = sal_True;
+        bReturn = true;
 
     return bReturn;
 }

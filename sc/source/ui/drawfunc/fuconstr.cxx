@@ -112,18 +112,18 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if ( pView->IsAction() )
     {
         if ( rMEvt.IsRight() )
             pView->BckAction();
-        return sal_True;
+        return true;
     }
 
     aDragTimer.Start();
@@ -139,12 +139,12 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
-            bReturn = sal_True;
+            bReturn = true;
         }
         else if ( pView->AreObjectsMarked() )
         {
             pView->UnmarkAll();
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 

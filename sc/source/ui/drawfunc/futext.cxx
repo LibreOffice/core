@@ -133,14 +133,14 @@ FuText::~FuText()
 |*
 \************************************************************************/
 
-sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
-    sal_Bool bStraightEnter = true;
+    bool bStraightEnter = true;
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        return (sal_True);                 // Event von der SdrView ausgewertet
+        return true;                 // Event von der SdrView ausgewertet
 
     if ( pView->IsTextEdit() )
     {
@@ -228,7 +228,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                     if ( pOLV->MouseButtonDown(rMEvt) )
-                        return (sal_True); // Event an den Outliner
+                        return true; // Event an den Outliner
                 }
             }
             else
@@ -350,7 +350,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                         pHdl=pView->PickHandle(aMDPos);
                         pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        return(sal_True);
+                        return true;
                     }
                 }
             }
@@ -375,7 +375,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
 //  return (bReturn);
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

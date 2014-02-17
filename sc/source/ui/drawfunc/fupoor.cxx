@@ -150,7 +150,7 @@ bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 }
 
 // moved from inline to *.cxx
-sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());

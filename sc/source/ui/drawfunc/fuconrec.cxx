@@ -63,12 +63,12 @@ FuConstRectangle::~FuConstRectangle()
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {

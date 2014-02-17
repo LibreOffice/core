@@ -48,7 +48,7 @@ class FuMarkRect : public FuPoor
 
     virtual bool MouseMove(const MouseEvent& rMEvt);
     virtual bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 };
 

@@ -131,7 +131,7 @@ void FuDraw::ResetModifiers()
 |*
 \************************************************************************/
 
-sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());

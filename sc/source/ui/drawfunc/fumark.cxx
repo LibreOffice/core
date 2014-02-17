@@ -63,18 +63,18 @@ FuMarkRect::~FuMarkRect()
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
     pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
-    bStartDrag = sal_True;
+    bStartDrag = true;
 
     aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
     aZoomRect = Rectangle( aBeginPos, Size() );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

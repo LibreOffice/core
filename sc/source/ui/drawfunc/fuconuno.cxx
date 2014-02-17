@@ -57,12 +57,12 @@ FuConstUnoControl::~FuConstUnoControl()
 |*
 \************************************************************************/
 
-sal_Bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
@@ -76,7 +76,7 @@ sal_Bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
         pWindow->CaptureMouse();
         pView->BegCreateObj(aPnt);
         pView->GetCreateObj()->SetGridOffset( aGridOff );
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }

@@ -94,7 +94,7 @@ sal_uInt8 FuSelection::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -103,13 +103,13 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if ( bSelectionOnly )
             pView->BckAction();
-        return sal_True;
+        return true;
     }
 
     bVCAction = false;
     bIsInDragMode = false;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
 
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
@@ -147,7 +147,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 aDragTimer.Start();
                 pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         else
@@ -158,7 +158,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
-                bReturn = sal_True;
+                bReturn = true;
             }
             else
             {
@@ -221,7 +221,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            pObjSh->CallXScript( pInfo->GetMacro(),
                                *pInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
-                           return sal_True;        // kein CaptureMouse etc.
+                           return true;        // kein CaptureMouse etc.
                        }
                    }
                 }
@@ -255,13 +255,13 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
                     pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
-                    return sal_True;        // kein CaptureMouse etc.
+                    return true;        // kein CaptureMouse etc.
                 }
 
                 //  Is another object being edited in this view?
                 //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
                 SfxInPlaceClient* pClient = pViewShell->GetIPClient();
-                sal_Bool bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
+                bool bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
                 //  Markieren
 
@@ -292,11 +292,11 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                         pHdl=pView->PickHandle(aMDPos);
                         pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                     else                                    // Objekt am Rand getroffen
                         if (pViewShell->IsDrawSelMode())
-                            bReturn = sal_True;
+                            bReturn = true;
                 }
                 else
                 {
@@ -308,7 +308,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         //Objekt selektieren
                         //********************************************************
                         pView->BegMarkObj(aMDPos);
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
             }

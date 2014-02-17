@@ -65,12 +65,12 @@ FuConstCustomShape::~FuConstCustomShape()
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -95,7 +95,7 @@ sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
             pObj->SetGridOffset( aGridOff );
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }
