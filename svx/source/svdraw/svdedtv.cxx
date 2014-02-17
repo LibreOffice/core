@@ -33,6 +33,7 @@
 #include "svx/svdglob.hxx"
 #include <svx/e3dsceneupdater.hxx>
 #include <rtl/strbuf.hxx>
+#include <svx/svdview.hxx>
 
 // #i13033#
 #include <clonelist.hxx>
@@ -987,6 +988,28 @@ sal_Bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_
 
 void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, sal_Bool bMark)
 {
+    if(IsTextEdit())
+    {
+#ifdef DBG_UTIL
+        if(pOldObj && dynamic_cast< SdrTextObj* >(pOldObj) && static_cast< SdrTextObj* >(pOldObj)->IsTextEditActive())
+        {
+            OSL_ENSURE(false, "OldObject is in TextEdit mode, this has to be ended before replacing it usnig SdrEndTextEdit (!)");
+        }
+
+        if(pNewObj && dynamic_cast< SdrTextObj* >(pNewObj) && static_cast< SdrTextObj* >(pNewObj)->IsTextEditActive())
+        {
+            OSL_ENSURE(false, "NewObject is in TextEdit mode, this has to be ended before replacing it usnig SdrEndTextEdit (!)");
+        }
+#endif
+
+        // #i123468# emergency repair situation, needs to cast up to a class derived from
+        // this one; (aw080 has a mechanism for that and the view hierarchy is secured to
+        // always be a SdrView)
+        SdrView *pSdrView = dynamic_cast<SdrView*>(this);
+        if (pSdrView)
+            pSdrView->SdrEndTextEdit();
+    }
+
     SdrObjList* pOL=pOldObj->GetObjList();
     const bool bUndo = IsUndoEnabled();
     if( bUndo  )
