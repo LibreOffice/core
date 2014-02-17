@@ -777,7 +777,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-sal_Bool FuDraw::IsEditingANote() const
+bool FuDraw::IsEditingANote() const
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     sal_Int32 backval=rMarkList.GetMarkCount();
@@ -792,9 +792,9 @@ sal_Bool FuDraw::IsEditingANote() const
     return false;
 }
 
-sal_Bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
+bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
 {
-    sal_Bool bIsSizingOrMoving = false;
+    bool bIsSizingOrMoving = false;
     if ( rMEvt.IsLeft() )
     {
         const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();

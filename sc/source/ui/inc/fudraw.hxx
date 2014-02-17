@@ -49,8 +49,8 @@ class FuDraw : public FuPoor
     // II
     virtual void SelectionHasChanged();
 
-    sal_Bool IsEditingANote() const;
-    sal_Bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
+    bool IsEditingANote() const;
+    bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 
  private:
     void    DoModifiers(const MouseEvent& rMEvt);
