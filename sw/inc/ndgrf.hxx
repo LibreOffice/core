@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
 
-    sal_Bool bGrafikArrived         :1;
+    sal_Bool bGraphicArrived        :1;
     sal_Bool bChgTwipSize           :1;
     sal_Bool bChgTwipSizeFromPixel  :1;
     sal_Bool bLoadLowResGrf         :1;
@@ -150,8 +150,8 @@ public:
     inline sal_Bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
     inline void SetChgTwipSize( sal_Bool b, sal_Bool bFromPx=sal_False )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
 
-    inline sal_Bool IsGrafikArrived() const         { return bGrafikArrived; }
-    inline void SetGrafikArrived( sal_Bool b )      { bGrafikArrived = b; }
+    inline sal_Bool IsGraphicArrived() const         { return bGraphicArrived; }
+    inline void SetGraphicArrived( sal_Bool b )      { bGraphicArrived = b; }
 
     inline sal_Bool IsFrameInPaint() const          { return bFrameInPaint; }
     inline void SetFrameInPaint( sal_Bool b )       { bFrameInPaint = b; }

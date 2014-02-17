@@ -140,7 +140,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         bGraphicArrived = GetObj()->IsDataComplete();
         bGraphicPieceArrived = GetObj()->IsPending();
-        pSwGrfNode->SetGrafikArrived( bGraphicArrived );
+        pSwGrfNode->SetGraphicArrived( bGraphicArrived );
 
         Graphic aGrf;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
@@ -248,8 +248,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                         pBLink->DataChanged( rMimeType, rValue );
                         pBLink->bIgnoreDataChanged = sal_True;
 
-                        pGrfNd->SetGrafikArrived( ((SwGrfNode*)pCntntNode)->
-                                                    IsGrafikArrived() );
+                        pGrfNd->SetGraphicArrived( ((SwGrfNode*)pCntntNode)->
+                                                    IsGraphicArrived() );
 
                         // Adjust the Fly's graphic
                         if( !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
