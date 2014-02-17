@@ -221,7 +221,6 @@ UDK_3_0_0 {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength;
         rtl_str_hashCode;
         rtl_str_hashCode_WithLength;
-        rtl_str_hashCode64_WithLength;
         rtl_str_indexOfChar;
         rtl_str_indexOfChar_WithLength;
         rtl_str_indexOfStr;
@@ -670,6 +669,12 @@ LIBO_UDK_4.2 { # symbols available in >= LibO 4.2
         rtl_str_toUInt32;
         rtl_ustr_toUInt32;
 } LIBO_UDK_4.1;
+
+LIBO_UDK_4.3 { #symbols available in >= LibO 4.3
+    global:
+         rtl_str_hashCode64_WithLength;
+         rtl_ustr_hashCode64_WithLength;
+} LIBO_UDK_4.2;
 
 PRIVATE_1.0 {
     global:

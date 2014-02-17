@@ -1227,6 +1227,21 @@ public:
     }
 
     /**
+      Returns a 64bit hash of the string data.
+      This hashes the entire data, while hashCode would do sampling for larger string sizes.
+
+      @return   a hash code value of the string data
+
+      @see hashCode() for simple hashes
+
+      @since LibreOffice 4.3
+    */
+    sal_uInt64 hashCode64() const SAL_THROW(())
+    {
+        return rtl_ustr_hashCode64_WithLength( pData->buffer, pData->length );
+    }
+
+    /**
       Returns a hashcode for this string.
 
       @return   a hash code value for this object.

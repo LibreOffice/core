@@ -898,6 +898,8 @@ public:
       @return   a hash code value of the string data
 
       @see hashCode() for simple hashes
+
+      @since LibreOffice 4.3
     */
     sal_uInt64 hashCode64() const SAL_THROW(())
     {
