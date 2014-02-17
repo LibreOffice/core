@@ -18,7 +18,6 @@
  */
 
 #include "dsselect.hxx"
-#include "dsselect.hrc"
 #include "dbu_dlg.hrc"
 #include <vcl/msgbox.hxx>
 #include "localresaccess.hxx"
@@ -49,26 +48,26 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet)
-     :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
-     ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
-     ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
-     ,m_aOk                 (this, ModuleRes(PB_OK))
-     ,m_aCancel             (this, ModuleRes(PB_CANCEL))
-     ,m_aHelp               (this, ModuleRes(PB_HELP))
-#ifdef HAVE_ODBC_ADMINISTRATION
-     ,m_aManageDatasources  (this, ModuleRes(PB_MANAGE))
-#endif
-     ,m_pOutputSet(_pOutputSet)
+    : ModalDialog(_pParent, "ChooseDataSourceDialog",
+        "dbaccess/ui/choosedatasourcedialog.ui")
+    , m_pOutputSet(_pOutputSet)
 {
+    get(m_pDatasource, "treeview");
+    m_pDatasource->set_height_request(m_pDatasource->GetTextHeight() * 6);
+    get(m_pOk, "ok");
+    get(m_pCancel, "cancel");
+
     fillListBox(_rDatasources);
 #ifdef HAVE_ODBC_ADMINISTRATION
+    get(m_pManageDatasources, "organize");
+    m_pManageDatasources->Show();
+
     // allow ODBC datasource managenment
-    m_aManageDatasources.Show();
-    m_aManageDatasources.Enable();
-    m_aManageDatasources.SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
+    m_pManageDatasources->Show();
+    m_pManageDatasources->Enable();
+    m_pManageDatasources->SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
 #endif
-    m_aDatasource.SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
-    FreeResource();
+    m_pDatasource->SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
 }
 
 ODatasourceSelectDialog::~ODatasourceSelectDialog()
@@ -101,15 +100,15 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
     if ( !m_pODBCManagement->manageDataSources_async() )
     {
         // TODO: error message
-        m_aDatasource.GrabFocus();
-        m_aManageDatasources.Disable();
+        m_pDatasource->GrabFocus();
+        m_pManageDatasources->Disable();
         return 1L;
     }
 
-    m_aDatasource.Disable();
-    m_aOk.Disable();
-    m_aCancel.Disable();
-    m_aManageDatasources.Disable();
+    m_pDatasource->Disable();
+    m_pOk->Disable();
+    m_pCancel->Disable();
+    m_pManageDatasources->Disable();
 
     OSL_POSTCOND( m_pODBCManagement->isRunning(), "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
     return 0L;
@@ -122,10 +121,10 @@ IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
     aEnumeration.getDatasourceNames( aOdbcDatasources );
     fillListBox( aOdbcDatasources );
 
-    m_aDatasource.Enable();
-    m_aOk.Enable();
-    m_aCancel.Enable();
-    m_aManageDatasources.Enable();
+    m_pDatasource->Enable();
+    m_pOk->Enable();
+    m_pCancel->Enable();
+    m_pManageDatasources->Enable();
 
     return 0L;
 }
@@ -134,24 +133,24 @@ IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 {
     OUString sSelected;
-    if (m_aDatasource.GetEntryCount())
-         sSelected = m_aDatasource.GetSelectEntry();
-    m_aDatasource.Clear();
+    if (m_pDatasource->GetEntryCount())
+         sSelected = m_pDatasource->GetSelectEntry();
+    m_pDatasource->Clear();
     // fill the list
     for (   StringBag::const_iterator aDS = _rDatasources.begin();
             aDS != _rDatasources.end();
             ++aDS
         )
     {
-        m_aDatasource.InsertEntry( *aDS );
+        m_pDatasource->InsertEntry( *aDS );
     }
 
-    if (m_aDatasource.GetEntryCount())
+    if (m_pDatasource->GetEntryCount())
     {
         if (!sSelected.isEmpty())
-            m_aDatasource.SelectEntry(sSelected);
+            m_pDatasource->SelectEntry(sSelected);
         else        // select the first entry
-            m_aDatasource.SelectEntryPos(0);
+            m_pDatasource->SelectEntryPos(0);
     }
 }
 

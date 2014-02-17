@@ -41,16 +41,12 @@ namespace dbaui
 class ODatasourceSelectDialog : public ModalDialog
 {
 protected:
-    FixedText       m_aDescription;
-    ListBox         m_aDatasource;
-    OKButton        m_aOk;
-    CancelButton    m_aCancel;
-    HelpButton      m_aHelp;
-#ifdef HAVE_ODBC_ADMINISTRATION
-    PushButton      m_aManageDatasources;
-#endif
+    ListBox*        m_pDatasource;
+    OKButton*       m_pOk;
+    CancelButton*   m_pCancel;
     SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
+    PushButton*     m_pManageDatasources;
     ::std::auto_ptr< OOdbcManagement >
                     m_pODBCManagement;
 #endif
@@ -59,8 +55,8 @@ public:
     ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
-    inline OUString GetSelected() const { return m_aDatasource.GetSelectEntry();}
-    void            Select( const OUString& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
+    OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
+    void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }
 
     virtual sal_Bool    Close();
 
