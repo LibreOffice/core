@@ -1194,7 +1194,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 // set the status of this windows, according to the PDFA selection
     enablePermissionControls();
 
-    ImpPDFTabGeneralPage* pGeneralPage = paParent ? paParent->getGeneralPage() : NULL;
+    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
 
     if (pGeneralPage)
         ImplPDFASecurityControl(!pGeneralPage->IsPdfaSelected());
