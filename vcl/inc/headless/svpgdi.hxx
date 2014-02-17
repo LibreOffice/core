@@ -244,7 +244,7 @@ public:
                          std::vector<unsigned char>& rBuffer,
                          bool* pJustCFF );
     void                RefreshRect( const CGRect& ) { };
-    void                RefreshRect(float /* lX */, float /* lY */, float /* lWidth */, float /* lHeight */) { };
+    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
     void                SetState();
     void                UnsetState();
     void                InvalidateContext();
