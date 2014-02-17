@@ -706,15 +706,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	$(if $(SYSTEM_CURL),,curl) \
-	$(if $(SYSTEM_LCMS2),,lcms2) \
-	$(if $(SYSTEM_LIBXSLT),,xslt) \
-	$(if $(SYSTEM_CAIRO),,cairo \
-		$(if $(filter $(OS),WNT),,pixman) \
-	) \
-))
-
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
 	genbrk \

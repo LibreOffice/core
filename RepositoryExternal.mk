@@ -871,6 +871,10 @@ endef
 
 else # !SYSTEM_LIBXSLT
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	xslt \
+))
+
 define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_use_package,$(1),xslt)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1073,6 +1077,8 @@ endif # ANDROID
 endif # SYSTEM_REDLAND
 
 
+ifneq ($(filter unx,$(GUIBASE))$(ENABLE_CAIRO_CANVAS),) # or
+
 ifneq ($(SYSTEM_CAIRO),)
 
 define gb_LinkTarget__use_cairo
@@ -1086,6 +1092,11 @@ $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 endef
 
 else # !SYSTEM_CAIRO
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	cairo \
+	$(if $(filter $(OS),WNT),,pixman) \
+))
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
@@ -1106,6 +1117,8 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endef
 
 endif # SYSTEM_CAIRO
+
+endif # CAIRO
 
 ifneq ($(SYSTEM_FREETYPE),)
 
@@ -1810,6 +1823,10 @@ gb_ExternalProject__use_lcms2 :=
 
 else # !SYSTEM_LCMS2
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	lcms2 \
+))
+
 define gb_ExternalProject__use_lcms2
 $(call gb_ExternalProject_use_package,$(1),lcms2)
 
@@ -2092,6 +2109,10 @@ $(call gb_LinkTarget_add_libs,$(1),$(CURL_LIBS))
 endef
 
 else # !SYSTEM_CURL
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	curl \
+))
 
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_use_package,$(1),curl)
