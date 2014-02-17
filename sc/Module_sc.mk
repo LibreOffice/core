@@ -56,6 +56,12 @@ $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_rangelst_test \
 ))
 
+ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    PythonTest_sc_insertremovecells \
+))
+endif
+
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
     CppunitTest_sc_subsequent_filters_test \
     CppunitTest_sc_subsequent_export_test \
