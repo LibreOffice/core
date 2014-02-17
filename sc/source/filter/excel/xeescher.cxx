@@ -691,7 +691,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     //Export description as alt text
     if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
     {
-        OUString  aAltTxt = pSdrObj->GetDescription().copy( 0, MSPROP_DESCRIPTION_MAX_LEN );
+        OUString aAltTxt;
+        OUString aDescrText = pSdrObj->GetDescription();
+        if(!aDescrText.isEmpty())
+            aAltTxt = aDescrText.copy( 0, std::min<sal_Int32>(MSPROP_DESCRIPTION_MAX_LEN, aDescrText.getLength()) );
         aPropOpt.AddOpt( ESCHER_Prop_wzDescription, aAltTxt );
     }
 
