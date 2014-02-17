@@ -1214,7 +1214,7 @@
  			<xsl:text>\overbrace{</xsl:text>
  			<xsl:apply-templates select="./*[1]"/>
  			<xsl:text>}</xsl:text>
-@@ -192,10 +193,46 @@
+@@ -192,10 +193,51 @@
  			<xsl:text>\ddot{</xsl:text>
   			<xsl:apply-templates select="./*[1]"/>
   			<xsl:text>}</xsl:text>
@@ -1253,6 +1253,11 @@
 + 		</xsl:when>
 + 		<xsl:when test="$over='&#xa8;'"> <!--  Diaeresis "¨" -->
 +			<xsl:text>\ddot{</xsl:text>
++ 			<xsl:apply-templates select="./*[1]"/>
++ 			<xsl:text>}</xsl:text>
++ 		</xsl:when>
++ 		<xsl:when test="$over='&#x20d7;'"> <!--  Vector -->
++			<xsl:text>\vec{</xsl:text>
 + 			<xsl:apply-templates select="./*[1]"/>
 + 			<xsl:text>}</xsl:text>
 + 		</xsl:when>
