@@ -986,7 +986,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
             Reference< util::XModifiable > xModifiable( m_rDialogModel.getChartModel(), uno::UNO_QUERY );
             if( xModifiable.is() )
                 xModifiable->setModified( sal_True );
-            const TimeBasedInfo& rInfo = m_rDialogModel.getTimeBasedInfo();
+            const DialogModelTimeBasedInfo& rInfo = m_rDialogModel.getTimeBasedInfo();
             if(rInfo.bTimeBased)
             {
                 m_rDialogModel.setTimeBasedRange(rInfo.bTimeBased, rInfo.nStart, rInfo.nEnd);

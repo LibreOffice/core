@@ -367,7 +367,7 @@ struct lcl_addSeriesNumber : public ::std::binary_function<
 namespace chart
 {
 
-TimeBasedInfo::TimeBasedInfo():
+DialogModelTimeBasedInfo::DialogModelTimeBasedInfo():
     bTimeBased(false),
     nStart(0),
     nEnd(0)

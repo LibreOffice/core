@@ -47,9 +47,9 @@ namespace chart
 
 class RangeSelectionHelper;
 
-struct TimeBasedInfo
+struct DialogModelTimeBasedInfo
 {
-    TimeBasedInfo();
+    DialogModelTimeBasedInfo();
 
     bool bTimeBased;
     sal_Int32 nStart;
@@ -153,7 +153,7 @@ public:
 
     void setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const;
 
-    const TimeBasedInfo& getTimeBasedInfo() const { return maTimeBasedInfo; }
+    const DialogModelTimeBasedInfo& getTimeBasedInfo() const { return maTimeBasedInfo; }
 
     void startControllerLockTimer();
 
@@ -194,7 +194,7 @@ private:
     sal_Int32 countSeries() const;
 
     ChartModel& getModel() const;
-    mutable TimeBasedInfo maTimeBasedInfo;
+    mutable DialogModelTimeBasedInfo maTimeBasedInfo;
 };
 
 } //  namespace chart
