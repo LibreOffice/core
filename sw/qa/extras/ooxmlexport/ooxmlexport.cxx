@@ -3013,6 +3013,18 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
         return;
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
+DECLARE_OOXMLEXPORT_TEST(testfdo73596,"fdo73596.docx")
+{
+    // DOCX contaning TOC should preserve code field '\u'.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" INDEX \\e \""));
+}
+
 
 DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
 {

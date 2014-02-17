@@ -2871,14 +2871,23 @@ void DomainMapper_Impl::handleIndex
     uno::Reference< beans::XPropertySet > xTOC;
     m_bStartTOC = true;
     m_bStartIndex = true;
+    OUString sValue;
+    bool bInline = false;
+
     if (m_xTextFactory.is())
         xTOC.set(
                 m_xTextFactory->createInstance(
                 sTOCServiceName),
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
+    {
         xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
 
+        if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
+        {
+            xTOC->setPropertyValue("IsCommaSeparated", uno::makeAny(true));
+        }
+    }
     pContext->SetTOC( xTOC );
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
