@@ -1103,7 +1103,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_PBdr_left:
     case NS_ooxml::LN_CT_PBdr_bottom:
     case NS_ooxml::LN_CT_PBdr_right:
-    case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
+    case NS_ooxml::LN_CT_PBdr_between:
         {
             //in binary format the borders are directly provided in OOXML they are inside of properties
             if( IsOOXMLImport() || IsRTFImport() )
@@ -1133,7 +1133,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                             eBorderId = PROP_RIGHT_BORDER;
                             eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
                         break;
-                        case NS_sprm::LN_PBrcBetween:
+                        case NS_ooxml::LN_CT_PBdr_between:
                             //not supported
                         break;
                         default:;
@@ -1157,7 +1157,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
                 switch( nSprmId )
                 {
-                case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
+                case NS_ooxml::LN_CT_PBdr_between:
                     OSL_FAIL( "TODO: inner border is not handled");
                     break;
                 case NS_ooxml::LN_CT_PBdr_left:
@@ -1182,8 +1182,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
     break;
-    case NS_sprm::LN_PBrcBar:
-        break;  // sprmPBrcBar
+    case NS_ooxml::LN_CT_PBdr_bar:
+        break;
     case NS_sprm::LN_PFNoAutoHyph:   // sprmPFNoAutoHyph
         rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::makeAny( nIntValue ? false : true ));
         break;

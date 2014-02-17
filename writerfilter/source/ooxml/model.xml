@@ -22318,8 +22318,8 @@
       <element name="left" tokenid="ooxml:CT_PBdr_left"/>
       <element name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
       <element name="right" tokenid="ooxml:CT_PBdr_right"/>
-      <element name="between" tokenid="sprm:PBrcBetween"/>
-      <element name="bar" tokenid="sprm:PBrcBar"/>
+      <element name="between" tokenid="ooxml:CT_PBdr_between"/>
+      <element name="bar" tokenid="ooxml:CT_PBdr_bar"/>
     </resource>
     <resource name="CT_Tabs" resource="Properties" tag="paragraph">
       <element name="tab" tokenid="ooxml:CT_Tabs_tab"/>
