@@ -19,7 +19,7 @@
 
 #include "SerfCopyReqProcImpl.hxx"
 
-#include <serf.h>
+#include <serf/serf.h>
 
 namespace http_dav_ucp
 {

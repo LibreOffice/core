@@ -21,7 +21,7 @@
 #ifndef INCLUDED_CALLBACKS_HXX
 #define INCLUDED_CALLBACKS_HXX
 
-#include <serf.h>
+#include <serf/serf.h>
 
 extern "C" apr_status_t Serf_ConnectSetup( apr_socket_t *skt,
                                            serf_bucket_t **read_bkt,
