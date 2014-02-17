@@ -53,6 +53,8 @@
 
 #ifdef DBG_UTIL
 
+#include <tools/solar.h>
+
 #include "swtypes.hxx"
 
 class SwImplProtocol;
