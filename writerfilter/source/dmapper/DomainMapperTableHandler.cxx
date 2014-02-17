@@ -959,9 +959,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
             // about the text area width, nor can fix this by delaying the text
             // frame conversion: just do it here.
+            // Also, we the anchor is within a table, then do it here as well,
+            // as xStart/xEnd would not point to the start/end at conversion
+            // time anyway.
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
-            if (m_rDMapper_Impl.GetSectionContext())
+            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1)
                 m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties, nTableWidth));
             else
                 m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);

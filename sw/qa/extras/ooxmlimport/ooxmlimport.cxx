@@ -745,6 +745,15 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo74357, "fdo74357.docx")
+{
+    // Floating table wasn't converted to a textframe.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo55187, "fdo55187.docx")
 {
     // 0x010d was imported as a newline.
