@@ -39,12 +39,12 @@ private:
     CheckBox*        aBtnDelObjects;
     OKButton*        aBtnOk;
 
-    sal_Bool            bObjectsDisabled;
+    bool             bObjectsDisabled;
 
-    static sal_Bool     bPreviousAllCheck;
+    static bool         bPreviousAllCheck;
     static sal_uInt16   nPreviousChecks;
 
-    void DisableChecks( sal_Bool bDelAllChecked = sal_True );
+    void DisableChecks( bool bDelAllChecked = true );
     DECL_LINK( DelAllHdl, void * );
 
 public:

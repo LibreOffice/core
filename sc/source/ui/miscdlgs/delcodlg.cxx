@@ -28,7 +28,7 @@
 
 //==================================================================
 
-sal_Bool   ScDeleteContentsDlg::bPreviousAllCheck = false;
+bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
@@ -108,7 +108,7 @@ sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
 
 //------------------------------------------------------------------------
 
-void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
+void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
 {
     if ( bDelAllChecked )
     {
@@ -139,7 +139,7 @@ void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
 
 void ScDeleteContentsDlg::DisableObjects()
 {
-    bObjectsDisabled = sal_True;
+    bObjectsDisabled = true;
     aBtnDelObjects->Check(false);
     aBtnDelObjects->Disable();
 }
