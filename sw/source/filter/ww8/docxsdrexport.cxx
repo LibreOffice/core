@@ -486,6 +486,29 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
 
+    // Relative size of the drawing.
+    if (pSdrObject->GetRelativeWidth())
+    {
+        // At the moment drawinglayer objects are always relative from page.
+        pFS->startElementNS(XML_wp14, XML_sizeRelH,
+                            XML_relativeFrom, "page",
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+        pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctWidth);
+        pFS->endElementNS(XML_wp14, XML_sizeRelH);
+    }
+    if (pSdrObject->GetRelativeHeight())
+    {
+        pFS->startElementNS(XML_wp14, XML_sizeRelV,
+                            XML_relativeFrom, "page",
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+        pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctHeight);
+        pFS->endElementNS(XML_wp14, XML_sizeRelV);
+    }
+
     m_rSdrExport.endDMLAnchorInline(pFrmFmt);
 }
 
