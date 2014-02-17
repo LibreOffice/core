@@ -127,7 +127,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Kannada" ; LANGUAGE_KANNADA ; > ;
         < "Kashmiri (Kashmir)" ; LANGUAGE_KASHMIRI ; > ;
         < "Kashmiri (India)" ; LANGUAGE_KASHMIRI_INDIA ; > ;
-        < "Kazak" ; LANGUAGE_KAZAK ; > ;
+        < "Kazakh" ; LANGUAGE_KAZAK ; > ;
         < "Konkani" ; LANGUAGE_KONKANI ; > ;
         < "Korean (RoK)" ; LANGUAGE_KOREAN ; > ;
         < "Latvian" ; LANGUAGE_LATVIAN ; > ;
