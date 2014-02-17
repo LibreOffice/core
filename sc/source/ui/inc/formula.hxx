@@ -105,7 +105,7 @@ protected:
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
-    sal_Bool        IsInputHdl(ScInputHandler* pHdl);
+    bool         IsInputHdl(ScInputHandler* pHdl);
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 

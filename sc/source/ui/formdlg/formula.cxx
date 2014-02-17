@@ -258,9 +258,9 @@ ScFormulaDlg::~ScFormulaDlg()
     } // if (pData) // wird nicht ueber Close zerstoert;
 }
 
-sal_Bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
+bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 {
-    sal_Bool bAlive = false;
+    bool bAlive = false;
 
     //  gehoert der InputHandler zu irgendeiner ViewShell ?
 
@@ -269,7 +269,7 @@ sal_Bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
     while ( pSh && !bAlive )
     {
         if (((ScTabViewShell*)pSh)->GetInputHandler() == pHdl)
-            bAlive = sal_True;
+            bAlive = true;
         pSh = SfxViewShell::GetNext( *pSh, &aScType );
     }
 
