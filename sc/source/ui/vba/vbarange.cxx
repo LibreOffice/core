@@ -1206,7 +1206,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
         bool bLocalName = false;
-        if ( !xNameAccess->hasByName( sAddress ) && pDocSh )
+        if ( !xNameAccess->hasByName( sAddress ) )
         {
             // try a local name
             ScDocument* pDoc = pDocSh->GetDocument();
