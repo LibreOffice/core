@@ -97,7 +97,7 @@ bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
         aZoomRect = aRect;
         aZoomRect.Justify();
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_True;
+        bVisible = true;
     }
 
     ForcePointer(&rMEvt);

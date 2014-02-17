@@ -30,8 +30,8 @@ class FuMarkRect : public FuPoor
  protected:
     Point           aBeginPos;
     Rectangle       aZoomRect;
-    sal_Bool            bVisible;
-    sal_Bool            bStartDrag;
+    bool            bVisible;
+    bool            bStartDrag;
     ScRangeListRef  aSourceRange;
 
  public:
