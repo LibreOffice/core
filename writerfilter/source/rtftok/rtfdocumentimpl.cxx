@@ -2270,11 +2270,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         case RTF_KEEP:
             if (m_aStates.top().pCurrentBuffer != &m_aTableBuffer)
-                nParam = NS_sprm::LN_PFKeep;
+                nParam = NS_ooxml::LN_CT_PPrBase_keepLines;
             break;
         case RTF_KEEPN:
             if (m_aStates.top().pCurrentBuffer != &m_aTableBuffer)
-                nParam = NS_sprm::LN_PFKeepFollow;
+                nParam = NS_ooxml::LN_CT_PPrBase_keepNext;
             break;
         case RTF_INTBL:
             {

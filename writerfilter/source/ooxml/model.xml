@@ -22338,8 +22338,8 @@
     <resource name="CT_PPrBase" resource="Properties" tag="paragraph">
       <kind name="paragraph"/>
       <element name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
-      <element name="keepNext" tokenid="sprm:PFKeepFollow"/>
-      <element name="keepLines" tokenid="sprm:PFKeep"/>
+      <element name="keepNext" tokenid="ooxml:CT_PPrBase_keepNext"/>
+      <element name="keepLines" tokenid="ooxml:CT_PPrBase_keepLines"/>
       <element name="pageBreakBefore" tokenid="sprm:PFPageBreakBefore"/>
       <element name="framePr" tokenid="ooxml:CT_PPrBase_framePr"/>
       <element name="widowControl" tokenid="ooxml:CT_PPrBase_widowControl"/>

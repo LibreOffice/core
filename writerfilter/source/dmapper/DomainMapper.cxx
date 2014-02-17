@@ -994,10 +994,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PJc: // sprmPJc
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
-    case NS_sprm::LN_PFKeep:   // sprmPFKeep
+    case NS_ooxml::LN_CT_PPrBase_keepLines:
         rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue ? false : true));
         break;
-    case NS_sprm::LN_PFKeepFollow:   // sprmPFKeepFollow
+    case NS_ooxml::LN_CT_PPrBase_keepNext:
         rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue ? true : false) );
         break;
     case NS_sprm::LN_PFPageBreakBefore:
