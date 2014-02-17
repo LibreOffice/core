@@ -1273,11 +1273,11 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
         {
             sal_uInt8 aColors[3] = { 0, 0, 0 };
 
-            OSL_ENSURE( aValue.startsWithIgnoreAsciiCase( "rgb" ) &&
-                        aValue.getLength() > 5 &&
-                        '(' == aValue[3] &&
-                        ')' == aValue[aValue.getLength()-1],
-                        "keine gueltiges RGB(...)" );
+            if (!aValue.startsWithIgnoreAsciiCase( "rgb" ) || aValue.getLength() < 6 ||
+                    aValue[3] != '(' || aValue[aValue.getLength()-1] != ')')
+            {
+                break;
+            }
 
             OUString aColorStr(aValue.copy(4, aValue.getLength() - 5));
 
