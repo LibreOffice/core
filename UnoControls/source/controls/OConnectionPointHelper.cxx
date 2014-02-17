@@ -113,7 +113,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
     MutexGuard aGuard( m_aSharedMutex );
 
     // Set default return value, if method failed.
-    if ( impl_LockContainer() == sal_False )
+    if ( !impl_LockContainer() )
     {
         // Container not exist! Its an runtime error.
         throw RuntimeException();
@@ -163,7 +163,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
     // You can add a listener more then one time at XConnectionPointContainer, but here only one ...
 
     // Operation is permitted only, if reference to container is valid!
-    if ( impl_LockContainer() == sal_False )
+    if ( !impl_LockContainer() )
     {
         // Container not exist! Its an runtime error.
         throw RuntimeException();
@@ -183,7 +183,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
     // Operation is permitted only, if reference to container is valid!
-    if ( impl_LockContainer() == sal_False )
+    if ( !impl_LockContainer() )
     {
         // Container not exist! Its an runtime error.
         throw RuntimeException();
@@ -204,7 +204,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
     // Operation is permitted only, if reference to container is valid!
-    if ( impl_LockContainer() == sal_False )
+    if ( !impl_LockContainer() )
     {
         // Container not exist! Its an runtime error.
         throw RuntimeException();
@@ -230,7 +230,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
 //  private method
 //______________________________________________________________________________________________________________
 
-sal_Bool OConnectionPointHelper::impl_LockContainer()
+bool OConnectionPointHelper::impl_LockContainer()
 {
     // Convert weakreference to hard uno3-reference and return state.
     // If this reference different from NULL, there exist a hard reference to container. Container-instance can't be destroyed.

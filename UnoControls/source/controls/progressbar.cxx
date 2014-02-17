@@ -442,14 +442,14 @@ void ProgressBar::impl_recalcRange ()
 
     if( nWindowWidth > nWindowHeight )
     {
-        m_bHorizontal = sal_True                            ;
+        m_bHorizontal = true                            ;
         fBlockHeight  = (nWindowHeight-(2*PROGRESSBAR_FREESPACE))       ;
         fBlockWidth   = fBlockHeight                        ;
         fMaxBlocks    = nWindowWidth/(fBlockWidth+PROGRESSBAR_FREESPACE);
     }
     else
     {
-        m_bHorizontal = sal_False                             ;
+        m_bHorizontal = false                             ;
         fBlockWidth   = (nWindowWidth-(2*PROGRESSBAR_FREESPACE))          ;
         fBlockHeight  = fBlockWidth                           ;
         fMaxBlocks    = nWindowHeight/(fBlockHeight+PROGRESSBAR_FREESPACE);

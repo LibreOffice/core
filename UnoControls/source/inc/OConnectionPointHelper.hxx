@@ -243,7 +243,7 @@ private:
         @onerror
     */
 
-    sal_Bool impl_LockContainer();
+    bool impl_LockContainer();
 
     /**_________________________________________________________________________________________________________
         @short

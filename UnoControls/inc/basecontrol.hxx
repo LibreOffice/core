@@ -1233,9 +1233,9 @@ private:
     sal_Int32                                       m_nY                    ;
     sal_Int32                                       m_nWidth                ;   // ... and size of window
     sal_Int32                                       m_nHeight               ;
-    sal_Bool                                        m_bVisible              ;   // Some state flags
-    sal_Bool                                        m_bInDesignMode         ;
-    sal_Bool                                        m_bEnable               ;
+    bool                                        m_bVisible              ;   // Some state flags
+    bool                                        m_bInDesignMode         ;
+    bool                                        m_bEnable               ;
 
 };  // class BaseControl
 

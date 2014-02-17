@@ -32,7 +32,7 @@
 namespace unocontrols{
 
 #define PROGRESSBAR_FREESPACE               4
-#define PROGRESSBAR_DEFAULT_HORIZONTAL      sal_True
+#define PROGRESSBAR_DEFAULT_HORIZONTAL      true
 #define PROGRESSBAR_DEFAULT_BLOCKDIMENSION  Size(1,1)
 #define PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
 #define PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )    // blue
@@ -406,7 +406,7 @@ protected:
 
 private:
 
-    sal_Bool        m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
+    bool        m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
     ::com::sun::star::awt::Size   m_aBlockSize        ;   // width and height of a block      [>=0,0]
     sal_Int32       m_nForegroundColor  ;   //                                  (alpha,r,g,b)
     sal_Int32       m_nBackgroundColor  ;   //                                  (alpha,r,g,b)

@@ -47,9 +47,9 @@ namespace unocontrols{
 #define DEFAULT_Y                           0
 #define DEFAULT_WIDTH                       100
 #define DEFAULT_HEIGHT                      100
-#define DEFAULT_VISIBLE                     sal_False
-#define DEFAULT_INDESIGNMODE                sal_False
-#define DEFAULT_ENABLE                      sal_True
+#define DEFAULT_VISIBLE                     false
+#define DEFAULT_INDESIGNMODE                false
+#define DEFAULT_ENABLE                      true
 
 //____________________________________________________________________________________________________________
 //  construct/destruct
@@ -326,7 +326,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         // use method "BaseControl::getWindowDescriptor()" fot change window attributes !!!
         WindowDescriptor* pDescriptor = impl_getWindowDescriptor( xParentPeer );
 
-        if ( m_bVisible == sal_True )
+        if ( m_bVisible )
         {
             pDescriptor->WindowAttributes |= WindowAttribute::SHOW ;
         }
@@ -689,14 +689,14 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
     // - set the graphics for an view
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
     // - they are used by "windowPaint() and draw()", forwarded to "paint ()"
-    sal_Bool bReturn = sal_False ;
+    bool bReturn = false ;
     if ( xDevice.is() )
     {
         // Ready for multithreading
         MutexGuard aGuard( m_aMutex );
 
         m_xGraphicsView = xDevice   ;
-        bReturn         = sal_True  ;
+        bReturn         = true  ;
     }
 
     return bReturn ;

@@ -836,7 +836,7 @@ void ProgressMonitor::impl_cleanMemory ()
 }
 
 //  private method
-IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, sal_Bool bbeforeProgress )
+IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, bool bbeforeProgress )
 {
     // Get right textlist for following operations.
     ::std::vector< IMPL_TextlistItem* >* pTextList ;
@@ -844,7 +844,7 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, s
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
-    if ( bbeforeProgress == sal_True )
+    if ( bbeforeProgress )
     {
         pTextList = &maTextlist_Top    ;
     }
@@ -879,36 +879,36 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, s
 #ifdef DBG_UTIL
 
 // addText, updateText
-sal_Bool ProgressMonitor::impl_debug_checkParameter (
+bool ProgressMonitor::impl_debug_checkParameter (
     const OUString& rTopic,
     const OUString& rText,
-    sal_Bool /*bbeforeProgress*/
+    bool /*bbeforeProgress*/
 ) {
     // Check "rTopic"
-    if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.isEmpty()       ) return sal_False ;    // ""
+    if ( &rTopic        ==  NULL    ) return false ;    // NULL-pointer for reference ???!!!
+    if ( rTopic.isEmpty()       ) return false ;    // ""
 
     // Check "rText"
-    if ( &rText         ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rText.isEmpty()       ) return sal_False ;    // ""
+    if ( &rText         ==  NULL    ) return false ;    // NULL-pointer for reference ???!!!
+    if ( rText.isEmpty()       ) return false ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 
     // Parameter OK ... return sal_True.
-    return sal_True ;
+    return true ;
 }
 
 // removeText
-sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sal_Bool /*bbeforeProgress*/ )
+bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /*bbeforeProgress*/ )
 {
     // Check "rTopic"
-    if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.isEmpty()      ) return sal_False ;    // ""
+    if ( &rTopic        ==  NULL    ) return false ;    // NULL-pointer for reference ???!!!
+    if ( rTopic.isEmpty()      ) return false ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 
     // Parameter OK ... return sal_True.
-    return sal_True ;
+    return true ;
 }
 
 #endif  // #ifdef DBG_UTIL

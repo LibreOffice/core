@@ -314,21 +314,21 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
                                                         sal_Int32   nHandle         ,
                                                 const   Any&        rValue          ) throw( IllegalArgumentException )
 {
-    sal_Bool bReturn = sal_False ;
+    bool bReturn = false ;
     switch (nHandle)
     {
         case PROPERTYHANDLE_COMPONENTURL        :       rConvertedValue   = rValue                  ;
                                                         rOldValue       <<= m_sComponentURL         ;
-                                                        bReturn           = sal_True                ;
+                                                        bReturn           = true                ;
                                                         break ;
 
         case PROPERTYHANDLE_LOADERARGUMENTS     :       rConvertedValue   = rValue                  ;
                                                         rOldValue       <<= m_seqLoaderArguments    ;
-                                                        bReturn           = sal_True                ;
+                                                        bReturn           = true                ;
                                                         break ;
     }
 
-    if ( bReturn == sal_False )
+    if ( !bReturn )
     {
         throw IllegalArgumentException();
     }

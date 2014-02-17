@@ -719,7 +719,7 @@ private:
         @onerror    -
     */
 
-    IMPL_TextlistItem* impl_searchTopic( const OUString& sTopic , sal_Bool bbeforeProgress );
+    IMPL_TextlistItem* impl_searchTopic( const OUString& sTopic , bool bbeforeProgress );
 
 //____________________________________________________________________________________________________________
 // debug methods
@@ -742,8 +742,8 @@ private:
 
     #ifdef DBG_UTIL
 
-    sal_Bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, sal_Bool bbeforeProgress );    // addText, updateText
-    sal_Bool impl_debug_checkParameter( const OUString& rTopic, sal_Bool bbeforeProgress );                              // removeText
+    bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, bool bbeforeProgress );    // addText, updateText
+    bool impl_debug_checkParameter( const OUString& rTopic, bool bbeforeProgress );                              // removeText
 
     #endif
 //____________________________________________________________________________________________________________
