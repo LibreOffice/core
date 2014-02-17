@@ -322,7 +322,13 @@ bool VclBox::set_property(const OString &rKey, const OString &rValue)
 
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
+#if defined(WNT)
+    //fdo#74284 call Boxes Panels, keep then as "Filler" under
+    //at least Linux seeing as that's what Gtk does for GtkBoxes
+    return com::sun::star::accessibility::AccessibleRole::PANEL;
+#else
     return com::sun::star::accessibility::AccessibleRole::FILLER;
+#endif
 }
 
 #define DEFAULT_CHILD_MIN_WIDTH 85
