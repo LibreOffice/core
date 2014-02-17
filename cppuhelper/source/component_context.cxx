@@ -600,22 +600,16 @@ Any ComponentContext::lookupMap( OUString const & rName )
     }
     catch (Exception & exc) // rethrow as WrappedTargetRuntimeException
     {
-        Any caught( getCaughtException() );
         OUStringBuffer buf;
         buf.append( "exception occurred raising singleton \"" );
         buf.append( rName );
         buf.append( "\": " );
         buf.append( exc.Message );
-        throw lang::WrappedTargetRuntimeException(
-            buf.makeStringAndClear(), static_cast<OWeakObject *>(this),caught );
+        SAL_WARN("cppuhelper", buf.makeStringAndClear());
     }
 
-    if (! xInstance.is())
-    {
-        throw RuntimeException(
-            "no service object raising singleton " + rName,
-            static_cast<OWeakObject *>(this) );
-    }
+    SAL_WARN_IF(!xInstance.is(),
+            "cppuhelper", "no service object raising singleton " << rName);
 
     Any ret;
     guard.reset();
