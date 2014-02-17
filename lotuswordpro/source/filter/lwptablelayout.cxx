@@ -1184,7 +1184,6 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
         pXFPara = static_cast<XFParagraph*>(pCell->FindFirstContent(enumXFContentPara));
         if (!pXFPara)
             return;
-        XFColor aColor;
         XFColor aNullColor = XFColor();
 
         if ( pXFPara)
@@ -1196,8 +1195,8 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
             if (!sNumfmt.isEmpty())
             {
                 pNumStyle = (XFNumberStyle*)pXFStyleManager->FindStyle( sNumfmt);
-                aColor = pNumStyle->GetColor();
-                if ( pNumStyle &&  aColor != aNullColor )
+                XFColor aColor = pNumStyle->GetColor();
+                if ( aColor != aNullColor )
                     bColorMod = sal_True;//end
             }
 
@@ -1213,7 +1212,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
                 if (bColorMod)
                 {
                     XFFont* pFont = pOverStyle->GetFont();
-                    aColor = pFont->GetColor();
+                    XFColor aColor = pFont->GetColor();
                     if ( aColor == aNullColor )
                     {
                         XFFont* pNewFont = new XFFont;
