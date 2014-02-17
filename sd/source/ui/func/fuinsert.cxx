@@ -352,6 +352,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pPage->InsertPresObj( pOleObj, ePresObjKind );
                     pOleObj->SetUserCall(pPickObj->GetUserCall());
                 }
+
+                // #i123468# we need to end text edit before replacing the object. There cannot yet
+                // being text typed (else it would not be an EmptyPresObj anymore), but it may be
+                // in text edit mode
+                if (mpView->IsTextEdit())
+                {
+                    mpView->SdrEndTextEdit();
+                }
             }
 
             bool bRet = true;
