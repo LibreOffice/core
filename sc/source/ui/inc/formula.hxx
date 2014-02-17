@@ -62,11 +62,11 @@ public:
     virtual void notifyChange();
     virtual void fill();
     virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult);
-    virtual void doClose(sal_Bool _bOk);
+    virtual void doClose(bool _bOk);
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
     virtual void showReference(const OUString& _sFormula);
-    virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked);
-    virtual void setDispatcherLock( sal_Bool bLock );
+    virtual void dispatch(bool _bOK, bool _bMartixChecked);
+    virtual void setDispatcherLock( bool bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
     virtual void deleteFormData();
     virtual void clear();

@@ -803,7 +803,7 @@ void FormulaDlg_Impl::FillListboxes()
     }
     FuncSelHdl(NULL);
 
-    m_pHelper->setDispatcherLock( sal_True );// Activate Modal-Mode
+    m_pHelper->setDispatcherLock( true );// Activate Modal-Mode
 
     aNewTitle = aTitle1;
 

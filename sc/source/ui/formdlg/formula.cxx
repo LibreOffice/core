@@ -484,7 +484,7 @@ void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
     }
 }
 
-void ScFormulaDlg::doClose(sal_Bool /*_bOk*/)
+void ScFormulaDlg::doClose(bool /*_bOk*/)
 {
     m_aHelper.DoClose( ScFormulaDlgWrapper::GetChildWindowId() );
 }
@@ -526,7 +526,7 @@ void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pB
 {
     m_aHelper.ReleaseFocus(pEdit,pButton);
 }
-void ScFormulaDlg::dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked)
+void ScFormulaDlg::dispatch(bool _bOK, bool _bMartixChecked)
 {
     SfxBoolItem   aRetItem( SID_DLG_RETOK, _bOK );
     SfxBoolItem   aMatItem( SID_DLG_MATRIX, _bMartixChecked );
@@ -545,7 +545,7 @@ void ScFormulaDlg::dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked)
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                               &aRetItem, &aStrItem, &aMatItem, 0L );
 }
-void ScFormulaDlg::setDispatcherLock( sal_Bool bLock )
+void ScFormulaDlg::setDispatcherLock( bool bLock )
 {
     m_aHelper.SetDispatcherLock( bLock );
 }

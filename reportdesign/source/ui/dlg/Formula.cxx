@@ -104,7 +104,7 @@ bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResul
     rStrResult = rStrExp;
     return false;
 }
-void FormulaDialog::doClose(sal_Bool _bOk)
+void FormulaDialog::doClose(bool _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
 }
@@ -114,10 +114,10 @@ void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc
 void FormulaDialog::showReference(const OUString& /*_sFormula*/)
 {
 }
-void FormulaDialog::dispatch(sal_Bool /*_bOK*/,sal_Bool /*_bMartixChecked*/)
+void FormulaDialog::dispatch(bool /*_bOK*/, bool /*_bMatrixChecked*/)
 {
 }
-void FormulaDialog::setDispatcherLock( sal_Bool /*bLock*/ )
+void FormulaDialog::setDispatcherLock( bool /*bLock*/ )
 {
 }
 void FormulaDialog::setReferenceInput(const FormEditData* /*_pData*/)

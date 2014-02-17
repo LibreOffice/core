@@ -154,9 +154,9 @@ namespace formula
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
         virtual ::com::sun::star::table::CellAddress getReferencePosition() const = 0;
 
-        virtual void setDispatcherLock( sal_Bool bLock ) = 0;
-        virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked) = 0;
-        virtual void doClose(sal_Bool _bOk) = 0;
+        virtual void setDispatcherLock( bool bLock ) = 0;
+        virtual void dispatch(bool _bOK, bool _bMartixChecked) = 0;
+        virtual void doClose(bool _bOk) = 0;
         virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
         virtual void showReference(const OUString& _sFormula) = 0;
 
