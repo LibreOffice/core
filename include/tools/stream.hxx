@@ -326,7 +326,7 @@ public:
     SvStream&       WriteStream( SvStream& rStream );
 
     SvStream&       WriteBool( bool b )
-                        { return WriteUChar(static_cast< sal_Bool >(b)); }
+                        { return WriteUChar(static_cast<unsigned char>(b)); }
     SvStream&       WriteSChar( signed char nChar );
     SvStream&       WriteChar( char nChar );
     SvStream&       WriteUChar( unsigned char nChar );

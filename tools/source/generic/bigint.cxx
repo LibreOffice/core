@@ -53,14 +53,14 @@ void BigInt::MakeBigInt( const BigInt& rVal )
         long nTmp = rVal.nVal;
 
         nVal   = rVal.nVal;
-        bIsBig = sal_True;
+        bIsBig = true;
         if ( nTmp < 0 )
         {
-            bIsNeg = sal_True;
+            bIsNeg = true;
             nTmp = -nTmp;
         }
         else
-            bIsNeg = sal_False;
+            bIsNeg = false;
 
         nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
         nNum[1] = (sal_uInt16)(nTmp >> 16);
@@ -87,7 +87,7 @@ void BigInt::Normalize()
             else
                 nVal = ((long)nNum[1] << 16) + nNum[0];
 
-            bIsBig = sal_False;
+            bIsBig = false;
 
             if ( bIsNeg )
                 nVal = -nVal;
@@ -119,7 +119,7 @@ void BigInt::Mult( const BigInt &rVal, sal_uInt16 nMul )
     else
         nLen = rVal.nLen;
 
-    bIsBig = sal_True;
+    bIsBig = true;
     bIsNeg = rVal.bIsNeg;
 }
 
@@ -194,20 +194,20 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         // Set length and sign
         rErg.nLen   = len;
         rErg.bIsNeg = bIsNeg && rB.bIsNeg;
-        rErg.bIsBig = sal_True;
+        rErg.bIsBig = true;
     }
     // If one of the values is negative, perform substraction instead
     else if (bIsNeg)
     {
-        bIsNeg = sal_False;
+        bIsNeg = false;
         rB.SubLong(*this, rErg);
-        bIsNeg = sal_True;
+        bIsNeg = true;
     }
     else
     {
-        rB.bIsNeg = sal_False;
+        rB.bIsNeg = false;
         SubLong(rB, rErg);
-        rB.bIsNeg = sal_True;
+        rB.bIsNeg = true;
     }
 }
 
@@ -262,22 +262,22 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
             rErg.bIsNeg = !bIsNeg;
         }
         rErg.nLen   = len;
-        rErg.bIsBig = sal_True;
+        rErg.bIsBig = true;
     }
     // If one of the values is negative, perform addition instead
     else if (bIsNeg)
     {
-        bIsNeg = sal_False;
+        bIsNeg = false;
         AddLong(rB, rErg);
-        bIsNeg = sal_True;
-        rErg.bIsNeg = sal_True;
+        bIsNeg = true;
+        rErg.bIsNeg = true;
     }
     else
     {
-        rB.bIsNeg = sal_False;
+        rB.bIsNeg = false;
         AddLong(rB, rErg);
-        rB.bIsNeg = sal_True;
-        rErg.bIsNeg = sal_False;
+        rB.bIsNeg = true;
+        rErg.bIsNeg = false;
     }
 }
 
@@ -287,7 +287,7 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
     sal_uInt32  nZ, k;
 
     rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = sal_True;
+    rErg.bIsBig = true;
     rErg.nLen   = nLen + rB.nLen;
 
     for (i = 0; i < rErg.nLen; i++)
@@ -371,7 +371,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     }
 
     rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = sal_True;
+    rErg.bIsBig = true;
     rErg.nLen   = nLen - rB.nLen + 1;
 }
 
@@ -479,16 +479,16 @@ BigInt::BigInt( const BigInt& rBigInt )
     else
     {
         bIsSet = rBigInt.bIsSet;
-        bIsBig = sal_False;
+        bIsBig = false;
         nVal   = rBigInt.nVal;
     }
 }
 
 BigInt::BigInt( const OUString& rString )
 {
-    bIsSet = sal_True;
-    bIsNeg = sal_False;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsNeg = false;
+    bIsBig = false;
     nVal   = 0;
 
     bool bNeg = false;
@@ -512,26 +512,26 @@ BigInt::BigInt( const OUString& rString )
 
 BigInt::BigInt( double nValue )
 {
-    bIsSet = sal_True;
+    bIsSet = true;
 
     if ( nValue < 0 )
     {
         nValue *= -1;
-        bIsNeg  = sal_True;
+        bIsNeg  = true;
     }
     else
     {
-        bIsNeg  = sal_False;
+        bIsNeg  = false;
     }
 
     if ( nValue < 1 )
     {
-        bIsBig = sal_False;
+        bIsBig = false;
         nVal   = 0;
     }
     else
     {
-        bIsBig = sal_True;
+        bIsBig = true;
 
         int i=0;
 
@@ -554,18 +554,18 @@ BigInt::BigInt( double nValue )
 
 BigInt::BigInt( sal_uInt32 nValue )
 {
-    bIsSet  = sal_True;
+    bIsSet  = true;
     if ( nValue & 0x80000000UL )
     {
-        bIsBig  = sal_True;
-        bIsNeg  = sal_False;
+        bIsBig  = true;
+        bIsNeg  = false;
         nNum[0] = (sal_uInt16)(nValue & 0xffffUL);
         nNum[1] = (sal_uInt16)(nValue >> 16);
         nLen    = 2;
     }
     else
     {
-        bIsBig = sal_False;
+        bIsBig = false;
         nVal   = nValue;
     }
 }
@@ -657,7 +657,7 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
     else
     {
         bIsSet = rBigInt.bIsSet;
-        bIsBig = sal_False;
+        bIsBig = false;
         nVal   = rBigInt.nVal;
     }
     return *this;

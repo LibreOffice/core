@@ -61,7 +61,7 @@ public:                                         \
     inline               ~ClassName##Ref();                             \
     inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
     inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline sal_Bool        Is() const { return pObj != NULL; }          \
+    inline bool        Is() const { return pObj != NULL; }          \
     inline ClassName *     operator &  () const { return pObj; }        \
     inline ClassName *     operator -> () const { return pObj; }        \
     inline ClassName &     operator *  () const { return *pObj; }       \
@@ -234,7 +234,7 @@ public:                                                             \
     inline void          Clear() { _xHdl.Clear(); }                 \
     inline ClassName##Weak& operator = ( ClassName * pObj ) {       \
         _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
-    inline sal_Bool            Is() const {                         \
+    inline bool            Is() const {                         \
         return _xHdl.Is() && _xHdl->GetObj(); }                     \
     inline ClassName *     operator &  () const {                   \
         return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \

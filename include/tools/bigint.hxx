@@ -41,7 +41,7 @@ private:
     long            nVal;
     unsigned short  nNum[MAX_DIGITS];
     sal_uInt8       nLen        : 5;    // current length
-    sal_Bool        bIsNeg      : 1,    // Is Sign negative?
+    bool        bIsNeg      : 1,    // Is Sign negative?
                     bIsBig      : 1,    // sal_True == BigInt
                     bIsSet      : 1;    // Not "Null" (not "not 0")
 
@@ -123,36 +123,36 @@ public:
 
 inline BigInt::BigInt()
 {
-    bIsSet = sal_False;
-    bIsBig = sal_False;
+    bIsSet = false;
+    bIsBig = false;
     nVal   = 0;
 }
 
 inline BigInt::BigInt( short nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 }
 
 inline BigInt::BigInt( long nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 }
 
 inline BigInt::BigInt( int nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 }
 
 inline BigInt::BigInt( sal_uInt16 nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 }
 
@@ -190,8 +190,8 @@ inline BigInt::operator sal_uInt16() const
 
 inline BigInt& BigInt::operator =( const short nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 
     return *this;
@@ -199,8 +199,8 @@ inline BigInt& BigInt::operator =( const short nValue )
 
 inline BigInt& BigInt::operator =( const long nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 
     return *this;
@@ -208,8 +208,8 @@ inline BigInt& BigInt::operator =( const long nValue )
 
 inline BigInt& BigInt::operator =( const int nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 
     return *this;
@@ -217,8 +217,8 @@ inline BigInt& BigInt::operator =( const int nValue )
 
 inline BigInt& BigInt::operator =( const sal_uInt16 nValue )
 {
-    bIsSet = sal_True;
-    bIsBig = sal_False;
+    bIsSet = true;
+    bIsBig = false;
     nVal   = nValue;
 
     return *this;
@@ -251,7 +251,7 @@ inline bool BigInt::IsOne() const
 inline void BigInt::Abs()
 {
     if ( bIsBig )
-        bIsNeg = sal_False;
+        bIsNeg = false;
     else if ( nVal < 0 )
         nVal = -nVal;
 }

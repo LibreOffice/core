@@ -28,36 +28,36 @@ typedef void* (*TypeId)();
 #define TYPEINFO() \
         static  void*  CreateType(); \
         static  TypeId StaticType(); \
-        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
+        static  bool   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
-        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
+        virtual bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINFO_VISIBILITY(visibility) \
         visibility static  void*  CreateType(); \
         visibility static  TypeId StaticType(); \
-        visibility static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
+        visibility static  bool   IsOf( TypeId aSameOrSuperType ); \
         visibility virtual TypeId Type() const; \
-        visibility virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
+        visibility virtual bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_FACTORY(sType, Factory ) \
         void*  sType::CreateType() { return Factory; } \
         TypeId sType::StaticType() { return &CreateType; } \
         TypeId sType::Type() const { return &CreateType; } \
-        sal_Bool sType::IsOf( TypeId aSameOrSuperType ) \
+        bool sType::IsOf( TypeId aSameOrSuperType ) \
         { \
             if ( aSameOrSuperType == StaticType() ) \
-                return sal_True
+                return true
 
 #define STATICTYPE(sType) (sType::StaticType())
 
 #define SUPERTYPE(sSuper) \
             if ( sSuper::IsOf(aSameOrSuperType ) ) \
-                return sal_True
+                return true
 
 #define TYPEINIT_END(sType) \
-            return sal_False; \
+            return false; \
         } \
-        sal_Bool sType::IsA( TypeId aSameOrSuperType ) const \
+        bool sType::IsA( TypeId aSameOrSuperType ) const \
         { return IsOf( aSameOrSuperType ); }
 
 #define TYPEINIT0_FACTORY(sType, Factory) \

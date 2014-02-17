@@ -72,7 +72,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         if( pLast )     // Were we able to jump to the beginning?
         {
             do {
-                if( (0 == n) != ( 0 != pLast->ISA( SwCntntFrm )) )
+                if( (0 == n) != pLast->ISA( SwCntntFrm ) )
                     pLast->ModifyNotification( &rItem, &rItem );
             } while( 0 != ( pLast = ++aIter ));
         }

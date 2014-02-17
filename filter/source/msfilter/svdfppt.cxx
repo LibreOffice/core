@@ -811,9 +811,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( pRet )
                 {
                     sal_Bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != 0;
-                    if ( bDeleteSource  && ( pRet->ISA( SdrGrafObj ) == sal_False )     // we are not allowed to get
-                            && ( pRet->ISA( SdrObjGroup ) == sal_False )                // grouped placeholder objects
-                                && ( pRet->ISA( SdrOle2Obj ) == sal_False ) )
+                    if ( bDeleteSource  && !pRet->ISA( SdrGrafObj )     // we are not allowed to get
+                            && !pRet->ISA( SdrObjGroup )                // grouped placeholder objects
+                                && !pRet->ISA( SdrOle2Obj ) )
                         SdrObject::Free( pRet );
                 }
                 sal_uInt32 nTextFlags = aTextObj.GetTextFlags();

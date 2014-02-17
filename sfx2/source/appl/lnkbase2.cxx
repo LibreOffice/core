@@ -443,7 +443,7 @@ void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;
-    pImpl->m_bIsConnect = ( xObj.Is() != sal_False );
+    pImpl->m_bIsConnect = xObj.Is();
     if( !pImpl->m_bIsConnect )
         _GetRealObject( xObj.Is() );
 
