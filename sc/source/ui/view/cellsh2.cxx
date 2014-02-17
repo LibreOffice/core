@@ -551,7 +551,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     OSL_FAIL("SID_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, sal_True );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, true );
                     rReq.Done();
                 }
                 else
@@ -572,7 +572,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     OSL_FAIL("SID_SPECIAL_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, sal_True );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, true );
                     rReq.Done();
                 }
                 else
@@ -608,9 +608,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScRange aAdvSource;
                     if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
-                        pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, sal_True );
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, true );
                     else
-                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, sal_True );
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, true );
                     rReq.Done( *pReqArgs );
                 }
             }
@@ -626,7 +626,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 for (SCSIZE i=0; i<nEC; i++)
                     aParam.GetEntry(i).bDoQuery = false;
                 aParam.bDuplicate = true;
-                pTabViewShell->Query( aParam, NULL, sal_True );
+                pTabViewShell->Query( aParam, NULL, true );
                 rReq.Done();
             }
             break;

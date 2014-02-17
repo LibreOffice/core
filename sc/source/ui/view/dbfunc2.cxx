@@ -26,7 +26,7 @@
 
 //==================================================================
 
-void ScDBFunc::UpdateCharts( sal_Bool bAllCharts )
+void ScDBFunc::UpdateCharts( bool bAllCharts )
 {
     sal_uInt16 nFound = 0;
     ScViewData* pViewData = GetViewData();

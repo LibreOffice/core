@@ -849,7 +849,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     //! test for data pilot operation
                 }
-                else if (!pTabViewShell->OutlinePossible(sal_True))
+                else if (!pTabViewShell->OutlinePossible(true))
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -862,7 +862,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        sal_Bool bCol, bRow;
+                        bool bCol, bRow;
                         pTabViewShell->TestRemoveOutline( bCol, bRow );
                         if ( !bCol && !bRow )
                             rSet.DisableItem( nWhich );

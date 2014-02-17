@@ -229,9 +229,9 @@ void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
 
         if (bMake)
-            rViewShell.MakeOutline( bColumns, sal_True );
+            rViewShell.MakeOutline( bColumns, true );
         else
-            rViewShell.RemoveOutline( bColumns, sal_True );
+            rViewShell.RemoveOutline( bColumns, true );
     }
 }
 
@@ -318,7 +318,7 @@ void ScUndoOutlineLevel::Redo()
 void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, true );
 }
 
 bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -418,9 +418,9 @@ void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
 
         if (bShow)
-            rViewShell.ShowMarkedOutlines( sal_True );
+            rViewShell.ShowMarkedOutlines( true );
         else
-            rViewShell.HideMarkedOutlines( sal_True );
+            rViewShell.HideMarkedOutlines( true );
     }
 }
 
@@ -506,7 +506,7 @@ void ScUndoRemoveAllOutlines::Redo()
 void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( true );
 }
 
 bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -609,7 +609,7 @@ void ScUndoAutoOutline::Redo()
 void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( true );
 }
 
 bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1538,7 +1538,7 @@ void ScUndoRepeatDB::Redo()
 void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( true );
 }
 
 bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const

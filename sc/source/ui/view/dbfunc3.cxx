@@ -96,7 +96,7 @@ using ::std::vector;
 
 //  Outline-Gruppierung erzeugen
 
-void ScDBFunc::MakeOutline( sal_Bool bColumns, sal_Bool bRecord )
+void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
@@ -111,7 +111,7 @@ void ScDBFunc::MakeOutline( sal_Bool bColumns, sal_Bool bRecord )
 
 //  Outline-Gruppierung loeschen
 
-void ScDBFunc::RemoveOutline( sal_Bool bColumns, sal_Bool bRecord )
+void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
@@ -126,10 +126,10 @@ void ScDBFunc::RemoveOutline( sal_Bool bColumns, sal_Bool bRecord )
 
 //  Menue-Status: Outlines loeschen
 
-void ScDBFunc::TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow )
+void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
 {
-    sal_Bool bColFound = false;
-    sal_Bool bRowFound = false;
+    bool bColFound = false;
+    bool bRowFound = false;
 
     SCCOL nStartCol, nEndCol;
     SCROW nStartRow, nEndRow;
@@ -145,8 +145,8 @@ void ScDBFunc::TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow )
             ScOutlineEntry* pEntry;
             SCCOLROW nStart;
             SCCOLROW nEnd;
-            sal_Bool bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
-            sal_Bool bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
+            bool bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
+            bool bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
 
             //  Spalten
 
@@ -159,7 +159,7 @@ void ScDBFunc::TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow )
                     nStart = pEntry->GetStart();
                     nEnd   = pEntry->GetEnd();
                     if ( nStartCol<=static_cast<SCCOL>(nEnd) && nEndCol>=static_cast<SCCOL>(nStart) )
-                        bColFound = sal_True;
+                        bColFound = true;
                 }
             }
 
@@ -174,7 +174,7 @@ void ScDBFunc::TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow )
                     nStart = pEntry->GetStart();
                     nEnd   = pEntry->GetEnd();
                     if ( nStartRow<=nEnd && nEndRow>=nStart )
-                        bRowFound = sal_True;
+                        bRowFound = true;
                 }
             }
         }
@@ -184,13 +184,13 @@ void ScDBFunc::TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow )
     rRow = bRowFound;
 }
 
-void ScDBFunc::RemoveAllOutlines( sal_Bool bRecord )
+void ScDBFunc::RemoveAllOutlines( bool bRecord )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    sal_Bool bOk = aFunc.RemoveAllOutlines( nTab, bRecord, false );
+    bool bOk = aFunc.RemoveAllOutlines( nTab, bRecord, false );
 
     if (bOk)
         UpdateScrollBars();
@@ -198,7 +198,7 @@ void ScDBFunc::RemoveAllOutlines( sal_Bool bRecord )
 
 //  Auto-Outlines
 
-void ScDBFunc::AutoOutline( sal_Bool bRecord )
+void ScDBFunc::AutoOutline( bool bRecord )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
     ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // ganze Tabelle, wenn nichts markiert
@@ -216,7 +216,7 @@ void ScDBFunc::AutoOutline( sal_Bool bRecord )
 
 //  Outline-Ebene auswaehlen
 
-void ScDBFunc::SelectLevel( sal_Bool bColumns, sal_uInt16 nLevel, sal_Bool bRecord, sal_Bool bPaint )
+void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord, bool bPaint )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -230,7 +230,7 @@ void ScDBFunc::SelectLevel( sal_Bool bColumns, sal_uInt16 nLevel, sal_Bool bReco
 
 //  einzelne Outline-Gruppe einblenden
 
-void ScDBFunc::ShowOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bRecord, sal_Bool bPaint )
+void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -244,7 +244,7 @@ void ScDBFunc::ShowOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEn
 
 //  einzelne Outline-Gruppe ausblenden
 
-void ScDBFunc::HideOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bRecord, sal_Bool bPaint )
+void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -258,9 +258,9 @@ void ScDBFunc::HideOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEn
 
 //  Menue-Status: markierten Bereich ein-/ausblenden
 
-sal_Bool ScDBFunc::OutlinePossible(sal_Bool bHide)
+bool ScDBFunc::OutlinePossible(bool bHide)
 {
-    sal_Bool bEnable = false;
+    bool bEnable = false;
 
     SCCOL nStartCol;
     SCROW nStartRow;
@@ -293,13 +293,13 @@ sal_Bool ScDBFunc::OutlinePossible(sal_Bool bHide)
                 {
                     if ( nStartCol<=static_cast<SCCOL>(nEnd) && nEndCol>=static_cast<SCCOL>(nStart) )
                         if (!pEntry->IsHidden())
-                            bEnable = sal_True;
+                            bEnable = true;
                 }
                 else
                 {
                     if ( nStart>=nStartCol && nEnd<=nEndCol )
                         if (pEntry->IsHidden())
-                            bEnable = sal_True;
+                            bEnable = true;
                 }
             }
 
@@ -315,13 +315,13 @@ sal_Bool ScDBFunc::OutlinePossible(sal_Bool bHide)
                 {
                     if ( nStartRow<=nEnd && nEndRow>=nStart )
                         if (!pEntry->IsHidden())
-                            bEnable = sal_True;
+                            bEnable = true;
                 }
                 else
                 {
                     if ( nStart>=nStartRow && nEnd<=nEndRow )
                         if (pEntry->IsHidden())
-                            bEnable = sal_True;
+                            bEnable = true;
                 }
             }
         }
@@ -332,7 +332,7 @@ sal_Bool ScDBFunc::OutlinePossible(sal_Bool bHide)
 
 //  markierten Bereich einblenden
 
-void ScDBFunc::ShowMarkedOutlines( sal_Bool bRecord )
+void ScDBFunc::ShowMarkedOutlines( bool bRecord )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
@@ -349,7 +349,7 @@ void ScDBFunc::ShowMarkedOutlines( sal_Bool bRecord )
 
 //  markierten Bereich ausblenden
 
-void ScDBFunc::HideMarkedOutlines( sal_Bool bRecord )
+void ScDBFunc::HideMarkedOutlines( bool bRecord )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
@@ -370,7 +370,7 @@ void ScDBFunc::HideMarkedOutlines( sal_Bool bRecord )
 //          Teilergebnisse
 //
 
-void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
+void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                             const ScSortParam* pForceNewSort )
 {
     sal_Bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
@@ -544,7 +544,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
 //          Consolidate
 //
 
-void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
+void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->DoConsolidate( rParam, bRecord );
@@ -1770,9 +1770,9 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     return aFunc.DataPilotUpdate(pDPObj, pNewObj.get(), true, false);
 }
 
-sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
+bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( rSource.aStart.Col(), rSource.aStart.Row(), rSource.aStart.Tab() );
     if ( pDPObj && pDPObj == pDoc->GetDPAtCursor( rDest.Col(), rDest.Row(), rDest.Tab() ) )
@@ -1858,7 +1858,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
 
                 Unmark();       // entry was moved - no use in leaving the old cell selected
 
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -2079,7 +2079,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 //          DB-Operationen (Sortieren, Filtern, Teilergebnisse) wiederholen
 //
 
-void ScDBFunc::RepeatDB( sal_Bool bRecord )
+void ScDBFunc::RepeatDB( bool bRecord )
 {
     SCCOL nCurX = GetViewData()->GetCurX();
     SCROW nCurY = GetViewData()->GetCurY();

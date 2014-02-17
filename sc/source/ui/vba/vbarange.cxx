@@ -4302,7 +4302,7 @@ static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
         if ( pViewData )
         {
             OSL_TRACE("Pushing out SelectAll query");
-            pViewData->GetView()->Query( aParam, NULL, sal_True );
+            pViewData->GetView()->Query( aParam, NULL, true );
         }
     }
 }

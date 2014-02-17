@@ -1159,7 +1159,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else            // Dialog only when removal for rows and columns is possible
                 {
-                    sal_Bool bColPoss, bRowPoss;
+                    bool bColPoss, bRowPoss;
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
                     if ( bColPoss && bRowPoss )
                     {

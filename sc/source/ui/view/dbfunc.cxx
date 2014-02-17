@@ -246,7 +246,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
 
 // Sort
 
-void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
+void ScDBFunc::UISort( const ScSortParam& rSortParam, bool bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -273,7 +273,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
     }
 }
 
-void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool bPaint )
+void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
@@ -294,7 +294,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool b
 
 //  filters
 
-void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, sal_Bool bRecord )
+void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, bool bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
@@ -392,7 +392,7 @@ void ScDBFunc::ToggleAutoFilter()
         for (SCSIZE i=0; i<nEC; i++)
             aParam.GetEntry(i).bDoQuery = false;
         aParam.bDuplicate = true;
-        Query( aParam, NULL, sal_True );
+        Query( aParam, NULL, true );
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
@@ -492,7 +492,7 @@ void ScDBFunc::HideAutoFilter()
 
 //      Re-Import
 
-sal_Bool ScDBFunc::ImportData( const ScImportParam& rParam, sal_Bool bRecord )
+bool ScDBFunc::ImportData( const ScImportParam& rParam, bool bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScEditableTester aTester( pDoc, GetViewData()->GetTabNo(), rParam.nCol1,rParam.nRow1,

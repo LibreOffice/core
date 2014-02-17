@@ -31,7 +31,7 @@ using namespace com::sun::star;
 
 //==================================================================
 
-sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
+sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)

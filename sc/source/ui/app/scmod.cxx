@@ -1344,9 +1344,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         WaitObject aWait( pDocSh->GetActiveDialogParent() );
         pDoc->CalcAll();
         if ( pViewSh )
-            pViewSh->UpdateCharts( sal_True );
+            pViewSh->UpdateCharts( true );
         else
-            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, sal_True );
+            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, true );
         if (pBindings)
             pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
     }

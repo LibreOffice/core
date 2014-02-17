@@ -50,21 +50,21 @@ public:
                     // only UISort repeat the partial results if necessary
 
     void            UISort( const ScSortParam& rSortParam,
-                          sal_Bool bRecord = sal_True );
+                          bool bRecord = true );
 
     void            Sort( const ScSortParam& rSortParam,
-                          sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
+                          bool bRecord = true, bool bPaint = true );
     SC_DLLPUBLIC void           Query( const ScQueryParam& rQueryParam,
-                           const ScRange* pAdvSource, sal_Bool bRecord );
-    void            DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord = sal_True,
+                           const ScRange* pAdvSource, bool bRecord );
+    void            DoSubTotals( const ScSubTotalParam& rParam, bool bRecord = true,
                             const ScSortParam* pForceNewSort = NULL );
 
     void            ToggleAutoFilter();
     void            HideAutoFilter();
 
-    void            RepeatDB( sal_Bool bRecord = sal_True );
+    void            RepeatDB( bool bRecord = true );
 
-    sal_Bool            ImportData( const ScImportParam& rParam, sal_Bool bRecord = sal_True );
+    bool            ImportData( const ScImportParam& rParam, bool bRecord = true );
 
     void GotoDBArea( const OUString& rDBName );
 
@@ -74,7 +74,7 @@ public:
 
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList );
 
-    void            Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
+    void            Consolidate( const ScConsolidateParam& rParam, bool bRecord = true );
 
     bool MakePivotTable(
         const ScDPSaveData& rData, const ScRange& rDest, bool bNewTable,
@@ -91,7 +91,7 @@ public:
     void DataPilotInput( const ScAddress& rPos, const OUString& rString );
 
     bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
-    sal_Bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
+    bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     bool HasSelectionForDrillDown( sal_uInt16& rOrientation );
     void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = NULL);
@@ -99,27 +99,27 @@ public:
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
 
-    void            MakeOutline( sal_Bool bColumns, sal_Bool bRecord = sal_True );
-    void            RemoveOutline( sal_Bool bColumns, sal_Bool bRecord = sal_True );
-    void            RemoveAllOutlines( sal_Bool bRecord = sal_True );
-    void            TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow );
+    void            MakeOutline( bool bColumns, bool bRecord = true );
+    void            RemoveOutline( bool bColumns, bool bRecord = true );
+    void            RemoveAllOutlines( bool bRecord = true );
+    void            TestRemoveOutline( bool& rCol, bool& rRow );
 
-    void            AutoOutline( sal_Bool bRecord = sal_True );
+    void            AutoOutline( bool bRecord = true );
 
-    void            SelectLevel( sal_Bool bColumns, sal_uInt16 nLevel,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    void            ShowOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    void            HideOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
+    void            SelectLevel( bool bColumns, sal_uInt16 nLevel,
+                                    bool bRecord = true, bool bPaint = true );
+    void            ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord = true, bool bPaint = true );
+    void            HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord = true, bool bPaint = true );
 
-    void            ShowMarkedOutlines( sal_Bool bRecord = sal_True );
-    void            HideMarkedOutlines( sal_Bool bRecord = sal_True );
-    sal_Bool            OutlinePossible(sal_Bool bHide);
+    void            ShowMarkedOutlines( bool bRecord = true );
+    void            HideMarkedOutlines( bool bRecord = true );
+    bool            OutlinePossible(bool bHide);
 
-    void            UpdateCharts(sal_Bool bAllCharts = false);      // Default: am Cursor
+    void            UpdateCharts(bool bAllCharts = false);      // Default: am Cursor
 
-    static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts );
+    static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
 };
 
 
