@@ -1851,36 +1851,36 @@ void ChartExport::exportCandleStickSeries(
                 {
                     Reference< chart2::data::XDataSequence > xLabelSeq( xLabeledSeq->getLabel());
                     Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues());
-                        {
-                            FSHelperPtr pFS = GetFS();
-                            pFS->startElement( FSNS( XML_c, XML_ser ),
+                    {
+                        FSHelperPtr pFS = GetFS();
+                        pFS->startElement( FSNS( XML_c, XML_ser ),
                                 FSEND );
 
-                            // TODO: idx and order
-                            // idx attribute should start from 1 and not from 0.
-                            pFS->singleElement( FSNS( XML_c, XML_idx ),
+                        // TODO: idx and order
+                        // idx attribute should start from 1 and not from 0.
+                        pFS->singleElement( FSNS( XML_c, XML_idx ),
                                 XML_val, I32S(idx+1),
                                 FSEND );
-                            pFS->singleElement( FSNS( XML_c, XML_order ),
+                        pFS->singleElement( FSNS( XML_c, XML_order ),
                                 XML_val, I32S(idx+1),
                                 FSEND );
 
-                            // export label
-                            if( xLabelSeq.is() )
-                                exportSeriesText( xLabelSeq );
+                        // export label
+                        if( xLabelSeq.is() )
+                            exportSeriesText( xLabelSeq );
 
-                            // TODO:export shape properties
+                        // TODO:export shape properties
 
-                            // export categories
-                            if( mxCategoriesValues.is() )
-                                exportSeriesCategory( mxCategoriesValues );
+                        // export categories
+                        if( mxCategoriesValues.is() )
+                            exportSeriesCategory( mxCategoriesValues );
 
-                            // export values
-                            if( xValueSeq.is() )
-                                exportSeriesValues( xValueSeq );
+                        // export values
+                        if( xValueSeq.is() )
+                            exportSeriesValues( xValueSeq );
 
-                            pFS->endElement( FSNS( XML_c, XML_ser ) );
-                        }
+                        pFS->endElement( FSNS( XML_c, XML_ser ) );
+                    }
                 }
             }
         }
