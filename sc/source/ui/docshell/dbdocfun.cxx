@@ -568,7 +568,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             rSortParam.nCol2,rSortParam.nRow2,nSrcTab );
         ScAddress aDest( rSortParam.nDestCol, rSortParam.nDestRow, rSortParam.nDestTab );
 
-        rDocShell.GetDocFunc().MoveBlock( aSource, aDest, false, false, false, sal_True );
+        rDocShell.GetDocFunc().MoveBlock( aSource, aDest, false, false, false, true );
     }
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)

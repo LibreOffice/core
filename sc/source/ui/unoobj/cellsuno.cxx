@@ -1848,7 +1848,7 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
         if ( ( nContentFlags & IDF_EDITATTR ) && ( nContentFlags & IDF_CONTENTS ) == 0 )
             nDelFlags |= IDF_EDITATTR;
 
-        pDocShell->GetDocFunc().DeleteContents( *GetMarkData(), nDelFlags, sal_True, sal_True );
+        pDocShell->GetDocFunc().DeleteContents( *GetMarkData(), nDelFlags, true, true );
     }
     // sonst ist nichts zu tun
 }
@@ -2000,7 +2000,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
                 }
                 else
                     aWIDs[1] = 0;
-                pDocShell->GetDocFunc().ClearItems( *GetMarkData(), aWIDs, sal_True );
+                pDocShell->GetDocFunc().ClearItems( *GetMarkData(), aWIDs, true );
             }
         }
         else if ( pEntry )
@@ -2012,7 +2012,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
             else if ( pEntry->nWID == SC_WID_UNO_CELLSTYL )
             {
                 OUString aStyleName( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ) );
-                pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aStyleName, sal_True, sal_True );
+                pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aStyleName, true, true );
             }
         }
     }
@@ -2293,7 +2293,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     if ( nWhich != nFirstItem && nWhich != nSecondItem )
                         rSet.ClearItem(nWhich);
 
-                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, sal_True, sal_True );
+                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true, true );
             }
         }
         else        // implemented here
@@ -2352,7 +2352,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         aValue >>= aStrVal;
                         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName(
                                                             aStrVal, SFX_STYLE_FAMILY_PARA ));
-                        pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aString, sal_True, sal_True );
+                        pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aString, true, true );
                     }
                     break;
                 case SC_WID_UNO_TBLBORD:
@@ -2433,7 +2433,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
-                                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, sal_True, sal_True );
+                                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true, true );
                             }
                         }
                     }
@@ -2732,7 +2732,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         }
 
         if ( pNewPattern && !aRanges.empty() )
-            pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, sal_True, sal_True );
+            pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, true, true );
 
         delete pNewPattern;
         delete pOldPattern;
@@ -2904,7 +2904,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         }
 
         if ( pNewPattern && !aRanges.empty() )
-            pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, sal_True, sal_True );
+            pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, true, true );
 
         delete pNewPattern;
         delete pOldPattern;
@@ -2995,7 +2995,7 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
         //#97041#; put only MultiMarked ScMarkData in ChangeIndent
         ScMarkData aMarkData(*GetMarkData());
         aMarkData.MarkToMulti();
-        pDocShell->GetDocFunc().ChangeIndent( aMarkData, false, sal_True );
+        pDocShell->GetDocFunc().ChangeIndent( aMarkData, false, true );
     }
 }
 
@@ -3007,7 +3007,7 @@ void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::R
         //#97041#; put only MultiMarked ScMarkData in ChangeIndent
         ScMarkData aMarkData(*GetMarkData());
         aMarkData.MarkToMulti();
-        pDocShell->GetDocFunc().ChangeIndent( aMarkData, sal_True, sal_True );
+        pDocShell->GetDocFunc().ChangeIndent( aMarkData, true, true );
     }
 }
 
@@ -5116,7 +5116,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const OUString& rFormula,
                 throw uno::RuntimeException();
             }
 
-            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, NULL, rFormula, sal_True, sal_True, rFormulaNmsp, eGrammar );
+            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, NULL, rFormula, true, true, rFormulaNmsp, eGrammar );
         }
         else
         {
@@ -5124,7 +5124,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const OUString& rFormula,
             ScMarkData aMark;
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), true );
-            pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, sal_True, sal_True );
+            pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, true, true );
         }
     }
 }
@@ -5202,7 +5202,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             // Actually GRAM_PODF_A1 is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
             // though.
-            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_OUSTRING, sal_True, sal_True, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_OUSTRING, true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
         }
         else
         {
@@ -5210,7 +5210,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             ScMarkData aMark;
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), true );
-            pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, sal_True, sal_True );
+            pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, true, true );
         }
     }
 }
@@ -5368,7 +5368,7 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
         }
 
         if (!bError)
-            pDocSh->GetDocFunc().TabOp( aRange, NULL, aParam, sal_True, sal_True );
+            pDocSh->GetDocFunc().TabOp( aRange, NULL, aParam, true, true );
     }
 }
 
@@ -5474,7 +5474,7 @@ void SAL_CALL ScCellRangeObj::fillSeries( sheet::FillDirection nFillDirection,
 
         if (!bError)
             pDocSh->GetDocFunc().FillSeries( aRange, NULL, eDir, eCmd, eDateCmd,
-                                                MAXDOUBLE, fStep, fEndValue, sal_True, sal_True );
+                                                MAXDOUBLE, fStep, fEndValue, true, true );
     }
 }
 
@@ -5518,7 +5518,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
             bError = sal_True;
 
         if (!bError)
-            pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, nCount, sal_True, sal_True );
+            pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, nCount, true, true );
     }
 }
 
@@ -7221,7 +7221,7 @@ void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
     if ( pDocSh )
     {
         OUString aString(aNewName);
-        pDocSh->GetDocFunc().RenameTable( GetTab_Impl(), aString, sal_True, sal_True );
+        pDocSh->GetDocFunc().RenameTable( GetTab_Impl(), aString, true, true );
     }
 }
 
@@ -7325,7 +7325,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
-        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, sal_True, sal_True, sal_True, sal_True );
+        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, true, true, true, true );
     }
 }
 
@@ -7341,7 +7341,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
-        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, false, sal_True, sal_True, sal_True );
+        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, false, true, true, true );
     }
 }
 
@@ -7964,7 +7964,7 @@ void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
     if ( pDocSh && !pDocSh->GetDocument()->IsTabProtected( GetTab_Impl() ) )
     {
         OUString aString(aPassword);
-        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aString, sal_True );
+        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aString, true );
     }
 }
 
@@ -7976,7 +7976,7 @@ void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
     if ( pDocSh )
     {
         OUString aString(aPassword);
-        sal_Bool bDone = pDocSh->GetDocFunc().Unprotect( GetTab_Impl(), aString, sal_True );
+        sal_Bool bDone = pDocSh->GetDocFunc().Unprotect( GetTab_Impl(), aString, true );
         if (!bDone)
             throw lang::IllegalArgumentException();
     }
@@ -8076,7 +8076,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
             ScPatternAttr aPattern( pDoc->GetPool() );
             aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
             aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
-            pDocSh->GetDocFunc().ApplyAttributes( aMarkData, aPattern, sal_True, sal_True );
+            pDocSh->GetDocFunc().ApplyAttributes( aMarkData, aPattern, true, true );
         }
     }
 }
@@ -8236,7 +8236,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-            rFunc.SetTableVisible( nTab, bVis, sal_True );
+            rFunc.SetTableVisible( nTab, bVis, true );
         }
         else if ( pEntry->nWID == SC_WID_UNO_ISACTIVE )
         {
@@ -8467,9 +8467,9 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             if (aValue >>= nValue)
             {
                 if (nValue == com::sun::star::text::WritingMode2::RL_TB)
-                    rFunc.SetLayoutRTL(nTab, true, sal_True);
+                    rFunc.SetLayoutRTL(nTab, true, true);
                 else
-                    rFunc.SetLayoutRTL(nTab, false, sal_True);
+                    rFunc.SetLayoutRTL(nTab, false, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_AUTOPRINT )
@@ -8850,32 +8850,32 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
             {
                 //  property is 1/100mm, column width is twips
                 nNewWidth = HMMToTwips(nNewWidth);
-                rFunc.SetWidthOrHeight( sal_True, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
-                                        (sal_uInt16)nNewWidth, sal_True, sal_True );
+                rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
+                                        (sal_uInt16)nNewWidth, true, true );
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-            rFunc.SetWidthOrHeight( sal_True, 1, nColArr, nTab, eMode, 0, sal_True, sal_True );
+            rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, eMode, 0, true, true );
             //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
             sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
-                rFunc.SetWidthOrHeight( sal_True, 1, nColArr, nTab,
-                                        SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, sal_True, sal_True );
+                rFunc.SetWidthOrHeight( true, 1, nColArr, nTab,
+                                        SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true );
             // sal_False bei Spalten momentan ohne Auswirkung
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE || pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             sal_Bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bSet)
-                rFunc.InsertPageBreak( sal_True, rRange.aStart, sal_True, sal_True, sal_True );
+                rFunc.InsertPageBreak( true, rRange.aStart, true, true, true );
             else
-                rFunc.RemovePageBreak( sal_True, rRange.aStart, sal_True, sal_True, sal_True );
+                rFunc.RemovePageBreak( true, rRange.aStart, true, true, true );
         }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
@@ -8994,14 +8994,14 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
                 //  property is 1/100mm, row height is twips
                 nNewHeight = HMMToTwips(nNewHeight);
                 rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
-                                        (sal_uInt16)nNewHeight, sal_True, sal_True );
+                                        (sal_uInt16)nNewHeight, true, true );
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-            rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, eMode, 0, sal_True, sal_True );
+            rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, eMode, 0, true, true );
             //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
@@ -9014,21 +9014,21 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         {
             sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, sal_True, sal_True );
+                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true );
             else
             {
                 //  set current height again manually
                 sal_uInt16 nHeight = pDoc->GetOriginalHeight( nRow, nTab );
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, sal_True, sal_True );
+                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, true, true );
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE || pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             sal_Bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bSet)
-                rFunc.InsertPageBreak( false, rRange.aStart, sal_True, sal_True, sal_True );
+                rFunc.InsertPageBreak( false, rRange.aStart, true, true, true );
             else
-                rFunc.RemovePageBreak( false, rRange.aStart, sal_True, sal_True, sal_True );
+                rFunc.RemovePageBreak( false, rRange.aStart, true, true, true );
         }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID

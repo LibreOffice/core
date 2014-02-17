@@ -2034,7 +2034,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( *getScDocument(), aTokenArray, aTokens );
 
-    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), sal_True, sal_True, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 OUString
@@ -5127,7 +5127,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
     double fEndValue =  MAXDOUBLE;
     ScDocShell* pDocSh = getDocShellFromRange( mxRange );
     pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd,
-                                   nCount, fStep, fEndValue, sal_True, sal_True );
+                                   nCount, fStep, fEndValue, true, true );
 }
 sal_Bool SAL_CALL
 ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell ) throw (uno::RuntimeException)

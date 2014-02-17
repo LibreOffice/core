@@ -1495,8 +1495,8 @@ void ScViewFunc::TransliterateText( sal_Int32 nType )
         aFuncMark.SetMarkArea( ScRange( aCursor ) );
     }
 
-    sal_Bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
-                        TransliterateText( aFuncMark, nType, sal_True, false );
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
+                        TransliterateText( aFuncMark, nType, true, false );
     if (bSuccess)
     {
         GetViewData()->GetViewShell()->UpdateInputHandler();

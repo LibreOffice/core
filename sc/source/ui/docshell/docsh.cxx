@@ -2822,7 +2822,7 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
             if ( pList && ( aDocument.IsDetectiveDirty() || pList->HasAddError() ) &&
                  pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
             {
-                GetDocFunc().DetectiveRefresh(sal_True);    // sal_True = caused by automatic update
+                GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
             }
             aDocument.SetDetectiveDirty(false);         // always reset, also if not refreshed
         }

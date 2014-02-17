@@ -2402,7 +2402,7 @@ void ScFiltersTest::testOptimalHeightReset()
     // set optimal height for empty row 2
     SCCOLROW nRowArr[2];
     nRowArr[0] = nRowArr[1] = 2;
-    rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, sal_True, sal_True );
+    rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true );
 
     // retrieve optimal height
     int nOptimalHeight = sc::TwipsToHMM( pDoc->GetRowHeight( nRowArr[0], nTab, false) );

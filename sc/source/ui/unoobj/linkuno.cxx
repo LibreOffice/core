@@ -682,7 +682,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
             bFitBlock = false;  // neuer Bereich angegeben -> keine Inhalte verschieben
         }
         pDocShell->GetDocFunc().InsertAreaLink( aFile, aFilter, aOptions, aSource,
-                                                aDest, nRefresh, bFitBlock, sal_True );
+                                                aDest, nRefresh, bFitBlock, true );
     }
 }
 
@@ -975,7 +975,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
         pDocShell->GetDocFunc().InsertAreaLink( aFileStr, aFilterStr, aOptionStr,
                                                 aSourceStr, ScRange(aDestAddr),
-                                                0, false, sal_True ); // don't move contents
+                                                0, false, true ); // don't move contents
     }
 }
 

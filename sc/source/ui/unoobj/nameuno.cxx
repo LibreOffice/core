@@ -563,7 +563,7 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
     if (bRight)  nFlags |= NAME_RIGHT;
 
     if (nFlags)
-        pDocShell->GetDocFunc().CreateNames( aRange, nFlags, sal_True, GetTab_Impl() );
+        pDocShell->GetDocFunc().CreateNames( aRange, nFlags, true, GetTab_Impl() );
 }
 
 void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
@@ -597,7 +597,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aOutputPosition.Column, (SCROW)aOutputPosition.Row, aOutputPosition.Sheet );
     if (pDocShell)
-        pDocShell->GetDocFunc().InsertNameList( aPos, sal_True );
+        pDocShell->GetDocFunc().InsertNameList( aPos, true );
 }
 
 // container::XEnumerationAccess

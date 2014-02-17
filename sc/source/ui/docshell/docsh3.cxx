@@ -1044,7 +1044,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         {
                             OUString aName;
                             aDocument.CreateValidTabName( aName );
-                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, false );
+                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, true, false );
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
@@ -1054,7 +1054,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, true, false );
                         break;
                         case SC_CAT_DELETE_TABS :
-                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), sal_True, false );
+                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), true, false );
                         break;
                         case SC_CAT_DELETE_ROWS:
                         {
@@ -1091,7 +1091,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             const ScChangeActionMove* pMove = (const ScChangeActionMove*) pSourceAction;
                             ScRange aFromRange( pMove->GetFromRange().MakeRange() );
                             GetDocFunc().MoveBlock( aFromRange,
-                                aSourceRange.aStart, sal_True, sal_True, false, false );
+                                aSourceRange.aStart, true, true, false, false );
                         }
                         break;
                         default:
