@@ -46,7 +46,6 @@ private:
     sal_uInt16 nError;
     LngLineList *pLines;
     OString sSource;
-    bool bULF;
     std::vector<OString> aLanguages;
 
     bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
@@ -55,8 +54,7 @@ private:
     void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
         const OString &rActFileName, const OString &rID);
 public:
-    LngParser(const OString &rLngFile,
-        bool bULFFormat);
+    LngParser(const OString &rLngFile);
     ~LngParser();
 
     bool CreatePO( const OString &rPOFile );

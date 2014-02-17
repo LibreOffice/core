@@ -47,12 +47,10 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 //
 // class LngParser
 //
-LngParser::LngParser(const OString &rLngFile,
-    bool bULFFormat)
+LngParser::LngParser(const OString &rLngFile)
     : nError( LNG_OK )
     , pLines( NULL )
     , sSource( rLngFile )
-    , bULF( bULFFormat )
 {
     pLines = new LngLineList();
     std::ifstream aStream(sSource.getStr());
@@ -237,7 +235,7 @@ bool LngParser::Merge(
                         std::advance( it, nPos );
                         pLines->erase( it );
                     }
-                    if( bULF && pEntrys )
+                    if( pEntrys )
                     {
                         if( !sLang.isEmpty() )
                         {

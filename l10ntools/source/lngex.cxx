@@ -34,7 +34,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         return 1;
     }
 
-    LngParser aParser( aArgs.m_sInputFile, true );
+    LngParser aParser( aArgs.m_sInputFile );
     if ( aArgs.m_bMergeMode )
         aParser.Merge(
             aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage );
