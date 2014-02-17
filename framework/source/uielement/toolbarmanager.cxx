@@ -926,7 +926,7 @@ void ToolBarManager::CreateControllers()
         if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
             bCreate = sal_False;
 
-        if ( !xController.is() && m_pToolBar && bCreate )
+        if ( !xController.is() && bCreate )
         {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
