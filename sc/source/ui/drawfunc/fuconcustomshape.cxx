@@ -106,7 +106,7 @@ sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
+bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }

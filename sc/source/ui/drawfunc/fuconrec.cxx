@@ -102,7 +102,7 @@ sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
+bool FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }

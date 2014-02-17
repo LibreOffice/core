@@ -42,7 +42,7 @@ class FuDraw : public FuPoor
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 

@@ -84,7 +84,7 @@ sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
+bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }

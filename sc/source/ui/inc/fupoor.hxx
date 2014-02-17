@@ -82,7 +82,7 @@ public:
 
     // Mouse- & Key-Events; return value=TRUE: Event was processed
     virtual bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
+    virtual bool MouseMove(const MouseEvent&) { return false; }
 
     // moved from inline to *.cxx
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }

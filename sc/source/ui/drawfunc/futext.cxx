@@ -384,9 +384,9 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
+bool FuText::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
 //  pViewShell->SetActivePointer(aNewPointer);
 
@@ -411,7 +411,7 @@ sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
         aPnt -= pView->GetCreateObj()->GetGridOffset();
 
     if ( pView->MouseMove(rMEvt, pWindow) )
-        return (sal_True); // Event von der SdrView ausgewertet
+        return true; // Event von der SdrView ausgewertet
 
     if ( pView->IsAction() )
     {
@@ -419,7 +419,7 @@ sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
         pView->MovAction(aPnt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

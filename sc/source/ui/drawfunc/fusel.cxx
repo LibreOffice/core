@@ -332,9 +332,9 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
+bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuDraw::MouseMove(rMEvt);
+    bool bReturn = FuDraw::MouseMove(rMEvt);
 
     if (aDragTimer.IsActive() )
     {
@@ -352,7 +352,7 @@ sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
         ForceScroll(aPix);
         pView->MovAction(aPnt);
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     // Ein VCControl ist aktiv
@@ -364,7 +364,7 @@ sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

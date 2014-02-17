@@ -159,7 +159,7 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
+bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
@@ -203,7 +203,7 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
             pViewShell->SetActivePointer( aNewPointer );
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

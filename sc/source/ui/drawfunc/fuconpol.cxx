@@ -88,11 +88,10 @@ sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
+bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
-    sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
-    return bReturn;
+    return FuConstruct::MouseMove(rMEvt);
 }
 
 /*************************************************************************

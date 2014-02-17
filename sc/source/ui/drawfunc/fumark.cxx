@@ -83,7 +83,7 @@ sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
+bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 {
     if ( bStartDrag )
     {

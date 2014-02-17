@@ -146,7 +146,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
+bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
     //  evaluate modifiers only if in a drawing layer action
     //  (don't interfere with keyboard shortcut handling)
