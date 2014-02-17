@@ -45,6 +45,12 @@ unx/
 	generic/
 		+ raw X11 support
 
+		dtrans/
+			+ "data transfer" - clipboard handling
+			+ http://stackoverflow.com/questions/3261379/getting-html-source-or-rich-text-from-the-x-clipboard
+			  for tips how to show the current content of the
+			  clipboard
+
 
 How the platform abstraction works
 
