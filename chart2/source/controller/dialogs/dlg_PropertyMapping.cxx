@@ -21,8 +21,9 @@ static long pListBoxTabs[] =
 
 }
 
-PropertyMappingDlg::PropertyMappingDlg(Window* pParent):
-    ModalDialog(pParent, "Property Mapping Dialog", "modules/schart/ui/dlg_PropertyMapping.ui")
+PropertyMappingDlg::PropertyMappingDlg(Window* pParent)
+    : ModalDialog(pParent, "PropertyMappingDialog",
+        "modules/schart/ui/dlg_PropertyMapping.ui")
 {
     get(mpMappingTable, "LST_PROPERTY_MAPPING");
 
