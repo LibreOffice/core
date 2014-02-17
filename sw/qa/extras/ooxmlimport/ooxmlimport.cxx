@@ -752,6 +752,10 @@ DECLARE_OOXMLIMPORT_TEST(testFdo74357, "fdo74357.docx")
     uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    // Bottom margin of the first paragraph was too large, causing a layout problem.
+    // This was 494.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(86), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo55187, "fdo55187.docx")

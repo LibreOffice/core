@@ -549,7 +549,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             sal_Int32 default_spacing = 100;
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
             {
-                default_spacing = 280;
+                // 49 is just the old value that should be removed, once the
+                // root cause in SwTabFrm::MakeAll() is fixed.
+                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_wordprocessingml_ST_View_web)
+                    default_spacing = 49;
+                else
+                    default_spacing = 280;
             }
             m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
@@ -564,7 +569,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
             {
-                default_spacing = 280;
+                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_wordprocessingml_ST_View_web)
+                    default_spacing = 49;
+                else
+                    default_spacing = 280;
             }
             m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag

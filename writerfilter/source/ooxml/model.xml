@@ -14278,7 +14278,7 @@
       </define>
       <define name="CT_View">
         <attribute name="val">
-          <text/>
+          <ref name="ST_View"/>
           <xs:documentation>Document View Setting  Value</xs:documentation>
         </attribute>
       </define>
