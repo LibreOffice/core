@@ -2348,6 +2348,27 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo73596_RunInStyle,"fdo73596_RunInStyle.docx")
+{
+    // INDEX should be preserved.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]"," INDEX \\e \"");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo73596_AlphaSeparator,"fdo73596_AlphaSeparator.docx")
+{
+    // INDEX flag \h "A" should be preserved.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" INDEX \\h \"A\" \\e \""));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
