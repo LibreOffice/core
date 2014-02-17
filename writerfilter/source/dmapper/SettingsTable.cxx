@@ -67,6 +67,7 @@ struct SettingsTable_Impl
     OUString     m_sSalt;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
+    Id                  m_nView;
     bool                m_bEvenAndOddHeaders;
     bool                m_bUsePrinterMetrics;
     bool                embedTrueTypeFonts;
@@ -91,6 +92,7 @@ struct SettingsTable_Impl
     , m_nCryptSpinCount(0)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
+    , m_nView(0)
     , m_bEvenAndOddHeaders(false)
     , m_bUsePrinterMetrics(false)
     , embedTrueTypeFonts(false)
@@ -123,6 +125,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     case NS_ooxml::LN_CT_Zoom_percent:
         m_pImpl->m_nZoomFactor = nIntValue;
     break;
+    case NS_ooxml::LN_CT_View_val:
+        m_pImpl->m_nView = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -152,6 +157,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_compat: //  92547;
     case NS_ooxml::LN_CT_Settings_themeFontLang: //  92552;
     case NS_ooxml::LN_CT_Settings_shapeDefaults: //  92560;
+    case NS_ooxml::LN_CT_Settings_view:
 
     //PropertySetValues - need to be resolved
     {
@@ -249,6 +255,11 @@ bool SettingsTable::GetLinkStyles() const
 sal_Int16 SettingsTable::GetZoomFactor() const
 {
     return m_pImpl->m_nZoomFactor;
+}
+
+Id SettingsTable::GetView() const
+{
+    return m_pImpl->m_nView;
 }
 
 bool SettingsTable::GetUsePrinterMetrics() const

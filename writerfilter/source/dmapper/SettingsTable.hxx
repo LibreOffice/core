@@ -61,6 +61,9 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     /// What's the zoom factor set in percents?
     sal_Int16 GetZoomFactor() const;
 
+    /// What's the requested view? E.g. "web".
+    Id GetView() const;
+
     bool GetEvenAndOddHeaders() const;
 
     bool GetUsePrinterMetrics() const;
