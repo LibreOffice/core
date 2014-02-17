@@ -328,6 +328,9 @@ dump-deps:
 dump-deps-png:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
+dump-deps-sort:
+	@$(SRCDIR)/bin/module-deps.pl -t $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
+
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration:
 	cd $(SRCDIR) && (LC_MESSAGES=C $(GNUMAKE) cmd="$(GNUMAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)

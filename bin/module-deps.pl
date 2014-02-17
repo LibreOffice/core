@@ -12,8 +12,9 @@ my $verbose = 0;
 my $no_leaf;
 my $from_file;
 my $to_file;
-my $graph_file;
+my $output_file;
 my $preserve_libs = 0;
+my $toposort = 0;
 
 sub logit($)
 {
@@ -283,7 +284,7 @@ sub dump_graphviz($)
 {
     my $tree = shift;
     my $to = \*STDOUT;
-    open($to, ">$graph_file") if defined($graph_file);
+    open($to, ">$output_file") if defined($output_file);
     print $to <<END;
 digraph LibreOffice {
 node [shape="Mrecord", color="#BBBBBB"]
@@ -299,6 +300,41 @@ END
        }
     }
     print $to "}\n";
+}
+
+sub toposort_visit($$$$);
+sub toposort_visit($$$$)
+{
+    my $tree = shift;
+    my $list = shift;
+    my $tags = shift;
+    my $name = shift;
+    die "dependencies don't form a DAG"
+        if (defined($tags->{$name}) && $tags->{$name} == 1);
+    if (!$tags->{$name}) {
+        $tags->{$name} = 1;
+        my $result = $tree->{$name};
+        for my $dep (@{$result->{deps}}) {
+            toposort_visit($tree, $list, $tags, $dep);
+        }
+        $tags->{$name} = 2;
+        push @{$list}, $name;
+    }
+}
+
+sub dump_toposort($)
+{
+    my $tree = shift;
+    my @list;
+    my %tags;
+    for my $name (sort keys %{$tree}) {
+        toposort_visit($tree, \@list, \%tags, $name);
+    }
+    my $to = \*STDOUT;
+    open($to, ">$output_file") if defined($output_file);
+    for (my $i = 0; $i <= $#list; ++$i) {
+        print $to "$list[$i]\n";
+    }
 }
 
 sub filter_targets($)
@@ -326,10 +362,11 @@ sub parse_options()
             VersionMessage(-msg => "You are using: 1.0 of ");
         },
         'preserve-libs|p' => \$preserve_libs,
+        'toposort|t' => \$toposort,
         'write-dep-file|w=s' => \$to_file,
         'read-dep-file|f=s' => \$from_file,
         'no-leaf|l' => \$no_leaf,
-        'graph-file|o=s' => \$graph_file);
+        'output-file|o=s' => \$output_file);
     GetOptions(%h) or pod2usage(2);
     pod2usage(1) if $help;
     pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -352,7 +389,11 @@ sub main()
     if ($no_leaf) {
         $tree = prune_leaves($tree);
     }
-    dump_graphviz($tree);
+    if ($toposort) {
+        dump_toposort($tree);
+    } else {
+        dump_graphviz($tree);
+    }
 }
 
 main()
@@ -395,6 +436,12 @@ Prints the version and exits.
 
 Don't collapse libs to modules
 
+=item B<--toposort>
+
+=item B<-t>
+
+Output a topological sorting instead of a graph
+
 =item B<--read-dep-file file>
 
 =item B<-f>
@@ -407,11 +454,11 @@ Read dependency from file.
 
 Write dependency to file.
 
-=item B<--graph-file file>
+=item B<--output-file file>
 
 =item B<-o>
 
-Write output to graph file
+Write graph or sort output to file
 
 =back
 
