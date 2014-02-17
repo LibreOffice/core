@@ -57,6 +57,8 @@
 #include <impex.hxx>
 #include <columnspanset.hxx>
 #include <docoptio.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -3688,7 +3690,75 @@ void Test::testCopyPasteTranspose()
 
 void Test::testCopyPasteSkipEmpty()
 {
+    struct Check
+    {
+        const char* mpStr;
+        Color maColor;
+        bool mbHasNote;
+    };
+
+    struct Test
+    {
+        ScDocument* mpDoc;
+
+        Test( ScDocument* pDoc ) : mpDoc(pDoc) {}
+
+        bool checkRange( const ScAddress& rPos, const Check* p, const Check* pEnd )
+        {
+            ScAddress aPos(rPos);
+            OUString aPosStr = aPos.Format(SCA_VALID);
+            for (; p != pEnd; ++p, aPos.IncRow())
+            {
+                if (!mpDoc->GetString(aPos).equalsAscii(p->mpStr))
+                {
+                    cerr << aPosStr << ": incorrect string value: expected='" << p->mpStr << "' actual='" << mpDoc->GetString(aPos) << endl;
+                    return false;
+                }
+
+                const SvxBrushItem* pBrush =
+                    dynamic_cast<const SvxBrushItem*>(mpDoc->GetAttr(aPos, ATTR_BACKGROUND));
+
+                if (!pBrush)
+                {
+                    cerr << aPosStr << ": failed to get brush item from the cell." << endl;
+                    return false;
+                }
+
+                if (pBrush->GetColor() != p->maColor)
+                {
+                    Color aExpected = p->maColor;
+                    Color aActual = pBrush->GetColor();
+                    cerr << aPosStr << ": incorrect cell background color: expected=("
+                        << static_cast<int>(aExpected.GetRed()) << ","
+                        << static_cast<int>(aExpected.GetGreen()) << ","
+                        << static_cast<int>(aExpected.GetBlue()) << "), actual=("
+                        << static_cast<int>(aActual.GetRed()) << ","
+                        << static_cast<int>(aActual.GetGreen()) << ","
+                        << static_cast<int>(aActual.GetBlue()) << ")" << endl;
+
+                    return false;
+                }
+
+                bool bHasNote = mpDoc->HasNote(aPos);
+                if (bHasNote != p->mbHasNote)
+                {
+                    cerr << aPosStr << ": ";
+                    if (p->mbHasNote)
+                        cerr << "this cell should have a cell note, but doesn't." << endl;
+                    else
+                        cerr << "this cell should NOT have a cell note, but one is found." << endl;
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest(m_pDoc);
+
     m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InitDrawLayer(&getDocShell()); // for cell note objects.
 
     ScRange aSrcRange(0,0,0,0,4,0);
     ScRange aDestRange(1,0,0,1,4,0);
@@ -3696,12 +3766,24 @@ void Test::testCopyPasteSkipEmpty()
     ScMarkData aMark;
     aMark.SetMarkArea(aDestRange);
 
-    // Put some texts in A1:A5.
+    // Put some texts in B1:B5.
     m_pDoc->SetString(ScAddress(1,0,0), "A");
     m_pDoc->SetString(ScAddress(1,1,0), "B");
     m_pDoc->SetString(ScAddress(1,2,0), "C");
     m_pDoc->SetString(ScAddress(1,3,0), "D");
     m_pDoc->SetString(ScAddress(1,4,0), "E");
+
+    // Set the background color of B1:B5 to blue.
+    ScPatternAttr aCellBackColor(m_pDoc->GetPool());
+    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    m_pDoc->ApplyPatternAreaTab(1, 0, 1, 4, 0, aCellBackColor);
+
+    // Insert notes to B1:B5.
+    m_pDoc->GetOrCreateNote(ScAddress(1,0,0));
+    m_pDoc->GetOrCreateNote(ScAddress(1,1,0));
+    m_pDoc->GetOrCreateNote(ScAddress(1,2,0));
+    m_pDoc->GetOrCreateNote(ScAddress(1,3,0));
+    m_pDoc->GetOrCreateNote(ScAddress(1,4,0));
 
     // Prepare a clipboard content interleaved with empty cells.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -3712,52 +3794,91 @@ void Test::testCopyPasteSkipEmpty()
     aClipDoc.SetString(ScAddress(0,2,0), "Clip2");
     aClipDoc.SetString(ScAddress(0,4,0), "Clip3");
 
+    // Set the background color of A1:A5 to yellow.
+    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_YELLOW, ATTR_BACKGROUND));
+    aClipDoc.ApplyPatternAreaTab(0, 0, 0, 4, 0, aCellBackColor);
+
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE,   aClipDoc.GetCellType(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE,   aClipDoc.GetCellType(ScAddress(0,3,0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0,4,0)));
 
+    // Check the initial condition.
+    {
+        Check aChecks[] = {
+            { "A", COL_BLUE, true },
+            { "B", COL_BLUE, true },
+            { "C", COL_BLUE, true },
+            { "D", COL_BLUE, true },
+            { "E", COL_BLUE, true },
+        };
+
+        bool bRes = aTest.checkRange(ScAddress(1,0,0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bRes);
+    }
+
     // Create undo document.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, IDF_ALL, false, pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
     bool bSkipEmpty = true;
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_ALL, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
 
     // Create redo document.
     ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
     pRedoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, IDF_ALL, false, pRedoDoc, &aMark);
 
     // Create an undo object for this.
     ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, IDF_ALL, pRefUndoData);
 
     // Check the content after the paste.
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip1"), m_pDoc->GetString(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("B"),     m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip2"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("D"),     m_pDoc->GetString(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip3"), m_pDoc->GetString(ScAddress(1,4,0)));
+    {
+        Check aChecks[] = {
+            { "Clip1", COL_YELLOW, false },
+            { "B",     COL_BLUE,   true },
+            { "Clip2", COL_YELLOW, false },
+            { "D",     COL_BLUE,   true },
+            { "Clip3", COL_YELLOW, false },
+        };
+
+        bool bRes = aTest.checkRange(ScAddress(1,0,0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        CPPUNIT_ASSERT_MESSAGE("Check after paste failed.", bRes);
+    }
 
     // Undo, and check the content.
     aUndo.Undo();
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("D"), m_pDoc->GetString(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("E"), m_pDoc->GetString(ScAddress(1,4,0)));
+    {
+        Check aChecks[] = {
+            { "A", COL_BLUE, true },
+            { "B", COL_BLUE, true },
+            { "C", COL_BLUE, true },
+            { "D", COL_BLUE, true },
+            { "E", COL_BLUE, true },
+        };
+
+        bool bRes = aTest.checkRange(ScAddress(1,0,0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        CPPUNIT_ASSERT_MESSAGE("Check after undo failed.", bRes);
+    }
 
     // Redo, and check the content again.
     aUndo.Redo();
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip1"), m_pDoc->GetString(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("B"),     m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip2"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("D"),     m_pDoc->GetString(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Clip3"), m_pDoc->GetString(ScAddress(1,4,0)));
+    {
+        Check aChecks[] = {
+            { "Clip1", COL_YELLOW, false },
+            { "B",     COL_BLUE,   true },
+            { "Clip2", COL_YELLOW, false },
+            { "D",     COL_BLUE,   true },
+            { "Clip3", COL_YELLOW, false },
+        };
+
+        bool bRes = aTest.checkRange(ScAddress(1,0,0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        CPPUNIT_ASSERT_MESSAGE("Check after redo failed.", bRes);
+    }
 
     m_pDoc->DeleteTab(0);
 }
