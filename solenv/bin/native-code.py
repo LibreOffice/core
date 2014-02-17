@@ -96,7 +96,10 @@ core_constructor_list = [
 # svx/util/svx.component
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
 # svx/util/svxcore.component
+    "com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation",
+    "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
+    "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
