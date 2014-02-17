@@ -313,55 +313,51 @@ bool SwTxtFrm::FormatEmpty()
         SVX_LINE_SPACE_FIX == rSpacing.GetLineSpaceRule() ||
         aSet.GetLRSpace().IsAutoFirst() ) )
         return false;
-    else
+
+    SwTxtFly aTxtFly( this );
+    SwRect aRect;
+    bool bFirstFlyCheck = 0 != Prt().Height();
+    if ( !bCollapse && bFirstFlyCheck &&
+            aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
+        return false;
+
+    SwTwips nHeight = EmptyHeight();
+
+    if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+            IsInDocBody() )
     {
-        SwTxtFly aTxtFly( this );
-        SwRect aRect;
-        bool bFirstFlyCheck = 0 != Prt().Height();
-        if ( !bCollapse && bFirstFlyCheck &&
-             aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
-            return false;
-        else
-        {
-            SwTwips nHeight = EmptyHeight();
-
-            if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
-                 IsInDocBody() )
-            {
-                GETGRID( FindPageFrm() )
-                if ( pGrid )
-                    nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
-            }
-
-            SWRECTFN( this )
-            const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
-
-            if( !nChg )
-                SetUndersized( false );
-            AdjustFrm( nChg );
-
-            if( HasBlinkPor() )
-            {
-                ClearPara();
-                ResetBlinkPor();
-            }
-            SetCacheIdx( MSHRT_MAX );
-            if( !IsEmpty() )
-            {
-                SetEmpty( true );
-                SetCompletePaint();
-            }
-            if( !bCollapse && !bFirstFlyCheck &&
-                 aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
-                return false;
-
-            // #i35635# - call method <HideAndShowObjects()>
-            // to assure that objects anchored at the empty paragraph are
-            // correctly visible resp. invisible.
-            HideAndShowObjects();
-            return true;
-        }
+        GETGRID( FindPageFrm() )
+        if ( pGrid )
+            nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
     }
+
+    SWRECTFN( this )
+    const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
+
+    if( !nChg )
+        SetUndersized( false );
+    AdjustFrm( nChg );
+
+    if( HasBlinkPor() )
+    {
+        ClearPara();
+        ResetBlinkPor();
+    }
+    SetCacheIdx( MSHRT_MAX );
+    if( !IsEmpty() )
+    {
+        SetEmpty( true );
+        SetCompletePaint();
+    }
+    if( !bCollapse && !bFirstFlyCheck &&
+            aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
+        return false;
+
+    // #i35635# - call method <HideAndShowObjects()>
+    // to assure that objects anchored at the empty paragraph are
+    // correctly visible resp. invisible.
+    HideAndShowObjects();
+    return true;
 }
 
 bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
