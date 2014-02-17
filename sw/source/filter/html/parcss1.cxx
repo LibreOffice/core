@@ -1279,7 +1279,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
                         ')' == aValue[aValue.getLength()-1],
                         "keine gueltiges RGB(...)" );
 
-            OUString aColorStr( aValue.copy( 4, aValue.getLength()-1 ) );
+            OUString aColorStr(aValue.copy(4, aValue.getLength() - 5));
 
             sal_Int32 nPos = 0;
             sal_uInt16 nCol = 0;
