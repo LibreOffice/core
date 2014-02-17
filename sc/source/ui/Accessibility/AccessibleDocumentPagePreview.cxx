@@ -1171,15 +1171,12 @@ SdrPage* ScShapeChildren::GetDrawPage() const
 {
     SCTAB nTab( mpViewShell->GetLocationData().GetPrintTab() );
     SdrPage* pDrawPage = NULL;
-    if (mpViewShell)
+    ScDocument* pDoc = mpViewShell->GetDocument();
+    if (pDoc && pDoc->GetDrawLayer())
     {
-        ScDocument* pDoc = mpViewShell->GetDocument();
-        if (pDoc && pDoc->GetDrawLayer())
-        {
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
-        }
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
+            pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     }
     return pDrawPage;
 }
