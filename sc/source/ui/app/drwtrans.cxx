@@ -772,7 +772,7 @@ void ScDrawTransferObj::InitDocShell()
         aViewData.SetScreen( aDestArea );
         aViewData.SetCurX( 0 );
         aViewData.SetCurY( 0 );
-        pDocSh->UpdateOle(&aViewData, sal_True);
+        pDocSh->UpdateOle(&aViewData, true);
     }
 }
 

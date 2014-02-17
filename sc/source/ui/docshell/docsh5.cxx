@@ -89,7 +89,7 @@ void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
         pParent->GrabFocus();
 }
 
-sal_Bool ScDocShell::IsEditable() const
+bool ScDocShell::IsEditable() const
 {
     // import into read-only document is possible - must be extended if other filters use api
     // #i108547# MSOOXML filter uses "IsChangeReadOnlyEnabled" property
@@ -369,7 +369,7 @@ void ScDocShell::CancelAutoDBRange()
         //  Hoehen anpassen
         //! mit docfunc zusammenfassen
 
-sal_Bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
+bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
@@ -469,7 +469,7 @@ static OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
     return aName;
 }
 
-void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
+void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 {
     ScConsData aData;
 
@@ -626,7 +626,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     aModificator.SetDocumentModified();
 }
 
-void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, sal_Bool bRecord )
+void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
 {
     if (!aDocument.IsScenario(nTab))
     {
@@ -749,7 +749,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
 
 SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags,
-                                    ScMarkData& rMark, sal_Bool bRecord )
+                                    ScMarkData& rMark, bool bRecord )
 {
     rMark.MarkToMulti();
     if (rMark.IsMultiMarked())
@@ -815,8 +815,8 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
 }
 
 sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
-                                SCTAB nDestPos, sal_Bool bInsertNew,
-                                sal_Bool bNotifyAndPaint )
+                                SCTAB nDestPos, bool bInsertNew,
+                                bool bNotifyAndPaint )
 {
     ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
 
@@ -861,7 +861,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
     return nErrVal;
 }
 
-sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, sal_Bool bRecord )
+bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRecord )
 {
     ScDocShellModificator aModificator( *this );
 
@@ -950,7 +950,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
         if ( nSrcTab == nDestTab )
         {
             //! allow only for api calls?
-            return sal_True;    // nothing to do, but valid
+            return true;    // nothing to do, but valid
         }
 
         ScProgress* pProgress = new ScProgress(this, ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
@@ -979,7 +979,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
-    return sal_True;
+    return true;
 }
 
 

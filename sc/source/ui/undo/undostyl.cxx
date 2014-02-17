@@ -196,7 +196,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
                 if (pNewSet)
                     pDoc->ModifyStyleSheet( *pStyle, *pNewSet );
 
-                pDocSh->PageStyleModified( aNewName, sal_True );
+                pDocSh->PageStyleModified( aNewName, true );
             }
         }
     }

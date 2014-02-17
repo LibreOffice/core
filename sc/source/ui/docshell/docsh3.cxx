@@ -218,14 +218,14 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW n
 
 //------------------------------------------------------------------
 
-void ScDocShell::LockPaint_Impl(sal_Bool bDoc)
+void ScDocShell::LockPaint_Impl(bool bDoc)
 {
     if ( !pPaintLockData )
         pPaintLockData = new ScPaintLockData;
     pPaintLockData->IncLevel(bDoc);
 }
 
-void ScDocShell::UnlockPaint_Impl(sal_Bool bDoc)
+void ScDocShell::UnlockPaint_Impl(bool bDoc)
 {
     if ( pPaintLockData )
     {
@@ -303,7 +303,7 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
     else if (pPaintLockData)    // loeschen
     {
         pPaintLockData->SetLevel(0, sal_True);  // bei Unlock sofort ausfuehren
-        UnlockPaint_Impl(sal_True);                 // jetzt
+        UnlockPaint_Impl(true);                 // jetzt
         UnlockDocument_Impl(0);
     }
 }
@@ -320,7 +320,7 @@ void ScDocShell::UnlockPaint()
 
 void ScDocShell::LockDocument()
 {
-    LockPaint_Impl(sal_True);
+    LockPaint_Impl(true);
     LockDocument_Impl(nDocumentLock + 1);
 }
 
@@ -328,7 +328,7 @@ void ScDocShell::UnlockDocument()
 {
     if (nDocumentLock)
     {
-        UnlockPaint_Impl(sal_True);
+        UnlockPaint_Impl(true);
         UnlockDocument_Impl(nDocumentLock - 1);
     }
     else
@@ -446,7 +446,7 @@ Printer* ScDocShell::GetDocumentPrinter()       // fuer OLE
     return aDocument.GetPrinter();
 }
 
-SfxPrinter* ScDocShell::GetPrinter(sal_Bool bCreateIfNotExist)
+SfxPrinter* ScDocShell::GetPrinter(bool bCreateIfNotExist)
 {
     return aDocument.GetPrinter(bCreateIfNotExist);
 }
@@ -639,7 +639,7 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rCom
     }
 }
 
-void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,sal_Bool bPrevNext)
+void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent, bool bPrevNext)
 {
     if (!pAction) return;           // ohne Aktion ist nichts..
 

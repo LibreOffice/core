@@ -1533,7 +1533,7 @@ void SAL_CALL ScModelObj::consolidate(
     if (pDocShell)
     {
         const ScConsolidateParam& rParam = aImpl.GetParam();
-        pDocShell->DoConsolidate( rParam, sal_True );
+        pDocShell->DoConsolidate( rParam, true );
         pDocShell->GetDocument()->SetConsolidateDlgData( &rParam );
     }
 }
@@ -2565,7 +2565,7 @@ void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDe
     {
         SCTAB nSource;
         if ( pDocShell->GetDocument()->GetTable( aName, nSource ) )
-            bDone = pDocShell->MoveTable( nSource, nDestination, false, sal_True );
+            bDone = pDocShell->MoveTable( nSource, nDestination, false, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2583,7 +2583,7 @@ void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
         SCTAB nSource;
         if ( pDocShell->GetDocument()->GetTable( aName, nSource ) )
         {
-            bDone = pDocShell->MoveTable( nSource, nDestination, sal_True, sal_True );
+            bDone = pDocShell->MoveTable( nSource, nDestination, true, true );
             if (bDone)
             {
                 // #i92477# any index past the last sheet means "append" in MoveTable

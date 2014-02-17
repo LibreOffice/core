@@ -657,12 +657,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox.Execute() == RET_YES )
-                            bDo = ExecuteChangeProtectionDialog( NULL, sal_True );
+                            bDo = ExecuteChangeProtectionDialog( NULL, true );
                         else
                             bDo = false;
                     }
                     else    // merge might reject some actions
-                        bDo = ExecuteChangeProtectionDialog( NULL, sal_True );
+                        bDo = ExecuteChangeProtectionDialog( NULL, true );
                 }
                 if ( !bDo )
                 {
@@ -1131,7 +1131,7 @@ void UpdateAcceptChangesDialog()
 
 //------------------------------------------------------------------
 
-bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected )
+bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQueryIfProtected )
 {
     bool bDone = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
@@ -1485,7 +1485,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     return bChange;
 }
 
-void ScDocShell::PageStyleModified( const OUString& rStyleName, sal_Bool bApi )
+void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 
@@ -2218,7 +2218,7 @@ SCTAB ScDocShell::GetCurTab()
     return pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 }
 
-ScTabViewShell* ScDocShell::GetBestViewShell( sal_Bool bOnlyVisible )
+ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     // falsches Doc?

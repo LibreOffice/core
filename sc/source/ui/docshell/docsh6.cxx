@@ -75,7 +75,7 @@ void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
-    SetVisAreaOrSize( rVisArea, sal_True );
+    SetVisAreaOrSize( rVisArea, true );
 }
 
 static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
@@ -87,7 +87,7 @@ static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
     rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
 }
 
-void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifyStart )
+void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart )
 {
     sal_Bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
 
@@ -172,12 +172,12 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifySt
     }
 }
 
-sal_Bool ScDocShell::IsOle()
+bool ScDocShell::IsOle()
 {
     return (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
 }
 
-void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
+void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
 {
     //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
     //  (VisArea wird dann beim Save wieder zurueckgesetzt)
@@ -418,7 +418,7 @@ void ScDocShell::UpdateLinks()
     }
 }
 
-sal_Bool ScDocShell::ReloadTabLinks()
+bool ScDocShell::ReloadTabLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
@@ -451,7 +451,7 @@ sal_Bool ScDocShell::ReloadTabLinks()
         SetDocumentModified();
     }
 
-    return sal_True;        //! Fehler erkennen
+    return true;        //! Fehler erkennen
 }
 
 void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )

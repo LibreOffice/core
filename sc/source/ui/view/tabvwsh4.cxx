@@ -250,7 +250,7 @@ void ScTabViewShell::Deactivate(sal_Bool bMDI)
         ActivateView( false, false );
 
         if ( GetViewFrame()->GetFrame().IsInPlace() ) // inplace
-            GetViewData()->GetDocShell()->UpdateOle(GetViewData(),sal_True);
+            GetViewData()->GetDocShell()->UpdateOle(GetViewData(), true);
 
         if ( pHdl )
             pHdl->NotifyChange( NULL, true ); // Timer-verzoegert wg. Dokumentwechsel

@@ -276,7 +276,7 @@ void ScDocShell::BeforeXMLLoading()
     aDocument.SetInsertingFromOtherDoc( true );
 }
 
-void ScDocShell::AfterXMLLoading(sal_Bool bRet)
+void ScDocShell::AfterXMLLoading(bool bRet)
 {
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
     {
@@ -434,7 +434,7 @@ void processDataStream( ScDocShell& rShell, const sc::ImportPostProcessData& rDa
 
 }
 
-sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     LoadMediumGuard aLoadGuard(&aDocument);
 
@@ -520,7 +520,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     return bRet;
 }
 
-sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     aDocument.EnableIdle(false);
 
@@ -2598,7 +2598,7 @@ OUString ScDocShell::GetDifFilterName()
     return OUString(pFilterDif);
 }
 
-sal_Bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
+bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
 {
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)
@@ -2778,7 +2778,7 @@ void ScDocShell::SetModified( sal_Bool bModified )
 }
 
 
-void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
+void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
 {
     //  BroadcastUno must also happen right away with pPaintLockData
     //  FIXME: Also for SetDrawModified, if Drawing is connected
@@ -2838,9 +2838,9 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
  * Drawing also needs to be updated for the normal SetDocumentModified
  * e.g.: when deleting tables etc.
  */
-void ScDocShell::SetDrawModified( sal_Bool bIsModified /* = sal_True */ )
+void ScDocShell::SetDrawModified( bool bIsModified /* = true */ )
 {
-    sal_Bool bUpdate = ( bIsModified != IsModified() );
+    sal_Bool bUpdate = ( (bIsModified ? 1 : 0) != IsModified() );
 
     SetModified( bIsModified );
 

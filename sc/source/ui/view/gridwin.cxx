@@ -4088,7 +4088,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if ( pThisDoc->IsDocEditable() )
             {
                 SCTAB nSrcTab = aSource.aStart.Tab();
-                pViewData->GetDocShell()->MoveTable( nSrcTab, nThisTab, !bIsMove, sal_True );   // with Undo
+                pViewData->GetDocShell()->MoveTable( nSrcTab, nThisTab, !bIsMove, true );   // with Undo
                 pView->SetTabNo( nThisTab, true );
                 bDone = sal_True;
             }

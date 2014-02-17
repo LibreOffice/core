@@ -757,7 +757,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             else
             {
                 if ( pDoc->RemovePageStyleInUse( aString ) )
-                    pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), sal_True );
+                    pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), true );
 
                 pStylePool->Remove( pStyle );
 
@@ -1097,7 +1097,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             {
                 //! ModifyStyleSheet am Dokument (alte Werte merken)
 
-                pDocShell->PageStyleModified( aStyleName, sal_True );
+                pDocShell->PageStyleModified( aStyleName, true );
             }
         }
     }
@@ -1468,7 +1468,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
             rSet.Put( aBoxInfoItem );
 
-            pDocShell->PageStyleModified( aStyleName, sal_True );
+            pDocShell->PageStyleModified( aStyleName, true );
         }
     }
 }
@@ -1841,7 +1841,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         {
             //! ModifyStyleSheet am Dokument (alte Werte merken)
 
-            pDocShell->PageStyleModified( aStyleName, sal_True );
+            pDocShell->PageStyleModified( aStyleName, true );
         }
     }
 }
