@@ -86,6 +86,7 @@ public:
     void testN779627();
     void testN779941();
     void testFdo55187();
+    void testFdo74357();
     void testN780563();
     void testN780853();
     void testN780843();
@@ -193,6 +194,7 @@ void Test::run()
         {"n779627.docx", &Test::testN779627},
         {"n779941.docx", &Test::testN779941},
         {"fdo55187.docx", &Test::testFdo55187},
+        {"fdo74357.docx", &Test::testFdo74357},
         {"n780563.docx", &Test::testN780563},
         {"n780853.docx", &Test::testN780853},
         {"n780843.docx", &Test::testN780843},
@@ -976,6 +978,15 @@ void Test::testN779627()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically", text::VertOrientation::CENTER, nValue);
     xShapeProperties->getPropertyValue("VertOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
+}
+
+void Test::testFdo74357()
+{
+    // Floating table wasn't converted to a textframe.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
 void Test::testFdo55187()
