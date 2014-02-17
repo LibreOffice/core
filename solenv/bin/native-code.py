@@ -17,9 +17,12 @@ from optparse import OptionParser
 # referenced in lo_get_constructor_map().
 
 core_factory_list = [
+    ("libembobj.a", "embobj_component_getFactory"),
     ("libintrospectionlo.a", "introspection_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libstocserviceslo.a", "stocservices_component_getFactory"),
+    ("libchartcontrollerlo.a", "chartcontroller_component_getFactory"),
+    ("libchartcorelo.a", "chartcore_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
@@ -31,6 +34,7 @@ core_factory_list = [
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libooxlo.a", "oox_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
+    ("libsmlo.a", "sm_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
@@ -80,15 +84,19 @@ core_constructor_list = [
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
+    "com_sun_star_extensions_xml_sax_Writer_get_implementation",
 # sfx2/util/sfx.component
     "SfxDocumentMetaData_get_implementation",
     "com_sun_star_comp_office_FrameLoader_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
 # svtools/util/svt.component
+    "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
+# svx/util/svxcore.component
+    "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
