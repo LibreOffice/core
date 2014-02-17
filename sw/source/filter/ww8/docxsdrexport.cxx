@@ -200,7 +200,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     if (isAnchor)
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
-        attrList->add(XML_behindDoc, pFrmFmt->GetOpaque().GetValue() ? "0" : "1");
+        bool bOpaque = pFrmFmt->GetOpaque().GetValue();
+        if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
+            // SdrObjects know their layer, consider that instead of the frame format.
+            bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
+        attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
         attrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
         attrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());

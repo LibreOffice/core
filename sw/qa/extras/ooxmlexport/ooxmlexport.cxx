@@ -2280,6 +2280,15 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBehinddoc, "behinddoc.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // This was "0", shape was in the foreground.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDmlZorder, "dml-zorder.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
