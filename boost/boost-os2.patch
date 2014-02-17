@@ -1,0 +1,22 @@
+--- misc/boost_1_55_0/boost/tr1/detail/config.hpp	2010-06-12 11:30:02.000000000 +0200
++++ misc/build/boost_1_55_0/boost/tr1/detail/config.hpp	2013-07-04 12:49:12.000000000 +0200
+@@ -9,6 +9,7 @@
+ #include <cstddef>
+ 
+ #if (defined(__GNUC__) && !(defined(linux) || defined(__linux) || defined(__linux__))) \
++   && !defined(__OS2__) \
+    || (!defined(_AIX) && defined(__IBMCPP__)  && (__IBMCPP__ >= 800)) 
+    // Disable use of #include_next on Linux as typically we are installed in a 
+    // directory that is searched *after* the std lib include path.
+--- misc/boost_1_55_0/boost/tr1/detail/config_all.hpp	2011-07-25 11:28:58.000000000 +0200
++++ misc/build/boost_1_55_0/boost/tr1/detail/config_all.hpp	2013-07-04 12:50:44.000000000 +0200
+@@ -107,7 +107,7 @@
+ #    endif
+ 
+ #      if !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT) && !defined(__ICC) \
+-            && (defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
++            && (defined(__OS2__) || defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
+          // Disable use of #include_next on Linux as typically we are installed in a directory that is searched
+          // *after* the std lib include path:
+ #        define BOOST_TR1_DISABLE_INCLUDE_NEXT
+Binary files misc/boost_1_55_0/libs/math/quaternion/TQE_EA.pdf and misc/build/boost_1_55_0/libs/math/quaternion/TQE_EA.pdf differ
