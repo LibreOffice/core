@@ -2015,7 +2015,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
                     const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : 0);
-                    if (pParentProperties->find(PROP_PARA_RIGHT_MARGIN) != pParentProperties->end())
+                    if (pParentProperties && pParentProperties->find(PROP_PARA_RIGHT_MARGIN) != pParentProperties->end())
                         nParaRightMargin = pParentProperties->find(PROP_PARA_RIGHT_MARGIN)->second.getValue().get<sal_Int32>();
                 }
                 if (nParaRightMargin != 0)
