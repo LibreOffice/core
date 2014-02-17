@@ -40,7 +40,7 @@
 #include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
-sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
+bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -54,7 +54,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     {
         pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
     }
-    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
+    bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {
@@ -67,7 +67,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     return bRet;
 }
 
-sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
+bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     SfxItemPool* pArgPool = rArgs.GetPool();
@@ -97,7 +97,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg(
         pViewData->GetDialogParent(), &aNewAttr);
     OSL_ENSURE(pDlg, "Dialog create fail!");
-    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
+    bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {

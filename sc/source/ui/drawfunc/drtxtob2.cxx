@@ -52,7 +52,7 @@ sal_uInt16 ScGetFontWorkId()
     return SvxFontWorkChildWindow::GetChildWindowId();
 }
 
-sal_Bool ScDrawTextObjectBar::IsNoteEdit()
+bool ScDrawTextObjectBar::IsNoteEdit()
 {
     return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }

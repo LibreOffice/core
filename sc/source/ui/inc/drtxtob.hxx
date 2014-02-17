@@ -36,7 +36,7 @@ class ScDrawTextObjectBar : public SfxShell
 {
     ScViewData*         pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool                bPastePossible;
+    bool                bPastePossible;
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
@@ -59,8 +59,8 @@ public:
     void ExecuteToggle( SfxRequest &rReq );
     void GetStatePropPanelAttr(SfxItemSet &);
 
-    sal_Bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet , sal_uInt16 nSlot);
-    sal_Bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet , sal_uInt16 nSlot);
+    bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );
     void ExecFormText(SfxRequest& rReq);        // StarFontWork
@@ -70,7 +70,7 @@ private:
     void ExecuteGlobal( SfxRequest &rReq );         // called by Execute for all objects
     void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
-    sal_Bool IsNoteEdit();
+    bool IsNoteEdit();
 };
 
 
