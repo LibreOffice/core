@@ -206,7 +206,7 @@ void ScFilterOptionsMgr::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
+bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
     OUString aPosStr( rPosStr );
     sal_Int32 nColonPos = aPosStr.indexOf( ':' );

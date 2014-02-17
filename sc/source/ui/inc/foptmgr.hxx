@@ -55,7 +55,7 @@ public:
                         FixedText*          refFtDbArea,
                         const OUString&       refStrUndefined );
     ~ScFilterOptionsMgr();
-    sal_Bool    VerifyPosStr ( const OUString& rPosStr ) const;
+    bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:
     ScViewData*     pViewData;
