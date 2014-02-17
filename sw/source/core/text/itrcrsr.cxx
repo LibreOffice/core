@@ -1292,7 +1292,7 @@ bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
  * Return: Offset in String
  *************************************************************************/
 sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                     const MSHORT nChgNode, SwCrsrMoveState* pCMS ) const
+                                    bool nChgNode, SwCrsrMoveState* pCMS ) const
 {
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
@@ -1736,13 +1736,9 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 //              we many not return with COMPLETE_STRING as value!
                 //              (BugId: 9692 + Change in feshview)
                 SwFlyInCntFrm *pTmp = ( (SwFlyCntPortion*)pPor )->GetFlyFrm();
-                sal_Bool bChgNode = 1 < nChgNode;
-                if( !bChgNode )
-                {
-                    SwFrm* pLower = pTmp->GetLower();
-                    if( pLower && (pLower->IsTxtFrm() || pLower->IsLayoutFrm()) )
-                        bChgNode = sal_True;
-                }
+                SwFrm* pLower = pTmp->GetLower();
+                bool bChgNode = pLower
+                    && (pLower->IsTxtFrm() || pLower->IsLayoutFrm());
                 Point aTmpPoint( rPoint );
 
                 if ( pFrm->IsRightToLeft() )

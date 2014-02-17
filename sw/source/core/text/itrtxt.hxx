@@ -301,7 +301,7 @@ public:
     bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
         const long nMax = 0 );
     sal_Int32 GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                const MSHORT nChgNode, SwCrsrMoveState* = 0 ) const;
+                bool nChgNode, SwCrsrMoveState* = 0 ) const;
     // Respects ambiguities: For the implementation see below
     const SwLineLayout *CharCrsrToLine( const sal_Int32 nPos );
 

@@ -332,7 +332,7 @@ sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
         return 0;
 
     const Point aPoint( nNextIndent, aLine.Y() );
-    rFndPos = aLine.GetCrsrOfst( 0, aPoint, sal_False );
+    rFndPos = aLine.GetCrsrOfst( 0, aPoint, false );
     if( 1 >= rFndPos )
         return 0;
 
