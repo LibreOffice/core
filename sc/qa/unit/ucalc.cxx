@@ -4885,30 +4885,72 @@ void Test::testNoteBasic()
 
 void Test::testNoteDeleteRow()
 {
-    ScDocument* pDoc = getDocShell().GetDocument();
     OUString aSheet1("Sheet1");
-    pDoc->InsertTab(0, aSheet1);
+    m_pDoc->InsertTab(0, aSheet1);
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     OUString aHello("Hello");
     OUString aJimBob("Jim Bob");
-    ScAddress rAddr(1, 1, 0);
-    ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
-    pNote->SetText(rAddr, aHello);
+    ScAddress aPos(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
+    pNote->SetText(aPos, aHello);
     pNote->SetAuthor(aJimBob);
 
-    CPPUNIT_ASSERT_MESSAGE("there should be a note", pDoc->HasNote(1, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(1, 1, 0));
 
     // test with IsBlockEmpty
     bool bIgnoreNotes = true;
-    CPPUNIT_ASSERT_MESSAGE("The Block should be detected as empty (no Notes)", pDoc->IsBlockEmpty(0, 0, 0, 100, 100, bIgnoreNotes));
+    CPPUNIT_ASSERT_MESSAGE("The Block should be detected as empty (no Notes)", m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100, bIgnoreNotes));
     bIgnoreNotes = false;
-    CPPUNIT_ASSERT_MESSAGE("The Block should NOT be detected as empty", !pDoc->IsBlockEmpty(0, 0, 0, 100, 100, bIgnoreNotes));
+    CPPUNIT_ASSERT_MESSAGE("The Block should NOT be detected as empty", !m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100, bIgnoreNotes));
 
-    pDoc->DeleteRow(0, 0, MAXCOL, 0, 1, 1);
+    m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 1, 1);
 
-    CPPUNIT_ASSERT_MESSAGE("there should be no more note", !pDoc->HasNote(1, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("there should be no more note", !m_pDoc->HasNote(1, 1, 0));
 
-    pDoc->DeleteTab(0);
+    // Set values and notes into B3:B4.
+    aPos = ScAddress(1,2,0); // B3
+    m_pDoc->SetString(aPos, "First");
+    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "First Note", false, false);
+
+    aPos = ScAddress(1,3,0); // B4
+    m_pDoc->SetString(aPos, "Second");
+    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "Second Note", false, false);
+
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
+
+    // Check to make sure the notes have shifted upward.
+    pNote = m_pDoc->GetNote(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Note"), pNote->GetText());
+    pNote = m_pDoc->GetNote(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
+    pNote = m_pDoc->GetNote(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("B4 should NOT have a note.", !pNote);
+
+    // Undo.
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get undo manager.", pUndoMgr);
+    m_pDoc->CreateAllNoteCaptions(); // to make sure that all notes have their corresponding caption objects...
+
+    pUndoMgr->Undo();
+    pNote = m_pDoc->GetNote(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should NOT have a note.", !pNote);
+    pNote = m_pDoc->GetNote(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Note"), pNote->GetText());
+    pNote = m_pDoc->GetNote(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("B4 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testNoteDeleteCol()
