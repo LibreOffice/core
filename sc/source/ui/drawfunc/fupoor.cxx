@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
     if ( pHdl==NULL && pView->IsMarkedHit(aMDPos) )
     {
         pWindow->ReleaseMouse();
-        bIsInDragMode = sal_True;
+        bIsInDragMode = true;
 
 //      pView->BeginDrag(pWindow, aMDPos);
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
@@ -265,13 +265,13 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
 
 //  Detektiv-Linie
 
-sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
+bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
     SdrPageView* pPV = pView->GetSdrPageView();
     if (!pPV)
         return false;
 
-    sal_Bool bFound = false;
+    bool bFound = false;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
@@ -282,7 +282,7 @@ sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
             if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
             {
-                bFound = sal_True;
+                bFound = true;
             }
         }
 

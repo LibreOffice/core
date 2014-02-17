@@ -57,7 +57,7 @@ protected:
     Timer           aDragTimer;             // for Drag&Drop
     DECL_LINK( DragTimerHdl, void * );
     DECL_LINK( DragHdl, void * );
-    sal_Bool            bIsInDragMode;
+    bool            bIsInDragMode;
     Point           aMDPos;                 // Position of MouseButtonDown
 
     // member to hold state of the mouse buttons for creation
@@ -99,7 +99,7 @@ public:
 
     sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 
-    sal_Bool    IsDetectiveHit( const Point& rLogicPos );
+    bool    IsDetectiveHit( const Point& rLogicPos );
 
     void    StopDragTimer();
 
