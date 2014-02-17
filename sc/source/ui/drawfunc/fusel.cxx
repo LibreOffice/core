@@ -373,13 +373,13 @@ bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-    sal_Bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+    bool bReturn = FuDraw::MouseButtonUp(rMEvt);
+    bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     SdrObject* pObj = NULL;
     SdrPageView* pPV = NULL;
@@ -441,7 +441,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     pView->UnmarkAllObj();
                     pView->MarkObj(pObj,pPV,false,false);
-                    return (sal_True);
+                    return true;
                 }
             }
             pView->EndDragObj( rMEvt.IsMod1() );
@@ -456,7 +456,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                   FuText* pText = static_cast<FuText*>(pPoor);
                 pText->StopDragMode(pObj );
             }
-            bReturn = sal_True;
+            bReturn = true;
         }
         else if (pView->IsAction() )
         {
@@ -465,7 +465,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pView->EndAction();
             if ( pView->AreObjectsMarked() )
             {
-                bReturn = sal_True;
+                bReturn = true;
 
                 /*  if multi-selection contains a note caption object, remove
                     all other objects from selection. */
@@ -560,13 +560,13 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             Point aMousePixel = rMEvt.GetPosPixel();
                             pText->SetInEditMode( pObj, &aMousePixel );
                         }
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
             }
         }
         else if ( TestDetective( pView->GetSdrPageView(), aPnt ) )
-            bReturn = sal_True;
+            bReturn = true;
     }
 
     // Ein VCControl ist aktiv
@@ -600,7 +600,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

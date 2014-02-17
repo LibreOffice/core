@@ -111,7 +111,7 @@ bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -149,7 +149,7 @@ sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 //  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
 //  SC_MOD()->SetRefDialog( nId, pWnd ? sal_False : sal_True );
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

@@ -117,17 +117,17 @@ bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         pView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = true;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }

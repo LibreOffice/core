@@ -100,13 +100,13 @@ bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
-    sal_Bool bSimple = false;
+    bool bReturn = false;
+    bool bSimple = false;
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
@@ -115,11 +115,11 @@ sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
-        bReturn = sal_True;
-        bSimple = sal_True;         // Doppelklick nicht weiterreichen
+        bReturn = true;
+        bSimple = true;         // Doppelklick nicht weiterreichen
     }
 
-    sal_Bool bParent;
+    bool bParent;
     if (bSimple)
         bParent = FuConstruct::SimpleMouseButtonUp(rMEvt);
     else

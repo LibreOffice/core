@@ -141,7 +141,7 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 // moved from inline to *.cxx
-sal_Bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());

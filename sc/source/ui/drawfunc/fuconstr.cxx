@@ -212,12 +212,12 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = SimpleMouseButtonUp( rMEvt );
+    bool bReturn = SimpleMouseButtonUp( rMEvt );
 
     //      Doppelklick auf Textobjekt? (->fusel)
 
@@ -250,7 +250,7 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                         Point aMousePixel = rMEvt.GetPosPixel();
                         pText->SetInEditMode( pObj, &aMousePixel );
                     }
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }

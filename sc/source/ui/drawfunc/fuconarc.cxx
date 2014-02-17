@@ -95,17 +95,17 @@ bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
-        bReturn = sal_True;
+        bReturn = true;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }

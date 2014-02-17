@@ -35,7 +35,7 @@ public:
                                        // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 

@@ -85,7 +85,7 @@ public:
     virtual bool MouseMove(const MouseEvent&) { return false; }
 
     // moved from inline to *.cxx
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
 
     // moved from inline to *.cxx
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }

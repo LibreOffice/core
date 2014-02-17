@@ -428,12 +428,12 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     if (aDragTimer.IsActive() )
     {
@@ -445,7 +445,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( pView->MouseButtonUp(rMEvt, pWindow) )
-        return (sal_True); // Event von der SdrView ausgewertet
+        return true; // Event von der SdrView ausgewertet
 
     if ( pView->IsDragObj() )
     {
@@ -553,7 +553,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

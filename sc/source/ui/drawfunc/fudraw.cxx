@@ -162,7 +162,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
