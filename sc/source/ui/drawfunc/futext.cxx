@@ -707,7 +707,7 @@ void FuText::SelectionHasChanged()
 \************************************************************************/
 
 void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
-                            sal_Bool bCursorToEnd, const KeyEvent* pInitialKey)
+                            bool bCursorToEnd, const KeyEvent* pInitialKey)
 {
     /*  It is possible to pass a special (unselected) object in pObj, e.g. the
         caption object of a cell note. If pObj is 0, then the selected object

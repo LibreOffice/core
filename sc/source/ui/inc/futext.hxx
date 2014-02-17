@@ -53,8 +53,8 @@ public:
     virtual void SelectionHasChanged();
 
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
-                            sal_Bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
-    void    StopEditMode(sal_Bool bTextDirection = false);
+                            bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
+    void    StopEditMode(bool bTextDirection = false);
     void    StopDragMode(SdrObject* pObject);
 
     // Create default drawing objects via keyboard

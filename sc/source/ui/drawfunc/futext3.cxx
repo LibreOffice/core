@@ -51,7 +51,7 @@
 //  bTextDirection=sal_True means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
 // ------------------------------------------------------------------------------------
 
-void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
+void FuText::StopEditMode(bool /*bTextDirection*/)
 {
     SdrObject* pObject = pView->GetTextEditObject();
     if( !pObject ) return;

@@ -205,7 +205,7 @@ static sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, co
         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
         {
             FuText* pText = (FuText*)pPoor;
-            pText->SetInEditMode( pObj, NULL, sal_True, pInitialKey );
+            pText->SetInEditMode( pObj, NULL, true, pInitialKey );
             //! set cursor to end of text
         }
         bReturn = sal_True;
