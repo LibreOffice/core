@@ -50,14 +50,14 @@ private:
                                     // extracted from model in ctor:
     Size                            aSrcSize;
     INetBookmark*                   pBookmark;
-    sal_Bool                            bGraphic;
-    sal_Bool                            bGrIsBit;
-    sal_Bool                            bOleObj;
+    bool                            bGraphic;
+    bool                            bGrIsBit;
+    bool                            bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
     SdrView*                        pDragSourceView;
-    sal_uInt16                          nDragSourceFlags;
-    sal_Bool                            bDragWasInternal;
+    sal_uInt16                      nDragSourceFlags;
+    bool                            bDragWasInternal;
 
     sal_uInt32                      nSourceDocID;
 

@@ -120,7 +120,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                 {
                     uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
                     if ( xPersObj.is() && xPersObj->hasEntry() )
-                        bOleObj = sal_True;
+                        bOleObj = true;
                 }
                 catch( uno::Exception& )
                 {}
@@ -133,9 +133,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
             if (nSdrObjKind == OBJ_GRAF)
             {
-                bGraphic = sal_True;
+                bGraphic = true;
                 if ( ((SdrGrafObj*)pObject)->GetGraphic().GetType() == GRAPHIC_BITMAP )
-                    bGrIsBit = sal_True;
+                    bGrIsBit = true;
             }
 
             //
@@ -698,7 +698,7 @@ void ScDrawTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
 
 void ScDrawTransferObj::SetDragWasInternal()
 {
-    bDragWasInternal = sal_True;
+    bDragWasInternal = true;
 }
 
 SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
