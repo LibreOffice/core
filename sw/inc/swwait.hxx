@@ -21,15 +21,28 @@
 
 #include "swdllapi.h"
 
+#include <boost/unordered_set.hpp>
+
 class SwDocShell;
+class SfxDispatcher;
 
 class SW_DLLPUBLIC SwWait
 {
-    SwDocShell &rDoc;
-    bool        bLock;
 public:
-    SwWait( SwDocShell &rDocShell, bool bLockDispatcher );
+    // Activate wait cursor for all windows of given document <rDocShell>
+    // Optional all dispatcher could be Locked
+    SwWait(
+        SwDocShell &rDocShell,
+        const bool bLockUnlockDispatcher );
     ~SwWait();
+
+private:
+    void EnterWaitAndLockDispatcher();
+    void LeaveWaitAndUnlockDispatcher();
+
+    SwDocShell& mrDoc;
+    const bool mbLockUnlockDispatcher;
+    boost::unordered_set< SfxDispatcher* > mpLockedDispatchers;
 };
 
 #endif

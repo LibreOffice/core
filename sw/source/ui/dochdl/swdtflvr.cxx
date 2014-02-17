@@ -1158,8 +1158,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             const Point* pPt, sal_Int8 nDropAction,
                             sal_Bool bPasteSelection )
 {
-    SwWait aWait( *rSh.GetView().
-        GetDocShell(), false );
+    SwWait aWait( *rSh.GetView().GetDocShell(), false );
     boost::scoped_ptr<SwTrnsfrActionAndUndo> pAction;
     SwModule* pMod = SW_MOD();
 
