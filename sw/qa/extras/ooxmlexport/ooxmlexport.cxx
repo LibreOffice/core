@@ -3276,6 +3276,18 @@ DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:t", 3);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.docx")
+{
+    // Position of text frame was wrong, because some conversion was missing.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // This was 3295.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    // This was 4611.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -150,7 +150,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[13].Name = "HoriOrientRelation";
     pFrameProperties[13].Value <<= nHoriOrientRelation;
     pFrameProperties[14].Name = "HoriOrientPosition";
-    pFrameProperties[14].Value <<= m_nX;
+    pFrameProperties[14].Value <<= ConversionHelper::convertTwipToMM100(m_nX);
 
 
     // Vertical positioning
@@ -177,7 +177,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[16].Name = "VertOrientRelation";
     pFrameProperties[16].Value <<= nVertOrientRelation;
     pFrameProperties[17].Name = "VertOrientPosition";
-    pFrameProperties[17].Value <<= m_nY;
+    pFrameProperties[17].Value <<= ConversionHelper::convertTwipToMM100(m_nY);
 
     return aFrameProperties;
 }
