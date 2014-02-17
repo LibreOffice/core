@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8c0949_31630ab3",
+        "filename": "vcl/quartz/ctfonts.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-02-17T19:09:00Z",
+      "side": 1,
+      "message": "why the double conversion ? can\u0027t we use kCFStringEncodingUTF16 directly here and avoid the OUString-\u003eOString above ?",
+      "revId": "8b3a7bf497c56f1a46db2d471c01e94a6ebbc741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
