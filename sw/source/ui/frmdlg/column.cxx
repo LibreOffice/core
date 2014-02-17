@@ -479,30 +479,18 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     // announce Controls for additional region at the MoreButton
     Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
-    m_pCLNrEdt->SetLoseFocusHdl(aCLNrLk);
-    m_pCLNrEdt->SetUpHdl(aCLNrLk);
-    m_pCLNrEdt->SetDownHdl(aCLNrLk);
+    m_pCLNrEdt->SetModifyHdl(aCLNrLk);
     Link aLk = LINK(this, SwColumnPage, GapModify);
-    aDistEd1.SetUpHdl(aLk);
-    aDistEd1.SetDownHdl(aLk);
-    aDistEd1.SetLoseFocusHdl(aLk);
-    aDistEd2.SetUpHdl(aLk);
-    aDistEd2.SetDownHdl(aLk);
-    aDistEd2.SetLoseFocusHdl(aLk);
+    aDistEd1.SetModifyHdl(aLk);
+    aDistEd2.SetModifyHdl(aLk);
 
     aLk = LINK(this, SwColumnPage, EdModify);
 
-    aEd1.SetUpHdl(aLk);
-    aEd1.SetDownHdl(aLk);
-    aEd1.SetLoseFocusHdl(aLk);
+    aEd1.SetModifyHdl(aLk);
 
-    aEd2.SetUpHdl(aLk);
-    aEd2.SetDownHdl(aLk);
-    aEd2.SetLoseFocusHdl(aLk);
+    aEd2.SetModifyHdl(aLk);
 
-    aEd3.SetUpHdl(aLk);
-    aEd3.SetDownHdl(aLk);
-    aEd3.SetLoseFocusHdl(aLk);
+    aEd3.SetModifyHdl(aLk);
 
     m_pBtnBack->SetClickHdl(LINK(this, SwColumnPage, Up));
     m_pBtnNext->SetClickHdl(LINK(this, SwColumnPage, Down));
