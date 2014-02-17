@@ -28,7 +28,6 @@
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <memory>
 
 namespace connectivity
 {

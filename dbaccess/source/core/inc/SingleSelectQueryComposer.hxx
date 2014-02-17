@@ -35,8 +35,6 @@
 #include <comphelper/propertycontainer.hxx>
 #include <svx/ParseContext.hxx>
 
-#include <memory>
-
 namespace com { namespace sun { namespace star { namespace util {
     class XNumberFormatsSupplier;
     class XNumberFormatter;

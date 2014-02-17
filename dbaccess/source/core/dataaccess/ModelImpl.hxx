@@ -71,8 +71,6 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/ref.hxx>
 
-#include <memory>
-
 namespace comphelper
 {
     class NamedValueCollection;

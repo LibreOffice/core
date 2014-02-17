@@ -23,8 +23,6 @@
 
 #include <cppuhelper/weakref.hxx>
 
-#include <memory>
-
 namespace connectivity
 {
     namespace mork

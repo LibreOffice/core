@@ -22,8 +22,6 @@
 
 #include <cppuhelper/weakref.hxx>
 
-#include <memory>
-
 // do we want here namespace too?
 class MorkParser;
 

@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <jvmaccess/virtualmachine.hxx>
-#include <memory>
 #include <functional>
 #include <boost/shared_ptr.hpp>
 

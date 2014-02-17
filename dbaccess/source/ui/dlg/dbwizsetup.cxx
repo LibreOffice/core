@@ -80,8 +80,6 @@
 #include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
 
-#include <memory>
-
 namespace dbaui
 {
 using namespace dbtools;

@@ -26,7 +26,6 @@
 #include <stdio.h>
 #endif
 
-#include <vector>
 #include <boost/unordered_map.hpp>
 #ifdef CONTEXT_DIAG
 #include <map>
@@ -54,8 +53,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
-
-#include <memory>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"

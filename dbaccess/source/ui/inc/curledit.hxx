@@ -23,7 +23,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include "dsntypes.hxx"
-#include <memory>
 
 namespace dbaui
 {

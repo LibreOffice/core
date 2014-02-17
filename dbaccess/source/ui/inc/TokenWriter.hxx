@@ -37,8 +37,6 @@
 #include <tools/stream.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
-#include <memory>
-
 namespace com { namespace sun { namespace star {
     namespace sdbc{
         class XRowUpdate;

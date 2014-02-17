@@ -28,8 +28,6 @@
 #include "cppu/EnvDcp.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
-#include <boost/unordered_map.hpp>
-#include <memory>
 
 namespace
 {

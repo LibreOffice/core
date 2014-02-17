@@ -21,10 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#include <vector>
 #include "QEnumTypes.hxx"
-
-#include <memory>
 
 namespace dbaui
 {

@@ -28,8 +28,6 @@
 #include <vcl/mnemonic.hxx>
 #include "IApplicationController.hxx"
 
-#include <memory>
-
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;

@@ -30,7 +30,6 @@
 #include "TableWindowData.hxx"
 
 #include <map>
-#include <memory>
 #include <vector>
 
 struct AcceptDropEvent;

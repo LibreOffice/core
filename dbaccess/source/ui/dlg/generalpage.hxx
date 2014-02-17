@@ -26,7 +26,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <svtools/dialogcontrolling.hxx>
-#include <memory>
 
 namespace dbaui
 {

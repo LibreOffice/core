@@ -27,7 +27,6 @@
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
 #include <memory>
-#include <boost/shared_ptr.hpp>
 
 namespace comphelper
 {
