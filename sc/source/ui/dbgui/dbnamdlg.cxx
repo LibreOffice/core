@@ -246,7 +246,7 @@ void ScDbNameDlg::Init()
 
     m_pEdAssign->SetText( theAreaStr );
     m_pEdName->GrabFocus();
-    bSaved=sal_True;
+    bSaved = true;
     pSaveObj->Save();
     NameModifyHdl( 0 );
 }
@@ -289,7 +289,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         m_pEdAssign->SetRefString( aRefStr );
         m_pOptions->Enable();
         m_pBtnAdd->Enable();
-        bSaved=sal_True;
+        bSaved = true;
         pSaveObj->Save();
     }
 }
@@ -477,7 +477,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 m_pBtnStripData->Check( false );
                 SetInfoStrings( NULL );     // leer
                 theCurArea = ScRange();
-                bSaved=sal_True;
+                bSaved = true;
                 pSaveObj->Save();
                 NameModifyHdl( 0 );
             }
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 
             if(!bSaved)
             {
-                bSaved=sal_True;
+                bSaved = true;
                 pSaveObj->Save();
             }
             UpdateDBData( theName );

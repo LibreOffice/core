@@ -68,7 +68,7 @@ private:
     PushButton*         m_pBtnAdd;
     PushButton*         m_pBtnRemove;
 
-    sal_Bool            bSaved;
+    bool            bSaved;
 
     OUString        aStrAdd;
     OUString        aStrModify;
@@ -79,7 +79,7 @@ private:
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    sal_Bool            bRefInputMode;
+    bool            bRefInputMode;
     ScAddress::Details aAddrDetails;
 
     ScDBCollection  aLocalDbCol;
