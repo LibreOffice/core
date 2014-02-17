@@ -111,6 +111,7 @@ core_constructor_list = [
 extended_core_factory_list = core_factory_list + [
     ("libanimcorelo.a", "animcore_component_getFactory"),
     ("libavmedialo.a", "avmedia_component_getFactory"),
+    ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
     ("libchartcorelo.a", "chartcore_component_getFactory"),
     ("libcuilo.a", "cui_component_getFactory"),
     ("libembobj.a", "embobj_component_getFactory"),
