@@ -81,7 +81,7 @@ public:
     virtual void DoPaste();
 
     // Mouse- & Key-Events; return value=TRUE: Event was processed
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
 
     // moved from inline to *.cxx

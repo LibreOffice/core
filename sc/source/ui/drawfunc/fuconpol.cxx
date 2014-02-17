@@ -138,11 +138,9 @@ sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
+bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 /*************************************************************************

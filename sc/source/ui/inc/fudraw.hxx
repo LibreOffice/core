@@ -35,7 +35,7 @@ class FuDraw : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuDraw();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
 
     virtual void Activate();
     virtual void Deactivate();

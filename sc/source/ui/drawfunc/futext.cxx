@@ -578,13 +578,13 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 |*
 \************************************************************************/
 
-sal_Bool FuText::KeyInput(const KeyEvent& rKEvt)
+bool FuText::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     if ( pView->KeyInput(rKEvt, pWindow) )
     {
-        bReturn = sal_True;
+        bReturn = true;
         lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
     else
@@ -592,7 +592,7 @@ sal_Bool FuText::KeyInput(const KeyEvent& rKEvt)
         bReturn = FuDraw::KeyInput(rKEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 

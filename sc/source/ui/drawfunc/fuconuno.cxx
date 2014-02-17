@@ -122,10 +122,9 @@ sal_Bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
+bool FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 /*************************************************************************

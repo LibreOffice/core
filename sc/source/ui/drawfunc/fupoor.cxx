@@ -175,11 +175,9 @@ sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
+bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
-    sal_Bool bReturn = false;
-
-    return(bReturn);
+    return false;
 }
 
 sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)

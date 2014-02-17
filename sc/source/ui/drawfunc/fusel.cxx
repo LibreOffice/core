@@ -612,16 +612,9 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
+bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
-
-    if (!bReturn)
-    {
-        bReturn = FuDraw::KeyInput(rKEvt);
-    }
-
-    return(bReturn);
+    return FuDraw::KeyInput(rKEvt);
 }
 
 

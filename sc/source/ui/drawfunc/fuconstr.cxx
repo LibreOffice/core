@@ -310,9 +310,9 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
+bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -321,7 +321,7 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
             {
                 pView->BrkAction();
                 pWindow->ReleaseMouse();
-                bReturn = sal_True;
+                bReturn = true;
             }
             else                            // Zeichenmodus beenden
             {
@@ -332,7 +332,7 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_DELETE:
             pView->DeleteMarked();
-            bReturn = sal_True;
+            bReturn = true;
             break;
     }
 
@@ -341,7 +341,7 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
         bReturn = FuDraw::KeyInput(rKEvt);
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

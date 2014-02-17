@@ -179,9 +179,9 @@ sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
+bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -189,7 +189,7 @@ sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
             //  beenden
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            bReturn = sal_True;
+            bReturn = true;
             break;
     }
 
@@ -198,7 +198,7 @@ sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
         bReturn = FuPoor::KeyInput(rKEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 /*************************************************************************

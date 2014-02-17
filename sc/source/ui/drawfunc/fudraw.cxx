@@ -213,9 +213,9 @@ static sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, co
     return bReturn;
 }
 
-sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
+bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
     ScViewData& rViewData = *pViewShell->GetViewData();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
@@ -225,13 +225,13 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus
                 rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-                bReturn = sal_True;
+                bReturn = true;
             }
             else if ( pViewShell->IsDrawSelMode() )
             {
                 pView->UnmarkAll();
                 rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-                bReturn = sal_True;
+                bReturn = true;
             }
             else if ( pView->AreObjectsMarked() )
             {
@@ -246,13 +246,13 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if (!pView->AreObjectsMarked())
                     pViewShell->SetDrawShell( false );
 
-                bReturn = sal_True;
+                bReturn = true;
             }
             break;
 
         case KEY_DELETE:                    //! ueber Accelerator
             pView->DeleteMarked();
-            bReturn = sal_True;
+            bReturn = true;
         break;
 
         case KEY_RETURN:
@@ -271,10 +271,10 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
 
                         // consumed
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                     else if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )       // start text edit for suitable object
-                        bReturn = sal_True;
+                        bReturn = true;
                 }
             }
         }
@@ -291,7 +291,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )            // start text edit for suitable object
-                        bReturn = sal_True;
+                        bReturn = true;
                 }
             }
         }
@@ -325,7 +325,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
 
                 // handle Mod1 and Mod2 to get travelling running on different systems
@@ -348,7 +348,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // consumed
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -373,7 +373,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -398,7 +398,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -527,7 +527,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 // II
                                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                                bReturn = sal_True;
+                                bReturn = true;
                             }
                         }
                         else
@@ -568,7 +568,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                                 pView->MakeVisible(aVisRect, *pWindow);
 
-                                bReturn = sal_True;
+                                bReturn = true;
                             }
                         }
                     }
@@ -635,7 +635,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                             }
                         }
 
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
             }
@@ -659,11 +659,11 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             // start text edit for suitable object, pass key event to OutlinerView
             if ( lcl_KeyEditMode( pObj, pViewShell, &rKEvt ) )
-                bReturn = sal_True;
+                bReturn = true;
         }
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 // II

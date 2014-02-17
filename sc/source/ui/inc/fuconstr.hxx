@@ -32,7 +32,7 @@ class FuConstruct : public FuDraw
 
     virtual ~FuConstruct();
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);

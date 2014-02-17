@@ -155,10 +155,9 @@ sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
+bool FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 /*************************************************************************
