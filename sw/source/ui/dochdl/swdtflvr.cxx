@@ -831,7 +831,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
     {
         SwWait *pWait = 0;
         if( pWrtShell->ShouldWait() )
-            pWait = new SwWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+            pWait = new SwWait( *pWrtShell->GetView().GetDocShell(), true );
 
         pClpDocFac = new SwDocFac;
 
@@ -996,7 +996,7 @@ int SwTransferable::CalculateAndCopy()
 {
     if(!pWrtShell)
         return 0;
-    SwWait aWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pWrtShell->GetView().GetDocShell(), true );
 
     String aStr( pWrtShell->Calculate() );
 
@@ -1018,7 +1018,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 {
     if(!pWrtShell)
         return 0;
-    SwWait aWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pWrtShell->GetView().GetDocShell(), true );
 
     pClpDocFac = new SwDocFac;
     SwDoc *const pCDoc = lcl_GetDoc(*pClpDocFac);
@@ -1163,8 +1163,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                             const Point* pPt, sal_Int8 nDropAction,
                             sal_Bool bPasteSelection )
 {
-    SwWait aWait( *rSh.GetView().
-        GetDocShell(), sal_False );
+    SwWait aWait( *rSh.GetView().GetDocShell(), false );
     SwTrnsfrActionAndUndo* pAction = 0;
     SwModule* pMod = SW_MOD();
 
@@ -2854,7 +2853,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     TransferableDataHelper& rData,
                                     sal_uLong nFormat )
 {
-    SwWait aWait( *rSh.GetView().GetDocShell(), sal_False );
+    SwWait aWait( *rSh.GetView().GetDocShell(), false );
     int nRet = 0;
 
     sal_uLong nPrivateFmt = FORMAT_PRIVATE;

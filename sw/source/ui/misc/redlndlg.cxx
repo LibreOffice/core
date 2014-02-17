@@ -145,7 +145,7 @@ void SwModelessRedlineAcceptDlg::Activate()
 
     if (pChildWin->GetOldDocShell() != pDocSh)
     {   // Dok-Wechsel
-        SwWait aWait( *pDocSh, sal_False );
+        SwWait aWait( *pDocSh, false );
         SwWrtShell* pSh = pView->GetWrtShellPtr();
 
         pChildWin->SetOldDocShell(pDocSh);  // Rekursion vermeiden (durch Modified-Hdl)
@@ -310,7 +310,7 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 
 void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
 {
-    SwWait aWait( *::GetActiveView()->GetDocShell(), sal_False );
+    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
     pTable->SetUpdateMode(sal_False);
     aUsedSeqNo.Remove((sal_uInt16)0, aUsedSeqNo.Count());
 
@@ -480,7 +480,7 @@ void SwRedlineAcceptDlg::Activate()
         return;
 
     SwView *pView = ::GetActiveView();
-    SwWait aWait( *pView->GetDocShell(), sal_False );
+    SwWait aWait( *pView->GetDocShell(), false );
 
     aUsedSeqNo.Remove((sal_uInt16)0, aUsedSeqNo.Count());
 
@@ -922,7 +922,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetView().GetDocShell(), true );
     pSh->StartAction();
 
     // #111827#
@@ -1328,7 +1328,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                     if (pTable->GetSortedCol() == nSortMode)
                         bSortDir = !pTable->GetSortDirection();
 
-                    SwWait aWait( *::GetActiveView()->GetDocShell(), sal_False );
+                    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
                     pTable->SortByCol(nSortMode, bSortDir);
                     if (nSortMode == 0xffff)
                         Init();             // Alles neu fuellen

@@ -106,7 +106,7 @@ TblWait::TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt1
     sal_Bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
                  20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().Count());
     if( bWait )
-        pWait = new SwWait( rDocShell, sal_True );
+        pWait = new SwWait( rDocShell, true );
 }
 
 
@@ -1145,7 +1145,7 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
     SwTabFrm *pTab = pFrm ? pFrm->FindTabFrm() : 0;
     if( pTab && pTab->GetTable()->GetRowsToRepeat() != nSet )
     {
-        SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+        SwWait aWait( *GetDoc()->GetDocShell(), true );
         SET_CURR_SHELL( this );
         StartAllAction();
         GetDoc()->SetRowsToRepeat( *pTab->GetTable(), nSet );

@@ -26,15 +26,28 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
+#include <hash_set>
+
 class SwDocShell;
+class SfxDispatcher;
 
 class SW_DLLPUBLIC SwWait
 {
-    SwDocShell &rDoc;
-    sal_Bool        bLock;
 public:
-    SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher );
+    // Activate wait cursor for all windows of given document <rDocShell>
+    // Optional all dispatcher could be Locked
+    SwWait(
+        SwDocShell &rDocShell,
+        const bool bLockUnlockDispatcher );
     ~SwWait();
+
+private:
+    void EnterWaitAndLockDispatcher();
+    void LeaveWaitAndUnlockDispatcher();
+
+    SwDocShell& mrDoc;
+    const bool mbLockUnlockDispatcher;
+    std::unordered_set< SfxDispatcher* > mpLockedDispatchers;
 };
 
 #endif

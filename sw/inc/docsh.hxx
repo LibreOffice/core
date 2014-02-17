@@ -280,12 +280,6 @@ public:
 
     sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
 
-    //Activate wait cursor for all windows of this document
-    //Optionally all dispatcher could be Locked
-    //Usually locking should be done using the class: SwWaitObject!
-    void EnterWait( sal_Bool bLockDispatcher );
-    void LeaveWait( sal_Bool bLockDispatcher );
-
     void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
 
     sal_uLong LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,

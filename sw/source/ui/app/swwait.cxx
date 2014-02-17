@@ -24,48 +24,69 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <swwait.hxx>
+#include <docsh.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/window.hxx>
-#include <docsh.hxx>
-#include <swwait.hxx>
 
 
-void SwDocShell::EnterWait( sal_Bool bLockDispatcher )
+SwWait::SwWait(
+    SwDocShell &rDocShell,
+    const bool bLockUnlockDispatcher )
+    : mrDoc ( rDocShell )
+    , mbLockUnlockDispatcher( bLockUnlockDispatcher )
+    , mpLockedDispatchers()
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
-    while ( pFrame )
-    {
-        pFrame->GetWindow().EnterWait();
-        if ( bLockDispatcher )
-            pFrame->GetDispatcher()->Lock( sal_True );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, sal_False );
-    }
-}
-
-void SwDocShell::LeaveWait( sal_Bool bLockDispatcher )
-{
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
-    while ( pFrame )
-    {
-        pFrame->GetWindow().LeaveWait();
-        if ( bLockDispatcher )
-            pFrame->GetDispatcher()->Lock( sal_False );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, sal_False );
-    }
-}
-
-SwWait::SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher ) :
-    rDoc ( rDocShell ),
-    bLock( bLockDispatcher )
-{
-    rDoc.EnterWait( bLock );
+    EnterWaitAndLockDispatcher();
 }
 
 SwWait::~SwWait()
 {
-    rDoc.LeaveWait( bLock );
+    LeaveWaitAndUnlockDispatcher();
+}
+
+void SwWait::EnterWaitAndLockDispatcher()
+{
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, sal_False );
+    while ( pFrame )
+    {
+        pFrame->GetWindow().EnterWait();
+        if ( mbLockUnlockDispatcher )
+        {
+            // do not look already locked dispatchers
+            SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            if ( !pDispatcher->IsLocked() )
+            {
+                pDispatcher->Lock( sal_True );
+                mpLockedDispatchers.insert( pDispatcher );
+            }
+        }
+
+        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, sal_False );
+    }
+}
+
+void SwWait::LeaveWaitAndUnlockDispatcher()
+{
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, sal_False );
+    while ( pFrame )
+    {
+        pFrame->GetWindow().LeaveWait();
+        if ( mbLockUnlockDispatcher )
+        {
+            // only unlock dispatchers which had been locked
+            SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            if ( mpLockedDispatchers.find( pDispatcher ) != mpLockedDispatchers.end() )
+            {
+                mpLockedDispatchers.erase( pDispatcher );
+                pDispatcher->Lock( sal_False );
+            }
+        }
+
+        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, sal_False );
+    }
 }
 
 

@@ -244,7 +244,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
       return sal_False; // #129881# return if no reader is found
     SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
         // SfxProgress unterdruecken, wenn man Embedded ist
     SW_MOD()->SetEmbeddedLoadSave(
@@ -307,7 +307,7 @@ sal_Bool SwDocShell::Save()
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // --> OD 2006-03-17 #i62875#
@@ -416,7 +416,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             }
         }
     }
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -746,7 +746,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     //Keine View also das ganze Dokument!
     if ( pWrtShell )
     {
-        SwWait aWait( *this, sal_True );
+        SwWait aWait( *this, true );
         // --> OD 2009-12-31 #i106906#
         const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
         pWrtShell->LockView( sal_True );

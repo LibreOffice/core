@@ -244,8 +244,6 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( !pDoc )
     {
-//MA: Kommt bei der OLE-Registration vor!
-//      ASSERT( !this, "DocShell ist nicht richtig initialisiert!" );
         return ;
     }
 
@@ -261,18 +259,16 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // swithc for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
         {
-            case SFX_HINT_TITLECHANGED:
-                if( GetMedium() )
-                    nAction = 2;
+        case SFX_HINT_TITLECHANGED:
+            if( GetMedium() )
+                nAction = 2;
             break;
         }
     }
     else if( rHint.ISA(SfxEventHint) &&
         ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
     {
-        // --> OD 2004-12-03 #i38126# - own action id
         nAction = 3;
-        // <--
     }
 
     if( nAction )
@@ -289,31 +285,25 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case 2:
             pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
-        // --> OD 2004-12-03 #i38126# - own action for event LOADFINISHED
-        // in order to avoid a modified document.
-        // --> OD 2005-02-01 #i41679# - Also for the instance of <SwDoc>
-        // it has to be assured, that it's not modified.
+
+        // own action for event LOADFINISHED in order to avoid a modified document.
+        // Also for the instance of <SwDoc> it has to be assured, that it's not modified.
         // Perform the same as for action id 1, but disable <SetModified>.
         case 3:
             {
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
                     EnableSetModified( sal_False );
-                // --> OD 2005-02-01 #i41679#
                 const bool bIsDocModified = pDoc->IsModified();
-                // <--
 
                 pDoc->DocInfoChgd( );
 
-                // --> OD 2005-02-01 #i41679#
                 if ( !bIsDocModified )
                     pDoc->ResetModified();
-                // <--
                 if ( bResetModified )
                     EnableSetModified( sal_True );
             }
             break;
-        // <--
         }
 
         if( pWrtShell )
@@ -1445,7 +1435,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     if( PrepareClose( sal_False ) )
                     {
-                        SwWait aWait( *this, sal_True );
+                        SwWait aWait( *this, true );
 
                         //bDone = bCreateHtml           //#outline level,removed by zhaojianwei
                         //  ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )

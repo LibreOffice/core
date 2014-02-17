@@ -293,7 +293,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
                                     const SfxItemSet* pSet)
 {
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetView().GetDocShell(), true );
     sal_Bool bRet = sal_True;
     const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
     SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;

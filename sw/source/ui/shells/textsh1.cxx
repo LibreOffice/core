@@ -1358,7 +1358,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         SwDocStat aCurr;
         SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
         {
-            SwWait aWait( *GetView().GetDocShell(), sal_True );
+            SwWait aWait( *GetView().GetDocShell(), true );
             rSh.StartAction();
             rSh.CountWords( aCurr );
             rSh.UpdateDocStat( aDocStat );

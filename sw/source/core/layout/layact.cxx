@@ -167,7 +167,7 @@ void SwLayAction::CheckWaitCrsr()
     if ( !IsWait() && IsWaitAllowed() && IsPaint() &&
          ((Ticks() - GetStartTicks()) >= CLOCKS_PER_SEC/2) )
     {
-        pWait = new SwWait( *pRoot->GetFmt()->GetDoc()->GetDocShell(), sal_True );
+        pWait = new SwWait( *pRoot->GetFmt()->GetDoc()->GetDocShell(), true );
     }
 }
 

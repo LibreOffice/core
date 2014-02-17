@@ -209,7 +209,7 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
                                 sal_Bool bLink, GraphicFilter *pFlt,
                                 Graphic* pPreviewGrf, sal_Bool bRule )
 {
-    SwWait aWait( *GetDocShell(), sal_True );
+    SwWait aWait( *GetDocShell(), true );
 
     Graphic aGrf;
     int nRes = GRFILTER_OK;
@@ -2146,7 +2146,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 sal_uLong nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
-                    SwWait aWait( *GetDocShell(), sal_True );
+                    SwWait aWait( *GetDocShell(), true );
                     pWrtShell->StartAllAction();
                     if ( pWrtShell->HasSelection() )
                         pWrtShell->DelRight();      // Selektionen loeschen
@@ -2206,7 +2206,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLoc
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {
-            SwWait aWait( *GetDocShell(), sal_True );
+            SwWait aWait( *GetDocShell(), true );
             pWrtShell->StartAllAction();
 
             pWrtShell->EnterStdMode();          // Selektionen loeschen

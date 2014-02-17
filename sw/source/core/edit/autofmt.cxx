@@ -2683,7 +2683,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     {
         aAFFlags = *pAFlags;
         if( !aAFFlags.bAFmtByInput )
-            pWait = new SwWait( *GetDoc()->GetDocShell(), sal_True );
+            pWait = new SwWait( *GetDoc()->GetDocShell(), true );
     }
 
     SwPaM* pCrsr = GetCrsr();

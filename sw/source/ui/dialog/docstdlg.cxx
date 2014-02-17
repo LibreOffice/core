@@ -166,7 +166,7 @@ void SwDocStatPage::Update()
 
     ASSERT( pSh, "Shell not found" );
 
-    SwWait aWait( *pSh->GetDoc()->GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetDoc()->GetDocShell(), true );
     pSh->StartAction();
     aDocStat = pSh->GetDoc()->GetDocStat();
     pSh->GetDoc()->UpdateDocStat( aDocStat );
