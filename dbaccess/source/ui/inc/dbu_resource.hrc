@@ -76,7 +76,6 @@
 //========================================================================
 // dialog ids
 
-#define DLG_DBASE_INDEXES               RID_DIALOG_START +  1
 #define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 

@@ -23,7 +23,6 @@
 #include <sfx2/app.hxx>
 #include "moduledbu.hxx"
 #include "dbu_dlg.hrc"
-#include "dbfindex.hrc"
 #include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
@@ -41,45 +40,40 @@ using namespace ::svt;
 const OString aGroupIdent("dBase III");
 
 
-ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, OUString aDataSrcName )
-    : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
-    aPB_OK(             this, ModuleRes( PB_OK ) ),
-    aPB_CANCEL(         this, ModuleRes( PB_CANCEL ) ),
-    aPB_HELP(           this, ModuleRes( PB_HELP ) ),
-    m_FT_Tables(        this, ModuleRes( FT_TABLES ) ),
-    aCB_Tables(         this, ModuleRes( CB_TABLES ) ),
-    m_FL_Indexes(       this, ModuleRes( FL_INDEXES ) ),
-    m_FT_TableIndexes(  this, ModuleRes( FT_TABLEINDEXES ) ),
-    aLB_TableIndexes(   this, ModuleRes( LB_TABLEINDEXES ) ),
-    m_FT_AllIndexes(    this, ModuleRes( FT_ALLINDEXES ) ),
-    aLB_FreeIndexes(    this, ModuleRes( LB_FREEINDEXES ) ),
-    aIB_Add(            this, ModuleRes( IB_ADD ) ),
-    aIB_Remove(         this, ModuleRes( IB_REMOVE ) ),
-    aIB_AddAll(         this, ModuleRes( IB_ADDALL ) ),
-    aIB_RemoveAll(      this, ModuleRes( IB_REMOVEALL ) ),
-    m_aDSN(aDataSrcName),
-    m_bCaseSensitiv(sal_True)
+ODbaseIndexDialog::ODbaseIndexDialog(Window * pParent, OUString aDataSrcName)
+    : ModalDialog(pParent, "DBaseIndexDialog", "dbaccess/ui/dbaseindexdialog.ui")
+    , m_aDSN(aDataSrcName)
+    , m_bCaseSensitiv(true)
 {
+    get(m_pPB_OK, "ok");
+    get(m_pCB_Tables, "table");
+    get(m_pIndexes, "frame");
+    get(m_pLB_TableIndexes, "tableindex");
+    get(m_pLB_FreeIndexes, "freeindex");
+    Size aSize(LogicToPixel(Size(76, 98), MAP_APPFONT));
+    m_pLB_TableIndexes->set_height_request(aSize.Height());
+    m_pLB_TableIndexes->set_width_request(aSize.Width());
+    m_pLB_FreeIndexes->set_height_request(aSize.Height());
+    m_pLB_FreeIndexes->set_width_request(aSize.Width());
+    get(m_pAdd, "add");
+    get(m_pAddAll, "addall");
+    get(m_pRemove, "remove");
+    get(m_pRemoveAll, "removeall");
 
-    aCB_Tables.SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
-    aIB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
-    aIB_Remove.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveClickHdl) );
-    aIB_AddAll.SetClickHdl( LINK(this, ODbaseIndexDialog, AddAllClickHdl) );
-    aIB_RemoveAll.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
-    aPB_OK.SetClickHdl( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
-    aLB_FreeIndexes.SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
-    aLB_TableIndexes.SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+    m_pCB_Tables->SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
+    m_pAdd->SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
+    m_pRemove->SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveClickHdl) );
+    m_pAddAll->SetClickHdl( LINK(this, ODbaseIndexDialog, AddAllClickHdl) );
+    m_pRemoveAll->SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
+    m_pPB_OK->SetClickHdl( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
-    aCB_Tables.SetDropDownLineCount(8);
+    m_pLB_FreeIndexes->SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+    m_pLB_TableIndexes->SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+
+    m_pCB_Tables->SetDropDownLineCount(8);
     Init();
     SetCtrls();
-    FreeResource();
-}
-
-ODbaseIndexDialog::~ODbaseIndexDialog()
-{
-
 }
 
 sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
@@ -105,11 +99,11 @@ sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iter
 
 void ODbaseIndexDialog::checkButtons()
 {
-    aIB_Add.Enable(0 != aLB_FreeIndexes.GetSelectEntryCount());
-    aIB_AddAll.Enable(0 != aLB_FreeIndexes.GetEntryCount());
+    m_pAdd->Enable(0 != m_pLB_FreeIndexes->GetSelectEntryCount());
+    m_pAddAll->Enable(0 != m_pLB_FreeIndexes->GetEntryCount());
 
-    aIB_Remove.Enable(0 != aLB_TableIndexes.GetSelectEntryCount());
-    aIB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
+    m_pRemove->Enable(0 != m_pLB_TableIndexes->GetSelectEntryCount());
+    m_pRemoveAll->Enable(0 != m_pLB_TableIndexes->GetEntryCount());
 }
 
 OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
@@ -162,7 +156,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
     if (!GetTable(_rTableName, aTablePos))
         return aReturn;
 
-    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes, _bMustExist);
+    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, *m_pLB_TableIndexes, _bMustExist);
 }
 
 void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
@@ -171,7 +165,7 @@ void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTa
     if (!GetTable(_rTableName, aTablePos))
         return;
 
-    implInsertIndex(_rIndex, aTablePos->aIndexList, aLB_TableIndexes);
+    implInsertIndex(_rIndex, aTablePos->aIndexList, *m_pLB_TableIndexes);
 }
 
 IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
@@ -190,8 +184,8 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 {
-    OUString aSelection = aLB_FreeIndexes.GetSelectEntry();
-    OUString aTableName = aCB_Tables.GetText();
+    OUString aSelection = m_pLB_FreeIndexes->GetSelectEntry();
+    OUString aTableName = m_pCB_Tables->GetText();
     OTableIndex aIndex = RemoveFreeIndex( aSelection, sal_True );
     InsertTableIndex( aTableName, aIndex );
 
@@ -201,8 +195,8 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 {
-    OUString aSelection = aLB_TableIndexes.GetSelectEntry();
-    OUString aTableName = aCB_Tables.GetText();
+    OUString aSelection = m_pLB_TableIndexes->GetSelectEntry();
+    OUString aTableName = m_pCB_Tables->GetText();
     OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, sal_True );
     InsertFreeIndex( aIndex );
 
@@ -212,11 +206,11 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 {
-    sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
-    OUString aTableName = aCB_Tables.GetText();
+    sal_uInt16 nCnt = m_pLB_FreeIndexes->GetEntryCount();
+    OUString aTableName = m_pCB_Tables->GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0), sal_True ) );
+        InsertTableIndex( aTableName, RemoveFreeIndex( m_pLB_FreeIndexes->GetEntry(0), sal_True ) );
 
     checkButtons();
     return 0;
@@ -224,11 +218,11 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
 {
-    sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
-    OUString aTableName = aCB_Tables.GetText();
+    sal_uInt16 nCnt = m_pLB_TableIndexes->GetEntryCount();
+    OUString aTableName = m_pCB_Tables->GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0), sal_True ) );
+        InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), sal_True ) );
 
     checkButtons();
     return 0;
@@ -248,15 +242,15 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
         return 0L;
 
     // fill the listbox for the indexes
-    aLB_TableIndexes.Clear();
+    m_pLB_TableIndexes->Clear();
     for (   TableIndexList::const_iterator aLoop = aTablePos->aIndexList.begin();
             aLoop != aTablePos->aIndexList.end();
             ++aLoop
         )
-        aLB_TableIndexes.InsertEntry( aLoop->GetIndexFileName() );
+        m_pLB_TableIndexes->InsertEntry( aLoop->GetIndexFileName() );
 
     if ( aTablePos->aIndexList.size() )
-        aLB_TableIndexes.SelectEntryPos(0);
+        m_pLB_TableIndexes->SelectEntryPos(0);
 
     checkButtons();
     return 0;
@@ -264,16 +258,8 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 
 void ODbaseIndexDialog::Init()
 {
-    aPB_OK.Disable();
-    m_FL_Indexes.Disable();
-    m_FT_TableIndexes.Disable();
-    aLB_TableIndexes.Disable();
-    m_FT_AllIndexes.Disable();
-    aLB_FreeIndexes.Disable();
-    aIB_Add.Disable();
-    aIB_Remove.Disable();
-    aIB_AddAll.Disable();
-    aIB_RemoveAll.Disable();
+    m_pPB_OK->Disable();
+    m_pIndexes->Disable();
 
     // All indices are first added to a list of free indices.
     // Afterwards, check the index of each table in the Inf-file.
@@ -371,12 +357,8 @@ void ODbaseIndexDialog::Init()
 
     if (m_aTableInfoList.size())
     {
-        aPB_OK.Enable();
-        m_FL_Indexes.Enable();
-        m_FT_TableIndexes.Enable();
-        aLB_TableIndexes.Enable();
-        m_FT_AllIndexes.Enable();
-        aLB_FreeIndexes.Enable();
+        m_pPB_OK->Enable();
+        m_pIndexes->Enable();
     }
 
     checkButtons();
@@ -389,23 +371,23 @@ void ODbaseIndexDialog::SetCtrls()
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
-        aCB_Tables.InsertEntry( aLoop->aTableName );
+        m_pCB_Tables->InsertEntry( aLoop->aTableName );
 
     // put the first dataset into Edit
     if( m_aTableInfoList.size() )
     {
         const OTableInfo& rTabInfo = m_aTableInfoList.front();
-        aCB_Tables.SetText( rTabInfo.aTableName );
+        m_pCB_Tables->SetText( rTabInfo.aTableName );
 
         // build ListBox of the table indices
         for (   TableIndexList::const_iterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
             )
-            aLB_TableIndexes.InsertEntry( aIndex->GetIndexFileName() );
+            m_pLB_TableIndexes->InsertEntry( aIndex->GetIndexFileName() );
 
         if( rTabInfo.aIndexList.size() )
-            aLB_TableIndexes.SelectEntryPos( 0 );
+            m_pLB_TableIndexes->SelectEntryPos( 0 );
     }
 
     // ListBox of the free indices
@@ -413,12 +395,12 @@ void ODbaseIndexDialog::SetCtrls()
             aFree != m_aFreeIndexList.end();
             ++aFree
         )
-        aLB_FreeIndexes.InsertEntry( aFree->GetIndexFileName() );
+        m_pLB_FreeIndexes->InsertEntry( aFree->GetIndexFileName() );
 
     if( m_aFreeIndexList.size() )
-        aLB_FreeIndexes.SelectEntryPos( 0 );
+        m_pLB_FreeIndexes->SelectEntryPos( 0 );
 
-    TableSelectHdl(&aCB_Tables);
+    TableSelectHdl(m_pCB_Tables);
     checkButtons();
 }
 

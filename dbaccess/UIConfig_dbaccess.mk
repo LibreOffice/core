@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/colwidthdialog \
+    dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/fielddialog \
     dbaccess/uiconfig/ui/finalpagewizard \

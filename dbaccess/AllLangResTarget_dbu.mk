@@ -43,7 +43,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/dlg/dbadmin2.src \
     dbaccess/source/ui/dlg/dbadminsetup.src \
     dbaccess/source/ui/dlg/dbadmin.src \
-    dbaccess/source/ui/dlg/dbfindex.src \
     dbaccess/source/ui/dlg/directsql.src \
     dbaccess/source/ui/dlg/indexdialog.src \
     dbaccess/source/ui/dlg/paramdialog.src \

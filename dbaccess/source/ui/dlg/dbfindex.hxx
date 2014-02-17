@@ -23,6 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <list>
@@ -72,25 +73,16 @@ typedef ::std::list< OTableInfo >   TableInfoList;
 class ODbaseIndexDialog : public ModalDialog
 {
 protected:
-    OKButton        aPB_OK;
-    CancelButton    aPB_CANCEL;
-    HelpButton      aPB_HELP;
+    OKButton*       m_pPB_OK;
+    ComboBox*       m_pCB_Tables;
+    VclContainer*   m_pIndexes;
+    ListBox*        m_pLB_TableIndexes;
+    ListBox*        m_pLB_FreeIndexes;
 
-    FixedText       m_FT_Tables;
-    ComboBox        aCB_Tables;
-
-    FixedLine       m_FL_Indexes;
-
-    FixedText       m_FT_TableIndexes;
-    ListBox         aLB_TableIndexes;
-
-    FixedText       m_FT_AllIndexes;
-    ListBox         aLB_FreeIndexes;
-
-    ImageButton      aIB_Add;
-    ImageButton      aIB_Remove;
-    ImageButton      aIB_AddAll;
-    ImageButton      aIB_RemoveAll;
+    PushButton*     m_pAdd;
+    PushButton*     m_pRemove;
+    PushButton*     m_pAddAll;
+    PushButton*     m_pRemoveAll;
 
     DECL_LINK( TableSelectHdl, ComboBox* );
     DECL_LINK( AddClickHdl, PushButton* );
@@ -112,8 +104,8 @@ protected:
     OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
     void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
-    OTableIndex RemoveFreeIndex( const OUString& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
-    void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, aLB_FreeIndexes); }
+    OTableIndex RemoveFreeIndex( const OUString& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, *m_pLB_FreeIndexes, _bMustExist); }
+    void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, *m_pLB_FreeIndexes); }
     OTableIndex RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, sal_Bool _bMustExist );
     void        InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex );
 
@@ -121,7 +113,6 @@ protected:
 
 public:
     ODbaseIndexDialog( Window * pParent, OUString aDataSrcName );
-    virtual ~ODbaseIndexDialog();
 };
 
 }   // namespace dbaui
