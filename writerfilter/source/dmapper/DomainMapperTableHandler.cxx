@@ -912,22 +912,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         }
         catch ( const lang::IllegalArgumentException &e )
         {
+            SAL_INFO("writerfilter.dmapper",
+                    "Conversion to table error: " << e.Message);
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-            fprintf( stderr, "Conversion to table error: %s\n",
-                    OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             dmapper_logger->chars(std::string("failed to import table!"));
-#else
-            (void)e;
 #endif
         }
         catch ( const uno::Exception &e )
         {
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
-            fprintf( stderr, "Exception during table creation: %s\n",
-                    OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) );
-#else
-            (void) e;
-#endif
+            SAL_INFO("writerfilter.dmapper",
+                    "Exception during table creation: " << e.Message);
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.

@@ -3308,7 +3308,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
 
-                // If there is a negative left margin, then the first cellx is relateve to that.
+                // If there is a negative left margin, then the first cellx is relative to that.
                 RTFValue::Pointer_t pTblInd = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd);
                 if (m_aStates.top().nCellX == 0 && pTblInd.get())
                 {

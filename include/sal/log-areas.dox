@@ -393,6 +393,8 @@ certain functionality.
 @section writerfilter
 
 @li @c writerfilter
+@li @c writerfilter.dmapper
+@li @c writerfilter.rtf
 @li @c writerfilter.profile - load times of filters
 
 @section writerperfect
