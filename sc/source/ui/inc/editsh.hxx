@@ -40,8 +40,8 @@ private:
     EditView*   pEditView;
     ScViewData* pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool        bPastePossible;
-    sal_Bool        bIsInsertMode;
+    bool        bPastePossible;
+    bool        bIsInsertMode;
 
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();

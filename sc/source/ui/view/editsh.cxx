@@ -92,7 +92,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pViewData       (pData),
     pClipEvtLstnr   (NULL),
     bPastePossible  (false),
-    bIsInsertMode   (sal_True)
+    bIsInsertMode   (true)
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
