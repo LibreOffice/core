@@ -425,52 +425,5 @@ ModalDialog RID_DLG_MAPPING
     };
     Text [ en-US ] = "Column Layout for Table %1";
 };
-ModalDialog RID_DLG_DBCHANGE
-{
-    HelpID = HID_DLG_DBCHANGE;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 291 , 131 ) ;
-    Moveable = TRUE ;
-    Text [ en-US ] = "Choose Data Source";
-    OKButton BT_OK
-    {
-        Pos = MAP_APPFONT ( 238 , 3 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 238 , 18 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-    };
-    HelpButton BT_HELP
-    {
-        Pos = MAP_APPFONT ( 238 , 36 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-    };
-    FixedLine    GB_SELECTION
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 229 , 8 ) ;
-    };
-    String ST_ENTRY
-    {
-        Text [ en-US ] = "Entry";
-    };
-    Control LB_SELECTION
-    {
-        Pos = MAP_APPFONT ( 9 , 24 ) ;
-        Size = MAP_APPFONT ( 223 , 100 ) ;
-        Border = TRUE;
-        TabStop = TRUE;
-        HelpId = HID_SELECTION_TLB;
-    };
-    Window HB_SELECTION
-    {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
-        Size = MAP_APPFONT ( 223 , 12 ) ;
-        Border = TRUE;
-    };
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

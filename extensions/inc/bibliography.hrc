@@ -62,8 +62,6 @@
 #define UID_BIB_FRAME_WINDOW                            "EXTENSIONS_UID_BIB_FRAME_WINDOW"
 #define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"
 #define HID_DLG_MAPPING                                 "EXTENSIONS_HID_DLG_MAPPING"
-#define HID_DLG_DBCHANGE                                "EXTENSIONS_HID_DLG_DBCHANGE"
-#define HID_SELECTION_TLB                               "EXTENSIONS_HID_SELECTION_TLB"
 
 #endif // EXTENSIONS_BIBLIOGRAPHY_HRC
 

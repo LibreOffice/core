@@ -87,9 +87,4 @@
 #define FT_CUSTOM5          66
 #define LB_CUSTOM5          67
 
-#define GB_SELECTION        68
-#define ST_ENTRY            69
-#define LB_SELECTION        71
-#define HB_SELECTION        72
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

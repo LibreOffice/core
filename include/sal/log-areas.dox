@@ -151,6 +151,7 @@ certain functionality.
 
 @section extensions
 
+@li @c extensions.biblio
 @li @c extensions.dbpilots
 @li @c extensions.plugin
 @li @c extensions.scanner

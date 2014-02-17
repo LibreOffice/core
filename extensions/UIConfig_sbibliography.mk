@@ -13,4 +13,8 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/sbibliography,\
 	extensions/uiconfig/sbibliography/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_uifiles,modules/sbibliography,\
+	extensions/uiconfig/sbibliography/ui/choosedatasourcedialog \
+))
+
 # vim: set noet sw=4 ts=4:

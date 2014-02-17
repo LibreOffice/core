@@ -528,14 +528,8 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl)
 
 class DBChangeDialog_Impl : public ModalDialog
 {
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-    FixedLine       aSelectionGB;
-    SvTabListBox    aSelectionLB;
-    HeaderBar       aSelectionHB;
+    ListBox*    m_pSelectionLB;
     DBChangeDialogConfig_Impl   aConfig;
-    OUString        aEntryST;
 
     BibDataManager* pDatMan;
 
@@ -547,51 +541,33 @@ public:
     OUString     GetCurrentURL()const;
 };
 
-DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan ) :
-    ModalDialog(pParent, BibResId(RID_DLG_DBCHANGE) ),
-    aOKBT(this,         BibResId( BT_OK     )),
-    aCancelBT(this,     BibResId( BT_CANCEL )),
-    aHelpBT(this,       BibResId( BT_HELP       )),
-    aSelectionGB(this,  BibResId( GB_SELECTION )),
-    aSelectionLB(this,  BibResId( LB_SELECTION )),
-    aSelectionHB(this,  BibResId( HB_SELECTION )),
-    aEntryST(BIB_RESSTR(ST_ENTRY)),
+DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
+    : ModalDialog(pParent, "ChooseDataSourceDialog",
+        "modules/sbibliography/ui/choosedatasourcedialog.ui")
+    ,
     pDatMan(pMan)
 {
-    FreeResource();
-    aSelectionLB.SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
+    get(m_pSelectionLB, "treeview");
+    m_pSelectionLB->set_height_request(m_pSelectionLB->GetTextHeight() * 6);
+
+    m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() | WB_SORT);
+    m_pSelectionLB->SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
+
     try
     {
-        ::Size aSize = aSelectionHB.GetSizePixel();
-        long nTabs[2];
-        nTabs[0] = 1;// Number of Tabs
-        nTabs[1] = aSize.Width() / 4;
-
-        aSelectionHB.SetStyle(aSelectionHB.GetStyle()|WB_STDHEADERBAR);
-        aSelectionHB.InsertItem( 1, aEntryST, aSize.Width());
-        aSelectionHB.SetSizePixel(aSelectionHB.CalcWindowSizePixel());
-        aSelectionHB.Show();
-
-        aSelectionLB.SetTabs( &nTabs[0], MAP_PIXEL );
-        aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
-        aSelectionLB.GetModel()->SetSortMode(SortAscending);
-
         OUString sActiveSource = pDatMan->getActiveDataSource();
         const Sequence< OUString >& rSources = aConfig.GetDataSourceNames();
         const OUString* pSourceNames = rSources.getConstArray();
-        for(int i = 0; i < rSources.getLength(); i++)
-        {
-            SvTreeListEntry* pEntry = aSelectionLB.InsertEntry(pSourceNames[i]);
-            if(pSourceNames[i] == sActiveSource)
-            {
-                aSelectionLB.Select(pEntry);
-            }
-        }
-        aSelectionLB.GetModel()->Resort();
+        for (sal_Int32 i = 0; i < rSources.getLength(); ++i)
+            m_pSelectionLB->InsertEntry(pSourceNames[i]);
+
+        m_pSelectionLB->SelectEntry(sActiveSource);
     }
-    catch (const Exception&)
+    catch (const Exception& e)
     {
-        OSL_FAIL("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
+        SAL_WARN("extensions.biblio",
+            "Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl "
+            << e.Message);
     }
 }
 
@@ -607,13 +583,7 @@ DBChangeDialog_Impl::~DBChangeDialog_Impl()
 
 OUString  DBChangeDialog_Impl::GetCurrentURL()const
 {
-    OUString sRet;
-    SvTreeListEntry* pEntry = aSelectionLB.FirstSelected();
-    if(pEntry)
-    {
-        sRet = aSelectionLB.GetEntryText(pEntry, 0);
-    }
-    return sRet;
+    return m_pSelectionLB->GetSelectEntry();
 }
 
 // XDispatchProvider

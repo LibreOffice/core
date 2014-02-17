@@ -29,7 +29,6 @@
 #define RID_BIB_DIALOG              (RID_BIB_START)
 #define RID_TP_GENERAL              (RID_BIB_DIALOG)
 #define RID_DLG_MAPPING             (RID_BIB_DIALOG + 1)
-#define RID_DLG_DBCHANGE            (RID_BIB_DIALOG + 2)
 
 //Controls(100)
 #define RID_BIB_CONTROLS            (RID_BIB_START + 100)
