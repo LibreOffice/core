@@ -27,8 +27,8 @@
 // --> #i32795#
 #include <txtfrm.hxx>
 // --> #i32795#
-// template class <std::vector>
 #include <vector>
+#include <svx/svdogrp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -626,8 +626,9 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
 // --> #i70122#
 const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
+    bool bGroupShape = PTR_CAST(SdrObjGroup, GetDrawObj());
     // Resize objects with relative width or height
-    if ( GetPageFrm( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
+    if ( !bGroupShape && GetPageFrm( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
     {
         Rectangle aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
         Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
