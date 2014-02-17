@@ -1281,7 +1281,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
                         ')' == aValue.GetChar( aValue.Len()-1),
                         "keine gueltiges RGB(...)" );
 
-            String aColorStr( aValue.Copy( 4, aValue.Len()-1 ) );
+            String aColorStr( aValue.Copy( 4, aValue.Len()-5 ) );
 
             xub_StrLen nPos = 0;
             sal_uInt16 nCol = 0;
