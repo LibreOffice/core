@@ -38,7 +38,7 @@ class FuConstruct : public FuDraw
     virtual bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
-            sal_Bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
+            bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
     virtual void Activate();
     virtual void Deactivate();

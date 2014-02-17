@@ -263,9 +263,9 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
 //      SimpleMouseButtonUp - ohne Test auf Doppelklick
 
-sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool    bReturn = sal_True;
+    bool    bReturn = true;
 
     if (aDragTimer.IsActive() )
     {
