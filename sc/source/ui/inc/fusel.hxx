@@ -45,10 +45,10 @@ public:
     void    ActivateNoteHandles(SdrObject* pObj);
 
 protected:
-    sal_Bool            bVCAction;
+    bool            bVCAction;
 
 private:
-    sal_Bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+    bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
 
     bool                IsNoteCaptionMarked() const;
     bool                IsNoteCaptionClicked( const Point& rPos ) const;

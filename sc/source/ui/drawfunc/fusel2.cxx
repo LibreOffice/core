@@ -48,12 +48,12 @@ inline long Diff( const Point& rP1, const Point& rP2 )
     return nX+nY;
 }
 
-sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
+bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
 {
     if (!pPV)
         return false;
 
-    sal_Bool bFound = false;
+    bool bFound = false;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
@@ -98,7 +98,7 @@ sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 }
                 pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, false );
 
-                bFound = sal_True;
+                bFound = true;
             }
         }
 
