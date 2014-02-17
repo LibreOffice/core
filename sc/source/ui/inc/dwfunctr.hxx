@@ -57,13 +57,13 @@ private:
     SfxChildAlignment   eSfxOldAlignment;
     ImageButton         aInsertButton;
     FixedText           aFiFuncDesc;
-    sal_uInt16              nLeftSlot;
-    sal_uInt16              nRightSlot;
-    sal_uLong               nMinWidth;
-    sal_uLong               nMinHeight;
+    sal_uInt16          nLeftSlot;
+    sal_uInt16          nRightSlot;
+    sal_uLong           nMinWidth;
+    sal_uLong           nMinHeight;
     Size                aOldSize;
-    sal_Bool                bSizeFlag;
-    sal_Bool                bInit;
+    bool                bSizeFlag;
+    bool                bInit;
     short               nDockMode;
     Point               aSplitterInitPos;
     const ScFuncDesc*   pFuncDesc;
@@ -73,7 +73,7 @@ private:
 
     void            UpdateFunctionList();
     void            UpdateLRUList();
-    void            DoEnter(sal_Bool bOk); //@@ ???
+    void            DoEnter();
     void            SetDescription();
     void            SetLeftRightSize();
     void            SetTopBottonSize();

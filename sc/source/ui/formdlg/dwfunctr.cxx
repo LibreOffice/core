@@ -152,7 +152,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 GetOutputSizePixel().Height()-2*aTxtSize.Height());
     aPrivatSplit.SetYRange(aYRange);
     SelHdl(&aCatBox);
-    bInit=sal_True;
+    bInit = true;
 }
 
 /*************************************************************************
@@ -321,7 +321,7 @@ void ScFunctionDockWin::SetLeftRightSize()
 {
     if(!bSizeFlag)
     {
-        bSizeFlag=sal_True;
+        bSizeFlag = true;
 
         Size aDiffSize=GetSizePixel();
         Size aNewSize=GetOutputSizePixel();
@@ -368,7 +368,7 @@ void ScFunctionDockWin::SetTopBottonSize()
 {
     if(!bSizeFlag)
     {
-        bSizeFlag=sal_True;
+        bSizeFlag = true;
         Size aDiffSize=GetSizePixel();
         Size aNewSize=GetOutputSizePixel();
         aDiffSize.Width()-=aNewSize.Width();
@@ -831,7 +831,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 #*
 #************************************************************************/
 
-void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
+void ScFunctionDockWin::DoEnter()
 {
     OUString aFirstArgStr;
     OUString aArgStr;
@@ -989,7 +989,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     if ((ImageButton *)pCtrl == &aInsertButton ||
         (ListBox *)pCtrl == &aFuncList)
     {
-        DoEnter(sal_True);          // Uebernimmt die Eingabe
+        DoEnter();          // Uebernimmt die Eingabe
     }
     //...
 
