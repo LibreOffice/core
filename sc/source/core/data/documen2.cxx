@@ -1029,7 +1029,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
     if ( bVbaEnabled  )
     {
-        SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
+        SfxObjectShell* pSrcShell = pSrcDoc->GetDocumentShell();
         if ( pSrcShell )
         {
             OUString aLibName("Standard");
