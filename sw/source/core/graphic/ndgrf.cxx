@@ -73,7 +73,7 @@ SwGrfNode::SwGrfNode(
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
 
-    bGrafikArrived = sal_True;
+    bGraphicArrived = sal_True;
 
     // fdo#50763 inline image has already been read into memory
     if (rGrfName.startsWith("data:")) {
@@ -99,7 +99,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
         maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel= bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
-    bGrafikArrived = sal_True;
+    bGraphicArrived = sal_True;
 }
 
 /** Create new SW/G reader.
@@ -126,7 +126,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
-    bGrafikArrived = sal_True;
+    bGraphicArrived = sal_True;
 
     InsertLink( rGrfName, rFltName );
     if( IsLinkedFile() )
