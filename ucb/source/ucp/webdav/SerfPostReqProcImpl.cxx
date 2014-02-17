@@ -24,7 +24,7 @@
 
 #include "SerfPostReqProcImpl.hxx"
 
-#include <serf.h>
+#include <serf/serf.h>
 
 using namespace com::sun::star;
 
