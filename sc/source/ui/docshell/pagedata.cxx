@@ -28,7 +28,7 @@ ScPrintRangeData::ScPrintRangeData()
     nPagesX = nPagesY = 0;
     pPageEndX = NULL;
     pPageEndY = NULL;
-    bTopDown = bAutomatic = sal_True;
+    bTopDown = bAutomatic = true;
     nFirstPage = 1;
 }
 
@@ -94,7 +94,7 @@ ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
     return pData[nPos];
 }
 
-sal_Bool ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
+bool ScPageBreakData::operator==( const ScPageBreakData& rOther ) const
 {
     if ( nUsed != rOther.nUsed )
         return false;
@@ -105,7 +105,7 @@ sal_Bool ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
 
     //! ScPrintRangeData komplett vergleichen ??
 
-    return sal_True;
+    return true;
 }
 
 void ScPageBreakData::AddPages()

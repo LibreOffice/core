@@ -1471,7 +1471,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
         }
 
         //  Druckbereiche veraendert?
-        if ( bForcePaint || ( pPageBreakData && !pPageBreakData->IsEqual( *pNewData ) ) )
+        if ( bForcePaint || ( pPageBreakData && !( *pPageBreakData == *pNewData ) ) )
             PaintGrid();
     }
 
