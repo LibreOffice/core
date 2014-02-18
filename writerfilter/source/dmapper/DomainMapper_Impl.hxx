@@ -316,6 +316,7 @@ private:
     /// If we got any text that is the pre-rendered result of the TOC field.
     bool                                                                            m_bStartedTOC;
     bool                                                                            m_bStartIndex;
+    bool                                                                            m_bStartBibliography;
     bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
@@ -402,6 +403,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
 private:
     bool m_bIsNewDoc;
+    bool m_bBibliographyMarkerAdded;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
@@ -590,6 +592,11 @@ public:
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties,
         const OUString & sTOCServiceName);
+
+    void handleBibliography
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        const OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
@@ -755,6 +762,7 @@ public:
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
     bool isInIndexContext() { return m_bStartIndex;}
+    bool isInBibliographyContext() { return m_bStartBibliography;}
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);

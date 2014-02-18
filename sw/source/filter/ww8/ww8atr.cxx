@@ -2106,7 +2106,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 }
                 break;
 
-                //      case TOX_AUTHORITIES:   eCode = eTOA; sStr = ???; break;
             case TOX_ILLUSTRATIONS:
             case TOX_OBJECTS:
             case TOX_TABLES:
@@ -2131,6 +2130,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 }
                 break;
 
+            case TOX_AUTHORITIES:
+                eCode = ww::eBIBLIOGRPAHY;
+                sStr = FieldString(eCode);
+                 break;
                 //      case TOX_USER:
                 //      case TOX_CONTENT:
             default:

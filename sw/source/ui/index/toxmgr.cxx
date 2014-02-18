@@ -129,6 +129,30 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
         }
         break;
+        case  TOX_BIBLIOGRAPHY:
+        {
+            pMark = new SwTOXMark(pSh->GetTOXType(TOX_BIBLIOGRAPHY, 0));
+
+            if( rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
+            {
+                pMark->SetPrimaryKey( *rDesc.GetPrimKey() );
+                if(rDesc.GetPhoneticReadingOfPrimKey())
+                    pMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
+
+                if( rDesc.GetSecKey() && !rDesc.GetSecKey()->isEmpty() )
+                {
+                    pMark->SetSecondaryKey( *rDesc.GetSecKey() );
+                    if(rDesc.GetPhoneticReadingOfSecKey())
+                        pMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
+                }
+            }
+            if(rDesc.GetAltStr())
+                pMark->SetAlternativeText(*rDesc.GetAltStr());
+            if(rDesc.GetPhoneticReadingOfAltStr())
+                pMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
+            pMark->SetMainEntry(rDesc.IsMainEntry());
+        }
+        break;
         default:; //prevent warning
     }
     pSh->StartAllAction();
@@ -352,6 +376,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         case TOX_OBJECTS:
         case TOX_TABLES:
         case TOX_AUTHORITIES:
+        case TOX_BIBLIOGRAPHY:
         case TOX_ILLUSTRATIONS:
         {
             //Special handling for TOX_AUTHORITY

@@ -148,6 +148,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartTOC(false),
         m_bStartedTOC(false),
         m_bStartIndex(false),
+        m_bStartBibliography(false),
         m_bTOCPageRef(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
@@ -174,6 +175,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aAnnotationPositions(),
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
+        m_bBibliographyMarkerAdded(false),
         m_bInTableStyleRunProps(false),
         m_pSdtHelper(0),
         m_nTableDepth(0),
@@ -1125,7 +1127,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
             uno::Sequence< beans::PropertyValue > pValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
             sal_Int32 len = pValues.getLength();
 
-            if (m_bStartTOC || m_bStartIndex)
+            if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
                 for( int i =0; i < len; ++i )
                 {
                     if (pValues[i].Name == "CharHidden")
@@ -1140,7 +1142,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
             }
             else
             {
-                if (m_bStartTOC || m_bStartIndex)
+                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
                 {
                     m_bStartedTOC = true;
                     uno::Reference< text::XTextCursor > xTOCTextCursor;
@@ -1148,7 +1150,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
                     xTOCTextCursor->gotoEnd(false);
                     if (xTOCTextCursor.is())
                     {
-                        if (m_bStartIndex)
+                        if (m_bStartIndex || m_bStartBibliography)
                             xTOCTextCursor->goLeft(1, false);
                         xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
@@ -2289,6 +2291,7 @@ if(!bFilled)
             {OUString("NUMPAGES"), "PageCount", "", FIELD_NUMPAGES},
             {OUString("INDEX"), "com.sun.star.text.DocumentIndex", "", FIELD_INDEX},
             {OUString("XE"), "com.sun.star.text.DocumentIndexMark", "", FIELD_XE},
+            {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", "", FILED_BIBLIOGRAPHY},
 
 //            {OUString(""), "", "", FIELD_},
 
@@ -2826,6 +2829,29 @@ void DomainMapper_Impl::handleToc
         }
     }
 }
+
+void DomainMapper_Impl::handleBibliography
+    (FieldContextPtr pContext,
+    PropertyNameSupplier& rPropNameSupplier,
+    const OUString & sTOCServiceName)
+{
+    uno::Reference< beans::XPropertySet > xTOC;
+    m_bStartTOC = true;
+    m_bStartBibliography = true;
+    if (m_xTextFactory.is())
+        xTOC.set(
+                m_xTextFactory->createInstance(
+                sTOCServiceName),
+                uno::UNO_QUERY_THROW);
+    if (xTOC.is())
+        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
+
+    pContext->SetTOC( xTOC );
+
+    uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
+    appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
+}
+
 void DomainMapper_Impl::handleIndex
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
@@ -2901,6 +2927,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_TOC:
                 case FIELD_INDEX:
                 case FIELD_XE:
+                case FILED_BIBLIOGRAPHY:
                 case FIELD_TC:
                 case FIELD_EQ:
                         bCreateField = false;
@@ -3386,6 +3413,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                         handleIndex(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
+                    case FILED_BIBLIOGRAPHY:
+                        handleBibliography(pContext, rPropNameSupplier,
+                                  OUString::createFromAscii(aIt->second.cFieldServiceName));
+                        break;
                     case FIELD_TOC:
                         handleToc(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
@@ -3597,9 +3628,9 @@ void DomainMapper_Impl::PopFieldContext()
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
-                    if(xTOCMarkerCursor.is() || m_bStartIndex)
+                    if(xTOCMarkerCursor.is() || m_bStartIndex || m_bStartBibliography)
                     {
-                        if (m_bStartIndex)
+                        if (m_bStartIndex || m_bStartBibliography)
                         {
                             if (mxTOCTextCursor.is())
                             {
@@ -3616,20 +3647,21 @@ void DomainMapper_Impl::PopFieldContext()
                             xTOCMarkerCursor->setString(OUString());
                         }
                     }
-                    if (m_bStartedTOC || m_bStartIndex)
+                    if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
                     }
                     m_bStartTOC = false;
                     m_bStartIndex = false;
+                    m_bStartBibliography = false;
                 }
                 else
                 {
                     xToInsert = uno::Reference< text::XTextContent >(pContext->GetTC(), uno::UNO_QUERY);
-                    if( !xToInsert.is() && !m_bStartTOC && !m_bStartIndex )
+                    if( !xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography )
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
-                    if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex)
+                    if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography)
                     {
                         uno::Sequence<beans::PropertyValue> aValues;
                         // Character properties of the field show up here the

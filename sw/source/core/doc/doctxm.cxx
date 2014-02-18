@@ -463,6 +463,7 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
     case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
     case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
+    case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     }
     if(!(*prBase) && bCreate)
     {
@@ -485,6 +486,7 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
     case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
     case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
+    case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     }
     if(*prBase)
         delete (*prBase);
@@ -1087,7 +1089,9 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
         case TOX_ILLUSTRATIONS: nPoolFmt = RES_POOLCOLL_TOX_ILLUSH;     break;
         case TOX_OBJECTS:       nPoolFmt = RES_POOLCOLL_TOX_OBJECTH;    break;
         case TOX_TABLES:        nPoolFmt = RES_POOLCOLL_TOX_TABLESH;    break;
-        case TOX_AUTHORITIES:   nPoolFmt = RES_POOLCOLL_TOX_AUTHORITIESH; break;
+        case TOX_AUTHORITIES:
+        case TOX_BIBLIOGRAPHY:
+            nPoolFmt = RES_POOLCOLL_TOX_AUTHORITIESH; break;
 
         case TOX_CONTENT:
             // There's a jump in the ContentArea!

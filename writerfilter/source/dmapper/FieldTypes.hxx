@@ -293,7 +293,10 @@ enum FieldId
     /* Document alphabetical index marks
      */
     ,FIELD_XE
-
+    /**
+     * Bibliography
+     */
+    ,FILED_BIBLIOGRAPHY
 };
 
 }}
