@@ -138,14 +138,15 @@ BaseResultSet::BaseResultSet(
     sal_Int32 rowCount,
     sal_Int32 colCount,
     const Reference< com::sun::star::script::XTypeConverter > & tc )
-    : OComponentHelper( refMutex->mutex ),
-      OPropertySetHelper( OComponentHelper::rBHelper ),
-      m_owner( owner ),
-      m_tc( tc ),
-      m_refMutex( refMutex ),
-      m_row( -1 ),
-      m_rowCount( rowCount ),
-      m_fieldCount( colCount )
+    : OComponentHelper( refMutex->mutex )
+    , OPropertySetHelper( OComponentHelper::rBHelper )
+    , m_owner( owner )
+    , m_tc( tc )
+    , m_refMutex( refMutex )
+    , m_row( -1 )
+    , m_rowCount( rowCount )
+    , m_fieldCount( colCount )
+    , m_wasNull(false)
 {
     POSTGRE_TRACE( "ctor BaseResultSet" );
 }
