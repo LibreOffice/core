@@ -305,6 +305,7 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.mbSubsettable = true;
 
     // get font name
+#ifdef MACOSX
     const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
     CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault, aUILang.getStr(), aUILang.getLength() );
     CFStringRef pLang = NULL;
@@ -314,6 +315,13 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
         CFRelease( pFamilyName );
         pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
     }
+#else
+    // No "Application" on iOS. And it is unclear whether this code
+    // snippet will actually ever get invoked on iOS anyway. So just
+    // use the old code that uses a non-localized font name.
+    CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
+#endif
+
     rDFA.SetFamilyName( GetOUString( pFamilyName ) );
 
     // get font style
