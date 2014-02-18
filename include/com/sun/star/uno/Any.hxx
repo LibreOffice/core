@@ -214,6 +214,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW(())
 
 // additionally for C++ bool:
 //______________________________________________________________________________
+template<>
 inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
     SAL_THROW(())
 {
@@ -250,6 +251,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(())
 
 // bool
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Bool & value ) SAL_THROW(())
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
@@ -260,6 +262,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
     return false;
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW(())
 {
     return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
@@ -293,6 +296,7 @@ inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
 
 // byte
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Int8 & value ) SAL_THROW(())
 {
     if (typelib_TypeClass_BYTE == rAny.pType->eTypeClass)
@@ -304,6 +308,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
 }
 // short
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -320,6 +325,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_TH
     }
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -337,6 +343,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_T
 }
 // long
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -359,6 +366,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_TH
     }
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -382,6 +390,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_T
 }
 // hyper
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -410,6 +419,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_TH
     }
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -439,6 +449,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_T
 }
 // float
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -461,6 +472,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(
 }
 // double
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW(())
 {
     switch (rAny.pType->eTypeClass)
@@ -492,6 +504,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW
 }
 // string
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW(())
 {
     if (typelib_TypeClass_STRING == rAny.pType->eTypeClass)
@@ -502,6 +515,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) 
     return false;
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW(())
 {
     return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
@@ -509,6 +523,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & val
 }
 // type
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW(())
 {
     if (typelib_TypeClass_TYPE == rAny.pType->eTypeClass)
@@ -519,6 +534,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW((
     return false;
 }
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW(())
 {
     return (typelib_TypeClass_TYPE == rAny.pType->eTypeClass &&
@@ -526,6 +542,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_TH
 }
 // any
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(())
 {
     if (&rAny != &value)
@@ -538,6 +555,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(()
 }
 // interface
 //__________________________________________________________________________________________________
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW(())
 {
     if (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass)

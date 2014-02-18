@@ -270,6 +270,7 @@ template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW(());
 
 // additionally for C++ bool:
+template<>
 inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
     SAL_THROW(());
 
@@ -312,7 +313,9 @@ inline bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_THROW
 
 // additional specialized >>= and == operators
 // bool
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW(());
 template<>
 inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
@@ -321,29 +324,44 @@ template<>
 inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
     SAL_THROW(());
 // byte
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) SAL_THROW(());
 // short
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW(());
 // long
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW(());
 // hyper
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW(());
 // float
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(());
 // double
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW(());
 // string
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW(());
 // type
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW(());
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW(());
 // any
+template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(());
 // interface
+template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW(());
 
 }
