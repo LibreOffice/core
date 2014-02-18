@@ -493,11 +493,12 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
 //
 GraphiteLayout::GraphiteLayout(const gr_face * face, gr_font * font,
                                const grutils::GrFeatureParser * pFeatures) throw()
-  : mpFace(face),
-    mpFont(font),
-    mnWidth(0),
-    mfScaling(1.0),
-    mpFeatures(pFeatures)
+    : mpFace(face)
+    , mpFont(font)
+    , mnSegCharOffset(0)
+    , mnWidth(0)
+    , mfScaling(1.0)
+    , mpFeatures(pFeatures)
 {
 
 }
