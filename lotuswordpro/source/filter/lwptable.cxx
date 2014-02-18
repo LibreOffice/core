@@ -88,7 +88,14 @@ void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
 
 //End of Add
 /*****************************************************************************/
- LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
+ LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+     : LwpContent(objHdr, pStrm)
+     , m_nRow(0)
+     , m_nColumn(0)
+     , m_nHeight(0)
+     , m_nWidth(0)
+     , m_nDefaultAutoGrowRowHeight(0)
+     , m_nAttributes(0)
 {}
 
 LwpTable::~LwpTable()
