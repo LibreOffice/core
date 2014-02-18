@@ -2720,8 +2720,6 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         pDBData->GetArea(aDataRange);
         pTabViewShell->MarkRange(aDataRange, false);
     }
-    if (!pDBData)
-        return;
 
     pDBData->GetSubTotalParam( aSubTotalParam );
     aSubTotalParam.bRemoveOnly = false;
