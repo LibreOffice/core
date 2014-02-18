@@ -103,7 +103,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
     {
         SCTAB nTab = *itr;
         ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
-        aFunc.SetRenderFlag( sal_True );
+        aFunc.SetRenderFlag( true );
 
         long nDisplayStart = GetDisplayStart( nTab );
 

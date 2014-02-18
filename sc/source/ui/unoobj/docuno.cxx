@@ -1051,7 +1051,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
     ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
                         pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-    aFunc.SetRenderFlag( sal_True );
+    aFunc.SetRenderFlag( true );
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
     MultiSelection aPage( aPageRange );
@@ -1154,7 +1154,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetDrawView( pDrawView );
-    aFunc.SetRenderFlag( sal_True );
+    aFunc.SetRenderFlag( true );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
         aFunc.SetExclusivelyDrawOleAndDrawObjects();
 

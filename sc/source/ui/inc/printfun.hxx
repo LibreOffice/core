@@ -53,14 +53,14 @@ class FmFormView;
                                             // Settings for headers/footers
 struct ScPrintHFParam
 {
-    sal_Bool                bEnable;
-    sal_Bool                bDynamic;
-    sal_Bool                bShared;
+    bool                bEnable;
+    bool                bDynamic;
+    bool                bShared;
     long                nHeight;            // in total (height + distance + frames)
     long                nManHeight;         // set size (min when dynamic)
-  sal_uInt16              nDistance;
-    sal_uInt16              nLeft;              // edges
-    sal_uInt16              nRight;
+    sal_uInt16          nDistance;
+    sal_uInt16          nLeft;              // edges
+    sal_uInt16          nRight;
     const ScPageHFItem* pLeft;
     const ScPageHFItem* pRight;
     const SvxBoxItem*   pBorder;
@@ -91,7 +91,7 @@ private:
     SCROW   nStartRow;
     SCROW   nEndRow;
     size_t  nPagesX;
-    sal_Bool*   pHidden;
+    bool*   pHidden;
     //!     Cache Number of really visible?
 
 public:
@@ -109,7 +109,7 @@ public:
 
     void    SetPagesX(size_t nNew);
     void    SetHidden(size_t nX);
-    sal_Bool    IsHidden(size_t nX) const;
+    bool    IsHidden(size_t nX) const;
 
     size_t  CountVisible() const;
 };
@@ -127,10 +127,10 @@ private:
 
     Point               aSrcOffset;         //  Paper-1/100 mm
     Point               aOffset;            //  scaled by a factor of page size
-    sal_uInt16              nManualZoom;        //  Zoom in Preview (percent)
-    sal_Bool                bClearWin;          //  Clear output before
-    sal_Bool                bUseStyleColor;
-    sal_Bool                bIsRender;
+    sal_uInt16          nManualZoom;        //  Zoom in Preview (percent)
+    bool                bClearWin;          //  Clear output before
+    bool                bUseStyleColor;
+    bool                bIsRender;
 
     SCTAB               nPrintTab;
     long                nPageStart;         //  Offset for the first page
@@ -139,17 +139,17 @@ private:
     const ScRange*      pUserArea;          //  Selection, if set in dialog
 
     const SfxItemSet*   pParamSet;          //  Selected template
-    sal_Bool                bState;             // created from State-struct
+    bool                bState;             // created from State-struct
 
                                             //  Parameter from template:
-    sal_uInt16              nLeftMargin;
-    sal_uInt16              nTopMargin;
-    sal_uInt16              nRightMargin;
-    sal_uInt16              nBottomMargin;
-    sal_Bool                bCenterHor;
-    sal_Bool                bCenterVer;
-    sal_Bool                bLandscape;
-    sal_Bool                bSourceRangeValid;
+    sal_uInt16          nLeftMargin;
+    sal_uInt16          nTopMargin;
+    sal_uInt16          nRightMargin;
+    sal_uInt16          nBottomMargin;
+    bool                bCenterHor;
+    bool                bCenterVer;
+    bool                bLandscape;
+    bool                bSourceRangeValid;
 
     sal_uInt16              nPageUsage;
     Size                aPageSize;          // Printer Twips
@@ -164,9 +164,9 @@ private:
     ScPageAreaParam     aAreaParam;
 
                                             // Calculated values:
-    sal_uInt16              nZoom;
-    sal_Bool                bPrintCurrentTable;
-    sal_Bool                bMultiArea;
+    sal_uInt16          nZoom;
+    bool                bPrintCurrentTable;
+    bool                bMultiArea;
     long                nTabPages;
     long                nTotalPages;
 
@@ -225,7 +225,7 @@ public:
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
-                                const Rectangle& rBound, ScViewData* pViewData, sal_Bool bMetaFile );
+                                const Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
 
     void            SetDrawView( FmFormView* pNew );
 
@@ -233,13 +233,13 @@ public:
     void            SetManualZoom( sal_uInt16 nNewZoom );
     void            SetDateTime( const Date& rDate, const Time& rTime );
 
-    void            SetClearFlag( sal_Bool bFlag );
-    void            SetUseStyleColor( sal_Bool bFlag );
-    void            SetRenderFlag( sal_Bool bFlag );
+    void            SetClearFlag( bool bFlag );
+    void            SetUseStyleColor( bool bFlag );
+    void            SetRenderFlag( bool bFlag );
 
     void            SetExclusivelyDrawOleAndDrawObjects();//for printing selected objects without surrounding cell contents
 
-    sal_Bool            UpdatePages();
+    bool            UpdatePages();
 
     void            ApplyPrintSettings();       // Already called from DoPrint()
     long            DoPrint( const MultiSelection& rPageRanges,
@@ -263,11 +263,11 @@ public:
     void            ResetBreaks( SCTAB nTab );
 
     void            GetPrintState( ScPrintState& rState );
-    sal_Bool            GetLastSourceRange( ScRange& rRange ) const;
-    sal_uInt16          GetLeftMargin() const{return nLeftMargin;}
-    sal_uInt16          GetRightMargin() const{return nRightMargin;}
-    sal_uInt16          GetTopMargin() const{return nTopMargin;}
-    sal_uInt16          GetBottomMargin() const{return nBottomMargin;}
+    bool            GetLastSourceRange( ScRange& rRange ) const;
+    sal_uInt16      GetLeftMargin() const{return nLeftMargin;}
+    sal_uInt16      GetRightMargin() const{return nRightMargin;}
+    sal_uInt16      GetTopMargin() const{return nTopMargin;}
+    sal_uInt16      GetBottomMargin() const{return nBottomMargin;}
     void            SetLeftMargin(sal_uInt16 nRulerLeftDistance){ nLeftMargin = nRulerLeftDistance; }
     void            SetRightMargin(sal_uInt16 nRulerRightDistance){ nRightMargin = nRulerRightDistance; }
     void            SetTopMargin(sal_uInt16 nRulerTopDistance){ nTopMargin = nRulerTopDistance; }
@@ -283,7 +283,7 @@ private:
     long            CountPages();
     long            CountNotePages();
 
-    sal_Bool            AdjustPrintArea( sal_Bool bNew );
+    bool            AdjustPrintArea( bool bNew );
 
     Size            GetDocPageSize();
 
@@ -293,31 +293,31 @@ private:
 
     void            InitModes();
 
-    sal_Bool            IsLeft( long nPageNo );
-    sal_Bool            IsMirror( long nPageNo );
+    bool            IsLeft( long nPageNo );
+    bool            IsMirror( long nPageNo );
     void            ReplaceFields( long nPageNo );      // changes Text in pEditEngine
     void            MakeTableString();                  // sets aTableStr
 
     void            PrintPage( long nPageNo,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    sal_Bool bDoPrint, ScPreviewLocationData* pLocationData );
+                                    bool bDoPrint, ScPreviewLocationData* pLocationData );
     void            PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     long nScrX, long nScrY,
-                                    sal_Bool bShLeft, sal_Bool bShTop, sal_Bool bShRight, sal_Bool bShBottom );
+                                    bool bShLeft, bool bShTop, bool bShRight, bool bShBottom );
     void            LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    long nScrX, long nScrY, sal_Bool bRepCol, sal_Bool bRepRow,
+                                    long nScrX, long nScrY, bool bRepCol, bool bRepRow,
                                     ScPreviewLocationData& rLocationData );
     void            PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY );
     void            PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY );
     void            LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
-                                sal_Bool bRepCol, ScPreviewLocationData& rLocationData );
+                                bool bRepCol, ScPreviewLocationData& rLocationData );
     void            LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
-                                sal_Bool bRepRow, ScPreviewLocationData& rLocationData );
-    void            PrintHF( long nPageNo, sal_Bool bHeader, long nStartY,
-                                    sal_Bool bDoPrint, ScPreviewLocationData* pLocationData );
+                                bool bRepRow, ScPreviewLocationData& rLocationData );
+    void            PrintHF( long nPageNo, bool bHeader, long nStartY,
+                                    bool bDoPrint, ScPreviewLocationData* pLocationData );
 
-    long            PrintNotes( long nPageNo, long nNoteStart, sal_Bool bDoPrint, ScPreviewLocationData* pLocationData );
-    long            DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocationData* pLocationData );
+    long            PrintNotes( long nPageNo, long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
+    long            DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
 
     void            DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                                     const SvxBoxItem* pBorderData,
