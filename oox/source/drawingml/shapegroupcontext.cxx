@@ -45,6 +45,8 @@ ShapeGroupContext::ShapeGroupContext( ContextHandler2Helper& rParent, ShapePtr p
 , mpGroupShapePtr( pGroupShapePtr )
 , mpMasterShapePtr( pMasterShapePtr )
 {
+    if( pMasterShapePtr )
+        mpGroupShapePtr->setWps(pMasterShapePtr->getWps());
 }
 
 ShapeGroupContext::~ShapeGroupContext()

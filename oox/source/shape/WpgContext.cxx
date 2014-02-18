@@ -60,9 +60,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_grpSp:
     {
-        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
-        pShape->setWps(true);
-        return new oox::drawingml::ShapeGroupContext(*this, mpShape, pShape);
+        return new oox::drawingml::ShapeGroupContext(*this, mpShape, oox::drawingml::ShapePtr(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape")));
     }
     break;
     default:

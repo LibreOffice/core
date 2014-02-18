@@ -3300,6 +3300,25 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.doc
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childposition.docx")
+{
+    // Problem was parent transformation was ingnored fully, but translate component
+    // which specify the position must be also applied for children of the group.
+
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+
+    xGroup.set(xChildGroup, uno::UNO_QUERY);
+    xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -1856 : -1858), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+
+    xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 14028 : 14025), xChildGroup->getPosition().Y);
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

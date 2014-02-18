@@ -348,10 +348,19 @@ void Shape::addChildren(
     aChildTransformation.scale(1/(maChSize.Width ? maChSize.Width : 1.0), 1/(maChSize.Height ? maChSize.Height : 1.0));
 
     // Child position and size is typically non-zero, but it's allowed to have
-    // it like that, and in that case Word ignores the parent transformation, it
-    // seems.
+    // it like that, and in that case Word ignores the parent transformation
+    // (excluding translate component).
     if (!mbWps || maChPosition.X || maChPosition.Y || maChSize.Width || maChSize.Height)
+    {
         aChildTransformation *= aTransformation;
+    }
+    else
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+        aChildTransformation.translate(aTranslate.getX(), aTranslate.getY());
+    }
 
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "parent matrix:\n"
              << aChildTransformation.get(0, 0) << " "
