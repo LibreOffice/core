@@ -233,7 +233,8 @@ namespace connectivity
     sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     {                                                                                                                                   \
         return cppu::supportsService(this, _rServiceName);                                                                              \
-    }                                                                                                                                   \
+    }
+
     }
 }
 #endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_
