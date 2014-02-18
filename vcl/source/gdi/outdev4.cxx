@@ -406,7 +406,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         nStepCount = nMinRect / nInc;
     }
 
-    // at least three steps and maximum number if colour differences
+    // at least three steps and at most the number of colour differences
     long nSteps = std::max( nStepCount, 2L );
     long nCalcSteps  = std::abs( nRedSteps );
     long nTempSteps = std::abs( nGreenSteps );
