@@ -318,7 +318,7 @@ gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(WORKDIR)/UnpackedTarba
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=$$($(gb_MKTEMP)) && \
-printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)" > $${OFFICESCRIPT} && \
+printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;'" > $${OFFICESCRIPT} && \
 gdb -x $${OFFICESCRIPT} $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice && \
 rm $${OFFICESCRIPT}
 endef

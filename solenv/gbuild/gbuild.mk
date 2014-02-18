@@ -257,8 +257,6 @@ gb_GLOBALDEFS += \
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
-gb_USER_INSTALLATION = $(call gb_Helper_make_url,$(TESTINSTALLDIR)/)
-
 include $(GBUILDDIR)/Deliver.mk
 
 $(eval $(call gb_Deliver_init))

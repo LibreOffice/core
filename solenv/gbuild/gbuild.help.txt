@@ -34,7 +34,7 @@ AVAILABLE TARGETS
        subsequentcheck  run system tests (requires full installation)
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files
-       debugrun         starts the dev-install instance and allows tests to be run
+       debugrun         starts the INSTDIR instance and allows tests to be run
                         against it
        <module>         build the named module
        <module>.check   run unittests of the named module
