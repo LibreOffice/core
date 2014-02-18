@@ -5107,6 +5107,7 @@ void Test::testNoteDeleteRow()
     m_pDoc->SetString(aPos, "Second");
     ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "Second Note", false, false);
 
+    // Delete row 2.
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
@@ -5131,6 +5132,24 @@ void Test::testNoteDeleteRow()
     pUndoMgr->Undo();
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
     CPPUNIT_ASSERT_MESSAGE("B2 should NOT have a note.", !pNote);
+    pNote = m_pDoc->GetNote(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Note"), pNote->GetText());
+    pNote = m_pDoc->GetNote(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("B4 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
+
+    // Delete row 3.
+    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
+
+    pNote = m_pDoc->GetNote(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
+    pNote = m_pDoc->GetNote(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("B4 should NOT have a note.", !pNote);
+
+    // Undo and check the result.
+    pUndoMgr->Undo();
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
     CPPUNIT_ASSERT_EQUAL(OUString("First Note"), pNote->GetText());
