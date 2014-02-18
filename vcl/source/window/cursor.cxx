@@ -135,17 +135,16 @@ void Cursor::ImplDraw()
         mpData->mnDirection     = mnDirection;
         long nOffsetY           = pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
 
-        // Position um den Offset korrigieren
+        // correct the position with the offset
         mpData->maPixPos.Y() -= nOffsetY;
         mpData->maPixRotOff = mpData->maPixPos;
         mpData->maPixRotOff.Y() += nOffsetY;
 
-        // Wenn groesse 0 ist, nehmen wir die breite, die in den
-        // Settings eingestellt ist
+        // use width (as set in Settings) if size is 0,
         if ( !mpData->maPixSize.Width() )
             mpData->maPixSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
 
-        // Ausgabeflaeche berechnen und ausgeben
+        // calculate output area and display
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = true;
     }
@@ -172,8 +171,8 @@ void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             pWindow = mpWindow;
         else
         {
-            // Gibt es ein aktives Fenster und ist der Cursor in dieses Fenster
-            // selektiert, dann zeige den Cursor an
+            // show the cursor, if there is an active window and the cursor
+            // has been selected in this window
             pWindow = Application::GetFocusWindow();
             if ( !pWindow || (pWindow->mpWindowImpl->mpCursor != this) || pWindow->mpWindowImpl->mbInPaint
                 || !pWindow->mpWindowImpl->mpFrameData->mbHasFocus )

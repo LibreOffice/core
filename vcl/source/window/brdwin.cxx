@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 
 static void ImplGetPinImage( sal_uInt16 nStyle, sal_Bool bPinIn, Image& rImage )
 {
-    // ImageListe laden, wenn noch nicht vorhanden
+    // load ImageList if not available yet
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maCtrlData.mpPinImgList )
     {
@@ -59,7 +59,7 @@ static void ImplGetPinImage( sal_uInt16 nStyle, sal_Bool bPinIn, Image& rImage )
         }
     }
 
-    // Image ermitteln und zurueckgeben
+    // get and return Image
     sal_uInt16 nId;
     if ( nStyle & BUTTON_DRAW_PRESSED )
     {
@@ -82,14 +82,14 @@ static void ImplGetPinImage( sal_uInt16 nStyle, sal_Bool bPinIn, Image& rImage )
 
 void Window::ImplCalcSymbolRect( Rectangle& rRect )
 {
-    // Den Rand den der Button in der nicht Default-Darstellung freilaesst,
-    // dazuaddieren, da wir diesen bei kleinen Buttons mit ausnutzen wollen
+    // Add border, not shown in the non-default representation,
+    // as we want to use it for small buttons
     rRect.Left()--;
     rRect.Top()--;
     rRect.Right()++;
     rRect.Bottom()++;
 
-    // Zwischen dem Symbol und dem Button-Rand lassen wir 5% Platz
+    // we leave 5% room between the symbol and the button border
     long nExtraWidth = ((rRect.GetWidth()*50)+500)/1000;
     long nExtraHeight = ((rRect.GetHeight()*50)+500)/1000;
     rRect.Left()    += nExtraWidth;
@@ -103,7 +103,7 @@ void Window::ImplCalcSymbolRect( Rectangle& rRect )
 static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                                   const Rectangle& rRect, SymbolType eSymbol )
 {
-    // Zwischen dem Symbol und dem Button lassen wir 5% Platz
+    // we leave 5% room between the symbol and the button border
     DecorationView  aDecoView( pDev );
     Rectangle       aTempRect = rRect;
     Window::ImplCalcSymbolRect( aTempRect );
@@ -488,7 +488,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnCloseState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_CLOSE );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     // dispatch to correct window type (why is Close() not virtual ??? )
@@ -510,7 +510,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnRollState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_ROLL );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
@@ -532,7 +532,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnDockState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_DOCK );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
@@ -560,7 +560,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnHideState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_HIDE );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
@@ -578,7 +578,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnHelpState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_HELP );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                 }
@@ -591,7 +591,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 pData->mnPinState &= ~BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_PIN );
 
-                // Bei Abbruch kein Click-Handler rufen
+                // do not call a Click-Handler when aborting
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
@@ -607,7 +607,7 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
         {
             if ( pData->mbDragFull )
             {
-                // Bei Abbruch alten Zustand wieder herstellen
+                // restore old state when aborting
                 if ( rTEvt.IsTrackingCanceled() )
                     pBorderWindow->SetPosSizePixel( Point( pData->mnTrackX, pData->mnTrackY ), Size( pData->mnTrackWidth, pData->mnTrackHeight ) );
             }
@@ -998,7 +998,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
 
 long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const
 {
-    // kein sichtbarer Title, dann auch keine Breite
+    // title is not visible therefore no width
     if ( !pData->mnTitleHeight )
         return 0;
 
@@ -1199,8 +1199,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
         if( ! mbNWFBorder )
         {
             sal_uInt16 nStyle = FRAME_DRAW_NODRAW;
-            // Wenn Border umgesetzt wurde oder BorderWindow ein Frame-Fenster
-            // ist, dann Border nach aussen
+            // move border outside if border was converted or if the BorderWindow is a frame window,
             if ( mpBorderWindow->mbSmallOutBorder )
                 nStyle |= FRAME_DRAW_DOUBLEOUT;
             else if ( nBorderStyle & WINDOW_BORDER_NWF )
@@ -1392,8 +1391,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     if ( nDrawFlags & BORDERWINDOW_DRAW_FRAME )
     {
         sal_uInt16 nStyle = 0;
-        // Wenn Border umgesetzt wurde oder BorderWindow ein Frame-Fenster
-        // ist, dann Border nach aussen
+        // move border outside if border was converted or if the border window is a frame window,
         if ( mpBorderWindow->mbSmallOutBorder )
             nStyle |= FRAME_DRAW_DOUBLEOUT;
         else if ( nBorderStyle & WINDOW_BORDER_NWF )
@@ -1861,7 +1859,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
                                  SystemParentData* pSystemParentData
                                  )
 {
-    // Alle WindowBits entfernen, die wir nicht haben wollen
+    // remove all unwanted WindowBits
     WinBits nOrgStyle = nStyle;
     WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_NEEDSFOCUS | WB_POPUP);
     if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
@@ -2005,8 +2003,8 @@ void ImplBorderWindow::Activate()
 
 void ImplBorderWindow::Deactivate()
 {
-    // Fenster die immer Active sind, nehmen wir von dieser Regel aus,
-    // genauso, wenn ein Menu aktiv wird, ignorieren wir das Deactivate
+    // remove active windows from the ruler, also ignore the Deactivate
+    // if a menu becomes active
     if ( GetActivateMode() && !ImplGetSVData()->maWinData.mbNoDeactivate )
         SetDisplayActive( sal_False );
     Window::Deactivate();
@@ -2016,14 +2014,14 @@ void ImplBorderWindow::Deactivate()
 
 void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    // no keyboard help for border win
+    // no keyboard help for border window
     if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;
         OUString    aHelpStr( mpBorderView->RequestHelp( aMousePosPixel, aHelpRect ) );
 
-        // Rechteck ermitteln
+        // retrieve rectangle
         if ( !aHelpStr.isEmpty() )
         {
             aHelpRect.SetPos( OutputToScreenPixel( aHelpRect.TopLeft() ) );
@@ -2198,7 +2196,7 @@ void ImplBorderWindow::InvalidateBorder()
 {
     if ( IsReallyVisible() )
     {
-        // Nur wenn wir einen Border haben, muessen wir auch invalidieren
+        // invalidate only if we have a border
         sal_Int32 nLeftBorder;
         sal_Int32 nTopBorder;
         sal_Int32 nRightBorder;
@@ -2212,7 +2210,7 @@ void ImplBorderWindow::InvalidateBorder()
             aWinRect.Top()    += nTopBorder;
             aWinRect.Right()  -= nRightBorder;
             aWinRect.Bottom() -= nBottomBorder;
-            // kein Output-Bereich mehr, dann alles invalidieren
+            // no output area anymore, now invalidate all
             if ( (aWinRect.Right() < aWinRect.Left()) ||
                  (aWinRect.Bottom() < aWinRect.Top()) )
                 Invalidate( INVALIDATE_NOCHILDREN );

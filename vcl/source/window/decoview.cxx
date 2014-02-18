@@ -548,8 +548,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         if ( !(nStyle & BUTTON_DRAW_NOFILL) )
         {
-            // Hack: Auf Druckern wollen wir im MonoChrom-Modus trotzdem
-            // erstmal graue Buttons haben
+            // Hack: in monochrome mode on printers we like to have grey buttons
             if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
                 pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
             else
@@ -1000,8 +999,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     mpOutDev->SetLineColor( maOldLineColor );
     mpOutDev->SetFillColor( maOldFillColor );
 
-    // Ein Border freilassen, der jedoch bei Default-Darstellung
-    // mitbenutzt wird
+    // keep border free, altough it is used at default representation
     ++aRect.Left();
     ++aRect.Top();
     --aRect.Right();
