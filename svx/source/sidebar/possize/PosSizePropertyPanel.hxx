@@ -173,6 +173,18 @@ private:
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
+
+    /** Check if the UI scale has changed and handle such a change.
+        UI scale is an SD only feature.  The UI scale is represented by items
+        ATTR_OPTIONS_SCALE_X and
+        ATTR_OPTIONS_SCALE_Y.
+        As we have no direct access (there is no dependency of svx on sd) we have to
+        use a small trick (aka hack):
+        a) call this method whenever a change of the metric item is notified,
+        b) check if the UI scale has changed (strangely, the UI scale value is available at the SdrModel.
+        c) invalidate the items for position and size to trigger notifications of their current values.
+    */
+    void UpdateUIScale();
 };
 
 

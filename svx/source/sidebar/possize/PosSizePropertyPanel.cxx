@@ -811,6 +811,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
         case SID_ATTR_METRIC:
             MetricState( eState, pState );
+            UpdateUIScale();
             break;
 
         default:
@@ -1158,6 +1159,28 @@ void PosSizePropertyPanel::DisableControls()
                 mpCbxScale->Enable();
             }
         }
+    }
+}
+
+
+
+
+void PosSizePropertyPanel::UpdateUIScale()
+{
+    const Fraction aUIScale (mpView->GetModel()->GetUIScale());
+    if (maUIScale != aUIScale)
+    {
+        // UI scale has changed.
+
+        // Remember the new UI scale.
+        maUIScale = aUIScale;
+
+        // The content of the position and size boxes is only updated when item changes are notified.
+        // Request such notifications without changing the actual item values.
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, sal_True, sal_False);
     }
 }
 
