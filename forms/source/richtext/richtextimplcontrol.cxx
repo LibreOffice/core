@@ -34,8 +34,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 
-#include <memory>
-
 #define EMPTY_PAPER_SIZE    0x7FFFFFFF
 
 //........................................................................

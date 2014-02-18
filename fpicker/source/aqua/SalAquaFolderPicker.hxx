@@ -29,11 +29,7 @@
 
 #include "SalAquaPicker.hxx"
 
-#include <memory>
-
 #include <rtl/ustring.hxx>
-
-#include <list>
 
 //----------------------------------------------------------
 // class declaration

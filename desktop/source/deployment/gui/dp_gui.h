@@ -36,9 +36,6 @@
 #include "svtools/headbar.hxx"
 #include "com/sun/star/ucb/XContentEventListener.hpp"
 #include "osl/mutex.hxx"
-#include <list>
-#include <memory>
-#include <queue>
 
 namespace com { namespace sun { namespace star {
     namespace container {

@@ -29,9 +29,6 @@
 
 #include "SalAquaPicker.hxx"
 
-#include <memory>
-#include <list>
-
 #include <rtl/ustring.hxx>
 #include "FilterHelper.hxx"
 #include "AquaFilePickerDelegate.hxx"

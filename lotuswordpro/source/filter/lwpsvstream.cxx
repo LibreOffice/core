@@ -54,7 +54,6 @@
  *
  ************************************************************************/
 #include "lwpsvstream.hxx"
-#include <memory>
 
 const sal_uInt32 LwpSvStream::LWP_STREAM_BASE = 0x0010;
 

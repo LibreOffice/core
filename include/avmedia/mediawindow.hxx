@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 #define INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 
-#include <memory>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <tools/gen.hxx>

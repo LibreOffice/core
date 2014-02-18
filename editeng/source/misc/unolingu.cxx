@@ -18,10 +18,6 @@
  */
 
 
-#include <map>
-#include <vector>
-#include <list>
-#include <memory>
 #include <editeng/unolingu.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/Desktop.hpp>

@@ -73,8 +73,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-#include <memory>
-
 //.........................................................................
 namespace frm
 {

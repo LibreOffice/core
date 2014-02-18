@@ -33,7 +33,6 @@
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
-#include <memory>
 #include <boost/unordered_map.hpp>
 #include <list>
 #include "dp_registry.hrc"

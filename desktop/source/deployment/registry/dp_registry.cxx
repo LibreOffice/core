@@ -42,7 +42,6 @@
 #include <boost/unordered_map.hpp>
 #include <set>
 #include <boost/unordered_set.hpp>
-#include <memory>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;

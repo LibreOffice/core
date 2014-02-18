@@ -29,7 +29,6 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <vector>
-#include <memory>
 
 #include "linguistic/misc.hxx"
 #include "lngopt.hxx"

@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include <memory>
 #include <vector>
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"

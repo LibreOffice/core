@@ -46,7 +46,6 @@
 #include <vcl/svapp.hxx>
 //==================================================================
 
-#include <memory>
 #include <limits>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>

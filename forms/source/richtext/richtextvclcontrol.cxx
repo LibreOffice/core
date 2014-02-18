@@ -37,7 +37,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
-#include <memory>
 
 //........................................................................
 namespace frm

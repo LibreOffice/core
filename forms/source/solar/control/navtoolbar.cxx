@@ -31,7 +31,6 @@
 #include <sfx2/imgmgr.hxx>
 #include <vcl/fixed.hxx>
 
-#include <memory>
 #include <sal/macros.h>
 
 #define LID_RECORD_LABEL    1000

@@ -21,7 +21,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <memory> /* auto_ptr */
 
 /// This Class is responsible for extracting/merging OpenOffice XML Helpfiles
 class HelpParser

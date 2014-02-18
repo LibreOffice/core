@@ -29,7 +29,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include <memory>
 
 
 using namespace ::dp_misc;

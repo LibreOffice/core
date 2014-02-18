@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 
 #include <svtools/toolboxcontroller.hxx>
-#include <memory>
 
 #include <tools/link.hxx>
 

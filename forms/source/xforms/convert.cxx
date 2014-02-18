@@ -21,7 +21,6 @@
 #include "convert.hxx"
 
 #include "unohelper.hxx"
-#include <memory>
 #include <algorithm>
 #include <functional>
 #include <o3tl/compat_functional.hxx>

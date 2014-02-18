@@ -20,9 +20,7 @@
 #ifndef INCLUDED_FORMULA_TOKEN_HXX
 #define INCLUDED_FORMULA_TOKEN_HXX
 
-#include <memory>
 #include <string.h>
-#include <vector>
 #include <formula/opcode.hxx>
 #include <tools/mempool.hxx>
 #include <formula/IFunctionDescription.hxx>
