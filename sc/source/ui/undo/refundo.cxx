@@ -135,7 +135,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
 }
 
-void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
+void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
 {
     if (pDBCollection)
         pDoc->SetDBCollection( new ScDBCollection(*pDBCollection) );

@@ -49,7 +49,7 @@ public:
                 ~ScRefUndoData();
 
     void        DeleteUnchanged( const ScDocument* pDoc );
-    void        DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst );
+    void        DoUndo( ScDocument* pDoc, bool bUndoRefFirst );
 };
 
 #endif
