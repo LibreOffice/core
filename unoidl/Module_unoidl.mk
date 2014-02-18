@@ -16,9 +16,11 @@ $(eval $(call gb_Module_add_targets,unoidl, \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,unoidl, \
-    CustomTarget_unoidl-write_test \
     Executable_unoidl-check \
     Executable_unoidl-write \
 ))
 
+$(eval $(call gb_Module_add_check_targets,unoidl, \
+    CustomTarget_unoidl-write_test \
+))
 # vim: set noet sw=4 ts=4:
