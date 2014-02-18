@@ -40,6 +40,7 @@ writerfilter_OOXMLNAMESPACES= \
 	vml-wordprocessingDrawing \
 	mce \
 	wp14 \
+	w14 \
 	wml
 
 writerfilter_ALL = \

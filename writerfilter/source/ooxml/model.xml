@@ -5315,6 +5315,82 @@
       <element name="sizeRelV" tokenid="ooxml:sizeRelV_sizeRelV"/>
     </resource>
   </namespace>
+  <namespace name="w14">
+    <start name="glow"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <define name="CT_Glow">
+        <element name="srgbClr">
+          <ref name="CT_SRgbColor"/>
+        </element>
+        <element name="schemeClr">
+          <ref name="CT_SchemeColor"/>
+        </element>
+        <attribute name="rad">
+          <ref name="ST_PositiveCoordinate"/>
+        </attribute>
+      </define>
+
+      <define name="CT_SRgbColor">
+        <element name="tint">
+          <ref name="CT_PositiveFixedPercentage"/>
+        </element>
+        <element name="shade">
+          <ref name="CT_PositiveFixedPercentage"/>
+        </element>
+        <element name="alpha">
+          <ref name="CT_PositiveFixedPercentage"/>
+        </element>
+        <element name="hueMod">
+          <ref name="CT_PositivePercentage"/>
+        </element>
+        <element name="sat">
+          <ref name="CT_Percentage"/>
+        </element>
+        <element name="satOff">
+          <ref name="CT_Percentage"/>
+        </element>
+        <element name="satMod">
+          <ref name="CT_Percentage"/>
+        </element>
+        <element name="lum">
+          <ref name="CT_Percentage"/>
+        </element>
+        <element name="lumOff">
+          <ref name="CT_Percentage"/>
+        </element>
+        <element name="lumMod">
+          <ref name="CT_Percentage"/>
+        </element>
+
+        <attribute name="val">
+          <ref name="ST_HexColorRGB"/>
+        </attribute>
+      </define>
+
+      <define name="CT_PositiveFixedPercentage">
+        <attribute name="val">
+          <ref name="ST_PositiveFixedPercentage"/>
+        </attribute>
+      </define>
+      <define name="CT_PositivePercentage">
+        <attribute name="val">
+          <ref name="ST_PositivePercentage"/>
+        </attribute>
+      </define>
+      <define name="CT_Percentage">
+        <attribute name="val">
+          <ref name="ST_Percentage"/>
+        </attribute>
+      </define>
+
+      <define name="glow">
+        <element name="glow">
+          <ref name="CT_Glow"/>
+        </element>
+      </define>
+
+    </grammar>
+  </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
@@ -12705,7 +12781,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-customXmlSchemaProperties.rng"/>
       <include href="shared-math.rng"/>
@@ -16945,6 +17021,11 @@
         <optional>
           <element name="oMath">
             <ref name="CT_OnOff"/>
+          </element>
+        </optional>
+         <optional>
+          <element name="w14:glow">
+            <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
       </define>
@@ -22873,7 +22954,7 @@
       <attribute name="eastAsiaTheme" tokenid="ooxml:CT_Fonts_eastAsiaTheme"/>
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
-    <resource name="EG_RPrBase" resource="Properties" tag="paragraph">
+    <resource name="EG_RPrBase" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" resource="Properties" tag="paragraph">
       <kind name="paragraph"/>
       <element name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <element name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
@@ -22914,6 +22995,7 @@
       <element name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
       <element name="specVanish" tokenid="sprm:CFspecVanish"/>
       <element name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
+      <element name="w14:glow" tokenid="ooxml:EG_RPrBase_w14_glow"/>
     </resource>
     <resource name="EG_RPrContent" resource="Properties" tag="character">
       <element name="rPrChange" tokenid="ooxml:EG_RPrContent_rPrChange"/>
