@@ -84,6 +84,7 @@ int static checkGLError(const char *file, int line)
     return retCode;
 }
 
+static bool bGlewInit = false;
 
 #define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
 
@@ -235,11 +236,16 @@ GLfloat texCoords[] = {
 int OpenGLRender::InitOpenGL(GLWindow aWindow)
 {
     glWin = aWindow;
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
+    if(!bGlewInit)
     {
-        SAL_WARN("chart2.opengl", "Failed to initialize GLEW");
-        return -1;
+        glewExperimental = GL_TRUE;
+        if (glewInit() != GLEW_OK)
+        {
+            SAL_WARN("chart2.opengl", "Failed to initialize GLEW");
+            return -1;
+        }
+        else
+            bGlewInit = true;
     }
 
     // These guys don't just check support but setup the vtables.
