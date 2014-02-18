@@ -98,7 +98,7 @@ void ScMoveTableDlg::SetForceCopyTable()
     pBtnCopy->Disable();
 }
 
-void ScMoveTableDlg::EnableCopyTable(sal_Bool bFlag)
+void ScMoveTableDlg::EnableCopyTable(bool bFlag)
 {
     if(bFlag)
         pBtnCopy->Enable();
@@ -106,7 +106,7 @@ void ScMoveTableDlg::EnableCopyTable(sal_Bool bFlag)
         pBtnCopy->Disable();
 }
 
-void ScMoveTableDlg::EnableRenameTable(sal_Bool bFlag)
+void ScMoveTableDlg::EnableRenameTable(bool bFlag)
 {
     bRenameTable = bFlag;
     pEdTabName->Enable(bFlag);

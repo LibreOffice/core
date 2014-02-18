@@ -42,8 +42,8 @@ public:
     bool    GetRenameTable          () const;
     void    GetTabNameString( OUString& rString ) const;
     void    SetForceCopyTable       ();
-    void    EnableCopyTable         (sal_Bool bFlag=true);
-    void    EnableRenameTable       (sal_Bool bFlag=true);
+    void    EnableCopyTable         (bool bFlag=true);
+    void    EnableRenameTable       (bool bFlag=true);
 
 private:
     void ResetRenameInput();
