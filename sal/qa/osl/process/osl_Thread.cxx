@@ -84,8 +84,10 @@ StopWatch::StopWatch()
     , m_bIsValid(false)
     , m_bIsRunning(false)
 {
-    t1 = {0, 0};
-    t2 = {0, 0};
+    t1.Seconds = 0;
+    t1.Nanosec = 0;
+    t2.Seconds = 0;
+    t2.Nanosec = 0;
 }
 
 void StopWatch::start()
