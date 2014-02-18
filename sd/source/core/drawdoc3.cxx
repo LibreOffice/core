@@ -808,7 +808,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         sal_uInt16 nSdPageStart = (nInsertPos - 1) / 2;
         sal_uInt16 nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
                             nSdPageStart - 1;
-        const bool bRemoveEmptyPresObj = pBookmarkDoc &&
+        const bool bRemoveEmptyPresObj =
                 (pBookmarkDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
                 (GetDocumentType() == DOCUMENT_TYPE_DRAW);
 
