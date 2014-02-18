@@ -1897,7 +1897,7 @@ void FormEditData::Reset()
     nFuncSel = 0;
     nOffset = 0;
     nEdFocus = 0;
-    bMatrix =sal_False;
+    bMatrix = false;
     aUniqueId=OString();
     aSelection.Min()=0;
     aSelection.Max()=0;
