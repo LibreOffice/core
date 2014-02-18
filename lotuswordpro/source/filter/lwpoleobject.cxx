@@ -198,7 +198,9 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
  * @date:    2/22/2005
  */
 LwpOleObject::LwpOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpGraphicOleObject(objHdr, pStrm),m_SizeRect(0,0,5,5)
+    : LwpGraphicOleObject(objHdr, pStrm)
+    , cPersistentFlags(0)
+    , m_SizeRect(0,0,5,5)
 {
 }
 /**
