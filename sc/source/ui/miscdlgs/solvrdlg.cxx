@@ -192,7 +192,7 @@ bool ScSolverDlg::IsRefInputMode() const
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
+bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 {
     sal_uInt32 n1 = 0;
     double n2;

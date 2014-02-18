@@ -75,7 +75,7 @@ private:
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
     formula::RefEdit*       pEdActive;
-    sal_Bool            bDlgLostFocus;
+    bool            bDlgLostFocus;
     const OUString  errMsgInvalidVar;
     const OUString  errMsgInvalidForm;
     const OUString  errMsgNoFormula;
@@ -84,7 +84,7 @@ private:
 
 #ifdef _SOLVRDLG_CXX
     void    Init();
-    sal_Bool    CheckTargetValue( const OUString& rStrVal );
+    bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );
