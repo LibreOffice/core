@@ -75,7 +75,7 @@ public:
                             return *this;
                         }
 
-    sal_Bool             operator==( const ScImportOptions& rCmp )
+    bool             operator==( const ScImportOptions& rCmp )
                         {
                             return
                                    nFieldSepCode    == rCmp.nFieldSepCode
@@ -95,10 +95,10 @@ public:
     sal_Unicode nTextSepCode;
     OUString    aStrFont;
     rtl_TextEncoding eCharSet;
-    sal_Bool    bFixedWidth;
-    sal_Bool    bSaveAsShown;
-    sal_Bool    bQuoteAllText;
-    sal_Bool    bSaveFormulas;
+    bool        bFixedWidth;
+    bool        bSaveAsShown;
+    bool        bQuoteAllText;
+    bool        bSaveFormulas;
 };
 
 

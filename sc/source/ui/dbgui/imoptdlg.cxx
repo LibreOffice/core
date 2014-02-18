@@ -41,7 +41,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     nFieldSepCode = 0;
     nTextSepCode = 0;
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
-    bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
+    bSaveAsShown = true;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
     bSaveFormulas = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
@@ -50,7 +50,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         // first 3 tokens: common
         OUString aToken( rStr.getToken( 0, ',' ) );
         if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
-            bFixedWidth = sal_True;
+            bFixedWidth = true;
         else
             nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
         nTextSepCode  = (sal_Unicode) rStr.getToken(1,',').toInt32();
@@ -61,7 +61,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         {
             // compatibility with old options string: "Save as shown" as 4th token, numeric
             bSaveAsShown = (rStr.getToken( 3, ',' ).toInt32() ? sal_True : false);
-            bQuoteAllText = sal_True;   // use old default then
+            bQuoteAllText = true;   // use old default then
         }
         else
         {
