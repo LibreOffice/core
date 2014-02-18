@@ -31,11 +31,15 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
     bool bAsLink, bool bSkipAttrForEmptyCells) :
     ClipContextBase(rDoc),
+    mnDestCol1(-1), mnDestCol2(-1),
+    mnDestRow1(-1), mnDestRow2(-1),
     mnTabStart(-1), mnTabEnd(-1),
-    mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
-    mpSinglePattern(NULL), mpSingleNote(NULL),
+    mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc),
+    mnInsertFlag(nInsertFlag), mnDeleteFlag(IDF_NONE),
+    mpCondFormatList(NULL), mpSinglePattern(NULL), mpSingleNote(NULL),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
-    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES))
+    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES)),
+    mbTableProtected(false)
 {
 }
 
@@ -59,6 +63,24 @@ SCTAB CopyFromClipContext::getTabEnd() const
     return mnTabEnd;
 }
 
+void CopyFromClipContext::setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    mnDestCol1 = nCol1;
+    mnDestRow1 = nRow1;
+    mnDestCol2 = nCol2;
+    mnDestRow2 = nRow2;
+}
+
+CopyFromClipContext::Range CopyFromClipContext::getDestRange() const
+{
+    Range aRet;
+    aRet.mnCol1 = mnDestCol1;
+    aRet.mnCol2 = mnDestCol2;
+    aRet.mnRow1 = mnDestRow1;
+    aRet.mnRow2 = mnDestRow2;
+    return aRet;
+}
+
 ScDocument* CopyFromClipContext::getUndoDoc()
 {
     return mpRefUndoDoc;
@@ -74,9 +96,29 @@ sal_uInt16 CopyFromClipContext::getInsertFlag() const
     return mnInsertFlag;
 }
 
+void CopyFromClipContext::setDeleteFlag( sal_uInt16 nFlag )
+{
+    mnDeleteFlag = nFlag;
+}
+
+sal_uInt16 CopyFromClipContext::getDeleteFlag() const
+{
+    return mnDeleteFlag;
+}
+
 ScCellValue& CopyFromClipContext::getSingleCell()
 {
     return maSingleCell;
+}
+
+void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
+{
+    mpCondFormatList = pCondFormatList;
+}
+
+ScConditionalFormatList* CopyFromClipContext::getCondFormatList()
+{
+    return mpCondFormatList;
 }
 
 const ScPatternAttr* CopyFromClipContext::getSingleCellPattern() const
@@ -97,6 +139,16 @@ const ScPostIt* CopyFromClipContext::getSingleCellNote() const
 void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
 {
     mpSingleNote = pNote;
+}
+
+void CopyFromClipContext::setTableProtected( bool b )
+{
+    mbTableProtected = b;
+}
+
+bool CopyFromClipContext::isTableProtected() const
+{
+    return mbTableProtected;
 }
 
 bool CopyFromClipContext::isAsLink() const

@@ -232,6 +232,7 @@ public:
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
 
+    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol );
     void CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2 );
 
     void CopyFromClip(
@@ -592,6 +593,9 @@ private:
     // cell notes
     void SwapCellNotes( SCROW nRow1, SCROW nRow2 );
 
+    void DeleteCells(
+        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
+        std::vector<SCROW>& rDeleted );
 };
 
 #endif

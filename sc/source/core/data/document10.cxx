@@ -26,6 +26,30 @@ bool ScDocument::IsMerged( const ScAddress& rPos ) const
     return pTab->IsMerged(rPos.Col(), rPos.Row());
 }
 
+void ScDocument::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScMarkData& rMark )
+{
+    SCTAB nClipTab = 0;
+    const TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
+    SCTAB nClipTabCount = rClipTabs.size();
+
+    for (SCTAB nTab = rCxt.getTabStart(); nTab <= rCxt.getTabEnd(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        if (!rMark.GetTableSelect(nTab))
+            continue;
+
+        while (!rClipTabs[nClipTab])
+            nClipTab = (nClipTab+1) % nClipTabCount;
+
+        pTab->DeleteBeforeCopyFromClip(rCxt, *rClipTabs[nClipTab]);
+
+        nClipTab = (nClipTab+1) % nClipTabCount;
+    }
+}
+
 bool ScDocument::CopyOneCellFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {

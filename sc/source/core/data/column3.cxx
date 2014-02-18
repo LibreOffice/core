@@ -570,6 +570,29 @@ public:
 
 }
 
+void ScColumn::DeleteCells(
+    sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
+    std::vector<SCROW>& rDeleted )
+{
+    // Determine which cells to delete based on the deletion flags.
+    DeleteAreaHandler aFunc(*pDocument, nDelFlag);
+    sc::CellStoreType::iterator itPos = maCells.position(rBlockPos.miCellPos, nRow1).first;
+    sc::ProcessBlock(itPos, maCells, aFunc, nRow1, nRow2);
+    aFunc.endFormulas(); // Have the formula cells stop listening.
+
+    std::vector<SCROW> aDeletedRows;
+    aFunc.getSpans().getRows(aDeletedRows);
+    std::copy(aDeletedRows.begin(), aDeletedRows.end(), std::back_inserter(rDeleted));
+
+    // Get the deletion spans.
+    sc::SingleColumnSpanSet::SpansType aSpans;
+    aFunc.getSpans().getSpans(aSpans);
+
+    // Delete the cells for real.
+    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this));
+    CellStorageModified();
+}
+
 void ScColumn::DeleteArea(
     SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast )
 {
@@ -581,35 +604,14 @@ void ScColumn::DeleteArea(
 
     std::vector<SCROW> aDeletedRows;
 
+    sc::ColumnBlockPosition aBlockPos;
+    InitBlockPosition(aBlockPos);
+
     if (!IsEmptyData() && nContFlag)
-    {
-        // There are cells to delete.  Determine which cells to delete based on the deletion flags.
-        DeleteAreaHandler aFunc(*pDocument, nDelFlag);
-        sc::CellStoreType::iterator itPos = maCells.position(nStartRow).first;
-        sc::ProcessBlock(itPos, maCells, aFunc, nStartRow, nEndRow);
-        aFunc.endFormulas(); // Have the formula cells stop listening.
-        aFunc.getSpans().getRows(aDeletedRows);
-
-        // Get the deletion spans.
-        sc::SingleColumnSpanSet::SpansType aSpans;
-        aFunc.getSpans().getSpans(aSpans);
-
-        sc::ColumnBlockPosition aBlockPos;
-        aBlockPos.miCellPos = itPos;
-        aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
-        aBlockPos.miCellNotePos = maCellNotes.begin();
-
-        // Delete the cells for real.
-        std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, *this));
-        CellStorageModified();
-    }
+        DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows);
 
     if (nDelFlag & IDF_NOTE)
-    {
-        sc::ColumnBlockPosition aBlockPos;
-        aBlockPos.miCellNotePos = maCellNotes.begin();
         DeleteCellNotes(aBlockPos, nStartRow, nEndRow);
-    }
 
     if ( nDelFlag & IDF_EDITATTR )
     {

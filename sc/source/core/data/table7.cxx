@@ -8,6 +8,10 @@
  */
 
 #include <table.hxx>
+#include <clipcontext.hxx>
+#include <document.hxx>
+#include <clipparam.hxx>
+#include <bcaslot.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -15,6 +19,34 @@ bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
         return false;
 
     return aCol[nCol].IsMerged(nRow);
+}
+
+void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScTable& rClipTab )
+{
+    sc::CopyFromClipContext::Range aRange = rCxt.getDestRange();
+    if (!ValidCol(aRange.mnCol1) || !ValidCol(aRange.mnCol2))
+        return;
+
+    // Pass some stuff to the columns via context.
+    rCxt.setTableProtected(IsProtected());
+    rCxt.setCondFormatList(mpCondFormatList.get());
+
+    ScRange aClipRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
+    SCCOL nClipCol = aClipRange.aStart.Col();
+    {
+        ScBulkBroadcast aBulkBroadcast(pDocument->GetBASM());
+
+        for (SCCOL nCol = aRange.mnCol1; nCol <= aRange.mnCol2; ++nCol, ++nClipCol)
+        {
+            if (nClipCol > aClipRange.aEnd.Col())
+                nClipCol = aClipRange.aStart.Col(); // loop through columns.
+
+            const ScColumn& rClipCol = rClipTab.aCol[nClipCol];
+            aCol[nCol].DeleteBeforeCopyFromClip(rCxt, rClipCol);
+        }
+    }
+
+    SetStreamValid(false);
 }
 
 void ScTable::CopyOneCellFromClip(
