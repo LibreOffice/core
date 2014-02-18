@@ -44,17 +44,17 @@ Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
-SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle) :
-
-    aVerSBar( pLBView, WB_DRAG | WB_VSCROLL ),
-    aHorSBar( pLBView, WB_DRAG | WB_HSCROLL ),
-    aScrBarBox( pLBView ),
-    aOutputSize( 0, 0 ),
-    aSelEng( pLBView, (FunctionSet*)0 ),
-    aFctSet( this, &aSelEng, pLBView ),
-    nExtendedWinBits( 0 ),
-    bAreChildrenTransient( true ),
-    m_pStringSorter(NULL)
+SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
+    : aVerSBar(pLBView, WB_DRAG | WB_VSCROLL)
+    , aHorSBar(pLBView, WB_DRAG | WB_HSCROLL)
+    , aScrBarBox(pLBView)
+    , aOutputSize(0, 0)
+    , aSelEng(pLBView, (FunctionSet*)0)
+    , aFctSet(this, &aSelEng, pLBView)
+    , nNextVerVisSize(0)
+    , nExtendedWinBits(0)
+    , bAreChildrenTransient(true)
+    , m_pStringSorter(NULL)
 {
     osl_atomic_increment(&s_nImageRefCount);
     pView = pLBView;
