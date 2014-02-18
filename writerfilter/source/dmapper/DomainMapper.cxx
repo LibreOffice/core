@@ -1000,9 +1000,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_PPrBase_keepNext:
         rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue ? true : false) );
         break;
-    case NS_sprm::LN_PFPageBreakBefore:
+    case NS_ooxml::LN_CT_PPrBase_pageBreakBefore:
         rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
-    break;  // sprmPFPageBreakBefore
+    break;
     case NS_ooxml::LN_CT_NumPr_ilvl:
             if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
             {
@@ -1058,7 +1058,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
         break;
-    case NS_sprm::LN_PFNoLineNumb:   // sprmPFNoLineNumb
+    case NS_ooxml::LN_CT_PPrBase_suppressLineNumbers:
         rContext->Insert(PROP_PARA_LINE_NUMBER_COUNT, uno::makeAny( nIntValue ? false : true) );
         break;
     case 0x845d:    //right margin Asian - undocumented

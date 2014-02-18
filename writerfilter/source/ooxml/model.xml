@@ -22340,11 +22340,11 @@
       <element name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
       <element name="keepNext" tokenid="ooxml:CT_PPrBase_keepNext"/>
       <element name="keepLines" tokenid="ooxml:CT_PPrBase_keepLines"/>
-      <element name="pageBreakBefore" tokenid="sprm:PFPageBreakBefore"/>
+      <element name="pageBreakBefore" tokenid="ooxml:CT_PPrBase_pageBreakBefore"/>
       <element name="framePr" tokenid="ooxml:CT_PPrBase_framePr"/>
       <element name="widowControl" tokenid="ooxml:CT_PPrBase_widowControl"/>
       <element name="numPr" tokenid="ooxml:CT_PPrBase_numPr"/>
-      <element name="suppressLineNumbers" tokenid="sprm:PFNoLineNumb"/>
+      <element name="suppressLineNumbers" tokenid="ooxml:CT_PPrBase_suppressLineNumbers"/>
       <element name="pBdr" tokenid="ooxml:CT_PrBase_pBdr"/>
       <element name="shd" tokenid="sprm:PShd"/>
       <element name="tabs" tokenid="ooxml:CT_PPrBase_tabs"/>
