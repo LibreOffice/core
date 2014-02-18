@@ -188,7 +188,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     Window*                 pGetChild;
     Window*                 pChild;
 
-    // Die schon vergebenen Mnemonics registieren
+    // register the assigned mnemonics
     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pGetChild )
     {
@@ -197,7 +197,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
         pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
     }
 
-    // Bei TabPages auch noch die Controls vom Dialog beruecksichtigen
+    // take the Controls of the dialog into account for TabPages
     if ( pWindow->GetType() == WINDOW_TABPAGE )
     {
         Window* pParent = pWindow->GetParent();
@@ -216,7 +216,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
         }
     }
 
-    // Die Mnemonics an die Controls vergeben, die noch keinen haben
+    // assign mnemonics to Controls which have none
     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pGetChild )
     {
@@ -398,7 +398,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             Dialog*     pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
             while ( pExeDlg )
             {
-                // Nur wenn er sichtbar und enabled ist
+                // only if visible and enabled
                 if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, sal_True ) &&
                      pExeDlg->IsReallyVisible() &&
                      pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode() )
@@ -596,7 +596,7 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
-    // Zuerst Basisklasse rufen wegen TabSteuerung
+    // first call the base class due to Tab control
     bool nRet = SystemWindow::Notify( rNEvt );
     if ( !nRet )
     {
@@ -848,11 +848,11 @@ sal_Bool Dialog::ImplStartExecuteModal()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Dialoge, die sich in Execute befinden, miteinander verketten
+     // link all dialogs which are being executed
     mpPrevExecuteDlg = pSVData->maWinData.mpLastExecuteDlg;
     pSVData->maWinData.mpLastExecuteDlg = this;
 
-    // Capture beenden, damit der Dialog bedient werden kann
+    // stop capturing, in order to have control over the dialog
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     if ( pSVData->maWinData.mpCaptureWin )
@@ -1007,7 +1007,7 @@ void Dialog::EndDialog( long nResult )
     {
         SetModalInputMode( sal_False );
 
-        // Dialog aus der Kette der Dialoge die in Execute stehen entfernen
+        // remove dialog from the list of dialogs which are being executed
         ImplSVData* pSVData = ImplGetSVData();
         Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
         while ( pExeDlg )
@@ -1176,22 +1176,20 @@ void Dialog::GrabFocusToFirstControl()
 {
     Window* pFocusControl;
 
-    // Wenn Dialog den Focus hat, versuchen wr trotzdem
-    // ein Focus-Control zu finden
+    // find focus control, even if the dialog has focus
     if ( HasFocus() )
         pFocusControl = NULL;
     else
     {
-        // Wenn schon ein Child-Fenster mal den Focus hatte,
-        // dann dieses bevorzugen
+        // prefer a child window which had focus before
         pFocusControl = ImplGetFirstOverlapWindow()->mpWindowImpl->mpLastFocusWindow;
-        // Control aus der Dialog-Steuerung suchen
+        // find the control out of the dialog control
         if ( pFocusControl )
             pFocusControl = ImplFindDlgCtrlWindow( pFocusControl );
     }
-    // Kein Control hatte vorher den Focus, oder das Control
-    // befindet sich nicht in der Tab-Steuerung, dann das erste
-    // Control in der TabSteuerung den Focus geben
+    // no control had the focus before or the control is not
+    // part of the tab-control, now give focus to the
+    // first control in the tab-control
     if ( !pFocusControl ||
          !(pFocusControl->GetStyle() & WB_TABSTOP) ||
          !isVisibleInLayout(pFocusControl) ||
@@ -1207,10 +1205,6 @@ void Dialog::GrabFocusToFirstControl()
 void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     ImplBorderWindow aImplWin( (Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
-//  aImplWin.SetText( GetText() );
-//  aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-//  aImplWin.SetDisplayActive( sal_True );
-//  aImplWin.InitView();
     aImplWin.GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
