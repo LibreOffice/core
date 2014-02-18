@@ -1383,7 +1383,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     if ( nFlags & IDF_OBJECTS )
     {
-        ScModelObj* pModelObj = ( pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : NULL );
+        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
         if ( pPage && pModelObj )
         {
             bool bSameDoc = ( rClipParam.getSourceDocID() == pDoc->GetDocumentID() );
