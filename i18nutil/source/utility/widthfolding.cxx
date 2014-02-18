@@ -41,7 +41,7 @@ sal_Unicode widthfolding::decompose_ja_voiced_sound_marksChar2Char (sal_Unicode 
 /**
  * Decompose Japanese specific voiced and semi-voiced sound marks.
  */
-OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, sal_Bool useOffset )
+OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
   // Create a string buffer which can hold nCount * 2 + 1 characters.
   // Its size may become double of nCount.
@@ -103,7 +103,7 @@ oneToOneMapping& widthfolding::getfull2halfTable(void)
 /**
  * Compose Japanese specific voiced and semi-voiced sound marks.
  */
-OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int32 nFlags )
+OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 nFlags )
 {
   // Create a string buffer which can hold nCount + 1 characters.
   // Its size may become equal to nCount or smaller.
@@ -157,14 +157,14 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
       // 0 addresses a code point regarding 0x3099 or 0x309b (voiced sound mark),
       // 1 is 0x309a or 0x309c (semi-voiced sound mark)
       int i = int(previousChar - 0x3040); // i acts as an index of array
-      sal_Bool bCompose = sal_False;
+      bool bCompose = false;
 
       if (0 <= i && i <= (0x30ff - 0x3040) && composition_table[i][j])
-        bCompose = sal_True;
+        bCompose = true;
 
       // not to use combined KATAKANA LETTER VU
       if ( previousChar == 0x30a6 && (nFlags & WIDTHFOLDNIG_DONT_USE_COMBINED_VU) )
-        bCompose = sal_False;
+        bCompose = false;
 
       if( bCompose ){
         if (useOffset) {

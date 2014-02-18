@@ -378,7 +378,7 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
             bit(UnicodeType::PARAGRAPH_SEPARATOR)
 
 #define IsType(func, mask)  \
-sal_Bool SAL_CALL func( const sal_Unicode ch) {\
+bool SAL_CALL func( const sal_Unicode ch) {\
     return (bit(getUnicodeType(ch)) & (mask)) != 0;\
 }
 
@@ -389,7 +389,7 @@ IsType(unicode::isSpace, SPACEMASK)
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
             bit(0x1c)|bit(0x1d)|bit(0x1e)|bit(0x1f)
 
-sal_Bool SAL_CALL unicode::isWhiteSpace( const sal_Unicode ch) {
+bool SAL_CALL unicode::isWhiteSpace( const sal_Unicode ch) {
     return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & (CONTROLSPACE)));
 }
 

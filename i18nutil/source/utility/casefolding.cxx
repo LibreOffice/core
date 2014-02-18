@@ -108,7 +108,7 @@ Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 
         return dummy;
 }
 
-inline sal_Bool SAL_CALL
+inline bool SAL_CALL
 is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
 {
         sal_Unicode c = 0;
