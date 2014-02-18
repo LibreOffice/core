@@ -628,7 +628,7 @@ sal_Bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
 
 const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealSlot ) const
 {
-    SAL_WARN_IF( !pImpData->bRegistered, "sfx2.control", "Interface not registered" );
+    SAL_WARN_IF( !pImpData->bRegistered, "sfx.control", "Interface not registered" );
 
     const SfxInterface* pInterface = this;
 
