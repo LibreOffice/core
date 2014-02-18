@@ -211,7 +211,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                     pClpDoc->CloneSdrObj( *pObj, sal_False, sal_True );
 
                 SwPaM aTemp(aPos);
-                pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
+                pClpDoc->InsertDrawObj(aTemp, *pNew, aSet );
             }
             else
             {
@@ -396,8 +396,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     aSet.Put( aAnchor );
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                                 GetDoc() == pDestDoc, sal_True );
-                    pFmt = pDestDoc->Insert( *pDestShell->GetCrsr(),
-                                            *pNew, &aSet, NULL );
+                    pFmt = pDestDoc->InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
                 }
                 else
                     pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
@@ -1456,7 +1455,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     DelSelectedObj();
 
-                    pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet, NULL );
+                    pFmt = GetDoc()->InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
                 }
                 else
                 {

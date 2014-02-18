@@ -923,57 +923,49 @@ if( GetIDocumentUndoRedo().DoesUndo() )
 }
 
 
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
-SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
-                             SdrObject& rDrawObj,
-                             const SfxItemSet* pFlyAttrSet,
-                             SwFrmFmt* pDefFmt )
+// Insert drawing object, which has to be already inserted in the DrawModel
+SwDrawFrmFmt* SwDoc::InsertDrawObj(
+    const SwPaM &rRg,
+    SdrObject& rDrawObj,
+    const SfxItemSet& rFlyAttrSet )
 {
-    SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( aEmptyStr,
-                                        pDefFmt ? pDefFmt : GetDfltFrmFmt() );
+    SwDrawFrmFmt* pFmt = MakeDrawFrmFmt( aEmptyStr, GetDfltFrmFmt() );
 
     const SwFmtAnchor* pAnchor = 0;
-    if( pFlyAttrSet )
-    {
-        pFlyAttrSet->GetItemState( RES_ANCHOR, sal_False,
-                                    (const SfxPoolItem**)&pAnchor );
-        pFmt->SetFmtAttr( *pFlyAttrSet );
-    }
+    rFlyAttrSet.GetItemState( RES_ANCHOR, sal_False, (const SfxPoolItem**) &pAnchor );
+    pFmt->SetFmtAttr( rFlyAttrSet );
 
-    RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
-                                  : pFmt->GetAnchor().GetAnchorId();
-
-    // Anker noch nicht gesetzt ?
-    // DrawObjecte duerfen niemals in Kopf-/Fusszeilen landen.
+    RndStdIds eAnchorId = pAnchor != NULL ? pAnchor->GetAnchorId() : pFmt->GetAnchor().GetAnchorId();
     const bool bIsAtCntnt = (FLY_AT_PAGE != eAnchorId);
 
     const SwNodeIndex* pChkIdx = 0;
-    if( !pAnchor )
+    if ( pAnchor == NULL )
     {
         pChkIdx = &rRg.GetPoint()->nNode;
     }
-    else if( bIsAtCntnt )
+    else if ( bIsAtCntnt )
     {
-        pChkIdx = pAnchor->GetCntntAnchor()
-                    ? &pAnchor->GetCntntAnchor()->nNode
-                    : &rRg.GetPoint()->nNode;
+        pChkIdx =
+            pAnchor->GetCntntAnchor() ? &pAnchor->GetCntntAnchor()->nNode : &rRg.GetPoint()->nNode;
     }
 
-    // OD 24.06.2003 #108784# - allow drawing objects in header/footer, but
-    // control objects aren't allowed in header/footer.
-    if( pChkIdx &&
-        ::CheckControlLayer( &rDrawObj ) &&
-        IsInHeaderFooter( *pChkIdx ) )
+    // allow drawing objects in header/footer, but control objects aren't allowed in header/footer.
+    if( pChkIdx != NULL
+        && ::CheckControlLayer( &rDrawObj )
+        && IsInHeaderFooter( *pChkIdx ) )
     {
-       pFmt->SetFmtAttr( SwFmtAnchor( eAnchorId = FLY_AT_PAGE ) );
+        // apply at-page anchor format
+        eAnchorId = FLY_AT_PAGE;
+        pFmt->SetFmtAttr( SwFmtAnchor( eAnchorId ) );
     }
-    else if( !pAnchor || (bIsAtCntnt && !pAnchor->GetCntntAnchor() ))
+    else if( pAnchor == NULL
+             || ( bIsAtCntnt
+                  && pAnchor->GetCntntAnchor() == NULL ) )
     {
-        // dann setze ihn, wird im Undo gebraucht
-        SwFmtAnchor aAnch( pAnchor ? *pAnchor : pFmt->GetAnchor() );
+        // apply anchor format
+        SwFmtAnchor aAnch( pAnchor != NULL ? *pAnchor : pFmt->GetAnchor() );
         eAnchorId = aAnch.GetAnchorId();
-        if( FLY_AT_FLY == eAnchorId )
+        if ( eAnchorId == FLY_AT_FLY )
         {
             SwPosition aPos( *rRg.GetNode()->FindFlyStartNode() );
             aAnch.SetAnchor( &aPos );
@@ -981,39 +973,50 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         else
         {
             aAnch.SetAnchor( rRg.GetPoint() );
-            if ( FLY_AT_PAGE == eAnchorId )
+            if ( eAnchorId == FLY_AT_PAGE )
             {
-                eAnchorId = rDrawObj.ISA( SdrUnoObj )
-                                    ? FLY_AS_CHAR : FLY_AT_PARA;
+                eAnchorId = rDrawObj.ISA( SdrUnoObj ) ? FLY_AS_CHAR : FLY_AT_PARA;
                 aAnch.SetType( eAnchorId );
             }
         }
         pFmt->SetFmtAttr( aAnch );
     }
 
-    // bei als Zeichen gebundenen Draws das Attribut im Absatz setzen
-    if ( FLY_AS_CHAR == eAnchorId )
+    // insert text attribute for as-character anchored drawing object
+    if ( eAnchorId == FLY_AS_CHAR )
     {
-        xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
-        SwFmtFlyCnt aFmt( pFmt );
-        rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
-                aFmt, nStt, nStt );
+        bool bAnchorAtPageAsFallback = true;
+        const SwFmtAnchor& rDrawObjAnchorFmt = pFmt->GetAnchor();
+        if ( rDrawObjAnchorFmt.GetCntntAnchor() != NULL )
+        {
+            SwTxtNode* pAnchorTxtNode =
+                    rDrawObjAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
+            if ( pAnchorTxtNode != NULL )
+            {
+                const xub_StrLen nStt = rDrawObjAnchorFmt.GetCntntAnchor()->nContent.GetIndex();
+                SwFmtFlyCnt aFmt( pFmt );
+                pAnchorTxtNode->InsertItem( aFmt, nStt, nStt );
+                bAnchorAtPageAsFallback = false;
+            }
+        }
+
+        if ( bAnchorAtPageAsFallback )
+        {
+            ASSERT( false, "SwDoc::InsertDrawObj(..) - missing content anchor for as-character anchored drawing object --> anchor at-page" );
+            pFmt->SetFmtAttr( SwFmtAnchor( FLY_AT_PAGE ) );
+        }
     }
 
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
-    // ggfs. Frames anlegen
-    if( GetCurrentViewShell() )
+    if ( GetCurrentViewShell() )
     {
+        // create layout representation
         pFmt->MakeFrms();
-        // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
-        // move object to visible layer
-        // --> OD 2007-07-10 #i79391#
         if ( pContact->GetAnchorFrm() )
         {
             pContact->MoveObjToVisibleLayer( &rDrawObj );
         }
-        // <--
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())

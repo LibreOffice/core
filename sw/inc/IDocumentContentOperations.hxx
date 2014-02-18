@@ -138,7 +138,7 @@ public:
     /** Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
     angemeldet sein.
     */
-    virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*) = 0;
+    virtual SwDrawFrmFmt* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) = 0;
 
     /** Einfuegen von OLE-Objecten.
     */
