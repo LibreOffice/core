@@ -56,6 +56,7 @@ protected:
     enum PreRelease
     {
         Rel_NONE,
+        Rel_INTERNAL,
         Rel_EA,
         Rel_EA1,
         Rel_EA2,

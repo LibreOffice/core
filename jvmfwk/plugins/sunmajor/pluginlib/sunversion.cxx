@@ -206,7 +206,9 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
 {
     if (szRelease == NULL)
         return Rel_NONE;
-    if( ! strcmp(szRelease,"ea"))
+    if( ! strcmp(szRelease,"internal"))
+        return  Rel_INTERNAL;
+    else if( ! strcmp(szRelease,"ea"))
         return  Rel_EA;
     else if( ! strcmp(szRelease,"ea1"))
         return Rel_EA1;
