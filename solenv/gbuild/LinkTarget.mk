@@ -597,7 +597,11 @@ $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 
 ifeq ($(gb_FULLDEPS),$(true))
+ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
+-includedepcache $(call gb_LinkTarget_get_dep_target,$(1))
+else
 -include $(call gb_LinkTarget_get_dep_target,$(1))
+endif
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
