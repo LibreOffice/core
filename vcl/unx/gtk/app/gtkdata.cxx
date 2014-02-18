@@ -868,7 +868,8 @@ create_sal_gtk_timeout( GtkSalTimer *pTimer )
 }
 
 GtkSalTimer::GtkSalTimer()
-    : m_pTimeout( NULL )
+    : m_pTimeout(NULL)
+    , m_nTimeoutMS(0)
 {
 }
 
