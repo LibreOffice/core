@@ -607,7 +607,7 @@ void ScInputWindow::Resize()
     }
 }
 
-void ScInputWindow::SetFuncString( const OUString& rString, sal_Bool bDoEdit )
+void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 {
     //! new method at ScModule to query if function autopilot is open
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -671,7 +671,7 @@ void ScInputWindow::SetOkCancelMode()
         SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
         SetItemText ( SID_INPUT_OK,     aTextOk );
         SetHelpId   ( SID_INPUT_OK,     HID_INSWIN_OK );
-        bIsOkCancelMode = sal_True;
+        bIsOkCancelMode = true;
     }
 }
 
@@ -700,7 +700,7 @@ void ScInputWindow::SetSumAssignMode()
     }
 }
 
-void ScInputWindow::SetFormulaMode( sal_Bool bSet )
+void ScInputWindow::SetFormulaMode( bool bSet )
 {
     aWndPos.SetFormulaMode(bSet);
     aTextWindow.SetFormulaMode(bSet);
@@ -716,7 +716,7 @@ OUString ScInputWindow::GetText() const
     return ToolBox::GetText();
 }
 
-sal_Bool ScInputWindow::IsInputActive()
+bool ScInputWindow::IsInputActive()
 {
     return aTextWindow.IsInputActive();
 }
@@ -731,7 +731,7 @@ void ScInputWindow::MakeDialogEditView()
     aTextWindow.MakeDialogEditView();
 }
 
-void ScInputWindow::StopEditEngine( sal_Bool bAll )
+void ScInputWindow::StopEditEngine( bool bAll )
 {
     aTextWindow.StopEditEngine( bAll );
 }
@@ -770,7 +770,7 @@ void ScInputWindow::PosGrabFocus()
     aWndPos.GrabFocus();
 }
 
-void ScInputWindow::EnableButtons( sal_Bool bEnable )
+void ScInputWindow::EnableButtons( bool bEnable )
 {
     //  when enabling buttons, always also enable the input window itself
     if ( bEnable && !IsEnabled() )
@@ -1023,7 +1023,7 @@ void ScInputBarGroup::Resize()
     Invalidate();
 }
 
-void ScInputBarGroup::StopEditEngine( sal_Bool bAll )
+void ScInputBarGroup::StopEditEngine( bool bAll )
 {
     aMultiTextWnd.StopEditEngine( bAll );
 }
@@ -1045,12 +1045,12 @@ EditView* ScInputBarGroup::GetEditView()
     return aMultiTextWnd.GetEditView();
 }
 
-sal_Bool ScInputBarGroup::IsInputActive()
+bool ScInputBarGroup::IsInputActive()
 {
     return aMultiTextWnd.IsInputActive();
 }
 
-void ScInputBarGroup::SetFormulaMode(sal_Bool bSet)
+void ScInputBarGroup::SetFormulaMode(bool bSet)
 {
     aMultiTextWnd.SetFormulaMode(bSet);
 }
@@ -1437,7 +1437,7 @@ void ScMultiTextWnd::InitEditEngine()
     }
 }
 
-void ScMultiTextWnd::StopEditEngine( sal_Bool bAll )
+void ScMultiTextWnd::StopEditEngine( bool bAll )
 {
     if ( pEditEngine )
         pEditEngine->SetNotifyHdl(Link());
@@ -1465,7 +1465,7 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
-        bIsInsertMode( sal_True ),
+        bIsInsertMode( true ),
         bFormulaMode ( false ),
         bInputMode   ( false ),
         mpViewShell(pViewSh)
@@ -1591,7 +1591,7 @@ void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
-    bInputMode = sal_True;
+    bInputMode = true;
     sal_uInt16 nCommand = rCEvt.GetCommand();
     if ( pEditView /* && nCommand == COMMAND_STARTDRAG */ )
     {
@@ -1669,7 +1669,7 @@ void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
 void ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 {
-    bInputMode = sal_True;
+    bInputMode = true;
     if (!SC_MOD()->InputKeyEvent( rKEvt ))
     {
         sal_Bool bUsed = false;
@@ -1703,7 +1703,7 @@ OUString ScTextWnd::GetText() const
         return GetTextString();
 }
 
-void ScTextWnd::SetFormulaMode( sal_Bool bSet )
+void ScTextWnd::SetFormulaMode( bool bSet )
 {
     if ( bSet != bFormulaMode )
     {
@@ -1841,7 +1841,7 @@ IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
     return 0;
 }
 
-void ScTextWnd::StopEditEngine( sal_Bool bAll )
+void ScTextWnd::StopEditEngine( bool bAll )
 {
     if (pEditView)
     {
@@ -1894,7 +1894,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
 {
     if ( rNewString != aString )
     {
-        bInputMode = sal_True;
+        bInputMode = true;
 
         //  Position der Aenderung suchen, nur Rest painten
 
@@ -1973,7 +1973,7 @@ const OUString& ScTextWnd::GetTextString() const
     return aString;
 }
 
-sal_Bool ScTextWnd::IsInputActive()
+bool ScTextWnd::IsInputActive()
 {
     return HasFocus();
 }
@@ -2110,7 +2110,7 @@ ScPosWnd::~ScPosWnd()
     delete pAccel;
 }
 
-void ScPosWnd::SetFormulaMode( sal_Bool bSet )
+void ScPosWnd::SetFormulaMode( bool bSet )
 {
     if ( bSet != bFormulaMode )
     {

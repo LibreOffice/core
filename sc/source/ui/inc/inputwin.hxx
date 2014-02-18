@@ -50,11 +50,11 @@ public:
     virtual void            SetTextString( const OUString& rString ) = 0;
     virtual const OUString& GetTextString() const = 0;
     virtual void            StartEditEngine() = 0;
-    virtual void            StopEditEngine( sal_Bool bAll ) = 0;
+    virtual void            StopEditEngine( bool bAll ) = 0;
     virtual EditView*       GetEditView() = 0;
     virtual void            MakeDialogEditView() = 0;
-    virtual void            SetFormulaMode( sal_Bool bSet ) = 0;
-    virtual sal_Bool            IsInputActive() = 0;
+    virtual void            SetFormulaMode( bool bSet ) = 0;
+    virtual bool            IsInputActive() = 0;
     virtual void            TextGrabFocus() = 0;
 };
 
@@ -67,20 +67,20 @@ public:
     virtual void            SetTextString( const OUString& rString );
     virtual const OUString& GetTextString() const;
 
-    sal_Bool            IsInputActive();
+    bool            IsInputActive();
     virtual EditView*       GetEditView();
 
                         // for function autopilots
     virtual void            MakeDialogEditView();
 
     virtual void            StartEditEngine();
-    virtual void            StopEditEngine( sal_Bool bAll );
+    virtual void            StopEditEngine( bool bAll );
 
     virtual void            TextGrabFocus();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual void            SetFormulaMode( sal_Bool bSet );
+    virtual void            SetFormulaMode( bool bSet );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -117,13 +117,13 @@ protected:
     ScEditEngineDefaulter*  pEditEngine;            // only created when needed
     EditView*   pEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
-    sal_Bool        bIsRTL;
-    sal_Bool        bIsInsertMode;
-    sal_Bool        bFormulaMode;
+    bool        bIsRTL;
+    bool        bIsInsertMode;
+    bool        bFormulaMode;
 
     // #102710#; this flag should be true if a key input or a command is handled
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
-    sal_Bool        bInputMode;
+    bool        bInputMode;
 
 private:
     ScTabViewShell* mpViewShell;
@@ -136,15 +136,15 @@ class ScPosWnd : public ComboBox, public SfxListener        // Display position
 private:
     OUString        aPosStr;
     Accelerator*    pAccel;
-    sal_uLong           nTipVisible;
-    sal_Bool            bFormulaMode;
+    sal_uLong       nTipVisible;
+    bool            bFormulaMode;
 
 public:
                     ScPosWnd( Window* pParent );
     virtual         ~ScPosWnd();
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
-    void            SetFormulaMode( sal_Bool bSet );
+    void            SetFormulaMode( bool bSet );
 
 protected:
     virtual void    Select();
@@ -172,7 +172,7 @@ public:
     ScMultiTextWnd( ScInputBarGroup* pParent, ScTabViewShell* pViewSh );
     virtual ~ScMultiTextWnd();
     virtual void StartEditEngine();
-    virtual void StopEditEngine( sal_Bool bAll );
+    virtual void StopEditEngine( bool bAll );
     virtual void Resize();
     virtual EditView*  GetEditView();
     long GetPixelHeightForLines( long nLines );
@@ -214,13 +214,13 @@ public:
     void            SetSize(Size aSize);
     virtual void    Resize();
     virtual const OUString&   GetTextString() const;
-    virtual void            StopEditEngine( sal_Bool bAll );
+    virtual void            StopEditEngine( bool bAll );
     virtual void            TextGrabFocus();
     void            InitEditEngine(SfxObjectShell* pObjSh);
-    void            SetFormulaMode( sal_Bool bSet );
+    void            SetFormulaMode( bool bSet );
     bool            IsFocus();
     void            MakeDialogEditView();
-    sal_Bool            IsInputActive();
+    bool            IsInputActive();
     ScrollBar&      GetScrollBar() { return aScrollBar; }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
@@ -248,17 +248,17 @@ public:
     virtual void    Resize();
     virtual void    Select();
 
-    void            SetFuncString( const OUString& rString, sal_Bool bDoEdit = sal_True );
+    void            SetFuncString( const OUString& rString, bool bDoEdit = true );
     void            SetPosString( const OUString& rStr );
     void            SetTextString( const OUString& rString );
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
-    void            EnableButtons( sal_Bool bEnable = sal_True );
+    void            EnableButtons( bool bEnable = true );
 
-    void            SetFormulaMode( sal_Bool bSet );
+    void            SetFormulaMode( bool bSet );
 
-    virtual sal_Bool            IsInputActive();
+    virtual bool            IsInputActive();
     EditView*       GetEditView();
 
     void            TextGrabFocus();
@@ -270,7 +270,7 @@ public:
     // For function autopilots
     void            MakeDialogEditView();
 
-    void            StopEditEngine( sal_Bool bAll );
+    void            StopEditEngine( bool bAll );
 
     void            SetInputHandler( ScInputHandler* pNew );
 
@@ -298,7 +298,7 @@ private:
     OUString        aTextSum;
     OUString        aTextEqual;
     long            mnMaxY;
-    sal_Bool            bIsOkCancelMode;
+    bool            bIsOkCancelMode;
     bool            bInResize;
     bool            mbIsMultiLine;
 };
