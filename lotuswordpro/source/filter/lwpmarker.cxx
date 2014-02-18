@@ -70,7 +70,11 @@
 #include "xfilter/xfplaceholder.hxx"
 #include "xfilter/xfinputlist.hxx"
 
-LwpMarker::LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpDLNFPVList(objHdr,pStrm)
+LwpMarker::LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpDLNFPVList(objHdr,pStrm)
+    , m_nFlag(0)
+    , m_nPageNumber(0)
+    , m_nNeedUpdate(0)
 {
 }
 
