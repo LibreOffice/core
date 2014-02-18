@@ -145,7 +145,7 @@ bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation
     return false;   // not found
 }
 
-sal_Bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
+bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
 {
     return aSelection == rStatus;
 }
