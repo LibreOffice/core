@@ -52,7 +52,7 @@ public:
 
     ScRangeFindData* GetObject( sal_uLong nIndex ) { return &(maEntries[nIndex]); }
 
-    void    SetHidden( sal_Bool bSet )              { bHidden = bSet; }
+    void    SetHidden( bool bSet )              { bHidden = bSet; }
 
     const OUString& GetDocName() const          { return aDocName; }
     bool            IsHidden() const            { return bHidden; }
