@@ -29,15 +29,15 @@
 class ScNavigatorSettings
 {
 private:
-    ::std::vector< sal_Bool >       maExpandedVec;      /// Array of Booleans for expand state.
+    ::std::vector< bool >           maExpandedVec;      /// Array of Booleans for expand state.
     sal_uInt16                      mnRootSelected;     /// Index of selected root entry.
     sal_uLong                       mnChildSelected;    /// Index of selected child entry.
 
 public:
                                 ScNavigatorSettings();
 
-    inline void                 SetExpanded( sal_uInt16 nIndex, sal_Bool bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
-    inline sal_Bool                 IsExpanded( sal_uInt16 nIndex ) const { return maExpandedVec[ nIndex ]; }
+    inline void                 SetExpanded( sal_uInt16 nIndex, bool bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
+    inline bool                 IsExpanded( sal_uInt16 nIndex ) const { return maExpandedVec[ nIndex ]; }
 
     inline void                 SetRootSelected( sal_uInt16 nIndex ) { mnRootSelected = nIndex; }
     inline sal_uInt16               GetRootSelected() const { return mnRootSelected; }
