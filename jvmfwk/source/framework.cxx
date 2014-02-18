@@ -40,7 +40,7 @@ static bool g_bEnabledSwitchedOn = false;
 
 static JavaVM * g_pJavaVM = NULL;
 
-sal_Bool areEqualJavaInfo(
+bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
     return jfw_areEqualJavaInfo(pInfoA, pInfoB);

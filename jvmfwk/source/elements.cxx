@@ -586,7 +586,7 @@ void NodeJava::write() const
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
 
-void NodeJava::setEnabled(sal_Bool bEnabled)
+void NodeJava::setEnabled(bool bEnabled)
 {
     m_enabled =  boost::optional<sal_Bool>(bEnabled);
 }

@@ -186,7 +186,7 @@ public:
     /** sets m_enabled.
         /java/enabled@xsi:nil will be set to false when write is called.
      */
-    void setEnabled(sal_Bool bEnabled);
+    void setEnabled(bool bEnabled);
 
     /** sets m_sUserClassPath. See setEnabled.
      */

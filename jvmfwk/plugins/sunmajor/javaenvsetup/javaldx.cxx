@@ -29,7 +29,7 @@
 #include "jvmfwk/framework.h"
 
 
-static sal_Bool hasOption(char const * szOption, int argc, char** argv);
+static bool hasOption(char const * szOption, int argc, char** argv);
 static OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 static bool findAndSelect(JavaInfo**);
 
@@ -132,14 +132,14 @@ OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
     return paths;
 }
 
-static sal_Bool hasOption(char const * szOption, int argc, char** argv)
+static bool hasOption(char const * szOption, int argc, char** argv)
 {
-    sal_Bool retVal= sal_False;
+    bool retVal= false;
     for(sal_Int16 i= 1; i < argc; i++)
     {
         if( ! strcmp(argv[i], szOption))
         {
-            retVal= sal_True;
+            retVal= true;
             break;
         }
     }

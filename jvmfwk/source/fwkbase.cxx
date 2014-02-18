@@ -424,12 +424,12 @@ OUString BootParams::getJREHome()
 {
     OUString sJRE;
     OUString sEnvJRE;
-    sal_Bool bJRE = Bootstrap::get()->getFrom(
+    bool bJRE = Bootstrap::get()->getFrom(
         OUString(UNO_JAVA_JFW_JREHOME) ,sJRE);
-    sal_Bool bEnvJRE = Bootstrap::get()->getFrom(
+    bool bEnvJRE = Bootstrap::get()->getFrom(
         OUString(UNO_JAVA_JFW_ENV_JREHOME) ,sEnvJRE);
 
-    if (bJRE == sal_True && bEnvJRE == sal_True)
+    if (bJRE && bEnvJRE)
     {
         throw FrameworkException(
             JFW_E_CONFIGURATION,
@@ -439,7 +439,7 @@ OUString BootParams::getJREHome()
                              "Check bootstrap parameters: environment variables, command line "
                              "arguments, rc/ini files for executable and java framework library."));
     }
-    else if (bEnvJRE == sal_True)
+    else if (bEnvJRE)
     {
         const char * pJRE = getenv("JAVA_HOME");
         if (pJRE == NULL)
@@ -463,8 +463,8 @@ OUString BootParams::getJREHome()
 #endif
     }
     else if (getMode() == JFW_MODE_DIRECT
-        && bEnvJRE == sal_False
-        && bJRE == sal_False)
+        && !bEnvJRE
+        && !bJRE)
     {
         throw FrameworkException(
             JFW_E_CONFIGURATION,
