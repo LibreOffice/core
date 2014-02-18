@@ -413,9 +413,4 @@ sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long
     return rtl_crc32( nLatestCRC, pSource, nDatSize );
 }
 
-void GZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
-{
-    ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

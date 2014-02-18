@@ -102,7 +102,10 @@ class GZCodec : public ZCodec
 public:
                     GZCodec(){};
                     ~GZCodec(){};
-    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
+    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT )
+    {
+        ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
+    };
 };
 
 #endif
