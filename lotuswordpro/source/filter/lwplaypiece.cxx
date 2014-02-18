@@ -62,6 +62,7 @@
 
 #include "lwpfilehdr.hxx"
 LwpRotor::LwpRotor()
+    : m_nRotation(0)
 {}
 
 LwpRotor::~LwpRotor()
