@@ -51,7 +51,8 @@ namespace sdr
         }
 
         ViewContactOfSdrOle2Obj::ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj)
-        :   ViewContactOfSdrRectObj(rOle2Obj)
+        :   ViewContactOfSdrRectObj(rOle2Obj),
+            mxChartContent()
         {
         }
 
@@ -100,30 +101,45 @@ namespace sdr
 
             if(GetOle2Obj().IsChart())
             {
-                // try to get chart primitives and chart range directly from xChartModel
-                basegfx::B2DRange aChartContentRange;
-                const drawinglayer::primitive2d::Primitive2DSequence aChartSequence(
-                    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
-                        GetOle2Obj().getXModel(),
-                        aChartContentRange));
-                const double fWidth(aChartContentRange.getWidth());
-                const double fHeight(aChartContentRange.getHeight());
-
-                if(aChartSequence.hasElements()
-                    && basegfx::fTools::more(fWidth, 0.0)
-                    && basegfx::fTools::more(fHeight, 0.0))
+                // #i123539# allow buffering and reuse of local chart data to not need to rebuild it
+                // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: No tneeded for
+                // aw080, there this mechanism alraedy works differently
+                if(mxChartContent.is())
                 {
-                    // create embedding transformation
-                    basegfx::B2DHomMatrix aEmbed(
-                        basegfx::tools::createTranslateB2DHomMatrix(
-                            -aChartContentRange.getMinX(),
-                            -aChartContentRange.getMinY()));
+                    xContent = mxChartContent;
+                }
+                else
+                {
+                    // try to get chart primitives and chart range directly from xChartModel
+                    basegfx::B2DRange aChartContentRange;
+                    const drawinglayer::primitive2d::Primitive2DSequence aChartSequence(
+                        ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                            GetOle2Obj().getXModel(),
+                            aChartContentRange));
+                    const double fWidth(aChartContentRange.getWidth());
+                    const double fHeight(aChartContentRange.getHeight());
 
-                    aEmbed.scale(1.0 / fWidth, 1.0 / fHeight);
-                    aEmbed = aObjectMatrix * aEmbed;
-                    xContent = new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aEmbed,
-                        aChartSequence);
+                    if(aChartSequence.hasElements()
+                        && basegfx::fTools::more(fWidth, 0.0)
+                        && basegfx::fTools::more(fHeight, 0.0))
+                    {
+                        // create embedding transformation
+                        basegfx::B2DHomMatrix aEmbed(
+                            basegfx::tools::createTranslateB2DHomMatrix(
+                                -aChartContentRange.getMinX(),
+                                -aChartContentRange.getMinY()));
+
+                        aEmbed.scale(1.0 / fWidth, 1.0 / fHeight);
+                        aEmbed = aObjectMatrix * aEmbed;
+                        xContent = new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aEmbed,
+                            aChartSequence);
+                    }
+
+                    if(xContent.is())
+                    {
+                        const_cast< ViewContactOfSdrOle2Obj* >(this)->mxChartContent = xContent;
+                    }
                 }
             }
 
@@ -152,6 +168,18 @@ namespace sdr
                     aAttribute));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        void ViewContactOfSdrOle2Obj::ActionChanged()
+        {
+            // call parent
+            ViewContactOfSdrRectObj::ActionChanged();
+
+            // #i123539# if we have buffered chart data, reset it
+            if(mxChartContent.is())
+            {
+                mxChartContent.clear();
+            }
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const

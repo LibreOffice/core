@@ -45,6 +45,7 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -379,7 +380,14 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
 void E3dScene::StructureChanged()
 {
     E3dObject::StructureChanged();
-    SetRectsDirty();
+
+    if(!GetModel() || !GetModel()->isLocked())
+    {
+        // #i123539# optimization for 3D chart object generation: do not reset
+        // already calculated scene projection data every time an object gets
+        // initialized
+        SetRectsDirty();
+    }
 
     ImpCleanup3DDepthMapper();
 }
