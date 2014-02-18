@@ -808,16 +808,9 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             return 0xffff;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
         {
-            // see if the PPD contains a value to set Collate to True
-            JobData aData;
-            JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
-
-            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("Collate") ) : NULL;
-            const PPDValue* pVal = pKey ? pKey->getValue(OUString("True")) : NULL;
-
             // PPDs don't mention the number of possible collated copies.
             // so let's guess as many as we want ?
-            return pVal ? 0xffff : 0;
+            return 0xffff;
         }
         case PRINTER_CAPABILITIES_SETORIENTATION:
             return 1;
@@ -836,7 +829,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
                 return 1;
             else
             {
-                // see if the PPD contains a value to set Collate to True
+                // see if the PPD contains a value to set PDF device
                 JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
                 if( pJobSetup->mpDriverData )
                     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -846,7 +839,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "external_dialog" ) ? 1 : 0;
         case PRINTER_CAPABILITIES_USEPULLMODEL:
         {
-            // see if the PPD contains a value to set Collate to True
+            // see if the PPD contains a value to set PDF device
             JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
             if( pJobSetup->mpDriverData )
                 JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
