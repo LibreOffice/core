@@ -99,7 +99,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
-sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
     // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
@@ -107,7 +107,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
-    sal_Bool bErrorShown = false;
+    bool bErrorShown = false;
 
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
@@ -166,7 +166,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
             nErr = pClient->DoVerb( nVerb );
-            bErrorShown = sal_True;
+            bErrorShown = true;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
             // attach listener to selection changes in chart that affect cell
@@ -431,8 +431,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
-    sal_Bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
     bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
 
@@ -504,7 +504,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
         case SID_REDO:
             if ( pUndoManager )
             {
-                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
+                bool bIsUndo = ( nSlot == SID_UNDO );
 
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
@@ -512,7 +512,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
                 // lock paint for more than one cell undo action (not for editing within a cell)
-                sal_Bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
+                bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
                 if ( bLockPaint )
                     pDocSh->LockPaint();
 
@@ -561,7 +561,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     if ( pUndoManager )
                     {
                         std::vector<OUString> &aList = aStrLst.GetList();
-                        sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
+                        bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
                         size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (size_t i=0; i<nCount; ++i)
                         {

@@ -209,7 +209,7 @@ void ScEditWindow::SetCharAttriutes()
 
     if ( pDocSh && pViewSh )
     {
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(sal_True);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(true);
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 

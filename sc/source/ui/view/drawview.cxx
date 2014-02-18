@@ -404,15 +404,15 @@ void ScDrawView::MarkListHasChanged()
         {
             pOle2Obj = (SdrOle2Obj*) pObj;
             if (!pDoc->IsChart(pObj) )
-                pViewSh->SetOleObjectShell(sal_True);
+                pViewSh->SetOleObjectShell(true);
             else
-                pViewSh->SetChartShell(sal_True);
+                pViewSh->SetChartShell(true);
             bSubShellSet = sal_True;
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRAF)
         {
             pGrafObj = (SdrGrafObj*) pObj;
-            pViewSh->SetGraphicShell(sal_True);
+            pViewSh->SetGraphicShell(true);
             bSubShellSet = sal_True;
         }
         else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
@@ -423,7 +423,7 @@ void ScDrawView::MarkListHasChanged()
         else if (pObj->GetObjIdentifier() != OBJ_TEXT   // Verhindern, das beim Anlegen
                     || !pViewSh->IsDrawTextShell())     // eines TextObjekts auf die
         {                                               // DrawShell umgeschaltet wird.
-            pViewSh->SetDrawShell(sal_True);                //@#70206#
+            pViewSh->SetDrawShell(true);                //@#70206#
         }
     }
 
@@ -470,15 +470,15 @@ void ScDrawView::MarkListHasChanged()
 
         if(bOnlyControls)
         {
-            pViewSh->SetDrawFormShell(sal_True);            // jetzt UNO-Controls
+            pViewSh->SetDrawFormShell(true);            // jetzt UNO-Controls
         }
         else if(bOnlyGraf)
         {
-            pViewSh->SetGraphicShell(sal_True);
+            pViewSh->SetGraphicShell(true);
         }
         else if(nMarkCount>1)
         {
-            pViewSh->SetDrawShell(sal_True);
+            pViewSh->SetDrawShell(true);
         }
     }
 

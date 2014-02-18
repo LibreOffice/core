@@ -448,7 +448,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                 pScDrawView->InsertObjectSafe(pObj, *pScDrawView->GetSdrPageView());
 
-                GetViewData()->GetViewShell()->SetDrawShell( sal_True );
+                GetViewData()->GetViewShell()->SetDrawShell( true );
                 bRet = sal_True;
             }
         }

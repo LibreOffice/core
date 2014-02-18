@@ -139,40 +139,40 @@ private:
     ScNavigatorSettings*    pNavSettings;
 
     // used in first Activate
-    sal_Bool                    bFirstActivate;
+    bool                    bFirstActivate;
 
-    sal_Bool                    bActiveDrawSh;
-    sal_Bool                    bActiveDrawTextSh;
-    sal_Bool                    bActivePivotSh;
-    sal_Bool                    bActiveAuditingSh;
-    sal_Bool                    bActiveDrawFormSh;
-    sal_Bool                    bActiveOleObjectSh;
-    sal_Bool                    bActiveChartSh;
-    sal_Bool                    bActiveGraphicSh;
-    sal_Bool                    bActiveMediaSh;
-    sal_Bool                    bActiveEditSh;
+    bool                    bActiveDrawSh;
+    bool                    bActiveDrawTextSh;
+    bool                    bActivePivotSh;
+    bool                    bActiveAuditingSh;
+    bool                    bActiveDrawFormSh;
+    bool                    bActiveOleObjectSh;
+    bool                    bActiveChartSh;
+    bool                    bActiveGraphicSh;
+    bool                    bActiveMediaSh;
+    bool                    bActiveEditSh;
 
-    sal_Bool                    bFormShellAtTop;            // does the FormShell need to be on top?
+    bool                    bFormShellAtTop;            // does the FormShell need to be on top?
 
 
-    sal_Bool                    bDontSwitch;                // Don't turn off EditShell
-    sal_Bool                    bInFormatDialog;            // for GetSelectionText
-    sal_Bool                    bPrintSelected;             // for result of SvxPrtQryBox
+    bool                    bDontSwitch;                // Don't turn off EditShell
+    bool                    bInFormatDialog;            // for GetSelectionText
+    bool                    bPrintSelected;             // for result of SvxPrtQryBox
 
-    sal_Bool                    bReadOnly;                  // to detect status changes
+    bool                    bReadOnly;                  // to detect status changes
 
-    sal_Bool                    bIsActive;
+    bool                    bIsActive;
 
     SbxObject*              pScSbxObject;
 
-    sal_Bool                bChartAreaValid; // if chart is drawn
-    sal_Bool                bForceFocusOnCurCell; // #i123629#
+    bool                    bChartAreaValid; // if chart is drawn
+    bool                    bForceFocusOnCurCell; // #i123629#
 
     OUString                aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
     SCTAB                   nChartDestTab;
-    sal_uInt16                  nCurRefDlgId;
+    sal_uInt16              nCurRefDlgId;
 
     SfxBroadcaster*         pAccessibilityBroadcaster;
 
@@ -250,10 +250,10 @@ public:
     void            ExecuteInputDirect();
 
     ScInputHandler* GetInputHandler() const;
-    void            UpdateInputHandler( sal_Bool bForce = false, sal_Bool bStopEditing = sal_True );
+    void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
-    sal_Bool            TabKeyInput(const KeyEvent& rKEvt);
-    sal_Bool            SfxKeyInput(const KeyEvent& rKEvt);
+    bool            TabKeyInput(const KeyEvent& rKEvt);
+    bool            SfxKeyInput(const KeyEvent& rKEvt);
 
     void            SetActive();
 
@@ -300,32 +300,32 @@ public:
     void            GetDrawOptState(SfxItemSet &rSet);
 
     void            UpdateDrawShell();
-    void            SetDrawShell( sal_Bool bActive );
-    void            SetDrawTextShell( sal_Bool bActive );
+    void            SetDrawShell( bool bActive );
+    void            SetDrawTextShell( bool bActive );
 
-    void            SetPivotShell( sal_Bool bActive );
+    void            SetPivotShell( bool bActive );
     ScArea*         GetPivotSource(){return pPivotSource;}
     void            SetPivotSource(ScArea* pSrc){pPivotSource=pSrc;}
     void            SetDialogDPObject( const ScDPObject* pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject; }
 
-    sal_Bool            GetDontSwitch(){return bDontSwitch;}
-    void            SetDontSwitch(sal_Bool bFlag){bDontSwitch=bFlag;}
+    bool            GetDontSwitch(){return bDontSwitch;}
+    void            SetDontSwitch(bool bFlag){bDontSwitch=bFlag;}
 
 
-    void            SetAuditShell( sal_Bool bActive );
-    void            SetDrawFormShell( sal_Bool bActive );
-    void            SetEditShell(EditView* pView, sal_Bool bActive );
-    void            SetOleObjectShell( sal_Bool bActive );
-    void            SetChartShell( sal_Bool bActive );
-    void            SetGraphicShell( sal_Bool bActive );
-    void            SetMediaShell( sal_Bool bActive );
+    void            SetAuditShell( bool bActive );
+    void            SetDrawFormShell( bool bActive );
+    void            SetEditShell(EditView* pView, bool bActive );
+    void            SetOleObjectShell( bool bActive );
+    void            SetChartShell( bool bActive );
+    void            SetGraphicShell( bool bActive );
+    void            SetMediaShell( bool bActive );
 
 
     void            SetDrawShellOrSub();
-    void            SetCurSubShell( ObjectSelectionType eOST, sal_Bool bForce = false );
+    void            SetCurSubShell( ObjectSelectionType eOST, bool bForce = false );
 
-    void            SetFormShellAtTop( sal_Bool bSet );
+    void            SetFormShellAtTop( bool bSet );
 
     ObjectSelectionType GetCurObjectSelectionType();
 
@@ -333,15 +333,15 @@ public:
 
 
     void            StopEditShell();
-    sal_Bool            IsDrawTextShell() const;
-    sal_Bool            IsAuditShell() const;
+    bool            IsDrawTextShell() const;
+    bool            IsAuditShell() const;
 
     void            SetDrawTextUndo( ::svl::IUndoManager* pUndoMgr );
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
-    sal_Bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
+    bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
     void            SetEditChartName(const OUString& aStr){aEditChartName=aStr;}
 
@@ -351,14 +351,14 @@ public:
 
     // Drucken:
     virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
-    virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter,
+    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter,
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
     virtual bool            HasPrintOptionsPage() const;
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
 
     void            ConnectObject( SdrOle2Obj* pObj );
-    sal_Bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );
+    bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );
 
     void            DeactivateOle();
 
@@ -381,10 +381,10 @@ public:
                             const Point* pInsPos = NULL );
     void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
-    sal_Bool    SelectObject( const OUString& rName );
+    bool    SelectObject( const OUString& rName );
 
-    void    SetInFormatDialog(sal_Bool bFlag) {bInFormatDialog=bFlag;}
-    sal_Bool    IsInFormatDialog() {return bInFormatDialog;}
+    void    SetInFormatDialog(bool bFlag) {bInFormatDialog=bFlag;}
+    bool    IsInFormatDialog() {return bInFormatDialog;}
 
     void    ForceMove()     { Move(); }
 
@@ -394,10 +394,10 @@ public:
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, const OString &rTabPage = OString());
 
-    sal_Bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode = 0 );
+    bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode = 0 );
 
     void    StartSimpleRefDialog( const OUString& rTitle, const OUString& rInitVal,
-                                    sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection );
+                                    bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
     void    StopSimpleRefDialog();
 
     void    SetCurRefDlgId( sal_uInt16 nNew );
@@ -405,21 +405,21 @@ public:
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
-    sal_Bool    HasAccessibilityObjects();
+    bool    HasAccessibilityObjects();
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
 
-    sal_Bool IsActive() const { return bIsActive; }
+    bool IsActive() const { return bIsActive; }
     OUString GetFormula(ScAddress& rAddress);
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & GetForms() const;
 
     // ugly hack to call Define Names from Manage Names
     void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);
     // #i123629#
-    sal_Bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
-    void SetForceFocusOnCurCell(sal_Bool bFlag) { bForceFocusOnCurCell=bFlag; }
+    bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
+    void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
 };
 
 //==================================================================

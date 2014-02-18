@@ -261,7 +261,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
             pInputHdl->SetMode( SC_INPUT_TABLE );       // Focus kommt eh nach unten
     }
     else if ( pViewSh )
-        pViewSh->UpdateInputHandler( sal_True ); // unbedingtes Update
+        pViewSh->UpdateInputHandler( true ); // unbedingtes Update
 
     pImgMgr->RegisterToolBox( this );
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));

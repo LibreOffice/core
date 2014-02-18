@@ -803,7 +803,7 @@ bool ScRefHandler::EnterRefMode()
             {
                 pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
                 if( pScViewShell )
-                    pScViewShell->UpdateInputHandler(sal_True);
+                    pScViewShell->UpdateInputHandler(true);
                 pParentDoc = pMyViewFrm->GetObjectShell();
             }
         }
@@ -850,7 +850,7 @@ bool ScRefHandler::LeaveRefMode()
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if( pScViewShell )
-        pScViewShell->UpdateInputHandler(sal_True);
+        pScViewShell->UpdateInputHandler(true);
 
     lcl_InvalidateWindows();
 

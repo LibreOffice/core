@@ -352,7 +352,7 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
 
         SdrPageView* pPV = pDrView->GetSdrPageView();
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // don't mark if OLE
-        GetViewData()->GetViewShell()->SetDrawShell( sal_True );
+        GetViewData()->GetViewShell()->SetDrawShell( true );
         return sal_True;
     }
     else
@@ -430,7 +430,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
         aPos.X() -= aSize.Width();
 
-    GetViewData()->GetViewShell()->SetDrawShell( sal_True );
+    GetViewData()->GetViewShell()->SetDrawShell( true );
     Rectangle aRect(aPos, aSize);
     SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
 

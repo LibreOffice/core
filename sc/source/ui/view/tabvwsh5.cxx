@@ -55,7 +55,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case FID_REFMODECHANGED:
                 {
-                    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
+                    bool bRefMode = SC_MOD()->IsFormulaMode();
                     if (!bRefMode)
                         StopRefMode();
                     else
@@ -109,7 +109,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
 
-                if ( GetViewData()->GetSfxDocShell()->IsReadOnly() != bReadOnly )
+                if ( GetViewData()->GetSfxDocShell()->IsReadOnly() != (bReadOnly ? 1 : 0) )
                 {
                     bReadOnly = GetViewData()->GetSfxDocShell()->IsReadOnly();
 
@@ -194,7 +194,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     EditView* pView = GetViewData()->GetEditView(eActive);  // ist nicht 0
 
-                    SetEditShell(pView ,sal_True);
+                    SetEditShell(pView, true);
                 }
             }
         }
@@ -287,7 +287,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
 
-        sal_Bool bForce = !bStayOnActiveTab;
+        bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, false, bStayOnActiveTab );
     }
     else if (rHint.ISA(ScIndexHint))

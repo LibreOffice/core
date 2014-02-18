@@ -871,7 +871,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
             }
 
             if (bRet)
-                pViewSh->SetDrawShell(sal_True);
+                pViewSh->SetDrawShell(true);
         }
     }
 

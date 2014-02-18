@@ -1836,7 +1836,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         if ( RET_YES == nRetVal )
             EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
 
-        GetViewData()->GetViewShell()->UpdateInputHandler( sal_True );
+        GetViewData()->GetViewShell()->UpdateInputHandler( true );
     }
 }
 

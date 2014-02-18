@@ -77,7 +77,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     //  inplace leads to trouble with EditShell ...
                     //! cannot always be switched werden ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
-                        pTabViewShell->SetDontSwitch(sal_True);         // do not switch off EditShell
+                        pTabViewShell->SetDontSwitch(true);         // do not switch off EditShell
                     // no break
 
             case FID_CELL_FORMAT:

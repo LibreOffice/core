@@ -162,15 +162,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     //  CTRL-SID_OBJECT_SELECT is used to select the first object,
     //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
     //  so this must be tested before changing nNewId below.
-    sal_Bool bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
+    bool bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
 
-    sal_Bool bEx = IsDrawSelMode();
+    bool bEx = IsDrawSelMode();
     if ( rReq.GetModifier() & KEY_MOD1 )
     {
         //  always allow keyboard selection also on background layer
         //  also allow creation of default objects if the same object type
         //  was already active
-        bEx = sal_True;
+        bEx = true;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
                                     nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
@@ -192,7 +192,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         nNewId = SID_OBJECT_SELECT;
     }
     else
-        bEx = sal_True;
+        bEx = true;
 
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
@@ -228,7 +228,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
                 nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
-            SetDrawTextShell( sal_True );
+            SetDrawTextShell( true );
         else
         {
             if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
@@ -293,7 +293,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_FM_CREATE_CONTROL:
-            SetDrawFormShell(sal_True);
+            SetDrawFormShell(true);
             pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
             nFormSfxId = nNewFormId;
             break;
@@ -431,7 +431,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_CHART:
                 {
-                    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+                    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }
@@ -445,13 +445,13 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
     }
 }
 
-sal_Bool ScTabViewShell::SelectObject( const OUString& rName )
+bool ScTabViewShell::SelectObject( const OUString& rName )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     if (!pView)
         return false;
 
-    sal_Bool bFound = pView->SelectObject( rName );
+    bool bFound = pView->SelectObject( rName );
     // DrawShell etc. is handled in MarkListHasChanged
 
     return bFound;

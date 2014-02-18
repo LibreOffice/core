@@ -121,9 +121,9 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 
     // #i123629#
     if( pTabViewShell->GetCurObjectSelectionType() == OST_Editing )
-        pTabViewShell->SetForceFocusOnCurCell(sal_True);
+        pTabViewShell->SetForceFocusOnCurCell(true);
     else
-        pTabViewShell->SetForceFocusOnCurCell(sal_False);
+        pTabViewShell->SetForceFocusOnCurCell(false);
 
     //OS: once for all should do, however!
     pTabViewShell->ExecuteInputDirect();

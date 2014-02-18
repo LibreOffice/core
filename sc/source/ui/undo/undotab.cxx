@@ -1221,7 +1221,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (pViewShell)
     {
         pViewShell->UpdateLayerLocks();
-        pViewShell->UpdateInputHandler(sal_True);   // so that input can be immediately entered again
+        pViewShell->UpdateInputHandler(true);   // so that input can be immediately entered again
     }
 
     pDocShell->PostPaintGridAll();
@@ -1293,7 +1293,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     if (pViewShell)
     {
         pViewShell->UpdateLayerLocks();
-        pViewShell->UpdateInputHandler(sal_True);   // so that input can be immediately entered again
+        pViewShell->UpdateInputHandler(true);   // so that input can be immediately entered again
     }
 
     pDocShell->PostPaintGridAll();

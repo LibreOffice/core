@@ -513,7 +513,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                                 pBeginEntry =  Next( pBeginEntry );
                             }
                             if(  !bHasMakredObject && pScTabViewShell)
-                                pScTabViewShell->SetDrawShell(sal_False);
+                                pScTabViewShell->SetDrawShell(false);
                             ObjectFresh( nType,pEntry );
                         }
                     }

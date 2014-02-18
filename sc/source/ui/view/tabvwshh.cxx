@@ -100,7 +100,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OBJECT_WIDTH:
         case SID_OBJECT_HEIGHT:
             {
-                sal_Bool bDone = false;
+                bool bDone = false;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlotId, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
@@ -131,7 +131,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                                 pDrView->ResizeMarkedObj( aRect.TopLeft(),
                                                 Fraction( 1, 1 ),
                                                 Fraction( nNewVal, aRect.GetHeight() ) );
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                 }
@@ -254,7 +254,7 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-sal_Bool ScTabViewShell::HasAccessibilityObjects()
+bool ScTabViewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster != NULL;
 }

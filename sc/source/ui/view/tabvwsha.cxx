@@ -60,7 +60,7 @@
 
 using namespace com::sun::star;
 
-sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
+bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 {
     OUString aStr;
 
@@ -129,7 +129,7 @@ sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
         }
 
         rFuncStr = aStr;
-        return sal_True;
+        return true;
     }
 
     return false;
@@ -157,7 +157,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     sal_uInt16      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
-    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -193,7 +193,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 if ( nTabSelCount > 1 )
                 {
                     // #i22589# also take "Print Entire Sheet" into account here
-                    sal_Bool bHas = false;
+                    bool bHas = false;
                     for (SCTAB i=0; !bHas && i<nTabCount; i++)
                         bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
                     if (!bHas)
@@ -336,7 +336,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_TOGGLEFORMULA:
                 {
                     const ScViewOptions& rOpts = pViewData->GetOptions();
-                    sal_Bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
+                    bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
                     rSet.Put(SfxBoolItem(nWhich, bFormulaMode ));
                 }
                 break;
@@ -616,7 +616,7 @@ void ScTabViewShell::ExecuteInputDirect()
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_Bool bStopEditing /* = sal_True */ )
+void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
     ScInputHandler* pHdl = pInputHandler ? pInputHandler : SC_MOD()->GetInputHdl();
 
