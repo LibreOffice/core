@@ -315,13 +315,13 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
         ThrowSQLException( t.pEnv, NULL );
 }
 // -------------------------------------------------------------------------
-void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument,bool _bIgnoreException ) const
+void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(Z)V", _inout_MethodID);
     // call method
-    t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
+    t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
     if ( _bIgnoreException )
         isExceptionOccurred(t.pEnv,sal_True);
     else

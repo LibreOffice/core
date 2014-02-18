@@ -36,6 +36,9 @@ namespace starawt   = ::com::sun::star::awt;
 // bool
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, bool& _rVal);
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, bool _bVal);
+void operator <<(
+    css::uno::Reference<css::io::XObjectOutputStream> const &, sal_Bool)
+    SAL_DELETED_FUNCTION;
 
 // OUString
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, OUString& _rStr);

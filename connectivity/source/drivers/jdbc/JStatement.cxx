@@ -501,11 +501,11 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
 }
 
 //------------------------------------------------------------------------------
-void java_sql_Statement_Base::setEscapeProcessing(sal_Bool _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    m_aLogger.log( LogLevel::FINE, STR_LOG_SET_ESCAPE_PROCESSING, (bool)_par0 );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_SET_ESCAPE_PROCESSING, _par0 );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     m_bEscapeProcessing = _par0;
