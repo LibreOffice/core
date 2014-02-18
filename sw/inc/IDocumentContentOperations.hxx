@@ -125,7 +125,7 @@ public:
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.
     */
-    virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*) = 0;
+    virtual SwDrawFrmFmt* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) = 0;
 
     /** Insert OLE-objects.
     */

@@ -295,7 +295,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else
-            pFmt = rDoc.Insert(*pPaM, *pRet, pFlySet, NULL);
+            pFmt = rDoc.InsertDrawObj(*pPaM, *pRet, *pFlySet );
     }
     else if (
                 GRAPHIC_GDIMETAFILE == aGraph.GetType() ||

@@ -921,7 +921,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         ::lcl_FindAnchorPos( *this, *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
-    SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
+    SwDrawFrmFmt* pFmt = GetDoc()->InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
 
     // move object to visible layer
     SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());

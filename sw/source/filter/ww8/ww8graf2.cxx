@@ -662,7 +662,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             }
                         }
                         else
-                            pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet, NULL);
+                            pRet = rDoc.InsertDrawObj(*pPaM, *pObject, aAttrSet );
                     }
                 }
 

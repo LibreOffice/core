@@ -208,7 +208,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     aFrmSet.Put( aAnchor );
 
-    pDoc->Insert( *pPam, *pNewDrawObj, &aFrmSet, NULL );
+    pDoc->InsertDrawObj( *pPam, *pNewDrawObj, aFrmSet );
 }
 
 

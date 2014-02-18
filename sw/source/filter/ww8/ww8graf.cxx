@@ -1410,7 +1410,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         if (SdrObject *pObject = ReadGrafPrimitive( nLeft, &aDo, aSet ))
         {
             pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
-            SwFrmFmt *pFrm = rDoc.Insert( *pPaM, *pObject, &aSet, NULL);
+            SwFrmFmt *pFrm = rDoc.InsertDrawObj( *pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
             pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFrm);
         }
@@ -2669,7 +2669,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 pWWZOrder->InsertTextLayerObject(pObject);
             }
 
-            pRetFrmFmt = rDoc.Insert(*pPaM, *pObject, &aFlySet, NULL);
+            pRetFrmFmt = rDoc.InsertDrawObj(*pPaM, *pObject, aFlySet );
 
             OSL_ENSURE(pRetFrmFmt->GetAnchor().GetAnchorId() ==
                 eAnchor, "Not the anchor type requested!");
