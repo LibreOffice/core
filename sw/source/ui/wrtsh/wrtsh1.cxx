@@ -298,7 +298,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         GetGrfSize( aGrfSize );
 
         // Add the margin attributes to GrfSize,
-        // because these counts at the margin additionaly
+        // because these counts at the margin additionally
         aGrfSize.Width() += pFrmMgr->CalcWidthBorder();
         aGrfSize.Height()+= pFrmMgr->CalcHeightBorder();
 

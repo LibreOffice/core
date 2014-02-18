@@ -94,7 +94,7 @@ public:
             When both iterators ar equal <TRUE/> is returned, <FALSE/> otherwise.
     */
     virtual bool operator== (const IteratorImplBase& rIterator) const;
-    /** This method is used by the equality operator.  Additionaly to the
+    /** This method is used by the equality operator.  Additionally to the
         iterator it takes a type information which is taken into account on
         comparison.  It is part of a "multimethod" pattern.
         @param rIterator

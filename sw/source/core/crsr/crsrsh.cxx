@@ -3180,7 +3180,7 @@ bool sw_PosOk(const SwPosition & aPos)
 
 /**
    Checks if a PaM is valid. For a PaM to be valid its point must be
-   valid. Additionaly if the PaM has a mark this has to be valid, too.
+   valid. Additionally if the PaM has a mark this has to be valid, too.
 
    @param aPam the PaM to check
 */
