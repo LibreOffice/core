@@ -3883,6 +3883,73 @@ void Test::testCopyPasteSkipEmpty()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopyPasteSkipEmptyConditionalFormatting()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScRange aDestRange(0,0,0,1,2,0);
+    ScRange aSrcRange(3,3,0,5,4,0);
+
+    ScMarkData aMark;
+    aMark.SetMarkArea(aDestRange);
+
+    m_pDoc->SetValue(0,0,0,1);
+    m_pDoc->SetValue(1,0,0,1);
+    m_pDoc->SetValue(0,1,0,1);
+    m_pDoc->SetValue(0,2,0,1);
+    m_pDoc->SetValue(1,2,0,1);
+
+    //create conditional formatting for A1:B3
+    ScConditionalFormatList* pCondFormatList = new ScConditionalFormatList();
+    m_pDoc->SetCondFormList(pCondFormatList, 0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    pFormat->AddRange(aDestRange);
+    sal_uLong nCondFormatKey = m_pDoc->AddCondFormat(pFormat, 0);
+
+    // Prepare a clipboard content interleaved with empty cells.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScClipParam aParam(aSrcRange, false);
+    aClipDoc.SetClipParam(aParam);
+    aClipDoc.SetValue(3,3,0,2);
+    aClipDoc.SetValue(4,3,0,2);
+    aClipDoc.SetValue(4,4,0,2);
+    aClipDoc.SetValue(3,5,0,2);
+    aClipDoc.SetValue(4,5,0,2);
+
+    ScConditionalFormat* pClipFormat = new ScConditionalFormat(2, &aClipDoc);
+    pClipFormat->AddRange(aSrcRange);
+    aClipDoc.AddCondFormat(pClipFormat, 0);
+
+    // Create undo document.
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+
+    // Paste clipboard content onto A1:A5 but skip empty cells.
+    bool bSkipEmpty = true;
+    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(1,1,0));
+    // empty cell in copy area does not overwrite conditional formatting
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nCondFormatKey), m_pDoc->GetCondFormat(1,1,0)->GetKey());
+    for(SCCOL nCol = 0; nCol <= 1; ++nCol)
+    {
+        for(SCROW nRow = 0; nRow <= 2; ++nRow)
+        {
+            if(nRow == 1 && nCol == 1)
+                continue;
+
+            CPPUNIT_ASSERT(m_pDoc->GetCondFormat(nCol, nRow, 0));
+            CPPUNIT_ASSERT(nCondFormatKey != m_pDoc->GetCondFormat(nCol, nRow, 0)->GetKey());
+        }
+    }
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testUndoCut()
 {
     m_pDoc->InsertTab(0, "Test");
