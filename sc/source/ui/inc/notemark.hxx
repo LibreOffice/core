@@ -41,27 +41,27 @@ private:
     Rectangle   aVisRect;
     Timer       aTimer;
     MapMode     aMapMode;
-    sal_Bool        bLeft;
-    sal_Bool        bByKeyboard;
+    bool        bLeft;
+    bool        bByKeyboard;
 
     Rectangle       aRect;
     SdrModel*       pModel;
     SdrObject*      pObject;
-    sal_Bool            bVisible;
-    Point       aGridOff;
+    bool            bVisible;
+    Point           aGridOff;
     DECL_LINK( TimeHdl, void* );
 
 public:
                 ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                                 ScDocument* pD, ScAddress aPos, const OUString& rUser,
-                                const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard );
+                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard );
                 ~ScNoteMarker();
 
     void        Draw();
     void        InvalidateWin();
 
     ScAddress   GetDocPos() const       { return aDocPos; }
-    sal_Bool        IsByKeyboard() const    { return bByKeyboard; }
+    bool        IsByKeyboard() const    { return bByKeyboard; }
     void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };
 
