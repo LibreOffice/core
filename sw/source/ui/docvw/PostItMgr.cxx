@@ -230,6 +230,8 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
 
 void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
+    SolarMutexGuard aGuard;
+
     EndListening(*pBroadcast);
     for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
     {
