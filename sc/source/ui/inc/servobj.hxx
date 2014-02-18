@@ -46,7 +46,7 @@ private:
     ScDocShell*     pDocSh;
     ScRange         aRange;
     OUString        aItemStr;
-    sal_Bool            bRefreshListener;
+    bool            bRefreshListener;
 
     void    Clear();
 

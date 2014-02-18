@@ -31,7 +31,7 @@ using namespace formula;
 
 // -----------------------------------------------------------------------
 
-static sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OUString& rName )
+static bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OUString& rName )
 {
     if (pDocSh)
     {
@@ -43,7 +43,7 @@ static sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, cons
             if (pData)
             {
                 if ( pData->IsValidReference( rRange ) )
-                    return sal_True;
+                    return true;
             }
         }
     }
@@ -147,7 +147,7 @@ sal_Bool ScServerObject::GetData(
         if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
         {
             aRange = aNew;
-            bRefreshListener = sal_True;
+            bRefreshListener = true;
         }
     }
 
@@ -199,7 +199,7 @@ sal_Bool ScServerObject::GetData(
 
 void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    sal_Bool bDataChanged = false;
+    bool bDataChanged = false;
 
     //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
     if ( &rBC == pDocSh )
@@ -220,7 +220,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  check if named range was modified
             ScRange aNew;
             if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
-                bDataChanged = sal_True;
+                bDataChanged = true;
         }
     }
     else
@@ -229,14 +229,14 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
         if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
-            bDataChanged = sal_True;
+            bDataChanged = true;
         else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
         {
             ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
             if ( aRange != aNewRange )
             {
-                bRefreshListener = sal_True;
-                bDataChanged = sal_True;
+                bRefreshListener = true;
+                bDataChanged = true;
             }
         }
         else if (rHint.ISA(SfxSimpleHint))
@@ -246,8 +246,8 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 //  If the range is being deleted, listening must be restarted
                 //  after the deletion is complete (done in GetData)
-                bRefreshListener = sal_True;
-                bDataChanged = sal_True;
+                bRefreshListener = true;
+                bDataChanged = true;
             }
         }
     }
