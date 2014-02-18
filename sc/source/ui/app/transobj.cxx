@@ -97,7 +97,7 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCR
 }
 
 void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
-                                const ScRange& rBlock, sal_Bool bMetaFile )
+                                const ScRange& rBlock, bool bMetaFile )
 {
     if (!pDoc)
         return;
@@ -737,7 +737,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     }
 }
 
-SfxObjectShell* ScTransferObj::SetDrawClipDoc( sal_Bool bAnyOle )
+SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
 {
     // update ScGlobal::pDrawClipDocShellRef
 

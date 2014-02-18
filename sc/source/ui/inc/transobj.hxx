@@ -50,9 +50,9 @@ private:
     SCCOL                           nDragHandleX;
     SCROW                           nDragHandleY;
     SCTAB                           nVisibleTab;
-    sal_uInt16                          nDragSourceFlags;
-    sal_Bool                            bDragWasInternal;
-    sal_Bool                            bUsedForLink;
+    sal_uInt16                      nDragSourceFlags;
+    bool                            bDragWasInternal;
+    bool                            bUsedForLink;
     bool                            bHasFiltered;       // if has filtered rows
     bool                            bUseInApi;          // to recognize clipboard content copied from API
 
@@ -64,7 +64,7 @@ private:
                             ScDocument* pDestDoc=0,
                             SCCOL nSubX=0, SCROW nSubY=0 );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
-                            const ScRange& rBlock, sal_Bool bMetaFile );
+                            const ScRange& rBlock, bool bMetaFile );
     static void GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
@@ -101,7 +101,7 @@ public:
 
     static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
 
-    static SfxObjectShell*  SetDrawClipDoc( sal_Bool bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
+    static SfxObjectShell*  SetDrawClipDoc( bool bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
