@@ -318,10 +318,10 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= setPropertyValues( aProperties, xEnv );
 
     } else if ( COMMAND_IS( aCommand, "getPropertySetInfo" ) ) {
-        aRet <<= getPropertySetInfo( xEnv, sal_False );
+        aRet <<= getPropertySetInfo( xEnv, false );
 
     } else if ( COMMAND_IS( aCommand, "getCommandInfo" ) ) {
-        aRet <<= getCommandInfo( xEnv, sal_False );
+        aRet <<= getCommandInfo( xEnv, false );
 
     } else if ( COMMAND_IS( aCommand, "open" ) ) {
         ucb::OpenCommandArgument2 aOpenCommand;
@@ -650,7 +650,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendVoid( rProp );
 
         else if ( rProp.Name == "IsVolume" || rProp.Name == "IsCompactDisk" )
-            xRow->appendBoolean( rProp, sal_False );
+            xRow->appendBoolean( rProp, false );
 
         else if ( rProp.Name == "DateCreated" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_CTIME)
