@@ -141,10 +141,11 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_SECURITY         ),
-    m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET ),
-    m_aExtensionPropName( EXTENSION_PROPNAME ),
-    m_bROOpenHyperlinkMode(sal_False)
+    :   ConfigItem          ( ROOTNODE_SECURITY         )
+    , m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET )
+    , m_aExtensionPropName( EXTENSION_PROPNAME )
+    , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
+    , m_bROOpenHyperlinkMode(sal_False)
     // Init member then.
 {
     // Fill the extension hash map with all secure extension strings
