@@ -10,6 +10,36 @@
 $(eval $(call gb_Package_Package,extras_gallbullets,$(SRCDIR)/extras/source/gallery/bullets))
 
 $(eval $(call gb_Package_add_files,extras_gallbullets,$(LIBO_SHARE_FOLDER)/gallery/bullets,\
+	Bullet01-Circle-DarkRed.svg \
+	Bullet02-Circle-Blue.svg \
+	Bullet03-Circle-Green.svg \
+	Bullet04-Square-Black.svg \
+	Bullet05-Square-Orange.svg \
+	Bullet06-Square-Purple.svg \
+	Bullet07-Diamond-Blue.svg \
+	Bullet08-Diamond-LightBlue.svg \
+	Bullet09-Diamond-Red.svg \
+	Bullet10-Star-Yellow.svg \
+	Bullet11-Star-Blue.svg \
+	Bullet12-Triangle-Blue.svg \
+	Bullet13-Triangle-DarkGreen.svg \
+	Bullet14-Arrow-Red.svg \
+	Bullet15-Arrow-Blue.svg \
+	Bullet16-Box-Blue.svg \
+	Bullet17-Box-Red.svg \
+	Bullet18-Asterisk-LightBlue.svg \
+	Bullet19-Leaves-Red.svg \
+	Bullet20-Target-Blue.svg \
+	Bullet21-Arrow-Blue.svg \
+	Bullet22-Arrow-DarkBlue.svg \
+	Bullet23-Arrow-Brown.svg \
+	Bullet24-Flag-Red.svg \
+	Bullet25-Flag-Green.svg \
+	Bullet26-X-Red.svg \
+	Bullet27-X-Black.svg \
+	Bullet28-Checkmark-Green.svg \
+	Bullet29-Checkmark-Blue.svg \
+	Bullet30-Square-DarkRed.svg \
 	blkpearl.gif \
 	bluarrow.gif \
 	bluball.gif \
