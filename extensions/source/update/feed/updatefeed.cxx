@@ -318,10 +318,13 @@ UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference<uno::XComponentContext>& xContext,
     const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
     const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
-    const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
-) : m_xContext(xContext), m_xUniversalContentBroker(xUniversalContentBroker),
-    m_xDocumentBuilder(xDocumentBuilder),
-    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
+    const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI)
+    : m_xContext(xContext)
+    , m_xUniversalContentBroker(xUniversalContentBroker)
+    , m_xDocumentBuilder(xDocumentBuilder)
+    , m_xXPathAPI(xXPathAPI)
+    , m_aRequestHeaderList(1)
+    , m_nCommandId(0)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
         com::sun::star::configuration::theDefaultProvider::get(xContext));
