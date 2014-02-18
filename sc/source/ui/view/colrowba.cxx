@@ -185,7 +185,7 @@ void ScColBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( sal_True );
+    pFuncSet->SetColumn( true );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();

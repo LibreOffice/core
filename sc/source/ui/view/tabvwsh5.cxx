@@ -61,7 +61,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     else
                     {
                         GetSelEngine()->Reset();
-                        GetFunctionSet()->SetAnchorFlag(sal_True);
+                        GetFunctionSet()->SetAnchorFlag(true);
                         //  AnchorFlag, damit gleich mit Control angehaengt werden kann
                     }
                 }
