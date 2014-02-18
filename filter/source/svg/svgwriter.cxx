@@ -91,11 +91,13 @@ static const char aOOOAttrNumberingType[] = NSPREFIX "numbering-type";
 static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
 static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 
-SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport ) :
-    mrExport( rExport ),
-    mrFontExport( rFontExport ),
-    mpElemFont( NULL ),
-    mpElemPaint( NULL )
+SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport )
+    : mrExport( rExport )
+    , mrFontExport( rFontExport )
+    , mpElemFont( NULL )
+    , mpElemPaint( NULL )
+    , maLineJoin(basegfx::B2DLINEJOIN_NONE)
+    , maLineCap(css::drawing::LineCap_BUTT)
 {
 }
 
