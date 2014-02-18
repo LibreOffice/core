@@ -251,27 +251,27 @@ void ScOutputData::SetGridColor( const Color& rColor )
     aGridColor = rColor;
 }
 
-void ScOutputData::SetMarkClipped( sal_Bool bSet )
+void ScOutputData::SetMarkClipped( bool bSet )
 {
     bMarkClipped = bSet;
 }
 
-void ScOutputData::SetShowNullValues( sal_Bool bSet )
+void ScOutputData::SetShowNullValues( bool bSet )
 {
     mbShowNullValues = bSet;
 }
 
-void ScOutputData::SetShowFormulas( sal_Bool bSet )
+void ScOutputData::SetShowFormulas( bool bSet )
 {
     mbShowFormulas = bSet;
 }
 
-void ScOutputData::SetShowSpellErrors( sal_Bool bSet )
+void ScOutputData::SetShowSpellErrors( bool bSet )
 {
     bShowSpellErrors = bSet;
 }
 
-void ScOutputData::SetSnapPixel( sal_Bool bSet )
+void ScOutputData::SetSnapPixel( bool bSet )
 {
     bSnapPixel = bSet;
 }
@@ -280,20 +280,20 @@ void ScOutputData::SetEditCell( SCCOL nCol, SCROW nRow )
 {
     nEditCol = nCol;
     nEditRow = nRow;
-    bEditMode = sal_True;
+    bEditMode = true;
 }
 
-void ScOutputData::SetMetaFileMode( sal_Bool bNewMode )
+void ScOutputData::SetMetaFileMode( bool bNewMode )
 {
     bMetaFile = bNewMode;
 }
 
-void ScOutputData::SetSingleGrid( sal_Bool bNewMode )
+void ScOutputData::SetSingleGrid( bool bNewMode )
 {
     bSingleGrid = bNewMode;
 }
 
-void ScOutputData::SetSyntaxMode( sal_Bool bNewMode )
+void ScOutputData::SetSyntaxMode( bool bNewMode )
 {
     mbSyntaxMode = bNewMode;
     if (bNewMode)
@@ -305,7 +305,7 @@ void ScOutputData::SetSyntaxMode( sal_Bool bNewMode )
         }
 }
 
-void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
+void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 {
     SCCOL nX;
     SCROW nY;
@@ -315,7 +315,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
     ScBreakType nBreak    = BREAK_NONE;
     ScBreakType nBreakOld = BREAK_NONE;
 
-    sal_Bool bSingle;
+    bool bSingle;
     Color aPageColor;
     Color aManualColor;
 
@@ -387,7 +387,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                 }
             }
 
-            sal_Bool bDraw = bGrid || nBreakOld; // simple grid only if set that way
+            bool bDraw = bGrid || nBreakOld; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = bSingleGrid; //! get into Fillinfo !!!!!
@@ -397,9 +397,9 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                 for (nArrY=1; nArrY+1<nArrCount && !bSingle; nArrY++)
                 {
                     if (pRowInfo[nArrY].pCellInfo[nXplus2].bHOverlapped)
-                        bSingle = sal_True;
+                        bSingle = true;
                     if (pRowInfo[nArrY].pCellInfo[nXplus1].bHideGrid)
-                        bSingle = sal_True;
+                        bSingle = true;
                 }
             }
 
@@ -418,7 +418,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         nNextY = nPosY + pThisRowInfo->nHeight;
 
-                        sal_Bool bHOver = pThisRowInfo->pCellInfo[nXplus1].bHideGrid;
+                        bool bHOver = pThisRowInfo->pCellInfo[nXplus1].bHideGrid;
                         if (!bHOver)
                         {
                             if (nWidthXplus2)
@@ -496,12 +496,12 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
 
             bool bDraw = bGrid || nBreakOld;    // simple grid only if set so
 
-            sal_Bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
+            bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
             bSingle = !bNextYisNextRow;             // Hidden
             for (SCCOL i=nX1; i<=nX2 && !bSingle; i++)
             {
                 if (pRowInfo[nArrYplus1].pCellInfo[i+1].bVOverlapped)
-                    bSingle = sal_True;
+                    bSingle = true;
             }
 
             if (bDraw)
@@ -520,7 +520,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                         nNextX = nPosX + pRowInfo[0].pCellInfo[i+1].nWidth * nLayoutSign;
                         if (nNextX != nPosX)                                // visible
                         {
-                            sal_Bool bVOver;
+                            bool bVOver;
                             if ( bNextYisNextRow )
                                 bVOver = pRowInfo[nArrYplus1].pCellInfo[i+1].bVOverlapped;
                             else
@@ -1061,7 +1061,7 @@ void ScOutputData::DrawShadow()
     DrawExtraShadow( false, false, false, false );
 }
 
-void ScOutputData::DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRight, sal_Bool bBottom)
+void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
     mpDev->SetLineColor();
 
@@ -1856,7 +1856,7 @@ Region ScOutputData::GetChangedAreaRegion()
     return aRegion;
 }
 
-sal_Bool ScOutputData::SetChangedClip()
+bool ScOutputData::SetChangedClip()
 {
     PolyPolygon aPoly;
 
@@ -1891,7 +1891,7 @@ sal_Bool ScOutputData::SetChangedClip()
     if (bHad)
         aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
 
-    sal_Bool bRet = (aPoly.Count() != 0);
+    bool bRet = (aPoly.Count() != 0);
     if (bRet)
         mpDev->SetClipRegion(Region(aPoly));
     return bRet;
@@ -1953,7 +1953,7 @@ void ScOutputData::FindChanged()
 
 void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                                 SCCOL nRefEndX, SCROW nRefEndY,
-                                const Color& rColor, sal_Bool bHandle )
+                                const Color& rColor, bool bHandle )
 {
     PutInOrder( nRefStartX, nRefEndX );
     PutInOrder( nRefStartY, nRefEndY );
@@ -1976,10 +1976,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         }
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        sal_Bool bTop    = false;
-        sal_Bool bBottom = false;
-        sal_Bool bLeft   = false;
-        sal_Bool bRight  = false;
+        bool bTop    = false;
+        bool bBottom = false;
+        bool bLeft   = false;
+        bool bRight  = false;
 
         long nPosY = nScrY;
         bool bNoStartY = ( nY1 < nRefStartY );
@@ -1991,17 +1991,17 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
             {
                 nMinY = nPosY;
-                bTop = sal_True;
+                bTop = true;
             }
             if ( nY==nRefEndY )
             {
                 nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
-                bBottom = sal_True;
+                bBottom = true;
             }
             if ( nY>nRefEndY && bNoEndY )
             {
                 nMaxY = nPosY-2;
-                bBottom = sal_True;
+                bBottom = true;
             }
             bNoStartY = ( nY < nRefStartY );
             bNoEndY   = ( nY < nRefEndY );
@@ -2017,12 +2017,12 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             if ( nX==nRefStartX )
             {
                 nMinX = nPosX;
-                bLeft = sal_True;
+                bLeft = true;
             }
             if ( nX==nRefEndX )
             {
                 nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 2 ) * nLayoutSign;
-                bRight = sal_True;
+                bRight = true;
             }
             nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
         }
@@ -2104,10 +2104,10 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
         }
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        sal_Bool bTop    = false;
-        sal_Bool bBottom = false;
-        sal_Bool bLeft   = false;
-        sal_Bool bRight  = false;
+        bool bTop    = false;
+        bool bBottom = false;
+        bool bLeft   = false;
+        bool bRight  = false;
 
         long nPosY = nScrY;
         bool bNoStartY = ( nY1 < nRefStartY );
@@ -2119,17 +2119,17 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
             if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
             {
                 nMinY = nPosY - 1;
-                bTop = sal_True;
+                bTop = true;
             }
             if ( nY==nRefEndY )
             {
                 nMaxY = nPosY + pRowInfo[nArrY].nHeight - 1;
-                bBottom = sal_True;
+                bBottom = true;
             }
             if ( nY>nRefEndY && bNoEndY )
             {
                 nMaxY = nPosY - 1;
-                bBottom = sal_True;
+                bBottom = true;
             }
             bNoStartY = ( nY < nRefStartY );
             bNoEndY   = ( nY < nRefEndY );
@@ -2145,12 +2145,12 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
             if ( nX==nRefStartX )
             {
                 nMinX = nPosX - nLayoutSign;
-                bLeft = sal_True;
+                bLeft = true;
             }
             if ( nX==nRefEndX )
             {
                 nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 1 ) * nLayoutSign;
-                bRight = sal_True;
+                bRight = true;
             }
             nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
         }

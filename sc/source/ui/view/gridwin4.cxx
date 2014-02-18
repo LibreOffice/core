@@ -541,7 +541,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( eMode == SC_UPDATE_CHANGED )
     {
         aOutputData.FindChanged();
-        aOutputData.SetSingleGrid(sal_True);
+        aOutputData.SetSingleGrid(true);
     }
 
     sal_Bool bPageMode = pViewData->IsPagebreakMode();
@@ -679,7 +679,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         DrawRedraw( aOutputData, eMode, SC_LAYER_BACK );
     }
     else
-        aOutputData.SetSolidBackground(sal_True);
+        aOutputData.SetSolidBackground(true);
 
     pContentDev->SetMapMode(MAP_PIXEL);
     aOutputData.DrawDocumentBackground();
@@ -712,8 +712,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
     if ( bLogicText )
-        aOutputData.DrawStrings(sal_True);      // in logic MapMode if bTextWysiwyg is set
-    aOutputData.DrawEdit(sal_True);
+        aOutputData.DrawStrings(true);      // in logic MapMode if bTextWysiwyg is set
+    aOutputData.DrawEdit(true);
     pContentDev->SetMapMode(MAP_PIXEL);
 
         // Autofilter- und Pivot-Buttons
@@ -806,7 +806,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                     aOutputData.DrawRefMark( aRef.aStart.Col(), aRef.aStart.Row(),
                                             aRef.aEnd.Col(), aRef.aEnd.Row(),
                                             Color( pData->nColorData ),
-                                            sal_True );
+                                            true );
             }
         }
     }

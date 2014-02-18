@@ -176,7 +176,7 @@ private:
     // #114135#
     FmFormView* pDrawView;      // SdrView to paint to
 
-    sal_Bool bEditMode;             // InPlace edited cell - do not output
+    bool bEditMode;             // InPlace edited cell - do not output
     SCCOL nEditCol;
     SCROW nEditRow;
 
@@ -189,7 +189,7 @@ private:
     bool mbUseStyleColor;
     bool mbForceAutoColor;
 
-    sal_Bool mbSyntaxMode;          // Syntax highlighting
+    bool mbSyntaxMode;          // Syntax highlighting
     Color* pValueColor;
     Color* pTextColor;
     Color* pFormulaColor;
@@ -215,8 +215,8 @@ private:
 
                             // private methods
 
-    sal_Bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
-                                    SCCOL& rOverX, SCROW& rOverY, sal_Bool bVisRowChanged );
+    bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
+                                    SCCOL& rOverX, SCROW& rOverY, bool bVisRowChanged );
     bool IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
     void GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue& rCell );
 
@@ -231,7 +231,7 @@ private:
 
     void            ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
                                     long nLeftM, long nTopM, long nRightM, long nBottomM,
-                                    sal_Bool bWidth, sal_uInt16 nOrient, long nAttrRotate, sal_Bool bPixelToLogic,
+                                    bool bWidth, sal_uInt16 nOrient, long nAttrRotate, bool bPixelToLogic,
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
@@ -280,37 +280,37 @@ public:
     // #114135#
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
-    void    SetSolidBackground( sal_Bool bSet )     { bSolidBackground = bSet; }
-    void    SetUseStyleColor( sal_Bool bSet )       { mbUseStyleColor = bSet; }
+    void    SetSolidBackground( bool bSet )     { bSolidBackground = bSet; }
+    void    SetUseStyleColor( bool bSet )       { mbUseStyleColor = bSet; }
 
     void    SetEditCell( SCCOL nCol, SCROW nRow );
-    void    SetSyntaxMode( sal_Bool bNewMode );
-    void    SetMetaFileMode( sal_Bool bNewMode );
-    void    SetSingleGrid( sal_Bool bNewMode );
+    void    SetSyntaxMode( bool bNewMode );
+    void    SetMetaFileMode( bool bNewMode );
+    void    SetSingleGrid( bool bNewMode );
     void    SetGridColor( const Color& rColor );
-    void    SetMarkClipped( sal_Bool bSet );
-    void    SetShowNullValues ( sal_Bool bSet = sal_True );
-    void    SetShowFormulas   ( sal_Bool bSet = sal_True );
-    void    SetShowSpellErrors( sal_Bool bSet = sal_True );
+    void    SetMarkClipped( bool bSet );
+    void    SetShowNullValues ( bool bSet = true );
+    void    SetShowFormulas   ( bool bSet = true );
+    void    SetShowSpellErrors( bool bSet = true );
     void    SetMirrorWidth( long nNew );
     long    GetScrW() const     { return nScrW; }
     long    GetScrH() const     { return nScrH; }
 
-    void    SetSnapPixel( sal_Bool bSet = sal_True );
+    void    SetSnapPixel( bool bSet = true );
 
-    void    DrawGrid( sal_Bool bGrid, sal_Bool bPage );
-    void    DrawStrings( sal_Bool bPixelToLogic = false );
+    void    DrawGrid( bool bGrid, bool bPage );
+    void    DrawStrings( bool bPixelToLogic = false );
     void    DrawDocumentBackground();
     void    DrawBackground();
     void    DrawShadow();
-    void    DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRight, sal_Bool bBottom);
+    void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame();
 
                     // with logic MapMode set!
-    void    DrawEdit(sal_Bool bPixelToLogic);
+    void    DrawEdit(bool bPixelToLogic);
 
     void    FindRotated();
-    void    DrawRotated(sal_Bool bPixelToLogic);        // logical
+    void    DrawRotated(bool bPixelToLogic);        // logical
 
     void    DrawClear();
 
@@ -323,14 +323,14 @@ public:
     void    DrawingSingle(const sal_uInt16 nLayer);
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
-    sal_Bool    SetChangedClip();       // sal_False = not
-    Region      GetChangedAreaRegion();
+    bool    SetChangedClip();       // sal_False = not
+    Region  GetChangedAreaRegion();
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
     void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
-                         const Color& rColor, sal_Bool bHandle );
+                         const Color& rColor, bool bHandle );
     void    DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
                             SCCOL nRefEndX, SCROW nRefEndY,
                             const Color& rColor, sal_uInt16 nType );
