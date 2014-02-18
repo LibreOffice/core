@@ -96,7 +96,9 @@ OUString LwpMarker::GetNamedProperty(OUString name)
         return OUString(A2OUSTR(""));
 }
 
-LwpStoryMarker::LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpMarker(objHdr,pStrm)
+LwpStoryMarker::LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpMarker(objHdr,pStrm)
+    , m_nFlag(0)
 {
 }
 
