@@ -354,7 +354,9 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 
     bool bAutoIsPDF = officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
 
-    assert(nLevelEntryData != 0 || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
+    assert(nLevelEntryData != 0
+            || "Generic Printer" == m_pParent->m_aJobData.m_aPrinterName
+            || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
 
     OUString sStr = m_pLevelBox->GetEntry(0);
     m_pLevelBox->InsertEntry(sStr.replaceAll("%s", bAutoIsPDF ? m_pLevelBox->GetEntry(5) : m_pLevelBox->GetEntry(1)), 0);
