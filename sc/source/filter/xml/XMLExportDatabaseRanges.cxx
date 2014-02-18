@@ -431,10 +431,6 @@ private:
 
     void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
-        if (bCaseSens)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-
         const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
         if (rItems.empty())
         {
@@ -442,7 +438,11 @@ private:
             return;
         }
 
-        else if (rItems.size() == 1)
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
+        if (bCaseSens)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
+        if (rItems.size() == 1)
         {
             // Single item condition.
             const ScQueryEntry::Item& rItem = rItems.front();
