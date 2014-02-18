@@ -46,9 +46,12 @@ TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 
 using namespace ::std;
 
-OOXMLDocumentImpl::OOXMLDocumentImpl
-(OOXMLStream::Pointer_t pStream)
-: mpStream(pStream), mXNoteType(0), mxThemeDom(0), mbIsSubstream( false )
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream)
+    : mpStream(pStream)
+    , mnXNoteId(0)
+    , mXNoteType(0)
+    , mxThemeDom(0)
+    , mbIsSubstream(false)
 {
 }
 
