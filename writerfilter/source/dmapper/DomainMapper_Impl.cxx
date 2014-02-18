@@ -1732,18 +1732,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->unoPropertySet(xProps);
 #endif
-            bool bIsGraphic = xSInfo->supportsService( "com.sun.star.drawing.GraphicObjectShape" );
-
-            // If there are position properties, the shape should not be inserted "as character".
-            sal_Int32 nHoriPosition = 0, nVertPosition = 0;
-            xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION)) >>= nHoriPosition;
-            xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION)) >>= nVertPosition;
-            if (nHoriPosition != 0 || nVertPosition != 0)
-                bIsGraphic = false;
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
             xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
-            if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
-                bIsGraphic = false;
 
             if (!m_bInHeaderFooterImport)
                 xProps->setPropertyValue(
@@ -1772,11 +1762,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 // we need to re-set this value to xTextContent, then only values are preserved.
                 xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
             }
-            else if (nAnchorType != text::TextContentAnchorType_AS_CHARACTER)
-            {
-                xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
-            }
-            else
+            else if (nAnchorType == text::TextContentAnchorType_AS_CHARACTER)
             {
                 // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
                 // it needs to be set on the object too, as that's what object placement code uses.
