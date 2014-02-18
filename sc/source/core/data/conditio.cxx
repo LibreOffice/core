@@ -1599,8 +1599,9 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 
 //------------------------------------------------------------------------
 
-ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc ):
-    ScFormatEntry( pDoc )
+ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc )
+    : ScFormatEntry( pDoc )
+    , meType(condformat::TODAY)
 {
 }
 
