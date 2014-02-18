@@ -297,12 +297,12 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
     {
         if ( !pPaintLockData )
             pPaintLockData = new ScPaintLockData;
-        pPaintLockData->SetLevel(nNew-1, sal_True);
+        pPaintLockData->SetLevel(nNew-1, true);
         LockDocument_Impl(nNew);
     }
     else if (pPaintLockData)    // loeschen
     {
-        pPaintLockData->SetLevel(0, sal_True);  // bei Unlock sofort ausfuehren
+        pPaintLockData->SetLevel(0, true);  // bei Unlock sofort ausfuehren
         UnlockPaint_Impl(true);                 // jetzt
         UnlockDocument_Impl(0);
     }
