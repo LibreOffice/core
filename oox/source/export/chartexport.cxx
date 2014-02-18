@@ -2801,6 +2801,21 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
 
             Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
 
+            OUString aService;
+            Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
+            if( !xServiceName.is() )
+                continue;
+
+            aService = xServiceName->getServiceName();
+
+            if(aService != "com.sun.star.chart2.LinearRegressionCurve" &&
+                    aService != "com.sun.star.chart2.ExponentialRegressionCurve" &&
+                    aService != "com.sun.star.chart2.LogarithmicRegressionCurve" &&
+                    aService != "com.sun.star.chart2.PotentialRegressionCurve" &&
+                    aService != "com.sun.star.chart2.PolynomialRegressionCurve" &&
+                    aService != "com.sun.star.chart2.MovingAverageRegressionCurve")
+                continue;
+
             pFS->startElement( FSNS( XML_c, XML_trendline ), FSEND );
 
             OUString aName;
@@ -2813,12 +2828,6 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             }
 
             exportShapeProps( xProperties );
-
-            OUString aService;
-            Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
-            if( !xServiceName.is() )
-                continue;
-            aService = xServiceName->getServiceName();
 
             if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
             {
@@ -2871,7 +2880,9 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             }
             else
             {
-                continue;
+                // should never happen
+                // This would produce invalid OOXML files so we check earlier for the type
+                assert(false);
             }
 
             double aExtrapolateForward = 0.0;
