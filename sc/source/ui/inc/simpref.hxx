@@ -54,11 +54,11 @@ private:
     ScDocument*     pDoc;
 
     ScRange         theCurArea;
-    sal_Bool            bCloseFlag;
-    sal_Bool            bAutoReOpen;
-    sal_Bool            bCloseOnButtonUp;
-    sal_Bool            bSingleCell;
-    sal_Bool            bMultiSelection;
+    bool            bCloseFlag;
+    bool            bAutoReOpen;
+    bool            bCloseOnButtonUp;
+    bool            bSingleCell;
+    bool            bMultiSelection;
 
     void            Init();
 
@@ -91,9 +91,9 @@ public:
     void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                 const Link& rChange );
 
-    void            SetFlags( sal_Bool bSetCloseOnButtonUp, sal_Bool bSetSingleCell, sal_Bool bSetMultiSelection );
+    void            SetFlags( bool bSetCloseOnButtonUp, bool bSetSingleCell, bool bSetMultiSelection );
 
-    void            SetAutoReOpen(sal_Bool bFlag) {bAutoReOpen=bFlag;}
+    void            SetAutoReOpen(bool bFlag) {bAutoReOpen=bFlag;}
 };
 
 

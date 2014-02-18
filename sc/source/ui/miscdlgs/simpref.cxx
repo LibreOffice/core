@@ -42,7 +42,7 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
 ,
 
         pDoc            ( ptrViewData->GetDocument() ),
-        bAutoReOpen     ( sal_True ),
+        bAutoReOpen     ( true ),
         bCloseOnButtonUp( false ),
         bSingleCell     ( false ),
         bMultiSelection ( false )
@@ -168,7 +168,7 @@ void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
     aChangeHdl  = rChange;
 }
 
-void ScSimpleRefDlg::SetFlags( sal_Bool bSetCloseOnButtonUp, sal_Bool bSetSingleCell, sal_Bool bSetMultiSelection )
+void ScSimpleRefDlg::SetFlags( bool bSetCloseOnButtonUp, bool bSetSingleCell, bool bSetMultiSelection )
 {
     bCloseOnButtonUp = bSetCloseOnButtonUp;
     bSingleCell = bSetSingleCell;
@@ -184,7 +184,7 @@ void ScSimpleRefDlg::StartRefInput()
     }
 
     m_pRbAssign->DoRef();
-    bCloseFlag=sal_True;
+    bCloseFlag = true;
 }
 
 void ScSimpleRefDlg::RefInputDone( bool bForced)
