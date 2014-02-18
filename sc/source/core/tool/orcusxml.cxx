@@ -13,8 +13,13 @@
 #include "svtools/treelistentry.hxx"
 #include "rtl/strbuf.hxx"
 
-ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType) :
-    meType(eType), maLinkedPos(ScAddress::INITIALIZE_INVALID), mbRangeParent(false), mbLeafNode(true) {}
+ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
+    : mnNamespaceID(0)
+    , meType(eType)
+    , maLinkedPos(ScAddress::INITIALIZE_INVALID)
+    , mbRangeParent(false)
+    , mbLeafNode(true)
+{}
 
 ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvTreeListEntry& rEntry)
 {
