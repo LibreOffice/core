@@ -489,9 +489,9 @@ IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*, EMPTYARG)
     return 0;
 }
 
-sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
+bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
@@ -508,7 +508,7 @@ sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
             pPreview->SetZoom( (sal_uInt16)nNew );
         }
 
-        bDone = sal_True;
+        bDone = true;
     }
     else
     {
@@ -1190,7 +1190,7 @@ void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-sal_Bool ScPreviewShell::HasAccessibilityObjects()
+bool ScPreviewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster && pAccessibilityBroadcaster->HasListeners();
 }

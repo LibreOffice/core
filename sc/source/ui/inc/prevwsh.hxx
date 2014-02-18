@@ -94,7 +94,7 @@ public:
 
     void            UpdateScrollBars();
     void            UpdateNeededScrollBars(bool bFromZoom = false);
-    sal_Bool            ScrollCommand( const CommandEvent& rCEvt );
+    bool            ScrollCommand( const CommandEvent& rCEvt );
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet& rSet );
@@ -115,7 +115,7 @@ public:
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
-    sal_Bool    HasAccessibilityObjects();
+    bool    HasAccessibilityObjects();
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument*     GetDocument();
