@@ -23,6 +23,8 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <svx/unopage.hxx>
+
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
@@ -259,6 +261,19 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
             }
             break;
+        case OOX_TOKEN( doc, spacing ):
+            {
+                OptValue<OUString> oBefore = rAttribs.getString(OOX_TOKEN(doc, before));
+                if (oBefore.has())
+                {
+                    TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
+                    rSpacing.nValue = TWIPS_TO_MM(oBefore.get().toInt32());
+                    rSpacing.bHasValue = true;
+                }
+            }
+            break;
+        default:
+            SAL_WARN("oox", "TextParagraphPropertiesContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
     return this;
 }
