@@ -169,13 +169,15 @@ PreparedStatement::PreparedStatement(
     const Reference< XConnection > & conn,
     struct ConnectionSettings *pSettings,
     const OString & stmt )
-    : OComponentHelper( refMutex->mutex ),
-      OPropertySetHelper( OComponentHelper::rBHelper ),
-      m_connection( conn ),
-      m_pSettings( pSettings ),
-      m_stmt( stmt ),
-      m_refMutex( refMutex ),
-      m_lastOidInserted( InvalidOid )
+    : OComponentHelper(refMutex->mutex)
+    , OPropertySetHelper(OComponentHelper::rBHelper)
+    , m_connection(conn)
+    , m_pSettings(pSettings)
+    , m_stmt(stmt)
+    , m_refMutex(refMutex)
+    , m_multipleResultAvailable(false)
+    , m_multipleResultUpdateCount(0)
+    , m_lastOidInserted( InvalidOid )
 {
     m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
     m_props[PREPARED_STATEMENT_MAX_ROWS] = makeAny( (sal_Int32)0 );
