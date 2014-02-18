@@ -65,9 +65,9 @@ struct ScOptConditionRow
 class ScOptSolverSave
 {
     OUString    maObjective;
-    sal_Bool    mbMax;
-    sal_Bool    mbMin;
-    sal_Bool    mbValue;
+    bool        mbMax;
+    bool        mbMin;
+    bool        mbValue;
     OUString    maTarget;
     OUString    maVariable;
     std::vector<ScOptConditionRow> maConditions;
@@ -75,16 +75,16 @@ class ScOptSolverSave
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
 public:
-            ScOptSolverSave( const OUString& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
+            ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
                              const OUString& rEngine,
                              const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
 
     const OUString&   GetObjective() const    { return maObjective; }
-    sal_Bool          GetMax() const          { return mbMax; }
-    sal_Bool          GetMin() const          { return mbMin; }
-    sal_Bool          GetValue() const        { return mbValue; }
+    bool              GetMax() const          { return mbMax; }
+    bool              GetMin() const          { return mbMin; }
+    bool              GetValue() const        { return mbValue; }
     const OUString&   GetTarget() const       { return maTarget; }
     const OUString&   GetVariable() const     { return maVariable; }
     const std::vector<ScOptConditionRow>& GetConditions() const { return maConditions; }

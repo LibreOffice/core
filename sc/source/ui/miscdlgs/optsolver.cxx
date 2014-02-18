@@ -134,7 +134,7 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
 
 //----------------------------------------------------------------------------
 
-ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
+ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
                              const OUString& rEngine,
