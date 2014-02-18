@@ -28,7 +28,7 @@
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *pShell,ScChangeAction *pAction,sal_Bool bPrevNext)
+                    ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
