@@ -177,11 +177,12 @@ LwpNumericFormatSubset::~LwpNumericFormatSubset()
 
 ///////////////////////////////////////////////////////////////////////////////////
 LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
-    : cFormat(FMT_DEFAULT)
+    : m_pObjStrm(pStrm)
+    , cFlags(0)
+    , cFormat(FMT_DEFAULT)
     , cDecimalPlaces(0)
 {
     assert(pStrm);
-    m_pObjStrm = pStrm;
 }
 /**
 *   Read number format from wordpro file
