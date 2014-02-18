@@ -310,9 +310,12 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault, aUILang.getStr(), aUILang.getLength() );
     CFStringRef pLang = NULL;
     CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang );
-    if ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo )
+    if ( !pLang || ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo ))
     {
-        CFRelease( pFamilyName );
+        if(pFamilyName)
+        {
+            CFRelease( pFamilyName );
+        }
         pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
     }
 #else
