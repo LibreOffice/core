@@ -41,7 +41,7 @@
 
 //========================================================================
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
+ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)
 
     : ModalDialog(pParent, "ScenarioDialog",
         "modules/scalc/ui/scenariodialog.ui")
