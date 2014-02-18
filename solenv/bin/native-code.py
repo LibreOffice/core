@@ -25,7 +25,6 @@ core_factory_list = [
     ("libchartcorelo.a", "chartcore_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
-    ("libdeployment.a", "deployment_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
