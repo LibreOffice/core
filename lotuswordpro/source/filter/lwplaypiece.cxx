@@ -74,6 +74,9 @@ void LwpRotor:: Read(LwpObjectStream *pStrm)
 
 LwpLayoutGeometry::LwpLayoutGeometry(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
+    , m_nWidth(0)
+    , m_nHeight(0)
+    , m_ContentOrientation(0)
 {}
 
 LwpLayoutGeometry::~LwpLayoutGeometry()
