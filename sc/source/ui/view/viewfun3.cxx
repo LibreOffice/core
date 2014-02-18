@@ -1384,7 +1384,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     if ( nFlags & IDF_OBJECTS )
     {
         ScModelObj* pModelObj = ( pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : NULL );
-        if ( pDoc && pPage && pModelObj )
+        if ( pPage && pModelObj )
         {
             bool bSameDoc = ( rClipParam.getSourceDocID() == pDoc->GetDocumentID() );
             const ScRangeListVector& rProtectedChartRangesVector( rClipParam.maProtectedChartRangesVector );
