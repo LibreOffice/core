@@ -3466,11 +3466,13 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         sal_Int32 nAktPos = 0;
         sal_Int32 nEnd = aStr.getLength();
 
-        m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
+        StartParagraph(ww8::WW8TableNodeInfo::Pointer_t());
 
         // Write paragraph properties.
         m_pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
+        StartParagraphProperties();
         aAttrIter.OutParaAttr(false);
+        EndParagraphProperties(0, 0, 0, 0);
         m_pSerializer->endElementNS(XML_w, XML_pPr);
 
         do {
@@ -3497,7 +3499,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPos();
         }
         while( nAktPos < nEnd );
-        m_pSerializer->endElementNS( XML_w, XML_p );
+        EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t());
     }
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
 }

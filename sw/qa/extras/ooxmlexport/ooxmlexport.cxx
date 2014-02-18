@@ -2317,6 +2317,18 @@ DECLARE_OOXMLEXPORT_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx"
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "page");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDmlGroupshapeParaspacing, "dml-groupshape-paraspacing.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Paragraph spacing of shape text in groupshapes was left, the w:spacing element was missing in pPr.
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:pPr/w:spacing",
+                "before",
+                "240");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
