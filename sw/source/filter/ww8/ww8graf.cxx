@@ -2032,7 +2032,7 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
             pGrfNd->SetAttr( aCrop );
         }
 
-        if (pRecord && pRecord->pObj)
+        if (pRecord->pObj)
         {
             const SfxItemSet& rOldSet = pRecord->pObj->GetMergedItemSet();
             //contrast
