@@ -424,6 +424,8 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport )
         mnTextWidth(0),
         mbPositioningNeeded( sal_False ),
         mbIsNewListItem( sal_False ),
+        meNumberingType(0),
+        mcBulletChar(0),
         maBulletListItemMap(),
         mbIsListLevelStyleImage( sal_False ),
         mbLineBreak( sal_False ),
