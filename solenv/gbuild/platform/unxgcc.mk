@@ -96,12 +96,6 @@ gb_CXXFLAGS += -Wno-deprecated-declarations
 endif
 endif
 
-ifeq ($(ENABLE_LTO),TRUE)
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
-gb_LTOFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
-endif
-endif
-
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
