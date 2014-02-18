@@ -84,8 +84,8 @@ private:
 
     SCCOL               nFirstCol;
     SCROW               nFirstRow;
-    sal_Bool            bHasHeader;
-    sal_Bool            bSortByRows;
+    bool                bHasHeader;
+    bool                bSortByRows;
 
     ScSortKeyItems      maSortKeyItems;
     ScSortKeyCtrl       maSortKeyCtrl;

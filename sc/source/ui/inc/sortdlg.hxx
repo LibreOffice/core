@@ -31,14 +31,14 @@ class ScSortDlg : public SfxTabDialog
 public:
     ScSortDlg(Window* pParent, const SfxItemSet* pArgSet);
 
-    void SetHeaders( sal_Bool bHeaders )  { bIsHeaders = bHeaders; }
-    void SetByRows ( sal_Bool bByRows  )  { bIsByRows = bByRows; }
-    sal_Bool GetHeaders() const           { return bIsHeaders; }
-    sal_Bool GetByRows () const           { return bIsByRows; }
+    void SetHeaders( bool bHeaders )  { bIsHeaders = bHeaders; }
+    void SetByRows ( bool bByRows  )  { bIsByRows = bByRows; }
+    bool GetHeaders() const           { return bIsHeaders; }
+    bool GetByRows () const           { return bIsByRows; }
 
 private:
-    sal_Bool    bIsHeaders;
-    sal_Bool    bIsByRows;
+    bool    bIsHeaders;
+    bool    bIsByRows;
 };
 
 class ScSortWarningDlg : public ModalDialog
