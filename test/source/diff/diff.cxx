@@ -38,9 +38,11 @@ struct tolerance
     }
 
     tolerance()
+        : elementName(NULL)
+        , attribName(NULL)
+        , relative(false)
+        , value(0.0)
     {
-        elementName = NULL;
-        attribName = NULL;
     }
 
     tolerance(const tolerance& tol)
