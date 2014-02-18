@@ -830,7 +830,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     const IFunctionDescription* pOldFuncDesc = pFuncDesc;
     sal_Bool bTestFlag = sal_False;
 
-    if ( m_aFormulaHelper.GetNextFunc( aFormula, sal_False,
+    if ( m_aFormulaHelper.GetNextFunc( aFormula, false,
                                      nNextFStart, &nNextFEnd, &pFuncDesc, &m_aArguments ) )
     {
         bTestFlag = (pOldFuncDesc != pFuncDesc);
@@ -905,10 +905,10 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
         //  Test, ob vorne/hinten noch mehr Funktionen sind
 
     sal_Int32 nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-    rbNext = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nTempStart );
+    rbNext = m_aFormulaHelper.GetNextFunc( aFormula, false, nTempStart );
     nTempStart = pMEdit->GetSelection().Min();
     pData->SetFStart(nTempStart);
-    rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, sal_True, nTempStart );
+    rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, true, nTempStart );
 }
 // -----------------------------------------------------------------------------
 
@@ -1108,7 +1108,7 @@ void FormulaDlg_Impl::EditThisFunc(sal_Int32 nFStart)
 
     sal_Bool bFound;
 
-    bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nNextFStart, &nNextFEnd);
+    bFound = m_aFormulaHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd);
     if ( bFound )
     {
         sal_Int32 PrivStart, PrivEnd;
@@ -1145,12 +1145,12 @@ void FormulaDlg_Impl::EditNextFunc( sal_Bool bForward, sal_Int32 nFStart )
     if ( bForward )
     {
         nNextFStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-        bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nNextFStart, &nNextFEnd);
+        bFound = m_aFormulaHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd);
     }
     else
     {
         nNextFStart = nFStart;
-        bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_True, nNextFStart, &nNextFEnd);
+        bFound = m_aFormulaHelper.GetNextFunc( aFormula, true, nNextFStart, &nNextFEnd);
     }
 
     if ( bFound )
@@ -1349,7 +1349,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
                 }
                 if(nCount==0)
                 {
-                    nFStart=m_aFormulaHelper.GetFunctionStart(aString,n,sal_True);
+                    nFStart=m_aFormulaHelper.GetFunctionStart(aString, n, true);
                     EditThisFunc(nFStart);
                 }
                 else

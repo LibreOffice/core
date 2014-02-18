@@ -66,8 +66,8 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
     m_pCharClass = m_pSysLocale->GetCharClassPtr();
 }
 
-sal_Bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
-                                     sal_Bool         bBack,
+bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
+                                     bool             bBack,
                                      sal_Int32&       rFStart,   // Input and output
                                      sal_Int32*       pFEnd,     // = NULL
                                      const IFunctionDescription**   ppFDesc,   // = NULL
@@ -77,7 +77,7 @@ sal_Bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
     OUString   aFname;
 
     rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
-    sal_Bool bFound  = ( rFStart != FUNC_NOTFOUND );
+    bool bFound  = ( rFStart != FUNC_NOTFOUND );
 
     if ( bFound )
     {
@@ -190,7 +190,7 @@ inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr
 
 sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                                             sal_Int32         nStart,
-                                            sal_Bool          bBack,
+                                            bool              bBack,
                                             OUString*         pFuncName ) const
 {
     sal_Int32 nStrLen = rFormula.getLength();
