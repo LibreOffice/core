@@ -38,14 +38,14 @@ public:
 
     sal_uInt16      GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;
-    sal_Bool        IsSkipEmptyCells() const {return mpBtnSkipEmptyCells->IsChecked();}
-    sal_Bool        IsTranspose() const {return mpBtnTranspose->IsChecked();}
-    sal_Bool        IsLink() const {return mpBtnLink->IsChecked();}
-    InsCellCmd  GetMoveMode();
+    bool            IsSkipEmptyCells() const {return mpBtnSkipEmptyCells->IsChecked();}
+    bool            IsTranspose() const {return mpBtnTranspose->IsChecked();}
+    bool            IsLink() const {return mpBtnLink->IsChecked();}
+    InsCellCmd      GetMoveMode();
 
-    void    SetOtherDoc( sal_Bool bSet );
-    void    SetFillMode( sal_Bool bSet );
-    void    SetChangeTrack( sal_Bool bSet );
+    void    SetOtherDoc( bool bSet );
+    void    SetFillMode( bool bSet );
+    void    SetChangeTrack( bool bSet );
     void    SetCellShiftDisabled( int nDisable );
 
 private:
@@ -72,19 +72,19 @@ private:
     RadioButton*     mpRbMoveDown;
     RadioButton*     mpRbMoveRight;
 
-    sal_Bool            bOtherDoc;
-    sal_Bool            bFillMode;
-    sal_Bool            bChangeTrack;
-    sal_Bool            bMoveDownDisabled;
-    sal_Bool            bMoveRightDisabled;
+    bool              bOtherDoc;
+    bool              bFillMode;
+    bool              bChangeTrack;
+    bool              bMoveDownDisabled;
+    bool              bMoveRightDisabled;
 
-    static sal_Bool     bPreviousAllCheck;
+    static bool         bPreviousAllCheck;
     static sal_uInt16   nPreviousChecks;
     static sal_uInt16   nPreviousChecks2;
     static sal_uInt16   nPreviousFormulaChecks;
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
-    void DisableChecks( sal_Bool bInsAllChecked = sal_True );
+    void DisableChecks( bool bInsAllChecked = true );
     void TestModes();
 
     // Handler

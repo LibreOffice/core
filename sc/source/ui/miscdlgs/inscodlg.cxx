@@ -31,7 +31,7 @@
 
 //==================================================================
 
-sal_Bool   ScInsertContentsDlg::bPreviousAllCheck = sal_False;
+bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
 sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
@@ -166,7 +166,7 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
 
 //------------------------------------------------------------------------
 
-void ScInsertContentsDlg::DisableChecks( sal_Bool bInsAllChecked )
+void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
 {
     if ( bInsAllChecked )
     {
@@ -214,7 +214,7 @@ void ScInsertContentsDlg::TestModes()
         mpRbMoveRight->Disable();
 
         mpBtnInsAll->Disable();
-        DisableChecks(sal_True);
+        DisableChecks(true);
     }
     else
     {
@@ -235,7 +235,7 @@ void ScInsertContentsDlg::TestModes()
     }
 }
 
-void ScInsertContentsDlg::SetOtherDoc( sal_Bool bSet )
+void ScInsertContentsDlg::SetOtherDoc( bool bSet )
 {
     if ( bSet != bOtherDoc )
     {
@@ -246,7 +246,7 @@ void ScInsertContentsDlg::SetOtherDoc( sal_Bool bSet )
     }
 }
 
-void ScInsertContentsDlg::SetFillMode( sal_Bool bSet )
+void ScInsertContentsDlg::SetFillMode( bool bSet )
 {
     if ( bSet != bFillMode )
     {
@@ -257,7 +257,7 @@ void ScInsertContentsDlg::SetFillMode( sal_Bool bSet )
     }
 }
 
-void ScInsertContentsDlg::SetChangeTrack( sal_Bool bSet )
+void ScInsertContentsDlg::SetChangeTrack( bool bSet )
 {
     if ( bSet != bChangeTrack )
     {
@@ -270,8 +270,8 @@ void ScInsertContentsDlg::SetChangeTrack( sal_Bool bSet )
 
 void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 {
-    sal_Bool bDown = ((nDisable & SC_CELL_SHIFT_DISABLE_DOWN) != 0);
-    sal_Bool bRight = ((nDisable & SC_CELL_SHIFT_DISABLE_RIGHT) != 0);
+    bool bDown = ((nDisable & SC_CELL_SHIFT_DISABLE_DOWN) != 0);
+    bool bRight = ((nDisable & SC_CELL_SHIFT_DISABLE_RIGHT) != 0);
     if ( bDown != bMoveDownDisabled || bRight != bMoveRightDisabled )
     {
         bMoveDownDisabled = bDown;
