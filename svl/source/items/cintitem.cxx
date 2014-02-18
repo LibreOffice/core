@@ -255,8 +255,9 @@ DBG_NAME(CntInt32Item);
 
 TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
-CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
-    SfxPoolItem(which)
+CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
+    : SfxPoolItem(which)
+    , m_nValue(0)
 {
     DBG_CTOR(CntInt32Item, 0);
     //fdo#39428 SvStream no longer supports operator>>(long&)
