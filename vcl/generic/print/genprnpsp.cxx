@@ -1231,6 +1231,8 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
         }
     }
 
+    bool bSuccess(true);
+
     // spool files
     if( ! i_pFileName && ! bAborted )
     {
@@ -1273,6 +1275,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
                             aBuf.append( ' ' );
                             aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
                         }
+                        bSuccess &=
                         PrinterInfoManager::get().endSpool( pPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob );
                         bFirstJob = false;
                     }
@@ -1283,7 +1286,10 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
     }
 
     // job has been spooled
-    i_rController.setJobState( bAborted ? view::PrintableState_JOB_ABORTED : view::PrintableState_JOB_SPOOLED );
+    i_rController.setJobState( (bAborted)
+            ? view::PrintableState_JOB_ABORTED
+            : ((bSuccess) ? view::PrintableState_JOB_SPOOLED
+                          : view::PrintableState_JOB_SPOOLING_FAILED));
 
     // clean up the temporary PDF files
     if( ! i_pFileName || bAborted )
