@@ -5318,52 +5318,148 @@
   <namespace name="w14">
     <start name="glow"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <define name="ST_SchemeColorVal">
+        <choice>
+          <value>bg1</value>
+          <value>tx1</value>
+          <value>bg2</value>
+          <value>tx2</value>
+          <value>accent1</value>
+          <value>accent2</value>
+          <value>accent3</value>
+          <value>accent4</value>
+          <value>accent5</value>
+          <value>accent6</value>
+        </choice>
+      </define>
+
       <define name="CT_Glow">
-        <element name="srgbClr">
-          <ref name="CT_SRgbColor"/>
-        </element>
-        <element name="schemeClr">
-          <ref name="CT_SchemeColor"/>
-        </element>
-        <attribute name="rad">
-          <ref name="ST_PositiveCoordinate"/>
-        </attribute>
+        <optional>
+          <element name="srgbClr">
+            <ref name="CT_SRgbColor"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="schemeClr">
+            <ref name="CT_SchemeColor"/>
+          </element>
+        </optional>
+        <optional>
+          <attribute name="rad">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
       </define>
 
       <define name="CT_SRgbColor">
-        <element name="tint">
-          <ref name="CT_PositiveFixedPercentage"/>
-        </element>
-        <element name="shade">
-          <ref name="CT_PositiveFixedPercentage"/>
-        </element>
-        <element name="alpha">
-          <ref name="CT_PositiveFixedPercentage"/>
-        </element>
-        <element name="hueMod">
-          <ref name="CT_PositivePercentage"/>
-        </element>
-        <element name="sat">
-          <ref name="CT_Percentage"/>
-        </element>
-        <element name="satOff">
-          <ref name="CT_Percentage"/>
-        </element>
-        <element name="satMod">
-          <ref name="CT_Percentage"/>
-        </element>
-        <element name="lum">
-          <ref name="CT_Percentage"/>
-        </element>
-        <element name="lumOff">
-          <ref name="CT_Percentage"/>
-        </element>
-        <element name="lumMod">
-          <ref name="CT_Percentage"/>
-        </element>
-
+        <optional>
+          <element name="tint">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="shade">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="alpha">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="hueMod">
+            <ref name="CT_PositivePercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="sat">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="satOff">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="satMod">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lum">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lumOff">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lumMod">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
         <attribute name="val">
           <ref name="ST_HexColorRGB"/>
+        </attribute>
+      </define>
+
+      <define name="CT_SchemeColor">
+        <optional>
+          <element name="tint">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="shade">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="alpha">
+            <ref name="CT_PositiveFixedPercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="hueMod">
+            <ref name="CT_PositivePercentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="sat">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="satOff">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="satMod">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lum">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lumOff">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lumMod">
+            <ref name="CT_Percentage"/>
+          </element>
+        </optional>
+        <attribute name="val">
+          <ref name="ST_SchemeColorVal"/>
         </attribute>
       </define>
 
@@ -5388,8 +5484,63 @@
           <ref name="CT_Glow"/>
         </element>
       </define>
-
     </grammar>
+
+    <resource name="ST_SchemeColorVal" resource="List" generated="yes">
+      <value name="bg1" tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
+      <value name="tx1" tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
+      <value name="bg2" tokenid="ooxml:ST_SchemeColorVal_bg2">bg2</value>
+      <value name="tx2" tokenid="ooxml:ST_SchemeColorVal">tx2</value>
+      <value name="accent1" tokenid="ooxml:ST_SchemeColorVal_accent1">accent1</value>
+      <value name="accent2" tokenid="ooxml:ST_SchemeColorVal_accent2">accent2</value>
+      <value name="accent3" tokenid="ooxml:ST_SchemeColorVal_accent3">accent3</value>
+      <value name="accent4" tokenid="ooxml:ST_SchemeColorVal_accent4">accent4</value>
+      <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
+      <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
+    </resource>
+    <resource name="CT_Glow" resource="Properties" tag="paragraph">
+      <element name="srgbClr" tokenid="ooxml:CT_Glow_srgbClr"/>
+      <element name="schemeClr" tokenid="ooxml:CT_Glow_schemeClr"/>
+      <attribute name="rad" tokenid="ooxml:CT_Glow_rad"/>
+    </resource>
+    <resource name="CT_SRgbColor" resource="Properties" tag="paragraph">
+      <element name="tint" tokenid="ooxml:CT_SRgbColor_tint"/>
+      <element name="shade" tokenid="ooxml:CT_SRgbColor_shade"/>
+      <element name="alpha" tokenid="ooxml:CT_SRgbColor_alpha"/>
+      <element name="hueMod" tokenid="ooxml:CT_SRgbColor_hueMod"/>
+      <element name="sat" tokenid="ooxml:CT_SRgbColor_sat"/>
+      <element name="satOff" tokenid="ooxml:CT_SRgbColor_satOff"/>
+      <element name="satMod" tokenid="ooxml:CT_SRgbColor_satMod"/>
+      <element name="lum" tokenid="ooxml:CT_SRgbColor_lum"/>
+      <element name="lumOff" tokenid="ooxml:CT_SRgbColor_lumOff"/>
+      <element name="lumMod" tokenid="ooxml:CT_SRgbColor_lumMod"/>
+      <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
+    </resource>
+    <resource name="CT_SchemeColor" resource="Properties" tag="paragraph">
+      <element name="tint" tokenid="ooxml:CT_SchemeColor_tint"/>
+      <element name="shade" tokenid="ooxml:CT_SchemeColor_shade"/>
+      <element name="alpha" tokenid="ooxml:CT_SchemeColor_alpha"/>
+      <element name="hueMod" tokenid="ooxml:CT_SchemeColor_hueMod"/>
+      <element name="sat" tokenid="ooxml:CT_SchemeColor_sat"/>
+      <element name="satOff" tokenid="ooxml:CT_SchemeColor_satOff"/>
+      <element name="satMod" tokenid="ooxml:CT_SchemeColor_satMod"/>
+      <element name="lum" tokenid="ooxml:CT_SchemeColor_lum"/>
+      <element name="lumOff" tokenid="ooxml:CT_SchemeColor_lumOff"/>
+      <element name="lumMod" tokenid="ooxml:CT_SchemeColor_lumMod"/>
+      <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
+    </resource>
+    <resource name="CT_PositiveFixedPercentage" resource="Properties" tag="paragraph">
+      <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val"/>
+    </resource>
+    <resource name="CT_PositivePercentage" resource="Properties" tag="paragraph">
+      <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val"/>
+    </resource>
+    <resource name="CT_Percentage" resource="Properties" tag="paragraph">
+      <attribute name="val" tokenid="ooxml:CT_Percentage_val"/>
+    </resource>
+    <resource name="glow" resource="Properties" tag="paragraph">
+      <element name="glow" tokenid="ooxml:glow_glow"/>
+    </resource>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
