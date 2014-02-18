@@ -27,7 +27,7 @@ class SC_DLLPUBLIC ScPopupMenu : public PopupMenu
 {
 private:
     sal_uInt16  nSel;
-    sal_Bool    bHit;
+    bool        bHit;
 protected:
     virtual void Select();
 public:
@@ -36,7 +36,7 @@ public:
     ScPopupMenu(const ResId& rRes) : PopupMenu(rRes),nSel(0),bHit(false) {}
 
     sal_uInt16  GetSelected() const { return nSel; }
-    sal_Bool    WasHit() const      { return bHit; }
+    bool        WasHit() const      { return bHit; }
 };
 
 

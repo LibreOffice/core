@@ -24,7 +24,7 @@
 void ScPopupMenu::Select()
 {
     nSel = GetCurItemId();
-    bHit = sal_True;
+    bHit = true;
 }
 
 
