@@ -1184,12 +1184,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_CT_PBdr_bar:
         break;
-    case NS_sprm::LN_PFNoAutoHyph:   // sprmPFNoAutoHyph
+    case NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens:
         rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::makeAny( nIntValue ? false : true ));
         break;
     case NS_ooxml::LN_CT_FramePr_h:
         break;
-    case NS_sprm::LN_PShd: // sprmPShd
+    case NS_ooxml::LN_CT_PrBase_shd:
     {
         //contains fore color, back color and shadow percentage, results in a brush
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

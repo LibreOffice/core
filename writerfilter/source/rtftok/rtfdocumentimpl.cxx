@@ -3086,7 +3086,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
-                lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_sprm::LN_PShd, NS_ooxml::LN_CT_Shd_fill, pValue);
+                lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_shd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_ULC:
