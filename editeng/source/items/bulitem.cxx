@@ -111,9 +111,10 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich ),
-    pGraphicObject( NULL )
+SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
+    : SfxPoolItem(_nWhich)
+    , pGraphicObject(NULL)
+    , nStyle(0)
 {
     rStrm.ReadUInt16( nStyle );
 
