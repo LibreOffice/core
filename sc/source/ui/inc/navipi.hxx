@@ -262,11 +262,11 @@ private:
     long            nListModeHeight;
     long            nInitListHeight;
     NavListMode     eListMode;
-    sal_uInt16          nDropMode;
+    sal_uInt16      nDropMode;
     SCCOL           nCurCol;
     SCROW           nCurRow;
     SCTAB           nCurTab;
-    sal_Bool            bFirstBig;
+    bool            bFirstBig;
     bool mbUseStyleSettingsBackground;
 
     ScNavigatorControllerItem** ppBoundItems;
@@ -287,7 +287,7 @@ private:
 
     ScTabViewShell*         GetTabViewShell() const;
     ScNavigatorSettings*    GetNavigatorSettings();
-    sal_Bool                    GetViewData();
+    bool                    GetViewData();
 
     void    UpdateColumn    ( const SCCOL* pCol = NULL );
     void    UpdateRow       ( const SCROW* pRow = NULL );
@@ -296,9 +296,9 @@ private:
 
     void    GetDocNames(const OUString* pSelEntry = NULL);
 
-    void    SetListMode     ( NavListMode eMode, sal_Bool bSetSize = sal_True );
-    void    ShowList        ( sal_Bool bShow, sal_Bool bSetSize );
-    void    ShowScenarios   ( sal_Bool bShow, sal_Bool bSetSize );
+    void    SetListMode     ( NavListMode eMode, bool bSetSize = true );
+    void    ShowList        ( bool bShow, bool bSetSize );
+    void    ShowScenarios   ( bool bShow, bool bSetSize );
 
     void    SetDropMode(sal_uInt16 nNew);
     sal_uInt16  GetDropMode() const         { return nDropMode; }

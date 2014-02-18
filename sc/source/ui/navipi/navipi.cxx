@@ -1099,7 +1099,7 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScNavigatorDlg::GetViewData()
+bool ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
     pViewData = pViewSh ? pViewSh->GetViewData() : NULL;
@@ -1170,7 +1170,7 @@ void ScNavigatorDlg::UpdateAll()
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
+void ScNavigatorDlg::SetListMode( NavListMode eMode, bool bSetSize )
 {
     if ( eMode != eListMode )
     {
@@ -1189,11 +1189,11 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
             case NAV_LMODE_DBAREAS:
             case NAV_LMODE_DOCS:
                 aLbEntries.Refresh();
-                ShowList( sal_True, bSetSize );
+                ShowList( true, bSetSize );
                 break;
 
             case NAV_LMODE_SCENARIOS:
-                ShowScenarios( sal_True, bSetSize );
+                ShowScenarios( true, bSetSize );
                 break;
         }
 
@@ -1212,7 +1212,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
+void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
 {
     FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
     Size aSize = GetParent()->GetOutputSizePixel();
@@ -1260,7 +1260,7 @@ void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
+void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
 {
     FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
     Size aSize = GetParent()->GetOutputSizePixel();
