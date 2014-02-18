@@ -448,7 +448,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     //----------------------------------------------------------
 
-    bCopyDone = sal_True;
+    bCopyDone = true;
 
 }
 
@@ -537,7 +537,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             }
             mpBtnNew->Hide();
             mpBtnDiscard->Show();
-            bCancelMode = sal_True;
+            bCancelMode = true;
         }
         else // if ( bCancelMode )
         {
@@ -766,12 +766,12 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
         {
             mpBtnNew->Hide();
             mpBtnDiscard->Show();
-            bCancelMode = sal_True;
+            bCancelMode = true;
             mpBtnAdd->Hide();
             mpBtnAdd->Enable();
             mpBtnModify->Show();
             mpBtnModify->Enable();
-            bModifyMode = sal_True;
+            bModifyMode = true;
             mpBtnRemove->Disable();
             mpFtLists->Disable();
             mpLbLists->Disable();

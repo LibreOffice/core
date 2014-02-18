@@ -78,10 +78,10 @@ private:
     ScRangeUtil*    pRangeUtil;
     OUString        aStrSelectedArea;
 
-    sal_Bool            bModifyMode;
-    sal_Bool            bCancelMode;
-    sal_Bool            bCopyDone;
-    sal_uInt16          nCancelPos;
+    bool            bModifyMode;
+    bool            bCancelMode;
+    bool            bCopyDone;
+    sal_uInt16      nCancelPos;
 
 #ifdef _TPUSRLST_CXX
 private:
