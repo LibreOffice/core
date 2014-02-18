@@ -29,7 +29,7 @@ class ScPrivatSplit : public Control
     private:
 
         Link                aCtrModifiedLink;
-        sal_Bool                aMovingFlag;
+        bool                aMovingFlag;
         Pointer             aWinPointer;
         SC_SPLIT_DIRECTION  eScSplit;
         short               nOldX;
@@ -42,7 +42,7 @@ class ScPrivatSplit : public Control
         short               nDeltaY;
 
         using Control::ImplInitSettings;
-        void                ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void                ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
 
 
