@@ -122,6 +122,7 @@ GDIMetaFile::GDIMetaFile() :
 }
 
 GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
+    nCurrentActionElement( rMtf.nCurrentActionElement ),
     aPrefMapMode    ( rMtf.aPrefMapMode ),
     aPrefSize       ( rMtf.aPrefSize ),
     aHookHdlLink    ( rMtf.aHookHdlLink ),
