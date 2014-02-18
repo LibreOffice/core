@@ -1901,6 +1901,7 @@ public:
     char m_Char_Test;
     // for pass thread-special data to thread
     myKeyThread(const char cData)
+        : m_Char_Test(0)
         {
             m_nData = cData;
         }
