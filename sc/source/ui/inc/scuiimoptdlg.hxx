@@ -32,12 +32,12 @@ class ScImportOptionsDlg : public ModalDialog
 {
 public:
     ScImportOptionsDlg( Window*                 pParent,
-                        sal_Bool                bAscii = sal_True,
+                        bool                    bAscii = true,
                         const ScImportOptions*  pOptions = NULL,
                         const OUString*         pStrTitle = NULL,
-                        sal_Bool                bMultiByte = false,
-                        sal_Bool                bOnlyDbtoolsEncodings = false,
-                        sal_Bool                bImport = sal_True );
+                        bool                    bMultiByte = false,
+                        bool                    bOnlyDbtoolsEncodings = false,
+                        bool                    bImport = true );
 
     ~ScImportOptionsDlg();
 

@@ -111,12 +111,12 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
-        sal_Bool                    bAscii,
+        bool                    bAscii,
         const ScImportOptions*  pOptions,
         const OUString*         pStrTitle,
-        sal_Bool                    bMultiByte,
-        sal_Bool                    bOnlyDbtoolsEncodings,
-        sal_Bool                    bImport )
+        bool                    bMultiByte,
+        bool                    bOnlyDbtoolsEncodings,
+        bool                    bImport )
     :   ModalDialog ( pParent, "ImOptDialog",
             "modules/scalc/ui/imoptdialog.ui" )
 {
