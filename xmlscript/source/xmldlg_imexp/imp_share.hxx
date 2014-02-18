@@ -156,6 +156,8 @@ public:
         , _pStyles( pStyles )
         , _xDialogModel( xDialogModel )
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
+        , XMLNS_DIALOGS_UID( 0 )
+        , XMLNS_SCRIPT_UID( 0 )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
     inline DialogImport( const DialogImport& rOther ) :
