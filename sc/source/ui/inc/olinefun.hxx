@@ -37,21 +37,21 @@ public:
                 ScOutlineDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                 ~ScOutlineDocFunc() {}
 
-    sal_Bool        MakeOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool        RemoveOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool        RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool        AutoOutline( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
+    bool        MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
+    bool        RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
+    bool        RemoveAllOutlines( SCTAB nTab, bool bRecord );
+    bool        AutoOutline( const ScRange& rRange, bool bRecord );
 
-    sal_Bool        SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
+    bool        SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,
+                                    bool bRecord, bool bPaint );
 
-    sal_Bool        ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord );
-    sal_Bool        HideMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
+    bool        ShowMarkedOutlines( const ScRange& rRange, bool bRecord );
+    bool        HideMarkedOutlines( const ScRange& rRange, bool bRecord );
 
-    sal_Bool        ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
-    sal_Bool        HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
+    bool        ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord, bool bPaint );
+    bool        HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord, bool bPaint );
 };
 
 

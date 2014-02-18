@@ -7864,7 +7864,7 @@ void SAL_CALL ScTableSheetObj::group( const table::CellRangeAddress& rGroupRange
         ScRange aGroupRange;
         ScUnoConversion::FillScRange( aGroupRange, rGroupRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.MakeOutline( aGroupRange, bColumns, sal_True, sal_True );
+        aFunc.MakeOutline( aGroupRange, bColumns, true, true );
     }
 }
 
@@ -7880,7 +7880,7 @@ void SAL_CALL ScTableSheetObj::ungroup( const table::CellRangeAddress& rGroupRan
         ScRange aGroupRange;
         ScUnoConversion::FillScRange( aGroupRange, rGroupRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.RemoveOutline( aGroupRange, bColumns, sal_True, sal_True );
+        aFunc.RemoveOutline( aGroupRange, bColumns, true, true );
     }
 }
 
@@ -7894,7 +7894,7 @@ void SAL_CALL ScTableSheetObj::autoOutline( const table::CellRangeAddress& rCell
         ScRange aFormulaRange;
         ScUnoConversion::FillScRange( aFormulaRange, rCellRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.AutoOutline( aFormulaRange, sal_True, sal_True );
+        aFunc.AutoOutline( aFormulaRange, true );
     }
 }
 
@@ -7907,7 +7907,7 @@ void SAL_CALL ScTableSheetObj::clearOutline()
     {
         SCTAB nTab = GetTab_Impl();
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.RemoveAllOutlines( nTab, sal_True, sal_True );
+        aFunc.RemoveAllOutlines( nTab, true );
     }
 }
 
@@ -7921,7 +7921,7 @@ void SAL_CALL ScTableSheetObj::hideDetail( const table::CellRangeAddress& rCellR
         ScRange aMarkRange;
         ScUnoConversion::FillScRange( aMarkRange, rCellRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.HideMarkedOutlines( aMarkRange, sal_True, sal_True );
+        aFunc.HideMarkedOutlines( aMarkRange, true );
     }
 }
 
@@ -7935,7 +7935,7 @@ void SAL_CALL ScTableSheetObj::showDetail( const table::CellRangeAddress& rCellR
         ScRange aMarkRange;
         ScUnoConversion::FillScRange( aMarkRange, rCellRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.ShowMarkedOutlines( aMarkRange, sal_True );
+        aFunc.ShowMarkedOutlines( aMarkRange, true );
     }
 }
 
@@ -7949,7 +7949,7 @@ void SAL_CALL ScTableSheetObj::showLevel( sal_Int16 nLevel, table::TableOrientat
         sal_Bool bColumns = ( nOrientation == table::TableOrientation_COLUMNS );
         SCTAB nTab = GetTab_Impl();
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.SelectLevel( nTab, bColumns, nLevel, sal_True, sal_True, sal_True );
+        aFunc.SelectLevel( nTab, bColumns, nLevel, true, true );
     }
 }
 

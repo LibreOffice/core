@@ -594,7 +594,7 @@ void ScUndoAutoOutline::Redo()
     ScRange aRange( aBlockStart.Col(), aBlockStart.Row(), nTab,
                     aBlockEnd.Col(),   aBlockEnd.Row(),   nTab );
     ScOutlineDocFunc aFunc( *pDocShell );
-    aFunc.AutoOutline( aRange, false, false );
+    aFunc.AutoOutline( aRange, false );
 
     //  Select in View
     //  If it was called with a multi selection,

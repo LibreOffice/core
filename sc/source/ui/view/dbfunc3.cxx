@@ -190,7 +190,7 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    bool bOk = aFunc.RemoveAllOutlines( nTab, bRecord, false );
+    bool bOk = aFunc.RemoveAllOutlines( nTab, bRecord );
 
     if (bOk)
         UpdateScrollBars();
@@ -211,7 +211,7 @@ void ScDBFunc::AutoOutline( bool bRecord )
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
-    aFunc.AutoOutline( aRange, bRecord, false );
+    aFunc.AutoOutline( aRange, bRecord );
 }
 
 //  Outline-Ebene auswaehlen
@@ -222,7 +222,7 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord, bool
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    sal_Bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, bPaint, false );
+    bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, bPaint );
 
     if (bOk)
         UpdateScrollBars();
@@ -236,7 +236,7 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    sal_Bool bOk = aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint, false );
+    bool bOk = aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bOk && bPaint )
         UpdateScrollBars();
@@ -250,7 +250,7 @@ void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    sal_Bool bOk = aFunc.HideOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint, false );
+    bool bOk = aFunc.HideOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bOk && bPaint )
         UpdateScrollBars();
@@ -356,7 +356,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
-        sal_Bool bDone = aFunc.HideMarkedOutlines( aRange, bRecord, false );
+        bool bDone = aFunc.HideMarkedOutlines( aRange, bRecord );
         if (bDone)
             UpdateScrollBars();
     }

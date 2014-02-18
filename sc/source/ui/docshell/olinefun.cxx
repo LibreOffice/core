@@ -80,9 +80,9 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi )
+bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
-    sal_Bool bSuccess = false;
+    bool bSuccess = false;
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
@@ -132,7 +132,7 @@ sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     else
     {
@@ -144,9 +144,9 @@ sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns
     return bSuccess;
 }
 
-sal_Bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi )
+bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -197,7 +197,7 @@ sal_Bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, sal_Bool bColum
 
             rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
             rDocShell.SetDocumentModified();
-            bDone = sal_True;
+            bDone = true;
             lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
             // es wird nicht wieder eingeblendet -> kein UpdatePageBreaks
@@ -212,7 +212,7 @@ sal_Bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, sal_Bool bColum
     return bDone;
 }
 
-sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi )
+bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 {
     sal_Bool bSuccess = false;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -246,8 +246,8 @@ sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_
                                                 pUndoDoc, pUndoTab ) );
         }
 
-        SelectLevel( nTab, sal_True,  pTable->GetColArray()->GetDepth(), false, false, bApi );
-        SelectLevel( nTab, false, pTable->GetRowArray()->GetDepth(), false, false, bApi );
+        SelectLevel( nTab, true,  pTable->GetColArray()->GetDepth(), false, false );
+        SelectLevel( nTab, false, pTable->GetRowArray()->GetDepth(), false, false );
         pDoc->SetOutlineTable( nTab, NULL );
 
         pDoc->UpdatePageBreaks( nTab );
@@ -267,7 +267,7 @@ sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
+bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -305,8 +305,8 @@ sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord,
         }
 
         // einblenden
-        SelectLevel( nTab, sal_True,  pTable->GetColArray()->GetDepth(), false, false, bApi );
-        SelectLevel( nTab, false, pTable->GetRowArray()->GetDepth(), false, false, bApi );
+        SelectLevel( nTab, true,  pTable->GetColArray()->GetDepth(), false, false );
+        SelectLevel( nTab, false, pTable->GetRowArray()->GetDepth(), false, false );
         pDoc->SetOutlineTable( nTab, NULL );
     }
 
@@ -328,13 +328,13 @@ sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord,
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
+bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,
+                                    bool bRecord, bool bPaint )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -423,14 +423,14 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord )
+bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -523,7 +523,7 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
         rDocShell.SetDocumentModified();
-        bDone = sal_True;
+        bDone = true;
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
@@ -531,9 +531,9 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
     return bDone;
 }
 
-sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
+bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -594,7 +594,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
             nEnd   = pEntry->GetEnd();
 
             if ( static_cast<SCCOLROW>(nStartCol)<=nEnd && static_cast<SCCOLROW>(nEndCol)>=nStart )
-                HideOutline( nTab, sal_True, nColLevel, i, false, false, bApi );
+                HideOutline( nTab, true, nColLevel, i, false, false );
         }
 
         //  Zeilen
@@ -607,7 +607,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
             nEnd   = pEntry->GetEnd();
 
             if ( nStartRow<=nEnd && nEndRow>=nStart )
-                HideOutline( nTab, false, nRowLevel, i, false, false, bApi );
+                HideOutline( nTab, false, nRowLevel, i, false, false );
         }
 
         pDoc->SetDrawPageSize(nTab);
@@ -616,7 +616,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
 
         rDocShell.SetDocumentModified();
-        bDone = sal_True;
+        bDone = true;
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
@@ -626,8 +626,8 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
+bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord, bool bPaint )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -707,11 +707,11 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return sal_True;        //! immer ???
+    return true;        //! immer ???
 }
 
-sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
+bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    bool bRecord, bool bPaint )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -766,7 +766,7 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return sal_True;        //! immer ???
+    return true;        //! immer ???
 }
 
 
