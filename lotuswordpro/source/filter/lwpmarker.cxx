@@ -114,7 +114,11 @@ void LwpFribRange::Read(LwpObjectStream* pObjStrm)
     m_EndPara.ReadIndexed(pObjStrm);
 }
 
-LwpCHBlkMarker::LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpStoryMarker(objHdr,pStrm)
+LwpCHBlkMarker::LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpStoryMarker(objHdr, pStrm)
+    , m_nTab(0)
+    , m_nFlag(0)
+    , m_nAction(0)
 {
 }
 
