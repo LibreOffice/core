@@ -106,7 +106,7 @@ void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
         if ( !bVertical )
         {
             Flush();
-            bVertical = sal_True;
+            bVertical = true;
         }
         AddLine( nY1, nY2, nX );
     }
