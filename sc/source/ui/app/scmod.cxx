@@ -1422,7 +1422,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 //
 //------------------------------------------------------------------
 
-ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, sal_Bool bUseRef )
+ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
 {
     if ( pRefInputHandler && bUseRef )
         return pRefInputHandler;
@@ -1461,19 +1461,19 @@ void ScModule::SetInputMode( ScInputMode eMode )
         pHdl->SetMode( eMode );
 }
 
-sal_Bool ScModule::IsEditMode()
+bool ScModule::IsEditMode()
 {
     ScInputHandler* pHdl = GetInputHdl();
     return pHdl && pHdl->IsEditMode();
 }
 
-sal_Bool ScModule::IsInputMode()
+bool ScModule::IsInputMode()
 {
     ScInputHandler* pHdl = GetInputHdl();
     return pHdl && pHdl->IsInputMode();
 }
 
-sal_Bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit )
+bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
 {
     ScInputHandler* pHdl = GetInputHdl();
     return ( pHdl ? pHdl->KeyInput( rKEvt, bStartEdit ) : false );
@@ -1567,7 +1567,7 @@ OUString ScModule::InputGetFormulaStr()
     return aStr;
 }
 
-void ScModule::ActivateInputWindow( const OUString* pStrFormula, sal_Bool bMatrix )
+void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if ( pHdl )
@@ -1607,7 +1607,7 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, sal_Bool bMatri
 //
 //------------------------------------------------------------------
 
-void ScModule::SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm )
+void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
@@ -1671,12 +1671,12 @@ static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
     return NULL;                    // none found
 }
 
-sal_Bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
+bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    sal_Bool bIsModal = false;
+    bool bIsModal = false;
 
     if ( nCurRefDlgId )
     {
@@ -1697,7 +1697,7 @@ sal_Bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
             // in 592 and above, the dialog isn't visible in other views
             //  if the dialog is open but can't be accessed, disable input
 
-            bIsModal = sal_True;
+            bIsModal = true;
         }
 
         //  pChildWnd kann 0 sein, wenn der Dialog nach dem Umschalten
@@ -1713,12 +1713,12 @@ sal_Bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
     return bIsModal;
 }
 
-sal_Bool ScModule::IsTableLocked()
+bool ScModule::IsTableLocked()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    sal_Bool bLocked = false;
+    bool bLocked = false;
 
     //  bisher nur bei ScAnyRefDlg
 
@@ -1731,18 +1731,18 @@ sal_Bool ScModule::IsTableLocked()
         else if( pModalDlg )
             bLocked = pModalDlg->IsTableLocked();
         else
-            bLocked = sal_True;     // for other views, see IsModalMode
+            bLocked = true;     // for other views, see IsModalMode
     }
 
     return bLocked;
 }
 
-sal_Bool ScModule::IsRefDialogOpen()
+bool ScModule::IsRefDialogOpen()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    sal_Bool bIsOpen = false;
+    bool bIsOpen = false;
 
     if ( nCurRefDlgId )
     {
@@ -1753,18 +1753,18 @@ sal_Bool ScModule::IsRefDialogOpen()
         else if(pModalDlg)
             bIsOpen = pModalDlg->IsVisible();
         else
-            bIsOpen = sal_True;     // for other views, see IsModalMode
+            bIsOpen = true;     // for other views, see IsModalMode
     }
 
     return bIsOpen;
 }
 
-sal_Bool ScModule::IsFormulaMode()
+bool ScModule::IsFormulaMode()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    sal_Bool bIsFormula = false;
+    bool bIsFormula = false;
 
     if ( nCurRefDlgId )
     {
@@ -1790,7 +1790,7 @@ sal_Bool ScModule::IsFormulaMode()
     }
 
     if (bIsInEditCommand)
-        bIsFormula = sal_True;
+        bIsFormula = true;
 
     return bIsFormula;
 }
@@ -2277,20 +2277,20 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-sal_Bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
+bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
         rlRefWindow.push_back( pWnd );
-        return sal_True;
+        return true;
     }
 
     return false;
 }
 
-sal_Bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
+bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 {
     std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
@@ -2309,10 +2309,10 @@ sal_Bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
     if( rlRefWindow.empty() )
         m_mapRefWindow.erase( nSlotId );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool  ScModule::IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd )
+bool  ScModule::IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd )
 {
     std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
@@ -2417,7 +2417,7 @@ void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal
     rAutoSpell = aOptions.bIsSpellAuto;
 }
 
-void ScModule::SetAutoSpellProperty( sal_Bool bSet )
+void ScModule::SetAutoSpellProperty( bool bSet )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
     //  loading the linguistic component
@@ -2428,12 +2428,12 @@ void ScModule::SetAutoSpellProperty( sal_Bool bSet )
     aConfig.SetProperty( OUString( LINGUPROP_AUTOSPELL ), aAny );
 }
 
-sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
+bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
 {
     if ( nLang == LANGUAGE_NONE )
         return false;
 
-    sal_Bool bHasLang = false;
+    bool bHasLang = false;
     try
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());

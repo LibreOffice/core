@@ -183,8 +183,8 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
                                         bool& rAutoSpell );
-    static void         SetAutoSpellProperty( sal_Bool bSet );
-    static sal_Bool         HasThesaurusLanguage( sal_uInt16 nLang );
+    static void         SetAutoSpellProperty( bool bSet );
+    static bool         HasThesaurusLanguage( sal_uInt16 nLang );
 
     sal_uInt16              GetOptDigitLanguage();      // from CTL options
 
@@ -198,15 +198,15 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
     // InputHandler:
-    sal_Bool                IsEditMode();   // not for SC_INPUT_TYPE
-    sal_Bool                IsInputMode();  // also for SC_INPUT_TYPE
+    bool                IsEditMode();   // not for SC_INPUT_TYPE
+    bool                IsInputMode();  // also for SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode );
-    sal_Bool                InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
+    bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
     SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
-    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, sal_Bool bUseRef = sal_True );
+    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, bool bUseRef = true );
 
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl();
@@ -220,18 +220,18 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                InputTurnOffWinEngine();
     OUString            InputGetFormulaStr();
     void                ActivateInputWindow( const OUString* pStr = NULL,
-                                                sal_Bool bMatrix = false );
+                                                bool bMatrix = false );
 
     void                InitFormEditData();
     void                ClearFormEditData();
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     // input of reference:
-    SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm = NULL );
-    sal_Bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
-    sal_Bool                IsFormulaMode();
-    sal_Bool                IsRefDialogOpen();
-    sal_Bool                IsTableLocked();
+    SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = NULL );
+    bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
+    bool                IsFormulaMode();
+    bool                IsRefDialogOpen();
+    bool                IsTableLocked();
     void                SetReference( const ScRange& rRef, ScDocument* pDoc,
                                         const ScMarkData* pMarkData = NULL );
     void                AddRefEntry();
@@ -248,9 +248,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    SC_DLLPUBLIC sal_Bool   RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
-    SC_DLLPUBLIC sal_Bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
-    SC_DLLPUBLIC sal_Bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
 
     ScAnyRefModalDlg* GetCurrentAnyRefDlg();
