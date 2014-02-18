@@ -40,11 +40,12 @@ using namespace ::com::sun::star::lang;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
-BreakIterator_Unicode::BreakIterator_Unicode() :
-    cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" ),    // implementation name
-    wordRule( "word" ),
-    lineRule( "line" ),
-    icuBI( NULL )
+BreakIterator_Unicode::BreakIterator_Unicode()
+    : cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" )    // implementation name
+    , wordRule( "word" )
+    , lineRule( "line" )
+    , icuBI( NULL )
+    , aBreakType(0)
 {
 }
 
@@ -61,14 +62,17 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
     Wrapper class to provide public access to the RuleBasedBreakIterator's
     setbreakType method.
 */
-class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator {
+class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
+{
     public:
-        inline void publicSetBreakType(int32_t type) {
+    inline void publicSetBreakType(int32_t type)
+        {
             setBreakType(type);
         };
-        OOoRuleBasedBreakIterator(UDataMemory* image,
-                UErrorCode &status) :
-            RuleBasedBreakIterator(image, status) { };
+    OOoRuleBasedBreakIterator(UDataMemory* image,
+                              UErrorCode &status)
+        : RuleBasedBreakIterator(image, status)
+        { };
 
 };
 
