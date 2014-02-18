@@ -63,7 +63,12 @@ struct LdapDefinition
     OUString mUserObjectClass;
     /** User Entity Unique Attribute */
     OUString mUserUniqueAttr;
- } ;
+
+    LdapDefinition()
+        : mPort(0)
+    {
+    }
+};
 
 typedef std::map< OUString, OUString > LdapData; // key/value pairs
 
