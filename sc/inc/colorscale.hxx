@@ -311,8 +311,10 @@ struct ScIconSetFormatData
     boost::ptr_vector<ScColorScaleEntry> maEntries;
 
     ScIconSetFormatData():
+        eIconSetType(IconSet_3Arrows),
         mbShowValue(true),
-        mbReverse(false) {}
+        mbReverse(false)
+        {}
 };
 
 class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
