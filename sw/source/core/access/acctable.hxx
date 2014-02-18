@@ -271,7 +271,6 @@ public:
     VEC_CELL m_vecCellAdd;
     VEC_CELL m_vecCellRemove;
     void FireSelectionEvent( );
-    void ClearSelectionCellCache();
     void AddSelectionCell(const SwAccessibleContext* ,sal_Bool bAddOrRemove);
 };
 

@@ -134,10 +134,6 @@ public:
 
     SwAccessibleMap *GetAccessibleMap(){ return GetMap();}
 
-private:
-    com::sun::star::accessibility::AccessibleRelation makeRelation(
-        sal_Int16 nType, const SwFlyFrm* pFrm );
-
 public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL

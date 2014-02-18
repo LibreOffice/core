@@ -535,11 +535,6 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
     CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS );
 }
 
-void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, OUString &rRenameSuffix)
-{
-    RenameAndCopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rRenameSuffix );
-}
-
 void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
 {
     CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL );
@@ -600,11 +595,6 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
             OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
         }
     }
-}
-
-void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
-{
-    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets );
 }
 
 void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)

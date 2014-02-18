@@ -60,13 +60,6 @@ ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableT
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
-ThumbnailView::ThumbnailView (Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
-    : Control( pParent, rResId )
-{
-    ImplInit();
-    mbIsTransientChildrenDisabled = bDisableTransientChildren;
-}
-
 ThumbnailView::~ThumbnailView()
 {
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>

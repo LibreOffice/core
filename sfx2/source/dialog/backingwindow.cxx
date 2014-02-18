@@ -497,31 +497,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
-IMPL_LINK( BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
-{
-    uno::Sequence< PropertyValue > aArgs(4);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= sal_True;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-    aArgs[3].Name = "InteractionHandler";
-    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
-
-    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
-
-    try
-    {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    return 0;
-}
-
 struct ImplDelayedDispatch
 {
     Reference< XDispatch >      xDispatch;

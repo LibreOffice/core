@@ -182,8 +182,6 @@ public:
 
     ThumbnailView ( Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false );
 
-    ThumbnailView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
-
     virtual ~ThumbnailView ();
 
     virtual void        MouseMove( const MouseEvent& rMEvt );

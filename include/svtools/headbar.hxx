@@ -291,9 +291,8 @@ private:
     SVT_DLLPRIVATE void             ImplEndDrag( sal_Bool bCancel );
 
 public:
-                        HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
-                        HeaderBar( Window* pParent, const ResId& rResId );
-                        ~HeaderBar();
+    HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
+    ~HeaderBar();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        MouseMove( const MouseEvent& rMEvt );

@@ -111,14 +111,6 @@ HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-HeaderBar::HeaderBar( Window* pParent, const ResId& rResId ) :
-    Window( pParent, rResId )
-{
-    ImplInit( rResId.GetWinBits() );
-}
-
-// -----------------------------------------------------------------------
-
 HeaderBar::~HeaderBar()
 {
     // Alle Items loeschen

@@ -823,12 +823,6 @@ _SetGetExpFld::_SetGetExpFld( const SwFlyFrmFmt& rFlyFmt,
     }
 }
 
-void _SetGetExpFld::GetPos( SwPosition& rPos ) const
-{
-    rPos.nNode = nNode;
-    rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), nCntnt );
-}
-
 void _SetGetExpFld::GetPosOfContent( SwPosition& rPos ) const
 {
     const SwNode* pNd = GetNodeFromCntnt();

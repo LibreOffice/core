@@ -1122,23 +1122,6 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 
 // -----------------------------------------------------------------------
 
-ValueSetItem* ValueSet::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
-{
-    const size_t nItemCount = mItemList.size();
-
-    for ( size_t n = 0; n < nItemCount; ++n )
-    {
-        ValueSetItem *const pItem = mItemList[n];
-
-        if ( pItem->mbVisible && !nVisiblePos-- )
-            return pItem;
-    }
-
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
 {
     ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );

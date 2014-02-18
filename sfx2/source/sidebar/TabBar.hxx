@@ -113,7 +113,6 @@ private:
     PopupMenuProvider maPopupMenuProvider;
 
     RadioButton* CreateTabItem (const DeckDescriptor& rDeckDescriptor);
-    Item* GetItemForId (const ::rtl::OUString& rsId);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
     void Layout (void);
     void UpdateButtonIcons (void);

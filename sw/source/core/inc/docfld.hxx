@@ -98,7 +98,6 @@ public:
     sal_Int32 GetCntnt() const { return nCntnt; }
     const void* GetPointer() const { return CNTNT.pTxtFld; }
 
-    void GetPos( SwPosition& rPos ) const;
     void GetPosOfContent( SwPosition& rPos ) const;
 
     const SwNode* GetNodeFromCntnt() const;

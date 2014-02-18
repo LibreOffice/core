@@ -80,9 +80,7 @@ public:
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
     void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
-    void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
-    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, OUString &rRenameSuffix);
     void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
 
     void                CreatePseudosIfNecessary();

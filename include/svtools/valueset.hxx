@@ -263,7 +263,6 @@ private:
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE ValueSetItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SVT_DLLPRIVATE void         ImplInsertItem( ValueSetItem *const pItem, const size_t nPos );
     SVT_DLLPRIVATE Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );

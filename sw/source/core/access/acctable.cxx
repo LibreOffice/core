@@ -1772,12 +1772,6 @@ void SwAccessibleTable::FireSelectionEvent( )
     }
 }
 
-void SwAccessibleTable::ClearSelectionCellCache()
-{
-    m_vecCellAdd.clear();
-    m_vecCellRemove.clear();
-}
-
 void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sal_Bool bAddOrRemove)
 {
     if (bAddOrRemove)

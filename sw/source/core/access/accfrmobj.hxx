@@ -61,8 +61,6 @@ class SwAccessibleChild
         bool IsAccessible( sal_Bool bPagePreview ) const;
         bool IsBoundAsChar() const;
 
-        sal_uInt32 GetAnchorPosition() const;
-
         bool IsVisibleChildrenOnly() const;
         SwRect GetBox( const SwAccessibleMap& rAccMap ) const;
         SwRect GetBounds( const SwAccessibleMap& rAccMap ) const;

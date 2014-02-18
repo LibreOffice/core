@@ -251,21 +251,6 @@ void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 
 
 
-TabBar::Item* TabBar::GetItemForId (const ::rtl::OUString& rsDeckId)
-{
-    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
-         iItem!=iEnd;
-         ++iItem)
-    {
-        if (iItem->msDeckId.equals(rsDeckId))
-            return &*iItem;
-    }
-    return NULL;
-}
-
-
-
-
 void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());

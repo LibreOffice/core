@@ -1,9 +1,8 @@
-(anonymous namespace)::hasNonEmpty(std::vector<double, std::allocator<double> > const&, int, int)
 AddressWalker::pop()
-BackingWindow::LinkStubOpenTemplateHdl(void*, void*)
 BigInt::BigInt(unsigned int)
 BigInt::GetString() const
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
+Chart2ExportTest::testFdo74115WallGradientFill()
 Chart2ImportTest::testODPChartSeries()
 Chart2ImportTest::testPPTChartSeries()
 Chart2ImportTest::testPPTXChartSeries()
@@ -77,6 +76,7 @@ ScCellValue::ScCellValue(ScFormulaCell const&)
 ScCellValue::hasNumeric() const
 ScCellValue::hasString() const
 ScCellValue::set(ScFormulaCell const&)
+ScCollection::IndexOf(ScDataObject*) const
 ScColorScaleEntry::UpdateMoveTab(short, short, short)
 ScColumn::DeleteCellNote(int)
 ScColumn::MoveListeners(SvtBroadcaster&, int)
@@ -150,13 +150,11 @@ SvxRectCtlAccessibleContext::FireAccessibleEvent(short, com::sun::star::uno::Any
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 SwAccessibleParagraph::GetTOCLevel()
 SwAccessiblePortionData::GetAttrFldType(int)
-SwAccessibleTable::ClearSelectionCellCache()
 SwAccessibleTable::SetTableData(SwAccessibleTableData_Impl*)
 SwCntntFrm::DelFrms(SwCntntNode const&)
 SwExtraRedlineTbl::Contains(SwExtraRedline const*) const
 SwExtraRedlineTbl::Remove(SwExtraRedline const*)
 SwPostItField::GetByName(SwDoc*, rtl::OUString const&)
-SwTableRowRedline::SwTableRowRedline(SwRedlineData const&, SwTableLine&)
 SwViewImp::FireColumnChangeEvent(unsigned short, unsigned short)
 SwViewImp::FirePageChangeEvent(unsigned short, unsigned short)
 SwViewImp::FireSectionChangeEvent(unsigned short, unsigned short)
@@ -172,7 +170,6 @@ TypeManager::decompose(rtl::OUString const&, bool, rtl::OUString*, int*, std::ve
 TypeManager::foundAtPrimaryProvider(rtl::OUString const&) const
 TypeManager::loadProvider(rtl::OUString const&, bool)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
-ValueSet::ImplGetVisibleItem(unsigned short)
 VclMultiLineEdit::IsRightToLeft() const
 VclMultiLineEdit::SetTextSelectable(bool)
 accessibility::AccessibleParaManager::Release(int)
@@ -363,20 +360,16 @@ sfx2::sidebar::EnumContext::GetContext() const
 sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()
 sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
-sfx2::sidebar::TabBar::GetItemForId(rtl::OUString const&)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 svl::SharedStringPool::SharedStringPool()
 svx::frame::Style::Style(editeng::SvxBorderLine const&, double, unsigned short)
-sw::access::SwAccessibleChild::GetAnchorPosition() const
 utl::MediaDescriptor::PROP_DEEPDETECTION()
 utl::toISO8601(com::sun::star::util::Time const&)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, int)
 writerfilter::WW8TableManager::WW8TableManager()
-writerfilter::dmapper::TrackChangesHandler::TrackChangesHandler(int)
-writerfilter::dmapper::TrackChangesHandler::getRedlineProperties() const
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::BinaryObj> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::Properties> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, rtl::OUString const&)
