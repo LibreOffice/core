@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/svdobj.hxx>
 
 #include "globdoc.hrc"
@@ -126,11 +128,13 @@ SwDLL::SwDLL()
     // register your view-factories here
     RegisterFactories();
 
+#if HAVE_FEATURE_DESKTOP
     // register your shell-interfaces here
     RegisterInterfaces();
 
     // register your controllers here
     RegisterControls();
+#endif
 }
 
 SwDLL::~SwDLL()

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>
@@ -242,6 +244,7 @@ void SwDLL::RegisterFactories()
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
+#if HAVE_FEATURE_DESKTOP
     SwWebView::RegisterFactory        ( 5 );
 
     if ( SvtModuleOptions().IsWriter() )
@@ -249,6 +252,7 @@ void SwDLL::RegisterFactories()
         SwSrcView::RegisterFactory      ( 6 );
         SwPagePreview::RegisterFactory  ( 7 );
     }
+#endif
 }
 
 void SwDLL::RegisterInterfaces()
