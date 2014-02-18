@@ -236,6 +236,7 @@ namespace writerfilter {
                 int nCellX;
                 int nCells;
                 int nInheritingCells;
+                int nCellEnds;
 
                 /// CJK or CTL?
                 bool bIsCjk;

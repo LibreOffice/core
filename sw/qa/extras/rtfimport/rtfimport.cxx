@@ -1365,6 +1365,25 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
 
 #endif
 
+DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
+{
+    // nested table in second cell was missing
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Responsable Commercial:"), xPara->getString());
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Nom: John Doe"), xPara->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
 {
     // The single-line document had a second fake empty para on Windows.

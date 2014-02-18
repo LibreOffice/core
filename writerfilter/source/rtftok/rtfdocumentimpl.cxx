@@ -1890,6 +1890,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pValue;
                 m_aTableBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
                 m_bNeedPap = true;
+                m_aStates.top().nCellEnds++;
             }
             break;
         case RTF_ROW:
@@ -1922,6 +1923,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsAttributes.pop_front();
                     replayBuffer(m_aTableBuffer);
                 }
+                for (int i = 0; i < m_aStates.top().nCellEnds - m_aStates.top().nCells; ++i)
+                {
+                    replayBuffer(m_aTableBuffer);
+                }
+                for (size_t i = 0; i < m_aTableBuffer.size(); ++i)
+                {
+                    SAL_WARN_IF(BUFFER_CELLEND == m_aTableBuffer[i].first,
+                        "writerfilter.rtf", "dropping table cell!");
+                }
+                assert(0 == m_aStates.top().aTableCellsSprms.size());
+                assert(0 == m_aStates.top().aTableCellsAttributes.size());
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
 
@@ -1974,6 +1986,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bNeedFinalPar = true;
                 m_aTableBuffer.clear();
                 m_aStates.top().nCells = 0;
+                m_aStates.top().nCellEnds = 0;
                 m_aStates.top().aTableCellsSprms.clear();
                 m_aStates.top().aTableCellsAttributes.clear();
             }
@@ -4991,6 +5004,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nCellX(0),
     nCells(0),
     nInheritingCells(0),
+    nCellEnds(0),
     bIsCjk(false),
     nYear(0),
     nMonth(0),
