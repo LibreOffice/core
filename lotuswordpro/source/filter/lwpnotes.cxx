@@ -132,8 +132,8 @@ void LwpFribNote::XFConvert(XFContentContainer* pCont)
 
 LwpNoteLayout::LwpNoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
+    , m_nTime(0)
 {
-
 }
 
 LwpNoteLayout::~LwpNoteLayout()
