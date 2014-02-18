@@ -42,12 +42,12 @@ struct ScPreviewLocationEntry;
 
 struct ScPreviewColRowInfo
 {
-    sal_Bool    bIsHeader;
+    bool    bIsHeader;
     SCCOLROW    nDocIndex;
     long    nPixelStart;
     long    nPixelEnd;
 
-    void Set( sal_Bool bHeader, SCCOLROW nIndex, long nStart, long nEnd )
+    void Set( bool bHeader, SCCOLROW nIndex, long nStart, long nEnd )
     {
         bIsHeader   = bHeader;
         nDocIndex   = nIndex;
@@ -102,11 +102,11 @@ public:
     void    SetCellMapMode( const MapMode& rMapMode );
     void    SetPrintTab( SCTAB nNew );
     void    Clear();
-    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, sal_Bool bRepCol, sal_Bool bRepRow,
+    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, bool bRepCol, bool bRepRow,
                             const MapMode& rDrawMap );
-    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, sal_Bool bRepCol );
-    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, sal_Bool bRepRow );
-    void    AddHeaderFooter( const Rectangle& rRect, sal_Bool bHeader, sal_Bool bLeft );
+    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, bool bRepCol );
+    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, bool bRepRow );
+    void    AddHeaderFooter( const Rectangle& rRect, bool bHeader, bool bLeft );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
@@ -118,31 +118,31 @@ public:
     sal_uInt16  GetDrawRanges() const   { return nDrawRanges; }
     void    GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
 
-    sal_Bool    GetHeaderPosition( Rectangle& rHeaderRect ) const;
-    sal_Bool    GetFooterPosition( Rectangle& rFooterRect ) const;
-    sal_Bool    IsHeaderLeft() const;
-    sal_Bool    IsFooterLeft() const;
+    bool    GetHeaderPosition( Rectangle& rHeaderRect ) const;
+    bool    GetFooterPosition( Rectangle& rFooterRect ) const;
+    bool    IsHeaderLeft() const;
+    bool    IsFooterLeft() const;
 
-    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, sal_Bool bNoteMarks ) const;
-    sal_Bool    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, sal_Bool bNoteMarks,
+    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, bool bNoteMarks ) const;
+    bool    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, bool bNoteMarks,
                             ScAddress& rCellPos, Rectangle& rNoteRect ) const;
-    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, sal_Bool bNoteMarks,
+    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, bool bNoteMarks,
                             const ScAddress& aCellPos) const;
 
     //  Check if any cells (including column/row headers) are in the visible area
-    sal_Bool    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
+    bool    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
-    sal_Bool    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
+    bool    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
 
     // returns the rectangle where the EditEngine draws the text of a Header Cell
     // if bColHeader is true it returns the rectangle of the header of the column in rCellPos
     // otherwise of the header of the row in rCellPos
-    Rectangle GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, sal_Bool bColHeader) const;
+    Rectangle GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, bool bColHeader) const;
     Rectangle GetCellOutputRect(const ScAddress& rCellPos) const;
 
     // Query the range and rectangle of the main (non-repeat) cell range.
     // Returns sal_False if not contained.
-    sal_Bool    GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const;
+    bool    GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const;
 };
 
 #endif
