@@ -43,7 +43,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     {
         pDevice = new VirtualDevice;
         pDevice->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-        bOwner = sal_True;
+        bOwner = true;
     }
 
     Point aLogic = pDevice->LogicToPixel( Point(1000,1000), MAP_TWIP );

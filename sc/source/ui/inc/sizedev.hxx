@@ -28,7 +28,7 @@ class ScDocShell;
 class ScSizeDeviceProvider
 {
     OutputDevice*   pDevice;
-    sal_Bool            bOwner;
+    bool            bOwner;
     double          nPPTX;
     double          nPPTY;
     MapMode         aOldMapMode;
@@ -40,7 +40,7 @@ public:
     OutputDevice*   GetDevice() const   { return pDevice; }
     double          GetPPTX() const     { return nPPTX; }
     double          GetPPTY() const     { return nPPTY; }
-    sal_Bool            IsPrinter() const   { return !bOwner; }
+    bool            IsPrinter() const   { return !bOwner; }
 };
 
 #endif
