@@ -16,6 +16,24 @@
       "revId": "8e1e2de4ad4c7cd92c593d06755995217a2c7a6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_d1f006cc",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000560
+      },
+      "writtenOn": "2014-02-18T06:22:53Z",
+      "side": 1,
+      "message": "I have attached sample pie chart files to bugzilla report and a screenshot showing the possible rotation values.\nDuring import we properly convert 0..90 angle received for pie chart to -90..90 range (ref http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/chart/plotareaconverter.cxx#224\n)\nHere I have added reverse calculation.",
+      "parentUuid": "7a8c0949_4ee713e5",
+      "revId": "8e1e2de4ad4c7cd92c593d06755995217a2c7a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
