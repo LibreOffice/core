@@ -65,7 +65,7 @@ public:
     virtual void doClose(bool _bOk);
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
     virtual void showReference(const OUString& _sFormula);
-    virtual void dispatch(bool _bOK, bool _bMartixChecked);
+    virtual void dispatch(bool _bOK, bool _bMatrixChecked);
     virtual void setDispatcherLock( bool bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
     virtual void deleteFormData();

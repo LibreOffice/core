@@ -155,7 +155,7 @@ namespace formula
         virtual ::com::sun::star::table::CellAddress getReferencePosition() const = 0;
 
         virtual void setDispatcherLock( bool bLock ) = 0;
-        virtual void dispatch(bool _bOK, bool _bMartixChecked) = 0;
+        virtual void dispatch(bool _bOK, bool _bMatrixChecked) = 0;
         virtual void doClose(bool _bOk) = 0;
         virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
         virtual void showReference(const OUString& _sFormula) = 0;

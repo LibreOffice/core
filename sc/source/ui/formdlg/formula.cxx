@@ -526,10 +526,10 @@ void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pB
 {
     m_aHelper.ReleaseFocus(pEdit,pButton);
 }
-void ScFormulaDlg::dispatch(bool _bOK, bool _bMartixChecked)
+void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
 {
     SfxBoolItem   aRetItem( SID_DLG_RETOK, _bOK );
-    SfxBoolItem   aMatItem( SID_DLG_MATRIX, _bMartixChecked );
+    SfxBoolItem   aMatItem( SID_DLG_MATRIX, _bMatrixChecked );
     SfxStringItem aStrItem( SCITEM_STRING, getCurrentFormula() );
 
     // Wenn durch Dokument-Umschalterei die Eingabezeile weg war/ist,
