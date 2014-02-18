@@ -93,9 +93,8 @@ struct GetPPDAttribs
         if (m_aCondition.wait( pDelay ) != Condition::result_ok
             )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "cupsGetPPD %s timed out\n", m_aParameter.getStr() );
-            #endif
+            SAL_WARN("vcl.unx.print",
+                    "cupsGetPPD " << m_aParameter << " timed out");
         }
         m_pSyncMutex->acquire();
 
@@ -206,9 +205,7 @@ void CUPSManager::runDestThread( void* pThis )
 
 void CUPSManager::runDests()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "starting cupsGetDests\n" );
-#endif
+    SAL_INFO("vcl.unx.print", "starting cupsGetDests");
     cups_dest_t* pDests = NULL;
 
     // n#722902 - do a fast-failing check for cups working *at all* first
@@ -222,17 +219,13 @@ void CUPSManager::runDests()
         httpClose(p_http);
 
         int nDests = cupsGetDests( &pDests );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "came out of cupsGetDests\n" );
-#endif
+        SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
 
         osl::MutexGuard aGuard( m_aCUPSMutex );
         m_nDests = nDests;
         m_pDests = pDests;
         m_bNewDests = true;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "finished cupsGetDests\n" );
-#endif
+        SAL_INFO("vcl.unx.print", "finished cupsGetDests");
     }
 }
 
@@ -397,25 +390,17 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rConte
                         if( pValue != pKey->getDefaultValue() )
                         {
                             rContext.setValue( pKey, pValue, true );
-#if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "key %s is set to %s\n", pOption->keyword, pChoice->choice );
-#endif
+                            SAL_INFO("vcl.unx.print", "key " << pOption->keyword << " is set to " << pChoice->choice);
 
                         }
-#if OSL_DEBUG_LEVEL > 1
                         else
-                            fprintf( stderr, "key %s is defaulted to %s\n", pOption->keyword, pChoice->choice );
-#endif
+                            SAL_INFO("vcl.unx.print", "key " << pOption->keyword << " is defaulted to " << pChoice->choice);
                     }
-#if OSL_DEBUG_LEVEL > 1
                     else
-                        fprintf( stderr, "caution: value %s not found in key %s\n", pChoice->choice, pOption->keyword );
-#endif
+                        SAL_INFO("vcl.unx.print", "caution: value " << pChoice->choice << " not found in key " << pOption->keyword);
                 }
-#if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "caution: key %s not found in parser\n", pOption->keyword );
-#endif
+                    SAL_INFO("vcl.unx.print", "caution: key " << pOption->keyword << " not found in parser");
             }
         }
     }
@@ -447,9 +432,8 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
             {
                 cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
                 OString aPPDFile = threadedCupsGetPPD( pDest->name );
-                #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), aPPDFile.getStr() );
-                #endif
+                SAL_INFO("vcl.unx.print",
+                        "PPD for " << aPrinter << " is " << aPPDFile);
                 if( !aPPDFile.isEmpty() )
                 {
                     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -464,14 +448,11 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         pNewParser = pCUPSParser;
 
                         /*int nConflicts =*/ cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
-                        #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "processing the following options for printer %s (instance %s):\n",
-                        pDest->name, pDest->instance );
+                        SAL_INFO("vcl.unx.print", "processing the following options for printer " << pDest->name << " (instance " << pDest->instance << "):");
                         for( int k = 0; k < pDest->num_options; k++ )
-                            fprintf( stderr, "   \"%s\" = \"%s\"\n",
-                        pDest->options[k].name,
-                        pDest->options[k].value );
-                        #endif
+                            SAL_INFO("vcl.unx.print",
+                                "   \"" << pDest->options[k].name <<
+                                "\" = \"" << pDest->options[k].value << "\"");
                         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
                         // remember the default context for later use
@@ -489,30 +470,22 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         // clean up the mess
                         ppdClose( pPPD );
                     }
-                    #if OSL_DEBUG_LEVEL > 1
                     else
-                        fprintf( stderr, "ppdOpenFile failed, falling back to generic driver\n" );
-                    #endif
+                        SAL_INFO("vcl.unx.print", "ppdOpenFile failed, falling back to generic driver");
 
                     // remove temporary PPD file
                     unlink( aPPDFile.getStr() );
                 }
-                #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "cupsGetPPD failed, falling back to generic driver\n" );
-                #endif
+                    SAL_INFO("vcl.unx.print", "cupsGetPPD failed, falling back to generic driver");
             }
-            #if OSL_DEBUG_LEVEL > 1
             else
-                fprintf( stderr, "no dest found for printer %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr() );
-            #endif
+                SAL_INFO("vcl.unx.print", "no dest found for printer " << aPrinter);
         }
         m_aCUPSMutex.release();
     }
-    #if OSL_DEBUG_LEVEL >1
     else
-        fprintf( stderr, "could not acquire CUPS mutex !!!\n" );
-    #endif
+        SAL_WARN("vcl.unx.print", "could not acquire CUPS mutex !!!" );
 
     if( ! pNewParser )
     {
@@ -540,9 +513,8 @@ void CUPSManager::setupJobContextData( JobData& rData )
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "CUPS printer list in disorder, no dest for printer %s !\n", OUStringToOString( rData.m_aPrinterName, osl_getThreadTextEncoding() ).getStr() );
-#endif
+        SAL_WARN("vcl.unx.print", "CUPS printer list in disorder, "
+                "no dest for printer " << rData.m_aPrinterName);
         return;
     }
 
@@ -674,17 +646,13 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         it->second.getStr(),
         OUStringToOString( rJobTitle, aEnc ).getStr(),
         nNumOptions, pOptions );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "cupsPrintFile( %s, %s, %s, %d, %p ) returns %d\n",
-                    pDest->name,
-                    it->second.getStr(),
-                    OUStringToOString( rJobTitle, aEnc ).getStr(),
-                    nNumOptions,
-                    pOptions,
-                    nJobID
-                    );
+        SAL_INFO("vcl.unx.print", "cupsPrintFile( " << pDest->name << ", "
+                << it->second << ", " << rJobTitle << ", " << nNumOptions
+                << ", " << pOptions << " ) returns " << nJobID);
         for( int n = 0; n < nNumOptions; n++ )
-            fprintf( stderr, "    option %s=%s\n", pOptions[n].name, pOptions[n].value );
+            SAL_INFO("vcl.unx.print",
+                "    option " << pOptions[n].name << "=" << pOptions[n].value);
+#if OSL_DEBUG_LEVEL > 1
         OString aCmd( "cp " );
         aCmd = aCmd + it->second;
         aCmd = aCmd + OString( " $HOME/cupsprint.ps" );
@@ -714,15 +682,11 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
         if(  m_aDestThread )
         {
             // initial asynchronous detection still running
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "syncing cups discovery thread\n" );
-            #endif
+            SAL_INFO("vcl.unx.print", "syncing cups discovery thread");
             osl_joinWithThread( m_aDestThread );
             osl_destroyThread( m_aDestThread );
             m_aDestThread = NULL;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "done: syncing cups discovery thread\n" );
-            #endif
+            SAL_INFO("vcl.unx.print", "done: syncing cups discovery thread");
         }
         else
         {
@@ -886,12 +850,11 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
         }
         osl_unloadModule( pLib );
     }
-#if OSL_DEBUG_LEVEL > 1
     else
     {
-        fprintf( stderr, "loading of module %s failed\n", _XSALSET_LIBNAME );
+        SAL_WARN("vcl.unx.print",
+            "loading of module " << _XSALSET_LIBNAME << " failed\n");
     }
-#endif
 
     return pRet;
 }
