@@ -1186,14 +1186,10 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     mXPropSet = Reference< XPropertySet >::query( mXShape );
     if( mXPropSet.is() )
     {
-        static const sal_Char aPrefix[] = "com.sun.star.";
-        static const sal_Int32 nPrefix = sizeof(aPrefix)-1;
-
         // detect name first to make below test (is group) work
         mType = OUString( mXShape->getShapeType() );
-        mType = mType.copy( nPrefix );  // strip "com.sun.star."
-        sal_Int32 nPos = mType.indexOf( "Shape" );
-        mType = mType.replaceAt( nPos, 5, "" );
+        mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
+        mType.endsWith( "Shape", &mType );  // strip "Shape"
 
         if(GetType() == "drawing.Group")
         {
