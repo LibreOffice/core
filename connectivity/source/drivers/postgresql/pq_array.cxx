@@ -128,3 +128,5 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

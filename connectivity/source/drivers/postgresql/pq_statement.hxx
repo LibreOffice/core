@@ -204,3 +204,5 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet > getGeneratedV
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

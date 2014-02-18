@@ -2591,3 +2591,5 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, Runtime
     return m_origin;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

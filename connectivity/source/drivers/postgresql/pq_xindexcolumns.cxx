@@ -292,3 +292,5 @@ Reference< com::sun::star::container::XNameAccess > IndexColumnDescriptors::crea
 }
 
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

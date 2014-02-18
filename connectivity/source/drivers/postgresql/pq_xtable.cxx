@@ -447,3 +447,5 @@ Reference< XPropertySet > TableDescriptor::createDataDescriptor(  ) throw (Runti
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

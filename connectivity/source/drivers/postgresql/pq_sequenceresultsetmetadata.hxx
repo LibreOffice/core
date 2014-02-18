@@ -87,3 +87,5 @@ namespace pq_sdbc_driver
     };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

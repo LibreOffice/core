@@ -308,3 +308,5 @@ Reference< com::sun::star::container::XIndexAccess > KeyDescriptors::create(
 }
 
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

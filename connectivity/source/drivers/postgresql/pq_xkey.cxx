@@ -231,3 +231,5 @@ Any KeyDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExceptio
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

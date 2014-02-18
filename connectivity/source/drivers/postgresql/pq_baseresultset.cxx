@@ -721,3 +721,5 @@ void BaseResultSet::checkRowIndex( sal_Bool mustBeOnValidRow )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

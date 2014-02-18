@@ -1242,3 +1242,5 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

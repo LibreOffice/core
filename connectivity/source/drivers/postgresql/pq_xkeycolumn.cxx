@@ -92,3 +92,5 @@ Reference< XPropertySet > KeyColumnDescriptor::createDataDescriptor(  ) throw (R
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

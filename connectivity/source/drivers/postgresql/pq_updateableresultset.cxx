@@ -585,3 +585,5 @@ Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -350,3 +350,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

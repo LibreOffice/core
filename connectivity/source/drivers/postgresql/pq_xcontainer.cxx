@@ -480,3 +480,5 @@ void Container::fire( const EventBroadcastHelper &helper )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

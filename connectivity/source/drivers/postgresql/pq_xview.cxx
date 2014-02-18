@@ -252,3 +252,5 @@ Reference< XPropertySet > ViewDescriptor::createDataDescriptor(  ) throw (Runtim
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

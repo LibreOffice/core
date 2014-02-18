@@ -176,3 +176,5 @@ template < typename T, typename Allocator > com::sun::star::uno::Sequence<T> seq
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

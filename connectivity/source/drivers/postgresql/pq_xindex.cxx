@@ -236,3 +236,5 @@ Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExcept
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

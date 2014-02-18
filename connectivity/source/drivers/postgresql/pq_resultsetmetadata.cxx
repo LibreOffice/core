@@ -481,3 +481,5 @@ void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -585,3 +585,5 @@ Reference< ::com::sun::star::beans::XPropertySet > ColumnDescriptors::createData
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

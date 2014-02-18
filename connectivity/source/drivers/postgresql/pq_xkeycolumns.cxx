@@ -383,3 +383,5 @@ Reference< ::com::sun::star::beans::XPropertySet > KeyColumnDescriptors::createD
     return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

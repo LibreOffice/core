@@ -125,3 +125,5 @@ sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     return 0; // Never reached
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

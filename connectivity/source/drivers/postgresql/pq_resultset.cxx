@@ -311,3 +311,5 @@ sal_Int32 ResultSet::guessDataType( sal_Int32 column )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

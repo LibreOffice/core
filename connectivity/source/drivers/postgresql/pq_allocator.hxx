@@ -186,3 +186,5 @@ inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 } /* namespace sal */
 
 #endif /* _PQ_ALLOCATOR_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
