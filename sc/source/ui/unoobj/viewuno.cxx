@@ -468,7 +468,8 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     aActivationListeners( 0 ),
     nPreviousTab( 0 ),
     bDrawSelModeSet(false),
-    mbLeftMousePressed(false    ),
+    bFilteredRangeSelection(false),
+    mbLeftMousePressed(false),
     mbPendingSelectionChanged(false)
 {
     if (pViewSh)
