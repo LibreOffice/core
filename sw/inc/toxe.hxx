@@ -41,7 +41,8 @@ enum TOXTypes
     TOX_ILLUSTRATIONS,
     TOX_OBJECTS,
     TOX_TABLES,
-    TOX_AUTHORITIES
+    TOX_AUTHORITIES,
+    TOX_BIBLIOGRAPHY
 };
 // this enum contains all types of sources
 enum ToxAuthorityType

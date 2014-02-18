@@ -50,6 +50,7 @@
 #define TO_USER         16
 #define TO_OBJECT       32
 #define TO_AUTHORITIES  64
+#define TO_BIBLIOGRAPHY 128
 
 struct CurTOXType
 {

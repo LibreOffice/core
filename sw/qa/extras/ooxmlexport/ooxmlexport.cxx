@@ -3318,6 +3318,17 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
     CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 14028 : 14025), xChildGroup->getPosition().Y);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[3]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" BIBLIOGRAPHY "));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

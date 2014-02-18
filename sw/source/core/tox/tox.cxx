@@ -402,6 +402,7 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
         case TOX_ILLUSTRATIONS:
         case TOX_OBJECTS      :
         case TOX_TABLES       : nRet = 2; break;
+        case TOX_BIBLIOGRAPHY :
         case TOX_AUTHORITIES  : nRet = AUTH_TYPE_END + 1;       break;
     }
     return nRet;

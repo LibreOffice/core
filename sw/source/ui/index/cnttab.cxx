@@ -959,6 +959,7 @@ static long lcl_TOXTypesToUserData(CurTOXType eType)
         case TOX_OBJECTS     : nRet = TO_OBJECT;    break;
         case TOX_TABLES      : nRet = TO_TABLE;     break;
         case TOX_AUTHORITIES : nRet = TO_AUTHORITIES; break;
+        case TOX_BIBLIOGRAPHY : nRet = TO_BIBLIOGRAPHY; break;
     }
     return nRet;
 }
@@ -992,6 +993,7 @@ static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
         case TO_OBJECT      : eRet.eType = TOX_OBJECTS;     break;
         case TO_TABLE       : eRet.eType = TOX_TABLES;      break;
         case TO_AUTHORITIES : eRet.eType = TOX_AUTHORITIES; break;
+        case TO_BIBLIOGRAPHY : eRet.eType = TOX_BIBLIOGRAPHY; break;
         default: OSL_FAIL("what a type?");
     }
     return eRet;
@@ -1186,6 +1188,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         }
         break;
         case TOX_AUTHORITIES:
+        case TOX_BIBLIOGRAPHY :
         {
             if(m_pBracketLB->GetSelectEntryPos())
                 rDesc.SetAuthBrackets(m_pBracketLB->GetSelectEntry());

@@ -2107,7 +2107,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 break;
 
                 //      case TOX_USER:
-                //      case TOX_CONTENT:
+            case TOX_AUTHORITIES:
+                eCode = ww::eBIBLIOGRPAHY;
+                sStr = FieldString(eCode);
+                 break;
             default:
                 {
                     sStr = FieldString(eCode);
