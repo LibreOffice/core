@@ -1644,85 +1644,48 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     }
 }
 
+namespace {
+
+class CopyCellNotesHandler
+{
+    ScColumn& mrDestCol;
+    sc::CellNoteStoreType& mrDestNotes;
+    sc::CellNoteStoreType::iterator miPos;
+    SCTAB mnSrcTab;
+    SCCOL mnSrcCol;
+    SCTAB mnDestTab;
+    SCCOL mnDestCol;
+    SCROW mnDestOffset; /// Add this to the source row position to get the destination row.
+    bool mbCloneCaption;
+
+public:
+    CopyCellNotesHandler( const ScColumn& rSrcCol, ScColumn& rDestCol, SCROW nDestOffset, bool bCloneCaption ) :
+        mrDestCol(rDestCol),
+        mrDestNotes(rDestCol.GetCellNoteStore()),
+        miPos(mrDestNotes.begin()),
+        mnSrcTab(rSrcCol.GetTab()),
+        mnSrcCol(rSrcCol.GetCol()),
+        mnDestTab(rDestCol.GetTab()),
+        mnDestCol(rDestCol.GetCol()),
+        mnDestOffset(nDestOffset),
+        mbCloneCaption(bCloneCaption) {}
+
+    void operator() ( size_t nRow, const ScPostIt* p )
+    {
+        SCROW nDestRow = nRow + mnDestOffset;
+        ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
+        ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
+        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption));
+    }
+};
+
+}
+
 void ScColumn::CopyCellNotesToDocument(
     SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
-    SCCOL nDestCol = rDestCol.GetCol();
-    SCTAB nDestTab = rDestCol.GetTab();
-
-    rDestCol.maCellNotes.set_empty(nRow1 + nRowOffsetDest, nRow2 + nRowOffsetDest); // Empty the destination range first.
-
-    sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
-
-    // Locate the top row position.
-    size_t nOffsetInBlock = 0;
-    size_t nBlockStart = 0, nBlockEnd = 0, nRowPos = static_cast<size_t>(nRow1);
-    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd)
-    {
-        nBlockEnd = nBlockStart + itBlk->size;
-        if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
-        {
-            // Found.
-            nOffsetInBlock = nRowPos - nBlockStart;
-            break;
-        }
-    }
-
-    if (itBlk == itBlkEnd)
-        // Specified range not found. Bail out.
-        return;
-
-    nRowPos = static_cast<size_t>(nRow2); // End row position.
-
-    // Keep copying until we hit the end row position.
-    sc::cellnote_block::const_iterator itData, itDataEnd;
-    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
-    {
-        nBlockEnd = nBlockStart + itBlk->size;
-
-        if (itBlk->data) // Non-empty block.
-        {
-            itData = sc::cellnote_block::begin(*itBlk->data);
-            itDataEnd = sc::cellnote_block::end(*itBlk->data);
-            std::advance(itData, nOffsetInBlock);
-
-            if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
-            {
-                // This block contains the end row. Only copy partially.
-                size_t nOffset = nRowPos - nBlockStart + 1;
-                itDataEnd = sc::cellnote_block::begin(*itBlk->data);
-                std::advance(itDataEnd, nOffset);
-                // need to clone notes
-                std::vector<ScPostIt*> vCloned;
-                vCloned.reserve(nOffset);
-                SCROW curRow = nBlockStart + nOffsetInBlock;
-                for (; itData != itDataEnd; ++itData, ++curRow)
-                {
-                    ScPostIt* pSrcNote = *itData;
-                    ScAddress aDestAddress = ScAddress(nDestCol, curRow + nRowOffsetDest, nDestTab);
-                    ScAddress aSrcAddress = ScAddress(nCol, curRow, nTab );
-                    ScPostIt* pClonedNote = pSrcNote->Clone(aSrcAddress, rDestCol.GetDoc(), aDestAddress, bCloneCaption );
-                    vCloned.push_back(pClonedNote);
-                }
-
-                rDestCol.maCellNotes.set(rDestCol.maCellNotes.begin(), nBlockStart + nOffsetInBlock + nRowOffsetDest, vCloned.begin(), vCloned.end());
-                break;
-            }
-            // need to clone notes
-            std::vector<ScPostIt*> vCloned;
-            vCloned.reserve(itBlk->size - nOffsetInBlock);
-            SCROW curRow = nBlockStart + nOffsetInBlock;
-            for (; itData != itDataEnd; ++itData, ++curRow)
-            {
-                ScPostIt* pSrcNote = *itData;
-                ScAddress aDestAddress = ScAddress(nDestCol, curRow + nRowOffsetDest, nDestTab);
-                ScAddress aSrcAddress = ScAddress(nCol, curRow, nTab );
-                ScPostIt* pClonedNote = pSrcNote->Clone(aSrcAddress, rDestCol.GetDoc(), aDestAddress, bCloneCaption );
-                vCloned.push_back(pClonedNote);
-            }
-            rDestCol.maCellNotes.set(rDestCol.maCellNotes.begin(), nBlockStart + nOffsetInBlock + nRowOffsetDest, vCloned.begin(), vCloned.end());
-        }
-    }
+    CopyCellNotesHandler aFunc(*this, rDestCol, nRowOffsetDest, bCloneCaption);
+    sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 
 void ScColumn::DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol, sc::ColumnBlockPosition& maDestBlockPos,

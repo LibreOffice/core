@@ -171,6 +171,8 @@ public:
     const sc::CellStoreType& GetCellStore() const { return maCells; }
     sc::CellTextAttrStoreType& GetCellAttrStore() { return maCellTextAttrs; }
     const sc::CellTextAttrStoreType& GetCellAttrStore() const { return maCellTextAttrs; }
+    sc::CellNoteStoreType& GetCellNoteStore() { return maCellNotes; }
+    const sc::CellNoteStoreType& GetCellNoteStore() const { return maCellNotes; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;

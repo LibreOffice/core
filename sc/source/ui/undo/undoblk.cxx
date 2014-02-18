@@ -414,11 +414,8 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
     // if Undo, restore references
     for( i=0; i<nCount && bUndo; i++ )
     {
-        // Cell note objects are handled separately.  Ignore them here.
-        sal_uInt16 nFlags = IDF_ALL;
-        nFlags &= ~IDF_NOTE;
         pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
-            nFlags, false, pDoc );
+            IDF_ALL | IDF_NOCAPTIONS, false, pDoc );
     }
 
     ScRange aWorkRange( aEffRange );
