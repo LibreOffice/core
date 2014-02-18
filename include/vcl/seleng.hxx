@@ -83,8 +83,6 @@ private:
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
     sal_uLong               nUpdateInterval;
-    // sensitivity of mouse moves during a selection
-    sal_uInt16              nMouseSensitivity;
     sal_uInt16              nLockedMods;
     sal_uInt16              nFlags;
     DECL_DLLPRIVATE_LINK( ImpWatchDog, void* );
@@ -126,11 +124,6 @@ public:
     void                SetFunctionSet( FunctionSet* pFuncs )
                             { pFunctionSet = pFuncs; }
     const FunctionSet*  GetFunctionSet() const { return pFunctionSet; }
-
-    void                SetMouseSensitivity( sal_uInt16 nSensitivity )
-                            { nMouseSensitivity = nSensitivity; }
-    sal_uInt16              GetMouseSensitivity() const
-                            { return nMouseSensitivity; }
 
     const Point&        GetMousePosPixel() const
                             { return aLastMove.GetPosPixel(); }
