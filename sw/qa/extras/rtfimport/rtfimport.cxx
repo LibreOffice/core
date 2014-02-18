@@ -165,6 +165,7 @@ public:
     void testFdo65090();
     void testN823675();
     void testCp1000018();
+    void testNestedTable();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -313,6 +314,7 @@ void Test::run()
         {"fdo65090.rtf", &Test::testFdo65090},
         {"n823675.rtf", &Test::testN823675},
         {"cp1000018.rtf", &Test::testCp1000018},
+        {"rhbz1065629.rtf", &Test::testNestedTable},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1533,6 +1535,25 @@ void Test::testFdo65090()
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
     // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
+void Test::testNestedTable()
+{
+    // nested table in second cell was missing
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Responsable Commercial:"), xPara->getString());
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Nom: John Doe"), xPara->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
