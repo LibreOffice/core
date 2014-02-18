@@ -2311,7 +2311,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
+    const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False );
     if( pSetFld->IsOn() && pRefFrm )
     {
         // determine the correct offset
