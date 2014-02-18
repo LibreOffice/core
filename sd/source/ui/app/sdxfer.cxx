@@ -695,7 +695,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
             maPageBookmarks = rPageBookmarks;
         }
 
-        if( mpSdViewIntern && mpSdDrawDocument )
+        if( mpSdViewIntern )
         {
             SdPage* pPage = mpSdDrawDocument->GetSdPage( 0, PK_STANDARD );
 
