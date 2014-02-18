@@ -31,6 +31,7 @@ using namespace psp;
 JobData& JobData::operator=(const JobData& rRight)
 {
     m_nCopies               = rRight.m_nCopies;
+    m_bCollate              = rRight.m_bCollate;
     m_nLeftMarginAdjust     = rRight.m_nLeftMarginAdjust;
     m_nRightMarginAdjust    = rRight.m_nRightMarginAdjust;
     m_nTopMarginAdjust      = rRight.m_nTopMarginAdjust;
@@ -54,6 +55,11 @@ JobData& JobData::operator=(const JobData& rRight)
 
 void JobData::setCollate( bool bCollate )
 {
+    if (m_nPDFDevice > 0)
+    {
+        m_bCollate = bCollate;
+        return;
+    }
     const PPDParser* pParser = m_aContext.getParser();
     if( pParser )
     {
@@ -133,6 +139,13 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine.append(static_cast<sal_Int32>(m_nCopies));
     aStream.WriteLine(aLine.makeStringAndClear());
 
+    if (m_nPDFDevice > 0)
+    {
+        aLine.append("collate=");
+        aLine.append(OString::boolean(m_bCollate));
+        aStream.WriteLine(aLine.makeStringAndClear());
+    }
+
     aLine.append("margindajustment=");
     aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
     aLine.append(',');
@@ -191,6 +204,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     const char printerEquals[] = "printer=";
     const char orientatationEquals[] = "orientation=";
     const char copiesEquals[] = "copies=";
+    const char collateEquals[] = "collate=";
     const char margindajustmentEquals[] = "margindajustment=";
     const char colordepthEquals[] = "colordepth=";
     const char colordeviceEquals[] = "colordevice=";
@@ -216,6 +230,10 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         {
             bCopies = true;
             rJobData.m_nCopies = aLine.copy(RTL_CONSTASCII_LENGTH(copiesEquals)).toInt32();
+        }
+        else if (aLine.startsWith(collateEquals))
+        {
+            rJobData.m_bCollate = aLine.copy(RTL_CONSTASCII_LENGTH(collateEquals)).toInt32();
         }
         else if (aLine.startsWith(margindajustmentEquals))
         {
