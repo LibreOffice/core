@@ -76,7 +76,8 @@ namespace connectivity
             OLEVariant();
             OLEVariant(const VARIANT& varSrc);
             OLEVariant(const OLEVariant& varSrc)    ;
-            OLEVariant(sal_Bool x)  ;
+            OLEVariant(bool x)  ;
+            OLEVariant(sal_Bool) SAL_DELETED_FUNCTION;
             OLEVariant(sal_Int8 n)  ;
             OLEVariant(sal_Int16 n) ;
             OLEVariant(sal_Int32 n) ;

@@ -138,7 +138,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             WpADOProperties aProps = m_pAdoConnection->get_Properties();
             if(aProps.IsValid())
             {
-                OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),sal_True);
+                OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),true);
                 OLEVariant aVar(OTools::getValue(aProps,OUString("Jet OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
                     m_nEngineType = aVar;
@@ -208,7 +208,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql ) throw(SQLExcept
     WpADOProperties aProps = m_pAdoConnection->get_Properties();
     if(aProps.IsValid())
     {
-        OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),sal_True);
+        OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),true);
         WpADOCommand aCommand;
         aCommand.Create();
         aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);

@@ -113,7 +113,7 @@ OLEVariant::OLEVariant(const OLEVariant& varSrc)
     OSL_UNUSED(eRet);
 }
 
-OLEVariant::OLEVariant(sal_Bool x)              {   VariantInit(this);  vt = VT_BOOL;   boolVal     = (x ? VARIANT_TRUE : VARIANT_FALSE);}
+OLEVariant::OLEVariant(bool x)              {   VariantInit(this);  vt = VT_BOOL;   boolVal     = (x ? VARIANT_TRUE : VARIANT_FALSE);}
 OLEVariant::OLEVariant(sal_Int8 n)              {   VariantInit(this);  vt = VT_I1;     bVal        = n;}
 OLEVariant::OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_I2;     intVal      = n;}
 OLEVariant::OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}

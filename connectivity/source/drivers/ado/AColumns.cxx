@@ -107,7 +107,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
         WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
         if ( aAddedColumn.IsValid() )
         {
-            sal_Bool bAutoIncrement = sal_False;
+            bool bAutoIncrement = false;
             pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
             if ( bAutoIncrement )
                 OTools::putValue( aAddedColumn.get_Properties(), OUString("Autoincrement"), bAutoIncrement );
