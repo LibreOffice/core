@@ -603,6 +603,8 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     {
         OString aVal( OString::number( rJob.m_nCopies ) );
         rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
+        aVal = OString::boolean(rJob.m_bCollate);
+        rNumOptions = cupsAddOption( "collate", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
     }
     if( ! bBanner )
     {

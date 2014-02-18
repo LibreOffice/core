@@ -34,6 +34,7 @@ enum type {
 struct VCL_DLLPUBLIC JobData
 {
     int                     m_nCopies;
+    bool                    m_bCollate;
     int                     m_nLeftMarginAdjust;
     int                     m_nRightMarginAdjust;
     int                     m_nTopMarginAdjust;
@@ -50,6 +51,7 @@ struct VCL_DLLPUBLIC JobData
 
     JobData() :
             m_nCopies( 1 ),
+            m_bCollate(false),
             m_nLeftMarginAdjust( 0 ),
             m_nRightMarginAdjust( 0 ),
             m_nTopMarginAdjust( 0 ),
