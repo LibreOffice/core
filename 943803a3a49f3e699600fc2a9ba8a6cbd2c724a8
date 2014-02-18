@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "7a8c0949_9194be45",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-18T08:27:11Z",
+      "side": 1,
+      "message": "Yes, to move the impl. classes out of the header file is a good idea. But not into separate header files: they are impl. details of the classes implemented in settings.cxx, so that is where they belong. Explicit (empty) dtor makes sense then.",
+      "parentUuid": "7a8c0949_1137eeb1",
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8c0949_4ee8f37c",
         "filename": "vcl/source/app/settings.cxx",
         "patchSetId": 2
@@ -146,6 +164,30 @@
       "side": 1,
       "message": "I introduced the extra step for debugging purposes. (I did not copy the parameters correctly the first time.)\n\nI think this should not have a performance impact.\n\nShould I add a comment on why I did it, or remove the extra step altogether?",
       "parentUuid": "7a8c0949_8e01fb3b",
+      "range": {
+        "startLine": 829,
+        "startChar": 0,
+        "endLine": 829,
+        "endChar": 8
+      },
+      "revId": "943803a3a49f3e699600fc2a9ba8a6cbd2c724a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a8c0949_b191ba54",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-18T08:27:11Z",
+      "side": 1,
+      "message": "Remove it, please.",
+      "parentUuid": "7a8c0949_d15486cc",
       "range": {
         "startLine": 829,
         "startChar": 0,
