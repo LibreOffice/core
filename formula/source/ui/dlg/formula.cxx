@@ -90,7 +90,7 @@ namespace formula
         ::std::pair<RefButton*,RefEdit*>
                         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
         void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
-        void            RefInputDoneAfter( sal_Bool bForced );
+        void            RefInputDoneAfter( bool bForced );
         sal_Bool        CalcValue( const OUString& rStrExp, OUString& rStrResult );
         sal_Bool        CalcStruct( const OUString& rStrExp);
         void            UpdateValues();
@@ -114,17 +114,17 @@ namespace formula
 
         void            SaveArg( sal_uInt16 nEd );
         void            UpdateSelection();
-        void            DoEnter( sal_Bool bOk );
+        void            DoEnter( bool bOk );
         void            FillListboxes();
         void            FillControls(sal_Bool &rbNext, sal_Bool &rbPrev);
 
-        FormulaDlgMode  SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate);
+        FormulaDlgMode  SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);
         void            SetMeText(const OUString& _sText);
-        sal_Bool        CheckMatrix(OUString& aFormula /*IN/OUT*/);
+        bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
 
         void            SetEdSelection();
 
-        sal_Bool            UpdateParaWin(Selection& _rSelection);
+        bool            UpdateParaWin(Selection& _rSelection);
         void            UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr);
 
         void            SetData(sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
@@ -957,7 +957,7 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
     return aResult;
 }
 
-void FormulaDlg_Impl::DoEnter(sal_Bool bOk)
+void FormulaDlg_Impl::DoEnter(bool bOk)
 {
     //  Accept input to the document or cancel
     if ( bOk)
@@ -984,11 +984,11 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 {
     if ( pBtn == &aBtnCancel )
     {
-        DoEnter(sal_False);                 // closes the Dialog
+        DoEnter(false);                 // closes the Dialog
     }
     else if ( pBtn == &aBtnEnd )
     {
-        DoEnter(sal_True);                  // closes the Dialog
+        DoEnter(true);                  // closes the Dialog
     }
     else if ( pBtn == &aBtnForward )
     {
@@ -1436,7 +1436,7 @@ void FormulaDlg_Impl::RefInputStartAfter( RefEdit* /*pEdit*/, RefButton* /*pButt
         m_pParent->SetText( MnemonicGenerator::EraseAllMnemonicChars( aStr ) );
     }
 }
-void FormulaDlg_Impl::RefInputDoneAfter( sal_Bool bForced )
+void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 {
     aRefBtn.SetStartImage();
     if( bForced || !aRefBtn.IsVisible() )
@@ -1490,7 +1490,7 @@ void FormulaDlg_Impl::SetMeText(const OUString& _sText)
     pMEdit->SetSelection( pData->GetSelection());
     aMEFormula.UpdateOldSel();
 }
-FormulaDlgMode FormulaDlg_Impl::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate)
+FormulaDlgMode FormulaDlg_Impl::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
     FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;
     if(!bEditFlag)
@@ -1509,11 +1509,11 @@ FormulaDlgMode FormulaDlg_Impl::SetMeText(const OUString& _sText, sal_Int32 Priv
     } // if ( _bUpdate )
     return eMode;
 }
-sal_Bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
+bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
 {
     pMEdit->GrabFocus();
     sal_Int32 nLen = aFormula.getLength();
-    sal_Bool bMatrix =  nLen > 3                    // Matrix-Formula
+    bool bMatrix =  nLen > 3                    // Matrix-Formula
             && aFormula[0] == '{'
             && aFormula[1] == '='
             && aFormula[nLen-1] == '}';
@@ -1594,7 +1594,7 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString
 
     pParaWin->SetRefMode(sal_False);
 }
-sal_Bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
+bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 {
     pParaWin->SetRefMode(sal_True);
 
@@ -1667,7 +1667,7 @@ void FormulaModalDialog::SetMeText(const OUString& _sText)
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
+bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
@@ -1684,7 +1684,7 @@ void FormulaModalDialog::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton 
 {
     m_pImpl->RefInputStartAfter( pEdit, pButton );
 }
-void FormulaModalDialog::RefInputDoneAfter( sal_Bool bForced )
+void FormulaModalDialog::RefInputDoneAfter( bool bForced )
 {
     m_pImpl->RefInputDoneAfter( bForced );
 }
@@ -1756,7 +1756,7 @@ void FormulaDlg::SetMeText(const OUString& _sText)
 }
 
 // -----------------------------------------------------------------------------
-FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate)
+FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
     return m_pImpl->SetMeText(_sText,PrivStart, PrivEnd,bMatrix,_bSelect,_bUpdate);
 }
@@ -1766,7 +1766,7 @@ void FormulaDlg::CheckMatrix()
     m_pImpl->aBtnMatrix.Check();
 }
 // -----------------------------------------------------------------------------
-sal_Bool FormulaDlg::CheckMatrix(OUString& aFormula)
+bool FormulaDlg::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
@@ -1784,7 +1784,7 @@ void FormulaDlg::Update()
     m_pImpl->aTimer.Start();
 }
 
-void FormulaDlg::DoEnter(sal_Bool _bOk)
+void FormulaDlg::DoEnter(bool _bOk)
 {
     m_pImpl->DoEnter(_bOk);
 }
@@ -1796,7 +1796,7 @@ void FormulaDlg::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton )
 {
     m_pImpl->RefInputStartAfter( pEdit, pButton );
 }
-void FormulaDlg::RefInputDoneAfter( sal_Bool bForced )
+void FormulaDlg::RefInputDoneAfter( bool bForced )
 {
     m_pImpl->RefInputDoneAfter( bForced );
 }
@@ -1847,7 +1847,7 @@ void FormulaDlg::UpdateParaWin(const Selection& _rSelection,const OUString& _sRe
 {
     m_pImpl->UpdateParaWin(_rSelection,_sRefStr);
 }
-sal_Bool FormulaDlg::UpdateParaWin(Selection& _rSelection)
+bool FormulaDlg::UpdateParaWin(Selection& _rSelection)
 {
     return m_pImpl->UpdateParaWin(_rSelection);
 }

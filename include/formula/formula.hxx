@@ -67,12 +67,12 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputDoneAfter( sal_Bool bForced = sal_False );
+    void            RefInputDoneAfter( bool bForced = false );
     void            SetFocusWin(Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const OUString& _sText);
     void            Update();
-    sal_Bool        CheckMatrix(OUString& aFormula /*IN/OUT*/);
+    bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
     void            Update(const OUString& _sExp);
 
     void            StoreFormEditData(FormEditData* pData);
@@ -111,20 +111,20 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputDoneAfter( sal_Bool bForced = sal_False );
+    void            RefInputDoneAfter( bool bForced = false );
     void            SetFocusWin(Window *pWin,const OString& nUniqueId);
     void            HighlightFunctionParas(const OUString& aFormula);
 
     void            SetMeText(const OUString& _sText);
-    FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate);
+    FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);
     void            Update();
-    sal_Bool        CheckMatrix(OUString& aFormula /*IN/OUT*/);
+    bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
     OUString        GetMeText() const;
     void            Update(const OUString& _sExp);
     void            CheckMatrix();
-    void            DoEnter(sal_Bool _bOk);
+    void            DoEnter(bool _bOk);
     const IFunctionDescription* getCurrentFunctionDescription() const;
-    sal_Bool        UpdateParaWin(Selection& _rSelection);
+    bool            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection, const OUString& _sRefStr);
     RefEdit*        GetActiveEdit();
     void            SetEdSelection();

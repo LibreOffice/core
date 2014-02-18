@@ -159,7 +159,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                 sal_Int32 PrivStart, PrivEnd;
                 pScMod->InputGetSelection( PrivStart, PrivEnd);
 
-                eMode = SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,sal_True,sal_True);
+                eMode = SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd, bMatrix, true, true);
                 pData->SetFStart( nFStart );
             }
             else

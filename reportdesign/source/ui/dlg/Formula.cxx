@@ -231,7 +231,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
     }
     m_pEdit = NULL;
     _pAddFieldDlg->Hide();
-    RefInputDoneAfter( sal_True );
+    RefInputDoneAfter( true );
 
     return 0L;
 }
