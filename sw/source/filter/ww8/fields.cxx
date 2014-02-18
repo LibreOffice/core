@@ -126,7 +126,8 @@ namespace ww
             /*92*/  "BIDIOUTLINE",
             /*93*/  "ADDRESSBLOCK",
             /*94*/  "GREETINGLINE",
-            /*95*/  "SHAPE"
+            /*95*/  "SHAPE",
+            /*96*/  "BIBLIOGRAPHY"
         };
 
         size_t nIndex = static_cast<size_t>(eIndex);

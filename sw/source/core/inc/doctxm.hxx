@@ -100,6 +100,7 @@ struct SwDefTOXBase_Impl
     SwTOXBase* pObjBase;
     SwTOXBase* pIllBase;
     SwTOXBase* pAuthBase;
+    SwTOXBase* pBiblioBase;
 
     SwDefTOXBase_Impl() :
     pContBase(0),
@@ -108,7 +109,8 @@ struct SwDefTOXBase_Impl
     pTblBase(0),
     pObjBase(0),
     pIllBase(0),
-    pAuthBase(0)
+    pAuthBase(0),
+    pBiblioBase(0)
     {
     }
     ~SwDefTOXBase_Impl()
@@ -120,6 +122,7 @@ struct SwDefTOXBase_Impl
         delete pObjBase;
         delete pIllBase;
         delete pAuthBase;
+        delete pBiblioBase;
     }
 
 };
