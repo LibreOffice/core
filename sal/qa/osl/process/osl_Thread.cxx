@@ -78,7 +78,15 @@ public:
 // A small stopwatch for internal use
 // (c) Lars Langhans 29.12.1996 22:10
 
-StopWatch::StopWatch():m_bIsValid(false),m_bIsRunning(false) {}
+StopWatch::StopWatch()
+    : m_nNanoSec(0)
+    , m_nSeconds(0)
+    , m_bIsValid(false)
+    , m_bIsRunning(false)
+{
+    t1 = {0, 0};
+    t2 = {0, 0};
+}
 
 void StopWatch::start()
 {
