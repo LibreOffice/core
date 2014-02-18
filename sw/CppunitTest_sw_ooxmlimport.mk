@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
 	basic/util/sb \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
+	canvas/source/factory/canvasfactory \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     drawinglayer/drawinglayer \

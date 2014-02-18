@@ -1231,9 +1231,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_GRAPHIC ),
                         uno::makeAny(xGraphic));
-        // mimic the treatment of graphics here.. it seems anchoring as character
-        // gives a better ( visually ) result
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
+        uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
+        if (xReplacementProperties.is())
+            xOLEProperties->setPropertyValue("AnchorType", xReplacementProperties->getPropertyValue("AnchorType"));
+        else
+            // mimic the treatment of graphics here.. it seems anchoring as character
+            // gives a better ( visually ) result
+            xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
         m_aAnchoredStack.top( ).bToRemove = true;
         RemoveLastParagraph();

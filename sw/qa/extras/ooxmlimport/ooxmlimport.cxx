@@ -1783,6 +1783,12 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeRelsize, "groupshape-relsize.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(9142730)), getShape(1)->getSize().Height);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")
+{
+    // This was AS_CHARACTER, even if the VML style explicitly contains "position:absolute".
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")
 {
     // Capitalization inside a group shape was not imported
