@@ -57,7 +57,7 @@ void ScShowTabDlg::SetDescription(
     m_pLb->SetHelpId( sLbHelpId );
 }
 
-void ScShowTabDlg::Insert( const OUString& rString, sal_Bool bSelected )
+void ScShowTabDlg::Insert( const OUString& rString, bool bSelected )
 {
     m_pLb->InsertEntry( rString );
     if( bSelected )

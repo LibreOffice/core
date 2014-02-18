@@ -44,7 +44,7 @@ public:
                 const OString& nDlgHelpId, const OString& nLbHelpId );
 
     /** Inserts a string into the ListBox. */
-    void    Insert( const OUString& rString, sal_Bool bSelected );
+    void    Insert( const OUString& rString, bool bSelected );
 
     sal_uInt16  GetSelectEntryCount() const;
     OUString    GetSelectEntry(sal_uInt16 nPos) const;
