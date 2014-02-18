@@ -181,6 +181,7 @@ LayoutManager::~LayoutManager()
 {
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_aAsyncLayoutTimer.Stop();
+    setDockingAreaAcceptor(NULL);
 }
 
 // Internal helper function
