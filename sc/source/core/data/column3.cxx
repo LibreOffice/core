@@ -736,7 +736,7 @@ public:
 
         if (node.type == sc::element_type_empty)
         {
-            if (bCopyCellNotes)
+            if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
             {
                 bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
