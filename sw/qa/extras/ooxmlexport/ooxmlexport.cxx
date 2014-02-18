@@ -110,8 +110,7 @@ protected:
             "math-mso2k7.docx",
             "ImageCrop.docx",
             "test_GIF_ImageCrop.docx",
-            "test_PNG_ImageCrop.docx",
-            "dml-shape-fillbitmapcrop.docx"
+            "test_PNG_ImageCrop.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -2991,10 +2990,10 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 1st shape has some cropping
     text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 454 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 367 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( -454 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( -367 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 454 : 455 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 367 : 368 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -454 : -455 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -367 : -368 ), aGraphicCropStruct.Bottom );
 
     // 2nd shape has no cropping
     aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
