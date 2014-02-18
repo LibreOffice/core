@@ -214,7 +214,7 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
-    void            DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove );
+    void            DPTestMouse( const MouseEvent& rMEvt, bool bMove );
 
     /**
      * Check if the mouse click is on a field popup button.
@@ -226,9 +226,9 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     void            DPLaunchFieldPopupMenu(
         const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
-    void            RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp );
+    void            RFMouseMove( const MouseEvent& rMEvt, bool bUp );
 
-    void            PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp );
+    void            PagebreakMove( const MouseEvent& rMEvt, bool bUp );
 
     void            UpdateDragRect( bool bShowRange, const Rectangle& rPosRect );
 
@@ -239,7 +239,7 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr );
 
-    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const OUString& rStr );
+    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr );
 
     bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 

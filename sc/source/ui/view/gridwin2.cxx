@@ -186,7 +186,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             if (bButton)
             {
                 bDPMouse = true;
-                DPTestMouse( rMEvt, sal_True );
+                DPTestMouse( rMEvt, true );
                 StartTracking();
             }
         }
@@ -244,7 +244,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 //  Data Pilot interaction
 //
 
-void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
+void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 {
     OSL_ENSURE(pDragDPObj, "pDragDPObj missing");
 
@@ -614,7 +614,7 @@ bool ScGridWindow::UpdateVisibleRange()
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )
 {
-    DPTestMouse( rMEvt, sal_True );
+    DPTestMouse( rMEvt, true );
 }
 
 void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
@@ -791,7 +791,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     return nFound;
 }
 
-void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
+void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 {
     //! Scrolling und Umschalten mit RFMouseMove zusammenfassen !
     //! (Weginvertieren vor dem Scrolling ist anders)

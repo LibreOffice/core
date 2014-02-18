@@ -570,7 +570,7 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
     return 0;
 }
 
-void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const OUString& rStr )
+void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr )
 {
     //! gridwin2 ?
 
@@ -2079,7 +2079,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if (bRFMouse)
     {
-        RFMouseMove( rMEvt, sal_True );     // Range wieder richtigherum
+        RFMouseMove( rMEvt, true );     // Range wieder richtigherum
         bRFMouse = false;
         SetPointer( Pointer( POINTER_ARROW ) );
         ReleaseMouse();
@@ -2088,7 +2088,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if (nPagebreakMouse)
     {
-        PagebreakMove( rMEvt, sal_True );
+        PagebreakMove( rMEvt, true );
         nPagebreakMouse = SC_PD_NONE;
         SetPointer( Pointer( POINTER_ARROW ) );
         ReleaseMouse();
@@ -5010,7 +5010,7 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
     }
 }
 
-void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
+void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
     if (!pHdl)
