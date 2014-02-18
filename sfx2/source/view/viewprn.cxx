@@ -339,6 +339,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
         mpObjectShell->Broadcast( SfxPrintingHint( nState ) );
         switch ( nState )
         {
+            case view::PrintableState_JOB_SPOOLING_FAILED :
             case view::PrintableState_JOB_FAILED :
             {
                 // "real" problem (not simply printing cancelled by user)
