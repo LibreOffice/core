@@ -598,14 +598,12 @@ Any ComponentContext::lookupMap( OUString const & rName )
     {
         throw;
     }
-    catch (Exception & exc) // rethrow as WrappedTargetRuntimeException
+    catch (Exception & exc)
     {
-        OUStringBuffer buf;
-        buf.append( "exception occurred raising singleton \"" );
-        buf.append( rName );
-        buf.append( "\": " );
-        buf.append( exc.Message );
-        SAL_WARN("cppuhelper", buf.makeStringAndClear());
+        SAL_WARN(
+            "cppuhelper",
+            "exception occurred raising singleton \"" << rName << "\": "
+            << exc.Message);
     }
 
     SAL_WARN_IF(!xInstance.is(),
