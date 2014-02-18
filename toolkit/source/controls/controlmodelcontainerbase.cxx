@@ -216,6 +216,7 @@ ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponen
     ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( sal_False )
     ,m_bEnabled( sal_True )
+    ,m_nTabPageId(0)
 {
 }
 
@@ -224,6 +225,8 @@ ControlModelContainerBase::ControlModelContainerBase( const ControlModelContaine
     , maContainerListeners( *this )
     , maChangeListeners ( GetMutex() )
     , mbGroupsUpToDate( sal_False )
+    , m_bEnabled( rModel.m_bEnabled )
+    , m_nTabPageId( rModel.m_nTabPageId )
 {
 }
 
