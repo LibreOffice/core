@@ -139,14 +139,14 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
 
         SFX_DECL_CHILDWINDOW_WITHID(Class);
 
-        static void     SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet=sal_True);
+        static void     SetDefaultPosSize(Point aPos, Size aSize, bool bSet = true);
         OUString        GetRefString();
         void            SetRefString(const OUString& rStr);
         void            SetCloseHdl( const Link& rLink );
         void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );
-        void            SetFlags( sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection );
-        static void     SetAutoReOpen(sal_Bool bFlag);
+        void            SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
+        static void     SetAutoReOpen(bool bFlag);
 
         void            StartRefInput();
 };

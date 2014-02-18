@@ -129,12 +129,12 @@ IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 // ScSimpleRefDlgWrapper
 //-------------------------------------------------------------------------
 
-static sal_Bool     bScSimpleRefFlag;
+static bool         bScSimpleRefFlag;
 static long         nScSimpleRefHeight;
 static long         nScSimpleRefWidth;
 static long         nScSimpleRefX;
 static long         nScSimpleRefY;
-static sal_Bool     bAutoReOpen=sal_True;
+static bool         bAutoReOpen = true;
 
 ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
                                 sal_uInt16              nId,
@@ -172,7 +172,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet)
+void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, bool bSet)
 {
     bScSimpleRefFlag=bSet;
     if(bScSimpleRefFlag)
@@ -195,7 +195,7 @@ OUString ScSimpleRefDlgWrapper::GetRefString()
     return aResult;
 }
 
-void ScSimpleRefDlgWrapper::SetAutoReOpen(sal_Bool bFlag)
+void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 {
     bAutoReOpen=bFlag;
 }
@@ -225,7 +225,7 @@ void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetFlags( sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection )
+void ScSimpleRefDlgWrapper::SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection )
 {
     if(pWindow!=NULL)
     {

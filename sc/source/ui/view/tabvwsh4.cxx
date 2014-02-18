@@ -1108,7 +1108,7 @@ IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
         SetTabNo( GetViewData()->GetRefTabNo() );
     }
 
-    ScSimpleRefDlgWrapper::SetAutoReOpen( sal_True );
+    ScSimpleRefDlgWrapper::SetAutoReOpen( true );
     return 0;
 }
 
