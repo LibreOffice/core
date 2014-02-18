@@ -603,9 +603,9 @@ OString SdPage::stringify() const
     return aString.makeStringAndClear();
 }
 
-sal_uInt64 SdPage::getHash() const
+sal_Int32 SdPage::getHash() const
 {
-    return stringify().hashCode64();
+    return stringify().hashCode();
 }
 
 

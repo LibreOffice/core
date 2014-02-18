@@ -650,7 +650,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             SfxStyleSheetBase* pExistingSheet = Find(aName, eFamily);
             if( pExistingSheet && !rRenameSuffix.isEmpty() )
             {
-                sal_uInt64 nHash = xSheet->GetItemSet().getHash();
+                sal_Int32 nHash = xSheet->GetItemSet().getHash();
                 if( pExistingSheet->GetItemSet().getHash() != nHash )
                 {
                     OUString aTmpName = aName + rRenameSuffix;

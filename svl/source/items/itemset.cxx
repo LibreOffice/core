@@ -2032,9 +2032,9 @@ SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt64 SfxItemSet::getHash() const
+sal_Int32 SfxItemSet::getHash() const
 {
-    return stringify().hashCode64();
+    return stringify().hashCode();
 }
 
 // -----------------------------------------------------------------------
