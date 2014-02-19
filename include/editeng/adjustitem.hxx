@@ -36,15 +36,15 @@ This item describes the row orientation.
 
 class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 {
-    sal_Bool    bLeft      : 1;
-    sal_Bool    bRight     : 1;
-    sal_Bool    bCenter    : 1;
-    sal_Bool    bBlock     : 1;
+    bool    bLeft      : 1;
+    bool    bRight     : 1;
+    bool    bCenter    : 1;
+    bool    bBlock     : 1;
 
     // only activ when bBlock
-    sal_Bool    bOneBlock : 1;
-    sal_Bool    bLastCenter : 1;
-    sal_Bool    bLastBlock : 1;
+    bool    bOneBlock : 1;
+    bool    bLastCenter : 1;
+    bool    bLastBlock : 1;
 
     friend SvStream& WriteSvxAdjustItem( SvStream&, SvxAdjustItem& ); //$ ostream
 public:

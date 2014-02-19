@@ -348,7 +348,7 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
-    bOneBlock( sal_False ), bLastCenter( sal_False ), bLastBlock( sal_False )
+    bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
 {
     SetAdjust( eAdjst );
 }
