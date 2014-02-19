@@ -301,6 +301,7 @@ ScXMLConditionContext::ScXMLConditionContext(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext),
+    nField(0),
     bIsCaseSensitive(false)
 {
     sDataType = GetXMLToken(XML_TEXT);
