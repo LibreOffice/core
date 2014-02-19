@@ -579,7 +579,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             break;
             case NULL_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_TRANSPARENT ), sal_True ) );
+                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_TRANSPARENT ), true ) );
             }
             break;
             case WHITE_PEN :
@@ -987,7 +987,7 @@ sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
                 {
                     aNopFillStyle = maFillStyle;
                     aNopLineStyle = maLineStyle;
-                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), sal_True );
+                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
                     maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), sal_True );
                     mbNopMode = sal_True;
                 }

@@ -708,7 +708,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 aBmp.ReleaseAccess( pBmp );
             }
             Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, sal_False ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, false ) );
         }
         break;
 
@@ -728,13 +728,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_CREATEBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), sal_False ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), false ) );
         }
         break;
 
         case W_META_CREATEPATTERNBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), sal_False ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), false ) );
         }
         break;
 
