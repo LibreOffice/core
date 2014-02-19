@@ -5206,7 +5206,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     long nAvailWidth = aCellSize.Width();
                                     if (eType==OUTTYPE_WINDOW &&
                                             eOrient!=SVX_ORIENTATION_STACKED &&
-                                            pInfo && pInfo->bAutoFilter)
+                                            pInfo->bAutoFilter)
                                     {
                                         // filter drop-down width is now independent from row height
                                         if (bPixelToLogic)
