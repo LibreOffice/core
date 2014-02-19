@@ -2570,42 +2570,38 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (pRecord->bHidden)
         return 0;
 
-    if(pObject)
+    sal_uInt16 nCount = pObject->GetUserDataCount();
+    if(nCount)
     {
-        sal_uInt16 nCount = pObject->GetUserDataCount();
-        if(nCount)
+        OUString lnName, aObjName, aTarFrm;
+        for (sal_uInt16 i = 0; i < nCount; i++ )
         {
-            OUString lnName, aObjName, aTarFrm;
-            for (sal_uInt16 i = 0; i < nCount; i++ )
+            SdrObjUserData* pData = pObject->GetUserData( i );
+            if( pData && pData->GetInventor() == SW_DRAWLAYER
+                    && pData->GetId() == SW_UD_IMAPDATA)
             {
-                SdrObjUserData* pData = pObject->GetUserData( i );
-                if( pData && pData->GetInventor() == SW_DRAWLAYER
-                        && pData->GetId() == SW_UD_IMAPDATA)
+                SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
+                if( macInf )// && macInf->GetShapeId() == pF->nSpId)
                 {
-                    SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
-
-                    if( macInf )// && macInf->GetShapeId() == pF->nSpId)
+                    sal_Int32 nShapeId = macInf->GetShapeId();
+                    if ( nShapeId ==  pF->nSpId )
                     {
-                        sal_Int32 nShapeId = macInf->GetShapeId();
-                        if ( nShapeId ==  pF->nSpId )
-                        {
-                            lnName = macInf->GetHlink();
-                            aObjName = macInf->GetName();
-                            aTarFrm = macInf->GetTarFrm();
-                            break;
-                        }
+                        lnName = macInf->GetHlink();
+                        aObjName = macInf->GetName();
+                        aTarFrm = macInf->GetTarFrm();
+                        break;
                     }
                 }
             }
-            SwFmtURL* pFmtURL = new SwFmtURL();
-            pFmtURL->SetURL( lnName, false );
-            if (!aObjName.isEmpty())
-                pFmtURL->SetName(aObjName);
-            if (!aTarFrm.isEmpty())
-                pFmtURL->SetTargetFrameName(aTarFrm);
-            pFmtURL->SetMap(0);
-            aFlySet.Put(*pFmtURL);
         }
+        SwFmtURL* pFmtURL = new SwFmtURL();
+        pFmtURL->SetURL( lnName, false );
+        if (!aObjName.isEmpty())
+            pFmtURL->SetName(aObjName);
+        if (!aTarFrm.isEmpty())
+            pFmtURL->SetTargetFrameName(aTarFrm);
+        pFmtURL->SetMap(0);
+        aFlySet.Put(*pFmtURL);
     }
 
     // If we are to be "below text" then we are not to be opaque
