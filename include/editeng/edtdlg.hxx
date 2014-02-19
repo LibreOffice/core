@@ -20,7 +20,6 @@
 #define INCLUDED_EDITENG_EDTDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>

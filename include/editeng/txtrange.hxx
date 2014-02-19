@@ -21,9 +21,7 @@
 #define INCLUDED_EDITENG_TXTRANGE_HXX
 
 #include <editeng/editengdllapi.h>
-#include <tools/solar.h>
 #include <tools/gen.hxx>
-
 #include <deque>
 
 class PolyPolygon;
@@ -35,11 +33,6 @@ namespace basegfx {
 
 typedef std::deque<long>* LongDqPtr;
 
-/*************************************************************************
-|*
-|*    class TextRanger
-|*
-*************************************************************************/
 class EDITENG_DLLPUBLIC TextRanger
 {
     //! The RangeCache class is used to cache the result of a single range calculation.
@@ -90,8 +83,6 @@ public:
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( sal_Bool bNew );
 };
-
-
 
 #endif      // _TXTRANGE_HXX
 

@@ -22,7 +22,6 @@
 #define INCLUDED_EDITENG_EDITDATA_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <editeng/editengdllapi.h>
 
 class SfxItemSet;
@@ -209,8 +208,6 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     EFieldInfo( const EFieldInfo& );
     EFieldInfo& operator= ( const EFieldInfo& );
 };
-
-// -----------------------------------------------------------------------
 
 enum ImportState {
                     RTFIMP_START, RTFIMP_END,               // only pParser, nPara, nIndex
