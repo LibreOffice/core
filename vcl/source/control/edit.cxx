@@ -2649,19 +2649,21 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
                     bCaret = sal_True;
                 if (nGap != 0 || oGap != 0)
                     bSelection = sal_True;
-                if (bCaret)
-                {
-                    if ( mbIsSubEdit )
-                        ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
-                    else
-                        ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
-                }
+
                 if (bSelection)
                 {
                     if ( mbIsSubEdit )
                         ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
                     else
                         ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                }
+
+                if (bCaret)
+                {
+                    if ( mbIsSubEdit )
+                        ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
+                    else
+                        ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
                 }
 
                 // #103511# notify combobox listeners of deselection
