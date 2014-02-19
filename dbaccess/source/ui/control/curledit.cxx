@@ -87,8 +87,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
     }
 
     // the fixed text gets the prefix
-    if ( m_pForcedPrefix )
-        m_pForcedPrefix->SetText(sPrefix);
+    m_pForcedPrefix->SetText(sPrefix);
 
     // both subs have to be resized according to the text len of the prefix
     Size aMySize = GetSizePixel();
