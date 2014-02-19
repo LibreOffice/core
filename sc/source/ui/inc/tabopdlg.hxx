@@ -80,7 +80,7 @@ private:
     ScDocument*         pDoc;
     const SCTAB         nCurTab;
     formula::RefEdit*   pEdActive;
-    sal_Bool            bDlgLostFocus;
+    bool                bDlgLostFocus;
     const OUString      errMsgNoFormula;
     const OUString      errMsgNoColRow;
     const OUString      errMsgWrongFormula;
