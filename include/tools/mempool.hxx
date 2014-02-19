@@ -23,7 +23,6 @@
 
 #include <sal/macros.h>
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 
 struct FixedMemPool_Impl;
 

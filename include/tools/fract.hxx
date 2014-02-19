@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_FRACT_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 
 class SvStream;
 
