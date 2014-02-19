@@ -419,7 +419,7 @@ namespace calc
         // range. In this case, we need to fire a change in our CellRange property, and additionally
         // notify our XListEntryListeners
 
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
     }
 
 //.........................................................................

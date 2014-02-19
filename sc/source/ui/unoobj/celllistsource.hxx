@@ -68,7 +68,7 @@ namespace calc
                     m_xRange;               /// the range of cells we're bound to
         ::cppu::OInterfaceContainerHelper
                     m_aListEntryListeners;  /// our listeners
-        sal_Bool    m_bInitialized;         /// has XInitialization::initialize been called?
+        bool        m_bInitialized;         /// has XInitialization::initialize been called?
 
     public:
         OCellListSource(
