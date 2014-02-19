@@ -38,9 +38,9 @@ private:
     sal_Int16 nLength;
     sal_Int16 nStart;
     // Add because of MSO has diferent behavior.
-    sal_Bool bReplace;
+    bool bReplace;
 public:
-    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool bReplace = false  ) throw ( css::lang::IllegalArgumentException );
+    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  ) throw ( css::lang::IllegalArgumentException );
 
     virtual ~ScVbaCharacters() {}
     // Attributes

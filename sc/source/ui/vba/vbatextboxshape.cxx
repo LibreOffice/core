@@ -54,7 +54,7 @@ ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length ) t
     uno::Reference< text::XSimpleText > xSimple( m_xTextRange, uno::UNO_QUERY_THROW );
 
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );
-    return  new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length, sal_True );
+    return  new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
