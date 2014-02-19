@@ -2343,10 +2343,12 @@ SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uIn
 }
 
 
-SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP ) :
-    SmVisibleNode(NTEXT, rNodeToken)
+SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
+    : SmVisibleNode(NTEXT, rNodeToken)
+    , nFontDesc(nFontDescP)
+    , nSelectionStart(0)
+    , nSelectionEnd(0)
 {
-    nFontDesc = nFontDescP;
 }
 
 
