@@ -111,12 +111,12 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     int             m_aActHitType;    // current mouse pointer
 
-    sal_uLong           m_nDropFormat;   // format from the last QueryDrop
-    sal_uInt16          m_nDropAction;   // action from the last QueryDrop
-    sal_uInt16          m_nDropDestination;  // destination from the last QueryDrop
+    sal_uLong       m_nDropFormat;   // format from the last QueryDrop
+    sal_uInt16      m_nDropAction;   // action from the last QueryDrop
+    sal_uInt16      m_nDropDestination;  // destination from the last QueryDrop
 
-    sal_uInt16          m_eBezierMode;
-    sal_uInt16          m_nInsFrmColCount; // column number for interactive frame
+    sal_uInt16      m_eBezierMode;
+    sal_uInt16      m_nInsFrmColCount; // column number for interactive frame
     SdrObjKind      m_eDrawMode;
     sal_Bool        m_bMBPressed      : 1,
                     m_bInsDraw        : 1,
@@ -232,13 +232,13 @@ public:
     inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( sal_False ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, sal_Bool bObjSelect );
 
-    sal_Bool            IsFrmAction()                   { return (m_bInsFrm); }
-    inline sal_uInt16   GetBezierMode()                 { return m_eBezierMode; }
+    bool            IsFrmAction() const             { return (m_bInsFrm); }
+    sal_uInt16      GetBezierMode() const           { return m_eBezierMode; }
     void            SetBezierMode(sal_uInt16 eBezMode)  { m_eBezierMode = eBezMode; }
     void            EnterDrawTextMode(const Point& aDocPos); // turn on DrawTextEditMode
     void            InsFrm(sal_uInt16 nCols);
     void            StopInsFrm();
-    sal_uInt16          GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
+    sal_uInt16      GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
 
 
     void            SetChainMode( sal_Bool bOn );
