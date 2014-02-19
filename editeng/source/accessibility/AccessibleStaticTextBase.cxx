@@ -389,7 +389,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
             return rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
         }
         catch( const uno::RuntimeException& )
@@ -407,7 +407,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
             mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             sal_Bool aRetVal;
 

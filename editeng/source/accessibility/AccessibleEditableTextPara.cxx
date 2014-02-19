@@ -406,18 +406,18 @@ namespace accessibility
         CheckPosition( nEnd );
     }
 
-    sal_Bool AccessibleEditableTextPara::GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((uno::RuntimeException))
+    bool AccessibleEditableTextPara::GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((uno::RuntimeException))
     {
         ESelection aSelection;
         sal_Int32 nPara = GetParagraphIndex();
         if( !GetEditViewForwarder().GetSelection( aSelection ) )
-            return sal_False;
+            return false;
 
         if( aSelection.nStartPara < aSelection.nEndPara )
         {
             if( aSelection.nStartPara > nPara ||
                 aSelection.nEndPara < nPara )
-                return sal_False;
+                return false;
 
             if( nPara == aSelection.nStartPara )
                 nStartPos = aSelection.nStartPos;
@@ -433,7 +433,7 @@ namespace accessibility
         {
             if( aSelection.nStartPara < nPara ||
                 aSelection.nEndPara > nPara )
-                return sal_False;
+                return false;
 
             if( nPara == aSelection.nStartPara )
                 nStartPos = aSelection.nStartPos;
@@ -446,7 +446,7 @@ namespace accessibility
                 nEndPos = 0;
         }
 
-        return sal_True;
+        return true;
     }
 
     OUString AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((uno::RuntimeException))
@@ -512,7 +512,7 @@ namespace accessibility
                                           ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
     }
 
-    SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
+    SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( bool bCreate ) const SAL_THROW((uno::RuntimeException))
     {
         SvxEditSourceAdapter& rEditSource = GetEditSource();
         SvxAccessibleTextEditViewAdapter* pTextEditViewForwarder = rEditSource.GetEditViewForwarderAdapter( bCreate );
@@ -548,21 +548,21 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleEditableTextPara::HaveEditView() const
+    bool AccessibleEditableTextPara::HaveEditView() const
     {
         SvxEditSource& rEditSource = GetEditSource();
         SvxEditViewForwarder* pViewForwarder = rEditSource.GetEditViewForwarder();
 
         if( !pViewForwarder )
-            return sal_False;
+            return false;
 
         if( !pViewForwarder->IsValid() )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool AccessibleEditableTextPara::HaveChildren()
+    bool AccessibleEditableTextPara::HaveChildren()
     {
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::HaveChildren: paragraph index value overflow");
@@ -652,7 +652,7 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex )
+    bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex )
     {
         DBG_ASSERT(nIndex >= 0 && nIndex <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
@@ -1491,7 +1491,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             return rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
         }
         catch (const uno::RuntimeException&)
@@ -1572,7 +1572,7 @@ namespace accessibility
                 {
                     try
                     {
-                        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_False );
+                        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( false );
                         sal_Bool bWrong = rCacheVF.IsWrongSpelledWordAtPos( GetParagraphIndex(), nIndex );
                         if ( bWrong )
                         {
@@ -1626,7 +1626,7 @@ namespace accessibility
                 {
                     try
                     {
-                        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_False );
+                        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( false );
                         sal_Bool bWrong = rCacheVF.IsWrongSpelledWordAtPos( GetParagraphIndex(), nIndex );
                         if ( bWrong )
                         {
@@ -1690,7 +1690,7 @@ namespace accessibility
             }
         }
     }
-    sal_Int32 AccessibleEditableTextPara::SkipField(sal_Int32 nIndex, sal_Bool bForward)
+    sal_Int32 AccessibleEditableTextPara::SkipField(sal_Int32 nIndex, bool bForward)
     {
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
@@ -1726,7 +1726,7 @@ namespace accessibility
         }
         return nIndex;
     }
-    sal_Bool AccessibleEditableTextPara::ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment )
+    bool AccessibleEditableTextPara::ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment )
     {
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
@@ -1754,18 +1754,18 @@ namespace accessibility
                 }
             }
         }
-        sal_Bool bExtend = sal_False;
+        bool bExtend = false;
         if( nFoundFieldIndex >= 0 )
         {
             if( Segment.SegmentEnd < reeEnd )
             {
                 Segment.SegmentEnd  = reeEnd;
-                bExtend = sal_True;
+                bExtend = true;
             }
             if( Segment.SegmentStart > reeBegin )
             {
                 Segment.SegmentStart = reeBegin;
-                bExtend = sal_True;
+                bExtend = true;
             }
             if( bExtend )
             {
@@ -2020,7 +2020,7 @@ namespace accessibility
             }
             case AccessibleTextType::WORD:
             {
-                nIndex = SkipField( nIndex, sal_False);
+                nIndex = SkipField( nIndex, false);
                 OUString sText( implGetText() );
                 sal_Int32 nLength = sText.getLength();
 
@@ -2057,7 +2057,7 @@ namespace accessibility
             break;
             case AccessibleTextType::CHARACTER:
             {
-                nIndex = SkipField( nIndex, sal_False);
+                nIndex = SkipField( nIndex, false);
                 aResult = OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
                 ExtendByField( aResult );
                 break;
@@ -2151,7 +2151,7 @@ namespace accessibility
             }
             case AccessibleTextType::WORD:
             {
-                nIndex = SkipField( nIndex, sal_True);
+                nIndex = SkipField( nIndex, true);
                 OUString sText( implGetText() );
                 sal_Int32 nLength = sText.getLength();
 
@@ -2183,7 +2183,7 @@ namespace accessibility
 
             case AccessibleTextType::CHARACTER:
             {
-                nIndex = SkipField( nIndex, sal_True);
+                nIndex = SkipField( nIndex, true);
                 aResult = OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
                 ExtendByField( aResult );
                 break;
@@ -2202,7 +2202,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             #if OSL_DEBUG_LEVEL > 0
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             (void)rCacheTF;
@@ -2247,7 +2247,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -2284,7 +2284,7 @@ namespace accessibility
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -2321,7 +2321,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -2362,7 +2362,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -2402,7 +2402,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -2445,7 +2445,7 @@ namespace accessibility
         {
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
-            GetEditViewForwarder( sal_True );
+            GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             sal_uInt16 nPara = static_cast< sal_uInt16 >( GetParagraphIndex() );
 

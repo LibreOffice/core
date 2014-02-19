@@ -266,7 +266,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Bool    HaveEditView() const;
+        bool    HaveEditView() const;
 
         /** Query the SvxEditViewForwarder for EditEngine access.
 
@@ -275,7 +275,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( bool bCreate = false ) const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Send a TEXT_CHANGED event for this paragraph
 
@@ -304,7 +304,7 @@ namespace accessibility
 
             @return sal_False, if the method was not able to determine the range
          */
-        sal_Bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex );
+        bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex );
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
@@ -313,7 +313,7 @@ namespace accessibility
         int getNotifierClientId() const;
 
         /// Do we have children? This is the case for image bullets
-        sal_Bool HaveChildren();
+        bool HaveChildren();
 
         const Point& GetEEOffset() const;
 
@@ -325,7 +325,7 @@ namespace accessibility
 
             @return sal_False, if nothing in this paragraph is selected
          */
-        sal_Bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** create selection from Accessible selection.
 
@@ -344,9 +344,9 @@ namespace accessibility
         void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
 
         void _correctValues( const sal_Int32 nIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues );
-        sal_Int32 SkipField(sal_Int32 nIndex, sal_Bool bForward);
+        sal_Int32 SkipField(sal_Int32 nIndex, bool bForward);
         // get overlapped field, extend return string. Only extend forward for now
-        sal_Bool ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment );
+        bool ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment );
         OUString GetFieldTypeNameAtIndex(sal_Int32 nIndex);
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
