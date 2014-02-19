@@ -360,8 +360,10 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
     Interne Methode f"ur Subklassen.
 */
 
-:   SfxSingleRecordWriter( nRecordType, pStream, nContentTag, nContentVer ),
-    _nContentCount( 0 )
+    :  SfxSingleRecordWriter( nRecordType, pStream, nContentTag, nContentVer )
+    , _nContentStartPos(0)
+    , _nContentSize(0)
+    , _nContentCount(0)
 {
     // Platz f"ur eigenen Header
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MULTI );
