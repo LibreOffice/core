@@ -453,10 +453,11 @@ void SvxColorBox::ReleaseFocus_Impl()
 //========================================================================
 
 SvxMetricField::SvxMetricField(
-    Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
-    MetricField( pParent, nBits ),
-    aCurTxt(),
-    mxFrame( rFrame )
+    Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
+    : MetricField(pParent, nBits)
+    , aCurTxt()
+    , ePoolUnit(SFX_MAPUNIT_CM)
+    , mxFrame(rFrame)
 {
     Size aSize = Size(GetTextWidth( OUString("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
