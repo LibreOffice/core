@@ -72,13 +72,13 @@ namespace calc
                     m_xCellText;            /// the cell we're bound to, for text access
         ::cppu::OInterfaceContainerHelper
                     m_aModifyListeners;     /// our modify listeners
-        sal_Bool    m_bInitialized;         /// has XInitialization::initialize been called?
-        sal_Bool    m_bListPos;             /// constructed as ListPositionCellBinding?
+        bool        m_bInitialized;         /// has XInitialization::initialize been called?
+        bool        m_bListPos;             /// constructed as ListPositionCellBinding?
 
     public:
         OCellValueBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument,
-            sal_Bool _bListPos
+            bool _bListPos
         );
 
         using OCellValueBinding_PBase::getFastPropertyValue;

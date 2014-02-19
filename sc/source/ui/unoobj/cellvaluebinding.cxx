@@ -73,7 +73,7 @@ namespace calc
 #endif
 
     //---------------------------------------------------------------------
-    OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, sal_Bool _bListPos )
+    OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, bool _bListPos )
         :OCellValueBinding_Base( m_aMutex )
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
         ,m_xDocument( _rxDocument )
@@ -630,7 +630,7 @@ namespace calc
         // TODO: be an XModifyBroadcaster, so that changes in our cell can be notified
         // to the BindableValue which is/will be bound to this instance.
 
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
         // TODO: place your code here
     }
 
