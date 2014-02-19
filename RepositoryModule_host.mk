@@ -185,7 +185,9 @@ ifeq (,$(filter-out all,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
 	scfilt scopencl \
 	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
-	sc msword swui sw sd \
+	sc msword \
+	$(call gb_Helper_optional,DESKTOP,swui) \
+	sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
 	writerfilter cui chartcontroller chartcore oox svx \
 	$(if $(MERGELIBS),merged,svxcore) \
