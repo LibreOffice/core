@@ -138,12 +138,13 @@ public:
 };
 
 TreeControlPeer::TreeControlPeer()
-: maSelectionListeners( *this )
-, maTreeExpansionListeners( *this )
-, maTreeEditListeners( *this )
-, mpTreeImpl( 0 )
-, mnEditLock( 0 )
-, mpTreeNodeMap( 0 )
+    : maSelectionListeners( *this )
+    , maTreeExpansionListeners( *this )
+    , maTreeEditListeners( *this )
+    , mbIsRootDisplayed(false)
+    , mpTreeImpl( 0 )
+    , mnEditLock( 0 )
+    , mpTreeNodeMap( 0 )
 {
 }
 
