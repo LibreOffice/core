@@ -98,6 +98,7 @@ struct SfxItemPool_Impl
         , mnStart(nStart)
         , mnEnd(nEnd)
         , mnFileFormatVersion(0)
+        , nVersion(0)
         , nLoadingVersion(0)
         , nInitRefCount(0)
         , nVerStart(0)
@@ -106,8 +107,10 @@ struct SfxItemPool_Impl
         , nStoringEnd(0)
         , nMajorVer(0)
         , nMinorVer(0)
+        , eDefMetric(SFX_MAPUNIT_CM)
         , bInSetItem(false)
         , bStreaming(false)
+        , mbPersistentRefCounts(false)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
         memset( ppPoolDefaults, 0, sizeof( SfxPoolItem* ) * (nEnd - nStart + 1));
