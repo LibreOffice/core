@@ -50,7 +50,8 @@ SwMasterUsrPref::SwMasterUsrPref(sal_Bool bWeb) :
     bIsHScrollMetricSet(sal_False),
     bIsVScrollMetricSet(sal_False),
     nDefTab( MM50 * 4 ),
-    bIsSquaredPageMode(sal_False),
+    bIsSquaredPageMode(false),
+    bIsAlignMathObjectsToBaseline(false),
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
@@ -60,6 +61,7 @@ SwMasterUsrPref::SwMasterUsrPref(sal_Bool bWeb) :
 {
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    eHScrollMetric = eVScrollMetric = eUserMetric;
 
     aContentConfig.Load();
     aLayoutConfig.Load();
