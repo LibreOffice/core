@@ -1328,8 +1328,8 @@ sal_Bool Bitmap::ImplScaleSuper(
 
                 if( bHMirr )
                     fTemp = nTempX - fTemp;
-
-                pMapFX[ nX ] = (long) ( ( fTemp - ( pMapIX[ nX ] = MinMax( (long) fTemp, 0, nTemp ) ) ) * 128. );
+                pMapIX[ nX ] = MinMax( (long) fTemp, 0, nTemp );
+                pMapFX[ nX ] = (long) ( ( fTemp - pMapIX ) * 128. );
             }
 
             // create vertical mapping table
@@ -1339,8 +1339,8 @@ sal_Bool Bitmap::ImplScaleSuper(
 
                 if( bVMirr )
                     fTemp = nTempY - fTemp;
-
-                pMapFY[ nY ] = (long) ( ( fTemp - ( pMapIY[ nY ] = MinMax( (long) fTemp, 0, nTemp ) ) ) * 128. );
+                pMapIY[ nY ] = MinMax( (long) fTemp, 0, nTemp );
+                pMapFY[ nY ] = (long) ( ( fTemp - pMapIY[nY] ) * 128. );
             }
 
             if( pAcc->HasPalette() )
