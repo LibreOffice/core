@@ -76,8 +76,8 @@ TYPEINIT1(ScUndoUpdateAreaLink,     SfxUndoAction);
 ScUndoDeleteContents::ScUndoDeleteContents(
                 ScDocShell* pNewDocShell,
                 const ScMarkData& rMark, const ScRange& rRange,
-                ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
-                sal_uInt16 nNewFlags, sal_Bool bObjects )
+                ScDocument* pNewUndoDoc, bool bNewMulti,
+                sal_uInt16 nNewFlags, bool bObjects )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( rRange ),
         aMarkData   ( rMark ),
@@ -116,7 +116,7 @@ void ScUndoDeleteContents::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
+void ScUndoDeleteContents::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -181,7 +181,7 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
 void ScUndoDeleteContents::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 
     BroadcastChanges(aRange);
@@ -213,8 +213,8 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                ScDocument* pNewUndoDoc, sal_Bool bNewMulti, SCTAB nSrc,
-                sal_uInt16 nFlg, sal_uInt16 nFunc, sal_Bool bSkip, sal_Bool bLink )
+                ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
+                sal_uInt16 nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
         aMarkData   ( rMark ),
@@ -266,7 +266,7 @@ void ScUndoFillTable::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void ScUndoFillTable::DoChange( const sal_Bool bUndo )
+void ScUndoFillTable::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -320,7 +320,7 @@ void ScUndoFillTable::DoChange( const sal_Bool bUndo )
 void ScUndoFillTable::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -346,7 +346,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
+                ScDocument* pNewUndoDoc, bool bNewMulti,
                 const ScPatternAttr* pNewApply,
                 const SvxBoxItem* pNewOuter, const SvxBoxInfoItem* pNewInner )
     :   ScSimpleUndo( pNewDocShell ),
@@ -385,7 +385,7 @@ ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
     return mpDataArray.get();
 }
 
-void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
+void ScUndoSelectionAttr::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -454,7 +454,7 @@ void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
 void ScUndoSelectionAttr::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -757,7 +757,7 @@ bool ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
                         const ScRange& rRange, ScDocument* pNewUndoDoc,
-                        const ScMarkData& rMark, sal_Bool bNewSize, sal_uInt16 nNewFormatNo )
+                        const ScMarkData& rMark, bool bNewSize, sal_uInt16 nNewFormatNo )
     :   ScBlockUndo( pNewDocShell, rRange, bNewSize ? SC_UNDO_MANUALHEIGHT : SC_UNDO_AUTOHEIGHT ),
         pUndoDoc    ( pNewUndoDoc ),
         aMarkData   ( rMark ),
@@ -1224,7 +1224,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
         SCTAB nTabCount = pDoc->GetTableCount();
         //  Undo/Redo-doc has only selected tables
 
-        sal_Bool bMulti = aMarkData.IsMultiMarked();
+        bool bMulti = aMarkData.IsMultiMarked();
         pRefDoc->CopyToDocument( 0,      0,      0,
                                  MAXCOL, MAXROW, nTabCount-1,
                                  IDF_CONTENTS, bMulti, pDoc, &aMarkData );
@@ -1267,7 +1267,7 @@ bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoRefConversion::ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, sal_Bool bNewMulti, sal_uInt16 nNewFlag) :
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, sal_uInt16 nNewFlag) :
 ScSimpleUndo( pNewDocShell ),
 aMarkData   ( rMark ),
 pUndoDoc    ( pNewUndoDoc ),
@@ -1374,11 +1374,11 @@ void ScUndoRefreshLink::Undo()
 {
     BeginUndo();
 
-    sal_Bool bMakeRedo = !pRedoDoc;
+    bool bMakeRedo = !pRedoDoc;
     if (bMakeRedo)
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
 
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
@@ -1607,7 +1607,7 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
                             const OUString& rOldA, const ScRange& rOldR, sal_uLong nOldRD,
                             const OUString& rNewD, const OUString& rNewF, const OUString& rNewO,
                             const OUString& rNewA, const ScRange& rNewR, sal_uLong nNewRD,
-                            ScDocument* pUndo, ScDocument* pRedo, sal_Bool bDoInsert )
+                            ScDocument* pUndo, ScDocument* pRedo, bool bDoInsert )
     :   ScSimpleUndo( pShell ),
         aOldDoc     ( rOldD ),
         aOldFlt     ( rOldF ),
@@ -1639,7 +1639,7 @@ OUString ScUndoUpdateAreaLink::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   //! own text ??
 }
 
-void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
+void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -1710,7 +1710,7 @@ void ScUndoUpdateAreaLink::Undo()
         pLink->SetRefreshDelay( nOldRefresh );
     }
 
-    DoChange(sal_True);
+    DoChange(true);
 }
 
 void ScUndoUpdateAreaLink::Redo()

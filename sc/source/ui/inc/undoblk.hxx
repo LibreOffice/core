@@ -50,7 +50,7 @@ public:
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
                                        InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
-                                       sal_Bool bNewPartOfPaste );
+                                       bool bNewPartOfPaste );
     virtual         ~ScUndoInsertCells();
 
     virtual void    Undo();
@@ -67,12 +67,12 @@ private:
     SCTAB           nCount;
     SCTAB*          pTabs;
     SCTAB*          pScenarios;
-    sal_uLong           nEndChangeAction;
+    sal_uLong       nEndChangeAction;
     InsCellCmd      eCmd;
-    sal_Bool            bPartOfPaste;
+    bool            bPartOfPaste;
     SfxUndoAction*  pPasteUndo;
 
-    void            DoChange ( const sal_Bool bUndo );
+    void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
 };
 
@@ -98,11 +98,11 @@ private:
     SCTAB           nCount;
     SCTAB*          pTabs;
     SCTAB*          pScenarios;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
     DelCellCmd      eCmd;
 
-    void            DoChange ( const sal_Bool bUndo );
+    void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
 };
 
@@ -164,7 +164,7 @@ private:
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
 
@@ -172,9 +172,9 @@ private:
 struct ScUndoPasteOptions
 {
     sal_uInt16 nFunction;
-    sal_Bool bSkipEmpty;
-    sal_Bool bTranspose;
-    sal_Bool bAsLink;
+    bool       bSkipEmpty;
+    bool       bTranspose;
+    bool       bAsLink;
     InsCellCmd eMoveMode;
 
     ScUndoPasteOptions() :
@@ -210,12 +210,12 @@ private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
-    sal_uInt16          nFlags;
+    sal_uInt16      nFlags;
     ScRefUndoData*  pRefUndoData;
     ScRefUndoData*  pRefRedoData;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_Bool            bRedoFilled;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    bool            bRedoFilled;
     ScUndoPasteOptions aPasteOptions;
 
     void DoChange(bool bUndo);
@@ -228,9 +228,9 @@ class ScUndoDragDrop: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDragDrop( ScDocShell* pNewDocShell,
-                                    const ScRange& rRange, ScAddress aNewDestPos, sal_Bool bNewCut,
+                                    const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData,
-                                    sal_Bool bScenario );
+                                    bool bScenario );
     virtual         ~ScUndoDragDrop();
 
     virtual void    Undo();
@@ -243,10 +243,10 @@ public:
 private:
     ScRange         aSrcRange;
     ScRange         aDestRange;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_Bool            bCut;
-    sal_Bool            bKeepScenarioFlags;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    bool            bCut;
+    bool            bKeepScenarioFlags;
 
     void            PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const;
     void            DoUndo( ScRange aRange ) const;
@@ -262,8 +262,8 @@ public:
                     ScUndoDeleteContents( ScDocShell* pNewDocShell,
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
-                                          ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
-                                          sal_uInt16 nNewFlags, sal_Bool bObjects );
+                                          ScDocument* pNewUndoDoc, bool bNewMulti,
+                                          sal_uInt16 nNewFlags, bool bObjects );
     virtual         ~ScUndoDeleteContents();
 
     virtual void    Undo();
@@ -278,12 +278,12 @@ private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;       // Block mark and deleted data
     SdrUndoAction*  pDrawUndo;      // Deleted objects
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_uInt16          nFlags;
-    sal_Bool            bMulti;         // Multi selection
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    sal_uInt16      nFlags;
+    bool            bMulti;         // Multi selection
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
 
@@ -296,8 +296,8 @@ public:
                                      const ScMarkData& rMark,
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                     ScDocument* pNewUndoDoc, sal_Bool bNewMulti, SCTAB nSrc,
-                                     sal_uInt16 nFlg, sal_uInt16 nFunc, sal_Bool bSkip, sal_Bool bLink );
+                                     ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
+                                     sal_uInt16 nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink );
     virtual         ~ScUndoFillTable();
 
     virtual void    Undo();
@@ -311,16 +311,16 @@ private:
     ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;       // Block mark and deleted data
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_uInt16          nFlags;
-    sal_uInt16          nFunction;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    sal_uInt16      nFlags;
+    sal_uInt16      nFunction;
     SCTAB           nSrcTab;
-    sal_Bool            bMulti;         // Multi selection
-    sal_Bool            bSkipEmpty;
-    sal_Bool            bAsLink;
+    bool            bMulti;         // Multi selection
+    bool            bSkipEmpty;
+    bool            bAsLink;
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
 
@@ -333,7 +333,7 @@ public:
                                          const ScMarkData& rMark,
                                          SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                          SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                         ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
+                                         ScDocument* pNewUndoDoc, bool bNewMulti,
                                          const ScPatternAttr* pNewApply,
                                          const SvxBoxItem* pNewOuter = NULL,
                                          const SvxBoxInfoItem* pNewInner = NULL );
@@ -352,12 +352,12 @@ private:
     ScRange         aRange;
     boost::scoped_ptr<ScEditDataArray> mpDataArray;
     ScDocument*     pUndoDoc;
-    sal_Bool            bMulti;
+    bool            bMulti;
     ScPatternAttr*  pApplyPattern;
     SvxBoxItem*     pLineOuter;
     SvxBoxInfoItem* pLineInner;
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
     void            ChangeEditData( const bool bUndo );
 };
 
@@ -374,7 +374,7 @@ public:
                                          SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                                          ScOutlineTable* pNewUndoTab,
                                          ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips,
-                                         sal_Bool bNewWidth );
+                                         bool bNewWidth );
     virtual         ~ScUndoWidthOrHeight();
 
     virtual void    Undo();
@@ -394,8 +394,8 @@ private:
     ScOutlineTable* pUndoTab;
     SCCOLROW        nRangeCnt;
     SCCOLROW*       pRanges;
-    sal_uInt16          nNewSize;
-    sal_Bool            bWidth;
+    sal_uInt16      nNewSize;
+    bool            bWidth;
     ScSizeMode      eMode;
     SdrUndoAction*  pDrawUndo;
 };
@@ -469,7 +469,7 @@ public:
                     ScUndoAutoFormat( ScDocShell* pNewDocShell,
                                       const ScRange& rRange, ScDocument* pNewUndoDoc,
                                       const ScMarkData& rMark,
-                                      sal_Bool bNewSize, sal_uInt16 nNewFormatNo );
+                                      bool bNewSize, sal_uInt16 nNewFormatNo );
     virtual         ~ScUndoAutoFormat();
 
     virtual void    Undo();
@@ -482,8 +482,8 @@ public:
 private:
     ScDocument*     pUndoDoc;       // deleted data
     ScMarkData      aMarkData;
-    sal_Bool            bSize;
-    sal_uInt16          nFormatNo;
+    bool            bSize;
+    sal_uInt16      nFormatNo;
 };
 
 
@@ -589,7 +589,7 @@ public:
                     TYPEINFO();
                     ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, sal_Bool bNewMulti, sal_uInt16 nNewFlag);
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, sal_uInt16 nNewFlag);
     virtual         ~ScUndoRefConversion();
 
     virtual void    Undo();
@@ -604,10 +604,10 @@ private:
     ScDocument*         pUndoDoc;
     ScDocument*         pRedoDoc;
     ScRange             aRange;
-    sal_Bool                bMulti;
-    sal_uInt16              nFlags;
-    sal_uLong               nStartChangeAction;
-    sal_uLong               nEndChangeAction;
+    bool                bMulti;
+    sal_uInt16          nFlags;
+    sal_uLong           nStartChangeAction;
+    sal_uLong           nEndChangeAction;
 
     void                DoChange( ScDocument* pRefDoc);
     void                SetChangeTrack();
@@ -687,7 +687,7 @@ private:
     OUString        aStyleName;
     ScRange         aRange;
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
 };
 
 
@@ -809,7 +809,7 @@ public:
                                           const OUString& rNewA, const ScRange& rNewR,
                                           sal_uLong nNewRD,
                                           ScDocument* pUndo, ScDocument* pRedo,
-                                          sal_Bool bDoInsert );
+                                          bool bDoInsert );
     virtual         ~ScUndoUpdateAreaLink();
 
     virtual void    Undo();
@@ -832,11 +832,11 @@ private:
     ScRange         aNewRange;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
-    sal_uLong           nOldRefresh;
-    sal_uLong           nNewRefresh;
-    sal_Bool            bWithInsert;
+    sal_uLong       nOldRefresh;
+    sal_uLong       nNewRefresh;
+    bool            bWithInsert;
 
-    void            DoChange( const sal_Bool bUndo ) const;
+    void            DoChange( const bool bUndo ) const;
 };
 
 
@@ -845,7 +845,7 @@ class ScUndoIndent: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                                    ScDocument* pNewUndoDoc, sal_Bool bIncrement );
+                                    ScDocument* pNewUndoDoc, bool bIncrement );
     virtual         ~ScUndoIndent();
 
     virtual void    Undo();
@@ -858,7 +858,7 @@ public:
 private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
-    sal_Bool            bIsIncrement;
+    bool            bIsIncrement;
 };
 
 

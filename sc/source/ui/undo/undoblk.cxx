@@ -79,7 +79,7 @@ TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
                                 InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
-                                sal_Bool bNewPartOfPaste ) :
+                                bool bNewPartOfPaste ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
     nCount( nNewCount ),
@@ -153,7 +153,7 @@ void ScUndoInsertCells::SetChangeTrack()
         nEndChangeAction = 0;
 }
 
-void ScUndoInsertCells::DoChange( const sal_Bool bUndo )
+void ScUndoInsertCells::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB i;
@@ -274,7 +274,7 @@ void ScUndoInsertCells::Undo()
 
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -365,7 +365,7 @@ void ScUndoDeleteCells::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
+void ScUndoDeleteCells::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB i;
@@ -506,7 +506,7 @@ void ScUndoDeleteCells::Undo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
@@ -764,7 +764,7 @@ void ScUndoCut::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void ScUndoCut::DoChange( const sal_Bool bUndo )
+void ScUndoCut::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sal_uInt16 nExtFlags = 0;
@@ -809,7 +809,7 @@ void ScUndoCut::DoChange( const sal_Bool bUndo )
 void ScUndoCut::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -1107,8 +1107,8 @@ bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
-                    const ScRange& rRange, ScAddress aNewDestPos, sal_Bool bNewCut,
-                    ScDocument* pUndoDocument, ScRefUndoData* pRefData, sal_Bool bScenario ) :
+                    const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
+                    ScDocument* pUndoDocument, ScRefUndoData* pRefData, bool bScenario ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFFIRST ),
     aSrcRange( rRange ),
     bCut( bNewCut ),
@@ -1119,7 +1119,7 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     aDestEnd.IncCol(aSrcRange.aEnd.Col() - aSrcRange.aStart.Col());
     aDestEnd.IncTab(aSrcRange.aEnd.Tab() - aSrcRange.aStart.Tab());
 
-    sal_Bool bIncludeFiltered = bCut;
+    bool bIncludeFiltered = bCut;
     if ( !bIncludeFiltered )
     {
         // find number of non-filtered rows
@@ -1304,7 +1304,7 @@ void ScUndoDragDrop::Redo()
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
         aDestMark.SelectTable( nTab, true );
 
-    sal_Bool bIncludeFiltered = bCut;
+    bool bIncludeFiltered = bCut;
     // TODO: restore old note captions instead of cloning new captions...
     pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc, true, false, bIncludeFiltered );
 
@@ -1451,7 +1451,7 @@ void ScUndoUseScenario::Undo()
     pUndoDoc->CopyToDocument( aRange, IDF_ALL, true, pDoc, &aMarkData );
 
     // scenario table
-    sal_Bool bFrame = false;
+    bool bFrame = false;
     SCTAB nTab = aRange.aStart.Tab();
     SCTAB nEndTab = nTab;
     while ( pUndoDoc->HasTable(nEndTab+1) && pUndoDoc->IsScenario(nEndTab+1) )
@@ -1464,7 +1464,7 @@ void ScUndoUseScenario::Undo()
         sal_uInt16 nScenFlags;
         pUndoDoc->GetScenarioData( i, aComment, aColor, nScenFlags );
         pDoc->SetScenarioData( i, aComment, aColor, nScenFlags );
-        sal_Bool bActive = pUndoDoc->IsActiveScenario( i );
+        bool bActive = pUndoDoc->IsActiveScenario( i );
         pDoc->SetActiveScenario( i, bActive );
         //  For copy-back scenario also consider content
         if ( nScenFlags & SC_SCENARIO_TWOWAY )
@@ -1473,7 +1473,7 @@ void ScUndoUseScenario::Undo()
             pUndoDoc->CopyToDocument( 0,0,i, MAXCOL,MAXROW,i, IDF_ALL,false, pDoc );
         }
         if ( nScenFlags & SC_SCENARIO_SHOWFRAME )
-            bFrame = sal_True;
+            bFrame = true;
     }
 
     // if visible borders, then paint all
@@ -1551,7 +1551,7 @@ OUString ScUndoSelectionStyle::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_APPLYCELLSTYLE );
 }
 
-void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
+void ScUndoSelectionStyle::DoChange( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -1597,7 +1597,7 @@ void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
 void ScUndoSelectionStyle::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -1732,7 +1732,7 @@ static ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 }
 
 ScUndoIndent::ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                            ScDocument* pNewUndoDoc, sal_Bool bIncrement ) :
+                            ScDocument* pNewUndoDoc, bool bIncrement ) :
     ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
@@ -2056,7 +2056,7 @@ void ScUndoRemoveMerge::Redo()
 
         //  Paint
 
-        sal_Bool bDidPaint = false;
+        bool bDidPaint = false;
         if ( pViewShell )
         {
             pViewShell->SetTabNo(nTab);

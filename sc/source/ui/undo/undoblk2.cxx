@@ -38,7 +38,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
                 ScDocument* pNewUndoDoc, SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                 ScOutlineTable* pNewUndoTab,
-                ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, sal_Bool bNewWidth ) :
+                ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, bool bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
     aMarkData( rMark ),
     nStart( nNewStart ),
