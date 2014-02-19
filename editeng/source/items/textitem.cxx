@@ -135,7 +135,7 @@ TYPEINIT1_FACTORY(SvxLanguageItem, SfxEnumItem, new SvxLanguageItem(LANGUAGE_GER
 TYPEINIT1_FACTORY(SvxNoLinebreakItem, SfxBoolItem, new SvxNoLinebreakItem(sal_True, 0));
 TYPEINIT1_FACTORY(SvxNoHyphenItem, SfxBoolItem, new SvxNoHyphenItem(sal_True, 0));
 TYPEINIT1_FACTORY(SvxLineColorItem, SvxColorItem, new SvxLineColorItem(0));
-TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(false, 0));
 TYPEINIT1_FACTORY(SvxEmphasisMarkItem, SfxUInt16Item, new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0));
 TYPEINIT1_FACTORY(SvxTwoLinesItem, SfxPoolItem, new SvxTwoLinesItem(sal_True, 0, 0, 0));
 TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
@@ -2774,7 +2774,7 @@ SfxItemPresentation SvxLineColorItem::GetPresentation
 // class SvxBlinkItem -------------------------------------------------
 
 
-SvxBlinkItem::SvxBlinkItem( const sal_Bool bBlink, const sal_uInt16 nId ) :
+SvxBlinkItem::SvxBlinkItem( const bool bBlink, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bBlink )
 {
 }

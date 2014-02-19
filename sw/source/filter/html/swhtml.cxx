@@ -1791,7 +1791,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_BLINK_ON:
         {
             NewStdAttr( HTML_BLINK_ON, &aAttrTab.pBlink,
-                        SvxBlinkItem( sal_True, RES_CHRATR_BLINK ) );
+                        SvxBlinkItem( true, RES_CHRATR_BLINK ) );
         }
         break;
 
