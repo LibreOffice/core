@@ -326,6 +326,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     , maImgDepth3( SVX_RES( IMG_DEPTH_3 ) )
     , maImgDepth4( SVX_RES( IMG_DEPTH_4 ) )
     , maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) )
+    , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
     , msMetricUnit(     ".uno:MetricUnit"     )
