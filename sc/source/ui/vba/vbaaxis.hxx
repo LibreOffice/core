@@ -31,9 +31,9 @@ class ScVbaAxis : public ScVbaAxis_BASE
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
     sal_Int32 mnGroup;
-    sal_Bool bCrossesAreCustomized;
+    bool bCrossesAreCustomized;
     ScVbaChart* getChartPtr() throw( css::uno::RuntimeException );
-    sal_Bool isValueAxis() throw( css::script::BasicErrorException );
+    bool isValueAxis() throw( css::script::BasicErrorException );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
     SAL_WNODEPRECATED_DECLARATIONS_POP

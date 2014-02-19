@@ -42,14 +42,14 @@ ScVbaAxis::getChartPtr() throw( uno::RuntimeException )
     return pChart;
 }
 
-sal_Bool
+bool
 ScVbaAxis::isValueAxis() throw( script::BasicErrorException )
 {
     if ( getType() == xlCategory )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
-    return sal_True;
+    return true;
 }
 
 ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet( _xPropertySet ), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( false )
@@ -136,7 +136,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
                 bCrossesAreCustomized = false;
                 break;
             default: //xlAxisCrossesCustom
-                bCrossesAreCustomized = sal_True;
+                bCrossesAreCustomized = true;
                 break;
         }
         mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny(false) );
