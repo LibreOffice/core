@@ -1485,6 +1485,19 @@ void ScColumn::StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
+namespace {
+
+void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatter )
+{
+    sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+    ScPatternAttr aNewAttrs(rCol.GetDoc().GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    rCol.ApplyPattern(nRow, aNewAttrs);
+}
+
+}
+
 bool ScColumn::ParseString(
     ScCellValue& rCell, SCROW nRow, SCTAB nTabP, const OUString& rString,
     formula::FormulaGrammar::AddressConvention eConv,
@@ -1519,6 +1532,12 @@ bool ScColumn::ParseString(
     {
         if ( rString.getLength() == 1 ) // = Text
         {
+            rCell.set(rPool.intern(rString));
+        }
+        else if (aParam.meSetTextNumFormat == ScSetStringParam::Always)
+        {
+            // Set the cell format type to Text.
+            applyTextNumFormat(*this, nRow, aParam.mpNumFormatter);
             rCell.set(rPool.intern(rString));
         }
         else // = Formula
@@ -1625,11 +1644,7 @@ bool ScColumn::ParseString(
             if (aParam.meSetTextNumFormat != ScSetStringParam::Never && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
             {
                 // Set the cell format type to Text.
-                sal_uInt32 nFormat = aParam.mpNumFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
-                ScPatternAttr aNewAttrs(pDocument->GetPool());
-                SfxItemSet& rSet = aNewAttrs.GetItemSet();
-                rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
-                ApplyPattern(nRow, aNewAttrs);
+                applyTextNumFormat(*this, nRow, aParam.mpNumFormatter);
             }
 
             rCell.set(rPool.intern(rString));
