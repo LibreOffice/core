@@ -86,6 +86,7 @@ void moveCursorByProtRule(
                 if(nNewUnhiddenCol >= MAXCOL)
                     return;
 
+                i += nEndCol - nNewUnhiddenCol + 1;
                 nNewUnhiddenCol = nEndCol +1;
             }
 
@@ -105,6 +106,7 @@ void moveCursorByProtRule(
                 if(nNewUnhiddenCol <= 0)
                     return;
 
+                i -= nNewUnhiddenCol - nStartCol + 1;
                 nNewUnhiddenCol = nStartCol - 1;
             }
 
@@ -125,6 +127,7 @@ void moveCursorByProtRule(
                 if(nNewUnhiddenRow >= MAXROW)
                     return;
 
+                i += nEndRow - nNewUnhiddenRow + 1;
                 nNewUnhiddenRow = nEndRow + 1;
             }
 
@@ -144,6 +147,7 @@ void moveCursorByProtRule(
                 if(nNewUnhiddenRow <= 0)
                     return;
 
+                i -= nNewUnhiddenRow - nStartRow + 1;
                 nNewUnhiddenRow = nStartRow - 1;
             }
 
