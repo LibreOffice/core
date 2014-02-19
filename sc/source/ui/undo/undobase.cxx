@@ -211,7 +211,7 @@ void ScBlockUndo::EndRedo()
     ScSimpleUndo::EndRedo();
 }
 
-sal_Bool ScBlockUndo::AdjustHeight()
+bool ScBlockUndo::AdjustHeight()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 

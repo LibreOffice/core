@@ -85,7 +85,7 @@ protected:
 //  void            BeginRedo();
     void            EndRedo();
 
-    sal_Bool            AdjustHeight();
+    bool            AdjustHeight();
     void            ShowBlock();
 };
 
