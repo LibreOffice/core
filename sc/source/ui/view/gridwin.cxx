@@ -2860,7 +2860,7 @@ static void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Wind
 {
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
-    Rectangle aEditArea = pViewData->GetEditArea( eWhich, nCol, nRow, pWin, NULL, sal_True );
+    Rectangle aEditArea = pViewData->GetEditArea( eWhich, nCol, nRow, pWin, NULL, true );
     aEditArea.Right() = aEditArea.Left();
     aEditArea = pWin->PixelToLogic( aEditArea );
     pWin->SetCursorRect( &aEditArea );
@@ -3081,7 +3081,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
             SCCOL nCurX = pViewData->GetCurX();
             SCROW nCurY = pViewData->GetCurY();
-            aMenuPos = pViewData->GetScrPos( nCurX, nCurY, eWhich, sal_True );
+            aMenuPos = pViewData->GetScrPos( nCurX, nCurY, eWhich, true );
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
@@ -4582,7 +4582,7 @@ void ScGridWindow::UpdateEditViewPos()
         else
         {
             // bForceToTop = sal_True for editing
-            Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, NULL, sal_True );
+            Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, NULL, true );
             Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
 
             Rectangle aRect = pView->GetOutputArea();
@@ -5358,12 +5358,12 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
             if ( bTextBelow )
             {
                 aButtonPos = pViewData->GetScrPos( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1,
-                                                    eWhich, sal_True );
+                                                    eWhich, true );
             }
             else
             {
                 aButtonPos = pViewData->GetScrPos( aRange.aEnd.Col()+1, aRange.aStart.Row(),
-                                                    eWhich, sal_True );
+                                                    eWhich, true );
                 aButtonPos.Y() -= nBHeight;
             }
             if ( bLayoutRTL )
@@ -5734,7 +5734,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     if ( bVis && !bOverlapped && !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
     {
-        Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, sal_True );
+        Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
         sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         //  completely right of/below the screen?
@@ -5894,7 +5894,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         ScDocument* pDoc = pViewData->GetDocument();
         sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-        Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, sal_True );
+        Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
         long nSizeXPix;
         long nSizeYPix;
         pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );

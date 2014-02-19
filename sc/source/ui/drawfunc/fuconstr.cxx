@@ -91,7 +91,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         ScSplitPos eWhich = pViewData->GetActivePart();
         ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
         // and equiv screen pos
-        Point aScreenPos =  pViewShell->GetViewData()->GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, sal_True );
+        Point aScreenPos =  pViewShell->GetViewData()->GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, true );
         MapMode aDrawMode = pGridWin->GetDrawMapMode();
         Point aCurPosHmm = pGridWin->PixelToLogic(aScreenPos, aDrawMode );
         Point aOff = ( rInOutPos - aCurPosHmm );

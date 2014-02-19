@@ -939,7 +939,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
         aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
         // find position of same point on the screen ( e.g. grid )
-        Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, sal_True );
+        Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, true );
         Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
         Point aGridOff = ( aCurPosHmm - aOldPos );
         // fdo#63878 Fix the X position for RTL Sheet

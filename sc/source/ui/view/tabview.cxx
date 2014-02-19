@@ -1980,14 +1980,14 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
     SCsROW nPosY;
     //  bNextIfLarge=FALSE: nicht auf naechste Zelle, wenn ausserhalb des Fensters
     aViewData.GetPosFromPixel( aMouse.X(), aMouse.Y(), ePos, nPosX, nPosY, true, false, false );
-    sal_Bool bLeft;
-    sal_Bool bTop;
+    bool bLeft;
+    bool bTop;
     aViewData.GetMouseQuadrant( aMouse, ePos, nPosX, nPosY, bLeft, bTop );
     if (!bLeft)
         ++nPosX;
     if (!bTop)
         ++nPosY;
-    aMouse = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, sal_True );
+    aMouse = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
     rScreenPosPixel = pWin->OutputToNormalizedScreenPixel( aMouse );
 }
 
@@ -2024,8 +2024,8 @@ void ScTabView::FreezeSplitters( bool bFreeze )
                 aSplit.Y() = aViewData.GetVSplitPos() - aWinStart.Y();
 
             aViewData.GetPosFromPixel( aSplit.X(), aSplit.Y(), ePos, nPosX, nPosY );
-            sal_Bool bLeft;
-            sal_Bool bTop;
+            bool bLeft;
+            bool bTop;
             aViewData.GetMouseQuadrant( aSplit, ePos, nPosX, nPosY, bLeft, bTop );
             if (!bLeft)
                 ++nPosX;
@@ -2126,7 +2126,7 @@ void ScTabView::SplitAtCursor()
 
     SCCOL nPosX = aViewData.GetCurX();
     SCROW nPosY = aViewData.GetCurY();
-    Point aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, sal_True );
+    Point aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, true );
     if ( nPosX > 0 )
         DoHSplit( aSplit.X() + aWinStart.X() );
     else

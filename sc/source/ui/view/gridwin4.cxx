@@ -215,9 +215,9 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
             if ( aRange.Intersects( aViewRange ) )          //! Platz fuer Text/Button?
             {
                 Point aStartPos = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, sal_True );
+                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
                 Point aEndPos = pViewData->GetScrPos(
-                                    aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, sal_True );
+                                    aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, true );
                 //  on the grid:
                 aStartPos.X() -= nLayoutSign;
                 aStartPos.Y() -= 1;
@@ -966,9 +966,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     pContentDev->SetFillColor( aManual );
 
                 Point aStart = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, sal_True );
+                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
                 Point aEnd = pViewData->GetScrPos(
-                                    aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, sal_True );
+                                    aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
 
@@ -1002,7 +1002,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                         else
                             pContentDev->SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
-                                        nBreak, aRange.aStart.Row(), eWhich, sal_True );
+                                        nBreak, aRange.aStart.Row(), eWhich, true );
                         pContentDev->DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                     }
                 }
@@ -1021,7 +1021,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                         else
                             pContentDev->SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
-                                        aRange.aStart.Col(), nBreak, eWhich, sal_True );
+                                        aRange.aStart.Col(), nBreak, eWhich, true );
                         pContentDev->DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                     }
                 }
@@ -1041,9 +1041,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
                             {
                                 Point aPageStart = pViewData->GetScrPos(
-                                                        nPrStartX, nPrStartY, eWhich, sal_True );
+                                                        nPrStartX, nPrStartY, eWhich, true );
                                 Point aPageEnd = pViewData->GetScrPos(
-                                                        nPrEndX+1,nPrEndY+1, eWhich, sal_True );
+                                                        nPrEndX+1,nPrEndY+1, eWhich, true );
 
                                 long nPageNo = rData.GetFirstPage();
                                 if ( rData.IsTopDown() )
@@ -1301,7 +1301,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     if ( nCellSizeY < aBtnSize.Height() )
         aBtnSize.Height() = nCellSizeY;
 
-    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich, sal_True );
+    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich, true );
     aPos.X() += nCellSizeX * nLayoutSign;               // start of next cell
     if (!bNextCell)
         aPos.X() -= aBtnSize.Width() * nLayoutSign;     // right edge of cell if next cell not available

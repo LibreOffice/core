@@ -221,7 +221,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                     aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
                     // get screen pos in hmm for aCellPos
                     // and equiv screen pos
-                    Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, sal_True );
+                    Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, true );
                     MapMode aDrawMode = GetDrawMapMode();
                     Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
                     Point aGridOff = aCurPosHmm -aOldPos;

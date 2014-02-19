@@ -97,8 +97,8 @@ Rectangle ScViewForwarder::GetVisArea() const
                                     SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
 
             Point aBaseCellPos(mpViewShell->GetViewData()->GetScrPos(mpViewShell->GetViewData()->GetPosX(eWhichH),
-                mpViewShell->GetViewData()->GetPosY(eWhichV), meSplitPos, sal_True));
-            Point aCellPos(mpViewShell->GetViewData()->GetScrPos(maCellPos.Col(), maCellPos.Row(), meSplitPos, sal_True));
+                mpViewShell->GetViewData()->GetPosY(eWhichV), meSplitPos, true));
+            Point aCellPos(mpViewShell->GetViewData()->GetScrPos(maCellPos.Col(), maCellPos.Row(), meSplitPos, true));
             aVisArea.SetPos(aCellPos - aBaseCellPos);
         }
     }

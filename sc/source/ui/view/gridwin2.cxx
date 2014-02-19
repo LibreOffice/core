@@ -282,8 +282,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), eWhich, nPosX, nPosY );
-    sal_Bool    bMouseLeft;
-    sal_Bool    bMouseTop;
+    bool    bMouseLeft;
+    bool    bMouseTop;
     pViewData->GetMouseQuadrant( aPixel, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
 
     ScAddress aPos( nPosX, nPosY, pViewData->GetTabNo() );
@@ -851,7 +851,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     SCsCOL nPosX;
     SCsROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-    sal_Bool bLeft, bTop;
+    bool bLeft, bTop;
     pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bLeft, bTop );
     if ( !bLeft ) ++nPosX;
     if ( !bTop )  ++nPosY;

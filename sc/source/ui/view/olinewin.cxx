@@ -257,8 +257,8 @@ size_t ScOutlineWindow::GetLevelFromPos( long nLevelPos ) const
 long ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
 {
     long nDocPos = mbHoriz ?
-        mrViewData.GetScrPos( static_cast<SCCOL>(nColRowIndex), 0, meWhich, sal_True ).X() :
-        mrViewData.GetScrPos( 0, static_cast<SCROW>(nColRowIndex), meWhich, sal_True ).Y();
+        mrViewData.GetScrPos( static_cast<SCCOL>(nColRowIndex), 0, meWhich, true ).X() :
+        mrViewData.GetScrPos( 0, static_cast<SCROW>(nColRowIndex), meWhich, true ).Y();
     return mnMainFirstPos + nDocPos;
 }
 
