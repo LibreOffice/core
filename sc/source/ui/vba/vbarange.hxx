@@ -84,8 +84,8 @@ class ScVbaRange : public ScVbaRange_BASE
     css::uno::Reference< ov::XCollection > m_Borders;
     css::uno::Reference< css::table::XCellRange > mxRange;
     css::uno::Reference< css::sheet::XSheetCellRangeContainer > mxRanges;
-    sal_Bool mbIsRows;
-    sal_Bool mbIsColumns;
+    bool mbIsRows;
+    bool mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
     double getCalcColWidth(const css::table::CellRangeAddress&)
         throw (css::uno::RuntimeException, std::exception);
@@ -120,8 +120,8 @@ protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
     virtual SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
 public:
-    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
-    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
+    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
+    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
 
     ScDocument* getScDocument() throw (css::uno::RuntimeException);
@@ -196,8 +196,8 @@ public:
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
     // Methods
-    sal_Bool IsRows() const { return mbIsRows; }
-    sal_Bool IsColumns() const { return mbIsColumns; }
+    bool IsRows() const { return mbIsRows; }
+    bool IsColumns() const { return mbIsColumns; }
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL AddComment( const css::uno::Any& Text ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Clear() throw (css::uno::RuntimeException);
     virtual void SAL_CALL ClearComments() throw (css::uno::RuntimeException);
