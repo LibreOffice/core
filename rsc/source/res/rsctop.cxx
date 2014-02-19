@@ -20,10 +20,8 @@
 
 #include <stdio.h>
 #include <string.h>
-
-// Solar Definitionen
-#include <tools/solar.h>
 #include <rsctop.hxx>
+
 RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
     : RefNode( nId )
     , pSuperClass( pSuperCl )
