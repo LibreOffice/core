@@ -519,7 +519,7 @@ SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 // -----------------------------------------------------------------------
 
 ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
-                             const ScRange* pRange, sal_Bool bNew ) :
+                             const ScRange* pRange, bool bNew ) :
         SfxPoolItem ( nWhichP )
 {
     //  pSaveData must always exist

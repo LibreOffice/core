@@ -281,7 +281,7 @@ class ScPivotItem : public SfxPoolItem
 public:
                 TYPEINFO();
                 ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
-                             const ScRange* pRange, sal_Bool bNew );
+                             const ScRange* pRange, bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
                 ~ScPivotItem();
 
@@ -291,12 +291,12 @@ public:
 
     const ScDPSaveData& GetData() const         { return *pSaveData; }
     const ScRange&      GetDestRange() const    { return aDestRange; }
-    sal_Bool                IsNewSheet() const      { return bNewSheet; }
+    bool                IsNewSheet() const      { return bNewSheet; }
 
 private:
     ScDPSaveData*   pSaveData;
     ScRange         aDestRange;
-    sal_Bool            bNewSheet;
+    bool            bNewSheet;
 };
 
 //----------------------------------------------------------------------------
