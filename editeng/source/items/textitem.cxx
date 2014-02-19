@@ -122,7 +122,7 @@ TYPEINIT1_FACTORY(SvxUnderlineItem, SfxEnumItem, new SvxUnderlineItem(UNDERLINE_
 TYPEINIT1_FACTORY(SvxOverlineItem, SfxEnumItem, new SvxOverlineItem(UNDERLINE_NONE, 0));
 TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
 TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(false, 0));
 TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
@@ -1687,7 +1687,7 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
 
 // class SvxAutoKernItem -------------------------------------------------
 
-SvxAutoKernItem::SvxAutoKernItem( const sal_Bool bAutoKern, const sal_uInt16 nId ) :
+SvxAutoKernItem::SvxAutoKernItem( const bool bAutoKern, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bAutoKern )
 {
 }

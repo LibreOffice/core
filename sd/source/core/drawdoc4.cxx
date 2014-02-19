@@ -230,7 +230,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
     // #i16874# enable kerning by default but only for new documents
-    rISet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+    rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
     // Bullet
     // BulletItem and BulletFont for title and outline
@@ -592,7 +592,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SdrTextLowerDistItem( 130 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
-    rISet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+    rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
     rISet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
     rISet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT) );
 

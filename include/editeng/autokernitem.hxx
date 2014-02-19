@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxAutoKernItem( const sal_Bool bAutoKern /*= sal_False*/,
+    SvxAutoKernItem( const bool bAutoKern /*= false*/,
                      const sal_uInt16 nId );
 
     // "pure virtual Methods" from SfxPoolItem

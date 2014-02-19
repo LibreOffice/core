@@ -165,7 +165,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
         // set draw defaults directly
         SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
-        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
         UpdateDrawLanguages();
         if (bImportingXML)

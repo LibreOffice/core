@@ -265,7 +265,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
                 rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
                 rSet.Put( SdrTextAutoGrowHeightItem(sal_False) );
                 // #i16874# enable kerning by default but only for new documents
-                rSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+                rSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
                 if( nLevel == 1 )
                 {
@@ -380,7 +380,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
-        rTitleSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rTitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
         aBulletFont.SetSize(Size(0,1552));                  // 44 pt
         PutNumBulletItem( pSheet, aBulletFont );
@@ -425,7 +425,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
-        rSubtitleSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rSubtitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
         aSvxLRSpaceItem.SetTxtLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
@@ -472,7 +472,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
-        rNotesSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rNotesSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
 /* #i35937# */
 
@@ -496,7 +496,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm shadow distance
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents
-        rBackgroundObjectsSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rBackgroundObjectsSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
         rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
     }
 
@@ -516,7 +516,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         rBackgroundSet.Put(XLineStyleItem(XLINE_NONE));
         rBackgroundSet.Put(XFillStyleItem(XFILL_NONE));
         // #i16874# enable kerning by default but only for new documents
-        rBackgroundSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rBackgroundSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
     }
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
