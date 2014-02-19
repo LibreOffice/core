@@ -125,10 +125,10 @@ public:
     static void         StoreFont( SvStream&, const Font& );
     static Font         CreateFont( SvStream&, sal_uInt16 nVer );
 
-    sal_uInt16&             GetValidMask()                  { return nValidMask;    }
-    sal_uInt16              GetValidMask() const            { return nValidMask;    }
-    sal_uInt16              IsValid( sal_uInt16 nFlag ) const   { return nValidMask & nFlag; }
-    void                SetValid( sal_uInt16 nFlag, sal_Bool bValid )
+    sal_uInt16&         GetValidMask()                  { return nValidMask;    }
+    sal_uInt16          GetValidMask() const            { return nValidMask;    }
+    sal_uInt16          IsValid( sal_uInt16 nFlag ) const   { return nValidMask & nFlag; }
+    void                SetValid( sal_uInt16 nFlag, bool bValid )
                         {
                             if ( bValid )
                                 nValidMask |= nFlag;
