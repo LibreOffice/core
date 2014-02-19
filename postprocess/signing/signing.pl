@@ -47,7 +47,7 @@ if ( $#ARGV < 2 ) {
     exit(1);
 }
 @args = parse_options();
-get_exclude_files() if ($opt_exclude != "");
+get_exclude_files() if ($opt_exclude ne "");
 @files_to_sign = get_files(\@args);
 if ( $opt_log ) {               # logging
     open(LOG,">$opt_log") || die "Can't open log file $opt_log\n";
