@@ -2336,12 +2336,13 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
 /**************************************************************************/
 
 
-SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP ) :
-    SmVisibleNode(eNodeType, rNodeToken)
+SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP )
+    : SmVisibleNode(eNodeType, rNodeToken)
+    , nFontDesc(nFontDescP)
+    , nSelectionStart(0)
+    , nSelectionEnd(0)
 {
-    nFontDesc = nFontDescP;
 }
-
 
 SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
     : SmVisibleNode(NTEXT, rNodeToken)
@@ -2350,7 +2351,6 @@ SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
     , nSelectionEnd(0)
 {
 }
-
 
 void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {

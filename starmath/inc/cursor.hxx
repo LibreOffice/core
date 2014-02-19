@@ -75,20 +75,22 @@ class SmDocShell;
  */
 class SmCursor{
 public:
-    SmCursor(SmNode* tree, SmDocShell* pShell){
-        //Initialize members
-        pTree           = tree;
-        anchor          = NULL;
-        position        = NULL;
-        pGraph          = NULL;
-        pDocShell       = pShell;
-        pClipboard      = NULL;
-        nEditSections   = 0;
+    SmCursor(SmNode* tree, SmDocShell* pShell)
+        : anchor(NULL)
+        , position(NULL)
+        , pTree(tree)
+        , pDocShell(pShell)
+        , pGraph(NULL)
+        , pClipboard(NULL)
+        , nEditSections(0)
+        , bIsEnabledSetModifiedSmDocShell(false)
+    {
         //Build graph
         BuildGraph();
     }
 
-    ~SmCursor(){
+    ~SmCursor()
+    {
         SetClipboard();
         delete pGraph;
         pGraph = NULL;
