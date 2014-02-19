@@ -21,12 +21,12 @@
 
 #include <rsctools.hxx>
 #include <rscerror.h>
+#include <tools/solar.h>
 
-/****************** C L A S S E S ****************************************/
 class RscTypCont;
-/*********** R s c F i l e I n s t ***************************************/
 
 #define READBUFFER_MAX  256
+
 class RscFileInst
 {
     ERRTYPE             aFirstError;// Erster Fehler
@@ -74,7 +74,6 @@ public:
     sal_uInt32  GetErrorPos()                 { return nErrorPos;      }
 };
 
-/******************* F u n c t i o n *************************************/
 void IncludeParser( RscFileInst * pFileInst );
 ERRTYPE parser( RscFileInst * pFileInst );
 
