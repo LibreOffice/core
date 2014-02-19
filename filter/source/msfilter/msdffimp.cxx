@@ -5504,7 +5504,11 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
      nShapeCount( USHRT_MAX ),              // whether the control stream contains the correct data
+     nGroupShapeFlags(0),
      maBaseURL( rBaseURL ),
+     mnCurMaxShapeId(0),
+     mnDrawingsSaved(0),
+     mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData( 0 ),
      pStData2( 0 ),
