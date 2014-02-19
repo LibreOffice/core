@@ -1990,11 +1990,12 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 }
 
 
-SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
-    SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
-    pImpl( new SmViewShell_Impl ),
-    aGraphic(this),
-    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
+SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
+    : SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT)
+    , pImpl(new SmViewShell_Impl)
+    , aGraphic(this)
+    , aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
+    , bPasteState(false)
     , bInsertIntoEditWindow(false)
 {
     SAL_INFO( "starmath", "SmViewShell::SmViewShell" );
