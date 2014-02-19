@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_FONTENUM_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 
 #ifndef ENUM_FONTFAMILY_DECLARED
 #define ENUM_FONTFAMILY_DECLARED

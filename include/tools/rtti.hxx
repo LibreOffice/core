@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLS_RTTI_HXX
 
 #include <string.h>
-#include <tools/solar.h>
 
 typedef void* (*TypeId)();
 

@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_TIME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 #include <com/sun/star/util/Time.hpp>
 
 class ResId;
