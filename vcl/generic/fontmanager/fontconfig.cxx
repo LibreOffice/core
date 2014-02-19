@@ -575,7 +575,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
                 continue;
             }
 
-            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), sal_True );
+            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), true );
             PrintFont* pUpdate = aFonts.front();
             std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
             ++second_font;

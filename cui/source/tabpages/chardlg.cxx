@@ -2279,7 +2279,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if ( rOldSet.GetItemState( nWhich ) == SFX_ITEM_DONTCARE &&
-         m_pIndividualWordsBtn->IsChecked() == m_pIndividualWordsBtn->GetSavedValue() )
+         TriState(m_pIndividualWordsBtn->IsChecked()) == m_pIndividualWordsBtn->GetSavedValue() )
         bChanged = false;
 
     if ( bChanged )
@@ -3211,7 +3211,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( m_pPairKerningBtn->IsChecked() != m_pPairKerningBtn->GetSavedValue() )
+    if ( TriState(m_pPairKerningBtn->IsChecked()) != m_pPairKerningBtn->GetSavedValue() )
     {
         rSet.Put( SvxAutoKernItem( m_pPairKerningBtn->IsChecked(), nWhich ) );
         bModified = sal_True;
@@ -3234,7 +3234,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     if ( m_p0degRB->IsChecked() != m_p0degRB->GetSavedValue()  ||
          m_p90degRB->IsChecked() != m_p90degRB->GetSavedValue()  ||
          m_p270degRB->IsChecked() != m_p270degRB->GetSavedValue()  ||
-         m_pFitToLineCB->IsChecked() != m_pFitToLineCB->GetSavedValue() )
+         TriState(m_pFitToLineCB->IsChecked()) != m_pFitToLineCB->GetSavedValue() )
     {
         SvxCharRotateItem aItem( 0, m_pFitToLineCB->IsChecked(), nWhich );
         if (m_p90degRB->IsChecked())

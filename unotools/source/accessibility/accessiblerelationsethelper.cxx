@@ -39,7 +39,7 @@ public:
     AccessibleRelation getRelation( sal_Int32 nIndex )
             throw (lang::IndexOutOfBoundsException,
                     uno::RuntimeException);
-    sal_Bool containsRelation( sal_Int16 aRelationType )
+    bool containsRelation( sal_Int16 aRelationType )
         throw (uno::RuntimeException);
     AccessibleRelation getRelationByType( sal_Int16 aRelationType )
             throw (uno::RuntimeException);
@@ -78,7 +78,7 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nInde
     return maRelations[nIndex];
 }
 
-sal_Bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType )
+bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType )
     throw (uno::RuntimeException)
 {
     AccessibleRelation defaultRelation; // default is INVALID
@@ -91,7 +91,7 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16
 {
     sal_Int32 nCount(getRelationCount());
     sal_Int32 i(0);
-    sal_Bool bFound(sal_False);
+    bool bFound(false);
     while ((i < nCount) && !bFound)
     {
         if (maRelations[i].RelationType == aRelationType)
@@ -107,11 +107,11 @@ void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRel
 {
     sal_Int32 nCount(getRelationCount());
     sal_Int32 i(0);
-    sal_Bool bFound(sal_False);
+    bool bFound(false);
     while ((i < nCount) && !bFound)
     {
         if (maRelations[i].RelationType == rRelation.RelationType)
-            bFound = sal_True;
+            bFound = true;
         else
             i++;
     }

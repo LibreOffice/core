@@ -98,7 +98,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYCOUNT                               16
 #define PROPERTYHANDLE_INVALID                      -1
 
-#define CFG_READONLY_DEFAULT                        sal_False
+#define CFG_READONLY_DEFAULT                        false
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -158,21 +158,21 @@ class SvtSecurityOptions_Impl : public ConfigItem
         //  public interface
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const ;
+        bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const ;
 
         Sequence< OUString >    GetSecureURLs   (                                                       ) const ;
         void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          )       ;
         inline sal_Int32        GetMacroSecurityLevel   (                                               ) const ;
         void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             )       ;
 
-        inline sal_Bool         IsMacroDisabled         (                                               ) const ;
+        inline bool         IsMacroDisabled         (                                               ) const ;
 
         Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
 
-        sal_Bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
-        sal_Bool                SetOption       ( SvtSecurityOptions::EOption eOption, sal_Bool bValue  )       ;
-        sal_Bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
+        bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
+        bool                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  )       ;
+        bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
 
         /*-****************************************************************************************************//**
             @short      return list of key names of ouer configuration management which represent our module tree
@@ -187,57 +187,57 @@ class SvtSecurityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void                    SetProperty( sal_Int32 nHandle, const Any& rValue, sal_Bool bReadOnly );
+        void                    SetProperty( sal_Int32 nHandle, const Any& rValue, bool bReadOnly );
         void                    LoadAuthors( void );
         static sal_Int32        GetHandle( const OUString& rPropertyName );
-        bool                    GetOption( SvtSecurityOptions::EOption eOption, sal_Bool*& rpValue, sal_Bool*& rpRO );
+        bool                    GetOption( SvtSecurityOptions::EOption eOption, bool*& rpValue, bool*& rpRO );
 
         static Sequence< OUString > GetPropertyNames();
 
         Sequence< OUString >                        m_seqSecureURLs;
-        sal_Bool                                    m_bSaveOrSend;
-        sal_Bool                                    m_bSigning;
-        sal_Bool                                    m_bPrint;
-        sal_Bool                                    m_bCreatePDF;
-        sal_Bool                                    m_bRemoveInfo;
-        sal_Bool                                    m_bRecommendPwd;
-        sal_Bool                                    m_bCtrlClickHyperlink;
-        sal_Bool                                    m_bBlockUntrustedRefererLinks;
+        bool                                    m_bSaveOrSend;
+        bool                                    m_bSigning;
+        bool                                    m_bPrint;
+        bool                                    m_bCreatePDF;
+        bool                                    m_bRemoveInfo;
+        bool                                    m_bRecommendPwd;
+        bool                                    m_bCtrlClickHyperlink;
+        bool                                    m_bBlockUntrustedRefererLinks;
         sal_Int32                                   m_nSecLevel;
         Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
-        sal_Bool                                    m_bDisableMacros;
+        bool                                    m_bDisableMacros;
 
-        sal_Bool                                    m_bROSecureURLs;
-        sal_Bool                                    m_bROSaveOrSend;
-        sal_Bool                                    m_bROSigning;
-        sal_Bool                                    m_bROPrint;
-        sal_Bool                                    m_bROCreatePDF;
-        sal_Bool                                    m_bRORemoveInfo;
-        sal_Bool                                    m_bRORecommendPwd;
-        sal_Bool                                    m_bROCtrlClickHyperlink;
-        sal_Bool                                    m_bROBlockUntrustedRefererLinks;
-        sal_Bool                                    m_bROSecLevel;
-        sal_Bool                                    m_bROTrustedAuthors;
-        sal_Bool                                    m_bRODisableMacros;
+        bool                                    m_bROSecureURLs;
+        bool                                    m_bROSaveOrSend;
+        bool                                    m_bROSigning;
+        bool                                    m_bROPrint;
+        bool                                    m_bROCreatePDF;
+        bool                                    m_bRORemoveInfo;
+        bool                                    m_bRORecommendPwd;
+        bool                                    m_bROCtrlClickHyperlink;
+        bool                                    m_bROBlockUntrustedRefererLinks;
+        bool                                    m_bROSecLevel;
+        bool                                    m_bROTrustedAuthors;
+        bool                                    m_bRODisableMacros;
 
 
         // xmlsec05 deprecated
         EBasicSecurityMode      m_eBasicMode;
-        sal_Bool                m_bExecutePlugins;
-        sal_Bool                m_bWarning;
-        sal_Bool                m_bConfirmation;
+        bool                m_bExecutePlugins;
+        bool                m_bWarning;
+        bool                m_bConfirmation;
 
-        sal_Bool                m_bROConfirmation;
-        sal_Bool                m_bROWarning;
-        sal_Bool                m_bROExecutePlugins;
-        sal_Bool                m_bROBasicMode;
+        bool                m_bROConfirmation;
+        bool                m_bROWarning;
+        bool                m_bROExecutePlugins;
+        bool                m_bROBasicMode;
         public:
-        sal_Bool IsWarningEnabled() const;
-        void SetWarningEnabled( sal_Bool bSet );
-        sal_Bool IsConfirmationEnabled() const;
-        void SetConfirmationEnabled( sal_Bool bSet );
-        sal_Bool    IsExecutePlugins() const;
-        void        SetExecutePlugins( sal_Bool bSet );
+        bool IsWarningEnabled() const;
+        void SetWarningEnabled( bool bSet );
+        bool IsConfirmationEnabled() const;
+        void SetConfirmationEnabled( bool bSet );
+        bool    IsExecutePlugins() const;
+        void        SetExecutePlugins( bool bSet );
         EBasicSecurityMode      GetBasicMode    (                                               ) const ;
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
@@ -248,17 +248,17 @@ class SvtSecurityOptions_Impl : public ConfigItem
 SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     :ConfigItem             ( ROOTNODE_SECURITY         )
     ,m_seqSecureURLs        ( DEFAULT_SECUREURL         )
-    ,m_bSaveOrSend          ( sal_True                  )
-    ,m_bSigning             ( sal_True                  )
-    ,m_bPrint               ( sal_True                  )
-    ,m_bCreatePDF           ( sal_True                  )
-    ,m_bRemoveInfo          ( sal_True                  )
+    ,m_bSaveOrSend          ( true                  )
+    ,m_bSigning             ( true                  )
+    ,m_bPrint               ( true                  )
+    ,m_bCreatePDF           ( true                  )
+    ,m_bRemoveInfo          ( true                  )
     ,m_bRecommendPwd(false)
     ,m_bCtrlClickHyperlink(false)
     ,m_bBlockUntrustedRefererLinks(false)
     ,m_nSecLevel            ( sal_True                  )
     ,m_seqTrustedAuthors    ( DEFAULT_TRUSTEDAUTHORS    )
-    ,m_bDisableMacros       ( sal_False                 )
+    ,m_bDisableMacros       ( false                 )
     ,m_bROSecureURLs        ( CFG_READONLY_DEFAULT      )
     ,m_bROSaveOrSend        ( CFG_READONLY_DEFAULT      )
     ,m_bROSigning           ( CFG_READONLY_DEFAULT      )
@@ -270,13 +270,13 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bROBlockUntrustedRefererLinks(CFG_READONLY_DEFAULT)
     ,m_bROSecLevel          ( CFG_READONLY_DEFAULT      )
     ,m_bROTrustedAuthors    ( CFG_READONLY_DEFAULT      )
-    ,m_bRODisableMacros     ( sal_True                  ) // currently is not intended to be changed
+    ,m_bRODisableMacros     ( true                  ) // currently is not intended to be changed
 
     // xmlsec05 deprecated
     ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
-    ,   m_bExecutePlugins   ( sal_True                )
-    ,   m_bWarning          ( sal_True                )
-    ,   m_bConfirmation     ( sal_True                )
+    ,   m_bExecutePlugins   ( true                )
+    ,   m_bWarning          ( true                )
+    ,   m_bConfirmation     ( true                )
     ,   m_bROConfirmation   ( CFG_READONLY_DEFAULT    )
     ,   m_bROWarning        ( CFG_READONLY_DEFAULT    )
     ,   m_bROExecutePlugins ( CFG_READONLY_DEFAULT    )
@@ -315,7 +315,7 @@ SvtSecurityOptions_Impl::~SvtSecurityOptions_Impl()
         Commit();
 }
 
-void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValue, sal_Bool bRO )
+void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValue, bool bRO )
 {
     switch( nProperty )
     {
@@ -542,7 +542,7 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
     return nHandle;
 }
 
-bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, sal_Bool*& rpValue, sal_Bool*& rpRO )
+bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, bool*& rpValue, bool*& rpRO )
 {
     switch( eOption )
     {
@@ -745,7 +745,7 @@ void SvtSecurityOptions_Impl::Commit()
             {
                 bDone = !m_bRODisableMacros;
                 if( bDone )
-                    lValues[ nRealCount ] <<= (sal_Bool)m_bDisableMacros;
+                    lValues[ nRealCount ] <<= m_bDisableMacros;
             }
             break;
 
@@ -798,9 +798,9 @@ void SvtSecurityOptions_Impl::Commit()
     PutProperties( lNames, lValues );
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) const
+bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool    bReadonly;
+    bool    bReadonly;
     switch(eOption)
     {
         case SvtSecurityOptions::E_SECUREURLS :
@@ -857,7 +857,7 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
 
 
         default:
-            bReadonly = sal_True;
+            bReadonly = true;
     }
 
     return bReadonly;
@@ -883,7 +883,7 @@ inline sal_Int32 SvtSecurityOptions_Impl::GetMacroSecurityLevel() const
     return m_nSecLevel;
 }
 
-inline sal_Bool SvtSecurityOptions_Impl::IsMacroDisabled() const
+inline bool SvtSecurityOptions_Impl::IsMacroDisabled() const
 {
     return m_bDisableMacros;
 }
@@ -918,11 +918,11 @@ void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOpti
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const
+bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool*   pValue;
-    sal_Bool*   pRO;
-    sal_Bool    bRet = sal_False;
+    bool*   pValue;
+    bool*   pRO;
+    bool    bRet = false;
 
     if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
         bRet = *pValue;
@@ -930,17 +930,17 @@ sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOpti
     return bRet;
 }
 
-sal_Bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption, sal_Bool bValue )
+bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption, bool bValue )
 {
-    sal_Bool*   pValue;
-    sal_Bool*   pRO;
-    sal_Bool    bRet = sal_False;
+    bool*   pValue;
+    bool*   pRO;
+    bool    bRet = false;
 
     if( GetOption( eOption, pValue, pRO ) )
     {
         if( !*pRO )
         {
-            bRet = sal_True;
+            bRet = true;
             if( *pValue != bValue )
             {
                 *pValue = bValue;
@@ -952,11 +952,11 @@ sal_Bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption
     return bRet;
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOption ) const
+bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOption ) const
 {
-    sal_Bool*   pValue;
-    sal_Bool*   pRO;
-    sal_Bool    bRet = sal_False;
+    bool*   pValue;
+    bool*   pRO;
+    bool    bRet = false;
 
     if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
         bRet = !*pRO;
@@ -1030,7 +1030,7 @@ SvtSecurityOptions::~SvtSecurityOptions()
     }
 }
 
-sal_Bool SvtSecurityOptions::IsReadOnly( EOption eOption ) const
+bool SvtSecurityOptions::IsReadOnly( EOption eOption ) const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsReadOnly(eOption);
@@ -1100,7 +1100,7 @@ void SvtSecurityOptions::SetMacroSecurityLevel( sal_Int32 _nLevel )
     m_pDataContainer->SetMacroSecurityLevel( _nLevel );
 }
 
-sal_Bool SvtSecurityOptions::IsMacroDisabled() const
+bool SvtSecurityOptions::IsMacroDisabled() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsMacroDisabled();
@@ -1166,12 +1166,12 @@ void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
+bool SvtSecurityOptions_Impl::IsExecutePlugins() const
 {
     return m_bExecutePlugins;
 }
 
-void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
+void SvtSecurityOptions_Impl::SetExecutePlugins( bool bSet )
 {
     DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n");
     if (!m_bROExecutePlugins && m_bExecutePlugins!=bSet)
@@ -1181,12 +1181,12 @@ void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsWarningEnabled() const
+bool SvtSecurityOptions_Impl::IsWarningEnabled() const
 {
     return m_bWarning;
 }
 
-void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
+void SvtSecurityOptions_Impl::SetWarningEnabled( bool bSet )
 {
     DBG_ASSERT(!m_bROWarning, "SvtSecurityOptions_Impl::SetWarningEnabled()\nYou tried to write on a readonly value!\n");
     if (!m_bROWarning && m_bWarning!=bSet)
@@ -1196,12 +1196,12 @@ void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
+bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
 {
     return m_bConfirmation;
 }
 
-void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
+void SvtSecurityOptions_Impl::SetConfirmationEnabled( bool bSet )
 {
     DBG_ASSERT(!m_bROConfirmation, "SvtSecurityOptions_Impl::SetConfirmationEnabled()\nYou tried to write on a readonly value!\n");
     if (!m_bROConfirmation && m_bConfirmation!=bSet)
@@ -1212,37 +1212,37 @@ void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
 }
 
 
-sal_Bool SvtSecurityOptions::IsExecutePlugins() const
+bool SvtSecurityOptions::IsExecutePlugins() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsExecutePlugins();
 }
 
-void SvtSecurityOptions::SetExecutePlugins( sal_Bool bSet )
+void SvtSecurityOptions::SetExecutePlugins( bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetExecutePlugins( bSet );
 }
 
-sal_Bool SvtSecurityOptions::IsWarningEnabled() const
+bool SvtSecurityOptions::IsWarningEnabled() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsWarningEnabled();
 }
 
-void SvtSecurityOptions::SetWarningEnabled( sal_Bool bSet )
+void SvtSecurityOptions::SetWarningEnabled( bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetWarningEnabled( bSet );
 }
 
-sal_Bool SvtSecurityOptions::IsConfirmationEnabled() const
+bool SvtSecurityOptions::IsConfirmationEnabled() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsConfirmationEnabled();
 }
 
-void SvtSecurityOptions::SetConfirmationEnabled( sal_Bool bSet )
+void SvtSecurityOptions::SetConfirmationEnabled( bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetConfirmationEnabled( bSet );

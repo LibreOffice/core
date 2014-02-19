@@ -1188,7 +1188,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     {
         case XTDATEF_SYSTEM_LONG:
         {
-            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, sal_False, 1, !bShowCentury );
+            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, false, 1, !bShowCentury );
         }
         case XTDATEF_SHORT_DDMMYY:
         case XTDATEF_SHORT_DDMMYYYY:
@@ -2653,7 +2653,7 @@ TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
     maLast( GetMax() )
 {
     SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
+    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
     Reformat();
 }
 
@@ -2666,7 +2666,7 @@ TimeField::TimeField( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
+    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
@@ -2835,7 +2835,7 @@ TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
+    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
     Reformat();
 }
 

@@ -181,7 +181,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      const OUString pDelim ( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
-     aStr += rWrapper.getTime( aT, sal_True, sal_False );
+     aStr += rWrapper.getTime( aT, true, false );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {

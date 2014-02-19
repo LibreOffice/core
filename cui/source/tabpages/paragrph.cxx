@@ -256,7 +256,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     }
 
     if ( m_pTopDist->IsValueModified() || m_pBottomDist->IsValueModified()
-            || m_pContextualCB->GetSavedValue() != m_pContextualCB->IsChecked())
+         || m_pContextualCB->GetSavedValue() != TriState(m_pContextualCB->IsChecked()))
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -303,7 +303,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     if ( m_pLeftIndent->IsValueModified() ||
          m_pFLineIndent->IsValueModified() ||
          m_pRightIndent->IsValueModified()
-         ||  m_pAutoCB->GetSavedValue() != m_pAutoCB->IsChecked() )
+         ||  m_pAutoCB->GetSavedValue() != TriState(m_pAutoCB->IsChecked()) )
     {
         nWhich = GetWhich( SID_ATTR_LRSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -383,7 +383,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                             rOutSet, SID_ATTR_PARA_REGISTER);
         SfxBoolItem* pRegItem = (SfxBoolItem*)pBoolItem->Clone();
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
-        sal_Bool bSet = pRegItem->GetValue();
+        bool bSet = pRegItem->GetValue();
 
         if(m_pRegisterCB->IsChecked() != bSet )
         {
@@ -1081,7 +1081,7 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         eAdjust = SVX_ADJUST_BLOCK;
         bAdj = !m_pJustify->GetSavedValue() ||
-            m_pExpandCB->IsChecked() != m_pExpandCB->GetSavedValue() ||
+            TriState(m_pExpandCB->IsChecked()) != m_pExpandCB->GetSavedValue() ||
             m_pLastLineLB->GetSelectEntryPos() != m_pLastLineLB->GetSavedValue();
         bChecked = true;
     }
@@ -1119,7 +1119,7 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             rOutSet.Put( aAdj );
         }
     }
-    if(m_pSnapToGridCB->IsChecked() != m_pSnapToGridCB->GetSavedValue())
+    if(TriState(m_pSnapToGridCB->IsChecked()) != m_pSnapToGridCB->GetSavedValue())
     {
         rOutSet.Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
         bModified = sal_True;
@@ -2151,7 +2151,7 @@ sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool* pPool = rSet.GetPool();
-    if (m_pScriptSpaceCB->IsEnabled() && m_pScriptSpaceCB->IsChecked() != m_pScriptSpaceCB->GetSavedValue())
+    if (m_pScriptSpaceCB->IsEnabled() && TriState(m_pScriptSpaceCB->IsChecked()) != m_pScriptSpaceCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
@@ -2160,7 +2160,7 @@ sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         delete pNewItem;
         bRet = sal_True;
     }
-    if (m_pHangingPunctCB->IsEnabled() && m_pHangingPunctCB->IsChecked() != m_pHangingPunctCB->GetSavedValue())
+    if (m_pHangingPunctCB->IsEnabled() && TriState(m_pHangingPunctCB->IsChecked()) != m_pHangingPunctCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
@@ -2169,7 +2169,7 @@ sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         delete pNewItem;
         bRet = sal_True;
     }
-    if (m_pForbiddenRulesCB->IsEnabled() && m_pForbiddenRulesCB->IsChecked() != m_pForbiddenRulesCB->GetSavedValue())
+    if (m_pForbiddenRulesCB->IsEnabled() && TriState(m_pForbiddenRulesCB->IsChecked()) != m_pForbiddenRulesCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();

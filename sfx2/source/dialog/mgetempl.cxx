@@ -389,7 +389,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         pStyle->SetMask( nMask );
     }
     if(m_pAutoCB->IsVisible() &&
-        m_pAutoCB->IsChecked() != m_pAutoCB->GetSavedValue())
+       TriState(m_pAutoCB->IsChecked()) != m_pAutoCB->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pAutoCB->IsChecked()));
     }

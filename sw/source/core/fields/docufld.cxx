@@ -913,7 +913,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             lcl_GetLocalDataWrapper( nLang, &pAppLocalData, &pLocalData );
             sal_Int32 dur = xDocProps->getEditingDuration();
             aStr = pLocalData->getTime( Time(dur/3600, (dur%3600)/60, dur%60),
-                                        sal_False, sal_False);
+                                        false, false);
         }
         else
         {
@@ -986,7 +986,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
                                                         &pLocalData );
                         aStr = pLocalData->getTime( aDate,
-                                                    sal_False, sal_False);
+                                                    false, false);
                     }
                     else
                     {

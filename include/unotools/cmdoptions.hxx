@@ -95,7 +95,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        sal_Bool HasEntries( CmdOption eOption ) const;
+        bool HasEntries( CmdOption eOption ) const;
 
         /*-****************************************************************************************************//**
             @short      Lookup if a command URL is inside a given list
@@ -110,7 +110,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool Lookup( CmdOption eOption, const OUString& aCommandURL ) const;
+        bool Lookup( CmdOption eOption, const OUString& aCommandURL ) const;
 
         /*-****************************************************************************************************//**
             @short      register an office frame, which must update its dispatches if

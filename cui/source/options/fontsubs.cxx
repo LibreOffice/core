@@ -177,7 +177,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
             static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().toInt32()),
             batch);
-    if(m_pNonPropFontsOnlyCB->GetSavedValue() != m_pNonPropFontsOnlyCB->IsChecked())
+    if(m_pNonPropFontsOnlyCB->GetSavedValue() != TriState(m_pNonPropFontsOnlyCB->IsChecked()))
         officecfg::Office::Common::Font::SourceViewFont::
             NonProportionalFontsOnly::set(
                 m_pNonPropFontsOnlyCB->IsChecked(), batch);

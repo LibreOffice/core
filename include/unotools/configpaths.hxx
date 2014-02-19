@@ -52,7 +52,7 @@ namespace utl
             <FALSE/>, if the path was a one-level path or an invalid path
 
     */
-    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
+    UNOTOOLS_DLLPUBLIC bool splitLastFromConfigurationPath(OUString const& _sInPath,
                                             OUString& _rsOutPath,
                                             OUString& _rsLocalName);
 
@@ -98,7 +98,7 @@ namespace utl
             If both paths are equal <TRUE/> is returned.
 
     */
-    sal_Bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
+    bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                          OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------

@@ -70,58 +70,58 @@ public:
     void                    SetAutoSaveTime( sal_Int32 n );
     sal_Int32               GetAutoSaveTime() const;
 
-    void                    SetUseUserData( sal_Bool b );
-    sal_Bool                IsUseUserData() const;
+    void                    SetUseUserData( bool b );
+    bool                IsUseUserData() const;
 
-    void                    SetBackup( sal_Bool b );
-    sal_Bool                IsBackup() const;
+    void                    SetBackup( bool b );
+    bool                IsBackup() const;
 
-    void                    SetAutoSave( sal_Bool b );
-    sal_Bool                IsAutoSave() const;
+    void                    SetAutoSave( bool b );
+    bool                IsAutoSave() const;
 
-    void                    SetAutoSavePrompt( sal_Bool b );
-    sal_Bool                IsAutoSavePrompt() const;
+    void                    SetAutoSavePrompt( bool b );
+    bool                IsAutoSavePrompt() const;
 
-    void                    SetUserAutoSave( sal_Bool b );
-    sal_Bool                IsUserAutoSave() const;
+    void                    SetUserAutoSave( bool b );
+    bool                IsUserAutoSave() const;
 
-    void                    SetDocInfoSave(sal_Bool b);
-    sal_Bool                IsDocInfoSave() const;
+    void                    SetDocInfoSave(bool b);
+    bool                IsDocInfoSave() const;
 
-    void                    SetSaveWorkingSet( sal_Bool b );
-    sal_Bool                IsSaveWorkingSet() const;
+    void                    SetSaveWorkingSet( bool b );
+    bool                IsSaveWorkingSet() const;
 
-    void                    SetSaveDocView( sal_Bool b );
-    sal_Bool                IsSaveDocView() const;
+    void                    SetSaveDocView( bool b );
+    bool                IsSaveDocView() const;
 
-    void                    SetSaveRelINet( sal_Bool b );
-    sal_Bool                IsSaveRelINet() const;
+    void                    SetSaveRelINet( bool b );
+    bool                IsSaveRelINet() const;
 
-    void                    SetSaveRelFSys( sal_Bool b );
-    sal_Bool                IsSaveRelFSys() const;
+    void                    SetSaveRelFSys( bool b );
+    bool                IsSaveRelFSys() const;
 
-    sal_Bool                IsSaveUnpacked() const;
+    bool                IsSaveUnpacked() const;
 
-    void                    SetLoadUserSettings(sal_Bool b);
-    sal_Bool                IsLoadUserSettings() const;
+    void                    SetLoadUserSettings(bool b);
+    bool                IsLoadUserSettings() const;
 
-    void                    SetPrettyPrinting( sal_Bool _bEnable );
-    sal_Bool                IsPrettyPrinting( ) const;
+    void                    SetPrettyPrinting( bool _bEnable );
+    bool                IsPrettyPrinting( ) const;
 
-    void                    SetWarnAlienFormat( sal_Bool _bEnable );
-    sal_Bool                IsWarnAlienFormat( ) const;
+    void                    SetWarnAlienFormat( bool _bEnable );
+    bool                IsWarnAlienFormat( ) const;
 
-    void                    SetLoadDocumentPrinter( sal_Bool _bEnable );
-    sal_Bool                IsLoadDocumentPrinter( ) const;
+    void                    SetLoadDocumentPrinter( bool _bEnable );
+    bool                IsLoadDocumentPrinter( ) const;
 
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
 
-    sal_Bool                IsUseSHA1InODF12() const;
+    bool                IsUseSHA1InODF12() const;
 
-    sal_Bool                IsUseBlowfishInODF12() const;
+    bool                IsUseBlowfishInODF12() const;
 
-    sal_Bool                IsReadOnly( EOption eOption ) const;
+    bool                IsReadOnly( EOption eOption ) const;
 };
 
 #endif

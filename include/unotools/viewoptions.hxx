@@ -165,7 +165,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
-        sal_Bool Exists() const;
+        bool Exists() const;
 
         /*-****************************************************************************************************//**
             @short      use it to delete an entry of dynamic view set
@@ -181,7 +181,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        sal_Bool Delete();
+        bool Delete();
 
         /*-****************************************************************************************************//**
             @short      use it to set/get the window state of your view
@@ -222,8 +222,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsVisible (                 ) const;
-        void     SetVisible( sal_Bool bState );
+        bool IsVisible (                 ) const;
+        void     SetVisible( bool bState );
 
         /** Return true if the "Visible" property actually has a non-nil value
 

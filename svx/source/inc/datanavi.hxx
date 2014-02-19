@@ -629,7 +629,7 @@ namespace svxform
         void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
         OUString         GetURL() const { return m_pURLED->GetText(); }
         void             SetURL( const OUString& _rURL ) { m_pURLED->SetText( _rURL );}
-        bool             IsLinkInstance() const { return ( m_pLinkInstanceCB->IsChecked() != sal_False ); }
+        bool             IsLinkInstance() const { return m_pLinkInstanceCB->IsChecked(); }
         void             SetLinkInstance( bool _bLink ) { m_pLinkInstanceCB->Check( _bLink != false ); }
     };
 

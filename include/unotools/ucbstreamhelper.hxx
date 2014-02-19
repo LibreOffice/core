@@ -62,8 +62,8 @@ namespace utl
                                 UcbLockBytesHandler* pHandler=0 );
         static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream );
         static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream );
-        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream, sal_Bool bCloseStream );
-        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream, sal_Bool bCloseStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream, bool bCloseStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream, bool bCloseStream );
     };
 }
 

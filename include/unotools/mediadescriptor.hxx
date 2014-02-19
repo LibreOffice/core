@@ -131,7 +131,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwise.
          */
-        sal_Bool addInputStream();
+        bool addInputStream();
 
         //---------------------------------------
         /** @short  it checks if the descriptor already has a valid
@@ -150,7 +150,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwise.
          */
-        sal_Bool addInputStreamOwnLock();
+        bool addInputStreamOwnLock();
 
         //---------------------------------------
         /** @short  it checks if the descriptor describes a readonly stream.
@@ -170,7 +170,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @return TRUE, if the stream must be interpreted as readonly ...
                     FALSE otherwise.
          */
-        sal_Bool isStreamReadOnly() const;
+        bool isStreamReadOnly() const;
 
         //---------------------------------------
         /** Returns a value from the sequence contained in the property
@@ -291,7 +291,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @throw  [css::lang::IllegalArgumentException]
                     if the given PostData stream is <NULL/>.
          */
-        SAL_DLLPRIVATE sal_Bool impl_openStreamWithPostData(
+        SAL_DLLPRIVATE bool impl_openStreamWithPostData(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
             )   throw(::com::sun::star::uno::RuntimeException);
 
@@ -317,9 +317,9 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        SAL_DLLPRIVATE sal_Bool impl_openStreamWithURL(
+        SAL_DLLPRIVATE bool impl_openStreamWithURL(
             const OUString& sURL,
-            sal_Bool bLockFile
+            bool bLockFile
             ) throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
@@ -339,7 +339,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwise.
          */
-        SAL_DLLPRIVATE sal_Bool impl_addInputStream( sal_Bool bLockFile );
+        SAL_DLLPRIVATE bool impl_addInputStream( bool bLockFile );
 };
 
 }

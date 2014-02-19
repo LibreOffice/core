@@ -117,7 +117,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     // We need it to get information about changes outside these class on our used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = "Events";
-    EnableNotification( aNotifySeq, sal_True );
+    EnableNotification( aNotifySeq, true );
 }
 
 //*****************************************************************************************************************
@@ -284,18 +284,18 @@ Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw 
     return uno::Sequence< OUString >(pRet, m_supportedEvents.size());
 }
 
-sal_Bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
+bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
 {
     if ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() )
-        return sal_True;
+        return true;
 
     // never accessed before - is it supported in general?
     SupportedEventsVector::const_iterator pos = ::std::find(
         m_supportedEvents.begin(), m_supportedEvents.end(), aName );
     if ( pos != m_supportedEvents.end() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException)
@@ -304,7 +304,7 @@ Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException
     return ::getCppuType((const Sequence<beans::PropertyValue>*)0);
 }
 
-sal_Bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
+bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
 {
     return ( m_eventBindingHash.empty() );
 }

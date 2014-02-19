@@ -309,7 +309,7 @@ void ConvDicNameContainer::AddConvDics(
         const OUString &rExtension )
 {
     const Sequence< OUString > aDirCnt(
-                utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, sal_False ) );
+                utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, false ) );
     const OUString *pDirCnt = aDirCnt.getConstArray();
     sal_Int32 nEntries = aDirCnt.getLength();
 

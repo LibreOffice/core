@@ -52,7 +52,7 @@ private:
 
     enum NodeType{ NT_Group, NT_Page, NT_Option };
     void            ReadNode( const OUString& _rNode, NodeType _eType );
-    sal_Bool        IsHidden( const OUString& _rPath ) const;
+    bool        IsHidden( const OUString& _rPath ) const;
 
 public:
                     SvtOptionsDlgOptions_Impl();
@@ -62,10 +62,10 @@ public:
 
     static ::osl::Mutex & getInitMutex();
 
-    sal_Bool        IsGroupHidden   (   const OUString& _rGroup ) const;
-    sal_Bool        IsPageHidden    (   const OUString& _rPage,
+    bool        IsGroupHidden   (   const OUString& _rGroup ) const;
+    bool        IsPageHidden    (   const OUString& _rPage,
                                         const OUString& _rGroup ) const;
-    sal_Bool        IsOptionHidden  (   const OUString& _rOption,
+    bool        IsOptionHidden  (   const OUString& _rOption,
                                         const OUString& _rPage,
                                         const OUString& _rGroup ) const;
 };
@@ -149,7 +149,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
 
     Sequence< Any > aValues;
     aValues = GetProperties( lResult );
-    sal_Bool bHide = sal_False;
+    bool bHide = false;
     if ( aValues[0] >>= bHide )
         m_aOptionNodeList.insert( OptionNodeList::value_type( sNode, bHide ) );
 
@@ -185,9 +185,9 @@ OUString getOptionPath( const OUString& _rOption )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
+bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OptionNodeList::const_iterator pIter = m_aOptionNodeList.find( _rPath );
     if ( pIter != m_aOptionNodeList.end() )
         bRet = pIter->second;
@@ -196,21 +196,21 @@ sal_Bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtOptionsDlgOptions_Impl::IsGroupHidden( const OUString& _rGroup ) const
+bool SvtOptionsDlgOptions_Impl::IsGroupHidden( const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup ) );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtOptionsDlgOptions_Impl::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
+bool SvtOptionsDlgOptions_Impl::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
+bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
     const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
@@ -247,17 +247,17 @@ SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
     }
 }
 
-sal_Bool SvtOptionsDialogOptions::IsGroupHidden( const OUString& _rGroup ) const
+bool SvtOptionsDialogOptions::IsGroupHidden( const OUString& _rGroup ) const
 {
     return m_pImp->IsGroupHidden( _rGroup );
 }
 
-sal_Bool SvtOptionsDialogOptions::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
+bool SvtOptionsDialogOptions::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
 {
     return m_pImp->IsPageHidden( _rPage, _rGroup );
 }
 
-sal_Bool SvtOptionsDialogOptions::IsOptionHidden(
+bool SvtOptionsDialogOptions::IsOptionHidden(
     const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
 {
     return m_pImp->IsOptionHidden( _rOption, _rPage, _rGroup );

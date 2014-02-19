@@ -435,7 +435,7 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyL
     // We need it to get information about changes outside these class on our configuration branch
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = "SharePoints";
-    EnableNotification( aNotifySeq, sal_True );
+    EnableNotification( aNotifySeq, true );
 }
 
 SubstitutePathVariables_Impl::~SubstitutePathVariables_Impl()

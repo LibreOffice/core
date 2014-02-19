@@ -47,7 +47,7 @@
 #define DEFAULT_WINDOWSTATE                     OUString()
 #define DEFAULT_USERDATA                        css::uno::Sequence< css::beans::NamedValue >()
 #define DEFAULT_PAGEID                          0
-#define DEFAULT_VISIBLE                         sal_False
+#define DEFAULT_VISIBLE                         false
 
 //#define DEBUG_VIEWOPTIONS
 
@@ -111,7 +111,7 @@ class IMPL_TViewData
             m_nPageID      = DEFAULT_PAGEID      ;
             m_bVisible     = DEFAULT_VISIBLE     ;
 
-            m_bDefault     = sal_True            ;
+            m_bDefault     = true            ;
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ class IMPL_TViewData
         void setWindowState( const OUString& sValue )
         {
             m_bDefault     = (
-                                ( m_bDefault == sal_True            )    &&
+                                m_bDefault    &&
                                 ( sValue     == DEFAULT_WINDOWSTATE )
                              );
             m_sWindowState = sValue;
@@ -129,7 +129,7 @@ class IMPL_TViewData
         void setUserData( const css::uno::Sequence< css::beans::NamedValue >& lValue )
         {
             m_bDefault  = (
-                            ( m_bDefault == sal_True         )    &&
+                            m_bDefault    &&
                             ( lValue     == DEFAULT_USERDATA )
                           );
             m_lUserData = lValue;
@@ -139,17 +139,17 @@ class IMPL_TViewData
         void setPageID( sal_Int32 nValue )
         {
             m_bDefault = (
-                           ( m_bDefault == sal_True       )    &&
+                           m_bDefault    &&
                            ( nValue     == DEFAULT_PAGEID )
                          );
             m_nPageID  = nValue;
         }
 
         //---------------------------------------------------------------------------------------------------------
-        void setVisible( sal_Bool bValue )
+        void setVisible( bool bValue )
         {
             m_bDefault = (
-                           ( m_bDefault == sal_True        )    &&
+                           m_bDefault    &&
                            ( bValue     == DEFAULT_VISIBLE )
                          );
             m_bVisible = bValue;
@@ -160,7 +160,7 @@ class IMPL_TViewData
         OUString                              getWindowState() { return m_sWindowState; }
         css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData   ; }
         sal_Int32                                    getPageID     () { return m_nPageID     ; }
-        sal_Bool                                     getVisible    () { return m_bVisible    ; }
+        bool                                     getVisible    () { return m_bVisible    ; }
 
         //---------------------------------------------------------------------------------------------------------
         // special operation for easy access on user data
@@ -170,9 +170,9 @@ class IMPL_TViewData
             // we change UserData in every case!
             //    a) we change already existing item
             // or b) we add a new one
-            m_bDefault = sal_False;
+            m_bDefault = false;
 
-            sal_Bool  bExist = sal_False;
+            bool  bExist = false;
             sal_Int32 nCount = m_lUserData.getLength();
 
             // change it, if it already exist ...
@@ -181,13 +181,13 @@ class IMPL_TViewData
                 if( m_lUserData[nStep].Name == sName )
                 {
                     m_lUserData[nStep].Value = aValue  ;
-                    bExist                   = sal_True;
+                    bExist                   = true;
                     break;
                 }
             }
 
             // ... or create new list item
-            if( bExist == sal_False )
+            if( !bExist )
             {
                 m_lUserData.realloc( nCount+1 );
                 m_lUserData[nCount].Name  = sName  ;
@@ -215,15 +215,15 @@ class IMPL_TViewData
 
         //---------------------------------------------------------------------------------------------------------
         // check for default items
-        sal_Bool isDefault() { return m_bDefault; }
+        bool isDefault() { return m_bDefault; }
 
     private:
         OUString                                 m_sWindowState    ;
         css::uno::Sequence< css::beans::NamedValue >    m_lUserData       ;
         sal_Int32                                       m_nPageID         ;
-        sal_Bool                                        m_bVisible        ;
+        bool                                        m_bVisible        ;
 
-        sal_Bool                                        m_bDefault        ;
+        bool                                        m_bDefault        ;
 };
 
 struct IMPL_TStringHashCode
@@ -258,8 +258,8 @@ class SvtViewOptionsBase_Impl
 
                                                         SvtViewOptionsBase_Impl ( const OUString&                                sList    );
         virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
-        sal_Bool                                        Exists                  ( const OUString&                                sName    );
-        sal_Bool                                        Delete                  ( const OUString&                                sName    );
+        bool                                        Exists                  ( const OUString&                                sName    );
+        bool                                        Delete                  ( const OUString&                                sName    );
         OUString                                 GetWindowState          ( const OUString&                                sName    );
         void                                            SetWindowState          ( const OUString&                                sName    ,
                                                                                   const OUString&                                sState   );
@@ -271,7 +271,7 @@ class SvtViewOptionsBase_Impl
                                                                                         sal_Int32                                       nID      );
         State                                           GetVisible              ( const OUString&                                sName    );
         void                                            SetVisible              ( const OUString&                                sName    ,
-                                                                                        sal_Bool                                        bVisible );
+                                                                                        bool                                        bVisible );
         css::uno::Any                                   GetUserItem             ( const OUString&                                sName    ,
                                                                                   const OUString&                                sItem    );
         void                                            SetUserItem             ( const OUString&                                sName    ,
@@ -281,7 +281,7 @@ class SvtViewOptionsBase_Impl
     //-------------------------------------------------------------------------------------------------------------
     private:
         css::uno::Reference< css::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
-                                                                           sal_Bool         bCreateIfMissing);
+                                                                           bool         bCreateIfMissing);
 
     //-------------------------------------------------------------------------------------------------------------
     private:
@@ -378,9 +378,9 @@ SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
     @return         true , if item exist
                     false, otherwise
 *//*-*************************************************************************************************************/
-sal_Bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
+bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
 {
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
 
     try
     {
@@ -389,7 +389,7 @@ sal_Bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
     }
     catch(const css::uno::Exception& ex)
         {
-            bExists = sal_False;
+            bExists = false;
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 
@@ -406,25 +406,25 @@ sal_Bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
     @return         true , if item not exist(!) or could be deleted (should be the same!)
                     false, otherwise
 *//*-*************************************************************************************************************/
-sal_Bool SvtViewOptionsBase_Impl::Delete( const OUString& sName )
+bool SvtViewOptionsBase_Impl::Delete( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nWriteCount;
     #endif
 
-    sal_Bool bDeleted = sal_False;
+    bool bDeleted = false;
     try
     {
         css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY_THROW);
         xSet->removeByName(sName);
-        bDeleted = sal_True;
+        bDeleted = true;
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::container::NoSuchElementException&)
-        { bDeleted = sal_True; }
+        { bDeleted = true; }
     catch(const css::uno::Exception& ex)
         {
-            bDeleted = sal_False;
+            bDeleted = false;
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 
@@ -450,7 +450,7 @@ OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_False),
+            impl_getSetNode(sName, false),
             css::uno::UNO_QUERY);
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_WINDOWSTATE) >>= sWindowState;
@@ -475,7 +475,7 @@ void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_True),
+            impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
@@ -496,7 +496,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     try
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
-            impl_getSetNode(sName, sal_False),
+            impl_getSetNode(sName, false),
             css::uno::UNO_QUERY); // no _THROW ! because we dont create missing items here. So we have to live with zero references .-)
         css::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
@@ -537,7 +537,7 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
     try
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
-            impl_getSetNode(sName, sal_True),
+            impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameContainer > xUserData;
         xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
@@ -574,7 +574,7 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
     try
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
-            impl_getSetNode(sName, sal_False),
+            impl_getSetNode(sName, false),
             css::uno::UNO_QUERY);
         css::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
@@ -605,7 +605,7 @@ void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
     try
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
-            impl_getSetNode(sName, sal_True),
+            impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameContainer > xUserData;
         xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
@@ -635,7 +635,7 @@ sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_False),
+            impl_getSetNode(sName, false),
             css::uno::UNO_QUERY);
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_PAGEID) >>= nID;
@@ -660,7 +660,7 @@ void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_True),
+            impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(nID));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
@@ -682,11 +682,11 @@ SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUStri
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_False),
+            impl_getSetNode(sName, false),
             css::uno::UNO_QUERY);
         if (xNode.is())
         {
-            sal_Bool bVisible = sal_False;
+            bool bVisible = false;
             if (xNode->getPropertyValue(PROPERTY_VISIBLE) >>= bVisible)
             {
                 eState = bVisible ? STATE_TRUE : STATE_FALSE;
@@ -703,7 +703,7 @@ SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUStri
 
 //*****************************************************************************************************************
 void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
-                                                sal_Bool         bVisible )
+                                                bool         bVisible )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nWriteCount;
@@ -712,7 +712,7 @@ void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
-            impl_getSetNode(sName, sal_True),
+            impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
@@ -734,7 +734,7 @@ void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
     @return         -
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSetNode( const OUString& sNode           ,
-                                                                                            sal_Bool         bCreateIfMissing)
+                                                                                            bool         bCreateIfMissing)
 {
     css::uno::Reference< css::uno::XInterface > xNode;
 
@@ -883,12 +883,12 @@ SvtViewOptions::~SvtViewOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtViewOptions::Exists() const
+bool SvtViewOptions::Exists() const
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
 
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     switch( m_eViewType )
     {
         case E_DIALOG       :   {
@@ -914,12 +914,12 @@ sal_Bool SvtViewOptions::Exists() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtViewOptions::Delete()
+bool SvtViewOptions::Delete()
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
 
-    sal_Bool bState = sal_False;
+    bool bState = false;
     switch( m_eViewType )
     {
         case E_DIALOG       :   {
@@ -1039,7 +1039,7 @@ void SvtViewOptions::SetPageID( sal_Int32 nID )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtViewOptions::IsVisible() const
+bool SvtViewOptions::IsVisible() const
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
@@ -1048,7 +1048,7 @@ sal_Bool SvtViewOptions::IsVisible() const
     // These call isn't allowed for dialogs, tab-dialogs or tab-pages!
     OSL_ENSURE( !(m_eViewType==E_DIALOG||m_eViewType==E_TABDIALOG||m_eViewType==E_TABPAGE), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!\n" );
 
-    sal_Bool bState = sal_False;
+    bool bState = false;
     if( m_eViewType == E_WINDOW )
         bState = m_pDataContainer_Windows->GetVisible( m_sViewName ) == SvtViewOptionsBase_Impl::STATE_TRUE;
 
@@ -1058,7 +1058,7 @@ sal_Bool SvtViewOptions::IsVisible() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtViewOptions::SetVisible( sal_Bool bState )
+void SvtViewOptions::SetVisible( bool bState )
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );

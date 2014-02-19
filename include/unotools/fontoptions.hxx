@@ -88,11 +88,11 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsFontHistoryEnabled        (                   ) const ;
-        void        EnableFontHistory           ( sal_Bool bState   )       ;
+        bool    IsFontHistoryEnabled        (                   ) const ;
+        void        EnableFontHistory           ( bool bState   )       ;
 
-        sal_Bool    IsFontWYSIWYGEnabled        (                   ) const ;
-        void        EnableFontWYSIWYG           ( sal_Bool bState   )       ;
+        bool    IsFontWYSIWYGEnabled        (                   ) const ;
+        void        EnableFontWYSIWYG           ( bool bState   )       ;
     private:
 
         /*-****************************************************************************************************//**

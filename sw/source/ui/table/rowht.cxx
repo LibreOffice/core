@@ -41,7 +41,7 @@ void SwTableHeightDlg::Apply()
     SwTwips nHeight = static_cast< SwTwips >(m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FUNIT_TWIP)));
     SwFmtFrmSize aSz(ATT_FIX_SIZE, 0, nHeight);
 
-    SwFrmSize eFrmSize = (SwFrmSize) m_pAutoHeightCB->IsChecked() ?
+    SwFrmSize eFrmSize = m_pAutoHeightCB->IsChecked() ?
         ATT_MIN_SIZE : ATT_FIX_SIZE;
     if(eFrmSize != aSz.GetHeightSizeType())
     {

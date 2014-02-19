@@ -145,7 +145,7 @@ namespace utl
             @see read
             @see commit
         */
-        void    write( sal_Bool _bCommit = sal_True );
+        void    write( bool _bCommit = true );
 
         /** commits any changes done
 
@@ -160,7 +160,7 @@ namespace utl
                 If <FALSE/>, only the current values in the config nodes (as present since the last call to
                 <method>write</method>) are committed.
         */
-        void    commit( sal_Bool _bWrite = sal_True );
+        void    commit( bool _bWrite = true );
 
     private:
         /// implements the ctors

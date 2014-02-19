@@ -108,7 +108,7 @@ throw( SAXException, RuntimeException )
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
         else
-            m_bAcceleratorMode = sal_True;
+            m_bAcceleratorMode = true;
     }
     else if ( aElementName == ELEMENT_ACCELERATORITEM )
     {
@@ -122,7 +122,7 @@ throw( SAXException, RuntimeException )
         else
         {
             // read accelerator item
-            m_bItemCloseExpected = sal_True;
+            m_bItemCloseExpected = true;
 
             SvtAcceleratorConfigItem aItem;
 

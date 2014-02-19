@@ -485,7 +485,7 @@ IMPL_LINK( PosSizePropertyPanel, ClickAutoHdl, void *, EMPTYARG )
 
     // mpCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions  aPageOpt( E_TABPAGE, OUString::number( RID_SVXPAGE_POSITION_SIZE ) );
-    aPageOpt.SetUserItem( USERITEM_NAME, ::com::sun::star::uno::makeAny( ::rtl::OUString::number( mpCbxScale->IsChecked() ) ) );
+    aPageOpt.SetUserItem( USERITEM_NAME, ::com::sun::star::uno::makeAny( ::rtl::OUString::number( int(mpCbxScale->IsChecked()) ) ) );
 
     return 0;
 }

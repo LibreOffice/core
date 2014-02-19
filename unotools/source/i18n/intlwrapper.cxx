@@ -60,7 +60,7 @@ void IntlWrapper::ImplNewLocaleData() const
 }
 
 
-void IntlWrapper::ImplNewCollator( sal_Bool bCaseSensitive ) const
+void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const
 {
     CollatorWrapper* p = new CollatorWrapper( m_xContext );
     if ( bCaseSensitive )

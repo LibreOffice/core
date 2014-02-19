@@ -644,14 +644,14 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
     sal_Bool bModified = sal_False;
 
-    if ( m_pExperimentalCB->IsChecked() != m_pExperimentalCB->GetSavedValue() )
+    if ( TriState(m_pExperimentalCB->IsChecked()) != m_pExperimentalCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( m_pMacroCB->IsChecked() != m_pMacroCB->GetSavedValue() )
+    if ( TriState(m_pMacroCB->IsChecked()) != m_pMacroCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetMacroRecorderMode( m_pMacroCB->IsChecked() );
@@ -733,7 +733,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
-    if ( bEnabled != m_pJavaEnableCB->IsChecked() )
+    if ( bool(bEnabled) != m_pJavaEnableCB->IsChecked() )
     {
         eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
         DBG_ASSERT( JFW_E_NONE == eErr,

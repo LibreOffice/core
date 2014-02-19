@@ -59,7 +59,7 @@ namespace utl
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     m_xDummy;
-        sal_Bool    m_bEscapeNames;         /// escape names before accessing children ?
+        bool    m_bEscapeNames;         /// escape names before accessing children ?
 
         OUString
                     m_sCompletePath;
@@ -77,7 +77,7 @@ namespace utl
 
     public:
         /// constructs an empty and invalid node object
-        OConfigurationNode() :m_bEscapeNames(sal_False) { }
+        OConfigurationNode() :m_bEscapeNames(false) { }
         /// copy ctor
         OConfigurationNode(const OConfigurationNode& _rSource);
 
@@ -123,9 +123,9 @@ namespace utl
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
-        sal_Bool            removeNode(const OUString& _rName) const throw();
+        bool            removeNode(const OUString& _rName) const throw();
 
-        sal_Bool            removeNode( const sal_Char* _pAsciiName ) const
+        bool            removeNode( const sal_Char* _pAsciiName ) const
         {
             return removeNode( OUString::createFromAscii( _pAsciiName ) );
         }
@@ -152,9 +152,9 @@ namespace utl
             node.
             @return     sal_True if and only if the write was successful.
         */
-        sal_Bool            setNodeValue(const OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
+        bool            setNodeValue(const OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
 
-        sal_Bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
+        bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
         {
             return setNodeValue( OUString::createFromAscii( _pAsciiPath ), _rValue );
         }
@@ -169,11 +169,11 @@ namespace utl
             escaping for such names may not be supported by the underlying API objects.
             @see getEscape
         */
-        void        setEscape(sal_Bool _bEnable = sal_True);
+        void        setEscape(bool _bEnable = true);
         /** get the flag specifying the current escape behaviour
             @see setEscape
         */
-        sal_Bool    getEscape() const { return m_bEscapeNames; }
+        bool    getEscape() const { return m_bEscapeNames; }
 
         /// invalidate the object
         virtual void clear() throw();
@@ -182,21 +182,21 @@ namespace utl
         // meta information about the node
 
         /// checks whether or not the object represents a set node.
-        sal_Bool isSetNode() const;
+        bool isSetNode() const;
 
         /// checks whether or not a direct child with a given name exists
-        sal_Bool hasByName(const OUString& _rName) const throw();
-        sal_Bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( OUString::createFromAscii( _pAsciiName ) ); }
+        bool hasByName(const OUString& _rName) const throw();
+        bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
-        sal_Bool hasByHierarchicalName( const OUString& _rName ) const throw();
-        sal_Bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( OUString::createFromAscii( _pAsciiName ) ); }
+        bool hasByHierarchicalName( const OUString& _rName ) const throw();
+        bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// check if the objects represents a valid configuration node
-        sal_Bool isValid() const { return m_xHierarchyAccess.is(); }
+        bool isValid() const { return m_xHierarchyAccess.is(); }
 
         /// check whether the object is read-only of updatable
-        sal_Bool isReadonly() const { return !m_xReplaceAccess.is(); }
+        bool isReadonly() const { return !m_xReplaceAccess.is(); }
 
     protected:
         // OEventListenerAdapter
@@ -278,7 +278,7 @@ namespace utl
                 const OUString& _rPath,
                 sal_Int32 _nDepth = -1,
                 CREATION_MODE _eMode = CM_UPDATABLE,
-                sal_Bool _bLazyWrite = sal_True
+                bool _bLazyWrite = true
             );
 
         /** open a new top-level configuration node<p/>
@@ -294,7 +294,7 @@ namespace utl
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
@@ -303,14 +303,14 @@ namespace utl
             given node path does not exist) are still asserted.</p>
         */
         static OConfigurationTreeRoot tryCreateWithComponentContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true );
 
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any OConfigurationNode object retrieved (maybe indirect) from this root
             object are committed when calling this method.
             @return     sal_True if and only if the commit was successful
         */
-        sal_Bool commit() const throw();
+        bool commit() const throw();
 
         /// invalidate the object
         virtual void clear() throw();

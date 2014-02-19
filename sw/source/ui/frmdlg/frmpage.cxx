@@ -1170,8 +1170,8 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     }
 
     bool bValueModified = (m_aWidthED.IsValueModified() || m_aHeightED.IsValueModified());
-    bool bCheckChanged = (m_pRelWidthCB->GetSavedValue() != m_pRelWidthCB->IsChecked()
-                        || m_pRelHeightCB->GetSavedValue() != m_pRelHeightCB->IsChecked());
+    bool bCheckChanged = (m_pRelWidthCB->GetSavedValue() != TriState(m_pRelWidthCB->IsChecked())
+                          || m_pRelHeightCB->GetSavedValue() != TriState(m_pRelHeightCB->IsChecked()));
 
     bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
                             m_aWidthED .GetValue() == m_aWidthED .GetMin() &&
@@ -1195,7 +1195,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         else
             aSz.SetHeightPercent(0);
 
-        if (m_pFixedRatioCB->IsChecked() && (m_pRelWidthCB->IsChecked() ^ m_pRelHeightCB->IsChecked()))
+        if (m_pFixedRatioCB->IsChecked() && (m_pRelWidthCB->IsChecked() != m_pRelHeightCB->IsChecked()))
         {
             if (m_pRelWidthCB->IsChecked())
                 aSz.SetHeightPercent(0xff);
@@ -1207,18 +1207,18 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     {
         if( m_pAutoHeightCB->GetState() != m_pAutoHeightCB->GetSavedValue() )
         {
-            SwFrmSize eFrmSize = (SwFrmSize) m_pAutoHeightCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            SwFrmSize eFrmSize = m_pAutoHeightCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
             if( eFrmSize != aSz.GetHeightSizeType() )
                 aSz.SetHeightSizeType(eFrmSize);
         }
         if( m_pAutoWidthCB->GetState() != m_pAutoWidthCB->GetSavedValue() )
         {
-            SwFrmSize eFrmSize = (SwFrmSize) m_pAutoWidthCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            SwFrmSize eFrmSize = m_pAutoWidthCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
             if( eFrmSize != aSz.GetWidthSizeType() )
                 aSz.SetWidthSizeType( eFrmSize );
         }
     }
-    if( !bFormat && m_pFixedRatioCB->GetSavedValue() != m_pFixedRatioCB->IsChecked())
+    if( !bFormat && m_pFixedRatioCB->GetSavedValue() != TriState(m_pFixedRatioCB->IsChecked()))
         bRet |= 0 != rSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, m_pFixedRatioCB->IsChecked()));
 
     pOldItem = GetOldItem(rSet, RES_FRM_SIZE);
@@ -1233,7 +1233,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         bRet |= 0 != rSet.Put( aSz );
     }
-    if(m_pFollowTextFlowCB->IsChecked() != m_pFollowTextFlowCB->GetSavedValue())
+    if(TriState(m_pFollowTextFlowCB->IsChecked()) != m_pFollowTextFlowCB->GetSavedValue())
     {
         bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
     }
@@ -2521,8 +2521,8 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
     sal_Bool bModified = sal_False;
-    if ( m_pMirrorHorzBox->GetSavedValue() != m_pMirrorHorzBox->IsChecked() ||
-         m_pMirrorVertBox->GetSavedValue() != m_pMirrorVertBox->IsChecked() ||
+    if ( m_pMirrorHorzBox->GetSavedValue() != TriState(m_pMirrorHorzBox->IsChecked()) ||
+         m_pMirrorVertBox->GetSavedValue() != TriState(m_pMirrorVertBox->IsChecked()) ||
          m_pAllPagesRB->GetSavedValue() != m_pAllPagesRB->IsChecked() ||
          m_pLeftPagesRB->GetSavedValue() != m_pLeftPagesRB->IsChecked() ||
          m_pRightPagesRB->GetSavedValue() != m_pRightPagesRB->IsChecked())

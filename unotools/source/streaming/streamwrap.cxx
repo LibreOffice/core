@@ -35,14 +35,14 @@ DBG_NAME(OInputStreamWrapper)
 //------------------------------------------------------------------
 OInputStreamWrapper::OInputStreamWrapper( SvStream& _rStream )
                  :m_pSvStream(&_rStream)
-                 ,m_bSvStreamOwner(sal_False)
+                 ,m_bSvStreamOwner(false)
 {
     DBG_CTOR(OInputStreamWrapper,NULL);
 
 }
 
 //------------------------------------------------------------------
-OInputStreamWrapper::OInputStreamWrapper( SvStream* pStream, sal_Bool bOwner )
+OInputStreamWrapper::OInputStreamWrapper( SvStream* pStream, bool bOwner )
                  :m_pSvStream( pStream )
                  ,m_bSvStreamOwner( bOwner )
 {
@@ -163,11 +163,11 @@ void OInputStreamWrapper::checkError() const
 //------------------------------------------------------------------------------
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, sal_False );
+    SetStream( &_rStream, false );
 }
 
 //------------------------------------------------------------------------------
-OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, sal_Bool _bOwner)
+OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, bool _bOwner)
 {
     SetStream( _pStream, _bOwner );
 }
@@ -318,7 +318,7 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
 //------------------------------------------------------------------------------
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, sal_False );
+    SetStream( &_rStream, false );
 }
 
 //------------------------------------------------------------------------------

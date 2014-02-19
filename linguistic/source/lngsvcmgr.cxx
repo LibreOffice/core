@@ -1737,7 +1737,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SaveCfgSvcs" );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
 
     LinguDispatcher *pDsp = 0;
     uno::Sequence< lang::Locale > aLocales;

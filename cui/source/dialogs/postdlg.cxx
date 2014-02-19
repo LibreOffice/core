@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     }
     aStr += rLocaleWrapper.getDate(aDate);
     aStr += ", ";
-    aStr += rLocaleWrapper.getTime(aTime, sal_False, sal_False);
+    aStr += rLocaleWrapper.getTime(aTime, false, false);
     aStr += " ----\n";
 
     aStr = convertLineEnd(aStr, GetSystemLineEnd());

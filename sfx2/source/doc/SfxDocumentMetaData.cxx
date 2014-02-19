@@ -2031,7 +2031,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     if (!URL.isEmpty()) {
         md[ utl::MediaDescriptor::PROP_URL() ] <<= URL;
     }
-    if (sal_True == md.addInputStream()) {
+    if (md.addInputStream()) {
         md[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
     css::uno::Reference<css::embed::XStorage> xStorage;

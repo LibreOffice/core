@@ -74,17 +74,17 @@ public:
 //  public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Bool    IsPaperSize() const { return m_bPaperSize; }
-    sal_Bool    IsPaperOrientation() const { return m_bPaperOrientation; }
-    sal_Bool    IsNotFound() const { return m_bNotFound; }
-    sal_Bool    IsTransparency() const { return m_bTransparency; }
-    sal_Bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
+    bool    IsPaperSize() const { return m_bPaperSize; }
+    bool    IsPaperOrientation() const { return m_bPaperOrientation; }
+    bool    IsNotFound() const { return m_bNotFound; }
+    bool    IsTransparency() const { return m_bTransparency; }
+    bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
 
-    void        SetPaperSize( sal_Bool bState ) { m_bPaperSize = bState; SetModified(); }
-    void        SetPaperOrientation( sal_Bool bState ) { m_bPaperOrientation = bState; SetModified(); }
-    void        SetNotFound( sal_Bool bState ) { m_bNotFound = bState; SetModified(); }
-    void        SetTransparency( sal_Bool bState ) { m_bTransparency = bState; SetModified(); }
-    void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
+    void        SetPaperSize( bool bState ) { m_bPaperSize = bState; SetModified(); }
+    void        SetPaperOrientation( bool bState ) { m_bPaperOrientation = bState; SetModified(); }
+    void        SetNotFound( bool bState ) { m_bNotFound = bState; SetModified(); }
+    void        SetTransparency( bool bState ) { m_bTransparency = bState; SetModified(); }
+    void        SetModifyDocumentOnPrintingAllowed( bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -100,11 +100,11 @@ private:
 
 private:
 
-    sal_Bool    m_bPaperSize;
-    sal_Bool    m_bPaperOrientation;
-    sal_Bool    m_bNotFound;
-    sal_Bool    m_bTransparency;
-    sal_Bool    m_bModifyDocumentOnPrintingAllowed;
+    bool    m_bPaperSize;
+    bool    m_bPaperOrientation;
+    bool    m_bNotFound;
+    bool    m_bTransparency;
+    bool    m_bModifyDocumentOnPrintingAllowed;
 };
 
 //*****************************************************************************************************************
@@ -112,11 +112,11 @@ private:
 //*****************************************************************************************************************
 SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
     ConfigItem( ROOTNODE_START  ),
-    m_bPaperSize( sal_False ),
-    m_bPaperOrientation( sal_False ),
-    m_bNotFound( sal_False ),
-    m_bTransparency( sal_True ),
-    m_bModifyDocumentOnPrintingAllowed( sal_True )
+    m_bPaperSize( false ),
+    m_bPaperOrientation( false ),
+    m_bNotFound( false ),
+    m_bTransparency( true ),
+    m_bModifyDocumentOnPrintingAllowed( true )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues( GetProperties( seqNames ) );
@@ -287,7 +287,7 @@ SvtPrintWarningOptions::~SvtPrintWarningOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtPrintWarningOptions::IsPaperSize() const
+bool SvtPrintWarningOptions::IsPaperSize() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaperSize();
@@ -296,7 +296,7 @@ sal_Bool SvtPrintWarningOptions::IsPaperSize() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtPrintWarningOptions::IsPaperOrientation() const
+bool SvtPrintWarningOptions::IsPaperOrientation() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaperOrientation();
@@ -305,7 +305,7 @@ sal_Bool SvtPrintWarningOptions::IsPaperOrientation() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtPrintWarningOptions::IsTransparency() const
+bool SvtPrintWarningOptions::IsTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsTransparency();
@@ -314,7 +314,7 @@ sal_Bool SvtPrintWarningOptions::IsTransparency() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtPrintWarningOptions::SetPaperSize( sal_Bool bState )
+void SvtPrintWarningOptions::SetPaperSize( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperSize( bState );
@@ -323,7 +323,7 @@ void SvtPrintWarningOptions::SetPaperSize( sal_Bool bState )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtPrintWarningOptions::SetPaperOrientation( sal_Bool bState )
+void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperOrientation( bState );
@@ -332,14 +332,14 @@ void SvtPrintWarningOptions::SetPaperOrientation( sal_Bool bState )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtPrintWarningOptions::SetTransparency( sal_Bool bState )
+void SvtPrintWarningOptions::SetTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetTransparency( bState );
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
+bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
@@ -347,7 +347,7 @@ sal_Bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 
 // -----------------------------------------------------------------------------
 
-void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( sal_Bool bState )
+void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;

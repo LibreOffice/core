@@ -75,8 +75,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
     sal_uInt16                      nCurrPositiveFormat;
     sal_uInt16                      nCurrNegativeFormat;
     sal_uInt16                      nCurrDigits;
-    sal_Bool                        bLocaleDataItemValid;
-    sal_Bool                        bReservedWordValid;
+    bool                        bLocaleDataItemValid;
+    bool                        bReservedWordValid;
     mutable ::utl::ReadWriteMutex   aMutex;
 
     // dummies, to be implemented or provided by XML locale data
@@ -106,7 +106,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 
     sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
-                            sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const;
+                            bool bUseThousandSep, bool bTrailingZeros ) const;
 
     void                getDigitGroupingImpl();
 
@@ -245,10 +245,10 @@ public:
     DateFormat          getLongDateFormat() const;
     /// only numerical values of Gregorian calendar
     OUString       getDate( const Date& rDate ) const;
-    OUString       getTime( const Time& rTime, sal_Bool bSec = sal_True,
-                            sal_Bool b100Sec = sal_False ) const;
+    OUString       getTime( const Time& rTime, bool bSec = true,
+                            bool b100Sec = false ) const;
     OUString       getDuration( const Time& rTime,
-                            sal_Bool bSec = sal_True, sal_Bool b100Sec = sal_False ) const;
+                            bool bSec = true, bool b100Sec = false ) const;
 
                         /** The CalendarWrapper already <b>MUST</b>
                             have loaded a calendar.
@@ -268,9 +268,9 @@ public:
     OUString       getLongDate( const Date& rDate,
                             CalendarWrapper& rCal,
                             sal_Int16 nDisplayDayOfWeek = 1,
-                            sal_Bool bDayOfMonthWithLeadingZero = sal_False,
+                            bool bDayOfMonthWithLeadingZero = false,
                             sal_Int16 nDisplayMonth = 1,
-                            sal_Bool bTwoDigitYear = sal_False
+                            bool bTwoDigitYear = false
                             ) const;
 
                         /** Simple number formatting
@@ -283,31 +283,31 @@ public:
                                 if the value is not an integer value.
                          */
     OUString       getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                            sal_Bool bUseThousandSep = sal_True,
-                            sal_Bool bTrailingZeros = sal_True ) const;
+                            bool bUseThousandSep = true,
+                            bool bTrailingZeros = true ) const;
 
                         /// "Secure" currency formatted string.
     OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                             const OUString& rCurrencySymbol,
-                            sal_Bool bUseThousandSep = sal_True ) const;
+                            bool bUseThousandSep = true ) const;
                         /** Default currency formatted string, use with
                             care as default currency may change in any
                             locale, for example, DEM -> EUR */
     OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                                sal_Bool bUseThousandSep = sal_True ) const
+                                bool bUseThousandSep = true ) const
                             { return getCurr( nNumber, nDecimals,
                                 getCurrSymbol(), bUseThousandSep ); }
 
     // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    inline  sal_Bool                isNumLeadingZero() const
-                                    { return sal_True; }
+    inline  bool                isNumLeadingZero() const
+                                    { return true; }
                                 /// standard decimal places
     inline  sal_uInt16              getNumDigits() const
                                     { return 2; }
-    inline  sal_Bool                isNumTrailingZeros() const
-                                    { return sal_True; }
+    inline  bool                isNumTrailingZeros() const
+                                    { return true; }
 
 
     // reserved words

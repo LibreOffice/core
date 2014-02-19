@@ -46,14 +46,14 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(Window* pParent, const OUString& _r
     m_pKeepCurrentBtn->SetText( sInfoText );
 
     // load value of "warning on" checkbox from save options
-    m_pWarningOnBox->Check( SvtSaveOptions().IsWarnAlienFormat() == sal_True );
+    m_pWarningOnBox->Check( SvtSaveOptions().IsWarnAlienFormat() );
 }
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
     // save value of "warning off" checkbox, if necessary
     SvtSaveOptions aSaveOpt;
-    sal_Bool bChecked = m_pWarningOnBox->IsChecked();
+    bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aSaveOpt.IsWarnAlienFormat() != bChecked )
         aSaveOpt.SetWarnAlienFormat( bChecked );
 }

@@ -1632,7 +1632,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
     pMap( 0 ),
-    bIsServerMap( sal_False )
+    bIsServerMap( false )
 {
 }
 

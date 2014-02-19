@@ -362,7 +362,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bDrawMode )
     {
-        sal_Bool bChecked = m_pWrapTransparentCB->IsChecked() & m_pWrapTransparentCB->IsEnabled();
+        sal_Bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
         if (m_pWrapTransparentCB->GetSavedValue() != bChecked)
             bModified |= 0 != rSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }

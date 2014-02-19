@@ -167,12 +167,12 @@ sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         m_pTextSizeMF->GetSavedValue().toInt32() != m_pTextSizeMF->GetValue()||
         m_pCharsPerLineNF->GetSavedValue().toInt32()
            != m_pCharsPerLineNF->GetValue()||
-        m_pSnapToCharsCB->GetSavedValue() != m_pSnapToCharsCB->IsChecked() ||
+        m_pSnapToCharsCB->GetSavedValue() != TriState(m_pSnapToCharsCB->IsChecked()) ||
         m_pRubySizeMF->GetSavedValue().toInt32() != m_pRubySizeMF->GetValue()||
         m_pCharWidthMF->GetSavedValue().toInt32() != m_pCharWidthMF->GetValue()||
-        m_pRubyBelowCB->GetSavedValue() != m_pRubyBelowCB->IsChecked()||
-        m_pDisplayCB->GetSavedValue() != m_pDisplayCB->IsChecked()||
-        m_pPrintCB->GetSavedValue() != m_pPrintCB->IsChecked()||
+        m_pRubyBelowCB->GetSavedValue() != TriState(m_pRubyBelowCB->IsChecked())||
+        m_pDisplayCB->GetSavedValue() != TriState(m_pDisplayCB->IsChecked())||
+        m_pPrintCB->GetSavedValue() != TriState(m_pPrintCB->IsChecked())||
         m_pColorLB->GetSavedValue() != m_pColorLB->GetSelectEntryPos())
     {
         PutGridItem(rSet);

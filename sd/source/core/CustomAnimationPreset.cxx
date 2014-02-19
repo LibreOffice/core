@@ -245,7 +245,7 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     {
         // create stream
         SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
-        Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, sal_True ) );
+        Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, true ) );
 
         // prepare ParserInputSrouce
         xml::sax::InputSource aParserInput;

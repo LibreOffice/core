@@ -163,9 +163,9 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bValue;
     sal_Int64 nValue;
 
-    if( m_pAutoCheckCheckBox->GetSavedValue() != m_pAutoCheckCheckBox->IsChecked() )
+    if( m_pAutoCheckCheckBox->GetSavedValue() != TriState(m_pAutoCheckCheckBox->IsChecked()) )
     {
-        bValue = (sal_True == m_pAutoCheckCheckBox->IsChecked());
+        bValue = m_pAutoCheckCheckBox->IsChecked();
         m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }
@@ -193,9 +193,9 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    if( m_pAutoDownloadCheckBox->GetSavedValue() != m_pAutoDownloadCheckBox->IsChecked() )
+    if( m_pAutoDownloadCheckBox->GetSavedValue() != TriState(m_pAutoDownloadCheckBox->IsChecked()) )
     {
-        bValue = (sal_True == m_pAutoDownloadCheckBox->IsChecked());
+        bValue = m_pAutoDownloadCheckBox->IsChecked();
         m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }

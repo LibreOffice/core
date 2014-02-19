@@ -74,7 +74,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
 }
 
 //----------------------------------------------------------------------------
-sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
+bool splitLastFromConfigurationPath(OUString const& _sInPath,
                                         OUString& _rsOutPath,
                                         OUString& _rsLocalName)
 {
@@ -196,7 +196,7 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
     OSL_ENSURE(nPrefixLength == 0 || _sPrefixPath[nPrefixLength-1] != '/',
                 "Cannot handle slash-terminated prefix paths");
 
-    sal_Bool bIsPrefix;
+    bool bIsPrefix;
     if (_sNestedPath.getLength() > nPrefixLength)
     {
         bIsPrefix = _sNestedPath[nPrefixLength] == '/' &&
@@ -216,7 +216,7 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
 }
 
 //----------------------------------------------------------------------------
-sal_Bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
+bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                      OUString const& _sPrefixPath)
 {
     return _sPrefixPath.isEmpty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;

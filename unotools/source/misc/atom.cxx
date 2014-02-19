@@ -33,7 +33,7 @@ AtomProvider::~AtomProvider()
 {
 }
 
-int AtomProvider::getAtom( const OUString& rString, sal_Bool bCreate )
+int AtomProvider::getAtom( const OUString& rString, bool bCreate )
 {
     ::boost::unordered_map< OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
@@ -66,7 +66,7 @@ MultiAtomProvider::~MultiAtomProvider()
         delete it->second;
 }
 
-int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, sal_Bool bCreate )
+int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, bool bCreate )
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
           m_aAtomLists.find( atomClass );

@@ -49,15 +49,15 @@ class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public InputStreamWrapper_Base
 protected:
     ::osl::Mutex    m_aMutex;
     SvStream*       m_pSvStream;
-    sal_Bool        m_bSvStreamOwner : 1;
+    bool        m_bSvStreamOwner : 1;
     OInputStreamWrapper()
-                    { m_pSvStream = 0; m_bSvStreamOwner = sal_False; }
-    void            SetStream(SvStream* _pStream, sal_Bool bOwner )
+                    { m_pSvStream = 0; m_bSvStreamOwner = false; }
+    void            SetStream(SvStream* _pStream, bool bOwner )
                     { m_pSvStream = _pStream; m_bSvStreamOwner = bOwner; }
 
 public:
     OInputStreamWrapper(SvStream& _rStream);
-    OInputStreamWrapper(SvStream* pStream, sal_Bool bOwner=sal_False);
+    OInputStreamWrapper(SvStream* pStream, bool bOwner=false);
     virtual ~OInputStreamWrapper();
 
 // stario::XInputStream
@@ -88,7 +88,7 @@ protected:
     OSeekableInputStreamWrapper() {}
 public:
     OSeekableInputStreamWrapper(SvStream& _rStream);
-    OSeekableInputStreamWrapper(SvStream* _pStream, sal_Bool _bOwner = sal_False);
+    OSeekableInputStreamWrapper(SvStream* _pStream, bool _bOwner = false);
 
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-sal_Bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn )
+bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn )
 {
     rReturn = "";
 
@@ -50,13 +50,13 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const O
     }
     catch ( ::com::sun::star::uno::RuntimeException& )
     {
-        return sal_False;
+        return false;
     }
 
     return !rReturn.isEmpty();
 }
 
-sal_Bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
+bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
 {
     rReturn = "";
     Reference< XUniversalContentBroker > pBroker(
@@ -111,13 +111,13 @@ bool LocalFileHelper::ConvertURLToPhysicalName(const OUString& rName, OUString& 
     return !rReturn.isEmpty();
 }
 
-sal_Bool LocalFileHelper::IsLocalFile(const OUString& rName)
+bool LocalFileHelper::IsLocalFile(const OUString& rName)
 {
     OUString aTmp;
     return ConvertURLToPhysicalName(rName, aTmp);
 }
 
-sal_Bool LocalFileHelper::IsFileContent(const OUString& rName)
+bool LocalFileHelper::IsFileContent(const OUString& rName)
 {
     OUString aTmp;
     return ConvertURLToSystemPath(rName, aTmp);
@@ -125,7 +125,7 @@ sal_Bool LocalFileHelper::IsFileContent(const OUString& rName)
 
 typedef ::std::vector< OUString* > StringList_Impl;
 
-::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, sal_Bool bFolder )
+::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
 {
     StringList_Impl* pFiles = NULL;
     try

@@ -82,7 +82,7 @@ ReadWriteGuard::~ReadWriteGuard()
 
 void ReadWriteGuard::changeReadToWrite()
 {
-    sal_Bool bOk = !(nMode & (ReadWriteGuardMode::nWrite | ReadWriteGuardMode::nBlockCritical));
+    bool bOk = !(nMode & (ReadWriteGuardMode::nWrite | ReadWriteGuardMode::nBlockCritical));
     DBG_ASSERT( bOk, "ReadWriteGuard::changeReadToWrite: can't" );
     if ( bOk )
     {
@@ -97,7 +97,7 @@ void ReadWriteGuard::changeReadToWrite()
         nMode |= ReadWriteGuardMode::nWrite;
         // wait for any other read to complete
 // TODO: set up a waiting thread instead of a loop
-        sal_Bool bWait = sal_True;
+        bool bWait = true;
         do
         {
             rMutex.pMutex->acquire();

@@ -44,66 +44,66 @@ public:
     // General Options
     //
 
-    sal_Bool    IsWholeWordsOnly() const;
-    sal_Bool    IsBackwards() const;
-    sal_Bool    IsUseRegularExpression() const;
-    sal_Bool    IsSimilaritySearch() const;
-    sal_Bool    IsUseAsianOptions() const;
-    sal_Bool    IsMatchCase() const;            // also Japanese search option
-    sal_Bool    IsNotes() const;
+    bool    IsWholeWordsOnly() const;
+    bool    IsBackwards() const;
+    bool    IsUseRegularExpression() const;
+    bool    IsSimilaritySearch() const;
+    bool    IsUseAsianOptions() const;
+    bool    IsMatchCase() const;            // also Japanese search option
+    bool    IsNotes() const;
 
-    void    SetWholeWordsOnly( sal_Bool bVal );
-    void    SetBackwards( sal_Bool bVal );
-    void    SetUseRegularExpression( sal_Bool bVal );
-    void    SetSearchForStyles( sal_Bool bVal );
-    void    SetSimilaritySearch( sal_Bool bVal );
-    void    SetUseAsianOptions( sal_Bool bVal );
-    void    SetMatchCase( sal_Bool bVal );      // also Japanese search option
-    void    SetNotes( sal_Bool bVal);
+    void    SetWholeWordsOnly( bool bVal );
+    void    SetBackwards( bool bVal );
+    void    SetUseRegularExpression( bool bVal );
+    void    SetSearchForStyles( bool bVal );
+    void    SetSimilaritySearch( bool bVal );
+    void    SetUseAsianOptions( bool bVal );
+    void    SetMatchCase( bool bVal );      // also Japanese search option
+    void    SetNotes( bool bVal);
 
     //
     // Japanese search options
     //
 
-    sal_Bool    IsMatchFullHalfWidthForms() const;
-    sal_Bool    IsMatchHiraganaKatakana() const;
-    sal_Bool    IsMatchContractions() const;
-    sal_Bool    IsMatchMinusDashChoon() const;
-    sal_Bool    IsMatchRepeatCharMarks() const;
-    sal_Bool    IsMatchVariantFormKanji() const;
-    sal_Bool    IsMatchOldKanaForms() const;
-    sal_Bool    IsMatchDiziDuzu() const;
-    sal_Bool    IsMatchBavaHafa() const;
-    sal_Bool    IsMatchTsithichiDhizi() const;
-    sal_Bool    IsMatchHyuiyuByuvyu() const;
-    sal_Bool    IsMatchSesheZeje() const;
-    sal_Bool    IsMatchIaiya() const;
-    sal_Bool    IsMatchKiku() const;
-    sal_Bool    IsIgnorePunctuation() const;
-    sal_Bool    IsIgnoreWhitespace() const;
-    sal_Bool    IsIgnoreProlongedSoundMark() const;
-    sal_Bool    IsIgnoreMiddleDot() const;
-    sal_Bool    IsIgnoreDiacritics_CTL() const;
+    bool    IsMatchFullHalfWidthForms() const;
+    bool    IsMatchHiraganaKatakana() const;
+    bool    IsMatchContractions() const;
+    bool    IsMatchMinusDashChoon() const;
+    bool    IsMatchRepeatCharMarks() const;
+    bool    IsMatchVariantFormKanji() const;
+    bool    IsMatchOldKanaForms() const;
+    bool    IsMatchDiziDuzu() const;
+    bool    IsMatchBavaHafa() const;
+    bool    IsMatchTsithichiDhizi() const;
+    bool    IsMatchHyuiyuByuvyu() const;
+    bool    IsMatchSesheZeje() const;
+    bool    IsMatchIaiya() const;
+    bool    IsMatchKiku() const;
+    bool    IsIgnorePunctuation() const;
+    bool    IsIgnoreWhitespace() const;
+    bool    IsIgnoreProlongedSoundMark() const;
+    bool    IsIgnoreMiddleDot() const;
+    bool    IsIgnoreDiacritics_CTL() const;
 
-    void    SetMatchFullHalfWidthForms( sal_Bool bVal );
-    void    SetMatchHiraganaKatakana( sal_Bool bVal );
-    void    SetMatchContractions( sal_Bool bVal );
-    void    SetMatchMinusDashChoon( sal_Bool bVal );
-    void    SetMatchRepeatCharMarks( sal_Bool bVal );
-    void    SetMatchVariantFormKanji( sal_Bool bVal );
-    void    SetMatchOldKanaForms( sal_Bool bVal );
-    void    SetMatchDiziDuzu( sal_Bool bVal );
-    void    SetMatchBavaHafa( sal_Bool bVal );
-    void    SetMatchTsithichiDhizi( sal_Bool bVal );
-    void    SetMatchHyuiyuByuvyu( sal_Bool bVal );
-    void    SetMatchSesheZeje( sal_Bool bVal );
-    void    SetMatchIaiya( sal_Bool bVal );
-    void    SetMatchKiku( sal_Bool bVal );
-    void    SetIgnorePunctuation( sal_Bool bVal );
-    void    SetIgnoreWhitespace( sal_Bool bVal );
-    void    SetIgnoreProlongedSoundMark( sal_Bool bVal );
-    void    SetIgnoreMiddleDot( sal_Bool bVal );
-    void    SetIgnoreDiacritics_CTL( sal_Bool bVal );
+    void    SetMatchFullHalfWidthForms( bool bVal );
+    void    SetMatchHiraganaKatakana( bool bVal );
+    void    SetMatchContractions( bool bVal );
+    void    SetMatchMinusDashChoon( bool bVal );
+    void    SetMatchRepeatCharMarks( bool bVal );
+    void    SetMatchVariantFormKanji( bool bVal );
+    void    SetMatchOldKanaForms( bool bVal );
+    void    SetMatchDiziDuzu( bool bVal );
+    void    SetMatchBavaHafa( bool bVal );
+    void    SetMatchTsithichiDhizi( bool bVal );
+    void    SetMatchHyuiyuByuvyu( bool bVal );
+    void    SetMatchSesheZeje( bool bVal );
+    void    SetMatchIaiya( bool bVal );
+    void    SetMatchKiku( bool bVal );
+    void    SetIgnorePunctuation( bool bVal );
+    void    SetIgnoreWhitespace( bool bVal );
+    void    SetIgnoreProlongedSoundMark( bool bVal );
+    void    SetIgnoreMiddleDot( bool bVal );
+    void    SetIgnoreDiacritics_CTL( bool bVal );
 };
 
 

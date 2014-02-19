@@ -38,53 +38,53 @@ public:
     virtual void            Commit();
     void                    Load();
 
-    void SetLoadWordBasicCode( sal_Bool bFlag );
-    sal_Bool IsLoadWordBasicCode() const;
-    void SetLoadWordBasicExecutable( sal_Bool bFlag );
-    sal_Bool IsLoadWordBasicExecutable() const;
-    void SetLoadWordBasicStorage( sal_Bool bFlag );
-    sal_Bool IsLoadWordBasicStorage() const;
+    void SetLoadWordBasicCode( bool bFlag );
+    bool IsLoadWordBasicCode() const;
+    void SetLoadWordBasicExecutable( bool bFlag );
+    bool IsLoadWordBasicExecutable() const;
+    void SetLoadWordBasicStorage( bool bFlag );
+    bool IsLoadWordBasicStorage() const;
 
-    void SetLoadExcelBasicCode( sal_Bool bFlag );
-    sal_Bool IsLoadExcelBasicCode() const;
-    void SetLoadExcelBasicExecutable( sal_Bool bFlag );
-    sal_Bool IsLoadExcelBasicExecutable() const;
-    void SetLoadExcelBasicStorage( sal_Bool bFlag );
-    sal_Bool IsLoadExcelBasicStorage() const;
+    void SetLoadExcelBasicCode( bool bFlag );
+    bool IsLoadExcelBasicCode() const;
+    void SetLoadExcelBasicExecutable( bool bFlag );
+    bool IsLoadExcelBasicExecutable() const;
+    void SetLoadExcelBasicStorage( bool bFlag );
+    bool IsLoadExcelBasicStorage() const;
 
-    void SetLoadPPointBasicCode( sal_Bool bFlag );
-    sal_Bool IsLoadPPointBasicCode() const;
-    void SetLoadPPointBasicStorage( sal_Bool bFlag );
-    sal_Bool IsLoadPPointBasicStorage() const;
+    void SetLoadPPointBasicCode( bool bFlag );
+    bool IsLoadPPointBasicCode() const;
+    void SetLoadPPointBasicStorage( bool bFlag );
+    bool IsLoadPPointBasicStorage() const;
 
-    sal_Bool IsMathType2Math() const;
-    void SetMathType2Math( sal_Bool bFlag );
-    sal_Bool IsMath2MathType() const;
-    void SetMath2MathType( sal_Bool bFlag );
+    bool IsMathType2Math() const;
+    void SetMathType2Math( bool bFlag );
+    bool IsMath2MathType() const;
+    void SetMath2MathType( bool bFlag );
 
-    sal_Bool IsWinWord2Writer() const;
-    void SetWinWord2Writer( sal_Bool bFlag );
-    sal_Bool IsWriter2WinWord() const;
-    void SetWriter2WinWord( sal_Bool bFlag );
+    bool IsWinWord2Writer() const;
+    void SetWinWord2Writer( bool bFlag );
+    bool IsWriter2WinWord() const;
+    void SetWriter2WinWord( bool bFlag );
 
-    sal_Bool IsUseEnhancedFields() const;
+    bool IsUseEnhancedFields() const;
 
-    sal_Bool IsExcel2Calc() const;
-    void SetExcel2Calc( sal_Bool bFlag );
-    sal_Bool IsCalc2Excel() const;
-    void SetCalc2Excel( sal_Bool bFlag );
+    bool IsExcel2Calc() const;
+    void SetExcel2Calc( bool bFlag );
+    bool IsCalc2Excel() const;
+    void SetCalc2Excel( bool bFlag );
 
-    sal_Bool IsPowerPoint2Impress() const;
-    void SetPowerPoint2Impress( sal_Bool bFlag );
-    sal_Bool IsImpress2PowerPoint() const;
-    void SetImpress2PowerPoint( sal_Bool bFlag );
+    bool IsPowerPoint2Impress() const;
+    void SetPowerPoint2Impress( bool bFlag );
+    bool IsImpress2PowerPoint() const;
+    void SetImpress2PowerPoint( bool bFlag );
 
-    sal_Bool IsSmartArt2Shape() const;
-    void SetSmartArt2Shape( sal_Bool bFlag );
+    bool IsSmartArt2Shape() const;
+    void SetSmartArt2Shape( bool bFlag );
 
-    sal_Bool IsEnablePPTPreview() const;
-    sal_Bool IsEnableCalcPreview() const;
-    sal_Bool IsEnableWordPreview() const;
+    bool IsEnablePPTPreview() const;
+    bool IsEnableCalcPreview() const;
+    bool IsEnableWordPreview() const;
 
     static SvtFilterOptions& Get();
 };

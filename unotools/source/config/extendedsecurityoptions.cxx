@@ -132,7 +132,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         OUString                                        m_aExtensionPropName;
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
-        sal_Bool                                        m_bROOpenHyperlinkMode;
+        bool                                        m_bROOpenHyperlinkMode;
         ExtensionHashMap                                m_aExtensionHashMap;
 };
 
@@ -145,7 +145,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     , m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET )
     , m_aExtensionPropName( EXTENSION_PROPNAME )
     , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
-    , m_bROOpenHyperlinkMode(sal_False)
+    , m_bROOpenHyperlinkMode(false)
     // Init member then.
 {
     // Fill the extension hash map with all secure extension strings

@@ -781,7 +781,7 @@ sal_Bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
 {
     return sm_pSingleImplConfig->GetIsAutomaticFontColor();
 }
-sal_Bool SvtAccessibilityOptions::GetIsSystemFont() const
+bool SvtAccessibilityOptions::GetIsSystemFont() const
 {
     return sm_pSingleImplConfig->GetIsSystemFont();
 }

@@ -80,7 +80,7 @@ public:
     // set the address token
     void SetCustomerNumber (OUString const&);
 
-    sal_Bool      IsTokenReadonly (sal_uInt16 nToken) const;
+    bool      IsTokenReadonly (sal_uInt16 nToken) const;
     OUString GetToken (sal_uInt16 nToken) const;
     void          SetToken (sal_uInt16 nToken, OUString const& rNewToken);
 

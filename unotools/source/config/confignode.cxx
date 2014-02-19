@@ -54,7 +54,7 @@ namespace utl
     //========================================================================
     //------------------------------------------------------------------------
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
-        :m_bEscapeNames(sal_False)
+        :m_bEscapeNames(false)
     {
         OSL_ENSURE(_rxNode.is(), "OConfigurationNode::OConfigurationNode: invalid node interface!");
         if (_rxNode.is())
@@ -208,7 +208,7 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
+    bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xContainerAccess.is(), "OConfigurationNode::removeNode: object is invalid!");
         if (m_xContainerAccess.is())
@@ -217,7 +217,7 @@ namespace utl
             {
                 OUString sName = normalizeName(_rName, NO_CALLER);
                 m_xContainerAccess->removeByName(sName);
-                return sal_True;
+                return true;
             }
             catch (NoSuchElementException&)
             {
@@ -238,7 +238,7 @@ namespace utl
                 OSL_FAIL("OConfigurationNode::removeNode: caught a generic exception!");
             }
         }
-        return sal_False;
+        return false;
     }
     //------------------------------------------------------------------------
     OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const throw()
@@ -329,15 +329,15 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    void OConfigurationNode::setEscape(sal_Bool _bEnable)
+    void OConfigurationNode::setEscape(bool _bEnable)
     {
         m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::isSetNode() const
+    bool OConfigurationNode::isSetNode() const
     {
-        sal_Bool bIsSet = sal_False;
+        bool bIsSet = false;
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
@@ -347,7 +347,7 @@ namespace utl
         return bIsSet;
     }
 
-    sal_Bool OConfigurationNode::hasByHierarchicalName( const OUString& _rName ) const throw()
+    bool OConfigurationNode::hasByHierarchicalName( const OUString& _rName ) const throw()
     {
         OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );
         try
@@ -361,11 +361,11 @@ namespace utl
         catch(Exception&)
         {
         }
-        return sal_False;
+        return false;
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
+    bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         try
@@ -377,13 +377,13 @@ namespace utl
         catch(Exception&)
         {
         }
-        return sal_False;
+        return false;
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
+    bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
     {
-        sal_Bool bResult = false;
+        bool bResult = false;
 
         OSL_ENSURE(m_xReplaceAccess.is(), "OConfigurationNode::setNodeValue: object is invalid!");
         if (m_xReplaceAccess.is())
@@ -553,29 +553,29 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationTreeRoot::commit() const throw()
+    bool OConfigurationTreeRoot::commit() const throw()
     {
         OSL_ENSURE(isValid(), "OConfigurationTreeRoot::commit: object is invalid!");
         if (!isValid())
-            return sal_False;
+            return false;
         OSL_ENSURE(m_xCommitter.is(), "OConfigurationTreeRoot::commit: I'm a readonly node!");
         if (!m_xCommitter.is())
-            return sal_False;
+            return false;
 
         try
         {
             m_xCommitter->commitChanges();
-            return sal_True;
+            return true;
         }
         catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return sal_False;
+        return false;
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
             _rxConfProvider, _rPath, _eMode != CM_READONLY, _nDepth, _bLazyWrite ) );
@@ -585,14 +585,14 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite )
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite )
     {
         return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
 
     //------------------------------------------------------------------------
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
-        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
+        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , bool _bLazyWrite )
     {
         OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithComponentContext: invalid XComponentContext!" );
         try

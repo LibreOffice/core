@@ -82,20 +82,20 @@ SdPrintOptions::~SdPrintOptions()
 
 sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
-    if( m_pCbxDraw->GetSavedValue() != m_pCbxDraw->IsChecked() ||
-        m_pCbxNotes->GetSavedValue() != m_pCbxNotes->IsChecked() ||
-        m_pCbxHandout->GetSavedValue() != m_pCbxHandout->IsChecked() ||
-        m_pCbxOutline->GetSavedValue() != m_pCbxOutline->IsChecked() ||
-        m_pCbxDate->GetSavedValue() != m_pCbxDate->IsChecked() ||
-        m_pCbxTime->GetSavedValue() != m_pCbxTime->IsChecked() ||
-        m_pCbxPagename->GetSavedValue() != m_pCbxPagename->IsChecked() ||
-        m_pCbxHiddenPages->GetSavedValue() != m_pCbxHiddenPages->IsChecked() ||
+    if( m_pCbxDraw->GetSavedValue() != TriState(m_pCbxDraw->IsChecked()) ||
+        m_pCbxNotes->GetSavedValue() != TriState(m_pCbxNotes->IsChecked()) ||
+        m_pCbxHandout->GetSavedValue() != TriState(m_pCbxHandout->IsChecked()) ||
+        m_pCbxOutline->GetSavedValue() != TriState(m_pCbxOutline->IsChecked()) ||
+        m_pCbxDate->GetSavedValue() != TriState(m_pCbxDate->IsChecked()) ||
+        m_pCbxTime->GetSavedValue() != TriState(m_pCbxTime->IsChecked()) ||
+        m_pCbxPagename->GetSavedValue() != TriState(m_pCbxPagename->IsChecked()) ||
+        m_pCbxHiddenPages->GetSavedValue() != TriState(m_pCbxHiddenPages->IsChecked()) ||
         m_pRbtPagesize->GetSavedValue() != m_pRbtPagesize->IsChecked() ||
         m_pRbtPagetile->GetSavedValue() != m_pRbtPagetile->IsChecked() ||
         m_pRbtBooklet->GetSavedValue() != m_pRbtBooklet->IsChecked() ||
-        m_pCbxFront->GetSavedValue() != m_pCbxFront->IsChecked() ||
-        m_pCbxBack->GetSavedValue() != m_pCbxBack->IsChecked() ||
-        m_pCbxPaperbin->GetSavedValue() != m_pCbxPaperbin->IsChecked() ||
+        m_pCbxFront->GetSavedValue() != TriState(m_pCbxFront->IsChecked()) ||
+        m_pCbxBack->GetSavedValue() != TriState(m_pCbxBack->IsChecked()) ||
+        m_pCbxPaperbin->GetSavedValue() != TriState(m_pCbxPaperbin->IsChecked()) ||
         m_pRbtColor->GetSavedValue() != m_pRbtColor->IsChecked() ||
         m_pRbtGrayscale->GetSavedValue() != m_pRbtGrayscale->IsChecked() ||
         m_pRbtBlackWhite->GetSavedValue() != m_pRbtBlackWhite->IsChecked() )

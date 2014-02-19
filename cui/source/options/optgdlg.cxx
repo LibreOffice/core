@@ -252,28 +252,28 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     if ( bChecked != m_pExtHelpCB->GetSavedValue() )
         aHelpOptions.SetExtendedHelp( bChecked );
 
-    if ( m_pFileDlgCB->IsChecked() != m_pFileDlgCB->GetSavedValue() )
+    if ( TriState(m_pFileDlgCB->IsChecked()) != m_pFileDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemFileDialog( !m_pFileDlgCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( m_pPrintDlgCB->IsChecked() != m_pPrintDlgCB->GetSavedValue() )
+    if ( TriState(m_pPrintDlgCB->IsChecked()) != m_pPrintDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemPrintDialog( !m_pPrintDlgCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( m_pDocStatusCB->IsChecked() != m_pDocStatusCB->GetSavedValue() )
+    if ( TriState(m_pDocStatusCB->IsChecked()) != m_pDocStatusCB->GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
         aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_pDocStatusCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( m_pSaveAlwaysCB->IsChecked() != m_pSaveAlwaysCB->GetSavedValue() )
+    if ( TriState(m_pSaveAlwaysCB->IsChecked()) != m_pSaveAlwaysCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetSaveAlwaysAllowed( m_pSaveAlwaysCB->IsChecked() );
@@ -751,7 +751,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 
 #if defined( UNX )
-    if ( m_pFontAntiAliasing->IsChecked() != m_pFontAntiAliasing->GetSavedValue() )
+    if ( TriState(m_pFontAntiAliasing->IsChecked()) != m_pFontAntiAliasing->GetSavedValue() )
     {
         pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
         bAppearanceChanged = sal_True;
@@ -764,7 +764,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 #endif
 
-    if ( m_pFontShowCB->IsChecked() != m_pFontShowCB->GetSavedValue() )
+    if ( TriState(m_pFontShowCB->IsChecked()) != m_pFontShowCB->GetSavedValue() )
     {
         aFontOpt.EnableFontWYSIWYG( m_pFontShowCB->IsChecked() );
         bModified = sal_True;
@@ -778,7 +778,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bAppearanceChanged = sal_True;
     }
 
-    if ( m_pFontHistoryCB->IsChecked() != m_pFontHistoryCB->GetSavedValue() )
+    if ( TriState(m_pFontHistoryCB->IsChecked()) != m_pFontHistoryCB->GetSavedValue() )
     {
         aFontOpt.EnableFontHistory( m_pFontHistoryCB->IsChecked() );
         bModified = sal_True;
@@ -787,7 +787,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if(m_pUseHardwareAccell->IsEnabled())
     {
-        if(m_pUseHardwareAccell->IsChecked() != m_pUseHardwareAccell->GetSavedValue())
+        if(TriState(m_pUseHardwareAccell->IsChecked()) != m_pUseHardwareAccell->GetSavedValue())
         {
             pCanvasSettings->EnabledHardwareAcceleration(m_pUseHardwareAccell->IsChecked());
             bModified = sal_True;
@@ -1289,10 +1289,10 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
 
-    if(m_pDecimalSeparatorCB->GetSavedValue() != m_pDecimalSeparatorCB->IsChecked())
+    if(m_pDecimalSeparatorCB->GetSavedValue() != TriState(m_pDecimalSeparatorCB->IsChecked()))
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(m_pDecimalSeparatorCB->IsChecked());
 
-    if(m_pIgnoreLanguageChangeCB->GetSavedValue() != m_pIgnoreLanguageChangeCB->IsChecked())
+    if(m_pIgnoreLanguageChangeCB->GetSavedValue() != TriState(m_pIgnoreLanguageChangeCB->IsChecked()))
         pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(m_pIgnoreLanguageChangeCB->IsChecked());
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
@@ -1380,7 +1380,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if(m_pAsianSupportCB->GetSavedValue() != m_pAsianSupportCB->IsChecked() )
+    if(m_pAsianSupportCB->GetSavedValue() != TriState(m_pAsianSupportCB->IsChecked()) )
     {
         sal_Bool bChecked = m_pAsianSupportCB->IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
@@ -1399,7 +1399,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
-    if ( m_pCTLSupportCB->GetSavedValue() != m_pCTLSupportCB->IsChecked() )
+    if ( m_pCTLSupportCB->GetSavedValue() != TriState(m_pCTLSupportCB->IsChecked()) )
     {
         SvtSearchOptions aOpt;
         aOpt.SetIgnoreDiacritics_CTL (true);

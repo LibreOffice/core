@@ -35,7 +35,7 @@ namespace utl
         Returning sal_True and an empty URL means that the URL doesn't point to a local file.
         */
         static bool ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn);
-        static sal_Bool ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn );
+        static bool ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn );
 
         /**
         Converts a "UCB compatible" URL into a "physical" file name.
@@ -44,13 +44,13 @@ namespace utl
         file system is present ( watch: this doesn't mean that this file really exists! )
         */
         static bool ConvertURLToPhysicalName( const OUString& rName, OUString& rReturn );
-        static sal_Bool ConvertURLToSystemPath( const OUString& rName, OUString& rReturn );
+        static bool ConvertURLToSystemPath( const OUString& rName, OUString& rReturn );
 
-        static sal_Bool IsLocalFile(const OUString& rName);
-        static sal_Bool IsFileContent(const OUString& rName);
+        static bool IsLocalFile(const OUString& rName);
+        static bool IsFileContent(const OUString& rName);
 
         static          ::com::sun::star::uno::Sequence< OUString >
-                                GetFolderContents( const OUString& rFolder, sal_Bool bFolder );
+                                GetFolderContents( const OUString& rFolder, bool bFolder );
     };
 }
 

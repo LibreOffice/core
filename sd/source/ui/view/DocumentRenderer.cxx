@@ -1482,7 +1482,7 @@ private:
             }
 
             if (mpOptions->IsTime())
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), sal_False, sal_False );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), false, false );
             aInfo.maPrintSize = aInfo.mpPrinter->GetOutputSize();
             maPrintSize = awt::Size(
                 aInfo.mpPrinter->GetPaperSize().Width(),

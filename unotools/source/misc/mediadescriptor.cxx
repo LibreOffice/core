@@ -329,13 +329,13 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyV
 {
 }
 
-sal_Bool MediaDescriptor::isStreamReadOnly() const
+bool MediaDescriptor::isStreamReadOnly() const
 {
     static OUString CONTENTSCHEME_FILE( "file" );
     static OUString CONTENTPROP_ISREADONLY( "IsReadOnly" );
-    static sal_Bool READONLY_FALLBACK = sal_False;
+    static bool READONLY_FALLBACK = false;
 
-    sal_Bool bReadOnly = READONLY_FALLBACK;
+    bool bReadOnly = READONLY_FALLBACK;
 
     // check for explicit readonly state
     const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
@@ -348,13 +348,13 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
     // streams based on post data are readonly by definition
     pIt = find(MediaDescriptor::PROP_POSTDATA());
     if (pIt != end())
-        return sal_True;
+        return true;
 
     // A XStream capsulate XInputStream and XOutputStream ...
     // If it exists - the file must be open in read/write mode!
     pIt = find(MediaDescriptor::PROP_STREAM());
     if (pIt != end())
-        return sal_False;
+        return false;
 
     // Only file system content provider is able to provide XStream
     // so for this content impossibility to create XStream triggers
@@ -370,7 +370,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
                 aScheme = xId->getContentProviderScheme();
 
             if (aScheme.equalsIgnoreAsciiCase(CONTENTSCHEME_FILE))
-                bReadOnly = sal_True;
+                bReadOnly = true;
             else
             {
                 ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
@@ -473,25 +473,25 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
     return aEncryptionData;
 }
 
-sal_Bool MediaDescriptor::addInputStream()
+bool MediaDescriptor::addInputStream()
 {
-    return impl_addInputStream( sal_True );
+    return impl_addInputStream( true );
 }
 
 /*-----------------------------------------------*/
-sal_Bool MediaDescriptor::addInputStreamOwnLock()
+bool MediaDescriptor::addInputStreamOwnLock()
 {
     return impl_addInputStream(
         officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get());
 }
 
 /*-----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
+bool MediaDescriptor::impl_addInputStream( bool bLockFile )
 {
     // check for an already existing stream item first
     const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM());
     if (pIt != end())
-        return sal_True;
+        return true;
 
     try
     {
@@ -524,7 +524,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
     }
 }
 
-sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
+bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
     throw(::com::sun::star::uno::RuntimeException)
 {
     if ( !_rxPostData.is() )
@@ -586,15 +586,15 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     if ( !xResultStream.is() )
     {
         OSL_FAIL( "no valid reply to the HTTP-Post" );
-        return sal_False;
+        return false;
     }
 
     (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xResultStream;
-    return sal_True;
+    return true;
 }
 
 /*-----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool bLockFile )
+bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
     OUString referer(getUnpackedValueOrDefault(PROP_REFERRER(), OUString()));
@@ -631,7 +631,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                 "unotools.misc",
                 "caught ContentCreationException \"" << e.Message
                     << "\" while opening <" << sURL << ">");
-            return sal_False; // TODO error handling
+            return false; // TODO error handling
         }
     catch(const css::uno::Exception& e)
         {
@@ -639,7 +639,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                 "unotools.misc",
                 "caught Exception \"" << e.Message << "\" while opening <"
                     << sURL << ">");
-            return sal_False; // TODO error handling
+            return false; // TODO error handling
         }
 
     // try to open the file in read/write mode
@@ -649,13 +649,13 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     css::uno::Reference< css::io::XStream >      xStream     ;
     css::uno::Reference< css::io::XInputStream > xInputStream;
 
-    sal_Bool bReadOnly = sal_False;
-    sal_Bool bModeRequestedExplicitly = sal_False;
+    bool bReadOnly = false;
+    bool bModeRequestedExplicitly = false;
     const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
     if (pIt != end())
     {
         pIt->second >>= bReadOnly;
-        bModeRequestedExplicitly = sal_True;
+        bModeRequestedExplicitly = true;
     }
 
     if ( !bReadOnly && bLockFile )
@@ -682,7 +682,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                         "unotools.misc",
                         "caught Exception \"" << e.Message
                             << "\" while opening <" << sURL << ">");
-                    return sal_False;
+                    return false;
                 }
                 xStream.clear();
                 xInputStream.clear();
@@ -707,13 +707,13 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
             // so for this content impossibility to create XStream triggers
             // switch to readonly mode in case of opening with locking on
             if( bLockFile && aScheme.equalsIgnoreAsciiCase("file") )
-                bReadOnly = sal_True;
+                bReadOnly = true;
             else
             {
-                sal_Bool bRequestReadOnly = bReadOnly;
+                bool bRequestReadOnly = bReadOnly;
                 aContent.getPropertyValue("IsReadOnly") >>= bReadOnly;
                 if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
-                        return sal_False; // the document is explicitly requested with WRITEABLE mode
+                        return false; // the document is explicitly requested with WRITEABLE mode
             }
         }
         catch(const css::uno::RuntimeException&)
@@ -742,7 +742,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                     "unotools.misc",
                     "caught Exception \"" << e.Message << "\" while opening <"
                         << sURL << ">");
-                return sal_False;
+                return false;
             }
     }
 

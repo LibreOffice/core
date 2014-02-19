@@ -1368,10 +1368,10 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     if (m_pWrtShell) {
         m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
                                     m_pMathBaselineAlignmentCB->IsChecked() );
-        bRet |= m_pMathBaselineAlignmentCB->IsChecked() != m_pMathBaselineAlignmentCB->GetSavedValue();
+        bRet |= TriState(m_pMathBaselineAlignmentCB->IsChecked()) != m_pMathBaselineAlignmentCB->GetSavedValue();
     }
 
-    if( m_pCrsrInProtCB->IsChecked() != m_pCrsrInProtCB->GetSavedValue())
+    if( TriState(m_pCrsrInProtCB->IsChecked()) != m_pCrsrInProtCB->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
         bRet = true;
@@ -2268,13 +2268,13 @@ sal_Bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
         bRet = sal_True;
     }
 
-    if( m_pRsidCB->IsChecked() != m_pRsidCB->GetSavedValue() )
+    if( TriState(m_pRsidCB->IsChecked()) != m_pRsidCB->GetSavedValue() )
     {
         pOpt->SetUseRsid( m_pRsidCB->IsChecked() );
         bRet = sal_True;
     }
 
-    if( m_pIgnoreCB->IsChecked() != m_pIgnoreCB->GetSavedValue() )
+    if( TriState(m_pIgnoreCB->IsChecked()) != m_pIgnoreCB->GetSavedValue() )
     {
         pOpt->SetIgnorePieces( m_pIgnoreCB->IsChecked() );
         bRet = sal_True;

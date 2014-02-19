@@ -226,7 +226,7 @@ public:
 
     ::std::auto_ptr<WindowUpdater> mpWindowUpdater;
 
-    sal_Bool mbPreview;
+    bool mbPreview;
     sal_uInt16 mnShowPage;
     sal_Bool mbDocPreview;
 
@@ -356,7 +356,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mbUserDataDirty(sal_False),
     xDocShell (NULL),
     mpWindowUpdater (new WindowUpdater()),
-    mbPreview(sal_True),
+    mbPreview(true),
     mnShowPage(0),
     mbDocPreview(sal_False),
     maAssistentFunc(5),

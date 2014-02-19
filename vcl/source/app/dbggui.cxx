@@ -988,7 +988,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         strncpy( pData->aExclClassFilter, aData.aExclClassFilter, sizeof( pData->aExclClassFilter ) );
         strncpy( pData->aInclFilter, aData.aInclFilter, sizeof( pData->aInclFilter ) );
         strncpy( pData->aExclFilter, aData.aExclFilter, sizeof( pData->aExclFilter ) );
-        if ( maBoldAppFont.GetSavedValue() != maBoldAppFont.IsChecked() )
+        if ( maBoldAppFont.GetSavedValue() != TriState(maBoldAppFont.IsChecked()) )
         {
             AllSettings aSettings = Application::GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();

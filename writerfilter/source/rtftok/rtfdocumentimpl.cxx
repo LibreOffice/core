@@ -281,7 +281,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nListPictureId(0)
 {
     OSL_ASSERT(xInputStream.is());
-    m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
 

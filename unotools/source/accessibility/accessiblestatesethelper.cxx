@@ -37,9 +37,9 @@ public:
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
     ~AccessibleStateSetHelperImpl();
 
-    sal_Bool IsEmpty () const
+    bool IsEmpty () const
         throw (uno::RuntimeException);
-    sal_Bool Contains (sal_Int16 aState) const
+    bool Contains (sal_Int16 aState) const
         throw (uno::RuntimeException);
     uno::Sequence<sal_Int16> GetStates() const
         throw (uno::RuntimeException);
@@ -68,13 +68,13 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 {
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty () const
+inline bool AccessibleStateSetHelperImpl::IsEmpty () const
     throw (uno::RuntimeException)
 {
     return maStates == 0;
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
+inline bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
@@ -210,7 +210,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     sal_Int32 nCount(rStateSet.getLength());
     const sal_Int16* pStates = rStateSet.getConstArray();
     sal_Int32 i = 0;
-    sal_Bool bFound(sal_True);
+    bool bFound(true);
     while (i < nCount)
     {
         bFound = mpHelperImpl->Contains(pStates[i]);

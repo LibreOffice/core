@@ -308,7 +308,7 @@ void DicList::SearchForDictionaries(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     const uno::Sequence< OUString > aDirCnt( utl::LocalFileHelper::
-                                        GetFolderContents( rDicDirURL, sal_False ) );
+                                        GetFolderContents( rDicDirURL, false ) );
     const OUString *pDirCnt = aDirCnt.getConstArray();
     sal_Int32 nEntries = aDirCnt.getLength();
 

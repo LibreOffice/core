@@ -133,7 +133,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsReadOnly( EOption eOption ) const ;
+        bool IsReadOnly( EOption eOption ) const ;
 
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
@@ -180,7 +180,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         sal_Int32           GetMacroSecurityLevel       (                   ) const ;
         void                SetMacroSecurityLevel       ( sal_Int32 _nLevel )       ;
 
-        sal_Bool            IsMacroDisabled             (                   ) const ;
+        bool            IsMacroDisabled             (                   ) const ;
 
         /**
            Check whether the given uri is either no dangerous macro-execution
@@ -209,14 +209,14 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         bool        IsOptionEnabled ( EOption eOption                   ) const ;
 
         // xmlsec05 deprecated methods
-        sal_Bool    IsExecutePlugins() const;
-        void        SetExecutePlugins( sal_Bool bSet );
+        bool    IsExecutePlugins() const;
+        void        SetExecutePlugins( bool bSet );
         EBasicSecurityMode  GetBasicMode(                           ) const ;
         void                SetBasicMode( EBasicSecurityMode eMode  )       ;
-        sal_Bool IsWarningEnabled() const;
-        void SetWarningEnabled( sal_Bool bSet );
-        sal_Bool IsConfirmationEnabled() const;
-        void SetConfirmationEnabled( sal_Bool bSet );
+        bool IsWarningEnabled() const;
+        void SetWarningEnabled( bool bSet );
+        bool IsConfirmationEnabled() const;
+        void SetConfirmationEnabled( bool bSet );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

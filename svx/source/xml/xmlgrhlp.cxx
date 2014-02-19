@@ -144,7 +144,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
             if( bRet )
             {
                 pStm->Seek( 0 );
-                mxStmWrapper = new ::utl::OInputStreamWrapper( pStm, sal_True );
+                mxStmWrapper = new ::utl::OInputStreamWrapper( pStm, true );
             }
             else
                 delete pStm;

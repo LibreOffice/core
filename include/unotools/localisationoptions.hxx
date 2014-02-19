@@ -77,7 +77,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsAutoMnemonic  (                   ) const ;
+        bool    IsAutoMnemonic  (                   ) const ;
 
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/DialogScale"

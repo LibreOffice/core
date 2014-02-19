@@ -826,7 +826,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     {
         case SVX_PAGE_MODE_CENTER:
         {
-            if ( m_pHorzBox->IsChecked() != m_pHorzBox->GetSavedValue() )
+            if ( TriState(m_pHorzBox->IsChecked()) != m_pHorzBox->GetSavedValue() )
             {
                 SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT1 ),
                                    m_pHorzBox->IsChecked() );
@@ -834,7 +834,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 bModified |= sal_True;
             }
 
-            if ( m_pVertBox->IsChecked() != m_pVertBox->GetSavedValue() )
+            if ( TriState(m_pVertBox->IsChecked()) != m_pVertBox->GetSavedValue() )
             {
                 SfxBoolItem aVert( GetWhich( SID_ATTR_PAGE_EXT2 ),
                                    m_pVertBox->IsChecked() );
@@ -857,7 +857,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if(m_pRegisterCB->IsVisible() &&
-        (m_pRegisterCB->IsChecked() || m_pRegisterCB->GetSavedValue() != m_pRegisterCB->IsChecked()))
+       (m_pRegisterCB->IsChecked() || m_pRegisterCB->GetSavedValue() != TriState(m_pRegisterCB->IsChecked())))
     {
         const SfxBoolItem& rRegItem = (const SfxBoolItem&)rOldSet.Get(SID_SWREGISTER_MODE);
         SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();

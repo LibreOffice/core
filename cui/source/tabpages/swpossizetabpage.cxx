@@ -814,7 +814,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                     bModified = true;
                 }
             }
-            if(m_pHoriMirrorCB->IsEnabled() && m_pHoriMirrorCB->IsChecked() != m_pHoriMirrorCB->GetSavedValue())
+            if(m_pHoriMirrorCB->IsEnabled() && TriState(m_pHoriMirrorCB->IsChecked()) != m_pHoriMirrorCB->GetSavedValue())
                 bModified |= 0 != rSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_pHoriMirrorCB->IsChecked()));
 
             if ( m_pVMap )
@@ -851,7 +851,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
             }
 
             // #i18732#
-            if(m_pFollowCB->IsChecked() != m_pFollowCB->GetSavedValue())
+            if(TriState(m_pFollowCB->IsChecked()) != m_pFollowCB->GetSavedValue())
             {
                 //Writer internal type - based on SfxBoolItem
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);

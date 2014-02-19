@@ -150,7 +150,7 @@ sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
         m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());
     if(m_pAddressED->GetText() != m_pAddressED->GetSavedValue())
         m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
-    if( m_pReplyToCB->GetSavedValue() != m_pReplyToCB->IsChecked())
+    if( m_pReplyToCB->GetSavedValue() != TriState(m_pReplyToCB->IsChecked()))
         m_pConfigItem->SetMailReplyTo(m_pReplyToCB->IsChecked());
     if(m_pReplyToED->GetText() != m_pReplyToED->GetSavedValue())
         m_pConfigItem->SetMailReplyTo(m_pReplyToED->GetText());

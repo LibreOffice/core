@@ -71,14 +71,14 @@ sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     sal_Bool bModified = sal_False;
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
-    if( pAutocloseProcChk->IsChecked() != pAutocloseProcChk->GetSavedValue() )
+    if( TriState(pAutocloseProcChk->IsChecked()) != pAutocloseProcChk->GetSavedValue() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
         CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
         bModified = sal_True;
     }
 
-    if( pCodeCompleteChk->IsChecked() != pCodeCompleteChk->GetSavedValue() )
+    if( TriState(pCodeCompleteChk->IsChecked()) != pCodeCompleteChk->GetSavedValue() )
     {
         //boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
@@ -86,28 +86,28 @@ sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
-    if( pUseExtendedTypesChk->IsChecked() != pUseExtendedTypesChk->GetSavedValue() )
+    if( TriState(pUseExtendedTypesChk->IsChecked()) != pUseExtendedTypesChk->GetSavedValue() )
     {
         officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
         CodeCompleteOptions::SetExtendedTypeDeclaration( pUseExtendedTypesChk->IsChecked() );
         bModified = sal_True;
     }
 
-    if( pAutocloseParenChk->IsChecked() != pAutocloseParenChk->GetSavedValue() )
+    if( TriState(pAutocloseParenChk->IsChecked()) != pAutocloseParenChk->GetSavedValue() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
         bModified = sal_True;
     }
 
-    if( pAutocloseQuotesChk->IsChecked() != pAutocloseQuotesChk->GetSavedValue() )
+    if( TriState(pAutocloseQuotesChk->IsChecked()) != pAutocloseQuotesChk->GetSavedValue() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
         bModified = sal_True;
     }
 
-    if( pAutoCorrectChk->IsChecked() != pAutoCorrectChk->GetSavedValue() )
+    if( TriState(pAutoCorrectChk->IsChecked()) != pAutoCorrectChk->GetSavedValue() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCorrectOn( pAutoCorrectChk->IsChecked() );

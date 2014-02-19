@@ -208,7 +208,7 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
 {
     OUString sShortName( sName );
 
-    if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) == sal_True )
+    if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) )
     {
         // it's a system file ... build short name by using osl functionality
     }

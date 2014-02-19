@@ -59,12 +59,12 @@ class SvtCmdOptions
             m_aCommandHashMap.clear();
         }
 
-        sal_Bool HasEntries() const
+        bool HasEntries() const
         {
             return ( m_aCommandHashMap.size() > 0 );
         }
 
-        sal_Bool Lookup( const OUString& aCmd ) const
+        bool Lookup( const OUString& aCmd ) const
         {
             CommandHashMap::const_iterator pEntry = m_aCommandHashMap.find( aCmd );
             return ( pEntry != m_aCommandHashMap.end() );
@@ -165,8 +165,8 @@ class SvtCommandOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
-        sal_Bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
+        bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
+        bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     private:
@@ -227,7 +227,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // We need it to get information about changes outside these class on ouer used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = "Disabled";
-    EnableNotification( aNotifySeq, sal_True );
+    EnableNotification( aNotifySeq, true );
 }
 
 //*****************************************************************************************************************
@@ -295,18 +295,18 @@ void SvtCommandOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
+bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
 {
     if ( eOption == SvtCommandOptions::CMDOPTION_DISABLED )
-        return ( m_aDisabledCommands.HasEntries() > 0 );
+        return m_aDisabledCommands.HasEntries();
     else
-        return sal_False;
+        return false;
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, const OUString& aCommand ) const
+bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, const OUString& aCommand ) const
 {
     switch( eCmdOption )
     {
@@ -318,7 +318,7 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
             DBG_ASSERT( false, "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
     }
 
-    return sal_False;
+    return false;
 }
 
 //*****************************************************************************************************************
@@ -409,7 +409,7 @@ SvtCommandOptions::~SvtCommandOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
+bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->HasEntries( eOption );
@@ -418,7 +418,7 @@ sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
+bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->Lookup( eCmdOption, aCommandURL );

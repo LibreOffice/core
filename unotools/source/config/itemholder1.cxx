@@ -64,10 +64,10 @@ ItemHolder1::ItemHolder1()
 #ifdef DBG_UTIL
     catch(const css::uno::Exception& rEx)
     {
-        static sal_Bool bMessage = sal_True;
+        static bool bMessage = true;
         if(bMessage)
         {
-            bMessage = sal_False;
+            bMessage = false;
             OString sMsg("CreateInstance with arguments exception: ");
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),

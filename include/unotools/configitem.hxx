@@ -117,7 +117,7 @@ namespace utl
             com::sun::star::uno::Sequence< sal_Bool >
                                     GetReadOnlyStates(const com::sun::star::uno::Sequence< OUString >& rNames);
 
-            sal_Bool                PutProperties(
+            bool                PutProperties(
                                         const com::sun::star::uno::Sequence< OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
@@ -129,15 +129,15 @@ namespace utl
                 @see Notify
                 @see DisableNotification
             */
-            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< OUString >& rNames,
-                                        sal_Bool bEnableInternalNotification = sal_False);
+            bool                EnableNotification(const com::sun::star::uno::Sequence< OUString >& rNames,
+                                        bool bEnableInternalNotification = false);
             /** disables notifications about changes on sub nodes/values, which previosly had
                 been enabled with EnableNotification
                 @see Notify
                 @see EnableNotification
             */
             void                    DisableNotification();
-            sal_Bool                IsInternalNotification()const {return IsInValueChange();}
+            bool                IsInternalNotification()const {return IsInValueChange();}
 
             //returns all members of a node in a specific format
             com::sun::star::uno::Sequence< OUString >
@@ -146,16 +146,16 @@ namespace utl
             com::sun::star::uno::Sequence< OUString >
                                     GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat);
             // remove all members of a set
-            sal_Bool                ClearNodeSet(const OUString& rNode);
+            bool                ClearNodeSet(const OUString& rNode);
             // remove selected members of a set
-            sal_Bool                ClearNodeElements(const OUString& rNode,
+            bool                ClearNodeElements(const OUString& rNode,
                                         com::sun::star::uno::Sequence< OUString >& rElements);
             // change or add members to a set
-            sal_Bool                SetSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            bool                SetSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // remove, change or add members of a set
-            sal_Bool                ReplaceSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            bool                ReplaceSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // add a new node without setting any properties
-            sal_Bool                AddNode(const OUString& rNode, const OUString& rNewNode);
+            bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
         public:
             virtual ~ConfigItem();

@@ -50,12 +50,12 @@ protected:
     ::utl::TempFile*    mpTempFile;
     ::osl::Mutex        maMutex;
     SvStream*           mpStream;
-    sal_Bool            mbRemoveFile;
-    sal_Bool            mbInClosed;
-    sal_Bool            mbOutClosed;
+    bool            mbRemoveFile;
+    bool            mbInClosed;
+    bool            mbOutClosed;
 
     sal_Int64           mnCachedPos;
-    sal_Bool            mbHasCachedPos;
+    bool            mbHasCachedPos;
 
     void checkError () const;
     void checkConnected ();

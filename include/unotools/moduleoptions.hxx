@@ -103,15 +103,15 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
          SvtModuleOptions();
         virtual ~SvtModuleOptions();
 
-        sal_Bool        IsModuleInstalled         (       EModule          eModule    ) const;
+        bool        IsModuleInstalled         (       EModule          eModule    ) const;
         OUString GetModuleName             (       EModule          eModule    ) const;
         OUString GetFactoryName            (       EFactory         eFactory   ) const;
         OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
         OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
         OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
-        sal_Bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
+        bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
         sal_Int32       GetFactoryIcon            (       EFactory         eFactory   ) const;
-        static sal_Bool ClassifyFactoryByName     ( const OUString& sName      ,
+        static bool ClassifyFactoryByName     ( const OUString& sName      ,
                                                           EFactory&        eFactory   );
         void            SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                     const OUString& sTemplate  );
@@ -176,14 +176,14 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 
         OUString GetDefaultModuleName();
 
-        sal_Bool   IsMath     () const;
-        sal_Bool   IsChart    () const;
-        sal_Bool   IsCalc     () const;
-        sal_Bool   IsDraw     () const;
-        sal_Bool   IsWriter   () const;
-        sal_Bool   IsImpress  () const;
-        sal_Bool   IsBasicIDE () const;
-        sal_Bool   IsDataBase () const;
+        bool   IsMath     () const;
+        bool   IsChart    () const;
+        bool   IsCalc     () const;
+        bool   IsDraw     () const;
+        bool   IsWriter   () const;
+        bool   IsImpress  () const;
+        bool   IsBasicIDE () const;
+        bool   IsDataBase () const;
 
         ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
 

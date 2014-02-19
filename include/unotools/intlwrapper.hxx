@@ -56,7 +56,7 @@ private:
             CollatorWrapper*    pCaseCollator;
 
             void                ImplNewLocaleData() const;
-            void                ImplNewCollator( sal_Bool bCaseSensitive ) const;
+            void                ImplNewCollator( bool bCaseSensitive ) const;
 
 
 public:
@@ -81,14 +81,14 @@ public:
     const CollatorWrapper*      getCollator() const
                                     {
                                         if ( !pCollator )
-                                            ImplNewCollator( sal_False );
+                                            ImplNewCollator( false );
                                         return pCollator;
                                     }
     /// case sensitive collator
     const CollatorWrapper*      getCaseCollator() const
                                     {
                                         if ( !pCaseCollator )
-                                            ImplNewCollator( sal_True );
+                                            ImplNewCollator( true );
                                         return pCaseCollator;
                                     }
 };

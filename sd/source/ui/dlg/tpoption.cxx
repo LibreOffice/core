@@ -141,10 +141,10 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 
-    if( m_pCbxRuler->GetSavedValue()           != m_pCbxRuler->IsChecked() ||
-        m_pCbxMoveOutline->GetSavedValue()     != m_pCbxMoveOutline->IsChecked() ||
-        m_pCbxDragStripes->GetSavedValue()     != m_pCbxDragStripes->IsChecked() ||
-        m_pCbxHandlesBezier->GetSavedValue()   != m_pCbxHandlesBezier->IsChecked() )
+    if( m_pCbxRuler->GetSavedValue()           != TriState(m_pCbxRuler->IsChecked()) ||
+        m_pCbxMoveOutline->GetSavedValue()     != TriState(m_pCbxMoveOutline->IsChecked()) ||
+        m_pCbxDragStripes->GetSavedValue()     != TriState(m_pCbxDragStripes->IsChecked()) ||
+        m_pCbxHandlesBezier->GetSavedValue()   != TriState(m_pCbxHandlesBezier->IsChecked()) )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
 
@@ -369,16 +369,16 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 
-    if( m_pCbxStartWithTemplate->GetSavedValue()   != m_pCbxStartWithTemplate->IsChecked() ||
-        m_pCbxMarkedHitMovesAlways->GetSavedValue()!= m_pCbxMarkedHitMovesAlways->IsChecked() ||
-        m_pCbxQuickEdit->GetSavedValue()           != m_pCbxQuickEdit->IsChecked() ||
-        m_pCbxPickThrough->GetSavedValue()         != m_pCbxPickThrough->IsChecked() ||
-        m_pCbxMasterPageCache->GetSavedValue()     != m_pCbxMasterPageCache->IsChecked() ||
-        m_pCbxCopy->GetSavedValue()                != m_pCbxCopy->IsChecked() ||
-        m_pCbxEnableSdremote->GetSavedValue()      != m_pCbxEnableSdremote->IsChecked() ||
-        m_pCbxEnablePresenterScreen->GetSavedValue()!= m_pCbxEnablePresenterScreen->IsChecked() ||
-        m_pCbxCompatibility->GetSavedValue()       != m_pCbxCompatibility->IsChecked() ||
-        m_pCbxUsePrinterMetrics->GetSavedValue()   != m_pCbxUsePrinterMetrics->IsChecked() )
+    if( m_pCbxStartWithTemplate->GetSavedValue()   != TriState(m_pCbxStartWithTemplate->IsChecked()) ||
+        m_pCbxMarkedHitMovesAlways->GetSavedValue()!= TriState(m_pCbxMarkedHitMovesAlways->IsChecked()) ||
+        m_pCbxQuickEdit->GetSavedValue()           != TriState(m_pCbxQuickEdit->IsChecked()) ||
+        m_pCbxPickThrough->GetSavedValue()         != TriState(m_pCbxPickThrough->IsChecked()) ||
+        m_pCbxMasterPageCache->GetSavedValue()     != TriState(m_pCbxMasterPageCache->IsChecked()) ||
+        m_pCbxCopy->GetSavedValue()                != TriState(m_pCbxCopy->IsChecked()) ||
+        m_pCbxEnableSdremote->GetSavedValue()      != TriState(m_pCbxEnableSdremote->IsChecked()) ||
+        m_pCbxEnablePresenterScreen->GetSavedValue()!= TriState(m_pCbxEnablePresenterScreen->IsChecked()) ||
+        m_pCbxCompatibility->GetSavedValue()       != TriState(m_pCbxCompatibility->IsChecked()) ||
+        m_pCbxUsePrinterMetrics->GetSavedValue()   != TriState(m_pCbxUsePrinterMetrics->IsChecked()) )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 

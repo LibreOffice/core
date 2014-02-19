@@ -183,7 +183,7 @@ namespace svt
     //--------------------------------------------------------------------
     Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
-        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), sal_True );   // take ownership
+        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   // take ownership
     }
 
 //........................................................................

@@ -31,16 +31,16 @@ ProgressHandlerWrap::ProgressHandlerWrap( ::com::sun::star::uno::Reference< ::co
 {
 }
 
-sal_Bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& nNum )
+bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& nNum )
 {
-    sal_Bool bNumIsSet = sal_False;
+    bool bNumIsSet = false;
 
     Sequence< Any > aSetList;
     if( ( aAny >>= aSetList ) && aSetList.getLength() )
         for( int ind = 0; ind < aSetList.getLength(); ind++ )
         {
             if( !bNumIsSet && ( aSetList[ind] >>= nNum ) )
-                bNumIsSet = sal_True;
+                bNumIsSet = true;
             else
                 aText.isEmpty() && ( aSetList[ind] >>= aText );
         }

@@ -730,7 +730,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
         maPreviewLine[i] = OUString();
 
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
-    bool bMergeSep = (pCkbAsOnce->IsChecked() == sal_True);
+    bool bMergeSep = pCkbAsOnce->IsChecked();
     mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
 
     return 0;

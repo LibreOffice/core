@@ -40,8 +40,8 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
     public:
         OReadAccelatorDocumentHandler( SvtAcceleratorItemList& aNewAcceleratorItemList ) :
             m_nElementDepth( 0 ),
-            m_bAcceleratorMode( sal_False ),
-            m_bItemCloseExpected( sal_False ),
+            m_bAcceleratorMode( false ),
+            m_bItemCloseExpected( false ),
             m_xLocator( 0 ),
             m_aReadAcceleratorList( aNewAcceleratorItemList ) {}
         virtual ~OReadAccelatorDocumentHandler() {}
@@ -79,8 +79,8 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
         OUString getErrorLineString();
 
         int                     m_nElementDepth;
-        sal_Bool                m_bAcceleratorMode;
-        sal_Bool                m_bItemCloseExpected;
+        bool                m_bAcceleratorMode;
+        bool                m_bItemCloseExpected;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
         SvtAcceleratorItemList& m_aReadAcceleratorList;
 };

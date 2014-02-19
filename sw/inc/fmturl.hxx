@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
     OUString  sName;            ///< Name of the anchor.
     ImageMap *pMap;             ///< ClientSide images.
 
-    sal_Bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
+    bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
     SwFmtURL& operator=( const SwFmtURL& );
 
@@ -65,7 +65,7 @@ public:
 
     OUString GetTargetFrameName()const { return sTargetFrameName; }
     OUString GetURL()            const { return sURL; }
-          sal_Bool      IsServerMap()       const { return bIsServerMap; }
+          bool      IsServerMap()       const { return bIsServerMap; }
     const ImageMap *GetMap()            const { return pMap; }
           ImageMap *GetMap()                  { return pMap; }
 

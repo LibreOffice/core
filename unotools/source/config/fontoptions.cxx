@@ -96,11 +96,11 @@ class SvtFontOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsFontHistoryEnabled        (                   ) const ;
-        void        EnableFontHistory           ( sal_Bool bState   )       ;
+        bool    IsFontHistoryEnabled        (                   ) const ;
+        void        EnableFontHistory           ( bool bState   )       ;
 
-        sal_Bool    IsFontWYSIWYGEnabled        (                   ) const ;
-        void        EnableFontWYSIWYG           ( sal_Bool bState   )       ;
+        bool    IsFontWYSIWYGEnabled        (                   ) const ;
+        void        EnableFontWYSIWYG           ( bool bState   )       ;
 
     private:
 
@@ -121,9 +121,9 @@ class SvtFontOptions_Impl : public ConfigItem
 
     private:
 
-        sal_Bool        m_bReplacementTable     ;
-        sal_Bool        m_bFontHistory          ;
-        sal_Bool        m_bFontWYSIWYG          ;
+        bool        m_bReplacementTable     ;
+        bool        m_bFontHistory          ;
+        bool        m_bFontWYSIWYG          ;
 };
 
 //*****************************************************************************************************************
@@ -133,9 +133,9 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_FONT )
     // Init member then.
-    ,   m_bReplacementTable ( sal_False     )
-    ,   m_bFontHistory      ( sal_False     )
-    ,   m_bFontWYSIWYG      ( sal_False     )
+    ,   m_bReplacementTable ( false     )
+    ,   m_bFontHistory      ( false     )
+    ,   m_bFontWYSIWYG      ( false     )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames (           );
@@ -261,7 +261,7 @@ void SvtFontOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
+bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 {
     return m_bFontHistory;
 }
@@ -269,7 +269,7 @@ sal_Bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtFontOptions_Impl::EnableFontHistory( sal_Bool bState )
+void SvtFontOptions_Impl::EnableFontHistory( bool bState )
 {
     m_bFontHistory = bState;
     SetModified();
@@ -278,7 +278,7 @@ void SvtFontOptions_Impl::EnableFontHistory( sal_Bool bState )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
+bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 {
     return m_bFontWYSIWYG;
 }
@@ -286,7 +286,7 @@ sal_Bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtFontOptions_Impl::EnableFontWYSIWYG( sal_Bool bState )
+void SvtFontOptions_Impl::EnableFontWYSIWYG( bool bState )
 {
     m_bFontWYSIWYG = bState;
     SetModified();
@@ -357,7 +357,7 @@ SvtFontOptions::~SvtFontOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtFontOptions::IsFontHistoryEnabled() const
+bool SvtFontOptions::IsFontHistoryEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontHistoryEnabled();
@@ -366,7 +366,7 @@ sal_Bool SvtFontOptions::IsFontHistoryEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtFontOptions::EnableFontHistory( sal_Bool bState )
+void SvtFontOptions::EnableFontHistory( bool bState )
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->EnableFontHistory( bState );
@@ -375,7 +375,7 @@ void SvtFontOptions::EnableFontHistory( sal_Bool bState )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtFontOptions::IsFontWYSIWYGEnabled() const
+bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontWYSIWYGEnabled();
@@ -384,7 +384,7 @@ sal_Bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtFontOptions::EnableFontWYSIWYG( sal_Bool bState )
+void SvtFontOptions::EnableFontWYSIWYG( bool bState )
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->EnableFontWYSIWYG( bState );

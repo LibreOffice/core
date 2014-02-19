@@ -1352,19 +1352,19 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     bool bModified = false;
 
     // Repeat Heading
-    if(m_pHeadLineCB->IsChecked() != m_pHeadLineCB->GetSavedValue() ||
+    if(TriState(m_pHeadLineCB->IsChecked()) != m_pHeadLineCB->GetSavedValue() ||
         OUString::number( static_cast< sal_Int32 >(m_pRepeatHeaderNF->GetValue()) ) != m_pRepeatHeaderNF->GetSavedValue() )
     {
         bModified |= 0 != rSet.Put(
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
     }
-    if(m_pKeepCB->IsChecked() != m_pKeepCB->GetSavedValue())
+    if(TriState(m_pKeepCB->IsChecked()) != m_pKeepCB->GetSavedValue())
         bModified |= 0 != rSet.Put( SvxFmtKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
 
-    if(m_pSplitCB->IsChecked() != m_pSplitCB->GetSavedValue())
+    if(TriState(m_pSplitCB->IsChecked()) != m_pSplitCB->GetSavedValue())
         bModified |= 0 != rSet.Put( SwFmtLayoutSplit( m_pSplitCB->IsChecked()));
 
-    if(m_pSplitRowCB->IsChecked() != m_pSplitRowCB->GetSavedValue())
+    if(TriState(m_pSplitRowCB->IsChecked()) != m_pSplitRowCB->GetSavedValue())
         bModified |= 0 != rSet.Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
 
 

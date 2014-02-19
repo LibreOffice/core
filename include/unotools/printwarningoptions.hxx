@@ -74,15 +74,15 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtPrintWarningOptions : public utl::de
             @seealso    configuration package "org.openoffice.Office.Common/_3D-Engine"
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsPaperSize() const;
-        sal_Bool    IsPaperOrientation() const;
-        sal_Bool    IsTransparency() const;
-        sal_Bool    IsModifyDocumentOnPrintingAllowed() const;
+        bool    IsPaperSize() const;
+        bool    IsPaperOrientation() const;
+        bool    IsTransparency() const;
+        bool    IsModifyDocumentOnPrintingAllowed() const;
 
-        void        SetPaperSize( sal_Bool bState );
-        void        SetPaperOrientation( sal_Bool bState );
-        void        SetTransparency( sal_Bool bState );
-        void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState );
+        void        SetPaperSize( bool bState );
+        void        SetPaperOrientation( bool bState );
+        void        SetTransparency( bool bState );
+        void        SetModifyDocumentOnPrintingAllowed( bool bState );
 
     private:
 

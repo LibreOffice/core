@@ -480,7 +480,7 @@ public:
     TriState        GetState() const { return meState; }
 
     void            Check( sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked() const;
+    bool            IsChecked() const;
 
     void            EnableTriState( sal_Bool bTriState = sal_True );
     sal_Bool            IsTriStateEnabled() const { return mbTriState; }
@@ -506,7 +506,7 @@ inline void CheckBox::Check( sal_Bool bCheck )
     SetState( (bCheck) ? STATE_CHECK : STATE_NOCHECK );
 }
 
-inline sal_Bool CheckBox::IsChecked() const
+inline bool CheckBox::IsChecked() const
 {
     return (GetState() == STATE_CHECK);
 }

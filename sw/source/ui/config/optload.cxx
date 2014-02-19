@@ -140,8 +140,8 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     SwFldUpdateFlags eFldFlags = m_pAutoUpdateFields->IsChecked() ?
         m_pAutoUpdateCharts->IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
-    if(m_pAutoUpdateFields->IsChecked() != m_pAutoUpdateFields->GetSavedValue() ||
-            m_pAutoUpdateCharts->IsChecked() != m_pAutoUpdateCharts->GetSavedValue())
+    if(TriState(m_pAutoUpdateFields->IsChecked()) != m_pAutoUpdateFields->GetSavedValue() ||
+       TriState(m_pAutoUpdateCharts->IsChecked()) != m_pAutoUpdateCharts->GetSavedValue())
     {
         pMod->ApplyFldUpdateFlags(eFldFlags);
         if(m_pWrtShell)

@@ -31,11 +31,11 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
     , static_cast< Implements >( IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET | IMPLEMENTS_PROPERTY_ACCESS )
     , com::sun::star::uno::Sequence< OUString >() )
 , mpStream( NULL )
-, mbRemoveFile( sal_True )
-, mbInClosed( sal_False )
-, mbOutClosed( sal_False )
+, mbRemoveFile( true )
+, mbInClosed( false )
+, mbOutClosed( false )
 , mnCachedPos( 0 )
-, mbHasCachedPos( sal_False )
+, mbHasCachedPos( false )
 
 {
     mpTempFile = new ::utl::TempFile;
@@ -179,7 +179,7 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
         // usually that means that the stream was read till the end
         // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
         mnCachedPos = mpStream->Tell();
-        mbHasCachedPos = sal_True;
+        mbHasCachedPos = true;
 
         mpStream = NULL;
         if ( mpTempFile )
@@ -249,7 +249,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
     if ( mbInClosed )
         throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak  * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
-    mbInClosed = sal_True;
+    mbInClosed = true;
 
     if ( mbOutClosed )
     {
@@ -297,13 +297,13 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
     if ( mbOutClosed )
         throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
-    mbOutClosed = sal_True;
+    mbOutClosed = true;
 
     // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
     if ( mpStream )
     {
         mnCachedPos = mpStream->Tell();
-        mbHasCachedPos = sal_True;
+        mbHasCachedPos = true;
 
         mpStream = NULL;
         if ( mpTempFile )
@@ -339,7 +339,7 @@ void OTempFileService::checkConnected ()
             mpStream->Seek( sal::static_int_cast<sal_Size>(mnCachedPos) );
             if ( mpStream->SvStream::GetError () == ERRCODE_NONE )
             {
-                mbHasCachedPos = sal_False;
+                mbHasCachedPos = false;
                 mnCachedPos = 0;
             }
             else

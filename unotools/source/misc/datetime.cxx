@@ -33,7 +33,7 @@ namespace
                         const OUString& rString,
                         T /*nMin*/ = -1, T /*nMax*/ = -1)
     {
-        sal_Bool bNeg = sal_False;
+        bool bNeg = false;
         rValue = 0;
 
         sal_Int32 nPos = 0L;
@@ -45,7 +45,7 @@ namespace
 
         if( nPos < nLen && '-' == rString[nPos] )
         {
-            bNeg = sal_True;
+            bNeg = true;
             nPos++;
         }
 

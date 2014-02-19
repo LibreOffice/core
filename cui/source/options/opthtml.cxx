@@ -113,28 +113,28 @@ sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
     if(aSize7NF->GetSavedValue() != aSize7NF->GetText())
         rHtmlOpt.SetFontSize(6, (sal_uInt16)aSize7NF->GetValue());
 
-    if(aNumbersEnglishUSCB->IsChecked() != aNumbersEnglishUSCB->GetSavedValue())
+    if(TriState(aNumbersEnglishUSCB->IsChecked()) != aNumbersEnglishUSCB->GetSavedValue())
         rHtmlOpt.SetNumbersEnglishUS(aNumbersEnglishUSCB->IsChecked());
 
-    if(aUnknownTagCB->IsChecked() != aUnknownTagCB->GetSavedValue())
+    if(TriState(aUnknownTagCB->IsChecked()) != aUnknownTagCB->GetSavedValue())
         rHtmlOpt.SetImportUnknown(aUnknownTagCB->IsChecked());
 
-    if(aIgnoreFontNamesCB->IsChecked() != aIgnoreFontNamesCB->GetSavedValue())
+    if(TriState(aIgnoreFontNamesCB->IsChecked()) != aIgnoreFontNamesCB->GetSavedValue())
         rHtmlOpt.SetIgnoreFontFamily(aIgnoreFontNamesCB->IsChecked());
 
     if(aExportLB->GetSelectEntryPos() != aExportLB->GetSavedValue())
         rHtmlOpt.SetExportMode(aPosToExportArr[aExportLB->GetSelectEntryPos()]);
 
-    if(aStarBasicCB->IsChecked() != aStarBasicCB->GetSavedValue())
+    if(TriState(aStarBasicCB->IsChecked()) != aStarBasicCB->GetSavedValue())
         rHtmlOpt.SetStarBasic(aStarBasicCB->IsChecked());
 
-    if(aStarBasicWarningCB->IsChecked() != aStarBasicWarningCB->GetSavedValue())
+    if(TriState(aStarBasicWarningCB->IsChecked()) != aStarBasicWarningCB->GetSavedValue())
         rHtmlOpt.SetStarBasicWarning(aStarBasicWarningCB->IsChecked());
 
-    if(aSaveGrfLocalCB->IsChecked() != aSaveGrfLocalCB->GetSavedValue())
+    if(TriState(aSaveGrfLocalCB->IsChecked()) != aSaveGrfLocalCB->GetSavedValue())
         rHtmlOpt.SetSaveGraphicsLocal(aSaveGrfLocalCB->IsChecked());
 
-    if(aPrintExtensionCB->IsChecked() != aPrintExtensionCB->GetSavedValue())
+    if(TriState(aPrintExtensionCB->IsChecked()) != aPrintExtensionCB->GetSavedValue())
         rHtmlOpt.SetPrintLayoutExtension(aPrintExtensionCB->IsChecked());
 
     if( aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )

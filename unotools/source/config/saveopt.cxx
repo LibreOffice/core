@@ -37,7 +37,7 @@ using namespace com::sun::star::uno;
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
 
-#define CFG_READONLY_DEFAULT    sal_False
+#define CFG_READONLY_DEFAULT    false
 
 struct SvtLoadSaveOptions_Impl
 {
@@ -51,7 +51,7 @@ static sal_Int32           nRefCount = 0;
 class SvtSaveOptions_Impl : public utl::ConfigItem
 {
     sal_Int32                           nAutoSaveTime;
-    sal_Bool                            bUseUserData,
+    bool                            bUseUserData,
                                         bBackup,
                                         bAutoSave,
                                         bAutoSavePrompt,
@@ -70,7 +70,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
     SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
 
-    sal_Bool                            bROAutoSaveTime,
+    bool                            bROAutoSaveTime,
                                         bROUseUserData,
                                         bROBackup,
                                         bROAutoSave,
@@ -97,43 +97,43 @@ public:
     virtual void            Commit();
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
-    sal_Bool                    IsUseUserData() const               { return bUseUserData; }
-    sal_Bool                    IsBackup() const                    { return bBackup; }
-    sal_Bool                    IsAutoSave() const                  { return bAutoSave; }
-    sal_Bool                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
-    sal_Bool                    IsUserAutoSave() const              { return bUserAutoSave; }
-    sal_Bool                    IsDocInfoSave() const               { return bDocInfSave; }
-    sal_Bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    sal_Bool                    IsSaveDocView() const               { return bSaveDocView; }
-    sal_Bool                    IsSaveRelINet() const               { return bSaveRelINet; }
-    sal_Bool                    IsSaveRelFSys() const               { return bSaveRelFSys; }
-    sal_Bool                    IsSaveUnpacked() const              { return bSaveUnpacked; }
-    sal_Bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
-    sal_Bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
-    sal_Bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
-    sal_Bool                IsUseSHA1InODF12() const            { return bUseSHA1InODF12; }
-    sal_Bool                IsUseBlowfishInODF12() const        { return bUseBlowfishInODF12; }
+    bool                    IsUseUserData() const               { return bUseUserData; }
+    bool                    IsBackup() const                    { return bBackup; }
+    bool                    IsAutoSave() const                  { return bAutoSave; }
+    bool                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
+    bool                    IsUserAutoSave() const              { return bUserAutoSave; }
+    bool                    IsDocInfoSave() const               { return bDocInfSave; }
+    bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
+    bool                    IsSaveDocView() const               { return bSaveDocView; }
+    bool                    IsSaveRelINet() const               { return bSaveRelINet; }
+    bool                    IsSaveRelFSys() const               { return bSaveRelFSys; }
+    bool                    IsSaveUnpacked() const              { return bSaveUnpacked; }
+    bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
+    bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
+    bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
+    bool                IsUseSHA1InODF12() const            { return bUseSHA1InODF12; }
+    bool                IsUseBlowfishInODF12() const        { return bUseBlowfishInODF12; }
 
     SvtSaveOptions::ODFDefaultVersion
                             GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
     void                    SetAutoSaveTime( sal_Int32 n );
-    void                    SetUseUserData( sal_Bool b );
-    void                    SetBackup( sal_Bool b );
-    void                    SetAutoSave( sal_Bool b );
-    void                    SetAutoSavePrompt( sal_Bool b );
-    void                    SetUserAutoSave( sal_Bool b );
-    void                    SetDocInfoSave( sal_Bool b );
-    void                    SetSaveWorkingSet( sal_Bool b );
-    void                    SetSaveDocView( sal_Bool b );
-    void                    SetSaveRelINet( sal_Bool b );
-    void                    SetSaveRelFSys( sal_Bool b );
-    void                    EnablePrettyPrinting( sal_Bool _bDoPP );
-    void                    SetWarnAlienFormat( sal_Bool _bDoPP );
-    void                    SetLoadDocPrinter( sal_Bool bNew );
+    void                    SetUseUserData( bool b );
+    void                    SetBackup( bool b );
+    void                    SetAutoSave( bool b );
+    void                    SetAutoSavePrompt( bool b );
+    void                    SetUserAutoSave( bool b );
+    void                    SetDocInfoSave( bool b );
+    void                    SetSaveWorkingSet( bool b );
+    void                    SetSaveDocView( bool b );
+    void                    SetSaveRelINet( bool b );
+    void                    SetSaveRelFSys( bool b );
+    void                    EnablePrettyPrinting( bool _bDoPP );
+    void                    SetWarnAlienFormat( bool _bDoPP );
+    void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
-    sal_Bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
+    bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
 
 void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
@@ -146,7 +146,7 @@ void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
     }
 }
 
-void SvtSaveOptions_Impl::SetUseUserData( sal_Bool b )
+void SvtSaveOptions_Impl::SetUseUserData( bool b )
 {
     if (!bROUseUserData && bUseUserData!=b)
     {
@@ -155,7 +155,7 @@ void SvtSaveOptions_Impl::SetUseUserData( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetBackup( sal_Bool b )
+void SvtSaveOptions_Impl::SetBackup( bool b )
 {
     if (!bROBackup && bBackup!=b)
     {
@@ -164,7 +164,7 @@ void SvtSaveOptions_Impl::SetBackup( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetAutoSave( sal_Bool b )
+void SvtSaveOptions_Impl::SetAutoSave( bool b )
 {
     if (!bROAutoSave && bAutoSave!=b)
     {
@@ -174,7 +174,7 @@ void SvtSaveOptions_Impl::SetAutoSave( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetAutoSavePrompt( sal_Bool b )
+void SvtSaveOptions_Impl::SetAutoSavePrompt( bool b )
 {
     if (!bROAutoSavePrompt && bAutoSavePrompt!=b)
     {
@@ -183,7 +183,7 @@ void SvtSaveOptions_Impl::SetAutoSavePrompt( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetUserAutoSave( sal_Bool b )
+void SvtSaveOptions_Impl::SetUserAutoSave( bool b )
 {
     if (!bROUserAutoSave && bUserAutoSave!=b)
     {
@@ -193,7 +193,7 @@ void SvtSaveOptions_Impl::SetUserAutoSave( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetDocInfoSave(sal_Bool b)
+void SvtSaveOptions_Impl::SetDocInfoSave(bool b)
 {
     if (!bRODocInfSave && bDocInfSave!=b)
     {
@@ -202,7 +202,7 @@ void SvtSaveOptions_Impl::SetDocInfoSave(sal_Bool b)
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveWorkingSet( sal_Bool b )
+void SvtSaveOptions_Impl::SetSaveWorkingSet( bool b )
 {
     if (!bROSaveWorkingSet && bSaveWorkingSet!=b)
     {
@@ -211,7 +211,7 @@ void SvtSaveOptions_Impl::SetSaveWorkingSet( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveDocView( sal_Bool b )
+void SvtSaveOptions_Impl::SetSaveDocView( bool b )
 {
     if (!bROSaveDocView && bSaveDocView!=b)
     {
@@ -220,7 +220,7 @@ void SvtSaveOptions_Impl::SetSaveDocView( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveRelINet( sal_Bool b )
+void SvtSaveOptions_Impl::SetSaveRelINet( bool b )
 {
     if (!bROSaveRelINet && bSaveRelINet!=b)
     {
@@ -229,7 +229,7 @@ void SvtSaveOptions_Impl::SetSaveRelINet( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveRelFSys( sal_Bool b )
+void SvtSaveOptions_Impl::SetSaveRelFSys( bool b )
 {
     if (!bROSaveRelFSys && bSaveRelFSys!=b)
     {
@@ -238,7 +238,7 @@ void SvtSaveOptions_Impl::SetSaveRelFSys( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::EnablePrettyPrinting( sal_Bool _bDoPP )
+void SvtSaveOptions_Impl::EnablePrettyPrinting( bool _bDoPP )
 {
     if (!bRODoPrettyPrinting && bDoPrettyPrinting!=_bDoPP)
     {
@@ -247,7 +247,7 @@ void SvtSaveOptions_Impl::EnablePrettyPrinting( sal_Bool _bDoPP )
     }
 }
 
-void SvtSaveOptions_Impl::SetWarnAlienFormat( sal_Bool _bDoPP )
+void SvtSaveOptions_Impl::SetWarnAlienFormat( bool _bDoPP )
 {
     if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
     {
@@ -256,7 +256,7 @@ void SvtSaveOptions_Impl::SetWarnAlienFormat( sal_Bool _bDoPP )
     }
 }
 
-void SvtSaveOptions_Impl::SetLoadDocPrinter( sal_Bool bNew )
+void SvtSaveOptions_Impl::SetLoadDocPrinter( bool bNew )
 {
     if ( !bROLoadDocPrinter && bLoadDocPrinter != bNew )
     {
@@ -274,9 +274,9 @@ void SvtSaveOptions_Impl::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersio
     }
 }
 
-sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
+bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
-    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
         case SvtSaveOptions::E_AUTOSAVETIME :
@@ -394,22 +394,22 @@ Sequence< OUString > GetPropertyNames()
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( OUString("Office.Common/Save") )
     , nAutoSaveTime( 0 )
-    , bUseUserData( sal_False )
-    , bBackup( sal_False )
-    , bAutoSave( sal_False )
-    , bAutoSavePrompt( sal_False )
-    , bUserAutoSave( sal_False )
-    , bDocInfSave( sal_False )
-    , bSaveWorkingSet( sal_False )
-    , bSaveDocView( sal_False )
-    , bSaveRelINet( sal_False )
-    , bSaveRelFSys( sal_False )
-    , bSaveUnpacked( sal_False )
-    , bDoPrettyPrinting( sal_False )
-    , bWarnAlienFormat( sal_True )
-    , bLoadDocPrinter( sal_True )
-    , bUseSHA1InODF12( sal_False )
-    , bUseBlowfishInODF12( sal_False )
+    , bUseUserData( false )
+    , bBackup( false )
+    , bAutoSave( false )
+    , bAutoSavePrompt( false )
+    , bUserAutoSave( false )
+    , bDocInfSave( false )
+    , bSaveWorkingSet( false )
+    , bSaveDocView( false )
+    , bSaveRelINet( false )
+    , bSaveRelFSys( false )
+    , bSaveUnpacked( false )
+    , bDoPrettyPrinting( false )
+    , bWarnAlienFormat( true )
+    , bLoadDocPrinter( true )
+    , bUseSHA1InODF12( false )
+    , bUseBlowfishInODF12( false )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
     , bROAutoSaveTime( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
@@ -479,7 +479,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
 
                     default:
                     {
-                        sal_Bool bTemp = sal_Bool();
+                        bool bTemp = bool();
                         if ( pValues[nProp] >>= bTemp )
                         {
                             switch ( nProp )
@@ -755,7 +755,7 @@ void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 class SvtLoadOptions_Impl : public utl::ConfigItem
 {
 
-    sal_Bool                            bLoadUserDefinedSettings;
+    bool                            bLoadUserDefinedSettings;
 
 public:
                             SvtLoadOptions_Impl();
@@ -764,15 +764,15 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void            Commit();
 
-    void                    SetLoadUserSettings(sal_Bool b){bLoadUserDefinedSettings = b; SetModified();}
-    sal_Bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
+    void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
+    bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
 };
 // -----------------------------------------------------------------------
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     : ConfigItem( OUString("Office.Common/Load") )
-    , bLoadUserDefinedSettings( sal_False )
+    , bLoadUserDefinedSettings( false )
 {
     Sequence< OUString > aNames(1);
     aNames[0] = OUString::createFromAscii(cUserDefinedSettings);
@@ -856,147 +856,147 @@ sal_Int32 SvtSaveOptions::GetAutoSaveTime() const
     return pImp->pSaveOpt->GetAutoSaveTime();
 }
 
-void SvtSaveOptions::SetUseUserData( sal_Bool b )
+void SvtSaveOptions::SetUseUserData( bool b )
 {
     pImp->pSaveOpt->SetUseUserData( b );
 }
 
-sal_Bool SvtSaveOptions::IsUseUserData() const
+bool SvtSaveOptions::IsUseUserData() const
 {
     return pImp->pSaveOpt->IsUseUserData();
 }
 
-void SvtSaveOptions::SetBackup( sal_Bool b )
+void SvtSaveOptions::SetBackup( bool b )
 {
     pImp->pSaveOpt->SetBackup( b );
 }
 
-sal_Bool SvtSaveOptions::IsBackup() const
+bool SvtSaveOptions::IsBackup() const
 {
     return pImp->pSaveOpt->IsBackup();
 }
 
-void SvtSaveOptions::SetAutoSave( sal_Bool b )
+void SvtSaveOptions::SetAutoSave( bool b )
 {
     pImp->pSaveOpt->SetAutoSave( b );
 }
 
-sal_Bool SvtSaveOptions::IsAutoSave() const
+bool SvtSaveOptions::IsAutoSave() const
 {
     return pImp->pSaveOpt->IsAutoSave();
 }
 
-void SvtSaveOptions::SetAutoSavePrompt( sal_Bool b )
+void SvtSaveOptions::SetAutoSavePrompt( bool b )
 {
     pImp->pSaveOpt->SetAutoSavePrompt( b );
 }
 
-sal_Bool SvtSaveOptions::IsAutoSavePrompt() const
+bool SvtSaveOptions::IsAutoSavePrompt() const
 {
     return pImp->pSaveOpt->IsAutoSavePrompt();
 }
 
-void SvtSaveOptions::SetUserAutoSave( sal_Bool b )
+void SvtSaveOptions::SetUserAutoSave( bool b )
 {
     pImp->pSaveOpt->SetUserAutoSave( b );
 }
 
-sal_Bool SvtSaveOptions::IsUserAutoSave() const
+bool SvtSaveOptions::IsUserAutoSave() const
 {
     return pImp->pSaveOpt->IsUserAutoSave();
 }
 
-void SvtSaveOptions::SetDocInfoSave(sal_Bool b)
+void SvtSaveOptions::SetDocInfoSave(bool b)
 {
     pImp->pSaveOpt->SetDocInfoSave( b );
 }
 
-sal_Bool SvtSaveOptions::IsDocInfoSave() const
+bool SvtSaveOptions::IsDocInfoSave() const
 {
     return pImp->pSaveOpt->IsDocInfoSave();
 }
 
-void SvtSaveOptions::SetSaveWorkingSet( sal_Bool b )
+void SvtSaveOptions::SetSaveWorkingSet( bool b )
 {
     pImp->pSaveOpt->SetSaveWorkingSet( b );
 }
 
-sal_Bool SvtSaveOptions::IsSaveWorkingSet() const
+bool SvtSaveOptions::IsSaveWorkingSet() const
 {
     return pImp->pSaveOpt->IsSaveWorkingSet();
 }
 
-void SvtSaveOptions::SetSaveDocView( sal_Bool b )
+void SvtSaveOptions::SetSaveDocView( bool b )
 {
     pImp->pSaveOpt->SetSaveDocView( b );
 }
 
-sal_Bool SvtSaveOptions::IsSaveDocView() const
+bool SvtSaveOptions::IsSaveDocView() const
 {
     return pImp->pSaveOpt->IsSaveDocView();
 }
 
-void SvtSaveOptions::SetSaveRelINet( sal_Bool b )
+void SvtSaveOptions::SetSaveRelINet( bool b )
 {
     pImp->pSaveOpt->SetSaveRelINet( b );
 }
 
-sal_Bool SvtSaveOptions::IsSaveRelINet() const
+bool SvtSaveOptions::IsSaveRelINet() const
 {
     return pImp->pSaveOpt->IsSaveRelINet();
 }
 
-void SvtSaveOptions::SetSaveRelFSys( sal_Bool b )
+void SvtSaveOptions::SetSaveRelFSys( bool b )
 {
     pImp->pSaveOpt->SetSaveRelFSys( b );
 }
 
-sal_Bool SvtSaveOptions::IsSaveRelFSys() const
+bool SvtSaveOptions::IsSaveRelFSys() const
 {
     return pImp->pSaveOpt->IsSaveRelFSys();
 }
 
-sal_Bool SvtSaveOptions::IsSaveUnpacked() const
+bool SvtSaveOptions::IsSaveUnpacked() const
 {
     return pImp->pSaveOpt->IsSaveUnpacked();
 }
 
-void SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
+void SvtSaveOptions::SetLoadUserSettings(bool b)
 {
     pImp->pLoadOpt->SetLoadUserSettings(b);
 }
 
-sal_Bool   SvtSaveOptions::IsLoadUserSettings() const
+bool   SvtSaveOptions::IsLoadUserSettings() const
 {
     return pImp->pLoadOpt->IsLoadUserSettings();
 }
 
-void SvtSaveOptions::SetPrettyPrinting( sal_Bool _bEnable )
+void SvtSaveOptions::SetPrettyPrinting( bool _bEnable )
 {
     pImp->pSaveOpt->EnablePrettyPrinting( _bEnable );
 }
 
-sal_Bool SvtSaveOptions::IsPrettyPrinting() const
+bool SvtSaveOptions::IsPrettyPrinting() const
 {
     return pImp->pSaveOpt->IsPrettyPrintingEnabled();
 }
 
-void SvtSaveOptions::SetWarnAlienFormat( sal_Bool _bEnable )
+void SvtSaveOptions::SetWarnAlienFormat( bool _bEnable )
 {
     pImp->pSaveOpt->SetWarnAlienFormat( _bEnable );
 }
 
-sal_Bool SvtSaveOptions::IsWarnAlienFormat() const
+bool SvtSaveOptions::IsWarnAlienFormat() const
 {
     return pImp->pSaveOpt->IsWarnAlienFormat();
 }
 
-void SvtSaveOptions::SetLoadDocumentPrinter( sal_Bool _bEnable )
+void SvtSaveOptions::SetLoadDocumentPrinter( bool _bEnable )
 {
     pImp->pSaveOpt->SetLoadDocPrinter( _bEnable );
 }
 
-sal_Bool SvtSaveOptions::IsLoadDocumentPrinter() const
+bool SvtSaveOptions::IsLoadDocumentPrinter() const
 {
     return pImp->pSaveOpt->IsLoadDocPrinter();
 }
@@ -1011,17 +1011,17 @@ SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
     return pImp->pSaveOpt->GetODFDefaultVersion();
 }
 
-sal_Bool SvtSaveOptions::IsUseSHA1InODF12() const
+bool SvtSaveOptions::IsUseSHA1InODF12() const
 {
     return pImp->pSaveOpt->IsUseSHA1InODF12();
 }
 
-sal_Bool SvtSaveOptions::IsUseBlowfishInODF12() const
+bool SvtSaveOptions::IsUseBlowfishInODF12() const
 {
     return pImp->pSaveOpt->IsUseBlowfishInODF12();
 }
 
-sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
+bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
     return pImp->pSaveOpt->IsReadOnly(eOption);
 }

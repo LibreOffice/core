@@ -1118,7 +1118,7 @@ sal_Bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
 }
 
 // primitives
-sal_Bool SvtOptionsDrawinglayer::IsAntiAliasing() const
+bool SvtOptionsDrawinglayer::IsAntiAliasing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsAntiAliasing() && IsAAPossibleOnThisSystem();

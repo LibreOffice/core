@@ -33,7 +33,7 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_LOCALISATION           OUString("Office.Common/View/Localisation")
-#define DEFAULT_AUTOMNEMONIC            sal_False
+#define DEFAULT_AUTOMNEMONIC            false
 #define DEFAULT_DIALOGSCALE             0
 
 #define PROPERTYNAME_AUTOMNEMONIC       OUString("AutoMnemonic")
@@ -95,7 +95,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsAutoMnemonic  (                   ) const ;
+        bool    IsAutoMnemonic  (                   ) const ;
         sal_Int32   GetDialogScale  (                   ) const ;
 
     private:
@@ -117,7 +117,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
 
     private:
 
-        sal_Bool    m_bAutoMnemonic     ;
+        bool    m_bAutoMnemonic     ;
         sal_Int32   m_nDialogScale      ;
 };
 
@@ -243,7 +243,7 @@ void SvtLocalisationOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
+bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
 {
     return m_bAutoMnemonic;
 }
@@ -317,7 +317,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
+bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsAutoMnemonic();

@@ -388,7 +388,7 @@ namespace offapp
 
         sal_Bool bModified = sal_False;
         // the enabled flag
-        if (m_pEnablePooling->GetSavedValue() != m_pEnablePooling->IsChecked())
+        if (m_pEnablePooling->GetSavedValue() != TriState(m_pEnablePooling->IsChecked()))
         {
             _rSet.Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()), SID_SB_POOLING_ENABLED);
             bModified = sal_True;

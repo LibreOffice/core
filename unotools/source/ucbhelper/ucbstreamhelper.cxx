@@ -51,7 +51,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
     UcbLockBytesRef xLockBytes;
     if ( eOpenMode & STREAM_WRITE )
     {
-        sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
+        bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
         if ( bTruncate )
         {
             try
@@ -60,7 +60,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
+                aCnt.executeCommand( OUString("delete"), makeAny( true ) );
             }
 
             catch ( const CommandAbortedException& )
@@ -193,7 +193,7 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream )
     return pStream;
 }
 
-SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, sal_Bool bCloseStream )
+SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, bool bCloseStream )
 {
     SvStream* pStream = NULL;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
@@ -210,7 +210,7 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, sal
     return pStream;
 };
 
-SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream, sal_Bool bCloseStream )
+SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream, bool bCloseStream )
 {
     SvStream* pStream = NULL;
     if ( xStream->getOutputStream().is() )

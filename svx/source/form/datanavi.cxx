@@ -2369,7 +2369,7 @@ namespace svxform
                 sPropName = PN_READONLY_EXPR;
             else if ( m_pCalculateCB == pBox )
                 sPropName = PN_CALCULATE_EXPR;
-            bool bIsChecked = ( pBox->IsChecked() != sal_False );
+            bool bIsChecked = pBox->IsChecked();
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
             if ( bIsChecked && sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;

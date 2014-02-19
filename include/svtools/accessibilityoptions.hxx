@@ -44,7 +44,7 @@ public:
     sal_Bool    GetIsAllowAnimatedGraphics() const;
     sal_Bool    GetIsAllowAnimatedText() const;
     sal_Bool    GetIsAutomaticFontColor() const;
-    sal_Bool    GetIsSystemFont() const;
+    bool    GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     sal_Bool    IsSelectionInReadonly() const;
     sal_Bool    GetAutoDetectSystemHC() const;

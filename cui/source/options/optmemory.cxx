@@ -196,7 +196,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     batch->commit();
 
-    if( m_pQuickLaunchCB->IsChecked() != m_pQuickLaunchCB->GetSavedValue())
+    if( TriState(m_pQuickLaunchCB->IsChecked()) != m_pQuickLaunchCB->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
         bModified = sal_True;

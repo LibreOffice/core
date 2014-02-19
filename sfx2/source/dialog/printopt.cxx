@@ -122,12 +122,12 @@ sal_Bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     sal_Bool                    bModified = sal_False;
 
 
-    if( m_pPaperSizeCB->IsChecked() != m_pPaperSizeCB->GetSavedValue())
+    if( TriState(m_pPaperSizeCB->IsChecked()) != m_pPaperSizeCB->GetSavedValue())
         aWarnOptions.SetPaperSize(m_pPaperSizeCB->IsChecked());
-    if( m_pPaperOrientationCB->IsChecked() != m_pPaperOrientationCB->GetSavedValue() )
+    if( TriState(m_pPaperOrientationCB->IsChecked()) != m_pPaperOrientationCB->GetSavedValue() )
         aWarnOptions.SetPaperOrientation(m_pPaperOrientationCB->IsChecked());
 
-    if( m_pTransparencyCB->IsChecked() != m_pTransparencyCB->GetSavedValue() )
+    if( TriState(m_pTransparencyCB->IsChecked()) != m_pTransparencyCB->GetSavedValue() )
         aWarnOptions.SetTransparency( m_pTransparencyCB->IsChecked() );
 
     ImplSaveControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
@@ -235,7 +235,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
                                                             (sal_uInt16)( (sizeof (aDPIArray) / sizeof (aDPIArray[0])) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_pReduceBitmapsTransparencyCB->IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( m_pConvertToGreyscalesCB->IsChecked() );
-    sal_Bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();
+    bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();
     if (bOrigBackEnd != m_pPDFCB->IsChecked())
     {
         pCurrentOptions->SetPDFAsStandardPrintJobFormat( m_pPDFCB->IsChecked() );

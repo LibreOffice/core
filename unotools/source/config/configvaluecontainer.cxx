@@ -108,7 +108,7 @@ namespace utl
                 if ( _rData.hasValue() )
                 {
 #ifdef DBG_UTIL
-                    sal_Bool bSuccess =
+                    bool bSuccess =
 #endif
                     // assign the value
                     uno_type_assignData(
@@ -297,7 +297,7 @@ namespace utl
         );
     }
 
-    void OConfigurationValueContainer::write( sal_Bool _bCommit )
+    void OConfigurationValueContainer::write( bool _bCommit )
     {
         // collect the current values in the exchange locations
         std::for_each(
@@ -308,14 +308,14 @@ namespace utl
 
         // commit the changes done (if requested)
         if ( _bCommit )
-            commit( sal_False );
+            commit( false );
     }
 
-    void OConfigurationValueContainer::commit( sal_Bool _bWrite )
+    void OConfigurationValueContainer::commit( bool _bWrite )
     {
         // write the current values in the exchange locations (if requested)
         if ( _bWrite )
-            write( sal_False );
+            write( false );
 
         // commit the changes done
         m_pImpl->aConfigRoot.commit( );

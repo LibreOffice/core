@@ -72,8 +72,8 @@ LocaleDataWrapper::LocaleDataWrapper(
         m_xContext( rxContext ),
         xLD( LocaleData::create(rxContext) ),
         maLanguageTag( rLanguageTag ),
-        bLocaleDataItemValid( sal_False ),
-        bReservedWordValid( sal_False )
+        bLocaleDataItemValid( false ),
+        bReservedWordValid( false )
 {
     invalidateData();
 }
@@ -85,8 +85,8 @@ LocaleDataWrapper::LocaleDataWrapper(
         m_xContext( comphelper::getProcessComponentContext() ),
         xLD( LocaleData::create(m_xContext) ),
         maLanguageTag( rLanguageTag ),
-        bLocaleDataItemValid( sal_False ),
-        bReservedWordValid( sal_False )
+        bLocaleDataItemValid( false ),
+        bReservedWordValid( false )
 {
     invalidateData();
 }
@@ -128,13 +128,13 @@ void LocaleDataWrapper::invalidateData()
     {
         for (sal_Int32 j=0; j<LocaleItem::COUNT; ++j)
             aLocaleItem[j] = "";
-        bLocaleDataItemValid = sal_False;
+        bLocaleDataItemValid = false;
     }
     if ( bReservedWordValid )
     {
         for ( sal_Int16 j=0; j<reservedWords::COUNT; ++j )
             aReservedWord[j] = "";
-        bReservedWordValid = sal_False;
+        bReservedWordValid = false;
     }
     xDefaultCalendar.reset();
     if (aGrouping.getLength())
@@ -361,7 +361,7 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
     if ( !bLocaleDataItemValid )
     {
         aLocaleDataItem = getLocaleItem();
-        bLocaleDataItemValid = sal_True;
+        bLocaleDataItemValid = true;
     }
     switch ( nItem )
     {
@@ -427,7 +427,7 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
     if ( !bReservedWordValid )
     {
         aReservedWordSeq = getReservedWord();
-        bReservedWordValid = sal_True;
+        bReservedWordValid = true;
     }
     DBG_ASSERT( nWord < aReservedWordSeq.getLength(), "getOneReservedWordImpl: which one?" );
     if ( nWord < aReservedWordSeq.getLength() )
@@ -617,13 +617,13 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
     const sal_Unicode* const pStop = pStr + rCode.getLength();
     const sal_Unicode* p = pStr + nStart;
     int nInSection = 0;
-    sal_Bool bQuote = sal_False;
+    bool bQuote = false;
     while ( p < pStop )
     {
         if ( bQuote )
         {
             if ( *p == '"' && *(p-1) != '\\' )
-                bQuote = sal_False;
+                bQuote = false;
         }
         else
         {
@@ -631,7 +631,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
             {
                 case '"' :
                     if ( pStr == p || *(p-1) != '\\' )
-                        bQuote = sal_True;
+                        bQuote = true;
                 break;
                 case '-' :
                     if (!nInSection && nSign == -1)
@@ -1217,8 +1217,8 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBu
 
 
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
-        sal_Int64 nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep,
-        sal_Bool bTrailingZeros ) const
+        sal_Int64 nNumber, sal_uInt16 nDecimals, bool bUseThousandSep,
+        bool bTrailingZeros ) const
 {
     sal_Unicode aNumBuf[64];
     sal_Unicode* pNumBuf;
@@ -1302,11 +1302,11 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         {
             pBuf = ImplAddString( pBuf, getNumDecimalSep() );
 
-            sal_Bool bNullEnd = sal_True;
+            bool bNullEnd = true;
             while ( i < nNumLen )
             {
                 if ( *pNumBuf != '0' )
-                    bNullEnd = sal_False;
+                    bNullEnd = false;
 
                 *pBuf = *pNumBuf;
                 pBuf++;
@@ -1373,7 +1373,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 }
 
 
-OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+OUString LocaleDataWrapper::getTime( const Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
@@ -1403,8 +1403,8 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
 
 
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
-        sal_Int16 nDisplayDayOfWeek, sal_Bool bDayOfMonthWithLeadingZero,
-        sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
+        sal_Int16 nDisplayDayOfWeek, bool bDayOfMonthWithLeadingZero,
+        sal_Int16 nDisplayMonth, bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     using namespace ::com::sun::star::i18n;
@@ -1447,7 +1447,7 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
 }
 
 
-OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+OUString LocaleDataWrapper::getDuration( const Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];
@@ -1493,7 +1493,7 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal
 
 
 OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
+        bool bUseThousandSep, bool bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
@@ -1512,7 +1512,7 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 }
 
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        const OUString& rCurrencySymbol, sal_Bool bUseThousandSep ) const
+        const OUString& rCurrencySymbol, bool bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[192];
@@ -1529,18 +1529,18 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         new sal_Unicode[ rCurrencySymbol.getLength() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 
-    sal_Bool bNeg;
+    bool bNeg;
     if ( nNumber < 0 )
     {
-        bNeg = sal_True;
+        bNeg = true;
         nNumber *= -1;
     }
     else
-        bNeg = sal_False;
+        bNeg = false;
 
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
-        bUseThousandSep, sal_True );
+        bUseThousandSep, true );
     sal_Int32 nNumLen = (sal_Int32)(sal_uLong)(pEndNumBuf-pNumBuffer);
 
     // replace zeros with zero character
@@ -1548,7 +1548,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     {
         sal_Unicode* pTempBuf;
         sal_uInt16  i;
-        sal_Bool    bZero = sal_True;
+        bool    bZero = true;
 
         pTempBuf = pNumBuffer+nNumLen-nDecimals;
         i = 0;
@@ -1556,7 +1556,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         {
             if ( *pTempBuf != '0' )
             {
-                bZero = sal_False;
+                bZero = false;
                 break;
             }
 

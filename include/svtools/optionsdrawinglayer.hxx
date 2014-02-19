@@ -136,7 +136,7 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         sal_Bool IsAAPossibleOnThisSystem() const;
 
         // primitives
-        sal_Bool    IsAntiAliasing() const;
+        bool    IsAntiAliasing() const;
         sal_Bool    IsSnapHorVerLinesToDiscrete() const;
         sal_Bool    IsSolidDragCreate() const;
         sal_Bool    IsRenderDecoratedTextDirect() const;

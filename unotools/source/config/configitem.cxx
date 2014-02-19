@@ -118,7 +118,7 @@ ConfigChangeListener_Impl::~ConfigChangeListener_Impl()
 {
 }
 
-static sal_Bool lcl_Find(
+static bool lcl_Find(
         const OUString& rTemp,
         const OUString* pCheckPropertyNames,
         sal_Int32 nLength)
@@ -127,8 +127,8 @@ static sal_Bool lcl_Find(
     //i.e ...Print/Content/Graphic and .../Print
     for(sal_Int32 nIndex = 0; nIndex < nLength; nIndex++)
         if( isPrefixOfConfigurationPath(rTemp, pCheckPropertyNames[nIndex]) )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 //-----------------------------------------------------------------------------
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
@@ -455,13 +455,13 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
     return aRet;
 }
 
-sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
+bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
-    sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
+    bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
     {
         Sequence< OUString >    lNames          ;
@@ -502,14 +502,14 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                     Reference<XNameReplace>   xNodeReplace(xNodeAcc, UNO_QUERY);
                     Reference<XNameContainer> xNodeCont   (xNodeAcc, UNO_QUERY);
 
-                    sal_Bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
+                    bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
                     if (bExist && xNodeReplace.is())
                         xNodeReplace->replaceByName(sProperty, pValues[i]);
                     else
                         if (!bExist && xNodeCont.is())
                             xNodeCont->insertByName(sProperty, pValues[i]);
                         else
-                            bRet = sal_False;
+                            bRet = false;
                 }
                 else //direct value
                 {
@@ -535,8 +535,8 @@ void ConfigItem::DisableNotification()
     RemoveChangesListener();
 }
 
-sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
-                sal_Bool bEnableInternalNotification )
+bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
+                bool bEnableInternalNotification )
 
 {
     OSL_ENSURE(0 == (m_nMode&CONFIG_MODE_RELEASE_TREE), "notification in CONFIG_MODE_RELEASE_TREE mode not possible");
@@ -544,12 +544,12 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
-        return sal_False;
+        return false;
 
     OSL_ENSURE(!xChangeLstnr.is(), "EnableNotification already called");
     if(xChangeLstnr.is())
         xChgNot->removeChangesListener( xChangeLstnr );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     try
     {
@@ -558,7 +558,7 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
     }
     catch (const RuntimeException&)
     {
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
@@ -690,10 +690,10 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
     return aRet;
 }
 
-sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
+bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -708,7 +708,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
             else
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
-                return sal_False;
+                return false;
             Sequence< OUString > aNames = xCont->getElementNames();
             const OUString* pNames = aNames.getConstArray();
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
@@ -721,17 +721,17 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 CATCH_INFO("Exception from removeByName(): ")
             }
             xBatch->commitChanges();
-            bRet = sal_True;
+            bRet = true;
         }
         CATCH_INFO("Exception from ClearNodeSet")
     }
     return bRet;
 }
 
-sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
+bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -747,7 +747,7 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
             else
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
-                return sal_False;
+                return false;
             try
             {
                 for(sal_Int32 nElement = 0; nElement < rElements.getLength(); nElement++)
@@ -758,7 +758,7 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
                 xBatch->commitChanges();
             }
             CATCH_INFO("Exception from commitChanges(): ")
-            bRet = sal_True;
+            bRet = true;
         }
         CATCH_INFO("Exception from GetNodeNames: ")
     }
@@ -801,11 +801,11 @@ Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue 
 }
 
 // Add or change properties
-sal_Bool ConfigItem::SetSetProperties(
+bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -821,7 +821,7 @@ sal_Bool ConfigItem::SetSetProperties(
             else
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
-                return sal_False;
+                return false;
 
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
 
@@ -855,7 +855,7 @@ sal_Bool ConfigItem::SetSetProperties(
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
 
-                sal_Bool bEmptyNode = rNode.isEmpty();
+                bool bEmptyNode = rNode.isEmpty();
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
                     pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
@@ -894,17 +894,17 @@ sal_Bool ConfigItem::SetSetProperties(
         catch (const Exception&)
         {
 #endif
-            bRet = sal_False;
+            bRet = false;
         }
     }
     return bRet;
 }
 
-sal_Bool ConfigItem::ReplaceSetProperties(
+bool ConfigItem::ReplaceSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -920,7 +920,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             else
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
-                return sal_False;
+                return false;
 
             // JB: Change: now the same name handling for sets of simple values
             const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
@@ -937,12 +937,12 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 
                 for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
                 {
-                    sal_Bool bFound = sal_False;
+                    bool bFound = false;
                     for(sal_Int32 j = 0; j < nSubNodeCount; j++)
                     {
                         if(pSubNodeNames[j] == pContainerSubNodes[nContSub])
                         {
-                            bFound = sal_True;
+                            bFound = true;
                             break;
                         }
                     }
@@ -995,7 +995,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
 
-                sal_Bool bEmptyNode = rNode.isEmpty();
+                bool bEmptyNode = rNode.isEmpty();
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
                     pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
@@ -1032,16 +1032,16 @@ sal_Bool ConfigItem::ReplaceSetProperties(
         catch (const Exception&)
         {
 #endif
-            bRet = sal_False;
+            bRet = false;
         }
     }
     return bRet;
 }
 
-sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
+bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -1057,7 +1057,7 @@ sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
             else
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
-                return sal_False;
+                return false;
 
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
 
@@ -1095,7 +1095,7 @@ sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
         catch (const Exception&)
         {
 #endif
-            bRet = sal_False;
+            bRet = false;
         }
     }
     return bRet;

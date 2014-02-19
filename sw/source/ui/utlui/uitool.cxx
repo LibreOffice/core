@@ -768,7 +768,7 @@ OUString GetAppLangDateTimeString( const DateTime& rDT )
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rAppLclData = aSysLocale.GetLocaleData();
-    OUString sRet = rAppLclData.getDate( rDT ) + " " + rAppLclData.getTime( rDT, sal_False, sal_False );
+    OUString sRet = rAppLclData.getDate( rDT ) + " " + rAppLclData.getTime( rDT, false, false );
     return sRet;
 }
 

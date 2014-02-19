@@ -94,7 +94,7 @@ public:
 
     OUString GetFullName () const;
 
-    sal_Bool IsTokenReadonly (sal_uInt16 nToken) const;
+    bool IsTokenReadonly (sal_uInt16 nToken) const;
     OUString GetToken (sal_uInt16 nToken) const;
     void     SetToken (sal_uInt16 nToken, OUString const& rNewToken);
     void     Notify ();
@@ -208,7 +208,7 @@ void SvtUserOptions::Impl::Notify ()
     NotifyListeners(0);
 }
 
-sal_Bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
+bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
 {
     if (nToken < nOptionNameCount)
     {
@@ -221,7 +221,7 @@ sal_Bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
     else
     {
         SAL_WARN("unotools.config", "SvtUserOptions::Impl::IsTokenReadonly(): invalid token");
-        return sal_False;
+        return false;
     }
 }
 
@@ -278,7 +278,7 @@ OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_C
 
 void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
 
-sal_Bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
+bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
     return pImpl->IsTokenReadonly(nToken);

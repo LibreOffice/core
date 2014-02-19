@@ -176,8 +176,8 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        sal_Bool (SvtFilterOptions:: *FnIs)() const;
-        void (SvtFilterOptions:: *FnSet)( sal_Bool bFlag );
+        bool (SvtFilterOptions:: *FnIs)() const;
+        void (SvtFilterOptions:: *FnSet)( bool bFlag );
     } aChkArr[] = {
         { Math,     &SvtFilterOptions::IsMathType2Math,
                         &SvtFilterOptions::SetMathType2Math },
@@ -200,7 +200,7 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
         { InvalidCBEntry, 0, 0 }
     };
 
-    sal_Bool bCheck, bFirst = sal_True;
+    bool bCheck, bFirst = true;
     for( const ChkCBoxEntries* pArr = aChkArr;
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
@@ -246,7 +246,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        sal_Bool (SvtFilterOptions:: *FnIs)() const;
+        bool (SvtFilterOptions:: *FnIs)() const;
     } aChkArr[] = {
         { Math,     &SvtFilterOptions::IsMathType2Math },
         { Math,     &SvtFilterOptions::IsMath2MathType },
