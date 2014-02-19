@@ -1462,8 +1462,10 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
             OUString sName( aToken.copy( nStt, nPos-nStt ) );
 
-            // PlugIns require original token name. Convert to lower case only for searching.
-            nToken = GetHTMLOption( sName.toAsciiLowerCase() ); // Name is ready
+            // PlugIns require original token name. Convert to upper case only for searching.
+            OUString sNameUpperCase( sName.toAsciiUpperCase() );
+
+            nToken = GetHTMLOption( sNameUpperCase ); // Name is ready
             DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
                         "GetOption: unknown HTML option" );
             bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
