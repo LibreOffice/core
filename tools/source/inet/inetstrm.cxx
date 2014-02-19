@@ -22,6 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
+#include <tools/solar.h>
 
 #include <ctype.h>
 

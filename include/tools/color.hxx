@@ -24,7 +24,6 @@
 class SvStream;
 class ResId;
 
-#include <tools/solar.h>
 #include <basegfx/color/bcolor.hxx>
 
 // Color types

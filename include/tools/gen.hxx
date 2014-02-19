@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_GEN_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 
 #include <limits.h>
 #include <ostream>

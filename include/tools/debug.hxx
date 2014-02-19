@@ -23,7 +23,6 @@
 
 #include <sal/detail/log.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 
 /** The facilities provided by this header are deprecated.  True assertions
     (that detect broken program logic) should use standard assert (which aborts
