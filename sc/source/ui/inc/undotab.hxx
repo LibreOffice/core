@@ -51,7 +51,7 @@ public:
                     ScUndoInsertTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
-                            sal_Bool bApp,
+                            bool bApp,
                             const OUString& rNewName);
     virtual         ~ScUndoInsertTab();
 
@@ -67,7 +67,7 @@ private:
     SdrUndoAction*  pDrawUndo;
     sal_uLong       nEndChangeAction;
     SCTAB           nTab;
-    sal_Bool        bAppend;
+    bool            bAppend;
 
     void            SetChangeTrack();
 };
@@ -181,7 +181,7 @@ private:
     ::boost::shared_ptr< ::std::vector< OUString> > mpOldNames;
     ::boost::shared_ptr< ::std::vector< OUString> > mpNewNames;
 
-    void DoChange( sal_Bool bUndo ) const;
+    void DoChange( bool bUndo ) const;
 };
 
 
@@ -323,7 +323,7 @@ private:
     sal_uInt8*  pModes;
     OUString*   pTabNames;
 
-    void DoChange( sal_Bool bLink ) const;
+    void DoChange( bool bLink ) const;
 };
 
 
@@ -334,7 +334,7 @@ public:
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
                             const std::vector<SCTAB>& newUndoTabs,
-                            sal_Bool bNewShow );
+                            bool bNewShow );
     virtual         ~ScUndoShowHideTab();
 
     virtual void    Undo();
@@ -346,9 +346,9 @@ public:
 
 private:
     std::vector<SCTAB>  undoTabs;
-    sal_Bool            bShow;
+    bool                bShow;
 
-    void DoChange( sal_Bool bShow ) const;
+    void DoChange( bool bShow ) const;
 };
 
 // ============================================================================
@@ -428,7 +428,7 @@ private:
     ScPrintRangeSaver*  pOldRanges;
     ScPrintRangeSaver*  pNewRanges;
 
-    void DoChange( sal_Bool bUndo );
+    void DoChange( bool bUndo );
 };
 
 
@@ -495,7 +495,7 @@ class ScUndoLayoutRTL : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewRTL );
+                    ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRTL );
     virtual         ~ScUndoLayoutRTL();
 
     virtual void    Undo();
@@ -507,9 +507,9 @@ public:
 
 private:
     SCTAB   nTab;
-    sal_Bool    bRTL;
+    bool    bRTL;
 
-    void DoChange( sal_Bool bNew );
+    void DoChange( bool bNew );
 };
 
 #endif

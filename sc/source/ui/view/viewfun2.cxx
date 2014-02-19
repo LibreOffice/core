@@ -1999,7 +1999,7 @@ sal_Bool ScViewFunc::AppendTable( const OUString& rName, sal_Bool bRecord )
         SCTAB nTab = pDoc->GetTableCount()-1;
         if (bRecord)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTab( pDocSh, nTab, sal_True, rName));
+                        new ScUndoInsertTab( pDocSh, nTab, true, rName));
         GetViewData()->InsertTab( nTab );
         SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();

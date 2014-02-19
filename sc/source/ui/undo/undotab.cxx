@@ -75,7 +75,7 @@ TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
-                                  sal_Bool bApp,
+                                  bool bApp,
                                   const OUString& rNewName) :
     ScSimpleUndo( pNewDocShell ),
     sNewName( rNewName ),
@@ -504,7 +504,7 @@ OUString ScUndoMoveTab::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_MOVE_TAB );
 }
 
-void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
+void ScUndoMoveTab::DoChange( bool bUndo ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -566,7 +566,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
 
 void ScUndoMoveTab::Undo()
 {
-    DoChange( sal_True );
+    DoChange( true );
 }
 
 void ScUndoMoveTab::Redo()
@@ -1086,7 +1086,7 @@ OUString ScUndoRemoveLink::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );
 }
 
-void ScUndoRemoveLink::DoChange( sal_Bool bLink ) const
+void ScUndoRemoveLink::DoChange( bool bLink ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     OUString aEmpty;
@@ -1100,7 +1100,7 @@ void ScUndoRemoveLink::DoChange( sal_Bool bLink ) const
 
 void ScUndoRemoveLink::Undo()
 {
-    DoChange( sal_True );
+    DoChange( true );
 }
 
 void ScUndoRemoveLink::Redo()
@@ -1118,7 +1118,7 @@ bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, const std::vector<SCTAB>& newUndoTabs, sal_Bool bNewShow ) :
+ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, const std::vector<SCTAB>& newUndoTabs, bool bNewShow ) :
     ScSimpleUndo( pShell ),
     undoTabs( newUndoTabs ),
     bShow( bNewShow )
@@ -1129,7 +1129,7 @@ ScUndoShowHideTab::~ScUndoShowHideTab()
 {
 }
 
-void ScUndoShowHideTab::DoChange( sal_Bool bShowP ) const
+void ScUndoShowHideTab::DoChange( bool bShowP ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1344,7 +1344,7 @@ ScUndoPrintRange::~ScUndoPrintRange()
     delete pNewRanges;
 }
 
-void ScUndoPrintRange::DoChange(sal_Bool bUndo)
+void ScUndoPrintRange::DoChange(bool bUndo)
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     if (bUndo)
@@ -1364,7 +1364,7 @@ void ScUndoPrintRange::DoChange(sal_Bool bUndo)
 void ScUndoPrintRange::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -1536,7 +1536,7 @@ bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewRTL ) :
+ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRTL ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     bRTL( bNewRTL )
@@ -1547,7 +1547,7 @@ ScUndoLayoutRTL::~ScUndoLayoutRTL()
 {
 }
 
-void ScUndoLayoutRTL::DoChange( sal_Bool bNew )
+void ScUndoLayoutRTL::DoChange( bool bNew )
 {
     pDocShell->SetInUndo( true );
 
