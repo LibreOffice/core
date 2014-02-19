@@ -930,7 +930,7 @@ bool ScValidationDlg::SetupRefDlg()
     return false;
 }
 
-bool ScValidationDlg::RemoveRefDlg( sal_Bool bRestoreModal /* = sal_True */ )
+bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
 {
     bool bVisLock = false;
     bool bFreeWindowLock = false;
@@ -951,7 +951,7 @@ bool ScValidationDlg::RemoveRefDlg( sal_Bool bRestoreModal /* = sal_True */ )
         m_bOwnRefHdlr = false;
 
         if( bRestoreModal )
-            SetModal( sal_True );
+            SetModal( true );
     }
 
     if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
@@ -977,12 +977,12 @@ void ScTPValidationValue::OnClick( Button *pBtn )
         SetupRefDlg();
 }
 
-sal_Bool ScValidationDlg::IsChildFocus()
+bool ScValidationDlg::IsChildFocus()
 {
     if ( const Window *pWin = Application::GetFocusWindow() )
         while( NULL != ( pWin = pWin->GetParent() ) )
             if( pWin == this )
-                return sal_True;
+                return true;
 
     return false;
 }

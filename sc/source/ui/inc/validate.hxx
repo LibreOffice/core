@@ -111,9 +111,9 @@ public:
     }
 
     bool    SetupRefDlg();
-    bool    RemoveRefDlg( sal_Bool bRestoreModal = sal_True );
+    bool    RemoveRefDlg( bool bRestoreModal = true );
 
-    virtual void            SetModal( sal_Bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
+    virtual void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
@@ -168,7 +168,7 @@ public:
             (m_pHandler->*m_pRefInputDonePostHdl)();
     }
 
-    sal_Bool IsChildFocus();
+    bool IsChildFocus();
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
