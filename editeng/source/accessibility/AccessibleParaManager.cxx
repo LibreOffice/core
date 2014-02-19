@@ -53,7 +53,7 @@ namespace accessibility
         maChildren(1),
         maEEOffset( 0, 0 ),
         mnFocusedChild( -1 ),
-        mbActive( sal_False )
+        mbActive( false )
     {
     }
 
@@ -139,12 +139,12 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleParaManager::IsReferencable( WeakPara::HardRefType aChild )
+    bool AccessibleParaManager::IsReferencable( WeakPara::HardRefType aChild )
     {
         return aChild.is();
     }
 
-    sal_Bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
+    bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
     {
         DBG_ASSERT( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild),
                 "AccessibleParaManager::IsReferencable: invalid index" );
@@ -156,7 +156,7 @@ namespace accessibility
         }
         else
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -221,7 +221,7 @@ namespace accessibility
         ::std::for_each( begin(), end(), aAdapter );
     }
 
-    void AccessibleParaManager::SetActive( sal_Bool bActive )
+    void AccessibleParaManager::SetActive( bool bActive )
     {
         mbActive = bActive;
 

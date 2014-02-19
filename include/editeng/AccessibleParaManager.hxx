@@ -63,7 +63,7 @@ namespace accessibility
             Hands off also from the implementation pointer if this
             returns sal_False!
          */
-        sal_Bool is() const { return mxRef.is(); }
+        bool is() const { return mxRef.is(); }
         InterfaceType* operator->() const { return mpImpl; }
         InterfaceType& operator*() const { return *mpImpl; }
         ::com::sun::star::uno::Reference< UnoInterfaceType >& getRef() { return mxRef; }
@@ -182,8 +182,8 @@ namespace accessibility
                         const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
                         const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
-        static sal_Bool IsReferencable( WeakPara::HardRefType aChild );
-        sal_Bool IsReferencable( sal_Int32 nChild ) const;
+        static bool IsReferencable( WeakPara::HardRefType aChild );
+        bool IsReferencable( sal_Int32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
         Child CreateChild( sal_Int32                                                                                        nChild,
@@ -195,7 +195,7 @@ namespace accessibility
 
         // forwarder to all paragraphs
         /// Make all children active and editable (or off)
-        void SetActive( sal_Bool bActive = sal_True );
+        void SetActive( bool bActive = true );
         /// Set state of all children
         void SetState( const sal_Int16 nStateId );
         /// Unset state of all children
@@ -324,7 +324,7 @@ namespace accessibility
         sal_Int32 mnFocusedChild;
 
         // whether children are active and editable
-        sal_Bool mbActive;
+        bool mbActive;
     };
 
 } // end of namespace accessibility

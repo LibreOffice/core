@@ -1398,7 +1398,7 @@ namespace accessibility
                                     SetChildFocus( aSelection.nEndPara, sal_False );
 
                                 // change children state
-                                maParaManager.SetActive( sal_False );
+                                maParaManager.SetActive( false );
 
                                 maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND,
                                                               EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
