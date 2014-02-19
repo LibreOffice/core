@@ -21,9 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-
-#include <tools/solar.h>
-
 #include <boost/shared_ptr.hpp>
 #include <map>
 
