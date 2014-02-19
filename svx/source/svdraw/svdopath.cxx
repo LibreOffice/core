@@ -114,10 +114,35 @@ public:
 };
 
 ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, bool bMuPoDr, const SdrDragStat& rDrag)
-:   aXP(5),
-    mbMultiPointDrag(bMuPoDr),
-    maOrig(rPO.GetPathPoly()),
-    maHandles(0)
+    : aXP(5)
+    , bValid(false)
+    , bClosed(false)
+    , nPoly(0)
+    , nPnt(0)
+    , nPntAnz(0)
+    , nPntMax(0)
+    , bBegPnt(false)
+    , bEndPnt(false)
+    , nPrevPnt(0)
+    , nNextPnt(0)
+    , bPrevIsBegPnt(false)
+    , bNextIsEndPnt(false)
+    , nPrevPrevPnt(0)
+    , nNextNextPnt(0)
+    , bControl(false)
+    , bIsPrevControl(false)
+    , bIsNextControl(false)
+    , bPrevIsControl(false)
+    , bNextIsControl(false)
+    , nPrevPrevPnt0(0)
+    , nPrevPnt0(0)
+    , nPnt0(0)
+    , nNextPnt0(0)
+    , nNextNextPnt0(0)
+    , bEliminate(false)
+    , mbMultiPointDrag(bMuPoDr)
+    , maOrig(rPO.GetPathPoly())
+    , maHandles(0)
 {
     if(mbMultiPointDrag)
     {
