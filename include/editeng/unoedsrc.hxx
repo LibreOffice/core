@@ -25,7 +25,6 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/mapmod.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
