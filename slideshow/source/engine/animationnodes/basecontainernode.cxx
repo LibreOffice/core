@@ -44,6 +44,7 @@ BaseContainerNode::BaseContainerNode(
     : BaseNode( xNode, rParent, rContext ),
       maChildren(),
       mnFinishedChildren(0),
+      mnLeftIterations(0),
       mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) &&
                             isIndefiniteTiming( xNode->getDuration() ) )
 {
