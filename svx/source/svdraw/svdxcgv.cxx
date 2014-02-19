@@ -201,7 +201,7 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
-    if(pObj && pObj->GetModel() && pObj->GetOutlinerParaObject())
+    if(pObj->GetModel() && pObj->GetOutlinerParaObject())
     {
         SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
