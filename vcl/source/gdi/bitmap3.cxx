@@ -24,6 +24,8 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
 
+#include <boost/scoped_array.hpp>
+
 #include <impoct.hxx>
 #include <impvect.hxx>
 
@@ -1299,10 +1301,10 @@ sal_Bool Bitmap::ImplScaleSuper(
         BitmapReadAccess*   pAcc = AcquireReadAccess();
         Bitmap              aOutBmp( Size( nDstW, nDstH ), 24 );
         BitmapWriteAccess*  pWAcc = aOutBmp.AcquireWriteAccess();
-        long*               pMapIX = new long[ nDstW ];
-        long*               pMapIY = new long[ nDstH ];
-        long*               pMapFX = new long[ nDstW ];
-        long*               pMapFY = new long[ nDstH ];
+        boost::scoped_array<long> pMapIX(new long[ nDstW ]);
+        boost::scoped_array<long> pMapIY(new long[ nDstH ]);
+        boost::scoped_array<long> pMapFX(new long[ nDstW ]);
+        boost::scoped_array<long> pMapFY(new long[ nDstH ]);
         long                nX, nY, nXDst, nYDst;;
         double              fTemp;
         long                nTemp , nTempX, nTempY, nTempFX, nTempFY;
@@ -2069,11 +2071,6 @@ sal_Bool Bitmap::ImplScaleSuper(
 
             bRet = true;
         }
-
-        delete[] pMapIX;
-        delete[] pMapIY;
-        delete[] pMapFX;
-        delete[] pMapFY;
 
         if(pAcc)
         {
