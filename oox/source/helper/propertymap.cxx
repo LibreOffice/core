@@ -243,8 +243,11 @@ void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& 
         for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
         {
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
-            *pNames = (*mpPropNames)[ aIt->first ];
-            *pValues = aIt->second;
+            if((sal_uInt32)aIt->first <= mpPropNames->size())
+            {
+               *pNames = (*mpPropNames)[ aIt->first ];
+               *pValues = aIt->second;
+            }
         }
     }
 }
