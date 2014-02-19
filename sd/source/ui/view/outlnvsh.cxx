@@ -1504,7 +1504,7 @@ OUString OutlineViewShell::GetSelectionText(bool bCompleteWords)
     ::Outliner* pOl = pOlView->GetOutliner();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
 
-    if (pOl && pOlView)
+    if (pOl)
     {
         if (bCompleteWords)
         {
