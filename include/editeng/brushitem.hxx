@@ -53,7 +53,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     OUString            maStrLink;
     OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;
-    sal_Bool            bLoadAgain;
+    bool                bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);

@@ -3382,7 +3382,7 @@ SvxBrushItem::SvxBrushItem( sal_uInt16 _nWhich ) :
     maStrLink        (),
     maStrFilter      (),
     eGraphicPos      ( GPOS_NONE ),
-    bLoadAgain       ( sal_True )
+    bLoadAgain       ( true )
 
 {
 }
@@ -3399,7 +3399,7 @@ SvxBrushItem::SvxBrushItem( const Color& rColor, sal_uInt16 _nWhich) :
     maStrLink         (),
     maStrFilter       (),
     eGraphicPos       ( GPOS_NONE ),
-    bLoadAgain        ( sal_True )
+    bLoadAgain        ( true )
 
 {
 }
@@ -3417,7 +3417,7 @@ SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos,
     maStrLink         (),
     maStrFilter       (),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( sal_True )
+    bLoadAgain        ( true )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3436,7 +3436,7 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
     maStrLink         (),
     maStrFilter       (),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( sal_True )
+    bLoadAgain        ( true )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3456,7 +3456,7 @@ SvxBrushItem::SvxBrushItem(
     maStrLink         ( rLink ),
     maStrFilter       ( rFilter ),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain        ( sal_True )
+    bLoadAgain        ( true )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3473,7 +3473,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
     , maStrLink         ()
     , maStrFilter       ()
     , eGraphicPos       ( GPOS_NONE )
-    , bLoadAgain (sal_False)
+    , bLoadAgain (false)
 {
     sal_Bool bTrans;
     Color aTempColor;
@@ -3587,7 +3587,7 @@ SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
     maStrLink         (),
     maStrFilter       (),
     eGraphicPos       ( GPOS_NONE ),
-    bLoadAgain        ( sal_True )
+    bLoadAgain        ( true )
 
 {
     *this = rItem;
@@ -3992,7 +3992,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
 
             if( nRes != GRFILTER_OK )
             {
-                const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
+                const_cast < SvxBrushItem*> (this)->bLoadAgain = false;
             }
             else
             {
@@ -4003,7 +4003,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         }
         else
         {
-            const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
+            const_cast < SvxBrushItem*> (this)->bLoadAgain = false;
         }
     }
 
@@ -4161,7 +4161,7 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
     pImpl          ( new SvxBrushItem_Impl( 0 ) ),
     maStrLink      (),
     maStrFilter    (),
-    bLoadAgain     ( sal_True )
+    bLoadAgain     ( true )
 {
     aColor = rItem.GetColor();
 
