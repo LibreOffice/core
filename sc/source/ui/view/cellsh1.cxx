@@ -1502,7 +1502,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
-                            bRet = pTabViewShell->PasteFromSystem(nFormat, sal_True);       // TRUE: no error messages
+                            bRet = pTabViewShell->PasteFromSystem(nFormat, true);       // TRUE: no error messages
                     }
 
                     if ( bRet )
@@ -1590,7 +1590,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case FID_INS_COLBRK:
-            pTabViewShell->InsertPageBreak( sal_True );
+            pTabViewShell->InsertPageBreak( true );
             rReq.Done();
             break;
 
@@ -1600,7 +1600,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case FID_DEL_COLBRK:
-            pTabViewShell->DeletePageBreak( sal_True );
+            pTabViewShell->DeletePageBreak( true );
             rReq.Done();
             break;
 

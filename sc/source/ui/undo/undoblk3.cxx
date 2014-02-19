@@ -621,7 +621,7 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
             rViewShell.FillSimple( eFillDir, true );
         else
             rViewShell.FillSeries( eFillDir, eFillCmd, eFillDateCmd,
-                                   fStartValue, fStepValue, fMaxValue, sal_True );
+                                   fStartValue, fStepValue, fMaxValue, true );
     }
 }
 
@@ -745,8 +745,8 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
-        sal_Bool bCont = false;
-        rViewShell.MergeCells( false, bCont, sal_True );
+        bool bCont = false;
+        rViewShell.MergeCells( false, bCont, true );
     }
 }
 
@@ -896,7 +896,7 @@ void ScUndoAutoFormat::Redo()
 void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, true );
 }
 
 bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1052,7 +1052,7 @@ void ScUndoReplace::Redo()
         {
             SetViewMarkData( aMarkData );
 
-            pViewShell->SearchAndReplace( pSearchItem, false, sal_True );
+            pViewShell->SearchAndReplace( pSearchItem, false, true );
         }
     }
     else if (pSearchItem->GetPattern() &&
@@ -1065,7 +1065,7 @@ void ScUndoReplace::Redo()
     }
     else
         if (pViewShell)
-            pViewShell->SearchAndReplace( pSearchItem, false, sal_True );
+            pViewShell->SearchAndReplace( pSearchItem, false, true );
 
     SetChangeTrack();
 
@@ -1075,7 +1075,7 @@ void ScUndoReplace::Redo()
 void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, sal_True, false );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, true, false );
 }
 
 bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1257,7 +1257,7 @@ void ScUndoConversion::Redo()
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
     if( rTarget.ISA( ScTabViewTarget ) )
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, true );
 }
 
 bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const

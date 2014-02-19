@@ -756,7 +756,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 if( bMerge )
                 {
                     // merge - check if to move contents of covered cells
-                    sal_Bool bMoveContents = false;
+                    bool bMoveContents = false;
                     sal_Bool bApi = rReq.IsAPI();
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&

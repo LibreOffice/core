@@ -4157,12 +4157,12 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     if ( bIsLink )
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pView->LinkBlock( aSource, aDest.aStart, sal_True /*bApi*/ );
+                        bDone = pView->LinkBlock( aSource, aDest.aStart, true /*bApi*/ );
                     }
                     else
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pView->MoveBlockTo( aSource, aDest.aStart, bIsMove, sal_True /*bRecord*/, sal_True /*bPaint*/, sal_True /*bApi*/ );
+                        bDone = pView->MoveBlockTo( aSource, aDest.aStart, bIsMove, true /*bRecord*/, true /*bPaint*/, true /*bApi*/ );
                     }
                 }
 

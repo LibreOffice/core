@@ -49,7 +49,7 @@
 
 extern Point aDragStartDiff;
 
-sal_Bool bPasteIsMove = false;
+bool bPasteIsMove = false;
 
 using namespace com::sun::star;
 
@@ -73,7 +73,7 @@ static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 }
 
 void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-        sal_Bool bGroup, sal_Bool bSameDocClipboard )
+        bool bGroup, bool bSameDocClipboard )
 {
     MakeDrawLayer();
     Point aPos( rLogicPos );
@@ -88,7 +88,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
     }
 
-    sal_Bool bNegativePage = GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() );
+    bool bNegativePage = GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() );
 
     SdrView* pDragEditView = NULL;
     ScModule* pScMod = SC_MOD();
@@ -114,7 +114,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     if (bGroup)
         pScDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
 
-    sal_Bool bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
+    bool bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
     if (bSameDoc)
     {
             // copy locally - incl. charts
@@ -267,7 +267,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     if (pRef)
         pRef->SetMapMode( aOldMapMode );
 
-    // GetViewData()->GetViewShell()->SetDrawShell( sal_True );
+    // GetViewData()->GetViewShell()->SetDrawShell( true );
     // It is not sufficient to just set the DrawShell if we pasted, for
     // example, a chart.  SetDrawShellOrSub() would only work for D&D in the
     // same document but not if inserting from the clipboard, therefore
@@ -276,7 +276,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
 }
 
-sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
+bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
                                 const Size* pDescSize, const Graphic* pReplGraph, const OUString& aMediaType, sal_Int64 nAspect )
 {
     MakeDrawLayer();
@@ -353,27 +353,27 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
         SdrPageView* pPV = pDrView->GetSdrPageView();
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // don't mark if OLE
         GetViewData()->GetViewShell()->SetDrawShell( true );
-        return sal_True;
+        return true;
     }
     else
         return false;
 }
 
-sal_Bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
+bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
 {
     OUString aEmpty;
     Graphic aGraphic(rBmpEx);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 
-sal_Bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
+bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 {
     OUString aEmpty;
     Graphic aGraphic(rMtf);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 
-sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
+bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                 const OUString& rFile, const OUString& rFilter )
 {
     MakeDrawLayer();
@@ -406,7 +406,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
             {
                 // we are done; mark the modified/new object
                 pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
-                return sal_True;
+                return true;
             }
         }
     }
@@ -449,7 +449,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if (!rFile.isEmpty())
         pGrafObj->SetGraphicLink( rFile, ""/*TODO?*/, rFilter );
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

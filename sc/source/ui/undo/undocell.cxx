@@ -565,9 +565,9 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
 
         if (bInsert)
-            rViewShell.InsertPageBreak(bColumn, sal_True);
+            rViewShell.InsertPageBreak(bColumn, true);
         else
-            rViewShell.DeletePageBreak(bColumn, sal_True);
+            rViewShell.DeletePageBreak(bColumn, true);
     }
 }
 
@@ -769,7 +769,7 @@ void ScUndoThesaurus::Redo()
 void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( true );
 }
 
 bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const

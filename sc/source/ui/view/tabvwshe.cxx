@@ -143,7 +143,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
 
             SCCOL nPosX = GetViewData()->GetCurX();
             SCROW nPosY = GetViewData()->GetCurY();
-            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, sal_True );
+            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, true );
         }
     }
     else
@@ -236,7 +236,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
-                    sal_Bool bSuccess = SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
+                    bool bSuccess = SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
                     const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)

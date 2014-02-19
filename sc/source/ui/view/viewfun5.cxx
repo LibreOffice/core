@@ -74,9 +74,9 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
+bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    SCCOL nPosX, SCROW nPosY, Point* pLogicPos, sal_Bool bLink, sal_Bool bAllowDialogs )
+                    SCCOL nPosX, SCROW nPosY, Point* pLogicPos, bool bLink, bool bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( true );
@@ -87,7 +87,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     else
     {
         //  inserting position isn't needed for text formats
-        sal_Bool bIsTextFormat = ( ScImportExport::IsFormatSupported( nFormatId ) ||
+        bool bIsTextFormat = ( ScImportExport::IsFormatSupported( nFormatId ) ||
                                 nFormatId == FORMAT_RTF );
         if ( !bIsTextFormat )
         {
@@ -105,7 +105,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
 
     TransferableDataHelper aDataHelper( rxTransferable );
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     //
     //  handle individual formats
@@ -164,7 +164,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                                     PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
                                     bAllowDialogs );
                     delete pClipDoc;
-                    bRet = sal_True;
+                    bRet = true;
                 }
 
                 xDocShRef->DoClose();
@@ -191,7 +191,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     else
                         PasteObject( aPos, xObj, &aObjDesc.maSize );
 
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else
                 {
@@ -262,7 +262,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                     // let object stay in loaded state after insertion
                     SdrOle2Obj::Unload( xObj, embed::Aspects::MSOLE_CONTENT );
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else
                 {
@@ -282,7 +282,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         {
             //  use EditView's PasteSpecial / Drop
             PasteRTF( nPosX, nPosY, rxTransferable );
-            bRet = sal_True;
+            bRet = true;
         }
         else
         {
@@ -349,7 +349,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                             bRet = false;
                     }
                     else
-                        bRet = sal_True;
+                        bRet = true;
                         // Yes, no failure, don't raise a "couldn't paste"
                         // dialog if user cancelled.
                     delete pDlg;
@@ -397,7 +397,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 
-            sal_Bool bAreaIsNew = !pDBData;
+            bool bAreaIsNew = !pDBData;
             SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
             //  asynchronous, to avoid doing the whole import in drop handler
@@ -405,7 +405,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
                                         &aDataDesc, &aTarget, &aAreaNew, (void*)0 );
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else if (nFormatId == SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)
@@ -449,7 +449,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 pScDrawView->InsertObjectSafe(pObj, *pScDrawView->GetSdrPageView());
 
                 GetViewData()->GetViewShell()->SetDrawShell( true );
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -518,7 +518,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
             delete pModel;
             aDragShellRef->DoClose();
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else if ( (nFormatId == SOT_FORMATSTR_ID_BIFF_5) || (nFormatId == SOT_FORMATSTR_ID_BIFF_8) )
@@ -578,7 +578,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                                 bAllowDialogs );
                 delete pInsDoc;
 
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -603,7 +603,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 aPos.X() += 400;
                 aPos.Y() += 400;
             }
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_SOLK ||

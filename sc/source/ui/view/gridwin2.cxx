@@ -958,12 +958,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
-                        pViewFunc->DeletePageBreak( sal_True, sal_True, &aOldAddr, false );
+                        pViewFunc->DeletePageBreak( true, true, &aOldAddr, false );
                     }
                     if ( !bHide && !bToEnd )    // am Ende nicht
                     {
                         ScAddress aNewAddr( static_cast<SCCOL>(nNew), nPosY, nTab );
-                        pViewFunc->InsertPageBreak( sal_True, sal_True, &aNewAddr, false );
+                        pViewFunc->InsertPageBreak( true, true, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
@@ -972,7 +972,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                         if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
-                            pViewFunc->InsertPageBreak( sal_True, sal_True, &aPrev, false );
+                            pViewFunc->InsertPageBreak( true, true, &aPrev, false );
                         }
 
                         if (!pDocSh->AdjustPrintZoom( ScRange(
@@ -985,12 +985,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if (pDoc->HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
-                        pViewFunc->DeletePageBreak( false, sal_True, &aOldAddr, false );
+                        pViewFunc->DeletePageBreak( false, true, &aOldAddr, false );
                     }
                     if ( !bHide && !bToEnd )    // am Ende nicht
                     {
                         ScAddress aNewAddr( nPosX, nNew, nTab );
-                        pViewFunc->InsertPageBreak( false, sal_True, &aNewAddr, false );
+                        pViewFunc->InsertPageBreak( false, true, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
@@ -999,7 +999,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );
-                            pViewFunc->InsertPageBreak( false, sal_True, &aPrev, false );
+                            pViewFunc->InsertPageBreak( false, true, &aPrev, false );
                         }
 
                         if (!pDocSh->AdjustPrintZoom( ScRange(

@@ -1767,7 +1767,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     if ( pDefLine )
                     {
                         pDefLine->SetColor( rColor );
-                        pTabViewShell->SetSelectionFrameLines( pDefLine, sal_True );
+                        pTabViewShell->SetSelectionFrameLines( pDefLine, true );
                     }
                     else
                     {

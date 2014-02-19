@@ -72,7 +72,7 @@ using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-sal_Bool bPasteIsDrop = false;
+bool bPasteIsDrop = false;
 
 //==================================================================
 
@@ -89,7 +89,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetViewData()->GetTabNo();
-        const sal_Bool bRecord (pDoc->IsUndoEnabled());
+        const bool bRecord (pDoc->IsUndoEnabled());
 
         const ScPatternAttr* pPattern = pDoc->GetPattern( nStartCol, nStartRow, nTab );
         ScTabEditEngine* pEngine = new ScTabEditEngine( *pPattern, pDoc->GetEnginePool() );
@@ -176,7 +176,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ShowAllCursors();
     }
 }
-void ScViewFunc::DoRefConversion( sal_Bool bRecord )
+void ScViewFunc::DoRefConversion( bool bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -186,7 +186,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
 
     ScRange aMarkRange;
     rMark.MarkToSimple();
-    sal_Bool bMulti = rMark.IsMultiMarked();
+    bool bMulti = rMark.IsMultiMarked();
     if (bMulti)
         rMark.GetMultiMarkArea( aMarkRange );
     else if (rMark.IsMarked())
@@ -205,7 +205,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
     }
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bOk = false;
+    bool bOk = false;
 
     ScDocument* pUndoDoc = NULL;
     if (bRecord)
@@ -301,7 +301,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
         ErrorMessage(STR_ERR_NOREF);
 }
 //  Thesaurus - Undo ok
-void ScViewFunc::DoThesaurus( sal_Bool bRecord )
+void ScViewFunc::DoThesaurus( bool bRecord )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -317,7 +317,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     EditView* pEditView = NULL;
     boost::scoped_ptr<ESelection> pEditSel;
     ScEditEngineDefaulter* pThesaurusEngine;
-    sal_Bool bIsEditMode = GetViewData()->HasEditView(eWhich);
+    bool bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
     if (bIsEditMode)                                            // Edit-Mode aktiv
@@ -438,13 +438,13 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     pDocSh->PostPaintGridAll();
 }
 
-void ScViewFunc::DoHangulHanjaConversion( sal_Bool bRecord )
+void ScViewFunc::DoHangulHanjaConversion( bool bRecord )
 {
     ScConversionParam aConvParam( SC_CONVERSION_HANGULHANJA, LANGUAGE_KOREAN, 0, true );
     DoSheetConversion( aConvParam, bRecord );
 }
 
-void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Bool bRecord )
+void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bRecord )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -455,7 +455,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
     ScMarkData& rMark = rViewData.GetMarkData();
     ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = NULL;
-    sal_Bool bIsEditMode = rViewData.HasEditView(eWhich);
+    bool bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
     if (bIsEditMode)                                            // Edit-Mode aktiv
@@ -473,7 +473,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
     nTab = rViewData.GetTabNo();
 
     rMark.MarkToMulti();
-    sal_Bool bMarked = rMark.IsMultiMarked();
+    bool bMarked = rMark.IsMultiMarked();
     if (bMarked)
     {
         ScEditableTester aTester( pDoc, rMark );
@@ -581,7 +581,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
-sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bool bLink )
+bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
@@ -591,7 +591,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
-        return sal_Bool( 0 != GetViewData()->GetDispatcher().Execute(
+        return ( 0 != GetViewData()->GetDispatcher().Execute(
                                 SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
                                 &aMediaURLItem, 0L ) );
     }
@@ -620,7 +620,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...
-            return sal_Bool( 0 != rDispatcher.Execute( SID_OPENDOC,
+            return ( 0 != rDispatcher.Execute( SID_OPENDOC,
                                     SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
@@ -657,7 +657,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
         SCROW nPosY = aRange.aStart.Row();
 
         InsertBookmark( aStrURL, aStrURL, nPosX, nPosY );
-        return sal_True;
+        return true;
     }
     else
     {
@@ -680,11 +680,11 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
         // If an OLE object can't be created, insert a URL button
 
         GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_OUSTRING, &rPos );
-        return sal_True;
+        return true;
     }
 }
 
-sal_Bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
+bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY )
@@ -695,12 +695,12 @@ sal_Bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
         return false;
 
     InsertBookmark( aBookmark.GetDescription(), aBookmark.GetURL(), nPosX, nPosY );
-    return sal_True;
+    return true;
 }
 
 void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget,
-                                    sal_Bool bTryReplace )
+                                    bool bTryReplace )
 {
     ScViewData* pViewData = GetViewData();
     if ( pViewData->HasEditView( pViewData->GetActivePart() ) &&

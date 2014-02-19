@@ -4093,9 +4093,9 @@ ScVbaRange::setPageBreak( const uno::Any& _pagebreak) throw (uno::RuntimeExcepti
         {
             ScTabViewShell* pViewShell = excel::getBestViewShell( xModel );
             if ( nPageBreak == excel::XlPageBreak::xlPageBreakManual )
-                pViewShell->InsertPageBreak( bColumn, sal_True, &aAddr);
+                pViewShell->InsertPageBreak( bColumn, true, &aAddr);
             else if ( nPageBreak == excel::XlPageBreak::xlPageBreakNone )
-                pViewShell->DeletePageBreak( bColumn, sal_True, &aAddr);
+                pViewShell->DeletePageBreak( bColumn, true, &aAddr);
         }
     }
 }

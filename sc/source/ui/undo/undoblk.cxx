@@ -826,7 +826,7 @@ void ScUndoCut::Redo()
 void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, true );
 }
 
 bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
