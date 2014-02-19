@@ -255,7 +255,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                     aLangHM->erase( sCur );
                 }
             }
-            else if( pResData )
+            else
             {
                 SAL_WARN(
                     "l10ntools",
