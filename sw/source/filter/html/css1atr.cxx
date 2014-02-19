@@ -218,8 +218,6 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_style) + " " +
                     OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"text/css\">");
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        OutNewLine();
-        Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment );
 
         IncIndentLevel();
     }
@@ -632,8 +630,6 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     if( !bFirstCSS1Rule )
     {
         DecIndentLevel();
-        OutNewLine();
-        Strm().WriteCharPtr( "-->" );
 
         OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, sal_False );
