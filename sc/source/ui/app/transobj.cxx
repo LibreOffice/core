@@ -119,6 +119,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
     pDoc( pClipDoc ),
+    nNonFiltered(0),
     aObjDesc( rDesc ),
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
