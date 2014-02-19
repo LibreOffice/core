@@ -1758,19 +1758,35 @@ void OGLTransitionerImpl::disposing()
     mxView.clear();
 }
 
-OGLTransitionerImpl::OGLTransitionerImpl() :
-    OGLTransitionerImplBase(m_aMutex),
-    GLleavingSlide( 0 ),
-    GLenteringSlide( 0 ),
-    pWindow( NULL ),
-    mxView(),
-    EnteringBytes(),
-    LeavingBytes(),
-    mbRestoreSync( false ),
-    mbUseLeavingPixmap( false ),
-    mbUseEnteringPixmap( false ),
-    SlideBitmapLayout(),
-    SlideSize()
+OGLTransitionerImpl::OGLTransitionerImpl()
+    : OGLTransitionerImplBase(m_aMutex)
+    , GLleavingSlide(0)
+    , GLenteringSlide(0)
+    , pWindow(NULL)
+    , mxView()
+    , EnteringBytes()
+    , LeavingBytes()
+#if defined( GLX_EXT_texture_from_pixmap )
+    , LeavingPixmap(0)
+    , EnteringPixmap(0)
+#endif
+    , mbRestoreSync(false)
+    , mbUseLeavingPixmap(false)
+    , mbUseEnteringPixmap(false)
+    , mbFreeLeavingPixmap(false)
+    , mbFreeEnteringPixmap(false)
+#ifdef UNX
+    , maLeavingPixmap(0)
+    , maEnteringPixmap(0)
+#endif
+    , SlideBitmapLayout()
+    , SlideSize()
+#ifdef UNX
+    , mnGLXVersion(0.0)
+#endif
+    , mbTextureFromPixmap(false)
+    , mbGenerateMipmap(false)
+    , mbHasTFPVisual(false)
 {
     memset(&GLWin, 0, sizeof(GLWin));
 }
