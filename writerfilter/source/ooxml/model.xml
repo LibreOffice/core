@@ -5315,9 +5315,11 @@
       <element name="sizeRelV" tokenid="ooxml:sizeRelV_sizeRelV"/>
     </resource>
   </namespace>
-  <namespace name="w14">
+  <namespace name="w14" file="w14.rng">
     <start name="glow"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <include href="dml-baseTypes.rng"/>
+
       <define name="ST_SchemeColorVal">
         <choice>
           <value>bg1</value>
@@ -5333,131 +5335,94 @@
         </choice>
       </define>
 
+      <define name="EG_ColorChoice">
+        <choice>
+           <optional>
+            <element name="srgbClr">
+              <ref name="CT_SRgbColor"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="schemeClr">
+              <ref name="CT_SchemeColor"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
+      <define name="EG_ColorTransform">
+        <choice>
+          <optional>
+            <element name="tint">
+              <ref name="CT_PositiveFixedPercentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="shade">
+              <ref name="CT_PositiveFixedPercentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="alpha">
+              <ref name="CT_PositiveFixedPercentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="hueMod">
+              <ref name="CT_PositivePercentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="sat">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="satOff">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="satMod">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="lum">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="lumOff">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="lumMod">
+              <ref name="CT_Percentage"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
       <define name="CT_Glow">
         <optional>
-          <element name="srgbClr">
-            <ref name="CT_SRgbColor"/>
-          </element>
+            <ref name="EG_ColorChoice"/>
         </optional>
-        <optional>
-          <element name="schemeClr">
-            <ref name="CT_SchemeColor"/>
-          </element>
-        </optional>
-        <optional>
-          <attribute name="rad">
-            <ref name="ST_PositiveCoordinate"/>
-          </attribute>
-        </optional>
+        <attribute name="rad">
+          <ref name="ST_PositiveCoordinate"/>
+        </attribute>
       </define>
 
       <define name="CT_SRgbColor">
-        <optional>
-          <element name="tint">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="shade">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="alpha">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="hueMod">
-            <ref name="CT_PositivePercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="sat">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="satOff">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="satMod">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lum">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lumOff">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lumMod">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
+        <ref name="EG_ColorTransform"/>
         <attribute name="val">
           <ref name="ST_HexColorRGB"/>
         </attribute>
       </define>
 
       <define name="CT_SchemeColor">
-        <optional>
-          <element name="tint">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="shade">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="alpha">
-            <ref name="CT_PositiveFixedPercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="hueMod">
-            <ref name="CT_PositivePercentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="sat">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="satOff">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="satMod">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lum">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lumOff">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
-        <optional>
-          <element name="lumMod">
-            <ref name="CT_Percentage"/>
-          </element>
-        </optional>
+        <ref name="EG_ColorTransform"/>
         <attribute name="val">
           <ref name="ST_SchemeColorVal"/>
         </attribute>
@@ -5498,35 +5463,30 @@
       <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
       <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
     </resource>
+
+    <resource name="EG_ColorTransform" resource="Properties" tag="paragraph">
+      <element name="tint" tokenid="ooxml:EG_ColorTransform_tint"/>
+      <element name="shade" tokenid="ooxml:EG_ColorTransform_shade"/>
+      <element name="alpha" tokenid="ooxml:EG_ColorTransform_alpha"/>
+      <element name="hueMod" tokenid="ooxml:EG_ColorTransform_hueMod"/>
+      <element name="sat" tokenid="ooxml:EG_ColorTransform_sat"/>
+      <element name="satOff" tokenid="ooxml:EG_ColorTransform_satOff"/>
+      <element name="satMod" tokenid="ooxml:EG_ColorTransform_satMod"/>
+      <element name="lum" tokenid="ooxml:EG_ColorTransform_lum"/>
+      <element name="lumOff" tokenid="ooxml:EG_ColorTransform_lumOff"/>
+      <element name="lumMod" tokenid="ooxml:EG_ColorTransform_lumMod"/>
+    </resource>
+    <resource name="EG_ColorChoice" resource="Properties" tag="paragraph">
+      <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
+      <element name="schemeClr" tokenid="ooxml:EG_ColorChoice_schemeClr"/>
+    </resource>
     <resource name="CT_Glow" resource="Properties" tag="paragraph">
-      <element name="srgbClr" tokenid="ooxml:CT_Glow_srgbClr"/>
-      <element name="schemeClr" tokenid="ooxml:CT_Glow_schemeClr"/>
       <attribute name="rad" tokenid="ooxml:CT_Glow_rad"/>
     </resource>
     <resource name="CT_SRgbColor" resource="Properties" tag="paragraph">
-      <element name="tint" tokenid="ooxml:CT_SRgbColor_tint"/>
-      <element name="shade" tokenid="ooxml:CT_SRgbColor_shade"/>
-      <element name="alpha" tokenid="ooxml:CT_SRgbColor_alpha"/>
-      <element name="hueMod" tokenid="ooxml:CT_SRgbColor_hueMod"/>
-      <element name="sat" tokenid="ooxml:CT_SRgbColor_sat"/>
-      <element name="satOff" tokenid="ooxml:CT_SRgbColor_satOff"/>
-      <element name="satMod" tokenid="ooxml:CT_SRgbColor_satMod"/>
-      <element name="lum" tokenid="ooxml:CT_SRgbColor_lum"/>
-      <element name="lumOff" tokenid="ooxml:CT_SRgbColor_lumOff"/>
-      <element name="lumMod" tokenid="ooxml:CT_SRgbColor_lumMod"/>
       <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
     </resource>
     <resource name="CT_SchemeColor" resource="Properties" tag="paragraph">
-      <element name="tint" tokenid="ooxml:CT_SchemeColor_tint"/>
-      <element name="shade" tokenid="ooxml:CT_SchemeColor_shade"/>
-      <element name="alpha" tokenid="ooxml:CT_SchemeColor_alpha"/>
-      <element name="hueMod" tokenid="ooxml:CT_SchemeColor_hueMod"/>
-      <element name="sat" tokenid="ooxml:CT_SchemeColor_sat"/>
-      <element name="satOff" tokenid="ooxml:CT_SchemeColor_satOff"/>
-      <element name="satMod" tokenid="ooxml:CT_SchemeColor_satMod"/>
-      <element name="lum" tokenid="ooxml:CT_SchemeColor_lum"/>
-      <element name="lumOff" tokenid="ooxml:CT_SchemeColor_lumOff"/>
-      <element name="lumMod" tokenid="ooxml:CT_SchemeColor_lumMod"/>
       <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
     </resource>
     <resource name="CT_PositiveFixedPercentage" resource="Properties" tag="paragraph">
