@@ -21,7 +21,7 @@
 #define INCLUDED_FORMULA_OPCODE_HXX
 
 #include <formula/compiler.hrc>
-#include <tools/solar.h>
+#include <sal/types.h>
 
 enum OpCodeEnum
 {

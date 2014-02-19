@@ -32,7 +32,6 @@
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
 
-#include "tools/solar.h"
 #include "tools/errcode.hxx"
 #include "tools/rc.hxx"
 #include "tools/wintypes.hxx"
@@ -65,7 +64,6 @@ namespace com { namespace sun { namespace star {
 
 class Window;
 
-
 struct InteractionHandlerData
 {
     /** The UNO service name to use to instanciate the content provider.
@@ -82,7 +80,6 @@ typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
 
 typedef ::boost::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
-
 
 class UUIInteractionHelper
 {
@@ -189,8 +186,6 @@ private:
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &
             rContinuations);
-
-
 
     bool
     handleInteractiveIOException(
@@ -330,7 +325,7 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((::com::sun::star::uno::RuntimeException));
 
-    bool    handleCustomRequest(
+    bool handleCustomRequest(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_rRequest,
                 const OUString& i_rServiceName
             ) const;
