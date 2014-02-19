@@ -1241,13 +1241,13 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Re
             throw uno::RuntimeException();
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
-                                    uno::makeAny( (sal_Bool)sal_True ) );
+                                    uno::makeAny( true ) );
         uno::Any aAny;
         aAny <<= rMediaType;
         xPropSet->setPropertyValue("MediaType", aAny );
 
         xPropSet->setPropertyValue("Compressed",
-                                    uno::makeAny( (sal_Bool)sal_True ) );
+                                    uno::makeAny( true ) );
     }
     catch (const uno::Exception&)
     {
@@ -1271,9 +1271,9 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star:
         aProps[0].Name = "MediaType";
         aProps[0].Value <<= rMediaType;
         aProps[1].Name = "UseCommonStoragePasswordEncryption";
-        aProps[1].Value <<= (sal_Bool)sal_True;
+        aProps[1].Value <<= true;
         aProps[2].Name = "Compressed";
-        aProps[2].Value <<= (sal_Bool)sal_True;
+        aProps[2].Value <<= true;
 
         if ( xReplacement->hasByName( rObjectName ) )
             xReplacement->removeElement( rObjectName );

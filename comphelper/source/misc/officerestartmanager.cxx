@@ -136,7 +136,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
             OUString aVetoPropName( "SuspendQuickstartVeto" );
             uno::Any aValue;
-            aValue <<= (sal_Bool)sal_True;
+            aValue <<= true;
             xPropertySet->setPropertyValue( aVetoPropName, aValue );
 
             try
@@ -147,7 +147,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
             if ( !bSuccess )
             {
-                aValue <<= (sal_Bool)sal_False;
+                aValue <<= false;
                 xPropertySet->setPropertyValue( aVetoPropName, aValue );
             }
         }
