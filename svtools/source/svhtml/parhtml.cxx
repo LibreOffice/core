@@ -296,6 +296,7 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     bPre_IgnoreNewPara(false),
     bReadNextChar(false),
     bReadComment(false),
+    nPre_LinePos(0),
     mnPendingOffToken(0)
 {
     //#i76649, default to UTF-8 for HTML unless we know differently
