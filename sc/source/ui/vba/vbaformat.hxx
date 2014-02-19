@@ -45,8 +45,8 @@ protected:
     css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
-    sal_Bool mbCheckAmbiguoity;
-    sal_Bool mbAddIndent;
+    bool mbCheckAmbiguoity;
+    bool mbAddIndent;
     //NumberFormatter oNumberFormatter = null;
     css::uno::Reference< css::lang::XMultiServiceFactory > xMultiServiceFactory;
     bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
